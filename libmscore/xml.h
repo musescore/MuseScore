@@ -20,6 +20,7 @@
 namespace Ms {
 
 enum class PlaceText : char;
+enum class ClefType : signed char;
 class Spanner;
 class Beam;
 class Tuplet;
@@ -54,6 +55,7 @@ class XmlReader : public XmlStreamReader {
       QList<StaffType> _staffTypes;
       void htmlToString(int level, QString*);
       Interval _transpose;
+      QList<QList<std::pair<int, ClefType>>> _clefs;   // for 1.3 scores
 
    public:
       XmlReader(QFile* f) : XmlStreamReader(f), docName(f->fileName()) {}
@@ -116,6 +118,8 @@ class XmlReader : public XmlStreamReader {
       Interval transpose() const { return _transpose; }
       void setTransposeChromatic(int v) { _transpose.chromatic = v; }
       void setTransposeDiatonic(int v) { _transpose.diatonic = v; }
+
+      QList<std::pair<int, ClefType>>& clefs(int idx);
       };
 
 //---------------------------------------------------------

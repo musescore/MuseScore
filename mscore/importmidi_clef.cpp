@@ -430,7 +430,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
             mainClef = MidiClef::clefTypeFromAveragePitch(allAveragePitch.pitch());
             }
 
-      staff->setClef(0, mainClef);      // set main clef
+      staff->setInitialClef(mainClef);      // set main clef
       createClef(mainClef, staff, 0);
 
       Q_ASSERT_X(!doesClefBreakTie(staff), "MidiClef::createClefs", "Clef breaks the tie");

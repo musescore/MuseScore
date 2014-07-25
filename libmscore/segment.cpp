@@ -472,6 +472,8 @@ void Segment::add(Element* el)
                   Q_ASSERT(_segmentType == Type::Clef);
                   checkElement(el, track);
                   _elist[track] = el;
+                  if (!el->generated())
+                        el->staff()->setClef(static_cast<Clef*>(el));
                   empty = false;
                   break;
 
@@ -596,6 +598,9 @@ void Segment::remove(Element* el)
                   break;
 
             case Element::Type::CLEF:
+                  if (!el->generated())
+                        el->staff()->removeClef(static_cast<Clef*>(el));
+
             case Element::Type::BAR_LINE:
             case Element::Type::BREATH:
             case Element::Type::AMBITUS:

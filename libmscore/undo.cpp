@@ -496,20 +496,15 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, Key key)
 
 void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
       {
-      QList<Staff*> staffList;
-      LinkedStaves* linkedStaves = ostaff->linkedStaves();
-      if (linkedStaves)
-            staffList = linkedStaves->staves();
-      else
-            staffList.append(ostaff);
-
       bool firstSeg = seg->measure()->first() == seg;
 
-      foreach(Staff* staff, staffList) {
-            Score* score = staff->score();
+      Clef* gclef = 0;
+      foreach (Staff* staff, ostaff->staffList()) {
             if (staff->staffType()->group() != ClefInfo::staffGroup(st))
                   continue;
-            int tick = seg->tick();
+
+            Score* score = staff->score();
+            int tick     = seg->tick();
             Measure* measure = score->tick2measure(tick);
             if (!measure) {
                   qDebug("measure for tick %d not found!", tick);
@@ -527,25 +522,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   destSeg = measure->findSegment(Segment::Type::Clef, tick);
                   }
 
-            if (destSeg) {
-                  // if destSeg not a Clef seg...
-                  if (destSeg->segmentType() != Segment::Type::Clef) {
-                        // ...check prev seg is Clef seg: if yes, prev seg is our dest seg
-                        if (destSeg->prev() && destSeg->prev()->segmentType() == Segment::Type::Clef) {
-                              destSeg = destSeg->prev();
-                             }
-                        // if no Clef seg (current or previous), create a new Clef seg
-                        else {
-                              Segment* s = new Segment(measure, Segment::Type::Clef, seg->tick());
-                              s->setNext(destSeg);
-                              s->setPrev(destSeg->prev());
-                              score->undoAddElement(s);
-                              destSeg = s;
-                              }
-                        }
-                  }
-            // if no dest seg, create a new Clef seg
-            else {
+            if (!destSeg) {
                   destSeg = new Segment(measure, Segment::Type::Clef, seg->tick());
                   score->undoAddElement(destSeg);
                   }
@@ -579,13 +556,19 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   score->undo(new ChangeClefType(clef, cp, tp));
                   }
             else {
-                  clef = new Clef(score);
+                  if (gclef) {
+                        clef = static_cast<Clef*>(gclef->linkedClone());
+                        clef->setScore(score);
+                        }
+                  else {
+                        clef = new Clef(score);
+                        gclef = clef;
+                        }
                   clef->setTrack(track);
                   clef->setClefType(st);
                   clef->setParent(destSeg);
                   score->undo(new AddElement(clef));
                   }
-            undo(new SetClefType(clef->staff(), tick, clef->clefTypeList()));
             cmdUpdateNotes();
             }
       }
@@ -2453,7 +2436,7 @@ void ChangeStaffType::undo()
       staffType = st;
 
       // restore initial clef, both in the staff clef map...
-      staff->setClef(0, initialClef);
+      // staff->setClef(0, initialClef);
 
       // ...and in the score itself (code mostly copied from undoChangeClef() )
       // TODO : add a single function adding/setting a clef change in score?
@@ -3147,8 +3130,9 @@ void ChangeClefType::flip()
 
       clef->setConcertClef(concertClef);
       clef->setTransposingClef(transposingClef);
-      clef->setClefType(clef->concertPitch() ? concertClef : transposingClef);
+//??      clef->setClefType(clef->concertPitch() ? concertClef : transposingClef);
 
+      clef->staff()->setClef(clef);
       Segment* segment = clef->segment();
       updateNoteLines(segment, clef->track());
       clef->score()->setLayoutAll(true);
@@ -3410,17 +3394,6 @@ void ChangeNoteEvent::flip()
 
       // TODO:
       note->chord()->setPlayEventType(PlayEventType::User);
-      }
-
-//---------------------------------------------------------
-//   SetClefType
-//---------------------------------------------------------
-
-void SetClefType::flip()
-      {
-      ClefTypeList ol = staff->clefTypeList(tick);
-      staff->setClef(tick, ctl);
-      ctl = ol;
       }
 
 //---------------------------------------------------------

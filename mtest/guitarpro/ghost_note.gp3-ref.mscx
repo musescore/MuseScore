@@ -80,9 +80,10 @@
         <Clef>
           <concertClefType>F8vb</concertClefType>
           <transposingClefType>F8vb</transposingClefType>
+          <lid>1</lid>
           </Clef>
         <TimeSig>
-          <lid>1</lid>
+          <lid>2</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -90,18 +91,18 @@
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <lid>2</lid>
+          <lid>3</lid>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
-          <lid>3</lid>
+          <lid>4</lid>
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
-          <lid>4</lid>
+          <lid>5</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>5</lid>
+            <lid>6</lid>
             <pitch>33</pitch>
             <tpc>17</tpc>
             <fret>0</fret>
@@ -113,11 +114,11 @@
           <l2>27</l2>
           </Beam>
         <Chord>
-          <lid>6</lid>
+          <lid>7</lid>
           <durationType>16th</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>7</lid>
+            <lid>8</lid>
             <pitch>33</pitch>
             <tpc>17</tpc>
             <head>1</head>
@@ -127,11 +128,11 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>8</lid>
+          <lid>9</lid>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>9</lid>
+            <lid>10</lid>
             <pitch>45</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -139,11 +140,11 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>10</lid>
+          <lid>11</lid>
           <durationType>16th</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>11</lid>
+            <lid>12</lid>
             <pitch>33</pitch>
             <tpc>17</tpc>
             <head>1</head>
@@ -157,11 +158,11 @@
           <l2>27</l2>
           </Beam>
         <Chord>
-          <lid>12</lid>
+          <lid>13</lid>
           <durationType>eighth</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>13</lid>
+            <lid>14</lid>
             <pitch>43</pitch>
             <tpc>15</tpc>
             <fret>0</fret>
@@ -169,11 +170,11 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>14</lid>
+          <lid>15</lid>
           <durationType>16th</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>15</lid>
+            <lid>16</lid>
             <pitch>33</pitch>
             <tpc>17</tpc>
             <fret>0</fret>
@@ -181,11 +182,11 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>16</lid>
+          <lid>17</lid>
           <durationType>eighth</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>17</lid>
+            <lid>18</lid>
             <pitch>41</pitch>
             <tpc>13</tpc>
             <head>1</head>
@@ -195,11 +196,11 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>18</lid>
+          <lid>19</lid>
           <durationType>16th</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>19</lid>
+            <lid>20</lid>
             <pitch>40</pitch>
             <tpc>18</tpc>
             <fret>2</fret>
@@ -207,11 +208,11 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>20</lid>
+          <lid>21</lid>
           <durationType>16th</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>21</lid>
+            <lid>22</lid>
             <pitch>38</pitch>
             <tpc>16</tpc>
             <fret>0</fret>
@@ -219,7 +220,7 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>22</lid>
+          <lid>23</lid>
           <durationType>16th</durationType>
           </Rest>
         <BarLine>
@@ -329,9 +330,10 @@
           <Clef>
             <concertClefType>F8vb</concertClefType>
             <transposingClefType>F8vb</transposingClefType>
+            <lid>1</lid>
             </Clef>
           <TimeSig>
-            <lid>1</lid>
+            <lid>2</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -339,18 +341,18 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <lid>2</lid>
+            <lid>3</lid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <lid>3</lid>
+            <lid>4</lid>
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <lid>4</lid>
+            <lid>5</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>5</lid>
+              <lid>6</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -362,11 +364,11 @@
             <l2>27</l2>
             </Beam>
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>16th</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -376,11 +378,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>eighth</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>9</lid>
+              <lid>10</lid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -388,11 +390,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>10</lid>
+            <lid>11</lid>
             <durationType>16th</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>11</lid>
+              <lid>12</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -406,11 +408,11 @@
             <l2>27</l2>
             </Beam>
           <Chord>
-            <lid>12</lid>
+            <lid>13</lid>
             <durationType>eighth</durationType>
             <Beam>4</Beam>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -418,11 +420,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>14</lid>
+            <lid>15</lid>
             <durationType>16th</durationType>
             <Beam>4</Beam>
             <Note>
-              <lid>15</lid>
+              <lid>16</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -430,11 +432,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>16</lid>
+            <lid>17</lid>
             <durationType>eighth</durationType>
             <Beam>4</Beam>
             <Note>
-              <lid>17</lid>
+              <lid>18</lid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               <head>1</head>
@@ -444,11 +446,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>18</lid>
+            <lid>19</lid>
             <durationType>16th</durationType>
             <Beam>4</Beam>
             <Note>
-              <lid>19</lid>
+              <lid>20</lid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -456,11 +458,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>20</lid>
+            <lid>21</lid>
             <durationType>16th</durationType>
             <Beam>4</Beam>
             <Note>
-              <lid>21</lid>
+              <lid>22</lid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
@@ -468,7 +470,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>22</lid>
+            <lid>23</lid>
             <durationType>16th</durationType>
             </Rest>
           <BarLine>
@@ -484,10 +486,10 @@
             <transposingClefType>TAB</transposingClefType>
             </Clef>
           <Chord>
-            <lid>4</lid>
+            <lid>5</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>5</lid>
+              <lid>6</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -499,11 +501,11 @@
             <l2>46</l2>
             </Beam>
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>16th</durationType>
             <Beam>5</Beam>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -513,11 +515,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>eighth</durationType>
             <Beam>5</Beam>
             <Note>
-              <lid>9</lid>
+              <lid>10</lid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -525,11 +527,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>10</lid>
+            <lid>11</lid>
             <durationType>16th</durationType>
             <Beam>5</Beam>
             <Note>
-              <lid>11</lid>
+              <lid>12</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -543,11 +545,11 @@
             <l2>46</l2>
             </Beam>
           <Chord>
-            <lid>12</lid>
+            <lid>13</lid>
             <durationType>eighth</durationType>
             <Beam>6</Beam>
             <Note>
-              <lid>13</lid>
+              <lid>14</lid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -555,11 +557,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>14</lid>
+            <lid>15</lid>
             <durationType>16th</durationType>
             <Beam>6</Beam>
             <Note>
-              <lid>15</lid>
+              <lid>16</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -567,11 +569,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>16</lid>
+            <lid>17</lid>
             <durationType>eighth</durationType>
             <Beam>6</Beam>
             <Note>
-              <lid>17</lid>
+              <lid>18</lid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               <head>1</head>
@@ -581,11 +583,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>18</lid>
+            <lid>19</lid>
             <durationType>16th</durationType>
             <Beam>6</Beam>
             <Note>
-              <lid>19</lid>
+              <lid>20</lid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -593,11 +595,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>20</lid>
+            <lid>21</lid>
             <durationType>16th</durationType>
             <Beam>6</Beam>
             <Note>
-              <lid>21</lid>
+              <lid>22</lid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
@@ -605,7 +607,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>22</lid>
+            <lid>23</lid>
             <durationType>16th</durationType>
             </Rest>
           <BarLine>

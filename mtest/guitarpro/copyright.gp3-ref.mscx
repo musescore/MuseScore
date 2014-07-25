@@ -83,23 +83,24 @@ All Rights Reserved - International Copyright Secured</metaTag>
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
+          <lid>1</lid>
           </Clef>
         <TimeSig>
-          <lid>1</lid>
+          <lid>2</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Tempo>
           <tempo>2</tempo>
-          <lid>2</lid>
+          <lid>3</lid>
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
-          <lid>3</lid>
+          <lid>4</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>4</lid>
+            <lid>5</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -110,10 +111,10 @@ All Rights Reserved - International Copyright Secured</metaTag>
             </Note>
           </Chord>
         <Chord>
-          <lid>5</lid>
+          <lid>6</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>6</lid>
+            <lid>7</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
             <fret>2</fret>
@@ -229,23 +230,24 @@ All Rights Reserved - International Copyright Secured</metaTag>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <lid>1</lid>
             </Clef>
           <TimeSig>
-            <lid>1</lid>
+            <lid>2</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
-            <lid>2</lid>
+            <lid>3</lid>
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <lid>3</lid>
+            <lid>4</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>4</lid>
+              <lid>5</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -256,10 +258,10 @@ All Rights Reserved - International Copyright Secured</metaTag>
               </Note>
             </Chord>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -279,10 +281,10 @@ All Rights Reserved - International Copyright Secured</metaTag>
             <transposingClefType>TAB</transposingClefType>
             </Clef>
           <Chord>
-            <lid>3</lid>
+            <lid>4</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>4</lid>
+              <lid>5</lid>
               <pitch>58</pitch>
               <tpc>12</tpc>
               <fret>3</fret>
@@ -290,10 +292,10 @@ All Rights Reserved - International Copyright Secured</metaTag>
               </Note>
             </Chord>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>

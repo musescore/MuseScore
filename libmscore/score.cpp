@@ -2068,36 +2068,6 @@ Score* Score::clone()
       Score* score = new Score(style());
       score->read1(r, true);
 
-#if 0
-      int staffIdx = 0;
-      foreach (Staff* st, score->staves()) {
-            if (st->updateKeymap())
-                  st->clearKeys();
-            int track = staffIdx * VOICES;
-            KeySig* key1 = 0;
-            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-                  for (Segment* s = m->first(); s; s = s->next()) {
-                        if (!s->element(track))
-                              continue;
-                        Element* e = s->element(track);
-                        if (e->generated())
-                              continue;
-                        if ((s->segmentType() == Segment::Type::KeySig) && st->updateKeymap()) {
-                              KeySig* ks = static_cast<KeySig*>(e);
-                              int naturals = key1 ? key1->keySigEvent().key() : 0;
-                              ks->setOldSig(naturals);
-                              st->setKey(s->tick(), ks->key());
-                              key1 = ks;
-                              }
-                        }
-                  if (m->sectionBreak())
-                        key1 = 0;
-                  }
-            st->setUpdateKeymap(false);
-            ++staffIdx;
-            }
-#endif
-
       score->updateNotes();
       score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();

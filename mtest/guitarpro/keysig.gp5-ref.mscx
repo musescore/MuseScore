@@ -96,13 +96,14 @@
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
+          <lid>1</lid>
           </Clef>
         <KeySig>
-          <lid>1</lid>
+          <lid>2</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>2</lid>
+          <lid>3</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -110,18 +111,18 @@
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>3</lid>
+          <lid>4</lid>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
-          <lid>4</lid>
+          <lid>5</lid>
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
-          <lid>5</lid>
+          <lid>6</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>6</lid>
+            <lid>7</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -129,10 +130,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>7</lid>
+          <lid>8</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>8</lid>
+            <lid>9</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -140,10 +141,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>9</lid>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>10</lid>
+            <lid>11</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>7</fret>
@@ -151,10 +152,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>11</lid>
+          <lid>12</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>12</lid>
+            <lid>13</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
@@ -164,14 +165,14 @@
         </Measure>
       <Measure number="2">
         <KeySig>
-          <lid>14</lid>
+          <lid>15</lid>
           <accidental>1</accidental>
           </KeySig>
         <Chord>
-          <lid>15</lid>
+          <lid>16</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>16</lid>
+            <lid>17</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>10</fret>
@@ -179,10 +180,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>17</lid>
+          <lid>18</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>18</lid>
+            <lid>19</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>12</fret>
@@ -190,10 +191,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>19</lid>
+          <lid>20</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>20</lid>
+            <lid>21</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>14</fret>
@@ -201,10 +202,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>21</lid>
+          <lid>22</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>22</lid>
+            <lid>23</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -214,14 +215,14 @@
         </Measure>
       <Measure number="3">
         <KeySig>
-          <lid>24</lid>
+          <lid>25</lid>
           <accidental>2</accidental>
           </KeySig>
         <Chord>
-          <lid>25</lid>
+          <lid>26</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>26</lid>
+            <lid>27</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -232,10 +233,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>27</lid>
+          <lid>28</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>28</lid>
+            <lid>29</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>14</fret>
@@ -243,10 +244,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>29</lid>
+          <lid>30</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>30</lid>
+            <lid>31</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>12</fret>
@@ -254,10 +255,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>31</lid>
+          <lid>32</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>32</lid>
+            <lid>33</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>10</fret>
@@ -267,14 +268,14 @@
         </Measure>
       <Measure number="4">
         <KeySig>
-          <lid>34</lid>
+          <lid>35</lid>
           <accidental>3</accidental>
           </KeySig>
         <Chord>
-          <lid>35</lid>
+          <lid>36</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>36</lid>
+            <lid>37</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -285,10 +286,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>37</lid>
+          <lid>38</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>38</lid>
+            <lid>39</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -299,10 +300,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>39</lid>
+          <lid>40</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>40</lid>
+            <lid>41</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -310,10 +311,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>41</lid>
+          <lid>42</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>42</lid>
+            <lid>43</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -326,14 +327,14 @@
         </Measure>
       <Measure number="5">
         <KeySig>
-          <lid>44</lid>
+          <lid>45</lid>
           <accidental>4</accidental>
           </KeySig>
         <Chord>
-          <lid>45</lid>
+          <lid>46</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>46</lid>
+            <lid>47</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -344,10 +345,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>47</lid>
+          <lid>48</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>48</lid>
+            <lid>49</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -358,10 +359,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>49</lid>
+          <lid>50</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>50</lid>
+            <lid>51</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>7</fret>
@@ -369,10 +370,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>51</lid>
+          <lid>52</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>52</lid>
+            <lid>53</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -385,14 +386,14 @@
         </Measure>
       <Measure number="6">
         <KeySig>
-          <lid>54</lid>
+          <lid>55</lid>
           <accidental>5</accidental>
           </KeySig>
         <Chord>
-          <lid>55</lid>
+          <lid>56</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>56</lid>
+            <lid>57</lid>
             <Accidental>
               <subtype>double sharp</subtype>
               </Accidental>
@@ -403,10 +404,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>57</lid>
+          <lid>58</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>58</lid>
+            <lid>59</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -417,10 +418,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>59</lid>
+          <lid>60</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>60</lid>
+            <lid>61</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>14</fret>
@@ -428,10 +429,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>61</lid>
+          <lid>62</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>62</lid>
+            <lid>63</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -444,14 +445,14 @@
         </Measure>
       <Measure number="7">
         <KeySig>
-          <lid>64</lid>
+          <lid>65</lid>
           <accidental>6</accidental>
           </KeySig>
         <Chord>
-          <lid>65</lid>
+          <lid>66</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>66</lid>
+            <lid>67</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -462,10 +463,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>67</lid>
+          <lid>68</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>68</lid>
+            <lid>69</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -476,10 +477,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>69</lid>
+          <lid>70</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>70</lid>
+            <lid>71</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -490,10 +491,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>71</lid>
+          <lid>72</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>72</lid>
+            <lid>73</lid>
             <Accidental>
               <subtype>double sharp</subtype>
               </Accidental>
@@ -506,14 +507,14 @@
         </Measure>
       <Measure number="8">
         <KeySig>
-          <lid>74</lid>
+          <lid>75</lid>
           <accidental>7</accidental>
           </KeySig>
         <Chord>
-          <lid>75</lid>
+          <lid>76</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>76</lid>
+            <lid>77</lid>
             <pitch>53</pitch>
             <tpc>25</tpc>
             <fret>8</fret>
@@ -521,10 +522,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>77</lid>
+          <lid>78</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>78</lid>
+            <lid>79</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -535,10 +536,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>79</lid>
+          <lid>80</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>80</lid>
+            <lid>81</lid>
             <Accidental>
               <subtype>double sharp</subtype>
               </Accidental>
@@ -549,10 +550,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>81</lid>
+          <lid>82</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>82</lid>
+            <lid>83</lid>
             <pitch>48</pitch>
             <tpc>26</tpc>
             <fret>3</fret>
@@ -562,14 +563,14 @@
         </Measure>
       <Measure number="9">
         <KeySig>
-          <lid>84</lid>
+          <lid>85</lid>
           <accidental>-1</accidental>
           </KeySig>
         <Chord>
-          <lid>85</lid>
+          <lid>86</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>86</lid>
+            <lid>87</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -577,10 +578,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>87</lid>
+          <lid>88</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>88</lid>
+            <lid>89</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -588,10 +589,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>89</lid>
+          <lid>90</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>90</lid>
+            <lid>91</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>7</fret>
@@ -599,10 +600,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>91</lid>
+          <lid>92</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>92</lid>
+            <lid>93</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
@@ -612,14 +613,14 @@
         </Measure>
       <Measure number="10">
         <KeySig>
-          <lid>94</lid>
+          <lid>95</lid>
           <accidental>-2</accidental>
           </KeySig>
         <Chord>
-          <lid>95</lid>
+          <lid>96</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>96</lid>
+            <lid>97</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>10</fret>
@@ -627,10 +628,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>97</lid>
+          <lid>98</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>98</lid>
+            <lid>99</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>12</fret>
@@ -638,10 +639,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>99</lid>
+          <lid>100</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>100</lid>
+            <lid>101</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -652,10 +653,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>101</lid>
+          <lid>102</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>102</lid>
+            <lid>103</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -665,14 +666,14 @@
         </Measure>
       <Measure number="11">
         <KeySig>
-          <lid>104</lid>
+          <lid>105</lid>
           <accidental>-3</accidental>
           </KeySig>
         <Chord>
-          <lid>105</lid>
+          <lid>106</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>106</lid>
+            <lid>107</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -680,10 +681,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>107</lid>
+          <lid>108</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>108</lid>
+            <lid>109</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -694,10 +695,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>109</lid>
+          <lid>110</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>110</lid>
+            <lid>111</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -708,10 +709,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>111</lid>
+          <lid>112</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>112</lid>
+            <lid>113</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>10</fret>
@@ -721,14 +722,14 @@
         </Measure>
       <Measure number="12">
         <KeySig>
-          <lid>114</lid>
+          <lid>115</lid>
           <accidental>-4</accidental>
           </KeySig>
         <Chord>
-          <lid>115</lid>
+          <lid>116</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>116</lid>
+            <lid>117</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
@@ -736,10 +737,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>117</lid>
+          <lid>118</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>118</lid>
+            <lid>119</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -750,10 +751,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>119</lid>
+          <lid>120</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>120</lid>
+            <lid>121</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -764,10 +765,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>121</lid>
+          <lid>122</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>122</lid>
+            <lid>123</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -777,14 +778,14 @@
         </Measure>
       <Measure number="13">
         <KeySig>
-          <lid>124</lid>
+          <lid>125</lid>
           <accidental>-5</accidental>
           </KeySig>
         <Chord>
-          <lid>125</lid>
+          <lid>126</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>126</lid>
+            <lid>127</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -792,10 +793,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>127</lid>
+          <lid>128</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>128</lid>
+            <lid>129</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -806,10 +807,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>129</lid>
+          <lid>130</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>130</lid>
+            <lid>131</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -820,10 +821,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>131</lid>
+          <lid>132</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>132</lid>
+            <lid>133</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -836,14 +837,14 @@
         </Measure>
       <Measure number="14">
         <KeySig>
-          <lid>134</lid>
+          <lid>135</lid>
           <accidental>-6</accidental>
           </KeySig>
         <Chord>
-          <lid>135</lid>
+          <lid>136</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>136</lid>
+            <lid>137</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -854,10 +855,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>137</lid>
+          <lid>138</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>138</lid>
+            <lid>139</lid>
             <Accidental>
               <subtype>double flat</subtype>
               </Accidental>
@@ -868,10 +869,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>139</lid>
+          <lid>140</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>140</lid>
+            <lid>141</lid>
             <pitch>59</pitch>
             <tpc>7</tpc>
             <fret>14</fret>
@@ -879,10 +880,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>141</lid>
+          <lid>142</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>142</lid>
+            <lid>143</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -895,14 +896,14 @@
         </Measure>
       <Measure number="15">
         <KeySig>
-          <lid>144</lid>
+          <lid>145</lid>
           <accidental>-7</accidental>
           </KeySig>
         <Chord>
-          <lid>145</lid>
+          <lid>146</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>146</lid>
+            <lid>147</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -913,10 +914,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>147</lid>
+          <lid>148</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>148</lid>
+            <lid>149</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -927,10 +928,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>149</lid>
+          <lid>150</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>150</lid>
+            <lid>151</lid>
             <Accidental>
               <subtype>double flat</subtype>
               </Accidental>
@@ -941,10 +942,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>151</lid>
+          <lid>152</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>152</lid>
+            <lid>153</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -957,14 +958,14 @@
         </Measure>
       <Measure number="16">
         <KeySig>
-          <lid>154</lid>
+          <lid>155</lid>
           <accidental>0</accidental>
           </KeySig>
         <Chord>
-          <lid>155</lid>
+          <lid>156</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>156</lid>
+            <lid>157</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
@@ -972,10 +973,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>157</lid>
+          <lid>158</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>158</lid>
+            <lid>159</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>7</fret>
@@ -983,10 +984,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>159</lid>
+          <lid>160</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>160</lid>
+            <lid>161</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -994,10 +995,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>161</lid>
+          <lid>162</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>162</lid>
+            <lid>163</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -1007,14 +1008,14 @@
         </Measure>
       <Measure number="17">
         <KeySig>
-          <lid>164</lid>
+          <lid>165</lid>
           <accidental>1</accidental>
           </KeySig>
         <Chord>
-          <lid>165</lid>
+          <lid>166</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>166</lid>
+            <lid>167</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -1022,10 +1023,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>167</lid>
+          <lid>168</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>168</lid>
+            <lid>169</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -1033,10 +1034,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>169</lid>
+          <lid>170</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>170</lid>
+            <lid>171</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>7</fret>
@@ -1044,10 +1045,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>171</lid>
+          <lid>172</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>172</lid>
+            <lid>173</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1060,14 +1061,14 @@
         </Measure>
       <Measure number="18">
         <KeySig>
-          <lid>174</lid>
+          <lid>175</lid>
           <accidental>2</accidental>
           </KeySig>
         <Chord>
-          <lid>175</lid>
+          <lid>176</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>176</lid>
+            <lid>177</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>10</fret>
@@ -1075,10 +1076,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>177</lid>
+          <lid>178</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>178</lid>
+            <lid>179</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>12</fret>
@@ -1086,10 +1087,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>179</lid>
+          <lid>180</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>180</lid>
+            <lid>181</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>14</fret>
@@ -1097,10 +1098,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>181</lid>
+          <lid>182</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>182</lid>
+            <lid>183</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1113,14 +1114,14 @@
         </Measure>
       <Measure number="19">
         <KeySig>
-          <lid>184</lid>
+          <lid>185</lid>
           <accidental>3</accidental>
           </KeySig>
         <Chord>
-          <lid>185</lid>
+          <lid>186</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>186</lid>
+            <lid>187</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1131,10 +1132,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>187</lid>
+          <lid>188</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>188</lid>
+            <lid>189</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>14</fret>
@@ -1142,10 +1143,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>189</lid>
+          <lid>190</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>190</lid>
+            <lid>191</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>12</fret>
@@ -1153,10 +1154,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>191</lid>
+          <lid>192</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>192</lid>
+            <lid>193</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1169,14 +1170,14 @@
         </Measure>
       <Measure number="20">
         <KeySig>
-          <lid>194</lid>
+          <lid>195</lid>
           <accidental>4</accidental>
           </KeySig>
         <Chord>
-          <lid>195</lid>
+          <lid>196</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>196</lid>
+            <lid>197</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -1187,10 +1188,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>197</lid>
+          <lid>198</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>198</lid>
+            <lid>199</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1201,10 +1202,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>199</lid>
+          <lid>200</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>200</lid>
+            <lid>201</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1215,10 +1216,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>201</lid>
+          <lid>202</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>202</lid>
+            <lid>203</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -1231,14 +1232,14 @@
         </Measure>
       <Measure number="21">
         <KeySig>
-          <lid>204</lid>
+          <lid>205</lid>
           <accidental>5</accidental>
           </KeySig>
         <Chord>
-          <lid>205</lid>
+          <lid>206</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>206</lid>
+            <lid>207</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -1249,10 +1250,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>207</lid>
+          <lid>208</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>208</lid>
+            <lid>209</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1263,10 +1264,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>209</lid>
+          <lid>210</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>210</lid>
+            <lid>211</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>7</fret>
@@ -1274,10 +1275,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>211</lid>
+          <lid>212</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>212</lid>
+            <lid>213</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -1290,14 +1291,14 @@
         </Measure>
       <Measure number="22">
         <KeySig>
-          <lid>214</lid>
+          <lid>215</lid>
           <accidental>6</accidental>
           </KeySig>
         <Chord>
-          <lid>215</lid>
+          <lid>216</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>216</lid>
+            <lid>217</lid>
             <Accidental>
               <subtype>double sharp</subtype>
               </Accidental>
@@ -1308,10 +1309,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>217</lid>
+          <lid>218</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>218</lid>
+            <lid>219</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1322,10 +1323,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>219</lid>
+          <lid>220</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>220</lid>
+            <lid>221</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>14</fret>
@@ -1333,10 +1334,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>221</lid>
+          <lid>222</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>222</lid>
+            <lid>223</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -1349,14 +1350,14 @@
         </Measure>
       <Measure number="23">
         <KeySig>
-          <lid>224</lid>
+          <lid>225</lid>
           <accidental>7</accidental>
           </KeySig>
         <Chord>
-          <lid>225</lid>
+          <lid>226</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>226</lid>
+            <lid>227</lid>
             <pitch>60</pitch>
             <tpc>26</tpc>
             <fret>15</fret>
@@ -1364,10 +1365,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>227</lid>
+          <lid>228</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>228</lid>
+            <lid>229</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1378,10 +1379,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>229</lid>
+          <lid>230</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>230</lid>
+            <lid>231</lid>
             <Accidental>
               <subtype>double sharp</subtype>
               </Accidental>
@@ -1392,10 +1393,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>231</lid>
+          <lid>232</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>232</lid>
+            <lid>233</lid>
             <Accidental>
               <subtype>double sharp</subtype>
               </Accidental>
@@ -1408,14 +1409,14 @@
         </Measure>
       <Measure number="24">
         <KeySig>
-          <lid>234</lid>
+          <lid>235</lid>
           <accidental>-1</accidental>
           </KeySig>
         <Chord>
-          <lid>235</lid>
+          <lid>236</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>236</lid>
+            <lid>237</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
@@ -1423,10 +1424,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>237</lid>
+          <lid>238</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>238</lid>
+            <lid>239</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>7</fret>
@@ -1434,10 +1435,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>239</lid>
+          <lid>240</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>240</lid>
+            <lid>241</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -1445,10 +1446,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>241</lid>
+          <lid>242</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>242</lid>
+            <lid>243</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -1458,14 +1459,14 @@
         </Measure>
       <Measure number="25">
         <KeySig>
-          <lid>244</lid>
+          <lid>245</lid>
           <accidental>-2</accidental>
           </KeySig>
         <Chord>
-          <lid>245</lid>
+          <lid>246</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>246</lid>
+            <lid>247</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -1473,10 +1474,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>247</lid>
+          <lid>248</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>248</lid>
+            <lid>249</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -1484,10 +1485,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>249</lid>
+          <lid>250</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>250</lid>
+            <lid>251</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1498,10 +1499,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>251</lid>
+          <lid>252</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>252</lid>
+            <lid>253</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
@@ -1511,14 +1512,14 @@
         </Measure>
       <Measure number="26">
         <KeySig>
-          <lid>254</lid>
+          <lid>255</lid>
           <accidental>-3</accidental>
           </KeySig>
         <Chord>
-          <lid>255</lid>
+          <lid>256</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>256</lid>
+            <lid>257</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>10</fret>
@@ -1526,10 +1527,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>257</lid>
+          <lid>258</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>258</lid>
+            <lid>259</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1540,10 +1541,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>259</lid>
+          <lid>260</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>260</lid>
+            <lid>261</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1554,10 +1555,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>261</lid>
+          <lid>262</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>262</lid>
+            <lid>263</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -1567,14 +1568,14 @@
         </Measure>
       <Measure number="27">
         <KeySig>
-          <lid>264</lid>
+          <lid>265</lid>
           <accidental>-4</accidental>
           </KeySig>
         <Chord>
-          <lid>265</lid>
+          <lid>266</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>266</lid>
+            <lid>267</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -1582,10 +1583,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>267</lid>
+          <lid>268</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>268</lid>
+            <lid>269</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -1596,10 +1597,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>269</lid>
+          <lid>270</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>270</lid>
+            <lid>271</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1610,10 +1611,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>271</lid>
+          <lid>272</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>272</lid>
+            <lid>273</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>10</fret>
@@ -1623,14 +1624,14 @@
         </Measure>
       <Measure number="28">
         <KeySig>
-          <lid>274</lid>
+          <lid>275</lid>
           <accidental>-5</accidental>
           </KeySig>
         <Chord>
-          <lid>275</lid>
+          <lid>276</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>276</lid>
+            <lid>277</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
@@ -1638,10 +1639,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>277</lid>
+          <lid>278</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>278</lid>
+            <lid>279</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -1652,10 +1653,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>279</lid>
+          <lid>280</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>280</lid>
+            <lid>281</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1666,10 +1667,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>281</lid>
+          <lid>282</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>282</lid>
+            <lid>283</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -1679,14 +1680,14 @@
         </Measure>
       <Measure number="29">
         <KeySig>
-          <lid>284</lid>
+          <lid>285</lid>
           <accidental>-6</accidental>
           </KeySig>
         <Chord>
-          <lid>285</lid>
+          <lid>286</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>286</lid>
+            <lid>287</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1697,10 +1698,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>287</lid>
+          <lid>288</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>288</lid>
+            <lid>289</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1711,10 +1712,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>289</lid>
+          <lid>290</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>290</lid>
+            <lid>291</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -1725,10 +1726,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>291</lid>
+          <lid>292</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>292</lid>
+            <lid>293</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1741,14 +1742,14 @@
         </Measure>
       <Measure number="30">
         <KeySig>
-          <lid>294</lid>
+          <lid>295</lid>
           <accidental>-7</accidental>
           </KeySig>
         <Chord>
-          <lid>295</lid>
+          <lid>296</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>296</lid>
+            <lid>297</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1759,10 +1760,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>297</lid>
+          <lid>298</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>298</lid>
+            <lid>299</lid>
             <Accidental>
               <subtype>double flat</subtype>
               </Accidental>
@@ -1773,10 +1774,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>299</lid>
+          <lid>300</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>300</lid>
+            <lid>301</lid>
             <pitch>59</pitch>
             <tpc>7</tpc>
             <fret>14</fret>
@@ -1784,10 +1785,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>301</lid>
+          <lid>302</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>302</lid>
+            <lid>303</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
@@ -1800,14 +1801,14 @@
         </Measure>
       <Measure number="31">
         <KeySig>
-          <lid>304</lid>
+          <lid>305</lid>
           <accidental>0</accidental>
           </KeySig>
         <Chord>
-          <lid>305</lid>
+          <lid>306</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>306</lid>
+            <lid>307</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -1815,10 +1816,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>307</lid>
+          <lid>308</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>308</lid>
+            <lid>309</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>14</fret>
@@ -1826,10 +1827,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>309</lid>
+          <lid>310</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>310</lid>
+            <lid>311</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>12</fret>
@@ -1837,10 +1838,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>311</lid>
+          <lid>312</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>312</lid>
+            <lid>313</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>10</fret>
@@ -1850,10 +1851,10 @@
         </Measure>
       <Measure number="32">
         <Chord>
-          <lid>314</lid>
+          <lid>315</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>315</lid>
+            <lid>316</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
@@ -1861,10 +1862,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>316</lid>
+          <lid>317</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>317</lid>
+            <lid>318</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>7</fret>
@@ -1872,10 +1873,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>318</lid>
+          <lid>319</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>319</lid>
+            <lid>320</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
@@ -1883,10 +1884,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>320</lid>
+          <lid>321</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>321</lid>
+            <lid>322</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
@@ -2018,13 +2019,14 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <lid>1</lid>
             </Clef>
           <KeySig>
-            <lid>1</lid>
+            <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>2</lid>
+            <lid>3</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -2032,18 +2034,18 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>3</lid>
+            <lid>4</lid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <lid>4</lid>
+            <lid>5</lid>
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -2051,10 +2053,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>7</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>8</lid>
+              <lid>9</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -2062,10 +2064,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>11</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -2073,10 +2075,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>12</lid>
+              <lid>13</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -2086,14 +2088,14 @@
           </Measure>
         <Measure number="2">
           <KeySig>
-            <lid>14</lid>
+            <lid>15</lid>
             <accidental>1</accidental>
             </KeySig>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -2101,10 +2103,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>17</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>18</lid>
+              <lid>19</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -2112,10 +2114,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>19</lid>
+            <lid>20</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>20</lid>
+              <lid>21</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -2123,10 +2125,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>21</lid>
+            <lid>22</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>22</lid>
+              <lid>23</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -2136,14 +2138,14 @@
           </Measure>
         <Measure number="3">
           <KeySig>
-            <lid>24</lid>
+            <lid>25</lid>
             <accidental>2</accidental>
             </KeySig>
           <Chord>
-            <lid>25</lid>
+            <lid>26</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>27</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2154,10 +2156,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>27</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>28</lid>
+              <lid>29</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -2165,10 +2167,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>29</lid>
+            <lid>30</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>30</lid>
+              <lid>31</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -2176,10 +2178,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>31</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>32</lid>
+              <lid>33</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -2189,14 +2191,14 @@
           </Measure>
         <Measure number="4">
           <KeySig>
-            <lid>34</lid>
+            <lid>35</lid>
             <accidental>3</accidental>
             </KeySig>
           <Chord>
-            <lid>35</lid>
+            <lid>36</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>36</lid>
+              <lid>37</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -2207,10 +2209,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>37</lid>
+            <lid>38</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>38</lid>
+              <lid>39</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2221,10 +2223,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>39</lid>
+            <lid>40</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>40</lid>
+              <lid>41</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -2232,10 +2234,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>41</lid>
+            <lid>42</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>42</lid>
+              <lid>43</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2248,14 +2250,14 @@
           </Measure>
         <Measure number="5">
           <KeySig>
-            <lid>44</lid>
+            <lid>45</lid>
             <accidental>4</accidental>
             </KeySig>
           <Chord>
-            <lid>45</lid>
+            <lid>46</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>46</lid>
+              <lid>47</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -2266,10 +2268,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>47</lid>
+            <lid>48</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>48</lid>
+              <lid>49</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2280,10 +2282,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>49</lid>
+            <lid>50</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>50</lid>
+              <lid>51</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -2291,10 +2293,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>51</lid>
+            <lid>52</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>52</lid>
+              <lid>53</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -2307,14 +2309,14 @@
           </Measure>
         <Measure number="6">
           <KeySig>
-            <lid>54</lid>
+            <lid>55</lid>
             <accidental>5</accidental>
             </KeySig>
           <Chord>
-            <lid>55</lid>
+            <lid>56</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>56</lid>
+              <lid>57</lid>
               <Accidental>
                 <subtype>double sharp</subtype>
                 </Accidental>
@@ -2325,10 +2327,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>57</lid>
+            <lid>58</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>58</lid>
+              <lid>59</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2339,10 +2341,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>59</lid>
+            <lid>60</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>60</lid>
+              <lid>61</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -2350,10 +2352,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>61</lid>
+            <lid>62</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>62</lid>
+              <lid>63</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -2366,14 +2368,14 @@
           </Measure>
         <Measure number="7">
           <KeySig>
-            <lid>64</lid>
+            <lid>65</lid>
             <accidental>6</accidental>
             </KeySig>
           <Chord>
-            <lid>65</lid>
+            <lid>66</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>66</lid>
+              <lid>67</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -2384,10 +2386,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>67</lid>
+            <lid>68</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>68</lid>
+              <lid>69</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2398,10 +2400,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>69</lid>
+            <lid>70</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>70</lid>
+              <lid>71</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2412,10 +2414,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>71</lid>
+            <lid>72</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>72</lid>
+              <lid>73</lid>
               <Accidental>
                 <subtype>double sharp</subtype>
                 </Accidental>
@@ -2428,14 +2430,14 @@
           </Measure>
         <Measure number="8">
           <KeySig>
-            <lid>74</lid>
+            <lid>75</lid>
             <accidental>7</accidental>
             </KeySig>
           <Chord>
-            <lid>75</lid>
+            <lid>76</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>76</lid>
+              <lid>77</lid>
               <pitch>53</pitch>
               <tpc>25</tpc>
               <fret>8</fret>
@@ -2443,10 +2445,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>77</lid>
+            <lid>78</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>78</lid>
+              <lid>79</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2457,10 +2459,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>79</lid>
+            <lid>80</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>80</lid>
+              <lid>81</lid>
               <Accidental>
                 <subtype>double sharp</subtype>
                 </Accidental>
@@ -2471,10 +2473,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>81</lid>
+            <lid>82</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>82</lid>
+              <lid>83</lid>
               <pitch>48</pitch>
               <tpc>26</tpc>
               <fret>3</fret>
@@ -2484,14 +2486,14 @@
           </Measure>
         <Measure number="9">
           <KeySig>
-            <lid>84</lid>
+            <lid>85</lid>
             <accidental>-1</accidental>
             </KeySig>
           <Chord>
-            <lid>85</lid>
+            <lid>86</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>86</lid>
+              <lid>87</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -2499,10 +2501,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>87</lid>
+            <lid>88</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>88</lid>
+              <lid>89</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -2510,10 +2512,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>89</lid>
+            <lid>90</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>90</lid>
+              <lid>91</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -2521,10 +2523,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>91</lid>
+            <lid>92</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>92</lid>
+              <lid>93</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -2534,14 +2536,14 @@
           </Measure>
         <Measure number="10">
           <KeySig>
-            <lid>94</lid>
+            <lid>95</lid>
             <accidental>-2</accidental>
             </KeySig>
           <Chord>
-            <lid>95</lid>
+            <lid>96</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>96</lid>
+              <lid>97</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -2549,10 +2551,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>97</lid>
+            <lid>98</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>98</lid>
+              <lid>99</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -2560,10 +2562,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>99</lid>
+            <lid>100</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>100</lid>
+              <lid>101</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2574,10 +2576,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>101</lid>
+            <lid>102</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>102</lid>
+              <lid>103</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -2587,14 +2589,14 @@
           </Measure>
         <Measure number="11">
           <KeySig>
-            <lid>104</lid>
+            <lid>105</lid>
             <accidental>-3</accidental>
             </KeySig>
           <Chord>
-            <lid>105</lid>
+            <lid>106</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>106</lid>
+              <lid>107</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -2602,10 +2604,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>107</lid>
+            <lid>108</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>108</lid>
+              <lid>109</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2616,10 +2618,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>109</lid>
+            <lid>110</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>110</lid>
+              <lid>111</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2630,10 +2632,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>111</lid>
+            <lid>112</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>112</lid>
+              <lid>113</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -2643,14 +2645,14 @@
           </Measure>
         <Measure number="12">
           <KeySig>
-            <lid>114</lid>
+            <lid>115</lid>
             <accidental>-4</accidental>
             </KeySig>
           <Chord>
-            <lid>115</lid>
+            <lid>116</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>116</lid>
+              <lid>117</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -2658,10 +2660,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>117</lid>
+            <lid>118</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>118</lid>
+              <lid>119</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2672,10 +2674,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>119</lid>
+            <lid>120</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>120</lid>
+              <lid>121</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2686,10 +2688,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>121</lid>
+            <lid>122</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>122</lid>
+              <lid>123</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -2699,14 +2701,14 @@
           </Measure>
         <Measure number="13">
           <KeySig>
-            <lid>124</lid>
+            <lid>125</lid>
             <accidental>-5</accidental>
             </KeySig>
           <Chord>
-            <lid>125</lid>
+            <lid>126</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>126</lid>
+              <lid>127</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -2714,10 +2716,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>127</lid>
+            <lid>128</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>128</lid>
+              <lid>129</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2728,10 +2730,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>129</lid>
+            <lid>130</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>130</lid>
+              <lid>131</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -2742,10 +2744,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>131</lid>
+            <lid>132</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>132</lid>
+              <lid>133</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2758,14 +2760,14 @@
           </Measure>
         <Measure number="14">
           <KeySig>
-            <lid>134</lid>
+            <lid>135</lid>
             <accidental>-6</accidental>
             </KeySig>
           <Chord>
-            <lid>135</lid>
+            <lid>136</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>136</lid>
+              <lid>137</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2776,10 +2778,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>137</lid>
+            <lid>138</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>138</lid>
+              <lid>139</lid>
               <Accidental>
                 <subtype>double flat</subtype>
                 </Accidental>
@@ -2790,10 +2792,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>139</lid>
+            <lid>140</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>140</lid>
+              <lid>141</lid>
               <pitch>59</pitch>
               <tpc>7</tpc>
               <fret>14</fret>
@@ -2801,10 +2803,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>141</lid>
+            <lid>142</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>142</lid>
+              <lid>143</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2817,14 +2819,14 @@
           </Measure>
         <Measure number="15">
           <KeySig>
-            <lid>144</lid>
+            <lid>145</lid>
             <accidental>-7</accidental>
             </KeySig>
           <Chord>
-            <lid>145</lid>
+            <lid>146</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>146</lid>
+              <lid>147</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2835,10 +2837,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>147</lid>
+            <lid>148</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>148</lid>
+              <lid>149</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -2849,10 +2851,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>149</lid>
+            <lid>150</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>150</lid>
+              <lid>151</lid>
               <Accidental>
                 <subtype>double flat</subtype>
                 </Accidental>
@@ -2863,10 +2865,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>151</lid>
+            <lid>152</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>152</lid>
+              <lid>153</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2879,14 +2881,14 @@
           </Measure>
         <Measure number="16">
           <KeySig>
-            <lid>154</lid>
+            <lid>155</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>155</lid>
+            <lid>156</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>156</lid>
+              <lid>157</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -2894,10 +2896,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>157</lid>
+            <lid>158</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>158</lid>
+              <lid>159</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -2905,10 +2907,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>159</lid>
+            <lid>160</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>160</lid>
+              <lid>161</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -2916,10 +2918,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>161</lid>
+            <lid>162</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>162</lid>
+              <lid>163</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -2929,14 +2931,14 @@
           </Measure>
         <Measure number="17">
           <KeySig>
-            <lid>164</lid>
+            <lid>165</lid>
             <accidental>1</accidental>
             </KeySig>
           <Chord>
-            <lid>165</lid>
+            <lid>166</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>166</lid>
+              <lid>167</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -2944,10 +2946,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>167</lid>
+            <lid>168</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>168</lid>
+              <lid>169</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -2955,10 +2957,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>169</lid>
+            <lid>170</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>170</lid>
+              <lid>171</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -2966,10 +2968,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>171</lid>
+            <lid>172</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>172</lid>
+              <lid>173</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -2982,14 +2984,14 @@
           </Measure>
         <Measure number="18">
           <KeySig>
-            <lid>174</lid>
+            <lid>175</lid>
             <accidental>2</accidental>
             </KeySig>
           <Chord>
-            <lid>175</lid>
+            <lid>176</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>176</lid>
+              <lid>177</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -2997,10 +2999,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>177</lid>
+            <lid>178</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>178</lid>
+              <lid>179</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -3008,10 +3010,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>179</lid>
+            <lid>180</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>180</lid>
+              <lid>181</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -3019,10 +3021,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>181</lid>
+            <lid>182</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>182</lid>
+              <lid>183</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3035,14 +3037,14 @@
           </Measure>
         <Measure number="19">
           <KeySig>
-            <lid>184</lid>
+            <lid>185</lid>
             <accidental>3</accidental>
             </KeySig>
           <Chord>
-            <lid>185</lid>
+            <lid>186</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>186</lid>
+              <lid>187</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3053,10 +3055,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>187</lid>
+            <lid>188</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>188</lid>
+              <lid>189</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -3064,10 +3066,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>189</lid>
+            <lid>190</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>190</lid>
+              <lid>191</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -3075,10 +3077,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>191</lid>
+            <lid>192</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>192</lid>
+              <lid>193</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3091,14 +3093,14 @@
           </Measure>
         <Measure number="20">
           <KeySig>
-            <lid>194</lid>
+            <lid>195</lid>
             <accidental>4</accidental>
             </KeySig>
           <Chord>
-            <lid>195</lid>
+            <lid>196</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>196</lid>
+              <lid>197</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -3109,10 +3111,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>197</lid>
+            <lid>198</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>198</lid>
+              <lid>199</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3123,10 +3125,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>199</lid>
+            <lid>200</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>200</lid>
+              <lid>201</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3137,10 +3139,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>201</lid>
+            <lid>202</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>202</lid>
+              <lid>203</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -3153,14 +3155,14 @@
           </Measure>
         <Measure number="21">
           <KeySig>
-            <lid>204</lid>
+            <lid>205</lid>
             <accidental>5</accidental>
             </KeySig>
           <Chord>
-            <lid>205</lid>
+            <lid>206</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>206</lid>
+              <lid>207</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -3171,10 +3173,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>207</lid>
+            <lid>208</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>208</lid>
+              <lid>209</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3185,10 +3187,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>209</lid>
+            <lid>210</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>210</lid>
+              <lid>211</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -3196,10 +3198,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>211</lid>
+            <lid>212</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>212</lid>
+              <lid>213</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -3212,14 +3214,14 @@
           </Measure>
         <Measure number="22">
           <KeySig>
-            <lid>214</lid>
+            <lid>215</lid>
             <accidental>6</accidental>
             </KeySig>
           <Chord>
-            <lid>215</lid>
+            <lid>216</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>216</lid>
+              <lid>217</lid>
               <Accidental>
                 <subtype>double sharp</subtype>
                 </Accidental>
@@ -3230,10 +3232,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>217</lid>
+            <lid>218</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>218</lid>
+              <lid>219</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3244,10 +3246,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>219</lid>
+            <lid>220</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>220</lid>
+              <lid>221</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -3255,10 +3257,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>221</lid>
+            <lid>222</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>222</lid>
+              <lid>223</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -3271,14 +3273,14 @@
           </Measure>
         <Measure number="23">
           <KeySig>
-            <lid>224</lid>
+            <lid>225</lid>
             <accidental>7</accidental>
             </KeySig>
           <Chord>
-            <lid>225</lid>
+            <lid>226</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>226</lid>
+              <lid>227</lid>
               <pitch>60</pitch>
               <tpc>26</tpc>
               <fret>15</fret>
@@ -3286,10 +3288,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>227</lid>
+            <lid>228</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>228</lid>
+              <lid>229</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3300,10 +3302,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>229</lid>
+            <lid>230</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>230</lid>
+              <lid>231</lid>
               <Accidental>
                 <subtype>double sharp</subtype>
                 </Accidental>
@@ -3314,10 +3316,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>231</lid>
+            <lid>232</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>232</lid>
+              <lid>233</lid>
               <Accidental>
                 <subtype>double sharp</subtype>
                 </Accidental>
@@ -3330,14 +3332,14 @@
           </Measure>
         <Measure number="24">
           <KeySig>
-            <lid>234</lid>
+            <lid>235</lid>
             <accidental>-1</accidental>
             </KeySig>
           <Chord>
-            <lid>235</lid>
+            <lid>236</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>236</lid>
+              <lid>237</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -3345,10 +3347,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>237</lid>
+            <lid>238</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>238</lid>
+              <lid>239</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -3356,10 +3358,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>239</lid>
+            <lid>240</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>240</lid>
+              <lid>241</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -3367,10 +3369,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>241</lid>
+            <lid>242</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>242</lid>
+              <lid>243</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -3380,14 +3382,14 @@
           </Measure>
         <Measure number="25">
           <KeySig>
-            <lid>244</lid>
+            <lid>245</lid>
             <accidental>-2</accidental>
             </KeySig>
           <Chord>
-            <lid>245</lid>
+            <lid>246</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>246</lid>
+              <lid>247</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -3395,10 +3397,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>247</lid>
+            <lid>248</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>248</lid>
+              <lid>249</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -3406,10 +3408,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>249</lid>
+            <lid>250</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>250</lid>
+              <lid>251</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3420,10 +3422,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>251</lid>
+            <lid>252</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>252</lid>
+              <lid>253</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -3433,14 +3435,14 @@
           </Measure>
         <Measure number="26">
           <KeySig>
-            <lid>254</lid>
+            <lid>255</lid>
             <accidental>-3</accidental>
             </KeySig>
           <Chord>
-            <lid>255</lid>
+            <lid>256</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>256</lid>
+              <lid>257</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -3448,10 +3450,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>257</lid>
+            <lid>258</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>258</lid>
+              <lid>259</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3462,10 +3464,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>259</lid>
+            <lid>260</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>260</lid>
+              <lid>261</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3476,10 +3478,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>261</lid>
+            <lid>262</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>262</lid>
+              <lid>263</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -3489,14 +3491,14 @@
           </Measure>
         <Measure number="27">
           <KeySig>
-            <lid>264</lid>
+            <lid>265</lid>
             <accidental>-4</accidental>
             </KeySig>
           <Chord>
-            <lid>265</lid>
+            <lid>266</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>266</lid>
+              <lid>267</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -3504,10 +3506,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>267</lid>
+            <lid>268</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>268</lid>
+              <lid>269</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -3518,10 +3520,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>269</lid>
+            <lid>270</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>270</lid>
+              <lid>271</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3532,10 +3534,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>271</lid>
+            <lid>272</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>272</lid>
+              <lid>273</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -3545,14 +3547,14 @@
           </Measure>
         <Measure number="28">
           <KeySig>
-            <lid>274</lid>
+            <lid>275</lid>
             <accidental>-5</accidental>
             </KeySig>
           <Chord>
-            <lid>275</lid>
+            <lid>276</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>276</lid>
+              <lid>277</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -3560,10 +3562,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>277</lid>
+            <lid>278</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>278</lid>
+              <lid>279</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -3574,10 +3576,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>279</lid>
+            <lid>280</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>280</lid>
+              <lid>281</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3588,10 +3590,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>281</lid>
+            <lid>282</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>282</lid>
+              <lid>283</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -3601,14 +3603,14 @@
           </Measure>
         <Measure number="29">
           <KeySig>
-            <lid>284</lid>
+            <lid>285</lid>
             <accidental>-6</accidental>
             </KeySig>
           <Chord>
-            <lid>285</lid>
+            <lid>286</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>286</lid>
+              <lid>287</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3619,10 +3621,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>287</lid>
+            <lid>288</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>288</lid>
+              <lid>289</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3633,10 +3635,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>289</lid>
+            <lid>290</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>290</lid>
+              <lid>291</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -3647,10 +3649,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>291</lid>
+            <lid>292</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>292</lid>
+              <lid>293</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3663,14 +3665,14 @@
           </Measure>
         <Measure number="30">
           <KeySig>
-            <lid>294</lid>
+            <lid>295</lid>
             <accidental>-7</accidental>
             </KeySig>
           <Chord>
-            <lid>295</lid>
+            <lid>296</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>296</lid>
+              <lid>297</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3681,10 +3683,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>297</lid>
+            <lid>298</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>298</lid>
+              <lid>299</lid>
               <Accidental>
                 <subtype>double flat</subtype>
                 </Accidental>
@@ -3695,10 +3697,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>299</lid>
+            <lid>300</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>300</lid>
+              <lid>301</lid>
               <pitch>59</pitch>
               <tpc>7</tpc>
               <fret>14</fret>
@@ -3706,10 +3708,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>301</lid>
+            <lid>302</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>302</lid>
+              <lid>303</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
@@ -3722,14 +3724,14 @@
           </Measure>
         <Measure number="31">
           <KeySig>
-            <lid>304</lid>
+            <lid>305</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>305</lid>
+            <lid>306</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>306</lid>
+              <lid>307</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -3737,10 +3739,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>307</lid>
+            <lid>308</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>308</lid>
+              <lid>309</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -3748,10 +3750,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>309</lid>
+            <lid>310</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>310</lid>
+              <lid>311</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -3759,10 +3761,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>311</lid>
+            <lid>312</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>312</lid>
+              <lid>313</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -3772,10 +3774,10 @@
           </Measure>
         <Measure number="32">
           <Chord>
-            <lid>314</lid>
+            <lid>315</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>315</lid>
+              <lid>316</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -3783,10 +3785,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>316</lid>
+            <lid>317</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>317</lid>
+              <lid>318</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -3794,10 +3796,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>318</lid>
+            <lid>319</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>319</lid>
+              <lid>320</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -3805,10 +3807,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>320</lid>
+            <lid>321</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>321</lid>
+              <lid>322</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -3828,14 +3830,14 @@
             <transposingClefType>TAB</transposingClefType>
             </Clef>
           <KeySig>
-            <lid>1</lid>
+            <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -3843,10 +3845,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>7</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>8</lid>
+              <lid>9</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -3854,10 +3856,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>11</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -3865,10 +3867,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>12</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>12</lid>
+              <lid>13</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -3878,14 +3880,14 @@
           </Measure>
         <Measure number="2">
           <KeySig>
-            <lid>14</lid>
+            <lid>15</lid>
             <accidental>1</accidental>
             </KeySig>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -3893,10 +3895,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>17</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>18</lid>
+              <lid>19</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -3904,10 +3906,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>19</lid>
+            <lid>20</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>20</lid>
+              <lid>21</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -3915,10 +3917,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>21</lid>
+            <lid>22</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>22</lid>
+              <lid>23</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -3928,14 +3930,14 @@
           </Measure>
         <Measure number="3">
           <KeySig>
-            <lid>24</lid>
+            <lid>25</lid>
             <accidental>2</accidental>
             </KeySig>
           <Chord>
-            <lid>25</lid>
+            <lid>26</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>27</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -3943,10 +3945,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>27</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>28</lid>
+              <lid>29</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -3954,10 +3956,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>29</lid>
+            <lid>30</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>30</lid>
+              <lid>31</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -3965,10 +3967,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>31</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>32</lid>
+              <lid>33</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -3978,14 +3980,14 @@
           </Measure>
         <Measure number="4">
           <KeySig>
-            <lid>34</lid>
+            <lid>35</lid>
             <accidental>3</accidental>
             </KeySig>
           <Chord>
-            <lid>35</lid>
+            <lid>36</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>36</lid>
+              <lid>37</lid>
               <pitch>53</pitch>
               <tpc>25</tpc>
               <fret>8</fret>
@@ -3993,10 +3995,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>37</lid>
+            <lid>38</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>38</lid>
+              <lid>39</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -4004,10 +4006,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>39</lid>
+            <lid>40</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>40</lid>
+              <lid>41</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -4015,10 +4017,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>41</lid>
+            <lid>42</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>42</lid>
+              <lid>43</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -4028,14 +4030,14 @@
           </Measure>
         <Measure number="5">
           <KeySig>
-            <lid>44</lid>
+            <lid>45</lid>
             <accidental>4</accidental>
             </KeySig>
           <Chord>
-            <lid>45</lid>
+            <lid>46</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>46</lid>
+              <lid>47</lid>
               <pitch>48</pitch>
               <tpc>26</tpc>
               <fret>3</fret>
@@ -4043,10 +4045,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>47</lid>
+            <lid>48</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>48</lid>
+              <lid>49</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -4054,10 +4056,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>49</lid>
+            <lid>50</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>50</lid>
+              <lid>51</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -4065,10 +4067,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>51</lid>
+            <lid>52</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>52</lid>
+              <lid>53</lid>
               <pitch>53</pitch>
               <tpc>25</tpc>
               <fret>8</fret>
@@ -4078,14 +4080,14 @@
           </Measure>
         <Measure number="6">
           <KeySig>
-            <lid>54</lid>
+            <lid>55</lid>
             <accidental>5</accidental>
             </KeySig>
           <Chord>
-            <lid>55</lid>
+            <lid>56</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>56</lid>
+              <lid>57</lid>
               <pitch>55</pitch>
               <tpc>27</tpc>
               <fret>10</fret>
@@ -4093,10 +4095,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>57</lid>
+            <lid>58</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>58</lid>
+              <lid>59</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -4104,10 +4106,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>59</lid>
+            <lid>60</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>60</lid>
+              <lid>61</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -4115,10 +4117,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>61</lid>
+            <lid>62</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>62</lid>
+              <lid>63</lid>
               <pitch>60</pitch>
               <tpc>26</tpc>
               <fret>15</fret>
@@ -4128,14 +4130,14 @@
           </Measure>
         <Measure number="7">
           <KeySig>
-            <lid>64</lid>
+            <lid>65</lid>
             <accidental>6</accidental>
             </KeySig>
           <Chord>
-            <lid>65</lid>
+            <lid>66</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>66</lid>
+              <lid>67</lid>
               <pitch>60</pitch>
               <tpc>26</tpc>
               <fret>15</fret>
@@ -4143,10 +4145,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>67</lid>
+            <lid>68</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>68</lid>
+              <lid>69</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -4154,10 +4156,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>69</lid>
+            <lid>70</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>70</lid>
+              <lid>71</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -4165,10 +4167,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>71</lid>
+            <lid>72</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>72</lid>
+              <lid>73</lid>
               <pitch>55</pitch>
               <tpc>27</tpc>
               <fret>10</fret>
@@ -4178,14 +4180,14 @@
           </Measure>
         <Measure number="8">
           <KeySig>
-            <lid>74</lid>
+            <lid>75</lid>
             <accidental>7</accidental>
             </KeySig>
           <Chord>
-            <lid>75</lid>
+            <lid>76</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>76</lid>
+              <lid>77</lid>
               <pitch>53</pitch>
               <tpc>25</tpc>
               <fret>8</fret>
@@ -4193,10 +4195,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>77</lid>
+            <lid>78</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>78</lid>
+              <lid>79</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -4204,10 +4206,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>79</lid>
+            <lid>80</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>80</lid>
+              <lid>81</lid>
               <pitch>50</pitch>
               <tpc>28</tpc>
               <fret>5</fret>
@@ -4215,10 +4217,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>81</lid>
+            <lid>82</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>82</lid>
+              <lid>83</lid>
               <pitch>48</pitch>
               <tpc>26</tpc>
               <fret>3</fret>
@@ -4228,14 +4230,14 @@
           </Measure>
         <Measure number="9">
           <KeySig>
-            <lid>84</lid>
+            <lid>85</lid>
             <accidental>-1</accidental>
             </KeySig>
           <Chord>
-            <lid>85</lid>
+            <lid>86</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>86</lid>
+              <lid>87</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -4243,10 +4245,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>87</lid>
+            <lid>88</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>88</lid>
+              <lid>89</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -4254,10 +4256,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>89</lid>
+            <lid>90</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>90</lid>
+              <lid>91</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -4265,10 +4267,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>91</lid>
+            <lid>92</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>92</lid>
+              <lid>93</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -4278,14 +4280,14 @@
           </Measure>
         <Measure number="10">
           <KeySig>
-            <lid>94</lid>
+            <lid>95</lid>
             <accidental>-2</accidental>
             </KeySig>
           <Chord>
-            <lid>95</lid>
+            <lid>96</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>96</lid>
+              <lid>97</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -4293,10 +4295,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>97</lid>
+            <lid>98</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>98</lid>
+              <lid>99</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -4304,10 +4306,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>99</lid>
+            <lid>100</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>100</lid>
+              <lid>101</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -4315,10 +4317,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>101</lid>
+            <lid>102</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>102</lid>
+              <lid>103</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -4328,14 +4330,14 @@
           </Measure>
         <Measure number="11">
           <KeySig>
-            <lid>104</lid>
+            <lid>105</lid>
             <accidental>-3</accidental>
             </KeySig>
           <Chord>
-            <lid>105</lid>
+            <lid>106</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>106</lid>
+              <lid>107</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -4343,10 +4345,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>107</lid>
+            <lid>108</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>108</lid>
+              <lid>109</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -4354,10 +4356,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>109</lid>
+            <lid>110</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>110</lid>
+              <lid>111</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -4365,10 +4367,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>111</lid>
+            <lid>112</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>112</lid>
+              <lid>113</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -4378,14 +4380,14 @@
           </Measure>
         <Measure number="12">
           <KeySig>
-            <lid>114</lid>
+            <lid>115</lid>
             <accidental>-4</accidental>
             </KeySig>
           <Chord>
-            <lid>115</lid>
+            <lid>116</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>116</lid>
+              <lid>117</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -4393,10 +4395,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>117</lid>
+            <lid>118</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>118</lid>
+              <lid>119</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -4404,10 +4406,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>119</lid>
+            <lid>120</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>120</lid>
+              <lid>121</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -4415,10 +4417,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>121</lid>
+            <lid>122</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>122</lid>
+              <lid>123</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -4428,14 +4430,14 @@
           </Measure>
         <Measure number="13">
           <KeySig>
-            <lid>124</lid>
+            <lid>125</lid>
             <accidental>-5</accidental>
             </KeySig>
           <Chord>
-            <lid>125</lid>
+            <lid>126</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>126</lid>
+              <lid>127</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -4443,10 +4445,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>127</lid>
+            <lid>128</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>128</lid>
+              <lid>129</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -4454,10 +4456,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>129</lid>
+            <lid>130</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>130</lid>
+              <lid>131</lid>
               <pitch>52</pitch>
               <tpc>6</tpc>
               <fret>7</fret>
@@ -4465,10 +4467,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>131</lid>
+            <lid>132</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>132</lid>
+              <lid>133</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -4478,14 +4480,14 @@
           </Measure>
         <Measure number="14">
           <KeySig>
-            <lid>134</lid>
+            <lid>135</lid>
             <accidental>-6</accidental>
             </KeySig>
           <Chord>
-            <lid>135</lid>
+            <lid>136</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>136</lid>
+              <lid>137</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -4493,10 +4495,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>137</lid>
+            <lid>138</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>138</lid>
+              <lid>139</lid>
               <pitch>57</pitch>
               <tpc>5</tpc>
               <fret>12</fret>
@@ -4504,10 +4506,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>139</lid>
+            <lid>140</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>140</lid>
+              <lid>141</lid>
               <pitch>59</pitch>
               <tpc>7</tpc>
               <fret>14</fret>
@@ -4515,10 +4517,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>141</lid>
+            <lid>142</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>142</lid>
+              <lid>143</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -4528,14 +4530,14 @@
           </Measure>
         <Measure number="15">
           <KeySig>
-            <lid>144</lid>
+            <lid>145</lid>
             <accidental>-7</accidental>
             </KeySig>
           <Chord>
-            <lid>145</lid>
+            <lid>146</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>146</lid>
+              <lid>147</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -4543,10 +4545,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>147</lid>
+            <lid>148</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>148</lid>
+              <lid>149</lid>
               <pitch>59</pitch>
               <tpc>7</tpc>
               <fret>14</fret>
@@ -4554,10 +4556,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>149</lid>
+            <lid>150</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>150</lid>
+              <lid>151</lid>
               <pitch>57</pitch>
               <tpc>5</tpc>
               <fret>12</fret>
@@ -4565,10 +4567,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>151</lid>
+            <lid>152</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>152</lid>
+              <lid>153</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -4578,14 +4580,14 @@
           </Measure>
         <Measure number="16">
           <KeySig>
-            <lid>154</lid>
+            <lid>155</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>155</lid>
+            <lid>156</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>156</lid>
+              <lid>157</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -4593,10 +4595,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>157</lid>
+            <lid>158</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>158</lid>
+              <lid>159</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -4604,10 +4606,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>159</lid>
+            <lid>160</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>160</lid>
+              <lid>161</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -4615,10 +4617,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>161</lid>
+            <lid>162</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>162</lid>
+              <lid>163</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -4628,14 +4630,14 @@
           </Measure>
         <Measure number="17">
           <KeySig>
-            <lid>164</lid>
+            <lid>165</lid>
             <accidental>1</accidental>
             </KeySig>
           <Chord>
-            <lid>165</lid>
+            <lid>166</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>166</lid>
+              <lid>167</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -4643,10 +4645,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>167</lid>
+            <lid>168</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>168</lid>
+              <lid>169</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -4654,10 +4656,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>169</lid>
+            <lid>170</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>170</lid>
+              <lid>171</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -4665,10 +4667,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>171</lid>
+            <lid>172</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>172</lid>
+              <lid>173</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -4678,14 +4680,14 @@
           </Measure>
         <Measure number="18">
           <KeySig>
-            <lid>174</lid>
+            <lid>175</lid>
             <accidental>2</accidental>
             </KeySig>
           <Chord>
-            <lid>175</lid>
+            <lid>176</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>176</lid>
+              <lid>177</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -4693,10 +4695,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>177</lid>
+            <lid>178</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>178</lid>
+              <lid>179</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -4704,10 +4706,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>179</lid>
+            <lid>180</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>180</lid>
+              <lid>181</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -4715,10 +4717,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>181</lid>
+            <lid>182</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>182</lid>
+              <lid>183</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -4728,14 +4730,14 @@
           </Measure>
         <Measure number="19">
           <KeySig>
-            <lid>184</lid>
+            <lid>185</lid>
             <accidental>3</accidental>
             </KeySig>
           <Chord>
-            <lid>185</lid>
+            <lid>186</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>186</lid>
+              <lid>187</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -4743,10 +4745,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>187</lid>
+            <lid>188</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>188</lid>
+              <lid>189</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -4754,10 +4756,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>189</lid>
+            <lid>190</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>190</lid>
+              <lid>191</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -4765,10 +4767,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>191</lid>
+            <lid>192</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>192</lid>
+              <lid>193</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -4778,14 +4780,14 @@
           </Measure>
         <Measure number="20">
           <KeySig>
-            <lid>194</lid>
+            <lid>195</lid>
             <accidental>4</accidental>
             </KeySig>
           <Chord>
-            <lid>195</lid>
+            <lid>196</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>196</lid>
+              <lid>197</lid>
               <pitch>53</pitch>
               <tpc>25</tpc>
               <fret>8</fret>
@@ -4793,10 +4795,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>197</lid>
+            <lid>198</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>198</lid>
+              <lid>199</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -4804,10 +4806,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>199</lid>
+            <lid>200</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>200</lid>
+              <lid>201</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -4815,10 +4817,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>201</lid>
+            <lid>202</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>202</lid>
+              <lid>203</lid>
               <pitch>48</pitch>
               <tpc>26</tpc>
               <fret>3</fret>
@@ -4828,14 +4830,14 @@
           </Measure>
         <Measure number="21">
           <KeySig>
-            <lid>204</lid>
+            <lid>205</lid>
             <accidental>5</accidental>
             </KeySig>
           <Chord>
-            <lid>205</lid>
+            <lid>206</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>206</lid>
+              <lid>207</lid>
               <pitch>48</pitch>
               <tpc>26</tpc>
               <fret>3</fret>
@@ -4843,10 +4845,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>207</lid>
+            <lid>208</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>208</lid>
+              <lid>209</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -4854,10 +4856,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>209</lid>
+            <lid>210</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>210</lid>
+              <lid>211</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -4865,10 +4867,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>211</lid>
+            <lid>212</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>212</lid>
+              <lid>213</lid>
               <pitch>53</pitch>
               <tpc>25</tpc>
               <fret>8</fret>
@@ -4878,14 +4880,14 @@
           </Measure>
         <Measure number="22">
           <KeySig>
-            <lid>214</lid>
+            <lid>215</lid>
             <accidental>6</accidental>
             </KeySig>
           <Chord>
-            <lid>215</lid>
+            <lid>216</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>216</lid>
+              <lid>217</lid>
               <pitch>55</pitch>
               <tpc>27</tpc>
               <fret>10</fret>
@@ -4893,10 +4895,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>217</lid>
+            <lid>218</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>218</lid>
+              <lid>219</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -4904,10 +4906,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>219</lid>
+            <lid>220</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>220</lid>
+              <lid>221</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -4915,10 +4917,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>221</lid>
+            <lid>222</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>222</lid>
+              <lid>223</lid>
               <pitch>60</pitch>
               <tpc>26</tpc>
               <fret>15</fret>
@@ -4928,14 +4930,14 @@
           </Measure>
         <Measure number="23">
           <KeySig>
-            <lid>224</lid>
+            <lid>225</lid>
             <accidental>7</accidental>
             </KeySig>
           <Chord>
-            <lid>225</lid>
+            <lid>226</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>226</lid>
+              <lid>227</lid>
               <pitch>60</pitch>
               <tpc>26</tpc>
               <fret>15</fret>
@@ -4943,10 +4945,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>227</lid>
+            <lid>228</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>228</lid>
+              <lid>229</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -4954,10 +4956,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>229</lid>
+            <lid>230</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>230</lid>
+              <lid>231</lid>
               <pitch>57</pitch>
               <tpc>29</tpc>
               <fret>12</fret>
@@ -4965,10 +4967,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>231</lid>
+            <lid>232</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>232</lid>
+              <lid>233</lid>
               <pitch>55</pitch>
               <tpc>27</tpc>
               <fret>10</fret>
@@ -4978,14 +4980,14 @@
           </Measure>
         <Measure number="24">
           <KeySig>
-            <lid>234</lid>
+            <lid>235</lid>
             <accidental>-1</accidental>
             </KeySig>
           <Chord>
-            <lid>235</lid>
+            <lid>236</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>236</lid>
+              <lid>237</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -4993,10 +4995,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>237</lid>
+            <lid>238</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>238</lid>
+              <lid>239</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -5004,10 +5006,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>239</lid>
+            <lid>240</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>240</lid>
+              <lid>241</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -5015,10 +5017,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>241</lid>
+            <lid>242</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>242</lid>
+              <lid>243</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -5028,14 +5030,14 @@
           </Measure>
         <Measure number="25">
           <KeySig>
-            <lid>244</lid>
+            <lid>245</lid>
             <accidental>-2</accidental>
             </KeySig>
           <Chord>
-            <lid>245</lid>
+            <lid>246</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>246</lid>
+              <lid>247</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -5043,10 +5045,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>247</lid>
+            <lid>248</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>248</lid>
+              <lid>249</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -5054,10 +5056,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>249</lid>
+            <lid>250</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>250</lid>
+              <lid>251</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -5065,10 +5067,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>251</lid>
+            <lid>252</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>252</lid>
+              <lid>253</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -5078,14 +5080,14 @@
           </Measure>
         <Measure number="26">
           <KeySig>
-            <lid>254</lid>
+            <lid>255</lid>
             <accidental>-3</accidental>
             </KeySig>
           <Chord>
-            <lid>255</lid>
+            <lid>256</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>256</lid>
+              <lid>257</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -5093,10 +5095,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>257</lid>
+            <lid>258</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>258</lid>
+              <lid>259</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -5104,10 +5106,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>259</lid>
+            <lid>260</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>260</lid>
+              <lid>261</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -5115,10 +5117,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>261</lid>
+            <lid>262</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>262</lid>
+              <lid>263</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -5128,14 +5130,14 @@
           </Measure>
         <Measure number="27">
           <KeySig>
-            <lid>264</lid>
+            <lid>265</lid>
             <accidental>-4</accidental>
             </KeySig>
           <Chord>
-            <lid>265</lid>
+            <lid>266</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>266</lid>
+              <lid>267</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -5143,10 +5145,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>267</lid>
+            <lid>268</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>268</lid>
+              <lid>269</lid>
               <pitch>59</pitch>
               <tpc>7</tpc>
               <fret>14</fret>
@@ -5154,10 +5156,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>269</lid>
+            <lid>270</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>270</lid>
+              <lid>271</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -5165,10 +5167,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>271</lid>
+            <lid>272</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>272</lid>
+              <lid>273</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -5178,14 +5180,14 @@
           </Measure>
         <Measure number="28">
           <KeySig>
-            <lid>274</lid>
+            <lid>275</lid>
             <accidental>-5</accidental>
             </KeySig>
           <Chord>
-            <lid>275</lid>
+            <lid>276</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>276</lid>
+              <lid>277</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -5193,10 +5195,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>277</lid>
+            <lid>278</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>278</lid>
+              <lid>279</lid>
               <pitch>52</pitch>
               <tpc>6</tpc>
               <fret>7</fret>
@@ -5204,10 +5206,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>279</lid>
+            <lid>280</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>280</lid>
+              <lid>281</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -5215,10 +5217,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>281</lid>
+            <lid>282</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>282</lid>
+              <lid>283</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -5228,14 +5230,14 @@
           </Measure>
         <Measure number="29">
           <KeySig>
-            <lid>284</lid>
+            <lid>285</lid>
             <accidental>-6</accidental>
             </KeySig>
           <Chord>
-            <lid>285</lid>
+            <lid>286</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>286</lid>
+              <lid>287</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -5243,10 +5245,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>287</lid>
+            <lid>288</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>288</lid>
+              <lid>289</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -5254,10 +5256,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>289</lid>
+            <lid>290</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>290</lid>
+              <lid>291</lid>
               <pitch>52</pitch>
               <tpc>6</tpc>
               <fret>7</fret>
@@ -5265,10 +5267,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>291</lid>
+            <lid>292</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>292</lid>
+              <lid>293</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -5278,14 +5280,14 @@
           </Measure>
         <Measure number="30">
           <KeySig>
-            <lid>294</lid>
+            <lid>295</lid>
             <accidental>-7</accidental>
             </KeySig>
           <Chord>
-            <lid>295</lid>
+            <lid>296</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>296</lid>
+              <lid>297</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -5293,10 +5295,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>297</lid>
+            <lid>298</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>298</lid>
+              <lid>299</lid>
               <pitch>57</pitch>
               <tpc>5</tpc>
               <fret>12</fret>
@@ -5304,10 +5306,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>299</lid>
+            <lid>300</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>300</lid>
+              <lid>301</lid>
               <pitch>59</pitch>
               <tpc>7</tpc>
               <fret>14</fret>
@@ -5315,10 +5317,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>301</lid>
+            <lid>302</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>302</lid>
+              <lid>303</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -5328,14 +5330,14 @@
           </Measure>
         <Measure number="31">
           <KeySig>
-            <lid>304</lid>
+            <lid>305</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>305</lid>
+            <lid>306</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>306</lid>
+              <lid>307</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -5343,10 +5345,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>307</lid>
+            <lid>308</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>308</lid>
+              <lid>309</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>14</fret>
@@ -5354,10 +5356,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>309</lid>
+            <lid>310</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>310</lid>
+              <lid>311</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>12</fret>
@@ -5365,10 +5367,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>311</lid>
+            <lid>312</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>312</lid>
+              <lid>313</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
@@ -5378,10 +5380,10 @@
           </Measure>
         <Measure number="32">
           <Chord>
-            <lid>314</lid>
+            <lid>315</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>315</lid>
+              <lid>316</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
@@ -5389,10 +5391,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>316</lid>
+            <lid>317</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>317</lid>
+              <lid>318</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
@@ -5400,10 +5402,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>318</lid>
+            <lid>319</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>319</lid>
+              <lid>320</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -5411,10 +5413,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>320</lid>
+            <lid>321</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>321</lid>
+              <lid>322</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>

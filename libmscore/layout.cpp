@@ -1273,7 +1273,7 @@ void Score::doLayout()
             measure->setBreakMMRest(false);
             }
 
-      for (MeasureBase* m = first(); m; m = m->next())
+      for (MeasureBase* m = first(); m; m = m->next())      // set layout break
             m->layout0();
 
       layoutFlags = 0;

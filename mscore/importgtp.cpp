@@ -1003,7 +1003,6 @@ qDebug("BeginRepeat=============================================");
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
-            clef->staff()->setClef(0, clef->clefTypeList());
 
             Channel& ch = instr->channel(0);
             if (midiChannel == int(StaffTypes::PERC_DEFAULT)) {
@@ -1581,7 +1580,6 @@ void GuitarPro3::read(QFile* fp)
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
-            clef->staff()->setClef(0, clef->clefTypeList());
 
             Channel& ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
@@ -2272,7 +2270,6 @@ void GuitarPro4::read(QFile* fp)
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
-            clef->staff()->setClef(0, clef->clefTypeList());
 
 
             Channel& ch = instr->channel(0);
@@ -3134,7 +3131,6 @@ void GuitarPro5::readTracks()
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
-            clef->staff()->setClef(0, clef->clefTypeList());
 
             Channel& ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
@@ -3791,13 +3787,11 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   if (measure->prevMeasure()) {
                         if (clefId != oldClefId[staffIdx]) {
                               segment->add(newClef);
-                              newClef->staff()->setClef(0, newClef->clefTypeList());
                               oldClefId[staffIdx] = clefId;
                               }
                         }
                   else  {
                         segment->add(newClef);
-                        newClef->staff()->setClef(0, newClef->clefTypeList());
                         oldClefId[staffIdx] = clefId;
                         }
 

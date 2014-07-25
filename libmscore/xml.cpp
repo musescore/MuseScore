@@ -717,10 +717,18 @@ const SpannerValues* XmlReader::spannerValues(int id)
       return 0;
       }
 
+//---------------------------------------------------------
+//   addSpanner
+//---------------------------------------------------------
+
 void XmlReader::addSpanner(int id, Spanner* s)
       {
       _spanner.append(std::pair<int, Spanner*>(id, s));
       }
+
+//---------------------------------------------------------
+//   removeSpanner
+//---------------------------------------------------------
 
 void XmlReader::removeSpanner(const Spanner* s)
       {
@@ -732,6 +740,10 @@ void XmlReader::removeSpanner(const Spanner* s)
             }
       }
 
+//---------------------------------------------------------
+//   findSpanner
+//---------------------------------------------------------
+
 Spanner* XmlReader::findSpanner(int id)
       {
       for (auto i : _spanner) {
@@ -740,6 +752,10 @@ Spanner* XmlReader::findSpanner(int id)
             }
       return nullptr;
       }
+
+//---------------------------------------------------------
+//   spannerId
+//---------------------------------------------------------
 
 int XmlReader::spannerId(const Spanner* s)
       {
@@ -751,12 +767,20 @@ int XmlReader::spannerId(const Spanner* s)
       return -1;
       }
 
+//---------------------------------------------------------
+//   addSpanner
+//---------------------------------------------------------
+
 int Xml::addSpanner(const Spanner* s)
       {
       ++_spannerId;
       _spanner.append(std::pair<int, const Spanner*>(_spannerId, s));
       return _spannerId;
       }
+
+//---------------------------------------------------------
+//   findSpanner
+//---------------------------------------------------------
 
 const Spanner* Xml::findSpanner(int id)
       {
@@ -767,6 +791,10 @@ const Spanner* Xml::findSpanner(int id)
       return nullptr;
       }
 
+//---------------------------------------------------------
+//   spannerId
+//---------------------------------------------------------
+
 int Xml::spannerId(const Spanner* s)
       {
       for (auto i : _spanner) {
@@ -774,6 +802,17 @@ int Xml::spannerId(const Spanner* s)
                   return i.first;
             }
       return addSpanner(s);
+      }
+
+//---------------------------------------------------------
+//   clefs
+//---------------------------------------------------------
+
+QList<std::pair<int, ClefType>>& XmlReader::clefs(int idx)
+      {
+      while (idx >= _clefs.size())
+            _clefs.append(QList<std::pair<int,ClefType>>());
+      return _clefs[idx];
       }
 
 }
