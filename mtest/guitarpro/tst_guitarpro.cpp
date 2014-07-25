@@ -125,6 +125,7 @@ private slots:
       void gpxGhost()        { gpReadTest("ghost-note", "gpx"); }
       void gpxRasg()         { gpReadTest("rasg", "gpx"); }
       void gp5Percussion()   { gpReadTest("all-percussion", "gp5"); }
+      void gpxFermata()      { gpReadTest("fermata", "gpx"); }
       };
 
 //---------------------------------------------------------

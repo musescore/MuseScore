@@ -540,6 +540,24 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
       }
 
 //---------------------------------------------------------
+//   fermataToFraction
+//---------------------------------------------------------
+
+Fraction GuitarPro6::fermataToFraction(int numerator, int denominator)
+      {
+      numerator++;
+      // minim through to hemidemisemiquaver
+      if (denominator == 0)       { denominator = 2; }
+      else if (denominator == 1)  { denominator = 4; }
+      else if (denominator == 2)  { denominator = 8;  }
+      else if (denominator == 3)  { denominator = 12;  }
+      else if (denominator == 4)  { denominator = 16;  }
+      else if (denominator == 5)  { denominator = 32;  }
+
+      return Fraction(numerator, denominator);
+      }
+
+//---------------------------------------------------------
 //   rhythmToDuration
 //---------------------------------------------------------
 
@@ -723,8 +741,10 @@ void GuitarPro6::makeTie(Note* note) {
             qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
 }
 
-int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[])
+int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter)
       {
+            // we must count from the start of the bar, so declare a fraction to track this
+            Fraction fermataIndex(0,1);
             int track = staffIdx * VOICES + voiceNum;
             auto currentBeatList = beats.split(" ");
             for (auto currentBeat = currentBeatList.begin(); currentBeat != currentBeatList.end(); currentBeat++) {
@@ -1239,6 +1259,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                           qDebug() << "WARNING: Not handling node: " << currentNode.nodeName();
                                     currentNode = currentNode.nextSibling();
                               }
+                              fermataIndex += l;
                         }
                         else if (currentNode.nodeName() == "Hairpin") {
                               Segment* seg = segment->prev1(SegmentType::ChordRest);
@@ -1316,6 +1337,20 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               ottava[track] = 0;
                               }
                   }
+                  auto fermataList = fermatas.find(measureCounter);
+                  if (fermataList != fermatas.end()) {
+                        // iterator is a list of GPFermata values
+                        for (auto fermataIter = (*fermataList)->begin(); fermataIter != (*fermataList)->end(); fermataIter++) {
+                              Fraction targetIndex = fermataToFraction((*fermataIter).index, ((*fermataIter).timeDivision));
+                              if (fermataIndex == targetIndex) {
+                                    Articulation* art = new Articulation(score);
+                                    art->setArticulationType(ArticulationType::Fermata);
+                                    art->setUp(true);
+                                    art->setAnchor(ArticulationAnchor::TOP_STAFF);
+                                    cr->add(art);
+                                    }
+                              }
+                        }
                   if (!ottavaFound)
                         ottava[track] = 0;
                   tick += cr->actualTicks();
@@ -1327,7 +1362,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 //   readBars
 //---------------------------------------------------------
 
-void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* /*t*/)
+void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* /*t*/, int measureCounter)
       {
       // unique bar identifiers are represented as a space separated string of numbers
       QStringList barsString = barList->toElement().text().split(" ");
@@ -1417,7 +1452,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                   }
 
             // read the beats that occur in the bar
-            tick = readBeats(voice.firstChild().toElement().text(), partInfo, measure, tick, staffIdx, voiceNum, tuplets);
+            tick = readBeats(voice.firstChild().toElement().text(), partInfo, measure, tick, staffIdx, voiceNum, tuplets, measureCounter);
             // increment the counter for parts
             staffIdx++;
             }
@@ -1459,6 +1494,29 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         t->setTrack(0);
                         measure->getSegment(SegmentType::KeySig, measure->tick())->add(t);
                         }
+                  else if (!masterBarElement.nodeName().compare("Fermatas")) {
+                        QDomNode currentFermata = masterBarElement.firstChild();
+                        while (!currentFermata.isNull()) {
+                              QString fermata = currentFermata.lastChildElement("Offset").toElement().text();
+                              currentFermata = currentFermata.nextSibling();
+
+                              // get the fermata information and construct a gpFermata from them
+                              QStringList fermataComponents = fermata.split("/", QString::SkipEmptyParts);
+                              GPFermata gpFermata;
+                              gpFermata.index = fermataComponents.at(0).toInt();
+                              gpFermata.timeDivision = fermataComponents.at(1).toInt();
+
+                              if (fermatas.contains(measureCounter)) {
+                                    QList<GPFermata>* fermataList = fermatas.value(measureCounter);
+                                    fermataList->push_back(gpFermata);
+                                    }
+                              else  {
+                                    QList<GPFermata>* fermataList = new QList<GPFermata>;
+                                    fermataList->push_back(gpFermata);
+                                    fermatas.insert(measureCounter, fermataList);
+                                    }
+                              }
+                        }
                   else if (!masterBarElement.nodeName().compare("Repeat")) {
                         bool start = !masterBarElement.attributes().namedItem("start").toAttr().value().compare("true");
                         int count = masterBarElement.attributes().namedItem("count").toAttr().value().toInt();
@@ -1478,7 +1536,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         score->addElement(volta);
                         }
                   else if (!masterBarElement.nodeName().compare("Bars")) {
-                        readBars(&masterBarElement, measure, oldClefId, partInfo, t);
+                        readBars(&masterBarElement, measure, oldClefId, partInfo, t, measureCounter);
                         }
                   masterBarElement = masterBarElement.nextSibling();
                   }
@@ -1538,6 +1596,7 @@ void GuitarPro6::readGpif(QByteArray* data)
       measures = findNumMeasures(&partInfo);
 
       createMeasures();
+      fermatas.clear();
       readMasterBars(&partInfo);
       // set the starting tempo of the score
       setTempo(/*tempo*/120, score->firstMeasure());
