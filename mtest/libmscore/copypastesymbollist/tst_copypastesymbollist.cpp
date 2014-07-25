@@ -47,6 +47,9 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       void copypasteRange()  { copypastepart("range", Element::Type::ARTICULATION); }
       void copypasteRange1()  { copypastedifferentvoice("range-01", Element::Type::ARTICULATION); }
 
+      void copypasteArticulationRest()   { copypaste("articulation-rest", Element::Type::ARTICULATION); }
+      void copypasteFermataRest()        { copypaste("fermata-rest", Element::Type::ARTICULATION); }
+
       };
 
 //---------------------------------------------------------
