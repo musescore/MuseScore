@@ -558,7 +558,12 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                     el->read(e);
                                     el->setTrack(destTrack);
                                     el->setParent(cr);
-                                    undoAddElement(el);
+                                    if (!el->isFermata()
+                                        && cr->type() == Element::Type::REST) {
+                                          delete el;
+                                          }
+                                    else
+                                          undoAddElement(el);
                                     }
                               else if (tag == "FiguredBass") {
                                     // FiguredBass always belongs to first staff voice
