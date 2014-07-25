@@ -66,6 +66,21 @@ struct GPVolta {
       QList<int> voltaInfo;
 };
 
+/* How the fermatas are represented in Guitar Pro is two integers, the
+ * first is an index value and the second is the time division that
+ * index value refers to, and they are givin with respect to a
+ * measure. Time division 0 means a minim, 1 is a crotchet, 2 is a
+ * quaver and so on, with the index (counting from 0) refering to how
+ * many time divisions occur before the fermata. These numbers are
+ * separated in GP6 with a '/' character. For example, a note
+ * occurring on the third beat of a measure in a 4/4 bar would be
+ * represented as 2/1.
+ */
+struct GPFermata {
+      int index;
+      int timeDivision;
+};
+
 struct GpBar {
       Fraction timesig;
       int keysig;
@@ -88,6 +103,7 @@ class GuitarPro {
       int version;
       int key;
 
+      QMap<int, QList<GPFermata>*> fermatas;
       Ottava** ottava;
       Hairpin** hairpins;
       Score* score;
@@ -277,11 +293,12 @@ class GuitarPro6 : public GuitarPro {
       int findNumMeasures(GPPartInfo* partInfo);
       void readMasterTracks(QDomNode* masterTrack);
       void readDrumNote(Note* note, int element, int variation);
-      int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[]);
-      void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* t);
+      int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter);
+      void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* t, int measureCounter);
       void readTracks(QDomNode* tracks);
       void readMasterBars(GPPartInfo* partInfo);
       Fraction rhythmToDuration(QString value);
+      Fraction fermataToFraction(int numerator, int denominator);
       QDomNode getNode(QString id, QDomNode nodes);
       void unhandledNode(QString nodeName);
       void makeTie(Note* note);
