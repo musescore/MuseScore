@@ -165,24 +165,44 @@ Palette* MuseScore::newFramePalette()
 //   newDynamicsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newDynamicsPalette()
+Palette* MuseScore::newDynamicsPalette(bool master)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Dynamics"));
       sp->setMag(.8);
-      sp->setGrid(42, 28);
+      if (master)
+            sp->setGrid(60, 28);
+      else
+            sp->setGrid(42, 28);
       sp->setDrawGrid(true);
 
-      const char* array[] = {
-            "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
-            "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
-            "rfz", "rf", "fz", "m", "r", "s", "z", "n"
-            };
-      for (const char* c : array) {
-            Dynamic* dynamic = new Dynamic(gscore);
-            dynamic->setDynamicType(c);
-            sp->append(dynamic, dynamic->dynamicTypeName());
+      if (master) {
+            const char* array[] = {
+                  "pppppp", "ppppp", "pppp",
+                  "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
+                  "ffff", "fffff", "ffffff",
+                  "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+                  "rfz", "rf", "fz", "m", "r", "s", "z", "n"
+                  };
+            for (const char* c : array) {
+                  Dynamic* dynamic = new Dynamic(gscore);
+                  dynamic->setDynamicType(c);
+                  sp->append(dynamic, dynamic->dynamicTypeName());
+                  }
             }
+      else {
+            const char* array[] = {
+                  "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
+                  "fp", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+                  "rfz", "rf", "fz", "m", "r", "s", "z", "n"
+                  };
+            for (const char* c : array) {
+                  Dynamic* dynamic = new Dynamic(gscore);
+                  dynamic->setDynamicType(c);
+                  sp->append(dynamic, dynamic->dynamicTypeName());
+                  }
+            }
+            
       return sp;
       }
 
