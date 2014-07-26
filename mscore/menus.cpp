@@ -971,9 +971,6 @@ Palette* MuseScore::newTextPalette()
       text->setText(tr("1."));
       sp->append(text, tr("Lyrics Verse Number"));
 
-      Harmony* harmony = new Harmony(gscore);
-      harmony->setText("C7");
-      sp->append(harmony, tr("Chord Symbol"));
       return sp;
       }
 
