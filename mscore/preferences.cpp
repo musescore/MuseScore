@@ -115,12 +115,17 @@ void Preferences::init()
       useJackMidi        = false;
       useJackTransport   = false;
       JackTimebaseMaster = false;
+      usePortaudioAudio  = false;
+      usePulseAudio      = false;
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       usePortaudioAudio  = true;
-      usePulseAudio      = false;
-#else
-      usePortaudioAudio  = false;
-      usePulseAudio      = true;
+      // Linux
+#elif defined(USE_PULSEAUDIO)
+      usePulseAudio  = true;
+#elif defined(USE_ALSA)
+      useAlsaAudio = true;
+#elif defined(USE_PORTAUDIO)
+      usePortaudioAudio = true;
 #endif
 
       midiPorts          = 2;
