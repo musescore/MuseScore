@@ -38,7 +38,7 @@ TextCursor Text::_cursor;
 static QString mapFace(Score* score, QString face)
       {
       if (face == "ScoreFont")
-            face = score->scoreFont()->textFace();
+            face = score->scoreTextFont();
       return face;
       }
 

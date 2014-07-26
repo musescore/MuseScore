@@ -171,6 +171,7 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::MinTieLength,                StyleType("minTieLength",            StyleValueType::SPATIUM) },
       { StyleIdx::SectionPause,                StyleType("sectionPause",            StyleValueType::DOUBLE) },
       { StyleIdx::MusicalSymbolFont,           StyleType("musicalSymbolFont",       StyleValueType::STRING) },
+      { StyleIdx::MusicalTextFont,             StyleType("musicalTextFont",         StyleValueType::STRING) },
       { StyleIdx::showHeader,                  StyleType("showHeader",              StyleValueType::BOOL) },
 //      { StyleIdx::headerStyled,                StyleType("headerStyled",            StyleValueType::BOOL) },
       { StyleIdx::headerFirstPage,             StyleType("headerFirstPage",         StyleValueType::BOOL) },

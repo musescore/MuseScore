@@ -300,6 +300,7 @@ enum class StyleIdx : unsigned char {
 
       SectionPause,
       MusicalSymbolFont,
+      MusicalTextFont,
 
       showHeader,
 //      headerStyled,
