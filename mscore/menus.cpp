@@ -971,9 +971,16 @@ Palette* MuseScore::newTextPalette()
       text->setText(tr("1."));
       sp->append(text, tr("Lyrics Verse Number"));
 
+#if 0
+      // creating a true Harmony object is more involved than this but would be a mistake
+      // as it would lock in a chord id unnecessarily
       Harmony* harmony = new Harmony(gscore);
       harmony->setText("C7");
+      int root, bass;
+      harmony->parseHarmony("C7", &root, &bass);
       sp->append(harmony, tr("Chord Symbol"));
+#endif
+
       return sp;
       }
 
