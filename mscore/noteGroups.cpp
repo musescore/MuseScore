@@ -49,7 +49,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
             }
 
       c.score()->parts().front()->setLongName("");
-      c.score()->style()->set(StyleIdx::linearStretch, 1.1);
+      c.score()->style()->set(StyleIdx::linearStretch, 1.3);
       return c.score();
       }
 
