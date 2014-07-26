@@ -48,7 +48,6 @@
 #include "stafftext.h"
 #include "mscoreview.h"
 #include "plugins.h"
-// #include "mscore/qmlplugin.h"
 
 namespace Ms {
 
