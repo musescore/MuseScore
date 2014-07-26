@@ -669,11 +669,13 @@ void checkOffTime(
 
 bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
       {
-      std::set<std::pair<ReducedFraction, int>> onTimeVoices;
-      for (const auto &chordEvent: chords) {
-            const auto pair = std::make_pair(chordEvent.first, chordEvent.second.voice);
-            if (onTimeVoices.find(pair) == onTimeVoices.end())
-                  onTimeVoices.insert(pair);
+      std::set<std::tuple<ReducedFraction, int, int>> onTimeVoicesBars;
+      for (const auto &chord: chords) {
+            const auto tuple = std::make_tuple(chord.first,
+                                               chord.second.voice,
+                                               chord.second.barIndex);
+            if (onTimeVoicesBars.find(tuple) == onTimeVoicesBars.end())
+                  onTimeVoicesBars.insert(tuple);
             else
                   return false;
             }
