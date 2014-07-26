@@ -1876,7 +1876,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.setBrush(Qt::NoBrush);
 
             QPen pen;
-            pen.setColor(Qt::blue);
+            pen.setColor(MScore::selectColor[0]);
             pen.setWidthF(2.0 / p.matrix().m11());
 
             pen.setStyle(Qt::SolidLine);
@@ -2340,7 +2340,7 @@ void ScoreView::setFocusRect()
             if (!focusFrame) {
                   focusFrame = new QFocusFrame;
                   QPalette p(focusFrame->palette());
-                  p.setColor(QPalette::WindowText, Qt::blue);
+                  p.setColor(QPalette::WindowText, MScore::selectColor[0]);
                   focusFrame->setPalette(p);
                   }
             focusFrame->setWidget(static_cast<QWidget*>(this));
