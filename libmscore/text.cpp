@@ -2160,10 +2160,16 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
       bool rv = true;
       switch (propertyId) {
             case P_ID::TEXT_STYLE:
-                  setTextStyle(v.value<TextStyle>());
+                  if (v.canConvert<TextStyle>())
+                        setTextStyle(v.value<TextStyle>());
+                  else
+                        qDebug("Text::setProperty: unable to set TextStyle");
                   break;
             case P_ID::TEXT_STYLE_TYPE:
-                  setTextStyleType(v.value<TextStyleType>());
+                  if (v.canConvert<TextStyleType>())
+                        setTextStyleType(v.value<TextStyleType>());     // won't happen currently
+                  else
+                        setTextStyleType(TextStyleType(v.toInt()));
                   setGenerated(false);
                   break;
             case P_ID::TEXT:

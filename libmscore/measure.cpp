@@ -3868,10 +3868,16 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
       {
       switch(propertyId) {
             case P_ID::TIMESIG_NOMINAL:
-                  _timesig = value.value<Fraction>();
+                  if (value.canConvert<Fraction>())
+                        _timesig = value.value<Fraction>();
+                  else
+                        qDebug("Measure::setProperty: unable to set _timesig");
                   break;
             case P_ID::TIMESIG_ACTUAL:
-                  _len = value.value<Fraction>();
+                  if (value.canConvert<Fraction>())
+                        _len = value.value<Fraction>();
+                  else
+                        qDebug("Measure::setProperty: unable to set _len");
                   break;
             case P_ID::REPEAT_FLAGS:
                   setRepeatFlags(Repeat(value.toInt()));
