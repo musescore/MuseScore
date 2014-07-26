@@ -2527,6 +2527,7 @@ class ScoreFont {
 
       static ScoreFont* fontFactory(QString);
       static ScoreFont* fallbackFont();
+      static const char* fallbackTextFont();
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
 
       const QFont& font() const { return *_font; }

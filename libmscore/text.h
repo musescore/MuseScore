@@ -91,7 +91,7 @@ class TextCursor {
       void setColumn(int val)       { _column = val; }
       void setSelectLine(int val)   { _selectLine = val; }
       void setSelectColumn(int val) { _selectColumn = val; }
-      void initFromStyle(Score*, const TextStyle& s);
+      void initFromStyle(const TextStyle& s);
       };
 
 class Text;

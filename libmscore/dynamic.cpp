@@ -37,7 +37,7 @@ struct Dyn {
       const char* text;  // utf8 text of dynamic
       };
 
-#if 1
+#if 0
 
 // variant with ligatures, using bravura-text
 
@@ -78,7 +78,7 @@ static Dyn dynList[] = {
       };
 #endif
 
-#if 0
+#if 1
 
 // variant with ligatures, works for both emmentaler and bravura:
 
@@ -94,8 +94,7 @@ static Dyn dynList[] = {
       {  64,  false, "mp",     "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>" },
       {  80,  false, "mf",     "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>" },
       {  96,  false, "f",      "<sym>dynamicForte</sym>" },
-//      { 112,  false, "ff",     "<sym>dynamicForte</sym><sym>dynamicForte</sym>" },
-      { 112,  false, "ff",     "<font face=\"BravuraText\">\ue522\ue522</font>" },
+      { 112,  false, "ff",     "<sym>dynamicForte</sym><sym>dynamicForte</sym>" },
       { 126,  false, "fff",    "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
       { 127,  false, "ffff",   "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
       { 127,  false, "fffff",  "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },

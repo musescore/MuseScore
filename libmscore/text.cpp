@@ -30,19 +30,6 @@ static const qreal superScriptOffset = -0.5;       // of x-height
 TextCursor Text::_cursor;
 
 //---------------------------------------------------------
-//   mapFace
-//    map the virtual font name "ScoreFont" to the
-//    score font of the current score
-//---------------------------------------------------------
-
-static QString mapFace(Score* score, QString face)
-      {
-      if (face == "ScoreFont")
-            face = score->scoreTextFont();
-      return face;
-      }
-
-//---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
 
@@ -75,9 +62,9 @@ void TextCursor::clearSelection()
 //   initFromStyle
 //---------------------------------------------------------
 
-void TextCursor::initFromStyle(Score* score, const TextStyle& s)
+void TextCursor::initFromStyle(const TextStyle& s)
       {
-      QString face = mapFace(score, s.family());
+      QString face = s.family();
       _format.setFontFamily(face);
       _format.setFontSize(s.size());
       _format.setBold(s.bold());
@@ -206,19 +193,12 @@ QFont TextFragment::font(const Text* t) const
             font.setItalic(format.italic());
             }
       else {
-            bool fallback = false;
-            for (SymId id : ids) {
-                  if (!t->symIsValid(id)) {
-                        fallback = true;
-                        break;
-                        }
-                  }
-            ScoreFont* f = fallback ? ScoreFont::fallbackFont() : t->score()->scoreFont();
             text.clear();
+            ScoreFont* sf = ScoreFont::fallbackFont();
             for (SymId id : ids)
-                  text.append(f->toString(id));
-            font.setFamily(f->family());
-            font.setWeight(QFont::Normal);  // if not set we get system default
+                  text.append(sf->toString(id));
+            font.setFamily(t->score()->styleSt(StyleIdx::MusicalTextFont));
+            font.setWeight(QFont::Normal);      // if not set we get system default
             font.setStyleStrategy(QFont::NoFontMerging);
             font.setHintingPreference(QFont::PreferVerticalHinting);
             }
@@ -828,7 +808,7 @@ void Text::updateCursorFormat(TextCursor* cursor)
       if (format)
             cursor->setFormat(*format);
       else
-            cursor->initFromStyle(score(), textStyle());
+            cursor->initFromStyle(textStyle());
       }
 
 //---------------------------------------------------------
@@ -1049,7 +1029,7 @@ void Text::createLayout()
       {
       _layout.clear();
       TextCursor cursor;
-      cursor.initFromStyle(score(), textStyle());
+      cursor.initFromStyle(textStyle());
 
       int state = 0;
       QString token;
@@ -1109,7 +1089,6 @@ void Text::createLayout()
                                     cursor.format()->setFontSize(parseNumProperty(token.mid(6)));
                               else if (token.startsWith("face=\"")) {
                                     QString face = parseStringProperty(token.mid(6));
-                                    face = mapFace(score(), face);
                                     cursor.format()->setFontFamily(face);
                                     }
                               else
@@ -1292,7 +1271,7 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       if (setCursor(pt))
             updateCursorFormat(&_cursor);
       else
-            _cursor.initFromStyle(score(), textStyle());
+            _cursor.initFromStyle(textStyle());
       undoPushProperty(P_ID::TEXT);
       }
 
@@ -1360,7 +1339,7 @@ void Text::genText()
                   }
             }
       TextCursor cursor;
-      cursor.initFromStyle(score(), textStyle());
+      cursor.initFromStyle(textStyle());
       XmlNesting xmlNesting(&_text);
       if (bold)
             xmlNesting.pushB();
@@ -2067,7 +2046,7 @@ void Text::insertText(const QString& s)
       if (_cursor.hasSelection())
             deleteSelectedText();
       if (_cursor.format()->type() == CharFormatType::SYMBOL) {
-            QString face = mapFace(score(), textStyle().family());
+            QString face = textStyle().family();
             _cursor.format()->setFontFamily(face);
             _cursor.format()->setType(CharFormatType::TEXT);
             }

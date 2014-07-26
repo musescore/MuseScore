@@ -281,7 +281,6 @@ class Score : public QObject {
       int _currentLayer;
 
       ScoreFont* _scoreFont;
-      QString _scoreTextFont;
       int _pageNumberOffset;        ///< Offset for page numbers.
 
       MeasureBaseList _measures;          // here are the notes
@@ -972,8 +971,6 @@ class Score : public QObject {
 
       ScoreFont* scoreFont() const            { return _scoreFont;     }
       void setScoreFont(ScoreFont* f)         { _scoreFont = f;        }
-      const QString& scoreTextFont() const    { return _scoreTextFont; }
-      void setScoreTextFont(const QString& s) { _scoreTextFont = s;    }
 
       qreal noteHeadWidth() const     { return _noteHeadWidth; }
       void setNoteHeadWidth( qreal n) { _noteHeadWidth = n; }
