@@ -473,7 +473,7 @@ StyleData::StyleData()
             { StyleIdx::MinTieLength,                QVariant(1.0) },
             { StyleIdx::SectionPause,                QVariant(qreal(3.0)) },
             { StyleIdx::MusicalSymbolFont,           QVariant(QString("Emmentaler")) },
-            { StyleIdx::MusicalTextFont,             QVariant(QString("Emmentaler Text")) },
+            { StyleIdx::MusicalTextFont,             QVariant(QString("MScore Text")) },
             { StyleIdx::showHeader,                  QVariant(false) },
 //            { StyleIdx::headerStyled,                QVariant(true) },
             { StyleIdx::headerFirstPage,             QVariant(false) },
