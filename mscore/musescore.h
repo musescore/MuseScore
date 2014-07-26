@@ -628,7 +628,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newRepeatsPalette();
       static Palette* newBreaksPalette();
       static Palette* newBeamPalette();
-      static Palette* newDynamicsPalette();
+      static Palette* newDynamicsPalette(bool master = false);
       static Palette* newFramePalette();
       static Palette* newFingeringPalette();
       static Palette* newTremoloPalette();
