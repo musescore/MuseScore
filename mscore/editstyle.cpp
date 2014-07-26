@@ -397,10 +397,10 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::SlurDottedWidth,         Spatium(slurDottedLineWidth->value()));
       lstyle.set(StyleIdx::MinTieLength,            Spatium(minTieLength->value()));
 
-      int idx1 = musicalSymbolFont->currentData().toInt();
+      int idx1 = musicalSymbolFont->itemData(musicalSymbolFont->currentIndex()).toInt();
       lstyle.set(StyleIdx::MusicalSymbolFont, ScoreFont::scoreFonts().at(idx1).name());
 
-      QString tf = musicalTextFont->currentData().toString();
+      QString tf = musicalTextFont->itemData(musicalTextFont->currentIndex()).toString();
       lstyle.set(StyleIdx::MusicalTextFont, tf);
 
       lstyle.set(StyleIdx::showHeader,      showHeader->isChecked());
