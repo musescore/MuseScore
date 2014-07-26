@@ -132,10 +132,21 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QSpinBox" name="spanFrom"/>
+      <widget class="QSpinBox" name="spanFrom">
+       <property name="minimum">
+        <number>-2</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QSpinBox" name="span"/>
+      <widget class="QSpinBox" name="span">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">

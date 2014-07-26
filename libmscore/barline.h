@@ -43,7 +43,7 @@ static const int BARLINE_SPAN_SHORT2_TO         = 7;
 // used while reading a score for a default spanTo (to last staff line) toward a staff not yet read;
 // fixed once all staves are read
 
-static const int UNKNOWN_BARLINE_TO = -4;
+static const int UNKNOWN_BARLINE_TO = -6;
 
 //---------------------------------------------------------
 //   @@ BarLine

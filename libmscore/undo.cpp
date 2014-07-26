@@ -1973,7 +1973,7 @@ void ChangeSingleBarLineSpan::flip()
       barLine->setSpan(span);
       barLine->setSpanFrom(spanFrom);
       barLine->setSpanTo(spanTo);
-      barLine->setCustomSpan(true);
+//      barLine->setCustomSpan(true);     // let setSpan(), setSpanFrom() and setSpanTo() determine if it is custom or not
       span        = nspan;
       spanFrom    = nspanFrom;
       spanTo      = nspanTo;

@@ -714,7 +714,7 @@ InspectorEmpty::InspectorEmpty(QWidget* parent)
 InspectorBarLine::InspectorBarLine(QWidget* parent)
    : InspectorBase(parent)
       {
-      static const char* buildinSpanNames[BARLINE_BUILTIN_SPANS+1] = {
+      static const char* builtinSpanNames[BARLINE_BUILTIN_SPANS+1] = {
             QT_TRANSLATE_NOOP("inspector", "Staff default"),
             QT_TRANSLATE_NOOP("inspector", "Tick 1"),
             QT_TRANSLATE_NOOP("inspector", "Tick 2"),
@@ -737,7 +737,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       e.setupUi(addWidget());
       b.setupUi(addWidget());
 
-      for (const char* name : buildinSpanNames)
+      for (const char* name : builtinSpanNames)
             b.spanType->addItem(tr(name));
       for (BarLineType t : types)
             b.type->addItem(BarLine::userTypeName(t), int(t));
@@ -753,8 +753,12 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
             { P_ID::BARLINE_SPAN_TO,   0, 0, b.spanTo,   b.resetSpanTo   },
             };
       mapSignals();
-      connect(b.spanType, SIGNAL(activated(int)), SLOT(spanTypeActivated(int)));
-      connect(b.resetSpanType, SIGNAL(clicked()), SLOT(resetSpanType()));
+      // when any of the span parameters is changed, span data need to be managed
+      connect(b.span,         SIGNAL(valueChanged(int)),    SLOT(manageSpanData()));
+      connect(b.spanFrom,     SIGNAL(valueChanged(int)),    SLOT(manageSpanData()));
+      connect(b.spanTo,       SIGNAL(valueChanged(int)),    SLOT(manageSpanData()));
+      connect(b.spanType,     SIGNAL(activated(int)),       SLOT(spanTypeChanged(int)));
+      connect(b.resetSpanType,SIGNAL(clicked()),            SLOT(resetSpanType()));
       }
 
 //---------------------------------------------------------
@@ -765,6 +769,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
 
 void InspectorBarLine::setElement()
       {
+      blockSpanDataSignals(true);
       InspectorBase::setElement();
       BarLine* bl = static_cast<BarLine*>(inspector->element());
 
@@ -774,12 +779,13 @@ void InspectorBarLine::setElement()
       bool bIsRepeat    = (blt == BarLineType::START_REPEAT
             || blt == BarLineType::END_REPEAT
             || blt == BarLineType::END_START_REPEAT);
+
       // scan type combo items
       const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(b.type->model());
       for (int i = 0; i < b.type->count(); i++) {
             BarLineType type = (BarLineType)(b.type->itemData(i).toInt());
             QStandardItem* item = model->item(i);
-            // if combo item is repeat type, sould be disabled for multi-staff scores
+            // if combo item is repeat type, should be disabled for multi-staff scores
             if (type == BarLineType::START_REPEAT
                         || type == BarLineType::END_REPEAT
                         || type == BarLineType::END_START_REPEAT) {
@@ -789,8 +795,8 @@ void InspectorBarLine::setElement()
                         item->flags() | (Qt::ItemFlags)(Qt::ItemIsSelectable|Qt::ItemIsEnabled) );
 /*                  visually disable by greying out (currently unnecessary, but kept for future reference)
                   item->setData(bMultiStaff ?
-                              b.type->palette().color(QPalette::Disabled, QPalette::Text) :
-                              QVariant(),       // clear item data in order to use default color
+                              b.type->palette().color(QPalette::Disabled, QPalette::Text)
+                              : QVariant(),       // clear item data in order to use default color
                         Qt::TextColorRole); */
                   }
             // if combo item is NOT repeat type, should be disabled if selected bar line is a repeat
@@ -800,74 +806,133 @@ void InspectorBarLine::setElement()
                         item->flags() | (Qt::ItemFlags)(Qt::ItemIsSelectable|Qt::ItemIsEnabled) );
                   }
             }
-//      Measure* m  = static_cast<Segment*>(bl->parent())->measure();
-      // set span type
+      // make custom span type unselectable (it is informative only)
+      model = qobject_cast<const QStandardItemModel*>(b.spanType->model());
+      QStandardItem* item = model->item(5);
+      item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+
+      manageSpanData();
+      blockSpanDataSignals(false);
+      }
+
+//---------------------------------------------------------
+//   spanTypeChanged
+//---------------------------------------------------------
+
+void InspectorBarLine::spanTypeChanged(int idx)
+      {
+      BarLine*    bl    = static_cast<BarLine*>(inspector->element());
+      Score*      score = bl->score();
+      score->startCmd();
+
+      int spanStaves, spanFrom, spanTo;
+      // the amount to adjust To value of short types, if staff num. of lines != 5
+      int shortDelta = bl->staff() ? (bl->staff()->lines() - 5)*2 : 0;
+      spanStaves = 1;               // in most cases, num. of spanned staves is 1
+      switch (idx) {
+            case 0:                 // staff default selected
+                  if(bl->staff()) {                   // if there is a staff
+                        Staff* st = bl->staff();      // use its span values as selected values
+                        spanStaves  = st->barLineSpan();
+                        spanFrom    = st->barLineFrom();
+                        spanTo      = st->barLineTo();
+                        }
+                  else {                              // if no staff, use default values
+                        spanFrom    = 0;
+                        spanTo      = DEFAULT_BARLINE_TO;
+                        }
+                  break;
+            case 1:
+                  spanFrom    = BARLINE_SPAN_TICK1_FROM;
+                  spanTo      = BARLINE_SPAN_TICK1_TO;
+                  break;
+            case 2:
+                  spanFrom    = BARLINE_SPAN_TICK2_FROM;
+                  spanTo      = BARLINE_SPAN_TICK2_TO;
+                  break;
+            case 3:
+                  spanFrom    = BARLINE_SPAN_SHORT1_FROM;
+                  spanTo      = BARLINE_SPAN_SHORT1_TO + shortDelta;
+                  break;
+            case 4:
+                  spanFrom    = BARLINE_SPAN_SHORT2_FROM;
+                  spanTo      = BARLINE_SPAN_SHORT2_TO + shortDelta;
+                  break;
+            case 5:                 // custom type has no effect
+                  spanStaves  = bl->span();           // use values from bar line itself
+                  spanFrom    = bl->spanFrom();
+                  spanTo      = bl->spanTo();
+                  break;
+            }
+
+      // if combo values different from bar line's, set them
+      if(bl->span() != spanStaves || bl->spanFrom() != spanFrom || bl->spanTo() != spanTo) {
+            blockSpanDataSignals(true);
+            score->undoChangeSingleBarLineSpan(bl, spanStaves, spanFrom, spanTo);
+            // if value reverted to staff default, update combo box
+            if(!bl->customSpan())
+                  b.spanType->setCurrentIndex(0);
+            blockSpanDataSignals(false);
+            }
+
+      score->endCmd();
+      mscore->endCmd();
+      }
+
+//---------------------------------------------------------
+//   manageSpanData
+//
+//    Makes sure span data are legal and consistent
+//---------------------------------------------------------
+
+void InspectorBarLine::manageSpanData()
+      {
+      BarLine* bl = static_cast<BarLine*>(inspector->element());
+
+      // determine MIN and MAX for SPANFROM and SPANTO
+      Staff* staffFrom  = bl->staff();
+      Staff* staffTo    = bl->score()->staff(bl->staffIdx() + bl->span() - 1);
+      int staffFromLines= (staffFrom ? staffFrom->lines() : 5);
+      int staffToLines  = (staffTo   ? staffTo->lines()   : 5);
+
+      // From:    min = minimum possible according to number of staff lines
+      //          max = if same as To, at least 1sp (2 units) above To; if not, max possible according to num.of lines
+      int min     = staffFromLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
+      int max     = bl->span() < 2 ? bl->spanTo() - MIN_BARLINE_FROMTO_DIST
+                        : (staffFromLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffFromLines-1) * 2 + 2);
+      b.spanFrom->setMinimum(min);
+      b.spanFrom->setMaximum(max);
+      b.spanFrom->setWrapping(false);
+
+      // To:      min = if same as From, at least 1sp (2 units) below From; if not, min possible according to num.of lines
+      //          max = max possible according to number of staff lines
+      min   = bl->span() < 2 ? bl->spanFrom() + MIN_BARLINE_FROMTO_DIST
+                  : (staffToLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO);
+      max   = staffFromLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffToLines-1) * 2 + 2;
+      b.spanTo->setMinimum(min);
+      b.spanTo->setMaximum(max);
+      b.spanTo->setWrapping(false);
+
+      // determin MAX for SPAN
+      max = bl->score()->nstaves() - bl->staffIdx();
+      b.span->setMaximum(max);
+      b.span->setWrapping(false);
+
+      // determine SPAN TYPE
+      int short1To      = BARLINE_SPAN_SHORT1_TO + (staffFromLines - 5) * 2;
+      int short2To      = BARLINE_SPAN_SHORT2_TO + (staffFromLines - 5) * 2;
       if (!bl->customSpan())
             b.spanType->setCurrentIndex(0);           // staff default
       else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_TICK1_FROM  && bl->spanTo() == BARLINE_SPAN_TICK1_TO)
             b.spanType->setCurrentIndex(1);
       else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_TICK2_FROM  && bl->spanTo() == BARLINE_SPAN_TICK2_TO)
             b.spanType->setCurrentIndex(2);
-      else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_SHORT1_FROM && bl->spanTo() == BARLINE_SPAN_SHORT1_TO)
+      else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_SHORT1_FROM && bl->spanTo() == short1To)
             b.spanType->setCurrentIndex(3);
-      else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_SHORT2_FROM && bl->spanTo() == BARLINE_SPAN_SHORT2_TO)
+      else if (bl->span() == 1 && bl->spanFrom() == BARLINE_SPAN_SHORT2_FROM && bl->spanTo() == short2To)
             b.spanType->setCurrentIndex(4);
       else
             b.spanType->setCurrentIndex(5);           // custom
-      // make custom span type unselectable (it is informative only)
-      model = qobject_cast<const QStandardItemModel*>(b.spanType->model());
-      QStandardItem* item = model->item(5);
-      item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-      }
-
-//---------------------------------------------------------
-//   spanTypeActivated
-//---------------------------------------------------------
-
-void InspectorBarLine::spanTypeActivated(int idx)
-      {
-      BarLine* bl = static_cast<BarLine*>(inspector->element());
-      Score*      score = bl->score();
-pippo();
-      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                      // do not set element values again
-      score->startCmd();
-
-      int spanStaves, spanFrom, spanTo;
-      if (idx == 0) {                 // staff default selected
-            if(bl->staff()) {                               // if there is a staff
-                  Staff* st = bl->staff();                  // use its span values as selected values
-                  spanStaves  = st->barLineSpan();
-                  spanFrom    = st->barLineFrom();
-                  spanTo      = st->barLineTo();
-                  }
-            else {                                          // if no staff
-                  spanStaves  = 1;                          // use values for a 'standard' staff
-                  spanFrom    = 0;
-                  spanTo      = DEFAULT_BARLINE_TO;
-                  }
-            }
-      else {                              // specific value selected
-            if (idx == BARLINE_BUILTIN_SPANS+1) {      // selecting custom has no effect:
-                  spanStaves  = bl->span();                 // use values from bar line itself
-                  spanFrom    = bl->spanFrom();
-                  spanTo      = bl->spanTo();
-                  }
-            else {
-                  spanStaves  = builtinSpans[currSpan][0];  // use values from selected combo item
-                  spanFrom    = builtinSpans[currSpan][1];
-                  spanTo      = builtinSpans[currSpan][2];
-                  }
-            }
-      // if combo values different from bar line's, set them
-      if(bl->span() != spanStaves || bl->spanFrom() != spanFrom || bl->spanTo() != spanTo)
-            score->undoChangeSingleBarLineSpan(bl, spanStaves, spanFrom, spanTo);
-      // if value reverted to staff default, update combo box
-      if(!bl->customSpan())
-            span->setCurrentIndex(0);
-
-      score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -878,19 +943,24 @@ void InspectorBarLine::resetSpanType()
       {
       }
 
+//---------------------------------------------------------
+//   blockSpanDataSignals
+//
+//    block/unblok signals for span value controls
+//---------------------------------------------------------
+
+void InspectorBarLine::blockSpanDataSignals(bool val)
+      {
+      b.span->blockSignals(val);
+      b.spanFrom->blockSignals(val);
+      b.spanTo->blockSignals(val);
+      b.spanType->blockSignals(val);
+      }
+
 #if 0
 
 #define BARLINE_TYPE_DEFAULT  -1
 
-
-int InspectorBarLine::builtinSpans[BARLINE_BUILTIN_SPANS][3] =
-{//   span From To
-      { 0,  0,  0},           // = staff defalt
-      { 1, -2,  2},           // tick 1
-      { 1, -1,  1},           // tick 2
-      { 1,  2,  0},           // short 1 (To depends on staff num. of lines)
-      { 1,  1,  0}            // short 2 (To depends on staff num. of lines)
-};
 //---------------------------------------------------------
 //   setElement
 //---------------------------------------------------------
@@ -953,67 +1023,6 @@ void InspectorBarLine::setElement()
       span->blockSignals(false);
       }
 
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
-void InspectorBarLine::apply()
-      {
-      BarLine*    bl = static_cast<BarLine*>(inspector->element());
-      Score*      score = bl->score();
-
-      mscore->getInspector()->setInspectorEdit(true); // this edit is coming from within the inspector itself:
-                                                      // do not set element values again
-      score->startCmd();
-
-      // type
-      int currType = type->itemData(type->currentIndex()).toInt();
-      if (currType == BARLINE_TYPE_DEFAULT)
-            currType = measureBarLineType;
-      if (currType != bl->barLineType())
-            score->undoChangeProperty(bl, P_ID::SUBTYPE, currType);
-      // if value reverted to measure default, update combo box
-      if (!bl->customSubtype())
-            type->setCurrentIndex(0);
-
-      // span: determine span, spanFrom and spanTo values for current combo box item
-      int currSpan = span->currentIndex();
-      int spanStaves, spanFrom, spanTo;
-      if (currSpan == 0) {                 // staff default selected
-            if(bl->staff()) {                               // if there is a staff
-                  Staff* st = bl->staff();                  // use its span values as selected values
-                  spanStaves  = st->barLineSpan();
-                  spanFrom    = st->barLineFrom();
-                  spanTo      = st->barLineTo();
-                  }
-            else {                                          // if no staff
-                  spanStaves  = 1;                          // use values for a 'standard' staff
-                  spanFrom    = 0;
-                  spanTo      = DEFAULT_BARLINE_TO;
-                  }
-            }
-      else {                              // specific value selected
-            if (currSpan == BARLINE_BUILTIN_SPANS+1) {      // selecting custom has no effect:
-                  spanStaves  = bl->span();                 // use values from bar line itself
-                  spanFrom    = bl->spanFrom();
-                  spanTo      = bl->spanTo();
-                  }
-            else {
-                  spanStaves  = builtinSpans[currSpan][0];  // use values from selected combo item
-                  spanFrom    = builtinSpans[currSpan][1];
-                  spanTo      = builtinSpans[currSpan][2];
-                  }
-            }
-      // if combo values different from bar line's, set them
-      if(bl->span() != spanStaves || bl->spanFrom() != spanFrom || bl->spanTo() != spanTo)
-            score->undoChangeSingleBarLineSpan(bl, spanStaves, spanFrom, spanTo);
-      // if value reverted to staff default, update combo box
-      if(!bl->customSpan())
-            span->setCurrentIndex(0);
-
-      score->endCmd();
-      mscore->endCmd();
-      }
 #endif
 }
 
