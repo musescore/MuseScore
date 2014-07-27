@@ -452,7 +452,7 @@ bool TrackList::write(int track, Measure* measure) const
             Element* el = s->element(track);
             if (el == 0 || el->type() != Element::Type::CHORD)
                   continue;
-            foreach(Note* n, static_cast<Chord*>(el)->notes()) {
+            foreach (Note* n, static_cast<Chord*>(el)->notes()) {
                   Tie* tie = n->tieFor();
                   if (!tie)
                         continue;
@@ -526,7 +526,6 @@ void ScoreRange::read(Segment* first, Segment* last)
 
 bool ScoreRange::write(Score* score, int tick) const
       {
-      printf("ScoreRange::write\n");
       int track = 0;
       for (TrackList* dl : tracks) {
             if (!dl->write(track, score->tick2measure(tick)))
@@ -550,6 +549,25 @@ bool ScoreRange::write(Score* score, int tick) const
       for (Spanner* s : spanner) {
             s->setTick(s->tick() + first()->tick());
             s->setTick2(s->tick2() + first()->tick());
+            if (s->type() == Element::Type::SLUR) {
+                  Slur* slur = static_cast<Slur*>(s);
+                  if (slur->startCR()->isGrace()) {
+                        Chord* sc = slur->startChord();
+                        int idx   = sc->graceIndex();
+                        Chord* dc = static_cast<Chord*>(score->findCR(s->tick(), s->track()));
+                        s->setStartElement(dc->graceNotes()[idx]);
+                        }
+                  else
+                        s->setStartElement(0);
+                  if (slur->endCR()->isGrace()) {
+                        Chord* sc = slur->endChord();
+                        int idx   = sc->graceIndex();
+                        Chord* dc = static_cast<Chord*>(score->findCR(s->tick2(), s->track2()));
+                        s->setEndElement(dc->graceNotes()[idx]);
+                        }
+                  else
+                        s->setEndElement(0);
+                  }
             score->undoAddElement(s);
             }
       for (const Annotation& a : annotations) {
