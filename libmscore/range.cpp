@@ -526,6 +526,7 @@ void ScoreRange::read(Segment* first, Segment* last)
 
 bool ScoreRange::write(Score* score, int tick) const
       {
+      printf("ScoreRange::write\n");
       int track = 0;
       for (TrackList* dl : tracks) {
             if (!dl->write(track, score->tick2measure(tick)))
