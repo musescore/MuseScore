@@ -27,11 +27,10 @@
 #include "libmscore/score.h"
 #include "libmscore/repeatlist.h"
 #include "mscore/playpanel.h"
-
 #include <jack/midiport.h>
 
 // Prevent killing sequencer with wrong data
-#define less128(__less) ((__less >=0 && __less <=127) ? __less : 0)
+#define less128(__less) ((__less >=0 && __less <= 127) ? __less : 0)
 
 namespace Ms {
 
@@ -502,8 +501,8 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
       if (!preferences.useJackMidi)
             return;
 
-      int portIdx = e.channel() / 16;
-      int chan    = e.channel() % 16;
+      int portIdx = seq->score()->midiPort(e.channel());
+      int chan    = seq->score()->midiChannel(e.channel());
 
 // qDebug("JackAudio::putEvent %d:%d  pos %d(%d)", portIdx, chan, framePos, _segmentSize);
 
@@ -536,7 +535,9 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
             case ME_NOTEOFF:
             case ME_POLYAFTER:
             case ME_CONTROLLER:
+                  // Catch CTRL_PROGRAM and let other ME_CONTROLLER events to go
                   if (e.dataA() == CTRL_PROGRAM) {
+                        // Convert CTRL_PROGRAM event to ME_PROGRAM
                         unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
                         if (p == 0) {
                               qDebug("JackMidi: buffer overflow, event lost");
