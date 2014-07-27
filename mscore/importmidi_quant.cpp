@@ -1241,6 +1241,7 @@ void quantizeOnTimes(
                         maxVoice = chordIt->second.voice;
                   if (chordIt->second.voice != voice)
                         continue;
+
                   if (chordsToQuant.empty()) {
                         rangeStart = rangeEnd;
                         currentlyInTuplet = chordIt->second.isInTuplet;
@@ -1393,6 +1394,8 @@ void quantizeChords(
                  "There are non-tuplet chords between tuplet chords");
       Q_ASSERT_X(MChord::areNotesLongEnough(chords), "Quantize::quantizeChords",
                  "There are too short notes");
+      Q_ASSERT_X(MChord::areBarIndexesSuccessive(chords), "Quantize::quantizeChords",
+                 "Bar indexes are not successive");
 
       applyTupletStaccato(chords);     // apply staccato for tuplet off times
       std::map<const std::pair<const ReducedFraction, MidiChord> *, QuantInfo> foundOnTimes;

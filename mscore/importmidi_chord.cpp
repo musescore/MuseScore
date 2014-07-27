@@ -197,6 +197,20 @@ bool areNotesLongEnough(const std::multimap<ReducedFraction, MidiChord> &chords)
       return true;
       }
 
+bool areBarIndexesSuccessive(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      int barIndex = 0;
+      for (const auto &chord: chords) {
+            const MidiChord &c = chord.second;
+            if (c.barIndex < 0)
+                  return false;
+            if (c.barIndex < barIndex)
+                  return false;
+            barIndex = c.barIndex;
+            }
+      return true;
+      }
+
 bool isLastTickValid(const ReducedFraction &lastTick,
                      const std::multimap<ReducedFraction, MidiChord> &chords)
       {
