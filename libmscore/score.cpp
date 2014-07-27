@@ -3475,6 +3475,8 @@ QList<int> Score::uniqueStaves() const
 ChordRest* Score::findCR(int tick, int track) const
       {
       Measure* m = tick2measureMM(tick);
+      if (!m)
+            return nullptr;
       // attach to first rest all spanner when mmRest
       if (m->isMMRest())
             tick = m->tick();

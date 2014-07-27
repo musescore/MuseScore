@@ -453,6 +453,10 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                   else
                         t = tick2() - 1;
                   m    = score()->tick2measure(t);
+                  if (!m) {
+                        *sys = 0;
+                        break;
+                        }
                   x   += m->tick2pos(t);
                   *sys = m->system();
                   }
