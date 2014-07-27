@@ -729,13 +729,23 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
 bool Score::makeGap1(int tick, int staffIdx, Fraction len)
       {
-      ChordRest* cr = 0;
       Segment* seg = tick2segment(tick, true, Segment::Type::ChordRest);
       if (!seg) {
             qDebug("1:makeGap1: no segment at %d", tick);
             return false;
             }
-      int track = staffIdx * VOICES;
+      int strack = staffIdx * VOICES;
+      for (int track = strack; track < strack + 4; track++) {
+            bool result = makeGapVoice(seg, track, len, tick);
+            if(track == strack && !result)
+                  return false;
+            }
+      return true;
+      }
+
+bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
+      {
+      ChordRest* cr = 0;
       cr = static_cast<ChordRest*>(seg->element(track));
       if (!cr) {
             // check if we are in the middle of a chord/rest
@@ -761,7 +771,6 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
                         return false;
                         }
                   if (seg1->element(track)) {
-                        tick = seg1->tick();
                         cr = static_cast<ChordRest*>(seg1->element(track));
                         break;
                         }
