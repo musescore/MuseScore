@@ -27,8 +27,10 @@
 #include "libmscore/score.h"
 #include "libmscore/repeatlist.h"
 #include "mscore/playpanel.h"
-
 #include <jack/midiport.h>
+
+// Prevent killing sequencer with wrong data
+#define less128(__less) ((__less >=0 && __less <=127) ? __less : 0)
 
 namespace Ms {
 
@@ -539,11 +541,14 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
             const char* portName = jack_port_name(port);
             int a     = e.dataA();
             int b     = e.dataB();
-            qDebug("MidiOut<%s>: jackMidi: %02x %i %i", portName, e.type(), a, b);
+            qDebug("MidiOut<%s>: jackMidi: %02x %02x %02x, chan: %i", portName, e.type(), a, b, chan);
             // e.dump();
             }
       void* pb = jack_port_get_buffer(port, _segmentSize);
 
+      if (pb == NULL) {
+            qDebug()<<"jack_port_get_buffer failed, cannot send anything";
+            }
       if (framePos >= _segmentSize) {
             qDebug("JackAudio::putEvent: time out of range %d(seg=%d)", framePos, _segmentSize);
             if (framePos > _segmentSize)
@@ -555,6 +560,16 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
             case ME_NOTEOFF:
             case ME_POLYAFTER:
             case ME_CONTROLLER:
+                  if (e.dataA() == CTRL_PROGRAM) {
+                        unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
+                        if (p == 0) {
+                              qDebug("JackMidi: buffer overflow, event lost");
+                              return;
+                              }
+                        p[0] = ME_PROGRAM | chan;
+                        p[1] = less128(e.dataB());
+                        break;
+                        }
             case ME_PITCHBEND:
                   {
                   unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
@@ -563,8 +578,8 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
                         return;
                         }
                   p[0] = e.type() | chan;
-                  p[1] = e.dataA();
-                  p[2] = e.dataB();
+                  p[1] = less128(e.dataA());
+                  p[2] = less128(e.dataB());
                   }
                   break;
 
@@ -577,7 +592,7 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
                         return;
                         }
                   p[0] = e.type() | chan;
-                  p[1] = e.dataA();
+                  p[1] = less128(e.dataA());
                   }
                   break;
           // Do we really need to handle ME_SYSEX?

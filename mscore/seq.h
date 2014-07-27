@@ -166,6 +166,7 @@ class Seq : public QObject, public Sequencer {
       void seek(int utick);
       void seekRT(int utick);
       void stopNotes(int channel = -1);
+      void stopNotesRT(int channel = -1); // called from realtime thread
       void start();
       void stop();
       void setPos(POS, unsigned);
@@ -215,6 +216,7 @@ class Seq : public QObject, public Sequencer {
       Score* score() const   { return cs; }
       ScoreView* viewer() const { return cv; }
       void initInstruments();
+      void initInstrumentsRT(); // called from realtime thread
 
       Driver* driver()                                 { return _driver; }
       void setDriver(Driver* d)                        { _driver = d;    }
