@@ -31,10 +31,8 @@ class ClefList : public std::map<int, ClefTypeList> {
       ClefList() {}
       ClefTypeList clef(int tick) const;
       void setClef(int tick, ClefTypeList);
-      void setInitial(ClefTypeList cl) { _initial = cl; }
-
-//      void read(XmlReader&, Score*);
-
+      void setInitial(ClefTypeList cl) { _initial = cl;   }
+      ClefTypeList initial() const     { return _initial; }
       };
 
 

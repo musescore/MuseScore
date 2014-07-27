@@ -62,27 +62,5 @@ void ClefList::setClef(int tick, ClefTypeList ctl)
             i->second = ctl;
       }
 
-#if 0
-//---------------------------------------------------------
-//   ClefList::read
-//    only used for 1.3 scores
-//---------------------------------------------------------
-
-void ClefList::read(XmlReader& e, Score* cs)
-      {
-      clear();
-      while (e.readNextStartElement()) {
-            if (e.name() == "clef") {
-                  int tick    = e.intAttribute("tick", 0);
-                  ClefType ct = Clef::clefType(e.attribute("idx", "0"));
-                  insert(std::pair<int, ClefTypeList>(cs->fileDivision(tick), ClefTypeList(ct, ct)));
-                  e.readNext();
-                  }
-            else
-                  e.unknown();
-            }
-      }
-#endif
-
 }
 
