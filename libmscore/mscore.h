@@ -64,6 +64,8 @@ static const qreal SPATIUM20 = 5.0 / PPI; // size of Spatium for 20pt font in in
 static const int MAX_STAVES = 4;
 #define MMSP(x)  Spatium((x) * .1)
 
+static const int MAX_MIDI_PORT = 99; // Midi ports available: 1..99
+
 static const char mimeSymbolFormat[]      = "application/mscore/symbol";
 static const char mimeSymbolListFormat[]  = "application/mscore/symbollist";
 static const char mimeStaffListFormat[]   = "application/mscore/stafflist";

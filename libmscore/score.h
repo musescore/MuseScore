@@ -448,7 +448,7 @@ class Score : public QObject {
    signals:
       void posChanged(POS, unsigned);
       void playlistChanged();
-
+      void updateMixer();
    public:
       Score();
       Score(const MStyle*);
