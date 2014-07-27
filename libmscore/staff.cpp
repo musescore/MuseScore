@@ -237,7 +237,6 @@ void Staff::setInitialClef(const ClefTypeList& ctl)
 //   setClef
 //---------------------------------------------------------
 
-
 void Staff::setClef(Clef* clef)
       {
       int tick = clef->segment()->tick();
