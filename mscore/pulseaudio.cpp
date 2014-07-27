@@ -137,7 +137,7 @@ bool PulseAudio::init(bool)
 
       pa_stream* playstream = pa_stream_new(pa_ctx, "Playback", &ss, NULL);
       if (!playstream) {
-            printf("pa_stream_new failed\n");
+            qDebug("pa_stream_new failed");
             return false;
             }
       pa_stream_set_write_callback(playstream, paCallback, this);
@@ -161,7 +161,7 @@ bool PulseAudio::init(bool)
                NULL, NULL);
             }
       if (r < 0) {
-            printf("pa_stream_connect_playback failed\n");
+            qDebug("pa_stream_connect_playback failed");
             pa_context_disconnect(pa_ctx);
             pa_context_unref(pa_ctx);
             pa_mainloop_free(pa_ml);

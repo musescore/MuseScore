@@ -79,7 +79,6 @@ TextPalette::TextPalette(QWidget* parent)
 
 void TextPalette::pageChanged(int idx)
       {
-      printf("page changed %d\n", idx);
       }
 
 //---------------------------------------------------------

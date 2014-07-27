@@ -745,16 +745,22 @@ void Staff::setStaffType(const StaffType* st)
       //    check for right clef-type and fix
       //    if necessary
       //
-      ClefType ct = clef(0);
+      ClefType ct    = clefs.initial()._concertClef;
       StaffGroup csg = ClefInfo::staffGroup(ct);
 
       if (_staffType.group() != csg) {
             switch(_staffType.group()) {
-                  case StaffGroup::TAB:        ct = ClefType(score()->styleI(StyleIdx::tabClef)); break;
-                  case StaffGroup::STANDARD:   ct = ClefType::G; break;      // TODO: use preferred clef for instrument
-                  case StaffGroup::PERCUSSION: ct = ClefType::PERC; break;
+                  case StaffGroup::TAB:
+                        ct = ClefType(score()->styleI(StyleIdx::tabClef));
+                        break;
+                  case StaffGroup::STANDARD:
+                        ct = ClefType::G;       // TODO: use preferred clef for instrument
+                        break;
+                  case StaffGroup::PERCUSSION:
+                        ct = ClefType::PERC;
+                        break;
                   }
-            clefs.setClef(0, ClefTypeList(ct, ct));
+            setInitialClef(ct);
             }
       }
 
@@ -767,11 +773,9 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
       // set staff-type-independent parameters
       if (cidx > MAX_STAVES) {
             setSmall(false);
-            clefs.setClef(0, t->clefTypes[0]);
             }
       else {
             setSmall(t->smallStaff[cidx]);
-            clefs.setClef(0, t->clefTypes[cidx]);     // initial clef will be fixed to staff-type clef by setStaffType()
             setBracket(0, t->bracket[cidx]);
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);

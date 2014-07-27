@@ -1107,30 +1107,49 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
             // ms->lines->setLines(staff->lines());
             ms->lines->setParent(this);
             ms->lines->setVisible(!staff->invisible());
-
             _score->undo(new InsertMStaff(this, ms, i));
+            }
 
-            if (createRest) {
-                  if (_timesig != len()) {
-                        score()->setRest(tick(), i * VOICES, len(), false, 0, false);
+      if (!createRest && !ts)
+            return;
+
+
+      // create list of unique staves (only one instance for linked staves):
+
+      QList<int> sl;
+      for (int staffIdx = sStaff; staffIdx < eStaff; ++staffIdx) {
+            Staff* s = _score->staff(staffIdx);
+            if (s->linkedStaves()) {
+                  bool alreadyInList = false;
+                  for (int idx : sl) {
+                        if (s->linkedStaves()->staves().contains(_score->staff(idx))) {
+                              alreadyInList = true;
+                              break;
+                              }
                         }
-                  else {
-                        score()->setRest(tick(), i * VOICES, len(), false, 0, true);
-                        }
+                  if (alreadyInList)
+                        continue;
                   }
+            sl.append(staffIdx);
+            }
+
+      for (int staffIdx : sl) {
+            if (createRest)
+                  score()->setRest(tick(), staffIdx * VOICES, len(), false, 0, _timesig == len());
 
             // replicate time signature
             if (ts) {
                   TimeSig* ots = 0;
                   for (int track = 0; track < staves.size() * VOICES; ++track) {
                         if (ts->element(track)) {
-                              ots = (TimeSig*)ts->element(track);
+                              ots = static_cast<TimeSig*>(ts->element(track));
                               break;
                               }
                         }
                   if (ots) {
                         TimeSig* timesig = new TimeSig(*ots);
-                        timesig->setTrack(i * VOICES);
+                        timesig->setTrack(staffIdx * VOICES);
+                        timesig->setParent(ts);
                         timesig->setSig(ots->sig(), ots->timeSigType());
                         score()->undoAddElement(timesig);
                         }
