@@ -2317,6 +2317,7 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
             Clef* c = static_cast<Clef*>(gclef ? gclef->linkedClone() : clef->clone());
             gclef = c;
             c->setParent(cs);
+            c->setScore(cs->score());
             c->setTrack(cr->staffIdx() * VOICES);
             if (cs->element(c->track()))
                   score->undo(new RemoveElement(cs->element(c->track())));

@@ -1375,8 +1375,8 @@ void AddElement::undo()
 
 void AddElement::redo()
       {
-//      qDebug("AddElement::redo: %s %p parent %s %p", element->name(), element,
-//         element->parent() ? element->parent()->name() : "nil", element->parent());
+//      qDebug("AddElement::redo: %s %p parent %s %p, score %p", element->name(), element,
+//         element->parent() ? element->parent()->name() : "nil", element->parent(), element->score());
 
       element->score()->addElement(element);
       endUndoRedo(false);
