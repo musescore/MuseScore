@@ -15,7 +15,7 @@
 
 /**
  \file
- Definition of classes MStaff, Measure and MeasureList.
+ Definition of classes MStaff, Measure.
 */
 
 #include "measurebase.h"

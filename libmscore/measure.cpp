@@ -1521,6 +1521,7 @@ void Measure::adjustToLen(Fraction nf)
             startTick += diff;
 
       score()->undoInsertTime(startTick, diff);
+      score()->undo(new InsertTime(score(), startTick, diff));
 
       for (Score* s : score()->scoreList()) {
             Measure* m = s->tick2measure(tick());
