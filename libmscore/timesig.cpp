@@ -235,6 +235,7 @@ void TimeSig::read(XmlReader& e)
             _sig.set(z1+z2+z3+z4, n);
             customText = false;
             }
+      _stretch.reduce();
       _needLayout = true;
       }
 
@@ -311,7 +312,7 @@ void TimeSig::layout1()
             // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
 
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
-            
+
             //align on the wider
             if (numRect.width() >= denRect.width()) {
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
@@ -323,7 +324,7 @@ void TimeSig::layout1()
             else {
                   // denominator: horiz: centred around centre of numerator | vert: one space below centre line
                   pn = QPointF(0.0, yoff + displ + _spatium);
-                  
+
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
                   pz = QPointF((denRect.width() - numRect.width())*.5, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
                   }

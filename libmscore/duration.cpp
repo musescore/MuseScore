@@ -68,12 +68,16 @@ Fraction DurationElement::globalDuration() const
 
 int DurationElement::actualTicks() const
       {
-      return Fraction(staff()->timeStretch(tick()) * globalDuration()).ticks();
+      return actualFraction().ticks();
       }
+
+//---------------------------------------------------------
+//   actualFraction
+//---------------------------------------------------------
 
 Fraction DurationElement::actualFraction() const
       {
-      return Fraction(staff()->timeStretch(tick()) * globalDuration());
+      return globalDuration() / staff()->timeStretch(tick());
       }
 
 //---------------------------------------------------------
