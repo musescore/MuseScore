@@ -305,7 +305,7 @@ void initStyle(MStyle* s)
       // y offset may depend on voltaHook style element
       AS("Volta",     ff, 11, true, false, false, AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.5, 1.9), OS, true);
       AS("Frame",     ff, 12, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::TOP);
-      AS("Text Line", ff, 20, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OS, true);
+      AS("Text Line", ff, 12, false, false, false, AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OS, true);
       AS("Glissando", ff, 8, false, true, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(), OS, true);
 
       AS("String Number", ff,  8, false, false, false,
