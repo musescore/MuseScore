@@ -3,7 +3,9 @@
 #include "importmidi_chord.h"
 #include "importmidi_clef.h"
 #include "importmidi_operations.h"
+#include "importmidi_quant.h"
 #include "libmscore/mscore.h"
+#include "libmscore/sig.h"
 #include "preferences.h"
 
 #include <set>
@@ -226,6 +228,15 @@ bool isLastTickValid(const ReducedFraction &lastTick,
       {
       for (const auto &track: tracks) {
             if (!(isLastTickValid(lastTick, track.second.chords)))
+                  return false;
+            }
+      return true;
+      }
+
+bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      for (const auto &chord: chords) {
+            if (chord.second.barIndex == -1)
                   return false;
             }
       return true;
@@ -510,6 +521,42 @@ findChordsForTimeRange(
             }
 
       return result;
+      }
+
+void setBarIndexes(
+            std::multimap<ReducedFraction, MidiChord> &chords,
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &lastTick,
+            const TimeSigMap *sigmap)
+      {
+      if (chords.empty())
+            return;
+      auto it = chords.begin();
+      for (int barIndex = 0;; ++barIndex) {       // iterate over all measures by indexes
+            const auto endBarTick = ReducedFraction::fromTicks(sigmap->bar2tick(barIndex + 1, 0));
+            if (endBarTick <= it->first)
+                  continue;
+            for (; it != chords.end(); ++it) {
+                  const auto onTime = Quantize::findQuantizedChordOnTime(*it, basicQuant);
+#ifdef QT_DEBUG
+                  const auto barStart = ReducedFraction::fromTicks(sigmap->bar2tick(barIndex, 0));
+                  Q_ASSERT_X(!(it->first >= barStart && onTime < barStart),
+                             "MChord::setBarIndexes", "quantized on time cannot be in previous bar");
+#endif
+                  if (onTime < endBarTick) {
+                        it->second.barIndex = barIndex;
+                        continue;
+                        }
+                  break;
+                  }
+            if (it == chords.end() || endBarTick > lastTick)
+                  break;
+            }
+
+      Q_ASSERT_X(areBarIndexesSet(chords),
+                 "MChord::setBarIndexes", "Not all bar indexes were set");
+      Q_ASSERT_X(areBarIndexesSuccessive(chords),
+                 "MChord::setBarIndexes", "Bar indexes are not successive");
       }
 
 } // namespace MChord

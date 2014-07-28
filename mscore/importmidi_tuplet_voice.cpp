@@ -31,9 +31,10 @@ int tupletVoiceLimit()
 std::pair<ReducedFraction, ReducedFraction>
 chordInterval(const std::pair<const ReducedFraction, MidiChord> &chord,
               const std::multimap<ReducedFraction, MidiChord> &chords,
-              const ReducedFraction &basicQuant)
+              const ReducedFraction &basicQuant,
+              const ReducedFraction &barStart)
       {
-      const auto onTime = MidiTuplet::findOnTimeBetweenChords(chord, chords, basicQuant);
+      const auto onTime = MidiTuplet::findOnTimeBetweenChords(chord, chords, basicQuant, barStart);
       auto offTime = Quantize::findMaxQuantizedOffTime(chord, basicQuant);
       if (offTime == onTime)
             offTime += Quantize::quantForLen(MChord::minNoteLen(chord), basicQuant);
@@ -59,7 +60,8 @@ std::pair<ReducedFraction, ReducedFraction>
 backTiedInterval(const TiedTuplet &tiedTuplet,
                  const std::vector<TupletInfo> &tuplets,
                  const std::multimap<ReducedFraction, MidiChord> &chords,
-                 const ReducedFraction &basicQuant)
+                 const ReducedFraction &basicQuant,
+                 const ReducedFraction &barStart)
       {
       const TupletInfo &tuplet = tupletFromId(tiedTuplet.tupletId, tuplets);
       const auto end = tupletInterval(tuplet, basicQuant).second;
@@ -68,7 +70,7 @@ backTiedInterval(const TiedTuplet &tiedTuplet,
       const int tupletIndex = findTupletWithChord(midiChord, tuplets);
       const auto beg = (tupletIndex != -1)
                   ? tupletInterval(tuplets[tupletIndex], basicQuant).first
-                  : chordInterval(*tiedTuplet.chord, chords, basicQuant).first;
+                  : chordInterval(*tiedTuplet.chord, chords, basicQuant, barStart).first;
 
       return std::make_pair(beg, end);
       }
@@ -145,12 +147,13 @@ void setNonTupletVoices(
             const std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> &tupletIntervals,
             const std::vector<TupletInfo> &tuplets,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart)
       {
       const int limit = MidiVoice::voiceLimit();
       while (!pendingNonTuplets.empty()) {
             auto chord = *pendingNonTuplets.begin();
-            const auto interval = chordInterval(*chord, chords, basicQuant);
+            const auto interval = chordInterval(*chord, chords, basicQuant, barStart);
                         // pick the voice such that the average pitch difference
                         // between the non-tuplet chord and tuplets with this voice
                         // is the smallest
@@ -173,16 +176,6 @@ void setNonTupletVoices(
             chord->second.voice = bestVoice;
             pendingNonTuplets.erase(pendingNonTuplets.begin());
             // don't insert chord interval here
-            }
-      }
-
-void resetTupletVoices(std::vector<TupletInfo> &tuplets)
-      {
-      for (auto &tuplet: tuplets) {
-            for (auto &chord: tuplet.chords) {
-                  MidiChord &midiChord = chord.second->second;
-                  midiChord.voice = 0;
-                  }
             }
       }
 
@@ -232,7 +225,8 @@ bool haveOverlappingVoices(
             const std::vector<TupletInfo> &tuplets,
             const std::list<TiedTuplet> &backTiedTuplets,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart)
       {
                   // <voice, intervals>
       std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> intervals;
@@ -248,7 +242,7 @@ bool haveOverlappingVoices(
 
       for (const auto &chord: nonTuplets) {
             const int voice = chord->second.voice;
-            const auto interval = chordInterval(*chord, chords, basicQuant);
+            const auto interval = chordInterval(*chord, chords, basicQuant, barStart);
             if (haveIntersection(interval, intervals[voice])) {
                   bool flag = false;
                               // if chord is tied then it can intersect tuplet
@@ -320,7 +314,8 @@ bool excludeExtraVoiceTuplets(
             std::list<TiedTuplet> &backTiedTuplets,
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &basicQuant,
-            const ReducedFraction &barStart)
+            const ReducedFraction &barStart,
+            int barIndex)
       {
       size_t sz = tuplets.size();
       if (sz == 0)
@@ -339,8 +334,8 @@ bool excludeExtraVoiceTuplets(
                         ++counter;
                         if (counter > addedCount)
                               break;
-                        if (haveIntersection(interval,
-                                             chordInterval(*nonTuplet, chords, basicQuant))) {
+                        if (haveIntersection(interval, chordInterval(*nonTuplet, chords,
+                                                                     basicQuant, barStart))) {
                               bool isTied = false;
                               for (const TiedTuplet &tiedTuplet: backTiedTuplets) {
                                     if (tiedTuplet.tupletId == tuplets[i].id
@@ -351,7 +346,7 @@ bool excludeExtraVoiceTuplets(
                                     }
                               if (!isTied) {
                                     for (const auto &chord: tuplets[i].chords) {
-                                          if (chord.first >= barStart)
+                                          if (chord.second->second.barIndex == barIndex)
                                                 newNonTuplets.push_back(chord.second);
                                           }
                                     eraseBackTiedTuplet(tuplets[i].id, backTiedTuplets);
@@ -386,7 +381,6 @@ void removeUnusedTuplets(
             std::set<int> &pendingTuplets,
             std::list<TiedTuplet> &backTiedTuplets,
             std::set<std::pair<const ReducedFraction, MidiChord> *> &pendingNonTuplets,
-            const ReducedFraction &barStart,
             int barIndex)
       {
       if (pendingTuplets.empty())
@@ -400,8 +394,7 @@ void removeUnusedTuplets(
             else {
                   eraseBackTiedTuplet(tuplets[i].id, backTiedTuplets);
                   for (const auto &chord: tuplets[i].chords) {
-                        if (isChordBelongToThisBar(chord.first, barStart,
-                                                   chord.second->second.barIndex, barIndex)) {
+                        if (chord.second->second.barIndex == barIndex) {
                               nonTuplets.push_back(chord.second);
                               pendingNonTuplets.insert(&*chord.second);
                               }
@@ -457,7 +450,8 @@ void setVoicesFromPrevBars(
             std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> &tupletIntervals,
             std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> &backTupletIntervals,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart)
       {
       bool loopAgain = false;
       do {
@@ -494,7 +488,7 @@ void setVoicesFromPrevBars(
                   tupletIntervals[tiedTuplet.voice].push_back(backInterval);
                               // add to intervals chord from previous bar
                   tupletIntervals[tiedTuplet.voice].push_back(
-                                    chordInterval(*tiedTuplet.chord, chords, basicQuant));
+                                    chordInterval(*tiedTuplet.chord, chords, basicQuant, barStart));
                   pendingTuplets.erase(tiedTuplet.tupletId);
 
                   Q_ASSERT_X(pendingNonTuplets.find(tiedTuplet.chord) == pendingNonTuplets.end(),
@@ -516,13 +510,14 @@ void setTiedChordVoice(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const std::list<TiedTuplet>::iterator &backTiedIt,
             bool isNonTupletBackChord,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart)
       {
       const TiedTuplet &tiedTuplet = *backTiedIt;
 
       if (isNonTupletBackChord) {
                         // non-tuplet chord tied
-            const auto interval = chordInterval(*tiedTuplet.chord, chords, basicQuant);
+            const auto interval = chordInterval(*tiedTuplet.chord, chords, basicQuant, barStart);
             backTupletIntervals[tiedTuplet.voice].push_back(interval);
             tiedTuplet.chord->second.voice = tiedTuplet.voice;
             if (tupletVoiceLimit() > 1)
@@ -582,13 +577,14 @@ int findVoiceForBackTied(
             std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> &backTupletIntervals,
             const std::multimap<ReducedFraction, MidiChord> &chords,
             bool isNonTupletBackChord,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart)
       {
       int voice = 0;
       for ( ; voice != voiceLimit; ++voice) {
             if (haveIntersection(backInterval, backTupletIntervals[voice])
-                        || (isNonTupletBackChord
-                            && haveIntersection(chordInterval(tiedTupletChord, chords, basicQuant),
+                        || (isNonTupletBackChord && haveIntersection(
+                                  chordInterval(tiedTupletChord, chords, basicQuant, barStart),
                                                 backTupletIntervals[voice]))) {
                   continue;
                   }
@@ -619,13 +615,14 @@ void setBackTiedVoices(
             std::set<std::pair<const ReducedFraction, MidiChord> *> &pendingNonTuplets,
             std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> &tupletIntervals,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &basicQuant)
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart)
       {
       auto backTupletIntervals = findBackTupletIntervals(backTiedTuplets, tuplets);
 
                   // set voices that are already set from one of previous bars
       setVoicesFromPrevBars(backTiedTuplets, tuplets, pendingTuplets, pendingNonTuplets,
-                            tupletIntervals, backTupletIntervals, chords, basicQuant);
+                            tupletIntervals, backTupletIntervals, chords, basicQuant, barStart);
 
                   // set yet unset back tied voices
       const int limit = tupletVoiceLimit();
@@ -643,9 +640,9 @@ void setBackTiedVoices(
                         = (pendingNonTuplets.find(tiedTuplet.chord) != pendingNonTuplets.end());
 
             if (tiedTuplet.voice == -1) {
-                  const int voice = findVoiceForBackTied(*tiedTuplet.chord, limit, backInterval,
-                                                         backTupletIntervals, chords,
-                                                         isNonTupletBackChord, basicQuant);
+                  const int voice = findVoiceForBackTied(
+                                    *tiedTuplet.chord, limit, backInterval, backTupletIntervals,
+                                    chords, isNonTupletBackChord, basicQuant, barStart);
                   if (voice < limit) {
                         tiedTuplet.voice = voice;
                         }
@@ -657,7 +654,8 @@ void setBackTiedVoices(
             else {
                   if (haveIntersection(backInterval, backTupletIntervals[tiedTuplet.voice])
                               || (isNonTupletBackChord
-                                  && haveIntersection(chordInterval(*tiedTuplet.chord, chords, basicQuant),
+                                  && haveIntersection(chordInterval(*tiedTuplet.chord, chords,
+                                                                    basicQuant, barStart),
                                                       backTupletIntervals[tiedTuplet.voice]))) {
                         it = eraseBackTiedTuplet(it, backTiedTuplets, tuplet);
                         continue;
@@ -675,7 +673,7 @@ void setBackTiedVoices(
 
             setTiedChordVoice(backTiedTuplets, tuplets, pendingTuplets, pendingNonTuplets,
                               tupletIntervals, backTupletIntervals, chords, it,
-                              isNonTupletBackChord, basicQuant);
+                              isNonTupletBackChord, basicQuant, barStart);
             ++it;
             }
       }
@@ -749,14 +747,6 @@ std::vector<int> findTiedNotes(
       return tiedNotes;
       }
 
-bool isChordFromPrevBars(
-            int chordBarIndex,
-            int currentBarIndex,
-            bool isInTupletOfThisBar)
-      {
-      return chordBarIndex != -1 && chordBarIndex <= currentBarIndex - 1 && !isInTupletOfThisBar;
-      }
-
 // prepare tied tuplets - pairs of tuplet and chord back-tied to it
 // voices of back-tied chords from previous bar are set explicitly
 // other voices = -1
@@ -770,7 +760,7 @@ findBackTiedTuplets(
             const ReducedFraction &prevBarStart,
             const ReducedFraction &startBarTick,
             const ReducedFraction &basicQuant,
-            int barIndex)
+            int currentBarIndex)
       {
       std::list<TiedTuplet> tiedTuplets;
                   // <voice, intervals>
@@ -797,8 +787,7 @@ findBackTiedTuplets(
                         }
                               // remember voices of tuplets that have tied chords from previous bar
                               // and that chords don't belong to the tuplets of this bar
-                  const int voice = isChordFromPrevBars(chordIt->second.barIndex, barIndex,
-                                                        isInTupletOfThisBar)
+                  const int voice = (chordIt->second.barIndex < currentBarIndex)
                                     ? chordIt->second.voice : -1;
                   const auto interval = std::make_pair(tuplets[i].onTime,
                                                        tuplets[i].onTime + tuplets[i].len);
@@ -837,8 +826,8 @@ void assignVoices(
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
             std::list<TiedTuplet> &backTiedTuplets,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &startBarTick,
             const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart,
             int barIndex)
       {
       Q_ASSERT_X(!haveTupletsEmptyChords(tuplets),
@@ -851,14 +840,14 @@ void assignVoices(
       std::map<int, std::vector<std::pair<ReducedFraction, ReducedFraction>>> tupletIntervals;
 
       setBackTiedVoices(backTiedTuplets, tuplets, pendingTuplets, pendingNonTuplets,
-                        tupletIntervals, chords, basicQuant);
+                        tupletIntervals, chords, basicQuant, barStart);
       setTupletVoices(tuplets, pendingTuplets, tupletIntervals, basicQuant);
       removeUnusedTuplets(tuplets, nonTuplets, pendingTuplets, backTiedTuplets,
-                          pendingNonTuplets, startBarTick, barIndex);
+                          pendingNonTuplets, barIndex);
 
       if (tupletVoiceLimit() == 1) {
             bool excluded = excludeExtraVoiceTuplets(tuplets, nonTuplets, backTiedTuplets,
-                                                     chords, basicQuant, startBarTick);
+                                                     chords, basicQuant, barStart, barIndex);
             if (excluded) {         // to exlude tuplet intervals - rebuild all intervals
                   tupletIntervals.clear();
                   for (const auto &tuplet: tuplets) {
@@ -868,7 +857,8 @@ void assignVoices(
                   }
             }
 
-      setNonTupletVoices(pendingNonTuplets, tupletIntervals, tuplets, chords, basicQuant);
+      setNonTupletVoices(pendingNonTuplets, tupletIntervals, tuplets,
+                         chords, basicQuant, barStart);
 
       Q_ASSERT_X(pendingNonTuplets.empty(),
                  "MIDI tuplets: assignVoices", "Unused non-tuplets");
@@ -876,7 +866,8 @@ void assignVoices(
                  "MIDI tuplets: assignVoices", "Empty tuplet chords");
       Q_ASSERT_X(doTupletChordsHaveSameVoice(tuplets),
                  "MIDI tuplets: assignVoices", "Tuplet chords have different voices");
-      Q_ASSERT_X(!haveOverlappingVoices(nonTuplets, tuplets, backTiedTuplets, chords, basicQuant),
+      Q_ASSERT_X(!haveOverlappingVoices(nonTuplets, tuplets, backTiedTuplets, chords,
+                                        basicQuant, barStart),
                  "MIDI tuplets: assignVoices", "Overlapping tuplets of the same voice");
       Q_ASSERT_X(!voiceDontExceedLimit(nonTuplets, tuplets),
                  "MIDI tuplets: assignVoices", "Voice exceeds the limit");

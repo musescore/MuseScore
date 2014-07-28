@@ -97,22 +97,10 @@ findTupletContainingTime(int voice,
                          const ReducedFraction &time,
                          const std::multimap<ReducedFraction, TupletData> &tupletEvents);
 
-std::multimap<ReducedFraction, MidiChord>::iterator
-findTupletFreeChord(
-            const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
-            const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt,
-            const ReducedFraction &startDivTick);
-
-bool isChordBelongToThisBar(
-            const ReducedFraction &chordOnTime,
-            const ReducedFraction &barStart,
-            int chordBarIndex,
-            int currentBarIndex);
-
 // Find tuplets and set bar indexes
 
 void findAllTuplets(
-            std::multimap<ReducedFraction, TupletData> &tupletEvents,
+            std::multimap<ReducedFraction, TupletData> &tuplets,
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
             const ReducedFraction &lastTick,
@@ -121,7 +109,8 @@ void findAllTuplets(
 ReducedFraction findOnTimeBetweenChords(
             const std::pair<const ReducedFraction, MidiChord> &chord,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &basicQuant);
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart);
 
 #ifdef QT_DEBUG
 

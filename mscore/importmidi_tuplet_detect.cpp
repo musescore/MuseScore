@@ -280,19 +280,45 @@ bool isTupletLenAllowed(
       return tupletNoteLen >= regularQuant;
       }
 
+// only one chord from the next bar can be used to search tuplets
+// and this chord should be the last in the current bar
+
+bool isNextBarOwnershipOk(
+            const std::multimap<ReducedFraction, MidiChord>::iterator &startIt,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &endIt,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
+            int barIndex)
+      {
+      if (endIt == chords.begin() || endIt == startIt)
+            return false;
+      if (std::prev(endIt)->second.barIndex == barIndex)
+            return true;
+
+      int nextBarCounter = 0;
+      for (auto it = std::prev(endIt); ; --it) {
+            if (it->second.barIndex > barIndex)
+                  ++nextBarCounter;
+            if (it == startIt)
+                  break;
+            }
+      return nextBarCounter == 1;
+      }
+
 std::vector<TupletInfo> detectTuplets(
-            std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &barFraction,
-            const ReducedFraction &startBarTick,
-            const ReducedFraction &tol,
-            const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt,
             const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
-            const ReducedFraction &basicQuant)
+            const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt,
+            const ReducedFraction &startBarTick,
+            const ReducedFraction &barFraction,
+            std::multimap<ReducedFraction, MidiChord> &chords,
+            const ReducedFraction &basicQuant,
+            int barIndex)
       {
       const auto divLengths = Meter::divisionsOfBarForTuplets(barFraction);
 
       std::vector<TupletInfo> tuplets;
       int id = 0;
+      const auto tol = basicQuant / 2;
+
       for (const auto &divLen: divLengths) {
             const auto tupletNumbers = findTupletNumbers(divLen, barFraction);
             const auto div = barFraction / divLen;
@@ -303,18 +329,22 @@ std::vector<TupletInfo> detectTuplets(
                   const auto endDivTime = startBarTick + divLen * (i + 1);
                               // check which chords can be inside tuplet period
                               // [startDivTime - tol, endDivTime]
-                  auto startDivChordIt = MChord::findFirstChordInRange(startDivTime - tol, endDivTime,
+                  const auto startDivTimeWithTol = qMax(startBarTick, startDivTime - tol);
+                  auto startDivChordIt = MChord::findFirstChordInRange(startDivTimeWithTol, endDivTime,
                                                                        startBarChordIt, endBarChordIt);
-                  startDivChordIt = findTupletFreeChord(startDivChordIt, endBarChordIt, startDivTime);
                   if (startDivChordIt == endBarChordIt)
                         continue;
 
-                  Q_ASSERT_X(startDivChordIt->second.isInTuplet == false,
-                             "MIDI tuplets: findTuplets", "Voice of the chord has been already set");
+                  Q_ASSERT_X(!startDivChordIt->second.isInTuplet,
+                             "MIDI tuplets: findTuplets", "Tuplet chord has been already used");
 
                               // end iterator, as usual, point to the next - invalid chord
-                  const auto endDivChordIt = chords.lower_bound(endDivTime);
+                  auto endDivChordIt = chords.lower_bound(endDivTime);
+                  if (!isNextBarOwnershipOk(startDivChordIt, endDivChordIt, chords, barIndex))
+                        continue;
                               // try different tuplets, nested tuplets are not allowed
+                              // here chords from next bar can be captured
+                              // if their on time < next bar start
                   for (const auto &tupletNumber: tupletNumbers) {
                         if (!isTupletLenAllowed(divLen, tupletNumber, startDivChordIt, endDivChordIt,
                                                 basicQuant)) {

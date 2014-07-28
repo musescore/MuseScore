@@ -1312,6 +1312,8 @@ void moveOffTimes(
 
                   Q_ASSERT_X(newOnTime > oldOnTime,
                              "Quantize::moveOffTimes", "Invalid note on time or off time");
+                  Q_ASSERT_X(note.offTime > oldOnTime,
+                             "Quantize::moveOffTimes", "Invalid old note length");
 
                   note.offTime += newOnTime - oldOnTime;
                   }
