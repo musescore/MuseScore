@@ -1416,24 +1416,25 @@ RemoveElement::RemoveElement(Element* e)
                         }
                   }
             // remove any slurs pointing to this chor/rest
-            QList<Spanner*> sl;
-            for (auto i : score->spanner()) {     // TODO: dont search whole list
-                  Spanner* s = i.second;
-                  // do not delete slur if in note entry mode
-                  if (noteEntryMode && slur->linkList().contains(s)) {
-                        if (s->startElement() == e)
-                              s->setStartElement(nullptr);
-                        else if (s->endElement() == e)
-                              s->setEndElement(nullptr);
-                        continue;
+            if (slur) {
+                  QList<Spanner*> sl;
+                  for (auto i : score->spanner()) {     // TODO: dont search whole list
+                        Spanner* s = i.second;
+                        // do not delete slur if in note entry mode
+                        if (noteEntryMode && slur->linkList().contains(s)) {
+                              if (s->startElement() == e)
+                                    s->setStartElement(nullptr);
+                              else if (s->endElement() == e)
+                                    s->setEndElement(nullptr);
+                              continue;
+                              }
+                        if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e)) {
+                              sl.append(s);
+                              }
                         }
-                  if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e)) {
-                        sl.append(s);
-                        }
+                  for (auto s : sl)
+                        score->undoRemoveElement(s);
                   }
-            for (auto s : sl)
-                  score->undoRemoveElement(s);
-
             ChordRest* cr = static_cast<ChordRest*>(element);
             if (cr->tuplet() && cr->tuplet()->elements().empty())
                   score->undoRemoveElement(cr->tuplet());

@@ -578,7 +578,10 @@ Score::FileError Score::read114(XmlReader& e)
                         }
                   }
 
-            if (s->type() == Element::Type::OTTAVA || s->type() == Element::Type::PEDAL || s->type() == Element::Type::TRILL) {
+            if (s->type() == Element::Type::OTTAVA
+                || s->type() == Element::Type::PEDAL
+                || s->type() == Element::Type::TRILL
+                || s->type() == Element::Type::TEXTLINE) {
                   qreal yo = 0;
                   if (s->type() == Element::Type::OTTAVA) {
                       // fix ottava position
@@ -592,9 +595,17 @@ Score::FileError Score::read114(XmlReader& e)
                   else if (s->type() == Element::Type::TRILL) {
                         yo = styleS(StyleIdx::trillY).val() * spatium();
                         }
-                  for (SpannerSegment* seg : s->spannerSegments()) {
-                        if (!seg->userOff().isNull())
-                              seg->setUserYoffset(seg->userOff().y() - yo);
+                  else if (s->type() == Element::Type::TEXTLINE) {
+                        yo = -5.0 * spatium();
+                  }
+                  if (!s->spannerSegments().isEmpty()) {
+                        for (SpannerSegment* seg : s->spannerSegments()) {
+                              if (!seg->userOff().isNull())
+                                    seg->setUserYoffset(seg->userOff().y() - yo);
+                              }
+                        }
+                  else {
+                        s->setUserYoffset(-yo);
                         }
                   }
             }

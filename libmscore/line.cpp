@@ -577,6 +577,8 @@ void SLine::layout()
                         // set user offset to previous segment's offset
                         if (segCount > 0)
                               ls->setUserOff(QPointF(0, segmentAt(segCount+i-1)->userOff().y()));
+                        else
+                              ls->setUserOff(QPointF(0, userOff().y()));
                         }
                   }
             else {
