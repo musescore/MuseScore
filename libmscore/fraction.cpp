@@ -164,8 +164,8 @@ Fraction& Fraction::operator*=(int val)
 
 Fraction& Fraction::operator/=(const Fraction& val)
       {
-      _numerator *= val._denominator;
-      _denominator  *= val._numerator;
+      _numerator   *= val._denominator;
+      _denominator *= val._numerator;
       return *this;
       }
 

@@ -1819,7 +1819,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment->add(barLine);
                   }
             else if (tag == "Chord") {
-
                   Chord* chord = new Chord(score());
                   chord->setTrack(e.track());
                   chord->read(e);
@@ -1837,9 +1836,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                               chord->add(gc);
                               }
                         graceNotes.clear();
-
-                        Fraction ts(timeStretch * chord->globalDuration());
-                        int crticks = ts.ticks();
+                        int crticks = chord->actualTicks();
 
                         if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
                               //
@@ -1900,14 +1897,13 @@ void Measure::read(XmlReader& e, int staffIdx)
                   rest->setDuration(timesig()/timeStretch);
                   rest->setTrack(e.track());
                   rest->read(e);
-
                   segment = getSegment(rest, e.tick());
                   segment->add(rest);
+
                   if (!rest->duration().isValid())     // hack
                         rest->setDuration(timesig()/timeStretch);
-                  Fraction ts(timeStretch * rest->globalDuration());
 
-                  e.incTick(ts.ticks());
+                  e.incTick(rest->actualTicks());
                   }
             else if (tag == "Breath") {
                   Breath* breath = new Breath(score());
@@ -2044,14 +2040,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                         // if courtesy sig., just add it without map processing
                         segment = getSegment(Segment::Type::TimeSigAnnounce, currTick);
                         segment->add(ts);
-                  }
+                        }
                   else {
                         // if 'real' time sig., do full process
                         segment = getSegment(Segment::Type::TimeSig, currTick);
                         segment->add(ts);
                         timeStretch = ts->stretch().reduced();
 
-                        _timesig = ts->sig() * timeStretch;
+                        _timesig = ts->sig() / timeStretch;
 
                         if (score()->mscVersion() > 114) {
                               if (irregular) {

@@ -684,7 +684,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   if (dList.isEmpty())
                         return akkumulated;
 
-                  Fraction f(cr->staff()->timeStretch(cr->tick()) * sd);
+                  Fraction f = sd / cr->staff()->timeStretch(cr->tick());
                   for (Tuplet* t = tuplet; t; t = t->tuplet())
                         f /= t->ratio();
                   int tick  = cr->tick() + f.ticks();
