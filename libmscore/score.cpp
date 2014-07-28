@@ -2005,10 +2005,10 @@ void Score::removeExcerpt(Score* score)
 ///   recompute note lines and accidental
 ///   not undoable add/remove
 //---------------------------------------------------------
-
+      
 void Score::updateNotes()
       {
-      for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
                   m->updateNotes(staffIdx);
             }
