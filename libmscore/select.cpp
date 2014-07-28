@@ -521,6 +521,16 @@ QByteArray Selection::mimeData() const
       return a;
       }
 
+
+bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
+      {
+      for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
+            if (seg->element(track))
+                  return true;
+            }
+      return false;
+      }
+
 //---------------------------------------------------------
 //   staffMimeData
 //---------------------------------------------------------
@@ -540,9 +550,15 @@ QByteArray Selection::staffMimeData() const
       Segment* seg2 = _endSegment;
 
       for (int staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
-            xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
             int startTrack = staffIdx * VOICES;
             int endTrack   = startTrack + VOICES;
+
+            int voices = 0;
+            for(int voice = 0; voice < 4; voice++) {
+                  voices |= hasElementInTrack(seg1, seg2, startTrack + voice) << voice;
+                  }
+            xml.stag(QString("Staff id=\"%1\" voices=\"%2\"").arg(staffIdx).arg(voices));
+
             Staff* staff = score()->staff(staffIdx);
             Part* part = staff->part();
             Interval interval = part->instr(seg1->tick())->transpose();

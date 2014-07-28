@@ -545,7 +545,7 @@ class Score : public QObject {
       void changeCRlen(ChordRest* cr, const TDuration&);
 
       Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*, bool keepChord = false);
-      bool makeGap1(int tick, int staffIdx, Fraction len);
+      bool makeGap1(int tick, int staffIdx, Fraction len, int voices);
       bool makeGapVoice(Segment* seg, int track, Fraction len, int tick);
 
       Rest* addRest(int tick, int track, TDuration, Tuplet*);
