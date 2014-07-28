@@ -183,6 +183,11 @@ void TextLineSegment::setText(Text* t)
 void TextLineSegment::layout1()
       {
       TextLine* tl = textLine();
+      if (parent() && tl && tl->type() != Element::Type::OTTAVA
+                  && tl->type() != Element::Type::PEDAL
+                  && tl->type() != Element::Type::VOLTA)
+            rypos() += -5.0 * spatium();
+
       if (!tl->diagonal())
             _userOff2.setY(0);
       switch (spannerSegmentType()) {
