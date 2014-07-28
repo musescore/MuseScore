@@ -12,13 +12,13 @@ namespace MidiTuplet {
 struct TupletInfo;
 
 std::vector<TupletInfo> detectTuplets(
-            std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &barFraction,
-            const ReducedFraction &startBarTick,
-            const ReducedFraction &tol,
-            const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt,
             const std::multimap<ReducedFraction, MidiChord>::iterator &startBarChordIt,
-            const ReducedFraction &basicQuant);
+            const std::multimap<ReducedFraction, MidiChord>::iterator &endBarChordIt,
+            const ReducedFraction &startBarTick,
+            const ReducedFraction &barFraction,
+            std::multimap<ReducedFraction, MidiChord> &chords,
+            const ReducedFraction &basicQuant,
+            int barIndex);
 
 } // namespace MidiTuplet
 } // namespace Ms

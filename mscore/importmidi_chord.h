@@ -9,6 +9,7 @@
 namespace Ms {
 
 class Tie;
+class TimeSigMap;
 
 namespace MidiTuplet {
 struct TupletData;
@@ -121,6 +122,11 @@ findChordsForTimeRange(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &maxChordLength);
 
+void setBarIndexes(
+            std::multimap<ReducedFraction, MidiChord> &chords,
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &lastTick, const TimeSigMap *sigmap);
+
 #ifdef QT_DEBUG
 
 bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords);
@@ -130,6 +136,7 @@ bool isLastTickValid(const ReducedFraction &lastTick,
                      const std::multimap<ReducedFraction, MidiChord> &chords);
 bool isLastTickValid(const ReducedFraction &lastTick,
                      const std::multimap<int, MTrack> &tracks);
+bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord> &chords);
 
 #endif
 

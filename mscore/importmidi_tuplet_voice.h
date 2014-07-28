@@ -20,7 +20,6 @@ struct TiedTuplet
       };
 
 int tupletVoiceLimit();
-void resetTupletVoices(std::vector<TupletInfo> &tuplets);
 
 bool excludeExtraVoiceTuplets(
             std::vector<TupletInfo> &tuplets,
@@ -28,7 +27,8 @@ bool excludeExtraVoiceTuplets(
             std::list<TiedTuplet> &backTiedTuplets,
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &basicQuant,
-            const ReducedFraction &barStart);
+            const ReducedFraction &barStart,
+            int barIndex);
 
 std::list<TiedTuplet>
 findBackTiedTuplets(
@@ -37,15 +37,15 @@ findBackTiedTuplets(
             const ReducedFraction &prevBarStart,
             const ReducedFraction &startBarTick,
             const ReducedFraction &basicQuant,
-            int barIndex);
+            int currentBarIndex);
 
 void assignVoices(
             std::vector<TupletInfo> &tuplets,
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
             std::list<TiedTuplet> &backTiedTuplets,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &startBarTick,
             const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart,
             int barIndex);
 
 #ifdef QT_DEBUG
@@ -55,7 +55,8 @@ bool haveOverlappingVoices(
             const std::vector<TupletInfo> &tuplets,
             const std::list<TiedTuplet> &backTiedTuplets,
             const std::multimap<ReducedFraction, MidiChord> &chords,
-            const ReducedFraction &basicQuant);
+            const ReducedFraction &basicQuant,
+            const ReducedFraction &barStart);
 
 #endif
 
