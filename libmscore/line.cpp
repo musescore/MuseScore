@@ -530,7 +530,7 @@ QPointF SLine::linePos(GripLine grip, System** sys)
 
 void SLine::layout()
       {
-      if (score() == gscore || tick() == -1) {
+      if (score() == gscore || tick() == -1 || tick2() == -1) {
             //
             // when used in a palette, SLine has no parent and
             // tick and tick2 has no meaning so no layout is
