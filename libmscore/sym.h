@@ -2442,6 +2442,7 @@ enum class SymId {
       noteLongaDown,
       noteLongaSquareUp,
       noteLongaSquareDown,
+      space,
 
 //    END OF TABLE
 
