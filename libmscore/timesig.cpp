@@ -38,6 +38,7 @@ TimeSig::TimeSig(Score* s)
       _stretch.set(1, 1);
       _sig.set(0, 1);               // initialize to invalid
       _timeSigType   = TimeSigType::NORMAL;
+      _freeTime = false;
       customText = false;
       _needLayout = true;
       }
@@ -74,6 +75,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
             customText = false;
       _timeSigType = st;
       _needLayout = true;
+      _freeTime = false;
       }
 
 //---------------------------------------------------------
@@ -348,6 +350,14 @@ void TimeSig::draw(QPainter* painter) const
       painter->setPen(curColor());
       QString ns = toTimeSigString(_numeratorString);
       QString ds = toTimeSigString(_denominatorString);
+
+      //draws parenthesis around the time signature, indicating free time
+      if (_freeTime) {
+            QPointF leftBracket = pz - QPointF(5,-6.8);
+            QPointF rightBracket = pz + QPointF(15,6.8);
+            drawSymbol(SymId::timeSigParensLeft, painter, leftBracket);
+            drawSymbol(SymId::timeSigParensRight, painter, rightBracket);
+            }
 
       drawSymbols(ns, painter, pz);
       drawSymbols(ds, painter, pn);
