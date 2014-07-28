@@ -72,12 +72,11 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
       if (m->type() == Element::Type::MEASURE || staffIdx == 0)
             m->write(xml, staffIdx, writeSystemElements);
 
-      if (mm) {
-            if (mm->mmRest()) {
-                  mm->mmRest()->write(xml, staffIdx, writeSystemElements);
-                  xml.tag("tick", mm->tick() + mm->ticks());         // rewind tick
-                  }
+      if (mm && mm->mmRest()) {
+            mm->mmRest()->write(xml, staffIdx, writeSystemElements);
+            xml.tag("tick", mm->tick() + mm->ticks());         // rewind tick
             }
+
       if (m->type() == Element::Type::MEASURE)
             xml.curTick = m->tick() + m->ticks();
       }
@@ -88,6 +87,27 @@ static void writeMeasure(Xml& xml, MeasureBase* m, int staffIdx, bool writeSyste
 
 void Score::write(Xml& xml, bool selectionOnly)
       {
+      // if we have multi measure rests and some parts are hidden,
+      // then some layout information is missing:
+      // relayout with all parts set visible
+
+      bool unhide = false;
+      QList<bool> partsVisible;
+      if (styleB(StyleIdx::createMultiMeasureRests)) {
+            for (Part* part : _parts) {
+                  partsVisible.append(part->show());
+                  if (!part->show()) {
+                        unhide = true;
+                        part->setShow(true);
+                        }
+                  }
+            }
+      if (unhide) {
+            doLayout();
+            for (int i = 0; i < partsVisible.size(); ++i)
+                  _parts[i]->setShow(partsVisible[i]);
+            }
+
       xml.stag("Score");
 
 #ifdef OMR
@@ -197,6 +217,9 @@ void Score::write(Xml& xml, bool selectionOnly)
       if (parentScore())
             xml.tag("name", name());
       xml.etag();
+
+      if (unhide)
+            doLayout();
       }
 
 //---------------------------------------------------------
