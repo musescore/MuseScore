@@ -234,7 +234,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
       if (spanner->anchor() == Spanner::Anchor::SEGMENT) {
             spanner->setTick(segment->tick());
             int lastTick = lastMeasure()->tick() + lastMeasure()->ticks();
-            int tick2 = qMin(segment->tick() + segment->measure()->ticks(), lastTick);
+            int tick2 = qMin(segment->measure()->tick() + segment->measure()->ticks(), lastTick);
             spanner->setTick2(tick2);
             }
       else {      // Anchor::MEASURE
