@@ -1492,8 +1492,14 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       {
       cv = view;
       if (cv) {
-            if (cv->score() && (cs != cv->score()))
+            if (cv->score() && (cs != cv->score())) {
+                  // exit note entry mode
+                  if (cv->noteEntryMode()) {
+                        cv->cmd(getAction("escape"));
+                        qApp->processEvents();
+                        }
                   updateInputState(cv->score());
+                  }
             cs = cv->score();
             view->setFocusRect();
             }
