@@ -61,7 +61,6 @@ void OttavaSegment::layout()
             if (ottava()->placement() == Element::Placement::BELOW)
                   yo = -yo + staff()->height();
             rypos() += yo;
-            return;
             }
       adjustReadPos();
       }
