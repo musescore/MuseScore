@@ -408,7 +408,7 @@ StyleData::StyleData()
             { StyleIdx::propertyDistance,            QVariant(1.0) },
             { StyleIdx::articulationMag,             QVariant(1.0) },
             { StyleIdx::lastSystemFillLimit,         QVariant(0.3) },
-            { StyleIdx::hairpinY,                    QVariant(8) },
+            { StyleIdx::hairpinY,                    QVariant(7.5) },
             { StyleIdx::hairpinHeight,               QVariant(1.2) },
             { StyleIdx::hairpinContHeight,           QVariant(0.5) },
             { StyleIdx::hairpinLineWidth,            QVariant(0.13) },
