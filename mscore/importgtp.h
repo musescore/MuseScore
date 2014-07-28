@@ -83,6 +83,7 @@ struct GPFermata {
 
 struct GpBar {
       Fraction timesig;
+      bool freeTime;
       int keysig;
       QString marker;
       BarLineType barLine;
