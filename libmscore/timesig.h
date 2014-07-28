@@ -65,6 +65,7 @@ class TimeSig : public Element {
       bool _showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from actualSig()
       bool _needLayout;
+      bool _freeTime;
       Groups _groups;
 
       void layout1();
@@ -115,6 +116,9 @@ class TimeSig : public Element {
       QString denominatorString() const  { return _denominatorString; }
       void setDenominatorString(const QString&);
       void undoSetDenominatorString(const QString&);
+
+      bool getFreeTime() const    { return _freeTime; }
+      void setFreeTime(bool v)    { _freeTime = v;    }
 
       void setFrom(const TimeSig*);
 

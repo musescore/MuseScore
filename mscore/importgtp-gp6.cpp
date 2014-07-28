@@ -513,6 +513,7 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
       QDomNode masterBarElement;
       while (!masterBar.isNull()) {
             GpBar gpBar;
+            gpBar.freeTime = false;
             masterBarElement = masterBar.firstChild();
             while (!masterBarElement.isNull()) {
                   if (!masterBarElement.nodeName().compare("Key"))
@@ -521,6 +522,10 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
                         QString timeSignature = masterBarElement.toElement().text();
                         QList<QString> timeSignatureList = timeSignature.split("/");
                         gpBar.timesig = Fraction(timeSignatureList.first().toInt(), timeSignatureList.last().toInt());
+                        }
+                  else if (!masterBarElement.nodeName().compare("FreeTime")) {
+                        gpBar.freeTime = true;
+                        gpBar.barLine = BarLineType::DOUBLE;
                         }
                   else if (!masterBarElement.nodeName().compare("DoubleBar"))
                         gpBar.barLine = BarLineType::DOUBLE;
@@ -1486,7 +1491,32 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
 
             QDomNode masterBarElement = nextMasterBar.firstChild();
             while (!masterBarElement.isNull()) {
-                  measure->setTimesig(bars[measureCounter].timesig);
+                  if (bars[measureCounter].freeTime) {
+                        TimeSig* ts = new TimeSig(score);
+                        ts->setSig(bars[measureCounter].timesig);
+                        ts->setTrack(0);
+                        Measure* m = score->getCreateMeasure(measure->tick());
+                        Segment* s = m->getSegment(SegmentType::TimeSig, measure->tick());
+                        ts->setFreeTime(true);
+                        s->add(ts);
+                        StaffText* st = new StaffText(score);
+                        st->setTextStyleType(TextStyleType::STAFF);
+                        st->setText("Free time");
+                        st->setParent(s);
+                        st->setTrack(0);
+                        score->addElement(st);
+                        }
+                  else if (measureCounter > 0 && bars[measureCounter - 1].freeTime) {
+                        TimeSig* ts = new TimeSig(score);
+                        ts->setSig(bars[measureCounter].timesig);
+                        ts->setTrack(0);
+                        Measure* m = score->getCreateMeasure(measure->tick());
+                        Segment* s = m->getSegment(SegmentType::TimeSig, measure->tick());
+                        ts->setFreeTime(false);
+                        s->add(ts);
+                        }
+                  else
+                        measure->setTimesig(bars[measureCounter].timesig);
                   measure->setLen(bars[measureCounter].timesig);
                   KeySig* t = new KeySig(score);
                   if (!masterBarElement.nodeName().compare("Key")) {
