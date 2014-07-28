@@ -727,7 +727,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 //    - do not stop at measure end
 //---------------------------------------------------------
 
-bool Score::makeGap1(int tick, int staffIdx, Fraction len)
+bool Score::makeGap1(int tick, int staffIdx, Fraction len, int voices)
       {
       Segment* seg = tick2segment(tick, true, Segment::Type::ChordRest);
       if (!seg) {
@@ -736,6 +736,8 @@ bool Score::makeGap1(int tick, int staffIdx, Fraction len)
             }
       int strack = staffIdx * VOICES;
       for (int track = strack; track < strack + 4; track++) {
+            if (!(voices & (1 << (track-strack))))
+                  continue;
             bool result = makeGapVoice(seg, track, len, tick);
             if(track == strack && !result)
                   return false;
