@@ -2375,8 +2375,8 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
             offsBelow = -1;
             }
       else if (sli->type() == Element::Type::TEXTLINE) {
-            offsAbove = -3;
-            offsBelow =  3 + (stafflines - 1);
+            offsAbove = 0;
+            offsBelow =  5 + 3 + (stafflines - 1);
             }
       else if (sli->type() == Element::Type::OTTAVA) {
             // ignore
