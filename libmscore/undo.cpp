@@ -1406,12 +1406,21 @@ RemoveElement::RemoveElement(Element* e)
 
       Score* score = element->score();
       if (element->isChordRest()) {
+            bool noteEntryMode = false;
+            Slur* slur = 0;
+            for (Score* sc : score->scoreList()) {
+                  if (sc->noteEntryMode()) {
+                        noteEntryMode = true;
+                        slur = sc->inputState().slur();
+                        break;
+                        }
+                  }
             // remove any slurs pointing to this chor/rest
             QList<Spanner*> sl;
             for (auto i : score->spanner()) {     // TODO: dont search whole list
                   Spanner* s = i.second;
                   // do not delete slur if in note entry mode
-                  if (e->score()->inputState().noteEntryMode() && e->score()->inputState().slur() == s) {
+                  if (noteEntryMode && slur->linkList().contains(s)) {
                         if (s->startElement() == e)
                               s->setStartElement(nullptr);
                         else if (s->endElement() == e)
