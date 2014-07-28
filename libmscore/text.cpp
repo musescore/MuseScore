@@ -27,6 +27,8 @@ static const qreal subScriptSize   = 0.6;
 static const qreal subScriptOffset = 0.5;       // of x-height
 static const qreal superScriptOffset = -0.5;       // of x-height
 
+static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
+
 TextCursor Text::_cursor;
 
 //---------------------------------------------------------
@@ -269,8 +271,21 @@ void TextBlock::layout(Text* t)
                         f.pos.setY(0.0);
                   qreal w;
                   QRectF r;
-                  if (f.format.type() == CharFormatType::SYMBOL)
+                  if (f.format.type() == CharFormatType::SYMBOL) {
                         r = fm.tightBoundingRect(f.text).translated(f.pos);
+                        // Hack for tempo text position
+                        // SMuFL defines them in the middle of the staff and advise the use of OpenType ligature
+                        // As of today, Qt doesn't support OT ligature... so...
+                        if (f.ids.contains(SymId::noteQuarterUp) || f.ids.contains(SymId::noteHalfUp)
+                            || f.ids.contains(SymId::note8thUp) || f.ids.contains(SymId::note16thUp)
+                            || f.ids.contains(SymId::note32ndUp) || f.ids.contains(SymId::note64thUp)
+                            || f.ids.contains(SymId::note128thUp) || f.ids.contains(SymId::note512thUp)
+                            || f.ids.contains(SymId::note1024thUp) || f.ids.contains(SymId::textAugmentationDot)) {
+                              qreal voffset = fm.xHeight();   // use original height
+                              voffset *= tempotextOffset;
+                              f.pos.ry() += voffset;
+                              }
+                        }
                   else
                         r = fm.boundingRect(f.text).translated(f.pos);
                   w = fm.width(f.text);
