@@ -183,7 +183,11 @@ void Preferences::init()
 
       styleName               = "light";   // ??
       globalStyle             = MuseScoreStyleType::LIGHT;
+#ifdef Q_OS_MAC
+      animations              = false;
+#else
       animations              = true;
+#endif
 
       QString wd      = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
 
