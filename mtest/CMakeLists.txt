@@ -39,6 +39,9 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp4.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp5.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp6.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_operations.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_meter.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_quant.cpp
