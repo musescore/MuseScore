@@ -693,6 +693,8 @@ void JackAudio::rememberAudioConnections()
       if (MScore::debugMode)
             qDebug("Saving audio connections...");
       QSettings settings;
+      settings.setValue(QString("audio-0-connections"), 0);
+      settings.setValue(QString("audio-1-connections"), 0);
       int port = 0;
       foreach(jack_port_t* mp, ports) {
             const char** cc = jack_port_get_connections(mp);
