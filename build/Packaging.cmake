@@ -14,6 +14,21 @@ SET(CPACK_PACKAGE_VERSION_MINOR "${MUSESCORE_VERSION_MINOR}")
 SET(CPACK_PACKAGE_VERSION_PATCH "${MUSESCORE_VERSION_PATCH}")
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore ${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
 
+set(git_date_string "")
+if (MSCORE_UNSTABLE)
+      find_program(GIT_EXECUTABLE git PATHS ENV PATH)
+      if (GIT_EXECUTABLE)
+            execute_process(
+                  COMMAND "${GIT_EXECUTABLE}" log -1 --date=short --format=%cd
+                  OUTPUT_VARIABLE git_date
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+      endif (GIT_EXECUTABLE)
+      if (git_date)
+            STRING(REGEX REPLACE "-" "" git_date "${git_date}")
+            set(git_date_string "~git${git_date}")
+      endif (git_date)
+endif (MSCORE_UNSTABLE)
+
 SET(CPACK_NSIS_COMPRESSOR "/FINAL /SOLID lzma")
 
 IF(MINGW)
@@ -53,15 +68,11 @@ ELSE(MINGW)
 ENDIF(MINGW)
 
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "mscore")
-SET(CPACK_PACKAGE_FILE_NAME     "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${MUSESCORE_VERSION_FULL}")
+SET(CPACK_PACKAGE_FILE_NAME     "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${MUSESCORE_VERSION_FULL}${git_date_string}")
 SET(CPACK_PACKAGE_EXECUTABLES   "mscore" "MuseScore")
 
 set(CPACK_DEBIAN_PACKAGE_NAME         "mscore")
-set(CPACK_DEBIAN_PACKAGE_VERSION      "${MUSESCORE_VERSION_FULL}-0ubuntu0.1")
-set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
-
-set(CPACK_DEBIAN_PACKAGE_DEPENDS    "libqt4-core (>= 4.4), libqt4-gui (>= 4.4)")
-
+set(CPACK_DEBIAN_PACKAGE_VERSION      "${MUSESCORE_VERSION_FULL}${git_date_string}")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER   "tsmithe@ubuntu.com")
 set(CPACK_DEBIAN_PACKAGE_SECTION      "devel")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY     "optional")
@@ -78,5 +89,18 @@ else (MINGW)
      set(CPACK_DEB "on")
    endif (NOT APPLE)
 endif (MINGW)
+
+
+if (CPACK_DEB)
+      find_program(DPKG_EXECUTABLE dpkg PATHS ENV PATH)
+      if (DPKG_EXECUTABLE)
+            set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS	"ON")
+            execute_process(
+                  COMMAND "${DPKG_EXECUTABLE} --print-architecture"
+                  OUTPUT_VARIABLE dpkg_architecture
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+            set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${dpkg_architecture}")
+      endif (DPKG_EXECUTABLE)
+endif (CPACK_DEB)
 
 include (CPack)
