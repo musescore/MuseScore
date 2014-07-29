@@ -708,16 +708,25 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                         if (_columns[index.column()]->isEditable()) {
                               QVariant value = _columns[index.column()]->value(0);
                               if (value.type() == QVariant::String) {
+                                    value = QVariant();
                                     if (!_columns[index.column()]->isForAllTracksOnly()) {
-                                          for (int i = 1; i < _trackCount; ++i) {
-                                                if (_columns[index.column()]->isVisible(i)
-                                                            && _columns[index.column()]->value(i).toString()
-                                                                        != value.toString()) {
-                                                      return "...";
+                                          for (int i = 0; i < _trackCount; ++i) {
+                                                if (!_columns[index.column()]->isVisible(i))
+                                                      continue;
+                                                const auto newValue
+                                                            = _columns[index.column()]->value(i);
+                                                if (!value.isValid()) {       // value to compare with
+                                                      value = newValue;
+                                                      continue;
                                                       }
+                                                if (newValue.toString() != value.toString())
+                                                      return "...";
                                                 }
                                           }
-                                    if (_columns[index.column()]->isVisible(0))
+                                    else {
+                                          value = _columns[index.column()]->value(0);
+                                          }
+                                    if (value.isValid())
                                           return value.toString();
                                     }
                               }
@@ -742,15 +751,26 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                   if (trackIndex == -1) {
                         QVariant value = _columns[index.column()]->value(0);
                         if (value.type() == QVariant::Bool) {
+                              value = QVariant();
                               if (!_columns[index.column()]->isForAllTracksOnly()) {
-                                    for (int i = 1; i < _trackCount; ++i) {
-                                          if (_columns[index.column()]->value(i).toBool()
-                                                      != value.toBool()) {
+                                    for (int i = 0; i < _trackCount; ++i) {
+                                          if (!_columns[index.column()]->isVisible(i))
+                                                continue;
+                                          const auto newValue
+                                                      = _columns[index.column()]->value(i);
+                                          if (!value.isValid()) {       // value to compare with
+                                                value = newValue;
+                                                continue;
+                                                }
+                                          if (newValue.toBool() != value.toBool()) {
                                                 return Qt::PartiallyChecked;
                                                 }
                                           }
                                     }
-                              if (_columns[index.column()]->isVisible(0))
+                              else {
+                                    value = _columns[index.column()]->value(0);
+                                    }
+                              if (value.isValid())
                                     return (value.toBool()) ? Qt::Checked : Qt::Unchecked;
                               }
                         }
