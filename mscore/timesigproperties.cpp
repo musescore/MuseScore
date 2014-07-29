@@ -53,7 +53,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       zText->setValidator(validator);
       nText->setValidator(validator);
 
-      Fraction nominal = timesig->sig() * timesig->stretch();
+      Fraction nominal = timesig->sig() / timesig->stretch();
       nominal.reduce();
       zNominal->setValue(nominal.numerator());
       nNominal->setValue(nominal.denominator());
