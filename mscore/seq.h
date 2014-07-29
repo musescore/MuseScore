@@ -146,7 +146,7 @@ class Seq : public QObject, public Sequencer {
       void collectMeasureEvents(Measure*, int staffIdx);
 
       void setPos(int);
-      void playEvent(const NPlayEvent&);
+      void playEvent(const NPlayEvent&, unsigned framePos);
       void guiToSeq(const SeqMsg& msg);
       void metronome(unsigned n, float* l, bool force);
       void seekCommon(int utick);
@@ -224,7 +224,7 @@ class Seq : public QObject, public Sequencer {
       int getCurTick();
       double curTempo() const;
 
-      void putEvent(const NPlayEvent&);
+      void putEvent(const NPlayEvent&, unsigned framePos = 0);
       void startNoteTimer(int duration);
       void startNote(int channel, int, int, double nt);
       void eventToGui(NPlayEvent);
