@@ -22,8 +22,8 @@ class ImportMidiPanel : public QWidget
 
       void setMidiFile(const QString &fileName);
       void excludeMidiFile(const QString &fileName);
-      bool isPrefferedVisible() const { return _prefferedVisible; }
-      void setPrefferedVisible(bool visible);
+      bool isPreferredVisible() const { return _preferredVisible; }
+      void setPreferredVisible(bool visible);
       void setReopenInProgress();
 
       static bool isMidiFile(const QString &fileName);
@@ -55,7 +55,7 @@ class ImportMidiPanel : public QWidget
 
       TracksModel *_model;
       OperationsDelegate *_delegate;
-      bool _prefferedVisible;
+      bool _preferredVisible;
       bool _importInProgress;
       bool _reopenInProgress;
       QString _midiFile;

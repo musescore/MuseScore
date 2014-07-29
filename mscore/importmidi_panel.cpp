@@ -15,7 +15,7 @@ ImportMidiPanel::ImportMidiPanel(QWidget *parent)
       : QWidget(parent)
       , _ui(new Ui::ImportMidiPanel)
       , _updateUiTimer(new QTimer)
-      , _prefferedVisible(false)
+      , _preferredVisible(false)
       , _importInProgress(false)
       , _reopenInProgress(false)
       {
@@ -167,7 +167,7 @@ void ImportMidiPanel::hidePanel()
       if (isVisible()) {
             setVisible(false);
             emit closeClicked();
-            _prefferedVisible = false;
+            _preferredVisible = false;
             }
       }
 
@@ -261,9 +261,9 @@ void ImportMidiPanel::excludeMidiFile(const QString &fileName)
             _midiFile = "";
       }
 
-void ImportMidiPanel::setPrefferedVisible(bool visible)
+void ImportMidiPanel::setPreferredVisible(bool visible)
       {
-      _prefferedVisible = visible;
+      _preferredVisible = visible;
       }
 
 void ImportMidiPanel::setReopenInProgress()
