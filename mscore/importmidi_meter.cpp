@@ -499,7 +499,7 @@ toDurationList(const ReducedFraction &startTickInBar,
                         // don't split gap if its duration is less than minDuration
             if (gap.second - gap.first < minDuration)
                   continue;
-            auto splitPoint = findMaxLevelBetween(gap.first, gap.second, divInfo);
+            const auto splitPoint = findMaxLevelBetween(gap.first, gap.second, divInfo);
                         // sum levels if there are several positions (beats) with max level value
                         // for example, 8th + half duration + 8th in 3/4, and half is over two beats
             if (splitPoint.pos == ReducedFraction(-1, 1))     // undefined
@@ -514,7 +514,7 @@ toDurationList(const ReducedFraction &startTickInBar,
                         || (durationType == DurationType::REST
                             && is23EndOfBeatInCompoundMeter(gap.first, gap.second, barFraction)))
                   {
-                  int edgeLevel = adjustEdgeLevelIfTuplet(splitPoint, divInfo);
+                  const int edgeLevel = adjustEdgeLevelIfTuplet(splitPoint, divInfo);
                               // split gap in splitPoint position
                   nodes.insert({splitPoint.pos, Node(edgeLevel, effectiveLevel)});
                   gapsToProcess.enqueue({gap.first, splitPoint.pos});
