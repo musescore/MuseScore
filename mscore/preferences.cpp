@@ -592,7 +592,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       portaudioDriver->setVisible(false);
 #endif
 #ifndef USE_PORTMIDI
-      portmidiDriverInput->setVisible(false);
+      portMidiInput->setVisible(false);
+      portMidiInputLabel->setVisible(false);
 #endif
 #ifndef USE_PULSEAUDIO
       pulseaudioDriver->setVisible(false);
