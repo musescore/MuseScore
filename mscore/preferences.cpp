@@ -1243,6 +1243,8 @@ void PreferenceDialog::apply()
             }
 
       prefs.useMidiRemote  = rcGroup->isChecked();
+      for (int i = 0; i < MIDI_REMOTES; ++i)
+            prefs.midiRemote[i] = preferences.midiRemote[i];
       prefs.fgWallpaper    = fgWallpaper->text();
       prefs.bgWallpaper    = bgWallpaper->text();
       prefs.fgColor        = fgColorLabel->color();
