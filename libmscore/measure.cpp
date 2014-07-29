@@ -1754,8 +1754,6 @@ void Measure::read(XmlReader& e, int staffIdx)
       // tick is obsolete
       if (e.hasAttribute("tick"))
             e.initTick(score()->fileDivision(e.intAttribute("tick")));
-      // setTick(e.tick());
-      // e.setTick(tick());
 
       bool irregular;
       if (e.hasAttribute("len")) {
@@ -2047,7 +2045,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                         segment->add(ts);
                         timeStretch = ts->stretch().reduced();
 
-                        _timesig = ts->sig() / timeStretch;
+                        if (_timesig != ts->sig() / timeStretch)
+                              _timesig = ts->sig() / timeStretch;
 
                         if (score()->mscVersion() > 114) {
                               if (irregular) {
@@ -3688,7 +3687,7 @@ void Measure::cmdUpdateNotes(int staffIdx)
 
 Fraction Measure::stretchedLen(Staff* staff) const
       {
-      return len() / staff->timeStretch(tick());
+      return len() * staff->timeStretch(tick());
       }
 
 //---------------------------------------------------------

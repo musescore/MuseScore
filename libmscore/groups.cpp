@@ -82,7 +82,9 @@ Beam::Mode Groups::endBeam(ChordRest* cr)
 
       TDuration d = cr->durationType();
       const Groups& g = cr->staff()->group(cr->tick());
-      return g.beamMode(cr->rtick(), d.type());
+      Fraction stretch = cr->staff()->timeStretch(cr->tick());
+      int tick = (cr->rtick() * stretch.numerator()) / stretch.denominator();
+      return g.beamMode(tick, d.type());
       }
 
 //---------------------------------------------------------

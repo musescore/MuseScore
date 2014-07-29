@@ -274,6 +274,13 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                               if (e->acceptDrop(this, pos, dragElement)) {
                                     if (e->type() != Element::Type::MEASURE)
                                           setDropTarget(const_cast<Element*>(e));
+                                    else {
+                                          if (dragElement->type() == Element::Type::TIMESIG
+                                             && (event->keyboardModifiers() & Qt::ControlModifier)) {
+                                                // TODO: reduce drop rectangle to staff
+                                                setDropRectangle(e->canvasBoundingRect());
+                                                }
+                                          }
                                     found = true;
                                     break;
                                     }
