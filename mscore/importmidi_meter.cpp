@@ -132,8 +132,9 @@ std::vector<ReducedFraction> divisionsOfBarForTuplets(const ReducedFraction &bar
       std::vector<ReducedFraction> divLengths;
       const auto beatLen = beatLength(barFraction);
       for (const auto &i: info.divLengths) {
-                        // in compound meter tuplet starts from beat level, not the whole bar
-            if (isCompound(barFraction) && i.len > beatLen)
+                        // in compound or complex meter
+                        // tuplet starts from beat level, not the whole bar
+            if ((isCompound(barFraction) || isComplex(barFraction)) && i.len > beatLen)
                   continue;
             divLengths.push_back(i.len);
             }
