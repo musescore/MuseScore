@@ -553,22 +553,16 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   //
                   // extend slur
                   //
-                  Chord* e = static_cast<Note*>(nr)->chord();
-                  int stick = 0;
-                  Element* ee = _is.slur()->startElement();
-                  if (!ee)
-                        stick = e->tick();
-                  else if (ee->isChordRest())
-                        stick = static_cast<ChordRest*>(ee)->tick();
-                  else if (ee->type() == Element::Type::NOTE)
-                        stick = static_cast<Note*>(ee)->chord()->tick();
-                  if (stick == e->tick()) {
-                        _is.slur()->setTick(stick);
-                        _is.slur()->setStartElement(e);
-                        }
-                  else {
-                        _is.slur()->setTick2(e->tick());
-                        _is.slur()->setEndElement(e);
+                  Chord* chord = static_cast<Note*>(nr)->chord();
+                  _is.slur()->undoChangeProperty(P_ID::SPANNER_TICK2, chord->tick());
+                  for (Element* e : _is.slur()->linkList()) {
+                        Slur* slur = static_cast<Slur*>(e);
+                        for (Element* e : chord->linkList()) {
+                              if (e->score() == slur->score() && e->track() == slur->track2()) {
+                                    slur->score()->undo(new ChangeSpannerElements(slur, slur->startElement(), e));
+                                    break;
+                                    }
+                              }
                         }
                   setLayoutAll(true);
                   }
