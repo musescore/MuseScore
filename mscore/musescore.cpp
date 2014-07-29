@@ -1604,12 +1604,12 @@ void MuseScore::midiPanelOnSwitchToFile(const QString &file)
       bool isMidiFile = ImportMidiPanel::isMidiFile(file);
       if (isMidiFile) {
             importmidiPanel->setMidiFile(file);
-            if (importmidiPanel->isPrefferedVisible())
+            if (importmidiPanel->isPreferredVisible())
                   importmidiPanel->setVisible(true);
             }
       else
             importmidiPanel->setVisible(false);
-      importmidiShowPanel->setVisible(!importmidiPanel->isPrefferedVisible() && isMidiFile);
+      importmidiShowPanel->setVisible(!importmidiPanel->isPreferredVisible() && isMidiFile);
       }
 
 void MuseScore::midiPanelOnCloseFile(const QString &file)
@@ -1621,10 +1621,10 @@ void MuseScore::midiPanelOnCloseFile(const QString &file)
 void MuseScore::allowShowMidiPanel(const QString &file)
       {
       if (ImportMidiPanel::isMidiFile(file))
-            importmidiPanel->setPrefferedVisible(true);
+            importmidiPanel->setPreferredVisible(true);
       }
 
-void MuseScore::setReopenInProgress(const QString &file)
+void MuseScore::setMidiReopenInProgress(const QString &file)
       {
       if (ImportMidiPanel::isMidiFile(file))
             importmidiPanel->setReopenInProgress();
@@ -1632,7 +1632,7 @@ void MuseScore::setReopenInProgress(const QString &file)
 
 void MuseScore::showMidiImportPanel()
       {
-      importmidiPanel->setPrefferedVisible(true);
+      importmidiPanel->setPreferredVisible(true);
       QString fileName = cs ? cs->fileInfo()->filePath() : "";
       if (ImportMidiPanel::isMidiFile(fileName))
             importmidiPanel->setVisible(true);
