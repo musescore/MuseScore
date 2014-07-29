@@ -3337,7 +3337,7 @@ void ChangeProperty::flip()
             << property
             ;
 #endif
-      if (id == P_ID::SPANNER_TICK)
+      if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICK2)
             element->score()->removeSpanner(static_cast<Spanner*>(element));
 
       QVariant v       = element->getProperty(id);
@@ -3347,7 +3347,7 @@ void ChangeProperty::flip()
       else
             element->setProperty(id, property);
 
-      if (id == P_ID::SPANNER_TICK)
+      if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICK2)
             element->score()->addSpanner(static_cast<Spanner*>(element));
       property = v;
       propertyStyle = ps;
