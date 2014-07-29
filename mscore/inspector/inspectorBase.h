@@ -45,7 +45,6 @@ class InspectorBase : public QWidget {
       bool blockSignals;
 
       bool dirty() const;
-      void checkDifferentValues(const InspectorItem&);
 
    protected slots:
       virtual void valueChanged(int idx, bool reset = false);
