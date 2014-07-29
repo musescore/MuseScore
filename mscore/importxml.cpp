@@ -2399,12 +2399,11 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
 //   addElem
 //---------------------------------------------------------
 
-static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Score* score, QString& placement,
-                    qreal /*rx*/, qreal /*ry*/, int /* offset */, Measure* measure, int tick)
+static void addElem(Element* el, int track, QString& placement, Measure* measure, int tick)
       {
       /*
-      qDebug("addElem el %p hasYoff %d staff %d rstaff %d placement %s rx %g ry %g tick %d",
-             el, hasYoffset, staff, rstaff, qPrintable(placement), rx, ry, tick);
+      qDebug("addElem el %p track %d placement %s tick %d",
+             el, track, qPrintable(placement), tick);
        */
 
       // calc y offset assuming five line staff and default style
@@ -2438,9 +2437,9 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
       if (placement == "above") y += offsAbove;
       if (placement == "below") y += offsBelow;
       //qDebug("   y = %g", y);
-      y *= score->spatium();
+      y *= el->score()->spatium();
       el->setUserOff(QPoint(0, y));
-      el->setTrack((staff + rstaff) * VOICES);
+      el->setTrack(track);
       Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
       s->add(el);
       }
@@ -2550,7 +2549,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       QString fontStyle = "";
       QString fontSize = "";
       int offset = 0; // not supported yet
-      int rstaff = 0;
+      int track = 0;
       QStringList dynamics;
       // int spread;
       qreal rx = 0.0;
@@ -2659,9 +2658,10 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   offset = (e.text().toInt() * MScore::division)/divisions;
             else if (e.tagName() == "staff") {
                   // DEBUG: <staff>0</staff>
-                  rstaff = e.text().toInt() - 1;
+                  int rstaff = e.text().toInt() - 1;
                   if (rstaff < 0)         // ???
                         rstaff = 0;
+                  track = (staff + rstaff) * VOICES;
                   }
             else if (e.tagName() == "voice")
                   domNotImplemented(e);
@@ -2782,12 +2782,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   jp->setJumpType(Jump::Type::DS_AL_FINE);
                   }
             if (jp) {
-                  jp->setTrack((staff + rstaff) * VOICES);
+                  jp->setTrack(track);
                   qDebug("jumpsMarkers adding jm %p meas %p",jp, measure);
                   jumpsMarkers.append(JumpMarkerDesc(jp, measure));
                   }
             if (m) {
-                  m->setTrack((staff + rstaff) * VOICES);
+                  m->setTrack(track);
                   qDebug("jumpsMarkers adding jm %p meas %p",m, measure);
                   jumpsMarkers.append(JumpMarkerDesc(m, measure));
                   }
@@ -2831,8 +2831,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             t->setPlainText(txt);
             if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
-            addElem(t, hasYoffset, staff, rstaff, score, placement,
-                       rx, ry, offset, measure, tick);
+            addElem(t, track, placement, measure, tick);
             }
       else if (dirType == "rehearsal") {
             Text* t = new RehearsalMark(score);
@@ -2840,8 +2839,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             else t->setPlacement(placement == "above" ? Element::Placement::ABOVE : Element::Placement::BELOW);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
-            addElem(t, hasYoffset, staff, rstaff, score, placement,
-                       rx, ry, offset, measure, tick);
+            addElem(t, track, placement, measure, tick);
             }
       else if (dirType == "pedal") {
             if (pedalLine) {
@@ -2851,7 +2849,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               }
                         else {
                               pedal = new Pedal(score);
-                              pedal->setTrack((staff + rstaff) * VOICES);
+                              pedal->setTrack(track);
                               if (placement == "") placement = "below";
                               setSLinePlacement(pedal,
                                                 score->spatium(), placement,
@@ -2884,8 +2882,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else
                         qDebug("unknown pedal %s", type.toLatin1().data());
                   if (hasYoffset) s->setYoff(yoffset);
-                  addElem(s, hasYoffset, staff, rstaff, score, placement,
-                          rx, ry, offset, measure, tick);
+                  addElem(s, track, placement, measure, tick);
                   }
             }
       else if (dirType == "dynamics") {
@@ -2903,8 +2900,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         dyn->setVelocity( dynaValue );
                         }
                   if (hasYoffset) dyn->textStyle().setYoff(yoffset);
-                  addElem(dyn, hasYoffset, staff, rstaff, score, placement,
-                             rx, ry, offset, measure, tick);
+                  addElem(dyn, track, placement, measure, tick);
                   }
             }
       else if (dirType == "wedge") {
@@ -2921,7 +2917,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         setSLinePlacement(hairpin,
                                           score->spatium(), placement,
                                           hasYoffset, yoffset);
-                        hairpin->setTrack((staff + rstaff) * VOICES);
+                        hairpin->setTrack(track);
                         if( niente == "yes")
                             hairpin->setHairpinCircledTip( true );
                         spanners[hairpin] = QPair<int, int>(tick, -1);
@@ -2976,7 +2972,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         else
                               qDebug("unsupported line-type: %s", lineType.toLatin1().data());
 
-                        b->setTrack((staff + rstaff) * VOICES);
+                        b->setTrack(track);
                         spanners[b] = QPair<int, int>(tick, -1);
                         bracket[n] = b;
                         //qDebug("bracket=%p inserted at first tick %d", b, tick);
@@ -3017,7 +3013,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
 
                         b->setBeginHook(false);
                         b->setLineStyle(Qt::DashLine);
-                        b->setTrack((staff + rstaff) * VOICES);
+                        b->setTrack(track);
                         spanners[b] = QPair<int, int>(tick, -1);
                         dashes[n] = b;
                         //qDebug("dashes=%p inserted at first tick %d", b, tick);
@@ -3047,7 +3043,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               }
                         else {
                               ottava = new Ottava(score);
-                              ottava->setTrack((staff + rstaff) * VOICES);
+                              ottava->setTrack(track);
                               if (type == "down" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VA);
                               if (type == "down" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
                               if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
@@ -4531,8 +4527,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             Dynamic* dyn = new Dynamic(score);
             dyn->setDynamicType(*it);
             if (hasYoffset) dyn->textStyle().setYoff(yoffset);
-            addElem(dyn, hasYoffset, track / VOICES /* staff */, 0 /* rstaff */, score, placement,
-                       rx, ry, 0 /*offset */, measure, tick);
+            addElem(dyn, track, placement, measure, tick);
             }
 
       }
