@@ -39,14 +39,14 @@ class TracksModel : public QAbstractTableModel
       QVariant headerData(int section, Qt::Orientation orientation, int role) const;
       bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-      void isItemEditable(const QModelIndex &index, const int trackIndex, Qt::ItemFlags flags) const;
-private:
+  private:
       bool isTrackIndexValid(int trackIndex) const;
       bool isColumnValid(int column) const;
       void forceRowDataChanged(int row);
       void forceColumnDataChanged(int col);
       void forceAllChanged();
       bool editableSingleTrack(int trackIndex, int column) const;
+      Qt::ItemFlags itemFlags(int row, int col) const;
 
       MidiOperations::Opers _trackOpers;
       int _trackCount;
