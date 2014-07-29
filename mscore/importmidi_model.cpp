@@ -804,6 +804,24 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
       return QVariant();
       }
 
+Qt::ItemFlags TracksModel::itemFlags(int row, int col) const
+      {
+      Qt::ItemFlags flags;
+      const int trackIndex = trackIndexFromRow(row);
+
+      if (_columns[col]->isVisible(trackIndex)) {
+            if (_columns[col]->value(0).type() == QVariant::Bool)
+                  flags |= Qt::ItemIsUserCheckable;
+            else if (_columns[col]->isEditable()
+                     && editableSingleTrack(trackIndex, col)) {
+                  QVariant value = _columns[col]->value(0);
+                  if (value.type() != QVariant::Bool)       // not checkboxes
+                        flags |= Qt::ItemIsEditable;
+                  }
+            }
+      return flags;
+      }
+
 Qt::ItemFlags TracksModel::flags(const QModelIndex &index) const
       {
       if (!index.isValid())
@@ -812,18 +830,19 @@ Qt::ItemFlags TracksModel::flags(const QModelIndex &index) const
       Qt::ItemFlags flags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
       const int trackIndex = trackIndexFromRow(index.row());
 
-      if (_columns[index.column()]->isVisible(trackIndex)) {
-            if (_columns[index.column()]->value(0).type() == QVariant::Bool)
-                  flags |= Qt::ItemIsUserCheckable;
-
-            if (_columns[index.column()]->isEditable()
-                        && editableSingleTrack(trackIndex, index.column())) {
-                              // not for checkboxes (value type is bool)
-                  QVariant value = _columns[index.column()]->value(0);
-                  if (value.type() != QVariant::Bool)
-                        flags |= Qt::ItemIsEditable;
+      if (trackIndex == -1) {       // all tracks row
+            for (int i = 0; i < _trackCount; ++i) {
+                  const auto newFlags = itemFlags(rowFromTrackIndex(i), index.column());
+                  if (newFlags) {
+                        flags |= newFlags;
+                        break;
+                        }
                   }
             }
+      else {
+            flags |= itemFlags(index.row(), index.column());
+            }
+
       return flags;
       }
 
