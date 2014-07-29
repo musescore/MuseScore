@@ -326,6 +326,10 @@ void findBeatLocations(
             setTimeSig(sigmap, beatData.timeSig);
             data->humanBeatData = beatData;
             data->trackOpers.measureCount2xLess.setDefaultValue(beatData.measureCount2xLess);
+            data->trackOpers.timeSigNumerator.setDefaultValue(
+                              Meter::fractionNumeratorToUserValue(beatData.timeSig.numerator()));
+            data->trackOpers.timeSigDenominator.setDefaultValue(
+                              Meter::fractionDenominatorToUserValue(beatData.timeSig.denominator()));
             }
       else {
             const auto currentTimeSig = ReducedFraction(sigmap->timesig(0).timesig());
