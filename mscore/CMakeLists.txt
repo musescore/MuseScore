@@ -159,9 +159,9 @@ QT4_WRAP_CPP (mocs
       )
 
 if (APPLE)
-      QT4_ADD_RESOURCES (qrc_files musescore-apple.qrc)
+      QT4_ADD_RESOURCES (qrc_files musescore.qrc)
 else (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc musescorefonts.qrc)
 endif (APPLE)
 
 
