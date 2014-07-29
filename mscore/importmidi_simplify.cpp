@@ -199,8 +199,7 @@ void minimizeNumberOfRests(
                   if (next != chords.end()) {
                         if (next->first < endTime)
                               endTime = next->first;
-                        if (next->second.isInTuplet
-                                    && !note.isInTuplet && next->second.tuplet == note.tuplet) {
+                        if (next->second.isInTuplet && !note.isInTuplet) {
                               const auto &tuplet = next->second.tuplet->second;
                               if (tuplet.onTime < endTime)
                                     endTime = tuplet.onTime;
