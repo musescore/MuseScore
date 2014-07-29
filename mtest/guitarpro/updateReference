@@ -39,4 +39,21 @@ cp   $MSCORE/slur-notes-effect-mask.gp5.mscx slur-notes-effect-mask.gp5-ref.mscx
 cp   $MSCORE/rest-centered.gpx.mscx rest-centered.gpx-ref.mscx
 cp   $MSCORE/rest-centered.gp5.mscx rest-centered.gp5-ref.mscx
 cp   $MSCORE/rest-centered.gp4.mscx rest-centered.gp4-ref.mscx
-
+cp   $MSCORE/slide-in-above.gp4.mscx slide-in-above.gp4-ref.mscx
+cp   $MSCORE/slide-in-above.gp5.mscx slide-in-above.gp5-ref.mscx
+cp   $MSCORE/slide-in-above.gpx.mscx slide-in-above.gpx-ref.mscx
+cp   $MSCORE/slide-in-below.gp4.mscx slide-in-below.gp4-ref.mscx
+cp   $MSCORE/slide-in-below.gp5.mscx slide-in-below.gp5-ref.mscx
+cp   $MSCORE/slide-in-below.gpx.mscx slide-in-below.gpx-ref.mscx
+cp   $MSCORE/slide-out-down.gp4.mscx slide-out-down.gp4-ref.mscx
+cp   $MSCORE/slide-out-down.gp5.mscx slide-out-down.gp5-ref.mscx
+cp   $MSCORE/slide-out-down.gpx.mscx slide-out-down.gpx-ref.mscx
+cp   $MSCORE/slide-out-up.gp4.mscx slide-out-up.gp4-ref.mscx
+cp   $MSCORE/slide-out-up.gp5.mscx slide-out-up.gp5-ref.mscx
+cp   $MSCORE/slide-out-up.gpx.mscx slide-out-up.gpx-ref.mscx
+cp   $MSCORE/legato-slide.gp4.mscx legato-slide.gp4-ref.mscx
+cp   $MSCORE/legato-slide.gp5.mscx legato-slide.gp5-ref.mscx
+cp   $MSCORE/legato-slide.gpx.mscx legato-slide.gpx-ref.mscx
+cp   $MSCORE/shift-slide.gp4.mscx shift-slide.gp4-ref.mscx
+cp   $MSCORE/shift-slide.gp5.mscx shift-slide.gp5-ref.mscx
+cp   $MSCORE/shift-slide.gpx.mscx shift-slide.gpx-ref.mscx
