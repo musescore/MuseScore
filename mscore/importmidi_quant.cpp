@@ -1338,6 +1338,7 @@ findQuantizedChords(
             if (found != quantizedChords.end()) {
                   MidiChord &fc = found->second;
                   fc.notes.append(chord.notes);     // merge chords with equal on times
+                  moveOffTimes(i.chord->first, i.onTime, fc.notes);
                   if (chord.isInTuplet) {
                         if (!fc.isInTuplet) {
                               fc.isInTuplet = true;
