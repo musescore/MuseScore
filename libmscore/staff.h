@@ -147,6 +147,7 @@ class Staff : public QObject {
 
       void setInitialClef(ClefType);
       void setInitialClef(const ClefTypeList&);
+      ClefTypeList initialClefTypeList() const;
 
       void setClef(Clef*);
       void removeClef(Clef*);

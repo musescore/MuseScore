@@ -234,6 +234,15 @@ void Staff::setInitialClef(const ClefTypeList& ctl)
       }
 
 //---------------------------------------------------------
+//   initialClefTypeList
+//---------------------------------------------------------
+
+ClefTypeList Staff::initialClefTypeList() const
+      {
+      return clefs.initial();
+      }
+
+//---------------------------------------------------------
 //   setClef
 //---------------------------------------------------------
 
