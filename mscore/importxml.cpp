@@ -2356,11 +2356,11 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
 // SLine placement is modified by changing the first segments user offset
 // As the SLine has just been created, it does not have any segment yet
 
-static void setSLinePlacement(SLine* sli, float spatium, const QString placement, bool /*hasYoff*/, qreal /*yoff*/)
+static void setSLinePlacement(SLine* sli, const QString placement)
       {
       /*
-      qDebug("setSLinePlacement sli %p type %d s=%g pl='%s' hasy=%d yoff=%g",
-             sli, sli->type(), spatium, qPrintable(placement), hasYoff, yoff);
+      qDebug("setSLinePlacement sli %p type %d s=%g pl='%s'",
+             sli, sli->type(), sli->score()->spatium(), qPrintable(placement));
        */
 
       // calc y offset assuming five line staff and default style
@@ -2390,7 +2390,7 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
       // add linesegment containing the user offset
       LineSegment* tls= sli->createLineSegment();
       //qDebug("   y = %g", y);
-      y *= spatium;
+      y *= sli->score()->spatium();
       tls->setUserOff(QPointF(0, y));
       sli->add(tls);
       }
@@ -2851,9 +2851,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               pedal = new Pedal(score);
                               pedal->setTrack(track);
                               if (placement == "") placement = "below";
-                              setSLinePlacement(pedal,
-                                                score->spatium(), placement,
-                                                hasYoffset, yoffset);
+                              setSLinePlacement(pedal, placement);
                               spanners[pedal] = QPair<int, int>(tick, -1);
                               // qDebug("pedal=%p inserted at first tick %d", pedal, tick);
                               }
@@ -2914,9 +2912,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         hairpin = new Hairpin(score);
                         hairpin->setHairpinType(type == "crescendo"
                                                 ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
-                        setSLinePlacement(hairpin,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
+                        setSLinePlacement(hairpin, placement);
                         hairpin->setTrack(track);
                         if( niente == "yes")
                             hairpin->setHairpinCircledTip( true );
@@ -2950,9 +2946,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         b = new TextLine(score);
 
                         if (placement == "") placement = "above";  // set default
-                        setSLinePlacement(b,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
+                        setSLinePlacement(b, placement);
 
                         b->setBeginHook(lineEnd != "none");
                         if (lineEnd == "up")
@@ -3002,9 +2996,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         b = new TextLine(score);
 
                         if (placement == "") placement = "above";  // set default
-                        setSLinePlacement(b,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
+                        setSLinePlacement(b, placement);
 
                         // hack: assume there was a words element before the dashes
                         if (!txt.isEmpty()) {
@@ -3049,9 +3041,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
                               if (type ==   "up" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MB);
                               if (placement == "") placement = "above";  // set default
-                              setSLinePlacement(ottava,
-                                                score->spatium(), placement,
-                                                hasYoffset, yoffset);
+                              setSLinePlacement(ottava, placement);
                               spanners[ottava] = QPair<int, int>(tick, -1);
                               //qDebug("ottava=%p inserted at first tick %d", ottava, tick);
                               }
