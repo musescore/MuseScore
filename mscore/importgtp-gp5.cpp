@@ -379,6 +379,7 @@ void GuitarPro5::readTracks()
 
             skip(version > 500 ? 49 : 44);
             if (version > 500) {
+                  //  british stack clean / amp tone
                   readDelphiString();
                   readDelphiString();
                   }
@@ -535,10 +536,12 @@ void GuitarPro5::read(QFile* fp)
                   }
             if (barBits & 0x80)
                   bar.barLine = BarLineType::DOUBLE;
-            if (barBits & 0x3)
+            if (barBits & 0x3) {
                   skip(4);
-            if ((barBits & 0x10) == 0)
+            }
+            if ((barBits & 0x10) == 0) {
                   skip(1);
+            }
             readChar();             // triple feel  (none, 8, 16)
             bar.timesig = Fraction(tnumerator, tdenominator);
             bars.append(bar);

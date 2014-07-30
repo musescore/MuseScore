@@ -126,6 +126,7 @@ private slots:
       void gpxRasg()         { gpReadTest("rasg", "gpx"); }
       void gp5Percussion()   { gpReadTest("all-percussion", "gp5"); }
       void gpxFermata()      { gpReadTest("fermata", "gpx"); }
+      void gpxDirections()   { gpReadTest("directions", "gpx"); }
       };
 
 //---------------------------------------------------------

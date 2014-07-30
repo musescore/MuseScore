@@ -51,6 +51,7 @@
 #include "libmscore/fingering.h"
 #include "libmscore/sym.h"
 #include "libmscore/ottava.h"
+#include "libmscore/marker.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -514,6 +515,8 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
       while (!masterBar.isNull()) {
             GpBar gpBar;
             gpBar.freeTime = false;
+            gpBar.direction = "";
+            gpBar.directionStyle = "";
             masterBarElement = masterBar.firstChild();
             while (!masterBarElement.isNull()) {
                   if (!masterBarElement.nodeName().compare("Key"))
@@ -522,6 +525,10 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
                         QString timeSignature = masterBarElement.toElement().text();
                         QList<QString> timeSignatureList = timeSignature.split("/");
                         gpBar.timesig = Fraction(timeSignatureList.first().toInt(), timeSignatureList.last().toInt());
+                        }
+                  else if (!masterBarElement.nodeName().compare("Directions")) {
+                        gpBar.direction = masterBarElement.firstChild().toElement().text();
+                        gpBar.directionStyle = masterBarElement.firstChild().nodeName();
                         }
                   else if (!masterBarElement.nodeName().compare("FreeTime")) {
                         gpBar.freeTime = true;
@@ -768,6 +775,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                   ChordRest* cr = segment->cr(track);
                   bool tupletSet = false;
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voiceNum];
+                  int whammyOrigin, whammyMiddle, whammyEnd, whammyOriginOff, whammyMiddleOff1, whammyMiddleOff2, whammyEndOff = -1;
                   while (!currentNode.isNull()) {
                         if (currentNode.nodeName() == "Notes") {
                               noteSpecified = true;
@@ -1089,9 +1097,38 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                   }
                                                             else if (!argument.compare("BarreString"))
                                                                   halfBarre = true;
+                                                            else if (!argument.compare("WhammyBarOriginValue"))
+                                                                  whammyOrigin = currentNode.firstChild().toElement().text().toInt();
+                                                            else if (!argument.compare("WhammyBarMiddleValue"))
+                                                                  whammyMiddle = currentNode.firstChild().toElement().text().toInt();
+                                                            else if (!argument.compare("WhammyBarDestinationValue"))
+                                                                  whammyEnd = currentNode.firstChild().toElement().text().toInt();
+                                                            else if (!argument.compare("WhammyBarMiddleOffset1"))
+                                                                  whammyMiddleOff1 = currentNode.firstChild().toElement().text().toInt();
+                                                            else if (!argument.compare("WhammyBarMiddleOffset2"))
+                                                                  whammyMiddleOff2 = currentNode.firstChild().toElement().text().toInt();
+                                                            else if (!argument.compare("WhammyBarDestinationOffset"))
+                                                                  whammyEndOff = currentNode.firstChild().toElement().text().toInt();
+
 
                                                             currentProperty = currentProperty.nextSibling();
                                                             }
+
+                                                      if (whammyOrigin != -1) {
+                                                            // some sort of whammy bar has been detected
+                                                            if ((whammyOrigin == whammyEnd) && (whammyOrigin != whammyMiddle)) {
+                                                                  // we are dealing with a dip
+                                                                  QList<PitchValue> points;
+                                                                  points.append(PitchValue(whammyOrigin, 0, false));
+                                                                  points.append(PitchValue(whammyMiddle, 50, false));
+                                                                  points.append(PitchValue(whammyEnd, 100, false));
+                                                                  TremoloBar* b = new TremoloBar(score);
+                                                                  b->setPoints(points);
+                                                                  b->setTrack(track);
+                                                                  segment->add(b);
+                                                            }
+                                                      }
+
                                                       // if a barre fret has been specified
                                                       if (barreFret.compare("")) {
                                                             TextStyle textStyle;
@@ -1318,10 +1355,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     score->add(ottava[track]);
                                     }
                               }
-
                         currentNode = currentNode.nextSibling();
                         dotted = 0;
                   }
+
                   // we have handled the beat - was there a note?
                   if (!noteSpecified) {
                         // add a rest with length of l
@@ -1518,6 +1555,75 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   else
                         measure->setTimesig(bars[measureCounter].timesig);
                   measure->setLen(bars[measureCounter].timesig);
+
+                  if (!bars[measureCounter].direction.compare("Fine") || (bars[measureCounter].direction.compare("") && !bars[measureCounter].directionStyle.compare("Jump"))) {
+                        Segment* s = measure->getSegment(SegmentType::KeySig, measure->tick());
+                        StaffText* st = new StaffText(score);
+                        st->setTextStyleType(TextStyleType::STAFF);
+                        if (!bars[measureCounter].direction.compare("Fine"))
+                              st->setText("fine");
+                        else if (!bars[measureCounter].direction.compare("DaCapo"))
+                              st->setText("Da Capo");
+                        else if (!bars[measureCounter].direction.compare("DaCapoAlCoda"))
+                              st->setText("D.C. al Coda");
+                        else if (!bars[measureCounter].direction.compare("DaCapoAlDoubleCoda"))
+                              st->setText("D.C. al Double Coda");
+                        else if (!bars[measureCounter].direction.compare("DaCapoAlFine"))
+                              st->setText("D.C. al Fine");
+                        else if (!bars[measureCounter].direction.compare("DaSegnoAlCoda"))
+                              st->setText("D.S. al Coda");
+                        else if (!bars[measureCounter].direction.compare("DaSegnoAlDoubleCoda"))
+                              st->setText("D.S. al Double Coda");
+                        else if (!bars[measureCounter].direction.compare("DaSegnoAlFine"))
+                              st->setText("D.S. al Fine");
+                        else if (!bars[measureCounter].direction.compare("DaSegnoSegno"))
+                              st->setText("Da Segno Segno");
+                        else if (!bars[measureCounter].direction.compare("DaSegnoSegnoAlCoda"))
+                              st->setText("D.S.S. al Coda");
+                        else if (!bars[measureCounter].direction.compare("DaSegnoSegnoAlDoubleCoda"))
+                              st->setText("D.S.S. al Double Coda");
+                        else if (!bars[measureCounter].direction.compare("DaSegnoSegnoAlFine"))
+                              st->setText("D.S.S. al Fine");
+                        else if (!bars[measureCounter].direction.compare("DaCoda"))
+                              st->setText("Da Coda");
+                        else if (!bars[measureCounter].direction.compare("DaDoubleCoda"))
+                              st->setText("Da Double Coda");
+                        st->setParent(s);
+                        st->setTrack(0);
+                        score->addElement(st);
+                        bars[measureCounter].direction = "";
+                  }
+                  else if (bars[measureCounter].direction.compare("") && !bars[measureCounter].directionStyle.compare("Target")) {
+                        Segment* s = measure->getSegment(SegmentType::BarLine, measure->tick());
+                        Symbol* sym = new Symbol(score);
+                        if (!bars[measureCounter].direction.compare("Segno"))
+                              sym->setSym(SymId::segno);
+                        else if (!bars[measureCounter].direction.compare("SegnoSegno")) {
+                              sym->setSym(SymId::segno);
+                              Segment* s2 = measure->getSegment(SegmentType::ChordRest, measure->tick());
+                              Symbol* sym2 = new Symbol(score);
+                              sym2->setSym(SymId::segno);
+                              sym2->setParent(measure);
+                              sym2->setTrack(0);
+                              s2->add(sym2);
+                              }
+                        else if (!bars[measureCounter].direction.compare("Coda"))
+                              sym->setSym(SymId::coda);
+                        else if (!bars[measureCounter].direction.compare("DoubleCoda")) {
+                              sym->setSym(SymId::coda);
+                              Segment* s2 = measure->getSegment(SegmentType::ChordRest, measure->tick());
+                              Symbol* sym2 = new Symbol(score);
+                              sym2->setSym(SymId::coda);
+                              sym2->setParent(measure);
+                              sym2->setTrack(0);
+                              s2->add(sym2);
+                              }
+                        sym->setParent(measure);
+                        sym->setTrack(0);
+                        s->add(sym);
+                        bars[measureCounter].direction = "";
+                        }
+
                   KeySig* t = new KeySig(score);
                   if (!masterBarElement.nodeName().compare("Key")) {
                         t->setKey(masterBarElement.firstChild().toElement().text().toInt());
