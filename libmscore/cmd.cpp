@@ -1682,6 +1682,8 @@ Element* Score::move(const QString& cmd)
             // cr is the ChordRest to move from on other cmd's
             int track = el->track();            // keep note of element track
             el = el->parent();
+            if (!el)
+                  return 0;
             switch (el->type()) {
                   case Element::Type::NOTE:           // a note is a valid target
                         trg = el;
