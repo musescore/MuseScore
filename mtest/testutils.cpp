@@ -197,7 +197,7 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith)
 //   saveCompareScore
 //---------------------------------------------------------
 
-bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith) const
+bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith)
       {
       saveScore(score, saveName);
       return compareFiles(saveName, compareWith);
