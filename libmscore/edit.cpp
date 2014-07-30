@@ -289,8 +289,6 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
             f *= staff->timeStretch(tick);
             f.reduce();
 
-            Fraction stretch = staff->timeStretch(tick);
-
             if (f > l)
                   f = l;
 
@@ -1210,33 +1208,6 @@ void Score::cmdAddTie()
                   }
             }
       endCmd();
-      }
-
-//---------------------------------------------------------
-//   cmdAddHairpin
-//    'H' typed on keyboard
-//---------------------------------------------------------
-
-void Score::cmdAddHairpin(bool decrescendo)
-      {
-      ChordRest* cr1;
-      ChordRest* cr2;
-      getSelectedChordRest2(&cr1, &cr2);
-      if (!cr1)
-            return;
-      if (cr2 == 0)
-            cr2 = nextChordRest(cr1);
-      if (cr2 == 0)
-            return;
-
-      Hairpin* pin = new Hairpin(this);
-      pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESCENDO : Hairpin::Type::CRESCENDO);
-      pin->setTrack(cr1->track());
-      pin->setTick(cr1->segment()->tick());
-      pin->setTick2(cr2->segment()->tick());
-      undoAddElement(pin);
-      if (!noteEntryMode())
-            select(pin, SelectType::SINGLE, 0);
       }
 
 //---------------------------------------------------------
