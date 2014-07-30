@@ -46,8 +46,11 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_meter.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_quant.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_detect.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_filter.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_voice.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_tonotes.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_chord.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_data.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_fraction.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_swing.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_drum.cpp
@@ -56,6 +59,9 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_lyrics.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_tie.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi_inner.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_beat.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_simplify.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi_voice.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
@@ -67,6 +73,10 @@ add_library(
       ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf2html.cpp    # required by capella.cpp and capxml.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_keyword.cpp # required by capella.cpp and capxml.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf_table.cpp   # required by capella.cpp and capxml.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Agent.cpp           # required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/AgentList.cpp       # required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # required by importmidi.cpp
       ${OMR_SRC}
       omr
       )

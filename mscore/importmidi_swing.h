@@ -10,7 +10,7 @@ class Staff;
 
 namespace Swing {
 
-void detectSwing(Staff *staff, MidiOperation::Swing swingType);
+void detectSwing(Staff *staff, MidiOperations::Swing swingType);
 
 } // namespace Swing
 } // namespace Ms

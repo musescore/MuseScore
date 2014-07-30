@@ -200,7 +200,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonImport">
+       <widget class="QPushButton" name="pushButtonApply">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -218,10 +218,6 @@
         </property>
         <property name="text">
          <string>Apply</string>
-        </property>
-        <property name="icon">
-         <iconset resource="musescore.qrc">
-          <normaloff>:/data/icons/checkmark.svg</normaloff>:/data/icons/checkmark.svg</iconset>
         </property>
        </widget>
       </item>
@@ -249,58 +245,10 @@
     </widget>
    </item>
    <item>
-    <widget class="QSplitter" name="splitter_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+    <widget class="TracksView" name="tracksView">
+     <property name="cornerButtonEnabled">
+      <bool>false</bool>
      </property>
-     <widget class="QSplitter" name="splitter">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="handleWidth">
-       <number>2</number>
-      </property>
-      <widget class="TracksView" name="tableViewTracks">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>1</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
-       </property>
-       <property name="alternatingRowColors">
-        <bool>true</bool>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::SingleSelection</enum>
-       </property>
-       <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectRows</enum>
-       </property>
-      </widget>
-      <widget class="QTreeView" name="treeViewOperations">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>1</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
-       </property>
-       <property name="tabKeyNavigation">
-        <bool>true</bool>
-       </property>
-       <property name="alternatingRowColors">
-        <bool>true</bool>
-       </property>
-       <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectRows</enum>
-       </property>
-      </widget>
-     </widget>
     </widget>
    </item>
   </layout>
@@ -309,7 +257,7 @@
   <customwidget>
    <class>TracksView</class>
    <extends>QTableView</extends>
-   <header>mscore/importmidi_trview.h</header>
+   <header>mscore/importmidi_view.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -150,9 +150,13 @@ QT4_WRAP_CPP (mocs
       inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
       inspector/inspectorNote.h inspector/inspectorAmbitus.h
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
-      importmidi_panel.h
-      importmidi_opmodel.h importmidi_opdelegate.h
-      debugger/debugger.h
+      importmidi_panel.h importmidi_operations.h importmidi_model.h importmidi_delegate.h
+      importmidi_operation.h importmidi_quant.h importmidi_chord.h
+      importmidi_inner.h importmidi_swing.h
+      importmidi_tuplet_detect.h  importmidi_tuplet_filter.h importmidi_tuplet_tonotes.h
+      importmidi_tuplet_voice.h importmidi_beat.h importmidi_simplify.h
+      debugger/debugger.h importmidi_fraction.h importmidi_drum.h importmidi_view.h
+      importmidi_lrhand.h importmidi_lyrics.h importmidi_tie.h importmidi_voice.h
       resourceManager.h downloadUtils.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
@@ -191,16 +195,16 @@ if (USE_JACK)
 endif (USE_JACK)
 
 if (APPLE)
-        set (ExecutableName mscore MACOSX_BUNDLE)
-        set (MACOSX_BUNDLE_ICON_FILE      mscore.icns)
-        set (MACOSX_BUNDLE_GUI_IDENTIFIER org.musescore.MuseScore)
-        set (MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSESCORE_VERSION_FULL})
-        set (MACOSX_BUNDLE_BUNDLE_NAME MuseScore)
-        set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
-        set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL})
-        set (MACOSX_BUNDLE_COPYRIGHT musescore.org)
+      set (ExecutableName mscore MACOSX_BUNDLE)
+      set (MACOSX_BUNDLE_ICON_FILE      mscore.icns)
+      set (MACOSX_BUNDLE_GUI_IDENTIFIER org.musescore.MuseScore)
+      set (MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSESCORE_VERSION_FULL})
+      set (MACOSX_BUNDLE_BUNDLE_NAME MuseScore)
+      set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
+      set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL})
+      set (MACOSX_BUNDLE_COPYRIGHT musescore.org)
 else (APPLE)
-        set (ExecutableName mscore)
+      set (ExecutableName mscore)
 endif (APPLE)
 
 if (OMR)
@@ -208,9 +212,9 @@ if (OMR)
 endif (OMR)
 
 if (APPLE)
-        file(GLOB_RECURSE INCS "*.h")
+      file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
-        set(INCS "")
+      set(INCS "")
 endif (APPLE)
 
 add_executable ( ${ExecutableName}
@@ -264,11 +268,13 @@ add_executable ( ${ExecutableName}
       paletteBoxButton.cpp driver.cpp exportmidi.cpp noteGroups.cpp
       pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp
       importmidi_panel.cpp importmidi_operations.cpp miconengine.cpp
-      importmidi_opmodel.cpp importmidi_trmodel.cpp importmidi_opdelegate.cpp
+      importmidi_model.cpp importmidi_delegate.cpp
       importmidi_meter.cpp importmidi_quant.cpp importmidi_tuplet.cpp importmidi_chord.cpp
-      importmidi_data.cpp importmidi_swing.cpp importmidi_fraction.cpp importmidi_drum.cpp
-      importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp importmidi_trview.cpp
-      importmidi_inner.cpp importmidi_tie.cpp
+      importmidi_swing.cpp importmidi_fraction.cpp importmidi_drum.cpp
+      importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp
+      importmidi_inner.cpp importmidi_tie.cpp importmidi_tuplet_voice.cpp importmidi_beat.cpp
+      importmidi_tuplet_detect.cpp  importmidi_tuplet_filter.cpp importmidi_tuplet_tonotes.cpp
+      importmidi_simplify.cpp importmidi_voice.cpp importmidi_view.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp
       continuouspanel.cpp
@@ -297,17 +303,18 @@ target_link_libraries(mscore
       libmscore
       xmlstream
       qzip
+      beatroot
       )
 
 #if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
 #called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
 #both installed in the same prefix on a Linux system.
 if (MSCORE_OUTPUT_NAME)
-      set_target_properties(
-            ${ExecutableName}
-            PROPERTIES
-            OUTPUT_NAME ${MSCORE_OUTPUT_NAME}
-            )
+  set_target_properties(
+      ${ExecutableName}
+      PROPERTIES
+      OUTPUT_NAME ${MSCORE_OUTPUT_NAME}
+      )
 endif (MSCORE_OUTPUT_NAME)
 
 if (ZERBERUS)
@@ -326,8 +333,8 @@ endif (HAS_AUDIOFILE)
 
 if (APPLE)
       set_target_properties (mscore
-         PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
+          PROPERTIES
+          MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
       #enable dSym generation
       #set_target_properties (mscore
       #   PROPERTIES
@@ -335,7 +342,7 @@ if (APPLE)
 endif(APPLE)
 
 if (OSC)
-    target_link_libraries(mscore ofqf)
+      target_link_libraries(mscore ofqf)
 endif (OSC)
 
 if (MINGW)

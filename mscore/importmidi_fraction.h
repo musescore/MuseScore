@@ -19,9 +19,12 @@ class ReducedFraction
 
       static ReducedFraction fromTicks(int ticks);
       ReducedFraction reduced() const;
-      ReducedFraction absValue() const;
+      ReducedFraction absValue() const { return ReducedFraction(qAbs(numerator_), qAbs(denominator_)); }
+      double toDouble() const { return numerator_ * 1.0 / denominator_; }
       int ticks() const;
       void reduce();
+      bool isIdenticalTo(const ReducedFraction &f) const
+                        { return (f.numerator_ == numerator_ && f.denominator_ == denominator_); }
 
       ReducedFraction& operator+=(const ReducedFraction&);
       ReducedFraction& operator-=(const ReducedFraction&);

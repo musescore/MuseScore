@@ -528,6 +528,7 @@
         </Measure>
       <Measure number="3">
         <Tuplet id="5">
+          <track>1</track>
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
           <baseNote>eighth</baseNote>

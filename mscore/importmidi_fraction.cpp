@@ -100,12 +100,12 @@ unsigned lcm(int a, int b)
       {
       const int tmp = gcd(a, b);
 
-      Q_ASSERT_X(!isMultiplicationOverflow(a, b),
-                 "ReducedFraction, lcm", "Multiplication overflow");
-      Q_ASSERT_X(!isDivisionOverflow(a * b, tmp),
+      Q_ASSERT_X(!isDivisionOverflow(a, tmp),
                  "ReducedFraction, lcm", "Division overflow");
+      Q_ASSERT_X(!isMultiplicationOverflow(a / tmp, b),
+                 "ReducedFraction, lcm", "Multiplication overflow");
 
-      return a * b / tmp;
+      return a / tmp * b;
       }
 
 } // namespace
@@ -148,11 +148,6 @@ ReducedFraction ReducedFraction::reduced() const
       return ReducedFraction(numerator_ / tmp, denominator_ / tmp);
       }
 
-ReducedFraction ReducedFraction::absValue() const
-      {
-      return ReducedFraction(qAbs(numerator_), qAbs(denominator_));
-      }
-
 int ReducedFraction::ticks() const
       {
       int integral = numerator_ / denominator_;
@@ -178,6 +173,10 @@ int ReducedFraction::ticks() const
 
 void ReducedFraction::reduce()
       {
+      if (numerator_ == 0) {
+            denominator_ = 1;
+            return;
+            }
       const int tmp = gcd(numerator_, denominator_);
 
       Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
@@ -187,7 +186,7 @@ void ReducedFraction::reduce()
 
       numerator_ /= tmp;
       denominator_ /= tmp;
-      }
+}
 
 void ReducedFraction::preventOverflow()
       {

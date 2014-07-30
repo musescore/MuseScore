@@ -69,7 +69,8 @@ class TDuration {
       void print() const;
       };
 
-extern QList<TDuration> toDurationList(Fraction, bool useDots, int maxDots = 2);
+extern QList<TDuration> toDurationList(
+            Fraction, bool useDots, int maxDots = 2, bool printRestRemains = true);
 
 }     // namespace Ms
 #endif
