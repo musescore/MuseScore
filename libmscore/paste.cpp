@@ -749,6 +749,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   QByteArray data(ms->data(mimeStaffListFormat));
 qDebug("paste <%s>", data.data());
                   XmlReader e(data);
+                  e.setPasteMode(true);
                   if (!pasteStaff(e, cr->segment(),cr->staffIdx())) {
                         return PasteStatus::TUPLET_CROSSES_BAR;
                         }

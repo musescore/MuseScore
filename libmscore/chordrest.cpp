@@ -325,6 +325,22 @@ bool ChordRest::readProperties(XmlReader& e)
                         //spanner was added in read114 with wrong tick
                         score()->removeSpanner(slur);
                         score()->addSpanner(slur);
+                        if (e.pasteMode()) {
+                              for (Element* e : slur->linkList()) {
+                                    if (e == slur)
+                                          continue;
+                                    Slur* ls = static_cast<Slur*>(e);
+                                    ls->setTick(slur->tick());
+                                    for (Element* ee : linkList()) {
+                                          ChordRest* cr = static_cast<ChordRest*>(ee);
+                                          if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                                                ls->setTrack(cr->track());
+                                                ls->setStartElement(cr);
+                                                break;
+                                                }
+                                          }
+                                    }
+                              }
                         }
                   else if (atype == "stop") {
                         slur->setTick2(e.tick());
@@ -333,6 +349,22 @@ bool ChordRest::readProperties(XmlReader& e)
                         Chord* start = static_cast<Chord*>(slur->startElement());
                         if (start)
                               slur->setTrack(start->track());
+                        if (e.pasteMode()) {
+                              for (Element* e : slur->linkList()) {
+                                    if (e == slur)
+                                          continue;
+                                    Slur* ls = static_cast<Slur*>(e);
+                                    ls->setTick2(slur->tick2());
+                                    for (Element* ee : linkList()) {
+                                          ChordRest* cr = static_cast<ChordRest*>(ee);
+                                          if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                                                ls->setTrack2(cr->track());
+                                                ls->setEndElement(cr);
+                                                break;
+                                                }
+                                          }
+                                    }
+                              }
                         }
                   else
                         qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(atype));

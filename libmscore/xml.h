@@ -44,10 +44,11 @@ class XmlReader : public XmlStreamReader {
       QString docName;  // used for error reporting
 
       // Score read context (for read optimizations):
-      int _tick  = 0;
-      int _tickOffset = 0;
-      int _track = 0;
-      Measure* _lastMeasure = 0;
+      int _tick             { 0       };
+      int _tickOffset       { 0       };
+      int _track            { 0       };
+      bool _pasteMode       { false   };        // modifies read behaviour on paste operation
+      Measure* _lastMeasure { nullptr };
       QList<Beam*>    _beams;
       QList<Tuplet*>  _tuplets;
       QList<SpannerValues> _spannerValues;
@@ -95,6 +96,9 @@ class XmlReader : public XmlStreamReader {
       void setTickOffset(int val) { _tickOffset = val; }
       int track() const           { return _track;     }
       void setTrack(int val)      { _track = val;      }
+      bool pasteMode() const      { return _pasteMode; }
+      void setPasteMode(bool v)   { _pasteMode = v;    }
+
       void addTuplet(Tuplet* s);
       void addBeam(Beam* s)       { _beams.append(s); }
 
