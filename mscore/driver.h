@@ -41,7 +41,7 @@ class Driver {
       Driver(Seq* s)    { seq = s; }
       virtual ~Driver() {}
       virtual bool init(bool hot = false) = 0;
-      virtual bool start() = 0;
+      virtual bool start(bool hotPlug = false) = 0;
       virtual bool stop() = 0;
       virtual void stopTransport() = 0;
       virtual void startTransport() = 0;

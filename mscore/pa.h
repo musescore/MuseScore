@@ -49,7 +49,7 @@ class Portaudio : public Driver {
       Portaudio(Seq*);
       virtual ~Portaudio();
       virtual bool init(bool hot = false);
-      virtual bool start();
+      virtual bool start(bool hotPlug = false);
       virtual bool stop();
       virtual void startTransport();
       virtual void stopTransport();

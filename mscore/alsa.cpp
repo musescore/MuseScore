@@ -699,7 +699,7 @@ void AlsaAudio::alsaLoop()
 //   start
 //---------------------------------------------------------
 
-bool AlsaAudio::start()
+bool AlsaAudio::start(bool)
       {
       pthread_attr_t* attributes = (pthread_attr_t*) malloc(sizeof(pthread_attr_t));
       pthread_attr_init(attributes);
