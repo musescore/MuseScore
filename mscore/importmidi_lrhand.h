@@ -4,9 +4,12 @@
 namespace Ms {
 
 class MTrack;
+class MidiChord;
+class ReducedFraction;
 
 namespace LRHand {
 
+bool needToSplit(const std::multimap<ReducedFraction, MidiChord> &chords, int midiProgram);
 void splitIntoLeftRightHands(std::multimap<int, MTrack> &tracks);
 
 } // namespace LRHand

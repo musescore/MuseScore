@@ -467,7 +467,7 @@ TDuration& TDuration::operator+=(const TDuration& t)
 //   toDurationList
 //---------------------------------------------------------
 
-QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots)
+QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots, bool printRestRemains)
       {
       QList<TDuration> dList;
       if (useDots) {
@@ -506,8 +506,9 @@ QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots)
                   dList.append(d);
                   }
             }
-      if (l != Fraction())
+      if (printRestRemains && l != Fraction())
             qDebug("toDurationList:: rest remains %d/%d", l.numerator(), l.denominator());
+
       return dList;
       }
 

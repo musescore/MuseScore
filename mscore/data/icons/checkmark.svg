@@ -7,31 +7,101 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="checkmark.svg"
+   height="24"
+   id="svg7384"
+   inkscape:version="0.48.5 r10040"
    version="1.1"
-   width="16"
-   height="16"
-   id="svg1307">
-  <defs
-     id="defs1309">
-  </defs>
+   width="24">
   <metadata
-     id="metadata1312">
+     id="metadata90">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title>MuseScore Icon Theme</dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <sodipodi:namedview
+     inkscape:bbox-nodes="false"
+     inkscape:bbox-paths="true"
+     bordercolor="#666666"
+     borderopacity="1"
+     inkscape:current-layer="actions"
+     inkscape:cx="11.155683"
+     inkscape:cy="11.648292"
+     fit-margin-bottom="6"
+     fit-margin-left="6"
+     fit-margin-right="6"
+     fit-margin-top="6"
+     gridtolerance="10"
+     inkscape:guide-bbox="true"
+     guidetolerance="10"
+     id="namedview88"
+     inkscape:object-nodes="false"
+     inkscape:object-paths="false"
+     objecttolerance="10"
+     pagecolor="#222222"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     showborder="false"
+     showgrid="false"
+     showguides="false"
+     inkscape:snap-bbox="true"
+     inkscape:snap-bbox-midpoints="false"
+     inkscape:snap-global="false"
+     inkscape:snap-grids="true"
+     inkscape:snap-nodes="false"
+     inkscape:snap-others="false"
+     inkscape:snap-to-guides="true"
+     inkscape:window-height="547"
+     inkscape:window-maximized="0"
+     inkscape:window-width="875"
+     inkscape:window-x="647"
+     inkscape:window-y="390"
+     inkscape:zoom="16.000001">
+    <inkscape:grid
+       empspacing="2"
+       enabled="true"
+       id="grid4866"
+       originx="-328.9994px"
+       originy="-77.999999px"
+       snapvisiblegridlinesonly="true"
+       spacingx="1px"
+       spacingy="1px"
+       type="xygrid"
+       visible="true" />
+  </sodipodi:namedview>
+  <title
+     id="title9167">MuseScore Icon Theme</title>
+  <defs
+     id="defs7386" />
   <g
-     id="layer1">
+     inkscape:groupmode="layer"
+     id="actions"
+     inkscape:label="actions"
+     style="display:inline"
+     transform="translate(-363.9994,-267)">
     <path
-       d="m 2.9101005,6.9818821 c 0.330072,1.01e-5 0.5797462,0.2708431 0.7490234,0.8125 0.3385348,1.0156332 0.5797455,1.5234452 0.7236328,1.5234375 0.1100187,7.7e-6 0.2242764,-0.084628 0.3427734,-0.2539063 2.3782453,-3.4954312 4.5787639,-5.9837099 6.6015629,-7.4648437 0.854802,-0.626286 1.68846,-0.93943673 2.500976,-0.93945313 1.074852,1.64e-5 1.722313,0.0338705 1.942383,0.1015625 0.09308,0.0254069 0.13963,0.13120107 0.139648,0.31738283 -1.8e-5,0.1523596 -0.09735,0.3427891 -0.291992,0.571289 C 10.176038,7.8959538 6.9345047,11.95845 5.8934989,13.837351 5.5380218,14.480583 4.717059,14.802197 3.4306083,14.802195 3.0074253,14.802197 2.5630898,14.692171 2.0976005,14.472116 1.9029343,14.370557 1.5643929,13.723096 1.0819755,12.529734 0.47259715,11.023229 0.16790995,9.7029181 0.16791296,8.5687962 0.16790995,8.1540915 0.46413361,7.8113184 1.0565848,7.5404758 1.8690801,7.1680899 2.4784545,6.9818922 2.8847098,6.9818821 l 0.025391,0"
-       id="path3858"
-       style="fill:#00ff00;fill-opacity:1;stroke:none" />
+       style="fill:#ffffff;fill-opacity:1"
+       d=""
+       id="path2999"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#ffffff;fill-opacity:1"
+       d=""
+       id="path3001"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#ffffff"
+       d="m 374.48064,287.63867 c -1.89186,-1.65167 -6.50403,-6.62305 -6.50403,-7.02138 0,-0.4155 1.7238,-2.17216 2.13152,-2.17216 0.16037,0 2.31836,2.03981 3.49691,3.15793 1.17855,1.11811 2.17428,2.03293 2.21272,2.03293 0.0384,0 2.04904,-2.86289 4.46799,-6.36197 3.31478,-4.79493 4.48596,-6.36245 4.75481,-6.36396 0.36095,-0.002 1.44307,0.64222 2.1505,1.28029 0.29529,0.26635 0.35101,0.4398 0.23732,0.73882 -0.41748,1.09806 -10.07321,15.28509 -10.68413,15.69805 -0.4783,0.32332 -1.04389,0.0763 -2.26361,-0.98855 z"
+       id="path3002"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csssssccsscc" />
   </g>
 </svg>

@@ -198,6 +198,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Tuplet id="2">
+          <track>1</track>
           <normalNotes>4</normalNotes>
           <actualNotes>5</actualNotes>
           <baseNote>16th</baseNote>

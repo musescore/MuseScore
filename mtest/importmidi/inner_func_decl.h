@@ -13,17 +13,9 @@ namespace MidiTuplet {
 
 struct TupletInfo;
 
-std::pair<std::multimap<ReducedFraction, MidiChord>::iterator, ReducedFraction>
-findBestChordForTupletNote(const ReducedFraction &tupletNotePos,
-                           const ReducedFraction &quantValue,
-                           const std::multimap<ReducedFraction, MidiChord>::iterator &startChordIt,
-                           const std::multimap<ReducedFraction, MidiChord>::iterator &endChordIt);
-
 bool isTupletAllowed(const TupletInfo &tupletInfo);
 
 std::vector<int> findTupletNumbers(const ReducedFraction &divLen, const ReducedFraction &barFraction);
-
-ReducedFraction findQuantizationError(const ReducedFraction &onTime, const ReducedFraction &quantValue);
 
 TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
                                    int tupletNumber,
@@ -35,7 +27,8 @@ TupletInfo findTupletApproximation(const ReducedFraction &tupletLen,
 void splitFirstTupletChords(std::vector<TupletInfo> &tuplets,
                             std::multimap<ReducedFraction, MidiChord> &chords);
 
-std::set<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets);
+std::set<int> findLongestUncommonGroup(const std::vector<TupletInfo> &tuplets,
+                                       const ReducedFraction &basicQuant);
 
 } // namespace MidiTuplet
 

@@ -29,7 +29,9 @@
 #include "mscore/importmidi_tuplet.h"
 #include "mscore/importmidi_meter.h"
 #include "mscore/importmidi_inner.h"
+#include "mscore/importmidi_quant.h"
 #include "mscore/importmidi_fraction.h"
+#include "mscore/importmidi_operations.h"
 #include "mscore/preferences.h"
 
 
@@ -49,33 +51,104 @@ class TestImportMidi : public QObject, public MTest
       {
       Q_OBJECT
 
-      void mf(const char* name);
+      QString midiFilePath(const QString &fileName) const;
+      QString midiFilePath(const char* fileName) const;
+      void mf(const char* name) const;
+
+                  // functions that modify default settings
+      void dontSimplify(const char *file)
+            {
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(file));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(file));
+            auto &data = *opers.data();
+
+            data.trackOpers.simplifyDurations.setDefaultValue(false, false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            data.trackOpers.doStaffSplit.setDefaultValue(false, false);
+            mf(file);
+            }
+      void voiceSeparation(const char *file, bool simplify = false)
+            {
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(file));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(file));
+            auto &data = *opers.data();
+
+            data.trackOpers.doStaffSplit.setDefaultValue(false, false);
+            data.trackOpers.simplifyDurations.setDefaultValue(simplify, false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_4, false);
+            mf(file);
+            }
+      void simplification(const char *file)
+            {
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(file));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(file));
+            auto &data = *opers.data();
+
+            data.trackOpers.doStaffSplit.setDefaultValue(false, false);
+            data.trackOpers.simplifyDurations.setDefaultValue(true, false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            mf(file);
+            }
+      void staffSplit(const char *file)
+            {
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(file));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(file));
+            auto &data = *opers.data();
+
+            data.trackOpers.doStaffSplit.setDefaultValue(true, false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false, false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            mf(file);
+            }
 
    private slots:
       void initTestCase();
-      void im1() { mf("m1"); }
-      void im2() { mf("m2"); }     // tie across bar line
-      void im3() { mf("m3"); }     // voices, typeA, resolve with tie
-      void im4() { mf("m4"); }     // voices, typeB, resolve with tie
-      void im5() { mf("m5"); }     // same as m1 with division 240
+      void im1() { dontSimplify("m1"); }
+      void im2() { dontSimplify("m2"); }     // tie across bar line
+      void im3() { dontSimplify("m3"); }     // voices, typeA, resolve with tie
+      void im4() { dontSimplify("m4"); }     // voices, typeB, resolve with tie
+      void im5() { dontSimplify("m5"); }     // same as m1 with division 240
 
       // quantization
       void quantDotted4th()
             {
+            QString midiFile("quant_dotted_4th");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
                         // 1/4 quantization should preserve 4th dotted note
-            const int defaultQuant = preferences.shortestNote;
-            preferences.shortestNote = MScore::division; // midi quantization: 1/4
-            TrackOperations opers;
-            opers.quantize.reduceToShorterNotesInBar = false;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("quant_dotted_4th");
-            preferences.shortestNote = defaultQuant;
-            preferences.midiImportOperations.clear();
+            data.trackOpers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_4, false);
+            dontSimplify(midiFile.toStdString().c_str());
             }
+
+      // human-performed (unaligned) files
+      void human4_4()
+            {
+            QString midiFile("human_4-4");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
+            data.trackOpers.doStaffSplit.setDefaultValue(false, false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false, false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            mf(midiFile.toStdString().c_str());
+            }
+
+      // chord detection
+      void chordSmallError() { mf("chord_small_error"); }
+      void chordBigError() { mf("chord_big_error"); }
+      void chordLegato() { mf("chord_legato"); }
 
       // test tuplet recognition functions
       void findChordInBar();
-      void bestChordForTupletNote();
       void isTupletAllowed();
       void findTupletNumbers();
       void findOnTimeRegularError();
@@ -89,141 +162,170 @@ class TestImportMidi : public QObject, public MTest
       void isSimpleDuration();
 
       // test scores for meter (duration subdivision)
-      void meterTimeSig4_4() { mf("meter_4-4"); }
-      void metertimeSig9_8() { mf("meter_9-8"); }
-      void metertimeSig12_8() { mf("meter_12-8"); }
-      void metertimeSig15_8() { mf("meter_15-8"); }
-      void meterCentralLongNote() { mf("meter_central_long_note"); }
-      void meterCentralLongRest() { mf("meter_central_long_rest"); }
-      void meterChordExample() { mf("meter_chord_example"); }
-      void meterDotsExample1() { mf("meter_dots_example1"); }
-      void meterDotsExample2() { mf("meter_dots_example2"); }
-      void meterDotsExample3() { mf("meter_dots_example3"); }
-      void meterHalfRest3_4() { mf("meter_half_rest_3-4"); }
-      void meterFirst2_8thRestsCompound() { mf("meter_first_2_8th_rests_compound"); }
-      void meterLastQuarterRestCompound() { mf("meter_last_quarter_rest_compound"); }
-      void meterRests() { mf("meter_rests"); }
-      void meterTwoBeatsOver() { mf("meter_two_beats_over"); }
-      void meterDotTie() { mf("meter_dot_tie"); }
+      void meterTimeSig4_4() { dontSimplify("meter_4-4"); }
+      void metertimeSig9_8() { dontSimplify("meter_9-8"); }
+      void metertimeSig12_8() { dontSimplify("meter_12-8"); }
+      void metertimeSig15_8() { dontSimplify("meter_15-8"); }
+      void meterCentralLongNote() { dontSimplify("meter_central_long_note"); }
+      void meterCentralLongRest() { dontSimplify("meter_central_long_rest"); }
+      void meterChordExample() { dontSimplify("meter_chord_example"); }
+      void meterDotsExample1() { dontSimplify("meter_dots_example1"); }
+      void meterDotsExample2() { dontSimplify("meter_dots_example2"); }
+      void meterDotsExample3() { dontSimplify("meter_dots_example3"); }
+      void meterHalfRest3_4() { dontSimplify("meter_half_rest_3-4"); }
+      void meterFirst2_8thRestsCompound() { dontSimplify("meter_first_2_8th_rests_compound"); }
+      void meterLastQuarterRestCompound() { dontSimplify("meter_last_quarter_rest_compound"); }
+      void meterRests() { dontSimplify("meter_rests"); }
+      void meterTwoBeatsOver() { dontSimplify("meter_two_beats_over"); }
+      void meterDotTie() { dontSimplify("meter_dot_tie"); }
 
       // time sig
-      void timesigChanges() { mf("timesig_changes"); }
+      void timesigChanges() { dontSimplify("timesig_changes"); }
 
       // test scores for tuplets
       void tuplet2Voices3_5Tuplets()
             {
                         // requires 1/32 quantization
-            const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_2_voices_3_5_tuplets");
-            preferences.shortestNote = defaultQuant;
+            QString midiFile("tuplet_2_voices_3_5_tuplets");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
+            data.trackOpers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_32, false);
+            mf(midiFile.toStdString().c_str());
             }
       void tuplet2VoicesTupletNon() { mf("tuplet_2_voices_tuplet_non"); }
       void tuplet3_5_7tuplets()
             {
-            TrackOperations opers;
-            opers.changeClef = false;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("tuplet_3_5_7_tuplets");
-            preferences.midiImportOperations.clear();
+            QString midiFile("tuplet_3_5_7_tuplets");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
+            data.trackOpers.changeClef.setDefaultValue(false, false);
+            data.trackOpers.doStaffSplit.setDefaultValue(false, false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false, false);
+            mf(midiFile.toStdString().c_str());
             }
-      void tuplet5_5TupletsRests() { mf("tuplet_5_5_tuplets_rests"); }
-      void tuplet3_4() { mf("tuplet_3-4"); }
-      void tupletDuplet() { mf("tuplet_duplet"); }
-      void tupletMars() { mf("tuplet_mars"); }
+      void tuplet5_5TupletsRests() { dontSimplify("tuplet_5_5_tuplets_rests"); }
+      void tuplet3_4() { dontSimplify("tuplet_3-4"); }
+      void tupletDuplet() { dontSimplify("tuplet_duplet"); }
+      void tupletMars() { dontSimplify("tuplet_mars"); }
       void tupletNonuplet3_4()
             {
                         // requires 1/64 quantization
-            const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_nonuplet_3-4");
-            preferences.shortestNote = defaultQuant;
+            QString midiFile("tuplet_nonuplet_3-4");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
+            data.trackOpers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_64, false);
+            dontSimplify(midiFile.toStdString().c_str());
             }
       void tupletNonuplet4_4()
             {
                         // requires 1/64 quantization
-            const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_nonuplet_4-4");
-            preferences.shortestNote = defaultQuant;
+            QString midiFile("tuplet_nonuplet_4-4");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
+            data.trackOpers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_64, false);
+            dontSimplify(midiFile.toStdString().c_str());
             }
-      void tupletQuadruplet() { mf("tuplet_quadruplet"); }
-      void tupletSeptuplet() { mf("tuplet_septuplet"); }
-      void tupletTripletsMixed() { mf("tuplet_triplets_mixed"); }
-      void tupletTriplet() { mf("tuplet_triplet"); }
-      void tupletTripletFirstTied() { mf("tuplet_triplet_first_tied"); }
-      void tupletTripletFirstTied2() { mf("tuplet_triplet_first_tied2"); }
-      void tupletTripletLastTied() { mf("tuplet_triplet_last_tied"); }
+      void tupletQuadruplet() { dontSimplify("tuplet_quadruplet"); }
+      void tupletSeptuplet() { dontSimplify("tuplet_septuplet"); }
+      void tupletTripletsMixed() { dontSimplify("tuplet_triplets_mixed"); }
+      void tupletTriplet() { dontSimplify("tuplet_triplet"); }
+      void tupletTripletFirstTied() { dontSimplify("tuplet_triplet_first_tied"); }
+      void tupletTripletFirstTied2() { dontSimplify("tuplet_triplet_first_tied2"); }
+      void tupletTripletLastTied() { dontSimplify("tuplet_triplet_last_tied"); }
       void tupletTied3_5()
             {
                         // requires 1/32 quantization
-            const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_tied_3_5_tuplets");
-            preferences.shortestNote = defaultQuant;
+            QString midiFile("tuplet_tied_3_5_tuplets");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
+            data.trackOpers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_32, false);
+            dontSimplify(midiFile.toStdString().c_str());
             }
       void tupletTied3_5_2()
             {
-            // requires 1/32 quantization
-            const int defaultQuant = preferences.shortestNote;
-            mf("tuplet_tied_3_5_tuplets2");
-            preferences.shortestNote = defaultQuant;
-            }
-      void tupletOffTimeOtherBar() { mf("tuplet_off_time_other_bar"); }
-      void tupletOffTimeOtherBar2() { mf("tuplet_off_time_other_bar2"); }
-      void tuplet16th8th() { mf("tuplet_16th_8th"); }
-      void tuplet7Staccato() { mf("tuplet_7_staccato"); }
-      void minDuration() { mf("min_duration"); }
-      void minDurationNoReduce()
-            {
-            TrackOperations opers;
-            opers.quantize.reduceToShorterNotesInBar = false;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("min_duration_no_reduce");
-            preferences.midiImportOperations.clear();
-            }
+                        // requires 1/32 quantization
+            QString midiFile("tuplet_tied_3_5_tuplets2");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
 
-      void pickupMeasure() { mf("pickup"); }
+            data.trackOpers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_32, false);
+            dontSimplify(midiFile.toStdString().c_str());
+            }
+      void tupletOffTimeOtherBar() { dontSimplify("tuplet_off_time_other_bar"); }
+      void tupletOffTimeOtherBar2() { dontSimplify("tuplet_off_time_other_bar2"); }
+      void tuplet16th8th() { dontSimplify("tuplet_16th_8th"); }
+      void tuplet7Staccato() { mf("tuplet_7_staccato"); }
+      void minDuration() { dontSimplify("min_duration"); }
+
+      void pickupMeasure() { dontSimplify("pickup"); }
 
       // LH/RH separation
-      void LHRH_Nontuplet()
-            {
-            TrackOperations opers;
-            opers.LHRH.doIt = true;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("split_nontuplet");
-            preferences.midiImportOperations.clear();
-            }
-      void LHRH_Tuplet()
-            {
-            TrackOperations opers;
-            opers.LHRH.doIt = true;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("split_tuplet");
-            preferences.midiImportOperations.clear();
-            }
+      void LHRH_Nontuplet() { staffSplit("split_nontuplet"); }
+      void LHRH_Acid() { staffSplit("split_acid"); }
+      void LHRH_Tuplet() { staffSplit("split_tuplet"); }
+      void LHRH_2melodies() { staffSplit("split_2_melodies"); }
+      void LHRH_octave() { staffSplit("split_octave"); }
 
       // swing
       void swingTriplets()
             {
-            TrackOperations opers;
-            opers.swing = MidiOperation::Swing::SWING;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("swing_triplets");
-            preferences.midiImportOperations.clear();
+            QString midiFile("swing_triplets");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
+            data.trackOpers.swing.setDefaultValue(MidiOperations::Swing::SWING, false);
+            data.trackOpers.doStaffSplit.setDefaultValue(false, false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false, false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            mf(midiFile.toStdString().c_str());
             }
       void swingShuffle()
             {
-            TrackOperations opers;
-            opers.swing = MidiOperation::Swing::SHUFFLE;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("swing_shuffle");
-            preferences.midiImportOperations.clear();
+            QString midiFile("swing_shuffle");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
+            data.trackOpers.swing.setDefaultValue(MidiOperations::Swing::SHUFFLE, false);
+            data.trackOpers.doStaffSplit.setDefaultValue(false, false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false, false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            mf(midiFile.toStdString().c_str());
             }
       void swingClef()
             {
-            TrackOperations opers;
-            opers.swing = MidiOperation::Swing::SWING;
-            opers.changeClef = true;
-            preferences.midiImportOperations.appendTrackOperations(opers);
-            mf("swing_clef");
-            preferences.midiImportOperations.clear();
+            QString midiFile("swing_clef");
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(midiFile));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(midiFile));
+            auto &data = *opers.data();
+
+            data.trackOpers.swing.setDefaultValue(MidiOperations::Swing::SWING, false);
+            data.trackOpers.changeClef.setDefaultValue(true, false);
+            data.trackOpers.doStaffSplit.setDefaultValue(false, false);
+            data.trackOpers.simplifyDurations.setDefaultValue(false, false);
+            data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            mf(midiFile.toStdString().c_str());
             }
 
       // percussion
@@ -231,9 +333,25 @@ class TestImportMidi : public QObject, public MTest
       void percRemoveTies() { mf("perc_remove_ties"); }
 
       // clef changes along the score
-      void clefTied() { mf("clef_tied"); }
-      void clefMelody() { mf("clef_melody"); }
-      void clefPrev() { mf("clef_prev"); }
+      void clefTied() { dontSimplify("clef_tied"); }
+      void clefMelody() { dontSimplify("clef_melody"); }
+      void clefPrev() { dontSimplify("clef_prev"); }
+
+      // duration simplification
+      void simplify16thStaccato() { simplification("simplify_16th_staccato"); }
+      void simplify8thDont() { simplification("simplify_8th_dont"); }
+      void simplify32ndStaccato() { simplification("simplify_32nd_staccato"); }
+      void simplify8thDottedNoStaccato() { simplification("simplify_8th_dotted_no_staccato"); }
+      void simplify4thDottedTied() { simplification("simplify_4th_dotted_tied"); }
+      void simplifyTripletStaccato() { simplification("simplify_triplet_staccato"); }
+      void simplifyDotted3_4() { simplification("simplify_dotted_3-4"); }
+      void simplifyStaccato9_8() { simplification("simplify_staccato_9-8"); }
+
+      // voice separation
+      void voiceSeparationAcid() { voiceSeparation("voice_acid"); }
+      void voiceSeparationIntersect() { voiceSeparation("voice_intersect"); }
+      void voiceSeparationTuplet() { voiceSeparation("voice_tuplet", true); }
+      void voiceSeparationCentral() { voiceSeparation("voice_central"); }
       };
 
 //---------------------------------------------------------
@@ -249,15 +367,25 @@ void TestImportMidi::initTestCase()
 //   midifile
 //---------------------------------------------------------
 
-void TestImportMidi::mf(const char* name)
+void TestImportMidi::mf(const char* name) const
       {
       Score* score = new Score(mscore->baseStyle());
       score->setName(name);
-      const QString midiname = QString(name) + ".mid";
       const QString mscorename = QString(name) + ".mscx";
-      QCOMPARE(importMidi(score,  TESTROOT "/mtest/" + DIR + midiname), Score::FileError::FILE_NO_ERROR);
+      QCOMPARE(importMidi(score,  midiFilePath(name)), Score::FileError::FILE_NO_ERROR);;
       QVERIFY(saveCompareScore(score, mscorename, DIR + mscorename));
       delete score;
+      }
+
+QString TestImportMidi::midiFilePath(const QString &fileName) const
+      {
+      const QString nameWithExtention = fileName + ".mid";
+      return QString(TESTROOT "/mtest/" + DIR + nameWithExtention);
+      }
+
+QString TestImportMidi::midiFilePath(const char* fileName) const
+      {
+      return midiFilePath(QString(fileName));
       }
 
 //---------------------------------------------------------
@@ -312,35 +440,6 @@ void TestImportMidi::findChordInBar()
       QCOMPARE(endChordIt, chords.end());
       }
 
-void TestImportMidi::bestChordForTupletNote()
-      {
-      const ReducedFraction tupletLen = ReducedFraction::fromTicks(MScore::division);
-      const ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division) / 4;
-      const int tupletNumber = 3;
-      const ReducedFraction tupletNoteLen = tupletLen / tupletNumber;
-
-      std::multimap<ReducedFraction, MidiChord> chords;
-      chords.insert({ReducedFraction::fromTicks(10), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(160), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(360), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(480), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(1480), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(2000), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(3201), MidiChord()});
-
-      ReducedFraction tupletNotePos = tupletNoteLen;
-      auto bestChord = MidiTuplet::findBestChordForTupletNote(tupletNotePos, quantValue,
-                                                              chords.begin(), chords.end());
-      QCOMPARE(bestChord.first, chords.find(ReducedFraction::fromTicks(160)));
-      QCOMPARE(bestChord.second, ReducedFraction(0, 1));
-
-      tupletNotePos = tupletNoteLen * 2;
-      bestChord = MidiTuplet::findBestChordForTupletNote(tupletNotePos, quantValue,
-                                                         chords.begin(), chords.end());
-      QCOMPARE(bestChord.first, chords.find(ReducedFraction::fromTicks(360)));
-      QCOMPARE(bestChord.second, ReducedFraction::fromTicks(40));
-      }
-
 // tupletNoteNumber - number of note in tuplet (like index):
 // i.e. for triplet notes can have numbers 1, 2, 3
 
@@ -351,7 +450,6 @@ void isSingleNoteInTupletAllowed(int tupletNumber,
       {
       MidiTuplet::TupletInfo tupletInfo;
       tupletInfo.len = ReducedFraction::fromTicks(MScore::division);
-      tupletInfo.regularQuant = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
@@ -377,7 +475,6 @@ void isChordCountInTupletAllowed(int tupletNumber,
       {
       MidiTuplet::TupletInfo tupletInfo;
       tupletInfo.len = ReducedFraction::fromTicks(MScore::division);
-      tupletInfo.regularQuant = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
       tupletInfo.firstChordIndex = 0;
@@ -404,7 +501,6 @@ void isTupletErrorAllowed(int tupletSumError,
       MidiTuplet::TupletInfo tupletInfo;
       tupletInfo.tupletNumber = 3;
       tupletInfo.len = ReducedFraction::fromTicks(MScore::division);
-      tupletInfo.regularQuant = ReducedFraction::fromTicks(MScore::division) / 4;     // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
       MidiChord chord;
@@ -422,6 +518,11 @@ void isTupletErrorAllowed(int tupletSumError,
 
 void TestImportMidi::isTupletAllowed()
       {
+      auto &opers = preferences.midiImportOperations;
+      const QString fileName = "dummy";
+      opers.addNewMidiFile(fileName);
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, fileName);
+
       // special cases
       //
 
@@ -494,6 +595,9 @@ void TestImportMidi::isTupletAllowed()
 
 void TestImportMidi::findTupletNumbers()
       {
+      auto &opers = preferences.midiImportOperations;
+      opers.addNewMidiFile("");
+      MidiOperations::CurrentTrackSetter setCurrentTrack{opers, 0};
       {
       const ReducedFraction barFraction(4, 4);
       const ReducedFraction divLen = barFraction / 4;
@@ -517,8 +621,13 @@ void TestImportMidi::findTupletNumbers()
 void TestImportMidi::findOnTimeRegularError()
       {
       ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division) / 4;  // 1/16
-      ReducedFraction onTime = quantValue + ReducedFraction::fromTicks(12);
-      QCOMPARE(MidiTuplet::findQuantizationError(onTime, quantValue),
+      MidiChord chord;
+      MidiNote note;
+      note.offTime = quantValue * 4;
+      chord.notes.push_back(note);
+      const auto onTime = quantValue + ReducedFraction::fromTicks(12);
+      std::pair<const ReducedFraction, MidiChord> pair(onTime, chord);
+      QCOMPARE(Quantize::findOnTimeQuantError(pair, quantValue),
                ReducedFraction::fromTicks(12));
       }
 
@@ -529,13 +638,30 @@ void TestImportMidi::findTupletApproximation()
       const ReducedFraction quantValue = ReducedFraction::fromTicks(MScore::division) / 4;  // 1/16
 
       std::multimap<ReducedFraction, MidiChord> chords;
-      chords.insert({ReducedFraction::fromTicks(0), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(160), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(320), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(480), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(1480), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(2000), MidiChord()});
-      chords.insert({ReducedFraction::fromTicks(3201), MidiChord()});
+      MidiChord chord;
+      MidiNote note;
+      chord.notes.push_back(note);
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(160);
+      chords.insert({ReducedFraction::fromTicks(0), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(320);
+      chords.insert({ReducedFraction::fromTicks(160), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(480);
+      chords.insert({ReducedFraction::fromTicks(320), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(1480);
+      chords.insert({ReducedFraction::fromTicks(480), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(2000);
+      chords.insert({ReducedFraction::fromTicks(1480), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(3201);
+      chords.insert({ReducedFraction::fromTicks(2000), chord});
+
+      chord.notes.back().offTime = ReducedFraction::fromTicks(4000);
+      chords.insert({ReducedFraction::fromTicks(3201), chord});
 
       {
       const ReducedFraction startTupletTime = ReducedFraction(0, 1);
@@ -546,8 +672,6 @@ void TestImportMidi::findTupletApproximation()
       QCOMPARE(tupletApprox.onTime, startTupletTime);
       QCOMPARE(tupletApprox.len, tupletLen);
       QCOMPARE(tupletApprox.tupletNumber, tupletNumber);
-      QCOMPARE(tupletApprox.tupletQuant, ReducedFraction::fromTicks(MScore::division) / 3);
-      QCOMPARE(tupletApprox.regularQuant, quantValue);
       QVERIFY(tupletApprox.chords.size() == 3);
       QCOMPARE(tupletApprox.tupletSumError, ReducedFraction::fromTicks(0));
       QCOMPARE(tupletApprox.regularSumError, ReducedFraction::fromTicks(80));
@@ -584,6 +708,7 @@ void TestImportMidi::findLongestUncommonGroup()
       {
       std::vector<MidiTuplet::TupletInfo> tuplets;
       MidiTuplet::TupletInfo info;
+      const ReducedFraction basicQuant = ReducedFraction::fromTicks(MScore::division) / 4;  // 1/16
                   // 0
       info.onTime = {5, 8};
       info.len = {1, 8};
@@ -613,7 +738,7 @@ void TestImportMidi::findLongestUncommonGroup()
       info.len = {1, 1};
       tuplets.push_back(info);
 
-      std::set<int> result = MidiTuplet::findLongestUncommonGroup(tuplets);
+      std::set<int> result = MidiTuplet::findLongestUncommonGroup(tuplets, basicQuant);
       QVERIFY(result.size() == 3);
       QVERIFY(result == std::set<int>({0, 1, 2})
               || result == std::set<int>({1, 2, 3}));
@@ -633,7 +758,7 @@ void TestImportMidi::findLongestUncommonGroup()
       info.len = {1, 1};
       tuplets.push_back(info);
 
-      result = MidiTuplet::findLongestUncommonGroup(tuplets);
+      result = MidiTuplet::findLongestUncommonGroup(tuplets, basicQuant);
       QVERIFY(result.size() == 1);
       }
 

@@ -9,8 +9,8 @@ class MTrack;
 
 namespace MidiLyrics {
 
-void assignLyricsToTracks(QList<MTrack> &tracks);
-void setLyricsToScore(const MidiFile *mf, const QList<MTrack> &tracks);
+void extractLyricsToMidiData(const MidiFile *mf);
+void setLyricsToScore(QList<MTrack> &tracks);
 QList<std::string> makeLyricsListForUI();
 
 } // namespace MidiLyrics

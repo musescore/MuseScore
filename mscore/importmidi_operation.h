@@ -1,108 +1,63 @@
 #ifndef IMPORTMIDI_OPERATION_H
 #define IMPORTMIDI_OPERATION_H
 
+#include "importmidi_fraction.h"
+
+#include <set>
+
 
 namespace Ms {
 
 // all enums below should have default indexes like 0, 1, 2...
-// text names for enum items are in OperationsModel class
+// text names for enum items are in TracksModel class
 
-struct MidiOperation
-      {
-      enum class Type {
-            DO_IMPORT = 0,
+namespace MidiOperations {
 
-            QUANT_VALUE,
-            QUANT_REDUCE,
-            QUANT_HUMAN,
-
-            DO_LHRH_SEPARATION,
-            LHRH_METHOD,
-            LHRH_SPLIT_OCTAVE,
-            LHRH_SPLIT_NOTE,
-
-            USE_DOTS,
-            USE_MULTIPLE_VOICES,
-
-            TUPLET_SEARCH,
-            TUPLET_2,
-            TUPLET_3,
-            TUPLET_4,
-            TUPLET_5,
-            TUPLET_7,
-            TUPLET_9,
-
-            CHANGE_CLEF,
-
-            SPLIT_DRUMS,
-            SHOW_STAFF_BRACKET,
-
-            REMOVE_DRUM_RESTS,
-
-            PICKUP_MEASURE,
-
-            SWING,
-
-            LYRIC_TRACK_INDEX
-      } type;
-
-      QVariant value;
-
-      enum class QuantValue {
-            FROM_PREFERENCES = 0,
-            N_4,
-            N_8,
-            N_16,
-            N_32,
-            N_64,
-            N_128
-            };
-
-      enum class Swing {
-            NONE = 0,
-            SWING,
-            SHUFFLE
-            };
-
-      enum class LHRHMethod {
-            HAND_WIDTH = 0,
-            SPECIFIED_PITCH
-            };
-
-      enum class Octave {
-            C_1 = 0,
-            C0,
-            C1,
-            C2,
-            C3,
-            C4,
-            C5,
-            C6,
-            C7,
-            C8,
-            C9
-            };
-
-      enum class Note {
-            C = 0,
-            Cis,
-            D,
-            Dis,
-            E,
-            F,
-            Fis,
-            G,
-            Gis,
-            A,
-            Ais,
-            H
-            };
+enum class QuantValue {
+      Q_4 = 0,
+      Q_8,
+      Q_16,
+      Q_32,
+      Q_64,
+      Q_128
       };
 
+enum class VoiceCount {
+      V_1 = 0,
+      V_2,
+      V_3,
+      V_4
+      };
+
+enum class Swing {
+      NONE = 0,
+      SWING,
+      SHUFFLE
+      };
+
+enum class TimeSigNumerator {
+      _2 = 0,
+      _3,
+      _4,
+      _5,
+      _6,
+      _7,
+      _9,
+      _12,
+      _15,
+      _21
+      };
+
+enum class TimeSigDenominator {
+      _2 = 0,
+      _4,
+      _8,
+      _16,
+      _32
+      };
+
+} // namespace MidiOperations
 } // namespace Ms
-
-
-Q_DECLARE_METATYPE(Ms::MidiOperation);
 
 
 #endif // IMPORTMIDI_OPERATION_H

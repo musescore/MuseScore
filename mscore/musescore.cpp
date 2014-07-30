@@ -1413,6 +1413,7 @@ static void usage()
         "   -e        enable experimental features\n"
         "   -c dir    override config/settings folder\n"
         "   -t        set testMode flag for all files\n"
+        "   -M file   specify MIDI import operations file\n"
         );
 
       exit(-1);
@@ -1603,12 +1604,12 @@ void MuseScore::midiPanelOnSwitchToFile(const QString &file)
       bool isMidiFile = ImportMidiPanel::isMidiFile(file);
       if (isMidiFile) {
             importmidiPanel->setMidiFile(file);
-            if (importmidiPanel->prefferedVisible())
+            if (importmidiPanel->isPreferredVisible())
                   importmidiPanel->setVisible(true);
             }
       else
             importmidiPanel->setVisible(false);
-      importmidiShowPanel->setVisible(!importmidiPanel->prefferedVisible() && isMidiFile);
+      importmidiShowPanel->setVisible(!importmidiPanel->isPreferredVisible() && isMidiFile);
       }
 
 void MuseScore::midiPanelOnCloseFile(const QString &file)
@@ -1620,24 +1621,23 @@ void MuseScore::midiPanelOnCloseFile(const QString &file)
 void MuseScore::allowShowMidiPanel(const QString &file)
       {
       if (ImportMidiPanel::isMidiFile(file))
-            importmidiPanel->setPrefferedVisible(true);
+            importmidiPanel->setPreferredVisible(true);
       }
 
-void MuseScore::setMidiPrefOperations(const QString &file)
+void MuseScore::setMidiReopenInProgress(const QString &file)
       {
       if (ImportMidiPanel::isMidiFile(file))
-            importmidiPanel->setMidiPrefOperations(file);
+            importmidiPanel->setReopenInProgress();
       }
 
 void MuseScore::showMidiImportPanel()
       {
-      importmidiPanel->setPrefferedVisible(true);
+      importmidiPanel->setPreferredVisible(true);
       QString fileName = cs ? cs->fileInfo()->filePath() : "";
       if (ImportMidiPanel::isMidiFile(fileName))
             importmidiPanel->setVisible(true);
       importmidiShowPanel->hide();
       }
-
 
 //---------------------------------------------------------
 //   dragEnterEvent
@@ -4633,6 +4633,13 @@ int main(int argc, char* av[])
                   case 't':
                         {
                         enableTestMode = true;
+                        }
+                        break;
+                  case 'M':
+                        {
+                        if (argv.size() - i < 2)
+                              usage();
+                        preferences.midiImportOperations.setOperationsFile(argv.takeAt(i + 1));
                         }
                         break;
                   default:

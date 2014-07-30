@@ -3,6 +3,7 @@
 
 #include "importmidi_fraction.h"
 #include "importmidi_tuplet.h"
+#include "importmidi_operation.h"
 
 #include <vector>
 #include <cstddef>
@@ -17,6 +18,7 @@
 namespace Ms {
 
 enum class Key;
+struct MidiTimeSig;
 
 namespace Meter {
 
@@ -47,6 +49,12 @@ struct DivisionInfo
 
 enum class DurationType : char;
 
+ReducedFraction userTimeSigToFraction(
+            MidiOperations::TimeSigNumerator timeSigNumerator,
+            MidiOperations::TimeSigDenominator timeSigDenominator);
+MidiOperations::TimeSigNumerator fractionNumeratorToUserValue(int n);
+MidiOperations::TimeSigDenominator fractionDenominatorToUserValue(int z);
+
 } // namespace Meter
 
 class Staff;
@@ -67,7 +75,6 @@ class MTrack {
       bool hasKey = false;
       int indexOfOperation = 0;
       int division = 0;
-      int initLyricTrackIndex = -1;
 
       std::multimap<ReducedFraction, MidiChord> chords;
       std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
@@ -90,11 +97,10 @@ namespace MidiTuplet {
 
 struct TupletInfo
       {
+      int id;
       ReducedFraction onTime = {-1, 1};  // invalid
       ReducedFraction len = {-1, 1};
       int tupletNumber = -1;
-      ReducedFraction tupletQuant;
-      ReducedFraction regularQuant;
                   // <chord onTime, chord iterator>
       std::map<ReducedFraction, std::multimap<ReducedFraction, MidiChord>::iterator> chords;
       ReducedFraction tupletSumError;
@@ -103,6 +109,13 @@ struct TupletInfo
       int firstChordIndex = -1;
       std::map<ReducedFraction, int> staccatoChords;      // <onTime, note index>
       };
+
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval1,
+                      const std::pair<ReducedFraction, ReducedFraction> &interval2,
+                      bool strictComparison = true);
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interval,
+                      const std::vector<std::pair<ReducedFraction, ReducedFraction>> &intervals,
+                      bool strictComparison = true);
 
 } // namespace MidiTuplet
 
@@ -113,6 +126,25 @@ QString defaultCharset();
 std::string fromUchar(const uchar *text);
 
 } // namespace MidiCharset
+
+namespace MidiTempo {
+
+ReducedFraction time2Tick(double time, double ticksPerSec);
+double findBasicTempo(const std::multimap<int, MTrack> &tracks);
+
+} // namespace MidiTempo
+
+namespace MidiBar {
+
+ReducedFraction findBarStart(const ReducedFraction &time, const TimeSigMap *sigmap);
+
+} // namespace MidiBar
+
+namespace MidiDuration {
+
+double durationCount(const QList<std::pair<ReducedFraction, TDuration> > &durations);
+
+} // namespace MidiDuration
 } // namespace Ms
 
 
