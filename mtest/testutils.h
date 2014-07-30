@@ -38,7 +38,7 @@ class MTest {
       bool saveMusicXml(Ms::Score*, const QString& name);
       bool saveMimeData(QByteArray mimeData, const QString& saveName);
       bool compareFiles(const QString& saveName, const QString& compareWith);
-      bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith) const;
+      bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith);
       bool saveCompareMusicXmlScore(Ms::Score*, const QString& saveName, const QString& compareWith);
       bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
       Ms::Element* writeReadElement(Ms::Element* element);
