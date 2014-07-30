@@ -58,7 +58,7 @@ double findChordSalience1(
       if (velocity <= 0)
             velocity = 1;
 
-      return durationInSeconds * (c4 - pitch) * std::log(velocity);
+      return durationInSeconds * (c4 - pitch) * log(velocity);
       }
 
 double findChordSalience2(
