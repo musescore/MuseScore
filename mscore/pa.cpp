@@ -198,7 +198,7 @@ int Portaudio::deviceIndex(int apiIdx, int apiDevIdx)
 //   start
 //---------------------------------------------------------
 
-bool Portaudio::start()
+bool Portaudio::start(bool)
       {
       PaError err = Pa_StartStream(stream);
       if (err != paNoError) {

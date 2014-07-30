@@ -224,9 +224,9 @@ void Seq::setScoreView(ScoreView* v)
 //    return false on error
 //---------------------------------------------------------
 
-bool Seq::init()
+bool Seq::init(bool hotPlug)
       {
-      if (!_driver || !_driver->start()) {
+      if (!_driver || !_driver->start(hotPlug)) {
             qDebug("Cannot start I/O");
             return false;
             }
@@ -532,7 +532,7 @@ void Seq::processMessages()
                               cs->tempomap()->setRelTempo(msg.realVal);
                               cs->repeatList()->update();
                               playTime = cs->utick2utime(utick) * MScore::sampleRate;
-                              if (preferences.JackTimebaseMaster && preferences.useJackTransport)
+                              if (preferences.jackTimebaseMaster && preferences.useJackTransport)
                                     _driver->seekTransport(utick + 2 * cs->utime2utick(qreal((_driver->bufferSize()) + 1) / qreal(MScore::sampleRate)));
                               }
                         else
