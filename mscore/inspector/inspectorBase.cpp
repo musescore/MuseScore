@@ -271,11 +271,11 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            ii.w->setEnabled(!valuesAreDifferent);
-            if (ii.r)
-                  ii.r->setEnabled(valuesAreDifferent);
+            ii.w->setStyleSheet( valuesAreDifferent ? "* { color: gray }" : "");
             }
-      else {
+      
+      //deal with reset if only one element, or if values are the same
+      if (!valuesAreDifferent){
             PropertyStyle styledValue = inspector->el().front()->propertyStyle(ii.t);
             bool reset;
             if (styledValue == PropertyStyle::STYLED) {
@@ -291,6 +291,10 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   reset = !isDefault(ii);
             if (ii.r)
                   ii.r->setEnabled(reset);
+            }
+      else {
+            if (ii.r)
+                  ii.r->setEnabled(true);
             }
       }
 
