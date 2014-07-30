@@ -49,6 +49,7 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste10() { copypaste("10"); }       // two slurs
       void copypaste11() { copypaste("11"); }       // grace notes
       void copypaste12() { copypaste("12"); }       // voices
+      void copyPaste2Voice();                       // voices-partial
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
@@ -172,6 +173,44 @@ void TestCopyPaste::copyPastePartial() {
          DIR + QString("copypaste_partial_01-ref.mscx")));
       delete score;
 }
+
+void TestCopyPaste::copyPaste2Voice()
+      {
+      Score* score = readScore(DIR + QString("copypaste13.mscx"));
+      score->doLayout();
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+
+      QVERIFY(m1 != 0);
+      QVERIFY(m2 != 0);
+
+      // select 2 chord rests at the start of the first measure
+      Segment* s = m1->first(Segment::Type::ChordRest);
+      score->select(static_cast<Chord*>(s->element(0))->notes().at(0));
+      s = s->next(Segment::Type::ChordRest);
+      score->select(s->element(0), SelectType::RANGE);
+
+      QVERIFY(score->selection().canCopy());
+      QString mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+      // paste into the second CR of second measure
+      Segment* secondCRSeg = m2->first()->next1(Segment::Type::ChordRest);
+      score->select(secondCRSeg->element(0));
+
+      score->startCmd();
+      score->cmdPaste(mimeData,0);
+      score->endCmd();
+
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("copypaste13.mscx"),
+         DIR + QString("copypaste13-ref.mscx")));
+      delete score;
+      }
 
 QTEST_MAIN(TestCopyPaste)
 #include "tst_copypaste.moc"
