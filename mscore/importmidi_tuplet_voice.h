@@ -48,6 +48,12 @@ void assignVoices(
             const ReducedFraction &barStart,
             int barIndex);
 
+std::pair<ReducedFraction, ReducedFraction>
+chordInterval(const std::pair<const ReducedFraction, MidiChord> &chord,
+              const std::multimap<ReducedFraction, MidiChord> &chords,
+              const ReducedFraction &basicQuant,
+              const ReducedFraction &barStart);
+
 #ifdef QT_DEBUG
 
 bool haveOverlappingVoices(
