@@ -1670,13 +1670,12 @@ Element* Score::move(const QString& cmd)
 
       // no chord/rest found? look for another type of element
       if (cr == 0) {
-            Element* el  = 0;
-            Element* trg = 0;
-            // retrieve last element of section list
-            if (!selection().elements().isEmpty())
-                  el = selection().elements().last();
-            if (!el)                            // no element, no party!
+            if (selection().elements().isEmpty())
                   return 0;
+            // retrieve last element of section list
+            Element* el = selection().elements().last();
+            Element* trg = 0;
+
             // get parent of element and process accordingly:
             // trg is the element to select on "next-chord" cmd
             // cr is the ChordRest to move from on other cmd's
@@ -2053,10 +2052,6 @@ void Score::cmd(const QAction* a)
             addArticulation(ArticulationType::Marcato);
       else if (cmd == "add-trill")
             addArticulation(ArticulationType::Trill);
-      else if (cmd == "add-hairpin")
-            cmdAddHairpin(false);
-      else if (cmd == "add-hairpin-reverse")
-            cmdAddHairpin(true);
       else if (cmd == "add-8va")
             cmdAddOttava(Ottava::Type::OTTAVA_8VA);
       else if (cmd == "add-8vb")

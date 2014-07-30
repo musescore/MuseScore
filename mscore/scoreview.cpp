@@ -2505,6 +2505,10 @@ void ScoreView::cmd(const QAction* a)
             sm->postEvent(new CommandEvent(cmd));
       else if (cmd == "add-slur")
             cmdAddSlur();
+      else if (cmd == "add-hairpin")
+            cmdAddHairpin(false);
+      else if (cmd == "add-hairpin-reverse")
+            cmdAddHairpin(true);
       else if (cmd == "add-noteline")
             cmdAddNoteLine();
       else if (cmd == "note-c")
@@ -4084,6 +4088,49 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
                   return;
                   }
             if ((lastNote == 0) && !el.isEmpty()) {
+                  editObject = el.front();
+                  sm->postEvent(new CommandEvent("edit"));  // calls startCmd()
+                  }
+            else
+                  _score->endCmd();
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdAddHairpin
+//    '<' typed on keyboard
+//---------------------------------------------------------
+
+void ScoreView::cmdAddHairpin(bool decrescendo)
+      {
+      ChordRest* cr1;
+      ChordRest* cr2;
+      _score->getSelectedChordRest2(&cr1, &cr2);
+      if (!cr1)
+            return;
+      if (cr2 == 0)
+            cr2 = nextChordRest(cr1);
+      if (cr2 == 0)
+            return;
+
+      _score->startCmd();
+      Hairpin* pin = new Hairpin(_score);
+      pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESCENDO : Hairpin::Type::CRESCENDO);
+      pin->setTrack(cr1->track());
+      pin->setTick(cr1->segment()->tick());
+      pin->setTick2(cr2->segment()->tick());
+      _score->undoAddElement(pin);
+      pin->layout();
+      _score->endCmd();
+      _score->startCmd();
+
+      const QList<SpannerSegment*>& el = pin->spannerSegments();
+
+      if (noteEntryMode()) {
+            _score->endCmd();
+            }
+      else {
+            if (!el.isEmpty()) {
                   editObject = el.front();
                   sm->postEvent(new CommandEvent("edit"));  // calls startCmd()
                   }
