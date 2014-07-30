@@ -90,6 +90,8 @@ struct GpBar {
       Repeat repeatFlags;
       int repeats;
       GPVolta volta;
+      QString direction;
+      QString directionStyle;
 
       GpBar();
       };

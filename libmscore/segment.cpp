@@ -443,6 +443,7 @@ void Segment::add(Element* el)
             case Element::Type::MARKER:
             case Element::Type::IMAGE:
             case Element::Type::TEXT:
+            case Element::Type::TREMOLOBAR:
             case Element::Type::TAB_DURATION_SYMBOL:
             case Element::Type::FIGURED_BASS:
                   _annotations.push_back(el);
