@@ -72,6 +72,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                   e.setTransposeDiatonic(0);
 
                   int srcStaffIdx = e.attribute("id", "0").toInt();
+                  int voices = e.attribute("voices","0").toInt();
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
 
                   if (dstStaffIdx >= nstaves()) {
@@ -93,7 +94,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               int tick = e.readInt();
                               e.initTick(tick);
                               int shift = tick - tickStart;
-                              if (makeGap && !makeGap1(dstTick + shift, dstStaffIdx, Fraction::fromTicks(tickLen - shift))) {
+                              if (makeGap && !makeGap1(dstTick + shift, dstStaffIdx, Fraction::fromTicks(tickLen - shift), voices)) {
                                     qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
                                     done = true; // break main loop, cannot make gap
                                     break;
