@@ -706,6 +706,7 @@ bool areTupletsIntersect(const TupletInfo &t1, const TupletInfo &t2)
 std::vector<int> findTiedNotes(
             const TupletInfo &tuplet,
             const std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &startBarTick,
             const ReducedFraction &basicQuant)
       {
@@ -721,7 +722,8 @@ std::vector<int> findTiedNotes(
       if (maxChordOffTime > firstTupletChordOnTime)
             return tiedNotes;
 
-      const auto onTime = Quantize::findQuantizedChordOnTime(*chordIt, basicQuant);
+      const auto onTime = MidiTuplet::findOnTimeBetweenChords(*chordIt, chords,
+                                                              basicQuant, startBarTick);
       if (onTime >= tuplet.onTime)
             return tiedNotes;
 
@@ -797,7 +799,8 @@ findBackTiedTuplets(
                   if (voice != -1 && haveIntersection(interval, backTupletIntervals[voice]))
                         continue;
 
-                  const auto tiedNotes = findTiedNotes(tuplets[i], chordIt, startBarTick, basicQuant);
+                  const auto tiedNotes = findTiedNotes(tuplets[i], chordIt, chords,
+                                                       startBarTick, basicQuant);
                   if (!tiedNotes.empty()) {
                                     // don't tie back twice to the same chord or tuplet
                         if (usedChords.find(&*chordIt) != usedChords.end())
