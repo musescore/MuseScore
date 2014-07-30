@@ -2,6 +2,7 @@
 #define IMPORTMIDI_CHORD_H
 
 #include "importmidi_fraction.h"
+#include "importmidi_tuplet.h"
 
 #include <map>
 
@@ -10,10 +11,6 @@ namespace Ms {
 
 class Tie;
 class TimeSigMap;
-
-namespace MidiTuplet {
-struct TupletData;
-}
 
 class MidiNote {
    public:
