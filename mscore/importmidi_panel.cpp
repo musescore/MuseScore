@@ -255,6 +255,7 @@ void ImportMidiPanel::excludeMidiFile(const QString &fileName)
       if (_importInProgress || _reopenInProgress)
             return;
 
+      _model->clear();
       auto &opers = preferences.midiImportOperations;
       opers.excludeMidiFile(fileName);
       if (fileName == _midiFile)
