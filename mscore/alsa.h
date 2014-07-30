@@ -123,7 +123,7 @@ class AlsaAudio : public Driver {
       AlsaAudio(Seq*);
       virtual ~AlsaAudio();
       virtual bool init(bool hot = false);
-      virtual bool start();
+      virtual bool start(bool hotPlug = false);
       virtual bool stop();
       float* getLBuffer(long n);
       float* getRBuffer(long n);

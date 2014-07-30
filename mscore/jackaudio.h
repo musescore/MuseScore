@@ -65,7 +65,7 @@ class JackAudio : public Driver {
       JackAudio(Seq*);
       virtual ~JackAudio();
       virtual bool init(bool hot = false);
-      virtual bool start();
+      virtual bool start(bool hotPlug = false);
       virtual bool stop();
       int framePos() const;
       void connect(void*, void*);

@@ -114,7 +114,7 @@ void Preferences::init()
       useJackAudio       = false;
       useJackMidi        = false;
       useJackTransport   = false;
-      JackTimebaseMaster = false;
+      jackTimebaseMaster = false;
       usePortaudioAudio  = false;
       usePulseAudio      = false;
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
@@ -256,7 +256,7 @@ void Preferences::write()
       s.setValue("useJackAudio",       useJackAudio);
       s.setValue("useJackMidi",        useJackMidi);
       s.setValue("useJackTransport",   useJackTransport);
-      s.setValue("JackTimebaseMaster", JackTimebaseMaster);
+      s.setValue("jackTimebaseMaster", jackTimebaseMaster);
       s.setValue("usePortaudioAudio",  usePortaudioAudio);
       s.setValue("usePulseAudio",      usePulseAudio);
       s.setValue("midiPorts",          midiPorts);
@@ -406,7 +406,7 @@ void Preferences::read()
       useAlsaAudio       = s.value("useAlsaAudio", useAlsaAudio).toBool();
       useJackAudio       = s.value("useJackAudio", useJackAudio).toBool();
       useJackMidi        = s.value("useJackMidi",  useJackMidi).toBool();
-      JackTimebaseMaster = s.value("JackTimebaseMaster",  JackTimebaseMaster).toBool();
+      jackTimebaseMaster = s.value("jackTimebaseMaster",  jackTimebaseMaster).toBool();
       useJackTransport   = s.value("useJackTransport",  useJackTransport).toBool();
       usePortaudioAudio  = s.value("usePortaudioAudio", usePortaudioAudio).toBool();
       usePulseAudio      = s.value("usePulseAudio", usePulseAudio).toBool();
@@ -674,6 +674,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(pulseaudioDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
       connect(alsaDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
       connect(jackDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
+      connect(useJackAudio, SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
+      connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       updateRemote();
       }
 
@@ -819,7 +821,7 @@ void PreferenceDialog::updateValues()
       pulseaudioDriver->setChecked(prefs.usePulseAudio);
       useJackMidi->setChecked(prefs.useJackMidi);
       useJackTransport->setChecked(prefs.useJackTransport);
-      becomeTimebaseMaster->setChecked(prefs.JackTimebaseMaster);
+      becomeTimebaseMaster->setChecked(prefs.jackTimebaseMaster);
 
       alsaDevice->setText(prefs.alsaDevice);
 
@@ -1265,23 +1267,27 @@ void PreferenceDialog::apply()
       prefs.antialiasedDrawing = drawAntialiased->isChecked();
 
       prefs.useJackTransport   = jackDriver->isChecked() && useJackTransport->isChecked();
-      prefs.JackTimebaseMaster = becomeTimebaseMaster->isChecked();
+      prefs.jackTimebaseMaster = becomeTimebaseMaster->isChecked();
       prefs.midiPorts          = midiPorts->value();
       prefs.rememberLastConnections = rememberLastMidiConnections->isChecked();
 
       bool wasJack = (prefs.useJackMidi || prefs.useJackAudio);
-      bool nowJack = jackDriver->isChecked() && (useJackAudio->isChecked() || useJackMidi->isChecked());
-      bool jackChanged = wasJack == nowJack && nowJack ==true;
-
       prefs.useJackAudio       = jackDriver->isChecked() && useJackAudio->isChecked();
       prefs.useJackMidi        = jackDriver->isChecked() && useJackMidi->isChecked();
+      bool nowJack = (prefs.useJackMidi || prefs.useJackAudio);
+      bool jackParametersChanged = (prefs.useJackAudio != preferences.useJackAudio
+                  || prefs.useJackMidi != preferences.useJackMidi
+                  || prefs.rememberLastConnections != preferences.rememberLastConnections
+                  || prefs.jackTimebaseMaster != preferences.jackTimebaseMaster)
+                  && (wasJack && nowJack);
 
-      if (jackChanged) {
-            //Keep JACK driver without unload
+      if (jackParametersChanged) {
+            // Change parameters of JACK driver without unload
             preferences = prefs;
-            seq->driver()->init(true);
-            if (!seq->init()) {
-                  qDebug("sequencer init failed");
+            if (seq) {
+                  seq->driver()->init(true);
+                  if (!seq->init(true))
+                        qDebug("sequencer init failed");
                   }
             }
       else if (
@@ -1307,9 +1313,8 @@ void PreferenceDialog::apply()
             Driver* driver = driverFactory(seq, "");
             if (seq) {
                   seq->setDriver(driver);
-                  if (!seq->init()) {
+                  if (!seq->init())
                         qDebug("sequencer init failed");
-                        }
                   }
             }
 
@@ -1507,6 +1512,8 @@ void PreferenceDialog::midiRemoteControlClearClicked()
 
 //---------------------------------------------------------
 //   exclusiveAudioDriver
+//   Allow user to select only one audio driver, restrict
+//   to uncheck all drivers.
 //---------------------------------------------------------
 
 void PreferenceDialog::exclusiveAudioDriver(bool on)
@@ -1524,6 +1531,43 @@ void PreferenceDialog::exclusiveAudioDriver(bool on)
                   useJackMidi->setChecked(true);
                   useJackAudio->setChecked(true);
                   }
+            }
+      else {
+            // True if QGroupBox is checked now or was checked before clicking on it
+            bool portAudioChecked =  portaudioDriver->isVisible()  && ((QObject::sender() != portaudioDriver  && portaudioDriver->isChecked())  || QObject::sender() == portaudioDriver);
+            bool pulseaudioChecked = pulseaudioDriver->isVisible() && ((QObject::sender() != pulseaudioDriver && pulseaudioDriver->isChecked()) || QObject::sender() == pulseaudioDriver);
+            bool alsaChecked =       alsaDriver->isVisible()       && ((QObject::sender() != alsaDriver       && alsaDriver->isChecked())       || QObject::sender() == alsaDriver);
+            bool jackChecked =       jackDriver->isVisible()       && ((QObject::sender() != jackDriver       && jackDriver->isChecked())       || QObject::sender() == jackDriver);
+            // If nothing is checked, prevent looping (runned with -s, sequencer disabled)
+            if (!(portAudioChecked || pulseaudioChecked || alsaChecked || jackChecked))
+                  return;
+            // Don't allow to uncheck all drivers
+            if (portaudioDriver == QObject::sender())
+                  portaudioDriver->setChecked(!(pulseaudioChecked || alsaChecked || jackChecked));
+            if (pulseaudioDriver == QObject::sender())
+                  pulseaudioDriver->setChecked(!(portAudioChecked || alsaChecked || jackChecked));
+            if (alsaDriver == QObject::sender())
+                  alsaDriver->setChecked(!(portAudioChecked || pulseaudioChecked || jackChecked));
+            if (jackDriver == QObject::sender())
+                  jackDriver->setChecked(!(portAudioChecked || pulseaudioChecked || alsaChecked));
+            }
+      }
+
+//---------------------------------------------------------
+//   exclusiveJackDriver
+//   Allow user to select "use Jack Audio", "use Jack MIDI"
+//   or both, but forbid unchecking both.
+//   There is no need to select "JACK audio server" without
+//   checking any of them.
+//---------------------------------------------------------
+
+void PreferenceDialog::nonExclusiveJackDriver(bool on)
+      {
+      if (!on) {
+            if (QObject::sender() == useJackAudio)
+                  useJackAudio->setChecked(!useJackMidi->isChecked());
+            else if (QObject::sender() == useJackMidi)
+                  useJackMidi->setChecked(!useJackAudio->isChecked());
             }
       }
 

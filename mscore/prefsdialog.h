@@ -66,6 +66,7 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void recordButtonClicked(int);
       void midiRemoteControlClearClicked();
       void exclusiveAudioDriver(bool on);
+      void nonExclusiveJackDriver(bool on);
       void selectScoresDirectory();
       void selectStylesDirectory();
       void selectTemplatesDirectory();

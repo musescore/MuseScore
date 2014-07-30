@@ -41,7 +41,7 @@ class PulseAudio : public Driver {
       PulseAudio(Seq*);
       virtual ~PulseAudio();
       virtual bool init(bool hot = false);
-      virtual bool start();
+      virtual bool start(bool hotPlug = false);
       virtual bool stop();
       virtual Transport getState() override { return state; }
       virtual int sampleRate() const { return _sampleRate;          }
@@ -189,7 +189,7 @@ void* PulseAudio::paLoop(void* data)
 //   start
 //---------------------------------------------------------
 
-bool PulseAudio::start()
+bool PulseAudio::start(bool)
       {
       pthread_attr_t* attributes = (pthread_attr_t*) malloc(sizeof(pthread_attr_t));
       pthread_attr_init(attributes);
