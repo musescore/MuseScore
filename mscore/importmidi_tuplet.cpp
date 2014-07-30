@@ -358,19 +358,6 @@ findNonTupletChords(
       return nonTuplets;
       }
 
-// do quantization before checking
-
-bool hasIntersectionWithChord(
-            const ReducedFraction &startTick,
-            const ReducedFraction &endTick,
-            const ReducedFraction &basicQuant,
-            const std::multimap<ReducedFraction, MidiChord>::iterator &chord)
-      {
-      const auto onTime = Quantize::findQuantizedChordOnTime(*chord, basicQuant);
-      const auto offTime = Quantize::findMaxQuantizedOffTime(*chord, basicQuant);
-      return (endTick > onTime && startTick < offTime);
-      }
-
 // split first tuplet chord, that belong to 2 tuplets, into 2 chords
 
 void splitTupletChord(const std::vector<TupletInfo>::iterator &lastMatch,
@@ -504,6 +491,7 @@ void minimizeOffTimeError(
 void addChordsBetweenTupletNotes(
             std::vector<TupletInfo> &tuplets,
             std::list<std::multimap<ReducedFraction, MidiChord>::iterator> &nonTuplets,
+            const std::multimap<ReducedFraction, MidiChord> &chords,
             const ReducedFraction &startBarTick,
             const ReducedFraction &basicQuant)
       {
@@ -511,9 +499,11 @@ void addChordsBetweenTupletNotes(
             for (auto it = nonTuplets.begin(); it != nonTuplets.end(); ) {
                   const auto &chordIt = *it;
                   const auto &onTime = chordIt->first;
-                  if (onTime > tuplet.onTime
-                              && hasIntersectionWithChord(tuplet.onTime, tuplet.onTime + tuplet.len,
-                                                          basicQuant, chordIt)) {
+                  const auto tupletInterv = std::make_pair(tuplet.onTime,
+                                                           tuplet.onTime + tuplet.len);
+                  const auto chordInterv = chordInterval(*chordIt, chords,
+                                                         basicQuant, startBarTick);
+                  if (onTime > tuplet.onTime && haveIntersection(tupletInterv, chordInterv)) {
                         const auto tupletRatio = tupletLimits(tuplet.tupletNumber).ratio;
 
                         auto tupletError = Quantize::findOnTimeTupletQuantError(
@@ -1037,7 +1027,7 @@ void findTuplets(
             markStaccatoTupletNotes(tuplets);
 
       auto nonTuplets = findNonTupletChords(tuplets, startBarChordIt, endBarChordIt);
-      addChordsBetweenTupletNotes(tuplets, nonTuplets, startBarTick, basicQuant);
+      addChordsBetweenTupletNotes(tuplets, nonTuplets, chords, startBarTick, basicQuant);
       sortNotesByPitch(startBarChordIt, endBarChordIt);
       sortTupletsByAveragePitch(tuplets);
 
