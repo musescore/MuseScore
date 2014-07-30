@@ -3756,7 +3756,12 @@ void MuseScore::selectElementDialog(Element* e)
       if (sd.exec()) {
             ElementPattern pattern;
             sd.setPattern(&pattern);
-            score->scanElements(&pattern, Score::collectMatch);
+
+            if (sd.isInSelection())
+                  score->scanElementsInRange(&pattern, Score::collectMatch);
+            else
+                  score->scanElements(&pattern, Score::collectMatch);
+
             if (sd.doReplace()) {
                   score->select(0, SelectType::SINGLE, 0);
                   foreach(Element* ee, pattern.el)

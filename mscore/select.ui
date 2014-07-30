@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>395</width>
-    <height>297</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -86,6 +86,13 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="inSelection">
+          <property name="text">
+           <string>in selection</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
@@ -155,9 +162,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
