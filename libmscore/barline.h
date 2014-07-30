@@ -30,10 +30,20 @@ static const int MIN_BARLINE_SPAN_FROMTO = -2;
 static const int BARLINE_SPAN_1LINESTAFF_FROM = -4;
 static const int BARLINE_SPAN_1LINESTAFF_TO   = 4;
 
+// data for some preset bar line span types
+static const int BARLINE_SPAN_TICK1_FROM        = -1;
+static const int BARLINE_SPAN_TICK1_TO          = 1;
+static const int BARLINE_SPAN_TICK2_FROM        = -2;
+static const int BARLINE_SPAN_TICK2_TO          = 2;
+static const int BARLINE_SPAN_SHORT1_FROM       = 2;
+static const int BARLINE_SPAN_SHORT1_TO         = 6;
+static const int BARLINE_SPAN_SHORT2_FROM       = 1;
+static const int BARLINE_SPAN_SHORT2_TO         = 7;
+
 // used while reading a score for a default spanTo (to last staff line) toward a staff not yet read;
 // fixed once all staves are read
 
-static const int UNKNOWN_BARLINE_TO = -4;
+static const int UNKNOWN_BARLINE_TO = -6;
 
 //---------------------------------------------------------
 //   @@ BarLine
