@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StaffList version="1.24" tick="0" len="1920" staff="0" staves="1">
-  <Staff id="0">
+  <Staff id="0" voices="1">
     <tick>0</tick>
     <Chord>
       <track>0</track>
