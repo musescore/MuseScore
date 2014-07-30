@@ -43,6 +43,7 @@ class SelectDialog : public QDialog, Ui::SelectDialog {
       bool doAdd() const           { return add->isChecked();           }
       bool doSubtract() const      { return subtract->isChecked();      }
       bool doFromSelection() const { return fromSelection->isChecked(); }
+      bool isInSelection() const   { return inSelection->isChecked();   }
       };
 
 
