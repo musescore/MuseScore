@@ -197,7 +197,7 @@ class Seq : public QObject, public Sequencer {
       void setLoopOut();
       void setLoopSelection();
 
-      bool init();
+      bool init(bool hotPlug = false);
       void exit();
       bool isRunning() const    { return running; }
       bool isPlaying() const    { return state == Transport::PLAY; }
