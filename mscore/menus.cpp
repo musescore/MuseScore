@@ -297,10 +297,10 @@ Palette* MuseScore::newBarLinePalette()
             const char* name;
             } t[] = {
             { BarLineType::NORMAL,       QT_TRANSLATE_NOOP("Palette", "Normal") },
-            { BarLineType::BROKEN,       QT_TRANSLATE_NOOP("Palette", "Dashed") },
-            { BarLineType::DOTTED,       QT_TRANSLATE_NOOP("Palette", "Dotted") },
-            { BarLineType::END,          QT_TRANSLATE_NOOP("Palette", "End Bar") },
-            { BarLineType::DOUBLE,       QT_TRANSLATE_NOOP("Palette", "Double Bar") },
+            { BarLineType::BROKEN,       QT_TRANSLATE_NOOP("Palette", "Dashed style") },
+            { BarLineType::DOTTED,       QT_TRANSLATE_NOOP("Palette", "Dotted style") },
+            { BarLineType::END,          QT_TRANSLATE_NOOP("Palette", "End Bar style") },
+            { BarLineType::DOUBLE,       QT_TRANSLATE_NOOP("Palette", "Double Bar style") },
             { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
             { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
             { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
@@ -316,10 +316,10 @@ Palette* MuseScore::newBarLinePalette()
             int         from, to;
             const char* name;
             } span[] = {
-            { -1, 1, QT_TRANSLATE_NOOP("Palette", "Tick 1") },
-            { -2, 2, QT_TRANSLATE_NOOP("Palette", "Tick 2") },
-            { 2,  6, QT_TRANSLATE_NOOP("Palette", "Short 1") },
-            { 1,  7, QT_TRANSLATE_NOOP("Palette", "Short 2") },
+            { BARLINE_SPAN_TICK1_FROM, BARLINE_SPAN_TICK1_TO, QT_TRANSLATE_NOOP("Palette", "Tick 1 span") },
+            { BARLINE_SPAN_TICK2_FROM, BARLINE_SPAN_TICK2_TO, QT_TRANSLATE_NOOP("Palette", "Tick 2 span") },
+            { BARLINE_SPAN_SHORT1_FROM,BARLINE_SPAN_SHORT1_TO,QT_TRANSLATE_NOOP("Palette", "Short 1 span") },
+            { BARLINE_SPAN_SHORT2_FROM,BARLINE_SPAN_SHORT2_TO,QT_TRANSLATE_NOOP("Palette", "Short 2 span") },
             };
       for (unsigned i = 0; i < sizeof(span)/sizeof(*span); ++i) {
             BarLine* b  = new BarLine(gscore);

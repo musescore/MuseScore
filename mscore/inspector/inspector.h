@@ -267,11 +267,13 @@ class InspectorBarLine : public InspectorBase {
       Ui::InspectorBarLine b;
 
       static QString builtinSpanNames[BARLINE_BUILTIN_SPANS];
-      static int     builtinSpans[BARLINE_BUILTIN_SPANS][3];
+
+      void  blockSpanDataSignals(bool val);
 
    private slots:
-      void spanTypeActivated(int);
+      void spanTypeChanged(int idx);
       void resetSpanType();
+      void manageSpanData();
 
    public:
       InspectorBarLine(QWidget* parent);
@@ -291,6 +293,7 @@ class Inspector : public QDockWidget {
       Element* _element;      // currently displayed element
       bool _inspectorEdit;    // set to true when an edit originates from
                               // within the inspector itself
+
    public slots:
       void reset();
 
