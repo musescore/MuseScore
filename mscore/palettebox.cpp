@@ -97,7 +97,7 @@ Palette* PaletteBox::newPalette(const QString& name, int slot)
       PaletteBoxButton* b = new PaletteBoxButton(p);
       vbox->insertWidget(slot, b);
       vbox->insertWidget(slot+1, p, 1000);
-      connect(b, SIGNAL(paletteCmd(int,int)), SLOT(paletteCmd(int,int)));
+      connect(b, SIGNAL(paletteCmd(PaletteCommand, int)), SLOT(paletteCmd(PaletteCommand, int)));
       connect(p, SIGNAL(changed()), Workspace::currentWorkspace, SLOT(setDirty()));
       for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
             static_cast<PaletteBoxButton*>(vbox->itemAt(i * 2)->widget())->setId(i*2);
