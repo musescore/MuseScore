@@ -75,6 +75,7 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       connect(continueTextTb, SIGNAL(clicked()), SLOT(continueTextProperties()));
       connect(endTextTb, SIGNAL(clicked()),      SLOT(endTextProperties()));
       }
+
 //---------------------------------------------------------
 //   LineProperties
 //---------------------------------------------------------

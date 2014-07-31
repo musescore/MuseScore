@@ -167,6 +167,7 @@ void TextLineSegment::setText(Text* t)
                   }
             else {
                   _text->setTextStyleType(t->textStyleType());
+                  _text->setTextStyle(t->textStyle());
                   _text->setText(t->text());
                   }
             }
