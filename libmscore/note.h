@@ -373,6 +373,7 @@ class Note : public Element {
       int customizeVelocity(int velo) const;
       NoteDot* dot(int n)                       { return _dots[n];           }
       QQmlListProperty<Ms::NoteDot> qmlDots();
+      void updatePitch(int pitch, int tcp);
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(const NoteVal&);

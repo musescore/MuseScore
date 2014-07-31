@@ -1286,15 +1286,18 @@ void Score::addArticulation(ArticulationType attr)
 
 void Score::changeAccidental(Accidental::Type idx)
       {
-      foreach(Note* note, selection().noteList())
-            changeAccidental(note, idx);
+       bool altPressed = property("AltModifier").toBool();
+       foreach(Note* note, selection().noteList()) {
+             setProperty("AltModifier", altPressed);
+             changeAccidental(note, idx);
+             }
       }
 
 //---------------------------------------------------------
 //   changeAccidental2
 //---------------------------------------------------------
 
-static void changeAccidental2(Note* n, int pitch, int tpc)
+static void changeAccidental2(Note* n, int pitch, int tpc, Accidental::Type accidental = Accidental::Type::NONE)
       {
       Score* score  = n->score();
       Chord* chord  = n->chord();
@@ -1322,6 +1325,13 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             tpc1 = tpc2;
             tpc2 = tpc;
             }
+
+      // change pitches and tpc's for
+      // whole measure
+      if(score->property("AltModifier").toBool())
+            score->updatePitches(chord->segment(), staffIdx, pitch, tpc1, tpc2, n->line(), accidental);
+      score->setProperty("AltModifier", false);
+
       score->undoChangePitch(n, pitch, tpc1, tpc2);
       if (!st->isTabStaff()) {
             //
