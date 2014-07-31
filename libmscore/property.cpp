@@ -76,7 +76,7 @@ static const PropertyData propertyList[] = {
       { P_ID::PLAY,                false, "play",          P_TYPE::BOOL  },
       { P_ID::TIMESIG_NOMINAL,     false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_ACTUAL,      true,  0,               P_TYPE::FRACTION },
-      
+
       { P_ID::NUMBER_TYPE,         false, "numberType",    P_TYPE::INT   },
       { P_ID::BRACKET_TYPE,        false, "bracketType",   P_TYPE::INT   },
       { P_ID::NORMAL_NOTES,        false, "normalNotes",   P_TYPE::INT   },
@@ -199,6 +199,11 @@ static const PropertyData propertyList[] = {
       { P_ID::IRREGULAR,           true,  "irregular",       P_TYPE::BOOL },
 
       { P_ID::ANCHOR,              false,  "anchor",       P_TYPE::INT },
+
+      { P_ID::SLUR_UOFF1,          false,  "o1",             P_TYPE::POINT  },
+      { P_ID::SLUR_UOFF2,          false,  "o2",             P_TYPE::POINT  },
+      { P_ID::SLUR_UOFF3,          false,  "o3",             P_TYPE::POINT  },
+      { P_ID::SLUR_UOFF4,          false,  "o4",             P_TYPE::POINT  },
 
       { P_ID::END,                 false, "",              P_TYPE::INT      }
       };

@@ -26,8 +26,6 @@ int Spanner::editTick2;
 int Spanner::editTrack2;
 QList<QPointF> Spanner::userOffsets2;
 QList<QPointF> Spanner::userOffsets;
-Element* Spanner::editEndElement;
-Element* Spanner::editStartElement;
 
 //---------------------------------------------------------
 //   SpannerSegment
@@ -257,9 +255,6 @@ void Spanner::startEdit(MuseScoreView*, const QPointF&)
       editTick2  = _tick2;
       editTrack2 = _track2;
 
-      editStartElement = _startElement;
-      editEndElement   = _endElement;
-
       userOffsets.clear();
       userOffsets2.clear();
       foreach (SpannerSegment* ss, spannerSegments()) {
@@ -288,57 +283,19 @@ void Spanner::endEdit()
             rebuild = true;
             }
 
-      if (type() == Element::Type::SLUR) {
-            if ((editStartElement != _startElement) || (editEndElement != _endElement)) {
-                  //
-                  // handle parts:
-                  //    search new start/end elements
-                  //
-                  for (Element* e : linkList()) {
-                        Spanner* spanner = static_cast<Spanner*>(e);
-                        if (spanner == this)
-                              score()->undo()->push1(new ChangeStartEndSpanner(this, editStartElement, editEndElement));
-                        else {
-                              Element* se = 0;
-                              Element* ee = 0;
-                              if (_startElement) {
-                                    QList<Element*> sel = _startElement->linkList();
-                                    for (Element* e : sel) {
-                                          if (e->score() == spanner->score() && e->track() == spanner->track()) {
-                                                se = e;
-                                                break;
-                                                }
-                                          }
-                                    }
-                              if (_endElement) {
-                                    QList<Element*> sel = _endElement->linkList();
-                                    for (Element* e : sel) {
-                                          if (e->score() == spanner->score() && e->track() == spanner->track2()) {
-                                                ee = e;
-                                                break;
-                                                }
-                                          }
-                                    }
-                              score()->undo(new ChangeStartEndSpanner(spanner, se, ee));
-                              }
-                        }
-                  }
-            }
-
       if (rebuild)
             score()->rebuildBspTree();
 
       if (spannerSegments().size() != userOffsets2.size()) {
-            qDebug("SLine::endEdit(): segment size changed");
+            qDebug("Spanner::endEdit(): segment size changed");
             return;
             }
-#if 0 //HACK
+
       for (int i = 0; i < userOffsets2.size(); ++i) {
             SpannerSegment* ss = segments[i];
             score()->undoPropertyChanged(ss, P_ID::USER_OFF, userOffsets[i]);
             score()->undoPropertyChanged(ss, P_ID::USER_OFF2, userOffsets2[i]);
             }
-#endif
       }
 
 //---------------------------------------------------------

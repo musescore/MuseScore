@@ -197,6 +197,11 @@ enum class P_ID : unsigned char {
 
       ANCHOR,
 
+      SLUR_UOFF1,
+      SLUR_UOFF2,
+      SLUR_UOFF3,
+      SLUR_UOFF4,
+
       END
       };
 

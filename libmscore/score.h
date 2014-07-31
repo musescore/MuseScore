@@ -523,7 +523,6 @@ class Score : public QObject {
       void undoRemoveStaff(Staff* staff, int idx);
       void undoInsertStaff(Staff* staff, int idx);
       void undoChangeInvisible(Element*, bool);
-      void undoMove(Element* e, const QPointF& pt);
       void undoChangeBracketSpan(Staff* staff, int column, int span);
       void undoChangeTuning(Note*, qreal);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);

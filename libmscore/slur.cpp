@@ -32,6 +32,10 @@
 
 namespace Ms {
 
+Element* SlurTie::editEndElement;
+Element* SlurTie::editStartElement;
+QList<SlurOffsets> SlurTie::editUps;
+
 //---------------------------------------------------------
 //   SlurSegment
 //---------------------------------------------------------
@@ -418,14 +422,11 @@ void SlurSegment::write(Xml& xml, int no) const
             return;
 
       xml.stag(QString("SlurSegment no=\"%1\"").arg(no));
-      if (!(ups[int(GripSlurSegment::START)].off.isNull()))
-            xml.tag("o1", ups[int(GripSlurSegment::START)].off);
-      if (!(ups[int(GripSlurSegment::BEZIER1)].off.isNull()))
-            xml.tag("o2", ups[int(GripSlurSegment::BEZIER1)].off);
-      if (!(ups[int(GripSlurSegment::BEZIER2)].off.isNull()))
-            xml.tag("o3", ups[int(GripSlurSegment::BEZIER2)].off);
-      if (!(ups[int(GripSlurSegment::END)].off.isNull()))
-            xml.tag("o4", ups[int(GripSlurSegment::END)].off);
+
+      writeProperty(xml, P_ID::SLUR_UOFF1);
+      writeProperty(xml, P_ID::SLUR_UOFF2);
+      writeProperty(xml, P_ID::SLUR_UOFF3);
+      writeProperty(xml, P_ID::SLUR_UOFF4);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -1101,6 +1102,14 @@ QVariant SlurSegment::getProperty(P_ID propertyId) const
             case P_ID::LINE_TYPE:
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->getProperty(propertyId);
+            case P_ID::SLUR_UOFF1:
+                  return ups[int(GripSlurSegment::START)].off;
+            case P_ID::SLUR_UOFF2:
+                  return ups[int(GripSlurSegment::BEZIER1)].off;
+            case P_ID::SLUR_UOFF3:
+                  return ups[int(GripSlurSegment::BEZIER2)].off;
+            case P_ID::SLUR_UOFF4:
+                  return ups[int(GripSlurSegment::END)].off;
             default:
                   return SpannerSegment::getProperty(propertyId);
             }
@@ -1116,9 +1125,22 @@ bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::LINE_TYPE:
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->setProperty(propertyId, v);
+            case P_ID::SLUR_UOFF1:
+                  ups[int(GripSlurSegment::START)].off = v.toPointF();
+                  break;
+            case P_ID::SLUR_UOFF2:
+                  ups[int(GripSlurSegment::BEZIER1)].off = v.toPointF();
+                  break;
+            case P_ID::SLUR_UOFF3:
+                  ups[int(GripSlurSegment::BEZIER2)].off = v.toPointF();
+                  break;
+            case P_ID::SLUR_UOFF4:
+                  ups[int(GripSlurSegment::END)].off = v.toPointF();
+                  break;
             default:
                   return SpannerSegment::setProperty(propertyId, v);
             }
+      score()->setLayoutAll(true);
       return true;
       }
 
@@ -1132,6 +1154,11 @@ QVariant SlurSegment::propertyDefault(P_ID id) const
             case P_ID::LINE_TYPE:
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->propertyDefault(id);
+            case P_ID::SLUR_UOFF1:
+            case P_ID::SLUR_UOFF2:
+            case P_ID::SLUR_UOFF3:
+            case P_ID::SLUR_UOFF4:
+                  return QPointF();
             default:
                   return SpannerSegment::propertyDefault(id);
             }
@@ -1143,10 +1170,12 @@ QVariant SlurSegment::propertyDefault(P_ID id) const
 
 void SlurSegment::reset()
       {
-      score()->undoChangeProperty(this, P_ID::USER_OFF, QPointF());
-      score()->undo(new ChangeSlurOffsets(this, QPointF(), QPointF(), QPointF(), QPointF()));
-      for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i)
-            ups[i].off = QPointF();
+      score()->undoChangeProperty(this, P_ID::USER_OFF,   QPointF());
+      score()->undoChangeProperty(this, P_ID::SLUR_UOFF1, QPointF());
+      score()->undoChangeProperty(this, P_ID::SLUR_UOFF2, QPointF());
+      score()->undoChangeProperty(this, P_ID::SLUR_UOFF3, QPointF());
+      score()->undoChangeProperty(this, P_ID::SLUR_UOFF4, QPointF());
+
       parent()->reset();
       parent()->layout();
       }
@@ -1461,5 +1490,86 @@ void SlurTie::fixupSegments(unsigned nsegs)
                   }
             }
       }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void SlurTie::startEdit(MuseScoreView* view, const QPointF& pt)
+      {
+      Spanner::startEdit(view, pt);
+
+      editStartElement = startElement();
+      editEndElement   = endElement();
+
+      editUps.clear();
+      foreach (SpannerSegment* s, spannerSegments()) {
+            SlurOffsets o;
+            SlurSegment* ss = static_cast<SlurSegment*>(s);
+            o.o[0] = ss->getProperty(P_ID::SLUR_UOFF1).toPointF();
+            o.o[1] = ss->getProperty(P_ID::SLUR_UOFF2).toPointF();
+            o.o[2] = ss->getProperty(P_ID::SLUR_UOFF3).toPointF();
+            o.o[3] = ss->getProperty(P_ID::SLUR_UOFF4).toPointF();
+            editUps.append(o);
+            }
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void SlurTie::endEdit()
+      {
+      Spanner::endEdit();
+      if (type() == Element::Type::SLUR) {
+            if ((editStartElement != startElement()) || (editEndElement != endElement())) {
+                  //
+                  // handle parts:
+                  //    search new start/end elements
+                  //
+                  for (Element* e : linkList()) {
+                        Spanner* spanner = static_cast<Spanner*>(e);
+                        if (spanner == this)
+                              score()->undo()->push1(new ChangeStartEndSpanner(this, editStartElement, editEndElement));
+                        else {
+                              Element* se = 0;
+                              Element* ee = 0;
+                              if (startElement()) {
+                                    QList<Element*> sel = startElement()->linkList();
+                                    for (Element* e : sel) {
+                                          if (e->score() == spanner->score() && e->track() == spanner->track()) {
+                                                se = e;
+                                                break;
+                                                }
+                                          }
+                                    }
+                              if (endElement()) {
+                                    QList<Element*> sel = endElement()->linkList();
+                                    for (Element* e : sel) {
+                                          if (e->score() == spanner->score() && e->track() == spanner->track2()) {
+                                                ee = e;
+                                                break;
+                                                }
+                                          }
+                                    }
+                              score()->undo(new ChangeStartEndSpanner(spanner, se, ee));
+                              }
+                        }
+                  }
+            }
+      if (spannerSegments().size() != editUps.size()) {
+            qDebug("SlurTie::endEdit(): segment size changed %d != %d", spannerSegments().size(), editUps.size());
+            return;
+            }
+      for (int i = 0; i < editUps.size(); ++i) {
+            SpannerSegment* ss = segments[i];
+            SlurOffsets o = editUps[i];
+            score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF1, o.o[0]);
+            score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF2, o.o[1]);
+            score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF3, o.o[2]);
+            score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF4, o.o[3]);
+            }
+      }
+
 }
 
