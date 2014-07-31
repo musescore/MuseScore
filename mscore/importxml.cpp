@@ -2511,6 +2511,42 @@ static void metronome(QDomElement e, Text* t)
       }
 
 //---------------------------------------------------------
+//   handleSpannerStart
+//---------------------------------------------------------
+
+static void handleSpannerStart(SLine*& cur_sp, SLine* new_sp, QString type, int track, QString& placement, int tick, MusicXmlSpannerMap& spanners)
+      {
+      if (cur_sp) {
+            qDebug("overlapping %s not supported", qPrintable(type));
+            qDebug("overlapping %p %p, deleting %p", cur_sp, new_sp, new_sp);
+            delete new_sp;
+            return;
+            }
+      cur_sp = new_sp;
+
+      new_sp->setTrack(track);
+      setSLinePlacement(new_sp, placement);
+      spanners[new_sp] = QPair<int, int>(tick, -1);
+      qDebug("%s %p inserted at first tick %d", qPrintable(type), new_sp, tick);
+      }
+      
+//---------------------------------------------------------
+//   handleSpannerStop
+//---------------------------------------------------------
+
+static void handleSpannerStop(SLine*& cur_sp, QString type, int tick, MusicXmlSpannerMap& spanners)
+      {
+      if (!cur_sp) {
+            qDebug("%s stop without start", qPrintable(type));
+            return;
+            }
+
+      spanners[cur_sp].second = tick;
+      qDebug("pedal %p second tick %d", cur_sp, tick);
+      cur_sp = 0;
+      }
+
+//---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
 
@@ -2844,28 +2880,13 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       else if (dirType == "pedal") {
             if (pedalLine) {
                   if (type == "start") {
-                        if (pedal) {
-                              qDebug("overlapping pedal lines not supported");
-                              }
-                        else {
-                              pedal = new Pedal(score);
-                              pedal->setTrack(track);
-                              if (placement == "") placement = "below";
-                              setSLinePlacement(pedal, placement);
-                              spanners[pedal] = QPair<int, int>(tick, -1);
-                              // qDebug("pedal=%p inserted at first tick %d", pedal, tick);
-                              }
+                        Pedal* new_pedal = new Pedal(score);
+                        qDebug("new pedal %p", new_pedal);
+                        if (placement == "") placement = "below";
+                        handleSpannerStart(pedal, new_pedal, "pedal", track, placement, tick, spanners);
                         }
-                  else if (type == "stop") {
-                        if (!pedal) {
-                              qDebug("pedal line stop without start");
-                              }
-                        else {
-                              spanners[pedal].second = tick;
-                              // qDebug("pedal=%p second tick %d", pedal, tick);
-                              pedal = 0;
-                              }
-                        }
+                  else if (type == "stop")
+                        handleSpannerStop(pedal, "pedal", tick, spanners);
                   else
                         qDebug("unknown pedal %s", qPrintable(type));
                   }

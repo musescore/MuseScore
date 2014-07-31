@@ -141,6 +141,7 @@ typedef QList<JumpMarkerDesc> JumpMarkerDescList;
 //---------------------------------------------------------
 
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
+typedef QMap<Spanner*, QPair<int, int> > MusicXmlSpannerMap;
 
 /**
  The MusicXML importer.
@@ -177,11 +178,11 @@ class MusicXml {
       JumpMarkerDescList jumpsMarkers;
 
       MusicXmlPartGroupList partGroupList;
-      QMap<Spanner*, QPair<int, int> > spanners;
+      MusicXmlSpannerMap spanners;
 
       Ottava* ottava;                            ///< Current ottava
       Trill* trill;                              ///< Current trill
-      Pedal* pedal;                              ///< Current pedal
+      SLine* pedal;                              ///< Current pedal
       Harmony* harmony;                          ///< Current harmony
       Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
