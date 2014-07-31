@@ -26,10 +26,10 @@ before_script:
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
   - "export PATH=$PATH:$HOME/bin"
   - "make revision"
-  - "make debug CPUS=2"
+  - "make debug CPUS=4"
   - "sudo make installdebug"
   - "cd build.debug/mtest"
-  - "make -j 2"
+  - "make -j 4"
 script:
   - "../../build/run_tests.sh"
 after_script:
