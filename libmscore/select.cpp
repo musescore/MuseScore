@@ -595,6 +595,15 @@ bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
       return false;
       }
 
+int firstElementInTrack(Segment* startSeg, Segment* endSeg, int track)
+      {
+      for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
+            if (seg->element(track))
+                  return seg->tick();
+            }
+      return -1;
+      }
+
 //---------------------------------------------------------
 //   staffMimeData
 //---------------------------------------------------------
@@ -618,11 +627,7 @@ QByteArray Selection::staffMimeData() const
             int startTrack = staffIdx * VOICES;
             int endTrack   = startTrack + VOICES;
 
-            int voices = 0;
-            for(int voice = 0; voice < 4; voice++) {
-                  voices |= hasElementInTrack(seg1, seg2, startTrack + voice) << voice;
-                  }
-            xml.stag(QString("Staff id=\"%1\" voices=\"%2\"").arg(staffIdx).arg(voices));
+            xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
 
             Staff* staff = score()->staff(staffIdx);
             Part* part = staff->part();
@@ -631,6 +636,12 @@ QByteArray Selection::staffMimeData() const
                   xml.tag("transposeChromatic", interval.chromatic);
             if (interval.diatonic)
                   xml.tag("transposeDiatonic", interval.diatonic);
+            for(int voice = 0; voice < VOICES; voice++) {
+                  if(hasElementInTrack(seg1, seg2, startTrack + voice)) {
+                        int offset = firstElementInTrack(seg1, seg2, startTrack+voice) - tickStart();
+                        xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
+                        }
+                  }
             score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
             }

@@ -715,25 +715,32 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
 //---------------------------------------------------------
 //   makeGap1
-//    make time gap at tick by removing/shortening
+//    make time gap for each voice
+//    starting at tick+voiceOffset[voice] by removing/shortening
 //    chord/rest
 //    - cr is top level (not part of a tuplet)
 //    - do not stop at measure end
 //---------------------------------------------------------
 
-bool Score::makeGap1(int tick, int staffIdx, Fraction len, int voices)
+bool Score::makeGap1(int baseTick, int staffIdx, Fraction len, int voiceOffset[VOICES])
       {
-      Segment* seg = tick2segment(tick, true, Segment::Type::ChordRest);
+      Segment* seg = tick2segment(baseTick, true, Segment::Type::ChordRest);
       if (!seg) {
-            qDebug("1:makeGap1: no segment at %d", tick);
+            qDebug("1:makeGap1: no segment to paste at tick %d", baseTick);
             return false;
             }
       int strack = staffIdx * VOICES;
-      for (int track = strack; track < strack + 4; track++) {
-            if (!(voices & (1 << (track-strack))))
+      for (int track = strack; track < strack + VOICES; track++) {
+            if (voiceOffset[track-strack] == -1)
                   continue;
-            bool result = makeGapVoice(seg, track, len, tick);
-            if(track == strack && !result)
+            int tick = baseTick + voiceOffset[track-strack];
+            Measure* m   = tick2measure(tick);
+            seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
+
+            Fraction newLen = len - Fraction::fromTicks(voiceOffset[track-strack]);
+            Q_ASSERT(newLen.numerator() != 0);
+            bool result = makeGapVoice(seg, track, newLen, tick);
+            if(track == strack && !result) // makeGap failed for first voice
                   return false;
             }
       return true;
@@ -748,8 +755,10 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             Segment* seg1 = seg->prev(Segment::Type::ChordRest);;
             for (;;) {
                   if (seg1 == 0) {
-                        qDebug("1:makeGap1: no segment at %d", tick);
-                        return false;
+                        qDebug("1:makeGap1: no segment before tick %d", tick);
+                        // this happens only for voices other than voice 1
+                        expandVoice(seg, track);
+                        return makeGapVoice(seg,track,len,tick);
                         }
                   if (seg1->element(track))
                         break;
@@ -796,6 +805,10 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
                         qDebug("===EOS reached");
                         return true;
                         }
+                  }
+            // first segment in measure was removed, have to recreate it
+            if(m->tick() != m->segments()->first()->tick()) {
+                  m->undoGetSegment(Segment::Type::ChordRest,m->tick());
                   }
             Segment* s = m->first(Segment::Type::ChordRest);
             int track  = cr->track();
