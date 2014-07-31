@@ -31,7 +31,7 @@ class QPainter;
 
 namespace Ms {
 
-class Interval;
+struct Interval;
 class TempoMap;
 struct TEvent;
 class SigEvent;
