@@ -2619,13 +2619,13 @@ void ScoreView::cmd(const QAction* a)
             if (el && (el->isText())) {
                   score()->startCmd();
                   if (cmd == "prev-chord")
-                        score()->undoMove(el, el->userOff() - QPointF (MScore::nudgeStep * el->spatium(), 0.0));
+                        el->undoChangeProperty(P_ID::USER_OFF, el->userOff() - QPointF (MScore::nudgeStep * el->spatium(), 0.0));
                   else if (cmd == "next-chord")
-                        score()->undoMove(el, el->userOff() + QPointF (MScore::nudgeStep * el->spatium(), 0.0));
+                        el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF (MScore::nudgeStep * el->spatium(), 0.0));
                   else if (cmd == "prev-measure")
-                        score()->undoMove(el, el->userOff() - QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
+                        el->undoChangeProperty(P_ID::USER_OFF, el->userOff() - QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
                   else if (cmd == "next-measure")
-                        score()->undoMove(el, el->userOff() + QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
+                        el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
                   score()->endCmd();
                   }
             else {

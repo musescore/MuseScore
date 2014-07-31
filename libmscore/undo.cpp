@@ -713,15 +713,6 @@ void Score::undoInsertStaff(Staff* staff, int idx)
       }
 
 //---------------------------------------------------------
-//   undoMove
-//---------------------------------------------------------
-
-void Score::undoMove(Element* e, const QPointF& pt)
-      {
-      undo(new MoveElement(e, pt));
-      }
-
-//---------------------------------------------------------
 //   undoChangeVoltaEnding
 //---------------------------------------------------------
 
@@ -2052,19 +2043,6 @@ void ChangeSingleBarLineSpan::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeSlurOffsets
-//---------------------------------------------------------
-
-void ChangeSlurOffsets::flip()
-      {
-      for (int i = 0; i < 4; ++i) {
-            QPointF f = slur->slurOffset(i);
-            slur->setSlurOffset(i, off[i]);
-            off[i] = f;
-            }
-      }
-
-//---------------------------------------------------------
 //   TransposeHarmony
 //---------------------------------------------------------
 
@@ -2187,27 +2165,6 @@ void ChangeChordRestDuration::flip()
       Fraction od = cr->duration();
       cr->setDuration(f);
       f   = od;
-      }
-
-//---------------------------------------------------------
-//   MoveElement
-//---------------------------------------------------------
-
-MoveElement::MoveElement(Element* e, const QPointF& o)
-      {
-      element = e;
-      offset = o;
-      }
-
-void MoveElement::flip()
-      {
-      QPointF po = element->userOff();
-      element->score()->addRefresh(element->canvasBoundingRect());
-      element->setUserOff(offset);
-      if (element->type() == Element::Type::REST)
-            element->layout();            // ledgerline could change
-      element->score()->addRefresh(element->canvasBoundingRect());
-      offset = po;
       }
 
 //---------------------------------------------------------

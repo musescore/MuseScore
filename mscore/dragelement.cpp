@@ -135,9 +135,7 @@ void ScoreView::endDrag()
       else {
             foreach(Element* e, _score->selection().elements()) {
                   e->endDrag();
-                  QPointF npos = e->userOff();
-                  e->setUserOff(e->startDragPosition());
-                  _score->undoMove(e, npos);
+                  e->score()->undoPropertyChanged(e, P_ID::USER_OFF, e->startDragPosition());
                   }
             }
       _score->setLayoutAll(true);

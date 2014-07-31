@@ -101,7 +101,6 @@ class Spanner : public Element {
       Q_PROPERTY(int                 tick2   READ tick2   WRITE setTick2)
       Q_PROPERTY(Ms::Spanner::Anchor anchor  READ anchor  WRITE setAnchor)
 
-      QList<SpannerSegment*> segments;
       Anchor _anchor = Anchor::SEGMENT;
       Element* _startElement = 0;
       Element* _endElement = 0;
@@ -113,9 +112,8 @@ class Spanner : public Element {
       static QList<QPointF> userOffsets2;
 
    protected:
+      QList<SpannerSegment*> segments;
       static int editTick, editTick2, editTrack2;
-      static Element* editStartElement;
-      static Element* editEndElement;
 
    public:
       Spanner(Score* = 0);

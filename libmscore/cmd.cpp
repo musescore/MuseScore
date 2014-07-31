@@ -129,6 +129,8 @@ void Score::endCmd()
                   }
             }
 
+      if (MScore::debugMode)
+            qDebug("===endCmd() %d", undo()->current()->childCount());
       bool noUndo = undo()->current()->childCount() <= 1;
       if (!noUndo)
             setDirty(true);
@@ -2037,7 +2039,7 @@ void Score::cmd(const QAction* a)
       Element* el = selection().element();
       if (cmd == "pitch-up") {
             if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
-                  undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
+                  el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::Type::REST)
                   cmdMoveRest(static_cast<Rest*>(el), MScore::Direction::UP);
             else if (el && el->type() == Element::Type::LYRICS)
@@ -2047,7 +2049,7 @@ void Score::cmd(const QAction* a)
             }
       else if (cmd == "pitch-down") {
             if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
-                  undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
+                  el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
             else if (el && el->type() == Element::Type::REST)
                   cmdMoveRest(static_cast<Rest*>(el), MScore::Direction::DOWN);
             else if (el && el->type() == Element::Type::LYRICS)
@@ -2076,13 +2078,13 @@ void Score::cmd(const QAction* a)
             }
       else if (cmd == "pitch-up-octave") {
             if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
-                  undoMove(el, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
+                  el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
             else
                   upDown(true, UpDownMode::OCTAVE);
             }
       else if (cmd == "pitch-down-octave") {
             if (el && (el->type() == Element::Type::ARTICULATION || el->isText()))
-                  undoMove(el, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
+                  el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
             else
                   upDown(false, UpDownMode::OCTAVE);
             }

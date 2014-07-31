@@ -58,6 +58,10 @@ struct UP {
             }
       };
 
+struct SlurOffsets {
+      QPointF o[4];
+      };
+
 //---------------------------------------------------------
 //   @@ SlurSegment
 ///    also used for Tie
@@ -68,6 +72,7 @@ class SlurSegment : public SpannerSegment {
 
    protected:
       struct UP ups[int(GripSlurSegment::GRIPS)];
+
       QPainterPath path;
       QPainterPath shapePath;
       QPointF autoAdjustOffset;
@@ -115,6 +120,7 @@ class SlurSegment : public SpannerSegment {
 
       friend class Tie;
       friend class Slur;
+      friend class SlurTie;
       };
 
 //-------------------------------------------------------------------
@@ -130,6 +136,10 @@ class SlurTie : public Spanner {
       Q_ENUMS(Ms::MScore::Direction)
 
       int _lineType;    // 0 = solid, 1 = dotted, 2 = dashed
+
+      static Element* editStartElement;
+      static Element* editEndElement;
+      static QList<SlurOffsets> editUps;
 
    protected:
       bool _up;               // actual direction
@@ -169,6 +179,9 @@ class SlurTie : public Spanner {
       SlurSegment* segmentAt(int n) const { return (SlurSegment*)spannerSegments().at(n); }
       virtual void slurPos(SlurPos*) = 0;
       virtual void computeBezier(SlurSegment*, QPointF so = QPointF()) = 0;
+
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual void endEdit() override;
 
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);

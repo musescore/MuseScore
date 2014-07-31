@@ -494,6 +494,13 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
                   setTimeStretch(v.toDouble());
                   score()->fixTicks();
                   break;
+            case P_ID::USER_OFF:
+                  setUserOff(v.toPointF());
+                  if (_articulationType == ArticulationType::Tenuto) {
+                        // moving a tenuto may move slurs:
+                        score()->setLayoutAll(true);
+                        }
+                  return true;
             default:
                   return Element::setProperty(propertyId, v);
             }
