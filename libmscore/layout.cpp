@@ -2058,6 +2058,10 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       }
 
 
+//---------------------------------------------------------
+//   hideEmptyStaves
+//---------------------------------------------------------
+
 void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       {
        //
@@ -2071,6 +2075,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
             if (styleB(StyleIdx::hideEmptyStaves)
                && (staves > 1)
                && !(isFirstSystem && styleB(StyleIdx::dontHideStavesInFirstSystem))
+               && !staff->neverHide()
                ) {
                   bool hideStaff = true;
                   foreach(MeasureBase* m, system->measures()) {

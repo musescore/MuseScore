@@ -61,6 +61,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       staff->setColor(orgStaff->color());
       staff->setStaffType(orgStaff->staffType());
       staff->setPart(part);
+      staff->setNeverHide(orgStaff->neverHide());
 
       // hide string data controls if instrument has no strings
       stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
@@ -70,6 +71,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       small->setChecked(staff->small());
       color->setColor(s->color());
       partName->setText(part->partName());
+      neverHide->setChecked(staff->neverHide());
 
       updateStaffType();
       updateInstrument();
@@ -232,6 +234,7 @@ void EditStaff::apply()
       bool inv       = invisible->isChecked();
       qreal userDist = spinExtraDistance->value();
       QColor col     = color->color();
+      bool nhide     = neverHide->isChecked();
 
       if (!(instrument == *part->instr()) || part->partName() != partName->text()) {
             Interval v1 = instrument.transpose();
@@ -244,8 +247,13 @@ void EditStaff::apply()
                   score->transpositionChanged(part);
             }
 
-      if (s != staff->small() || inv != staff->invisible() || userDist != staff->userDist() || col != staff->color())
-            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col));
+      if (s != staff->small()
+         || inv != staff->invisible()
+         || userDist != staff->userDist()
+         || col != staff->color()
+         || nhide != staff->neverHide()
+         )
+            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide));
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {
             // updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);

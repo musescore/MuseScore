@@ -162,14 +162,7 @@ Staff::Staff(Score* s)
       _score          = s;
       _rstaff         = 0;
       _part           = 0;
-      _small          = false;
-      _invisible      = false;
-      _userDist       = .0;
-      _barLineSpan    = 1;
-      _barLineFrom    = 0;
       _barLineTo      = (lines()-1)*2;
-      _linkedStaves   = 0;
-      _color          = MScore::defaultColor;
       }
 
 Staff::Staff(Score* s, Part* p, int rs)
@@ -177,14 +170,7 @@ Staff::Staff(Score* s, Part* p, int rs)
       _score          = s;
       _rstaff         = rs;
       _part           = p;
-      _small          = false;
-      _invisible      = false;
-      _userDist       = .0;
-      _barLineSpan    = 1;
-      _barLineFrom    = 0;
       _barLineTo      = (lines()-1)*2;
-      _linkedStaves   = 0;
-      _color          = MScore::defaultColor;
       }
 
 //---------------------------------------------------------
@@ -437,6 +423,9 @@ void Staff::write(Xml& xml) const
             xml.tag("small", small());
       if (invisible())
             xml.tag("invisible", invisible());
+      if (neverHide())
+            xml.tag("neverHide", neverHide());
+
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
 
@@ -495,6 +484,8 @@ void Staff::read(XmlReader& e)
                   setSmall(e.readInt());
             else if (tag == "invisible")
                   setInvisible(e.readInt());
+            else if (tag == "neverHide")
+                  setNeverHide(e.readInt());
             else if (tag == "keylist")
                   _keys.read(e, _score);
             else if (tag == "bracket") {

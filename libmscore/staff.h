@@ -19,7 +19,6 @@
 */
 
 #include "mscore.h"
-// #include "key.h"
 #include "velo.h"
 #include "pitch.h"
 #include "cleflist.h"
@@ -97,18 +96,18 @@ class Staff : public QObject {
       std::map<int,TimeSig*> timesigs;
 
       QList <BracketItem> _brackets;
-      int _barLineSpan;       ///< 0 - no bar line, 1 - span this staff, ...
-      int _barLineFrom;       ///< line of start staff to draw the barline from (0 = staff top line, ...)
-      int _barLineTo;         ///< line of end staff to draw the bar line to (0= staff top line, ...)
-      bool _small;
-      bool _invisible;
-      QColor _color;
-
-      qreal _userDist;        ///< user edited extra distance
+      int _barLineSpan   { 1     };    ///< 0 - no bar line, 1 - span this staff, ...
+      int _barLineFrom   { 0     };    ///< line of start staff to draw the barline from (0 = staff top line, ...)
+      int _barLineTo;                  ///< line of end staff to draw the bar line to (0= staff top line, ...)
+      bool _small        { false };
+      bool _invisible    { false };
+      bool _neverHide    { false };
+      QColor _color      { MScore::defaultColor };
+      qreal _userDist    { 0.0   };        ///< user edited extra distance
 
       StaffType _staffType;
 
-      LinkedStaves* _linkedStaves;
+      LinkedStaves* _linkedStaves { nullptr };
 
       QMap<int,int> _channelList[VOICES];
 
@@ -173,6 +172,9 @@ class Staff : public QObject {
       void setSmall(bool val)        { _small = val;        }
       bool invisible() const         { return _invisible;   }
       void setInvisible(bool val)    { _invisible = val;    }
+      bool neverHide() const         { return _neverHide;   }
+      void setNeverHide(bool val)    { _neverHide = val;    }
+
       void setSlashStyle(bool val);
       int lines() const;
       void setLines(int);
