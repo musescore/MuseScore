@@ -51,7 +51,8 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
 
       if (opers.data()->processingsOfOpenedFile == 1) {     // initial processing of MIDI file
             ++opers.data()->processingsOfOpenedFile;
-            _model->clear();        // need to be called before resetTableViewState
+            resetTableViewState();
+            _model->clear();
             resetTableViewState();
             _model->reset(opers.data()->trackOpers,
                           MidiLyrics::makeLyricsListForUI(),
@@ -255,7 +256,9 @@ void ImportMidiPanel::excludeMidiFile(const QString &fileName)
       if (_importInProgress || _reopenInProgress)
             return;
 
+      resetTableViewState();
       _model->clear();
+      resetTableViewState();
       auto &opers = preferences.midiImportOperations;
       opers.excludeMidiFile(fileName);
       if (fileName == _midiFile)
