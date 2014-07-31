@@ -1130,6 +1130,8 @@ void findAllTuplets(
 
                                     Q_ASSERT_X(!nextBarFound, "MidiTuplet::findAllTuplets",
                                                "Bar indexes become not successive");
+                                    Q_ASSERT_X(endBarIt != chords.end(), "MidiTuplet::findAllTuplets",
+                                               "End bar iterator cannot be incremented");
 
                                     ++endBarIt;
                                     }
@@ -1139,10 +1141,13 @@ void findAllTuplets(
 #endif
                               }
                         }
+
                   startBarIt = endBarIt;
+                  if (endBarIt == chords.end())
+                        break;
                   }
             }
-                  // handle last bar
+                  // handle the last bar containing chords
       findTuplets(startBarIt, chords.end(), chords, basicQuant, tuplets,
                   sigmap, startBarIt->second.barIndex);
       }
