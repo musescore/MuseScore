@@ -206,21 +206,12 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   }
             }
       else if (e->type() == Element::Type::DYNAMIC) {
-            popup->addSeparator();
-            if (e->visible())
-                  popup->addAction(tr("Set Invisible"))->setData("invisible");
-            else
-                  popup->addAction(tr("Set Visible"))->setData("invisible");
             popup->addAction(tr("Text Style..."))->setData("text-style");
             popup->addAction(tr("Text Properties..."))->setData("text-props");
             }
       else if (e->type() == Element::Type::TEXTLINE_SEGMENT
                   || e->type() == Element::Type::OTTAVA_SEGMENT
                   || e->type() == Element::Type::PEDAL_SEGMENT) {
-            if (e->visible())
-                  popup->addAction(tr("Set Invisible"))->setData("invisible");
-            else
-                  popup->addAction(tr("Set Visible"))->setData("invisible");
             popup->addAction(tr("Line Properties..."))->setData("l-props");
             }
       else if (e->type() == Element::Type::STAFF_TEXT) {
@@ -302,11 +293,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
             }
       else if (e->type() == Element::Type::FRET_DIAGRAM) {
-            if (e->visible())
-                  popup->addAction(tr("Set Invisible"))->setData("invisible");
-            else
-                  popup->addAction(tr("Set Visible"))->setData("invisible");
-            popup->addAction(tr("Color..."))->setData("color");
             popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
             }
       else if (e->type() == Element::Type::GLISSANDO) {
@@ -576,10 +562,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
             editStaff.exec();
             }
-      else if (cmd == "invisible")
-            score()->undoChangeInvisible(e, !e->visible());
-      else if (cmd == "color")
-            score()->colorItem(e);
       else if (cmd.startsWith("layer-")) {
             int n = cmd.mid(6).toInt();
             uint mask = 1 << n;
