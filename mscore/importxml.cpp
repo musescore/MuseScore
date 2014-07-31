@@ -2518,7 +2518,6 @@ static void handleSpannerStart(SLine*& cur_sp, SLine* new_sp, QString type, int 
       {
       if (cur_sp) {
             qDebug("overlapping %s not supported", qPrintable(type));
-            qDebug("overlapping %p %p, deleting %p", cur_sp, new_sp, new_sp);
             delete new_sp;
             return;
             }
@@ -2527,7 +2526,7 @@ static void handleSpannerStart(SLine*& cur_sp, SLine* new_sp, QString type, int 
       new_sp->setTrack(track);
       setSLinePlacement(new_sp, placement);
       spanners[new_sp] = QPair<int, int>(tick, -1);
-      qDebug("%s %p inserted at first tick %d", qPrintable(type), new_sp, tick);
+      //qDebug("%s %p inserted at first tick %d", qPrintable(type), new_sp, tick);
       }
       
 //---------------------------------------------------------
@@ -2542,7 +2541,7 @@ static void handleSpannerStop(SLine*& cur_sp, QString type, int tick, MusicXmlSp
             }
 
       spanners[cur_sp].second = tick;
-      qDebug("pedal %p second tick %d", cur_sp, tick);
+      //qDebug("pedal %p second tick %d", cur_sp, tick);
       cur_sp = 0;
       }
 
@@ -2881,7 +2880,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             if (pedalLine) {
                   if (type == "start") {
                         Pedal* new_pedal = new Pedal(score);
-                        qDebug("new pedal %p", new_pedal);
                         if (placement == "") placement = "below";
                         handleSpannerStart(pedal, new_pedal, "pedal", track, placement, tick, spanners);
                         }
@@ -2926,31 +2924,21 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             // qDebug("wedge type='%s' hairpin=%p", qPrintable(type), hairpin);
             // bool above = (placement == "above");
             if (type == "crescendo" || type == "diminuendo") {
-                  if (hairpin) {
-                        qDebug("overlapping wedge not supported");
-                        }
-                  else {
-                        hairpin = new Hairpin(score);
-                        hairpin->setHairpinType(type == "crescendo"
+                        Hairpin* new_hairpin = new Hairpin(score);
+                        new_hairpin->setHairpinType(type == "crescendo"
                                                 ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
-                        setSLinePlacement(hairpin, placement);
-                        hairpin->setTrack(track);
-                        if( niente == "yes")
-                            hairpin->setHairpinCircledTip( true );
-                        spanners[hairpin] = QPair<int, int>(tick, -1);
-                        // qDebug("hairpin=%p inserted at first tick %d", hairpin, tick);
+                        if (niente == "yes")
+                            new_hairpin->setHairpinCircledTip(true);
+                        handleSpannerStart(hairpin, new_hairpin, "hairpin", track, placement, tick, spanners);
                         }
-                  }
             else if (type == "stop") {
                   if (!hairpin) {
                         qDebug("wedge stop without start");
                         }
                   else {
-                        if( niente == "yes")
-                            hairpin->setHairpinCircledTip( true );
-                        spanners[hairpin].second = tick;
-                        // qDebug("hairpin=%p second tick %d", hairpin, tick);
-                        hairpin = 0;
+                        if (niente == "yes")
+                            static_cast<Hairpin*>(hairpin)->setHairpinCircledTip(true);
+                        handleSpannerStop(hairpin, "hairpin", tick, spanners);
                         }
                   }
             else

@@ -184,7 +184,7 @@ class MusicXml {
       Trill* trill;                              ///< Current trill
       SLine* pedal;                              ///< Current pedal
       Harmony* harmony;                          ///< Current harmony
-      Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
+      SLine* hairpin;                            ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
       bool figBassExtend;                        ///< Current figured bass extend
