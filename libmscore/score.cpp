@@ -1106,12 +1106,25 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       System* system     = measure->system();
       qreal y           = p.y() - system->pagePos().y();
       for (; pos->staffIdx < nstaves(); ++pos->staffIdx) {
+            Staff* st = staff(pos->staffIdx);
+            if (st->invisible() || !st->part()->show())
+                  continue;
             qreal sy2;
             SysStaff* ss = system->staff(pos->staffIdx);
-            if ((pos->staffIdx+1) != nstaves()) {
-                  SysStaff* nstaff = system->staff(pos->staffIdx+1);
+            SysStaff* nstaff = 0;
+
+            // find next visible staff
+            for (int i = pos->staffIdx + 1; i < nstaves(); ++i) {
+                  Staff* st = staff(i);
+                  if (st->invisible() || !st->part()->show())
+                        continue;
+                  nstaff = system->staff(i);
+                  break;
+                  }
+
+            if (nstaff) {
                   qreal s1y2 = ss->bbox().y() + ss->bbox().height();
-                  sy2         = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
+                  sy2        = s1y2 + (nstaff->bbox().y() - s1y2) * .5;
                   }
             else
                   sy2 = system->page()->height() - system->pos().y();   // system->height();
@@ -2005,7 +2018,7 @@ void Score::removeExcerpt(Score* score)
 ///   recompute note lines and accidental
 ///   not undoable add/remove
 //---------------------------------------------------------
-      
+
 void Score::updateNotes()
       {
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
