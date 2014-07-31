@@ -1337,7 +1337,7 @@ Shortcut Shortcut::sc[] = {
          0,
          "toggle-selection-window",
          Qt::ApplicationShortcut,
-         QT_TRANSLATE_NOOP("action","Selection Window")
+         QT_TRANSLATE_NOOP("action","Selection Filter")
          ),
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
