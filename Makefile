@@ -82,8 +82,8 @@ clean:
 	-rm -rf build.debug build.release
 	-rm -rf win32build win32install
 
-revision:
-	@git rev-parse --short HEAD > mscore/revision.h
+#revision:
+#	@git rev-parse --short HEAD > mscore/revision.h
 
 version:
 	@echo ${VERSION}

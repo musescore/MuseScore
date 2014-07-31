@@ -19,6 +19,10 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
+add_custom_target(
+      revision ALL
+      COMMAND "${CMAKE_COMMAND}" -DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}" -P "${PROJECT_SOURCE_DIR}/build/GitRevision.cmake"
+      )
 SET_SOURCE_FILES_PROPERTIES(revision.h PROPERTIES GENERATED TRUE)
 
 include_directories(
@@ -549,4 +553,4 @@ endif (APPLE)
 
 ADD_DEPENDENCIES(${ExecutableName} mops1)
 ADD_DEPENDENCIES(${ExecutableName} mops2)
-
+ADD_DEPENDENCIES(${ExecutableName} revision)

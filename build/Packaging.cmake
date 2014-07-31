@@ -3,6 +3,7 @@
 ##
 
 include (InstallRequiredSystemLibraries)
+include (FindGit)
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MuseScore is a full featured WYSIWYG score editor")
 SET(CPACK_PACKAGE_VENDOR "Werner Schweer and Others")
@@ -17,7 +18,6 @@ SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore ${MUSESCORE_VERSION_MAJOR}.${MUSE
 
 set(git_date_string "")
 if (MSCORE_UNSTABLE)
-      find_program(GIT_EXECUTABLE git PATHS ENV PATH)
       if (GIT_EXECUTABLE)
             execute_process(
                   COMMAND "${GIT_EXECUTABLE}" log -1 --date=short --format=%cd
