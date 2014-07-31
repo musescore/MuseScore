@@ -86,6 +86,7 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
       const ClefTypeList& clef() const          { return _clef;    }
       void setDefaultClef(const ClefTypeList& val);
       const ClefTypeList& defaultClef() const   { return _defaultClef;  }
+
       void setLinked(bool val);
       bool linked() const                       { return _linked;  }
       void setStaffType(const StaffType*);
