@@ -441,24 +441,28 @@ SLine::SLine(const SLine& s)
 
 QPointF SLine::linePos(GripLine grip, System** sys)
       {
-      qreal _spatium = spatium();
       qreal x = 0.0;
       switch (anchor()) {
             case Spanner::Anchor::SEGMENT:
                   {
-                  Measure* m;
-                  int t;
+                  ChordRest* cr;
                   if (grip == GripLine::START)
-                        t = tick();
-                  else
-                        t = tick2() - 1;
-                  m    = score()->tick2measure(t);
-                  if (!m) {
-                        *sys = 0;
-                        break;
+                        cr = static_cast<ChordRest*>(startElement());
+                  else {
+                        cr = static_cast<ChordRest*>(endElement());
+                        if (cr)
+                              x += cr->width();
                         }
-                  x   += m->tick2pos(t);
-                  *sys = m->system();
+
+                  int t = grip == GripLine::START ? tick() : tick2();
+                  Measure* m = cr ? cr->measure() : score()->tick2measure(t);
+
+                  if (m) {
+                        x += cr ? cr->pos().x() + cr->segment()->pos().x() + m->pos().x() : m->tick2pos(t);
+                        *sys = m->system();
+                        }
+                  else
+                        *sys = 0;
                   }
                   break;
 
@@ -475,6 +479,8 @@ QPointF SLine::linePos(GripLine grip, System** sys)
                               }
                         }
                   else {
+                        qreal _spatium = spatium();
+
                         Q_ASSERT(endElement()->type() == Element::Type::MEASURE);
                         m = static_cast<Measure*>(endElement());
                         x = m->pos().x() + m->bbox().right();
