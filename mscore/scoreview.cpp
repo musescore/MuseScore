@@ -5126,6 +5126,7 @@ void ScoreView::cmdRepeatSelection()
 
       QByteArray data(mimeData->data(mimeType));
       XmlReader xml(data);
+      xml.setPasteMode(true);
 
       int dStaff = selection.staffStart();
       Segment* endSegment = selection.endSegment();
