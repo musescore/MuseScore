@@ -82,8 +82,8 @@ clean:
 	-rm -rf build.debug build.release
 	-rm -rf win32build win32install
 
-#revision:
-#	@git rev-parse --short HEAD > mscore/revision.h
+revision:
+	cmake -DPROJECT_SOURCE_DIR="`pwd`" -P build/GitRevision.cmake
 
 version:
 	@echo ${VERSION}
