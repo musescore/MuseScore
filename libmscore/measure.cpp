@@ -2090,6 +2090,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   // previous versions stored measure number, delete it
                   if ((score()->mscVersion() <= 114) && (t->textStyleType() == TextStyleType::MEASURE_NUMBER))
                         delete t;
+                  else if (t->isEmpty()) {
+                        qDebug("reading empty text: deleted");
+                        delete t;
+                        }
                   else {
                         segment = getSegment(Segment::Type::ChordRest, e.tick());
                         segment->add(t);
