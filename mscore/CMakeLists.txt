@@ -150,13 +150,8 @@ QT4_WRAP_CPP (mocs
       inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
       inspector/inspectorNote.h inspector/inspectorAmbitus.h
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
-      importmidi_panel.h importmidi_operations.h importmidi_model.h importmidi_delegate.h
-      importmidi_operation.h importmidi_quant.h importmidi_chord.h
-      importmidi_inner.h importmidi_swing.h
-      importmidi_tuplet_detect.h  importmidi_tuplet_filter.h importmidi_tuplet_tonotes.h
-      importmidi_tuplet_voice.h importmidi_beat.h importmidi_simplify.h
-      debugger/debugger.h importmidi_fraction.h importmidi_drum.h importmidi_view.h
-      importmidi_lrhand.h importmidi_lyrics.h importmidi_tie.h importmidi_voice.h
+      importmidi_panel.h importmidi_delegate.h importmidi_view.h
+      debugger/debugger.h
       resourceManager.h downloadUtils.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
