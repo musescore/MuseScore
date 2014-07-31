@@ -2511,18 +2511,24 @@ static void metronome(QDomElement e, Text* t)
       }
 
 //---------------------------------------------------------
-//   handleSpannerStart
+//   checkSpannerOverlap
 //---------------------------------------------------------
 
-static void handleSpannerStart(SLine*& cur_sp, SLine* new_sp, QString type, int track, QString& placement, int tick, MusicXmlSpannerMap& spanners)
+static void checkSpannerOverlap(SLine* cur_sp, SLine* new_sp, QString type)
       {
       if (cur_sp) {
             qDebug("overlapping %s not supported", qPrintable(type));
             delete new_sp;
             return;
             }
-      cur_sp = new_sp;
-
+      }
+      
+//---------------------------------------------------------
+//   handleSpannerStart
+//---------------------------------------------------------
+      
+static void handleSpannerStart(SLine* new_sp, QString /* type */, int track, QString& placement, int tick, MusicXmlSpannerMap& spanners)
+      {
       new_sp->setTrack(track);
       setSLinePlacement(new_sp, placement);
       spanners[new_sp] = QPair<int, int>(tick, -1);
@@ -2533,7 +2539,7 @@ static void handleSpannerStart(SLine*& cur_sp, SLine* new_sp, QString type, int 
 //   handleSpannerStop
 //---------------------------------------------------------
 
-static void handleSpannerStop(SLine*& cur_sp, QString type, int tick, MusicXmlSpannerMap& spanners)
+static void handleSpannerStop(SLine* cur_sp, QString type, int tick, MusicXmlSpannerMap& spanners)
       {
       if (!cur_sp) {
             qDebug("%s stop without start", qPrintable(type));
@@ -2542,7 +2548,6 @@ static void handleSpannerStop(SLine*& cur_sp, QString type, int tick, MusicXmlSp
 
       spanners[cur_sp].second = tick;
       //qDebug("pedal %p second tick %d", cur_sp, tick);
-      cur_sp = 0;
       }
 
 //---------------------------------------------------------
@@ -2880,11 +2885,15 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             if (pedalLine) {
                   if (type == "start") {
                         Pedal* new_pedal = new Pedal(score);
+                        checkSpannerOverlap(pedal, new_pedal, "pedal");
+                        pedal = new_pedal;
                         if (placement == "") placement = "below";
-                        handleSpannerStart(pedal, new_pedal, "pedal", track, placement, tick, spanners);
+                        handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
                         }
-                  else if (type == "stop")
+                  else if (type == "stop") {
                         handleSpannerStop(pedal, "pedal", tick, spanners);
+                        pedal = 0;
+                        }
                   else
                         qDebug("unknown pedal %s", qPrintable(type));
                   }
@@ -2922,149 +2931,121 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             }
       else if (dirType == "wedge") {
             // qDebug("wedge type='%s' hairpin=%p", qPrintable(type), hairpin);
-            // bool above = (placement == "above");
             if (type == "crescendo" || type == "diminuendo") {
-                        Hairpin* new_hairpin = new Hairpin(score);
-                        new_hairpin->setHairpinType(type == "crescendo"
-                                                ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
-                        if (niente == "yes")
-                            new_hairpin->setHairpinCircledTip(true);
-                        handleSpannerStart(hairpin, new_hairpin, "hairpin", track, placement, tick, spanners);
-                        }
+                  Hairpin* new_hairpin = new Hairpin(score);
+                  checkSpannerOverlap(hairpin, new_hairpin, "hairpin");
+                  hairpin = new_hairpin;
+                  hairpin->setHairpinType(type == "crescendo"
+                                          ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
+                  if (niente == "yes")
+                      hairpin->setHairpinCircledTip(true);
+                  handleSpannerStart(hairpin, "hairpin", track, placement, tick, spanners);
+                  }
             else if (type == "stop") {
-                  if (!hairpin) {
-                        qDebug("wedge stop without start");
-                        }
-                  else {
-                        if (niente == "yes")
-                            static_cast<Hairpin*>(hairpin)->setHairpinCircledTip(true);
-                        handleSpannerStop(hairpin, "hairpin", tick, spanners);
-                        }
+                  if (hairpin && niente == "yes")
+                      hairpin->setHairpinCircledTip(true);
+                  handleSpannerStop(hairpin, "wedge", tick, spanners);
+                  hairpin = 0;
                   }
             else
                   qDebug("unknown wedge type: %s", qPrintable(type));
             }
       else if (dirType == "bracket") {
-            int n = number-1;
-            TextLine* b = bracket[n];
+            int n = number - 1;
+            TextLine*& b = bracket[n];
             if (type == "start") {
-                  if (b) {
-                        qDebug("overlapping bracket number %d", number);
+                  TextLine* new_b = new TextLine(score);
+                  checkSpannerOverlap(b, new_b, "bracket");
+                  b = new_b;
+
+                  if (placement == "") placement = "above";  // set default
+
+                  b->setBeginHook(lineEnd != "none");
+                  if (lineEnd == "up")
+                        b->setBeginHookHeight(-1 * b->beginHookHeight());
+
+                  // hack: assume there was a words element before the bracket
+                  if (!txt.isEmpty()) {
+                        b->setBeginText(txt, TextStyleType::TEXTLINE);
                         }
-                  else {
-                        b = new TextLine(score);
 
-                        if (placement == "") placement = "above";  // set default
-                        setSLinePlacement(b, placement);
+                  if (lineType == "solid")
+                        b->setLineStyle(Qt::SolidLine);
+                  else if (lineType == "dashed")
+                        b->setLineStyle(Qt::DashLine);
+                  else if (lineType == "dotted")
+                        b->setLineStyle(Qt::DotLine);
+                  else
+                        qDebug("unsupported line-type: %s", lineType.toLatin1().data());
 
-                        b->setBeginHook(lineEnd != "none");
-                        if (lineEnd == "up")
-                              b->setBeginHookHeight(-1 * b->beginHookHeight());
-
-                        // hack: assume there was a words element before the bracket
-                        if (!txt.isEmpty()) {
-                              b->setBeginText(txt, TextStyleType::TEXTLINE);
-                              }
-
-                        if (lineType == "solid")
-                              b->setLineStyle(Qt::SolidLine);
-                        else if (lineType == "dashed")
-                              b->setLineStyle(Qt::DashLine);
-                        else if (lineType == "dotted")
-                              b->setLineStyle(Qt::DotLine);
-                        else
-                              qDebug("unsupported line-type: %s", lineType.toLatin1().data());
-
-                        b->setTrack(track);
-                        spanners[b] = QPair<int, int>(tick, -1);
-                        bracket[n] = b;
-                        //qDebug("bracket=%p inserted at first tick %d", b, tick);
-                        }
+                  handleSpannerStart(b, QString("bracket %1").arg(number), track, placement, tick, spanners);
+                  //qDebug("bracket=%p inserted at first tick %d", b, tick);
                   }
             else if (type == "stop") {
-                  if (!b)
-                        qDebug("bracket stop without start, number %d", number);
-                  else {
+                  if (b) {
                         b->setEndHook(lineEnd != "none");
                         if (lineEnd == "up")
                               b->setEndHookHeight(-1 * b->endHookHeight());
-                        spanners[b].second = tick;
-                        bracket[n] = 0;
-                        //qDebug("bracket=%p second tick %d", b, tick);
                         }
+                  handleSpannerStop(b, QString("bracket %1").arg(number), tick, spanners);
+                  //qDebug("bracket=%p second tick %d", b, tick);
+                  b = 0;
                   }
             }
       else if (dirType == "dashes") {
-            int n = number-1;
-            TextLine* b = dashes[n];
+            int n = number - 1;
+            TextLine*& b = dashes[n];
             if (type == "start") {
-                  if (b) {
-                        qDebug("overlapping dashes, number %d", number);
+                  TextLine* new_b = new TextLine(score);
+                  checkSpannerOverlap(b, new_b, "dashes");
+                  b = new_b;
+
+                  if (placement == "") placement = "above";  // set default
+
+                  // hack: assume there was a words element before the dashes
+                  if (!txt.isEmpty()) {
+                        b->setBeginText(txt, TextStyleType::TEXTLINE);
                         }
-                  else {
-                        b = new TextLine(score);
 
-                        if (placement == "") placement = "above";  // set default
-                        setSLinePlacement(b, placement);
+                  b->setBeginHook(false);
+                  b->setEndHook(false);
+                  b->setLineStyle(Qt::DashLine);
 
-                        // hack: assume there was a words element before the dashes
-                        if (!txt.isEmpty()) {
-                              b->setBeginText(txt, TextStyleType::TEXTLINE);
-                              }
-
-                        b->setBeginHook(false);
-                        b->setLineStyle(Qt::DashLine);
-                        b->setTrack(track);
-                        spanners[b] = QPair<int, int>(tick, -1);
-                        dashes[n] = b;
-                        //qDebug("dashes=%p inserted at first tick %d", b, tick);
-                        }
+                  handleSpannerStart(b, QString("dashes %1").arg(number), track, placement, tick, spanners);
+                  //qDebug("dashes=%p inserted at first tick %d", b, tick);
                   }
             else if (type == "stop") {
-                  if (!b) {
-                        qDebug("dashes stop without start, number %d", number);
-                        }
-                  else {
-                        // TODO: MuseScore doesn't support lines which start and end on different staves
-                        b->setEndHook(false);
-                        spanners[b].second = tick;
-                        dashes[n] = 0;
-                        //qDebug("dashes=%p second tick %d", b, tick);
-                        }
+                  // TODO: MuseScore doesn't support lines which start and end on different staves
+                  handleSpannerStop(b, QString("dashes %1").arg(number), tick, spanners);
+                  //qDebug("dashes=%p second tick %d", b, tick);
+                  b = 0;
                   }
             }
       else if (dirType == "octave-shift") {
             if (type == "up" || type == "down") {
-                  if (ottava) {
-                        qDebug("overlapping octave-shift not supported");
+                  if (!(ottavasize == 8 || ottavasize == 15)) {
+                        qDebug("unknown octave-shift size %d", ottavasize);
                         }
                   else {
-                        if (!(ottavasize == 8 || ottavasize == 15)) {
-                              qDebug("unknown octave-shift size %d", ottavasize);
-                              }
-                        else {
-                              ottava = new Ottava(score);
-                              ottava->setTrack(track);
-                              if (type == "down" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VA);
-                              if (type == "down" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
-                              if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
-                              if (type ==   "up" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MB);
-                              if (placement == "") placement = "above";  // set default
-                              setSLinePlacement(ottava, placement);
-                              spanners[ottava] = QPair<int, int>(tick, -1);
-                              //qDebug("ottava=%p inserted at first tick %d", ottava, tick);
-                              }
+                        Ottava* new_ottava = new Ottava(score);
+                        checkSpannerOverlap(ottava, new_ottava, "dashes");
+                        ottava = new_ottava;
+
+                        if (placement == "") placement = "above";  // set default
+
+                        if (type == "down" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VA);
+                        if (type == "down" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
+                        if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
+                        if (type ==   "up" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MB);
+
+                        handleSpannerStart(ottava, "octave-shift", track, placement, tick, spanners);
+                        //qDebug("ottava=%p inserted at first tick %d", ottava, tick);
                         }
                   }
             else if (type == "stop") {
-                  if (!ottava) {
-                        qDebug("octave-shift stop without start");
-                        }
-                  else {
-                        spanners[ottava].second = tick;
-                        //qDebug("ottava=%p second tick %d", ottava, tick);
-                        ottava = 0;
-                        }
+                  handleSpannerStop(ottava, "octave-shift", tick, spanners);
+                  //qDebug("ottava=%p second tick %d", ottava, tick);
+                  ottava = 0;
                   }
             }
       }

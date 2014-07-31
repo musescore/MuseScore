@@ -141,7 +141,7 @@ typedef QList<JumpMarkerDesc> JumpMarkerDescList;
 //---------------------------------------------------------
 
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
-typedef QMap<Spanner*, QPair<int, int> > MusicXmlSpannerMap;
+typedef QMap<SLine*, QPair<int, int> > MusicXmlSpannerMap;
 
 /**
  The MusicXML importer.
@@ -155,7 +155,6 @@ class MusicXml {
       Fraction fractionTSig;                    ///< Current timesig as fraction
 
       Slur* slur[MAX_NUMBER_LEVEL];
-
       TextLine* bracket[MAX_BRACKETS];
       TextLine* dashes[MAX_DASHES];
 
@@ -184,7 +183,7 @@ class MusicXml {
       Trill* trill;                              ///< Current trill
       SLine* pedal;                              ///< Current pedal
       Harmony* harmony;                          ///< Current harmony
-      SLine* hairpin;                            ///< Current hairpin (obsoletes wedgelist)
+      Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
       bool figBassExtend;                        ///< Current figured bass extend
