@@ -217,7 +217,7 @@ void StaffListItem::staffTypeChanged(int idx)
       int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
       const StaffType* stfType = StaffType::preset(StaffTypes(staffTypeIdx));
       if (stfType->group() != ClefInfo::staffGroup(_clef._transposingClef)) {
-            ClefType clefType = ClefType::INVALID;
+            ClefType clefType;
             switch (stfType->group()) {
                   case StaffGroup::STANDARD:
                         clefType = _defaultClef._transposingClef;
@@ -855,6 +855,179 @@ void InstrumentsDialog::accept()
       }
 
 //---------------------------------------------------------
+//   on_saveButton_clicked
+//---------------------------------------------------------
+
+void InstrumentsDialog::on_saveButton_clicked()
+      {
+      QString name = QFileDialog::getSaveFileName(
+         this,
+         tr("MuseScore: Save Instrument List"),
+         ".",
+         tr("MuseScore Instruments (*.xml);;")
+         );
+      if (name.isEmpty())
+            return;
+      QString ext(".xml");
+      QFileInfo info(name);
+
+      if (info.suffix().isEmpty())
+            info.setFile(info.filePath() + ext);
+      QFile f(info.filePath());
+      if (!f.open(QIODevice::WriteOnly)) {
+            QString s = tr("Open Instruments File\n%1\nfailed: ")
+               + QString(strerror(errno));
+            QMessageBox::critical(mscore, tr("MuseScore: Open Instruments File"), s.arg(f.fileName()));
+            return;
+            }
+
+      Xml xml(&f);
+      xml.header();
+      xml.stag("museScore version=\"" MSC_VERSION "\"");
+      foreach(InstrumentGroup* g, instrumentGroups) {
+            xml.stag(QString("InstrumentGroup name=\"%1\" extended=\"%2\"").arg(g->name).arg(g->extended));
+            foreach(InstrumentTemplate* t, g->instrumentTemplates)
+                  t->write(xml);
+            xml.etag();
+            }
+      xml.etag();
+      if (f.error() != QFile::NoError) {
+            QString s = tr("Write Style failed: ") + f.errorString();
+            QMessageBox::critical(this, tr("MuseScore: Write Style"), s);
+            }
+      }
+
+//---------------------------------------------------------
+//   on_loadButton_clicked
+//---------------------------------------------------------
+
+void InstrumentsDialog::on_loadButton_clicked()
+      {
+      QString fn = QFileDialog::getOpenFileName(
+         this, tr("MuseScore: Load Instrument List"),
+          mscoreGlobalShare + "/templates",
+         tr("MuseScore Instruments (*.xml);;"
+            "All files (*)"
+            )
+         );
+      if (fn.isEmpty())
+            return;
+      QFile f(fn);
+      if (!loadInstrumentTemplates(fn)) {
+            QMessageBox::warning(0,
+               QWidget::tr("MuseScore: Load Style Failed"),
+               QString(strerror(errno)),
+               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
+            return;
+            }
+      buildTemplateList();
+      }
+
+//---------------------------------------------------------
+//   filterInstruments
+//---------------------------------------------------------
+
+void filterInstruments(QTreeWidget* instrumentList, const QString &searchPhrase)
+      {
+      QTreeWidgetItem* item = 0;
+
+      for (int idx = 0; (item = instrumentList->topLevelItem(idx)); ++idx) {
+            int numMatchedChildren = 0;
+            QTreeWidgetItem* ci = 0;
+
+            for (int cidx = 0; (ci = item->child(cidx)); ++cidx) {
+                  // replace the unicode b (accidential) so a search phrase of "bb" would give Bb Trumpet...
+                  QString text = ci->text(0).replace(QChar(0x266d), QChar('b'));
+                  bool isMatch = text.contains(searchPhrase, Qt::CaseInsensitive);
+                  ci->setHidden(!isMatch);
+
+                  if (isMatch)
+                        numMatchedChildren++;
+                  }
+
+            item->setHidden(numMatchedChildren == 0);
+            item->setExpanded(numMatchedChildren > 0 && !searchPhrase.isEmpty());
+            }
+      }
+
+//---------------------------------------------------------
+//   on_search_textChanged
+//---------------------------------------------------------
+
+void InstrumentsDialog::on_search_textChanged(const QString &searchPhrase)
+      {
+      filterInstruments(instrumentList, searchPhrase);
+      instrumentGenreFilter->blockSignals(true);
+      instrumentGenreFilter->setCurrentIndex(0);
+      instrumentGenreFilter->blockSignals(false);
+      }
+
+//---------------------------------------------------------
+//   on_clearSearch_clicked
+//---------------------------------------------------------
+
+void InstrumentsDialog::on_clearSearch_clicked()
+      {
+      search->clear();
+      filterInstruments (instrumentList);
+      }
+
+//---------------------------------------------------------
+//   on_instrumentGenreFilter_currentTextChanged
+//---------------------------------------------------------
+
+void InstrumentsDialog::on_instrumentGenreFilter_currentIndexChanged(int index)
+      {
+      QString id = instrumentGenreFilter->itemData(index).toString();
+      // Redisplay tree, only showing items from the selected genre
+      filterInstrumentsByGenre(instrumentList, id);
+      }
+
+
+//---------------------------------------------------------
+//   filterInstrumentsByGenre
+//---------------------------------------------------------
+
+void InstrumentsDialog::filterInstrumentsByGenre(QTreeWidget *instrumentList, QString genre)
+      {
+      QTreeWidgetItemIterator iList(instrumentList);
+      while (*iList) {
+            (*iList)->setHidden(true);
+            InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(*iList);
+            InstrumentTemplate *it=itli->instrumentTemplate();
+
+            if(it) {
+                  if (genre == "all" || it->genreMember(genre)) {
+                        (*iList)->setHidden(false);
+
+                        QTreeWidgetItem *iParent = (*iList)->parent();
+                        while(iParent) {
+                              if(!iParent->isHidden())
+                                    break;
+
+                              iParent->setHidden(false);
+                              iParent = iParent->parent();
+                              }
+                        }
+                  }
+            ++iList;
+            }
+      }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void InstrumentsDialog::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup("Instruments");
+      settings.setValue("size", size());
+      settings.setValue("pos", pos());
+      settings.endGroup();
+      }
+
+//---------------------------------------------------------
 //   editInstrList
 //---------------------------------------------------------
 
@@ -1118,175 +1291,4 @@ void MuseScore::editInstrList()
       seq->initInstruments();
       }
 
-//---------------------------------------------------------
-//   on_saveButton_clicked
-//---------------------------------------------------------
-
-void InstrumentsDialog::on_saveButton_clicked()
-      {
-      QString name = QFileDialog::getSaveFileName(
-         this,
-         tr("MuseScore: Save Instrument List"),
-         ".",
-         tr("MuseScore Instruments (*.xml);;")
-         );
-      if (name.isEmpty())
-            return;
-      QString ext(".xml");
-      QFileInfo info(name);
-
-      if (info.suffix().isEmpty())
-            info.setFile(info.filePath() + ext);
-      QFile f(info.filePath());
-      if (!f.open(QIODevice::WriteOnly)) {
-            QString s = tr("Open Instruments File\n%1\nfailed: ")
-               + QString(strerror(errno));
-            QMessageBox::critical(mscore, tr("MuseScore: Open Instruments File"), s.arg(f.fileName()));
-            return;
-            }
-
-      Xml xml(&f);
-      xml.header();
-      xml.stag("museScore version=\"" MSC_VERSION "\"");
-      foreach(InstrumentGroup* g, instrumentGroups) {
-            xml.stag(QString("InstrumentGroup name=\"%1\" extended=\"%2\"").arg(g->name).arg(g->extended));
-            foreach(InstrumentTemplate* t, g->instrumentTemplates)
-                  t->write(xml);
-            xml.etag();
-            }
-      xml.etag();
-      if (f.error() != QFile::NoError) {
-            QString s = tr("Write Style failed: ") + f.errorString();
-            QMessageBox::critical(this, tr("MuseScore: Write Style"), s);
-            }
-      }
-
-//---------------------------------------------------------
-//   on_loadButton_clicked
-//---------------------------------------------------------
-
-void InstrumentsDialog::on_loadButton_clicked()
-      {
-      QString fn = QFileDialog::getOpenFileName(
-         this, tr("MuseScore: Load Instrument List"),
-          mscoreGlobalShare + "/templates",
-         tr("MuseScore Instruments (*.xml);;"
-            "All files (*)"
-            )
-         );
-      if (fn.isEmpty())
-            return;
-      QFile f(fn);
-      if (!loadInstrumentTemplates(fn)) {
-            QMessageBox::warning(0,
-               QWidget::tr("MuseScore: Load Style Failed"),
-               QString(strerror(errno)),
-               QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-            return;
-            }
-      buildTemplateList();
-      }
-
-//---------------------------------------------------------
-//   filterInstruments
-//---------------------------------------------------------
-
-void filterInstruments(QTreeWidget* instrumentList, const QString &searchPhrase)
-      {
-      QTreeWidgetItem* item = 0;
-
-      for (int idx = 0; (item = instrumentList->topLevelItem(idx)); ++idx) {
-            int numMatchedChildren = 0;
-            QTreeWidgetItem* ci = 0;
-
-            for (int cidx = 0; (ci = item->child(cidx)); ++cidx) {
-                  // replace the unicode b (accidential) so a search phrase of "bb" would give Bb Trumpet...
-                  QString text = ci->text(0).replace(QChar(0x266d), QChar('b'));
-                  bool isMatch = text.contains(searchPhrase, Qt::CaseInsensitive);
-                  ci->setHidden(!isMatch);
-
-                  if (isMatch)
-                        numMatchedChildren++;
-                  }
-
-            item->setHidden(numMatchedChildren == 0);
-            item->setExpanded(numMatchedChildren > 0 && !searchPhrase.isEmpty());
-            }
-      }
-
-//---------------------------------------------------------
-//   on_search_textChanged
-//---------------------------------------------------------
-
-void InstrumentsDialog::on_search_textChanged(const QString &searchPhrase)
-      {
-      filterInstruments(instrumentList, searchPhrase);
-      instrumentGenreFilter->blockSignals(true);
-      instrumentGenreFilter->setCurrentIndex(0);
-      instrumentGenreFilter->blockSignals(false);
-      }
-
-//---------------------------------------------------------
-//   on_clearSearch_clicked
-//---------------------------------------------------------
-
-void InstrumentsDialog::on_clearSearch_clicked()
-      {
-      search->clear();
-      filterInstruments (instrumentList);
-      }
-//---------------------------------------------------------
-//   on_instrumentGenreFilter_currentTextChanged
-//---------------------------------------------------------
-
-void InstrumentsDialog::on_instrumentGenreFilter_currentIndexChanged(int index)
-      {
-      QString id = instrumentGenreFilter->itemData(index).toString();
-      // Redisplay tree, only showing items from the selected genre
-      filterInstrumentsByGenre(instrumentList, id);
-      }
-
-
-//---------------------------------------------------------
-//   filterInstrumentsByGenre
-//---------------------------------------------------------
-
-void InstrumentsDialog::filterInstrumentsByGenre(QTreeWidget *instrumentList, QString genre)
-      {
-      QTreeWidgetItemIterator iList(instrumentList);
-      while (*iList) {
-            (*iList)->setHidden(true);
-            InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(*iList);
-            InstrumentTemplate *it=itli->instrumentTemplate();
-
-            if(it) {
-                  if (genre == "all" || it->genreMember(genre)) {
-                        (*iList)->setHidden(false);
-
-                        QTreeWidgetItem *iParent = (*iList)->parent();
-                        while(iParent) {
-                              if(!iParent->isHidden())
-                                    break;
-
-                              iParent->setHidden(false);
-                              iParent = iParent->parent();
-                              }
-                        }
-                  }
-            ++iList;
-            }
-      }
-
-//---------------------------------------------------------
-//   writeSettings
-//---------------------------------------------------------
-
-void InstrumentsDialog::writeSettings()
-      {
-      QSettings settings;
-      settings.beginGroup("Instruments");
-      settings.setValue("size", size());
-      settings.setValue("pos", pos());
-      settings.endGroup();
-      }
 }

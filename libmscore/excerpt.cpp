@@ -501,8 +501,8 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
       int srcStaffIdx = score->staffIdx(srcStaff);
       int dstStaffIdx = score->staffIdx(dstStaff);
 
-      dstStaff->setInitialClef(srcStaff->initialClefTypeList());
-
+      if (srcStaff->staffGroup() == dstStaff->staffGroup())
+            dstStaff->setInitialClef(srcStaff->initialClefTypeList());
 
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             int sTrack = srcStaffIdx * VOICES;
@@ -524,8 +524,6 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffGroup()
                                           && dstStaff->clefTypeList(tick) != clef->clefTypeList()) {
                                     ne = oe->clone();
-                                    // add to staff clef map too
-                                    // dstStaff->setClef(tick, clef->clefTypeList());
                                     }
                               }
                         else
