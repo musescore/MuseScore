@@ -430,7 +430,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               continue;
                         }
                   Element* ne;
-                  if (e->type() == Element::Type::TEXT) // clone the title, subtitle etc...
+                  if (e->type() == Element::Type::TEXT || e->type() == Element::Type::LAYOUT_BREAK) // link the title, subtitle etc...
                         ne = e->linkedClone();
                   else
                         ne = e->clone();
@@ -559,6 +559,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           // exclude certain element types
                                           // this should be same list excluded in Score::undoAddElement()
                                           case Element::Type::STAFF_TEXT:
+                                          case Element::Type::FRET_DIAGRAM:
                                           case Element::Type::HARMONY:
                                           case Element::Type::FIGURED_BASS:
                                           case Element::Type::LYRICS:
