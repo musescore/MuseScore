@@ -34,6 +34,7 @@ class TestCopyPaste : public QObject, public MTest
 
       void copypaste(const char*);
       void copypastestaff(const char*);
+      void copypastevoice(const char*, int);
 
    private slots:
       void initTestCase();
@@ -50,6 +51,8 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste11() { copypaste("11"); }       // grace notes
       void copypaste12() { copypaste("12"); }       // voices
       void copyPaste2Voice();                       // voices-partial
+      void copyPaste2Voice2() { copypastevoice("14", 0); }
+      void copyPaste2Voice3() { copypastevoice("15", 1); }
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
@@ -209,6 +212,49 @@ void TestCopyPaste::copyPaste2Voice()
 
       QVERIFY(saveCompareScore(score, QString("copypaste13.mscx"),
          DIR + QString("copypaste13-ref.mscx")));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   copypaste
+//    copy measure 2 from first staff, paste into staff 2
+//---------------------------------------------------------
+
+void TestCopyPaste::copypastevoice(const char* idx, int voice)
+      {
+      Score* score = readScore(DIR + QString("copypaste%1.mscx").arg(idx));
+      score->doLayout();
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+
+      QVERIFY(m1 != 0);
+      QVERIFY(m2 != 0);
+
+      // create a range selection on 2 and 3 beat of first measure
+      Segment::Type segTypeCR = Segment::Type::ChordRest;
+      Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
+      score->select(static_cast<Chord*>(s->element(voice))->notes().at(0));
+      s = s->next(Segment::Type::ChordRest);
+      score->select(s->element(voice), SelectType::RANGE);
+
+      QVERIFY(score->selection().canCopy());
+      QString mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+      //paste to second measure
+      score->select(m2->first()->element(0));
+
+      score->startCmd();
+      score->cmdPaste(mimeData,0);
+      score->endCmd();
+
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("copypaste%1.mscx").arg(idx),
+         DIR + QString("copypaste%1-ref.mscx").arg(idx)));
       delete score;
       }
 
