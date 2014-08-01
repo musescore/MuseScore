@@ -321,7 +321,7 @@ struct DataDescriptor
     uchar uncompressed_size[4];
 };
 
-struct CentralFileHeader
+struct MCentralFileHeader
 {
     uchar signature[4]; // 0x02014b50
     uchar version_made[2];
@@ -356,7 +356,7 @@ struct EndOfDirectory
 
 struct FileHeader
 {
-    CentralFileHeader h;
+    MCentralFileHeader h;
     QByteArray file_name;
     QByteArray extra_field;
     QByteArray file_comment;
@@ -465,7 +465,7 @@ public:
     void addEntry(EntryType type, const QString &fileName, const QByteArray &contents);
 };
 
-LocalFileHeader CentralFileHeader::toLocalHeader() const
+LocalFileHeader MCentralFileHeader::toLocalHeader() const
 {
     LocalFileHeader h;
     writeUInt(h.signature, 0x04034b50);
@@ -536,8 +536,8 @@ void MQZipReaderPrivate::scanFiles()
     device->seek(start_of_directory);
     for (i = 0; i < num_dir_entries; ++i) {
         FileHeader header;
-        int read = device->read((char *) &header.h, sizeof(CentralFileHeader));
-        if (read < (int)sizeof(CentralFileHeader)) {
+        int read = device->read((char *) &header.h, sizeof(MCentralFileHeader));
+        if (read < (int)sizeof(MCentralFileHeader)) {
             qWarning() << "QZip: Failed to read complete header, index may be incomplete";
             break;
         }
@@ -596,7 +596,7 @@ void MQZipWriterPrivate::addEntry(EntryType type, const QString &fileName, const
     }
 
     FileHeader header;
-    memset(&header.h, 0, sizeof(CentralFileHeader));
+    memset(&header.h, 0, sizeof(MCentralFileHeader));
     writeUInt(header.h.signature, 0x02014b50);
 
     writeUShort(header.h.version_needed, 0x14);
@@ -1240,7 +1240,7 @@ void MQZipWriter::close()
     // write new directory
     for (int i = 0; i < d->fileHeaders.size(); ++i) {
         const FileHeader &header = d->fileHeaders.at(i);
-        d->device->write((const char *)&header.h, sizeof(CentralFileHeader));
+        d->device->write((const char *)&header.h, sizeof(MCentralFileHeader));
         d->device->write(header.file_name);
         d->device->write(header.extra_field);
         d->device->write(header.file_comment);
