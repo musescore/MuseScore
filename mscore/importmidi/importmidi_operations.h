@@ -184,6 +184,7 @@ struct FileData
       int trackCount = 0;
       Opers trackOpers;
       QString charset = MidiCharset::defaultCharset();
+      std::string textForCharsetDetection;
                   // after the user apply MIDI import operations
                   // this value should be set to false
                   // tracks of <tick, lyric fragment> from karaoke files

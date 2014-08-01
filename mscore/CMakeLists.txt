@@ -334,6 +334,7 @@ target_link_libraries(mscore
       qzip
       beatroot
       kqoauth
+      universalchardet
       )
 
 if (MINGW)
