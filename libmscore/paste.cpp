@@ -424,6 +424,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         TDuration d;
                         d.setVal(len);
                         c2->setDurationType(d);
+                        c2->setDuration(d.fraction());
                         rest -= len;
                         undoAddCR(c2, measure, tick);
 
