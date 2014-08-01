@@ -2549,30 +2549,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <FretDiagram>
-            <strings>7</strings>
-            <string no="0">
-              <marker>88</marker>
-              </string>
-            <string no="1">
-              <dot>2</dot>
-              </string>
-            <string no="2">
-              <marker>48</marker>
-              </string>
-            <string no="3">
-              <marker>48</marker>
-              </string>
-            <string no="4">
-              <dot>2</dot>
-              </string>
-            <string no="5">
-              <marker>48</marker>
-              </string>
-            <string no="6">
-              <dot>2</dot>
-              </string>
-            </FretDiagram>
           <Beam id="11">
             <l1>46</l1>
             <l2>46</l2>
