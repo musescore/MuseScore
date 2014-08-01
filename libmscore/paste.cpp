@@ -415,17 +415,23 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                   while (rest) {
                         tick += c->actualTicks();
                         measure = tick2measure(tick);
-                        if (measure->tick() != tick) {  // last measure
-                              qDebug("==last measure %d != %d", measure->tick(), tick);
-                              break;
-                              }
+                        //if (measure->tick() != tick) {  // last measure
+                        //      qDebug("==last measure %d != %d", measure->tick(), tick);
+                        //      break;
+                        //      }
                         Chord* c2 = static_cast<Chord*>(c->clone());
                         len = measure->ticks() > rest ? rest : measure->ticks();
                         TDuration d;
                         d.setVal(len);
+                        // split the remaining part of the chord in the final target measure
+                        // into a set of valid value chords
+                        if (len == rest) {
+                              QList<TDuration> dl = toDurationList(Fraction::fromTicks(len), true);
+                              d = dl[0];
+                              }
                         c2->setDurationType(d);
                         c2->setDuration(d.fraction());
-                        rest -= len;
+                        rest -= c2->actualTicks();
                         undoAddCR(c2, measure, tick);
 
                         QList<Note*> nl1 = c->notes();
@@ -457,10 +463,17 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         measure       = tick2measure(tick);
                         Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
                         Fraction len  = rest > mlen ? mlen : rest;
-                        r2->setDuration(len);
-                        r2->setDurationType(TDuration(len));
+                        TDuration d = TDuration(len);
+                        // split the remaining part of the rest in the final target measure
+                        // into a set of valid value rests
+                        if (len == rest) {
+                              QList<TDuration> dl = toDurationList(len, true);
+                              d = dl[0];
+                              }
+                        r2->setDuration(d.fraction());
+                        r2->setDurationType(d);
                         undoAddCR(r2, measure, tick);
-                        rest -= len;
+                        rest -= d.fraction();
                         tick += r2->actualTicks();
                         }
                   delete r;
