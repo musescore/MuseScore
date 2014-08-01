@@ -2296,6 +2296,8 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   score->fixTicks();
                   }
             else {
+                  if (mb != omb)
+                        mb->linkTo(omb);
                   undo(new InsertMeasure(mb, im));
                   }
             }
