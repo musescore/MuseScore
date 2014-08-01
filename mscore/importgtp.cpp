@@ -2026,7 +2026,6 @@ Score::FileError importGTP(Score* score, const QString& name)
                   StaffType st = *StaffType::preset(StaffTypes::TAB_DEFAULT);
                   st.setSlashStyle(true);
                   s1->setStaffType(&st);
-                  s1->linkTo(s);
                   cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }

@@ -39,6 +39,7 @@
 #include "beam.h"
 #include "utils.h"
 #include "tremolo.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -497,6 +498,8 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
       {
       Score* score = srcStaff->score();
       TieMap tieMap;
+
+      score->undo(new LinkStaff(srcStaff, dstStaff));
 
       int srcStaffIdx = score->staffIdx(srcStaff);
       int dstStaffIdx = score->staffIdx(dstStaff);

@@ -1127,7 +1127,6 @@ void MuseScore::editInstrList()
                         rootScore->undoInsertStaff(staff, staffIdx + rstaff);
                         Staff* linkedStaff = part->staves()->front();
                         if (sli->linked() && linkedStaff != staff) {
-                              linkedStaff->linkTo(staff);
                               cloneStaff(linkedStaff, staff);
                               linked.append(staff);
                               }
@@ -1191,7 +1190,6 @@ void MuseScore::editInstrList()
                               if (sli->linked() && rstaff > 0) {
                                     // link to top staff of same part
                                     Staff* linkedStaff = part->staves()->front();
-                                    linkedStaff->linkTo(staff);
                                     cloneStaff(linkedStaff, staff);
                                     }
                               if(firstStaff && !sli->linked())
