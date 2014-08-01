@@ -1370,6 +1370,7 @@ class ChangeNoteEvent : public UndoCommand {
    public:
       ChangeNoteEvent(Note* n, NoteEvent* oe, const NoteEvent& ne)
          : note(n), oldEvent(oe), newEvent(ne) {}
+      UNDO_NAME("ChangeNoteEvent")
       };
 
 //---------------------------------------------------------
@@ -1384,6 +1385,37 @@ class Unlink : public UndoCommand {
       Unlink(Element* _e);
       virtual void undo();
       virtual void redo();
+      UNDO_NAME("Unlink")
+      };
+
+//---------------------------------------------------------
+//   Link
+//---------------------------------------------------------
+
+class Link : public UndoCommand {
+      Element* e1;
+      Element* e2;
+
+   public:
+      Link(Element* _e1, Element* _e2) : e1(_e1), e2(_e2) {}
+      virtual void undo();
+      virtual void redo();
+      UNDO_NAME("Link")
+      };
+
+//---------------------------------------------------------
+//   LinkStaff
+//---------------------------------------------------------
+
+class LinkStaff : public UndoCommand {
+      Staff* s1;
+      Staff* s2;
+
+   public:
+      LinkStaff(Staff* _s1, Staff* _s2) : s1(_s1), s2(_s2) {}
+      virtual void undo();
+      virtual void redo();
+      UNDO_NAME("LinkStaff")
       };
 
 //---------------------------------------------------------
@@ -1399,6 +1431,7 @@ class ChangeStartEndSpanner : public UndoCommand {
 
    public:
       ChangeStartEndSpanner(Spanner* sp, Element*s, Element*e) : spanner(sp), start(s), end(e) {}
+      UNDO_NAME("ChangeStartEndSpanner")
       };
 
 

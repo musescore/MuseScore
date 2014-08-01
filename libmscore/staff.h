@@ -208,10 +208,11 @@ class Staff : public QObject {
       LinkedStaves* linkedStaves() const    { return _linkedStaves; }
       void setLinkedStaves(LinkedStaves* l) { _linkedStaves = l;    }
       QList<Staff*> staffList() const;
-
       void linkTo(Staff* staff);
       bool isLinked(Staff* staff);
+      void unlink(Staff* staff);
       bool primaryStaff() const;
+
       qreal userDist() const        { return _userDist;  }
       void setUserDist(qreal val)   { _userDist = val;  }
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
