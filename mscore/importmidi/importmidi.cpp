@@ -51,6 +51,7 @@
 #include "importmidi_fraction.h"
 #include "importmidi_drum.h"
 #include "importmidi_inner.h"
+#include "importmidi_charset.h"
 #include "importmidi_clef.h"
 #include "importmidi_lrhand.h"
 #include "importmidi_lyrics.h"

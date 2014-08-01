@@ -150,31 +150,6 @@ bool haveIntersection(
 
 }
 
-namespace MidiCharset {
-
-QString convertToCharset(const std::string &text)
-      {
-                  // charset for the current MIDI file
-      QString charset = preferences.midiImportOperations.data()->charset;
-      auto *codec = QTextCodec::codecForName(charset.toLatin1());
-      if (codec)
-            return codec->toUnicode(text.c_str());
-      else
-            return QString::fromStdString(text);
-      }
-
-QString defaultCharset()
-      {
-      return "UTF-8";
-      }
-
-std::string fromUchar(const uchar *text)
-      {
-      return reinterpret_cast<const char*>(text);
-      }
-
-} // namespace MidiCharset
-
 namespace MidiTempo {
 
 ReducedFraction time2Tick(double time, double ticksPerSec)
