@@ -65,6 +65,12 @@ void Score::updateChannel()
             return;
       for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             foreach(const Element* e, s->annotations()) {
+                  if (e->type() == Element::Type::INSTRUMENT_CHANGE) {
+                        Staff* staff = _staves[e->staffIdx()];
+                        for (int voice = 0; voice < VOICES; ++voice)
+                              staff->channelList(voice)->insert(s->tick(), 0);
+                        continue;
+                        }
                   if (e->type() != Element::Type::STAFF_TEXT)
                         continue;
                   const StaffText* st = static_cast<const StaffText*>(e);

@@ -253,6 +253,7 @@ void EditStaff::apply()
             }
 
       score->update();
+      score->updateChannel();
       }
 
 //---------------------------------------------------------

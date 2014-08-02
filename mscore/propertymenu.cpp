@@ -548,6 +548,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   if (it) {
                         ic->setInstrument(Instrument::fromTemplate(it));
                         score()->undo(new ChangeInstrument(ic, ic->instrument()));
+                        score()->updateChannel();
                         }
                   else
                         qDebug("no template selected?");
