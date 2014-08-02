@@ -2728,20 +2728,46 @@ void ChangeTimesig::flip()
 
 void Score::undoInsertTime(int tick, int len)
       {
-      qDebug() << "insertTime" << len << "at tick" << tick;
+//      qDebug("insertTime %d at %d, spanner %d", len, tick, _spanner.map().size());
       if (len == 0)
             return;
 
-      //
-      // we have to iterate on a map copy bc. the map is
-      // changed in the loop
-      //
-      std::multimap<int, Spanner*> spannerMap = _spanner.map();
-
-      for (auto i : spannerMap) {
+      QList<Spanner*> sl;
+      for (auto i : _spanner.map()) {
             Spanner* s = i.second;
             if (s->tick2() < tick)
                   continue;
+            bool append = false;
+            if (len > 0) {
+                  if (tick > s->tick() && tick < s->tick2())
+                        append = true;
+                  else if (tick <= s->tick())
+                        append = true;
+                  }
+            else {
+                  int tick2 = tick - len;
+                  if (s->tick() >= tick2)
+                        append = true;
+                  else if ((s->tick() < tick) && (s->tick2() > tick2)) {
+                        int t2 = s->tick2() + len;
+                        if (t2 > s->tick())
+                              append = true;
+                        }
+                  else if (s->tick() >= tick && s->tick2() < tick2)
+                        append = true;
+                  else if (s->tick() > tick && s->tick2() > tick2)
+                        append = true;
+                  }
+            for (Spanner* ss : sl) {
+                  if (ss->linkList().contains(s)) {
+                        append = false;
+                        break;
+                        }
+                  }
+            if (append)
+                  sl.append(s);
+            }
+      for (Spanner* s : sl) {
             if (len > 0) {
                   if (tick > s->tick() && tick < s->tick2()) {
                         //
@@ -2826,8 +2852,9 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
       int tick1 = m1->tick();
       int tick2 = m2->endTick();
 
-      for (auto i : _spanner.findContained(tick1, tick2))
-            undoRemoveElement(i.value);
+//      for (auto i : _spanner.findContained(tick1, tick2)) {
+//            undo(new RemoveElement(i.value));
+//            }
 
       //
       //  handle ties which start before m1 and end in (m1-m2)

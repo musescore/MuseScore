@@ -168,7 +168,7 @@
         <tick>480</tick>
         <Breath>
           <subtype>0</subtype>
-          <lid>118</lid>
+          <lid>119</lid>
           </Breath>
         <tick>960</tick>
         <Chord>
@@ -806,7 +806,7 @@
           <tick>480</tick>
           <Breath>
             <subtype>0</subtype>
-            <lid>118</lid>
+            <lid>119</lid>
             </Breath>
           <tick>960</tick>
           <Chord>
