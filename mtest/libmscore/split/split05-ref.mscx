@@ -149,6 +149,7 @@
             <tpc>15</tpc>
             </Note>
           <Slur type="stop" id="2"/>
+          <Slur type="stop" id="3"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
