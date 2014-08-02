@@ -1633,9 +1633,17 @@ bool Score::processMidiInput()
                         p = staff(0)->part();
                   else
                         p = staff(staffIdx)->part();
-                  if (p)
-                        MScore::seq->startNote(p->instr()->channel(0).channel, ev.pitch, 80,
-                           MScore::defaultPlayDuration, 0.0);
+                  if (p) {
+                        if (!styleB(StyleIdx::concertPitch)) {
+                              ev.pitch += p->instr(selection().tickStart())->transpose().chromatic;
+                        }
+                        MScore::seq->startNote(
+                                          p->instr()->channel(0).channel,
+                                          ev.pitch,
+                                          80,
+                                          MScore::defaultPlayDuration,
+                                          0.0);
+                        }
                   }
             else  {
                   if (!cmdActive) {
@@ -1645,8 +1653,10 @@ bool Score::processMidiInput()
                   NoteVal nval(ev.pitch);
                   Staff* st = staff(inputState().track() / VOICES);
                   Key key = st->key(inputState().tick());
-
                   nval.tpc = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+                  if (!styleB(StyleIdx::concertPitch)) {
+                      nval.pitch += st->part()->instr(inputState().tick())->transpose().chromatic;
+                      }
                   addPitch(nval, ev.chord);
                   }
             }
