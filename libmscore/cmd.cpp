@@ -2308,10 +2308,8 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
             // create a clef segment before cr if it does not exist
             //
             Segment* s = cr->segment();
-            Segment* cs;
-            if (s->prev()->segmentType() == Segment::Type::Clef)
-                  cs = s->prev();
-            else {
+            Segment* cs = s->prev();
+            if (!cs || cs->segmentType() != Segment::Type::Clef) {
                   cs = new Segment(cr->measure(), Segment::Type::Clef, s->tick());
                   cs->setNext(s);
                   score->undo(new AddElement(cs));
