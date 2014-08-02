@@ -75,7 +75,18 @@ Selection::Selection(Score* s)
 
 int Selection::tickStart() const
       {
-      return _startSegment->tick();
+      switch (_state) {
+            case SelState::RANGE:
+                  return _startSegment->tick();
+                  break;
+            case SelState::LIST: {
+                  ChordRest* cr = firstChordRest();
+                  return (cr) ? cr->tick() : -1;
+                  break;
+                  }
+            default:
+                  return -1;
+            }
       }
 
 //---------------------------------------------------------
@@ -84,13 +95,25 @@ int Selection::tickStart() const
 
 int Selection::tickEnd() const
       {
-      if (_endSegment) {
-            return _endSegment->tick();
+      switch (_state) {
+            case SelState::RANGE: {
+                  if (_endSegment) {
+                        return _endSegment->tick();
+                        }
+                  else { // endsegment == 0 if end of score
+                      Measure* m = _score->lastMeasure();
+                      return m->tick() + m->ticks();
+                      }
+                  break;
+                  }
+            case SelState::LIST: {
+                  ChordRest* cr = lastChordRest();
+                  return (cr) ? cr->tick() : -1;
+                  break;
+                  }
+            default:
+                  return -1;
             }
-      else{ // endsegment == 0 if end of score
-          Measure* m = _score->lastMeasure();
-          return m->tick() + m->ticks();
-          }
       }
 
 //---------------------------------------------------------
