@@ -183,19 +183,25 @@ void addLyricsToScore(
       {
       Score *score = staffAddTo->score();
       int textCounter = 0;
+      for (const auto &lyric: lyricTrack) {
+            if (lyric.first == ReducedFraction(0, 1)) {
+                  QString text = MidiCharset::convertToCharset(lyric.second);
+                  addTitle(score, text, &textCounter);
+                  }
+            }
 
       for (const auto &timePair: matchedLyricTimes) {
-            const auto lyricTime = timePair.first;
-            const auto it = lyricTrack.find(timePair.second);
+            const auto quantizedTime = timePair.first;
+            const auto originalTime = timePair.second;
+            const auto it = lyricTrack.find(originalTime);
 
             Q_ASSERT_X(it != lyricTrack.end(),
                        "MidiLyrics::addLyricsToScore", "Lyric time not found");
 
-            QString text = MidiCharset::convertToCharset(it->second);
-            if (lyricTime == ReducedFraction(0, 1))
-                  addTitle(score, text, &textCounter);
-            else
-                  score->addLyrics(lyricTime.ticks(), staffAddTo->idx(), removeSlashes(text));
+            if (originalTime != ReducedFraction(0, 1)) {     // not title
+                  QString text = MidiCharset::convertToCharset(it->second);
+                  score->addLyrics(quantizedTime.ticks(), staffAddTo->idx(), removeSlashes(text));
+                  }
             }
       }
 
@@ -232,6 +238,7 @@ std::vector<std::pair<ReducedFraction, ReducedFraction> > findMatchedLyricTimes(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const std::multimap<ReducedFraction, std::string> &lyricTrack)
       {
+                  // <chord quantized on time, chord original on time>
       std::vector<std::pair<ReducedFraction, ReducedFraction> > matchedLyricTimes;
 
       for (const auto &chord: chords) {
