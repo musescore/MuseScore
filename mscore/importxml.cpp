@@ -1521,6 +1521,10 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               domError(ee);
                         }
                   }
+            else if (e.tagName() == "midi-device") {
+                  QString port = e.attribute("port", "1");
+                  part->setMidiChannel(-1, port.toInt() - 1);
+                  }
             else
                   domError(e);
             }

@@ -40,9 +40,9 @@ void InstrumentChange::write(Xml& xml) const
       {
       xml.stag("InstrumentChange");
       if (segment())
-            staff()->part()->instr(segment()->tick())->write(xml); // _instrument may not reflect mixer changes
+            staff()->part()->instr(segment()->tick())->write(xml, staff() ? staff()->part() : 0); // _instrument may not reflect mixer changes
       else
-            _instrument.write(xml);
+            _instrument.write(xml, staff() ? staff()->part() : 0);
       Text::writeProperties(xml);
       xml.etag();
       }
@@ -56,7 +56,7 @@ void InstrumentChange::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Instrument")
-                  _instrument.read(e);
+                  _instrument.read(e, staff() ? staff()->part() : 0);
             else if (!Text::readProperties(e))
                   e.unknown();
             }

@@ -166,6 +166,7 @@ void Score::write(Xml& xml, bool selectionOnly)
             xml.etag();
             }
 
+      checkDefaultMidiMapping();
       foreach(const Part* part, _parts)
             part->write(xml);
 

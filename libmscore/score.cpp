@@ -1013,6 +1013,78 @@ void Score::setMaxPortNumber(int maxport) {
       }
 
 //---------------------------------------------------------
+//   checkDefaultMidiMapping
+//   If channels have default mapping there is no need
+//   to export them
+//---------------------------------------------------------
+
+void Score::checkDefaultMidiMapping()
+      {
+      bool def = true;
+      int port = 0;
+      int channel = 0;
+      int idx = 0;
+      foreach (MidiMapping mm, _midiMapping) {
+                  bool drum = false;
+                  bool found = false;
+                  foreach(Part* part, _parts) {
+                        if (found)
+                              break;
+                        InstrumentList* il = part->instrList();
+                        for (auto i = il->begin(); i != il->end() && !found; ++i) {
+                              for (int k = 0; k < i->second.channel().size(); ++k) {
+                                    if (mm.articulation == &(i->second.channel(k))) {
+                                          drum = i->second.useDrumset();
+                                          found = true;
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
+                  if (MScore::debugMode)
+                        qDebug()<<"idx:"<<idx<<",drum: "<<drum<<",checking...p: "<<port<<", ch: "<<channel<<", mm.p: "<<(int)mm.port<<", mm.ch: "<<(int)mm.channel;
+
+                  if (drum) {
+                        if (mm.port != port || mm.channel != 9) {
+                              def = false;
+                              break;
+                              }
+                        }
+                  else {
+                        if (mm.port != port || mm.channel != channel) {
+                              def = false;
+                              break;
+                              }
+                        if (channel == 15) {
+                              channel = 0;
+                              ++port;
+                              }
+                        else {
+                              ++channel;
+                              if (channel == 9)
+                                    ++channel;
+                              }
+                        }
+                  idx++;
+            }
+      defMidiMapping = def;
+      if (MScore::debugMode)
+            qDebug()<<"Default midi mapping: "<<defMidiMapping;
+      }
+
+//---------------------------------------------------------
+//   dumpMidiMapping
+//---------------------------------------------------------
+
+void Score::dumpMidiMapping() {
+      if (!MScore::debugMode)
+            return;
+      qDebug("====dump midi mapping ==");
+      foreach(MidiMapping mm, _midiMapping)
+            qDebug()<<"mm port:"<<(int)mm.port<<", channel: "<<(int)mm.channel;
+      }
+
+//---------------------------------------------------------
 //   midiPort
 //---------------------------------------------------------
 

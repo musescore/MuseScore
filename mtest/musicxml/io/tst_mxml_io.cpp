@@ -58,6 +58,8 @@ private slots:
       void arpGliss1() { mxmlIoTest("testArpGliss1"); }
       void arpGliss2() { mxmlIoTest("testArpGliss2"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
+      void channels1() { mxmlIoTest("testChannels1"); }
+      void channels2() { mxmlIoTest("testChannels2"); }
       void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
       void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
       void clefs1() { mxmlIoTest("testClefs1"); }

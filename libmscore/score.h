@@ -300,6 +300,7 @@ class Score : public QObject {
 
       QQueue<MidiInputEvent> midiInputQueue;
       QList<MidiMapping> _midiMapping;
+      bool defMidiMapping;     // If channels have default mapping there is no need to export them
 
       RepeatList* _repeatList;
       TimeSigMap* _sigmap;
@@ -746,11 +747,10 @@ class Score : public QObject {
       int midiChannel(int idx) const;
       QList<MidiMapping>* midiMapping()       { return &_midiMapping;          }
       MidiMapping* midiMapping(int channel)   { return &_midiMapping[channel]; }
-      void dumpMidiMapping() {
-            qDebug("====dump midi mapping ==");
-            foreach(MidiMapping mm, _midiMapping)
-                  qDebug()<<"mm port:"<<(int)mm.port<<", channel: "<<(int)mm.channel;
-            }
+
+      void dumpMidiMapping();
+      void checkDefaultMidiMapping();
+      bool exportMidiMapping() {return !defMidiMapping;}     
       void rebuildMidiMapping();
       void updateChannel();
       void updateSwing();
