@@ -2,11 +2,9 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/select.h"
+#include "palettebox.h"
 
 namespace Ms {
-
-static const int DEFAULT_POS_X  = 300;
-static const int DEFAULT_POS_Y  = 100;
 
 static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "1st Voice"),
@@ -35,7 +33,7 @@ static const char* labels[] = {
 const int numLabels = sizeof(labels)/sizeof(labels[0]);
 
 SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
-      QDockWidget(tr("Selections"),parent)
+      QDockWidget(tr("Selection"),parent)
       {
       setObjectName("selection-window");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
@@ -43,6 +41,8 @@ SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
 
       _listWidget = new QListWidget;
       setWidget(_listWidget);
+      _listWidget->setFrameShape(QFrame::NoFrame);
+            _listWidget->setSelectionMode(QAbstractItemView::NoSelection);
 
       for (int row = 0; row < numLabels; row++) {
             QListWidgetItem *listItem = new QListWidgetItem(labels[row],_listWidget);
@@ -100,9 +100,15 @@ void MuseScore::showSelectionWindow(bool val)
       if (selectionWindow == 0) {
             selectionWindow = new SelectionWindow(this,this->currentScore());
             connect(selectionWindow, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
-            addDockWidget(Qt::RightDockWidgetArea,selectionWindow);
+            addDockWidget(Qt::LeftDockWidgetArea,selectionWindow);
+            if (paletteBox && paletteBox->isVisible()) {
+                  tabifyDockWidget(paletteBox, selectionWindow);
+                  }
             }
       selectionWindow->setVisible(val);
+      if (val) {
+            selectionWindow->raise();
+            }
       }
 void SelectionWindow::closeEvent(QCloseEvent* ev)
       {
