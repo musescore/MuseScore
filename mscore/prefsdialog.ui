@@ -1756,7 +1756,7 @@
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout7">
           <item row="0" column="6">
            <spacer name="horizontalSpacer_6">
             <property name="orientation">
@@ -2025,7 +2025,7 @@
          <property name="checkable">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout7">
+         <layout class="QGridLayout" name="gridLayout71">
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="useJackAudio">
             <property name="text">
