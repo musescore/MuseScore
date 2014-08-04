@@ -147,6 +147,12 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                                                 }
                                           graceNotes.clear();
                                           }
+                                    //shorten last cr to fit in the space made by makeGap
+                                    if ((tick - dstTick) + cr->durationTicks() > tickLen) {
+                                          int newLength = tickLen - (tick - dstTick);
+                                          cr->setDuration(newLength);
+                                          cr->setDurationType(newLength);
+                                          }
                                     pasteChordRest(cr, tick, e.transpose());
                                     }
                               }
