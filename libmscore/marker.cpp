@@ -38,37 +38,44 @@ void Marker::setMarkerType(Type t)
       _markerType = t;
       switch (t) {
             case Type::SEGNO:
-                  setText("<sym>segno</sym>");
+                  if (isEmpty())
+                      setText("<sym>segno</sym>");
                   setLabel("segno");
                   break;
 
             case Type::VARSEGNO:
-                  setText("<sym>segnoSerpent1</sym>");
+                  if (isEmpty())
+                        setText("<sym>segnoSerpent1</sym>");
                   setLabel("varsegno");
                   break;
 
             case Type::CODA:
-                  setText("<sym>coda</sym>");
+                  if (isEmpty())
+                        setText("<sym>coda</sym>");
                   setLabel("codab");
                   break;
 
             case Type::VARCODA:
-                  setText("<sym>codaSquare</sym>");
+                  if (isEmpty())
+                        setText("<sym>codaSquare</sym>");
                   setLabel("varcoda");
                   break;
 
             case Type::CODETTA:
-                  setText("<sym>coda</sym><sym>coda</sym>");
+                  if (isEmpty())
+                        setText("<sym>coda</sym><sym>coda</sym>");
                   setLabel("codetta");
                   break;
 
             case Type::FINE:
-                  setText("Fine");
+                  if (isEmpty())
+                        setText("Fine");
                   setLabel("fine");
                   break;
 
             case Type::TOCODA:
-                  setText("To Coda");
+                  if (isEmpty())
+                        setText("To Coda");
                   setLabel("coda");
                   break;
 
