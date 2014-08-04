@@ -4167,7 +4167,7 @@
          <property name="title">
           <string>Pedal Line</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout1">
+         <layout class="QGridLayout" name="gridLayout11">
           <item row="0" column="1" rowspan="2" colspan="2">
            <widget class="QDoubleSpinBox" name="pedalY">
             <property name="suffix">
