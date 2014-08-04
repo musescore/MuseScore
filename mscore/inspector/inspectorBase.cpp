@@ -271,7 +271,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            ii.w->setStyleSheet( valuesAreDifferent ? "* { color: gray }" : "");
+            ii.w->setStyleSheet( valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
             }
       
       //deal with reset if only one element, or if values are the same
