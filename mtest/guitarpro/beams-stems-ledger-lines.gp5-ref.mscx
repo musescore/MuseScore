@@ -1915,26 +1915,6 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
-          <FretDiagram>
-            <string no="0">
-              <dot>4</dot>
-              </string>
-            <string no="1">
-              <dot>5</dot>
-              </string>
-            <string no="2">
-              <dot>4</dot>
-              </string>
-            <string no="3">
-              <marker>48</marker>
-              </string>
-            <string no="4">
-              <marker>48</marker>
-              </string>
-            <string no="5">
-              <marker>48</marker>
-              </string>
-            </FretDiagram>
           <Beam id="9">
             <l1>46</l1>
             <l2>46</l2>
@@ -2319,26 +2299,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <FretDiagram>
-            <string no="0">
-              <dot>2</dot>
-              </string>
-            <string no="1">
-              <dot>2</dot>
-              </string>
-            <string no="2">
-              <marker>48</marker>
-              </string>
-            <string no="3">
-              <marker>48</marker>
-              </string>
-            <string no="4">
-              <marker>48</marker>
-              </string>
-            <string no="5">
-              <marker>48</marker>
-              </string>
-            </FretDiagram>
           <Beam id="11">
             <l1>46</l1>
             <l2>46</l2>
