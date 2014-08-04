@@ -1,6 +1,7 @@
 #!/bin/bash
 
 P=../../../build.debug/mtest/libmscore/compat
+#P=../../../../MuseScore-build/mtest/libmscore/compat
 
 # cp $P/articulations-test.mscx articulations-ref.mscx
 cp $P/keysig-test.mscx keysig-ref.mscx
@@ -15,6 +16,7 @@ cp $P/slurs-test.mscx slurs-ref.mscx
 cp $P/clef_missing_first-test.mscx clef_missing_first-ref.mscx
 cp $P/hor_frame_and_mmrest-test.mscx hor_frame_and_mmrest-ref.mscx
 cp $P/chord_symbol-test.mscx chord_symbol-ref.mscx
+cp $P/style-test.mscx style-ref.mscx
 
 
 
