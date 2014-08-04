@@ -2628,10 +2628,21 @@ ChangeChordStaffMove::ChangeChordStaffMove(Chord* c, int v)
 
 void ChangeChordStaffMove::flip()
       {
+      const LinkedElements* l = chord->links();
       int v = chord->staffMove();
-      chord->setStaffMove(staffMove);
-      chord->measure()->cmdUpdateNotes(chord->staffIdx());
-      chord->score()->setLayoutAll(true);
+      if (l) {
+            for (Element* e : *l) {
+                  Chord* c = static_cast<Chord*>(e);
+                  c->setStaffMove(staffMove);
+                  c->measure()->cmdUpdateNotes(c->staffIdx());
+                  c->score()->setLayoutAll(true);
+                  }
+            }
+      else {
+            chord->setStaffMove(staffMove);
+            chord->measure()->cmdUpdateNotes(chord->staffIdx());
+            chord->score()->setLayoutAll(true);
+            }
       staffMove = v;
       }
 
