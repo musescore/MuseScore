@@ -11,7 +11,7 @@
       <akkoladeDistance>6.4</akkoladeDistance>
       <minSystemDistance>8.2</minSystemDistance>
       <lyricsDistance>1.5</lyricsDistance>
-      <lyricsMinBottomDistance>1.5</lyricsMinBottomDistance>
+      <lyricsMinBottomDistance>5.5</lyricsMinBottomDistance>
       <systemFrameDistance>6</systemFrameDistance>
       <frameSystemDistance>0</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
