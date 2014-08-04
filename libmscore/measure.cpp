@@ -3165,6 +3165,7 @@ void Measure::layoutX(qreal stretch)
                               }
                         if (lyrics) {
                               qreal y = lyrics->ipos().y() + score()->styleS(StyleIdx::lyricsMinBottomDistance).val() * _spatium;
+                              y -= score()->staff(staffIdx)->height();
                               if (y > staves[staffIdx]->distanceDown)
                                  staves[staffIdx]->distanceDown = y;
                               space.max(Space(llw, rrw));
