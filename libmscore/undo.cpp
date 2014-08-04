@@ -911,6 +911,7 @@ void Score::undoAddElement(Element* element)
          && et != Element::Type::TREMOLO
          && et != Element::Type::ARPEGGIO
          && et != Element::Type::SYMBOL
+         && et != Element::Type::FRET_DIAGRAM
          && et != Element::Type::HARMONY)
             ) {
             undo(new AddElement(element));
@@ -929,6 +930,7 @@ void Score::undoAddElement(Element* element)
                               // exclude certain element types except on corresponding staff in part
                               // this should be same list excluded in cloneStaff()
                               case Element::Type::STAFF_TEXT:
+                              case Element::Type::FRET_DIAGRAM:
                               case Element::Type::HARMONY:
                               case Element::Type::FIGURED_BASS:
                               case Element::Type::LYRICS:
@@ -1005,6 +1007,7 @@ void Score::undoAddElement(Element* element)
                || element->type() == Element::Type::IMAGE
                || element->type() == Element::Type::DYNAMIC
                || element->type() == Element::Type::STAFF_TEXT
+               || element->type() == Element::Type::FRET_DIAGRAM
                || element->type() == Element::Type::HARMONY) {
                   Segment* segment = static_cast<Segment*>(element->parent());
                   int tick         = segment->tick();
