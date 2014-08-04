@@ -3294,16 +3294,16 @@ qreal Score::computeMinWidth(Segment* fs)
       if (_nstaves == 0)
             return 1.0;
 
-      qreal _spatium           = spatium();
-      qreal clefKeyRightMargin = styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
-      qreal minNoteDistance    = styleS(StyleIdx::minNoteDistance).val()    * _spatium;
-      qreal minHarmonyDistance = styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
+      qreal _spatium              = spatium();
+      qreal clefKeyRightMargin    = styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
+      qreal minNoteDistance       = styleS(StyleIdx::minNoteDistance).val()    * _spatium;
+      qreal minHarmonyDistance    = styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
       qreal maxHarmonyBarDistance = styleS(StyleIdx::maxHarmonyBarDistance).val() * _spatium;
 
-      qreal rest[_nstaves];    // fixed space needed from previous segment
+      qreal rest[_nstaves];   // fixed space needed from previous segment
       memset(rest, 0, _nstaves * sizeof(qreal));
 
-      qreal hRest[_nstaves];    // fixed space needed from previous harmony
+      qreal hRest[_nstaves];  // fixed space needed from previous harmony
       memset(hRest, 0, _nstaves * sizeof(qreal));
 
       qreal clefWidth[_nstaves];
@@ -3336,11 +3336,11 @@ qreal Score::computeMinWidth(Segment* fs)
             bool rest2[_nstaves];
             bool hRest2[_nstaves];
             bool spaceHarmony     = false;
-            Segment::Type segType   = s->segmentType();
+            Segment::Type segType = s->segmentType();
             qreal segmentWidth    = 0.0;
             qreal harmonyWidth    = 0.0;
             qreal stretchDistance = 0.0;
-            Segment::Type pt        = pSeg ? pSeg->segmentType() : Segment::Type::BarLine;
+            Segment::Type pt      = pSeg ? pSeg->segmentType() : Segment::Type::BarLine;
 
             for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
                   if (!staff(staffIdx)->show())
@@ -3348,6 +3348,7 @@ qreal Score::computeMinWidth(Segment* fs)
                   qreal minDistance = 0.0;
                   Space space;
                   Space hSpace;
+                  Space naSpace;          // space needed for full measure rests (and potentially other non-aligned elements)
                   QRectF hBbox;
                   int track  = staffIdx * VOICES;
                   bool found = false;
@@ -3426,7 +3427,13 @@ qreal Score::computeMinWidth(Segment* fs)
                               qreal rx = qMin(cxu, 0.0); // nudge right shouldn't require more trailing space
                               Space crSpace = cr->space();
                               Space segRelSpace(crSpace.lw()-lx, crSpace.rw()+rx);
-                              space.max(segRelSpace);
+                              // always allocate sufficient space
+                              // but in Measure::layoutX() we will ignore full measure rests
+                              // since they do not need to affect spacing in other voices
+                              if (cr->durationType() != TDuration::DurationType::V_MEASURE)
+                                    space.max(segRelSpace);
+                              else
+                                    naSpace.max(segRelSpace);
 
                               // lyrics
                               foreach (Lyrics* l, cr->lyricsList()) {
@@ -3443,6 +3450,8 @@ qreal Score::computeMinWidth(Segment* fs)
                                           }
                                     }
                               }
+
+                        space.max(naSpace);
                         if (lyrics)
                               space.max(Space(llw, rrw));
 

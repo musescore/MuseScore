@@ -407,7 +407,10 @@ void Rest::layout()
                + dots() * score()->styleS(StyleIdx::dotDotDistance));
             }
       setbbox(symBbox(_sym));
-      _space.setRw(width() + point(rs));
+      qreal symOffset = bbox().x();
+      if (symOffset < 0.0)
+            _space.setLw(-symOffset);
+      _space.setRw(width() + point(rs) + symOffset);
       }
 
 //---------------------------------------------------------
