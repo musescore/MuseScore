@@ -260,8 +260,8 @@ void initStyle(MStyle* s)
       AS("Composer", ff, 12, false, false, false, AlignmentFlags::RIGHT   | AlignmentFlags::BOTTOM, QPointF(), OA);
       AS("Lyricist", ff, 12, false, false, false, AlignmentFlags::LEFT    | AlignmentFlags::BOTTOM, QPointF(), OA);
 
-      AS("Lyrics Odd Lines", ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 7), OS, true);
-      AS("Lyrics Even Lines", ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 7), OS, true);
+      AS("Lyrics Odd Lines", ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OS, true);
+      AS("Lyrics Even Lines", ff, 11, false, false, false, AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OS, true);
       AS("Fingering", ff,  8, false, false, false, AlignmentFlags::CENTER, QPointF(), OA, true);
       AS("Instrument Name (Long)",   ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OA, true);
       AS("Instrument Name (Short)",   ff, 12, false, false, false, AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OA, true);
@@ -351,8 +351,8 @@ StyleData::StyleData()
             { StyleIdx::akkoladeDistance,            6.5  },
             { StyleIdx::minSystemDistance,           8.5  },
             { StyleIdx::maxSystemDistance,           15.0 },
-            { StyleIdx::lyricsDistance,              3.5  },
-            { StyleIdx::lyricsMinBottomDistance,     2    },
+            { StyleIdx::lyricsDistance,              2.0  },
+            { StyleIdx::lyricsMinBottomDistance,     4.0  },
             { StyleIdx::lyricsLineHeight,            QVariant(1.0) },
             { StyleIdx::figuredBassFontFamily,       QVariant(QString("MuseScore Figured Bass")) },
             { StyleIdx::figuredBassFontSize,         QVariant(8.0) },

@@ -682,8 +682,8 @@ Score::FileError Score::read114(XmlReader& e)
             }
 
       // adjust some styles
-      if (style(StyleIdx::lyricsDistance) == MScore::baseStyle()->value(StyleIdx::lyricsDistance))
-            style()->set(StyleIdx::lyricsDistance, 2.0f);
+      qreal lmbd = styleD(StyleIdx::lyricsMinBottomDistance);
+      style()->set(StyleIdx::lyricsMinBottomDistance, lmbd + 4.0);
       if (style(StyleIdx::voltaY) == MScore::baseStyle()->value(StyleIdx::voltaY))
             style()->set(StyleIdx::voltaY, -2.0f);
       if (style(StyleIdx::hideEmptyStaves).toBool()) // http://musescore.org/en/node/16228
