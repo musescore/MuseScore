@@ -918,7 +918,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 //   readBars
 //---------------------------------------------------------
 
-void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* t)
+void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* /*t*/)
       {
       // unique bar identifiers are represented as a space separated string of numbers
       QStringList barsString = barList->toElement().text().split(" ");

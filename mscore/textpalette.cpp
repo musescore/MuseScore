@@ -77,7 +77,7 @@ TextPalette::TextPalette(QWidget* parent)
 //   pageChanged
 //---------------------------------------------------------
 
-void TextPalette::pageChanged(int idx)
+void TextPalette::pageChanged(int /*idx*/)
       {
       }
 
