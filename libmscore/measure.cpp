@@ -2981,10 +2981,10 @@ void Measure::layoutX(qreal stretch)
       if (nstaves == 0 || segs == 0)
             return;
 
-      qreal _spatium           = spatium();
-      int tracks               = nstaves * VOICES;
-      qreal clefKeyRightMargin = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
-      qreal minHarmonyDistance = score()->styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
+      qreal _spatium              = spatium();
+      int tracks                  = nstaves * VOICES;
+      qreal clefKeyRightMargin    = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
+      qreal minHarmonyDistance    = score()->styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
       qreal maxHarmonyBarDistance = score()->styleS(StyleIdx::maxHarmonyBarDistance).val() * _spatium;
 
       qreal rest[nstaves];    // fixed space needed from previous segment
@@ -3042,11 +3042,11 @@ void Measure::layoutX(qreal stretch)
             bool rest2[nstaves];
             bool hRest2[nstaves];
             bool spaceHarmony     = false;
-            Segment::Type segType   = s->segmentType();
+            Segment::Type segType = s->segmentType();
             qreal segmentWidth    = 0.0;
             qreal harmonyWidth    = 0.0;
             qreal stretchDistance = 0.0;
-            Segment::Type pt        = pSeg ? pSeg->segmentType() : Segment::Type::BarLine;
+            Segment::Type pt      = pSeg ? pSeg->segmentType() : Segment::Type::BarLine;
 #if 0
             qreal firstHarmonyDistance = 0.0;
 #endif
@@ -3145,9 +3145,14 @@ void Measure::layoutX(qreal stretch)
                               qreal cxu = cr->userOff().x();
                               qreal lx = qMax(cxu, 0.0); // nudge left shouldn't require more leading space
                               qreal rx = qMin(cxu, 0.0); // nudge right shouldn't require more trailing space
-                              Space crSpace = cr->space();
-                              Space segRelSpace(crSpace.lw()-lx, crSpace.rw()+rx);
-                              space.max(segRelSpace);
+                              // Score::computeMinWidth already allocated enough space for full measure rests
+                              // but do not account for them when spacing within the measure
+                              // because they do not need to align with the other elements in segment
+                              if (cr->durationType() != TDuration::DurationType::V_MEASURE) {
+                                    Space crSpace = cr->space();
+                                    Space segRelSpace(crSpace.lw()-lx, crSpace.rw()+rx);
+                                    space.max(segRelSpace);
+                                    }
 
                               // lyrics
                               int n = cr->lyricsList().size();
