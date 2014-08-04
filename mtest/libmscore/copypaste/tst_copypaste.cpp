@@ -53,6 +53,7 @@ class TestCopyPaste : public QObject, public MTest
       void copyPaste2Voice();                       // voices-partial
       void copyPaste2Voice2() { copypastevoice("14", 0); }
       void copyPaste2Voice3() { copypastevoice("15", 1); }
+      void copyPaste2Voice4() { copypastevoice("16",1); } // shorten last cr
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
