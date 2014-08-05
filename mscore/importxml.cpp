@@ -1297,16 +1297,11 @@ void MusicXml::scorePartwise(QDomElement ee)
       // now attach all jumps and markers to segments
       // simply use the first SegChordRest in the measure
       for (int i = 0; i < jumpsMarkers.size(); i++) {
-            Segment* seg = jumpsMarkers.at(i).meas()->first(Segment::Type::ChordRest);
+            Measure* meas = jumpsMarkers.at(i).meas();
             qDebug("jumpsMarkers jm %p meas %p ",
-                   jumpsMarkers.at(i).el(), jumpsMarkers.at(i).meas());
-            if (seg) {
-                  qDebug("attach to seg %p", seg);
-                  seg->add(jumpsMarkers.at(i).el());
-                  }
-            else {
-                  qDebug("no segment found");
-                  }
+            jumpsMarkers.at(i).el(), meas);
+            qDebug("attach to measure %p", meas);
+            meas->add(jumpsMarkers.at(i).el());
             }
       }
 

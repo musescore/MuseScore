@@ -49,27 +49,19 @@ Volta* Score::searchVolta(int tick) const
 
 Measure* Score::searchLabel(const QString& s)
       {
-// qDebug("searchLabel<%s>", qPrintable(s));
-      if (s == "start") {
-// qDebug("   found %p", firstMeasure());
+      if (s == "start")
             return firstMeasure();
-            }
-      else if (s == "end") {
-// qDebug("   found %p", firstMeasure());
+      else if (s == "end")
             return lastMeasure();
-            }
-      for (Segment* segment = firstMeasure()->first(); segment; segment = segment->next1()) {
-            foreach(const Element* e, segment->annotations()) {
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            for (auto e : *m->el()) {
                   if (e->type() == Element::Type::MARKER) {
                         const Marker* marker = static_cast<const Marker*>(e);
-                        if (marker->label() == s) {
-// qDebug("   found %p", segment->measure());
-                              return segment->measure();
-                              }
+                        if (marker->label() == s)
+                              return m;
                         }
                   }
             }
-// qDebug("   found %p", 0);
       return 0;
       }
 
@@ -306,15 +298,11 @@ void RepeatList::unwind()
                   // Jumps are only accepted outside of other repeats
                   if (flags & Repeat::JUMP) {
                         Jump* s = 0;
-                        for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                              foreach(Element* e, seg->annotations()) {
-                                    if (e->type() == Element::Type::JUMP) {
-                                          s = static_cast<Jump*>(e);
-                                          break;
-                                          }
-                                    }
-                              if (s)
+                        foreach(Element* e, *m->el()) {
+                              if (e->type() == Element::Type::JUMP) {
+                                    s = static_cast<Jump*>(e);
                                     break;
+                                    }
                               }
                         if (s) {
                               Measure* nm = _score->searchLabel(s->jumpTo());

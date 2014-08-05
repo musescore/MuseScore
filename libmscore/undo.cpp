@@ -815,6 +815,13 @@ void Score::undoAddElement(Element* element)
                         nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
                         undo(new AddElement(nsp));
                         }
+                  else if (et == Element::Type::MARKER || et == Element::Type::JUMP) {
+                        Measure* om = static_cast<Measure*>(element->parent());
+                        Measure* m  = score->tick2measure(om->tick());
+                        ne->setTrack(element->track());
+                        ne->setParent(m);
+                        undo(new AddElement(ne));
+                        }
                   else {
                         Segment* segment  = static_cast<Segment*>(element->parent());
                         int tick          = segment->tick();

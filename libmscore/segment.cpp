@@ -447,11 +447,6 @@ void Segment::add(Element* el)
             case Element::Type::FIGURED_BASS:
                   _annotations.push_back(el);
                   break;
-            case Element::Type::JUMP:
-                  measure()->setRepeatFlags(measure()->repeatFlags() | Repeat::JUMP);
-                  _annotations.push_back(el);
-                  break;
-
             case Element::Type::STAFF_STATE:
                   if (static_cast<StaffState*>(el)->staffStateType() == StaffStateType::INSTRUMENT) {
                         StaffState* ss = static_cast<StaffState*>(el);
@@ -561,11 +556,6 @@ void Segment::remove(Element* el)
             case Element::Type::TEXT:
             case Element::Type::TAB_DURATION_SYMBOL:
             case Element::Type::FIGURED_BASS:
-                  removeAnnotation(el);
-                  break;
-
-            case Element::Type::JUMP:
-                  measure()->resetRepeatFlag(Repeat::JUMP);
                   removeAnnotation(el);
                   break;
 

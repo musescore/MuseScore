@@ -2098,9 +2098,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 
             if(e != 0){
                   e->setTrack(track);
-                  Segment* s = measure->getSegment(e, absTick);
-                  s->add(e);
-                  //measure->add(e);
+                  measure->add(e);
                   }
             }
 

@@ -59,6 +59,8 @@ class Jump : public Text {
       virtual Jump* clone()          const { return new Jump(*this); }
       virtual Element::Type type()   const { return Element::Type::JUMP; }
 
+      Measure* measure() const         { return (Measure*)parent(); }
+
       virtual void read(XmlReader&);
       virtual void write(Xml& xml)   const;
 
