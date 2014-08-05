@@ -2473,7 +2473,7 @@ bool Measure::createEndBarLines()
             // and forget about any previous bar line
 
             if (span == 0) {
-                  if(cbl && cbl->customSpan()) {      // if there is a bar line and has custom span,
+                  if (cbl && cbl->customSpan()) {      // if there is a bar line and has custom span,
                         span        = cbl->span();    // get span values from it
                         spanFrom    = cbl->spanFrom();
                         spanTo      = cbl->spanTo();
