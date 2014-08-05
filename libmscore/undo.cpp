@@ -3263,7 +3263,6 @@ void ChangeClefType::flip()
 
       clef->setConcertClef(concertClef);
       clef->setTransposingClef(transposingClef);
-//??      clef->setClefType(clef->concertPitch() ? concertClef : transposingClef);
 
       clef->staff()->setClef(clef);
       Segment* segment = clef->segment();

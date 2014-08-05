@@ -36,6 +36,7 @@
 #include "timesig.h"
 #include "system.h"
 #include "xml.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -472,8 +473,10 @@ void Segment::add(Element* el)
                   Q_ASSERT(_segmentType == Type::Clef);
                   checkElement(el, track);
                   _elist[track] = el;
-                  if (!el->generated())
+                  if (!el->generated()) {
                         el->staff()->setClef(static_cast<Clef*>(el));
+                        updateNoteLines(this, el->track());
+                        }
                   empty = false;
                   break;
 
@@ -598,8 +601,11 @@ void Segment::remove(Element* el)
                   break;
 
             case Element::Type::CLEF:
-                  if (!el->generated())
+                  if (!el->generated()) {
                         el->staff()->removeClef(static_cast<Clef*>(el));
+                        updateNoteLines(this, el->track());
+                        }
+                  // fall through
 
             case Element::Type::BAR_LINE:
             case Element::Type::BREATH:

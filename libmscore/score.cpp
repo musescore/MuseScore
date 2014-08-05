@@ -1390,14 +1390,6 @@ void Score::addElement(Element* element)
                   _playlistDirty = true;
                   break;
 
-            case Element::Type::CLEF:
-                  {
-                  Clef* clef = static_cast<Clef*>(element);
-                  if (!clef->generated())
-                        updateNoteLines(clef->segment(), clef->track());
-                  }
-                  break;
-
             case Element::Type::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(element);
@@ -1535,13 +1527,6 @@ void Score::removeElement(Element* element)
                   if (cr->beam())
                         cr->beam()->remove(cr);
                   // TODO: check for tuplet?
-                  }
-                  break;
-            case Element::Type::CLEF:
-                  {
-                  Clef* clef = static_cast<Clef*>(element);
-                  if (!clef->generated())
-                        updateNoteLines(clef->segment(), clef->track());
                   }
                   break;
             case Element::Type::TEMPO_TEXT:
