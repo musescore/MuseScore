@@ -924,5 +924,14 @@ QList<Staff*> Staff::staffList() const
       return staffList;
       }
 
+//---------------------------------------------------------
+//   setBarLineTo
+//---------------------------------------------------------
+
+void Staff::setBarLineTo(int val)
+      {
+      _barLineTo = val;
+      }
+
 }
 

@@ -184,7 +184,7 @@ class Staff : public QObject {
       int barLineTo() const          { return _barLineTo;   }
       void setBarLineSpan(int val)   { _barLineSpan = val;  }
       void setBarLineFrom(int val)   { _barLineFrom = val;  }
-      void setBarLineTo(int val)     { _barLineTo   = val;  }
+      void setBarLineTo(int val);
       Score* score() const           { return _score;       }
       qreal mag() const;
       qreal height() const;
