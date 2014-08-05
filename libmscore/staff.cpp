@@ -234,6 +234,8 @@ ClefTypeList Staff::initialClefTypeList() const
 
 void Staff::setClef(Clef* clef)
       {
+      if (clef->generated())
+            return;
       int tick = clef->segment()->tick();
       for (Segment* s = clef->segment()->next(); s && s->tick() == tick; s = s->next()) {
             if (s->segmentType() == Segment::Type::Clef && s->element(clef->track())) {
@@ -250,8 +252,9 @@ void Staff::setClef(Clef* clef)
 
 void Staff::removeClef(Clef* clef)
       {
+      if (clef->generated())
+            return;
       int tick = clef->segment()->tick();
-
       for (Segment* s = clef->segment()->next(); s && s->tick() == tick; s = s->next()) {
             if (s->segmentType() == Segment::Type::Clef && s->element(clef->track())) {
                   // removal of this clef has no effect on the clefs list
