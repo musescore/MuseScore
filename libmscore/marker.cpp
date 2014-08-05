@@ -27,6 +27,7 @@ Marker::Marker(Score* s)
       _markerType = Type::FINE;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setTextStyleType(TextStyleType::REPEAT);
+      setLayoutToParentWidth(true);
       }
 
 //---------------------------------------------------------
@@ -69,6 +70,7 @@ void Marker::setMarkerType(Type t)
 
             case Type::TOCODA:
                   setText("To Coda");
+                  setTextStyleType(TextStyleType::REPEAT_RIGHT);
                   setLabel("coda");
                   break;
 
@@ -97,7 +99,9 @@ void Marker::styleChanged()
 void Marker::adjustReadPos()
       {
       if (!readPos().isNull()) {
+
             QPointF uo;
+/*
             if (score()->mscVersion() <= 114) {
                   // rebase from Measure to Segment
                   uo = userOff();
@@ -107,6 +111,7 @@ void Marker::adjustReadPos()
                         uo.rx() -= bbox().width() * .5;
                   }
             else
+*/
                   uo = readPos() - ipos();
             setUserOff(uo);
             setReadPos(QPointF());

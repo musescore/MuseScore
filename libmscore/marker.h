@@ -59,8 +59,7 @@ class Marker : public Text {
       virtual Marker* clone() const override      { return new Marker(*this); }
       virtual Element::Type type() const override { return Element::Type::MARKER; }
 
-      Segment* segment() const         { return (Segment*)parent(); }
-      Measure* measure() const         { return (Measure*)parent()->parent(); }
+      Measure* measure() const         { return (Measure*)parent(); }
 
       virtual void read(XmlReader&) override;
       virtual void write(Xml& xml) const override;

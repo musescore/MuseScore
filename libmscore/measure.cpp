@@ -820,16 +820,6 @@ void Measure::add(Element* el)
             case Element::Type::SEGMENT:
                   {
                   Segment* seg = static_cast<Segment*>(el);
-#if 0
-                  if (seg->segmentType() == Segment::Type::KeySig) {
-                        int tracks = staves.size() * VOICES;
-                        for (int track = 0; track < tracks; track += VOICES) {
-                              if (!seg->element(track))
-                                    continue;
-                              score()->staff(track/VOICES)->setUpdateKeymap(true);
-                              }
-                        }
-#endif
 
                   // insert segment at specific position
                   if (seg->next()) {
@@ -868,15 +858,6 @@ void Measure::add(Element* el)
 
                   _segments.insert(seg, s);
                   if ((seg->segmentType() == Segment::Type::TimeSig) && seg->element(0)) {
-#if 0
-                        Fraction nfraction(static_cast<TimeSig*>(seg->element(0))->getSig());
-                        setTimesig2(nfraction);
-                        for (Measure* m = nextMeasure(); m; m = m->nextMeasure()) {
-                              if (m->first(SegTimeSig))
-                                    break;
-                              m->setTimesig2(nfraction);
-                              }
-#endif
                         score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                         }
                   }
@@ -884,6 +865,9 @@ void Measure::add(Element* el)
 
             case Element::Type::JUMP:
                   _repeatFlags = _repeatFlags | Repeat::JUMP;
+                  // fall through
+
+            case Element::Type::MARKER:
                   _el.push_back(el);
                   break;
 
@@ -932,6 +916,7 @@ void Measure::remove(Element* el)
                   resetRepeatFlag(Repeat::JUMP);
                   // fall through
 
+            case Element::Type::MARKER:
             case Element::Type::HBOX:
                   if (!_el.remove(el)) {
                         qDebug("Measure(%p)::remove(%s,%p) not found",
@@ -1310,7 +1295,7 @@ qDebug("drop staffList");
 
             case Element::Type::MARKER:
             case Element::Type::JUMP:
-                  e->setParent(seg);
+                  e->setParent(this);
                   e->setTrack(0);
                   score()->undoAddElement(e);
                   return e;
@@ -2119,8 +2104,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "StaffText"
                || tag == "RehearsalMark"
                || tag == "InstrumentChange"
-               || tag == "Marker"
-               || tag == "Jump"
                || tag == "StaffState"
                || tag == "FiguredBass"
                ) {
@@ -2129,6 +2112,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                   el->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(el);
+                  }
+            else if (tag == "Marker"
+               || tag == "Jump"
+               ) {
+                  Element* el = Element::name2Element(tag, score());
+                  el->setTrack(e.track());
+                  el->read(e);
+                  add(el);
                   }
             else if (tag == "Image") {
                   if (MScore::noImages)

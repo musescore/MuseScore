@@ -11,6 +11,8 @@
 //=============================================================================
 
 #include "text.h"
+#include "jump.h"
+#include "marker.h"
 #include "score.h"
 #include "segment.h"
 #include "measure.h"
@@ -237,15 +239,28 @@ void TextBlock::layout(Text* t)
       Element* e = t->parent();
       if (e && t->layoutToParentWidth()) {
             layoutWidth = e->width();
-            if (e->type() == Element::Type::HBOX || e->type() == Element::Type::VBOX || e->type() == Element::Type::TBOX) {
-                  Box* b = static_cast<Box*>(e);
-                  layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
-                  lm = b->leftMargin() * MScore::DPMM;
-                  }
-            else if (e->type() == Element::Type::PAGE) {
-                  Page* p = static_cast<Page*>(e);
-                  layoutWidth -= (p->lm() + p->rm());
-                  lm = p->lm();
+            switch(e->type()) {
+                  case Element::Type::HBOX:
+                  case Element::Type::VBOX:
+                  case Element::Type::TBOX: {
+                        Box* b = static_cast<Box*>(e);
+                        layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
+                        lm = b->leftMargin() * MScore::DPMM;
+                        }
+                        break;
+                  case Element::Type::PAGE: {
+                        Page* p = static_cast<Page*>(e);
+                        layoutWidth -= (p->lm() + p->rm());
+                        lm = p->lm();
+                        }
+                        break;
+                  case Element::Type::MEASURE: {
+                        Measure* m = static_cast<Measure*>(e);
+                        layoutWidth = m->bbox().width();
+                        }
+                        break;
+                  default:
+                        break;
                   }
             }
       if (_text.isEmpty()) {
@@ -1194,6 +1209,8 @@ void Text::layout1()
                         h = p->height() - p->tm() - p->bm();
                         yoff = p->tm();
                         }
+                  else if (parent()->type() == Element::Type::MEASURE)
+                        h = 0;
                   else
                         h  = parent()->height();
                   }

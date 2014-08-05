@@ -296,6 +296,8 @@ void MeasureBase::layout()
                   element->setPos(x, y);
                   breakCount++;
                   }
+            else
+                  element->layout();
             }
       }
 

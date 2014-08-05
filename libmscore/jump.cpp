@@ -22,6 +22,7 @@ namespace Ms {
 
 struct JumpTypeTable {
       Jump::Type type;
+      TextStyleType textStyleType;
       const char* text;
       const char* jumpTo;
       const char* playUntil;
@@ -29,12 +30,12 @@ struct JumpTypeTable {
       };
 
 static const JumpTypeTable jumpTypeTable[] = {
-      { Jump::Type::DC,         "D.C.",         "start", "end",  "" },
-      { Jump::Type::DC_AL_FINE, "D.C. al Fine", "start", "fine", "" },
-      { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab" },
-      { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab" },
-      { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "" },
-      { Jump::Type::DS,         "D.S.",         "segno", "end",  "" }
+      { Jump::Type::DC,         TextStyleType::REPEAT,       "D.C.",         "start", "end",  "" },
+      { Jump::Type::DC_AL_FINE, TextStyleType::REPEAT,       "D.C. al Fine", "start", "fine", "" },
+      { Jump::Type::DC_AL_CODA, TextStyleType::REPEAT,       "D.C. al Coda", "start", "coda", "codab" },
+      { Jump::Type::DS_AL_CODA, TextStyleType::REPEAT,       "D.S. al Coda", "segno", "coda", "codab" },
+      { Jump::Type::DS_AL_FINE, TextStyleType::REPEAT,       "D.S. al Fine", "segno", "fine", "" },
+      { Jump::Type::DS,         TextStyleType::REPEAT_RIGHT, "D.S.",         "segno", "end",  "" }
       };
 
 //---------------------------------------------------------
@@ -46,6 +47,7 @@ Jump::Jump(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setTextStyleType(TextStyleType::REPEAT);
+      setLayoutToParentWidth(true);
       }
 
 //---------------------------------------------------------
@@ -60,6 +62,7 @@ void Jump::setJumpType(Type t)
                   setJumpTo(p.jumpTo);
                   setPlayUntil(p.playUntil);
                   setContinueAt(p.continueAt);
+                  setTextStyleType(p.textStyleType);
                   break;
                   }
             }
