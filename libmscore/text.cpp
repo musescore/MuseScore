@@ -1484,6 +1484,7 @@ void Text::endEdit()
                   }
             }
       textChanged();
+      score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
