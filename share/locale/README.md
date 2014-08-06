@@ -5,7 +5,7 @@ You need the name of the language and the code
 
 On transifex
 ------
-* Add a resource
+* Add the new language to the resource on Transifex ( http://musescore.org/node/22982 )
 
 In MuseScore source 
 ------
