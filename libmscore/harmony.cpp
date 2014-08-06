@@ -618,7 +618,7 @@ void Harmony::endEdit()
                   h->setHarmony(text());
                   }
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll(true);  // done in Text::endEdit() too, but no harm being sure
       }
 
 //---------------------------------------------------------
