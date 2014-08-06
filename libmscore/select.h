@@ -88,6 +88,7 @@ public:
       void setFiltered(SelectionFilterType type, bool set);
       bool isFiltered(SelectionFilterType type) const        { return _filtered & (int)type; }
       bool canSelect(const Element*) const;
+      bool canSelectVoice(int track) const;
       };
 
 //-------------------------------------------------------------------
@@ -112,7 +113,8 @@ class Selection {
       QByteArray staffMimeData() const;
       QByteArray symbolListMimeData() const;
       SelectionFilter selectionFilter() const;
-      bool canSelect(Element* e) { return selectionFilter().canSelect(e); }
+      bool canSelect(Element* e) const { return selectionFilter().canSelect(e); }
+      bool canSelectVoice(int track) const { return selectionFilter().canSelectVoice(track); }
       void appendFiltered(Element* e);
       void appendChord(Chord* chord);
 

@@ -824,5 +824,14 @@ bool Xml::canWrite(const Element* e) const
       return _filter.canSelect(e);
       }
 
+//---------------------------------------------------------
+//   canWriteVoice
+//---------------------------------------------------------
+
+bool Xml::canWriteVoice(int track) const
+      {
+      return _filter.canSelectVoice(track);
+      }
+
 }
 
