@@ -300,6 +300,10 @@ void Selection::add(Element* el)
       update();
       }
 
+//---------------------------------------------------------
+//   canSelect
+//---------------------------------------------------------
+
 bool SelectionFilter::canSelect(const Element* e) const
       {
       if (e->type() == Element::Type::DYNAMIC || e->type() == Element::Type::HAIRPIN)
@@ -328,7 +332,7 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::FRET_DIAGRAM);
       if (e->type() == Element::Type::BREATH)
           return isFiltered(SelectionFilterType::BREATH);
-      if (e->isText()) //turns out that only TEXT INSTRCHANGE AND STAFFTEXT are caught here, rest are system thus not in selection
+      if (e->isText()) // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
           return isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
           return isFiltered(SelectionFilterType::OTHER_LINE);
@@ -339,11 +343,35 @@ bool SelectionFilter::canSelect(const Element* e) const
       return true;
       }
 
+//---------------------------------------------------------
+//   canSelectVoice
+//---------------------------------------------------------
+
+bool SelectionFilter::canSelectVoice(int track) const
+      {
+      int voice = track % VOICES;
+      switch (voice) {
+            case 0: return isFiltered(SelectionFilterType::FIRST_VOICE);
+            case 1: return isFiltered(SelectionFilterType::SECOND_VOICE);
+            case 2: return isFiltered(SelectionFilterType::THIRD_VOICE);
+            case 3: return isFiltered(SelectionFilterType::FOURTH_VOICE);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   appendFiltered
+//---------------------------------------------------------
+
 void Selection::appendFiltered(Element* e)
       {
       if (selectionFilter().canSelect(e))
             _el.append(e);
       }
+
+//---------------------------------------------------------
+//   appendChord
+//---------------------------------------------------------
 
 void Selection::appendChord(Chord* chord)
       {
@@ -395,6 +423,8 @@ void Selection::updateSelectedElements()
       int endTrack   = _staffEnd * VOICES;
 
       for (int st = startTrack; st < endTrack; ++st) {
+            if (!canSelectVoice(st))
+                  continue;
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
                   if (s->segmentType() == Segment::Type::EndBarLine)  // do not select end bar line
                         continue;
@@ -660,7 +690,8 @@ QByteArray Selection::staffMimeData() const
             if (interval.diatonic)
                   xml.tag("transposeDiatonic", interval.diatonic);
             for(int voice = 0; voice < VOICES; voice++) {
-                  if(hasElementInTrack(seg1, seg2, startTrack + voice)) {
+                  if (hasElementInTrack(seg1, seg2, startTrack + voice)
+                     && xml.canWriteVoice(voice)) {
                         int offset = firstElementInTrack(seg1, seg2, startTrack+voice) - tickStart();
                         xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
                         }

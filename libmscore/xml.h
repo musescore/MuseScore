@@ -189,6 +189,7 @@ class Xml : public QTextStream {
 
       void setFilter(SelectionFilter f) { _filter = f; }
       bool canWrite(const Element*) const;
+      bool canWriteVoice(int track) const;
 
       static QString xmlString(const QString&);
       };
