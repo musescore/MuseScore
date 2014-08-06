@@ -1526,9 +1526,19 @@ void Score::deleteItem(Element* el)
                               }
                         }
                   else {
+                        if (clef->generated()) {
+                              // find the real clef if this is a cautionary one
+                              Measure* m = clef->measure();
+                              if (m && m->prevMeasure()) {
+                                    int tick = m->tick();
+                                    m = m->prevMeasure();
+                                    Segment* s = m->findSegment(Segment::Type::Clef, tick);
+                                    if (s && s->element(clef->track()))
+                                          clef = static_cast<Clef*>(s->element(clef->track()));
+                                    }
+                              }
                         undoRemoveElement(clef);
                         }
-                  // cmdUpdateNotes();
                   }
                   break;
 

@@ -1510,7 +1510,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef = new Clef(this);
                         clef->setTrack(i * VOICES);
                         clef->setSmall(false);
-                        clef->setGenerated(staff->clef(tick) == staff->clef(tick-1));
+                        clef->setGenerated(true);
 
                         Segment* s = m->undoGetSegment(Segment::Type::Clef, tick);
                         clef->setParent(s);
