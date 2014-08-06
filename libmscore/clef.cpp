@@ -144,6 +144,8 @@ void Clef::setSelected(bool f)
 
 void Clef::layout()
       {
+      setPos(QPoint());
+
       // determine current number of lines and line distance
       int   lines       = 5;              // assume resonable defaults
       qreal lineDist    = 1.0;
@@ -155,7 +157,7 @@ void Clef::layout()
       if (clefSeg && stf && stf->staffType()) {
             bool        bHide;
             // check staff type allows clef display
-            staffType = staff()->staffType();
+            staffType = stf->staffType();
             bHide = !staffType->genClef();
 
             // check clef is compatible with staff type group
@@ -226,7 +228,6 @@ void Clef::layout1()
       {
       qreal smag     = mag();
       qreal _spatium = spatium();
-      // qreal msp      = score()->spatium() * smag;
       qreal yoff     = 0.0;
 
       qDeleteAll(elements);

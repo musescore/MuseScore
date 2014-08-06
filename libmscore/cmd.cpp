@@ -1566,17 +1566,6 @@ void Score::cmdAddStretch(qreal val)
       }
 
 //---------------------------------------------------------
-//   cmdInsertClef
-//---------------------------------------------------------
-
-void Score::cmdInsertClef(ClefType type)
-      {
-      if (!noteEntryMode())
-            return;
-      undoChangeClef(staff(inputTrack()/VOICES), inputState().segment(), type);
-      }
-
-//---------------------------------------------------------
 //   cmdResetBeamMode
 //---------------------------------------------------------
 
@@ -2304,6 +2293,17 @@ void Score::cmd(const QAction* a)
 
 //---------------------------------------------------------
 //   cmdInsertClef
+//---------------------------------------------------------
+
+void Score::cmdInsertClef(ClefType type)
+      {
+      if (!noteEntryMode())
+            return;
+      undoChangeClef(staff(inputTrack()/VOICES), inputState().segment(), type);
+      }
+
+//---------------------------------------------------------
+//   cmdInsertClef
 //    insert clef before cr
 //---------------------------------------------------------
 
@@ -2327,7 +2327,7 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
             Clef* c = static_cast<Clef*>(gclef ? gclef->linkedClone() : clef->clone());
             gclef = c;
             c->setParent(cs);
-            c->setScore(cs->score());
+            c->setScore(score);
             c->setTrack(cr->staffIdx() * VOICES);
             if (cs->element(c->track()))
                   score->undo(new RemoveElement(cs->element(c->track())));
