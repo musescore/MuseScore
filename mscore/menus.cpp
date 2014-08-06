@@ -550,6 +550,28 @@ Palette* MuseScore::newArticulationsPalette()
       tb->points().append(PitchValue(30, -100, false));
       tb->points().append(PitchValue(60,    0, false));
       sp->append(tb, qApp->translate("articulation", "Tremolo Bar"));
+
+      ChordLine* clFall = new ChordLine(gscore);
+      clFall->setChordLineType(ChordLineType::FALL);
+      clFall->setStraight(true);
+      sp->append(clFall, qApp->translate("articulation", "Slide out down"));
+
+      ChordLine* clDoit = new ChordLine(gscore);
+      clDoit->setChordLineType(ChordLineType::DOIT);
+      clDoit->setStraight(true);
+      sp->append(clDoit, qApp->translate("articulation", "Slide out up"));
+
+      ChordLine* clScoop = new ChordLine(gscore);
+      clScoop->setChordLineType(ChordLineType::SCOOP);
+      clScoop->setStraight(true);
+      sp->append(clScoop, qApp->translate("articulation", "Slide in below"));
+
+      ChordLine* clPlop = new ChordLine(gscore);
+      clPlop->setChordLineType(ChordLineType::PLOP);
+      clPlop->setStraight(true);
+      sp->append(clPlop, qApp->translate("articulation", "Slide in above"));
+
+
       return sp;
       }
 

@@ -40,6 +40,8 @@ class ChordLine : public Element {
       bool _straight;
       QPainterPath path;
       bool modified;
+      int _lengthX;
+      int _lengthY;
 
    public:
       ChordLine(Score*);
@@ -52,6 +54,8 @@ class ChordLine : public Element {
       Chord* chord() const                { return (Chord*)(parent()); }
       virtual bool isStraight() const     { return _straight; }
       virtual void setStraight(bool straight)   { _straight =  straight; }
+      virtual void setLengthX(int length)   { _lengthX = length; }
+      virtual void setLengthY(int length)   { _lengthY = length; }
 
       virtual void read(XmlReader&);
       virtual void write(Xml& xml) const;
