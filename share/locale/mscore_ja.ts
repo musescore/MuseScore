@@ -57,11 +57,11 @@ p, li { white-space: pre-wrap; }
     <name>AeolusGui</name>
     <message>
         <source>Azimuth</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">方位角</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>幅</translation>
     </message>
     <message>
         <source>Reflect</source>
@@ -69,11 +69,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Reverb</source>
-        <translation type="unfinished">リバーブ</translation>
+        <translation>リバーブ</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレイ</translation>
     </message>
     <message>
         <source>Time</source>
@@ -336,22 +336,22 @@ p, li { white-space: pre-wrap; }
     <name>ChordBase</name>
     <message>
         <source>Arpeggio</source>
-        <translation type="unfinished"></translation>
+        <translation>アルペジオ</translation>
     </message>
     <message>
         <source>Glissando</source>
-        <translation type="unfinished"></translation>
+        <translation>グリッサンド</translation>
     </message>
     <message>
         <source>Tremolo</source>
-        <translation type="unfinished"></translation>
+        <translation>トレモロ</translation>
     </message>
 </context>
 <context>
     <name>ChordRestBase</name>
     <message>
         <source>Lyrics:</source>
-        <translation type="unfinished"></translation>
+        <translation>詞</translation>
     </message>
 </context>
 <context>
@@ -385,11 +385,11 @@ p, li { white-space: pre-wrap; }
     <name>Clef</name>
     <message>
         <source>Hide courtesy clef</source>
-        <translation>儀礼上の音部記号を非表示</translation>
+        <translation>音部記号を非表示</translation>
     </message>
     <message>
         <source>Show courtesy clef</source>
-        <translation>儀礼上の音部記号を表示</translation>
+        <translation>音部記号を表示</translation>
     </message>
 </context>
 <context>
@@ -562,43 +562,43 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Octave 8</source>
-        <translation type="unfinished"></translation>
+        <translation>8オクターブ</translation>
     </message>
     <message>
         <source>Octave 7</source>
-        <translation type="unfinished"></translation>
+        <translation>7オクターブ</translation>
     </message>
     <message>
         <source>Octave 6</source>
-        <translation type="unfinished"></translation>
+        <translation>6オクターブ</translation>
     </message>
     <message>
         <source>Octave 5</source>
-        <translation type="unfinished"></translation>
+        <translation>5オクターブ</translation>
     </message>
     <message>
         <source>Octave 4</source>
-        <translation type="unfinished"></translation>
+        <translation>4オクターブ</translation>
     </message>
     <message>
         <source>Octave 3</source>
-        <translation type="unfinished"></translation>
+        <translation>3オクターブ</translation>
     </message>
     <message>
         <source>Octave 2</source>
-        <translation type="unfinished"></translation>
+        <translation>2オクターブ</translation>
     </message>
     <message>
         <source>Octave 1</source>
-        <translation type="unfinished"></translation>
+        <translation>1オクターブ</translation>
     </message>
     <message>
         <source>Octave 0</source>
-        <translation type="unfinished"></translation>
+        <translation>0オクターブ</translation>
     </message>
     <message>
         <source>Octave -1</source>
-        <translation type="unfinished"></translation>
+        <translation>-1オクターブ</translation>
     </message>
     <message>
         <source>C</source>
@@ -1531,27 +1531,27 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Line distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>線間距離</translation>
     </message>
     <message>
         <source>Show clef</source>
-        <translation type="unfinished"></translation>
+        <translation>音部記号を表示</translation>
     </message>
     <message>
         <source>Show time signature</source>
-        <translation type="unfinished"></translation>
+        <translation>拍子記号を表示</translation>
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"></translation>
+        <translation>小節線の表示</translation>
     </message>
     <message>
         <source>Ledger lines</source>
-        <translation type="unfinished"></translation>
+        <translation>加線の表示</translation>
     </message>
     <message>
         <source>Key signature</source>
-        <translation type="unfinished"></translation>
+        <translation>調号</translation>
     </message>
     <message>
         <source>Create New Standard Type</source>
@@ -1559,7 +1559,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Upside down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">上下反転</translation>
     </message>
     <message>
         <source>Vertical offset:</source>
@@ -1780,7 +1780,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create courtesy clefs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">慣例の音部記号を表示する</translation>
     </message>
     <message>
         <source>Create time signature for all systems</source>
@@ -3291,19 +3291,19 @@ p, li { white-space: pre-wrap; }
     <name>InspectorHairpin</name>
     <message>
         <source>Hairpin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ヘアピン</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">高さ</translation>
     </message>
     <message>
         <source>crescendo</source>
-        <translation type="unfinished"></translation>
+        <translation>クレッシェンド</translation>
     </message>
     <message>
         <source>decrescendo</source>
-        <translation type="unfinished"></translation>
+        <translation>デクレッシェンド</translation>
     </message>
     <message>
         <source>Type</source>
@@ -3311,7 +3311,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Dynamic range</source>
-        <translation type="unfinished"></translation>
+        <translation>ダイナミックレンジ</translation>
     </message>
     <message>
         <source>reset value</source>
@@ -3327,7 +3327,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">パート</translation>
     </message>
     <message>
         <source>System</source>
@@ -3335,7 +3335,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Velocity change</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">速さの変化</translation>
     </message>
     <message>
         <source>Continue height</source>
