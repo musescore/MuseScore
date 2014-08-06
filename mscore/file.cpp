@@ -2339,7 +2339,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                   }
 
                   margin = score->styleS(StyleIdx::systemFrameDistance).val()*sys->spatium();
-                  w = sys->width();
+                  w = sys->width()+2*margin;
                   h = sys->height() + 2*margin;
 
                   svgname = fi.baseName()+QString::number(count++)+".svg";
@@ -2350,7 +2350,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                   svgbuf->open(QIODevice::ReadWrite);
 
                   p = getSvgPainter(svgbuf,w,h,mag);
-                  p->translate(-sys->pagePos().rx(), -(sys->staffYpage(0)-margin) );
+                  p->translate(-(sys->pagePos().rx()-margin), -(sys->staffYpage(0)-margin) );
                }
             }
 
