@@ -209,6 +209,7 @@ void TextLineSegment::layout1()
                   }
             else {
                   _endText->setTextStyleType(tl->_endText->textStyleType());
+                  _endText->setTextStyle(tl->_endText->textStyle());
                   _endText->setText(tl->_endText->text());
                   }
             }
