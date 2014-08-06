@@ -428,6 +428,8 @@ void Staff::write(Xml& xml) const
             xml.tag("invisible", invisible());
       if (neverHide())
             xml.tag("neverHide", neverHide());
+      if (showIfEmpty())
+            xml.tag("showIfSystemEmpty", showIfEmpty());
 
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
@@ -489,6 +491,8 @@ void Staff::read(XmlReader& e)
                   setInvisible(e.readInt());
             else if (tag == "neverHide")
                   setNeverHide(e.readInt());
+            else if (tag == "showIfSystemEmpty")
+                  setShowIfEmpty(e.readInt());
             else if (tag == "keylist")
                   _keys.read(e, _score);
             else if (tag == "bracket") {

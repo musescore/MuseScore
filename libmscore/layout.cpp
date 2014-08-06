@@ -10,7 +10,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-// #include <fenv.h>
 #include "page.h"
 #include "sig.h"
 #include "key.h"
@@ -2069,6 +2068,8 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       //
       int staves = _staves.size();
       int staffIdx = 0;
+      bool systemIsEmpty = true;
+
       foreach (Staff* staff, _staves) {
             SysStaff* s  = system->staff(staffIdx);
             bool oldShow = s->show();
@@ -2119,8 +2120,12 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                               }
                         }
                   s->setShow(hideStaff ? false : staff->show());
+                  if (s->show()) {
+                        systemIsEmpty = false;
+                        }
                   }
             else {
+                  systemIsEmpty = false;
                   s->setShow(true);
                   }
 
@@ -2132,6 +2137,14 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                         }
                   }
             ++staffIdx;
+            }
+      if (systemIsEmpty) {
+            foreach (Staff* staff, _staves) {
+                  SysStaff* s  = system->staff(staff->idx());
+                  if (staff->showIfEmpty() && !s->show()) {
+                        s->setShow(true);
+                        }
+                  }
             }
       }
 

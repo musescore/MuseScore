@@ -62,6 +62,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       staff->setStaffType(orgStaff->staffType());
       staff->setPart(part);
       staff->setNeverHide(orgStaff->neverHide());
+      staff->setShowIfEmpty(orgStaff->showIfEmpty());
 
       // hide string data controls if instrument has no strings
       stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
@@ -72,6 +73,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       color->setColor(s->color());
       partName->setText(part->partName());
       neverHide->setChecked(staff->neverHide());
+      showIfEmpty->setChecked(staff->showIfEmpty());
 
       updateStaffType();
       updateInstrument();
@@ -235,6 +237,7 @@ void EditStaff::apply()
       qreal userDist = spinExtraDistance->value();
       QColor col     = color->color();
       bool nhide     = neverHide->isChecked();
+      bool ifEmpty   = showIfEmpty->isChecked();
 
       if (!(instrument == *part->instr()) || part->partName() != partName->text()) {
             Interval v1 = instrument.transpose();
@@ -252,8 +255,10 @@ void EditStaff::apply()
          || userDist != staff->userDist()
          || col != staff->color()
          || nhide != staff->neverHide()
-         )
-            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide));
+         || ifEmpty != staff->showIfEmpty()
+         ) {
+            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide, ifEmpty));
+            }
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {
             // updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
