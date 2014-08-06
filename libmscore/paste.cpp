@@ -58,6 +58,9 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                 tickLen       = e.intAttribute("len", 0);
             int srcStaffStart = e.intAttribute("staff", 0);
                 staves        = e.intAttribute("staves", 0);
+            int voiceOffset[VOICES];
+            std::fill(voiceOffset,voiceOffset+VOICES,-1);
+
             e.setTickOffset(dstTick - tickStart);
             e.initTick(0);
 
@@ -72,7 +75,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                   e.setTransposeDiatonic(0);
 
                   int srcStaffIdx = e.attribute("id", "0").toInt();
-                  int voices = e.attribute("voices","0").toInt();
                   int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
 
                   if (dstStaffIdx >= nstaves()) {
@@ -90,11 +92,16 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               e.setTransposeChromatic(e.readInt());
                         else if (tag == "transposeDiatonic")
                               e.setTransposeDiatonic(e.readInt());
+                        else if (tag == "voice") {
+                              int voiceId = e.attribute("id", "-1").toInt();
+                              Q_ASSERT(voiceId >= 0 && voiceId < VOICES);
+                              voiceOffset[voiceId] = e.readInt();
+                              }
                         else if (tag == "tick") {
                               int tick = e.readInt();
                               e.initTick(tick);
                               int shift = tick - tickStart;
-                              if (makeGap && !makeGap1(dstTick + shift, dstStaffIdx, Fraction::fromTicks(tickLen - shift), voices)) {
+                              if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen),voiceOffset)) {
                                     qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
                                     done = true; // break main loop, cannot make gap
                                     break;
@@ -139,6 +146,12 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                                                 chord->add(gc);
                                                 }
                                           graceNotes.clear();
+                                          }
+                                    //shorten last cr to fit in the space made by makeGap
+                                    if ((tick - dstTick) + cr->durationTicks() > tickLen) {
+                                          int newLength = tickLen - (tick - dstTick);
+                                          cr->setDuration(newLength);
+                                          cr->setDurationType(newLength);
                                           }
                                     pasteChordRest(cr, tick, e.transpose());
                                     }
