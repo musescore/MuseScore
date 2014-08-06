@@ -2872,10 +2872,9 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
       {
       int tick1 = m1->tick();
       int tick2 = m2->endTick();
-
-//      for (auto i : _spanner.findContained(tick1, tick2)) {
-//            undo(new RemoveElement(i.value));
-//            }
+      for (auto i : _spanner.findContained(tick1, tick2)) {
+            undo(new RemoveElement(i.value));
+            }
 
       //
       //  handle ties which start before m1 and end in (m1-m2)
@@ -2900,8 +2899,8 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
             }
       undo(new RemoveMeasures(m1, m2));
 
-      int ticks = tick2 - tick1;
-      undoInsertTime(m1->tick(), -ticks);
+//      int ticks = tick2 - tick1;
+//      undoInsertTime(m1->tick(), -ticks);
       }
 
 //---------------------------------------------------------
