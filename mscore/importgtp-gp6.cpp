@@ -258,6 +258,8 @@ void GuitarPro6::readScore(QDomNode* scoreNode)
             QString nodeName = currentNode.nodeName();
             if (!nodeName.compare("Title"))
                   title = currentNode.toElement().text();
+            if (!nodeName.compare("Copyright"))
+                  score->setMetaTag("copyright", currentNode.toElement().text());
             else if (!nodeName.compare("Subtitle"))
                   subtitle = currentNode.toElement().text();
             else if (!nodeName.compare("Artist"))

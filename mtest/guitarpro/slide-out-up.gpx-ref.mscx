@@ -134,6 +134,8 @@
           <ChordLine>
             <subtype>2</subtype>
             <straight>1</straight>
+            <lengthX>10</lengthX>
+            <lengthY>10</lengthY>
             <lid>8</lid>
             </ChordLine>
           </Chord>
@@ -150,6 +152,8 @@
           <ChordLine>
             <subtype>2</subtype>
             <straight>1</straight>
+            <lengthX>10</lengthX>
+            <lengthY>10</lengthY>
             <lid>11</lid>
             </ChordLine>
           </Chord>
@@ -166,6 +170,8 @@
           <ChordLine>
             <subtype>2</subtype>
             <straight>1</straight>
+            <lengthX>10</lengthX>
+            <lengthY>10</lengthY>
             <lid>14</lid>
             </ChordLine>
           </Chord>
@@ -182,6 +188,8 @@
           <ChordLine>
             <subtype>2</subtype>
             <straight>1</straight>
+            <lengthX>10</lengthX>
+            <lengthY>10</lengthY>
             <lid>17</lid>
             </ChordLine>
           </Chord>
@@ -356,6 +364,8 @@
             <ChordLine>
               <subtype>2</subtype>
               <straight>1</straight>
+              <lengthX>10</lengthX>
+              <lengthY>10</lengthY>
               <lid>8</lid>
               </ChordLine>
             </Chord>
@@ -372,6 +382,8 @@
             <ChordLine>
               <subtype>2</subtype>
               <straight>1</straight>
+              <lengthX>10</lengthX>
+              <lengthY>10</lengthY>
               <lid>11</lid>
               </ChordLine>
             </Chord>
@@ -388,6 +400,8 @@
             <ChordLine>
               <subtype>2</subtype>
               <straight>1</straight>
+              <lengthX>10</lengthX>
+              <lengthY>10</lengthY>
               <lid>14</lid>
               </ChordLine>
             </Chord>
@@ -404,6 +418,8 @@
             <ChordLine>
               <subtype>2</subtype>
               <straight>1</straight>
+              <lengthX>10</lengthX>
+              <lengthY>10</lengthY>
               <lid>17</lid>
               </ChordLine>
             </Chord>
@@ -442,6 +458,8 @@
             <ChordLine>
               <subtype>2</subtype>
               <straight>1</straight>
+              <lengthX>10</lengthX>
+              <lengthY>10</lengthY>
               <lid>8</lid>
               </ChordLine>
             </Chord>
@@ -458,6 +476,8 @@
             <ChordLine>
               <subtype>2</subtype>
               <straight>1</straight>
+              <lengthX>10</lengthX>
+              <lengthY>10</lengthY>
               <lid>11</lid>
               </ChordLine>
             </Chord>
@@ -474,6 +494,8 @@
             <ChordLine>
               <subtype>2</subtype>
               <straight>1</straight>
+              <lengthX>10</lengthX>
+              <lengthY>10</lengthY>
               <lid>14</lid>
               </ChordLine>
             </Chord>
@@ -490,6 +512,8 @@
             <ChordLine>
               <subtype>2</subtype>
               <straight>1</straight>
+              <lengthX>10</lengthX>
+              <lengthY>10</lengthY>
               <lid>17</lid>
               </ChordLine>
             </Chord>
