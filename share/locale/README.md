@@ -1,3 +1,8 @@
+How to update a translation
+===========================
+
+Read http://musescore.org/node/22982
+
 How to add a new language
 =========================
 
@@ -5,7 +10,7 @@ You need the name of the language and the code
 
 On transifex
 ------
-* Add the new language to the resource on Transifex ( http://musescore.org/node/22982 )
+* Add the new language to the resource on Transifex
 
 In MuseScore source 
 ------
