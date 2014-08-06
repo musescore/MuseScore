@@ -722,11 +722,12 @@ class ChangeStaff : public UndoCommand {
       qreal       userDist;
       QColor      color;
       bool        neverHide;
+      bool        showIfEmpty;
 
       void flip();
 
    public:
-      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color, bool _neverHide);
+      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color, bool _neverHide, bool _showIfEmpty);
       UNDO_NAME("ChangeStaff")
       };
 

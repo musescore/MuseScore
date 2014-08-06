@@ -2326,14 +2326,15 @@ void ChangePageFormat::flip()
 //---------------------------------------------------------
 
 ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible,
-   qreal _userDist, QColor _color, bool _neverHide)
+   qreal _userDist, QColor _color, bool _neverHide, bool _showIfEmpty)
       {
-      staff     = _staff;
-      small     = _small;
-      invisible = _invisible;
-      userDist  = _userDist;
-      color     = _color;
-      neverHide = _neverHide;
+      staff       = _staff;
+      small       = _small;
+      invisible   = _invisible;
+      userDist    = _userDist;
+      color       = _color;
+      neverHide   = _neverHide;
+      showIfEmpty = _showIfEmpty;
       }
 
 //---------------------------------------------------------
@@ -2355,23 +2356,26 @@ void ChangeStaff::flip()
       {
       bool invisibleChanged = staff->invisible() != invisible;
 
-      int oldSmall      = staff->small();
-      bool oldInvisible = staff->invisible();
-      qreal oldUserDist = staff->userDist();
-      QColor oldColor   = staff->color();
-      bool oldNeverHide = staff->neverHide();
+      int oldSmall        = staff->small();
+      bool oldInvisible   = staff->invisible();
+      qreal oldUserDist   = staff->userDist();
+      QColor oldColor     = staff->color();
+      bool oldNeverHide   = staff->neverHide();
+      bool oldShowIfEmpty = staff->showIfEmpty();
 
       staff->setSmall(small);
       staff->setInvisible(invisible);
       staff->setUserDist(userDist);
       staff->setColor(color);
       staff->setNeverHide(neverHide);
+      staff->setShowIfEmpty(showIfEmpty);
 
-      small     = oldSmall;
-      invisible = oldInvisible;
-      userDist  = oldUserDist;
-      color     = oldColor;
-      neverHide = oldNeverHide;
+      small       = oldSmall;
+      invisible   = oldInvisible;
+      userDist    = oldUserDist;
+      color       = oldColor;
+      neverHide   = oldNeverHide;
+      showIfEmpty = oldShowIfEmpty;
 
       Score* score = staff->score();
       if (invisibleChanged) {

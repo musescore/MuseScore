@@ -101,7 +101,8 @@ class Staff : public QObject {
       int _barLineTo;                  ///< line of end staff to draw the bar line to (0= staff top line, ...)
       bool _small        { false };
       bool _invisible    { false };
-      bool _neverHide    { false };
+      bool _neverHide    { false };    ///< always show this staff, even if empty and hideEmptyStaves is true
+      bool _showIfEmpty  { false };    ///< show this staff if system is empty and hideEmptyStaves is true
       QColor _color      { MScore::defaultColor };
       qreal _userDist    { 0.0   };        ///< user edited extra distance
 
@@ -174,6 +175,8 @@ class Staff : public QObject {
       void setInvisible(bool val)    { _invisible = val;    }
       bool neverHide() const         { return _neverHide;   }
       void setNeverHide(bool val)    { _neverHide = val;    }
+      bool showIfEmpty() const       { return _showIfEmpty; }
+      void setShowIfEmpty(bool val)  { _showIfEmpty = val;  }
 
       void setSlashStyle(bool val);
       int lines() const;

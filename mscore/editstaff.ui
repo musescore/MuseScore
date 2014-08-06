@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>893</width>
-    <height>583</height>
+    <height>603</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -825,6 +825,13 @@
            </widget>
           </item>
          </layout>
+        </item>
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="showIfEmpty">
+          <property name="text">
+           <string>Do not hide if system is empty</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
