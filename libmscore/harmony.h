@@ -104,6 +104,7 @@ class Harmony : public Text {
       ~Harmony();
       virtual Harmony* clone() const           { return new Harmony(*this); }
       virtual Element::Type type() const       { return Element::Type::HARMONY; }
+      virtual bool systemFlag() const override { return false;  }
 
       void setId(int d)                        { _id = d; }
       int id() const                           { return _id;           }
