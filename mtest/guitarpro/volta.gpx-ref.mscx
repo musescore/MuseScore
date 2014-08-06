@@ -153,14 +153,6 @@
           <lid>11</lid>
           <accidental>0</accidental>
           </KeySig>
-        <Volta id="2">
-          <lid>27</lid>
-          <beginText>
-            <style>Volta</style>
-            <text>1,2</text>
-            </beginText>
-          <endings></endings>
-          </Volta>
         <Chord>
           <lid>12</lid>
           <durationType>whole</durationType>
@@ -192,15 +184,6 @@
           <lid>17</lid>
           <accidental>0</accidental>
           </KeySig>
-        <endSpanner id="2"/>
-        <Volta id="3">
-          <lid>28</lid>
-          <beginText>
-            <style>Volta</style>
-            <text>3</text>
-            </beginText>
-          <endings></endings>
-          </Volta>
         <Chord>
           <lid>18</lid>
           <durationType>whole</durationType>
@@ -226,17 +209,13 @@
             <string>2</string>
             </Note>
           </Chord>
-        <tick>3840</tick>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
         </Measure>
       <Measure number="4">
         <KeySig>
           <lid>23</lid>
           <accidental>0</accidental>
           </KeySig>
-        <endSpanner id="3"/>
+        <endSpanner id="2"/>
         <Chord>
           <lid>24</lid>
           <durationType>whole</durationType>
@@ -253,9 +232,9 @@
           <span>1</span>
           </BarLine>
         <tick>5760</tick>
-        <endSpanner id="3"/>
-        <endSpanner id="3"/>
-        <endSpanner id="3"/>
+        <endSpanner id="2"/>
+        <endSpanner id="2"/>
+        <endSpanner id="2"/>
         </Measure>
       </Staff>
     <Score>
@@ -432,14 +411,6 @@
             <lid>11</lid>
             <accidental>0</accidental>
             </KeySig>
-          <Volta id="4">
-            <lid>27</lid>
-            <beginText>
-              <style>Volta</style>
-              <text>1,2</text>
-              </beginText>
-            <endings></endings>
-            </Volta>
           <Chord>
             <lid>12</lid>
             <durationType>whole</durationType>
@@ -471,15 +442,6 @@
             <lid>17</lid>
             <accidental>0</accidental>
             </KeySig>
-          <endSpanner id="4"/>
-          <Volta id="5">
-            <lid>28</lid>
-            <beginText>
-              <style>Volta</style>
-              <text>3</text>
-              </beginText>
-            <endings></endings>
-            </Volta>
           <Chord>
             <lid>18</lid>
             <durationType>whole</durationType>
@@ -505,17 +467,13 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>3840</tick>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
           </Measure>
         <Measure number="4">
           <KeySig>
             <lid>23</lid>
             <accidental>0</accidental>
             </KeySig>
-          <endSpanner id="5"/>
+          <endSpanner id="3"/>
           <Chord>
             <lid>24</lid>
             <durationType>whole</durationType>
@@ -532,9 +490,9 @@
             <span>1</span>
             </BarLine>
           <tick>5760</tick>
-          <endSpanner id="5"/>
-          <endSpanner id="5"/>
-          <endSpanner id="5"/>
+          <endSpanner id="3"/>
+          <endSpanner id="3"/>
+          <endSpanner id="3"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -609,7 +567,6 @@
             <lid>17</lid>
             <accidental>0</accidental>
             </KeySig>
-          <endSpanner id="4"/>
           <Chord>
             <lid>18</lid>
             <durationType>whole</durationType>
@@ -635,17 +592,13 @@
               <string>2</string>
               </Note>
             </Chord>
-          <tick>3840</tick>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
           </Measure>
         <Measure number="4">
           <KeySig>
             <lid>23</lid>
             <accidental>0</accidental>
             </KeySig>
-          <endSpanner id="5"/>
+          <endSpanner id="3"/>
           <Chord>
             <lid>24</lid>
             <durationType>whole</durationType>
@@ -662,9 +615,9 @@
             <span>1</span>
             </BarLine>
           <tick>5760</tick>
-          <endSpanner id="5"/>
-          <endSpanner id="5"/>
-          <endSpanner id="5"/>
+          <endSpanner id="3"/>
+          <endSpanner id="3"/>
+          <endSpanner id="3"/>
           </Measure>
         </Staff>
       <name>S-Gt</name>

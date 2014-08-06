@@ -66,7 +66,7 @@ void GuitarPro5::readInfo()
       readDelphiString();
       QString copyright = readDelphiString();
       if (!copyright.isEmpty())
-            score->setMetaTag("copyright", QString("Copyright %1\nAll Rights Reserved - International Copyright Secured").arg(copyright));
+            score->setMetaTag("copyright", QString("%1").arg(copyright));
 
       transcriber  = readDelphiString();
       instructions = readDelphiString();

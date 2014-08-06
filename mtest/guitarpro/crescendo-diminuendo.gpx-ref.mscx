@@ -132,11 +132,6 @@
             <string>2</string>
             </Note>
           </Chord>
-        <HairPin id="2">
-          <subtype>0</subtype>
-          <veloChange>10</veloChange>
-          <lid>21</lid>
-          </HairPin>
         <Chord>
           <lid>8</lid>
           <durationType>half</durationType>
@@ -148,7 +143,6 @@
             <string>3</string>
             </Note>
           </Chord>
-        <endSpanner id="2"/>
         <Chord>
           <lid>10</lid>
           <durationType>quarter</durationType>
@@ -160,10 +154,6 @@
             <string>4</string>
             </Note>
           </Chord>
-        <tick>1440</tick>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
         </Measure>
       <Measure number="2">
         <KeySig>
@@ -181,7 +171,7 @@
             <string>2</string>
             </Note>
           </Chord>
-        <HairPin id="3">
+        <HairPin id="2">
           <subtype>1</subtype>
           <veloChange>10</veloChange>
           <lid>22</lid>
@@ -197,7 +187,7 @@
             <string>3</string>
             </Note>
           </Chord>
-        <endSpanner id="3"/>
+        <endSpanner id="2"/>
         <Chord>
           <lid>18</lid>
           <durationType>quarter</durationType>
@@ -214,9 +204,9 @@
           <span>1</span>
           </BarLine>
         <tick>3360</tick>
-        <endSpanner id="3"/>
-        <endSpanner id="3"/>
-        <endSpanner id="3"/>
+        <endSpanner id="2"/>
+        <endSpanner id="2"/>
+        <endSpanner id="2"/>
         </Measure>
       </Staff>
     <Score>
@@ -372,11 +362,6 @@
               <string>2</string>
               </Note>
             </Chord>
-          <HairPin id="4">
-            <subtype>0</subtype>
-            <veloChange>10</veloChange>
-            <lid>21</lid>
-            </HairPin>
           <Chord>
             <lid>8</lid>
             <durationType>half</durationType>
@@ -388,7 +373,6 @@
               <string>3</string>
               </Note>
             </Chord>
-          <endSpanner id="4"/>
           <Chord>
             <lid>10</lid>
             <durationType>quarter</durationType>
@@ -400,11 +384,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>1440</tick>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
-          <endSpanner id="5"/>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -422,7 +401,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <HairPin id="6">
+          <HairPin id="3">
             <subtype>1</subtype>
             <veloChange>10</veloChange>
             <lid>22</lid>
@@ -438,7 +417,7 @@
               <string>3</string>
               </Note>
             </Chord>
-          <endSpanner id="6"/>
+          <endSpanner id="3"/>
           <Chord>
             <lid>18</lid>
             <durationType>quarter</durationType>
@@ -455,10 +434,10 @@
             <span>1</span>
             </BarLine>
           <tick>3360</tick>
-          <endSpanner id="6"/>
-          <endSpanner id="6"/>
-          <endSpanner id="6"/>
-          <endSpanner id="7"/>
+          <endSpanner id="3"/>
+          <endSpanner id="3"/>
+          <endSpanner id="3"/>
+          <endSpanner id="4"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -482,11 +461,6 @@
               <string>2</string>
               </Note>
             </Chord>
-          <HairPin id="5">
-            <subtype>0</subtype>
-            <veloChange>10</veloChange>
-            <lid>21</lid>
-            </HairPin>
           <Chord>
             <lid>8</lid>
             <durationType>half</durationType>
@@ -498,7 +472,6 @@
               <string>3</string>
               </Note>
             </Chord>
-          <endSpanner id="4"/>
           <Chord>
             <lid>10</lid>
             <durationType>quarter</durationType>
@@ -510,10 +483,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>1440</tick>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -531,7 +500,7 @@
               <string>2</string>
               </Note>
             </Chord>
-          <HairPin id="7">
+          <HairPin id="4">
             <subtype>1</subtype>
             <veloChange>10</veloChange>
             <lid>22</lid>
@@ -547,7 +516,7 @@
               <string>3</string>
               </Note>
             </Chord>
-          <endSpanner id="6"/>
+          <endSpanner id="3"/>
           <Chord>
             <lid>18</lid>
             <durationType>quarter</durationType>
@@ -564,9 +533,9 @@
             <span>1</span>
             </BarLine>
           <tick>3360</tick>
-          <endSpanner id="6"/>
-          <endSpanner id="6"/>
-          <endSpanner id="6"/>
+          <endSpanner id="3"/>
+          <endSpanner id="3"/>
+          <endSpanner id="3"/>
           </Measure>
         </Staff>
       <name>S-Gt</name>

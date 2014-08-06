@@ -112,8 +112,8 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Dynamic>
-          <subtype>mf</subtype>
-          <velocity>80</velocity>
+          <subtype>f</subtype>
+          <velocity>96</velocity>
           <lid>4</lid>
           </Dynamic>
         <Tempo>
@@ -123,75 +123,67 @@
           </Tempo>
         <Chord>
           <lid>6</lid>
-          <durationType>quarter</durationType>
+          <durationType>whole</durationType>
           <Note>
-            <lid>7</lid>
-            <pitch>45</pitch>
-            <tpc>17</tpc>
-            <fret>5</fret>
-            <string>5</string>
-            </Note>
-          <ChordLine>
-            <subtype>1</subtype>
-            <straight>1</straight>
-            <lengthX>10</lengthX>
-            <lengthY>10</lengthY>
             <lid>8</lid>
-            </ChordLine>
-          </Chord>
-        <Chord>
-          <lid>9</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>10</lid>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
-            <fret>7</fret>
+            <pitch>50</pitch>
+            <tpc>16</tpc>
+            <fret>0</fret>
             <string>3</string>
             </Note>
-          <ChordLine>
-            <subtype>1</subtype>
-            <straight>1</straight>
-            <lengthX>10</lengthX>
-            <lengthY>10</lengthY>
-            <lid>11</lid>
-            </ChordLine>
-          </Chord>
-        <Chord>
-          <lid>12</lid>
-          <durationType>quarter</durationType>
           <Note>
-            <lid>13</lid>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            <fret>5</fret>
+            <lid>7</lid>
+            <pitch>53</pitch>
+            <tpc>13</tpc>
+            <fret>8</fret>
+            <string>4</string>
+            </Note>
+          <Note>
+            <lid>9</lid>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            <fret>2</fret>
             <string>2</string>
             </Note>
-          <ChordLine>
+          <Arpeggio>
+            <lid>10</lid>
             <subtype>1</subtype>
-            <straight>1</straight>
-            <lengthX>10</lengthX>
-            <lengthY>10</lengthY>
-            <lid>14</lid>
-            </ChordLine>
+            </Arpeggio>
           </Chord>
+        </Measure>
+      <Measure number="2">
+        <KeySig>
+          <lid>12</lid>
+          <accidental>0</accidental>
+          </KeySig>
         <Chord>
-          <lid>15</lid>
-          <durationType>quarter</durationType>
+          <lid>13</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>14</lid>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            <fret>3</fret>
+            <string>4</string>
+            </Note>
+          <Note>
+            <lid>15</lid>
+            <pitch>53</pitch>
+            <tpc>13</tpc>
+            <fret>3</fret>
+            <string>3</string>
+            </Note>
           <Note>
             <lid>16</lid>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            <fret>3</fret>
-            <string>0</string>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            <fret>2</fret>
+            <string>2</string>
             </Note>
-          <ChordLine>
-            <subtype>1</subtype>
-            <straight>1</straight>
-            <lengthX>10</lengthX>
-            <lengthY>10</lengthY>
+          <Arpeggio>
             <lid>17</lid>
-            </ChordLine>
+            <subtype>2</subtype>
+            </Arpeggio>
           </Chord>
         <BarLine>
           <subtype>end</subtype>
@@ -332,8 +324,8 @@
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
             <lid>4</lid>
             </Dynamic>
           <Tempo>
@@ -343,75 +335,67 @@
             </Tempo>
           <Chord>
             <lid>6</lid>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <lid>7</lid>
-              <pitch>45</pitch>
-              <tpc>17</tpc>
-              <fret>5</fret>
-              <string>5</string>
-              </Note>
-            <ChordLine>
-              <subtype>1</subtype>
-              <straight>1</straight>
-              <lengthX>10</lengthX>
-              <lengthY>10</lengthY>
               <lid>8</lid>
-              </ChordLine>
-            </Chord>
-          <Chord>
-            <lid>9</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>10</lid>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              <fret>7</fret>
+              <pitch>50</pitch>
+              <tpc>16</tpc>
+              <fret>0</fret>
               <string>3</string>
               </Note>
-            <ChordLine>
-              <subtype>1</subtype>
-              <straight>1</straight>
-              <lengthX>10</lengthX>
-              <lengthY>10</lengthY>
-              <lid>11</lid>
-              </ChordLine>
-            </Chord>
-          <Chord>
-            <lid>12</lid>
-            <durationType>quarter</durationType>
             <Note>
-              <lid>13</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
+              <lid>7</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <fret>8</fret>
+              <string>4</string>
+              </Note>
+            <Note>
+              <lid>9</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
               <string>2</string>
               </Note>
-            <ChordLine>
+            <Arpeggio>
+              <lid>10</lid>
               <subtype>1</subtype>
-              <straight>1</straight>
-              <lengthX>10</lengthX>
-              <lengthY>10</lengthY>
-              <lid>14</lid>
-              </ChordLine>
+              </Arpeggio>
             </Chord>
+          </Measure>
+        <Measure number="2">
+          <KeySig>
+            <lid>12</lid>
+            <accidental>0</accidental>
+            </KeySig>
           <Chord>
-            <lid>15</lid>
-            <durationType>quarter</durationType>
+            <lid>13</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>14</lid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              <fret>3</fret>
+              <string>4</string>
+              </Note>
+            <Note>
+              <lid>15</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <fret>3</fret>
+              <string>3</string>
+              </Note>
             <Note>
               <lid>16</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>3</fret>
-              <string>0</string>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
               </Note>
-            <ChordLine>
-              <subtype>1</subtype>
-              <straight>1</straight>
-              <lengthX>10</lengthX>
-              <lengthY>10</lengthY>
+            <Arpeggio>
               <lid>17</lid>
-              </ChordLine>
+              <subtype>2</subtype>
+              </Arpeggio>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
@@ -431,75 +415,67 @@
             </KeySig>
           <Chord>
             <lid>6</lid>
-            <durationType>quarter</durationType>
+            <durationType>whole</durationType>
             <Note>
-              <lid>7</lid>
-              <pitch>45</pitch>
-              <tpc>17</tpc>
-              <fret>5</fret>
-              <string>5</string>
-              </Note>
-            <ChordLine>
-              <subtype>1</subtype>
-              <straight>1</straight>
-              <lengthX>10</lengthX>
-              <lengthY>10</lengthY>
               <lid>8</lid>
-              </ChordLine>
-            </Chord>
-          <Chord>
-            <lid>9</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>10</lid>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              <fret>7</fret>
+              <pitch>50</pitch>
+              <tpc>16</tpc>
+              <fret>0</fret>
               <string>3</string>
               </Note>
-            <ChordLine>
-              <subtype>1</subtype>
-              <straight>1</straight>
-              <lengthX>10</lengthX>
-              <lengthY>10</lengthY>
-              <lid>11</lid>
-              </ChordLine>
-            </Chord>
-          <Chord>
-            <lid>12</lid>
-            <durationType>quarter</durationType>
             <Note>
-              <lid>13</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
+              <lid>7</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <fret>8</fret>
+              <string>4</string>
+              </Note>
+            <Note>
+              <lid>9</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
               <string>2</string>
               </Note>
-            <ChordLine>
+            <Arpeggio>
+              <lid>10</lid>
               <subtype>1</subtype>
-              <straight>1</straight>
-              <lengthX>10</lengthX>
-              <lengthY>10</lengthY>
-              <lid>14</lid>
-              </ChordLine>
+              </Arpeggio>
             </Chord>
+          </Measure>
+        <Measure number="2">
+          <KeySig>
+            <lid>12</lid>
+            <accidental>0</accidental>
+            </KeySig>
           <Chord>
-            <lid>15</lid>
-            <durationType>quarter</durationType>
+            <lid>13</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>14</lid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              <fret>3</fret>
+              <string>4</string>
+              </Note>
+            <Note>
+              <lid>15</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <fret>3</fret>
+              <string>3</string>
+              </Note>
             <Note>
               <lid>16</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              <fret>3</fret>
-              <string>0</string>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
               </Note>
-            <ChordLine>
-              <subtype>1</subtype>
-              <straight>1</straight>
-              <lengthX>10</lengthX>
-              <lengthY>10</lengthY>
+            <Arpeggio>
               <lid>17</lid>
-              </ChordLine>
+              <subtype>2</subtype>
+              </Arpeggio>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
