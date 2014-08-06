@@ -9,7 +9,6 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
-      <lyricsDistance>2</lyricsDistance>
       <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <bracketDistance>0.3</bracketDistance>
       <measureSpacing>1.3</measureSpacing>
