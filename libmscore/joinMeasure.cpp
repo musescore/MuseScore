@@ -32,6 +32,8 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       range.read(m1->first(), m2->last());
 
       undoRemoveMeasures(m1, m2);
+      undoInsertTime(m1->tick(), -(m2->endTick() - m1->tick()));
+
       Measure* m = static_cast<Measure*>(insertMeasure(Element::Type::MEASURE, m2->next(), true));
       fixTicks();
 

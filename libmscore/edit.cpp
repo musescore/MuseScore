@@ -457,6 +457,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns)
       {
       Measure* lm  = fm;
       Measure* fm1 = fm;
+
       //
       // split into Measure segments fm-lm
       //
@@ -535,6 +536,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             ts->setParent(seg);
             ts->setTrack(track);
             ts->setStretch((ns / fm->timesig()).reduced());
+            ts->setSelected(false);
             undoAddElement(ts);
             timesigStretchChanged(ts, fm, staffIdx);
             return;
@@ -600,6 +602,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         else {
                               undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
                                     ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
+                              nsig->setSelected(false);
                               nsig->setDropTarget(0);       // DEBUG
                               }
                         }
@@ -1486,8 +1489,11 @@ void Score::deleteItem(Element* el)
                   cmdDeleteTuplet(static_cast<Tuplet*>(el), true);
                   break;
 
-            case Element::Type::MEASURE:
-                  undoRemoveMeasures(static_cast<Measure*>(el), static_cast<Measure*>(el));
+            case Element::Type::MEASURE: {
+                  Measure* m = static_cast<Measure*>(el);
+                  undoRemoveMeasures(m, m);
+                  undoInsertTime(m->tick(), -(m->endTick() - m->tick()));
+                  }
                   break;
 
             case Element::Type::BRACKET:
@@ -1629,6 +1635,7 @@ void Score::cmdDeleteSelectedMeasures()
             Measure* ie = score->tick2measure(endTick);
 
             undoRemoveMeasures(is, ie);
+            undoInsertTime(is->tick(), -(ie->endTick() - is->tick()));
 
             // adjust views
             Measure* focusOn = is->prevMeasure() ? is->prevMeasure() : firstMeasure();
