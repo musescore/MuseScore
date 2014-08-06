@@ -51,15 +51,15 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>S-Gt</trackName>
+      <trackName>E-Gt</trackName>
       <Instrument>
-        <longName pos="0">Acoustic Guitar</longName>
-        <shortName pos="0">Guit.</shortName>
-        <trackName>Acoustic Guitar</trackName>
+        <longName pos="0">Electric Guitar</longName>
+        <shortName pos="0">El. Guit.</shortName>
+        <trackName>Electric Guitar</trackName>
         <minPitchP>40</minPitchP>
-        <maxPitchP>83</maxPitchP>
+        <maxPitchP>86</maxPitchP>
         <minPitchA>40</minPitchA>
-        <maxPitchA>83</maxPitchA>
+        <maxPitchA>86</maxPitchA>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -86,7 +86,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="25"/>
+          <program value="27"/>
           </Channel>
         </Instrument>
       </Part>
@@ -107,211 +107,171 @@
           </KeySig>
         <TimeSig>
           <lid>3</lid>
-          <sigN>5</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <TremoloBar>
+          <point time="0" pitch="0" vibrato="0"/>
+          <point time="50" pitch="-125" vibrato="0"/>
+          <point time="100" pitch="-250" vibrato="0"/>
+          </TremoloBar>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>4</lid>
+          <lid>5</lid>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
-          <lid>5</lid>
+          <lid>6</lid>
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
-          <lid>6</lid>
+          <lid>7</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>7</lid>
-            <Fingering>
-              <lid>8</lid>
-              <text>O</text>
-              </Fingering>
-            <pitch>62</pitch>
-            <tpc>16</tpc>
-            <fret>7</fret>
+            <lid>8</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
-        <Chord>
+        <Rest>
           <lid>9</lid>
           <durationType>quarter</durationType>
-          <Note>
-            <lid>10</lid>
-            <Fingering>
-              <lid>11</lid>
-              <text>t</text>
-              </Fingering>
-            <pitch>53</pitch>
-            <tpc>13</tpc>
-            <fret>3</fret>
-            <string>3</string>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>12</lid>
+          </Rest>
+        <Rest>
+          <lid>10</lid>
           <durationType>quarter</durationType>
-          <Note>
-            <lid>13</lid>
-            <Fingering>
-              <lid>14</lid>
-              <text>1</text>
-              </Fingering>
-            <pitch>47</pitch>
-            <tpc>19</tpc>
-            <fret>2</fret>
-            <string>4</string>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>15</lid>
-          <durationType>half</durationType>
-          <Note>
-            <lid>16</lid>
-            <Fingering>
-              <lid>17</lid>
-              <text>2</text>
-              </Fingering>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            <fret>5</fret>
-            <string>3</string>
-            </Note>
-          </Chord>
+          </Rest>
+        <Rest>
+          <lid>11</lid>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       <Measure number="2">
         <KeySig>
-          <lid>19</lid>
+          <lid>13</lid>
           <accidental>0</accidental>
           </KeySig>
+        <TremoloBar>
+          <point time="0" pitch="0" vibrato="0"/>
+          <point time="50" pitch="150" vibrato="0"/>
+          <point time="100" pitch="0" vibrato="0"/>
+          </TremoloBar>
         <Chord>
-          <lid>20</lid>
+          <lid>15</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>21</lid>
-            <Fingering>
-              <lid>22</lid>
-              <text>3</text>
-              </Fingering>
-            <pitch>59</pitch>
-            <tpc>19</tpc>
-            <fret>4</fret>
-            <string>2</string>
+            <lid>16</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <fret>15</fret>
+            <string>4</string>
             </Note>
           </Chord>
+        <Rest>
+          <lid>17</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>18</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>19</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <KeySig>
+          <lid>21</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <TremoloBar>
+          <point time="0" pitch="0" vibrato="0"/>
+          <point time="50" pitch="-550" vibrato="0"/>
+          <point time="100" pitch="-550" vibrato="0"/>
+          </TremoloBar>
         <Chord>
           <lid>23</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>24</lid>
-            <Accidental>
-              <subtype>flat</subtype>
-              </Accidental>
-            <Fingering>
-              <lid>25</lid>
-              <text>4</text>
-              </Fingering>
-            <pitch>51</pitch>
-            <tpc>11</tpc>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
             <fret>1</fret>
-            <string>3</string>
+            <string>1</string>
             </Note>
           </Chord>
+        <TremoloBar>
+          <point time="0" pitch="-550" vibrato="0"/>
+          <point time="50" pitch="-550" vibrato="0"/>
+          <point time="100" pitch="-400" vibrato="0"/>
+          </TremoloBar>
         <Chord>
           <lid>26</lid>
           <durationType>quarter</durationType>
           <Note>
             <lid>27</lid>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
-            <Fingering>
-              <lid>28</lid>
-              <text>P</text>
-              </Fingering>
-            <pitch>61</pitch>
-            <tpc>21</tpc>
-            <fret>6</fret>
-            <string>2</string>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>29</lid>
-          <durationType>half</durationType>
-          <Note>
-            <lid>30</lid>
-            <Accidental>
-              <subtype>natural</subtype>
-              </Accidental>
-            <Fingering>
-              <lid>31</lid>
-              <text>I</text>
-              </Fingering>
-            <pitch>52</pitch>
-            <tpc>18</tpc>
-            <fret>2</fret>
-            <string>3</string>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="3">
-        <KeySig>
-          <lid>33</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <Chord>
-          <lid>34</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>35</lid>
-            <Fingering>
-              <lid>36</lid>
-              <text>M</text>
-              </Fingering>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            <fret>5</fret>
-            <string>3</string>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>37</lid>
-          <durationType>half</durationType>
-          <Note>
-            <lid>38</lid>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
-            <Fingering>
-              <lid>39</lid>
-              <text>A</text>
-              </Fingering>
-            <pitch>56</pitch>
-            <tpc>22</tpc>
-            <fret>1</fret>
-            <string>2</string>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>40</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>41</lid>
-            <Fingering>
-              <lid>42</lid>
-              <text>C</text>
-              </Fingering>
-            <pitch>52</pitch>
-            <tpc>18</tpc>
-            <fret>2</fret>
-            <string>3</string>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <fret>15</fret>
+            <string>4</string>
             </Note>
           </Chord>
         <Rest>
-          <lid>43</lid>
+          <lid>28</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>29</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <KeySig>
+          <lid>31</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <TremoloBar>
+          <point time="0" pitch="0" vibrato="0"/>
+          <point time="50" pitch="200" vibrato="0"/>
+          <point time="100" pitch="300" vibrato="0"/>
+          </TremoloBar>
+        <Chord>
+          <lid>33</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>34</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <fret>1</fret>
+            <string>1</string>
+            </Note>
+          </Chord>
+        <TremoloBar>
+          <point time="0" pitch="300" vibrato="0"/>
+          <point time="100" pitch="300" vibrato="0"/>
+          </TremoloBar>
+        <Chord>
+          <lid>36</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>37</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <fret>1</fret>
+            <string>1</string>
+            </Note>
+          </Chord>
+        <Rest>
+          <lid>38</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>39</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -390,13 +350,13 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Acoustic Guitar</longName>
-          <shortName pos="0">Guit.</shortName>
-          <trackName>Acoustic Guitar</trackName>
+          <longName pos="0">Electric Guitar</longName>
+          <shortName pos="0">El. Guit.</shortName>
+          <trackName>Electric Guitar</trackName>
           <minPitchP>40</minPitchP>
-          <maxPitchP>83</maxPitchP>
+          <maxPitchP>86</maxPitchP>
           <minPitchA>40</minPitchA>
-          <maxPitchA>83</maxPitchA>
+          <maxPitchA>86</maxPitchA>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -423,7 +383,7 @@
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
-            <program value="25"/>
+            <program value="27"/>
             </Channel>
           </Instrument>
         </Part>
@@ -433,7 +393,7 @@
           <lid>0</lid>
           <Text>
             <style>Instrument Name (Part)</style>
-            <text>Acoustic Guitar</text>
+            <text>Electric Guitar</text>
             </Text>
           </VBox>
         <Measure number="1">
@@ -448,211 +408,171 @@
             </KeySig>
           <TimeSig>
             <lid>3</lid>
-            <sigN>5</sigN>
+            <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="-125" vibrato="0"/>
+            <point time="100" pitch="-250" vibrato="0"/>
+            </TremoloBar>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>4</lid>
+            <lid>5</lid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <lid>5</lid>
+            <lid>6</lid>
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>7</lid>
-              <Fingering>
-                <lid>8</lid>
-                <text>O</text>
-                </Fingering>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              <fret>7</fret>
+              <lid>8</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Chord>
+          <Rest>
             <lid>9</lid>
             <durationType>quarter</durationType>
-            <Note>
-              <lid>10</lid>
-              <Fingering>
-                <lid>11</lid>
-                <text>t</text>
-                </Fingering>
-              <pitch>53</pitch>
-              <tpc>13</tpc>
-              <fret>3</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>12</lid>
+            </Rest>
+          <Rest>
+            <lid>10</lid>
             <durationType>quarter</durationType>
-            <Note>
-              <lid>13</lid>
-              <Fingering>
-                <lid>14</lid>
-                <text>1</text>
-                </Fingering>
-              <pitch>47</pitch>
-              <tpc>19</tpc>
-              <fret>2</fret>
-              <string>4</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>15</lid>
-            <durationType>half</durationType>
-            <Note>
-              <lid>16</lid>
-              <Fingering>
-                <lid>17</lid>
-                <text>2</text>
-                </Fingering>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>5</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
+            </Rest>
+          <Rest>
+            <lid>11</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         <Measure number="2">
           <KeySig>
-            <lid>19</lid>
+            <lid>13</lid>
             <accidental>0</accidental>
             </KeySig>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="150" vibrato="0"/>
+            <point time="100" pitch="0" vibrato="0"/>
+            </TremoloBar>
           <Chord>
-            <lid>20</lid>
+            <lid>15</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>21</lid>
-              <Fingering>
-                <lid>22</lid>
-                <text>3</text>
-                </Fingering>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>4</fret>
-              <string>2</string>
+              <lid>16</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>15</fret>
+              <string>4</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>17</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>18</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>19</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </Measure>
+        <Measure number="3">
+          <KeySig>
+            <lid>21</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="-550" vibrato="0"/>
+            <point time="100" pitch="-550" vibrato="0"/>
+            </TremoloBar>
           <Chord>
             <lid>23</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>24</lid>
-              <Accidental>
-                <subtype>flat</subtype>
-                </Accidental>
-              <Fingering>
-                <lid>25</lid>
-                <text>4</text>
-                </Fingering>
-              <pitch>51</pitch>
-              <tpc>11</tpc>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
               <fret>1</fret>
-              <string>3</string>
+              <string>1</string>
               </Note>
             </Chord>
+          <TremoloBar>
+            <point time="0" pitch="-550" vibrato="0"/>
+            <point time="50" pitch="-550" vibrato="0"/>
+            <point time="100" pitch="-400" vibrato="0"/>
+            </TremoloBar>
           <Chord>
             <lid>26</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>27</lid>
-              <Accidental>
-                <subtype>sharp</subtype>
-                </Accidental>
-              <Fingering>
-                <lid>28</lid>
-                <text>P</text>
-                </Fingering>
-              <pitch>61</pitch>
-              <tpc>21</tpc>
-              <fret>6</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>29</lid>
-            <durationType>half</durationType>
-            <Note>
-              <lid>30</lid>
-              <Accidental>
-                <subtype>natural</subtype>
-                </Accidental>
-              <Fingering>
-                <lid>31</lid>
-                <text>I</text>
-                </Fingering>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
-          </Measure>
-        <Measure number="3">
-          <KeySig>
-            <lid>33</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>34</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>35</lid>
-              <Fingering>
-                <lid>36</lid>
-                <text>M</text>
-                </Fingering>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>5</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>37</lid>
-            <durationType>half</durationType>
-            <Note>
-              <lid>38</lid>
-              <Accidental>
-                <subtype>sharp</subtype>
-                </Accidental>
-              <Fingering>
-                <lid>39</lid>
-                <text>A</text>
-                </Fingering>
-              <pitch>56</pitch>
-              <tpc>22</tpc>
-              <fret>1</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>40</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>41</lid>
-              <Fingering>
-                <lid>42</lid>
-                <text>C</text>
-                </Fingering>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>15</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Rest>
-            <lid>43</lid>
+            <lid>28</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>29</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </Measure>
+        <Measure number="4">
+          <KeySig>
+            <lid>31</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="200" vibrato="0"/>
+            <point time="100" pitch="300" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <lid>33</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>34</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <TremoloBar>
+            <point time="0" pitch="300" vibrato="0"/>
+            <point time="100" pitch="300" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <lid>36</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>37</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <lid>38</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>39</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -671,185 +591,157 @@
             <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="-125" vibrato="0"/>
+            <point time="100" pitch="-250" vibrato="0"/>
+            </TremoloBar>
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>7</lid>
-              <Fingering>
-                <lid>8</lid>
-                <text>O</text>
-                </Fingering>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              <fret>7</fret>
+              <lid>8</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Chord>
+          <Rest>
             <lid>9</lid>
             <durationType>quarter</durationType>
-            <Note>
-              <lid>10</lid>
-              <Fingering>
-                <lid>11</lid>
-                <text>t</text>
-                </Fingering>
-              <pitch>53</pitch>
-              <tpc>13</tpc>
-              <fret>3</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>12</lid>
+            </Rest>
+          <Rest>
+            <lid>10</lid>
             <durationType>quarter</durationType>
-            <Note>
-              <lid>13</lid>
-              <Fingering>
-                <lid>14</lid>
-                <text>1</text>
-                </Fingering>
-              <pitch>47</pitch>
-              <tpc>19</tpc>
-              <fret>2</fret>
-              <string>4</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>15</lid>
-            <durationType>half</durationType>
-            <Note>
-              <lid>16</lid>
-              <Fingering>
-                <lid>17</lid>
-                <text>2</text>
-                </Fingering>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>5</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
+            </Rest>
+          <Rest>
+            <lid>11</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           </Measure>
         <Measure number="2">
           <KeySig>
-            <lid>19</lid>
+            <lid>13</lid>
             <accidental>0</accidental>
             </KeySig>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="150" vibrato="0"/>
+            <point time="100" pitch="0" vibrato="0"/>
+            </TremoloBar>
           <Chord>
-            <lid>20</lid>
+            <lid>15</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>21</lid>
-              <Fingering>
-                <lid>22</lid>
-                <text>3</text>
-                </Fingering>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>4</fret>
-              <string>2</string>
+              <lid>16</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>15</fret>
+              <string>4</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>17</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>18</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>19</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </Measure>
+        <Measure number="3">
+          <KeySig>
+            <lid>21</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="-550" vibrato="0"/>
+            <point time="100" pitch="-550" vibrato="0"/>
+            </TremoloBar>
           <Chord>
             <lid>23</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>24</lid>
-              <Fingering>
-                <lid>25</lid>
-                <text>4</text>
-                </Fingering>
-              <pitch>51</pitch>
-              <tpc>11</tpc>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
               <fret>1</fret>
-              <string>3</string>
+              <string>1</string>
               </Note>
             </Chord>
+          <TremoloBar>
+            <point time="0" pitch="-550" vibrato="0"/>
+            <point time="50" pitch="-550" vibrato="0"/>
+            <point time="100" pitch="-400" vibrato="0"/>
+            </TremoloBar>
           <Chord>
             <lid>26</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>27</lid>
-              <Fingering>
-                <lid>28</lid>
-                <text>P</text>
-                </Fingering>
-              <pitch>61</pitch>
-              <tpc>21</tpc>
-              <fret>6</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>29</lid>
-            <durationType>half</durationType>
-            <Note>
-              <lid>30</lid>
-              <Fingering>
-                <lid>31</lid>
-                <text>I</text>
-                </Fingering>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
-          </Measure>
-        <Measure number="3">
-          <KeySig>
-            <lid>33</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>34</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>35</lid>
-              <Fingering>
-                <lid>36</lid>
-                <text>M</text>
-                </Fingering>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>5</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>37</lid>
-            <durationType>half</durationType>
-            <Note>
-              <lid>38</lid>
-              <Fingering>
-                <lid>39</lid>
-                <text>A</text>
-                </Fingering>
-              <pitch>56</pitch>
-              <tpc>22</tpc>
-              <fret>1</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>40</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>41</lid>
-              <Fingering>
-                <lid>42</lid>
-                <text>C</text>
-                </Fingering>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>15</fret>
+              <string>4</string>
               </Note>
             </Chord>
           <Rest>
-            <lid>43</lid>
+            <lid>28</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>29</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </Measure>
+        <Measure number="4">
+          <KeySig>
+            <lid>31</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="200" vibrato="0"/>
+            <point time="100" pitch="300" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <lid>33</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>34</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <TremoloBar>
+            <point time="0" pitch="300" vibrato="0"/>
+            <point time="100" pitch="300" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <lid>36</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>37</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <lid>38</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>39</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -858,7 +750,7 @@
             </BarLine>
           </Measure>
         </Staff>
-      <name>S-Gt</name>
+      <name>E-Gt</name>
       </Score>
     </Score>
   </museScore>

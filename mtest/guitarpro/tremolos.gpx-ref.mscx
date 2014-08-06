@@ -99,13 +99,14 @@
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
+          <lid>1</lid>
           </Clef>
         <KeySig>
-          <lid>1</lid>
+          <lid>2</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>2</lid>
+          <lid>3</lid>
           <sigN>5</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -113,18 +114,18 @@
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>3</lid>
+          <lid>4</lid>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
-          <lid>4</lid>
+          <lid>5</lid>
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
-          <lid>5</lid>
+          <lid>6</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>6</lid>
+            <lid>7</lid>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <fret>7</fret>
@@ -132,20 +133,7 @@
             </Note>
           <Tremolo>
             <subtype>r8</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <lid>7</lid>
-          <durationType>quarter</durationType>
-          <Note>
             <lid>8</lid>
-            <pitch>53</pitch>
-            <tpc>13</tpc>
-            <fret>3</fret>
-            <string>3</string>
-            </Note>
-          <Tremolo>
-            <subtype>r16</subtype>
             </Tremolo>
           </Chord>
         <Chord>
@@ -153,6 +141,21 @@
           <durationType>quarter</durationType>
           <Note>
             <lid>10</lid>
+            <pitch>53</pitch>
+            <tpc>13</tpc>
+            <fret>3</fret>
+            <string>3</string>
+            </Note>
+          <Tremolo>
+            <subtype>r16</subtype>
+            <lid>11</lid>
+            </Tremolo>
+          </Chord>
+        <Chord>
+          <lid>12</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>13</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
             <fret>2</fret>
@@ -160,10 +163,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>11</lid>
+          <lid>14</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>12</lid>
+            <lid>15</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>5</fret>
@@ -171,6 +174,7 @@
             </Note>
           <Tremolo>
             <subtype>r32</subtype>
+            <lid>16</lid>
             </Tremolo>
           </Chord>
         <BarLine>
@@ -299,13 +303,14 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <lid>1</lid>
             </Clef>
           <KeySig>
-            <lid>1</lid>
+            <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>2</lid>
+            <lid>3</lid>
             <sigN>5</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -313,18 +318,18 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>3</lid>
+            <lid>4</lid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <lid>4</lid>
+            <lid>5</lid>
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>7</fret>
@@ -332,20 +337,7 @@
               </Note>
             <Tremolo>
               <subtype>r8</subtype>
-              </Tremolo>
-            </Chord>
-          <Chord>
-            <lid>7</lid>
-            <durationType>quarter</durationType>
-            <Note>
               <lid>8</lid>
-              <pitch>53</pitch>
-              <tpc>13</tpc>
-              <fret>3</fret>
-              <string>3</string>
-              </Note>
-            <Tremolo>
-              <subtype>r16</subtype>
               </Tremolo>
             </Chord>
           <Chord>
@@ -353,6 +345,21 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>10</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <fret>3</fret>
+              <string>3</string>
+              </Note>
+            <Tremolo>
+              <subtype>r16</subtype>
+              <lid>11</lid>
+              </Tremolo>
+            </Chord>
+          <Chord>
+            <lid>12</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>13</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -360,10 +367,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>14</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>12</lid>
+              <lid>15</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -371,6 +378,7 @@
               </Note>
             <Tremolo>
               <subtype>r32</subtype>
+              <lid>16</lid>
               </Tremolo>
             </Chord>
           <BarLine>
@@ -386,14 +394,14 @@
             <transposingClefType>TAB</transposingClefType>
             </Clef>
           <KeySig>
-            <lid>1</lid>
+            <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>7</fret>
@@ -401,20 +409,7 @@
               </Note>
             <Tremolo>
               <subtype>r8</subtype>
-              </Tremolo>
-            </Chord>
-          <Chord>
-            <lid>7</lid>
-            <durationType>quarter</durationType>
-            <Note>
               <lid>8</lid>
-              <pitch>53</pitch>
-              <tpc>13</tpc>
-              <fret>3</fret>
-              <string>3</string>
-              </Note>
-            <Tremolo>
-              <subtype>r16</subtype>
               </Tremolo>
             </Chord>
           <Chord>
@@ -422,6 +417,21 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>10</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <fret>3</fret>
+              <string>3</string>
+              </Note>
+            <Tremolo>
+              <subtype>r16</subtype>
+              <lid>11</lid>
+              </Tremolo>
+            </Chord>
+          <Chord>
+            <lid>12</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>13</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -429,10 +439,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>14</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>12</lid>
+              <lid>15</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -440,6 +450,7 @@
               </Note>
             <Tremolo>
               <subtype>r32</subtype>
+              <lid>16</lid>
               </Tremolo>
             </Chord>
           <BarLine>

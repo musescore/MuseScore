@@ -98,14 +98,15 @@ void TremoloBar::draw(QPainter* painter) const
 //      qreal y = -_spatium * .8;
 //      qreal x2, y2;
 
-      for (int pt = 0; pt < n; ++pt) {
-            if (pt == (n-1))
-                  break;
-//            int pitch = _points[pt].pitch;
+
+      int previousTime = _points[0].time;
+      int previousPitch = _points[0].pitch;
+      for (int pt = 1; pt < n; ++pt) {
+            painter->drawLine(QLineF(previousTime/10, -previousPitch/25-_spatium*3,
+                                     _points[pt].time/10, -_points[pt].pitch/25-_spatium*3));
+            previousTime = _points[pt].time;
+            previousPitch = _points[pt].pitch;
             }
-      //debug:
-      painter->drawLine(QLineF(0.0, 0.0, _spatium*1.5, _spatium*3));
-      painter->drawLine(QLineF(_spatium*1.5, _spatium*3, _spatium*3, 0.0));
       }
 
 //---------------------------------------------------------
