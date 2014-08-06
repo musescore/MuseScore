@@ -44,6 +44,7 @@ class TextProp : public QWidget, public Ui::TextProperties {
       void mmToggled(bool);
       void doResetToTextStyle();
       void boxButtonToggled(bool);
+      void styleIndexChanged(int idx);
 
    signals:
       void resetToStyleClicked();
