@@ -48,6 +48,8 @@ class TestSelectionFilter : public QObject, public MTest
       void filterOtherText()        { testFilter(14,SelectionFilterType::OTHER_TEXT); }
       void filterOtherLine()        { testFilterSpanner(15,SelectionFilterType::OTHER_LINE); }
       void filterTremolo()          { testFilter(16,SelectionFilterType::TREMOLO); }
+      void filterVoice1()           { testFilter(17,SelectionFilterType::FIRST_VOICE); }
+      void filterVoice2()           { testFilter(18,SelectionFilterType::SECOND_VOICE); }
       };
 
 //---------------------------------------------------------
