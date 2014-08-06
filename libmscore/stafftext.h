@@ -46,6 +46,9 @@ class StaffText : public Text  {
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
 
+      virtual int subtype() const         { return (int) textStyleType(); }
+      virtual QString subtypeName() const { return textStyle().name(); }
+
       QString channelName(int voice) const                { return _channelNames[voice]; }
       void setChannelName(int v, const QString& s)        { _channelNames[v] = s;        }
       const QList<ChannelActions>* channelActions() const { return &_channelActions;    }
