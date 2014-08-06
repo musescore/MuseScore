@@ -99,13 +99,14 @@
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
+          <lid>1</lid>
           </Clef>
         <KeySig>
-          <lid>1</lid>
+          <lid>2</lid>
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <lid>2</lid>
+          <lid>3</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -113,18 +114,18 @@
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>3</lid>
+          <lid>4</lid>
           </Dynamic>
         <Tempo>
           <tempo>2</tempo>
-          <lid>4</lid>
+          <lid>5</lid>
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
-          <lid>5</lid>
+          <lid>6</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>6</lid>
+            <lid>7</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -134,13 +135,13 @@
         <HairPin id="2">
           <subtype>0</subtype>
           <veloChange>10</veloChange>
-          <lid>20</lid>
+          <lid>21</lid>
           </HairPin>
         <Chord>
-          <lid>7</lid>
+          <lid>8</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>8</lid>
+            <lid>9</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>2</fret>
@@ -149,10 +150,10 @@
           </Chord>
         <endSpanner id="2"/>
         <Chord>
-          <lid>9</lid>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>10</lid>
+            <lid>11</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -166,14 +167,14 @@
         </Measure>
       <Measure number="2">
         <KeySig>
-          <lid>12</lid>
+          <lid>13</lid>
           <accidental>0</accidental>
           </KeySig>
         <Chord>
-          <lid>13</lid>
+          <lid>14</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>14</lid>
+            <lid>15</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -183,13 +184,13 @@
         <HairPin id="3">
           <subtype>1</subtype>
           <veloChange>10</veloChange>
-          <lid>21</lid>
+          <lid>22</lid>
           </HairPin>
         <Chord>
-          <lid>15</lid>
+          <lid>16</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>16</lid>
+            <lid>17</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>2</fret>
@@ -198,10 +199,10 @@
           </Chord>
         <endSpanner id="3"/>
         <Chord>
-          <lid>17</lid>
+          <lid>18</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>18</lid>
+            <lid>19</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -338,13 +339,14 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <lid>1</lid>
             </Clef>
           <KeySig>
-            <lid>1</lid>
+            <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
           <TimeSig>
-            <lid>2</lid>
+            <lid>3</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -352,18 +354,18 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>3</lid>
+            <lid>4</lid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <lid>4</lid>
+            <lid>5</lid>
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -373,13 +375,13 @@
           <HairPin id="4">
             <subtype>0</subtype>
             <veloChange>10</veloChange>
-            <lid>20</lid>
+            <lid>21</lid>
             </HairPin>
           <Chord>
-            <lid>7</lid>
+            <lid>8</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>8</lid>
+              <lid>9</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -388,10 +390,10 @@
             </Chord>
           <endSpanner id="4"/>
           <Chord>
-            <lid>9</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>11</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -406,14 +408,14 @@
           </Measure>
         <Measure number="2">
           <KeySig>
-            <lid>12</lid>
+            <lid>13</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>13</lid>
+            <lid>14</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -423,13 +425,13 @@
           <HairPin id="6">
             <subtype>1</subtype>
             <veloChange>10</veloChange>
-            <lid>21</lid>
+            <lid>22</lid>
             </HairPin>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -438,10 +440,10 @@
             </Chord>
           <endSpanner id="6"/>
           <Chord>
-            <lid>17</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>18</lid>
+              <lid>19</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -466,14 +468,14 @@
             <transposingClefType>TAB</transposingClefType>
             </Clef>
           <KeySig>
-            <lid>1</lid>
+            <lid>2</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -483,13 +485,13 @@
           <HairPin id="5">
             <subtype>0</subtype>
             <veloChange>10</veloChange>
-            <lid>20</lid>
+            <lid>21</lid>
             </HairPin>
           <Chord>
-            <lid>7</lid>
+            <lid>8</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>8</lid>
+              <lid>9</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -498,10 +500,10 @@
             </Chord>
           <endSpanner id="4"/>
           <Chord>
-            <lid>9</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>11</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -515,14 +517,14 @@
           </Measure>
         <Measure number="2">
           <KeySig>
-            <lid>12</lid>
+            <lid>13</lid>
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>13</lid>
+            <lid>14</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -532,13 +534,13 @@
           <HairPin id="7">
             <subtype>1</subtype>
             <veloChange>10</veloChange>
-            <lid>21</lid>
+            <lid>22</lid>
             </HairPin>
           <Chord>
-            <lid>15</lid>
+            <lid>16</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>17</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -547,10 +549,10 @@
             </Chord>
           <endSpanner id="6"/>
           <Chord>
-            <lid>17</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>18</lid>
+              <lid>19</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>

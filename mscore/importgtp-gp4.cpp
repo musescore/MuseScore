@@ -144,7 +144,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
 //   readNote
 //---------------------------------------------------------
 
-bool GuitarPro4::readNote(int string, Note* note)
+bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
       {
       uchar noteBits = readUChar();
 
@@ -173,7 +173,7 @@ bool GuitarPro4::readNote(int string, Note* note)
             else if (variant == 2) {
                   /* guitar pro 4 bundles tied notes with slides in the representation
                    * we take note when we see ties and do not create slides for these notes. */
-                  slides[note->track()] = -2;
+                  slides[staffIdx * VOICES] = -2;
                   tieNote = true;
                   }
             else if (variant == 3) {                 // dead notes = ghost note
@@ -195,8 +195,8 @@ bool GuitarPro4::readNote(int string, Note* note)
       // set dynamic information on note if different from previous note
       if (noteBits & 0x10) {
             int d = readChar();
-            if (previousDynamic[staffIdx * VOICES] != d) {
-                  previousDynamic[staffIdx * VOICES] = d;
+            if (previousDynamic != d) {
+                  previousDynamic = d;
                   addDynamic(note, d);
                   }
             }
@@ -216,7 +216,7 @@ bool GuitarPro4::readNote(int string, Note* note)
       if (noteBits & 0x80) {              // fingering
             int leftFinger = readUChar();
             int rightFinger = readUChar();
-            Fingering* f = new Fingering(score);
+            Text* f = new Fingering(score);
             QString finger;
             // if there is a valid left hand fingering
             if (leftFinger < 5) {
@@ -501,14 +501,16 @@ void GuitarPro4::read(QFile* fp)
       key        = readInt();
       /*int octave =*/ readUChar();    // octave
 
+      //previousDynamic = new int [staves * VOICES];
+      // initialise the dynamics to 0
+      //for (int i = 0; i < staves * VOICES; i++)
+      //      previousDynamic[i] = 0;
+      previousDynamic = -1;
+      previousTempo = -1;
+
       readChannels();
       measures = readInt();
       staves   = readInt();
-
-      previousDynamic = new int [staves * VOICES];
-      // initialise the dynamics to 0
-      for (int i = 0; i < staves * VOICES; i++)
-            previousDynamic[i] = 0;
 
       int tnumerator   = 4;
       int tdenominator = 4;
@@ -767,7 +769,7 @@ void GuitarPro4::read(QFile* fp)
                                     Note* note = new Note(score);
                                     static_cast<Chord*>(cr)->add(note);
 
-                                    hasSlur = readNote(6-i, note);
+                                    hasSlur = readNote(6-i, staffIdx, note);
                                     note->setTpcFromPitch();
                                     }
                               }

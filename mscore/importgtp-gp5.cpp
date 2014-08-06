@@ -153,7 +153,6 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       if (slides.contains(track))
             slide = slides.take(track);
 
-
       int pause = -1;
       if (beatBits & 0x40)
             pause = readUChar();
@@ -320,6 +319,7 @@ void GuitarPro5::readMixChange(Measure* measure)
             readChar();
       if (reverb >= 0)
             readChar();
+      //qDebug("read reverb: %d", reverb);
       if (phase >= 0)
             readChar();
       if (tremolo >= 0)
@@ -428,6 +428,7 @@ void GuitarPro5::readTracks()
             ch.pan     = channelDefaults[midiChannel].pan;
             ch.chorus  = channelDefaults[midiChannel].chorus;
             ch.reverb  = channelDefaults[midiChannel].reverb;
+            //qDebug("default2: %d", channelDefaults[i].reverb);
             // missing: phase, tremolo
             ch.updateInitList();
             }
@@ -479,6 +480,11 @@ void GuitarPro5::read(QFile* fp)
 
       previousDynamic = -1;
       previousTempo = -1;
+      //previousDynamic = new int [staves * VOICES];
+      // initialise the dynamics to 0
+      //for (int i = 0; i < staves * VOICES; i++)
+      //      previousDynamic[i] = 0;
+
       int tempo = readInt();
       if (version > 500)
             skip(1);
@@ -678,7 +684,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
       if (modMask2 & 0x4) {    // tremolo picking length
             int tremoloDivision = readUChar();
             Chord* chord = note->chord();
-            Tremolo* t = new Tremolo(chord->score());
+            Tremolo* t = new Tremolo(score);
             if (tremoloDivision == 1) {
                   t->setTremoloType(TremoloType::R8);
                   chord->add(t);
@@ -769,8 +775,8 @@ bool GuitarPro5::readNote(int string, Note* note)
 
       if (noteBits & 0x10) {          // velocity
             int d = readChar();
-            if (previousDynamic[staffIdx * VOICES] != d) {
-                  previousDynamic[staffIdx * VOICES] = d;
+            if (previousDynamic != d) {
+                  previousDynamic = d;
                   addDynamic(note, d);
                   }
             }

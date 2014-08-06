@@ -113,7 +113,7 @@ class GuitarPro {
       QFile* f;
       int curPos;
       int previousTempo;
-      int* previousDynamic;
+      int previousDynamic;
       int tempo;
       QMap<int,int> slides;
 
@@ -221,7 +221,7 @@ class GuitarPro4 : public GuitarPro {
 
       int slide;
       void readInfo();
-      bool readNote(int string, Note* note);
+      bool readNote(int string, int staffIdx, Note* note);
       virtual int readBeatEffects(int track, Segment* segment);
       virtual void readMixChange(Measure* measure);
       int convertGP4SlideNum(int slide);
@@ -305,6 +305,8 @@ class GuitarPro6 : public GuitarPro {
       QDomNode getNode(QString id, QDomNode nodes);
       void unhandledNode(QString nodeName);
       void makeTie(Note* note);
+      int* previousDynamic;
+      void addTremoloBar(Segment* segment, int track, int whammyOrigin, int whammyMiddle, int whammyEnd);
 
    protected:
       void readNote(int string, Note* note);
