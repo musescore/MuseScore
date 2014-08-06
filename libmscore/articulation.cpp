@@ -87,6 +87,26 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             "fadeout", QT_TRANSLATE_NOOP("articulation", "fade out"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
+      { SymId::guitarVolumeSwell, SymId::guitarVolumeSwell,
+            "volumeswell", QT_TRANSLATE_NOOP("articulation", "volume swell"),
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            },
+      { SymId::wiggleSawtooth, SymId::wiggleSawtooth,
+            "wigglesawtooth", QT_TRANSLATE_NOOP("articulation", "wiggle sawtooth"),
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            },
+      { SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide,
+            "wigglesawtoothwide", QT_TRANSLATE_NOOP("articulation", "wiggle sawtooth wide"),
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            },
+      { SymId::wiggleVibratoLargeFaster, SymId::wiggleVibratoLargeFaster,
+            "wigglevibratolargefaster", QT_TRANSLATE_NOOP("articulation", "wiggle vibrato large faster"),
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            },
+      { SymId::wiggleVibratoLargeSlowest, SymId::wiggleVibratoLargeSlowest,
+            "wigglevibratolargeslowest", QT_TRANSLATE_NOOP("articulation", "wide vibrato large slowest"),
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            },
       { SymId::brassMuteOpen, SymId::brassMuteOpen,
             "ouvert", QT_TRANSLATE_NOOP("articulation", "ouvert"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
@@ -300,23 +320,28 @@ void Articulation::setSubtype(const QString& s)
                   bool up;
                   ArticulationType type;
                   } al[] = {
-                  { "fadein",           true,  ArticulationType::FadeIn },
-                  { "fadeout",          true,  ArticulationType::FadeOut },
-                  { "umarcato",         true,  ArticulationType::Marcato },
-                  { "dmarcato",         false, ArticulationType::Marcato },
-                  { "ufermata",         true,  ArticulationType::Fermata },
-                  { "dfermata",         false, ArticulationType::Fermata },
-                  { "ushortfermata",    true,  ArticulationType::Shortfermata },
-                  { "dshortfermata",    false, ArticulationType::Shortfermata },
-                  { "ulongfermata",     true,  ArticulationType::Longfermata },
-                  { "dlongfermata",     false, ArticulationType::Longfermata },
-                  { "uverylongfermata", true,  ArticulationType::Verylongfermata },
-                  { "dverylongfermata", false, ArticulationType::Verylongfermata },
+                  { "fadein",                 true,  ArticulationType::FadeIn },
+                  { "fadeout",                true,  ArticulationType::FadeOut },
+                  { "volumeswell",            true,  ArticulationType::VolumeSwell },
+                  { "wigglesawtooth",         true,  ArticulationType::WiggleSawtooth },
+                  { "wigglesawtoothwide",     true,  ArticulationType::WiggleSawtoothWide },
+                  { "wigglevibratolargefaster",  true,  ArticulationType::WiggleVibratoLargeFaster },
+                  { "wigglevibratolargeslowest", true,  ArticulationType::WiggleVibratoLargeSlowest },
+                  { "umarcato",               true,  ArticulationType::Marcato },
+                  { "dmarcato",               false, ArticulationType::Marcato },
+                  { "ufermata",               true,  ArticulationType::Fermata },
+                  { "dfermata",               false, ArticulationType::Fermata },
+                  { "ushortfermata",          true,  ArticulationType::Shortfermata },
+                  { "dshortfermata",          false, ArticulationType::Shortfermata },
+                  { "ulongfermata",           true,  ArticulationType::Longfermata },
+                  { "dlongfermata",           false, ArticulationType::Longfermata },
+                  { "uverylongfermata",       true,  ArticulationType::Verylongfermata },
+                  { "dverylongfermata",       false, ArticulationType::Verylongfermata },
                   // watch out, bug in 1.2 uportato and dportato are reversed
-                  { "dportato",         true,  ArticulationType::Portato },
-                  { "uportato",         false, ArticulationType::Portato },
-                  { "ustaccatissimo",   true,  ArticulationType::Staccatissimo },
-                  { "dstaccatissimo",   false, ArticulationType::Staccatissimo }
+                  { "dportato",               true,  ArticulationType::Portato },
+                  { "uportato",               false, ArticulationType::Portato },
+                  { "ustaccatissimo",         true,  ArticulationType::Staccatissimo },
+                  { "dstaccatissimo",         false, ArticulationType::Staccatissimo }
                   };
 
             int i;

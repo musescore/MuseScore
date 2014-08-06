@@ -127,6 +127,10 @@ private slots:
       void gp5Percussion()   { gpReadTest("all-percussion", "gp5"); }
       void gpxFermata()      { gpReadTest("fermata", "gpx"); }
       void gpxDirections()   { gpReadTest("directions", "gpx"); }
+      void gpxSlur()         { gpReadTest("slur", "gpx"); }
+      void gpxVibrato()      { gpReadTest("vibrato", "gpx"); }
+      void gpxVolumeSwell()  { gpReadTest("volume-swell", "gpx"); }
+      void gpxTremoloBar()   { gpReadTest("tremolo-bar", "gpx"); }
       };
 
 //---------------------------------------------------------

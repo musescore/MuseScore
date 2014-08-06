@@ -188,15 +188,20 @@
           <Slur type="stop" id="3"/>
           </Chord>
         <Chord>
-          <lid>17</lid>
+          <lid>16</lid>
           <durationType>16th</durationType>
-          <Articulation>
-            <subtype>fermata</subtype>
-            <lid>16</lid>
-            </Articulation>
           <Beam>2</Beam>
           <Note>
-            <lid>18</lid>
+            <lid>17</lid>
+            <Text>
+              <lid>18</lid>
+              <style></style>
+              <halign>center</halign>
+              <valign>center</valign>
+              <xoffset>0</xoffset>
+              <yoffset>-2</yoffset>
+              <text>S</text>
+              </Text>
             <pitch>38</pitch>
             <tpc>16</tpc>
             <head>1</head>
@@ -206,15 +211,20 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>20</lid>
+          <lid>19</lid>
           <durationType>16th</durationType>
-          <Articulation>
-            <subtype>fermata</subtype>
-            <lid>19</lid>
-            </Articulation>
           <Beam>2</Beam>
           <Note>
-            <lid>21</lid>
+            <lid>20</lid>
+            <Text>
+              <lid>21</lid>
+              <style></style>
+              <halign>center</halign>
+              <valign>center</valign>
+              <xoffset>0</xoffset>
+              <yoffset>-2</yoffset>
+              <text>P</text>
+              </Text>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>9</fret>
@@ -243,15 +253,20 @@
           <l2>27</l2>
           </Beam>
         <Chord>
-          <lid>26</lid>
+          <lid>25</lid>
           <durationType>16th</durationType>
-          <Articulation>
-            <subtype>fermata</subtype>
-            <lid>25</lid>
-            </Articulation>
           <Beam>3</Beam>
           <Note>
-            <lid>27</lid>
+            <lid>26</lid>
+            <Text>
+              <lid>27</lid>
+              <style></style>
+              <halign>center</halign>
+              <valign>center</valign>
+              <xoffset>0</xoffset>
+              <yoffset>-2</yoffset>
+              <text>S</text>
+              </Text>
             <pitch>33</pitch>
             <tpc>17</tpc>
             <head>1</head>
@@ -261,15 +276,20 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>29</lid>
+          <lid>28</lid>
           <durationType>16th</durationType>
-          <Articulation>
-            <subtype>fermata</subtype>
-            <lid>28</lid>
-            </Articulation>
           <Beam>3</Beam>
           <Note>
-            <lid>30</lid>
+            <lid>29</lid>
+            <Text>
+              <lid>30</lid>
+              <style></style>
+              <halign>center</halign>
+              <valign>center</valign>
+              <xoffset>0</xoffset>
+              <yoffset>-2</yoffset>
+              <text>P</text>
+              </Text>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>9</fret>
@@ -277,15 +297,20 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>32</lid>
+          <lid>31</lid>
           <durationType>16th</durationType>
-          <Articulation>
-            <subtype>fermata</subtype>
-            <lid>31</lid>
-            </Articulation>
           <Beam>3</Beam>
           <Note>
-            <lid>33</lid>
+            <lid>32</lid>
+            <Text>
+              <lid>33</lid>
+              <style></style>
+              <halign>center</halign>
+              <valign>center</valign>
+              <xoffset>0</xoffset>
+              <yoffset>-2</yoffset>
+              <text>S</text>
+              </Text>
             <pitch>33</pitch>
             <tpc>17</tpc>
             <head>1</head>
@@ -295,15 +320,20 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>35</lid>
+          <lid>34</lid>
           <durationType>16th</durationType>
-          <Articulation>
-            <subtype>fermata</subtype>
-            <lid>34</lid>
-            </Articulation>
           <Beam>3</Beam>
           <Note>
-            <lid>36</lid>
+            <lid>35</lid>
+            <Text>
+              <lid>36</lid>
+              <style></style>
+              <halign>center</halign>
+              <valign>center</valign>
+              <xoffset>0</xoffset>
+              <yoffset>-2</yoffset>
+              <text>P</text>
+              </Text>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>9</fret>
@@ -526,15 +556,20 @@
             <Slur type="stop" id="5"/>
             </Chord>
           <Chord>
-            <lid>17</lid>
+            <lid>16</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>16</lid>
-              </Articulation>
             <Beam>5</Beam>
             <Note>
-              <lid>18</lid>
+              <lid>17</lid>
+              <Text>
+                <lid>18</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>S</text>
+                </Text>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <head>1</head>
@@ -544,15 +579,20 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>20</lid>
+            <lid>19</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>19</lid>
-              </Articulation>
             <Beam>5</Beam>
             <Note>
-              <lid>21</lid>
+              <lid>20</lid>
+              <Text>
+                <lid>21</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>P</text>
+                </Text>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>9</fret>
@@ -581,15 +621,20 @@
             <l2>27</l2>
             </Beam>
           <Chord>
-            <lid>26</lid>
+            <lid>25</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>25</lid>
-              </Articulation>
             <Beam>6</Beam>
             <Note>
-              <lid>27</lid>
+              <lid>26</lid>
+              <Text>
+                <lid>27</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>S</text>
+                </Text>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -599,15 +644,20 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>29</lid>
+            <lid>28</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>28</lid>
-              </Articulation>
             <Beam>6</Beam>
             <Note>
-              <lid>30</lid>
+              <lid>29</lid>
+              <Text>
+                <lid>30</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>P</text>
+                </Text>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>9</fret>
@@ -615,15 +665,20 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>32</lid>
+            <lid>31</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>31</lid>
-              </Articulation>
             <Beam>6</Beam>
             <Note>
-              <lid>33</lid>
+              <lid>32</lid>
+              <Text>
+                <lid>33</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>S</text>
+                </Text>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -633,15 +688,20 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>35</lid>
+            <lid>34</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>34</lid>
-              </Articulation>
             <Beam>6</Beam>
             <Note>
-              <lid>36</lid>
+              <lid>35</lid>
+              <Text>
+                <lid>36</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>P</text>
+                </Text>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>9</fret>
@@ -746,15 +806,20 @@
             <Slur type="stop" id="7"/>
             </Chord>
           <Chord>
-            <lid>17</lid>
+            <lid>16</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>16</lid>
-              </Articulation>
             <Beam>8</Beam>
             <Note>
-              <lid>18</lid>
+              <lid>17</lid>
+              <Text>
+                <lid>18</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>S</text>
+                </Text>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <head>1</head>
@@ -764,15 +829,20 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>20</lid>
+            <lid>19</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>19</lid>
-              </Articulation>
             <Beam>8</Beam>
             <Note>
-              <lid>21</lid>
+              <lid>20</lid>
+              <Text>
+                <lid>21</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>P</text>
+                </Text>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>9</fret>
@@ -801,15 +871,20 @@
             <l2>46</l2>
             </Beam>
           <Chord>
-            <lid>26</lid>
+            <lid>25</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>25</lid>
-              </Articulation>
             <Beam>9</Beam>
             <Note>
-              <lid>27</lid>
+              <lid>26</lid>
+              <Text>
+                <lid>27</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>S</text>
+                </Text>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -819,15 +894,20 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>29</lid>
+            <lid>28</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>28</lid>
-              </Articulation>
             <Beam>9</Beam>
             <Note>
-              <lid>30</lid>
+              <lid>29</lid>
+              <Text>
+                <lid>30</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>P</text>
+                </Text>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>9</fret>
@@ -835,15 +915,20 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>32</lid>
+            <lid>31</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>31</lid>
-              </Articulation>
             <Beam>9</Beam>
             <Note>
-              <lid>33</lid>
+              <lid>32</lid>
+              <Text>
+                <lid>33</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>S</text>
+                </Text>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -853,15 +938,20 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>35</lid>
+            <lid>34</lid>
             <durationType>16th</durationType>
-            <Articulation>
-              <subtype>fermata</subtype>
-              <lid>34</lid>
-              </Articulation>
             <Beam>9</Beam>
             <Note>
-              <lid>36</lid>
+              <lid>35</lid>
+              <Text>
+                <lid>36</lid>
+                <style></style>
+                <halign>center</halign>
+                <valign>center</valign>
+                <xoffset>0</xoffset>
+                <yoffset>-2</yoffset>
+                <text>P</text>
+                </Text>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>9</fret>

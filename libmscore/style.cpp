@@ -565,6 +565,11 @@ StyleData::StyleData()
       _articulationAnchor[int(ArticulationType::Marcato)]         = ArticulationAnchor::CHORD;
       _articulationAnchor[int(ArticulationType::FadeIn)]          = ArticulationAnchor::CHORD;
       _articulationAnchor[int(ArticulationType::FadeOut)]         = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::VolumeSwell)]     = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::WiggleSawtooth)]  = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::WiggleSawtoothWide)]        = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::WiggleVibratoLargeFaster)]  = ArticulationAnchor::CHORD;
+      _articulationAnchor[int(ArticulationType::WiggleVibratoLargeSlowest)] = ArticulationAnchor::CHORD;
       _articulationAnchor[int(ArticulationType::Ouvert)]          = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Plusstop)]        = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Upbow)]           = ArticulationAnchor::TOP_STAFF;
