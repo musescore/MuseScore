@@ -80,7 +80,7 @@ void LineSegment::read(XmlReader& e)
 
 void LineSegment::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
-      *grips = 3;
+      *grips       = 3;
       *defaultGrip = 2;
       QPointF pp(pagePos());
       grip[int(GripLine::START)].translate(pp);
@@ -109,7 +109,7 @@ void LineSegment::setGrip(int grip, const QPointF& p)
             case GripLine::MIDDLE:
                   setUserOff(pt);
                   break;
-            default:
+            case GripLine::APERTURE:
                   break;
             }
       layout();   // needed?
@@ -132,7 +132,7 @@ QPointF LineSegment::getGrip(int grip) const
             case GripLine::MIDDLE:
                   p = userOff();
                   break;
-            default:
+            case GripLine::APERTURE:
                   break;
             }
       p /= spatium();
@@ -144,12 +144,13 @@ QPointF LineSegment::getGrip(int grip) const
 //    return page coordinates
 //---------------------------------------------------------
 
-QPointF LineSegment::gripAnchor(int grip) const
+QPointF LineSegment::gripAnchor(int _grip) const
       {
+      GripLine grip = (GripLine)_grip;
       qreal y = system()->staffYpage(staffIdx());
       if (spannerSegmentType() == SpannerSegmentType::MIDDLE) {
             qreal x;
-            switch((GripLine)grip) {
+            switch (grip) {
                   case GripLine::START:
                         x = system()->firstMeasure()->abbox().left();
                         break;
@@ -166,7 +167,7 @@ QPointF LineSegment::gripAnchor(int grip) const
             return QPointF(x, y);
             }
       else {
-            if (grip == int(GripLine::MIDDLE) || grip == int(GripLine::APERTURE)) // center grip or aperture grip
+            if (grip == GripLine::MIDDLE || grip == GripLine::APERTURE) // center grip or aperture grip
                   return QPointF(0, 0);
             else {
                   System* s;
@@ -412,6 +413,21 @@ QVariant LineSegment::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
+//   dragAnchor
+//---------------------------------------------------------
+
+QLineF LineSegment::dragAnchor() const
+      {
+      if (spannerSegmentType() != SpannerSegmentType::SINGLE && spannerSegmentType() != SpannerSegmentType::BEGIN)
+            return QLineF();
+      System* s;
+      QPointF p = line()->linePos(GripLine::START, &s);
+      p += QPointF(s->canvasPos().x(), s->staffYpage(line()->staffIdx()));
+
+      return QLineF(p, canvasPos());
+      }
+
+//---------------------------------------------------------
 //   SLine
 //---------------------------------------------------------
 
@@ -439,7 +455,7 @@ SLine::SLine(const SLine& s)
 //    return System/Staff coordinates
 //---------------------------------------------------------
 
-QPointF SLine::linePos(GripLine grip, System** sys)
+QPointF SLine::linePos(GripLine grip, System** sys) const
       {
       qreal x = 0.0;
       switch (anchor()) {

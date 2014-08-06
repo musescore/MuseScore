@@ -54,7 +54,7 @@ class Pedal : public TextLine {
       PropertyStyle lineStyleStyle;
 
    protected:
-      QPointF linePos(GripLine, System**) override;
+      QPointF linePos(GripLine, System**) const override;
 
    public:
       Pedal(Score* s);
