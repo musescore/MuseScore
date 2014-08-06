@@ -620,6 +620,7 @@ void Debugger::updateElement(Element* el)
                   case Element::Type::HBOX:
                   case Element::Type::FBOX:
                   case Element::Type::TBOX:             ew = new BoxView;             break;
+                  case Element::Type::TRILL:            ew = new SpannerView;         break;
 
                   case Element::Type::FINGERING:
                   case Element::Type::MARKER:

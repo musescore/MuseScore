@@ -299,7 +299,8 @@ void Trill::layout()
       //
       Segment* seg1  = startSegment();
       Segment* seg2  = endSegment();
-      if (seg2
+      if (seg1
+         && seg2
          && (seg1->system() == seg2->system())
          && (spannerSegments().size() == 1)
          && (seg2->tick() == seg2->measure()->tick())
@@ -490,5 +491,6 @@ void Trill::setYoff(qreal val)
       {
       rUserYoffset() += (val - score()->styleS(StyleIdx::trillY).val()) * spatium();
       }
+
 }
 
