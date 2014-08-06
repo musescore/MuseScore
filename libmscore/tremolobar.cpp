@@ -62,7 +62,7 @@ void TremoloBar::layout()
 //      qreal y = notePos.y() - _spatium;
 //      qreal x2, y2;
 
-      QRectF bb (0, 0, _spatium*3, -_spatium * 4);
+      QRectF bb (0, 0, _spatium, -_spatium * 5);
 #if 0
       for (int pt = 0; pt < n; ++pt) {
             if (pt == (n-1))
