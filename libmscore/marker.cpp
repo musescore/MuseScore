@@ -37,39 +37,40 @@ Marker::Marker(Score* s)
 void Marker::setMarkerType(Type t)
       {
       _markerType = t;
+      const char* txt = 0;
       switch (t) {
             case Type::SEGNO:
-                  setText("<sym>segno</sym>");
+                  txt = "<sym>segno</sym>";
                   setLabel("segno");
                   break;
 
             case Type::VARSEGNO:
-                  setText("<sym>segnoSerpent1</sym>");
+                  txt = "<sym>segnoSerpent1</sym>";
                   setLabel("varsegno");
                   break;
 
             case Type::CODA:
-                  setText("<sym>coda</sym>");
+                  txt = "<sym>coda</sym>";
                   setLabel("codab");
                   break;
 
             case Type::VARCODA:
-                  setText("<sym>codaSquare</sym>");
+                  txt = "<sym>codaSquare</sym>";
                   setLabel("varcoda");
                   break;
 
             case Type::CODETTA:
-                  setText("<sym>coda</sym><sym>coda</sym>");
+                  txt = "<sym>coda</sym><sym>coda</sym>";
                   setLabel("codetta");
                   break;
 
             case Type::FINE:
-                  setText("Fine");
+                  txt = "Fine";
                   setLabel("fine");
                   break;
 
             case Type::TOCODA:
-                  setText("To Coda");
+                  txt = "To Coda";
                   setTextStyleType(TextStyleType::REPEAT_RIGHT);
                   setLabel("coda");
                   break;
@@ -81,6 +82,8 @@ void Marker::setMarkerType(Type t)
                   qDebug("unknown marker type %hhd", t);
                   break;
             }
+      if (isEmpty() && txt)
+            setText(txt);
       }
 
 //---------------------------------------------------------
