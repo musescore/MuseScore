@@ -2040,7 +2040,6 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
       for(i=0; i<repeats.size(); ++i){
             OVE::RepeatSymbol* repeatPtr = static_cast<OVE::RepeatSymbol*>(repeats[i]);
             OVE::RepeatType type = repeatPtr->getRepeatType();
-            int absTick = mtt_->getTick(measure->no(), repeatPtr->getTick());
             Element* e = 0;
 
             switch(type) {
