@@ -2312,17 +2312,23 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
       Clef* gclef = 0;
       for (Element* e : cr->linkList()) {
             ChordRest* cr = static_cast<ChordRest*>(e);
-            Score* score = cr->score();
+            Score* score  = cr->score();
 
             //
             // create a clef segment before cr if it does not exist
             //
-            Segment* s = cr->segment();
+            Segment* s  = cr->segment();
             Segment* cs = s->prev();
+            int tick    = s->tick();
             if (!cs || cs->segmentType() != Segment::Type::Clef) {
-                  cs = new Segment(cr->measure(), Segment::Type::Clef, s->tick());
+                  cs = new Segment(cr->measure(), Segment::Type::Clef, tick);
                   cs->setNext(s);
                   score->undo(new AddElement(cs));
+                  }
+            else if (cs == cr->measure()->first() && cr->measure()->prevMeasure()) {
+                  // move to end of previous measure
+                  Measure* m = cr->measure()->prevMeasure();
+                  cs = m->undoGetSegment(Segment::Type::Clef, tick);
                   }
             Clef* c = static_cast<Clef*>(gclef ? gclef->linkedClone() : clef->clone());
             gclef = c;
