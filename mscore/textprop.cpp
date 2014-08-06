@@ -65,6 +65,7 @@ TextProp::TextProp(QWidget* parent)
       connect(resetToStyle, SIGNAL(clicked()), SIGNAL(resetToStyleClicked()));
       connect(boxButton, SIGNAL(toggled(bool)), this, SLOT(boxButtonToggled(bool)));
       connect(frame, SIGNAL(toggled(bool)), this, SLOT(boxButtonToggled(bool)));
+      connect(styles, SIGNAL(currentIndexChanged(int)), SLOT(styleIndexChanged(int)));
       }
 
 //---------------------------------------------------------
@@ -79,6 +80,7 @@ void TextProp::setScore(bool onlyStyle, Score* score)
       styleLabel->setVisible(!onlyStyle);
       styles->clear();
 
+      styles->blockSignals(true);
       const QList<TextStyle>& scoreStyles = score->style()->textStyles();
       int n = scoreStyles.size();
       for (int i = 0; i < n; ++i) {
@@ -86,6 +88,7 @@ void TextProp::setScore(bool onlyStyle, Score* score)
             if ( !(scoreStyles.at(i).hidden() & TextStyleHidden::IN_LISTS) )
                   styles->addItem(scoreStyles.at(i).name(), i);
             }
+      styles->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -244,6 +247,17 @@ void TextProp::doResetToTextStyle()
 void TextProp::boxButtonToggled(bool state)
       {
       frameRound->setEnabled(frame->isChecked() && state);
+      }
+
+//---------------------------------------------------------
+//   styleIndexChanged
+//---------------------------------------------------------
+
+void TextProp::styleIndexChanged(int i)
+      {
+      int idx = styles->itemData(i).toInt();
+      setTextStyle(_score->textStyle(TextStyleType(idx)));
+      printf("style index changed %d\n", idx);
       }
 
 }
