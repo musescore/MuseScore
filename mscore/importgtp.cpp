@@ -607,9 +607,18 @@ void GuitarPro::readChannels()
             channelDefaults[i].pan     = readUChar() * 8 - 1;
             channelDefaults[i].chorus  = readUChar() * 8 - 1;
             channelDefaults[i].reverb  = readUChar() * 8 - 1;
-            //qDebug("default: %d", channelDefaults[i].reverb);
             channelDefaults[i].phase   = readUChar() * 8 - 1;
             channelDefaults[i].tremolo = readUChar() * 8 - 1;
+
+            // defaults of 255, or any value above 127, are set to 0. */
+            if (channelDefaults[i].patch > 127)   { channelDefaults[i].patch = 0; }
+            if (channelDefaults[i].volume > 127)  { channelDefaults[i].volume = 0; }
+            if (channelDefaults[i].pan > 127)     { channelDefaults[i].pan = 0; }
+            if (channelDefaults[i].chorus > 127)  { channelDefaults[i].chorus = 0; }
+            if (channelDefaults[i].reverb > 127)  { channelDefaults[i].reverb = 0; }
+            if (channelDefaults[i].phase > 127)   { channelDefaults[i].phase = 0; }
+            if (channelDefaults[i].tremolo > 127) { channelDefaults[i].tremolo = 0; }
+
             // skip over blank information included for backwards compatibility with 3.0
             skip(2);
             }
@@ -1084,7 +1093,7 @@ void GuitarPro2::read(QFile* fp)
       composer     = readDelphiString();
       QString copyright = readDelphiString();
       if (!copyright.isEmpty())
-            score->setMetaTag("copyright", QString("Copyright %1\nAll Rights Reserved - International Copyright Secured").arg(copyright));
+            score->setMetaTag("copyright", QString("%1").arg(copyright));
 
       transcriber  = readDelphiString();
       instructions = readDelphiString();
@@ -1625,7 +1634,7 @@ void GuitarPro3::read(QFile* fp)
       composer     = readDelphiString();
       QString copyright = readDelphiString();
       if (!copyright.isEmpty())
-            score->setMetaTag("copyright", QString("Copyright %1\nAll Rights Reserved - International Copyright Secured").arg(copyright));
+            score->setMetaTag("copyright", QString("%1").arg(copyright));
 
       transcriber  = readDelphiString();
       instructions = readDelphiString();

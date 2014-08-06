@@ -131,6 +131,7 @@ private slots:
       void gpxVibrato()      { gpReadTest("vibrato", "gpx"); }
       void gpxVolumeSwell()  { gpReadTest("volume-swell", "gpx"); }
       void gpxTremoloBar()   { gpReadTest("tremolo-bar", "gpx"); }
+      void gpxCopyright()   { gpReadTest("copyright", "gpx"); }
       };
 
 //---------------------------------------------------------

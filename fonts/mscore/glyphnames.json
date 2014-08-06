@@ -647,6 +647,12 @@
     "timeSigParensRightSmall": {
         "codepoint": "U+E0A3"
     },
+    "timeSigParensLeft": {
+        "codepoint": "U+E094"
+    },
+    "timeSigParensRight": {
+        "codepoint": "U+E095"
+    },
     "timeSigPlusSmall": {
         "codepoint": "U+E09D"
     },

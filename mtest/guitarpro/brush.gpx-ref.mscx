@@ -51,12 +51,17 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Track 1</trackName>
+      <trackName>S-Gt</trackName>
       <Instrument>
-        <longName pos="0">Track 1</longName>
-        <trackName></trackName>
+        <longName pos="0">Acoustic Guitar</longName>
+        <shortName pos="0">Guit.</shortName>
+        <trackName>Acoustic Guitar</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>83</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
         <StringData>
-          <frets>32</frets>
+          <frets>21</frets>
           <string>40</string>
           <string>45</string>
           <string>50</string>
@@ -64,10 +69,24 @@
           <string>59</string>
           <string>64</string>
           </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="25"/>
-          <controller ctrl="7" value="127"/>
-          <controller ctrl="10" value="63"/>
           </Channel>
         </Instrument>
       </Part>
@@ -88,13 +107,13 @@
           </KeySig>
         <TimeSig>
           <lid>3</lid>
-          <sigN>5</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Dynamic>
-          <subtype>mf</subtype>
-          <velocity>80</velocity>
+          <subtype>f</subtype>
+          <velocity>96</velocity>
           <lid>4</lid>
           </Dynamic>
         <Tempo>
@@ -103,56 +122,68 @@
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
-          <lid>7</lid>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>downbow</subtype>
-            <lid>6</lid>
-            </Articulation>
+          <lid>6</lid>
+          <durationType>whole</durationType>
           <Note>
             <lid>8</lid>
-            <pitch>62</pitch>
+            <pitch>50</pitch>
             <tpc>16</tpc>
-            <fret>7</fret>
+            <fret>0</fret>
+            <string>3</string>
+            </Note>
+          <Note>
+            <lid>7</lid>
+            <pitch>53</pitch>
+            <tpc>13</tpc>
+            <fret>8</fret>
+            <string>4</string>
+            </Note>
+          <Note>
+            <lid>9</lid>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            <fret>2</fret>
             <string>2</string>
             </Note>
-          </Chord>
-        <Chord>
-          <lid>9</lid>
-          <durationType>quarter</durationType>
-          <Note>
+          <Arpeggio>
             <lid>10</lid>
+            <subtype>4</subtype>
+            </Arpeggio>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <KeySig>
+          <lid>12</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <Chord>
+          <lid>13</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>14</lid>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            <fret>3</fret>
+            <string>4</string>
+            </Note>
+          <Note>
+            <lid>15</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>3</fret>
             <string>3</string>
             </Note>
-          </Chord>
-        <Chord>
-          <lid>12</lid>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>upbow</subtype>
-            <lid>11</lid>
-            </Articulation>
           <Note>
-            <lid>13</lid>
-            <pitch>47</pitch>
-            <tpc>19</tpc>
+            <lid>16</lid>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
             <fret>2</fret>
-            <string>4</string>
+            <string>2</string>
             </Note>
-          </Chord>
-        <Chord>
-          <lid>14</lid>
-          <durationType>half</durationType>
-          <Note>
-            <lid>15</lid>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            <fret>5</fret>
-            <string>3</string>
-            </Note>
+          <Arpeggio>
+            <lid>17</lid>
+            <subtype>5</subtype>
+            </Arpeggio>
           </Chord>
         <BarLine>
           <subtype>end</subtype>
@@ -230,10 +261,15 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Track 1</longName>
-          <trackName></trackName>
+          <longName pos="0">Acoustic Guitar</longName>
+          <shortName pos="0">Guit.</shortName>
+          <trackName>Acoustic Guitar</trackName>
+          <minPitchP>40</minPitchP>
+          <maxPitchP>83</maxPitchP>
+          <minPitchA>40</minPitchA>
+          <maxPitchA>83</maxPitchA>
           <StringData>
-            <frets>32</frets>
+            <frets>21</frets>
             <string>40</string>
             <string>45</string>
             <string>50</string>
@@ -241,10 +277,24 @@
             <string>59</string>
             <string>64</string>
             </StringData>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
           <Channel>
             <program value="25"/>
-            <controller ctrl="7" value="127"/>
-            <controller ctrl="10" value="63"/>
             </Channel>
           </Instrument>
         </Part>
@@ -254,7 +304,7 @@
           <lid>0</lid>
           <Text>
             <style>Instrument Name (Part)</style>
-            <text>Track 1</text>
+            <text>Acoustic Guitar</text>
             </Text>
           </VBox>
         <Measure number="1">
@@ -269,13 +319,13 @@
             </KeySig>
           <TimeSig>
             <lid>3</lid>
-            <sigN>5</sigN>
+            <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
             <lid>4</lid>
             </Dynamic>
           <Tempo>
@@ -284,56 +334,68 @@
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <lid>7</lid>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>downbow</subtype>
-              <lid>6</lid>
-              </Articulation>
+            <lid>6</lid>
+            <durationType>whole</durationType>
             <Note>
               <lid>8</lid>
-              <pitch>62</pitch>
+              <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>7</fret>
+              <fret>0</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <lid>7</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <fret>8</fret>
+              <string>4</string>
+              </Note>
+            <Note>
+              <lid>9</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
               <string>2</string>
               </Note>
-            </Chord>
-          <Chord>
-            <lid>9</lid>
-            <durationType>quarter</durationType>
-            <Note>
+            <Arpeggio>
               <lid>10</lid>
+              <subtype>4</subtype>
+              </Arpeggio>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <KeySig>
+            <lid>12</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <Chord>
+            <lid>13</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>14</lid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              <fret>3</fret>
+              <string>4</string>
+              </Note>
+            <Note>
+              <lid>15</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
-            </Chord>
-          <Chord>
-            <lid>12</lid>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>upbow</subtype>
-              <lid>11</lid>
-              </Articulation>
             <Note>
-              <lid>13</lid>
-              <pitch>47</pitch>
-              <tpc>19</tpc>
+              <lid>16</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
               <fret>2</fret>
-              <string>4</string>
+              <string>2</string>
               </Note>
-            </Chord>
-          <Chord>
-            <lid>14</lid>
-            <durationType>half</durationType>
-            <Note>
-              <lid>15</lid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>5</fret>
-              <string>3</string>
-              </Note>
+            <Arpeggio>
+              <lid>17</lid>
+              <subtype>5</subtype>
+              </Arpeggio>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
@@ -352,56 +414,68 @@
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>7</lid>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>downbow</subtype>
-              <lid>6</lid>
-              </Articulation>
+            <lid>6</lid>
+            <durationType>whole</durationType>
             <Note>
               <lid>8</lid>
-              <pitch>62</pitch>
+              <pitch>50</pitch>
               <tpc>16</tpc>
-              <fret>7</fret>
+              <fret>0</fret>
+              <string>3</string>
+              </Note>
+            <Note>
+              <lid>7</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <fret>8</fret>
+              <string>4</string>
+              </Note>
+            <Note>
+              <lid>9</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
               <string>2</string>
               </Note>
-            </Chord>
-          <Chord>
-            <lid>9</lid>
-            <durationType>quarter</durationType>
-            <Note>
+            <Arpeggio>
               <lid>10</lid>
+              <subtype>4</subtype>
+              </Arpeggio>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <KeySig>
+            <lid>12</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <Chord>
+            <lid>13</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>14</lid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              <fret>3</fret>
+              <string>4</string>
+              </Note>
+            <Note>
+              <lid>15</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
-            </Chord>
-          <Chord>
-            <lid>12</lid>
-            <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>upbow</subtype>
-              <lid>11</lid>
-              </Articulation>
             <Note>
-              <lid>13</lid>
-              <pitch>47</pitch>
-              <tpc>19</tpc>
+              <lid>16</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
               <fret>2</fret>
-              <string>4</string>
+              <string>2</string>
               </Note>
-            </Chord>
-          <Chord>
-            <lid>14</lid>
-            <durationType>half</durationType>
-            <Note>
-              <lid>15</lid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>5</fret>
-              <string>3</string>
-              </Note>
+            <Arpeggio>
+              <lid>17</lid>
+              <subtype>5</subtype>
+              </Arpeggio>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
@@ -409,7 +483,7 @@
             </BarLine>
           </Measure>
         </Staff>
-      <name>Track 1</name>
+      <name>S-Gt</name>
       </Score>
     </Score>
   </museScore>
