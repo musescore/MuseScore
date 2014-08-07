@@ -1420,6 +1420,21 @@ class LinkStaff : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   UnlinkStaff
+//---------------------------------------------------------
+
+class UnlinkStaff : public UndoCommand {
+      Staff* s1;
+      Staff* s2;
+
+   public:
+      UnlinkStaff(Staff* _s1, Staff* _s2) : s1(_s1), s2(_s2) {}
+      virtual void undo();
+      virtual void redo();
+      UNDO_NAME("UnlinkStaff")
+      };
+
+//---------------------------------------------------------
 //   ChangeStartEndSpanner
 //---------------------------------------------------------
 

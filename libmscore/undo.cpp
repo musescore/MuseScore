@@ -1174,6 +1174,7 @@ void Score::undoAddElement(Element* element)
 void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       {
       Q_ASSERT(cr->type() != Element::Type::CHORD || !(static_cast<Chord*>(cr)->notes()).isEmpty());
+      Q_ASSERT(cr->isChordRest());
 
       Staff* ostaff = cr->staff();
       Segment::Type segmentType = Segment::Type::ChordRest;
@@ -1189,6 +1190,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
             ChordRest* newcr = (staff == ostaff) ? cr : static_cast<ChordRest*>(cr->linkedClone());
             newcr->setScore(score);
             int staffIdx = score->staffIdx(staff);
+
             int ntrack   = staffIdx * VOICES + cr->voice();
             newcr->setTrack(ntrack);
             newcr->setParent(seg);
@@ -3604,12 +3606,30 @@ void LinkStaff::redo()
       }
 
 //---------------------------------------------------------
-//   LinkStaff::redo
+//   LinkStaff::undo
 //---------------------------------------------------------
 
 void LinkStaff::undo()
       {
       s1->unlink(s2);
+      }
+
+//---------------------------------------------------------
+//   UnlinkStaff::redo
+//---------------------------------------------------------
+
+void UnlinkStaff::redo()
+      {
+      s1->unlink(s2);
+      }
+
+//---------------------------------------------------------
+//   UnlinkStaff::undo
+//---------------------------------------------------------
+
+void UnlinkStaff::undo()
+      {
+      s1->linkTo(s2);
       }
 
 //---------------------------------------------------------
