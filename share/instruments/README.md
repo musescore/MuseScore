@@ -2,7 +2,7 @@ Translation of the instrument list
 ---
 
 * `generateTs.py` parses `instruments.xml` and create a fake `instrumentsxml.h` file
-* `lupdate.sh` creates a TS file, `instruments_XX.ts` per language in `share/locale`
+* gen-instruments-projectfile creates a pro file for the translations, so we can run lupdate and lrelease on it
 * the TS file is loaded by MuseScore and the instruments are translated when the instruments.xml file is loaded
 
 If instruments.xml is modified
