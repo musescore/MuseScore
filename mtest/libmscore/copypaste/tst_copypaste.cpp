@@ -56,6 +56,7 @@ class TestCopyPaste : public QObject, public MTest
       void copyPaste2Voice3() { copypastevoice("15", 1); }
       void copyPaste2Voice4() { copypastevoice("16",1); } // shorten last cr
       void copyPaste2Voice5();                            // cut and move
+      void copyPasteOnlySecondVoice();
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
@@ -300,6 +301,45 @@ void TestCopyPaste::copyPaste2Voice5()
 
       QVERIFY(saveCompareScore(score, QString("copypaste17.mscx"),
          DIR + QString("copypaste17-ref.mscx")));
+      delete score;
+      }
+
+
+void TestCopyPaste::copyPasteOnlySecondVoice()
+      {
+      Score* score = readScore(DIR + QString("copypaste18.mscx"));
+      score->doLayout();
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+
+      QVERIFY(m1 != 0);
+      QVERIFY(m2 != 0);
+
+      score->select(m1, SelectType::RANGE, 0);
+
+      score->selectionFilter().setFiltered(SelectionFilterType::FIRST_VOICE,false);
+
+      QVERIFY(score->selection().canCopy());
+      QString mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+
+      //paste to second measure
+      score->deselectAll();
+      score->selectionFilter().setFiltered(SelectionFilterType::FIRST_VOICE,true);
+      score->select(m2,SelectType::RANGE);
+
+      score->startCmd();
+      score->cmdPaste(mimeData,0);
+      score->endCmd();
+
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("copypaste18.mscx"),
+         DIR + QString("copypaste18-ref.mscx")));
       delete score;
       }
 
