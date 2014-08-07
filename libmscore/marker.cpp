@@ -26,7 +26,7 @@ Marker::Marker(Score* s)
       {
       _markerType = Type::FINE;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setTextStyleType(TextStyleType::REPEAT);
+      setTextStyleType(TextStyleType::REPEAT_LEFT);
       setLayoutToParentWidth(true);
       }
 
@@ -66,6 +66,7 @@ void Marker::setMarkerType(Type t)
 
             case Type::FINE:
                   txt = "Fine";
+                  setTextStyleType(TextStyleType::REPEAT_RIGHT);
                   setLabel("fine");
                   break;
 
@@ -146,6 +147,21 @@ Marker::Type Marker::markerType(const QString& s) const
       }
 
 //---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Marker::layout()
+      {
+      setPos(textStyle().offset(spatium()));
+      Text::layout1();
+      // although markers are normally laid out to parent (measure) width,
+      // force them to center over barline if left-aligned
+      if (!(textStyle().align() & (AlignmentFlags::RIGHT|AlignmentFlags::HCENTER)))
+            rxpos() -= width() * 0.5;
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -164,6 +180,9 @@ void Marker::read(XmlReader& e)
             else if (!Text::readProperties(e))
                   e.unknown();
             }
+      // REPEAT is obsolete, but was previously used for both left and right aligned text
+      if (textStyleType() == TextStyleType::REPEAT)
+            setTextStyleType(TextStyleType::REPEAT_LEFT);
       setMarkerType(mt);
       }
 
