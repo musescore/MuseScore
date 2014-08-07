@@ -669,7 +669,7 @@ Score::FileError Score::read114(XmlReader& e)
       _fileDivision = MScore::division;
 
       //
-      //    sanity check for barLineSpan
+      //    sanity check for barLineSpan and update ottavas
       //
       foreach(Staff* staff, _staves) {
             int barLineSpan = staff->barLineSpan();
@@ -679,6 +679,7 @@ Score::FileError Score::read114(XmlReader& e)
                   qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
                   staff->setBarLineSpan(n - idx);
                   }
+            staff->updateOttava();
             }
 
       // adjust some styles
