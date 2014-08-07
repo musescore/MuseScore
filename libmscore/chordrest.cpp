@@ -111,6 +111,19 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
       }
 
 //---------------------------------------------------------
+//   undoUnlink
+//---------------------------------------------------------
+
+void ChordRest::undoUnlink()
+      {
+      DurationElement::undoUnlink();
+      for (Articulation* a : _articulations)
+            a->undoUnlink();
+      for (Lyrics* l : _lyricsList)
+            l->undoUnlink();
+      }
+
+//---------------------------------------------------------
 //   ChordRest
 //---------------------------------------------------------
 

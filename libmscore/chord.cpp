@@ -271,6 +271,31 @@ Chord::Chord(const Chord& c, bool link)
       }
 
 //---------------------------------------------------------
+//   undoUnlink
+//---------------------------------------------------------
+
+void Chord::undoUnlink()
+      {
+      ChordRest::undoUnlink();
+      for (Note* n : _notes)
+            n->undoUnlink();
+      for (Chord* gn : graceNotes())
+            gn->undoUnlink();
+
+      if (_glissando)
+            _glissando->undoUnlink();
+      if (_arpeggio)
+            _arpeggio->undoUnlink();
+      if (_tremolo && !_tremolo->twoNotes())
+            _tremolo->undoUnlink();
+
+      for (Element* e : el()) {
+            if (e->type() == Element::Type::CHORDLINE)
+                  e->undoUnlink();
+            }
+      }
+
+//---------------------------------------------------------
 //   ~Chord
 //---------------------------------------------------------
 
