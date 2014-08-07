@@ -164,7 +164,8 @@
           </KeySig>
         <Rest>
           <lid>15</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="3">
@@ -207,7 +208,8 @@
           </KeySig>
         <Rest>
           <lid>26</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="5">
@@ -250,7 +252,8 @@
           </KeySig>
         <Rest>
           <lid>37</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="7">
@@ -293,7 +296,8 @@
           </KeySig>
         <Rest>
           <lid>48</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="9">
@@ -303,7 +307,8 @@
           </KeySig>
         <Rest>
           <lid>51</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="10">
@@ -317,7 +322,8 @@
           </KeySig>
         <Rest>
           <lid>55</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="11">
@@ -327,7 +333,8 @@
           </KeySig>
         <Rest>
           <lid>58</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="12">
@@ -341,7 +348,8 @@
           </KeySig>
         <Rest>
           <lid>62</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="13">
@@ -351,7 +359,8 @@
           </KeySig>
         <Rest>
           <lid>65</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="14">
@@ -365,7 +374,8 @@
           </KeySig>
         <Rest>
           <lid>69</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="15">
@@ -375,7 +385,8 @@
           </KeySig>
         <Rest>
           <lid>72</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="16">
@@ -389,7 +400,8 @@
           </KeySig>
         <Rest>
           <lid>76</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="17">
@@ -399,7 +411,8 @@
           </KeySig>
         <Rest>
           <lid>79</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="18">
@@ -409,7 +422,8 @@
           </KeySig>
         <Rest>
           <lid>82</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="19">
@@ -423,7 +437,8 @@
           </KeySig>
         <Rest>
           <lid>86</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="20">
@@ -433,7 +448,8 @@
           </KeySig>
         <Rest>
           <lid>89</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="21">
@@ -443,7 +459,8 @@
           </KeySig>
         <Rest>
           <lid>92</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="22">
@@ -457,7 +474,8 @@
           </KeySig>
         <Rest>
           <lid>96</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="23">
@@ -467,7 +485,8 @@
           </KeySig>
         <Rest>
           <lid>99</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="24">
@@ -477,7 +496,8 @@
           </KeySig>
         <Rest>
           <lid>102</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="25">
@@ -491,7 +511,8 @@
           </KeySig>
         <Rest>
           <lid>106</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="26">
@@ -501,7 +522,8 @@
           </KeySig>
         <Rest>
           <lid>109</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="27">
@@ -515,7 +537,8 @@
           </KeySig>
         <Rest>
           <lid>113</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="28">
@@ -525,7 +548,8 @@
           </KeySig>
         <Rest>
           <lid>116</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="29">
@@ -539,7 +563,8 @@
           </KeySig>
         <Rest>
           <lid>120</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="30">
@@ -549,7 +574,8 @@
           </KeySig>
         <Rest>
           <lid>123</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="31">
@@ -563,7 +589,8 @@
           </Symbol>
         <Rest>
           <lid>127</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="32">
@@ -573,7 +600,8 @@
           </KeySig>
         <Rest>
           <lid>130</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="33">
@@ -595,7 +623,8 @@
           </Symbol>
         <Rest>
           <lid>135</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="34">
@@ -609,7 +638,8 @@
           </Symbol>
         <Rest>
           <lid>139</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="35">
@@ -631,7 +661,8 @@
           </Symbol>
         <Rest>
           <lid>144</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -824,7 +855,8 @@
             </KeySig>
           <Rest>
             <lid>15</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="3">
@@ -867,7 +899,8 @@
             </KeySig>
           <Rest>
             <lid>26</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="5">
@@ -910,7 +943,8 @@
             </KeySig>
           <Rest>
             <lid>37</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="7">
@@ -953,7 +987,8 @@
             </KeySig>
           <Rest>
             <lid>48</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="9">
@@ -963,7 +998,8 @@
             </KeySig>
           <Rest>
             <lid>51</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="10">
@@ -977,7 +1013,8 @@
             </KeySig>
           <Rest>
             <lid>55</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="11">
@@ -987,7 +1024,8 @@
             </KeySig>
           <Rest>
             <lid>58</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="12">
@@ -1001,7 +1039,8 @@
             </KeySig>
           <Rest>
             <lid>62</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="13">
@@ -1011,7 +1050,8 @@
             </KeySig>
           <Rest>
             <lid>65</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="14">
@@ -1025,7 +1065,8 @@
             </KeySig>
           <Rest>
             <lid>69</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="15">
@@ -1035,7 +1076,8 @@
             </KeySig>
           <Rest>
             <lid>72</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="16">
@@ -1049,7 +1091,8 @@
             </KeySig>
           <Rest>
             <lid>76</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="17">
@@ -1059,7 +1102,8 @@
             </KeySig>
           <Rest>
             <lid>79</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="18">
@@ -1069,7 +1113,8 @@
             </KeySig>
           <Rest>
             <lid>82</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="19">
@@ -1083,7 +1128,8 @@
             </KeySig>
           <Rest>
             <lid>86</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="20">
@@ -1093,7 +1139,8 @@
             </KeySig>
           <Rest>
             <lid>89</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="21">
@@ -1103,7 +1150,8 @@
             </KeySig>
           <Rest>
             <lid>92</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="22">
@@ -1117,7 +1165,8 @@
             </KeySig>
           <Rest>
             <lid>96</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="23">
@@ -1127,7 +1176,8 @@
             </KeySig>
           <Rest>
             <lid>99</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="24">
@@ -1137,7 +1187,8 @@
             </KeySig>
           <Rest>
             <lid>102</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="25">
@@ -1151,7 +1202,8 @@
             </KeySig>
           <Rest>
             <lid>106</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="26">
@@ -1161,7 +1213,8 @@
             </KeySig>
           <Rest>
             <lid>109</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="27">
@@ -1175,7 +1228,8 @@
             </KeySig>
           <Rest>
             <lid>113</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="28">
@@ -1185,7 +1239,8 @@
             </KeySig>
           <Rest>
             <lid>116</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="29">
@@ -1199,7 +1254,8 @@
             </KeySig>
           <Rest>
             <lid>120</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="30">
@@ -1209,7 +1265,8 @@
             </KeySig>
           <Rest>
             <lid>123</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="31">
@@ -1223,7 +1280,8 @@
             </Symbol>
           <Rest>
             <lid>127</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="32">
@@ -1233,7 +1291,8 @@
             </KeySig>
           <Rest>
             <lid>130</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="33">
@@ -1255,7 +1314,8 @@
             </Symbol>
           <Rest>
             <lid>135</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="34">
@@ -1269,7 +1329,8 @@
             </Symbol>
           <Rest>
             <lid>139</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="35">
@@ -1291,7 +1352,8 @@
             </Symbol>
           <Rest>
             <lid>144</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
@@ -1340,7 +1402,8 @@
             </KeySig>
           <Rest>
             <lid>15</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="3">
@@ -1379,7 +1442,8 @@
             </KeySig>
           <Rest>
             <lid>26</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="5">
@@ -1418,7 +1482,8 @@
             </KeySig>
           <Rest>
             <lid>37</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="7">
@@ -1457,7 +1522,8 @@
             </KeySig>
           <Rest>
             <lid>48</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="9">
@@ -1467,7 +1533,8 @@
             </KeySig>
           <Rest>
             <lid>51</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="10">
@@ -1477,7 +1544,8 @@
             </KeySig>
           <Rest>
             <lid>55</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="11">
@@ -1487,7 +1555,8 @@
             </KeySig>
           <Rest>
             <lid>58</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="12">
@@ -1497,7 +1566,8 @@
             </KeySig>
           <Rest>
             <lid>62</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="13">
@@ -1507,7 +1577,8 @@
             </KeySig>
           <Rest>
             <lid>65</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="14">
@@ -1517,7 +1588,8 @@
             </KeySig>
           <Rest>
             <lid>69</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="15">
@@ -1527,7 +1599,8 @@
             </KeySig>
           <Rest>
             <lid>72</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="16">
@@ -1537,7 +1610,8 @@
             </KeySig>
           <Rest>
             <lid>76</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="17">
@@ -1547,7 +1621,8 @@
             </KeySig>
           <Rest>
             <lid>79</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="18">
@@ -1557,7 +1632,8 @@
             </KeySig>
           <Rest>
             <lid>82</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="19">
@@ -1567,7 +1643,8 @@
             </KeySig>
           <Rest>
             <lid>86</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="20">
@@ -1577,7 +1654,8 @@
             </KeySig>
           <Rest>
             <lid>89</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="21">
@@ -1587,7 +1665,8 @@
             </KeySig>
           <Rest>
             <lid>92</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="22">
@@ -1597,7 +1676,8 @@
             </KeySig>
           <Rest>
             <lid>96</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="23">
@@ -1607,7 +1687,8 @@
             </KeySig>
           <Rest>
             <lid>99</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="24">
@@ -1617,7 +1698,8 @@
             </KeySig>
           <Rest>
             <lid>102</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="25">
@@ -1627,7 +1709,8 @@
             </KeySig>
           <Rest>
             <lid>106</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="26">
@@ -1637,7 +1720,8 @@
             </KeySig>
           <Rest>
             <lid>109</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="27">
@@ -1647,7 +1731,8 @@
             </KeySig>
           <Rest>
             <lid>113</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="28">
@@ -1657,7 +1742,8 @@
             </KeySig>
           <Rest>
             <lid>116</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="29">
@@ -1667,7 +1753,8 @@
             </KeySig>
           <Rest>
             <lid>120</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="30">
@@ -1677,7 +1764,8 @@
             </KeySig>
           <Rest>
             <lid>123</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="31">
@@ -1687,7 +1775,8 @@
             </KeySig>
           <Rest>
             <lid>127</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="32">
@@ -1697,7 +1786,8 @@
             </KeySig>
           <Rest>
             <lid>130</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="33">
@@ -1711,7 +1801,8 @@
             </Symbol>
           <Rest>
             <lid>135</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="34">
@@ -1721,7 +1812,8 @@
             </KeySig>
           <Rest>
             <lid>139</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="35">
@@ -1735,7 +1827,8 @@
             </Symbol>
           <Rest>
             <lid>144</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>

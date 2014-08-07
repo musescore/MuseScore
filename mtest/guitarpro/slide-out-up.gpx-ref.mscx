@@ -201,7 +201,8 @@
           </KeySig>
         <Rest>
           <lid>20</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -431,7 +432,8 @@
             </KeySig>
           <Rest>
             <lid>20</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
@@ -529,7 +531,8 @@
             </KeySig>
           <Rest>
             <lid>20</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
