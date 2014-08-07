@@ -16,6 +16,7 @@
 #include "mscore.h"
 #include "synthesizer/event.h"
 #include "interval.h"
+#include "clef.h"
 
 namespace Ms {
 
@@ -152,6 +153,8 @@ class Instrument {
       void setProfessionalPitchRange(int a, int b);
       Channel& channel(int idx);
       const Channel& channel(int idx) const;
+      ClefTypeList clefType() const;
+      void setClefType(const ClefTypeList&);
 
       const QList<NamedEventList>& midiActions() const;
       const QList<MidiArticulation>& articulation() const;

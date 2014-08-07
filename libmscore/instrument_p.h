@@ -37,6 +37,7 @@ class InstrumentData : public QSharedData {
       QList<NamedEventList>   _midiActions;
       QList<MidiArticulation> _articulation;
       QList<Channel> _channel;      // at least one entry
+      ClefTypeList _clefType;
 
    public:
       InstrumentData();
@@ -65,8 +66,10 @@ class InstrumentData : public QSharedData {
       void setUseDrumset(bool val);
       void setAmateurPitchRange(int a, int b)                { _minPitchA = a; _maxPitchA = b; }
       void setProfessionalPitchRange(int a, int b)           { _minPitchP = a; _maxPitchP = b; }
-      Channel& channel(int idx)                              { return _channel[idx]; }
-      const Channel& channel(int idx) const                  { return _channel[idx]; }
+      Channel& channel(int idx)                              { return _channel[idx];  }
+      const Channel& channel(int idx) const                  { return _channel[idx];  }
+      ClefTypeList clefType() const                          { return _clefType; }
+      void setClefType(const ClefTypeList& c)                { _clefType = c;    }
 
       const QList<NamedEventList>& midiActions() const       { return _midiActions; }
       const QList<MidiArticulation>& articulation() const    { return _articulation; }
@@ -84,7 +87,6 @@ class InstrumentData : public QSharedData {
 
       void addLongName(const StaffName& f);
       void addShortName(const StaffName& f);
-
 
       friend class Instrument;
       };
