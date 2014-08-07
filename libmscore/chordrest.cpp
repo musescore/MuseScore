@@ -317,25 +317,23 @@ bool ChordRest::readProperties(XmlReader& e)
                   qDebug("ChordRest::read(): Slur id %d not found", id);
             else {
                   QString atype(e.attribute("type"));
-                  Slur* slur = static_cast<Slur*>(spanner);
                   if (atype == "start") {
-                        slur->setTick(e.tick());
-                        slur->setTrack(track());
-                        slur->setStartElement(this);
-                        //spanner was added in read114 with wrong tick
-                        score()->removeSpanner(slur);
-                        score()->addSpanner(slur);
+                        spanner->setTick(e.tick());
+                        spanner->setTrack(track());
+                        if (spanner->type() == Element::Type::SLUR)
+                              spanner->setStartElement(this);
                         if (e.pasteMode()) {
-                              for (Element* e : slur->linkList()) {
-                                    if (e == slur)
+                              for (Element* e : spanner->linkList()) {
+                                    if (e == spanner)
                                           continue;
-                                    Slur* ls = static_cast<Slur*>(e);
-                                    ls->setTick(slur->tick());
+                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    ls->setTick(spanner->tick());
                                     for (Element* ee : linkList()) {
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack(cr->track());
-                                                ls->setStartElement(cr);
+                                                if (ls->type() == Element::Type::SLUR)
+                                                      ls->setStartElement(cr);
                                                 break;
                                                 }
                                           }
@@ -343,23 +341,25 @@ bool ChordRest::readProperties(XmlReader& e)
                               }
                         }
                   else if (atype == "stop") {
-                        slur->setTick2(e.tick());
-                        slur->setTrack2(track());
-                        slur->setEndElement(this);
-                        Chord* start = static_cast<Chord*>(slur->startElement());
+                        spanner->setTick2(e.tick());
+                        spanner->setTrack2(track());
+                        if (spanner->type() == Element::Type::SLUR)
+                              spanner->setEndElement(this);
+                        Chord* start = static_cast<Chord*>(spanner->startElement());
                         if (start)
-                              slur->setTrack(start->track());
+                              spanner->setTrack(start->track());
                         if (e.pasteMode()) {
-                              for (Element* e : slur->linkList()) {
-                                    if (e == slur)
+                              for (Element* e : spanner->linkList()) {
+                                    if (e == spanner)
                                           continue;
-                                    Slur* ls = static_cast<Slur*>(e);
-                                    ls->setTick2(slur->tick2());
+                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    ls->setTick2(spanner->tick2());
                                     for (Element* ee : linkList()) {
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack2(cr->track());
-                                                ls->setEndElement(cr);
+                                                if (ls->type() == Element::Type::SLUR)
+                                                      ls->setEndElement(cr);
                                                 break;
                                                 }
                                           }

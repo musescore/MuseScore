@@ -42,8 +42,8 @@ class Tie : public SlurTie {
       virtual Element::Type type() const override { return Element::Type::TIE;             }
       void setStartNote(Note* note);
       void setEndNote(Note* note)         { setEndElement((Element*)note);      }
-      Note* startNote() const             { return (Note*) startElement();      }
-      Note* endNote() const               { return (Note*) endElement();        }
+      Note* startNote() const;
+      Note* endNote() const;
       void calculateDirection();
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;

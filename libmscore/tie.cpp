@@ -210,16 +210,6 @@ Tie::Tie(Score* s)
       }
 
 //---------------------------------------------------------
-//   setStartNote
-//---------------------------------------------------------
-
-void Tie::setStartNote(Note* note)
-      {
-      setStartElement(note);
-      setParent(note);
-      }
-
-//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -442,6 +432,36 @@ void Tie::endEdit()
             }
       SlurTie::endEdit();
       score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   setStartNote
+//---------------------------------------------------------
+
+void Tie::setStartNote(Note* note)
+      {
+      setStartElement(note);
+      setParent(note);
+      }
+
+//---------------------------------------------------------
+//   startNote
+//---------------------------------------------------------
+
+Note* Tie::startNote() const
+      {
+      Q_ASSERT(!startElement() || startElement()->type() == Element::Type::NOTE);
+      return static_cast<Note*>(startElement());
+      }
+
+//---------------------------------------------------------
+//   endNote
+//---------------------------------------------------------
+
+Note* Tie::endNote() const
+      {
+      Q_ASSERT(!endElement() || endElement()->type() == Element::Type::NOTE);
+      return static_cast<Note*>(endElement());
       }
 
 }

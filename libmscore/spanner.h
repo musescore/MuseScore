@@ -155,8 +155,8 @@ class Spanner : public Element {
       Element* startElement() const    { return _startElement; }
       Element* endElement() const      { return _endElement;   }
 
-      void setStartElement(Element* e) { _startElement = e; }
-      void setEndElement(Element* e)   { _endElement = e; }
+      void setStartElement(Element* e);
+      void setEndElement(Element* e);
 
       void setStartChord(Chord*);
       void setEndChord(Chord*);

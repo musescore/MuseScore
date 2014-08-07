@@ -410,7 +410,7 @@ void Segment::checkElement(Element* el, int track)
       if (_elist[track]) {
             qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p",
                el->name(), _elist[track]->name(),
-               score()->sigmap()->pos(tick()), tick(), track, score());
+               qPrintable(score()->sigmap()->pos(tick())), tick(), track, score());
             }
       }
 
