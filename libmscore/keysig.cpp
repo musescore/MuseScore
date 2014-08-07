@@ -104,6 +104,7 @@ void KeySig::layout()
 
       if (staff() && !staff()->genKeySig()) {     // no key sigs on TAB staves
             qDeleteAll(keySymbols);
+            keySymbols.clear();
             return;
             }
 
