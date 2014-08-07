@@ -118,7 +118,8 @@
           </Tempo>
         <Rest>
           <lid>5</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -150,7 +151,8 @@
           </KeySig>
         <Rest>
           <lid>13</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -297,7 +299,8 @@
             </Tempo>
           <Rest>
             <lid>5</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -329,7 +332,8 @@
             </KeySig>
           <Rest>
             <lid>13</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
@@ -345,7 +349,8 @@
             </KeySig>
           <Rest>
             <lid>5</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -372,7 +377,8 @@
             </KeySig>
           <Rest>
             <lid>13</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>

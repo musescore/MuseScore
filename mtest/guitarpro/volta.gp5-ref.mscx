@@ -1421,8 +1421,8 @@
           </Volta>
         <Rest>
           <lid>165</lid>
-          <dots>1</dots>
-          <durationType>half</durationType>
+          <durationType>measure</durationType>
+          <duration z="3" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -2959,8 +2959,8 @@
             </Volta>
           <Rest>
             <lid>165</lid>
-            <dots>1</dots>
-            <durationType>half</durationType>
+            <durationType>measure</durationType>
+            <duration z="3" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
@@ -4289,8 +4289,8 @@
           <endSpanner id="4"/>
           <Rest>
             <lid>165</lid>
-            <dots>1</dots>
-            <durationType>half</durationType>
+            <durationType>measure</durationType>
+            <duration z="3" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
