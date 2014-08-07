@@ -535,7 +535,7 @@ void Spanner::setStartElement(Element* e)
       {
 #ifndef NDEBUG
       if (_anchor == Anchor::NOTE)
-            Q_ASSERT(e->type() == Element::Type::NOTE);
+            Q_ASSERT(!e || e->type() == Element::Type::NOTE);
 #endif
       _startElement = e;
       }
@@ -548,7 +548,7 @@ void Spanner::setEndElement(Element* e)
       {
 #ifndef NDEBUG
       if (_anchor == Anchor::NOTE)
-            Q_ASSERT(e->type() == Element::Type::NOTE);
+            Q_ASSERT(!e || e->type() == Element::Type::NOTE);
 #endif
       _endElement = e;
       }
