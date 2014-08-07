@@ -527,5 +527,31 @@ void Spanner::setVisible(bool f)
       _visible = f;
       }
 
+//---------------------------------------------------------
+//   setStartElement
+//---------------------------------------------------------
+
+void Spanner::setStartElement(Element* e)
+      {
+#ifndef NDEBUG
+      if (_anchor == Anchor::NOTE)
+            Q_ASSERT(e->type() == Element::Type::NOTE);
+#endif
+      _startElement = e;
+      }
+
+//---------------------------------------------------------
+//   setEndElement
+//---------------------------------------------------------
+
+void Spanner::setEndElement(Element* e)
+      {
+#ifndef NDEBUG
+      if (_anchor == Anchor::NOTE)
+            Q_ASSERT(e->type() == Element::Type::NOTE);
+#endif
+      _endElement = e;
+      }
+
 }
 
