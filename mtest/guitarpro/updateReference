@@ -102,3 +102,5 @@ cp   $MSCORE/slur.gpx.mscx slur.gpx-ref.mscx
 cp   $MSCORE/vibrato.gpx.mscx vibrato.gpx-ref.mscx
 cp   $MSCORE/volume-swell.gpx.mscx volume-swell.gpx-ref.mscx
 cp   $MSCORE/tremolo-bar.gpx.mscx tremolo-bar.gpx-ref.mscx
+cp   $MSCORE/free-time.gpx.mscx free-time.gpx-ref.mscx
+cp   $MSCORE/repeated-bars.gpx.mscx repeated-bars.gpx-ref.mscx
