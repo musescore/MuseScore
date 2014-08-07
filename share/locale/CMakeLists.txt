@@ -104,6 +104,58 @@ install(FILES
       qt_vi.qm
       qt_zh_CN.qm
       qt_zh_TW.qm
+      instruments_af.qm
+      instruments_ar.qm
+      instruments_ast.qm
+      instruments_be.qm      
+      instruments_bg.qm
+      instruments_ca.qm
+      instruments_ca@valencia.qm
+      instruments_cs.qm
+      instruments_da.qm
+      instruments_de.qm
+      instruments_el.qm
+      instruments_en_GB.qm
+      instruments_en_US.qm
+      instruments_eo.qm
+      instruments_es.qm
+      instruments_et.qm
+      instruments_eu.qm
+      instruments_fa.qm
+      instruments_fi.qm
+      instruments_fo.qm
+      instruments_fr.qm
+      instruments_gl.qm
+      instruments_he.qm
+      instruments_hi_IN.qm
+      instruments_hr.qm
+      instruments_hu.qm
+      instruments_id.qm      
+      instruments_it.qm
+      instruments_ja.qm
+      instruments_ka.qm
+      instruments_ko.qm
+      instruments_lt.qm
+      instruments_mn_MN.qm
+      instruments_nl.qm
+      instruments_nb.qm
+      instruments_nn.qm
+      instruments_pl.qm
+      instruments_pt.qm
+      instruments_pt_BR.qm
+      instruments_ro.qm
+      instruments_ru.qm
+      instruments_sk.qm
+      instruments_sl.qm
+      instruments_sr.qm
+      instruments_sv.qm
+      instruments_th.qm
+      instruments_tr.qm
+      instruments_uk.qm
+      instruments_uz@Latn.qm
+      instruments_vi.qm
+      instruments_zh_CN.qm
+      instruments_zh_TW.qm
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
       )
 

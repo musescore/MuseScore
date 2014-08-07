@@ -2023,6 +2023,52 @@ void MuseScore::removeTab(int i)
       }
 
 //---------------------------------------------------------
+//   loadTranslation
+//---------------------------------------------------------
+      
+void loadTranslation(QString filename, QString localeName)
+      {
+      static QList<QTranslator*> translatorList;
+      QTranslator* translator = new QTranslator;
+      QString userPrefix = dataPath + "/locale/"+ filename +"_";
+      QString defaultPrefix = mscoreGlobalShare + "locale/"+ filename +"_";
+      QString userlp = userPrefix + localeName;
+            
+      QString defaultlp = defaultPrefix + localeName;
+      QString lp = defaultlp;
+            
+      QFileInfo userFi(userlp + ".qm");
+      QFileInfo defaultFi(defaultlp + ".qm");
+            
+      if(!defaultFi.exists()) { // try with a shorter locale name
+      QString shortLocaleName = localeName.left(localeName.lastIndexOf("_"));
+            QString shortDefaultlp = defaultPrefix + shortLocaleName;
+            QFileInfo shortDefaultFi(shortDefaultlp + ".qm");
+            if(shortDefaultFi.exists()) {
+                  userlp = userPrefix + shortLocaleName;
+                  userFi = QFileInfo(userlp + ".qm");
+                  defaultFi = shortDefaultFi;
+                  defaultlp = shortDefaultlp;
+                  }
+      	}
+            
+      //      qDebug() << userFi.exists();
+      //      qDebug() << userFi.lastModified() << defaultFi.lastModified();
+      if (userFi.exists() && userFi.lastModified() > defaultFi.lastModified())
+            lp = userlp;
+      
+      if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
+      bool success = translator->load(lp);
+      if (!success && MScore::debugMode) {
+            qDebug("load translator <%s> failed", qPrintable(lp));
+      }
+      if(success) {
+            qApp->installTranslator(translator);
+            translatorList.append(translator);
+            }
+      }
+      
+//---------------------------------------------------------
 //   setLocale
 //---------------------------------------------------------
 
@@ -2044,47 +2090,11 @@ void setMscoreLocale(QString localeName)
                   qDebug("real localeName <%s>", qPrintable(localeName));
             }
 
-      QTranslator* translator = new QTranslator;
-
       // find the most recent translation file
       // try to replicate QTranslator.load algorithm in our particular case
-      QString userPrefix = dataPath + "/locale/mscore_";
-      QString defaultPrefix = mscoreGlobalShare + "locale/mscore_";
-      QString userlp = userPrefix + localeName;
-
-      QString defaultlp = defaultPrefix + localeName;
-      QString lp = defaultlp;
-
-      QFileInfo userFi(userlp + ".qm");
-      QFileInfo defaultFi(defaultlp + ".qm");
-
-      if(!defaultFi.exists()) { // try with a shorter locale name
-            QString shortLocaleName = localeName.left(localeName.lastIndexOf("_"));
-            QString shortDefaultlp = defaultPrefix + shortLocaleName;
-            QFileInfo shortDefaultFi(shortDefaultlp + ".qm");
-            if(shortDefaultFi.exists()) {
-                  userlp = userPrefix + shortLocaleName;
-                  userFi = QFileInfo(userlp + ".qm");
-                  defaultFi = shortDefaultFi;
-                  defaultlp = shortDefaultlp;
-            }
-      }
-
-//      qDebug() << userFi.exists();
-//      qDebug() << userFi.lastModified() << defaultFi.lastModified();
-      if (userFi.exists() && userFi.lastModified() > defaultFi.lastModified())
-            lp = userlp;
-
-      if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
-      bool success = translator->load(lp);
-      if (!success && MScore::debugMode) {
-            qDebug("load translator <%s> failed", qPrintable(lp));
-            }
-      if(success) {
-           qApp->installTranslator(translator);
-           translatorList.append(translator);
-           }
-
+      loadTranslation("mscore", localeName);
+      loadTranslation("instruments", localeName);
+            
       QString resourceDir;
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       resourceDir = mscoreGlobalShare + "locale/";

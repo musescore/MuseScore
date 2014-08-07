@@ -6016,7 +6016,8 @@
                   <genre>orchestra</genre>
             </Instrument>
       </InstrumentGroup>
-      <InstrumentGroup name="Marching Percussion">
+      <InstrumentGroup id="marching-percussion">
+            <name>Marching Percussion</name>
             <Instrument id="marching-snare">
                   <longName>Snare Drum</longName>
                   <shortName>SD</shortName>

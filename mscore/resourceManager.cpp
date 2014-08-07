@@ -43,14 +43,16 @@ void ResourceManager::displayPlugins()
 void ResourceManager::displayLanguages()
       {
       tabs->setTabText(0,tr("Languages"));
+      
+      // Download details.json
       DownloadUtils *js = new DownloadUtils(this);
       js->setTarget(baseAddr + "languages/details.json");
       js->download();
       QByteArray json = js->returnData();
 
+      // parse the json file
       QJsonParseError err;
       QJsonDocument result = QJsonDocument::fromJson(json, &err);
-
       if (err.error != QJsonParseError::NoError || !result.isObject()) {
             qDebug("An error occured during parsing");
             return;
@@ -79,22 +81,23 @@ void ResourceManager::displayLanguages()
             QString fileSize = value.value("file_size").toString();
             QString hashValue = value.value("hash").toString();
 
-            languagesTable->setItem(row,col++,new QTableWidgetItem (name));
-            languagesTable->setItem(row,col++,new QTableWidgetItem (filename));
-            languagesTable->setItem(row,col++,new QTableWidgetItem (tr("%1 KB").arg(fileSize)));
+            languagesTable->setItem(row, col++, new QTableWidgetItem(name));
+            languagesTable->setItem(row, col++, new QTableWidgetItem(filename));
+            languagesTable->setItem(row, col++, new QTableWidgetItem(tr("%1 KB").arg(fileSize)));
             updateButtons[row] = new QPushButton(tr("Update"));
 
             temp = updateButtons[row];
             buttonMap[temp] = "languages/" + filename;
             buttonHashMap[temp] = hashValue;
-            languagesTable->setIndexWidget(languagesTable->model()->index(row,col++), temp);
+            
+            languagesTable->setIndexWidget(languagesTable->model()->index(row, col++), temp);
+            
             QString local = dataPath + "/locale/" + filename;
-
             QFileInfo fileLocal(local);
             if(!fileLocal.exists())
                   local = mscoreGlobalShare + "locale/" + filename;;
 
-            if(verifyFile(local, hashValue)) {
+            if(verifyFile(local, hashValue)) { // compare local file with distant hash
                   temp->setText(tr("No update"));
                   temp->setDisabled(1);
                   }

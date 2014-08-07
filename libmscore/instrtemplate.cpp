@@ -73,7 +73,7 @@ static int readStaffIdx(XmlReader& e)
 void InstrumentGroup::read(XmlReader& e)
       {
       id       = e.attribute("id");
-      name     = e.attribute("name");
+      name     = qApp->translate("InstrumentsXML", e.attribute("name").toUtf8().data());
       extended = e.intAttribute("extended", 0);
 
       while (e.readNextStartElement()) {
@@ -98,7 +98,7 @@ void InstrumentGroup::read(XmlReader& e)
                         qDebug("instrument reference not found <%s>", e.text().toUtf8().data());
                   }
             else if (tag == "name")
-                  name = e.readElementText();
+                  name = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
             else if (tag == "extended")
                   extended = e.readInt();
             else
@@ -339,7 +339,7 @@ void InstrumentTemplate::read(XmlReader& e)
                               longNames.erase(i);
                         break;
                         }
-                  longNames.append(StaffName(e.readElementText(), pos));
+                  longNames.append(StaffName(qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
                   }
             else if (tag == "shortName" || tag == "short-name") {   // "short-name" is obsolete
                   int pos = e.intAttribute("pos", 0);
@@ -348,10 +348,10 @@ void InstrumentTemplate::read(XmlReader& e)
                               shortNames.erase(i);
                         break;
                         }
-                  shortNames.append(StaffName(e.readElementText(), pos));
+                  shortNames.append(StaffName(qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
                   }
             else if (tag == "trackName")
-                  trackName = e.readElementText();
+                  trackName = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
             else if (tag == "description")
                   description = e.readElementText();
             else if (tag == "extended")
@@ -736,7 +736,7 @@ void InstrumentGenre::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name") {
-                  name = e.readElementText();
+                  name = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
             }
             else
                   e.unknown();

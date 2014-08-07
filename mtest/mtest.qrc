@@ -17,7 +17,7 @@
       <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
       <file alias="fonts/mscore-BC.ttf">../fonts/mscore-BC.ttf</file>
 
-      <file alias="instruments.xml">../share/templates/instruments.xml</file>
+      <file alias="instruments.xml">../share/instruments/instruments.xml</file>
 
       <file>../mscore/data/mscore.png</file>
       <file>../mscore/data/cancel.png</file>
