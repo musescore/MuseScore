@@ -1063,7 +1063,6 @@ void Score::undoAddElement(Element* element)
                                     }
                               }
                         }
-
                   undo(new AddElement(nsp));
                   }
             else if (element->type() == Element::Type::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
@@ -1434,24 +1433,24 @@ RemoveElement::RemoveElement(Element* e)
                               }
                         }
                   for (auto s : sl)
-                        score->undoRemoveElement(s);
+                        score->undo(new RemoveElement(s));
                   }
             ChordRest* cr = static_cast<ChordRest*>(element);
             if (cr->tuplet() && cr->tuplet()->elements().empty())
-                  score->undoRemoveElement(cr->tuplet());
+                  score->undo(new RemoveElement(cr->tuplet()));
             if (e->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(e);
                   // remove tremolo between 2 notes
                   if (chord->tremolo()) {
                         Tremolo* tremolo = chord->tremolo();
                         if (tremolo->twoNotes())
-                              score->undoRemoveElement(tremolo);
+                              score->undo(new RemoveElement(tremolo));
                         }
                   for (const Note* note : chord->notes()) {
                         if (note->tieFor() && note->tieFor()->endNote())
-                              score->undoRemoveElement(note->tieFor());
+                              score->undo(new RemoveElement(note->tieFor()));
                         if (note->tieBack())
-                              score->undoRemoveElement(note->tieBack());
+                              score->undo(new RemoveElement(note->tieBack()));
                         }
                   }
             }

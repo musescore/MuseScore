@@ -176,10 +176,11 @@ void InstrumentData::write(Xml& xml) const
             xml.tag("useDrumset", _useDrumset);
             _drumset->save(xml);
             }
-
       if (_clefType._concertClef == _clefType._transposingClef) {
-            QString tag = ClefInfo::tag(_clefType._concertClef);
-            xml.tag("clef", tag);
+            if (_clefType._concertClef != ClefType::G) {
+                  QString tag = ClefInfo::tag(_clefType._concertClef);
+                  xml.tag("clef", tag);
+                  }
             }
       else {
             QString tag1 = ClefInfo::tag(_clefType._concertClef);
@@ -213,6 +214,8 @@ void InstrumentData::read(XmlReader& e)
       int pan     = 60;
       bool customDrumset = false;
 
+      _clefType._concertClef = ClefType::G;
+      _clefType._transposingClef = ClefType::G;
       _channel.clear();
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
