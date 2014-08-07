@@ -299,7 +299,7 @@ void initStyle(MStyle* s)
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true);
 
       AS("Repeat Text", ff,  12, false, false, false,          // for backward compatibility
-         AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, -2.0), OS, true,
+         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OS, true,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true);
 
       // y offset may depend on voltaHook style element

@@ -61,6 +61,7 @@ class Marker : public Text {
 
       Measure* measure() const         { return (Measure*)parent(); }
 
+      virtual void layout() override;
       virtual void read(XmlReader&) override;
       virtual void write(Xml& xml) const override;
 

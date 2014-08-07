@@ -30,11 +30,11 @@ struct JumpTypeTable {
       };
 
 static const JumpTypeTable jumpTypeTable[] = {
-      { Jump::Type::DC,         TextStyleType::REPEAT,       "D.C.",         "start", "end",  "" },
-      { Jump::Type::DC_AL_FINE, TextStyleType::REPEAT,       "D.C. al Fine", "start", "fine", "" },
-      { Jump::Type::DC_AL_CODA, TextStyleType::REPEAT,       "D.C. al Coda", "start", "coda", "codab" },
-      { Jump::Type::DS_AL_CODA, TextStyleType::REPEAT,       "D.S. al Coda", "segno", "coda", "codab" },
-      { Jump::Type::DS_AL_FINE, TextStyleType::REPEAT,       "D.S. al Fine", "segno", "fine", "" },
+      { Jump::Type::DC,         TextStyleType::REPEAT_RIGHT, "D.C.",         "start", "end",  "" },
+      { Jump::Type::DC_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" },
+      { Jump::Type::DC_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab" },
+      { Jump::Type::DS_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab" },
+      { Jump::Type::DS_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "" },
       { Jump::Type::DS,         TextStyleType::REPEAT_RIGHT, "D.S.",         "segno", "end",  "" }
       };
 
@@ -46,7 +46,7 @@ Jump::Jump(Score* s)
    : Text(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      setTextStyleType(TextStyleType::REPEAT);
+      setTextStyleType(TextStyleType::REPEAT_RIGHT);
       setLayoutToParentWidth(true);
       }
 
