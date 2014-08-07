@@ -22,7 +22,6 @@
 #include "part.h"
 #include "chord.h"
 #include "style.h"
-#include "ottava.h"
 #include "slur.h"
 #include "tie.h"
 #include "stafftext.h"
@@ -255,17 +254,6 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             }
 #endif
       }
-
-//---------------------------------------------------------
-//   OttavaShiftSegment
-//---------------------------------------------------------
-
-struct OttavaShiftSegment {
-      int stick;
-      int etick;
-      int shift;
-      };
-
 
 //---------------------------------------------------------
 //   aeolusSetStop
