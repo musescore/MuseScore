@@ -2459,8 +2459,10 @@ void Score::cmdRemoveStaff(int staffIdx)
             if (s->staffIdx() == staffIdx && (staffIdx != 0 || s->type() != Element::Type::VOLTA))
                   sl.append(s);
             }
-      for (auto i : sl)
-            undoRemoveElement(i);
+      for (auto i : sl) {
+            i->undoUnlink();
+            undo(new RemoveElement(i));
+            }
 
       undoRemoveStaff(s, staffIdx);
 
