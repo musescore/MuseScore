@@ -673,6 +673,11 @@ void Staff::unlink(Staff* staff)
       {
       Q_ASSERT(_linkedStaves->staves().contains(staff));
       _linkedStaves->remove(staff);
+      if (_linkedStaves->staves().size() <= 1) {
+            delete _linkedStaves;
+            _linkedStaves = 0;
+            }
+      staff->_linkedStaves = 0;
       }
 
 //---------------------------------------------------------
