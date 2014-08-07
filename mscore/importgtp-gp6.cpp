@@ -777,7 +777,9 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               cr->setDuration(l);
                               TDuration d(l);
                               d.setDots(dotted);
+
                               cr->setDurationType(d);
+
 
                               if(!segment->cr(staffIdx * VOICES + voiceNum))
                                     segment->add(cr);
@@ -1371,7 +1373,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               tuplet->add(cr);
                         TDuration d(l);
                         cr->setDuration(l);
-                        cr->setDurationType(d);
+                        if (cr->type() == Element::Type::REST && l == measure->len())
+                              cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                        else
+                              cr->setDurationType(d);
                         if(!segment->cr(track))
                               segment->add(cr);
                         // if (ottava[track]) {
@@ -1485,7 +1490,11 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                   cr->setTrack(staffIdx * VOICES + voiceNum);
                   TDuration d(l);
                   cr->setDuration(l);
-                  cr->setDurationType(d);
+                  if (cr->type() == Element::Type::REST && l == measure->len())
+                        cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                  else
+                        cr->setDurationType(d);
+
                   Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                   if(!segment->cr(staffIdx * VOICES + voiceNum))
                         segment->add(cr);
