@@ -33,6 +33,7 @@ namespace Ms {
 
 class Score;
 class Palette;
+class StaffListItem;
 
 //---------------------------------------------------------
 //   InstrumentWizard
@@ -50,7 +51,7 @@ class InstrumentWizard : public QWidget, private Ui::InstrumentWizard {
       void on_upButton_clicked();
       void on_downButton_clicked();
       void on_linkedButton_clicked();
-      void on_belowButton_clicked();
+      StaffListItem* on_belowButton_clicked();
       void buildTemplateList();
       void expandOrCollapse(const QModelIndex &);
 
