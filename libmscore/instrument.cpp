@@ -699,8 +699,10 @@ void InstrumentData::setUseDrumset(DrumsetKind val)
             switch (val) {
                   case DEFAULT_DRUMS:
                         _drumset = new Drumset(*smDrumset);
+                        break;
                   case GUITAR_PRO:
                         _drumset = new Drumset(*gpDrumset);
+                        break;
                   default:
                         break;
                   }
