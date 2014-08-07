@@ -209,7 +209,7 @@ const StaffType* StaffListItem::staffType() const
 
 int StaffListItem::staffTypeIdx() const
       {
-      return _staffTypeCombo->currentData().toInt();
+      return _staffTypeCombo->itemData(_staffTypeCombo->currentIndex()).toInt();
       }
 
 //---------------------------------------------------------
