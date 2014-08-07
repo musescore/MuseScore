@@ -687,7 +687,7 @@ void Note::draw(QPainter* painter) const
             // draw background, if required
             if (!tab->linesThrough() || fretConflict()) {
                   qreal d  = spatium() * .1;
-                  QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY(), bbox().width() + 2*d, tab->fretMaskH());
+                  QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY()*magS(), bbox().width() + 2*d, tab->fretMaskH()*magS());
                   // we do not know which viewer did this draw() call
                   // so update all:
                   foreach(MuseScoreView* view, score()->getViewer())
