@@ -582,6 +582,23 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
       QRectF bbox = path.boundingRect();
 
       // adjust position to avoid staff line if necessary
+      bool reverseAdjust = false;
+      if (slurTie()->type() == Element::Type::TIE) {
+            // multinote chords with ties need special handling
+            // otherwise, adjusted tie might crowd an unadjusted tie unnecessarily
+            Tie* t = static_cast<Tie*>(slurTie());
+            Note* sn = t->startNote();
+            Chord* sc = sn ? sn->chord() : 0;
+            // normally, the adjustment moves ties according to their direction (eg, up if tie is up)
+            // but we will reverse this for notes within chords when appropriate
+            // for two-note chords, it looks better to have ties on notes with spaces outside the lines
+            if (sc) {
+                  int notes = sc->notes().size();
+                  bool onLine = !(sn->line() & 1);
+                  if ((onLine && notes > 1) || (!onLine && notes > 2))
+                        reverseAdjust = true;
+                  }
+            }
       qreal sp = spatium();
       qreal minDistance = 0.5;
       Staff* st = staff();
@@ -601,7 +618,7 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
                         if (!isNudged() && !isEdited()) {
                               // user has not nudged or edited
                               qreal offY;
-                              if (up)
+                              if (up != reverseAdjust)      // exclusive or
                                     offY = (lineY - minDistance) - topY;
                               else
                                     offY = (lineY + minDistance) - bottomY;
