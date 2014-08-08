@@ -840,6 +840,7 @@ void Score::undoAddElement(Element* element)
          || (et == Element::Type::IMAGE  && element->parent()->type() != Element::Type::SEGMENT)
          || (et == Element::Type::SYMBOL && element->parent()->type() != Element::Type::SEGMENT)
          || et == Element::Type::NOTE
+         || et == Element::Type::TEXT
          || et == Element::Type::GLISSANDO
          || (et == Element::Type::CHORD && static_cast<Chord*>(element)->isGrace())
             ) {

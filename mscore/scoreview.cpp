@@ -4959,7 +4959,6 @@ void ScoreView::cmdAddText(TEXT type)
 
       if (s) {
             _score->undoAddElement(s);
-            _score->setLayoutAll(true);
             _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
             startEdit(s);
