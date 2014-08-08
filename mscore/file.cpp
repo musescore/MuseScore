@@ -2400,9 +2400,29 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
          uz.close();
          return true;
       }
-}
 
 
+bool MuseScore::newLinearized(Score* old_score)
+      {
+
+      Score* score = old_score->clone();
+
+      Measure * m1 = score->firstMeasure();
+      Measure * m2 = m1->nextMeasure();
+
+      Measure * mn = m1->clone();
+
+      //mn->setTick(m2->tick());
+
+      //score->fixTicks();
+
+      //score->undo(new InsertMeasure(mn, searchMeasureBase(score,m2)));
+
+      score->insertMeasure(Element::Type::MEASURE,m1->nextMeasure(),true);
+
+      score->rebuildMidiMapping();
+      score->doLayout();
+      setCurrentScoreView(appendScore(score));
 
       /*
       // Preliminary work for score linearization
@@ -2439,3 +2459,8 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                   }
             }
       */
+      return true;
+      }
+}
+
+

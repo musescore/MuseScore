@@ -776,6 +776,10 @@ MuseScore::MuseScore()
       _fileMenu->addAction(getAction("file-save-selection"));
       _fileMenu->addAction(getAction("file-export"));
       _fileMenu->addAction(getAction("file-part-export"));
+
+      _fileMenu->addSeparator();
+      _fileMenu->addAction(getAction("linearize"));
+
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("file-close"));
 
@@ -4040,6 +4044,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             saveAs(cs, true);
       else if (cmd == "file-new")
             newFile();
+      else if (cmd == "linearize")
+            newLinearized(cs);
       else if (cmd == "quit") {
             close();
             }

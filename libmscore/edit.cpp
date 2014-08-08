@@ -2195,6 +2195,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
             MeasureBase* im = p.second;
             MeasureBase* mb = static_cast<MeasureBase*>(Element::create(type, score));
             mb->setTick(tick);
+            qDebug("PAIR: %i %i %i",tick,score==this,im==measure);
 
             if (score == this)
                   omb = mb;

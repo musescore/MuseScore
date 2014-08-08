@@ -554,6 +554,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* getTab2() const { return tab2; }
       QList<LanguageItem>& languages() { return _languages; }
 
+      bool newLinearized(Score*);
+
       QStringList getOpenScoreNames(QString& dir, const QString& filter, const QString& title);
       QString getSaveScoreName(const QString& title, QString& name, const QString& filter, bool folder = false);
       QString getStyleFilename(bool open, const QString& title = QString());

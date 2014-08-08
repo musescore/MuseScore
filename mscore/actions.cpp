@@ -121,6 +121,16 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Create new score"),
          Icons::fileNew_ICON
          ),
+
+      Shortcut(
+         STATE_NORMAL,
+         0,
+         "linearize",
+         Qt::ApplicationShortcut,
+         QT_TRANSLATE_NOOP("action","Linearize"),
+         QT_TRANSLATE_NOOP("action","Linearize")
+         ),
+
       Shortcut(
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_LYRICS_EDIT | STATE_PLAY,
          ShortcutFlags::A_SCORE,
