@@ -2025,7 +2025,7 @@ void MuseScore::removeTab(int i)
 //---------------------------------------------------------
 //   loadTranslation
 //---------------------------------------------------------
-      
+
 void loadTranslation(QString filename, QString localeName)
       {
       static QList<QTranslator*> translatorList;
@@ -2033,13 +2033,13 @@ void loadTranslation(QString filename, QString localeName)
       QString userPrefix = dataPath + "/locale/"+ filename +"_";
       QString defaultPrefix = mscoreGlobalShare + "locale/"+ filename +"_";
       QString userlp = userPrefix + localeName;
-            
+
       QString defaultlp = defaultPrefix + localeName;
       QString lp = defaultlp;
-            
+
       QFileInfo userFi(userlp + ".qm");
       QFileInfo defaultFi(defaultlp + ".qm");
-            
+
       if(!defaultFi.exists()) { // try with a shorter locale name
       QString shortLocaleName = localeName.left(localeName.lastIndexOf("_"));
             QString shortDefaultlp = defaultPrefix + shortLocaleName;
@@ -2051,12 +2051,12 @@ void loadTranslation(QString filename, QString localeName)
                   defaultlp = shortDefaultlp;
                   }
       	}
-            
+
       //      qDebug() << userFi.exists();
       //      qDebug() << userFi.lastModified() << defaultFi.lastModified();
       if (userFi.exists() && userFi.lastModified() > defaultFi.lastModified())
             lp = userlp;
-      
+
       if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
       bool success = translator->load(lp);
       if (!success && MScore::debugMode) {
@@ -2067,7 +2067,7 @@ void loadTranslation(QString filename, QString localeName)
             translatorList.append(translator);
             }
       }
-      
+
 //---------------------------------------------------------
 //   setLocale
 //---------------------------------------------------------
@@ -2094,7 +2094,7 @@ void setMscoreLocale(QString localeName)
       // try to replicate QTranslator.load algorithm in our particular case
       loadTranslation("mscore", localeName);
       loadTranslation("instruments", localeName);
-            
+
       QString resourceDir;
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       resourceDir = mscoreGlobalShare + "locale/";
@@ -3865,13 +3865,9 @@ void MuseScore::transpose()
             //
             // select all
             //
-            cs->selection().setState(SelState::RANGE);
-            cs->selection().setStartSegment(cs->tick2segment(0));
-            cs->selection().setEndSegment(
-               cs->tick2segment(cs->last()->tick() + cs->last()->ticks())
-               );
-            cs->selection().setStaffStart(0);
-            cs->selection().setStaffEnd(cs->nstaves());
+
+            cs->cmdSelectAll();
+            
             }
       bool rangeSelection = cs->selection().isRange();
       TransposeDialog td;
