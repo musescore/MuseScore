@@ -320,8 +320,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "b-props") {
             Bend* bend = static_cast<Bend*>(e);
             BendProperties bp(bend, 0);
-            if (bp.exec())
-                  score()->undo(new ChangeBend(bend, bp.points()));
+            if (bp.exec()) {
+                  for (Element* b : bend->linkList())
+                        b->score()->undo(new ChangeBend(static_cast<Bend*>(b), bp.points()));
+                  }
             }
       else if (cmd == "f-props") {
             BoxProperties vp(static_cast<Box*>(e), 0);

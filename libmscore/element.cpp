@@ -1281,9 +1281,9 @@ Element::Type Element::readType(XmlReader& e, QPointF* dragOffset,
 
 void Element::editDrag(const EditData& ed)
       {
-      score()->addRefresh(abbox());
+      score()->addRefresh(canvasBoundingRect());
       setUserOff(userOff() + ed.delta);
-      score()->addRefresh(abbox());
+      score()->addRefresh(canvasBoundingRect());
       }
 
 //---------------------------------------------------------

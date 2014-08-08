@@ -316,7 +316,7 @@ class Score : public QObject {
       //   modified during cmd processing and used in endCmd() to
       //   determine what to layout and what to repaint:
 
-      QRectF refresh;
+      QRectF refresh;               ///< area to update, canvas coordinates
       LayoutFlags layoutFlags;
 
       bool _updateAll;
