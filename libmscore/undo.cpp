@@ -2399,10 +2399,15 @@ void ChangeStaff::flip()
 
 void ChangeStaffType::redo()
       {
-      initialClef = staff->clefTypeList(0);
+      initialClef  = staff->initialClefTypeList();
       StaffType st = *staff->staffType();
+
       bool updateNotesNeeded = st.group() != staffType.group();
       staff->setStaffType(&staffType);
+
+      if (st.group() != StaffGroup::STANDARD && staffType.group() == StaffGroup::STANDARD)
+            staff->setInitialClef(staff->part()->instr(0)->clefType());
+
       staffType = st;
       Score* score = staff->score();
       if (updateNotesNeeded)
