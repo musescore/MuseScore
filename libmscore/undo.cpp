@@ -842,6 +842,7 @@ void Score::undoAddElement(Element* element)
          || et == Element::Type::NOTE
          || et == Element::Type::TEXT
          || et == Element::Type::GLISSANDO
+         || et == Element::Type::BEND
          || (et == Element::Type::CHORD && static_cast<Chord*>(element)->isGrace())
             ) {
             Element* parent       = element->parent();
@@ -2027,7 +2028,7 @@ ChangeSingleBarLineSpan::ChangeSingleBarLineSpan(BarLine* _barLine, int _span, i
 
 void ChangeSingleBarLineSpan::flip()
       {
-      barLine->score()->addRefresh(barLine->abbox()); // area of this bar line needs redraw
+      barLine->score()->addRefresh(barLine->canvasBoundingRect()); // area of this bar line needs redraw
       int nspan         = barLine->span();
       bool respan = (span != nspan);
       int nspanFrom     = barLine->spanFrom();
@@ -2051,7 +2052,7 @@ void ChangeSingleBarLineSpan::flip()
             else
                   meas->createEndBarLines();
             }
-      barLine->score()->addRefresh(barLine->abbox()); // new area of this bar line needs redraw
+      barLine->score()->addRefresh(barLine->canvasBoundingRect()); // new area of this bar line needs redraw
       }
 
 //---------------------------------------------------------
@@ -2728,7 +2729,7 @@ ChangeTimesig::ChangeTimesig(TimeSig * _timesig, bool sc, const Fraction& f1,
 
 void ChangeTimesig::flip()
       {
-      timesig->score()->addRefresh(timesig->abbox());
+      timesig->score()->addRefresh(timesig->canvasBoundingRect());
       bool sc           = timesig->showCourtesySig();
       Fraction f1       = timesig->sig();
       Fraction f2       = timesig->stretch();
@@ -2750,7 +2751,7 @@ void ChangeTimesig::flip()
       subtype           = st;
 
       timesig->layout();
-      timesig->score()->addRefresh(timesig->abbox());
+      timesig->score()->addRefresh(timesig->canvasBoundingRect());
       }
 
 //---------------------------------------------------------
@@ -3097,8 +3098,11 @@ void RemoveExcerpt::redo()
 void ChangeBend::flip()
       {
       QList<PitchValue> pv = bend->points();
+      bend->score()->addRefresh(bend->canvasBoundingRect());
       bend->setPoints(points);
       points = pv;
+      bend->layout();
+      bend->score()->addRefresh(bend->canvasBoundingRect());
       }
 
 //---------------------------------------------------------
