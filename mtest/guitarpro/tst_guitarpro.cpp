@@ -40,7 +40,6 @@ private slots:
       void gpTremolos()      { gpReadTest("tremolos", "gp5"); }
       void gpTrill()         { gpReadTest("trill", "gp4"); }
       void gpDynamic()       { gpReadTest("dynamic", "gp5"); }
-      void gpArpeggio()      { gpReadTest("arpeggio_up_down", "gp4"); }
       void gpGhostNote()     { gpReadTest("ghost_note", "gp3"); }
       void gpGraceNote()     { /*gpReadTest("grace", "gp5");*/ } // doesn't work
       void gp5Volta()        { gpReadTest("volta", "gp5"); }
@@ -88,6 +87,53 @@ private slots:
       void gp4ShiftSlide()   { gpReadTest("shift-slide", "gp4"); }
       void gp5ShiftSlide()   { gpReadTest("shift-slide", "gp5"); }
       void gpxShiftSlide()   { gpReadTest("shift-slide", "gpx"); }
+      void gpDoubleBar()     { gpReadTest("double-bar", "gpx"); }
+      void gpxTrill()        { gpReadTest("trill", "gpx"); }
+      void gpxCrecDim()      { gpReadTest("crescendo-diminuendo", "gpx"); }
+      void gpxTremolos()     { gpReadTest("tremolos", "gpx"); }
+      void gpxDeadNote()     { gpReadTest("dead-note", "gpx"); }
+      void gpxWah()          { gpReadTest("wah", "gpx"); }
+      void gpxSforzato()     { gpReadTest("accent", "gpx"); }
+      void gpxTurn()         { gpReadTest("turn", "gpx"); }
+      void gpxMordents()     { gpReadTest("mordents", "gpx"); }
+      void gpxPickUpDown()   { gpReadTest("pick-up-down", "gpx"); }
+      void gp5PickUpDown()   { gpReadTest("pick-up-down", "gp5"); }
+      void gp4PickUpDown()   { gpReadTest("pick-up-down", "gp4"); }
+      void gpxFingering()    { gpReadTest("fingering", "gpx"); }
+      void gp5Fingering()    { gpReadTest("fingering", "gp5"); }
+      void gp4Fingering()    { gpReadTest("fingering", "gp4"); }
+      void gpxArpeggio()     { gpReadTest("arpeggio", "gpx"); }
+      void gpxBrush()        { gpReadTest("brush", "gpx"); }
+      void gp5Brush()        { gpReadTest("brush", "gp5"); }
+      void gp4Brush()        { gpReadTest("brush", "gp4"); }
+      void gpxRepeats()      { gpReadTest("repeats", "gpx"); }
+      void gpxVolta()        { gpReadTest("volta", "gpx"); }
+      void gpxGraceBefore()  { gpReadTest("grace-before-beat", "gpx"); }
+      void gpxGraceOn()      { gpReadTest("grace-on-beat", "gpx"); }
+      void gpxPalmMute()     { gpReadTest("palm-mute", "gpx"); }
+      void gp5PalmMute()     { gpReadTest("palm-mute", "gp5"); }
+      void gp4PalmMute()     { gpReadTest("palm-mute", "gp4"); }
+      void gpxLetRing()      { gpReadTest("let-ring", "gpx"); }
+      void gp5LetRing()      { gpReadTest("let-ring", "gp5"); }
+      void gp4LetRing()      { gpReadTest("let-ring", "gp4"); }
+      void gpxTapSlapPop()   { gpReadTest("tap-slap-pop", "gpx"); }
+      void gp5TapSlapPop()   { gpReadTest("tap-slap-pop", "gp5"); }
+      void gpxBarre()        { gpReadTest("barre", "gpx"); }
+      void gpxTimer()        { gpReadTest("timer", "gpx"); }
+      void gpxText()         { gpReadTest("text", "gpx"); }
+      void gpxArtHarmonic()  { gpReadTest("artificial-harmonic", "gpx"); }
+      void gpxGhost()        { gpReadTest("ghost-note", "gpx"); }
+      void gpxRasg()         { gpReadTest("rasg", "gpx"); }
+      void gp5Percussion()   { gpReadTest("all-percussion", "gp5"); }
+      void gpxFermata()      { gpReadTest("fermata", "gpx"); }
+      void gpxDirections()   { gpReadTest("directions", "gpx"); }
+      void gpxSlur()         { gpReadTest("slur", "gpx"); }
+      void gpxVibrato()      { gpReadTest("vibrato", "gpx"); }
+      void gpxVolumeSwell()  { gpReadTest("volume-swell", "gpx"); }
+      void gpxTremoloBar()   { gpReadTest("tremolo-bar", "gpx"); }
+      void gpxCopyright()    { gpReadTest("copyright", "gpx"); }
+      void gpxFreeTime()     { gpReadTest("free-time", "gpx"); }
+      void gpxRepeatBar()    { gpReadTest("repeated-bars", "gpx"); }
       };
 
 //---------------------------------------------------------

@@ -724,7 +724,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
             if (track.mtrack->drumTrack()) {
                   s->setInitialClef(ClefType::PERC);
                   part->instr()->setDrumset(smDrumset);
-                  part->instr()->setUseDrumset(true);
+                  part->instr()->setUseDrumset(DEFAULT_DRUMS);
                   }
             else {
                   s->setInitialClef(ClefType::G);           // can be reset later

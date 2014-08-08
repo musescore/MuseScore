@@ -152,6 +152,8 @@
             </Note>
           <ChordLine>
             <subtype>1</subtype>
+            <lengthX>10</lengthX>
+            <lengthY>10</lengthY>
             <lid>6</lid>
             </ChordLine>
           </Chord>
@@ -785,6 +787,8 @@
               </Note>
             <ChordLine>
               <subtype>1</subtype>
+              <lengthX>10</lengthX>
+              <lengthY>10</lengthY>
               <lid>6</lid>
               </ChordLine>
             </Chord>

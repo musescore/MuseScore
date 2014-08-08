@@ -46,6 +46,7 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/volta.h"
 #include "libmscore/instrtemplate.h"
+#include "libmscore/fingering.h"
 #include "preferences.h"
 
 
@@ -65,7 +66,7 @@ void GuitarPro5::readInfo()
       readDelphiString();
       QString copyright = readDelphiString();
       if (!copyright.isEmpty())
-            score->setMetaTag("copyright", QString("Copyright %1\nAll Rights Reserved - International Copyright Secured").arg(copyright));
+            score->setMetaTag("copyright", QString("%1").arg(copyright));
 
       transcriber  = readDelphiString();
       instructions = readDelphiString();
@@ -99,11 +100,12 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
                   int strokedown = readUChar();            // down stroke length
 
                   Arpeggio* a = new Arpeggio(score);
+                  // representation is different in guitar pro 5 - the up/down order below is correct
                   if( strokeup > 0 ) {
-                        a->setArpeggioType(ArpeggioType::UP);
+                        a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
                         }
                   else if( strokedown > 0 ) {
-                        a->setArpeggioType(ArpeggioType::DOWN);
+                        a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
                         }
                   else {
                         delete a;
@@ -118,8 +120,8 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
                         }
                   }
       if (fxBits2 & 0x02) {
-            int a = readChar();            // stroke pick direction
-            qDebug("  0x02: 0x%02x", a);
+            effects = readChar();            // stroke pick direction
+            effects += 4; //1 or 2 for effects becomes 4 or 5
             }
       return effects;
       }
@@ -150,7 +152,6 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       int track = staffIdx * VOICES + voice;
       if (slides.contains(track))
             slide = slides.take(track);
-
 
       int pause = -1;
       if (beatBits & 0x40)
@@ -230,7 +231,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   }
 
             cr->setDuration(l);
-            if (cr->type() == Element::Type::REST && pause == 0)
+            if (cr->type() == Element::Type::REST && (pause == 0 || l == measure->len()))
                   cr->setDurationType(TDuration::DurationType::V_MEASURE);
             else
                   cr->setDurationType(d);
@@ -318,6 +319,7 @@ void GuitarPro5::readMixChange(Measure* measure)
             readChar();
       if (reverb >= 0)
             readChar();
+      //qDebug("read reverb: %d", reverb);
       if (phase >= 0)
             readChar();
       if (tremolo >= 0)
@@ -377,6 +379,7 @@ void GuitarPro5::readTracks()
 
             skip(version > 500 ? 49 : 44);
             if (version > 500) {
+                  //  british stack clean / amp tone
                   readDelphiString();
                   readDelphiString();
                   }
@@ -398,8 +401,8 @@ void GuitarPro5::readTracks()
             ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
-                  instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  instr->setUseDrumset(GUITAR_PRO);
+                  staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -425,6 +428,7 @@ void GuitarPro5::readTracks()
             ch.pan     = channelDefaults[midiChannel].pan;
             ch.chorus  = channelDefaults[midiChannel].chorus;
             ch.reverb  = channelDefaults[midiChannel].reverb;
+            //qDebug("default2: %d", channelDefaults[i].reverb);
             // missing: phase, tremolo
             ch.updateInitList();
             }
@@ -476,6 +480,11 @@ void GuitarPro5::read(QFile* fp)
 
       previousDynamic = -1;
       previousTempo = -1;
+      //previousDynamic = new int [staves * VOICES];
+      // initialise the dynamics to 0
+      //for (int i = 0; i < staves * VOICES; i++)
+      //      previousDynamic[i] = 0;
+
       int tempo = readInt();
       if (version > 500)
             skip(1);
@@ -533,10 +542,12 @@ void GuitarPro5::read(QFile* fp)
                   }
             if (barBits & 0x80)
                   bar.barLine = BarLineType::DOUBLE;
-            if (barBits & 0x3)
+            if (barBits & 0x3) {
                   skip(4);
-            if ((barBits & 0x10) == 0)
+            }
+            if ((barBits & 0x10) == 0) {
                   skip(1);
+            }
             readChar();             // triple feel  (none, 8, 16)
             bar.timesig = Fraction(tnumerator, tdenominator);
             bars.append(bar);
@@ -574,6 +585,8 @@ bool GuitarPro5::readNoteEffects(Note* note)
             slur = true;
       if (modMask1 & 0x8) {         // let ring
             }
+      if (modMask1 & 0x8)
+            addLetRing(note);
       if (modMask1 & 0x10) {
             int fret = readUChar();            // grace fret
             int dynamic = readUChar();            // grace dynamic
@@ -666,11 +679,12 @@ bool GuitarPro5::readNoteEffects(Note* note)
             chord->add(a);
             }
       if (modMask2 & 0x2) {   // palm mute - mute the whole column
+            addPalmMute(note);
             }
       if (modMask2 & 0x4) {    // tremolo picking length
             int tremoloDivision = readUChar();
             Chord* chord = note->chord();
-            Tremolo* t = new Tremolo(chord->score());
+            Tremolo* t = new Tremolo(score);
             if (tremoloDivision == 1) {
                   t->setTremoloType(TremoloType::R8);
                   chord->add(t);
@@ -747,8 +761,7 @@ bool GuitarPro5::readNote(int string, Note* note)
       bool tieNote = false;
       if (noteBits & 0x20) {
             uchar noteType = readUChar();
-            if (noteType == 1) {
-                  }
+            if (noteType == 1) {} //standard note
             else if (noteType == 2) {
                   tieNote = true;
                   }
@@ -773,12 +786,43 @@ bool GuitarPro5::readNote(int string, Note* note)
             fretNumber = readChar();
 
       if (noteBits & 0x80) {              // fingering
-            int a = readUChar();
-            int b = readUChar();
-            qDebug("   Fingering=========%d %d", a, b);
+            int leftFinger = readUChar();
+            int rightFinger = readUChar();
+            Fingering* f = new Fingering(score);
+            QString finger;
+            // if there is a valid left hand fingering
+            if (leftFinger < 5) {
+                  if (leftFinger == 0)
+                        finger = "T";
+                  else if (leftFinger == 1)
+                        finger = "1";
+                  else if (leftFinger == 2)
+                        finger = "2";
+                  else if (leftFinger == 3)
+                        finger = "3";
+                  else if (leftFinger == 4)
+                        finger = "4";
+                  }
+            else  {
+                  if (rightFinger == 0)
+                        finger = "T";
+                  else if (rightFinger == 1)
+                        finger = "I";
+                  else if (rightFinger == 2)
+                        finger = "M";
+                  else if (rightFinger == 3)
+                        finger = "A";
+                  else if (rightFinger == 4)
+                        finger = "O";
+                  }
+            f->setText(finger);
+            note->add(f);
             }
-      if (noteBits & 0x1)
+
+      if (noteBits & 0x1) {
+            qDebug("Detected 0x1 mask, skipped 8");
             skip(8);
+            }
 
       // check if a note is supposed to be accented, and give it the marcato type
       if (noteBits & 0x02) {

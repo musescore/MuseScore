@@ -30,6 +30,8 @@ ChordLine::ChordLine(Score* s)
       modified = false;
       _chordLineType = ChordLineType::NOTYPE;
       _straight = false;
+      _lengthX = 10;
+      _lengthY = 10;
       }
 
 ChordLine::ChordLine(const ChordLine& cl)
@@ -39,6 +41,8 @@ ChordLine::ChordLine(const ChordLine& cl)
       modified = cl.modified;
       _chordLineType = cl._chordLineType;
       _straight = cl._straight;
+      _lengthX = cl._lengthX;
+      _lengthY = cl._lengthY;
       }
 
 //---------------------------------------------------------
@@ -106,7 +110,14 @@ void ChordLine::layout()
       else
             setPos(0.0, 0.0);
       QRectF r(path.boundingRect());
-      bbox().setRect(r.x() * _spatium, r.y() * _spatium, r.width() * _spatium, r.height() * _spatium);
+      if (_straight && (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT))
+            bbox().setRect(r.x() + _spatium * 2.5, r.y(), r.width() + _spatium * 2.5, r.height());
+      else if (_straight && _chordLineType == ChordLineType::SCOOP)
+            bbox().setRect(r.x() - _spatium * 3, r.y() - _spatium, r.width() - _spatium*2, r.height());
+      else if (_straight && _chordLineType == ChordLineType::PLOP)
+            bbox().setRect(r.x() - _spatium * 4, r.y() + _spatium, r.width() + _spatium, r.height());
+      else
+            bbox().setRect(r.x() * _spatium, r.y() * _spatium, r.width() * _spatium, r.height() * _spatium);
       }
 
 //---------------------------------------------------------
@@ -164,6 +175,11 @@ void ChordLine::read(XmlReader& e)
                   setChordLineType(ChordLineType(e.readInt()));
              else if (tag == "straight")
                   setStraight(e.readInt());
+             else if (tag == "lengthX")
+                  setLengthX(e.readInt());
+             else if (tag == "lengthY")
+                  setLengthY(e.readInt());
+
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -178,6 +194,8 @@ void ChordLine::write(Xml& xml) const
       xml.stag(name());
       xml.tag("subtype", int(_chordLineType));
       xml.tag("straight", _straight, false);
+      xml.tag("lengthX", _lengthX, false);
+      xml.tag("lengthY", _lengthY, false);
       Element::writeProperties(xml);
       if (modified) {
             int n = path.elementCount();
@@ -207,16 +225,16 @@ void ChordLine::draw(QPainter* painter) const
             pen.setCapStyle(Qt::RoundCap);
             painter->setPen(pen);
             if (_chordLineType == ChordLineType::FALL)
-                  painter->drawLine(QLineF(20.0, -4.0, 30.0, 4.0));
+                  painter->drawLine(QLineF(20.0, -4.0, 20.0 + _lengthX, -4.0 + _lengthY));
             else if (_chordLineType == ChordLineType::DOIT)
-                  painter->drawLine(QLineF(20.0, 4.0, 30.0, -4.0));
+                  painter->drawLine(QLineF(20.0, 4.0, 20.0 + _lengthX, 4.0 - _lengthY));
             else if (_chordLineType == ChordLineType::SCOOP) {
                   painter->translate(-50.0, -5.0);
-                  painter->drawLine(QLineF(20.0, -4.0, 30.0, 4.0));
+                  painter->drawLine(QLineF(20.0, -4.0, 20.0 + _lengthX, -4.0 + _lengthY));
                   }
             else if (_chordLineType == ChordLineType::PLOP) {
                   painter->translate(-50.0, 5.0);
-                  painter->drawLine(QLineF(20.0, 4.0, 30.0, -4.0));
+                  painter->drawLine(QLineF(20.0, 4.0, 20.0 + _lengthX, 4.0 - _lengthY));
                   }
             painter->restore();
             }
@@ -238,6 +256,8 @@ void ChordLine::editDrag(const EditData& ed)
       int n = path.elementCount();
       QPainterPath p;
       qreal sp = spatium();
+      _lengthX += ed.delta.x();
+      _lengthY += ed.delta.y();
       qreal dx = ed.delta.x() / sp;
       qreal dy = ed.delta.y() / sp;
       for (int i = 0; i < n; ++i) {

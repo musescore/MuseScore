@@ -46,6 +46,7 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/volta.h"
 #include "libmscore/instrtemplate.h"
+#include "libmscore/fingering.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -109,11 +110,12 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
             int strokedown = readUChar();            // down stroke length
 
             Arpeggio* a = new Arpeggio(score);
+            // representation is different in guitar pro 5 - the up/down order below is correct
             if( strokeup > 0 ) {
-                  a->setArpeggioType(ArpeggioType::UP);
+                  a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
                   }
             else if( strokedown > 0 ) {
-                  a->setArpeggioType(ArpeggioType::DOWN);
+                  a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
                   }
             else {
                   delete a;
@@ -127,8 +129,10 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
                   segment->add(cr);
                   }
             }
-      if (fxBits2 & 0x02)
-            readUChar();            // stroke pick direction
+      if (fxBits2 & 0x02) {
+            effects = readUChar();            // stroke pick direction
+            effects += 4;    //1 or 2 for effects becomes 4 or 5
+            }
       if (fxBits1 & 0x01) {         // GP3 column-wide vibrato
             }
       if (fxBits1 & 0x2) {          // GP3 column-wide wide vibrato (="tremolo" in GP3)
@@ -140,7 +144,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
 //   readNote
 //---------------------------------------------------------
 
-bool GuitarPro4::readNote(int string, Note* note)
+bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
       {
       uchar noteBits = readUChar();
 
@@ -169,7 +173,7 @@ bool GuitarPro4::readNote(int string, Note* note)
             else if (variant == 2) {
                   /* guitar pro 4 bundles tied notes with slides in the representation
                    * we take note when we see ties and do not create slides for these notes. */
-                  slides[note->track()] = -2;
+                  slides[staffIdx * VOICES] = -2;
                   tieNote = true;
                   }
             else if (variant == 3) {                 // dead notes = ghost note
@@ -210,9 +214,37 @@ bool GuitarPro4::readNote(int string, Note* note)
             }
 
       if (noteBits & 0x80) {              // fingering
-            int a = readUChar();
-            int b = readUChar();
-            qDebug("Fingering=========%d %d", a, b);
+            int leftFinger = readUChar();
+            int rightFinger = readUChar();
+            Text* f = new Fingering(score);
+            QString finger;
+            // if there is a valid left hand fingering
+            if (leftFinger < 5) {
+                  if (leftFinger == 0)
+                        finger = "T";
+                  else if (leftFinger == 1)
+                        finger = "1";
+                  else if (leftFinger == 2)
+                        finger = "2";
+                  else if (leftFinger == 3)
+                        finger = "3";
+                  else if (leftFinger == 4)
+                        finger = "4";
+                  }
+            else  {
+                  if (rightFinger == 0)
+                        finger = "T";
+                  else if (rightFinger == 1)
+                        finger = "I";
+                  else if (rightFinger == 2)
+                        finger = "M";
+                  else if (rightFinger == 3)
+                        finger = "A";
+                  else if (rightFinger == 4)
+                        finger = "O";
+                  }
+            f->setText(finger);
+            note->add(f);
             }
       bool slur = false;
       if (noteBits & 0x8) {
@@ -223,8 +255,8 @@ bool GuitarPro4::readNote(int string, Note* note)
             if (modMask1 & 0x2) {         // hammer on / pull off
                   slur = true;
                   }
-            if (modMask1 & 0x8) {         // let ring
-                  }
+            if (modMask1 & 0x8)
+                  addLetRing(note);
             if (modMask1 & 0x10) {
                   int fret = readUChar();            // grace fret
                   int dynamic = readUChar();            // grace dynamic
@@ -306,9 +338,14 @@ bool GuitarPro4::readNote(int string, Note* note)
                          }
                   }
             if (modMask2 & 0x1) {   // staccato
+                  Chord* chord = note->chord();
+                  Articulation* a = new Articulation(chord->score());
+                  a->setArticulationType(ArticulationType::Staccato);
+                  chord->add(a);
                   }
-            if (modMask2 & 0x2) {   // palm mute - mute the whole column
-                  }
+            if (modMask2 & 0x2)
+                  addPalmMute(note);
+
             if (modMask2 & 0x4) {    // tremolo picking length
                   int tremoloDivision = readUChar();
                   Chord* chord = note->chord();
@@ -411,7 +448,7 @@ void GuitarPro4::readInfo()
       composer     = readDelphiString();
       QString copyright = readDelphiString();
       if (!copyright.isEmpty())
-            score->setMetaTag("copyright", QString("Copyright %1\nAll Rights Reserved - International Copyright Secured").arg(copyright));
+            score->setMetaTag("copyright", QString("%1").arg(copyright));
 
       transcriber  = readDelphiString();
       instructions = readDelphiString();
@@ -460,11 +497,16 @@ void GuitarPro4::read(QFile* fp)
       readUChar();      // triplet feeling
       readLyrics();
 
-      previousDynamic = -1;
-      previousTempo = -1;
       int tempo  = readInt();
       key        = readInt();
       /*int octave =*/ readUChar();    // octave
+
+      //previousDynamic = new int [staves * VOICES];
+      // initialise the dynamics to 0
+      //for (int i = 0; i < staves * VOICES; i++)
+      //      previousDynamic[i] = 0;
+      previousDynamic = -1;
+      previousTempo = -1;
 
       readChannels();
       measures = readInt();
@@ -568,8 +610,8 @@ void GuitarPro4::read(QFile* fp)
             ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
-                  instr->setUseDrumset(true);
-                        staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  instr->setUseDrumset(GUITAR_PRO);
+                  staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
                   clefId = ClefType::G3;
@@ -727,7 +769,7 @@ void GuitarPro4::read(QFile* fp)
                                     Note* note = new Note(score);
                                     static_cast<Chord*>(cr)->add(note);
 
-                                    hasSlur = readNote(6-i, note);
+                                    hasSlur = readNote(6-i, staffIdx, note);
                                     note->setTpcFromPitch();
                                     }
                               }

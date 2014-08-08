@@ -29,6 +29,11 @@
 #include "libmscore/clef.h"
 #include "libmscore/keysig.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/clef.h"
+#include "libmscore/keysig.h"
+#include "libmscore/hairpin.h"
+#include "libmscore/ottava.h"
+#include "libmscore/drumset.h"
 
 namespace Ms {
 
@@ -61,14 +66,32 @@ struct GPVolta {
       QList<int> voltaInfo;
 };
 
+/* How the fermatas are represented in Guitar Pro is two integers, the
+ * first is an index value and the second is the time division that
+ * index value refers to, and they are givin with respect to a
+ * measure. Time division 0 means a minim, 1 is a crotchet, 2 is a
+ * quaver and so on, with the index (counting from 0) refering to how
+ * many time divisions occur before the fermata. These numbers are
+ * separated in GP6 with a '/' character. For example, a note
+ * occurring on the third beat of a measure in a 4/4 bar would be
+ * represented as 2/1.
+ */
+struct GPFermata {
+      int index;
+      int timeDivision;
+};
+
 struct GpBar {
       Fraction timesig;
+      bool freeTime;
       int keysig;
       QString marker;
       BarLineType barLine;
       Repeat repeatFlags;
       int repeats;
       GPVolta volta;
+      QString direction;
+      QString directionStyle;
 
       GpBar();
       };
@@ -83,6 +106,9 @@ class GuitarPro {
       int version;
       int key;
 
+      QMap<int, QList<GPFermata>*> fermatas;
+      Ottava** ottava;
+      Hairpin** hairpins;
       Score* score;
       QFile* f;
       int curPos;
@@ -121,8 +147,16 @@ class GuitarPro {
       void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, int tick);
       void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
       void createSlide(int slide, ChordRest* cr, int staffIdx);
+      void createCrecDim(int staffIdx, int track, int tick, bool crec);
+      void addTextToNote(QString string, TextStyle textStyle, Note* note);
+      void addPalmMute(Note* note);
+      void addLetRing(Note* note);
+      void addTap(Note* note);
+      void addSlap(Note* note);
+      void addPop(Note* note);
 
    public:
+      void initGuitarProDrumset();
       QString title, subtitle, artist, album, composer;
       QString transcriber, instructions;
       QStringList comments;
@@ -187,7 +221,7 @@ class GuitarPro4 : public GuitarPro {
 
       int slide;
       void readInfo();
-      bool readNote(int string, Note* note);
+      bool readNote(int string, int staffIdx, Note* note);
       virtual int readBeatEffects(int track, Segment* segment);
       virtual void readMixChange(Measure* measure);
       int convertGP4SlideNum(int slide);
@@ -262,14 +296,17 @@ class GuitarPro6 : public GuitarPro {
       int findNumMeasures(GPPartInfo* partInfo);
       void readMasterTracks(QDomNode* masterTrack);
       void readDrumNote(Note* note, int element, int variation);
-      int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[]);
-      void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* t);
+      int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter);
+      void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* t, int measureCounter);
       void readTracks(QDomNode* tracks);
       void readMasterBars(GPPartInfo* partInfo);
       Fraction rhythmToDuration(QString value);
+      Fraction fermataToFraction(int numerator, int denominator);
       QDomNode getNode(QString id, QDomNode nodes);
       void unhandledNode(QString nodeName);
       void makeTie(Note* note);
+      int* previousDynamic;
+      void addTremoloBar(Segment* segment, int track, int whammyOrigin, int whammyMiddle, int whammyEnd);
 
    protected:
       void readNote(int string, Note* note);
@@ -280,5 +317,6 @@ class GuitarPro6 : public GuitarPro {
       virtual void read(QFile*);
       };
 
+extern Drumset* gpDrumset;
 } // namespace Ms
 #endif
