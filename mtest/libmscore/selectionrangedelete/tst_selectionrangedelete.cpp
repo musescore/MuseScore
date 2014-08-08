@@ -31,11 +31,14 @@ class TestSelectionRangeDelete : public QObject, public MTest
       Q_OBJECT
       void verifyDelete(Score* score, size_t spanners);
       void verifyNoDelete(Score* score, size_t spanners);
+      void deleteVoice(int voice, QString idx);
 
    private slots:
       void initTestCase();
       void deleteSegmentWithSlur();
       void deleteSegmentWithSpanner();
+      void deleteVoice1() { deleteVoice(0,"03"); }
+      void deleteVoice2() { deleteVoice(1,"04"); }
       };
 
 //---------------------------------------------------------
@@ -165,6 +168,34 @@ void TestSelectionRangeDelete::deleteSegmentWithSpanner()
       score->select(chordRestAtBeat(score, 2),SelectType::RANGE);
       verifyDelete(score,spanners);
       score->deselectAll();
+
+      }
+
+//---------------------------------------------------------
+//   deleteVoice
+//---------------------------------------------------------
+
+void TestSelectionRangeDelete::deleteVoice(int voice, QString idx)
+      {
+      Score* score = readScore(DIR + QString("selectionrangedelete%1.mscx").arg(idx));
+
+      Measure* m1 = score->firstMeasure();
+      QVERIFY(m1);
+
+      SelectionFilterType voiceFilterType = SelectionFilterType((int)SelectionFilterType::FIRST_VOICE + voice);
+      score->selectionFilter().setFiltered(voiceFilterType,false);
+      score->select(m1,SelectType::RANGE);
+
+      score->startCmd();
+      score->cmdDeleteSelection();
+      score->endCmd();
+
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("selectionrangedelete%1.mscx").arg(idx),
+         DIR + QString("selectionrangedelete%1-ref.mscx").arg(idx)));
+
+      delete score;
       }
 
 QTEST_MAIN(TestSelectionRangeDelete)
