@@ -131,6 +131,7 @@ void TestSelectionRangeDelete::deleteSegmentWithSlur()
       verifyDelete(score,spanners);
       score->deselectAll();
 
+      delete score;
       }
 
 //---------------------------------------------------------
@@ -169,6 +170,7 @@ void TestSelectionRangeDelete::deleteSegmentWithSpanner()
       verifyDelete(score,spanners);
       score->deselectAll();
 
+      delete score;
       }
 
 //---------------------------------------------------------
