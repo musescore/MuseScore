@@ -1157,5 +1157,21 @@ void ChordRest::writeBeam(Xml& xml)
 #endif
       }
 
+//---------------------------------------------------------
+//   nextSegmentAfterCR
+//    returns first segment at tick CR->tick + CR->actualTicks
+//    of given types
+//---------------------------------------------------------
+
+Segment* ChordRest::nextSegmentAfterCR(Segment::Type types) const
+      {
+      for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
+            // chordrest ends at tick+actualTicks
+            // we return the segment at or after the end of the chordrest
+            if (s->tick() >= tick() + actualTicks())
+                  return s;
+            }
+      return 0;
+      }
 }
 
