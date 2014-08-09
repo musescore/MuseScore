@@ -974,6 +974,7 @@ bool Score::read(XmlReader& e)
                   layer.name = e.attribute("name");
                   layer.tags = e.attribute("mask").toUInt();
                   _layer.append(layer);
+                  e.readNext();
                   }
             else if (tag == "currentLayer")
                   _currentLayer = e.readInt();
