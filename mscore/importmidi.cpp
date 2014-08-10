@@ -164,7 +164,7 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                         }
                   }
             const auto basicQuant = Quantize::quantValueToFraction(
-                                    opers.data()->trackOpers.quantValue.defaultValue());
+                        opers.data()->trackOpers.quantValue.value(mtrack.indexOfOperation));
 
             MChord::setBarIndexes(mtrack.chords, basicQuant, lastTick, sigmap);
             MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick, basicQuant);
