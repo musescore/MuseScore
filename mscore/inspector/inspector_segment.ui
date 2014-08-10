@@ -75,7 +75,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Trailing</string>
+        <string>Trailing space</string>
        </property>
       </widget>
      </item>
@@ -132,7 +132,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Leading</string>
+        <string>Leading space</string>
        </property>
       </widget>
      </item>
