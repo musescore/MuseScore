@@ -2849,8 +2849,10 @@ void Score::selectRange(Element* e, int staffIdx)
                               if (etick >= oetick)
                                     _selection.setEndSegment(m->last());
                               else
-                                    _selection.setEndSegment(cr->segment()->next1MM());
-                                    //change this to call nextSegmentAfterCR
+                                    _selection.setEndSegment(cr->nextSegmentAfterCR(Segment::Type::ChordRest
+                                                                                    | Segment::Type::EndBarLine
+                                                                                    | Segment::Type::Clef));
+                              
                               }
                         else {
                               _selection.setStartSegment(cr->segment());
