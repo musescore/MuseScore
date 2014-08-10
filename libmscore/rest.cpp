@@ -122,8 +122,10 @@ void Rest::draw(QPainter* painter) const
             int dots = durationType().dots();
             if (dots) {
                   qreal y = dotline * _spatium * .5;
+                  qreal dnd = point(score()->styleS(StyleIdx::dotNoteDistance)) * mag();
+                  qreal ddd = point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
                   for (int i = 1; i <= dots; ++i) {
-                        qreal x = symWidth(_sym) + point(score()->styleS(StyleIdx::dotNoteDistance)) * i;
+                        qreal x = symWidth(_sym) + dnd + ddd * (i - 1);
                         drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
                         }
                   }
