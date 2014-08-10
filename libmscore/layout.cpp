@@ -370,6 +370,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         else
                               downDots = 0; // no need to adjust for dots in this case
                         upOffset = qMax(clearLeft, clearRight);
+                        // don't center small downstem chords in this case
+                        centerDown = qMin(centerDown, 0.0);
                         }
 
                   }
@@ -575,13 +577,14 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
       qreal gap = lower->top - upper->bottom;
 
       // no conflict at all if there is sufficient vertical gap between accidentals
-      if (gap >= pd)
+      // the arrangement of accidentals into columns assumes accidentals an octave apart *do* clear
+      if (gap >= pd || lower->line - upper->line >= 7)
             return false;
 
       qreal allowableOverlap = qMax(upper->descent, lower->ascent) - pd;
 
       // accidentals that are "close" (small gap or even slight overlap)
-      if (qAbs(gap) <= 0.25 * sp) {
+      if (qAbs(gap) <= 0.33 * sp) {
             // acceptable with slight offset
             // if one of the accidentals can subsume the overlap
             // and both accidentals allow it
@@ -628,6 +631,10 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
 static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffset, QList<Note*>& leftNotes, qreal pnd, qreal pd, qreal sp)
       {
       qreal lx = colOffset;
+      Accidental* acc = me->note->accidental();
+      qreal mag = acc->mag();
+      pnd *= mag;
+      pd *= mag;
 
       // extra space for ledger lines
       if (me->line <= -2 || me->line >= me->note->staff()->lines() * 2)
@@ -643,9 +650,9 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
             if (me->top - lnBottom <= pnd && lnTop - me->bottom <= pnd) {
                   // undercut note above if possible
                   if (lnBottom - me->top <= me->ascent - pnd)
-                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear - pnd);
+                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear);
                   else
-                        lx = qMin(lx, ln->x() + ln->chord()->x() - pnd);
+                        lx = qMin(lx, ln->x() + ln->chord()->x());
                   }
             else if (lnTop > me->bottom)
                   break;
@@ -654,7 +661,6 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
       // clear other accidentals
       bool conflictAbove = false;
       bool conflictBelow = false;
-      Accidental* acc = me->note->accidental();
 
       if (above)
             conflictAbove = resolveAccidentals(me, above, lx, pd, sp);
@@ -663,9 +669,9 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
       if (conflictAbove || conflictBelow)
             me->x = lx - acc->width() - acc->bbox().x();
       else if (colOffset != 0.0)
-            me->x = lx - pd * acc->mag() - acc->width() - acc->bbox().x();
+            me->x = lx - pd - acc->width() - acc->bbox().x();
       else
-            me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
+            me->x = lx - pnd - acc->width() - acc->bbox().x();
 
       return me->x;
 
@@ -922,7 +928,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                               below = k;
                               }
                         // check to see if accidental can fit in slot
-                        qreal myPd = pd * me->note->mag();
+                        qreal myPd = pd * me->note->accidental()->mag();
                         bool conflict = false;
                         if (above != -1 && me->top - aclist[above].bottom < myPd)
                               conflict = true;
