@@ -430,6 +430,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
 
       if (!range.write(rootScore(), fm->tick()))
             qFatal("Cannot write measures");
+      connectTies(true);
 
       return true;
       }

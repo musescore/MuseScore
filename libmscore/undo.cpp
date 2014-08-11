@@ -72,6 +72,7 @@
 #include "chordline.h"
 #include "tremolo.h"
 #include "sym.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -2952,8 +2953,34 @@ void RemoveMeasures::undo()
             clef->staff()->setClef(clef);
       if (!clefs.empty())
             score->cmdUpdateNotes();
-      score->connectTies();
       score->setLayoutAll(true);
+
+      //
+      // connect ties
+      //
+
+      if (!fm->prevMeasure())
+            return;
+      Measure* m = fm->prevMeasure();
+      for (Segment* seg = m->first(); seg; seg = seg->next()) {
+            for (int track = 0; track < score->ntracks(); ++track) {
+                  Chord* chord = static_cast<Chord*>(seg->element(track));
+                  if (chord == 0 || chord->type() != Element::Type::CHORD)
+                        continue;
+                  foreach (Note* n, chord->notes()) {
+                        Tie* tie = n->tieFor();
+                        if (!tie)
+                              continue;
+                        if (!tie->endNote() || tie->endNote()->chord()->segment()->measure() != m) {
+                              Note* nn = searchTieNote(n);
+                              if (nn) {
+                                    tie->setEndNote(nn);
+                                    nn->setTieBack(tie);
+                                    }
+                              }
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -2993,6 +3020,8 @@ void InsertMeasures::undo()
       {
       fm->score()->measures()->remove(fm, lm);
       fm->score()->fixTicks();
+      fm->score()->setLayoutAll(true);
+      fm->score()->connectTies(true);
       }
 
 //---------------------------------------------------------
@@ -3002,9 +3031,38 @@ void InsertMeasures::undo()
 
 void InsertMeasures::redo()
       {
-      fm->score()->measures()->insert(fm, lm);
-      fm->score()->fixTicks();
-      fm->score()->connectTies();
+      Score* s = fm->score();
+      s->measures()->insert(fm, lm);
+      s->fixTicks();
+      s->setLayoutAll(true);
+      s->connectTies(true);
+
+      //
+      // connect ties
+      //
+
+      if (!fm->prevMeasure())
+            return;
+      Measure* m = fm->prevMeasure();
+      for (Segment* seg = m->first(); seg; seg = seg->next()) {
+            for (int track = 0; track < s->ntracks(); ++track) {
+                  Chord* chord = static_cast<Chord*>(seg->element(track));
+                  if (chord == 0 || chord->type() != Element::Type::CHORD)
+                        continue;
+                  foreach (Note* n, chord->notes()) {
+                        Tie* tie = n->tieFor();
+                        if (!tie)
+                              continue;
+                        if (!tie->endNote() || tie->endNote()->chord()->segment()->measure() != m) {
+                              Note* nn = searchTieNote(n);
+                              if (nn) {
+                                    tie->setEndNote(nn);
+                                    nn->setTieBack(tie);
+                                    }
+                              }
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------

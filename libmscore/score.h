@@ -812,17 +812,14 @@ class Score : public QObject {
       Ms::Measure* firstMeasureMM() const;
       Ms::Measure* lastMeasure() const;
       Ms::Measure* lastMeasureMM() const;
-//      int measureIdx(MeasureBase*) const;
       MeasureBase* measure(int idx) const;
 
       Q_INVOKABLE Ms::Segment* firstSegment(Segment::Type s = Segment::Type::All) const;
       Ms::Segment* firstSegmentMM(Segment::Type s = Segment::Type::All) const;
       Ms::Segment* lastSegment() const;
 
-      void connectTies();
+      void connectTies(bool silent=false);
 
-//      void add(Element*);
-//      void remove(Element*);
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
       void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
