@@ -51,6 +51,7 @@
 #include "libmscore/chordline.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/hairpin.h"
+#include "libmscore/ottava.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -653,7 +654,7 @@ Fraction GuitarPro::len2fraction(int len)
 //   readMixChange
 //---------------------------------------------------------
 
-void GuitarPro::readMixChange(Measure* measure)
+bool GuitarPro::readMixChange(Measure* measure)
       {
       /*char patch   =*/ readChar();
       char volume  = readChar();
@@ -669,7 +670,7 @@ void GuitarPro::readMixChange(Measure* measure)
       if (pan >= 0)
             readChar();
       if (chorus >= 0)
-            readChar();
+             readChar();
       if (reverb >= 0)
             readChar();
       if (phase >= 0)
@@ -683,6 +684,7 @@ void GuitarPro::readMixChange(Measure* measure)
                   }
             readChar();
             }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -704,7 +706,6 @@ void GuitarPro::createMeasures()
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                         Staff* staff = score->staff(staffIdx);
                         StaffType* staffType = staff->staffType();
-qDebug("staff %d group %d timesig %d", staffIdx, int(staffType->group()), staffType->genTimesig());
                         if (staffType->genTimesig()) {
                               TimeSig* t = new TimeSig(score);
                               t->setTrack(staffIdx * VOICES);
@@ -767,6 +768,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
       else if (beatEffect == 4) {
             Articulation* a = new Articulation(chord->score());
             a->setArticulationType(ArticulationType::FadeIn);
+            a->setAnchor(ArticulationAnchor::TOP_STAFF);
             chord->add(a);
             }
       else if (beatEffect == 5) {
@@ -864,6 +866,7 @@ void GuitarPro1::read(QFile* fp)
 
       previousTempo = tempo;
       Measure* measure = score->firstMeasure();
+      bool mixChange = false;
       for (int bar = 0; bar < measures; ++bar, measure = measure->nextMeasure()) {
             const GpBar& gpbar = bars[bar];
 
@@ -916,8 +919,12 @@ void GuitarPro1::read(QFile* fp)
                               }
                         if (beatBits & 0x8)
                               readBeatEffects(track, segment);
-                        if (beatBits & 0x10)
+
+                        if (beatBits & 0x10) {
                               readMixChange(measure);
+                              mixChange = true;
+                              }
+
                         int strings = readUChar();   // used strings mask
 
                         Fraction l = len2fraction(len);
@@ -968,8 +975,9 @@ void GuitarPro1::read(QFile* fp)
                         tick += cr->actualTicks();
                         }
                   }
+            if (bar == 1 && !mixChange)
+                  setTempo(tempo, score->firstMeasure());
             }
-      setTempo(tempo, score->firstMeasure());
       }
 
 //---------------------------------------------------------
@@ -1074,6 +1082,37 @@ void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
             slurs[staffIdx] = 0;
             s->setTick2(cr->tick());
             s->setTrack2(cr->track());
+            }
+      }
+
+//---------------------------------------------------------
+//   createSlur
+//---------------------------------------------------------
+
+void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString value)
+      {
+      if (hasOttava && (ottava[track] == 0)) {
+            Ottava* newOttava = new Ottava(score);
+            newOttava->setTrack(track);
+            if (!value.compare("8va"))
+                  newOttava->setOttavaType(Ottava::Type::OTTAVA_8VA);
+            else if (!value.compare("8vb"))
+                  newOttava->setOttavaType(Ottava::Type::OTTAVA_8VB);
+            else if (!value.compare("15ma"))
+                  newOttava->setOttavaType(Ottava::Type::OTTAVA_15MA);
+            else if (!value.compare("15mb"))
+                  newOttava->setOttavaType(Ottava::Type::OTTAVA_15MB);
+            newOttava->setTick(cr->tick());
+            newOttava->setTick2(cr->tick());
+            ottava[track] = newOttava;
+            score->addElement(newOttava);
+            }
+      else if (ottava[track] && !hasOttava) {
+            Ottava* currentOttava = ottava[track];
+            ottava[track] = 0;
+            currentOttava->setTick2(cr->tick());
+            currentOttava->setProperty(P_ID::LINE_WIDTH,0.1);
+            //ottava[track]->staff()->updateOttava(ottava[track]);
             }
       }
 
@@ -1262,6 +1301,7 @@ qDebug("BeginRepeat=============================================");
 
       previousTempo = tempo;
       Measure* measure = score->firstMeasure();
+      bool mixChange = false;
       for (int bar = 0; bar < measures; ++bar, measure = measure->nextMeasure()) {
             const GpBar& gpbar = bars[bar];
 
@@ -1315,8 +1355,12 @@ qDebug("BeginRepeat=============================================");
                               }
                         if (beatBits & 0x8)
                               readBeatEffects(track, segment);
-                        if (beatBits & 0x10)
+
+                        if (beatBits & 0x10) {
                               readMixChange(measure);
+                              mixChange = true;
+                              }
+
                         int strings = readUChar();   // used strings mask
 
                         Fraction l = len2fraction(len);
@@ -1367,8 +1411,9 @@ qDebug("BeginRepeat=============================================");
                         tick += cr->actualTicks();
                         }
                   }
+            if (bar == 1 && !mixChange)
+                  setTempo(tempo, score->firstMeasure());
             }
-      setTempo(tempo, score->firstMeasure());
       }
 
 //---------------------------------------------------------
@@ -1588,8 +1633,6 @@ void GuitarPro1::readNote(int string, Note* note)
                         }
                   segment = segment->prev1(Segment::Type::ChordRest);
                   }
-            if (!found)
-                  qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
             }
       }
 
@@ -1845,6 +1888,7 @@ void GuitarPro3::read(QFile* fp)
 
       previousTempo = tempo;
       Measure* measure = score->firstMeasure();
+      bool mixChange = false;
       for (int bar = 0; bar < measures; ++bar, measure = measure->nextMeasure()) {
             const GpBar& gpbar = bars[bar];
 
@@ -1900,8 +1944,12 @@ void GuitarPro3::read(QFile* fp)
                               }
                         if (beatBits & 0x8)
                               readBeatEffects(track, segment);
-                        if (beatBits & 0x10)
+
+                        if (beatBits & 0x10) {
                               readMixChange(measure);
+                              mixChange = true;
+                              }
+
                         int strings = readUChar();   // used strings mask
 
                         Fraction l = len2fraction(len);
@@ -1971,8 +2019,9 @@ void GuitarPro3::read(QFile* fp)
                         tick += cr->actualTicks();
                         }
                   }
+            if (bar == 1 && !mixChange)
+                  setTempo(tempo, score->firstMeasure());
             }
-      setTempo(tempo, score->firstMeasure());
       }
 
 int GuitarPro3::readBeatEffects(int track, Segment* segment)

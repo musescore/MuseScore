@@ -97,8 +97,13 @@
           <lid>4</lid>
           <text><sym>noteQuarterUp</sym> = 120</text>
           </Tempo>
-        <Rest>
+        <Tempo>
+          <tempo>2</tempo>
           <lid>5</lid>
+          <text><sym>noteQuarterUp</sym> = 120</text>
+          </Tempo>
+        <Rest>
+          <lid>6</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -107,13 +112,13 @@
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>7</lid>
+          <lid>8</lid>
           </Dynamic>
         <Chord>
-          <lid>8</lid>
+          <lid>9</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>9</lid>
+            <lid>10</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -123,7 +128,7 @@
         </Measure>
       <Measure number="3">
         <Rest>
-          <lid>11</lid>
+          <lid>12</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -251,8 +256,13 @@
             <lid>4</lid>
             <text><sym>noteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Rest>
+          <Tempo>
+            <tempo>2</tempo>
             <lid>5</lid>
+            <text><sym>noteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Rest>
+            <lid>6</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -261,13 +271,13 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>7</lid>
+            <lid>8</lid>
             </Dynamic>
           <Chord>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>9</lid>
+              <lid>10</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -277,7 +287,7 @@
           </Measure>
         <Measure number="3">
           <Rest>
-            <lid>11</lid>
+            <lid>12</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -294,17 +304,17 @@
             <accidental>0</accidental>
             </KeySig>
           <Rest>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>8</lid>
+            <lid>9</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>9</lid>
+              <lid>10</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -314,7 +324,7 @@
           </Measure>
         <Measure number="3">
           <Rest>
-            <lid>11</lid>
+            <lid>12</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>

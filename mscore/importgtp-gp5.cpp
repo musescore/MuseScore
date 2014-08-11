@@ -89,9 +89,6 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
              effects = 4; // fade in
       if (fxBits1 & 0x20) {
             effects = readUChar();
-            // 1 - tapping
-            // 2 - slapping
-            // 3 - popping
             }
       if (fxBits2 & 0x04)
             readTremoloBar(track, segment);       // readBend();
@@ -143,7 +140,7 @@ void GuitarPro5::readPageSetup()
 //   readBeat
 //---------------------------------------------------------
 
-int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets)
+int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange)
       {
       uchar beatBits = readUChar();
       bool dotted    = beatBits & 0x1;
@@ -182,8 +179,11 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       int beatEffects = 0;
       if (beatBits & 0x8)
             beatEffects = readBeatEffects(track, segment);
-      if (beatBits & 0x10)
+
+      if (beatBits & 0x10) {
             readMixChange(measure);
+            mixChange = true;
+            }
 
       int strings = readUChar();   // used strings mask
 
@@ -282,14 +282,13 @@ qDebug("  3beat read 0x%02x", rrr);
 //   readMeasure
 //---------------------------------------------------------
 
-void GuitarPro5::readMeasure(Measure* measure, int staffIdx, Tuplet** tuplets)
+void GuitarPro5::readMeasure(Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange)
       {
       for (int voice = 0; voice < 2; ++voice) {
             int tick = measure->tick();
             int beats = readInt();
-            for (int beat = 0; beat < beats; ++beat) {
-                  tick += readBeat(tick, voice, measure, staffIdx, tuplets);
-                  }
+            for (int beat = 0; beat < beats; ++beat)
+                  tick += readBeat(tick, voice, measure, staffIdx, tuplets, mixChange);
             }
       }
 
@@ -297,7 +296,7 @@ void GuitarPro5::readMeasure(Measure* measure, int staffIdx, Tuplet** tuplets)
 //   readMixChange
 //---------------------------------------------------------
 
-void GuitarPro5::readMixChange(Measure* measure)
+bool GuitarPro5::readMixChange(Measure* measure)
       {
       /*char patch   =*/ readChar();
       skip(16);
@@ -310,6 +309,7 @@ void GuitarPro5::readMixChange(Measure* measure)
       readDelphiString();                 // tempo name
 
       int tempo = readInt();
+      bool editedTempo = false;
 
       if (volume >= 0)
             readChar();
@@ -328,6 +328,7 @@ void GuitarPro5::readMixChange(Measure* measure)
             if (tempo != previousTempo) {
                   previousTempo = tempo;
                   setTempo(tempo, measure);
+                  editedTempo = true;
                   }
             readChar();
             if (version > 500)
@@ -339,6 +340,7 @@ void GuitarPro5::readMixChange(Measure* measure)
             readDelphiString();
             readDelphiString();
             }
+      return editedTempo;
       }
 
 //---------------------------------------------------------
@@ -439,9 +441,10 @@ void GuitarPro5::readTracks()
 //   readMeasures
 //---------------------------------------------------------
 
-void GuitarPro5::readMeasures()
+void GuitarPro5::readMeasures(int startingTempo)
       {
       Measure* measure = score->firstMeasure();
+      bool mixChange = false;
       for (int bar = 0; bar < measures; ++bar, measure = measure->nextMeasure()) {
             const GpBar& gpbar = bars[bar];
 
@@ -458,12 +461,14 @@ void GuitarPro5::readMeasures()
                   tuplets[track] = 0;
 
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                  readMeasure(measure, staffIdx, tuplets);
+                  readMeasure(measure, staffIdx, tuplets, mixChange);
                   if (!(((bar == (measures-1)) && (staffIdx == (staves-1))))) {
                         /*int a = */  readChar();
                         // qDebug("    ======skip %02x", a);
                         }
                   }
+            if (bar == 1 && !mixChange)
+                  setTempo(tempo, score->firstMeasure());
             }
       }
 
@@ -485,7 +490,7 @@ void GuitarPro5::read(QFile* fp)
       //for (int i = 0; i < staves * VOICES; i++)
       //      previousDynamic[i] = 0;
 
-      int tempo = readInt();
+      tempo = readInt();
       if (version > 500)
             skip(1);
 
@@ -566,8 +571,7 @@ void GuitarPro5::read(QFile* fp)
 
       createMeasures();
       readTracks();
-      readMeasures();
-      setTempo(tempo, score->firstMeasure());
+      readMeasures(tempo);
       }
 
 //---------------------------------------------------------
@@ -817,6 +821,7 @@ bool GuitarPro5::readNote(int string, Note* note)
                   }
             f->setText(finger);
             note->add(f);
+            f->reset();
             }
 
       if (noteBits & 0x1) {

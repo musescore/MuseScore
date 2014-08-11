@@ -114,6 +114,8 @@ class GuitarPro {
       int curPos;
       int previousTempo;
       int previousDynamic;
+      int ottavaFound;
+      QString ottavaValue;
       int tempo;
       QMap<int,int> slides;
 
@@ -132,7 +134,7 @@ class GuitarPro {
       QString readDelphiString();
       void readVolta(GPVolta*, Measure*);
       virtual void readBend(Note*);
-      virtual void readMixChange(Measure* measure);
+      virtual bool readMixChange(Measure* measure);
       virtual int readBeatEffects(int track, Segment*) = 0;
       void readLyrics();
       void readChannels();
@@ -146,6 +148,7 @@ class GuitarPro {
       void readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader);
       void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, int tick);
       void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
+      void createOttava(bool hasOttava, int track, ChordRest* cr, QString value);
       void createSlide(int slide, ChordRest* cr, int staffIdx);
       void createCrecDim(int staffIdx, int track, int tick, bool crec);
       void addTextToNote(QString string, TextStyle textStyle, Note* note);
@@ -223,7 +226,7 @@ class GuitarPro4 : public GuitarPro {
       void readInfo();
       bool readNote(int string, int staffIdx, Note* note);
       virtual int readBeatEffects(int track, Segment* segment);
-      virtual void readMixChange(Measure* measure);
+      virtual bool readMixChange(Measure* measure);
       int convertGP4SlideNum(int slide);
 
    public:
@@ -242,12 +245,12 @@ class GuitarPro5 : public GuitarPro {
       void readPageSetup();
       virtual int readBeatEffects(int track, Segment* segment);
       bool readNote(int string, Note* note);
-      virtual void readMixChange(Measure* measure);
-      void readMeasure(Measure* measure, int staffIdx, Tuplet*[]);
+      virtual bool readMixChange(Measure* measure);
+      void readMeasure(Measure* measure, int staffIdx, Tuplet*[], bool mixChange);
       void readArtificialHarmonic();
       void readTracks();
-      void readMeasures();
-      int readBeat(int tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets);
+      void readMeasures(int startingTempo);
+      int readBeat(int tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange);
       bool readNoteEffects(Note*);
 
    public:
@@ -297,7 +300,7 @@ class GuitarPro6 : public GuitarPro {
       void readMasterTracks(QDomNode* masterTrack);
       void readDrumNote(Note* note, int element, int variation);
       int readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter);
-      void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* t, int measureCounter);
+      void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
       void readTracks(QDomNode* tracks);
       void readMasterBars(GPPartInfo* partInfo);
       Fraction rhythmToDuration(QString value);

@@ -50,7 +50,7 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/fingering.h"
 #include "libmscore/sym.h"
-//#include "libmscore/ottava.h"
+#include "libmscore/ottava.h"
 #include "libmscore/marker.h"
 #include "preferences.h"
 
@@ -229,6 +229,10 @@ void GuitarPro6::parseFile(char* filename, QByteArray* data)
       // test to check if we are dealing with the score
       if (!strcmp(filename, "score.gpif")) {
             readGpif(data);
+            QFile file("/tmp/score.gpif");
+            file.open(QIODevice::WriteOnly);
+            file.write(*data);
+            file.close();
             }
       }
 
@@ -340,7 +344,6 @@ void GuitarPro6::readChord(QDomNode* diagram, int track)
                         counter++;
                         }
                   else  {
-                        qDebug("Setting fret (string=%d,fret=%d)", string, fret-baseFret);
                         fretDiagram->setDot(string, fret);
                         counter++;
                         }
@@ -415,16 +418,14 @@ void GuitarPro6::readTracks(QDomNode* track)
                               *instr = instr->fromTemplate(Ms::searchTemplate("metallic-synth"));
                               part->setInstrument(*instr, 0);
                               }
-                        //else if (!ref.compare("mrcs")) {
-                              //*instr = instr->fromTemplate(Ms::searchTemplate("maracas"));
-                              //part->setInstrument(*instr, 0);
-                        //      }
-                        // else if (!ref.compare("drmkt")) {
-                        //       *instr = instr->fromTemplate(Ms::searchTemplate("drumset"));
-                        //       part->setInstrument(*instr, 0);
-                        //       }
-                        else
-                              qDebug() << "WARINNG: unhandled playback instrument" << ref << "- defaulting.";
+                        else if (!ref.compare("mrcs")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("maracas"));
+                              part->setInstrument(*instr, 0);
+                             }
+                        else if (!ref.compare("drmkt")) {
+                              *instr = instr->fromTemplate(Ms::searchTemplate("drumset"));
+                              part->setInstrument(*instr, 0);
+                              }
                         }
                   else if (nodeName == "Properties") {
                         QDomNode currentProperty = currentNode.firstChild();
@@ -510,7 +511,8 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
             while (!masterBarElement.isNull()) {
                   if (!masterBarElement.nodeName().compare("Key"))
                         gpBar.keysig = masterBarElement.firstChild().toElement().text().toInt();
-                  else if (!masterBarElement.nodeName().compare("Time")) {
+                  else
+                        if (!masterBarElement.nodeName().compare("Time")) {
                         QString timeSignature = masterBarElement.toElement().text();
                         QList<QString> timeSignatureList = timeSignature.split("/");
                         gpBar.timesig = Fraction(timeSignatureList.first().toInt(), timeSignatureList.last().toInt());
@@ -736,8 +738,6 @@ void GuitarPro6::makeTie(Note* note) {
             }
             segment = segment->prev1(Segment::Type::ChordRest);
       }
-      if (!found)
-            qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
 }
 
 int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, int tick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter)
@@ -753,7 +753,6 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 
                   Fraction l;
                   int dotted = 0;
-                  // bool ottavaFound = false;
                   QDomNode beat = getNode(*currentBeat, partInfo->beats);
 
                   Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
@@ -915,8 +914,6 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                   addTextToNote(harmonicText, textStyle, harmonicNote);
                                                                   }
                                                             }
-                                                      else
-                                                            qDebug() << "WARNING: Not handling node argument: " << argument << "in node" << currentNote.nodeName();
                                                       currentProperty = currentProperty.nextSibling();
                                                 }
 
@@ -938,18 +935,18 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       note->setPitch((octave.toInt() * 12) + tone.toInt()); // multiply octaves by 12 as 12 semitones in octave
                                                 QDomNode graceNode = currentNode.parentNode().firstChildElement("GraceNotes");
                                                 if (!graceNode.isNull()) {
-                                                      if (!graceNode.toElement().text().compare("BeforeBeat")) {
-                                                            chord->setDurationType(MScore::division/2);
-                                                            chord->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
-                                                            chord->setNoteType(NoteType::ACCIACCATURA);
-                                                           }
+                                                      note->setTpcFromPitch();
+                                                      // before beat grace notes have to be handled after the Tpc is set from pitch
                                                       if (!graceNode.toElement().text().compare("OnBeat")) {
                                                             chord->setDurationType(MScore::division/2);
                                                             chord->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
                                                             chord->setNoteType(NoteType::GRACE4);
                                                            }
+                                                      else if (!graceNode.toElement().text().compare("BeforeBeat")) {
+                                                            score->setGraceNote(chord, note->pitch(), NoteType::ACCIACCATURA, MScore::division/2);
+                                                            }
                                                       }
-                                                if (tie) {
+                                                 if (tie) {
                                                       makeTie(note);
                                                       tie = false;
                                                       }
@@ -1077,10 +1074,12 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                                   }
                                                             else if (!argument.compare("VibratoWTremBar")) {
                                                                   Articulation* art = new Articulation(note->score());
+
                                                                   if (!currentProperty.firstChild().toElement().text().compare("Slight"))
                                                                         art->setArticulationType(ArticulationType::WiggleSawtooth);
                                                                   else
                                                                         art->setArticulationType(ArticulationType::WiggleSawtoothWide);
+                                                                  art->setAnchor(ArticulationAnchor::TOP_STAFF);
                                                                   if (!note->score()->addArticulation(note, art))
                                                                         delete art;
 
@@ -1163,7 +1162,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 if (!leftFingeringNode.isNull() || !rightFingeringNode.isNull()) {
                                                       QDomNode fingeringNode = leftFingeringNode.isNull() ? rightFingeringNode : leftFingeringNode;
                                                       QString finger = fingeringNode.toElement().text();
-                                                      Text* f = new Fingering(score);
+                                                      Fingering* f = new Fingering(score);
                                                       if (!leftFingeringNode.isNull()) {
                                                             if (!finger.compare("Open"))
                                                                   finger = "O";
@@ -1180,6 +1179,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             }
                                                       f->setText(finger);
                                                       note->add(f);
+                                                      f->reset();
                                                       }
                                                 QDomNode arpeggioNode = currentNode.parentNode().firstChildElement("Arpeggio");
                                                 if (!arpeggioNode.isNull()) {
@@ -1224,6 +1224,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 if (!swellNode.isNull()) {
                                                       Articulation* art = new Articulation(note->score());
                                                       art->setArticulationType(ArticulationType::VolumeSwell);
+                                                      art->setAnchor(ArticulationAnchor::TOP_STAFF);
                                                       if (!note->score()->addArticulation(note, art))
                                                             delete art;
                                                       }
@@ -1234,6 +1235,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             art->setArticulationType(ArticulationType::WiggleVibratoLargeFaster);
                                                       else
                                                             art->setArticulationType(ArticulationType::WiggleVibratoLargeSlowest);
+                                                      art->setAnchor(ArticulationAnchor::TOP_STAFF);
                                                       if (!note->score()->addArticulation(note, art))
                                                             delete art;
                                                       }
@@ -1242,18 +1244,31 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 createSlide(slide, cr, staffIdx);
                                                 note->setTpcFromPitch();
 
-                                                // if (ottava[track]) {
-                                                //       int pitch = note->pitch();
-                                                //       Ottava::Type type = ottava[track]->ottavaType();
-                                                //       if (type == Ottava::Type::OTTAVA_8VA)
-                                                //             note->setPitch(pitch-12);
-                                                //       else if (type == Ottava::Type::OTTAVA_8VB)
-                                                //             note->setPitch(pitch+12);
-                                                //       else if (type == Ottava::Type::OTTAVA_15MA)
-                                                //             note->setPitch(pitch-24);
-                                                //       else if (type == Ottava::Type::OTTAVA_15MB)
-                                                //             note->setPitch(pitch+24);
-                                                //       }
+                                                /* if the ottava is a continuation (need to end old one), or we don't
+                                                 * see one in the current note when we are tracking one then end the ottava. */
+                                                if (ottavaFound == 2 || (ottavaFound == 1 && currentNode.parentNode().firstChildElement("Ottavia").isNull())) {
+                                                      Segment* prevSeg = segment->prev1(Segment::Type::ChordRest);
+                                                      Element* e = prevSeg->element(track);
+                                                      if (e)
+                                                            if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST) {
+                                                                  ChordRest* crPrev = static_cast<Chord*>(e);
+                                                                  createOttava(false, track, crPrev, ottavaValue);
+                                                                  }
+                                                      ottavaFound = 1;
+                                                      }
+                                                if (ottavaFound) {
+                                                      createOttava(ottavaFound, track, cr, ottavaValue);
+                                                      int pitch = note->pitch();
+                                                      Ottava::Type type = ottava[track]->ottavaType();
+                                                      if (type == Ottava::Type::OTTAVA_8VA)
+                                                            note->setPitch(pitch-12);
+                                                      else if (type == Ottava::Type::OTTAVA_8VB)
+                                                            note->setPitch(pitch+12);
+                                                      else if (type == Ottava::Type::OTTAVA_15MA)
+                                                            note->setPitch(pitch-24);
+                                                      else if (type == Ottava::Type::OTTAVA_15MB)
+                                                            note->setPitch(pitch+24);
+                                                      }
 
                                                 currentNote = currentNote.nextSibling();
                                                 }
@@ -1335,31 +1350,16 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     currentProperty = currentProperty.nextSibling();
                                     }
                               }
-                        // else if (!currentNode.nodeName().compare("Ottavia")) {
-                        //       QString value = currentNode.toElement().text();
-                        //       ottavaFound = true;
-                        //       int track = track;
-                        //       if (ottava[track] == 0) {
-                        //             ottava[track] = new Ottava(score);
-                        //             ottava[track]->setTrack(track);
-                        //             if (!value.compare("8va"))
-                        //                   ottava[track]->setOttavaType(Ottava::Type::OTTAVA_8VA);
-                        //             else if (!value.compare("8vb"))
-                        //                   ottava[track]->setOttavaType(Ottava::Type::OTTAVA_8VB);
-                        //             else if (!value.compare("15ma"))
-                        //                   ottava[track]->setOttavaType(Ottava::Type::OTTAVA_15MA);
-                        //             else if (!value.compare("15mb"))
-                        //                   ottava[track]->setOttavaType(Ottava::Type::OTTAVA_15MB);
-                        //             ottava[track]->setTick(tick);
-                        //             ottava[track]->setTick2(tick);
-                        //             }
-                        //       else  {
-                        //             ottava[track]->setTick2(tick);
-                        //             ottava[track]->setProperty(P_ID::LINE_WIDTH,0.1);
-                        //             //ottava[track]->staff()->updateOttava(ottava[track]);
-                        //             score->addElement(ottava[track]);
-                        //             }
-                        //       }
+                        else if (!currentNode.nodeName().compare("Ottavia")) {
+                              /* if we saw an ottava and have an updated
+                               * information string, set to 2 indicating that. */
+                              if (ottavaFound == 1 && ottavaValue.compare(currentNode.toElement().text())) {
+                                    ottavaFound = 2;
+                              }
+                              else
+                                    ottavaFound = 1;
+                              ottavaValue = currentNode.toElement().text();
+                              }
                         currentNode = currentNode.nextSibling();
                         dotted = 0;
                   }
@@ -1379,13 +1379,6 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               cr->setDurationType(d);
                         if(!segment->cr(track))
                               segment->add(cr);
-                        // if (ottava[track]) {
-                        //       ottava[track]->setTick2(tick);
-                        //       ottava[track]->setProperty(P_ID::LINE_WIDTH,0.1);
-                        //       //ottava[track]->staff()->updateOttava(ottava[track]);
-                        //       score->addElement(ottava[track]);
-                        //       ottava[track] = 0;
-                        //       }
                   }
                   auto fermataList = fermatas.find(measureCounter);
                   if (fermataList != fermatas.end()) {
@@ -1401,8 +1394,6 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     }
                               }
                         }
-                  // if (!ottavaFound)
-                  //       ottava[track] = 0;
                   tick += cr->actualTicks();
             }
             return tick;
@@ -1412,7 +1403,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 //   readBars
 //---------------------------------------------------------
 
-void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, KeySig* /*t*/, int measureCounter)
+void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter)
       {
       // unique bar identifiers are represented as a space separated string of numbers
       QStringList barsString = barList->toElement().text().split(" ");
@@ -1648,30 +1639,32 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   segment->add(s);
                   }
 
-            QDomNode masterBarElement = nextMasterBar.firstChild();
+            QDomNode masterBarElementTemplate = nextMasterBar.firstChild();
+            for (int stave = 0; stave < staves; stave++) {
+            QDomNode masterBarElement = masterBarElementTemplate;
             while (!masterBarElement.isNull()) {
                   if (bars[measureCounter].freeTime) {
                         TimeSig* ts = new TimeSig(score);
                         ts->setSig(bars[measureCounter].timesig);
-                        ts->setTrack(0);
+                        ts->setTrack(stave);
                         Measure* m = score->getCreateMeasure(measure->tick());
                         Segment* s = m->getSegment(Segment::Type::TimeSig, measure->tick());
-                        ts->setFreeTime(true);
+                        ts->setLargeParentheses(true);
                         s->add(ts);
                         StaffText* st = new StaffText(score);
                         st->setTextStyleType(TextStyleType::STAFF);
                         st->setText("Free time");
                         st->setParent(s);
-                        st->setTrack(0);
+                        st->setTrack(stave);
                         score->addElement(st);
                         }
                   else if (measureCounter > 0 && bars[measureCounter - 1].freeTime) {
                         TimeSig* ts = new TimeSig(score);
                         ts->setSig(bars[measureCounter].timesig);
-                        ts->setTrack(0);
+                        ts->setTrack(stave);
                         Measure* m = score->getCreateMeasure(measure->tick());
                         Segment* s = m->getSegment(Segment::Type::TimeSig, measure->tick());
-                        ts->setFreeTime(false);
+                        ts->setLargeParentheses(false);
                         s->add(ts);
                         }
                   else
@@ -1711,7 +1704,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         else if (!bars[measureCounter].direction.compare("DaDoubleCoda"))
                               st->setText("Da Double Coda");
                         st->setParent(s);
-                        st->setTrack(0);
+                        st->setTrack(stave);
                         score->addElement(st);
                         bars[measureCounter].direction = "";
                   }
@@ -1726,7 +1719,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                               Symbol* sym2 = new Symbol(score);
                               sym2->setSym(SymId::segno);
                               sym2->setParent(measure);
-                              sym2->setTrack(0);
+                              sym2->setTrack(stave);
                               s2->add(sym2);
                               }
                         else if (!bars[measureCounter].direction.compare("Coda"))
@@ -1737,22 +1730,17 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                               Symbol* sym2 = new Symbol(score);
                               sym2->setSym(SymId::coda);
                               sym2->setParent(measure);
-                              sym2->setTrack(0);
+                              sym2->setTrack(stave);
                               s2->add(sym2);
                               }
                         sym->setParent(measure);
-                        sym->setTrack(0);
+                        sym->setTrack(stave);
                         s->add(sym);
                         bars[measureCounter].direction = "";
                         }
 
-                  KeySig* t = new KeySig(score);
-                  if (!masterBarElement.nodeName().compare("Key")) {
-                        t->setKey(Key(masterBarElement.firstChild().toElement().text().toInt()));
-                        t->setTrack(0);
-                        measure->getSegment(Segment::Type::KeySig, measure->tick())->add(t);
-                        }
-                  else if (!masterBarElement.nodeName().compare("Fermatas")) {
+                  // we no longer set the key here, the gpbar has the information stored in it
+                  if (!masterBarElement.nodeName().compare("Fermatas")) {
                         QDomNode currentFermata = masterBarElement.firstChild();
                         while (!currentFermata.isNull()) {
                               QString fermata = currentFermata.lastChildElement("Offset").toElement().text();
@@ -1793,10 +1781,11 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         volta->setTick2(measure->tick() + measure->ticks());
                         score->addElement(volta);
                         }
-                  else if (!masterBarElement.nodeName().compare("Bars")) {
-                        readBars(&masterBarElement, measure, oldClefId, partInfo, t, measureCounter);
+                  else if (!masterBarElement.nodeName().compare("Bars") && stave == staves - 1) {
+                        readBars(&masterBarElement, measure, oldClefId, partInfo, measureCounter);
                         }
                   masterBarElement = masterBarElement.nextSibling();
+                  }
                   }
             measureCounter++;
             nextMasterBar = nextMasterBar.nextSibling();
@@ -1828,11 +1817,12 @@ void GuitarPro6::readGpif(QByteArray* data)
 
       // now we know how many staves there are from readTracks, we can initialise slurs
       slurs = new Slur*[staves];
-      for (int i = 0; i < staves; ++i)
+      ottava = new Ottava*[staves];
+      for (int i = 0; i < staves; ++i) {
             slurs[i] = 0;
-      // ottava = new Ottava*[staves];
-      // for (int staffIdx = 0; staffIdx < staves; ++staffIdx)
-      //       ottava[staffIdx] = 0;
+            ottava[i] = 0;
+            }
+
 
       // MasterBars node
       GPPartInfo partInfo;
@@ -1866,12 +1856,13 @@ void GuitarPro6::readGpif(QByteArray* data)
 
 void GuitarPro6::read(QFile* fp)
       {
-      qDebug("reading guitar pro v6 file (.gpx)...");
       f = fp;
 
       slides = new QMap<int,int>();
 
       previousTempo = -1;
+      ottavaFound = 0;
+      ottavaValue = "";
       this->buffer = new QByteArray();
       *(this->buffer) = fp->readAll();
 

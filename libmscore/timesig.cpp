@@ -38,7 +38,7 @@ TimeSig::TimeSig(Score* s)
       _stretch.set(1, 1);
       _sig.set(0, 1);               // initialize to invalid
       _timeSigType   = TimeSigType::NORMAL;
-      _freeTime = false;
+      _largeParentheses = false;
       customText = false;
       _needLayout = true;
       }
@@ -75,7 +75,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
             customText = false;
       _timeSigType = st;
       _needLayout = true;
-      _freeTime = false;
+      _largeParentheses = false;
       }
 
 //---------------------------------------------------------
@@ -250,8 +250,10 @@ void TimeSig::layout1()
       qreal _spatium = spatium();
 
       setbbox(QRectF());                  // prepare for an empty time signature
+      pointLargeLeftParen = QPointF();
       pz = QPointF();
       pn = QPointF();
+      pointLargeRightParen = QPointF();
 
       qreal lineDist      = 1.0;          // assume dimensions a standard staff
       int   numOfLines    = 5;
@@ -262,8 +264,10 @@ void TimeSig::layout1()
             // if staff is without time sig, format as if no text at all
             if (!_staff->staffType()->genTimesig() ) {
                   // reset position and box sizes to 0
+                  pointLargeLeftParen.rx() = 0.0;
                   pn.rx() = 0.0;
                   pz.rx() = 0.0;
+                  pointLargeRightParen.rx() = 0.0;
                   setbbox(QRectF());
                   // leave everything else as it is:
                   // draw() will anyway skip any drawing if staff type has no time sigs
@@ -319,20 +323,26 @@ void TimeSig::layout1()
             if (numRect.width() >= denRect.width()) {
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
                   pz = QPointF(0.0, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
-
                   // denominator: horiz: centred around centre of numerator | vert: one space below centre line
                   pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + _spatium);
+                  pointLargeLeftParen = QPointF(-numRect.width() - (numRect.width() / 5) + _spatium, yoff/2 + _spatium);
+                  pointLargeRightParen = QPointF(numRect.width() - (numRect.width() / 5) * 2 + _spatium, yoff/2 + _spatium);
                   }
             else {
                   // denominator: horiz: centred around centre of numerator | vert: one space below centre line
                   pn = QPointF(0.0, yoff + displ + _spatium);
-
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
                   pz = QPointF((denRect.width() - numRect.width())*.5, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
+                  pointLargeLeftParen = QPointF(-denRect.width() - (numRect.width() / 5) + _spatium, yoff/2 + _spatium);
+                  pointLargeRightParen = QPointF(denRect.width() - (numRect.width() / 5) * 2 + _spatium, yoff/2 + _spatium);
                   }
 
             setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
             addbbox(denRect.translated(pn));
+            if (_largeParentheses) {
+                  addbbox(QRect(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium / 2, numRect.height() + denRect.height()));
+                  addbbox(QRect(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2, numRect.height() + denRect.height()));
+                  }
             }
 
       _needLayout = false;
@@ -351,16 +361,12 @@ void TimeSig::draw(QPainter* painter) const
       QString ns = toTimeSigString(_numeratorString);
       QString ds = toTimeSigString(_denominatorString);
 
-      //draws parenthesis around the time signature, indicating free time
-      if (_freeTime) {
-            QPointF leftBracket = pz - QPointF(5,-6.8);
-            QPointF rightBracket = pz + QPointF(15,6.8);
-            drawSymbol(SymId::timeSigParensLeft, painter, leftBracket);
-            drawSymbol(SymId::timeSigParensRight, painter, rightBracket);
-            }
-
       drawSymbols(ns, painter, pz);
       drawSymbols(ds, painter, pn);
+      if (_largeParentheses) {
+            drawSymbol(SymId::timeSigParensLeft, painter, pointLargeLeftParen);
+            drawSymbol(SymId::timeSigParensRight, painter, pointLargeRightParen);
+            }
       }
 
 //---------------------------------------------------------
