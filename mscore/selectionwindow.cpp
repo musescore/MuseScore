@@ -45,7 +45,7 @@ SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
             _listWidget->setSelectionMode(QAbstractItemView::NoSelection);
 
       for (int row = 0; row < numLabels; row++) {
-            QListWidgetItem *listItem = new QListWidgetItem(labels[row],_listWidget);
+            QListWidgetItem *listItem = new QListWidgetItem(qApp->translate("selectionfilter", labels[row]),_listWidget);
             listItem->setData(Qt::UserRole, QVariant(1 << row));
             listItem->setCheckState(Qt::Unchecked);
             _listWidget->addItem(listItem);
