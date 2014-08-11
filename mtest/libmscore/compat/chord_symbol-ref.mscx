@@ -206,11 +206,10 @@
         </Measure>
       <Measure number="7">
         <Harmony>
-          <name>Bo</name>
+          <root>19</root>
+          <extension>33</extension>
+          <name>dim</name>
           </Harmony>
-        <StaffText>
-          <text><font face="Times New Roman"/>unrecognized</text>
-          </StaffText>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
@@ -221,6 +220,11 @@
           </BarLine>
         </Measure>
       <Measure number="8">
+        <Harmony>
+          <root>21</root>
+          <extension>64</extension>
+          <name>7</name>
+          </Harmony>
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
