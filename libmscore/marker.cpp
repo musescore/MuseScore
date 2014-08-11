@@ -177,9 +177,9 @@ void Marker::layout()
       {
       setPos(textStyle().offset(spatium()));
       Text::layout1();
-      // although markers are normally laid out to parent (measure) width,
-      // force them to center over barline if left-aligned
-      if (!(textStyle().align() & (AlignmentFlags::RIGHT|AlignmentFlags::HCENTER)))
+      // although normally laid out to parent (measure) width,
+      // force to center over barline if left-aligned
+      if (layoutToParentWidth() && !(textStyle().align() & (AlignmentFlags::RIGHT|AlignmentFlags::HCENTER)))
             rxpos() -= width() * 0.5;
       adjustReadPos();
       }
