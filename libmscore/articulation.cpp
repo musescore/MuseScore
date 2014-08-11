@@ -55,9 +55,9 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 // <> not available in smufl?
-//      { esprSym, esprSym             ,
+//      { SymId::esprSym, SymId::esprSym             ,
 //            "espressivo", QT_TRANSLATE_NOOP("articulation", "espressivo"),
-//            1.0,ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+//            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
 //            },
       { SymId::articStaccatoAbove, SymId::articStaccatoBelow,
             "staccato", QT_TRANSLATE_NOOP("articulation", "staccato"),
@@ -169,15 +169,15 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             },
 
 #if 0
-      { letterTSym, letterTSym,
+      { SymId::letterTSym, SymId::letterTSym,
             "tapping", QT_TRANSLATE_NOOP("articulation", "tapping"),
             1.0, ArticulationShowIn::TABLATURE
             },
-      { letterSSym, letterSSym,
+      { SymId::letterSSym, SymId::letterSSym,
             "slapping", QT_TRANSLATE_NOOP("articulation", "slapping"),
             1.0, ArticulationShowIn::TABLATURE
             },
-      { letterPSym, letterPSym,
+      { SymId::letterPSym, SymId::letterPSym,
             "popping", QT_TRANSLATE_NOOP("articulation", "popping"),
             1.0, ArticulationShowIn::TABLATURE
             },

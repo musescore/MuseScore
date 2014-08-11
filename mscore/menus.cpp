@@ -221,16 +221,16 @@ Palette* MuseScore::newKeySigPalette()
       for (int i = 0; i < 7; ++i) {
             KeySig* k = new KeySig(gscore);
             k->setKey(Key(i + 1));
-            sp->append(k, keyNames[i*2]);
+            sp->append(k, qApp->translate("MuseScore", keyNames[i*2]));
             }
       for (int i = -7; i < 0; ++i) {
             KeySig* k = new KeySig(gscore);
             k->setKey(Key(i));
-            sp->append(k, keyNames[(7 + i) * 2 + 1]);
+            sp->append(k, qApp->translate("MuseScore", keyNames[(7 + i) * 2 + 1]));
             }
       KeySig* k = new KeySig(gscore);
       k->setKey(Key::C);
-      sp->append(k, keyNames[14]);
+      sp->append(k, qApp->translate("MuseScore", keyNames[14]));
       return sp;
       }
 
@@ -257,7 +257,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
             for (auto i : types) {
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(Accidental::Type(i));
-                  sp->append(s, s->subtypeUserName());
+                  sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
                   }
             }
       else {
@@ -265,7 +265,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(Accidental::Type(i));
                   if (s->symbol() != SymId::noSym)
-                        sp->append(s, s->subtypeUserName());
+                        sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
                   else
                         delete s;
                   }
@@ -487,7 +487,7 @@ Palette* MuseScore::newTremoloPalette()
       for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
             Tremolo* tremolo = new Tremolo(gscore);
             tremolo->setTremoloType(TremoloType(i));
-            sp->append(tremolo, tremolo->subtypeName());
+            sp->append(tremolo, qApp->translate("Tremolo", qPrintable(tremolo->subtypeName())));
             }
       return sp;
       }
