@@ -2358,7 +2358,7 @@ Page* Score::addPage()
 ///   Rebuild tie connections.
 //---------------------------------------------------------
 
-void Score::connectTies()
+void Score::connectTies(bool silent)
       {
       int tracks = nstaves() * VOICES;
       Measure* m = firstMeasure();
@@ -2380,9 +2380,11 @@ void Score::connectTies()
                         else
                               nnote = searchTieNote(n);
                         if (nnote == 0) {
-                              qDebug("next note at %d track %d for tie not found", s->tick(), i);
-                              delete tie;
-                              n->setTieFor(0);
+                              if (!silent) {
+                                    qDebug("next note at %d track %d for tie not found (version %d)", s->tick(), i, _mscVersion);
+                                    delete tie;
+                                    n->setTieFor(0);
+                                    }
                               }
                         else {
                               tie->setEndNote(nnote);
