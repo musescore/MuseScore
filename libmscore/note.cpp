@@ -1561,8 +1561,8 @@ void Note::layout2()
 
       int dots = chord()->dots();
       if (dots) {
-            qreal d  = point(score()->styleS(StyleIdx::dotNoteDistance)) * mag();
-            qreal dd = point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
+            qreal d  = score()->point(score()->styleS(StyleIdx::dotNoteDistance)) * mag();
+            qreal dd = score()->point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
 
             // if TAB and stems through staff
