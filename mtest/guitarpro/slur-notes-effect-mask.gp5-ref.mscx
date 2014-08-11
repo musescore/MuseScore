@@ -90,17 +90,12 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Tempo>
-          <tempo>1.78333</tempo>
-          <lid>4</lid>
-          <text><sym>noteQuarterUp</sym> = 107</text>
-          </Tempo>
         <Rest>
-          <lid>5</lid>
+          <lid>4</lid>
           <durationType>16th</durationType>
           </Rest>
         <Slur id="2">
-          <lid>38</lid>
+          <lid>37</lid>
           <track>0</track>
           </Slur>
         <Beam id="1">
@@ -108,11 +103,11 @@
           <l2>8</l2>
           </Beam>
         <Chord>
-          <lid>6</lid>
+          <lid>5</lid>
           <durationType>16th</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>7</lid>
+            <lid>6</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>12</fret>
@@ -121,11 +116,11 @@
           <Slur type="start" id="2"/>
           </Chord>
         <Chord>
-          <lid>8</lid>
+          <lid>7</lid>
           <durationType>16th</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>9</lid>
+            <lid>8</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -136,11 +131,11 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>10</lid>
+          <lid>9</lid>
           <durationType>16th</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>11</lid>
+            <lid>10</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>9</fret>
@@ -149,7 +144,7 @@
           <Slur type="stop" id="2"/>
           </Chord>
         <Slur id="3">
-          <lid>39</lid>
+          <lid>38</lid>
           <track>0</track>
           </Slur>
         <Beam id="2">
@@ -157,11 +152,11 @@
           <l2>20</l2>
           </Beam>
         <Chord>
-          <lid>12</lid>
+          <lid>11</lid>
           <durationType>16th</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>13</lid>
+            <lid>12</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
             <fret>9</fret>
@@ -170,11 +165,11 @@
           <Slur type="start" id="3"/>
           </Chord>
         <Chord>
-          <lid>14</lid>
+          <lid>13</lid>
           <durationType>16th</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>15</lid>
+            <lid>14</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -186,13 +181,13 @@
           <Slur type="stop" id="3"/>
           </Chord>
         <Chord>
-          <lid>16</lid>
+          <lid>15</lid>
           <durationType>16th</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>17</lid>
+            <lid>16</lid>
             <Text>
-              <lid>18</lid>
+              <lid>17</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -209,13 +204,13 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>19</lid>
+          <lid>18</lid>
           <durationType>16th</durationType>
           <Beam>2</Beam>
           <Note>
-            <lid>20</lid>
+            <lid>19</lid>
             <Text>
-              <lid>21</lid>
+              <lid>20</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -230,10 +225,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>22</lid>
+          <lid>21</lid>
           <durationType>16th</durationType>
           <Note>
-            <lid>23</lid>
+            <lid>22</lid>
             <pitch>33</pitch>
             <tpc>17</tpc>
             <head>1</head>
@@ -243,7 +238,7 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>24</lid>
+          <lid>23</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Beam id="3">
@@ -251,13 +246,13 @@
           <l2>27</l2>
           </Beam>
         <Chord>
-          <lid>25</lid>
+          <lid>24</lid>
           <durationType>16th</durationType>
           <Beam>3</Beam>
           <Note>
-            <lid>26</lid>
+            <lid>25</lid>
             <Text>
-              <lid>27</lid>
+              <lid>26</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -274,13 +269,13 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>28</lid>
+          <lid>27</lid>
           <durationType>16th</durationType>
           <Beam>3</Beam>
           <Note>
-            <lid>29</lid>
+            <lid>28</lid>
             <Text>
-              <lid>30</lid>
+              <lid>29</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -295,13 +290,13 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>31</lid>
+          <lid>30</lid>
           <durationType>16th</durationType>
           <Beam>3</Beam>
           <Note>
-            <lid>32</lid>
+            <lid>31</lid>
             <Text>
-              <lid>33</lid>
+              <lid>32</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -318,13 +313,13 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>34</lid>
+          <lid>33</lid>
           <durationType>16th</durationType>
           <Beam>3</Beam>
           <Note>
-            <lid>35</lid>
+            <lid>34</lid>
             <Text>
-              <lid>36</lid>
+              <lid>35</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -456,17 +451,12 @@
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
-          <Tempo>
-            <tempo>1.78333</tempo>
-            <lid>4</lid>
-            <text><sym>noteQuarterUp</sym> = 107</text>
-            </Tempo>
           <Rest>
-            <lid>5</lid>
+            <lid>4</lid>
             <durationType>16th</durationType>
             </Rest>
           <Slur id="4">
-            <lid>38</lid>
+            <lid>37</lid>
             <track>0</track>
             </Slur>
           <Beam id="4">
@@ -474,11 +464,11 @@
             <l2>8</l2>
             </Beam>
           <Chord>
-            <lid>6</lid>
+            <lid>5</lid>
             <durationType>16th</durationType>
             <Beam>4</Beam>
             <Note>
-              <lid>7</lid>
+              <lid>6</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>12</fret>
@@ -487,11 +477,11 @@
             <Slur type="start" id="4"/>
             </Chord>
           <Chord>
-            <lid>8</lid>
+            <lid>7</lid>
             <durationType>16th</durationType>
             <Beam>4</Beam>
             <Note>
-              <lid>9</lid>
+              <lid>8</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -502,11 +492,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>10</lid>
+            <lid>9</lid>
             <durationType>16th</durationType>
             <Beam>4</Beam>
             <Note>
-              <lid>11</lid>
+              <lid>10</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>9</fret>
@@ -515,7 +505,7 @@
             <Slur type="stop" id="4"/>
             </Chord>
           <Slur id="5">
-            <lid>39</lid>
+            <lid>38</lid>
             <track>0</track>
             </Slur>
           <Beam id="5">
@@ -523,11 +513,11 @@
             <l2>20</l2>
             </Beam>
           <Chord>
-            <lid>12</lid>
+            <lid>11</lid>
             <durationType>16th</durationType>
             <Beam>5</Beam>
             <Note>
-              <lid>13</lid>
+              <lid>12</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
@@ -536,11 +526,11 @@
             <Slur type="start" id="5"/>
             </Chord>
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>16th</durationType>
             <Beam>5</Beam>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -552,13 +542,13 @@
             <Slur type="stop" id="5"/>
             </Chord>
           <Chord>
-            <lid>16</lid>
+            <lid>15</lid>
             <durationType>16th</durationType>
             <Beam>5</Beam>
             <Note>
-              <lid>17</lid>
+              <lid>16</lid>
               <Text>
-                <lid>18</lid>
+                <lid>17</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -575,13 +565,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>19</lid>
+            <lid>18</lid>
             <durationType>16th</durationType>
             <Beam>5</Beam>
             <Note>
-              <lid>20</lid>
+              <lid>19</lid>
               <Text>
-                <lid>21</lid>
+                <lid>20</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -596,10 +586,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>22</lid>
+            <lid>21</lid>
             <durationType>16th</durationType>
             <Note>
-              <lid>23</lid>
+              <lid>22</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -609,7 +599,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>24</lid>
+            <lid>23</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Beam id="6">
@@ -617,13 +607,13 @@
             <l2>27</l2>
             </Beam>
           <Chord>
-            <lid>25</lid>
+            <lid>24</lid>
             <durationType>16th</durationType>
             <Beam>6</Beam>
             <Note>
-              <lid>26</lid>
+              <lid>25</lid>
               <Text>
-                <lid>27</lid>
+                <lid>26</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -640,13 +630,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>28</lid>
+            <lid>27</lid>
             <durationType>16th</durationType>
             <Beam>6</Beam>
             <Note>
-              <lid>29</lid>
+              <lid>28</lid>
               <Text>
-                <lid>30</lid>
+                <lid>29</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -661,13 +651,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>31</lid>
+            <lid>30</lid>
             <durationType>16th</durationType>
             <Beam>6</Beam>
             <Note>
-              <lid>32</lid>
+              <lid>31</lid>
               <Text>
-                <lid>33</lid>
+                <lid>32</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -684,13 +674,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>34</lid>
+            <lid>33</lid>
             <durationType>16th</durationType>
             <Beam>6</Beam>
             <Note>
-              <lid>35</lid>
+              <lid>34</lid>
               <Text>
-                <lid>36</lid>
+                <lid>35</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -718,11 +708,11 @@
             <accidental>0</accidental>
             </KeySig>
           <Rest>
-            <lid>5</lid>
+            <lid>4</lid>
             <durationType>16th</durationType>
             </Rest>
           <Slur id="6">
-            <lid>38</lid>
+            <lid>37</lid>
             <track>4</track>
             </Slur>
           <Beam id="7">
@@ -730,11 +720,11 @@
             <l2>46</l2>
             </Beam>
           <Chord>
-            <lid>6</lid>
+            <lid>5</lid>
             <durationType>16th</durationType>
             <Beam>7</Beam>
             <Note>
-              <lid>7</lid>
+              <lid>6</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>12</fret>
@@ -743,11 +733,11 @@
             <Slur type="start" id="6"/>
             </Chord>
           <Chord>
-            <lid>8</lid>
+            <lid>7</lid>
             <durationType>16th</durationType>
             <Beam>7</Beam>
             <Note>
-              <lid>9</lid>
+              <lid>8</lid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <fret>11</fret>
@@ -755,11 +745,11 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>10</lid>
+            <lid>9</lid>
             <durationType>16th</durationType>
             <Beam>7</Beam>
             <Note>
-              <lid>11</lid>
+              <lid>10</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>9</fret>
@@ -768,7 +758,7 @@
             <Slur type="stop" id="6"/>
             </Chord>
           <Slur id="7">
-            <lid>39</lid>
+            <lid>38</lid>
             <track>4</track>
             </Slur>
           <Beam id="8">
@@ -776,11 +766,11 @@
             <l2>46</l2>
             </Beam>
           <Chord>
-            <lid>12</lid>
+            <lid>11</lid>
             <durationType>16th</durationType>
             <Beam>8</Beam>
             <Note>
-              <lid>13</lid>
+              <lid>12</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
@@ -789,11 +779,11 @@
             <Slur type="start" id="7"/>
             </Chord>
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>16th</durationType>
             <Beam>8</Beam>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               <fret>11</fret>
@@ -802,13 +792,13 @@
             <Slur type="stop" id="7"/>
             </Chord>
           <Chord>
-            <lid>16</lid>
+            <lid>15</lid>
             <durationType>16th</durationType>
             <Beam>8</Beam>
             <Note>
-              <lid>17</lid>
+              <lid>16</lid>
               <Text>
-                <lid>18</lid>
+                <lid>17</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -825,13 +815,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>19</lid>
+            <lid>18</lid>
             <durationType>16th</durationType>
             <Beam>8</Beam>
             <Note>
-              <lid>20</lid>
+              <lid>19</lid>
               <Text>
-                <lid>21</lid>
+                <lid>20</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -846,10 +836,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>22</lid>
+            <lid>21</lid>
             <durationType>16th</durationType>
             <Note>
-              <lid>23</lid>
+              <lid>22</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -859,7 +849,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>24</lid>
+            <lid>23</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Beam id="9">
@@ -867,13 +857,13 @@
             <l2>46</l2>
             </Beam>
           <Chord>
-            <lid>25</lid>
+            <lid>24</lid>
             <durationType>16th</durationType>
             <Beam>9</Beam>
             <Note>
-              <lid>26</lid>
+              <lid>25</lid>
               <Text>
-                <lid>27</lid>
+                <lid>26</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -890,13 +880,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>28</lid>
+            <lid>27</lid>
             <durationType>16th</durationType>
             <Beam>9</Beam>
             <Note>
-              <lid>29</lid>
+              <lid>28</lid>
               <Text>
-                <lid>30</lid>
+                <lid>29</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -911,13 +901,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>31</lid>
+            <lid>30</lid>
             <durationType>16th</durationType>
             <Beam>9</Beam>
             <Note>
-              <lid>32</lid>
+              <lid>31</lid>
               <Text>
-                <lid>33</lid>
+                <lid>32</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -934,13 +924,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>34</lid>
+            <lid>33</lid>
             <durationType>16th</durationType>
             <Beam>9</Beam>
             <Note>
-              <lid>35</lid>
+              <lid>34</lid>
               <Text>
-                <lid>36</lid>
+                <lid>35</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>

@@ -123,7 +123,7 @@
             </Note>
           <Arpeggio>
             <lid>9</lid>
-            <subtype>4</subtype>
+            <subtype>5</subtype>
             </Arpeggio>
           </Chord>
         </Measure>
@@ -154,7 +154,7 @@
             </Note>
           <Arpeggio>
             <lid>15</lid>
-            <subtype>5</subtype>
+            <subtype>4</subtype>
             </Arpeggio>
           </Chord>
         <BarLine>
@@ -307,7 +307,7 @@
               </Note>
             <Arpeggio>
               <lid>9</lid>
-              <subtype>4</subtype>
+              <subtype>5</subtype>
               </Arpeggio>
             </Chord>
           </Measure>
@@ -338,7 +338,7 @@
               </Note>
             <Arpeggio>
               <lid>15</lid>
-              <subtype>5</subtype>
+              <subtype>4</subtype>
               </Arpeggio>
             </Chord>
           <BarLine>
@@ -383,7 +383,7 @@
               </Note>
             <Arpeggio>
               <lid>9</lid>
-              <subtype>4</subtype>
+              <subtype>5</subtype>
               </Arpeggio>
             </Chord>
           </Measure>
@@ -414,7 +414,7 @@
               </Note>
             <Arpeggio>
               <lid>15</lid>
-              <subtype>5</subtype>
+              <subtype>4</subtype>
               </Arpeggio>
             </Chord>
           <BarLine>

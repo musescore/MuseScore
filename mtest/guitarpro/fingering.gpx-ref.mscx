@@ -128,6 +128,7 @@
             <lid>7</lid>
             <Fingering>
               <lid>8</lid>
+              <pos x="0.6498" y="-1.6"/>
               <text>O</text>
               </Fingering>
             <pitch>62</pitch>
@@ -143,6 +144,7 @@
             <lid>10</lid>
             <Fingering>
               <lid>11</lid>
+              <pos x="0.6498" y="-1.6"/>
               <text>t</text>
               </Fingering>
             <pitch>53</pitch>
@@ -158,6 +160,7 @@
             <lid>13</lid>
             <Fingering>
               <lid>14</lid>
+              <pos x="0.6498" y="-1.6"/>
               <text>1</text>
               </Fingering>
             <pitch>47</pitch>
@@ -173,6 +176,7 @@
             <lid>16</lid>
             <Fingering>
               <lid>17</lid>
+              <pos x="0.6864" y="-1.6"/>
               <text>2</text>
               </Fingering>
             <pitch>55</pitch>
@@ -194,6 +198,7 @@
             <lid>21</lid>
             <Fingering>
               <lid>22</lid>
+              <pos x="0.6498" y="-1.6"/>
               <text>3</text>
               </Fingering>
             <pitch>59</pitch>
@@ -212,6 +217,7 @@
               </Accidental>
             <Fingering>
               <lid>25</lid>
+              <pos x="0.6498" y="-1.6"/>
               <text>4</text>
               </Fingering>
             <pitch>51</pitch>
@@ -230,6 +236,7 @@
               </Accidental>
             <Fingering>
               <lid>28</lid>
+              <pos x="0.6498" y="-1.6"/>
               <text>P</text>
               </Fingering>
             <pitch>61</pitch>
@@ -248,6 +255,7 @@
               </Accidental>
             <Fingering>
               <lid>31</lid>
+              <pos x="0.6864" y="-1.6"/>
               <text>I</text>
               </Fingering>
             <pitch>52</pitch>
@@ -269,6 +277,7 @@
             <lid>35</lid>
             <Fingering>
               <lid>36</lid>
+              <pos x="0.6498" y="-1.6"/>
               <text>M</text>
               </Fingering>
             <pitch>55</pitch>
@@ -287,6 +296,7 @@
               </Accidental>
             <Fingering>
               <lid>39</lid>
+              <pos x="0.6864" y="-1.6"/>
               <text>A</text>
               </Fingering>
             <pitch>56</pitch>
@@ -302,6 +312,7 @@
             <lid>41</lid>
             <Fingering>
               <lid>42</lid>
+              <pos x="0.6498" y="-1.6"/>
               <text>C</text>
               </Fingering>
             <pitch>52</pitch>
@@ -469,6 +480,7 @@
               <lid>7</lid>
               <Fingering>
                 <lid>8</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>O</text>
                 </Fingering>
               <pitch>62</pitch>
@@ -484,6 +496,7 @@
               <lid>10</lid>
               <Fingering>
                 <lid>11</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>t</text>
                 </Fingering>
               <pitch>53</pitch>
@@ -499,6 +512,7 @@
               <lid>13</lid>
               <Fingering>
                 <lid>14</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>1</text>
                 </Fingering>
               <pitch>47</pitch>
@@ -514,6 +528,7 @@
               <lid>16</lid>
               <Fingering>
                 <lid>17</lid>
+                <pos x="0.6864" y="-1.6"/>
                 <text>2</text>
                 </Fingering>
               <pitch>55</pitch>
@@ -535,6 +550,7 @@
               <lid>21</lid>
               <Fingering>
                 <lid>22</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>3</text>
                 </Fingering>
               <pitch>59</pitch>
@@ -553,6 +569,7 @@
                 </Accidental>
               <Fingering>
                 <lid>25</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>4</text>
                 </Fingering>
               <pitch>51</pitch>
@@ -571,6 +588,7 @@
                 </Accidental>
               <Fingering>
                 <lid>28</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>P</text>
                 </Fingering>
               <pitch>61</pitch>
@@ -589,6 +607,7 @@
                 </Accidental>
               <Fingering>
                 <lid>31</lid>
+                <pos x="0.6864" y="-1.6"/>
                 <text>I</text>
                 </Fingering>
               <pitch>52</pitch>
@@ -610,6 +629,7 @@
               <lid>35</lid>
               <Fingering>
                 <lid>36</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>M</text>
                 </Fingering>
               <pitch>55</pitch>
@@ -628,6 +648,7 @@
                 </Accidental>
               <Fingering>
                 <lid>39</lid>
+                <pos x="0.6864" y="-1.6"/>
                 <text>A</text>
                 </Fingering>
               <pitch>56</pitch>
@@ -643,6 +664,7 @@
               <lid>41</lid>
               <Fingering>
                 <lid>42</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>C</text>
                 </Fingering>
               <pitch>52</pitch>
@@ -678,6 +700,7 @@
               <lid>7</lid>
               <Fingering>
                 <lid>8</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>O</text>
                 </Fingering>
               <pitch>62</pitch>
@@ -693,6 +716,7 @@
               <lid>10</lid>
               <Fingering>
                 <lid>11</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>t</text>
                 </Fingering>
               <pitch>53</pitch>
@@ -708,6 +732,7 @@
               <lid>13</lid>
               <Fingering>
                 <lid>14</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>1</text>
                 </Fingering>
               <pitch>47</pitch>
@@ -723,6 +748,7 @@
               <lid>16</lid>
               <Fingering>
                 <lid>17</lid>
+                <pos x="0.6864" y="-1.6"/>
                 <text>2</text>
                 </Fingering>
               <pitch>55</pitch>
@@ -744,6 +770,7 @@
               <lid>21</lid>
               <Fingering>
                 <lid>22</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>3</text>
                 </Fingering>
               <pitch>59</pitch>
@@ -759,6 +786,7 @@
               <lid>24</lid>
               <Fingering>
                 <lid>25</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>4</text>
                 </Fingering>
               <pitch>51</pitch>
@@ -774,6 +802,7 @@
               <lid>27</lid>
               <Fingering>
                 <lid>28</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>P</text>
                 </Fingering>
               <pitch>61</pitch>
@@ -789,6 +818,7 @@
               <lid>30</lid>
               <Fingering>
                 <lid>31</lid>
+                <pos x="0.6864" y="-1.6"/>
                 <text>I</text>
                 </Fingering>
               <pitch>52</pitch>
@@ -810,6 +840,7 @@
               <lid>35</lid>
               <Fingering>
                 <lid>36</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>M</text>
                 </Fingering>
               <pitch>55</pitch>
@@ -825,6 +856,7 @@
               <lid>38</lid>
               <Fingering>
                 <lid>39</lid>
+                <pos x="0.6864" y="-1.6"/>
                 <text>A</text>
                 </Fingering>
               <pitch>56</pitch>
@@ -840,6 +872,7 @@
               <lid>41</lid>
               <Fingering>
                 <lid>42</lid>
+                <pos x="0.6498" y="-1.6"/>
                 <text>C</text>
                 </Fingering>
               <pitch>52</pitch>

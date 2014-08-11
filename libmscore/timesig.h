@@ -59,13 +59,13 @@ class TimeSig : public Element {
       TimeSigType _timeSigType;
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
-      QPointF pz, pn;
+      QPointF pz, pn, pointLargeLeftParen, pointLargeRightParen;
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
       bool _showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from actualSig()
       bool _needLayout;
-      bool _freeTime;
+      bool _largeParentheses;
       Groups _groups;
 
       void layout1();
@@ -117,8 +117,8 @@ class TimeSig : public Element {
       void setDenominatorString(const QString&);
       void undoSetDenominatorString(const QString&);
 
-      bool getFreeTime() const    { return _freeTime; }
-      void setFreeTime(bool v)    { _freeTime = v;    }
+      bool getLargeParentheses() const    { return _largeParentheses; }
+      void setLargeParentheses(bool v)    { _largeParentheses = v;    }
 
       void setFrom(const TimeSig*);
 

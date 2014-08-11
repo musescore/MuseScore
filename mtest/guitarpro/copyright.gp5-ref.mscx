@@ -92,16 +92,11 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>4</lid>
-          <text><sym>noteQuarterUp</sym> = 120</text>
-          </Tempo>
         <Chord>
-          <lid>5</lid>
+          <lid>4</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>6</lid>
+            <lid>5</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -112,10 +107,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>7</lid>
+          <lid>6</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>8</lid>
+            <lid>7</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
             <fret>2</fret>
@@ -241,16 +236,11 @@
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>4</lid>
-            <text><sym>noteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Chord>
-            <lid>5</lid>
+            <lid>4</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>5</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -261,10 +251,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>7</lid>
+            <lid>6</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>8</lid>
+              <lid>7</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -284,10 +274,10 @@
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>5</lid>
+            <lid>4</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>5</lid>
               <pitch>58</pitch>
               <tpc>12</tpc>
               <fret>3</fret>
@@ -295,10 +285,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>7</lid>
+            <lid>6</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>8</lid>
+              <lid>7</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
