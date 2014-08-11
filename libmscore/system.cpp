@@ -510,18 +510,17 @@ void System::setInstrumentNames(bool longName)
             for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                   SysStaff* staff = _staves[staffIdx];
                   foreach(InstrumentName* t, staff->instrumentNames)
-                        //score()->undoRemoveElement(t);
                         score()->removeElement(t);
                   }
             return;
             }
+
       int tick = ml.isEmpty() ? 0 : ml.front()->tick();
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             SysStaff* staff = _staves[staffIdx];
             Staff* s        = score()->staff(staffIdx);
             if (!s->isTop()) {
                   foreach(InstrumentName* t, staff->instrumentNames)
-                        //score()->undoRemoveElement(t);
                         score()->removeElement(t);
                   continue;
                   }
@@ -539,7 +538,6 @@ void System::setInstrumentNames(bool longName)
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
-                        // score()->undoAddElement(iname);
                         score()->addElement(iname);
                         }
                   iname->setText(sn.name);
@@ -547,7 +545,6 @@ void System::setInstrumentNames(bool longName)
                   ++idx;
                   }
             for (; idx < staff->instrumentNames.size(); ++idx)
-                  // score()->undoRemoveElement(staff->instrumentNames[idx]);
                   score()->removeElement(staff->instrumentNames[idx]);
             }
       }

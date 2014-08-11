@@ -214,15 +214,13 @@ void Staff::read114(XmlReader& e)
 
 void Part::read114(XmlReader& e)
       {
-      int rstaff = 0;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Staff") {
-                  Staff* staff = new Staff(_score, this, rstaff);
+                  Staff* staff = new Staff(_score, this);
                   _score->staves().push_back(staff);
                   _staves.push_back(staff);
                   staff->read114(e);
-                  ++rstaff;
                   }
             else if (tag == "Instrument") {
                   Instrument* instrument = instr(0);

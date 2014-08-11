@@ -372,7 +372,7 @@ void GuitarPro6::readTracks(QDomNode* track)
       while (!nextTrack.isNull()) {
             QDomNode currentNode = nextTrack.firstChild();
             Part* part = new Part(score);
-            Staff* s = new Staff(score, part, trackCounter);
+            Staff* s = new Staff(score, part);
             while (!currentNode.isNull()) {
                   QString nodeName = currentNode.nodeName();
                   if (nodeName == "Name")
@@ -467,7 +467,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                   }
 
             // add in a new part
-            part->insertStaff(s);
+            part->insertStaff(s, -1);
             score->staves().push_back(s);
             score->appendPart(part);
             trackCounter++;

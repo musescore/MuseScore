@@ -89,7 +89,6 @@ class Staff : public QObject {
 
       Score* _score;
       Part* _part;
-      int _rstaff;                  ///< Index in Part.
 
       ClefList clefs;
       KeyList _keys;
@@ -117,16 +116,15 @@ class Staff : public QObject {
 
    public:
       Staff(Score* = 0);
-      Staff(Score*, Part*, int);
+      Staff(Score*, Part*);
       ~Staff();
       void init(const InstrumentTemplate*, const StaffType *staffType, int);
       void initFromStaffType(const StaffType* staffType);
 
-      bool isTop() const             { return _rstaff == 0; }
+      bool isTop() const;
       QString partName() const;
-      int rstaff() const             { return _rstaff; }
+      int rstaff() const;
       int idx() const;
-      void setRstaff(int n)          { _rstaff = n;    }
       void read(XmlReader&);
       void read114(XmlReader&);
       void write(Xml& xml) const;

@@ -160,15 +160,13 @@ QString Staff::partName() const
 Staff::Staff(Score* s)
       {
       _score          = s;
-      _rstaff         = 0;
       _part           = 0;
       _barLineTo      = (lines()-1)*2;
       }
 
-Staff::Staff(Score* s, Part* p, int rs)
+Staff::Staff(Score* s, Part* p)
       {
       _score          = s;
-      _rstaff         = rs;
       _part           = p;
       _barLineTo      = (lines()-1)*2;
       }
@@ -671,6 +669,8 @@ void Staff::linkTo(Staff* staff)
 
 void Staff::unlink(Staff* staff)
       {
+      if (!_linkedStaves)
+            return;
       Q_ASSERT(_linkedStaves->staves().contains(staff));
       _linkedStaves->remove(staff);
       if (_linkedStaves->staves().size() <= 1) {
@@ -942,5 +942,22 @@ void Staff::setBarLineTo(int val)
       _barLineTo = val;
       }
 
+//---------------------------------------------------------
+//   rstaff
+//---------------------------------------------------------
+
+int Staff::rstaff() const
+      {
+      return _part->staves()->indexOf((Staff*)this, 0);
+      }
+
+//---------------------------------------------------------
+//   isTop
+//---------------------------------------------------------
+
+bool Staff::isTop() const
+      {
+      return _part->staves()->front() == this;
+      }
 }
 

@@ -696,15 +696,17 @@ void Score::undoInsertPart(Part* part, int idx)
 
 //---------------------------------------------------------
 //   undoRemoveStaff
+//    idx - index of staff in part
 //---------------------------------------------------------
 
-void Score::undoRemoveStaff(Staff* staff, int idx)
+void Score::undoRemoveStaff(Staff* staff)
       {
-      undo(new RemoveStaff(staff, idx));
+      undo(new RemoveStaff(staff));
       }
 
 //---------------------------------------------------------
 //   undoInsertStaff
+//    idx - index of staff in part
 //---------------------------------------------------------
 
 void Score::undoInsertStaff(Staff* staff, int idx)
@@ -1592,7 +1594,7 @@ void RemovePart::redo()
 InsertStaff::InsertStaff(Staff* p, int i)
       {
       staff = p;
-      idx  = i;
+      ridx  = i;
       }
 
 void InsertStaff::undo()
@@ -1602,22 +1604,22 @@ void InsertStaff::undo()
 
 void InsertStaff::redo()
       {
-      staff->score()->insertStaff(staff, idx);
+      staff->score()->insertStaff(staff, ridx);
       }
 
 //---------------------------------------------------------
 //   RemoveStaff
 //---------------------------------------------------------
 
-RemoveStaff::RemoveStaff(Staff* p, int i)
+RemoveStaff::RemoveStaff(Staff* p)
       {
       staff = p;
-      idx  = i;
+      ridx  = staff->rstaff();
       }
 
 void RemoveStaff::undo()
       {
-      staff->score()->insertStaff(staff, idx);
+      staff->score()->insertStaff(staff, ridx);
       }
 
 void RemoveStaff::redo()
@@ -3303,8 +3305,7 @@ void MoveStaff::flip()
       Part* oldPart = staff->part();
       int idx = staff->rstaff();
       oldPart->removeStaff(staff);
-      staff->setRstaff(rstaff);
-      part->insertStaff(staff);
+      part->insertStaff(staff, rstaff);
       part = oldPart;
       rstaff = idx;
       staff->score()->setLayoutAll(true);
