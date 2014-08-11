@@ -326,9 +326,11 @@ void Harmony::read(XmlReader& e)
             // we need to strip away the markup
             // this removes any user-applied formatting,
             // but we no longer support user-applied formatting for chord symbols anyhow
+            // with any luck, the resulting text will be parseable now, so give it a shot
             createLayout();
-            _textName = plainText();
-            setText(_textName);
+            QString s = plainText(true);
+            setHarmony(s);
+            return;
             }
 
       // render chord from description (or _textName)

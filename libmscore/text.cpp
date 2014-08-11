@@ -1455,7 +1455,22 @@ QString Text::plainText(bool noSym) const
                   if (format.type() == CharFormatType::TEXT) {
                         s += f.text;
                         }
-                  else if (!noSym){
+                  else if (noSym) {
+                        // do some simple symbol substitution
+                        for (SymId id : f.ids) {
+                              switch (id) {
+                                    case SymId::accidentalFlat:
+                                          s += "b";
+                                          break;
+                                    case SymId::accidentalSharp:
+                                          s += "#";
+                                          break;
+                                    default:
+                                          break;
+                                    }
+                              }
+                        }
+                  else {
                         for (SymId id : f.ids)
                               s += QString("<sym>%1</sym>").arg(Sym::id2name(id));
                         }
