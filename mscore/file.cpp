@@ -2290,7 +2290,6 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
 
       ChordRest* last_cr=NULL;
       Measure * measure = NULL;
-      System * sys = NULL;
       QPainter * p = NULL;
 
       qreal w=1.0, h=1.0, margin=0.0;
@@ -2313,72 +2312,74 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
       score->setPrinting(true);
 
 
-      foreach (Page* page, score->pages())
-      foreach(const Element* e, page->elements()) {
+      foreach( Page* page, score->pages() )
+      foreach( System* sys, *(page->systems()) ) {
+
+            margin = score->styleS(StyleIdx::systemFrameDistance).val()*sys->spatium();
+            w = sys->width()+2*margin;
+            h = sys->height() + 2*margin;
+
+            svgname = fi.baseName()+QString::number(count++)+".svg";
+            qts << "# " << svgname << endl;
+            //qts << ticksFromBeg << ',' << 0.0 << '\n';
+
+            svgbuf = new QBuffer();
+            svgbuf->open(QIODevice::ReadWrite);
+
+            p = getSvgPainter(svgbuf,w,h,mag);
+            p->translate(-(sys->pagePos().rx()-margin), -(sys->staffYpage(0)-margin) );
+
+            // Collect together all elements belonging to this system!
+            QList<const Element*> elems;
+            foreach(MeasureBase *m, sys->measures())
+               m->scanElements(&elems, collectElements, false);
+            sys->scanElements(&elems, collectElements, false);
+
+            foreach(const Element * e, elems) {
 
             //qDebug("%s", qPrintable(e->userName()) );
 
-            if (e->type() == Element::Type::MEASURE) {
+            //auto drawElementOnP = [&] (void * v, Element * e) {
 
-               if (measure!=NULL) ticksFromBeg+=measure->ticks();
+               if (e->type() == Element::Type::MEASURE) {
+                  if (measure!=NULL) ticksFromBeg+=measure->ticks();
+                  measure = (Measure *)e;
+               }
 
-               measure = (Measure *)e;
-               if (measure->system()!=sys) {
-                  sys = measure->system();
+               /*if (e->visible()) { 
+                  qDebug("ELEMENT %s %f", qPrintable(e->userName()),e->pagePos().ry());
+                  if (e->parent()) 
+                     qDebug(" PARENT %s", qPrintable(e->parent()->userName()));
+               }*/
 
-                  qDebug("%u",(uint)p);
+               if (!e->visible())
+                     continue;
 
-                  if (p!=NULL && svgbuf!=NULL) {
-                     p->end();
+               QPointF pos(e->pagePos());
+               p->translate(pos);
+               e->draw(p);
 
-                     svgbuf->seek(0);
-                     uz.addFile(svgname,svgbuf->data());
-                     svgbuf->close();
-                     
-                     delete p; delete svgbuf;
+               if (e->type() == Element::Type::NOTE || 
+                   e->type() == Element::Type::REST) {
+
+                  QTransform world = p->worldTransform();
+                  ChordRest * cr = (e->type()==Element::Type::NOTE?
+                                 (ChordRest*)( ((Note*)e)->chord()):(ChordRest*)e);
+
+                  if (cr != last_cr) {
+                     //qDebug("%i (%i) - %f",cr->segment()->tick(),ticksFromBeg,world.m31());
+                     qts << cr->segment()->tick() << ',' << world.m31()/(w*mag) << endl;
+                     last_cr = cr;
                   }
-
-                  margin = score->styleS(StyleIdx::systemFrameDistance).val()*sys->spatium();
-                  w = sys->width()+2*margin;
-                  h = sys->height() + 2*margin;
-
-                  svgname = fi.baseName()+QString::number(count++)+".svg";
-                  qts << "# " << svgname << endl;
-                  //qts << ticksFromBeg << ',' << 0.0 << '\n';
-
-                  svgbuf = new QBuffer();
-                  svgbuf->open(QIODevice::ReadWrite);
-
-                  p = getSvgPainter(svgbuf,w,h,mag);
-                  p->translate(-(sys->pagePos().rx()-margin), -(sys->staffYpage(0)-margin) );
                }
+
+               p->translate(-pos);
+
+            //};
+            //sys->scanElements(NULL, drawElementOnP,true);
             }
 
-            if (!e->visible() || measure==NULL)
-                  continue;
 
-            QPointF pos(e->pagePos());
-            p->translate(pos);
-
-            if (e->type() == Element::Type::NOTE || 
-                e->type() == Element::Type::REST) {
-
-               QTransform world = p->worldTransform();
-               ChordRest * cr = (e->type()==Element::Type::NOTE?
-                              (ChordRest*)( ((Note*)e)->chord()):(ChordRest*)e);
-
-               if (cr != last_cr) {
-                  qDebug("%i (%i) - %f",cr->segment()->tick(),ticksFromBeg,world.m31());
-                  qts << cr->segment()->tick() << ',' << world.m31()/(w*mag) << endl;
-                  last_cr = cr;
-               }
-            }
-
-            e->draw(p);
-            p->translate(-pos);
-         }
-
-         if (p!=NULL) {
             p->end();
 
             svgbuf->seek(0);
@@ -2389,7 +2390,6 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
          }
 
          if (measure!=NULL) ticksFromBeg+=measure->ticks();
-
          qDebug("Total ticks: %i",ticksFromBeg);
          qts << "## " << ticksFromBeg << endl;
 
@@ -2408,9 +2408,9 @@ bool MuseScore::newLinearized(Score* old_score)
       Score* score = old_score->clone();
 
       Measure * m1 = score->firstMeasure();
-      Measure * m2 = m1->nextMeasure();
+      //Measure * m2 = m1->nextMeasure();
 
-      Measure * mn = m1->clone();
+      //Measure * mn = m1->clone();
 
       //mn->setTick(m2->tick());
 
