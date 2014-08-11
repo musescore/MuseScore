@@ -1497,6 +1497,7 @@ void MuseScore::printFile()
 bool MuseScore::exportFile()
       {
       QStringList fl;
+      fl.append(tr("SVG Collection (*.svg-c)"));
       fl.append(tr("Uncompressed MuseScore Format (*.mscx)"));
       fl.append(tr("MusicXML Format (*.xml)"));
       fl.append(tr("Compressed MusicXML Format (*.mxl)"));
@@ -1504,7 +1505,6 @@ bool MuseScore::exportFile()
       fl.append(tr("PDF File (*.pdf)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
-      fl.append(tr("SVG Collection (*.svg-c)"));
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio (*.wav)"));
       fl.append(tr("FLAC Audio (*.flac)"));
@@ -1526,7 +1526,7 @@ bool MuseScore::exportFile()
             }
 
       QString selectedFilter;
-      QString name   = QString("%1/%2.mscx").arg(saveDirectory).arg(cs->name());
+      QString name   = QString("%1/%2.svg-c").arg(saveDirectory).arg(cs->name());
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
@@ -1551,6 +1551,7 @@ bool MuseScore::exportFile()
 bool MuseScore::exportParts()
       {
       QStringList fl;
+      fl.append(tr("SVG Collection (*.svg-c)"));
       fl.append(tr("Uncompressed MuseScore Format (*.mscx)"));
       fl.append(tr("MusicXML Format (*.xml)"));
       fl.append(tr("Compressed MusicXML Format (*.mxl)"));
@@ -1558,7 +1559,6 @@ bool MuseScore::exportParts()
       fl.append(tr("PDF File (*.pdf)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
-      fl.append(tr("SVG Collection (*.svg-c)"));
 #ifdef HAS_AUDIOFILE
       fl.append(tr("Wave Audio (*.wav)"));
       fl.append(tr("FLAC Audio (*.flac)"));
