@@ -8291,7 +8291,7 @@
             </Instrument>
             <Instrument id="lute">
                   <longName>Lute</longName>
-                  <shortName>Lute</shortName>
+                  <shortName>Lt.</shortName>
                   <description>Lute</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
@@ -8323,9 +8323,9 @@
             </Instrument>
             <Instrument id="ren.-tenor-lute-5-course">
                   <longName>Lute</longName>
-                  <shortName>Lute</shortName>
-                  <trackName>Lute 5 course</trackName>
-                  <description>Ren. Tenor Lute (5 course)</description>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 5-course</trackName>
+                  <description>Ren. Tenor Lute (5-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -8346,9 +8346,9 @@
             </Instrument>
             <Instrument id="ren.-tenor-lute-6-course">
                   <longName>Lute</longName>
-                  <shortName>Lute</shortName>
-                  <trackName>Lute 6 course</trackName>
-                  <description>Ren. Tenor Lute (6 course)</description>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 6-course</trackName>
+                  <description>Ren. Tenor Lute (6-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -8370,9 +8370,9 @@
             </Instrument>
             <Instrument id="ren.-tenor-lute-7-course">
                   <longName>Lute</longName>
-                  <shortName>Lute</shortName>
-                  <trackName>Lute 7 course</trackName>
-                  <description>Ren. Tenor Lute (7 course)</description>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 7-course</trackName>
+                  <description>Ren. Tenor Lute (7-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -8394,9 +8394,9 @@
             </Instrument>
             <Instrument id="ren.-tenor-lute-8-course">
                   <longName>Lute</longName>
-                  <shortName>Lute.</shortName>
-                  <trackName>Lute 8 course</trackName>
-                  <description>Ren. Tenor Lute (8 course)</description>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 8-course</trackName>
+                  <description>Ren. Tenor Lute (8-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -8418,9 +8418,9 @@
             </Instrument>
             <Instrument id="ren.-tenor-lute-9-course">
                   <longName>Lute</longName>
-                  <shortName>Lute</shortName>
-                  <trackName>Lute 9 course</trackName>
-                  <description>Ren. Tenor Lute (9 course)</description>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 9-course</trackName>
+                  <description>Ren. Tenor Lute (9-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -8442,9 +8442,9 @@
             </Instrument>
             <Instrument id="ren.-tenor-lute-10-course">
                   <longName>Lute</longName>
-                  <shortName>Lute</shortName>
-                  <trackName>Lute 10 course</trackName>
-                  <description>Ren. Tenor Lute (10 course)</description>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 10-course</trackName>
+                  <description>Ren. Tenor Lute (10-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -8466,9 +8466,9 @@
             </Instrument>
             <Instrument id="baroque-lute-13-course">
                   <longName>Lute</longName>
-                  <shortName>Lute</shortName>
-                  <trackName>Lute 13 course</trackName>
-                  <description>Baroque Lute (13 course)</description>
+                  <shortName>Lt.</shortName>
+                  <trackName>Lute 13-course</trackName>
+                  <description>Baroque Lute (13-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -8490,8 +8490,8 @@
             </Instrument>
             <Instrument id="archlute-14-course">
                   <longName>Archlute</longName>
-                  <shortName>A. Lute</shortName>
-                  <description>Archlute (14 course)</description>
+                  <shortName>A. Lt.</shortName>
+                  <description>Archlute (14-course)</description>
                   <musicXMLid>pluck.archlute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -8514,7 +8514,7 @@
             <Instrument id="theorbo-15-course">
                   <longName>Theorbo</longName>
                   <shortName>Thb.</shortName>
-                  <description>Theorbo (15 course)</description>
+                  <description>Theorbo (15-course)</description>
                   <musicXMLid>pluck.theorbo</musicXMLid>
                   <StringData>
                         <frets>13</frets>
@@ -8856,9 +8856,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="5-string-electric-bass">
-                  <longName>5-Str. Electric Bass</longName>
+                  <longName>5-str. Electric Bass</longName>
                   <shortName>El. B.</shortName>
-                  <description>5-String Electric Bass</description>
+                  <description>5-string Electric Bass</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
                   <StringData>
                         <frets>24</frets>
@@ -8879,9 +8879,9 @@
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-tab">
-                  <trackName>5-Str. Electric Bass [Tablature]</trackName>
+                  <trackName>5-str. Electric Bass [Tablature]</trackName>
                   <init>5-string-electric-bass</init>
-                  <description>5-String Electric Bass (Tablature)</description>
+                  <description>5-string Electric Bass (Tablature)</description>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
@@ -9142,7 +9142,7 @@
             <Instrument id="viola-da-gamba-tablature">
                   <longName>Viola da gamba (Tab)</longName>
                   <shortName>Vla. d. g.</shortName>
-                  <trackName>Viola da Gamba (Tablature)</trackName>
+                  <trackName>Viola da gamba (Tablature)</trackName>
                   <init>viola-da-gamba</init>
                   <description>Viola da gamba (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
