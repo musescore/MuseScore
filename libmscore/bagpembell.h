@@ -25,7 +25,7 @@ typedef QList<int> noteList;
 //---------------------------------------------------------
 
 struct BagpipeEmbellishmentInfo {
-      QString name;
+      const char* name;
       QString notes;
       };
 
