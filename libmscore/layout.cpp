@@ -170,17 +170,21 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             maxDownWidth = qMax(maxDownWidth, hw);
             }
 
-      qreal sp = staff->spatium();
-      qreal upOffset = 0.0;
-      qreal downOffset = 0.0;
-      qreal dotAdjust = 0.0;  // additional chord offset to account for dots
+      qreal sp                      = staff->spatium();
+      qreal upOffset                = 0.0;      // offset to apply to upstem chords
+      qreal downOffset              = 0.0;      // offset to apply to downstem chords
+      qreal dotAdjust               = 0.0;      // additional chord offset to account for dots
+      qreal dotAdjustThreshold      = 0.0;      // if it exceeds this amount
 
       // centering adjustments for whole note, breve, and small chords
-      qreal centerUp = 0.0;
-      qreal oversizeUp = 0.0;
-      qreal centerDown = 0.0;
       qreal headDiff;
-      qreal centerThreshold = 0.1 * sp;
+      qreal centerUp          = 0.0;      // offset to apply in order to center upstem chords
+      qreal oversizeUp        = 0.0;      // adjustment to oversized upstem chord needed if laid out to the right
+      qreal centerDown        = 0.0;      // offset to apply in order to center downstem chords
+      qreal centerAdjustUp    = 0.0;      // adjustment to upstem chord needed after centering donwstem chord
+      qreal centerAdjustDown  = 0.0;      // adjustment to downstem chord needed after centering upstem chord
+      qreal centerThreshold   = 0.1 * sp; // only center chords if they differ from nominal by this amount
+
       headDiff = maxUpWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             // larger than nominal
@@ -191,14 +195,17 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       else if (-headDiff > centerThreshold) {
             // smaller than nominal
             centerUp = headDiff * -0.5;
+            centerAdjustDown = centerUp;
             }
       headDiff = maxDownWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             centerDown = headDiff * -0.5;
             maxDownWidth = nominalWidth - centerDown;
             }
-      else if (-headDiff > centerThreshold)
+      else if (-headDiff > centerThreshold) {
             centerDown = headDiff * -0.5;
+            centerAdjustUp = centerDown;
+            }
 
       // handle conflict between upstem and downstem chords
 
@@ -370,6 +377,13 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         else
                               downDots = 0; // no need to adjust for dots in this case
                         upOffset = qMax(clearLeft, clearRight);
+                        // if downstem chord is small, don't center
+                        // and we might not need as much dot adjustment either
+                        if (centerDown > 0.0) {
+                              centerDown = 0.0;
+                              centerAdjustUp = 0.0;
+                              dotAdjustThreshold = (upOffset - maxDownWidth) + maxUpWidth - 0.3 * sp;
+                              }
                         }
 
                   }
@@ -395,6 +409,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   if (dots > 1)
                         dotAdjust += point(styleS(StyleIdx::dotDotDistance)) * (dots - 1);
                   dotAdjust *= mag;
+                  // only by amount over threshold
+                  dotAdjust = qMax(dotAdjust - dotAdjustThreshold, 0.0);
                   }
             if (separation == 1)
                   dotAdjust += 0.1 * sp;
@@ -408,7 +424,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   Chord* chord = static_cast<Chord*>(e);
                   if (chord->up()) {
                         if (upOffset != 0.0) {
-                              chord->rxpos() += upOffset + oversizeUp;
+                              chord->rxpos() += upOffset + centerAdjustUp + oversizeUp;
                               if (downDots && !upDots)
                                     chord->rxpos() += dotAdjust;
                               }
@@ -417,7 +433,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         }
                   else {
                         if (downOffset != 0.0) {
-                              chord->rxpos() += downOffset;
+                              chord->rxpos() += downOffset + centerAdjustDown;
                               if (upDots && !downDots)
                                     chord->rxpos() += dotAdjust;
                               }
@@ -575,13 +591,14 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
       qreal gap = lower->top - upper->bottom;
 
       // no conflict at all if there is sufficient vertical gap between accidentals
-      if (gap >= pd)
+      // the arrangement of accidentals into columns assumes accidentals an octave apart *do* clear
+      if (gap >= pd || lower->line - upper->line >= 7)
             return false;
 
       qreal allowableOverlap = qMax(upper->descent, lower->ascent) - pd;
 
       // accidentals that are "close" (small gap or even slight overlap)
-      if (qAbs(gap) <= 0.25 * sp) {
+      if (qAbs(gap) <= 0.33 * sp) {
             // acceptable with slight offset
             // if one of the accidentals can subsume the overlap
             // and both accidentals allow it
@@ -628,6 +645,10 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
 static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffset, QList<Note*>& leftNotes, qreal pnd, qreal pd, qreal sp)
       {
       qreal lx = colOffset;
+      Accidental* acc = me->note->accidental();
+      qreal mag = acc->mag();
+      pnd *= mag;
+      pd *= mag;
 
       // extra space for ledger lines
       if (me->line <= -2 || me->line >= me->note->staff()->lines() * 2)
@@ -643,9 +664,9 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
             if (me->top - lnBottom <= pnd && lnTop - me->bottom <= pnd) {
                   // undercut note above if possible
                   if (lnBottom - me->top <= me->ascent - pnd)
-                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear - pnd);
+                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear);
                   else
-                        lx = qMin(lx, ln->x() + ln->chord()->x() - pnd);
+                        lx = qMin(lx, ln->x() + ln->chord()->x());
                   }
             else if (lnTop > me->bottom)
                   break;
@@ -654,7 +675,6 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
       // clear other accidentals
       bool conflictAbove = false;
       bool conflictBelow = false;
-      Accidental* acc = me->note->accidental();
 
       if (above)
             conflictAbove = resolveAccidentals(me, above, lx, pd, sp);
@@ -663,9 +683,9 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
       if (conflictAbove || conflictBelow)
             me->x = lx - acc->width() - acc->bbox().x();
       else if (colOffset != 0.0)
-            me->x = lx - pd * acc->mag() - acc->width() - acc->bbox().x();
+            me->x = lx - pd - acc->width() - acc->bbox().x();
       else
-            me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
+            me->x = lx - pnd - acc->width() - acc->bbox().x();
 
       return me->x;
 
@@ -922,7 +942,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                               below = k;
                               }
                         // check to see if accidental can fit in slot
-                        qreal myPd = pd * me->note->mag();
+                        qreal myPd = pd * me->note->accidental()->mag();
                         bool conflict = false;
                         if (above != -1 && me->top - aclist[above].bottom < myPd)
                               conflict = true;
