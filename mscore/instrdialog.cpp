@@ -374,7 +374,7 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
 void populateGenreCombo(QComboBox* combo)
       {
       combo->clear();
-      combo->addItem(QT_TR_NOOP("All instruments"), "all");
+      combo->addItem(qApp->translate("InstrumentsDialog", "All instruments"), "all");
       int i = 1;
       int defaultIndex = 0;
       foreach (InstrumentGenre *ig, instrumentGenres) {
@@ -1046,12 +1046,18 @@ void MuseScore::editInstrList()
       instrList->setScore(rootScore);
       instrList->genPartList();
       rootScore->startCmd();
-        rootScore->deselectAll();
+      rootScore->deselectAll();
       int rv = instrList->exec();
 
       if (rv == 0) {
             rootScore->endCmd();
             return;
+            }
+      ScoreView* cv = currentScoreView();
+      if (cv && cv->noteEntryMode()) {
+		cv->cmd(getAction("escape"));
+            qApp->processEvents();
+            updateInputState(cv->score());
             }
       rootScore->inputState().setTrack(-1);
 
