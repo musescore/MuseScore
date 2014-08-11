@@ -1084,7 +1084,7 @@ void MusicXml::scorePartwise(QDomElement ee)
                         Part* part = new Part(score);
                         part->setId(id);
                         score->appendPart(part);
-                        Staff* staff = new Staff(score, part, 0);
+                        Staff* staff = new Staff(score, part);
                         part->staves()->push_back(staff);
                         score->staves().push_back(staff);
                         tuplets.resize(VOICES); // part now contains one staff, thus VOICES voices

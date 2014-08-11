@@ -512,7 +512,7 @@ void MuseScore::newFile()
                         s = ns;
                         }
                   }
-            foreach(Excerpt* excerpt, score->excerpts()) {
+            foreach (Excerpt* excerpt, score->excerpts()) {
                   Score* exScore =  excerpt->score();
                   if (exScore->firstMeasure()) {
                         for (Segment* s = exScore->firstMeasure()->first(); s;) {
@@ -525,7 +525,7 @@ void MuseScore::newFile()
                                           }
                                     }
                               s->measure()->remove(s);
-                              if(s->measure()->segments()->size() == 0){
+                              if (s->measure()->segments()->size() == 0){
                                     exScore->measures()->remove(s->measure(), s->measure());
                                     delete s->measure();
                                     }

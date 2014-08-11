@@ -393,8 +393,8 @@ Score::FileError importBB(Score* score, const QString& name)
             ntracks = 1;
       for (int i = 0; i < ntracks; ++i) {
             Part* part = new Part(score);
-            Staff* s   = new Staff(score, part, 0);
-            part->insertStaff(s);
+            Staff* s   = new Staff(score, part);
+            part->insertStaff(s, 0);
             score->staves().append(s);
             score->appendPart(part);
             }

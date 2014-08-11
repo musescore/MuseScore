@@ -2155,10 +2155,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       //
       Staff* s  = staff(staffIdx);
       Part*  p  = s->part();
-      int rstaff = s->rstaff();
-      Staff* ns = new Staff(this, p, rstaff + 1);
-      ns->setRstaff(rstaff + 1);
-
+      Staff* ns = new Staff(this, p);
       undoInsertStaff(ns, staffIdx+1);
 
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
@@ -2353,10 +2350,17 @@ void Score::removePart(Part* part)
 //   insertStaff
 //---------------------------------------------------------
 
-void Score::insertStaff(Staff* staff, int idx)
+void Score::insertStaff(Staff* staff, int ridx)
       {
+      int idx = 0;            // new index in _staves
+      for (Part* p : _parts) {
+            if (p == staff->part())
+                  break;
+            idx += p->nstaves();
+            }
+      idx += ridx;
       _staves.insert(idx, staff);
-      staff->part()->insertStaff(staff);
+      staff->part()->insertStaff(staff, ridx);
       for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
             Spanner* s = i->second;
             if (s->staffIdx() >= idx) {
@@ -2464,7 +2468,7 @@ void Score::cmdRemoveStaff(int staffIdx)
             undo(new RemoveElement(i));
             }
 
-      undoRemoveStaff(s, staffIdx);
+      undoRemoveStaff(s);
 
       // remove linked staff and measures in linked staves in excerps
       // should be done earlier for the main staff
@@ -2483,7 +2487,7 @@ void Score::cmdRemoveStaff(int staffIdx)
                               if (m->hasMMRest())
                                     m->mmRest()->cmdRemoveStaves(lstaffIdx, lstaffIdx + 1);
                               }
-                        undoRemoveStaff(staff, lstaffIdx);
+                        undoRemoveStaff(staff);
                         if (staff->part()->nstaves() == 0)
                               undoRemovePart(staff->part(), pIndex);
                         }
@@ -2852,7 +2856,7 @@ void Score::selectRange(Element* e, int staffIdx)
                                     _selection.setEndSegment(cr->nextSegmentAfterCR(Segment::Type::ChordRest
                                                                                     | Segment::Type::EndBarLine
                                                                                     | Segment::Type::Clef));
-                              
+
                               }
                         else {
                               _selection.setStartSegment(cr->segment());
@@ -3343,7 +3347,7 @@ void Score::appendPart(const QString& name)
       part->initFromInstrTemplate(t);
       int n = nstaves();
       for (int i = 0; i < t->nstaves(); ++i) {
-            Staff* staff = new Staff(this, part, i);
+            Staff* staff = new Staff(this, part);
             staff->setLines(t->staffLines[i]);
             staff->setSmall(t->smallStaff[i]);
             if (i == 0) {

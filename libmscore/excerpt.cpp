@@ -121,16 +121,15 @@ Score* createExcerpt(const QList<Part*>& parts)
       foreach (Part* part, parts) {
             Part* p = new Part(score);
             p->setInstrument(*part->instr());
-            int idx = 0;
+
             foreach (Staff* staff, *part->staves()) {
-                  Staff* s = new Staff(score, p, idx);
+                  Staff* s = new Staff(score, p);
                   s->setInitialClef(staff->initialClefTypeList());
                   s->setStaffType(staff->staffType());
                   s->linkTo(staff);
                   p->staves()->append(s);
                   score->staves().append(s);
                   srcStaves.append(oscore->staffIdx(staff));
-                  ++idx;
                   }
             score->appendPart(p);
             }

@@ -1124,9 +1124,8 @@ void MuseScore::editInstrList()
                   QList<Staff*> nonLinked;
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(ci);
-                        Staff* staff       = new Staff(rootScore, part, rstaff);
+                        Staff* staff       = new Staff(rootScore, part);
                         sli->staff         = staff;
-                        staff->setRstaff(rstaff);
 
                         staff->init(t, sli->staffType(), cidx);
                         staff->setInitialClef(sli->clef());
@@ -1175,11 +1174,10 @@ void MuseScore::editInstrList()
                               rootScore->cmdRemoveStaff(sidx);
                               }
                         else if (sli->op == ListItemOp::ADD) {
-                              Staff* staff = new Staff(rootScore, part, rstaff);
+                              Staff* staff = new Staff(rootScore, part);
                               sli->staff   = staff;
-                              staff->setRstaff(rstaff);
 
-                              rootScore->undoInsertStaff(staff, staffIdx);
+                              rootScore->undoInsertStaff(staff, rstaff);
 
                               for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
                                     // do not create whole measure rests for linked staves
@@ -1194,13 +1192,25 @@ void MuseScore::editInstrList()
                               Key nKey = part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
-                              if (sli->linked() && rstaff > 0) {
-                                    // link to top staff of same part
-                                    Staff* linkedStaff = part->staves()->front();
-                                    cloneStaff(linkedStaff, staff);
+                              Staff* linkedStaff = 0;
+                              if (sli->linked()) {
+                                    if (rstaff > 0)
+                                          linkedStaff = part->staves()->front();
+                                    else {
+                                          for (Staff* st : *part->staves()) {
+                                                if (st != staff) {
+                                                      linkedStaff = st;
+                                                      break;
+                                                      }
+                                                }
+                                          }
                                     }
-                              if(firstStaff && !sli->linked())
-                                    rootScore->adjustKeySigs(staffIdx, staffIdx+1, tmpKeymap);
+                              if (linkedStaff)
+                                    cloneStaff(linkedStaff, staff);
+                              else {
+                                    if (firstStaff)
+                                          rootScore->adjustKeySigs(staffIdx, staffIdx+1, tmpKeymap);
+                                    }
                               ++staffIdx;
                               ++rstaff;
                               }
@@ -1292,7 +1302,6 @@ void MuseScore::editInstrList()
       rootScore->cmdUpdateNotes();  // do it before global layout or layout of chords will not
       rootScore->endCmd();          // find notes in right positions for stems, ledger lines, etc
       rootScore->rebuildMidiMapping();
-//      rootScore->updateNotes();
       seq->initInstruments();
       }
 

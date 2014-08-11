@@ -637,8 +637,8 @@ void GuitarPro1::read(QFile* fp)
       //
       for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
             Part* part = new Part(score);
-            Staff* s = new Staff(score, part, staffIdx);
-            part->insertStaff(s);
+            Staff* s   = new Staff(score, part);
+            part->insertStaff(s, 0);
             score->staves().push_back(s);
             score->appendPart(part);
             }
@@ -981,8 +981,8 @@ qDebug("BeginRepeat=============================================");
       //
       for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
             Part* part = new Part(score);
-            Staff* s = new Staff(score, part, staffIdx);
-            part->insertStaff(s);
+            Staff* s = new Staff(score, part);
+            part->insertStaff(s, 0);
             score->staves().push_back(s);
             score->appendPart(part);
             }
@@ -1535,8 +1535,8 @@ void GuitarPro3::read(QFile* fp)
       //
       for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
             Part* part = new Part(score);
-            Staff* s = new Staff(score, part, staffIdx);
-            part->insertStaff(s);
+            Staff* s = new Staff(score, part);
+            part->insertStaff(s, 0);
             score->staves().push_back(s);
             score->appendPart(part);
             }
@@ -2007,7 +2007,7 @@ Score::FileError importGTP(Score* score, const QString& name)
 
             Staff* staff = part->staves()->front();
 
-            Staff* s = new Staff(pscore, p, 0);
+            Staff* s = new Staff(pscore, p);
             StaffType* st = staff->staffType();
             s->setStaffType(st);
 //            int idx = pscore->staffTypeIdx(st);

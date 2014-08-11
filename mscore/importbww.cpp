@@ -552,7 +552,7 @@ Score::FileError importBww(Score* score, const QString& path)
       Part* part = new Part(score);
       part->setId(id);
       score->appendPart(part);
-      Staff* staff = new Staff(score, part, 0);
+      Staff* staff = new Staff(score, part);
       part->staves()->push_back(staff);
       score->staves().push_back(staff);
 

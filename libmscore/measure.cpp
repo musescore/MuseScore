@@ -579,67 +579,63 @@ void Measure::layout2()
       //
       bool smn = false;
 
-//      if (!_noText || _noText->generated()) {
-            if (_noMode == MeasureNumberMode::SHOW)
-                  smn = true;
-            else if (_noMode == MeasureNumberMode::HIDE)
-                  smn = false;
-            else {
-                  if (score()->styleB(StyleIdx::showMeasureNumber)
-                     && !_irregular
-                     && (_no || score()->styleB(StyleIdx::showMeasureNumberOne))) {
-                        if (score()->styleB(StyleIdx::measureNumberSystem))
-                              smn = system()->firstMeasure() == this;
-                        else {
-                              smn = (_no == 0 && score()->styleB(StyleIdx::showMeasureNumberOne)) ||
-                                    ( ((_no+1) % score()->style(StyleIdx::measureNumberInterval).toInt()) == 0 );
-                              }
+      if (_noMode == MeasureNumberMode::SHOW)
+            smn = true;
+      else if (_noMode == MeasureNumberMode::HIDE)
+            smn = false;
+      else {
+            if (score()->styleB(StyleIdx::showMeasureNumber)
+               && !_irregular
+               && (_no || score()->styleB(StyleIdx::showMeasureNumberOne))) {
+                  if (score()->styleB(StyleIdx::measureNumberSystem))
+                        smn = system()->firstMeasure() == this;
+                  else {
+                        smn = (_no == 0 && score()->styleB(StyleIdx::showMeasureNumberOne)) ||
+                              ( ((_no+1) % score()->style(StyleIdx::measureNumberInterval).toInt()) == 0 );
                         }
                   }
-            QString s;
-            if (smn)
-                  s = QString("%1").arg(_no + 1);
-            int nn = 1;
-            if (!score()->styleB(StyleIdx::measureNumberAllStaffs)) {
-                  //find first non invisible staff
-                  for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx) {
-                        MStaff* ms = staves.at(staffIdx);
-                        SysStaff* s  = system()->staff(staffIdx);
-                        Staff* staff = score()->staff(staffIdx);
-                        if (ms->visible() && staff->show() && s->show()) {
-                              nn = staffIdx;
-                              break;
-                              }
-                        }
-                  }
+            }
+      QString s;
+      if (smn)
+            s = QString("%1").arg(_no + 1);
+      int nn = 1;
+      bool nas = score()->styleB(StyleIdx::measureNumberAllStaffs);
+
+      if (!nas) {
+            //find first non invisible staff
             for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx) {
                   MStaff* ms = staves.at(staffIdx);
-                  Text* t = ms->noText();
-                  if (smn) {
-                        if ((staffIdx == nn || score()->styleB(StyleIdx::measureNumberAllStaffs))) {
-                              if (t == 0) {
-                                    t = new Text(score());
-                                    t->setFlag(ElementFlag::ON_STAFF, true);
-                                    // t->setFlag(ElementFlag::MOVABLE, false); ??
-                                    t->setTrack(staffIdx * VOICES);
-                                    t->setGenerated(true);
-                                    t->setTextStyleType(TextStyleType::MEASURE_NUMBER);
-                                    t->setParent(this);
-                                    score()->undoAddElement(t);
-                                    }
-                              if(t) {
-                                    t->setText(s);
-                                    t->layout();
-                                    smn = score()->styleB(StyleIdx::measureNumberAllStaffs);
-                                    }
-                              }
-                        }
-                  else {
-                        if (t)
-                              score()->undoRemoveElement(t);
+                  SysStaff* s  = system()->staff(staffIdx);
+                  Staff* staff = score()->staff(staffIdx);
+                  if (ms->visible() && staff->show() && s->show()) {
+                        nn = staffIdx;
+                        break;
                         }
                   }
-//            }
+            }
+      for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx) {
+            MStaff* ms = staves.at(staffIdx);
+            Text* t = ms->noText();
+            if (t)
+                  t->setTrack(staffIdx * VOICES);
+            if (smn && ((staffIdx == nn) || nas)) {
+                  if (t == 0) {
+                        t = new Text(score());
+                        t->setFlag(ElementFlag::ON_STAFF, true);
+                        t->setTrack(staffIdx * VOICES);
+                        t->setGenerated(true);
+                        t->setTextStyleType(TextStyleType::MEASURE_NUMBER);
+                        t->setParent(this);
+                        score()->undoAddElement(t);
+                        }
+                  t->setText(s);
+                  t->layout();
+                  }
+            else {
+                  if (t)
+                        score()->undoRemoveElement(t);
+                  }
+            }
 
       //
       // slur layout needs articulation layout first

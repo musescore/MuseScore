@@ -448,12 +448,11 @@ void InstrumentWizard::createInstruments(Score* cs)
             QTreeWidgetItem* ci = 0;
             int rstaff = 0;
             for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
-                  if(ci->isHidden())
+                  if (ci->isHidden())
                         continue;
                   StaffListItem* sli = (StaffListItem*)ci;
-                  Staff* staff       = new Staff(cs, part, rstaff);
+                  Staff* staff       = new Staff(cs, part);
                   sli->staff         = staff;
-                  staff->setRstaff(rstaff);
                   ++rstaff;
 
                   staff->init(t, sli->staffType(), cidx);
@@ -467,9 +466,9 @@ void InstrumentWizard::createInstruments(Score* cs)
                   cs->staves().insert(staffIdx + rstaff, staff);
                   }
             // if a staff was removed from instrument:
-            if (part->staves()->at(0)->barLineSpan() > rstaff) {
-                  part->staves()->at(0)->setBarLineSpan(rstaff);
-                  part->staves()->at(0)->setBracket(0, BracketType::NO_BRACKET);
+            if (part->staff(0)->barLineSpan() > rstaff) {
+                  part->staff(0)->setBarLineSpan(rstaff);
+                  part->staff(0)->setBracket(0, BracketType::NO_BRACKET);
                   }
 
             // insert part

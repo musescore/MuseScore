@@ -195,7 +195,7 @@ class RemovePart : public UndoCommand {
 
 class InsertStaff : public UndoCommand {
       Staff* staff;
-      int idx;
+      int ridx;
 
    public:
       InsertStaff(Staff*, int idx);
@@ -210,10 +210,10 @@ class InsertStaff : public UndoCommand {
 
 class RemoveStaff : public UndoCommand {
       Staff* staff;
-      int idx;
+      int ridx;
 
    public:
-      RemoveStaff(Staff*, int idx);
+      RemoveStaff(Staff*);
       virtual void undo();
       virtual void redo();
       UNDO_NAME("RemoveStaff")

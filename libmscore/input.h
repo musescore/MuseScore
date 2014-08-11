@@ -70,7 +70,7 @@ class InputState {
       int drumNote() const                { return _drumNote;       }
       void setDrumNote(int v)             { _drumNote = v;          }
 
-      int voice() const                   { return _track % VOICES; }
+      int voice() const                   { return _track == -1 ? 0 : (_track % VOICES); }
       int track() const                   { return _track;          }
       void setTrack(int v)                { _track = v;             }
 

@@ -520,7 +520,7 @@ class Score : public QObject {
       void undoExchangeVoice(Measure* measure, int val1, int val2, int staff1, int staff2);
       void undoRemovePart(Part* part, int idx);
       void undoInsertPart(Part* part, int idx);
-      void undoRemoveStaff(Staff* staff, int idx);
+      void undoRemoveStaff(Staff* staff);
       void undoInsertStaff(Staff* staff, int idx);
       void undoChangeInvisible(Element*, bool);
       void undoChangeBracketSpan(Staff* staff, int column, int span);

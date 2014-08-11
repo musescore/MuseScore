@@ -855,7 +855,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             midiPatch = cl->sound;
 
-            Staff* s = new Staff(score, part, staffIdx);
+            Staff* s = new Staff(score, part);
             if (cl->bPercussion)
                   part->setMidiProgram(0, 128);
             else
@@ -877,7 +877,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   bstaff = 0;
                   }
             s->setSmall(cl->bSmall);
-            part->insertStaff(s);
+            part->insertStaff(s, -1);
             score->staves().push_back(s);
             // _parts.push_back(part);
             }
