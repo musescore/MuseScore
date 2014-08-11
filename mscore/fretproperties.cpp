@@ -227,7 +227,7 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
                         _marker[string] = 'X';
                         break;
                   case 'X':
-                        _marker[string] = 'O';
+                        _marker[string] = 0;
                         break;
                   default:
                         _marker[string] = 'O';
