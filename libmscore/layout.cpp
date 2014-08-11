@@ -170,17 +170,21 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             maxDownWidth = qMax(maxDownWidth, hw);
             }
 
-      qreal sp = staff->spatium();
-      qreal upOffset = 0.0;
-      qreal downOffset = 0.0;
-      qreal dotAdjust = 0.0;  // additional chord offset to account for dots
+      qreal sp                      = staff->spatium();
+      qreal upOffset                = 0.0;      // offset to apply to upstem chords
+      qreal downOffset              = 0.0;      // offset to apply to downstem chords
+      qreal dotAdjust               = 0.0;      // additional chord offset to account for dots
+      qreal dotAdjustThreshold      = 0.0;      // if it exceeds this amount
 
       // centering adjustments for whole note, breve, and small chords
-      qreal centerUp = 0.0;
-      qreal oversizeUp = 0.0;
-      qreal centerDown = 0.0;
       qreal headDiff;
-      qreal centerThreshold = 0.1 * sp;
+      qreal centerUp          = 0.0;      // offset to apply in order to center upstem chords
+      qreal oversizeUp        = 0.0;      // adjustment to oversized upstem chord needed if laid out to the right
+      qreal centerDown        = 0.0;      // offset to apply in order to center downstem chords
+      qreal centerAdjustUp    = 0.0;      // adjustment to upstem chord needed after centering donwstem chord
+      qreal centerAdjustDown  = 0.0;      // adjustment to downstem chord needed after centering upstem chord
+      qreal centerThreshold   = 0.1 * sp; // only center chords if they differ from nominal by this amount
+
       headDiff = maxUpWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             // larger than nominal
@@ -191,14 +195,17 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       else if (-headDiff > centerThreshold) {
             // smaller than nominal
             centerUp = headDiff * -0.5;
+            centerAdjustDown = centerUp;
             }
       headDiff = maxDownWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             centerDown = headDiff * -0.5;
             maxDownWidth = nominalWidth - centerDown;
             }
-      else if (-headDiff > centerThreshold)
+      else if (-headDiff > centerThreshold) {
             centerDown = headDiff * -0.5;
+            centerAdjustUp = centerDown;
+            }
 
       // handle conflict between upstem and downstem chords
 
@@ -370,8 +377,13 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         else
                               downDots = 0; // no need to adjust for dots in this case
                         upOffset = qMax(clearLeft, clearRight);
-                        // don't center small downstem chords in this case
-                        centerDown = qMin(centerDown, 0.0);
+                        // if downstem chord is small, don't center
+                        // and we might not need as much dot adjustment either
+                        if (centerDown > 0.0) {
+                              centerDown = 0.0;
+                              centerAdjustUp = 0.0;
+                              dotAdjustThreshold = (upOffset - maxDownWidth) + maxUpWidth - 0.3 * sp;
+                              }
                         }
 
                   }
@@ -397,6 +409,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   if (dots > 1)
                         dotAdjust += point(styleS(StyleIdx::dotDotDistance)) * (dots - 1);
                   dotAdjust *= mag;
+                  // only by amount over threshold
+                  dotAdjust = qMax(dotAdjust - dotAdjustThreshold, 0.0);
                   }
             if (separation == 1)
                   dotAdjust += 0.1 * sp;
@@ -410,7 +424,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   Chord* chord = static_cast<Chord*>(e);
                   if (chord->up()) {
                         if (upOffset != 0.0) {
-                              chord->rxpos() += upOffset + oversizeUp;
+                              chord->rxpos() += upOffset + centerAdjustUp + oversizeUp;
                               if (downDots && !upDots)
                                     chord->rxpos() += dotAdjust;
                               }
@@ -419,7 +433,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         }
                   else {
                         if (downOffset != 0.0) {
-                              chord->rxpos() += downOffset;
+                              chord->rxpos() += downOffset + centerAdjustDown;
                               if (upDots && !downDots)
                                     chord->rxpos() += dotAdjust;
                               }
