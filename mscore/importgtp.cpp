@@ -1250,7 +1250,7 @@ void GuitarPro2::read(QFile* fp)
                   tuning[j] = readInt();
             for (int j = strings; j < GP_MAX_STRING_NUMBER; ++j)
                   readInt();
-            /*int midiPort     =*/ readInt(); //  - 1;
+            int midiPort     = readInt() - 1;
             int midiChannel  = readInt() - 1;
             /*int midiChannel2 =*/ readInt(); // - 1;
             int frets        = readInt();
@@ -1303,6 +1303,7 @@ void GuitarPro2::read(QFile* fp)
             ch.pan     = channelDefaults[midiChannel].pan;
             ch.chorus  = channelDefaults[midiChannel].chorus;
             ch.reverb  = channelDefaults[midiChannel].reverb;
+            staff->part()->setMidiChannel(midiChannel, midiPort);
             // missing: phase, tremolo
             ch.updateInitList();
             }
@@ -1838,7 +1839,7 @@ void GuitarPro3::read(QFile* fp)
                   tuning[j] = readInt();
             for (int j = strings; j < GP_MAX_STRING_NUMBER; ++j)
                   readInt();
-            /*int midiPort     =*/ readInt(); // - 1;
+            int midiPort     = readInt() - 1;
             int midiChannel  = readInt() - 1;
             /*int midiChannel2 =*/ readInt(); // - 1;
             int frets        = readInt();
@@ -1891,6 +1892,7 @@ void GuitarPro3::read(QFile* fp)
             ch.pan     = channelDefaults[midiChannel].pan;
             ch.chorus  = channelDefaults[midiChannel].chorus;
             ch.reverb  = channelDefaults[midiChannel].reverb;
+            staff->part()->setMidiChannel(midiChannel, midiPort);
             // missing: phase, tremolo
             ch.updateInitList();
             }
