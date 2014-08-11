@@ -27,14 +27,14 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const char* tremoloName[] = {
-      QT_TR_NOOP("Eighth through stem"),
-      QT_TR_NOOP("16th through stem"),
-      QT_TR_NOOP("32nd through stem"),
-      QT_TR_NOOP("64th through stem"),
-      QT_TR_NOOP("Eighth between notes"),
-      QT_TR_NOOP("16th between notes"),
-      QT_TR_NOOP("32nd between notes"),
-      QT_TR_NOOP("64th between notes")
+      QT_TRANSLATE_NOOP("Tremolo", "Eighth through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "16th through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "32nd through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "64th through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "Eighth between notes"),
+      QT_TRANSLATE_NOOP("Tremolo", "16th between notes"),
+      QT_TRANSLATE_NOOP("Tremolo", "32nd between notes"),
+      QT_TRANSLATE_NOOP("Tremolo", "64th between notes")
       };
 
 Tremolo::Tremolo(Score* score)

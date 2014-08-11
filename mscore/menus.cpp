@@ -721,7 +721,7 @@ Palette* MuseScore::newBagpipeEmbellishmentPalette()
       for (int i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
             BagpipeEmbellishment* b  = new BagpipeEmbellishment(gscore);
             b->setEmbelType(i);
-            sp->append(b, BagpipeEmbellishment::BagpipeEmbellishmentList[i].name);
+            sp->append(b, qApp->translate("bagpipe", BagpipeEmbellishment::BagpipeEmbellishmentList[i].name));
             }
 
       return sp;
