@@ -339,7 +339,7 @@ Fraction Tremolo::tremoloLen() const
 
 QString Tremolo::subtypeName() const
       {
-      return tr(tremoloName[subtype() - int(TremoloType::R8)]);
+      return tremoloName[subtype() - int(TremoloType::R8)];
       }
 
 }
