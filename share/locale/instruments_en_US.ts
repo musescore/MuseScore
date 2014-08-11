@@ -4856,21 +4856,26 @@ Acoustic Guitar</extracomment>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1380"/>
-        <location filename="../instruments/instrumentsxml.h" line="1382"/>
         <location filename="../instruments/instrumentsxml.h" line="1384"/>
-        <location filename="../instruments/instrumentsxml.h" line="1386"/>
         <location filename="../instruments/instrumentsxml.h" line="1388"/>
-        <location filename="../instruments/instrumentsxml.h" line="1390"/>
         <location filename="../instruments/instrumentsxml.h" line="1392"/>
-        <location filename="../instruments/instrumentsxml.h" line="1394"/>
         <location filename="../instruments/instrumentsxml.h" line="1396"/>
         <location filename="../instruments/instrumentsxml.h" line="1400"/>
-        <location filename="../instruments/instrumentsxml.h" line="1402"/>
         <location filename="../instruments/instrumentsxml.h" line="1404"/>
-        <location filename="../instruments/instrumentsxml.h" line="1406"/>
         <location filename="../instruments/instrumentsxml.h" line="1408"/>
-        <location filename="../instruments/instrumentsxml.h" line="1410"/>
         <source>Lute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1382"/>
+        <location filename="../instruments/instrumentsxml.h" line="1386"/>
+        <location filename="../instruments/instrumentsxml.h" line="1390"/>
+        <location filename="../instruments/instrumentsxml.h" line="1394"/>
+        <location filename="../instruments/instrumentsxml.h" line="1398"/>
+        <location filename="../instruments/instrumentsxml.h" line="1402"/>
+        <location filename="../instruments/instrumentsxml.h" line="1406"/>
+        <location filename="../instruments/instrumentsxml.h" line="1410"/>
+        <source>Lt.</source>
         <extracomment>Lute</extracomment>
         <translation type="unfinished"></translation>
     </message>
@@ -4881,54 +4886,63 @@ Acoustic Guitar</extracomment>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1387"/>
-        <source>Lute 5 course</source>
+        <source>Lute 5-course</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1391"/>
-        <source>Lute 6 course</source>
+        <source>Lute 6-course</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1395"/>
-        <source>Lute 7 course</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1398"/>
-        <source>Lute.</source>
-        <extracomment>Lute</extracomment>
+        <source>Lute 7-course</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1399"/>
-        <source>Lute 8 course</source>
+        <source>Lute 8-course</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1403"/>
-        <source>Lute 9 course</source>
+        <source>Lute 9-course</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1407"/>
-        <source>Lute 10 course</source>
+        <source>Lute 10-course</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1411"/>
-        <source>Lute 13 course</source>
+        <source>Lute 13-course</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1414"/>
+        <source>A. Lt.</source>
+        <extracomment>Archlute</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1466"/>
+        <source>5-str. Electric Bass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1469"/>
+        <source>5-str. Electric Bass [Tablature]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1506"/>
+        <source>Viola da gamba (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1412"/>
         <source>Archlute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1414"/>
-        <source>A. Lute</source>
-        <extracomment>Archlute</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5094,7 +5108,7 @@ Tenor Mandola</extracomment>
         <source>El. B.</source>
         <extracomment>Electric Bass
 ----------
-5-Str. Electric Bass</extracomment>
+5-str. Electric Bass</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5111,16 +5125,6 @@ Tenor Mandola</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1465"/>
         <source>Frtl. El. B.</source>
         <extracomment>Fretless Electric Bass</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1466"/>
-        <source>5-Str. Electric Bass</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1469"/>
-        <source>5-Str. Electric Bass [Tablature]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5250,11 +5254,6 @@ Viola da gamba (Tab)</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1503"/>
         <source>Viola da gamba (Tab)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1506"/>
-        <source>Viola da Gamba (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -1379,39 +1379,39 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Koto"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Ko."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
 //: Lute
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lt."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Lute [Tablature]"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
 //: Lute
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 5 course"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
-//: Lute
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 6 course"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 5-course"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
 //: Lute
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 7 course"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
-//: Lute
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute."),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 8 course"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 6-course"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
 //: Lute
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 9 course"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
-//: Lute
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 10 course"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 7-course"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
 //: Lute
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 8-course"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 13 course"),
+//: Lute
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 9-course"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
+//: Lute
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 10-course"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lute"),
+//: Lute
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Lute 13-course"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Archlute"),
 //: Archlute
-QT_TRANSLATE_NOOP("InstrumentsXML", "A. Lute"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "A. Lt."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Theorbo"),
 //: Theorbo
 QT_TRANSLATE_NOOP("InstrumentsXML", "Thb."),
@@ -1463,10 +1463,10 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Electric Bass [Tablature]"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Fretless Electric Bass"),
 //: Fretless Electric Bass
 QT_TRANSLATE_NOOP("InstrumentsXML", "Frtl. El. B."),
-QT_TRANSLATE_NOOP("InstrumentsXML", "5-Str. Electric Bass"),
-//: 5-Str. Electric Bass
+QT_TRANSLATE_NOOP("InstrumentsXML", "5-str. Electric Bass"),
+//: 5-str. Electric Bass
 QT_TRANSLATE_NOOP("InstrumentsXML", "El. B."),
-QT_TRANSLATE_NOOP("InstrumentsXML", "5-Str. Electric Bass [Tablature]"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "5-str. Electric Bass [Tablature]"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Strings"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "String Section"),
 //: String Section
@@ -1503,7 +1503,7 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Vla. d. g."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Viola da gamba (Tab)"),
 //: Viola da gamba (Tab)
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vla. d. g."),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Viola da Gamba (Tablature)"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Viola da gamba (Tablature)"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Violone"),
 //: Violone
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vne."),
