@@ -9,7 +9,6 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
-
 #include "navigate.h"
 #include "element.h"
 #include "clef.h"
@@ -25,6 +24,10 @@
 #include "input.h"
 #include "measure.h"
 #include "page.h"
+#include "spanner.h"
+#include "system.h"
+#include "staff.h"
+#include "barline.h"
 
 namespace Ms {
 
@@ -225,6 +228,267 @@ Note* Score::downAltCtrl(Note* note) const
       return note->chord()->downNote();
       }
 
+Element* Score::firstElement()
+      {
+      return this->firstSegment()->element(0);
+      }
+
+Element* Score::lastElement()
+      {
+      Element* re =0;
+      Segment* seg = this->lastSegment();
+      while (true) {
+            for(int i = (this->staves().size() -1) * VOICES; i < this->staves().size() * VOICES; i++){
+                  if(seg->element(i) != 0){
+                        re = seg->element(i);
+                        }
+                  }
+            if(re){
+                  if(re->type() == Element::Type::CHORD){
+                        return static_cast<Chord*>(re)->notes().first();
+                        }
+                  return re;
+                  }
+            seg = seg->prev1MM(Segment::Type::All);
+            }
+      }
+
+//----------------------------------------------------------------------
+//   next element
+//   returns the next non-attached element
+//   (Note, Rest, Cleff, Time signature, Key signature, Barline, etc.)
+//   for attached elements (annotations and articulations) it goes to
+//   the closest non-attached element
+//----------------------------------------------------------------------
+
+Element* Score::nextElement(Element *e)
+      {
+      //if nothing is selected, I'm starting at the begining of the score
+      if (!e)
+            return this->firstElement();
+
+      int  activeTrack;
+      int  activeStaff;
+      bool goToNextSeg = true;
+      Segment* seg;
+      Element* re = 0;
+
+      //finding the active staff
+      if (e->type() == Element::Type::BAR_LINE)
+            activeTrack = _is.prevTrack();
+      else
+            activeTrack = e->track();
+
+      activeStaff = activeTrack/VOICES;
+
+      //for spanners I find the starting segment
+      if (e->inherits("Ms::Spanner")) {
+            Spanner* s = static_cast<Spanner*>(e);
+            seg = s->startSegment();
+            goToNextSeg = false;
+            }
+      else if (e->inherits("Ms::SpannerSegment")) {
+            SpannerSegment* ss = static_cast<SpannerSegment*>(e);
+            seg = ss->spanner()->startSegment();
+            goToNextSeg = false;
+            }
+      else {
+            //if it is a note, or rest (for fermata) attached element, I'm returning the note/rest
+            if (e->parent()->type() == Element::Type::NOTE || e->parent()->inherits("Ms::Rest"))
+                  return e->parent();
+
+            //if it's a note or rest, I'm looking I'm looking in the segment to find the next one
+            if (e->type() == Element::Type::NOTE || e->inherits("Ms::Rest")) {
+                  Note* n = qobject_cast<Note*>(e);
+                  //for grace notes
+                  if (n && n->noteType() != NoteType::NORMAL) {
+                        goToNextSeg = false;
+                        }
+                  else {
+                        re = downAlt(e);
+                        if (re && re != e && (re->track()/VOICES == activeStaff)) {
+                              Segment* reSeg = (re->type() == Element::Type::NOTE) ? static_cast<Note*>(re)->chord()->segment() : static_cast<Segment*>(re->parent());
+                              Segment* eSeg  = (e->type()  == Element::Type::NOTE) ? static_cast<Note*>(e)->chord()->segment()  : static_cast<Segment*>(e->parent());
+                              if (eSeg == reSeg)
+                                    return re;
+                              }
+                        }
+                  }
+
+            //else, I'm finding the parent segment of the element
+            Element* p = e;
+            while (!p->inherits("Ms::Segment") && !p->inherits("Ms::System")) {
+                  if (p->type() == Element::Type::CHORD && e->type() != Element::Type::NOTE)
+                        goToNextSeg = false;
+                  p = p->parent();
+                  }
+            if (p->inherits("Ms::System")) { //starting from the first segment of that system
+                  System* sys = static_cast<System*>(p);
+                  return sys->firstMeasure()->segments()->first()->element(0);
+                  }
+            seg = static_cast<Segment*>(p);
+            //if the element is an annotation
+            auto i = std::find(seg->annotations().begin(), seg->annotations().end(), e);
+            if (i != seg->annotations().end())
+                  goToNextSeg = false;
+            }
+
+      //if necesary I'm moving to the previous segment that has elements
+      //on the current staff
+      if (goToNextSeg) {
+            re = 0;
+            while(!re) {
+                  seg = seg->next1MM(Segment::Type::All);
+                  if (!seg) //end of staff, or score
+                        break;
+
+                  re = seg->firstElement(activeStaff);
+                  }
+            }
+      else {
+            re = seg->firstElement(activeStaff);
+            }
+
+      if (!seg) { //end of staff
+            seg = this->firstSegment();
+            //if there are no more staffs it will return NULL,
+            //else the ;ast element of the last segment of the previous staff
+            return seg->element( (activeStaff + 1) * VOICES );
+            }
+
+      return re;
+      }
+
+
+//----------------------------------------------------------------------
+//   prev element
+//   returns the previous non-attached element
+//   (Note, Rest, Cleff, Time signature, Key signature, Barline, etc.)
+//   for attached elements (annotations and articulations) it goes to
+//   the closest non-attached element
+//----------------------------------------------------------------------
+
+Element* Score::prevElement(Element *e)
+      {
+      Element* re = 0;
+      Segment* seg;
+      //if nothing is selected, I'm starting at the end of the score
+      if (!e)
+            return this->lastElement();
+
+      //finding the active staff
+      int activeTrack;
+      int activeStaff;
+
+      if (e->type() == Element::Type::BAR_LINE)
+            activeTrack = _is.prevTrack();
+      else
+            activeTrack = e->track();
+
+      activeStaff = activeTrack/VOICES;
+
+      //for spanners I find the last segment
+      bool goToPrevSeg = true;
+      if (e->inherits("Ms::Spanner")) {
+            Spanner* s = static_cast<Spanner*>(e);
+            seg = s->endSegment();
+            goToPrevSeg = false;
+            }
+      else if (e->inherits("Ms::SpannerSegment")) {
+            SpannerSegment* ss = static_cast<SpannerSegment*>(e);
+            seg = ss->spanner()->endSegment();
+            goToPrevSeg = false;
+            }
+      else {
+            //if it is a note, or rest (for fermata) attached element, I'm returning the note/rest
+            if (e->parent()->type() == Element::Type::NOTE || e->parent()->inherits("Ms::Rest"))
+                  return e->parent();
+
+            //if it's a note or rest, I'm looking I'm looking in the segment to find the previous one
+            if (e->type() == Element::Type::NOTE || e->inherits("Ms::Rest")) {
+                  Note* n = qobject_cast<Note*>(e);
+                  //for grace notes
+                  if (n && n->noteType() != NoteType::NORMAL) {
+                        goToPrevSeg = false;
+                        }
+                  else {
+                        re = upAlt(e);
+                        if (re && re != e && (re->track()/VOICES == activeStaff)) {
+                              Segment* reSeg = (re->type() == Element::Type::NOTE) ? static_cast<Note*>(re)->chord()->segment() : static_cast<Segment*>(re->parent());
+                              Segment* eSeg  = (e->type()  == Element::Type::NOTE) ? static_cast<Note*>(e)->chord()->segment()  : static_cast<Segment*>(e->parent());
+                              if (eSeg == reSeg)
+                                    return re;
+                              }
+                        }
+                  }
+
+            //else, I'm finding the parent segment of the element
+            Element* p = e;
+            while (!p->inherits("Ms::Segment") && !p->inherits("Ms::System")) {
+                  if (p->type() == Element::Type::CHORD && e->type() != Element::Type::NOTE)
+                        goToPrevSeg = false;
+                  p = p->parent();
+                  }
+            if (p->inherits("Ms::System")) {
+                  //searching for the previous segment that has elements on the previous staff
+                  System* sys = static_cast<System*>(p);
+                  seg = sys->firstMeasure()->first();
+                  re = 0;
+                  while (!re) {
+                        seg = seg->prev1MM();
+                        if (!seg)
+                              return prevElement(0);
+
+                        if (seg->segmentType() == Segment::Type::EndBarLine)
+                              _is.setTrack((this->staves().size() - 1) * VOICES); //corection
+
+                        re = seg->lastElement(this->staves().size() - 1);
+                        }
+                  return re;
+                  }
+            seg = static_cast<Segment*>(p);
+            //finding if the element is an annotation
+            auto i = std::find(seg->annotations().begin(), seg->annotations().end(), e);
+            if (i != seg->annotations().end())
+                  goToPrevSeg = false;
+            }
+
+      if (goToPrevSeg) {
+            re = 0;
+            while (!re) {
+                  seg = seg->prev1MM(Segment::Type::All);
+                  if (!seg) //end of staff, or score
+                        break;
+
+                  re = seg->lastElement(activeStaff);
+                  }
+            }
+      else {
+            re = seg->lastElement(activeStaff);
+            }
+
+      if (!seg) { //end of staff
+            if (activeStaff -1 < 0) //end of score
+                  return 0;
+
+            re = 0;
+            seg = this->lastSegment();
+            while (true) {
+                  if (seg->segmentType() == Segment::Type::EndBarLine)
+                        _is.setTrack( (activeStaff -1) * VOICES ); //correction
+
+                  if ((re = seg->lastElement(activeStaff -1)) != 0)
+                        return re;
+
+                  seg = seg->prev1(Segment::Type::All);
+                  }
+            }
+
+      return re;
+      }
+
+
+
 //---------------------------------------------------------
 //   upStaff
 //---------------------------------------------------------
@@ -409,7 +673,7 @@ ChordRest* Score::prevMeasure(ChordRest* element)
       bool last = false;
 
       if ((selection().isRange())
-         && selection().isEndActive() && selection().startSegment()->tick() <= startTick)
+          && selection().isEndActive() && selection().startSegment()->tick() <= startTick)
             last = true;
       else if (element->tick() != startTick) {
             measure = element->measure();

@@ -984,6 +984,11 @@ class Score : public QObject {
       Element* downAlt(Element*);
       Note* downAltCtrl(Note*) const;
 
+      Element* firstElement();
+      Element* lastElement();
+      Element* nextElement(Element*);
+      Element* prevElement(Element*);
+
       void cmdInsertClef(Clef* clef, ChordRest* cr);
 
       friend class ChangeSynthesizerState;

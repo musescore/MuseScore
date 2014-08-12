@@ -2465,6 +2465,8 @@ void ScoreView::cmdGotoElement(Element* e)
             if (e->type() == Element::Type::NOTE)
                   score()->setPlayNote(true);
             score()->select(e, SelectType::SINGLE, 0);
+            if (e)
+                  adjustCanvasPosition(e, false);
             moveCursor();
             }
       }
@@ -2673,6 +2675,26 @@ void ScoreView::cmd(const QAction* a)
             if (el && el->type() == Element::Type::NOTE)
                   cmdGotoElement(score()->downAltCtrl(static_cast<Note*>(el)));
             }
+      else if (cmd == "next-element"){
+            Element* el = score()->selection().element();
+            if (!el && !score()->selection().elements().isEmpty() )
+                el = score()->selection().elements().first();
+
+            cmdGotoElement(score()->nextElement(el));
+            }
+      else if (cmd == "prev-element"){
+            Element* el = score()->selection().element();
+            if (!el && !score()->selection().elements().isEmpty())
+                el = score()->selection().elements().last();
+
+            cmdGotoElement(score()->prevElement(el));
+      }
+      else if (cmd == "home"){
+            cmdGotoElement(score()->firstElement());
+      }
+      else if (cmd == "end"){
+            cmdGotoElement(score()->lastElement());
+      }
       else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
       else if (cmd == "rest-1")
