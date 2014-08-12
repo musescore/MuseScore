@@ -179,7 +179,9 @@ void EditStaffType::setValues()
                   fretY->setValue(staffType.fretFontUserY());
 
                   numbersRadio->setChecked(staffType.useNumbers());
+                  lettersRadio->setChecked(!staffType.useNumbers());
                   onLinesRadio->setChecked(staffType.onLines());
+                  aboveLinesRadio->setChecked(!staffType.onLines());
                   linesThroughRadio->setChecked(staffType.linesThrough());
                   linesBrokenRadio->setChecked(!staffType.linesThrough());
 
