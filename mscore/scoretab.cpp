@@ -17,7 +17,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-
+#include "shortcut.h"
+#include "musescore.h"
 #include "config.h"
 #include "scoretab.h"
 #include "scoreview.h"
@@ -39,22 +40,29 @@ namespace Ms {
 ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
    : QWidget(parent)
       {
+      mainWindow = static_cast<MuseScore*>(parent);
       scoreList = sl;
       QVBoxLayout* layout = new QVBoxLayout;
       setLayout(layout);
       layout->setSpacing(0);
       layout->setMargin(2);
 
-      tab = new QTabBar;
+      QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::SCORE_TAB, Qt::WidgetWithChildrenShortcut);
+      ag->setParent(this);
+      this->addActions(ag->actions());
+
+      connect(ag, SIGNAL(triggered(QAction*)), this, SIGNAL(actionTriggered(QAction*)));
+
+      tab = new QTabBar(this);
       tab->setExpanding(false);
       tab->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
-      tab->setFocusPolicy(Qt::StrongFocus);
+      tab->setFocusPolicy(Qt::ClickFocus);
       tab->setTabsClosable(true);
 
-      tab2 = new QTabBar;
+      tab2 = new QTabBar(this);
       tab2->setExpanding(false);
       tab2->setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
-      tab2->setFocusPolicy(Qt::StrongFocus);
+      tab2->setFocusPolicy(Qt::ClickFocus);
       tab2->setVisible(false);
       tab2->setTabsClosable(false);
 

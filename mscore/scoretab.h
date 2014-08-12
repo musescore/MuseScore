@@ -20,7 +20,7 @@
 
 #ifndef __SCORETAB_H__
 #define __SCORETAB_H__
-
+#include"musescore.h"
 namespace Ms {
 
 class ScoreView;
@@ -50,12 +50,13 @@ class ScoreTab : public QWidget {
       QTabBar* tab;                 // list of scores
       QTabBar* tab2;                // list of excerpts for current score
       QStackedLayout* stack;
-
+      MuseScore* mainWindow;
       void clearTab2();
 
    signals:
       void currentScoreViewChanged(ScoreView*);
       void tabCloseRequested(int);
+      void actionTriggered(QAction*);
 
    public slots:
       void updateExcerpts();
@@ -72,7 +73,6 @@ class ScoreTab : public QWidget {
       int count() const       { return scoreList->size(); }
       ScoreView* view(int) const;
       QSplitter* viewSplitter(int n) const;
-
       ScoreView* view() const { return view(currentIndex()); }
       bool contains(ScoreView*) const;
       void initScoreView(int idx, double mag, MagIdx magIdx, double xoffset, double yoffset);

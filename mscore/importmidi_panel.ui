@@ -29,7 +29,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -63,6 +72,9 @@
         </property>
         <item>
          <widget class="QToolButton" name="toolButtonHideMidiPanel">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Close MIDI import panel</string>
           </property>
@@ -102,6 +114,9 @@
             <height>29</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::ClickFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Move track up</string>
           </property>
@@ -117,6 +132,9 @@
             <width>0</width>
             <height>29</height>
            </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::ClickFocus</enum>
           </property>
           <property name="toolTip">
            <string>Move track down</string>
@@ -179,6 +197,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::ClickFocus</enum>
+          </property>
           <property name="editable">
            <bool>true</bool>
           </property>
@@ -212,6 +233,9 @@
           <width>0</width>
           <height>29</height>
          </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
         </property>
         <property name="toolTip">
          <string>Apply MIDI import operations</string>
