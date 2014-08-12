@@ -12,6 +12,7 @@
 
 #include <fenv.h>
 
+#include "palettebox.h"
 #include "config.h"
 #include "musescore.h"
 #include "scoreview.h"
@@ -96,6 +97,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "fluid/fluid.h"
 #include "qmlplugin.h"
+#include "accessibletoolbutton.h"
 
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
@@ -443,6 +445,7 @@ MuseScore::MuseScore()
       lastCmd               = 0;
       lastShortcut          = 0;
       importmidiPanel      = 0;
+      this->setFocusPolicy(Qt::NoFocus);
 
       if (!preferences.styleName.isEmpty()) {
             QFile f(preferences.styleName);
@@ -460,7 +463,6 @@ MuseScore::MuseScore()
       _modeText->setAutoFillBackground(false);
       _modeText->setObjectName("modeLabel");
       _statusBar = new QStatusBar;
-
       hRasterAction = getAction("hraster");
       hRasterAction->setCheckable(true);
       vRasterAction = getAction("vraster");
@@ -509,15 +511,9 @@ MuseScore::MuseScore()
 
       // otherwise unused actions:
       //   must be added somewere to work
-
-      QActionGroup* ag = new QActionGroup(this);
-      ag->setExclusive(false);
-      foreach(const Shortcut* s, Shortcut::shortcuts()) {
-            QAction* a = s->action();
-            if (a)
-                  ag->addAction(a);
-            }
-      addActions(ag->actions());
+      QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::MAIN_WINDOW);
+      ag->setParent(this);
+      this->addActions(ag->actions());
       connect(ag, SIGNAL(triggered(QAction*)), SLOT(cmd(QAction*)));
 
       mainWindow = new QSplitter;
@@ -539,6 +535,7 @@ MuseScore::MuseScore()
       mainScore->setLayout(layout);
 
       _navigator = new NScrollArea;
+      _navigator->setFocusPolicy(Qt::NoFocus);
       mainWindow->addWidget(_navigator);
       showNavigator(preferences.showNavigator);
 
@@ -566,6 +563,7 @@ MuseScore::MuseScore()
       hl->setSpacing(0);
       importmidiShowPanel->setLayout(hl);
       QPushButton *b = new QPushButton("Show MIDI import panel");
+      b->setFocusPolicy(Qt::ClickFocus);
       importmidiShowPanel->setVisible(false);
       connect(b, SIGNAL(clicked()), SLOT(showMidiImportPanel()));
       connect(importmidiPanel, SIGNAL(closeClicked()), importmidiShowPanel, SLOT(show()));
@@ -582,18 +580,19 @@ MuseScore::MuseScore()
       }
 
       splitter = new QSplitter;
-
-      tab1 = new ScoreTab(&scoreList);
+      tab1 = new ScoreTab(&scoreList, this);
       tab1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       connect(tab1, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
       connect(tab1, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
+      connect(tab1, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
       splitter->addWidget(tab1);
 
       if (splitScreen()) {
-            tab2 = new ScoreTab(&scoreList);
+            tab2 = new ScoreTab(&scoreList, this);
             tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
             connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
+            connect(tab2, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
             splitter->addWidget(tab2);
             tab2->setVisible(false);
             }
@@ -634,64 +633,72 @@ MuseScore::MuseScore()
 
       fileTools = addToolBar(tr("File Operations"));
       fileTools->setObjectName("file-operations");
-      fileTools->addAction(getAction("file-new"));
-      fileTools->addAction(getAction("file-open"));
-      fileTools->addAction(getAction("file-save"));
-      fileTools->addAction(getAction("print"));
-      fileTools->addAction(getAction("musescore-connect"));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("file-new")));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("file-open")));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("file-save")));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("print")));
+      fileTools->addWidget(new AccessibleToolButton(fileTools, getAction("musescore-connect")));
       fileTools->addSeparator();
 
       a = getAction("undo");
       a->setEnabled(false);
-      fileTools->addAction(a);
+      fileTools->addWidget(new AccessibleToolButton(fileTools, a));
 
       a = getAction("redo");
       a->setEnabled(false);
-      fileTools->addAction(a);
+      fileTools->addWidget(new AccessibleToolButton(fileTools, a));
 
       fileTools->addSeparator();
-
-      transportTools = addToolBar(tr("Transport Tools"));
-      transportTools->setObjectName("transport-tools");
-#ifdef HAS_MIDI
-      transportTools->addAction(getAction("midi-on"));
-#endif
-      transportTools->addSeparator();
-      transportTools->addAction(getAction("rewind"));
-      //transportTools->addAction(getAction("loop-in"));
-      transportTools->addAction(getAction("play"));
-      transportTools->addAction(getAction("loop"));
-      //transportTools->addAction(getAction("loop-out"));
-      transportTools->addSeparator();
-      a = getAction("repeat");
-      a->setChecked(MScore::playRepeats);
-      transportTools->addAction(a);
-      a = getAction("pan");
-      a->setChecked(MScore::panPlayback);
-      transportTools->addAction(a);
-
-      transportTools->addAction(metronomeAction);
-
       mag = new MagBox;
+      mag->setFocusPolicy(Qt::StrongFocus);
+      mag->setAccessibleName(tr("Zoom"));
       mag->setFixedHeight(preferences.iconHeight + 10);  // hack
       connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
       fileTools->addWidget(mag);
       viewModeCombo = new QComboBox(this);
+#if defined(Q_OS_MAC)
+      viewModeCombo->setFocusPolicy(Qt::StrongFocus);
+#else
+      viewModeCombo->setFocusPolicy(Qt::TabFocus);
+#endif
+      viewModeCombo->setAccessibleName(tr("View Mode"));
       viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
       viewModeCombo->addItem(tr("Page View"));
       viewModeCombo->addItem(tr("Continuous View"));
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
       fileTools->addWidget(viewModeCombo);
 
+      transportTools = addToolBar(tr("Transport Tools"));
+      transportTools->setObjectName("transport-tools");
+#ifdef HAS_MIDI
+      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("midi-on")));
+#endif
+      transportTools->addSeparator();
+      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("rewind")));
+      //transportTools->addAction(getAction("loop-in"));
+      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("play")));
+      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("loop")));
+      //transportTools->addAction(getAction("loop-out"));
+      transportTools->addSeparator();
+      a = getAction("repeat");
+      a->setChecked(MScore::playRepeats);
+      transportTools->addWidget(new AccessibleToolButton(transportTools, a));
+      a = getAction("pan");
+      a->setChecked(MScore::panPlayback);
+      transportTools->addWidget(new AccessibleToolButton(transportTools, a));
+
+      transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
+
+
       cpitchTools = addToolBar(tr("Concert Pitch"));
       cpitchTools->setObjectName("pitch-tools");
-      cpitchTools->addAction(getAction("concert-pitch"));
+      cpitchTools->addWidget(new AccessibleToolButton( cpitchTools, getAction("concert-pitch")));
 
       QToolBar* foto = addToolBar(tr("Foto Mode"));
       foto->setObjectName("foto-tools");
       a = getAction("fotomode");
       a->setCheckable(true);
-      foto->addAction(a);
+      foto->addWidget(new AccessibleToolButton(foto, a));
 
       addToolBarBreak();
 
@@ -748,6 +755,7 @@ MuseScore::MuseScore()
             QAction* a = getAction(voiceActions[i]);
             a->setCheckable(true);
             tb->setDefaultAction(a);
+            tb->setFocusPolicy(Qt::ClickFocus);
             entryTools->addWidget(tb);
             }
 
@@ -3419,10 +3427,11 @@ void MuseScore::splitWindow(bool horizontal)
       {
       if (!_splitScreen) {
             if (tab2 == 0) {
-                  tab2 = new ScoreTab(&scoreList);
+                  tab2 = new ScoreTab(&scoreList, this);
                   tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                   connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
                   connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
+                  connect(tab2, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
                   splitter->addWidget(tab2);
                   }
             tab2->setVisible(true);
@@ -3978,6 +3987,7 @@ void MuseScore::endCmd()
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
             cs->end();
+            currentScoreView()->setFocus();
             }
       else {
             if (inspector)

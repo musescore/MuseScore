@@ -152,7 +152,8 @@ QT4_WRAP_CPP (mocs
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
       importmidi_panel.h importmidi_delegate.h importmidi_view.h
       debugger/debugger.h
-      resourceManager.h downloadUtils.h
+      resourceManager.h downloadUtils.h accessibletoolbutton.h
+
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -277,7 +278,7 @@ add_executable ( ${ExecutableName}
       importmidi_simplify.cpp importmidi_voice.cpp importmidi_view.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp
-      continuouspanel.cpp
+      continuouspanel.cpp accessibletoolbutton.cpp
 
       ${OMR_FILES}
       ${AUDIO}
