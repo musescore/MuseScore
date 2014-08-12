@@ -57,6 +57,10 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       staffText = st;
 
+#ifndef AEOLUS
+	tabWidget->removeTab(2);
+#endif
+
       vb[0][0] = voice1_1;
       vb[0][1] = voice1_2;
       vb[0][2] = voice1_3;

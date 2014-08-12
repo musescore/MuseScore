@@ -6927,6 +6927,7 @@
                   <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
+<!--
             <Instrument id="aeolus-organ">
                   <longName pos="2">Man.</longName>
                   <longName pos="5">Ped.</longName>
@@ -7267,6 +7268,7 @@
                   <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
+-->
             <!-- Electronic Organ has been removed as the term is ambiguous it has been replaced by several different organ types-->
             <Instrument id="harmonium">
                   <longName>Harmonium</longName>
