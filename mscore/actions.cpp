@@ -2498,7 +2498,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL,
+         STATE_NORMAL | STATE_LOCK,
          0,
          "lock",
          QT_TRANSLATE_NOOP("action","Lock Score")
