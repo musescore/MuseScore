@@ -304,6 +304,7 @@ void System::layout2()
       qreal y = 0.0;
       int lastStaffIdx  = 0;   // last visible staff
       int firstStaffIdx = -1;
+      qreal lastStaffDistanceDown = 0.0;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff = score()->staff(staffIdx);
             StyleIdx downDistance;
@@ -335,6 +336,7 @@ void System::layout2()
 
             SysStaff* s    = _staves[staffIdx];
             qreal distDown = score()->styleS(downDistance).val() * _spatium + userDist;
+            qreal nominalDistDown = distDown;
             qreal distUp   = 0.0;
             int n = ml.size();
             for (int i = 0; i < n; ++i) {
@@ -356,6 +358,7 @@ void System::layout2()
             s->bbox().setRect(_leftMargin, y + dup, width() - _leftMargin, sHeight);
             y += dup + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
+            lastStaffDistanceDown = distDown - nominalDistDown;
             if (firstStaffIdx == -1)
                   firstStaffIdx = staffIdx;
             }
@@ -363,6 +366,8 @@ void System::layout2()
             firstStaffIdx = 0;
 
       qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
+      if (lastStaffIdx < nstaves - 1)
+            systemHeight += lastStaffDistanceDown;
       setHeight(systemHeight);
 
       int n = ml.size();
