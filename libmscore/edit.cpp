@@ -2141,13 +2141,14 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
             int track = (cr->track() / VOICES) * VOICES;
             ncr = s ? static_cast<ChordRest*>(s->element(track)) : 0;
             }
-      _is.setSegment(ncr ? ncr->segment() : 0);
-      if (doSelect)
-            select(ncr, SelectType::SINGLE, 0);
-      if (ncr)
+      if (ncr) {
+            _is.setSegment(ncr->segment());
+            if (doSelect)
+                  select(ncr, SelectType::SINGLE, 0);
             setPlayPos(ncr->tick());
-      for (MuseScoreView* v : viewer)
-            v->moveCursor();
+            for (MuseScoreView* v : viewer)
+                  v->moveCursor();
+            }
       }
 
 //---------------------------------------------------------
