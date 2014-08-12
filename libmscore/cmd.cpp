@@ -1767,7 +1767,7 @@ Element* Score::move(const QString& cmd)
             el = nextChordRest(cr);
             }
       else if (cmd == "prev-chord") {
-            if (noteEntryMode()) {
+            if (noteEntryMode() && _is.segment()) {
                   Segment* s = _is.segment()->prev1();
                   //
                   // if _is._segment is first chord/rest segment in measure
