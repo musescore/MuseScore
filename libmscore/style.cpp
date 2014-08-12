@@ -247,106 +247,106 @@ void initStyle(MStyle* s)
 
       // this is an empty style, no offsets are allowed
       // never show this style
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", ""), ff, 10, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", ""), ff, 10, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, false,
          false, Spatium(.2), Spatium(.5), 25, QColor(Qt::black), false, false, QColor(Qt::black),
          QColor(255, 255, 255, 0), TextStyleHidden::ALWAYS));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Title"),    ff, 24, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Title"),    ff, 24, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Subtitle"), ff, 14, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Subtitle"), ff, 14, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::TOP,    QPointF(0, MM(10)), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Composer"), ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Composer"), ff, 12, false, false, false,
          AlignmentFlags::RIGHT   | AlignmentFlags::BOTTOM, QPointF(), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Lyricist"), ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyricist"), ff, 12, false, false, false,
          AlignmentFlags::LEFT    | AlignmentFlags::BOTTOM, QPointF(), OffsetType::ABS));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Lyrics Odd Lines"),          ff, 11, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Odd Lines"),          ff, 11, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Lyrics Even Lines"),         ff, 11, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Even Lines"),         ff, 11, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Fingering"),                 ff,  8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Fingering"),                 ff,  8, false, false, false,
          AlignmentFlags::CENTER, QPointF(), OffsetType::ABS, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Instrument Name (Long)"),    ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Long)"),    ff, 12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OffsetType::ABS, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Instrument Name (Short)"),   ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Short)"),   ff, 12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OffsetType::ABS, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Instrument Name (Part)"),    ff, 18, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Part)"),    ff, 18, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BOTTOM, QPointF(), OffsetType::ABS));
 
       // dynamics size is 12pt for bravura-text
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Dynamics"),  ff, 12, false, false,false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Dynamics"),  ff, 12, false, false,false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0.0, 8.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Technique"), ff, 12, false, true, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Technique"), ff, 12, false, true, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OffsetType::SPATIUM));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Tempo"), ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tempo"), ff, 12, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -4.0), OffsetType::SPATIUM,
          true, false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Metronome"),      ff, 12, true, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Metronome"),      ff, 12, true, false, false,
          AlignmentFlags::LEFT));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Measure Number"), ff, 8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Measure Number"), ff, 8, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(.0, -2.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Translator"),     ff, 11, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Translator"),     ff, 11, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::TOP, QPointF(0, 6)));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Tuplet"),         ff,  10, false, true, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tuplet"),         ff,  10, false, true, false,
          AlignmentFlags::CENTER, QPointF(), OffsetType::ABS, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "System"), ff,  10, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "System"), ff,  10, false, false, false,
          AlignmentFlags::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true,
          false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Staff"),        ff,  10, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Staff"),        ff,  10, false, false, false,
          AlignmentFlags::LEFT, QPointF(0, -4.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Chord Symbol"), ff,  12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Chord Symbol"), ff,  12, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Rehearsal Mark"), ff,  14, true, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Rehearsal Mark"), ff,  14, true, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, -3.0), OffsetType::SPATIUM, true,
          true, Spatium(.2), Spatium(.5), 20, Qt::black, false, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Repeat Text Left"), ff,  20, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Left"), ff,  20, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true,
          false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Repeat Text Right"), ff,  12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Right"), ff,  12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
 
       // for backward compatibility
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Repeat Text"), ff,  12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text"), ff,  12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
 
       // y offset may depend on voltaHook style element
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Volta"),     ff, 11, true, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Volta"),     ff, 11, true, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.5, 1.9), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Frame"),     ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Frame"),     ff, 12, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::TOP));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Text Line"), ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Text Line"), ff, 12, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Glissando"), ff, 8, false, true, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Glissando"), ff, 8, false, true, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "String Number"), ff,  8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "String Number"), ff,  8, false, false, false,
          AlignmentFlags::CENTER, QPointF(0, -5.0), OffsetType::SPATIUM, true,
          true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Ottava"),            ff, 12, false, true, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Ottava"),            ff, 12, false, true, false,
          AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Bend"),              ff, 8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Bend"),              ff, 8, false, false, false,
          AlignmentFlags::CENTER | AlignmentFlags::BOTTOM, QPointF(), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Header"),            ff, 8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Header"),            ff, 8, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::TOP));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Footer"),            ff, 8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Footer"),            ff, 8, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(0.0, MM(5)), OffsetType::ABS));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Instrument Change"), ff,  12, true, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Change"), ff,  12, true, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BOTTOM, QPointF(0, -3.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Lyrics Verse"),      ff, 11, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Verse"),      ff, 11, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::TOP, QPointF(), OffsetType::SPATIUM, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("MuseScore", "Figured Bass"), "MScoreBC", 8, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Figured Bass"), "MScoreBC", 8, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, 6), OffsetType::SPATIUM, true,
          false, Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
          false, QColor(Qt::black), QColor(255, 255, 255, 0),                   // default params
