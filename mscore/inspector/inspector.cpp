@@ -123,8 +123,6 @@ void Inspector::setElements(const QList<Element*>& l)
       Element* e = l.isEmpty() ? 0 : l[0];
       if (e == 0 || _element == 0 || (_el != l)) {
             _el = l;
-            if (ie)
-                  ie->deleteLater();
             ie = 0;
             _element = e;
 
@@ -233,6 +231,9 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         }
                   }
+            QWidget* ww = sa->takeWidget();
+            if (ww)
+                  ww->deleteLater();
             sa->setWidget(ie);
             // setMinimumWidth(ie->width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
             setMinimumWidth(ie->sizeHint().width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
