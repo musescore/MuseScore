@@ -1042,7 +1042,8 @@ void PreferenceDialog::updateSCListView()
                   newItem->setIcon(0, *icons[int(s->icon())]);
             newItem->setText(1, s->keysToString());
             newItem->setData(0, Qt::UserRole, s->key());
-            shortcutList->addTopLevelItem(newItem);
+            if (enableExperimental || (strncmp(s->key(), "media", 5) != 0 && strncmp(s->key(), "layer", 5) != 0 && strncmp(s->key(), "insert-fretframe", 16) != 0))
+                shortcutList->addTopLevelItem(newItem);
             }
       shortcutList->resizeColumnToContents(0);
       }
