@@ -48,7 +48,7 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
       tp->setScore(true, cs);
 
       textNames->clear();
-      for (int i = 0; i < styles.size(); ++i) {
+      for (int i = 0, n = styles.size(); i < n; ++i) {
 //            const TextStyle& s = styles.at(i);
             if ( (styles.at(i).hidden()& TextStyleHidden::IN_EDITOR) == 0) {
                   int count = textNames->count();
