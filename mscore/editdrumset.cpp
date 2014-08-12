@@ -32,7 +32,7 @@ namespace Ms {
 enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 
 //---------------------------------------------------------
-//   noteHeadNames
+//   noteHeadNames (see also libmscore/note.cpp)
 //---------------------------------------------------------
 
 const char* noteHeadNames[int(NoteHead::Group::HEAD_GROUPS)] = {
@@ -48,6 +48,7 @@ const char* noteHeadNames[int(NoteHead::Group::HEAD_GROUPS)] = {
       QT_TRANSLATE_NOOP("noteheadnames", "fa"),
       QT_TRANSLATE_NOOP("noteheadnames", "la"),
       QT_TRANSLATE_NOOP("noteheadnames", "ti"),
+      //QT_TRANSLATE_NOOP("noteheadnames", "alt brevis."),
       };
 
 //---------------------------------------------------------
@@ -70,7 +71,7 @@ EditDrumset::EditDrumset(Drumset* ds, QWidget* parent)
 
       noteHead->addItem(tr("invalid"));
       for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS) - 2 ; ++i)
-            noteHead->addItem(noteHeadNames[i]);
+            noteHead->addItem(qApp->translate("noteheadnames", noteHeadNames[i]));
 
       connect(pitchList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
          SLOT(itemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
