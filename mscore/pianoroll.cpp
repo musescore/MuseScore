@@ -50,7 +50,6 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       staff    = 0;
 
       QWidget* mainWidget = new QWidget;
-
       QToolBar* tb = addToolBar(tr("toolbar 1"));
       tb->addAction(getAction("undo"));
       tb->addAction(getAction("redo"));
