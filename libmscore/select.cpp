@@ -456,51 +456,7 @@ void Selection::updateSelectedElements()
                               continue;
                         appendFiltered(e);
                         }
-#if 0 // TODO-S
-                  for(Spanner* sp = s->spannerFor(); sp; sp = sp->next()) {
-                        if (sp->track() < startTrack || sp->track() >= endTrack)
-                              continue;
-                        if (sp->endElement()->type() == Element::SEGMENT) {
-                              Segment* s2 = static_cast<Segment*>(sp->endElement());
-                              if (_endSegment && (s2->tick() < _endSegment->tick()))
-                                    _el.append(sp);
-                              }
-                        else {
-                              qDebug("1spanner element type %s", sp->endElement()->name());
-                              }
-                        }
-#endif
                   }
-
-#if 0 // TODO-S
-            // for each measure in the selection, check if it contains spanners within our selection
-            Measure* sm = _startSegment->measure();
-            Measure* em = _endSegment ? _endSegment->measure()->nextMeasure() : 0;
-            // int endTick = _endSegment ? _endSegment->tick() : score()->lastMeasure()->endTick();
-            for (Measure* m = sm; m && m != em; m = m->nextMeasure()) {
-
-                  for(Spanner* sp = m->spannerFor(); sp; sp = sp->next()) {
-                        // ignore spanners belonging to other tracks
-                        if (sp->track() < startTrack || sp->track() >= endTrack)
-                              continue;
-                        // if spanner ends between _startSegment and _endSegment, select it
-                        if (sp->endElement()->type() == Element::Type::SEGMENT) {
-                              Segment* s2 = static_cast<Segment*>(sp->endElement());
-                              if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
-                                    _el.append(sp);
-                              }
-                        else if (sp->endElement()->type() == Element::Type::MEASURE) {
-                              Measure* s2 = static_cast<Measure*>(sp->endElement());
-                              if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
-                                    _el.append(sp);
-                              }
-                        else {
-                              qDebug("2spanner element type %s", sp->endElement()->name());
-                              }
-                        }
-
-                  }
-#endif
             }
       int stick = startSegment()->tick();
       int etick = tickEnd();
