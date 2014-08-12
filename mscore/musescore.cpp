@@ -3983,6 +3983,7 @@ void MuseScore::endCmd()
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
             cs->end();
+            currentScoreView()->setFocus();
             }
       else {
             if (inspector)
