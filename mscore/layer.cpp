@@ -210,7 +210,8 @@ void LayerManager:: accept()
       score->setDirty(true);
       score->setLayoutAll(true);
       score->endCmd();
-      mscore->updateLayer();
+      if (enableExperimental)
+      	mscore->updateLayer();
       QDialog::accept();
       }
 

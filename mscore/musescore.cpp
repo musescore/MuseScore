@@ -491,18 +491,20 @@ MuseScore::MuseScore()
       _statusBar->addPermanentWidget(new QWidget(this), 2);
       _statusBar->addPermanentWidget(new QWidget(this), 100);
       _statusBar->addPermanentWidget(_modeText, 0);
-      layerSwitch = new QComboBox(this);
-      layerSwitch->setToolTip(tr("switch layer"));
-      connect(layerSwitch, SIGNAL(activated(const QString&)), SLOT(switchLayer(const QString&)));
+      
+      if (enableExperimental) {
+            layerSwitch = new QComboBox(this);
+            layerSwitch->setToolTip(tr("switch layer"));
+            connect(layerSwitch, SIGNAL(activated(const QString&)), SLOT(switchLayer(const QString&)));
+            playMode = new QComboBox(this);
+            playMode->addItem(tr("synthesizer"));
+            playMode->addItem(tr("audio track"));
+            playMode->setToolTip(tr("switch play mode"));
+            connect(playMode, SIGNAL(activated(int)), SLOT(switchPlayMode(int)));
 
-      playMode = new QComboBox(this);
-      playMode->addItem(tr("synthesizer"));
-      playMode->addItem(tr("audio track"));
-      playMode->setToolTip(tr("switch play mode"));
-      connect(playMode, SIGNAL(activated(int)), SLOT(switchPlayMode(int)));
-
-      _statusBar->addPermanentWidget(playMode);
-      _statusBar->addPermanentWidget(layerSwitch);
+            _statusBar->addPermanentWidget(playMode);
+            _statusBar->addPermanentWidget(layerSwitch);
+            }
       _statusBar->addPermanentWidget(_positionLabel, 0);
 
       setStatusBar(_statusBar);
@@ -790,7 +792,9 @@ MuseScore::MuseScore()
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("parts"));
       _fileMenu->addAction(getAction("album"));
-      _fileMenu->addAction(getAction("layer"));
+
+      if (enableExperimental)
+            _fileMenu->addAction(getAction("layer"));
 
       _fileMenu->addSeparator();
       _fileMenu->addAction(getAction("edit-info"));
@@ -1524,9 +1528,12 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   // set midi import panel
       QString fileName = cs ? cs->fileInfo()->filePath() : "";
       midiPanelOnSwitchToFile(fileName);
+	
+      if (enableExperimental) {
+            updateLayer();
+            updatePlayMode();
+            }
 
-      updateLayer();
-      updatePlayMode();
       if (seq)
             seq->setScoreView(cv);
       if (playPanel)
