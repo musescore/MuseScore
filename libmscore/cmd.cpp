@@ -665,8 +665,13 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   tuplet = 0;
                   }
             else {
-                  if (seg != firstSegment || !keepChord)
+                  if (seg != firstSegment || !keepChord) {
+                        for (auto i : spanner()) {
+                              if (i.second->tick() == cr->tick() || i.second->tick2() == cr->tick())
+                                    undoRemoveElement(i.second);
+                              }
                         undoRemoveElement(cr);
+                        }
                   }
             nextTick += td.ticks();
             if (sd < td) {

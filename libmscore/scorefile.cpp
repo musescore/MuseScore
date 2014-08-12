@@ -1262,7 +1262,8 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
       for (int track = strack; track < etrack; ++track) {
-            if (!xml.canWriteVoice(track)) continue;
+            if (!xml.canWriteVoice(track))
+                  continue;
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
                   if (track == 0)
                         segment->setWritten(false);
@@ -1319,10 +1320,10 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                           s->write(xml);
                                           }
                                     }
-                              if (s->tick2() == segment->tick()
+                              if ((s->tick2() == segment->tick())
+                                 && s->type() != Element::Type::SLUR
                                  && (s->track2() == track || s->track2() == -1)
                                  && (!clip || s->tick() >= fs->tick())
-                                 && (s->type() != Element::Type::SLUR)
                                  ) {
                                     if (needTick) {
                                           xml.tag("tick", segment->tick() - xml.tickDiff);

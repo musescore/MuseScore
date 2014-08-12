@@ -337,7 +337,8 @@ LineSegment* Trill::createLineSegment()
 
 void Trill::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       xml.tag("subtype", trillTypeName());
       SLine::writeProperties(xml);
