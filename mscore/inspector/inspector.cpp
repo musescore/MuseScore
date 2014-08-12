@@ -739,7 +739,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       b.setupUi(addWidget());
 
       for (const char* name : builtinSpanNames)
-            b.spanType->addItem(tr(name));
+            b.spanType->addItem(qApp->translate("inspector", name));
       for (BarLineType t : types)
             b.type->addItem(BarLine::userTypeName(t), int(t));
 
