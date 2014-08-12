@@ -160,7 +160,12 @@ QT4_WRAP_CPP (mocs
 if (APPLE)
       QT4_ADD_RESOURCES (qrc_files musescore.qrc)
 else (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc musescorefonts.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc 
+            musescorefonts-MScore.qrc 
+            musescorefonts-Gonville.qrc 
+            musescorefonts-Bravura.qrc 
+            musescorefonts-MuseJazz.qrc 
+            musescorefonts-Free.qrc)
 endif (APPLE)
 
 
