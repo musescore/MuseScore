@@ -118,7 +118,7 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
    }
 };
 
-
+// see also mscore/editdrumset.cpp
 static const char* noteHeadNames[] = {
       "normal","cross","diamond","triangle","slash","xcircle"
       ,"do","re","mi","fa","sol","la","ti","alt. brevis"
