@@ -66,7 +66,7 @@ ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
       tab2->setVisible(false);
       tab2->setTabsClosable(false);
 
-      stack = new QStackedLayout(this);
+      stack = new QStackedLayout;
       layout->addWidget(tab);
       layout->addWidget(tab2);
       layout->addLayout(stack);
