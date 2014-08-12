@@ -240,22 +240,22 @@ void Inspector::setElements(const QList<Element*>& l)
             //removing every widget from the tabbing order until suport for
             //accessibility is provided
             QList<QWidget*> widgets = ie->findChildren<QWidget*>();
-            for(int i = 0; i < widgets.size(); i++){
+            for (int i = 0; i < widgets.size(); i++) {
                   QWidget* currentWidget = widgets.at(i);
-                  switch (currentWidget->focusPolicy()){
+                  switch (currentWidget->focusPolicy()) {
                         case Qt::TabFocus:
                               currentWidget->setFocusPolicy(Qt::NoFocus);
                               break;
                         case Qt::WheelFocus:
                         case Qt::StrongFocus:
                         case Qt::ClickFocus:
-                              if(currentWidget->parent()->inherits("QAbstractSpinBox") ||
-                                 currentWidget->inherits("QLineEdit")){
-                                  currentWidget->setFocusPolicy(Qt::ClickFocus);
-                                   }
-                              else{
-                                  currentWidget->setFocusPolicy(Qt::NoFocus);
-                                   }
+                              if (currentWidget->parent()->inherits("QAbstractSpinBox") ||
+                                  currentWidget->inherits("QLineEdit")) {
+                                    currentWidget->setFocusPolicy(Qt::ClickFocus);
+                                    }
+                              else {
+                                    currentWidget->setFocusPolicy(Qt::NoFocus);
+                                    }
                               break;
                         case Qt::NoFocus:
                               break;

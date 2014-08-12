@@ -492,22 +492,23 @@ QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w)
       ag->setExclusive(false);
       ag->setEnabled(true);
       foreach (Shortcut* s, Shortcut::shortcuts()) {
-            if(s->assignedWidget() == w){
+            if (s->assignedWidget() == w) {
                   QAction* a = s->action();
-                  if(a){
+                  if (a)
                         ag->addAction(s->action());
-                        }
                   }
-             }
+            }
       return ag;
       }
-QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext){
+
+QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext)
+      {
       QActionGroup* ag = Shortcut::getActionGroupForWidget(w);
       foreach (QAction* a, ag->actions()) {
             a->setShortcutContext(newShortcutContext);
-      }
+            }
       return ag;
-}
+      }
 
 
 //---------------------------------------------------------
