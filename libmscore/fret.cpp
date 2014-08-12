@@ -413,14 +413,14 @@ void FretDiagram::setDot(int string, int fret)
 //   setMarker
 //---------------------------------------------------------
 
-void FretDiagram::setMarker(int string, int marker)
+void FretDiagram::setMarker(int string, int m)
       {
       if (_marker == 0) {
             _marker = new char[_strings];
             memset(_marker, 0, _strings);
             }
       if (0 <= string && string < _strings)
-            _marker[string] = marker;
+            _marker[string] = m;
       }
 
 //---------------------------------------------------------
