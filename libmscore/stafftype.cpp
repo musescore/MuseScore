@@ -25,7 +25,7 @@ namespace Ms {
 //   StaffTypeTablature
 //---------------------------------------------------------
 
-#define TAB_DEFAULT_DUR_YOFFS (-1.75)
+#define TAB_DEFAULT_DUR_YOFFS (-1.0)
 
 QList<TablatureFretFont>     StaffType::_fretFonts      = QList<TablatureFretFont>();
 QList<TablatureDurationFont> StaffType::_durationFonts  = QList<TablatureDurationFont>();
