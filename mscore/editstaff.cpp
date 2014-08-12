@@ -50,6 +50,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       orgStaff = s;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setModal(true);
 
       Part* part        = orgStaff->part();
       instrument        = *part->instr();
