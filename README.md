@@ -24,6 +24,8 @@ MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directo
 
 ## Packages
 * **aeolus** Clone of [Aeolus](http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/)
+Disabled by default in the stable releases. See http://dev-list.musescore.org/Aeolus-Organ-Synth-td7578364.html
+Kept as an example of how to integrate with a complex synthesizer.
 
 * **awl** Audio Widget Library, from the MusE project
 

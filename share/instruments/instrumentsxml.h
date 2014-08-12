@@ -1206,10 +1206,6 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Pipe Organ"),
 //: Pipe Organ
 QT_TRANSLATE_NOOP("InstrumentsXML", "Org."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Pipe Organ"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Man."),
-//: Man.
-QT_TRANSLATE_NOOP("InstrumentsXML", "Man."),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Aeolus Organ"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Harmonium"),
 //: Harmonium
 QT_TRANSLATE_NOOP("InstrumentsXML", "Harm."),
