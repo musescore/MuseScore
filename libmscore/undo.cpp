@@ -2361,6 +2361,7 @@ static void notifyTimeSigs(void*, Element* e)
 void ChangeStaff::flip()
       {
       bool invisibleChanged = staff->invisible() != invisible;
+      bool smallChanged = staff->small() != small;
 
       int oldSmall        = staff->small();
       bool oldInvisible   = staff->invisible();
@@ -2389,6 +2390,16 @@ void ChangeStaff::flip()
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
                   MStaff* mstaff = m->mstaff(staffIdx);
                   mstaff->lines->setVisible(!staff->invisible());
+                  }
+            }
+      if (smallChanged) {
+            for (Segment* s = score->firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
+                  for (Element* e : s->annotations()) {
+                        if (e->type() == Element::Type::HARMONY && e->staff() == staff) {
+                              Harmony* h = static_cast<Harmony*>(e);
+                              h->render();
+                              }
+                        }
                   }
             }
       staff->score()->setLayoutAll(true);
