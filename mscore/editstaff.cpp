@@ -293,8 +293,8 @@ void EditStaff::editLongNameClicked()
 void EditStaff::minPitchAClicked()
       {
       int         newCode;
-
       EditPitch* ep = new EditPitch(this, instrument.minPitchA() );
+      ep->setWindowModality(Qt::WindowModal);
       if ( (newCode=ep->exec()) != -1) {
             minPitchA->setText(midiCodeToStr(newCode));
             _minPitchA = newCode;
@@ -304,8 +304,8 @@ void EditStaff::minPitchAClicked()
 void EditStaff::maxPitchAClicked()
       {
       int         newCode;
-
       EditPitch* ep = new EditPitch(this, instrument.maxPitchA() );
+      ep->setWindowModality(Qt::WindowModal);
       if ( (newCode=ep->exec()) != -1) {
             maxPitchA->setText(midiCodeToStr(newCode));
             _maxPitchA = newCode;
@@ -315,8 +315,8 @@ void EditStaff::maxPitchAClicked()
 void EditStaff::minPitchPClicked()
       {
       int         newCode;
-
       EditPitch* ep = new EditPitch(this, instrument.minPitchP() );
+      ep->setWindowModality(Qt::WindowModal);
       if ( (newCode=ep->exec()) != -1) {
             minPitchP->setText(midiCodeToStr(newCode));
             _minPitchP = newCode;
@@ -326,8 +326,8 @@ void EditStaff::minPitchPClicked()
 void EditStaff::maxPitchPClicked()
       {
       int         newCode;
-
       EditPitch* ep = new EditPitch(this, instrument.maxPitchP() );
+      ep->setWindowModality(Qt::WindowModal);
       if ( (newCode=ep->exec()) != -1) {
             maxPitchP->setText(midiCodeToStr(newCode));
             _maxPitchP = newCode;
@@ -370,6 +370,7 @@ void EditStaff::showBarlinesChanged()
 void EditStaff::showInstrumentDialog()
       {
       SelectInstrument si(instrument, this);
+      si.setWindowModality(Qt::WindowModal);
       if (si.exec()) {
             instrument = Instrument::fromTemplate(si.instrTemplate());
             updateInstrument();
@@ -386,6 +387,7 @@ void EditStaff::editStringDataClicked()
       QList<int>  stringList = instrument.stringData()->stringList();
 
       EditStringData* esd = new EditStringData(this, &stringList, &frets);
+      esd->setWindowModality(Qt::WindowModal);
       if (esd->exec()) {
             StringData stringData(frets, stringList);
             // detect number of strings going from 0 to !0 or vice versa
@@ -426,6 +428,7 @@ QString EditStaff::midiCodeToStr(int midiCode)
 void EditStaff::showStaffTypeDialog()
       {
       EditStaffType editor(this, staff);
+      editor.setWindowModality(Qt::WindowModal);
       if (editor.exec()) {
             staff->setStaffType(editor.getStaffType());
             updateStaffType();

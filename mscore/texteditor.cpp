@@ -160,6 +160,7 @@ QString TextEditor::toPlainText() const
 QString editPlainText(const QString& s, const QString& title)
       {
       TextEditor editor;
+      editor.setWindowModality(Qt::WindowModal);
       editor.setWindowTitle(title);
       editor.setPlainText(s);
       editor.exec();
@@ -173,6 +174,7 @@ QString editPlainText(const QString& s, const QString& title)
 QString editHtml(const QString& s, const QString& title)
       {
       TextEditor editor;
+      editor.setWindowModality(Qt::WindowModal);
       editor.setWindowTitle(title);
       editor.setHtml(s);
       editor.exec();
