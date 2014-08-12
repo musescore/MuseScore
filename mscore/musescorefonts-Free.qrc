@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file alias="fonts/FreeSerif.ttf">../fonts/FreeSerif.ttf</file>
         <file alias="fonts/FreeSerifBold.ttf">../fonts/FreeSerifBold.ttf</file>
         <file alias="fonts/FreeSans.ttf">../fonts/FreeSans.ttf</file>
         <file alias="fonts/mscoreTab.ttf">../fonts/mscoreTab.ttf</file>
