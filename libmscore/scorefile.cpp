@@ -1262,6 +1262,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
       for (int track = strack; track < etrack; ++track) {
+            if (!xml.canWriteVoice(track)) continue;
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
                   if (track == 0)
                         segment->setWritten(false);

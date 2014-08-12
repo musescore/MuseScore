@@ -1713,6 +1713,7 @@ void Score::cmdDeleteSelection()
                         }
                   }
             for (int track = track1; track < track2; ++track) {
+                  if(!selectionFilter().canSelectVoice(track)) continue;
                   Fraction f;
                   int tick  = -1;
                   Tuplet* tuplet = 0;

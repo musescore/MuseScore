@@ -2945,7 +2945,6 @@ void Score::selectRange(Element* e, int staffIdx)
       _selection.setActiveTrack(activeTrack);
 
       _selection.updateSelectedElements();
-      _selection.setState(SelState::RANGE);
       }
 
 //---------------------------------------------------------

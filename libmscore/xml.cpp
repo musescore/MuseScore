@@ -821,7 +821,20 @@ QList<std::pair<int, ClefType>>& XmlReader::clefs(int idx)
 
 bool Xml::canWrite(const Element* e) const
       {
+      if (!clipboardmode)
+            return true;
       return _filter.canSelect(e);
+      }
+
+//---------------------------------------------------------
+//   canWriteVoice
+//---------------------------------------------------------
+
+bool Xml::canWriteVoice(int track) const
+      {
+      if (!clipboardmode)
+            return true;
+      return _filter.canSelectVoice(track);
       }
 
 }
