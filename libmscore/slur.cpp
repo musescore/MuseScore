@@ -1325,7 +1325,7 @@ void Slur::layout()
                track(), track2(), startCR(), endCR(), tick(), tick2());
             return;
             }
-      if (endCR() == 0) {
+      if (endCR() == 0) {     // sanity check
             setEndElement(startCR());
             setTick2(tick());
             }
