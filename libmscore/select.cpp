@@ -387,7 +387,7 @@ void Selection::appendChord(Chord* chord)
             if (note->accidental()) _el.append(note->accidental());
             foreach(Element* el, note->el())
                   appendFiltered(el);
-            for(int x = 0; x < MAX_DOTS; x++)
+            for (int x = 0; x < MAX_DOTS; x++)
                   if (note->dot(x) != 0) _el.append(note->dot(x));
 
             if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
@@ -443,7 +443,7 @@ void Selection::updateSelectedElements()
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         for (Chord* graceNote : chord->graceNotes())
-                              if(canSelect(graceNote)) appendChord(graceNote);
+                              if (canSelect(graceNote)) appendChord(graceNote);
                         appendChord(chord);
                         }
                   else {
@@ -471,7 +471,7 @@ void Selection::updateSelectedElements()
                       if (canSelect(sp->startChord()) && canSelect(sp->endChord()))
                         appendFiltered(sp); // slur with start or end in range selection
             }
-            else if((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
+            else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
                   appendFiltered(sp); // spanner with start and end in range selection
             }
       update();
@@ -645,7 +645,7 @@ QByteArray Selection::staffMimeData() const
                   xml.tag("transposeChromatic", interval.chromatic);
             if (interval.diatonic)
                   xml.tag("transposeDiatonic", interval.diatonic);
-            for(int voice = 0; voice < VOICES; voice++) {
+            for (int voice = 0; voice < VOICES; voice++) {
                   if (hasElementInTrack(seg1, seg2, startTrack + voice)
                      && xml.canWriteVoice(voice)) {
                         int offset = firstElementInTrack(seg1, seg2, startTrack+voice) - tickStart();
