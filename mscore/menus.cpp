@@ -551,27 +551,6 @@ Palette* MuseScore::newArticulationsPalette()
       tb->points().append(PitchValue(60,    0, false));
       sp->append(tb, qApp->translate("articulation", "Tremolo Bar"));
 
-      ChordLine* clFall = new ChordLine(gscore);
-      clFall->setChordLineType(ChordLineType::FALL);
-      clFall->setStraight(true);
-      sp->append(clFall, qApp->translate("articulation", "Slide out down"));
-
-      ChordLine* clDoit = new ChordLine(gscore);
-      clDoit->setChordLineType(ChordLineType::DOIT);
-      clDoit->setStraight(true);
-      sp->append(clDoit, qApp->translate("articulation", "Slide out up"));
-
-      ChordLine* clScoop = new ChordLine(gscore);
-      clScoop->setChordLineType(ChordLineType::SCOOP);
-      clScoop->setStraight(true);
-      sp->append(clScoop, qApp->translate("articulation", "Slide in below"));
-
-      ChordLine* clPlop = new ChordLine(gscore);
-      clPlop->setChordLineType(ChordLineType::PLOP);
-      clPlop->setStraight(true);
-      sp->append(clPlop, qApp->translate("articulation", "Slide in above"));
-
-
       return sp;
       }
 
@@ -672,6 +651,27 @@ Palette* MuseScore::newArpeggioPalette()
       cl = new ChordLine(gscore);
       cl->setChordLineType(ChordLineType::SCOOP);
       sp->append(cl, tr(scorelineNames[3]));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(ChordLineType::FALL);
+      cl->setStraight(true);
+      sp->append(cl, qApp->translate("articulation", "Slide out down"));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(ChordLineType::DOIT);
+      cl->setStraight(true);
+      sp->append(cl, qApp->translate("articulation", "Slide out up"));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(ChordLineType::SCOOP);
+      cl->setStraight(true);
+      sp->append(cl, qApp->translate("articulation", "Slide in below"));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(ChordLineType::PLOP);
+      cl->setStraight(true);
+      sp->append(cl, qApp->translate("articulation", "Slide in above"));
+
 
       return sp;
       }
