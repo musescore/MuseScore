@@ -32,9 +32,9 @@ namespace Ms {
 enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 
 //---------------------------------------------------------
-//   noteHeadNames (see also libmscore/note.cpp)
-//   same order than NoteHead::Group, sol and altbrevis omitted
-//   not useful for drums
+//   noteHeadNames (see also libmscore/note.{h,cpp})
+//   same order as NoteHead::Group, sol and altbrevis omitted,
+//   as not being useful for drums
 //---------------------------------------------------------
 
 const char* noteHeadNames[int(NoteHead::Group::HEAD_GROUPS)] = {
@@ -50,7 +50,6 @@ const char* noteHeadNames[int(NoteHead::Group::HEAD_GROUPS)] = {
       QT_TRANSLATE_NOOP("EditDrumset", "fa"),
       QT_TRANSLATE_NOOP("EditDrumset", "la"),
       QT_TRANSLATE_NOOP("EditDrumset", "ti"),
-      //QT_TRANSLATE_NOOP("noteheadnames", "alt brevis."),
       };
 
 //---------------------------------------------------------
