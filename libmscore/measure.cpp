@@ -3732,54 +3732,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
             m->_segments.push_back(s);
             for (int track = 0; track < tracks; ++track) {
                   Element* oe = oseg->element(track);
-                  if (oe) {
-                        Element* ne = oe->clone();
-                        if (oe->isChordRest()) {
-                              ChordRest* ocr = static_cast<ChordRest*>(oe);
-                              ChordRest* ncr = static_cast<ChordRest*>(ne);
-                              Tuplet* ot     = ocr->tuplet();
-                              if (ot) {
-                                    Tuplet* nt = tupletMap.findNew(ot);
-                                    if (nt == 0) {
-                                          nt = new Tuplet(*ot);
-                                          nt->clear();
-                                          nt->setTrack(track);
-                                          nt->setScore(sc);
-                                          m->add(nt);
-                                          tupletMap.add(ot, nt);
-                                          }
-                                    ncr->setTuplet(nt);
-                                    }
-                              if (oe->type() == Element::Type::CHORD) {
-                                    Chord* och = static_cast<Chord*>(ocr);
-                                    Chord* nch = static_cast<Chord*>(ncr);
-                                    int n = och->notes().size();
-                                    for (int i = 0; i < n; ++i) {
-                                          Note* on = och->notes().at(i);
-                                          Note* nn = nch->notes().at(i);
-                                          if (on->tieFor()) {
-                                                Tie* tie = new Tie(sc);
-                                                nn->setTieFor(tie);
-                                                tie->setStartNote(nn);
-                                                tieMap->add(on->tieFor(), tie);
-                                                }
-                                          if (on->tieBack()) {
-                                                Tie* tie = tieMap->findNew(on->tieBack());
-                                                if (tie) {
-                                                      nn->setTieBack(tie);
-                                                      tie->setEndNote(nn);
-                                                      }
-                                                else {
-                                                      qDebug("cloneMeasure: cannot find tie, track %d", track);
-                                                      }
-                                                }
-                                          }
-                                    }
-                              }
-                        ne->setUserOff(oe->userOff());
-                        s->add(ne);
-                        }
-                  foreach(Element* e, oseg->annotations()) {
+                  foreach (Element* e, oseg->annotations()) {
                         if (e->generated() || e->track() != track)
                               continue;
                         Element* ne = e->clone();
@@ -3787,6 +3740,53 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                         ne->setUserOff(e->userOff());
                         s->add(ne);
                         }
+                  if (!oe)
+                        continue;
+                  Element* ne = oe->clone();
+                  if (oe->isChordRest()) {
+                        ChordRest* ocr = static_cast<ChordRest*>(oe);
+                        ChordRest* ncr = static_cast<ChordRest*>(ne);
+                        Tuplet* ot     = ocr->tuplet();
+                        if (ot) {
+                              Tuplet* nt = tupletMap.findNew(ot);
+                              if (nt == 0) {
+                                    nt = new Tuplet(*ot);
+                                    nt->clear();
+                                    nt->setTrack(track);
+                                    nt->setScore(sc);
+                                    tupletMap.add(ot, nt);
+                                    }
+                              ncr->setTuplet(nt);
+                              nt->add(ncr);
+                              }
+                        if (oe->type() == Element::Type::CHORD) {
+                              Chord* och = static_cast<Chord*>(ocr);
+                              Chord* nch = static_cast<Chord*>(ncr);
+                              int n = och->notes().size();
+                              for (int i = 0; i < n; ++i) {
+                                    Note* on = och->notes().at(i);
+                                    Note* nn = nch->notes().at(i);
+                                    if (on->tieFor()) {
+                                          Tie* tie = new Tie(sc);
+                                          nn->setTieFor(tie);
+                                          tie->setStartNote(nn);
+                                          tieMap->add(on->tieFor(), tie);
+                                          }
+                                    if (on->tieBack()) {
+                                          Tie* tie = tieMap->findNew(on->tieBack());
+                                          if (tie) {
+                                                nn->setTieBack(tie);
+                                                tie->setEndNote(nn);
+                                                }
+                                          else {
+                                                qDebug("cloneMeasure: cannot find tie, track %d", track);
+                                                }
+                                          }
+                                    }
+                              }
+                        }
+                  ne->setUserOff(oe->userOff());
+                  s->add(ne);
                   }
             }
       foreach(Element* e, *el()) {
