@@ -80,9 +80,9 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool TimeSig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool TimeSig::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::TIMESIG;
+      return data.element->type() == Element::Type::TIMESIG;
       }
 
 //---------------------------------------------------------

@@ -179,8 +179,9 @@ QRectF Rest::drag(EditData* data)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Rest::acceptDrop(const DropData& data) const
       {
+      Element* e = data.element;
       Element::Type type = e->type();
       if (
          (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)

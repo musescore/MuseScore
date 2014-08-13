@@ -246,7 +246,7 @@ class Measure : public MeasureBase {
       void sortStaves(QList<int>& dst);
 
       void dump() const;
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
 
       int repeatCount() const         { return _repeatCount; }

@@ -2298,9 +2298,9 @@ void Text::layoutEdit()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Text::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Text::acceptDrop(const DropData& data) const
       {
-      Element::Type type = e->type();
+      Element::Type type = data.element->type();
       return type == Element::Type::SYMBOL || type == Element::Type::FSYMBOL;
       }
 

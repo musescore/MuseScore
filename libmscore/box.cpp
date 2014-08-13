@@ -427,12 +427,12 @@ void HBox::layout2()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Box::acceptDrop(const DropData& data) const
       {
-      Element::Type type = e->type();
-      if(e->flag(ElementFlag::ON_STAFF))
+      Element::Type type = data.element->type();
+      if (data.element->flag(ElementFlag::ON_STAFF))
             return false;
-      switch(type) {
+      switch (type) {
             case Element::Type::LAYOUT_BREAK:
             case Element::Type::TEXT:
             case Element::Type::STAFF_TEXT:
@@ -440,7 +440,7 @@ bool Box::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
             case Element::Type::SYMBOL:
                   return true;
             case Element::Type::ICON:
-                  switch(static_cast<Icon*>(e)->iconType()) {
+                  switch(static_cast<Icon*>(data.element)->iconType()) {
                         case IconType::VFRAME:
                         case IconType::TFRAME:
                         case IconType::FFRAME:

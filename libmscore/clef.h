@@ -143,7 +143,7 @@ class Clef : public Element {
       Segment* segment() const           { return (Segment*)parent(); }
       Measure* measure() const           { return (Measure*)parent()->parent(); }
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
       virtual void layout();
       virtual void draw(QPainter*) const;

@@ -270,9 +270,9 @@ void KeySig::draw(QPainter* p) const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool KeySig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool KeySig::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::KEYSIG;
+      return data.element->type() == Element::Type::KEYSIG;
       }
 
 //---------------------------------------------------------

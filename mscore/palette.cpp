@@ -261,17 +261,18 @@ void Palette::mousePressEvent(QMouseEvent* ev)
 
 static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element* e, QPointF pt = QPointF())
       {
-      if (target->acceptDrop(viewer, pt, e)) {
+      DropData dropData;
+      dropData.view       = viewer;
+      dropData.pos        = pt;
+      dropData.dragOffset = pt;
+      dropData.modifiers  = 0;
+      dropData.element    = e;
+
+      if (target->acceptDrop(dropData)) {
             Element* ne = e->clone();
             ne->setScore(score);
 
-            DropData dropData;
-            dropData.view       = viewer;
-            dropData.pos        = pt;
-            dropData.dragOffset = pt;
-            dropData.modifiers  = 0;
             dropData.element    = ne;
-
             ne = target->drop(dropData);
             if (ne)
                   score->select(ne, SelectType::SINGLE, 0);

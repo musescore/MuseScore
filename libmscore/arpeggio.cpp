@@ -359,9 +359,9 @@ void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Arpeggio::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Arpeggio::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::ARPEGGIO;
+      return data.element->type() == Element::Type::ARPEGGIO;
       }
 
 //---------------------------------------------------------
