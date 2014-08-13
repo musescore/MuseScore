@@ -98,7 +98,7 @@ class TimeSig : public Element {
       int numeratorStretch() const       { return _stretch.numerator(); }
       int denominatorStretch() const     { return _stretch.denominator(); }
 
-      bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      bool acceptDrop(const DropData&) const override;
       Element* drop(const DropData&);
 
       Segment* segment() const           { return (Segment*)parent(); }

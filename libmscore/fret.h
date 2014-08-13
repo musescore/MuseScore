@@ -87,7 +87,7 @@ class FretDiagram : public Element {
       virtual void add(Element*);
       virtual void remove(Element*);
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);

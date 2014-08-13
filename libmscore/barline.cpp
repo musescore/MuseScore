@@ -499,14 +499,14 @@ Space BarLine::space() const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool BarLine::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool BarLine::acceptDrop(const DropData& data) const
       {
-      Element::Type type = e->type();
+      Element::Type type = data.element->type();
       if (type == Element::Type::BAR_LINE) {
             if (parent() && parent()->type() == Element::Type::SEGMENT)
                   return true;
             if (parent() && parent()->type() == Element::Type::SYSTEM) {
-                  BarLine* b = static_cast<BarLine*>(e);
+                  BarLine* b = static_cast<BarLine*>(data.element);
                   return (b->barLineType() == BarLineType::BROKEN || b->barLineType() == BarLineType::DOTTED
                      || b->barLineType() == BarLineType::NORMAL || b->barLineType() == BarLineType::DOUBLE
                      || b->spanFrom() != 0 || b->spanTo() != DEFAULT_BARLINE_TO);

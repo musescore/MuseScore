@@ -336,7 +336,7 @@ class Note : public Element {
       void read(XmlReader&);
       void write(Xml& xml) const;
 
-      bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      bool acceptDrop(const DropData&) const override;
       Element* drop(const DropData&);
 
       bool hidden() const                       { return _hidden; }
@@ -415,7 +415,7 @@ class Note : public Element {
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s);
       void setDotY(MScore::Direction);
-      
+
       void addBracket();
 
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);

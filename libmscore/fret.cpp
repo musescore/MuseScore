@@ -467,9 +467,9 @@ void FretDiagram::remove(Element* e)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool FretDiagram::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool FretDiagram::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::HARMONY;
+      return data.element->type() == Element::Type::HARMONY;
       }
 
 //---------------------------------------------------------

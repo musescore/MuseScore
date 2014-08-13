@@ -396,8 +396,9 @@ void Accidental::draw(QPainter* painter) const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Accidental::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Accidental::acceptDrop(const DropData& data) const
       {
+      Element* e = data.element;
       return e->type() == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS;
       }
 

@@ -328,9 +328,9 @@ void Bracket::endEditDrag()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Bracket::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Bracket::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::BRACKET;
+      return data.element->type() == Element::Type::BRACKET;
       }
 
 //---------------------------------------------------------

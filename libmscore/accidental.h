@@ -113,7 +113,7 @@ class Accidental : public Element {
       virtual int subtype() const           { return (int)_accidentalType; }
       virtual QString subtypeName() const   { return QString(subtype2name(_accidentalType)); }
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
       virtual void layout();
       virtual void draw(QPainter*) const;

@@ -1215,14 +1215,34 @@ QRectF Measure::staffabbox(int staffIdx) const
  Return true if an Element of type \a type can be dropped on a Measure
 */
 
-bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF&, Element* e) const
+bool Measure::acceptDrop(const DropData& data) const
       {
+      MuseScoreView* viewer = data.view;
+      QPointF pos           = data.pos;
+      Element* e            = data.element;
+
+      int staffIdx;
+      Segment* seg;
+      _score->pos2measure(pos, &staffIdx, 0, &seg, 0);
+      QRectF staffR = system()->staff(staffIdx)->bbox().translated(system()->canvasPos());
+      staffR &= canvasBoundingRect();
+
       switch (e->type()) {
             case Element::Type::MEASURE_LIST:
             case Element::Type::JUMP:
             case Element::Type::MARKER:
             case Element::Type::LAYOUT_BREAK:
             case Element::Type::STAFF_LIST:
+                  viewer->setDropRectangle(canvasBoundingRect());
+                  return true;
+
+            case Element::Type::TIMESIG:
+                  if (data.modifiers & Qt::ControlModifier)
+                        viewer->setDropRectangle(staffR);
+                  else
+                        viewer->setDropRectangle(canvasBoundingRect());
+                  return true;
+
             case Element::Type::BRACKET:
             case Element::Type::REPEAT_MEASURE:
             case Element::Type::MEASURE:
@@ -1232,8 +1252,7 @@ bool Measure::acceptDrop(MuseScoreView* viewer, const QPointF&, Element* e) cons
             case Element::Type::SYMBOL:
             case Element::Type::CLEF:
             case Element::Type::KEYSIG:
-            case Element::Type::TIMESIG:
-                  viewer->setDropRectangle(canvasBoundingRect());
+                  viewer->setDropRectangle(staffR);
                   return true;
 
             case Element::Type::ICON:

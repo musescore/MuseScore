@@ -356,9 +356,10 @@ void Clef::draw(QPainter* painter) const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Clef::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Clef::acceptDrop(const DropData& data) const
       {
-      return (e->type() == Element::Type::CLEF || (/*!generated() &&*/ e->type() == Element::Type::AMBITUS) );
+      return (data.element->type() == Element::Type::CLEF
+         || (/*!generated() &&*/ data.element->type() == Element::Type::AMBITUS) );
       }
 
 //---------------------------------------------------------

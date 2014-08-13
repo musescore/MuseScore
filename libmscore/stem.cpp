@@ -276,8 +276,9 @@ void Stem::reset()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Stem::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Stem::acceptDrop(const DropData& data) const
       {
+      Element* e = data.element;
       if ((e->type() == Element::Type::TREMOLO) && (static_cast<Tremolo*>(e)->tremoloType() <= TremoloType::R64)) {
             return true;
             }

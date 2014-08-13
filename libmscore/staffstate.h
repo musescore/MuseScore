@@ -52,7 +52,7 @@ class StaffState : public Element {
       StaffStateType staffStateType() const     { return _staffStateType; }
       QString staffStateTypeName() const;
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);

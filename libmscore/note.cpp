@@ -1201,8 +1201,9 @@ void Note::endDrag()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Note::acceptDrop(const DropData& data) const
       {
+      Element* e = data.element;
       Element::Type type = e->type();
       return (type == Element::Type::ARTICULATION
          || type == Element::Type::CHORDLINE

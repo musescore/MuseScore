@@ -121,7 +121,7 @@ class Beam : public Element {
 
       virtual QPainterPath shape() const override;
       virtual bool contains(const QPointF& p) const override;
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
 
       qreal growLeft() const              { return _grow1; }

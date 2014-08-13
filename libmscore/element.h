@@ -467,7 +467,7 @@ class Element : public QObject {
  Reimplemented by elements that accept drops. Used to change cursor shape while
  dragging to indicate drop targets.
 */
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const { return false; }
+      virtual bool acceptDrop(const DropData&) const { return false; }
 
 /**
  Handle a dropped element at canvas relative \a pos of given element

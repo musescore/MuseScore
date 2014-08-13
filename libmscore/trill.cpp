@@ -156,9 +156,9 @@ void TrillSegment::layout()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool TrillSegment::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool TrillSegment::acceptDrop(const DropData& data) const
       {
-      if (e->type() == Element::Type::ACCIDENTAL)
+      if (data.element->type() == Element::Type::ACCIDENTAL)
             return true;
       return false;
       }

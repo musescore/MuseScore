@@ -88,7 +88,7 @@ class BarLine : public Element {
       virtual void remove(Element*);
       virtual QPainterPath shape() const;
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
       void setCustomSpan(bool val)    { _customSpan = val;    }
       void setCustomSubtype(bool val) { _customSubtype = val; }

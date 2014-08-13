@@ -41,7 +41,7 @@ class TrillSegment : public LineSegment {
       virtual Element::Type type() const override  { return Element::Type::TRILL_SEGMENT; }
       virtual TrillSegment* clone() const override { return new TrillSegment(*this); }
       virtual void draw(QPainter*) const override;
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
       virtual void layout() override;
       virtual QVariant getProperty(P_ID propertyId) const override;
