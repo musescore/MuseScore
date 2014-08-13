@@ -1895,7 +1895,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   int id = e.attribute("id").toInt();
                   Spanner* spanner = e.findSpanner(id);
                   if (spanner) {
-                        spanner->setTick2(e.tick());
+                        spanner->setTicks(e.tick() - spanner->tick());
                         // if (spanner->track2() == -1)
                               // the absence of a track tag [?] means the
                               // track is the same as the beginning of the slur
@@ -1948,7 +1948,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   int id = e.spannerId(sp);
                   const SpannerValues* sv = e.spannerValues(id);
                   if (sv) {
-                        sp->setTick2(sv->tick2);
+                        sp->setTicks(sv->tick2 - sp->tick());
                         sp->setTrack2(sv->track2);
                         }
                   }

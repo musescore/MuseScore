@@ -1473,7 +1473,7 @@ void SpannerView::setElement(Element* e)
       Spanner* spanner = static_cast<Spanner*>(e);
       ShowElementBase::setElement(e);
       sp.tick->setValue(spanner->tick());
-      sp.tick2->setValue(spanner->tick2());
+      sp.ticks->setValue(spanner->ticks());
       sp.anchor->setCurrentIndex(int(spanner->anchor()));
       sp.track2->setValue(spanner->track2());
 
@@ -1995,7 +1995,7 @@ VoltaView::VoltaView()
       connect(tlb.beginText,    SIGNAL(clicked()), SLOT(beginTextClicked()));
       connect(tlb.continueText, SIGNAL(clicked()), SLOT(continueTextClicked()));
       connect(tlb.endText,      SIGNAL(clicked()), SLOT(endTextClicked()));
-      connect(sp.segments,      SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+      connect(sp.segments,      SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(gotoElement(QTreeWidgetItem*)));
       }
 
 //---------------------------------------------------------
@@ -2023,7 +2023,7 @@ void VoltaView::setElement(Element* e)
             }
 
       sp.tick->setValue(volta->tick());
-      sp.tick2->setValue(volta->tick2());
+      sp.ticks->setValue(volta->ticks());
       sp.track2->setValue(volta->track2());
       sp.startElement->setEnabled(volta->startElement() != 0);
       sp.endElement->setEnabled(volta->endElement() != 0);

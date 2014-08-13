@@ -556,7 +556,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   // extend slur
                   //
                   Chord* chord = static_cast<Note*>(nr)->chord();
-                  _is.slur()->undoChangeProperty(P_ID::SPANNER_TICK2, chord->tick());
+                  _is.slur()->undoChangeProperty(P_ID::SPANNER_TICKS, chord->tick() - _is.slur()->tick());
                   for (Element* e : _is.slur()->linkList()) {
                         Slur* slur = static_cast<Slur*>(e);
                         for (Element* e : chord->linkList()) {
@@ -666,9 +666,20 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   }
             else {
                   if (seg != firstSegment || !keepChord) {
+                        // remove chord anchored spanner (slurs) if start or endpoint
+                        // is removed
+                        int tick = seg->tick();
                         for (auto i : spanner()) {
-                              if (i.second->tick() == cr->tick() || i.second->tick2() == cr->tick())
-                                    undoRemoveElement(i.second);
+                              Spanner* s = i.second;
+                              if (((s->tick() == tick) || s->tick2() == tick)
+                                 && (s->anchor() == Spanner::Anchor::CHORD)
+                                 ) {
+                                    // there is always a chord/rest at tick == cr->measure()->tick()
+                                    if (s->tick() == tick && tick == cr->measure()->tick())
+                                          i.second->setStartElement(nullptr);
+                                    else
+                                          undoRemoveElement(i.second);
+                                    }
                               }
                         undoRemoveElement(cr);
                         }

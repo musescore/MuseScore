@@ -68,6 +68,8 @@ void TestSelectionFilter::initTestCase()
 void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
       {
       Score* score = readScore(DIR + QString("selectionfilter%1.mscx").arg(idx));
+      score->doLayout();
+
       Measure* m1 = score->firstMeasure();
 
       QVERIFY(m1 != 0);
@@ -92,6 +94,8 @@ void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
 void TestSelectionFilter::testFilterSpanner(int idx, SelectionFilterType filter)
       {
       Score* score = readScore(DIR + QString("selectionfilter%1.mscx").arg(idx));
+      score->doLayout();
+
       Measure* m1 = score->firstMeasure();
       Measure* m2 = score->firstMeasure()->nextMeasure();
 

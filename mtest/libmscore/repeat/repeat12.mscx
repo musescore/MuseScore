@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="1.24">
+  <programVersion>2.0.0</programVersion>
+  <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <concertPitch>1</concertPitch>
       <page-layout>
         <page-height>1683.78</page-height>
         <page-width>1190.55</page-width>
@@ -23,49 +28,6 @@
         </page-layout>
       <Spatium>1.76389</Spatium>
       </Style>
-    <StaffType idx="4" group="tablature">
-      <name>Tab</name>
-      <lines>6</lines>
-      <lineDistance>1.5</lineDistance>
-      <clef>1</clef>
-      <slashStyle>0</slashStyle>
-      <barlines>1</barlines>
-      <timesig>0</timesig>
-      <durations>0</durations>
-      <durationFontName>MuseScore Tab Modern</durationFontName>
-      <durationFontSize>15</durationFontSize>
-      <durationFontY>0</durationFontY>
-      <fretFontName>MuseScore Tab Sans</fretFontName>
-      <fretFontSize>10</fretFontSize>
-      <fretFontY>0</fretFontY>
-      <linesThrough>0</linesThrough>
-      <minimStyle>0</minimStyle>
-      <onLines>1</onLines>
-      <showRests>0</showRests>
-      <stemsDown>1</stemsDown>
-      <stemsThrough>1</stemsThrough>
-      <upsideDown>0</upsideDown>
-      <useNumbers>1</useNumbers>
-      </StaffType>
-    <StaffType idx="14" group="pitched">
-      <name>Pitched 5 lines</name>
-      <lines>5</lines>
-      <lineDistance>1</lineDistance>
-      <clef>1</clef>
-      <slashStyle>0</slashStyle>
-      <barlines>1</barlines>
-      <timesig>1</timesig>
-      </StaffType>
-    <StaffType idx="15" group="percussion">
-      <name>Percussion 5 lines</name>
-      <lines>5</lines>
-      <lineDistance>1</lineDistance>
-      <clef>1</clef>
-      <slashStyle>0</slashStyle>
-      <barlines>1</barlines>
-      <timesig>1</timesig>
-      <keysig>0</keysig>
-      </StaffType>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -73,9 +35,11 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2014-08-13</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -89,7 +53,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
@@ -105,6 +71,7 @@
           <program value="73"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -121,7 +88,6 @@
           </TimeSig>
         <StaffText>
           <pos x="-1.65" y="8.89999"/>
-          <style>Staff</style>
           <text>Playback should be 1234 356 23567
 A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
           </StaffText>
@@ -228,20 +194,14 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
       <Measure number="4">
         <endRepeat>2</endRepeat>
         <Volta id="2">
-          <subtype>1</subtype>
-          <beginHookHeight>1.9</beginHookHeight>
-          <endHookHeight>1.9</endHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
+          <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>1.</text>
             </beginText>
           <endings>1</endings>
           </Volta>
-        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -272,20 +232,15 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
           </Chord>
         </Measure>
       <Measure number="5">
+        <endSpanner id="2"/>
         <Volta id="3">
-          <subtype>0</subtype>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lineWidth>0.1</lineWidth>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>2.</text>
             </beginText>
           <endings>2</endings>
           </Volta>
-        <endSpanner id="3"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -316,6 +271,15 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
           </Chord>
         </Measure>
       <Measure number="6">
+        <Jump>
+          <pos x="0" y="-2.31944"/>
+          <style>Repeat Text Right</style>
+          <text>D.S.</text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>end</playUntil>
+          <continueAt></continueAt>
+          </Jump>
+        <endSpanner id="3"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -337,14 +301,6 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <Jump>
-          <pos x="0" y="-2.31944"/>
-          <style>Repeat Text Right</style>
-          <text>D.S.</text>
-          <jumpTo>segno</jumpTo>
-          <playUntil>end</playUntil>
-          <continueAt></continueAt>
-          </Jump>
         <Chord>
           <durationType>quarter</durationType>
           <Note>

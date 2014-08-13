@@ -65,6 +65,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="label_2">
+          <property name="accessibleName">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string notr="true">tick</string>
           </property>
@@ -88,8 +91,11 @@
         </item>
         <item>
          <widget class="QLabel" name="label_3">
+          <property name="accessibleName">
+           <string notr="true"/>
+          </property>
           <property name="text">
-           <string notr="true">tick2</string>
+           <string notr="true">ticks</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -100,7 +106,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="tick2">
+         <widget class="QSpinBox" name="ticks">
           <property name="maximum">
            <number>999999</number>
           </property>
@@ -108,6 +114,9 @@
         </item>
         <item>
          <widget class="QLabel" name="label_4">
+          <property name="accessibleName">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string notr="true">track2</string>
           </property>
@@ -135,6 +144,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QLabel" name="label">
+          <property name="accessibleName">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string notr="true">Anchor</string>
           </property>
@@ -148,6 +160,9 @@
         </item>
         <item>
          <widget class="QComboBox" name="anchor">
+          <property name="accessibleName">
+           <string notr="true"/>
+          </property>
           <item>
            <property name="text">
             <string notr="true">SEGMENT</string>
@@ -185,6 +200,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="startElement">
+          <property name="accessibleName">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string notr="true">startElement</string>
           </property>
@@ -192,6 +210,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="endElement">
+          <property name="accessibleName">
+           <string notr="true"/>
+          </property>
           <property name="text">
            <string notr="true">endElement</string>
           </property>

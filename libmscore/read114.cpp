@@ -475,9 +475,9 @@ Score::FileError Score::read114(XmlReader& e)
                         e.initTick(s->tick());      // update current tick
                   if (s->track2() == -1)
                         s->setTrack2(s->track());
-                  if (s->tick2() == -1) {
+                  if (s->ticks() == 0) {
                         delete s;
-                        qDebug("invalid spanner %s tick2: %d", s->name(), s->tick2());
+                        qDebug("zero spanner %s ticks: %d", s->name(), s->ticks());
                         }
                   else {
                         addSpanner(s);

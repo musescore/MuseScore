@@ -188,7 +188,7 @@ Spanner::Spanner(const Spanner& s)
       _startElement = s._startElement;
       _endElement   = s._endElement;
       _tick         = s._tick;
-      _tick2        = s._tick2;
+      _ticks        = s._ticks;
       _track2       = s._track2;
       }
 
@@ -252,7 +252,7 @@ void Spanner::setScore(Score* s)
 void Spanner::startEdit(MuseScoreView*, const QPointF&)
       {
       editTick   = _tick;
-      editTick2  = _tick2;
+      editTick2  = tick2();
       editTrack2 = _track2;
 
       userOffsets.clear();
@@ -275,7 +275,7 @@ void Spanner::endEdit()
             rebuild = true;
             }
       if (editTick2 != tick2()) {
-            score()->undoPropertyChanged(this, P_ID::SPANNER_TICK2, editTick2);
+            score()->undoPropertyChanged(this, P_ID::SPANNER_TICKS, editTick2 - editTick);
             rebuild = true;
             }
       if (editTrack2 != track2()) {
@@ -307,8 +307,8 @@ QVariant Spanner::getProperty(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::SPANNER_TICK:
                   return tick();
-            case P_ID::SPANNER_TICK2:
-                  return tick2();
+            case P_ID::SPANNER_TICKS:
+                  return ticks();
             case P_ID::SPANNER_TRACK2:
                   return track2();
             case P_ID::ANCHOR:
@@ -329,8 +329,8 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::SPANNER_TICK:
                   setTick(v.toInt());
                   break;
-            case P_ID::SPANNER_TICK2:
-                  setTick2(v.toInt());
+            case P_ID::SPANNER_TICKS:
+                  setTicks(v.toInt());
                   break;
             case P_ID::SPANNER_TRACK2:
                   setTrack2(v.toInt());
@@ -401,8 +401,10 @@ void Spanner::computeEndElement()
 
             case Anchor::MEASURE:
                   _endElement = score()->tick2measure(tick2() - 1);
-                  if (!_endElement)
+                  if (!_endElement) {
+                        qDebug("Spanner::computeEndElement(), measure not found for tick %d\n", tick2()-1);
                         _endElement = score()->lastMeasure();
+                        }
                   break;
 
             case Anchor::CHORD:
