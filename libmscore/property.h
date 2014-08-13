@@ -169,7 +169,7 @@ enum class P_ID : unsigned char {
       TIMESIG_GLOBAL,
       TIMESIG_TYPE,
       SPANNER_TICK,
-      SPANNER_TICK2,
+      SPANNER_TICKS,
       SPANNER_TRACK2,
       USER_OFF2,
       BEGIN_TEXT_PLACE,

@@ -867,11 +867,11 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
       foreach (LinkedElements* le, _elinks)
             le->setLid(this, id++);
       _elinks.clear();
-
-      // check all spanners for missing end (tick2 == -1)
+#if 0
+      // check all spanners for missing end
       QList<Spanner*> sl;
       for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
-            if (i->second->tick2() == -1)
+            if (i->second->ticks() == 0)
                   sl.append(i->second);
             }
       int lastTick = lastMeasure()->endTick();
@@ -880,6 +880,7 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
             _spanner.removeSpanner(s);
             _spanner.addSpanner(s);
             }
+#endif
       for (Staff* s : _staves)
             s->updateOttava();
 
@@ -931,7 +932,6 @@ bool Score::read(XmlReader& e)
                         st = new StaffType;
                         }
 #endif
-                  qDebug("Score::read  staffType idx %d", e.intAttribute("idx"));
                   StaffType st;
                   st.read(e);
                   e.staffType().append(st);

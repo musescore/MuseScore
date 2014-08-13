@@ -172,7 +172,7 @@ static const PropertyData propertyList[] = {
       { P_ID::TIMESIG_GLOBAL,      false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_TYPE,        true,  0,               P_TYPE::INT },
       { P_ID::SPANNER_TICK,        true,  "tick",          P_TYPE::INT      },
-      { P_ID::SPANNER_TICK2,       true,  "tick2",         P_TYPE::INT      },
+      { P_ID::SPANNER_TICKS,       true,  "ticks",           P_TYPE::INT      },
       { P_ID::SPANNER_TRACK2,      true,  "track2",          P_TYPE::INT      },
       { P_ID::USER_OFF2,           false, "userOff2",        P_TYPE::POINT   },
       { P_ID::BEGIN_TEXT_PLACE,    false, "beginTextPlace",  P_TYPE::INT     },

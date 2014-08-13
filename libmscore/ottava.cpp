@@ -349,8 +349,8 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
                   numbersOnlyStyle = PropertyStyle::UNSTYLED;
                   break;
 
-            case P_ID::SPANNER_TICK2:
-                  setTick2(val.toInt());
+            case P_ID::SPANNER_TICKS:
+                  setTicks(val.toInt());
                   staff()->updateOttava();
                   break;
 

@@ -23,7 +23,6 @@
 
 namespace Ms {
 
-
 //---------------------------------------------------------
 //   LineSegment
 //---------------------------------------------------------
@@ -552,7 +551,7 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
 
 void SLine::layout()
       {
-      if (score() == gscore || tick() == -1 || tick2() == -1) {
+      if (score() == gscore) {
             //
             // when used in a palette, SLine has no parent and
             // tick and tick2 has no meaning so no layout is
@@ -678,7 +677,10 @@ void SLine::layout()
 
 void SLine::writeProperties(Xml& xml) const
       {
-      Element::writeProperties(xml);
+      if (!endElement()) {
+            xml.tag("ticks", ticks());
+            }
+      Spanner::writeProperties(xml);
       if (_diagonal)
             xml.tag("diagonal", _diagonal);
       if (propertyStyle(P_ID::LINE_WIDTH) != PropertyStyle::STYLED)
@@ -743,6 +745,8 @@ bool SLine::readProperties(XmlReader& e)
             setTick2(e.readInt());
       else if (tag == "tick")             // obsolete
             setTick(e.readInt());
+      else if (tag == "ticks")
+            setTicks(e.readInt());
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
             ls->read(e);

@@ -1374,7 +1374,7 @@ void Score::doLayout()
             }
       for (auto s : _spanner.map()) {
             Spanner* sp = s.second;
-            if (sp->type() == Element::Type::OTTAVA && sp->tick2() == -1) {
+            if (sp->type() == Element::Type::OTTAVA && sp->ticks() == 0) {
                   sp->setTick2(lastMeasure()->endTick());
                   sp->staff()->updateOttava();
                   }

@@ -121,7 +121,6 @@
           <durationType>quarter</durationType>
           <Note>
             <Fingering>
-              <pos x="0.663786" y="-1.59871"/>
               <text>0</text>
               </Fingering>
             <pitch>72</pitch>
@@ -132,7 +131,6 @@
           <durationType>quarter</durationType>
           <Note>
             <Fingering>
-              <pos x="0.663786" y="-1.59871"/>
               <text>1</text>
               </Fingering>
             <pitch>74</pitch>
@@ -143,7 +141,6 @@
           <durationType>quarter</durationType>
           <Note>
             <Fingering>
-              <pos x="0.663786" y="-1.59871"/>
               <text>5</text>
               </Fingering>
             <pitch>76</pitch>
@@ -154,7 +151,6 @@
           <durationType>quarter</durationType>
           <Note>
             <Fingering>
-              <pos x="0.663786" y="-1.59871"/>
               <text>3</text>
               </Fingering>
             <pitch>77</pitch>

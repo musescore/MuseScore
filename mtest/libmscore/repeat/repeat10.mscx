@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="1.24">
+  <programVersion>2.0.0</programVersion>
+  <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -24,9 +28,11 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2014-08-13</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -44,7 +50,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
         <bracket type="-1" span="1"/>
         </Staff>
       <trackName>Voice</trackName>
@@ -60,6 +68,7 @@
           <program value="52"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -156,13 +165,8 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
         </Measure>
       <Measure number="3">
         <Volta id="2">
-          <subtype>1</subtype>
-          <beginHookHeight>1.9</beginHookHeight>
-          <endHookHeight>1.9</endHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
+          <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>1.</text>
@@ -200,7 +204,6 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
         </Measure>
       <Measure number="4">
         <endRepeat>2</endRepeat>
-        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -231,14 +234,18 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
           </Chord>
         </Measure>
       <Measure number="5">
+        <endSpanner id="2"/>
         <Volta id="3">
-          <subtype>1</subtype>
-          <beginHookHeight>1.9</beginHookHeight>
-          <endHookHeight>1.9</endHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
+          <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
-          <anchor>1</anchor>
+          <Segment>
+            <subtype>1</subtype>
+            <off2 x="0.1" y="0"/>
+            </Segment>
+          <Segment>
+            <subtype>3</subtype>
+            <off2 x="0" y="0"/>
+            </Segment>
           <beginText>
             <style>Volta</style>
             <text>2.</text>
@@ -340,7 +347,6 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
         </Measure>
       <Measure number="8">
         <endRepeat>2</endRepeat>
-        <endSpanner id="3"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -371,14 +377,10 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
           </Chord>
         </Measure>
       <Measure number="9">
+        <endSpanner id="3"/>
         <Volta id="4">
-          <subtype>1</subtype>
-          <beginHookHeight>1.9</beginHookHeight>
-          <endHookHeight>1.9</endHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
+          <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
-          <anchor>1</anchor>
           <beginText>
             <style>Volta</style>
             <text>3.</text>
@@ -416,7 +418,6 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
         </Measure>
       <Measure number="10">
         <endRepeat>2</endRepeat>
-        <endSpanner id="4"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -447,6 +448,7 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
           </Chord>
         </Measure>
       <Measure number="11">
+        <endSpanner id="4"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
