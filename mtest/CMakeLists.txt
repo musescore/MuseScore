@@ -34,6 +34,8 @@ add_library(
       testutils.cpp
       ${PROJECT_SOURCE_DIR}/libmscore/mcursor.cpp
       ${PROJECT_SOURCE_DIR}/mscore/bb.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importove.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/ove.cpp
       ${PROJECT_SOURCE_DIR}/mscore/capella.cpp
       ${PROJECT_SOURCE_DIR}/mscore/capxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
@@ -136,7 +138,7 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore importmidi capella biab musicxml guitarpro)
+subdirs (libmscore importmidi capella biab musicxml guitarpro ove)
 
 
 install(FILES

@@ -26,6 +26,7 @@
 #include "mscore/importmidi_operations.h"
 #include "libmscore/xml.h"
 #include "libmscore/excerpt.h"
+#include "mscore/importove.h"
 
 namespace Ms {
 
@@ -142,6 +143,8 @@ Score* MTest::readCreatedScore(const QString& name)
             rv = importMusicXml(score, name);
       else if (csl == "gp3" || csl == "gp4" || csl == "gp5" || csl == "gpx")
             rv = importGTP(score, name);
+      else if (csl == "ove")
+            rv = importOve(score, name);
       else
             rv = Score::FileError::FILE_UNKNOWN_TYPE;
 
