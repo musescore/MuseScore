@@ -194,8 +194,11 @@ Note::Note(Score* s)
       _line              = 0;
       _fret              = -1;
       _string            = -1;
-      _fretConflict      = false;
       _ghost             = false;
+      _hidden            = false;
+      _dotsHidden        = false;
+      _fretConflict      = false;
+
       _lineOffset        = 0;
       _tieFor            = 0;
       _tieBack           = 0;
@@ -204,7 +207,6 @@ Note::Note(Score* s)
       _headGroup         = NoteHead::Group::HEAD_NORMAL;
       _headType          = NoteHead::Type::HEAD_AUTO;
 
-      _hidden            = false;
       _subchannel        = 0;
 
       _veloType          = ValueType::OFFSET_VAL;
@@ -242,6 +244,7 @@ Note::Note(const Note& n, bool link)
       _pitch             = n._pitch;
       _tpc[0]            = n._tpc[0];
       _tpc[1]            = n._tpc[1];
+      _dotsHidden        = n._dotsHidden;
       _hidden            = n._hidden;
       _play              = n._play;
       _tuning            = n._tuning;
