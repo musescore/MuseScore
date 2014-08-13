@@ -674,6 +674,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                               Spanner* s = i.second;
                               if (((s->tick() == tick) || s->tick2() == tick)
                                  && (s->anchor() == Spanner::Anchor::CHORD)
+                                 && (!noteEntryMode() || inputState().slur() != s)
                                  ) {
                                     // there is always a chord/rest at tick == cr->measure()->tick()
                                     if (s->tick() == tick && tick == cr->measure()->tick())
