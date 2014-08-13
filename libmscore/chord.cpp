@@ -2064,10 +2064,14 @@ void Chord::layoutTablature()
       // remove stems
       if (tab->slashStyle() || _noStem || durationType().type() <
          (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
-            delete _stem;
-            delete _hook;
-            _stem = 0;
-            _hook = 0;
+            // delete _stem;
+            // delete _hook;
+            // _stem = 0;
+            // _hook = 0;
+            if (_stem)
+                  score()->undo(new RemoveElement(_stem));
+            if (_hook)
+                  score()->undo(new RemoveElement(_hook));
             }
       // if stem is required but missing, add it;
       // set stem position (stem length is set in Chord:layoutStem() )
