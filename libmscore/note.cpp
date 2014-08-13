@@ -118,10 +118,10 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
    }
 };
 
-// see also mscore/editdrumset.cpp
+// same order than NoteHead::Group
 static const char* noteHeadNames[] = {
-      "normal","cross","diamond","triangle","slash","xcircle"
-      ,"do","re","mi","fa","sol","la","ti","alt. brevis"
+      "normal", "cross", "diamond", "triangle", "mi", "slash", "xcircle"
+      , "do", "re", "fa", "la", "ti", "sol", "alt. brevis"
 };
 
 //---------------------------------------------------------
