@@ -30,8 +30,8 @@ ChordLine::ChordLine(Score* s)
       modified = false;
       _chordLineType = ChordLineType::NOTYPE;
       _straight = false;
-      _lengthX = 10;
-      _lengthY = 10;
+      _lengthX = 0.0;
+      _lengthY = 0.0;
       }
 
 ChordLine::ChordLine(const ChordLine& cl)
@@ -110,14 +110,42 @@ void ChordLine::layout()
       else
             setPos(0.0, 0.0);
       QRectF r(path.boundingRect());
-      if (_straight && (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT))
-            bbox().setRect(r.x() + _spatium * 2.5, r.y(), r.width() + _spatium * 2.5, r.height());
-      else if (_straight && _chordLineType == ChordLineType::SCOOP)
-            bbox().setRect(r.x() - _spatium * 3, r.y() - _spatium, r.width() - _spatium*2, r.height());
-      else if (_straight && _chordLineType == ChordLineType::PLOP)
-            bbox().setRect(r.x() - _spatium * 4, r.y() + _spatium, r.width() + _spatium, r.height());
-      else
-            bbox().setRect(r.x() * _spatium, r.y() * _spatium, r.width() * _spatium, r.height() * _spatium);
+      int x1, y1, width, height = 0;
+      // negative gradient after note
+      if (_straight && _chordLineType == ChordLineType::FALL) {
+            x1 = r.x() + _spatium;
+            y1 = r.height() + _spatium * 0.8 + _lengthY * 0.95;
+            width =  r.width() + _spatium * 2 + _lengthX;
+            height = -r.height() - _spatium * 2 - _lengthY * 0.95;
+            }
+      // positive gradient after note
+      else if (_straight && _chordLineType ==  ChordLineType::DOIT) {
+            x1 = r.x() + _spatium;
+            y1 = r.y() + _spatium * 0.5 - _lengthY * 0.15;
+            width =  r.width() + _spatium * 2.2 + _lengthX * 0.95;
+            height = -r.height() - _spatium * 2 + _lengthY * 0.95;
+            }
+      // negative gradient before note
+      else if (_straight && _chordLineType == ChordLineType::SCOOP) {
+            x1 = -r.x() - _spatium * 1.3;
+            y1 = -r.y() / 4 - _spatium * 0.5;
+            width =  -r.width() - _spatium * 2.5 + _lengthX;
+            height = r.height() - _spatium * 1.9  + _lengthY * 1.1;
+            }
+      // positive gradient before note
+      else if (_straight && _chordLineType == ChordLineType::PLOP) {
+            x1 = -r.x() - _spatium * 1.2;
+            y1 = -r.y() + _spatium * 1.5 + _lengthY;
+            width =  -r.width() - _spatium * 2.9 + _lengthX * 1.15;
+            height = -r.height() - _spatium * 2.5 - _lengthY * 0.93;
+            }
+      else  {
+            x1 = r.x() * _spatium;
+            y1 = r.y() * _spatium;
+            width = r.width() * _spatium;
+            height = r.height() * _spatium;
+            }
+      bbox().setRect(x1, y1, width, height);
       }
 
 //---------------------------------------------------------
@@ -194,8 +222,8 @@ void ChordLine::write(Xml& xml) const
       xml.stag(name());
       xml.tag("subtype", int(_chordLineType));
       xml.tag("straight", _straight, false);
-      xml.tag("lengthX", _lengthX, false);
-      xml.tag("lengthY", _lengthY, false);
+      xml.tag("lengthX", _lengthX, 0.0);
+      xml.tag("lengthY", _lengthY, 0.0);
       Element::writeProperties(xml);
       if (modified) {
             int n = path.elementCount();
@@ -224,18 +252,17 @@ void ChordLine::draw(QPainter* painter) const
             pen.setWidthF(_spatium * .15);
             pen.setCapStyle(Qt::RoundCap);
             painter->setPen(pen);
+            // negative gradient after note
             if (_chordLineType == ChordLineType::FALL)
-                  painter->drawLine(QLineF(20.0, -4.0, 20.0 + _lengthX, -4.0 + _lengthY));
+                  painter->drawLine(QLineF(_spatium + 3.0, -_spatium + 2.0, _spatium * 3 + _lengthX, 2.0 + _spatium / 2 + _lengthY));
+            // positive gradient, after note
             else if (_chordLineType == ChordLineType::DOIT)
-                  painter->drawLine(QLineF(20.0, 4.0, 20.0 + _lengthX, 4.0 - _lengthY));
-            else if (_chordLineType == ChordLineType::SCOOP) {
-                  painter->translate(-50.0, -5.0);
-                  painter->drawLine(QLineF(20.0, -4.0, 20.0 + _lengthX, -4.0 + _lengthY));
-                  }
-            else if (_chordLineType == ChordLineType::PLOP) {
-                  painter->translate(-50.0, 5.0);
-                  painter->drawLine(QLineF(20.0, 4.0, 20.0 + _lengthX, 4.0 - _lengthY));
-                  }
+                  painter->drawLine(QLineF(_spatium + 3.0, _spatium / 3 - 2.0, _spatium * 3 + _lengthX, -2.0 - _spatium / 2 + _lengthY));
+            else if (_chordLineType == ChordLineType::SCOOP)
+                  painter->drawLine(QLineF(-3.5 * _spatium + _lengthX, -_spatium * 2 + _lengthY, -_spatium - 2.0, -_spatium / 2));
+            else if (_chordLineType == ChordLineType::PLOP)
+                  painter->drawLine(QLineF(-3.5 * _spatium + _lengthX, _spatium + 3.0 + _lengthY, -_spatium - 3.0, -_spatium / 5));
+
             painter->restore();
             }
       else  {
@@ -258,6 +285,15 @@ void ChordLine::editDrag(const EditData& ed)
       qreal sp = spatium();
       _lengthX += ed.delta.x();
       _lengthY += ed.delta.y();
+      if ((_chordLineType == ChordLineType::PLOP || _chordLineType == ChordLineType::FALL) && _lengthY < -10)
+            _lengthY = -10;
+      else if ((_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT) && _lengthX < -10)
+            _lengthX = -10;
+      else if ((_chordLineType == ChordLineType::DOIT || _chordLineType == ChordLineType::SCOOP) && _lengthY > 10)
+            _lengthY = 10;
+      else if ((_chordLineType == ChordLineType::SCOOP || _chordLineType == ChordLineType::PLOP)  && _lengthX > 10)
+            _lengthX = 10;
+
       qreal dx = ed.delta.x() / sp;
       qreal dy = ed.delta.y() / sp;
       for (int i = 0; i < n; ++i) {
