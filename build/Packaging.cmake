@@ -22,6 +22,7 @@ if (MSCORE_UNSTABLE)
             execute_process(
                   COMMAND "${GIT_EXECUTABLE}" log -1 --date=short --format=%cd
                   OUTPUT_VARIABLE git_date
+                  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
       endif (GIT_EXECUTABLE)
       if (git_date)

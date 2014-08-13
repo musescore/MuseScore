@@ -2,6 +2,7 @@ include (FindGit)
 if (GIT_EXECUTABLE)
       execute_process(
             COMMAND "${GIT_EXECUTABLE}" rev-parse --short HEAD
+            WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
             OUTPUT_VARIABLE GIT_REVISION
             )
       endif (GIT_EXECUTABLE)
