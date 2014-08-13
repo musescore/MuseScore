@@ -118,10 +118,22 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
    }
 };
 
-// same order than NoteHead::Group
+// same order as NoteHead::Group
 static const char* noteHeadNames[] = {
-      "normal", "cross", "diamond", "triangle", "mi", "slash", "xcircle"
-      , "do", "re", "fa", "la", "ti", "sol", "alt. brevis"
+    QT_TRANSLATE_NOOP("noteheadnames", "normal"),
+    QT_TRANSLATE_NOOP("noteheadnames", "cross"),
+    QT_TRANSLATE_NOOP("noteheadnames", "diamond"),
+    QT_TRANSLATE_NOOP("noteheadnames", "triangle"),
+    QT_TRANSLATE_NOOP("noteheadnames", "mi"),
+    QT_TRANSLATE_NOOP("noteheadnames", "slash"),
+    QT_TRANSLATE_NOOP("noteheadnames", "xcircle"),
+    QT_TRANSLATE_NOOP("noteheadnames", "do"),
+    QT_TRANSLATE_NOOP("noteheadnames", "re"),
+    QT_TRANSLATE_NOOP("noteheadnames", "fa"),
+    QT_TRANSLATE_NOOP("noteheadnames", "la"),
+    QT_TRANSLATE_NOOP("noteheadnames", "ti"),
+    QT_TRANSLATE_NOOP("noteheadnames", "sol"),
+    QT_TRANSLATE_NOOP("noteheadnames", "alt. brevis")
 };
 
 //---------------------------------------------------------
