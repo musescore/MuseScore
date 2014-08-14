@@ -787,7 +787,8 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   return PasteStatus::DEST_TUPLET;
             else {
                   QByteArray data(ms->data(mimeStaffListFormat));
-qDebug("paste <%s>", data.data());
+                  if(MScore::debugMode)
+                        qDebug("paste <%s>", data.data());
                   XmlReader e(data);
                   e.setPasteMode(true);
                   if (!pasteStaff(e, cr->segment(),cr->staffIdx())) {
@@ -817,7 +818,8 @@ qDebug("paste <%s>", data.data());
                   return PasteStatus::DEST_TUPLET;
             else {
                   QByteArray data(ms->data(mimeSymbolListFormat));
-                  qDebug("paste <%s>", data.data());
+                  if (MScore::debugMode)
+                        qDebug("paste <%s>", data.data());
                   XmlReader e(data);
 //            QPointF dragOffset;
 //            Fraction duration(1, 4);
