@@ -93,7 +93,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -2265,6 +2265,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
         <widget class="QGroupBox" name="pulseaudioDriver">
+         <property name="accessibleName">
+          <string>Pulse Audio</string>
+         </property>
          <property name="title">
           <string>PulseAudio</string>
          </property>
@@ -2283,6 +2286,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Port Audio</string>
          </property>
          <property name="title">
           <string>PortAudio</string>
@@ -2325,6 +2331,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>API</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose API</string>
+            </property>
            </widget>
           </item>
           <item row="2" column="0">
@@ -2348,6 +2360,12 @@
               <height>25</height>
              </size>
             </property>
+            <property name="accessibleName">
+             <string>MIDI Input</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose MIDI Input</string>
+            </property>
            </widget>
           </item>
           <item row="0" column="2">
@@ -2368,6 +2386,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>Device</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose device</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -2380,6 +2404,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>ALSA audio</string>
          </property>
          <property name="title">
           <string>ALSA audio</string>
@@ -2406,6 +2433,12 @@
           </item>
           <item row="1" column="3">
            <widget class="QSpinBox" name="alsaFragments">
+            <property name="accessibleName">
+             <string>Fragments</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose number of fragments</string>
+            </property>
             <property name="minimum">
              <number>2</number>
             </property>
@@ -2436,6 +2469,12 @@
           </item>
           <item row="1" column="5">
            <widget class="QComboBox" name="alsaPeriodSize">
+            <property name="accessibleName">
+             <string>Period Size</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose period size</string>
+            </property>
             <item>
              <property name="text">
               <string>4096</string>
@@ -2498,6 +2537,12 @@
           </item>
           <item row="1" column="1">
            <widget class="QComboBox" name="alsaSampleRate">
+            <property name="accessibleName">
+             <string>Sample rate</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose sample rate</string>
+            </property>
             <item>
              <property name="text">
               <string>192000</string>
@@ -2537,6 +2582,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QLineEdit" name="alsaDevice">
+            <property name="accessibleName">
+             <string>Device</string>
+            </property>
             <property name="text">
              <string>default</string>
             </property>
@@ -2552,6 +2600,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>JACK audio server</string>
          </property>
          <property name="title">
           <string>JACK audio server</string>
@@ -2580,6 +2631,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Use JACK MIDI</string>
             </property>
             <property name="text">
              <string>Use JACK MIDI</string>
@@ -2617,6 +2671,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>Ports</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose number of ports</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -2652,6 +2712,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>Remember last connection(s)</string>
+            </property>
             <property name="text">
              <string>Remember last connection(s)</string>
             </property>
@@ -2668,6 +2731,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>Use JACK Transport</string>
+            </property>
             <property name="text">
              <string>Use JACK Transport</string>
             </property>
@@ -2680,6 +2746,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Timebase Master</string>
             </property>
             <property name="text">
              <string>Timebase Master</string>
