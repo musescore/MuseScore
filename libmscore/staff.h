@@ -143,10 +143,6 @@ class Staff : public QObject {
       ClefTypeList clefTypeList(int tick) const;
       ClefType clef(int tick) const;
 
-      void setInitialClef(ClefType);
-      void setInitialClef(const ClefTypeList&);
-      ClefTypeList initialClefTypeList() const;
-
       void setClef(Clef*);
       void removeClef(Clef*);
 

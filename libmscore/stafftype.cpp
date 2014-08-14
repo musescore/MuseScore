@@ -114,16 +114,18 @@ const char* StaffType::groupName(StaffGroup r)
 
 bool StaffType::operator==(const StaffType& st) const
       {
-      if (!isSameStructure(st) || st._name != _name)        // common to all type groups
+      if (!isSameStructure(st) || st._xmlName != _xmlName) {        // common to all type groups
             return false;
+            }
       if (_group == StaffGroup::TAB) {                      // TAB-specific
-            return st._durationFontIdx  == _durationFontIdx
+            bool v = st._durationFontIdx  == _durationFontIdx
                && st._durationFontSize  == _durationFontSize
                && st._durationFontUserY == _durationFontUserY
                && st._fretFontIdx       == _fretFontIdx
                && st._fretFontSize      == _fretFontSize
                && st._fretFontUserY     == _fretFontUserY
                ;
+            return v;
             }
       return true;
       }
@@ -197,8 +199,8 @@ void StaffType::setLines(int val)
 void StaffType::write(Xml& xml) const
       {
       xml.stag(QString("StaffType group=\"%1\"").arg(fileGroupNames[(int)_group]));
-      if (!_name.isEmpty())
-            xml.tag("name", _name);
+      if (!_xmlName.isEmpty())
+            xml.tag("name", _xmlName);
       if (_lines != 5)
             xml.tag("lines", _lines);
       if (_lineDistance.val() != 1.0)
@@ -258,7 +260,7 @@ void StaffType::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
-                  setName(e.readElementText());
+                  setXmlName(e.readElementText());
             else if (tag == "lines")
                   setLines(e.readInt());
             else if (tag == "lineDistance")

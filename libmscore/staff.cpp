@@ -190,7 +190,25 @@ Staff::~Staff()
 
 ClefTypeList Staff::clefTypeList(int tick) const
       {
-      return clefs.clef(tick);
+      ClefTypeList ct = clefs.clef(tick);
+      if (ct._concertClef == ClefType::INVALID) {
+            switch(_staffType.group()) {
+                  case StaffGroup::TAB: {
+                        ClefType t = ClefType(score()->styleI(StyleIdx::tabClef));
+                        ct._concertClef = t;
+                        ct._transposingClef = t;
+                        }
+                        break;
+                  case StaffGroup::STANDARD:
+                        ct = part()->instr(tick)->clefType(rstaff());
+                        break;
+                  case StaffGroup::PERCUSSION:
+                        ct._concertClef = ClefType::PERC;
+                        ct._transposingClef = ClefType::PERC;
+                        break;
+                  }
+            }
+      return ct;
       }
 
 //---------------------------------------------------------
@@ -201,29 +219,6 @@ ClefType Staff::clef(int tick) const
       {
       ClefTypeList c = clefTypeList(tick);
       return score()->styleB(StyleIdx::concertPitch) ? c._concertClef : c._transposingClef;
-      }
-
-//---------------------------------------------------------
-//   setInitialClef
-//---------------------------------------------------------
-
-void Staff::setInitialClef(ClefType ct)
-      {
-      clefs.setInitial(ClefTypeList(ct,ct));
-      }
-
-void Staff::setInitialClef(const ClefTypeList& ctl)
-      {
-      clefs.setInitial(ctl);
-      }
-
-//---------------------------------------------------------
-//   initialClefTypeList
-//---------------------------------------------------------
-
-ClefTypeList Staff::initialClefTypeList() const
-      {
-      return clefs.initial();
       }
 
 //---------------------------------------------------------
@@ -760,28 +755,6 @@ void Staff::setStaffType(const StaffType* st)
                   }
             else                                // update barLineFrom/To in whole score context
                   score()->updateBarLineSpans(sIdx, linesOld, linesNew /*, true*/);
-            }
-
-      //
-      //    check for right clef-type and fix
-      //    if necessary
-      //
-      ClefType ct    = clefs.initial()._concertClef;
-      StaffGroup csg = ClefInfo::staffGroup(ct);
-
-      if (_staffType.group() != csg) {
-            switch(_staffType.group()) {
-                  case StaffGroup::TAB:
-                        ct = ClefType(score()->styleI(StyleIdx::tabClef));
-                        break;
-                  case StaffGroup::STANDARD:
-                        ct = ClefType::G;       // TODO: use preferred clef for instrument
-                        break;
-                  case StaffGroup::PERCUSSION:
-                        ct = ClefType::PERC;
-                        break;
-                  }
-            setInitialClef(ct);
             }
       }
 

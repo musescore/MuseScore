@@ -138,10 +138,6 @@
         </Measure>
       <Measure number="1" len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <KeySig>
           <accidental>0</accidental>
           </KeySig>

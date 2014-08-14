@@ -232,7 +232,7 @@
         <Staff id="2">
           <linkedTo>1</linkedTo>
           <StaffType group="tablature">
-            <name>Tab. 6-str common</name>
+            <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
             <timesig>0</timesig>
@@ -395,10 +395,6 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <Clef>
-            <concertClefType>TAB</concertClefType>
-            <transposingClefType>TAB</transposingClefType>
-            </Clef>
           <KeySig>
             <lid>2</lid>
             <accidental>0</accidental>

@@ -221,10 +221,6 @@
         </Measure>
       <Measure number="1" len="128/4">
         <multiMeasureRest>32</multiMeasureRest>
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <KeySig>
           <accidental>0</accidental>
           </KeySig>

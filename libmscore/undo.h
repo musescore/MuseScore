@@ -736,14 +736,13 @@ class ChangeStaff : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeStaffType : public UndoCommand {
-      ClefTypeList initialClef;
       Staff*       staff;
       StaffType    staffType;
 
+      void flip();
+
    public:
       ChangeStaffType(Staff* s, const StaffType& t) : staff(s), staffType(t) {}
-      virtual void undo();
-      virtual void redo();
       UNDO_NAME("ChangeStaffType")
       };
 
@@ -760,7 +759,6 @@ class ChangePart : public UndoCommand {
 
    public:
       ChangePart(Part*, const Instrument&, const QString& name);
-
       UNDO_NAME("ChangePart")
       };
 

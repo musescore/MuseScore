@@ -124,7 +124,6 @@ Score* createExcerpt(const QList<Part*>& parts)
 
             foreach (Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score, p);
-                  s->setInitialClef(staff->initialClefTypeList());
                   s->setStaffType(staff->staffType());
                   s->linkTo(staff);
                   p->staves()->append(s);
@@ -503,9 +502,6 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
       int srcStaffIdx = score->staffIdx(srcStaff);
       int dstStaffIdx = score->staffIdx(dstStaff);
 
-      if (srcStaff->staffGroup() == dstStaff->staffGroup())
-            dstStaff->setInitialClef(srcStaff->initialClefTypeList());
-
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             int sTrack = srcStaffIdx * VOICES;
             int eTrack = sTrack + VOICES;
@@ -639,7 +635,6 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
 
       TieMap tieMap;
 
-      dstStaff->setInitialClef(srcStaff->initialClefTypeList());
       int srcStaffIdx = oscore->staffIdx(srcStaff);
       int dstStaffIdx = score->staffIdx(dstStaff);
 

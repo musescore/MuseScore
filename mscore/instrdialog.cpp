@@ -179,6 +179,15 @@ void StaffListItem::setStaffType(const StaffType* st)
                         return;
                         }
                   }
+            // try harder
+            for (int i = 0; i < _staffTypeCombo->count(); ++i) {
+                  const StaffType* _st = StaffType::preset(StaffTypes(_staffTypeCombo->itemData(i).toInt()));
+                  if (_st->isSameStructure(*st)) {
+                        _staffTypeCombo->setCurrentIndex(i);
+                        return;
+                        }
+                  }
+            qDebug("StaffListItem::setStaffType: not found\n");
             _staffTypeCombo->setCurrentIndex(0);      // if none found, default to standard staff type
             }
       }
@@ -429,7 +438,6 @@ void InstrumentsDialog::expandOrCollapse(const QModelIndex &model)
             instrumentList->expand(model);
       }
 
-
 //---------------------------------------------------------
 //   genPartList
 //---------------------------------------------------------
@@ -446,7 +454,7 @@ void InstrumentsDialog::genPartList()
                   sli->staff    = s;
                   sli->setPartIdx(s->rstaff());
                   sli->staffIdx = s->idx();
-                  sli->setDefaultClef(p->instr(0)->clefType());
+                  sli->setDefaultClef(p->instr()->clefType(s->rstaff()));
                   if (s->isTabStaff()) {
                         ClefType ct(ClefType(cs->styleI(StyleIdx::tabClef)));
                         sli->setClef(ClefTypeList(ct, ct));
@@ -564,7 +572,7 @@ void InstrumentsDialog::on_addButton_clicked()
                   sli->staff    = 0;
                   sli->setPartIdx(i);
                   sli->staffIdx = -1;
-                  sli->setDefaultClef(it->clefTypes[i]);
+//                  sli->setDefaultClef(it->clefTypes[i]);
                   sli->setStaffType(it->staffTypePreset);
                   }
             partiturList->setItemExpanded(pli, true);
@@ -1128,7 +1136,6 @@ void MuseScore::editInstrList()
                         sli->staff         = staff;
 
                         staff->init(t, sli->staffType(), cidx);
-                        staff->setInitialClef(sli->clef());
 
                         rootScore->undoInsertStaff(staff, staffIdx + rstaff);
                         Staff* linkedStaff = part->staves()->front();
@@ -1188,7 +1195,6 @@ void MuseScore::editInstrList()
 
                               rootScore->adjustBracketsIns(staffIdx, staffIdx+1);
                               staff->initFromStaffType(sli->staffType());
-                              staff->setInitialClef(sli->clef());
                               Key nKey = part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
