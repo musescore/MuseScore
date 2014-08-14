@@ -93,7 +93,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -1192,6 +1192,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QCheckBox" name="enableMidiInput">
+            <property name="accessibleName">
+             <string>Enable MIDI Input</string>
+            </property>
             <property name="text">
              <string>Enable MIDI input</string>
             </property>
@@ -1201,6 +1204,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
              <widget class="QCheckBox" name="playNotes">
+              <property name="accessibleName">
+               <string>Play notes when editing</string>
+              </property>
               <property name="text">
                <string>Play notes when editing</string>
               </property>
@@ -1228,6 +1234,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="defaultPlayDuration">
+              <property name="accessibleName">
+               <string>Default duration</string>
+              </property>
               <property name="suffix">
                <string>ms</string>
               </property>
@@ -1262,6 +1271,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="warnPitchRange">
+            <property name="accessibleName">
+             <string>Color notes outside of usable pitch range</string>
+            </property>
             <property name="text">
              <string>Color notes outside of usable pitch range</string>
             </property>
@@ -1287,6 +1299,9 @@
         <widget class="QGroupBox" name="rcGroup">
          <property name="toolTip">
           <string>enable MIDI remote control</string>
+         </property>
+         <property name="accessibleName">
+          <string>MIDI remote control</string>
          </property>
          <property name="title">
           <string>MIDI remote control</string>
@@ -1325,8 +1340,14 @@
           </item>
           <item row="0" column="1">
            <widget class="Ms::GreendotButton" name="rewindActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
+            </property>
+            <property name="accessibleName">
+             <string>Rewind is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1335,8 +1356,14 @@
           </item>
           <item row="0" column="2">
            <widget class="Ms::RecordButton" name="recordRewind">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Rewind record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1355,6 +1382,9 @@
           </item>
           <item row="1" column="1">
            <widget class="Ms::GreendotButton" name="togglePlayActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
             </property>
@@ -1365,8 +1395,14 @@
           </item>
           <item row="1" column="2">
            <widget class="Ms::RecordButton" name="recordTogglePlay">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Toggle play record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1408,6 +1444,12 @@
           </item>
           <item row="0" column="5">
            <widget class="Ms::GreendotButton" name="rca2">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Whole note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1415,6 +1457,12 @@
           </item>
           <item row="1" column="5">
            <widget class="Ms::GreendotButton" name="rca3">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Half note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1422,6 +1470,12 @@
           </item>
           <item row="0" column="6">
            <widget class="Ms::RecordButton" name="rcr2">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Whole note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1429,6 +1483,12 @@
           </item>
           <item row="1" column="6">
            <widget class="Ms::RecordButton" name="rcr3">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Half note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1466,6 +1526,12 @@
           </item>
           <item row="3" column="9">
            <widget class="Ms::GreendotButton" name="rca9">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Rest is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1473,6 +1539,12 @@
           </item>
           <item row="2" column="5">
            <widget class="Ms::GreendotButton" name="rca4">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Quater note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1480,6 +1552,12 @@
           </item>
           <item row="2" column="6">
            <widget class="Ms::RecordButton" name="rcr4">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Quater note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1487,6 +1565,12 @@
           </item>
           <item row="3" column="5">
            <widget class="Ms::GreendotButton" name="rca5">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>8th note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1494,6 +1578,12 @@
           </item>
           <item row="3" column="6">
            <widget class="Ms::RecordButton" name="rcr5">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>8th note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1528,6 +1618,12 @@
           </item>
           <item row="0" column="13">
            <widget class="Ms::GreendotButton" name="rca10">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Augmentation dot is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1535,6 +1631,12 @@
           </item>
           <item row="0" column="14">
            <widget class="Ms::RecordButton" name="rcr10">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Augmentation dot record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1542,6 +1644,12 @@
           </item>
           <item row="1" column="13">
            <widget class="Ms::GreendotButton" name="rca11">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Double augmentation dot is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1549,6 +1657,12 @@
           </item>
           <item row="1" column="14">
            <widget class="Ms::RecordButton" name="rcr11">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Double augmentation dot record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1556,6 +1670,12 @@
           </item>
           <item row="2" column="13">
            <widget class="Ms::GreendotButton" name="rca12">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Tie is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1563,6 +1683,12 @@
           </item>
           <item row="2" column="14">
            <widget class="Ms::RecordButton" name="rcr12">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Tie record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1570,6 +1696,12 @@
           </item>
           <item row="3" column="10">
            <widget class="Ms::RecordButton" name="rcr9">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Rest record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1636,8 +1768,14 @@
           </item>
           <item row="2" column="1">
            <widget class="Ms::GreendotButton" name="playActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
+            </property>
+            <property name="accessibleName">
+             <string>Play is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1646,8 +1784,14 @@
           </item>
           <item row="3" column="1">
            <widget class="Ms::GreendotButton" name="stopActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
+            </property>
+            <property name="accessibleName">
+             <string>Stop is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1656,8 +1800,14 @@
           </item>
           <item row="2" column="2">
            <widget class="Ms::RecordButton" name="recordPlay">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Play record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1666,8 +1816,14 @@
           </item>
           <item row="3" column="2">
            <widget class="Ms::RecordButton" name="recordStop">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Stop record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1686,8 +1842,14 @@
           </item>
           <item row="4" column="1">
            <widget class="Ms::GreendotButton" name="editModeActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
+            </property>
+            <property name="accessibleName">
+             <string>Note entry is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1696,8 +1858,14 @@
           </item>
           <item row="4" column="2">
            <widget class="Ms::RecordButton" name="recordEditMode">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Note entry record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1716,6 +1884,12 @@
           </item>
           <item row="4" column="5">
            <widget class="Ms::GreendotButton" name="rca6">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>16th note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1723,6 +1897,12 @@
           </item>
           <item row="4" column="6">
            <widget class="Ms::RecordButton" name="rcr6">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>16th note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1730,6 +1910,12 @@
           </item>
           <item row="0" column="9">
            <widget class="Ms::GreendotButton" name="rca7">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>32nd note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1737,6 +1923,12 @@
           </item>
           <item row="0" column="10">
            <widget class="Ms::RecordButton" name="rcr7">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>32nd note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1764,6 +1956,12 @@
           </item>
           <item row="1" column="9">
            <widget class="Ms::GreendotButton" name="rca8">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>64nd note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1771,6 +1969,12 @@
           </item>
           <item row="1" column="10">
            <widget class="Ms::RecordButton" name="rcr8">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>64nd note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1778,6 +1982,9 @@
           </item>
           <item row="4" column="12" colspan="3">
            <widget class="QPushButton" name="midiRemoteControlClear">
+            <property name="accessibleName">
+             <string>Clear</string>
+            </property>
             <property name="text">
              <string>Clear</string>
             </property>
