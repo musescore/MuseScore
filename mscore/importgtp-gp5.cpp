@@ -441,7 +441,7 @@ void GuitarPro5::readTracks()
 //   readMeasures
 //---------------------------------------------------------
 
-void GuitarPro5::readMeasures(int startingTempo)
+void GuitarPro5::readMeasures(int /*startingTempo*/)
       {
       Measure* measure = score->firstMeasure();
       bool mixChange = false;
