@@ -174,10 +174,7 @@
           </Chord>
         <Chord>
           <Tuplet>1</Tuplet>
-          <durationType>32nd</durationType>
-          <Articulation>
-            <subtype>staccato</subtype>
-            </Articulation>
+          <durationType>64th</durationType>
           <Note>
             <Events>
               <Event>
@@ -192,7 +189,10 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <tick>411</tick>
+        <Rest>
+          <Tuplet>1</Tuplet>
+          <durationType>64th</durationType>
+          </Rest>
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>32nd</durationType>

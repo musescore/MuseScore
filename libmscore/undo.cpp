@@ -2328,7 +2328,7 @@ void ChangePageFormat::flip()
 //---------------------------------------------------------
 
 ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible,
-   qreal _userDist, QColor _color, bool _neverHide, bool _showIfEmpty)
+   qreal _userDist, QColor _color, bool _neverHide, bool _showIfEmpty, qreal _mag)
       {
       staff       = _staff;
       small       = _small;
@@ -2337,6 +2337,7 @@ ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible,
       color       = _color;
       neverHide   = _neverHide;
       showIfEmpty = _showIfEmpty;
+      mag         = _mag;
       }
 
 //---------------------------------------------------------
@@ -2365,6 +2366,7 @@ void ChangeStaff::flip()
       QColor oldColor     = staff->color();
       bool oldNeverHide   = staff->neverHide();
       bool oldShowIfEmpty = staff->showIfEmpty();
+      qreal oldMag        = staff->userMag();
 
       staff->setSmall(small);
       staff->setInvisible(invisible);
@@ -2372,6 +2374,7 @@ void ChangeStaff::flip()
       staff->setColor(color);
       staff->setNeverHide(neverHide);
       staff->setShowIfEmpty(showIfEmpty);
+      staff->setUserMag(mag);
 
       small       = oldSmall;
       invisible   = oldInvisible;
@@ -2379,6 +2382,7 @@ void ChangeStaff::flip()
       color       = oldColor;
       neverHide   = oldNeverHide;
       showIfEmpty = oldShowIfEmpty;
+      mag         = oldMag;
 
       Score* score = staff->score();
       if (invisibleChanged) {

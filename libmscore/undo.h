@@ -716,18 +716,20 @@ class ChangePageFormat : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeStaff : public UndoCommand {
-      Staff*      staff;
-      bool        small;
-      bool        invisible;
-      qreal       userDist;
-      QColor      color;
-      bool        neverHide;
-      bool        showIfEmpty;
+      Staff* staff;
+      bool   small;
+      bool   invisible;
+      qreal  userDist;
+      QColor color;
+      bool   neverHide;
+      bool   showIfEmpty;
+      qreal  mag;
 
       void flip();
 
    public:
-      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color, bool _neverHide, bool _showIfEmpty);
+      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color, bool _neverHide,
+         bool _showIfEmpty, qreal _mag);
       UNDO_NAME("ChangeStaff")
       };
 

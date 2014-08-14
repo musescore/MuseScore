@@ -113,6 +113,7 @@ class Staff : public QObject {
       bool _showIfEmpty  { false };    ///< show this staff if system is empty and hideEmptyStaves is true
       QColor _color      { MScore::defaultColor };
       qreal _userDist    { 0.0   };        ///< user edited extra distance
+      qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
 
       StaffType _staffType;
       LinkedStaves* _linkedStaves { nullptr };
@@ -221,7 +222,10 @@ class Staff : public QObject {
       bool primaryStaff() const;
 
       qreal userDist() const        { return _userDist;  }
-      void setUserDist(qreal val)   { _userDist = val;  }
+      void setUserDist(qreal val)   { _userDist = val;   }
+      qreal userMag() const         { return _userMag;   }
+      void setUserMag(qreal m)      { _userMag = m;      }
+
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       bool genKeySig();
       bool showLedgerLines();

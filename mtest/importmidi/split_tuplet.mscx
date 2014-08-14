@@ -151,14 +151,20 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Tuplet id="2">
+          <normalNotes>2</normalNotes>
+          <actualNotes>3</actualNotes>
+          <baseNote>eighth</baseNote>
+          </Tuplet>
         <Chord>
-          <durationType>16th</durationType>
+          <Tuplet>2</Tuplet>
+          <durationType>eighth</durationType>
           <Note>
             <Events>
               <Event>
                 <pitch>0</pitch>
                 <ontime>0</ontime>
-                <len>1000</len>
+                <len>666</len>
                 </Event>
               </Events>
             <pitch>64</pitch>
@@ -171,7 +177,7 @@
               <Event>
                 <pitch>0</pitch>
                 <ontime>0</ontime>
-                <len>1000</len>
+                <len>666</len>
                 </Event>
               </Events>
             <pitch>67</pitch>
@@ -181,10 +187,8 @@
             </Note>
           </Chord>
         <Rest>
-          <durationType>16th</durationType>
-          </Rest>
-        <Rest>
-          <durationType>eighth</durationType>
+          <Tuplet>2</Tuplet>
+          <durationType>quarter</durationType>
           </Rest>
         <Rest>
           <durationType>quarter</durationType>

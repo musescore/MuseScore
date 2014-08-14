@@ -449,6 +449,8 @@ void Staff::write(Xml& xml) const
             }
       if (_userDist != 0.0)
             xml.tag("distOffset", _userDist / spatium());
+      if (_userMag != 1.0)
+            xml.tag("mag", _userMag);
       if (color() != Qt::black)
             xml.tag("color", color());
       xml.etag();
@@ -515,6 +517,13 @@ void Staff::read(XmlReader& e)
                   }
             else if (tag == "distOffset")
                   _userDist = e.readDouble() * spatium();
+            else if (tag == "mag") {
+                  _userMag = e.readDouble();
+                  if (_userMag < 0.1)
+                        _userMag = 0.1;
+                  else if (_userMag > 10.0)
+                        _userMag = 10;
+                  }
             else if (tag == "linkedTo") {
                   int v = e.readInt() - 1;
                   //
@@ -569,7 +578,7 @@ qreal Staff::spatium() const
 
 qreal Staff::mag() const
       {
-      return _small ? score()->styleD(StyleIdx::smallStaffMag) : 1.0;
+      return (_small ? score()->styleD(StyleIdx::smallStaffMag) : 1.0) * userMag();
       }
 
 //---------------------------------------------------------
