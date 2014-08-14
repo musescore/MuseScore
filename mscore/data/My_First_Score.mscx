@@ -19,7 +19,7 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Composer</metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="creationDate">2014-08-14</metaTag>
+    <metaTag name="creationDate"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
@@ -28,7 +28,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Title</metaTag>
+    <metaTag name="workTitle">Titre</metaTag>
     <PageList>
       <Page>
         <System>
@@ -54,7 +54,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
@@ -66,6 +66,7 @@
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
+        <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>95</gateTime>
@@ -93,7 +94,7 @@
         <height>10</height>
         <Text>
           <style>Title</style>
-          <text>Title</text>
+          <text>Titre</text>
           </Text>
         <Text>
           <style>Composer</style>
@@ -101,10 +102,6 @@
           </Text>
         </VBox>
       <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <KeySig>
           <accidental>0</accidental>
           </KeySig>
