@@ -5,10 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <frameSystemDistance>21</frameSystemDistance>
-      <beamMinLen>1.32</beamMinLen>
-      <beamNoSlope>0</beamNoSlope>
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>

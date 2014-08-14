@@ -8,15 +8,12 @@
       <maxSystemDistance>20</maxSystemDistance>
       <lyricsDistance>0</lyricsDistance>
       <lyricsMinBottomDistance>0</lyricsMinBottomDistance>
-      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <frameSystemDistance>0</frameSystemDistance>
       <barWidth>0.2</barWidth>
       <endBarWidth>0.4</endBarWidth>
       <bracketDistance>0.4</bracketDistance>
       <stemWidth>0.2</stemWidth>
       <staffLineWidth>0.15</staffLineWidth>
-      <beamMinLen>1.32</beamMinLen>
-      <beamNoSlope>0</beamNoSlope>
       <genCourtesyTimesig>0</genCourtesyTimesig>
       <sectionPause>2</sectionPause>
       <showHeader>1</showHeader>
