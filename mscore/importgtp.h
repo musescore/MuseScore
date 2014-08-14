@@ -320,6 +320,5 @@ class GuitarPro6 : public GuitarPro {
       virtual void read(QFile*);
       };
 
-extern Drumset* gpDrumset;
 } // namespace Ms
 #endif

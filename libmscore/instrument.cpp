@@ -18,7 +18,6 @@
 #include "stringdata.h"
 #include "instrtemplate.h"
 #include "mscore.h"
-#include "mscore/importgtp.h"
 
 namespace Ms {
 

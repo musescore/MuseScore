@@ -117,7 +117,6 @@ class TimeSig : public Element {
       void setDenominatorString(const QString&);
       void undoSetDenominatorString(const QString&);
 
-      bool getLargeParentheses() const    { return _largeParentheses; }
       void setLargeParentheses(bool v)    { _largeParentheses = v;    }
 
       void setFrom(const TimeSig*);
