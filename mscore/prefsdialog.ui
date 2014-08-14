@@ -42,6 +42,9 @@
      </property>
      <item>
       <widget class="QPushButton" name="resetToDefault">
+       <property name="accessibleName">
+        <string>Reset All Preferences to Default</string>
+       </property>
        <property name="text">
         <string>Reset All Preferences to Default</string>
        </property>
@@ -62,6 +65,12 @@
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Apply</string>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -107,7 +116,14 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QComboBox" name="language"/>
+           <widget class="QComboBox" name="language">
+            <property name="accessibleName">
+             <string>Select language</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>The language will be changed once you restart MuseScore.</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="restartWarningLanguage">
@@ -147,6 +163,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QRadioButton" name="emptySession">
+            <property name="accessibleName">
+             <string>Start empty</string>
+            </property>
             <property name="text">
              <string>Start empty</string>
             </property>
@@ -154,6 +173,9 @@
           </item>
           <item>
            <widget class="QRadioButton" name="lastSession">
+            <property name="accessibleName">
+             <string>Continue last session</string>
+            </property>
             <property name="text">
              <string>Continue last session</string>
             </property>
@@ -164,6 +186,9 @@
           </item>
           <item>
            <widget class="QRadioButton" name="newSession">
+            <property name="accessibleName">
+             <string>Start with new score</string>
+            </property>
             <property name="text">
              <string>Start with new score</string>
             </property>
@@ -179,18 +204,34 @@
             </property>
             <item>
              <widget class="QRadioButton" name="scoreSession">
+              <property name="accessibleName">
+               <string>Start with score:</string>
+              </property>
               <property name="text">
                <string>Start with score:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="sessionScore"/>
+             <widget class="QLineEdit" name="sessionScore">
+              <property name="accessibleName">
+               <string>Start with score</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Insert path to starting score</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="startWithButton">
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
               <property name="accessibleName">
-               <string/>
+               <string>Choose starting score</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting the starting score</string>
               </property>
               <property name="text">
                <string/>
@@ -201,6 +242,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="showSplashScreen">
+            <property name="accessibleName">
+             <string>Show splash screen</string>
+            </property>
             <property name="text">
              <string>Show splash screen</string>
             </property>
@@ -211,6 +255,9 @@
        </item>
        <item row="3" column="1">
         <widget class="QGroupBox" name="autoSave">
+         <property name="accessibleName">
+          <string>Auto Save</string>
+         </property>
          <property name="title">
           <string>Auto Save</string>
          </property>
@@ -245,6 +292,9 @@
           </item>
           <item>
            <widget class="QSpinBox" name="autoSaveTime">
+            <property name="accessibleName">
+             <string>Select delay (in minutes) between auto saves</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -302,6 +352,9 @@
           </property>
           <item row="1" column="0">
            <widget class="QCheckBox" name="playPanelShow">
+            <property name="accessibleName">
+             <string>Show Play Panel</string>
+            </property>
             <property name="text">
              <string>Show Play Panel</string>
             </property>
@@ -309,6 +362,9 @@
           </item>
           <item row="3" column="0">
            <widget class="QCheckBox" name="navigatorShow">
+            <property name="accessibleName">
+             <string>Show Navigator</string>
+            </property>
             <property name="text">
              <string>Show Navigator</string>
             </property>
@@ -316,6 +372,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QCheckBox" name="webPanelShow">
+            <property name="accessibleName">
+             <string>Show MuseScore Connect</string>
+            </property>
             <property name="text">
              <string>Show MuseScore Connect</string>
             </property>
@@ -326,6 +385,9 @@
        </item>
        <item row="4" column="1">
         <widget class="QGroupBox" name="oscServer">
+         <property name="accessibleName">
+          <string>OSC remote control</string>
+         </property>
          <property name="title">
           <string>OSC remote control</string>
          </property>
@@ -351,6 +413,9 @@
           </item>
           <item>
            <widget class="QSpinBox" name="oscPort">
+            <property name="accessibleName">
+             <string>Port number</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -386,6 +451,9 @@
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
            <widget class="QComboBox" name="styleName">
+            <property name="accessibleName">
+             <string>Select style</string>
+            </property>
             <item>
              <property name="text">
               <string>dark</string>
@@ -400,6 +468,9 @@
           </item>
           <item row="2" column="2">
            <widget class="QSpinBox" name="iconHeight">
+            <property name="accessibleName">
+             <string>Icon Height</string>
+            </property>
             <property name="minimum">
              <number>5</number>
             </property>
@@ -417,6 +488,9 @@
           </item>
           <item row="2" column="1">
            <widget class="QSpinBox" name="iconWidth">
+            <property name="accessibleName">
+             <string>Icon Width</string>
+            </property>
             <property name="minimum">
              <number>5</number>
             </property>
@@ -427,6 +501,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="animations">
+            <property name="accessibleName">
+             <string>Animations</string>
+            </property>
             <property name="text">
              <string>Animations</string>
             </property>
@@ -502,7 +579,14 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="myStyles"/>
+           <widget class="QLineEdit" name="myStyles">
+            <property name="accessibleName">
+             <string>Style folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path for style folder</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
@@ -519,6 +603,15 @@
           </item>
           <item row="0" column="2">
            <widget class="QToolButton" name="myScoresButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose score folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the score folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -526,13 +619,29 @@
           </item>
           <item row="1" column="2">
            <widget class="QToolButton" name="myStylesButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose style folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the style folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="myScores"/>
+           <widget class="QLineEdit" name="myScores">
+            <property name="accessibleName">
+             <string>Score folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to score folder.</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_89">
@@ -548,13 +657,36 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="myTemplates"/>
+           <widget class="QLineEdit" name="myTemplates">
+            <property name="accessibleName">
+             <string>Template folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to Template folder</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="myPlugins"/>
+           <widget class="QLineEdit" name="myPlugins">
+            <property name="accessibleName">
+             <string>Plugin folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to plugin folder</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="2">
            <widget class="QToolButton" name="myPluginsButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose plugin folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the plugin folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -574,20 +706,50 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="sfPath"/>
+           <widget class="QLineEdit" name="sfPath">
+            <property name="accessibleName">
+             <string>Soundfont folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to soundfont folders</string>
+            </property>
+           </widget>
           </item>
           <item row="6" column="1">
-           <widget class="QLineEdit" name="myImages"/>
+           <widget class="QLineEdit" name="myImages">
+            <property name="accessibleName">
+             <string>Image folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to image folder</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="2">
            <widget class="QToolButton" name="myTemplatesButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose template folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the template folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLineEdit" name="sfzPath"/>
+           <widget class="QLineEdit" name="sfzPath">
+            <property name="accessibleName">
+             <string>SFZ folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to SFZ folders</string>
+            </property>
+           </widget>
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_19">
@@ -604,6 +766,15 @@
           </item>
           <item row="6" column="2">
            <widget class="QToolButton" name="myImagesButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Image folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the image folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -611,6 +782,15 @@
           </item>
           <item row="4" column="2">
            <widget class="QToolButton" name="mySoundfontsButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Soundfont folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for configuring the soundfont folders</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -618,6 +798,15 @@
           </item>
           <item row="5" column="2">
            <widget class="QToolButton" name="mySfzButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>SFZ folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for configuring the SFZ folders</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
