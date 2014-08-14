@@ -665,28 +665,8 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   tuplet = 0;
                   }
             else {
-                  if (seg != firstSegment || !keepChord) {
-                        // remove chord anchored spanner (slurs) if start or endpoint
-                        // is removed
-                        int tick = seg->tick();
-                        QList<Spanner*> sl;
-                        for (auto i : spanner()) {
-                              Spanner* s = i.second;
-                              if (((s->tick() == tick) || s->tick2() == tick)
-                                 && (s->anchor() == Spanner::Anchor::CHORD)
-                                 && (!noteEntryMode() || inputState().slur() != s)
-                                 ) {
-                                    // there is always a chord/rest at tick == cr->measure()->tick()
-                                    if (s->tick() == tick && tick == cr->measure()->tick())
-                                          i.second->setStartElement(nullptr);
-                                    else
-                                          sl.append(i.second);
-                                    }
-                              }
-                        for (auto i : sl)
-                              undoRemoveElement(i);
+                  if (seg != firstSegment || !keepChord)
                         undoRemoveElement(cr);
-                        }
                   }
             nextTick += td.ticks();
             if (sd < td) {

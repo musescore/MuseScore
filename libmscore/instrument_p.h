@@ -37,7 +37,7 @@ class InstrumentData : public QSharedData {
       QList<NamedEventList>   _midiActions;
       QList<MidiArticulation> _articulation;
       QList<Channel> _channel;      // at least one entry
-      ClefTypeList _clefType;
+      QList<ClefTypeList> _clefType;
 
    public:
       InstrumentData();
@@ -68,8 +68,8 @@ class InstrumentData : public QSharedData {
       void setProfessionalPitchRange(int a, int b)           { _minPitchP = a; _maxPitchP = b; }
       Channel& channel(int idx)                              { return _channel[idx];  }
       const Channel& channel(int idx) const                  { return _channel[idx];  }
-      ClefTypeList clefType() const                          { return _clefType; }
-      void setClefType(const ClefTypeList& c)                { _clefType = c;    }
+      ClefTypeList clefType(int staffIdx) const;
+      void setClefType(int staffIdx, const ClefTypeList& c);
 
       const QList<NamedEventList>& midiActions() const       { return _midiActions; }
       const QList<MidiArticulation>& articulation() const    { return _articulation; }

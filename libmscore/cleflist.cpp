@@ -42,10 +42,10 @@ bool ClefTypeList::operator!=(const ClefTypeList& t) const
 ClefTypeList ClefList::clef(int tick) const
       {
       if (empty())
-            return _initial;
+            return ClefTypeList(ClefType::INVALID, ClefType::INVALID);
       auto i = upper_bound(tick);
       if (i == begin())
-            return _initial;
+            return ClefTypeList(ClefType::INVALID, ClefType::INVALID);
       return (--i)->second;
       }
 

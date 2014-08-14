@@ -25,16 +25,11 @@ class Score;
 //---------------------------------------------------------
 
 class ClefList : public std::map<int, ClefTypeList> {
-      ClefTypeList _initial;
-
    public:
       ClefList() {}
       ClefTypeList clef(int tick) const;
       void setClef(int tick, ClefTypeList);
-      void setInitial(ClefTypeList cl) { _initial = cl;   }
-      ClefTypeList initial() const     { return _initial; }
       };
-
 
 }     // namespace Ms
 #endif

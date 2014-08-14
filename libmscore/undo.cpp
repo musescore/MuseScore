@@ -1413,35 +1413,31 @@ RemoveElement::RemoveElement(Element* e)
 
       Score* score = element->score();
       if (element->isChordRest()) {
-            bool noteEntryMode = false;
-            Slur* slur = 0;
+            // do not delete pending slur in note entry mode
+            Slur* pendingSlur = 0;
             for (Score* sc : score->scoreList()) {
                   if (sc->noteEntryMode()) {
-                        noteEntryMode = true;
-                        slur = sc->inputState().slur();
+                        pendingSlur = sc->inputState().slur();
                         break;
                         }
                   }
             // remove any slurs pointing to this chor/rest
-            if (slur) {
-                  QList<Spanner*> sl;
-                  for (auto i : score->spanner()) {     // TODO: dont search whole list
-                        Spanner* s = i.second;
-                        // do not delete slur if in note entry mode
-                        if (noteEntryMode && slur->linkList().contains(s)) {
-                              if (s->startElement() == e)
-                                    s->setStartElement(nullptr);
-                              else if (s->endElement() == e)
-                                    s->setEndElement(nullptr);
-                              continue;
-                              }
-                        if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e)) {
-                              sl.append(s);
-                              }
+            QList<Spanner*> sl;
+            for (auto i : score->spanner()) {     // TODO: dont search whole list
+                  Spanner* s = i.second;
+                  if (pendingSlur && pendingSlur->linkList().contains(s)) {
+                        if (s->startElement() == e)
+                              s->setStartElement(nullptr);
+                        else if (s->endElement() == e)
+                              s->setEndElement(nullptr);
+                        continue;
                         }
-                  for (auto s : sl)
-                        score->undo(new RemoveElement(s));
+                  if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e))
+                        sl.append(s);
                   }
+            for (auto s : sl)       // actually remove scheduled spanners
+                  score->undo(new RemoveElement(s));
+
             ChordRest* cr = static_cast<ChordRest*>(element);
             if (cr->tuplet() && cr->tuplet()->elements().empty())
                   score->undo(new RemoveElement(cr->tuplet()));
@@ -2410,62 +2406,19 @@ void ChangeStaff::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeStaffType::undo / redo
+//   ChangeStaffType::flip
 //---------------------------------------------------------
 
-void ChangeStaffType::redo()
+void ChangeStaffType::flip()
       {
-      initialClef  = staff->initialClefTypeList();
       StaffType st = *staff->staffType();
 
       bool updateNotesNeeded = st.group() != staffType.group();
       staff->setStaffType(&staffType);
 
-      if (st.group() != StaffGroup::STANDARD && staffType.group() == StaffGroup::STANDARD)
-            staff->setInitialClef(staff->part()->instr(0)->clefType());
-
-      staffType = st;
-      Score* score = staff->score();
-      if (updateNotesNeeded)
-            score->cmdUpdateNotes();
-      score->setLayoutAll(true);
-      score->scanElements(0, notifyTimeSigs);
-      }
-
-void ChangeStaffType::undo()
-      {
-      StaffType st = *staff->staffType();
-      bool updateNotesNeeded = st.group() != staffType.group();
-      staff->setStaffType(&staffType);
       staffType = st;
 
-      // restore initial clef, both in the staff clef map...
-      // staff->setClef(0, initialClef);
-
-      // ...and in the score itself (code mostly copied from undoChangeClef() )
-      // TODO : add a single function adding/setting a clef change in score?
-      // possibly directly in ClefList?
-      int tick = 0;
       Score* score = staff->score();
-      Measure* measure = score->tick2measure(tick);
-      if (!measure) {
-            qDebug("measure for tick %d not found!", tick);
-            return;
-            }
-      Segment* seg = measure->findSegment(Segment::Type::Clef, tick);
-      int track    = staff->idx() * VOICES;
-      Clef* clef   = static_cast<Clef*>(seg->element(track));
-      if (clef) {
-            clef->setGenerated(false);
-            clef->setClefType(initialClef);
-            }
-      else {
-            clef = new Clef(score);
-            clef->setTrack(track);
-            clef->setClefType(initialClef);
-            clef->setParent(seg);
-            seg->add(clef);
-            }
       if (updateNotesNeeded)
             score->cmdUpdateNotes();
       score->setLayoutAll(true);

@@ -153,8 +153,8 @@ class Instrument {
       void setProfessionalPitchRange(int a, int b);
       Channel& channel(int idx);
       const Channel& channel(int idx) const;
-      ClefTypeList clefType() const;
-      void setClefType(const ClefTypeList&);
+      ClefTypeList clefType(int staffIdx) const;
+      void setClefType(int staffIdx, const ClefTypeList&);
 
       const QList<NamedEventList>& midiActions() const;
       const QList<MidiArticulation>& articulation() const;

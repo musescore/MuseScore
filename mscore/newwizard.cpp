@@ -456,7 +456,6 @@ void InstrumentWizard::createInstruments(Score* cs)
                   ++rstaff;
 
                   staff->init(t, sli->staffType(), cidx);
-                  staff->setInitialClef(sli->clef());
 
                   if (sli->linked() && !part->staves()->isEmpty()) {
                         Staff* linkedStaff = part->staves()->back();

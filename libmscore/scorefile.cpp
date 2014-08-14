@@ -1339,6 +1339,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         continue;
 
                   if (e->generated()) {
+#if 0
                         if ((xml.curTick - xml.tickDiff) == 0) {
                               if (e->type() == Element::Type::CLEF) {
                                     if (needTick) {
@@ -1349,6 +1350,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                     e->write(xml);
                                     }
                               }
+#endif
                         continue;
                         }
                   if (needTick) {

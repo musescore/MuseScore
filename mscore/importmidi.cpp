@@ -722,13 +722,11 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
             track.staff = s;
 
             if (track.mtrack->drumTrack()) {
-                  s->setInitialClef(ClefType::PERC);
                   s->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   part->instr()->setDrumset(smDrumset);
                   part->instr()->setUseDrumset(true);
                   }
             else {
-                  s->setInitialClef(ClefType::G);           // can be reset later
                   if (idx < (tracks.size() - 1) && idx >= 0
                               && isGrandStaff(tracks[idx], tracks[idx + 1])) {
                                     // assume that the current track and the next track
@@ -740,7 +738,6 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                         part->insertStaff(ss, 1);
                         score->staves().push_back(ss);
                         ++idx;
-                        ss->setInitialClef(ClefType::F);    // can be reset later
                         tracks[idx].staff = ss;
                         }
                   }
