@@ -89,11 +89,14 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
      <property name="accessibleName">
-      <string>Prefferences Tab Mananger</string>
+      <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>8</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -3566,6 +3569,143 @@
    <header>recordbutton.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>General</tabstop>
+  <tabstop>emptySession</tabstop>
+  <tabstop>lastSession</tabstop>
+  <tabstop>newSession</tabstop>
+  <tabstop>scoreSession</tabstop>
+  <tabstop>sessionScore</tabstop>
+  <tabstop>startWithButton</tabstop>
+  <tabstop>showSplashScreen</tabstop>
+  <tabstop>myScores</tabstop>
+  <tabstop>myScoresButton</tabstop>
+  <tabstop>myStyles</tabstop>
+  <tabstop>myStylesButton</tabstop>
+  <tabstop>myTemplates</tabstop>
+  <tabstop>myTemplatesButton</tabstop>
+  <tabstop>myPlugins</tabstop>
+  <tabstop>myPluginsButton</tabstop>
+  <tabstop>sfPath</tabstop>
+  <tabstop>mySoundfontsButton</tabstop>
+  <tabstop>sfzPath</tabstop>
+  <tabstop>mySfzButton</tabstop>
+  <tabstop>myImages</tabstop>
+  <tabstop>myImagesButton</tabstop>
+  <tabstop>language</tabstop>
+  <tabstop>styleName</tabstop>
+  <tabstop>animations</tabstop>
+  <tabstop>iconWidth</tabstop>
+  <tabstop>iconHeight</tabstop>
+  <tabstop>autoSave</tabstop>
+  <tabstop>autoSaveTime</tabstop>
+  <tabstop>oscServer</tabstop>
+  <tabstop>oscPort</tabstop>
+  <tabstop>playPanelShow</tabstop>
+  <tabstop>navigatorShow</tabstop>
+  <tabstop>webPanelShow</tabstop>
+  <tabstop>bgColorButton</tabstop>
+  <tabstop>bgWallpaperButton</tabstop>
+  <tabstop>bgColorLabel</tabstop>
+  <tabstop>bgWallpaper</tabstop>
+  <tabstop>bgWallpaperSelect</tabstop>
+  <tabstop>fgColorButton</tabstop>
+  <tabstop>fgWallpaperButton</tabstop>
+  <tabstop>fgColorLabel</tabstop>
+  <tabstop>fgWallpaper</tabstop>
+  <tabstop>fgWallpaperSelect</tabstop>
+  <tabstop>drawAntialiased</tabstop>
+  <tabstop>proximity</tabstop>
+  <tabstop>enableMidiInput</tabstop>
+  <tabstop>playNotes</tabstop>
+  <tabstop>defaultPlayDuration</tabstop>
+  <tabstop>warnPitchRange</tabstop>
+  <tabstop>rcGroup</tabstop>
+  <tabstop>rewindActive</tabstop>
+  <tabstop>recordRewind</tabstop>
+  <tabstop>togglePlayActive</tabstop>
+  <tabstop>recordTogglePlay</tabstop>
+  <tabstop>playActive</tabstop>
+  <tabstop>recordPlay</tabstop>
+  <tabstop>stopActive</tabstop>
+  <tabstop>recordStop</tabstop>
+  <tabstop>editModeActive</tabstop>
+  <tabstop>recordEditMode</tabstop>
+  <tabstop>rca2</tabstop>
+  <tabstop>rcr2</tabstop>
+  <tabstop>rca3</tabstop>
+  <tabstop>rcr3</tabstop>
+  <tabstop>rca4</tabstop>
+  <tabstop>rcr4</tabstop>
+  <tabstop>rca5</tabstop>
+  <tabstop>rcr5</tabstop>
+  <tabstop>rca6</tabstop>
+  <tabstop>rcr6</tabstop>
+  <tabstop>rca7</tabstop>
+  <tabstop>rcr7</tabstop>
+  <tabstop>rca8</tabstop>
+  <tabstop>rcr8</tabstop>
+  <tabstop>rca9</tabstop>
+  <tabstop>rcr9</tabstop>
+  <tabstop>rca10</tabstop>
+  <tabstop>rcr10</tabstop>
+  <tabstop>rca11</tabstop>
+  <tabstop>rcr11</tabstop>
+  <tabstop>rca12</tabstop>
+  <tabstop>rcr12</tabstop>
+  <tabstop>midiRemoteControlClear</tabstop>
+  <tabstop>instrumentList1</tabstop>
+  <tabstop>instrumentList1Button</tabstop>
+  <tabstop>instrumentList2</tabstop>
+  <tabstop>instrumentList2Button</tabstop>
+  <tabstop>defaultStyle</tabstop>
+  <tabstop>defaultStyleButton</tabstop>
+  <tabstop>partStyle</tabstop>
+  <tabstop>partStyleButton</tabstop>
+  <tabstop>scale</tabstop>
+  <tabstop>pulseaudioDriver</tabstop>
+  <tabstop>portaudioDriver</tabstop>
+  <tabstop>portaudioApi</tabstop>
+  <tabstop>portaudioDevice</tabstop>
+  <tabstop>portMidiInput</tabstop>
+  <tabstop>alsaDriver</tabstop>
+  <tabstop>alsaDevice</tabstop>
+  <tabstop>alsaSampleRate</tabstop>
+  <tabstop>alsaFragments</tabstop>
+  <tabstop>alsaPeriodSize</tabstop>
+  <tabstop>jackDriver</tabstop>
+  <tabstop>useJackAudio</tabstop>
+  <tabstop>useJackMidi</tabstop>
+  <tabstop>midiPorts</tabstop>
+  <tabstop>rememberLastMidiConnections</tabstop>
+  <tabstop>useJackTransport</tabstop>
+  <tabstop>becomeTimebaseMaster</tabstop>
+  <tabstop>useImportBuildinStyle</tabstop>
+  <tabstop>useImportStyleFile</tabstop>
+  <tabstop>importStyleFile</tabstop>
+  <tabstop>styleFileButton</tabstop>
+  <tabstop>importCharsetListGP</tabstop>
+  <tabstop>importCharsetListOve</tabstop>
+  <tabstop>importLayout</tabstop>
+  <tabstop>importBreaks</tabstop>
+  <tabstop>shortestNote</tabstop>
+  <tabstop>pngResolution</tabstop>
+  <tabstop>pngTransparent</tabstop>
+  <tabstop>expandRepeats</tabstop>
+  <tabstop>exportAudioSampleRate</tabstop>
+  <tabstop>exportLayout</tabstop>
+  <tabstop>exportAllBreaks</tabstop>
+  <tabstop>exportManualBreaks</tabstop>
+  <tabstop>exportNoBreaks</tabstop>
+  <tabstop>shortcutList</tabstop>
+  <tabstop>resetShortcut</tabstop>
+  <tabstop>clearShortcut</tabstop>
+  <tabstop>defineShortcut</tabstop>
+  <tabstop>printShortcuts</tabstop>
+  <tabstop>checkUpdateStartup</tabstop>
+  <tabstop>resetToDefault</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
