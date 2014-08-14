@@ -723,6 +723,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
             if (track.mtrack->drumTrack()) {
                   s->setInitialClef(ClefType::PERC);
+                  s->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   part->instr()->setDrumset(smDrumset);
                   part->instr()->setUseDrumset(true);
                   }
