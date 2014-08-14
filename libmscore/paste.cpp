@@ -231,6 +231,18 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
+                              if (seg->findAnnotationOrElement(Element::Type::HARMONY, dstStaffIdx * VOICES,dstStaffIdx * VOICES)) {
+                                    QList<Element*> elements;
+                                    foreach (Element* el, seg->annotations()) {
+                                          if (el->type() == Element::Type::HARMONY
+                                              && el->track() == dstStaffIdx * VOICES) {
+                                                elements.append(el);
+                                                }
+                                          }
+                                    foreach (Element* el, elements)
+                                          undoRemoveElement(el);
+                              }
+
                               harmony->setParent(seg);
                               undoAddElement(harmony);
                               }
