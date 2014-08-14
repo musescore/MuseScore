@@ -17,6 +17,7 @@
 namespace Ms {
 
 Drumset* smDrumset;           // standard midi drumset
+Drumset* gpDrumset;           // guitar pro drumset
 
 //---------------------------------------------------------
 //   save
