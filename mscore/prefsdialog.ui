@@ -93,7 +93,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>6</number>
+      <number>7</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -3346,6 +3346,12 @@
        </property>
        <item>
         <widget class="QTreeWidget" name="shortcutList">
+         <property name="accessibleName">
+          <string>Shortcuts table</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Here you can configure shorcuts for actions</string>
+         </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
@@ -3395,6 +3401,12 @@
          </property>
          <item>
           <widget class="QPushButton" name="resetShortcut">
+           <property name="accessibleName">
+            <string>Reset Shortcut to default</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Resets the shortcuts to their default assignement</string>
+           </property>
            <property name="text">
             <string>Reset Shortcut to Default</string>
            </property>
@@ -3402,6 +3414,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="clearShortcut">
+           <property name="accessibleName">
+            <string>Clear</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Clears the shorcut assignment for the selected action</string>
+           </property>
            <property name="text">
             <string>Clear</string>
            </property>
@@ -3409,6 +3427,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="defineShortcut">
+           <property name="accessibleName">
+            <string>Define</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Opens a dialog for defining a new shorcut for the selected action</string>
+           </property>
            <property name="text">
             <string>Define...</string>
            </property>
@@ -3429,6 +3453,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="printShortcuts">
+           <property name="accessibleName">
+            <string>Print</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Print the shorcuts list</string>
+           </property>
            <property name="text">
             <string>Print</string>
            </property>
