@@ -319,32 +319,25 @@ void TimeSig::layout1()
 
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
-            // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
-            int centerY = yoff/2 + _spatium;
-
             //align on the wider
             if (numRect.width() >= denRect.width()) {
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
                   pz = QPointF(0.0, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
                   // denominator: horiz: centred around centre of numerator | vert: one space below centre line
                   pn = QPointF((numRect.width() - denRect.width())*.5, yoff + displ + _spatium);
-                  // center the parenthesis around the time signature, with equal spacing on either side
-                  int xOffsetLeft = -numRect.width() - (numRect.width() / 5) + _spatium;
-                  int xOffsetRight = numRect.width() - (numRect.width() / 5) * 2 + _spatium;
-                  pointLargeLeftParen = QPointF(xOffsetLeft, centerY);
-                  pointLargeRightParen = QPointF(xOffsetRight, centerY);
                   }
             else {
                   // denominator: horiz: centred around centre of numerator | vert: one space below centre line
                   pn = QPointF(0.0, yoff + displ + _spatium);
                   // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
                   pz = QPointF((denRect.width() - numRect.width())*.5, yoff - ((denRect.width() < 0.01) ? 0.0 : (displ + _spatium)) );
-                  // center the parenthesis around the time signature, with equal spacing on either side
-                  int xOffsetLeft = -denRect.width() - (numRect.width() / 5) + _spatium;
-                  int xOffsetRight = denRect.width() - (numRect.width() / 5) * 2 + _spatium;
-                  pointLargeLeftParen = QPointF(xOffsetLeft, centerY);
-                  pointLargeRightParen = QPointF(xOffsetRight, centerY);
                   }
+
+            // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
+            int centerY = yoff/2 + _spatium;
+            int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
+            pointLargeLeftParen = QPointF(-_spatium, centerY);
+            pointLargeRightParen = QPointF(widestPortion + _spatium, centerY);
 
             setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
             addbbox(denRect.translated(pn));
