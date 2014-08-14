@@ -93,7 +93,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -2017,6 +2017,12 @@
             <property name="toolTip">
              <string>default scale for new score views</string>
             </property>
+            <property name="accessibleName">
+             <string>Default zoom</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>default scale for new score views</string>
+            </property>
             <property name="suffix">
              <string notr="true">%</string>
             </property>
@@ -2099,6 +2105,15 @@
           </item>
           <item row="0" column="2">
            <widget class="QToolButton" name="instrumentList1Button">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose Instrument list 1</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting a instrument list file</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -2115,7 +2130,14 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="instrumentList1"/>
+           <widget class="QLineEdit" name="instrumentList1">
+            <property name="accessibleName">
+             <string>Instrument list 1</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to a instrument list file</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_87">
@@ -2128,10 +2150,26 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="defaultStyle"/>
+           <widget class="QLineEdit" name="defaultStyle">
+            <property name="accessibleName">
+             <string>Style</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to style file</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="2">
            <widget class="QToolButton" name="defaultStyleButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose style</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting a style file</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -2148,20 +2186,52 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="partStyle"/>
+           <widget class="QLineEdit" name="partStyle">
+            <property name="accessibleName">
+             <string>Style for part</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to style file for part</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="2">
            <widget class="QToolButton" name="partStyleButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose style for part</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting a style file for part</string>
+            </property>
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="instrumentList2"/>
+           <widget class="QLineEdit" name="instrumentList2">
+            <property name="accessibleName">
+             <string>Instrument list 2</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to a instrument list file</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="2">
            <widget class="QToolButton" name="instrumentList2Button">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose Instrument list 2</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting a instrument list file</string>
+            </property>
             <property name="text">
              <string/>
             </property>
