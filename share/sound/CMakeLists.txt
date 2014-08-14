@@ -19,7 +19,7 @@
 #=============================================================================
 
 install(FILES
-      FluidR3Mono_GM2-6beta.sf3
+      FluidR3Mono_GM.sf3
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       )
 
