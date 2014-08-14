@@ -207,6 +207,7 @@ void Spanner::add(Element* e)
       SpannerSegment* ls = static_cast<SpannerSegment*>(e);
       ls->setSpanner(this);
       ls->setSelected(selected());
+      ls->setTrack(ls->spanner()->track());
       segments.append(ls);
       }
 
