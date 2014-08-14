@@ -140,7 +140,7 @@ void Preferences::init()
 
       antialiasedDrawing       = true;
       sessionStart             = SessionStart::SCORE;
-      startScore               = ":/data/Promenade_Example.mscz";
+      startScore               = ":/data/My_First_Score.mscx";
       defaultStyleFile         = "";
       showSplashScreen         = true;
 
