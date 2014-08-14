@@ -57,6 +57,7 @@ class TestCopyPaste : public QObject, public MTest
       void copyPaste2Voice4() { copypastevoice("16",1); } // shorten last cr
       void copyPaste2Voice5();                            // cut and move
       void copyPasteOnlySecondVoice();
+      void copypaste19() { copypaste("19"); }       // chord symbols
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
