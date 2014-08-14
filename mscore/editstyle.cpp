@@ -309,15 +309,15 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::clefBarlineDistance,     Spatium(clefBarlineDistance->value()));
       lstyle.set(StyleIdx::staffLineWidth,          Spatium(staffLineWidth->value()));
       lstyle.set(StyleIdx::beamWidth,               Spatium(beamWidth->value()));
-      lstyle.set(StyleIdx::beamDistance,            beamDistance->value() * 0.01);
+      lstyle.set(StyleIdx::beamDistance,            beamDistance->value() / 100.0);
       lstyle.set(StyleIdx::beamMinLen,              Spatium(beamMinLen->value()));
       lstyle.set(StyleIdx::beamNoSlope,             beamNoSlope->isChecked());
 
-      lstyle.set(StyleIdx::graceNoteMag,            graceNoteSize->value() * 0.01);
-      lstyle.set(StyleIdx::smallStaffMag,           smallStaffSize->value() * 0.01);
-      lstyle.set(StyleIdx::smallNoteMag,            smallNoteSize->value() * 0.01);
-      lstyle.set(StyleIdx::smallClefMag,            smallClefSize->value() * 0.01);
-      lstyle.set(StyleIdx::lastSystemFillLimit,     lastSystemFillThreshold->value() * 0.01);
+      lstyle.set(StyleIdx::graceNoteMag,            graceNoteSize->value() / 100.0);
+      lstyle.set(StyleIdx::smallStaffMag,           smallStaffSize->value() / 100.0);
+      lstyle.set(StyleIdx::smallNoteMag,            smallNoteSize->value() / 100.0);
+      lstyle.set(StyleIdx::smallClefMag,            smallClefSize->value() / 100.0);
+      lstyle.set(StyleIdx::lastSystemFillLimit,     lastSystemFillThreshold->value() / 100.0);
       lstyle.set(StyleIdx::hairpinY,                Spatium(hairpinY->value()));
       lstyle.set(StyleIdx::hairpinLineWidth,        Spatium(hairpinLineWidth->value()));
       lstyle.set(StyleIdx::hairpinHeight,           Spatium(hairpinHeight->value()));
@@ -364,7 +364,7 @@ void EditStyle::getValues()
 
       lstyle.set(StyleIdx::accidentalNoteDistance,  Spatium(accidentalNoteDistance->value()));
       lstyle.set(StyleIdx::accidentalDistance,      Spatium(accidentalDistance->value()));
-      lstyle.set(StyleIdx::dotMag,                  dotMag->value() * 0.01);
+      lstyle.set(StyleIdx::dotMag,                  dotMag->value() / 100.0);
       lstyle.set(StyleIdx::dotNoteDistance,         Spatium(noteDotDistance->value()));
       lstyle.set(StyleIdx::dotDotDistance,          Spatium(dotDotDistance->value()));
       lstyle.set(StyleIdx::stemWidth,               Spatium(stemWidth->value()));
@@ -379,7 +379,7 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::propertyDistanceHead,    Spatium(propertyDistanceHead->value()));
       lstyle.set(StyleIdx::propertyDistanceStem,    Spatium(propertyDistanceStem->value()));
       lstyle.set(StyleIdx::propertyDistance,        Spatium(propertyDistance->value()));
-      lstyle.set(StyleIdx::articulationMag,         articulationMag->value() * 0.01);
+      lstyle.set(StyleIdx::articulationMag,         articulationMag->value() / 100.0);
 
       lstyle.set(StyleIdx::shortenStem,             shortenStem->isChecked());
       lstyle.set(StyleIdx::shortStemProgression,    Spatium(shortStemProgression->value()));
