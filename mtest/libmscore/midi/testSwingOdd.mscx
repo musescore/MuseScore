@@ -115,7 +115,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
-          <swing swingUnit="eighth" swingRatio= "60"/>
+          <swing unit="eighth" ratio= "60"/>
           <style>System</style>
           <text>system-text</text>
           </StaffText>

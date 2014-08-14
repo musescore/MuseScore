@@ -182,7 +182,7 @@
         </Measure>
       <Measure number="2">
         <StaffText>
-          <swing swingUnit="eighth" swingRatio= "80"/>
+          <swing unit="eighth" ratio= "80"/>
           <text>staff-text</text>
           </StaffText>
         <Chord>

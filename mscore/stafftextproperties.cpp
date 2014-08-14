@@ -127,7 +127,7 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
                   }
             }
 
-      if (staffText->_setSwing) {
+      if (staffText->swing()) {
             setSwingBox->setChecked(true);
             if (st->swingParameters()->swingUnit == MScore::division/2) {
                   swingBox->setEnabled(true);
@@ -418,7 +418,7 @@ void StaffTextProperties::saveValues()
                   }
             }
       if (setSwingBox->isChecked()) {
-            staffText->setSetSwing(true);
+            staffText->setSwing(true);
             if (SwingOff->isChecked()) {
                   staffText->setSwingParameters(0, swingBox->value());
                   swingBox->setEnabled(false);

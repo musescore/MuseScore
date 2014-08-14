@@ -28,7 +28,7 @@ StaffText::StaffText(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setTextStyleType(TextStyleType::STAFF);
       _setAeolusStops = false;
-      _setSwing = false;
+      _swing = false;
       clearAeolusStops();
       setSwingParameters(MScore::division / 2, 60);
       }
@@ -54,7 +54,7 @@ void StaffText::write(Xml& xml) const
             for (int i = 0; i < 4; ++i)
                   xml.tag(QString("aeolus group=\"%1\"").arg(i), aeolusStops[i]);
             }
-      if (_setSwing) {
+      if (swing()) {
             QString swingUnit;
             if (swingParameters()->swingUnit == MScore::division / 2)
                   swingUnit = TDuration(TDuration::DurationType::V_EIGHT).name();
@@ -63,7 +63,7 @@ void StaffText::write(Xml& xml) const
             else
                   swingUnit = TDuration(TDuration::DurationType::V_ZERO).name();
             int swingRatio = swingParameters()->swingRatio;
-            xml.tagE(QString("swing swingUnit=\"%1\" swingRatio= \"%2\"").arg(swingUnit).arg(swingRatio));
+            xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
             }
       Text::writeProperties(xml);
       xml.etag();
@@ -122,7 +122,7 @@ void StaffText::read(XmlReader& e)
                   _setAeolusStops = true;
                   }
           else if (tag == "swing") {
-                  QString swingUnit = e.attribute("swingUnit","");
+                  QString swingUnit = e.attribute("unit","");
                   int unit = 0;
                   if (swingUnit == TDuration(TDuration::DurationType::V_EIGHT).name())
                         unit = MScore::division / 2;
@@ -130,8 +130,8 @@ void StaffText::read(XmlReader& e)
                         unit = MScore:: division / 4;
                   else if (swingUnit == TDuration(TDuration::DurationType::V_ZERO).name())
                         unit = 0;
-                  int ratio = e.intAttribute("swingRatio", 60);
-                  setSetSwing(true);
+                  int ratio = e.intAttribute("ratio", 60);
+                  setSwing(true);
                   setSwingParameters(unit, ratio);
                   e.readNext();
                   }

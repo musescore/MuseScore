@@ -205,7 +205,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
-          <swing swingUnit="eighth" swingRatio= "75"/>
+          <swing unit="eighth" ratio= "75"/>
           <style>Tempo</style>
           <text>Everybody swing!</text>
           </StaffText>
@@ -485,7 +485,7 @@
         </Measure>
       <Measure number="2">
         <StaffText>
-          <swing swingUnit="" swingRatio= "60"/>
+          <swing unit="" ratio= "60"/>
           <text>Straight</text>
           </StaffText>
         <Chord>
