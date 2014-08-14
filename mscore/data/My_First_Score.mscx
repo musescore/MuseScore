@@ -28,7 +28,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Titre</metaTag>
+    <metaTag name="workTitle">Title</metaTag>
     <PageList>
       <Page>
         <System>
@@ -94,7 +94,7 @@
         <height>10</height>
         <Text>
           <style>Title</style>
-          <text>Titre</text>
+          <text>Title</text>
           </Text>
         <Text>
           <style>Composer</style>
