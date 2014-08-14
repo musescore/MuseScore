@@ -492,9 +492,9 @@ class Element : public QObject {
 
       virtual void reset();
 
-      virtual qreal mag() const                { return _mag;   }
-      qreal magS() const;
+      virtual qreal mag() const        { return _mag;   }
       void setMag(qreal val)           { _mag = val;    }
+      qreal magS() const;
 
       bool isText() const;
 
