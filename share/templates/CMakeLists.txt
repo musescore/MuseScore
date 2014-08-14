@@ -19,19 +19,6 @@
 #=============================================================================
 
 install(FILES
-      Chamber\ Orchestra.mscx
-      Choir\ SATB.mscx
-      Choir\ SATB\ with\ Piano.mscx
-      Concert\ Band.mscx
-      Hymn.mscz
-      Lead\ Sheet.mscx
-      Piano.mscx
-      Guitar\ Tab.mscx
-      carol.mscx
-      Jazz\ Lead\ Sheet.mscz
-      Jazz\ Big\ Band.mscz
-      Jazz\ Combo.mscz
-      UK\ Brass\ Band.mscz
       drumset_fr.drm
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )
