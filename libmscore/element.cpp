@@ -290,6 +290,8 @@ Element::~Element()
                   delete _links;
                   }
             }
+      if (_selected && _score && _score->selection().elements().contains(this))
+            _score->selection().remove(this);
       }
 
 //---------------------------------------------------------
