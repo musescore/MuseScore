@@ -93,7 +93,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -3111,6 +3111,9 @@
           </item>
           <item row="1" column="0">
            <widget class="QCheckBox" name="pngTransparent">
+            <property name="accessibleName">
+             <string>Transparent background</string>
+            </property>
             <property name="text">
              <string>Transparent background</string>
             </property>
@@ -3131,6 +3134,12 @@
           </item>
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="pngResolution">
+            <property name="accessibleName">
+             <string>Resolution DPI</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose resolution DPI</string>
+            </property>
             <property name="minimum">
              <double>32.000000000000000</double>
             </property>
@@ -3153,6 +3162,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>MIDI</string>
+         </property>
          <property name="title">
           <string>MIDI</string>
          </property>
@@ -3162,6 +3174,9 @@
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QCheckBox" name="expandRepeats">
+            <property name="accessibleName">
+             <string>Expand repeats</string>
+            </property>
             <property name="text">
              <string>Expand repeats</string>
             </property>
@@ -3172,6 +3187,9 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_16">
+         <property name="accessibleName">
+          <string>Audio</string>
+         </property>
          <property name="title">
           <string>Audio</string>
          </property>
@@ -3185,6 +3203,12 @@
           </item>
           <item>
            <widget class="QComboBox" name="exportAudioSampleRate">
+            <property name="accessibleName">
+             <string>Sample rate</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose sample rate</string>
+            </property>
             <item>
              <property name="text">
               <string>44100</string>
@@ -3221,6 +3245,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>MusicXML</string>
+         </property>
          <property name="title">
           <string>MusicXML</string>
          </property>
@@ -3230,6 +3257,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
            <widget class="QGroupBox" name="exportLayout">
+            <property name="accessibleName">
+             <string>Export layout</string>
+            </property>
             <property name="title">
              <string>Export layout</string>
             </property>
@@ -3239,6 +3269,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_11">
              <item>
               <widget class="QRadioButton" name="exportAllBreaks">
+               <property name="accessibleName">
+                <string>Export all system and page breaks</string>
+               </property>
                <property name="text">
                 <string>Export all system and page breaks</string>
                </property>
@@ -3246,6 +3279,9 @@
              </item>
              <item>
               <widget class="QRadioButton" name="exportManualBreaks">
+               <property name="accessibleName">
+                <string>Export manually added system and page breaks only</string>
+               </property>
                <property name="text">
                 <string>Export manually added system and page breaks only</string>
                </property>
@@ -3253,6 +3289,9 @@
              </item>
              <item>
               <widget class="QRadioButton" name="exportNoBreaks">
+               <property name="accessibleName">
+                <string>Do not export system or page breaks</string>
+               </property>
                <property name="text">
                 <string>Do not export system or page breaks</string>
                </property>
