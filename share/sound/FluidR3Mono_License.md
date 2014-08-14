@@ -1,21 +1,23 @@
-FluidR3Mono GM2-6.SF2
+FluidR3Mono_GM.sf3
+---
 
-FluidR3Mono GM 
-Version 2.6beta
+Current version: 2.6beta
 
 Original Stereo version by Frank Wen Copyright © 2000-2002
 
 Mono version by Michael Cowgill Copyright © 2014
 
-DO NOT REDISTRIBUTE ANY OF THESE SAMPLES
+This Mono version of FluidR3 GM is released under the MIT license as described in COPYING
 
-This Mono version of FluidR3 GM is released under a Creative Commons Attribution-NonCommercial 4.0 International Licence.
+The soundfont was compressed from the SF2 soundfont.
+More info about the SF3 format and compression algorithm: https://github.com/wschweer/sftools
 
-More information about this licence is available here: http://creativecommons.org/licenses/by-nc/4.0/
+The COPYING and README files from the original FluidR3GM file are now displayed here for reference.
 
-The copyright and readme files from the original FluidR3GM file are now displayed here for reference.
 
-Readme
+README
+---
+
 Fluid (R3) SoundFont
 
 Copyright (c) 2000-2002, 2008 Frank Wen <getfrank@gmail.com>
@@ -54,7 +56,10 @@ say hello and tell me what is going on in the computer musician world.
 Who knows, maybe I'll kick start this project again? ;)
 
 
-Copying
+COPYING
+---
+
+Mono version:  Copyright (c) 2014 Michael Cowgill 
 Copyright (c) 2000-2002, 2008 Frank Wen <getfrank@gmail.com>
 
 Permission is hereby granted, free of charge, to any person
