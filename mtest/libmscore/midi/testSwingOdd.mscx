@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="1.24">
   <programVersion>2.0.0</programVersion>
-  <programRevision>8cc66dd</programRevision>
+  <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -12,7 +12,9 @@
       <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <beamMinLen>1.32</beamMinLen>
       <beamNoSlope>0</beamNoSlope>
-      <swingUnit>240</swingUnit>
+      <smallNoteMag>0.7</smallNoteMag>
+      <graceNoteMag>0.7</graceNoteMag>
+      <smallStaffMag>0.7</smallStaffMag>
       <page-layout>
         <page-height>1584</page-height>
         <page-width>1224</page-width>
@@ -112,6 +114,11 @@
           <sigD>8</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <StaffText>
+          <swing unit="eighth" ratio= "60"/>
+          <style>System</style>
+          <text>system-text</text>
+          </StaffText>
         <Chord>
           <durationType>eighth</durationType>
           <Note>

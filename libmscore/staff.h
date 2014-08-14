@@ -80,6 +80,15 @@ struct BracketItem {
       };
 
 //---------------------------------------------------------
+//   SwingParameters
+//---------------------------------------------------------
+
+struct SwingParameters {
+      int swingUnit;
+      int swingRatio;
+};
+
+//---------------------------------------------------------
 //    Staff
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
@@ -106,10 +115,9 @@ class Staff : public QObject {
       qreal _userDist    { 0.0   };        ///< user edited extra distance
 
       StaffType _staffType;
-
       LinkedStaves* _linkedStaves { nullptr };
-
       QMap<int,int> _channelList[VOICES];
+      QMap<int,SwingParameters> _swingList;
 
       VeloList _velocities;         ///< cached value
       PitchList _pitchOffsets;      ///< cached value
@@ -188,6 +196,8 @@ class Staff : public QObject {
       qreal spatium() const;
       int channel(int tick, int voice) const;
       QMap<int,int>* channelList(int voice) { return  &_channelList[voice]; }
+      SwingParameters swing(int tick)  const;
+      QMap<int,SwingParameters>* swingList() { return &_swingList; }
 
       const StaffType* staffType() const { return &_staffType;      }
       StaffType* staffType()             { return &_staffType;      }

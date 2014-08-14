@@ -50,6 +50,44 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   updateSwing
+//---------------------------------------------------------
+
+void Score::updateSwing()
+      {
+      foreach (Staff* s, _staves) {
+            s->swingList()->clear();
+            }
+      Measure* fm = firstMeasure();
+      if (!fm)
+            return;
+      for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
+            foreach (const Element* e, s->annotations()) {
+                  if (e->type() != Element::Type::STAFF_TEXT)
+                        continue;
+                  const StaffText* st = static_cast<const StaffText*>(e);
+                  QString an(st->plainText());
+                  qDebug() << an;
+                  if (an.isEmpty())
+                        continue;
+                  Staff* staff = st->staff();
+                  if (!st->swing())
+                        continue;
+                  SwingParameters sp;
+                  sp.swingRatio = st->swingParameters()->swingRatio;
+                  sp.swingUnit = st->swingParameters()->swingUnit;
+                  if (st->systemFlag()) {
+                        foreach (Staff* sta, _staves) {
+                              sta->swingList()->insert(s->tick(),sp);
+                              }
+                        }
+                  else
+                        staff->swingList()->insert(s->tick(),sp);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   updateChannel
 //---------------------------------------------------------
 
@@ -573,6 +611,7 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
             if (offset > 0)
                   tick += offset;
            }
+
       int swingBeat = swingUnit * 2;
       qreal ticksDuration = (qreal)chord->actualTicks();
       qreal swingTickAdjust = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
@@ -835,12 +874,12 @@ void Score::createPlayEvents(Chord* chord)
                   on += graceDuration;
                   }
             }
-
+      SwingParameters st = chord->staff()->swing(tick);
+      int unit = st.swingUnit;
+      int ratio = st.swingRatio;
       // Check if swing needs to be applied
-      int swingUnit = styleI(StyleIdx::swingUnit);
-      if (swingUnit) {
-            int swingRatio = styleI(StyleIdx::swingRatio);
-            swingAdjustParams(chord, gateTime, ontime, swingUnit, swingRatio);
+      if (unit) {
+            swingAdjustParams(chord, gateTime, ontime, unit, ratio);
       }
       //
       //    render normal (and articulated) chords
@@ -883,6 +922,7 @@ void Score::createPlayEvents()
 
 void Score::renderMidi(EventMap* events)
       {
+      updateSwing();
       createPlayEvents();
 
       updateRepeatList(MScore::playRepeats);
