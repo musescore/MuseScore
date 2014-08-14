@@ -5,11 +5,8 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <frameSystemDistance>21</frameSystemDistance>
       <clefLeftMargin>4</clefLeftMargin>
-      <beamMinLen>1.32</beamMinLen>
-      <beamNoSlope>0</beamNoSlope>
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
@@ -395,10 +392,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
         <frameSystemDistance>21</frameSystemDistance>
-        <beamMinLen>1.32</beamMinLen>
-        <beamNoSlope>0</beamNoSlope>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <TextStyle>
           <halign>center</halign>
@@ -635,10 +629,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
         <frameSystemDistance>21</frameSystemDistance>
-        <beamMinLen>1.32</beamMinLen>
-        <beamNoSlope>0</beamNoSlope>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <TextStyle>
           <halign>center</halign>
