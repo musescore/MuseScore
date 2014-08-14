@@ -119,7 +119,7 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
-          <swing swingUnit="16th" swingRatio= "70"/>
+          <swing unit="16th" ratio= "70"/>
           <style>System</style>
           <text>system-text</text>
           </StaffText>

@@ -40,9 +40,9 @@ class StaffText : public Text  {
       SwingParameters _swingParameters;
       bool _setAeolusStops;
       int aeolusStops[4];
+      bool _swing;
 
    public:
-      bool _setSwing;
       StaffText(Score* = 0);
       virtual StaffText* clone() const   { return new StaffText(*this); }
       virtual Element::Type type() const { return Element::Type::STAFF_TEXT; }
@@ -55,13 +55,14 @@ class StaffText : public Text  {
       void setSwingParameters(int unit, int ratio)        {  _swingParameters.swingUnit = unit; _swingParameters.swingRatio = ratio; }
       const QList<ChannelActions>* channelActions() const { return &_channelActions;    }
       QList<ChannelActions>* channelActions()             { return &_channelActions;    }
-      const SwingParameters* swingParameters() const      { return &_swingParameters;    }
+      const SwingParameters* swingParameters() const      { return &_swingParameters;   }
       void clearAeolusStops();
       void setAeolusStop(int group, int idx, bool val);
       bool getAeolusStop(int group, int idx) const;
       void setSetAeolusStops(bool val) { _setAeolusStops = val; }
-      void setSetSwing(bool checked)   { _setSwing = checked; }
+      void setSwing(bool checked)      { _swing = checked; }
       bool setAeolusStops() const      { return _setAeolusStops; }
+      bool swing() const               { return _swing; }
       };
 
 }     // namespace Ms

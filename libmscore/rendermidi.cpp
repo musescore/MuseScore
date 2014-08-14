@@ -71,7 +71,7 @@ void Score::updateSwing()
                   if (an.isEmpty())
                         continue;
                   Staff* staff = st->staff();
-                  if (!st->_setSwing)
+                  if (!st->swing())
                         continue;
                   SwingParameters sp;
                   sp.swingRatio = st->swingParameters()->swingRatio;
