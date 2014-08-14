@@ -93,7 +93,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -842,6 +842,9 @@
        </property>
        <item>
         <widget class="QGroupBox" name="groupBox_2">
+         <property name="accessibleName">
+          <string>Background</string>
+         </property>
          <property name="title">
           <string>Background</string>
          </property>
@@ -866,6 +869,9 @@
           </property>
           <item row="0" column="1">
            <widget class="QRadioButton" name="bgWallpaperButton">
+            <property name="accessibleName">
+             <string>Background Wallpaper</string>
+            </property>
             <property name="text">
              <string>Wallpaper</string>
             </property>
@@ -873,6 +879,9 @@
           </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="bgColorButton">
+            <property name="accessibleName">
+             <string>Background Color</string>
+            </property>
             <property name="text">
              <string>Color</string>
             </property>
@@ -896,10 +905,23 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QLineEdit" name="bgWallpaper"/>
+             <widget class="QLineEdit" name="bgWallpaper">
+              <property name="accessibleName">
+               <string>Background wallpaper path</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Insert path to background wallpaper file</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="bgWallpaperSelect">
+              <property name="accessibleName">
+               <string>Choose Background wallpaper file</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting the wallpaper file</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -926,6 +948,15 @@
             </property>
             <item>
              <widget class="Awl::ColorLabel" name="bgColorLabel">
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
+              <property name="accessibleName">
+               <string>Select background color</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a dialog for selecting the background color</string>
+              </property>
               <property name="frameShape">
                <enum>QFrame::Box</enum>
               </property>
@@ -938,6 +969,9 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_3">
+         <property name="accessibleName">
+          <string>Paper</string>
+         </property>
          <property name="title">
           <string>Paper</string>
          </property>
@@ -978,10 +1012,23 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QLineEdit" name="fgWallpaper"/>
+             <widget class="QLineEdit" name="fgWallpaper">
+              <property name="accessibleName">
+               <string>Paper wallpaper path</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Insert path to paper wallpaper file</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="fgWallpaperSelect">
+              <property name="accessibleName">
+               <string>Choose paper wallpaper file</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting the wallpaper file</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -1008,6 +1055,15 @@
             </property>
             <item>
              <widget class="Awl::ColorLabel" name="fgColorLabel">
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
+              <property name="accessibleName">
+               <string>Select paper color</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a dialog for selecting the paper color</string>
+              </property>
               <property name="frameShape">
                <enum>QFrame::Box</enum>
               </property>
@@ -1017,6 +1073,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QRadioButton" name="fgWallpaperButton">
+            <property name="accessibleName">
+             <string>Paper Wallpaper</string>
+            </property>
             <property name="text">
              <string>Wallpaper</string>
             </property>
@@ -1024,6 +1083,9 @@
           </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="fgColorButton">
+            <property name="accessibleName">
+             <string>Paper Color</string>
+            </property>
             <property name="text">
              <string>Color</string>
             </property>
@@ -1063,6 +1125,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="proximity">
+            <property name="accessibleName">
+             <string>Proximity for selecting elements:</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -1090,6 +1155,12 @@
              <string>Disable antialiased drawing</string>
             </property>
             <property name="whatsThis">
+             <string>Uncheck this to speed up drawing</string>
+            </property>
+            <property name="accessibleName">
+             <string>Draw antialiased</string>
+            </property>
+            <property name="accessibleDescription">
              <string>Uncheck this to speed up drawing</string>
             </property>
             <property name="text">
