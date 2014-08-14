@@ -42,7 +42,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <StaffType group="pitched">
+        <StaffType group="percussion">
+          <name>Perc. 5 lines</name>
+          <keysig>0</keysig>
           </StaffType>
         </Staff>
       <trackName>drum</trackName>
