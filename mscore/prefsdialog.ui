@@ -90,14 +90,14 @@
       </sizepolicy>
      </property>
      <property name="accessibleName">
-      <string/>
+      <string>Prefferences Tab Mananger</string>
      </property>
      <property name="currentIndex">
-      <number>7</number>
+      <number>8</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
-       <string/>
+       <string>General Tab</string>
       </property>
       <attribute name="title">
        <string>General</string>
@@ -819,7 +819,7 @@
      </widget>
      <widget class="QWidget" name="tabCanvas">
       <property name="accessibleName">
-       <string/>
+       <string>Canvas Tab</string>
       </property>
       <attribute name="title">
        <string>Canvas</string>
@@ -1178,7 +1178,7 @@
      </widget>
      <widget class="QWidget" name="tabNoteEntry">
       <property name="accessibleName">
-       <string/>
+       <string>Note Entry Tab</string>
       </property>
       <attribute name="title">
        <string>Note Entry</string>
@@ -1997,7 +1997,7 @@
      </widget>
      <widget class="QWidget" name="tabScore">
       <property name="accessibleName">
-       <string/>
+       <string>Score Tab</string>
       </property>
       <attribute name="title">
        <string>Score</string>
@@ -2257,7 +2257,10 @@
      </widget>
      <widget class="QWidget" name="tabIO">
       <property name="accessibleName">
-       <string/>
+       <string>I/O Tab</string>
+      </property>
+      <property name="accessibleDescription">
+       <string>Attention: Any changes on this page require a restart of MuseScore.</string>
       </property>
       <attribute name="title">
        <string>I/O</string>
@@ -2838,7 +2841,7 @@
      </widget>
      <widget class="QWidget" name="tabImport">
       <property name="accessibleName">
-       <string/>
+       <string>Import Tab</string>
       </property>
       <attribute name="title">
        <string>Import</string>
@@ -3087,7 +3090,7 @@
      </widget>
      <widget class="QWidget" name="tabExport">
       <property name="accessibleName">
-       <string/>
+       <string>Export Tab</string>
       </property>
       <attribute name="title">
        <string>Export</string>
@@ -3323,7 +3326,7 @@
      </widget>
      <widget class="QWidget" name="tabShortcuts">
       <property name="accessibleName">
-       <string/>
+       <string>Shortcuts Tab</string>
       </property>
       <attribute name="title">
        <string>Shortcuts</string>
@@ -3470,7 +3473,7 @@
      </widget>
      <widget class="QWidget" name="tabUpdate">
       <property name="accessibleName">
-       <string/>
+       <string>Update Tab</string>
       </property>
       <attribute name="title">
        <string>Update</string>
@@ -3478,6 +3481,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
         <widget class="QGroupBox" name="groupBox_17">
+         <property name="accessibleName">
+          <string>Automatic Update Check</string>
+         </property>
          <property name="title">
           <string>Automatic Update Check</string>
          </property>
@@ -3495,7 +3501,14 @@
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QComboBox" name="checkUpdateStartup"/>
+             <widget class="QComboBox" name="checkUpdateStartup">
+              <property name="accessibleName">
+               <string>Check for new versions of MuseScore on startup</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Choose interval</string>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="horizontalSpacer_5">
