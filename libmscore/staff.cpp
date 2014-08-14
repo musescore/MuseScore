@@ -573,6 +573,34 @@ qreal Staff::mag() const
       }
 
 //---------------------------------------------------------
+//   swing
+//---------------------------------------------------------
+
+SwingParameters Staff::swing(int tick) const
+      {
+      SwingParameters sp;
+      int swingUnit;
+      QString unit = score()->styleSt(StyleIdx::swingUnit);
+      int swingRatio = score()->styleI(StyleIdx::swingRatio);
+      if (unit == TDuration(TDuration::DurationType::V_EIGHT).name()) {
+            swingUnit = MScore::division / 2;
+            }
+      else if (unit == TDuration(TDuration::DurationType::V_16TH).name())
+            swingUnit = MScore::division / 4;
+      else if (unit == TDuration(TDuration::DurationType::V_ZERO).name())
+            swingUnit = 0;
+      sp.swingRatio = swingRatio;
+      sp.swingUnit = swingUnit;
+      if (_swingList.isEmpty())
+            return sp;
+      QMap<int, SwingParameters>::const_iterator i = _swingList.upperBound(tick);
+      if (i == _swingList.begin())
+            return sp;
+      --i;
+      return i.value();
+      }
+
+//---------------------------------------------------------
 //   channel
 //---------------------------------------------------------
 
