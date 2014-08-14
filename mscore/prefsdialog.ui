@@ -93,7 +93,7 @@
       <string/>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -2855,6 +2855,9 @@
          <layout class="QVBoxLayout">
           <item>
            <widget class="QRadioButton" name="useImportBuildinStyle">
+            <property name="accessibleName">
+             <string>Build in style</string>
+            </property>
             <property name="text">
              <string>Built in style</string>
             </property>
@@ -2864,16 +2867,32 @@
            <layout class="QHBoxLayout">
             <item>
              <widget class="QRadioButton" name="useImportStyleFile">
+              <property name="accessibleName">
+               <string>Use style file</string>
+              </property>
               <property name="text">
                <string>Use style file:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="importStyleFile"/>
+             <widget class="QLineEdit" name="importStyleFile">
+              <property name="accessibleName">
+               <string>Use style file</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Insert path to style file</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="styleFileButton">
+              <property name="accessibleName">
+               <string>Choose style</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting a style file</string>
+              </property>
               <property name="text">
                <string>Browse...</string>
               </property>
@@ -2903,7 +2922,14 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QComboBox" name="importCharsetListOve"/>
+             <widget class="QComboBox" name="importCharsetListOve">
+              <property name="accessibleName">
+               <string>Overture import character set</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Choose Overture import character set</string>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_23">
@@ -2913,7 +2939,14 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QComboBox" name="importCharsetListGP"/>
+             <widget class="QComboBox" name="importCharsetListGP">
+              <property name="accessibleName">
+               <string>Guitar Pro import character set</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Choose Guitar Pro import character set</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -2928,6 +2961,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>MusicXML</string>
+         </property>
          <property name="title">
           <string>MusicXML</string>
          </property>
@@ -2937,6 +2973,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
            <widget class="QCheckBox" name="importLayout">
+            <property name="accessibleName">
+             <string>Import layout</string>
+            </property>
             <property name="text">
              <string>Import layout</string>
             </property>
@@ -2944,6 +2983,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="importBreaks">
+            <property name="accessibleName">
+             <string>Import system and page breaks</string>
+            </property>
             <property name="text">
              <string>Import system and page breaks</string>
             </property>
@@ -2960,6 +3002,9 @@
            <height>100</height>
           </size>
          </property>
+         <property name="accessibleName">
+          <string>MIDI</string>
+         </property>
          <property name="title">
           <string>MIDI</string>
          </property>
@@ -2973,6 +3018,12 @@
           </item>
           <item>
            <widget class="QComboBox" name="shortestNote">
+            <property name="accessibleName">
+             <string>Shortest note</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose the shortest note value</string>
+            </property>
             <property name="currentIndex">
              <number>2</number>
             </property>
