@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>920</width>
-    <height>603</height>
+    <height>623</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -833,11 +833,20 @@
           </item>
           <item row="4" column="1">
            <widget class="QDoubleSpinBox" name="mag">
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
             <property name="minimum">
-             <double>1.000000000000000</double>
+             <double>10.000000000000000</double>
             </property>
             <property name="maximum">
-             <double>10.000000000000000</double>
+             <double>1000.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>100.000000000000000</double>
             </property>
            </widget>
           </item>

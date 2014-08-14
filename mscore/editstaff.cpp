@@ -76,7 +76,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       partName->setText(part->partName());
       neverHide->setChecked(staff->neverHide());
       showIfEmpty->setChecked(staff->showIfEmpty());
-      mag->setValue(staff->userMag());
+      mag->setValue(staff->userMag() * 100.0);
       updateStaffType();
       updateInstrument();
 
@@ -240,7 +240,7 @@ void EditStaff::apply()
       QColor col     = color->color();
       bool nhide     = neverHide->isChecked();
       bool ifEmpty   = showIfEmpty->isChecked();
-      qreal scale    = mag->value();
+      qreal scale    = mag->value() / 100.0;
 
       if (!(instrument == *part->instr()) || part->partName() != partName->text()) {
             Interval v1 = instrument.transpose();
