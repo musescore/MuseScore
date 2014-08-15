@@ -720,6 +720,7 @@ void EditStyle::setValues()
       musicalTextFont->clear();
       musicalTextFont->addItem("Emmentaler Text", "MScore Text");
       musicalTextFont->addItem("Bravura Text", "Bravura Text");
+      musicalTextFont->addItem("MuseJazz", "MuseJazz");
       QString tfont(lstyle.value(StyleIdx::MusicalTextFont).toString());
       idx = tfont == "Bravura Text" ? 1 : 0;
       musicalTextFont->setCurrentIndex(idx);
