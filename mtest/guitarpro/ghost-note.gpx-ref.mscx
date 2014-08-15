@@ -60,6 +60,7 @@
         <maxPitchP>86</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>86</maxPitchA>
+        <clef>G8vb</clef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -235,6 +236,7 @@
           <maxPitchP>86</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>86</maxPitchA>
+          <clef>G8vb</clef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
