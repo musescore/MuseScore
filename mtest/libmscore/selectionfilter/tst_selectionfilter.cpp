@@ -89,7 +89,13 @@ void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
 
       QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1.xml").arg(idx),
          DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
+
+      delete score;
       }
+
+//---------------------------------------------------------
+//   testFilterSpanner
+//---------------------------------------------------------
 
 void TestSelectionFilter::testFilterSpanner(int idx, SelectionFilterType filter)
       {
@@ -117,6 +123,8 @@ void TestSelectionFilter::testFilterSpanner(int idx, SelectionFilterType filter)
 
       QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1.xml").arg(idx),
          DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
+
+      delete score;
       }
 
 QTEST_MAIN(TestSelectionFilter)

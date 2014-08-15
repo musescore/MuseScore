@@ -64,9 +64,9 @@ Selection::Selection(Score* s)
       _startSegment  = 0;
       _endSegment    = 0;
       _activeSegment = 0;
-      _staffStart     = 0;
-      _staffEnd       = 0;
-      _activeTrack    = 0;
+      _staffStart    = 0;
+      _staffEnd      = 0;
+      _activeTrack   = 0;
       }
 
 //---------------------------------------------------------
@@ -273,9 +273,9 @@ void Selection::clear()
       _startSegment  = 0;
       _endSegment    = 0;
       _activeSegment = 0;
-      _staffStart     = 0;
-      _staffEnd       = 0;
-      _activeTrack    = 0;
+      _staffStart    = 0;
+      _staffEnd      = 0;
+      _activeTrack   = 0;
       setState(SelState::NONE);
       }
 
@@ -544,10 +544,8 @@ void Selection::updateState()
 
 void Selection::setState(SelState s)
       {
-//      if (_state != s) {
-            _state = s;
-            _score->setSelectionChanged(true);
-//            }
+      _state = s;
+      _score->setSelectionChanged(true);
       }
 
 //---------------------------------------------------------
@@ -594,6 +592,9 @@ QByteArray Selection::mimeData() const
       return a;
       }
 
+//---------------------------------------------------------
+//   hasElementInTrack
+//---------------------------------------------------------
 
 bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
       {
@@ -603,6 +604,10 @@ bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
             }
       return false;
       }
+
+//---------------------------------------------------------
+//   firstElementInTrack
+//---------------------------------------------------------
 
 int firstElementInTrack(Segment* startSeg, Segment* endSeg, int track)
       {
@@ -1124,10 +1129,18 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
       }
 
+//---------------------------------------------------------
+//   selectionFilter
+//---------------------------------------------------------
+
 SelectionFilter Selection::selectionFilter() const
       {
       return _score->selectionFilter();
       }
+
+//---------------------------------------------------------
+//   setFiltered
+//---------------------------------------------------------
 
 void SelectionFilter::setFiltered(SelectionFilterType type, bool set)
       {

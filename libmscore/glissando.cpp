@@ -152,7 +152,8 @@ void Glissando::layout()
 
 void Glissando::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Glissando");
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
