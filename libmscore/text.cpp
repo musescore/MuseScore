@@ -201,9 +201,10 @@ QFont TextFragment::font(const Text* t) const
             ScoreFont* sf = ScoreFont::fallbackFont();
             for (SymId id : ids)
                   text.append(sf->toString(id));
-            font.setFamily(t->score()->styleSt(StyleIdx::MusicalTextFont));
+            QString sfn = t->score()->styleSt(StyleIdx::MusicalTextFont);
+            font.setFamily(sfn);
             font.setWeight(QFont::Normal);      // if not set we get system default
-            font.setStyleStrategy(QFont::NoFontMerging);
+            //font.setStyleStrategy(QFont::NoFontMerging);
             font.setHintingPreference(QFont::PreferVerticalHinting);
             }
       if (format.valign() != VerticalAlignment::AlignNormal)
