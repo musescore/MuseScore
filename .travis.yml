@@ -29,7 +29,7 @@ before_script:
   - "make debug CPUS=4"
   - "sudo make installdebug"
   - "cd build.debug/mtest"
-  - "make -j 4"
+  - "make -j 2"
 script:
   - "../../build/run_tests.sh"
 after_script:
