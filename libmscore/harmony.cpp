@@ -1438,5 +1438,18 @@ const QList<HDegree>& Harmony::degreeList() const
       return _degreeList;
       }
 
-}
+//---------------------------------------------------------
+//   parsedForm
+//---------------------------------------------------------
 
+const ParsedChord* Harmony::parsedForm()
+      {
+      if (!_parsedForm) {
+            ChordList* cl = score()->style()->chordList();
+            _parsedForm = new ParsedChord();
+            _parsedForm->parse(_textName, cl, false);
+            }
+      return _parsedForm;
+      }
+
+}

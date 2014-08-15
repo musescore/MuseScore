@@ -1298,7 +1298,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
       // validate kindText
       if (kindText != "" && kind != "none") {
             ParsedChord validate;
-            validate.parse(kindText,cl,false);
+            validate.parse(kindText, cl, false);
             // kindText should parse to produce same kind, no degrees
             if (validate._xmlKind != kind || !validate._xmlDegrees.isEmpty())
                   kindText = "";
@@ -1344,7 +1344,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             _name += ")";
 
       // parse name to construct handle & tokenList
-      parse(_name,cl,true);
+      parse(_name, cl, true);
 
       // record original MusicXML
       _xmlKind = kind;
@@ -1468,7 +1468,7 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
             QString n;
             if (!names.isEmpty())
                   n = names.front();
-            pc->parse(n,cl);
+            pc->parse(n, cl);
             }
       parsedChords.append(*pc);
       if (renderList.isEmpty() || renderListGenerated) {
