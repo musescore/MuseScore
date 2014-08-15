@@ -42,6 +42,9 @@
      </property>
      <item>
       <widget class="QPushButton" name="resetToDefault">
+       <property name="accessibleName">
+        <string>Reset All Preferences to Default</string>
+       </property>
        <property name="text">
         <string>Reset All Preferences to Default</string>
        </property>
@@ -62,6 +65,12 @@
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Apply</string>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -80,15 +89,18 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
      <property name="accessibleName">
-      <string/>
+      <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
-       <string/>
+       <string>General Tab</string>
       </property>
       <attribute name="title">
        <string>General</string>
@@ -107,7 +119,14 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QComboBox" name="language"/>
+           <widget class="QComboBox" name="language">
+            <property name="accessibleName">
+             <string>Select language</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>The language will be changed once you restart MuseScore.</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="restartWarningLanguage">
@@ -147,6 +166,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QRadioButton" name="emptySession">
+            <property name="accessibleName">
+             <string>Start empty</string>
+            </property>
             <property name="text">
              <string>Start empty</string>
             </property>
@@ -154,6 +176,9 @@
           </item>
           <item>
            <widget class="QRadioButton" name="lastSession">
+            <property name="accessibleName">
+             <string>Continue last session</string>
+            </property>
             <property name="text">
              <string>Continue last session</string>
             </property>
@@ -164,6 +189,9 @@
           </item>
           <item>
            <widget class="QRadioButton" name="newSession">
+            <property name="accessibleName">
+             <string>Start with new score</string>
+            </property>
             <property name="text">
              <string>Start with new score</string>
             </property>
@@ -179,18 +207,34 @@
             </property>
             <item>
              <widget class="QRadioButton" name="scoreSession">
+              <property name="accessibleName">
+               <string>Start with score:</string>
+              </property>
               <property name="text">
                <string>Start with score:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="sessionScore"/>
+             <widget class="QLineEdit" name="sessionScore">
+              <property name="accessibleName">
+               <string>Start with score</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Insert path to starting score</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="startWithButton">
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
               <property name="accessibleName">
-               <string/>
+               <string>Choose starting score</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting the starting score</string>
               </property>
               <property name="text">
                <string/>
@@ -201,6 +245,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="showSplashScreen">
+            <property name="accessibleName">
+             <string>Show splash screen</string>
+            </property>
             <property name="text">
              <string>Show splash screen</string>
             </property>
@@ -211,6 +258,9 @@
        </item>
        <item row="3" column="1">
         <widget class="QGroupBox" name="autoSave">
+         <property name="accessibleName">
+          <string>Auto Save</string>
+         </property>
          <property name="title">
           <string>Auto Save</string>
          </property>
@@ -245,6 +295,9 @@
           </item>
           <item>
            <widget class="QSpinBox" name="autoSaveTime">
+            <property name="accessibleName">
+             <string>Select delay (in minutes) between auto saves</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -302,6 +355,9 @@
           </property>
           <item row="1" column="0">
            <widget class="QCheckBox" name="playPanelShow">
+            <property name="accessibleName">
+             <string>Show Play Panel</string>
+            </property>
             <property name="text">
              <string>Show Play Panel</string>
             </property>
@@ -309,6 +365,9 @@
           </item>
           <item row="3" column="0">
            <widget class="QCheckBox" name="navigatorShow">
+            <property name="accessibleName">
+             <string>Show Navigator</string>
+            </property>
             <property name="text">
              <string>Show Navigator</string>
             </property>
@@ -316,6 +375,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QCheckBox" name="webPanelShow">
+            <property name="accessibleName">
+             <string>Show MuseScore Connect</string>
+            </property>
             <property name="text">
              <string>Show MuseScore Connect</string>
             </property>
@@ -326,6 +388,9 @@
        </item>
        <item row="4" column="1">
         <widget class="QGroupBox" name="oscServer">
+         <property name="accessibleName">
+          <string>OSC remote control</string>
+         </property>
          <property name="title">
           <string>OSC remote control</string>
          </property>
@@ -351,6 +416,9 @@
           </item>
           <item>
            <widget class="QSpinBox" name="oscPort">
+            <property name="accessibleName">
+             <string>Port number</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -386,6 +454,9 @@
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
            <widget class="QComboBox" name="styleName">
+            <property name="accessibleName">
+             <string>Select style</string>
+            </property>
             <item>
              <property name="text">
               <string>dark</string>
@@ -400,6 +471,9 @@
           </item>
           <item row="2" column="2">
            <widget class="QSpinBox" name="iconHeight">
+            <property name="accessibleName">
+             <string>Icon Height</string>
+            </property>
             <property name="minimum">
              <number>5</number>
             </property>
@@ -417,6 +491,9 @@
           </item>
           <item row="2" column="1">
            <widget class="QSpinBox" name="iconWidth">
+            <property name="accessibleName">
+             <string>Icon Width</string>
+            </property>
             <property name="minimum">
              <number>5</number>
             </property>
@@ -427,6 +504,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="animations">
+            <property name="accessibleName">
+             <string>Animations</string>
+            </property>
             <property name="text">
              <string>Animations</string>
             </property>
@@ -502,7 +582,14 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="myStyles"/>
+           <widget class="QLineEdit" name="myStyles">
+            <property name="accessibleName">
+             <string>Style folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path for style folder</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
@@ -519,6 +606,15 @@
           </item>
           <item row="0" column="2">
            <widget class="QToolButton" name="myScoresButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose score folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the score folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -526,13 +622,29 @@
           </item>
           <item row="1" column="2">
            <widget class="QToolButton" name="myStylesButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose style folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the style folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="myScores"/>
+           <widget class="QLineEdit" name="myScores">
+            <property name="accessibleName">
+             <string>Score folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to score folder.</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_89">
@@ -548,13 +660,36 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="myTemplates"/>
+           <widget class="QLineEdit" name="myTemplates">
+            <property name="accessibleName">
+             <string>Template folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to Template folder</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="myPlugins"/>
+           <widget class="QLineEdit" name="myPlugins">
+            <property name="accessibleName">
+             <string>Plugin folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to plugin folder</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="2">
            <widget class="QToolButton" name="myPluginsButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose plugin folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the plugin folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -574,20 +709,50 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="sfPath"/>
+           <widget class="QLineEdit" name="sfPath">
+            <property name="accessibleName">
+             <string>Soundfont folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to soundfont folders</string>
+            </property>
+           </widget>
           </item>
           <item row="6" column="1">
-           <widget class="QLineEdit" name="myImages"/>
+           <widget class="QLineEdit" name="myImages">
+            <property name="accessibleName">
+             <string>Image folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to image folder</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="2">
            <widget class="QToolButton" name="myTemplatesButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose template folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the template folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLineEdit" name="sfzPath"/>
+           <widget class="QLineEdit" name="sfzPath">
+            <property name="accessibleName">
+             <string>SFZ folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to SFZ folders</string>
+            </property>
+           </widget>
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_19">
@@ -604,6 +769,15 @@
           </item>
           <item row="6" column="2">
            <widget class="QToolButton" name="myImagesButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Image folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the image folder</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -611,6 +785,15 @@
           </item>
           <item row="4" column="2">
            <widget class="QToolButton" name="mySoundfontsButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Soundfont folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for configuring the soundfont folders</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -618,6 +801,15 @@
           </item>
           <item row="5" column="2">
            <widget class="QToolButton" name="mySfzButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>SFZ folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for configuring the SFZ folders</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -630,7 +822,7 @@
      </widget>
      <widget class="QWidget" name="tabCanvas">
       <property name="accessibleName">
-       <string/>
+       <string>Canvas Tab</string>
       </property>
       <attribute name="title">
        <string>Canvas</string>
@@ -653,6 +845,9 @@
        </property>
        <item>
         <widget class="QGroupBox" name="groupBox_2">
+         <property name="accessibleName">
+          <string>Background</string>
+         </property>
          <property name="title">
           <string>Background</string>
          </property>
@@ -677,6 +872,9 @@
           </property>
           <item row="0" column="1">
            <widget class="QRadioButton" name="bgWallpaperButton">
+            <property name="accessibleName">
+             <string>Background Wallpaper</string>
+            </property>
             <property name="text">
              <string>Wallpaper</string>
             </property>
@@ -684,6 +882,9 @@
           </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="bgColorButton">
+            <property name="accessibleName">
+             <string>Background Color</string>
+            </property>
             <property name="text">
              <string>Color</string>
             </property>
@@ -707,10 +908,23 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QLineEdit" name="bgWallpaper"/>
+             <widget class="QLineEdit" name="bgWallpaper">
+              <property name="accessibleName">
+               <string>Background wallpaper path</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Insert path to background wallpaper file</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="bgWallpaperSelect">
+              <property name="accessibleName">
+               <string>Choose Background wallpaper file</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting the wallpaper file</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -737,6 +951,15 @@
             </property>
             <item>
              <widget class="Awl::ColorLabel" name="bgColorLabel">
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
+              <property name="accessibleName">
+               <string>Select background color</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a dialog for selecting the background color</string>
+              </property>
               <property name="frameShape">
                <enum>QFrame::Box</enum>
               </property>
@@ -749,6 +972,9 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_3">
+         <property name="accessibleName">
+          <string>Paper</string>
+         </property>
          <property name="title">
           <string>Paper</string>
          </property>
@@ -789,10 +1015,23 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QLineEdit" name="fgWallpaper"/>
+             <widget class="QLineEdit" name="fgWallpaper">
+              <property name="accessibleName">
+               <string>Paper wallpaper path</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Insert path to paper wallpaper file</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="fgWallpaperSelect">
+              <property name="accessibleName">
+               <string>Choose paper wallpaper file</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting the wallpaper file</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -819,6 +1058,15 @@
             </property>
             <item>
              <widget class="Awl::ColorLabel" name="fgColorLabel">
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
+              <property name="accessibleName">
+               <string>Select paper color</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a dialog for selecting the paper color</string>
+              </property>
               <property name="frameShape">
                <enum>QFrame::Box</enum>
               </property>
@@ -828,6 +1076,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QRadioButton" name="fgWallpaperButton">
+            <property name="accessibleName">
+             <string>Paper Wallpaper</string>
+            </property>
             <property name="text">
              <string>Wallpaper</string>
             </property>
@@ -835,6 +1086,9 @@
           </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="fgColorButton">
+            <property name="accessibleName">
+             <string>Paper Color</string>
+            </property>
             <property name="text">
              <string>Color</string>
             </property>
@@ -874,6 +1128,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="proximity">
+            <property name="accessibleName">
+             <string>Proximity for selecting elements:</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -903,6 +1160,12 @@
             <property name="whatsThis">
              <string>Uncheck this to speed up drawing</string>
             </property>
+            <property name="accessibleName">
+             <string>Draw antialiased</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Uncheck this to speed up drawing</string>
+            </property>
             <property name="text">
              <string>Draw antialiased</string>
             </property>
@@ -918,7 +1181,7 @@
      </widget>
      <widget class="QWidget" name="tabNoteEntry">
       <property name="accessibleName">
-       <string/>
+       <string>Note Entry Tab</string>
       </property>
       <attribute name="title">
        <string>Note Entry</string>
@@ -932,6 +1195,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QCheckBox" name="enableMidiInput">
+            <property name="accessibleName">
+             <string>Enable MIDI Input</string>
+            </property>
             <property name="text">
              <string>Enable MIDI input</string>
             </property>
@@ -941,6 +1207,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
              <widget class="QCheckBox" name="playNotes">
+              <property name="accessibleName">
+               <string>Play notes when editing</string>
+              </property>
               <property name="text">
                <string>Play notes when editing</string>
               </property>
@@ -968,6 +1237,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="defaultPlayDuration">
+              <property name="accessibleName">
+               <string>Default duration</string>
+              </property>
               <property name="suffix">
                <string>ms</string>
               </property>
@@ -1002,6 +1274,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="warnPitchRange">
+            <property name="accessibleName">
+             <string>Color notes outside of usable pitch range</string>
+            </property>
             <property name="text">
              <string>Color notes outside of usable pitch range</string>
             </property>
@@ -1027,6 +1302,9 @@
         <widget class="QGroupBox" name="rcGroup">
          <property name="toolTip">
           <string>enable MIDI remote control</string>
+         </property>
+         <property name="accessibleName">
+          <string>MIDI remote control</string>
          </property>
          <property name="title">
           <string>MIDI remote control</string>
@@ -1065,8 +1343,14 @@
           </item>
           <item row="0" column="1">
            <widget class="Ms::GreendotButton" name="rewindActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
+            </property>
+            <property name="accessibleName">
+             <string>Rewind is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1075,8 +1359,14 @@
           </item>
           <item row="0" column="2">
            <widget class="Ms::RecordButton" name="recordRewind">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Rewind record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1095,6 +1385,9 @@
           </item>
           <item row="1" column="1">
            <widget class="Ms::GreendotButton" name="togglePlayActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
             </property>
@@ -1105,8 +1398,14 @@
           </item>
           <item row="1" column="2">
            <widget class="Ms::RecordButton" name="recordTogglePlay">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Toggle play record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1148,6 +1447,12 @@
           </item>
           <item row="0" column="5">
            <widget class="Ms::GreendotButton" name="rca2">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Whole note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1155,6 +1460,12 @@
           </item>
           <item row="1" column="5">
            <widget class="Ms::GreendotButton" name="rca3">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Half note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1162,6 +1473,12 @@
           </item>
           <item row="0" column="6">
            <widget class="Ms::RecordButton" name="rcr2">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Whole note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1169,6 +1486,12 @@
           </item>
           <item row="1" column="6">
            <widget class="Ms::RecordButton" name="rcr3">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Half note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1206,6 +1529,12 @@
           </item>
           <item row="3" column="9">
            <widget class="Ms::GreendotButton" name="rca9">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Rest is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1213,6 +1542,12 @@
           </item>
           <item row="2" column="5">
            <widget class="Ms::GreendotButton" name="rca4">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Quater note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1220,6 +1555,12 @@
           </item>
           <item row="2" column="6">
            <widget class="Ms::RecordButton" name="rcr4">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Quater note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1227,6 +1568,12 @@
           </item>
           <item row="3" column="5">
            <widget class="Ms::GreendotButton" name="rca5">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>8th note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1234,6 +1581,12 @@
           </item>
           <item row="3" column="6">
            <widget class="Ms::RecordButton" name="rcr5">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>8th note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1268,6 +1621,12 @@
           </item>
           <item row="0" column="13">
            <widget class="Ms::GreendotButton" name="rca10">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Augmentation dot is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1275,6 +1634,12 @@
           </item>
           <item row="0" column="14">
            <widget class="Ms::RecordButton" name="rcr10">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Augmentation dot record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1282,6 +1647,12 @@
           </item>
           <item row="1" column="13">
            <widget class="Ms::GreendotButton" name="rca11">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Double augmentation dot is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1289,6 +1660,12 @@
           </item>
           <item row="1" column="14">
            <widget class="Ms::RecordButton" name="rcr11">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Double augmentation dot record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1296,6 +1673,12 @@
           </item>
           <item row="2" column="13">
            <widget class="Ms::GreendotButton" name="rca12">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Tie is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1303,6 +1686,12 @@
           </item>
           <item row="2" column="14">
            <widget class="Ms::RecordButton" name="rcr12">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Tie record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1310,6 +1699,12 @@
           </item>
           <item row="3" column="10">
            <widget class="Ms::RecordButton" name="rcr9">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Rest record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1376,8 +1771,14 @@
           </item>
           <item row="2" column="1">
            <widget class="Ms::GreendotButton" name="playActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
+            </property>
+            <property name="accessibleName">
+             <string>Play is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1386,8 +1787,14 @@
           </item>
           <item row="3" column="1">
            <widget class="Ms::GreendotButton" name="stopActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
+            </property>
+            <property name="accessibleName">
+             <string>Stop is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1396,8 +1803,14 @@
           </item>
           <item row="2" column="2">
            <widget class="Ms::RecordButton" name="recordPlay">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Play record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1406,8 +1819,14 @@
           </item>
           <item row="3" column="2">
            <widget class="Ms::RecordButton" name="recordStop">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Stop record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1426,8 +1845,14 @@
           </item>
           <item row="4" column="1">
            <widget class="Ms::GreendotButton" name="editModeActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>is active</string>
+            </property>
+            <property name="accessibleName">
+             <string>Note entry is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1436,8 +1861,14 @@
           </item>
           <item row="4" column="2">
            <widget class="Ms::RecordButton" name="recordEditMode">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="toolTip">
              <string>record</string>
+            </property>
+            <property name="accessibleName">
+             <string>Note entry record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1456,6 +1887,12 @@
           </item>
           <item row="4" column="5">
            <widget class="Ms::GreendotButton" name="rca6">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>16th note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1463,6 +1900,12 @@
           </item>
           <item row="4" column="6">
            <widget class="Ms::RecordButton" name="rcr6">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>16th note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1470,6 +1913,12 @@
           </item>
           <item row="0" column="9">
            <widget class="Ms::GreendotButton" name="rca7">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>32nd note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1477,6 +1926,12 @@
           </item>
           <item row="0" column="10">
            <widget class="Ms::RecordButton" name="rcr7">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>32nd note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1504,6 +1959,12 @@
           </item>
           <item row="1" column="9">
            <widget class="Ms::GreendotButton" name="rca8">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>64nd note is active</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1511,6 +1972,12 @@
           </item>
           <item row="1" column="10">
            <widget class="Ms::RecordButton" name="rcr8">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>64nd note record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -1518,6 +1985,9 @@
           </item>
           <item row="4" column="12" colspan="3">
            <widget class="QPushButton" name="midiRemoteControlClear">
+            <property name="accessibleName">
+             <string>Clear</string>
+            </property>
             <property name="text">
              <string>Clear</string>
             </property>
@@ -1530,7 +2000,7 @@
      </widget>
      <widget class="QWidget" name="tabScore">
       <property name="accessibleName">
-       <string/>
+       <string>Score Tab</string>
       </property>
       <attribute name="title">
        <string>Score</string>
@@ -1548,6 +2018,12 @@
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="scale">
             <property name="toolTip">
+             <string>default scale for new score views</string>
+            </property>
+            <property name="accessibleName">
+             <string>Default zoom</string>
+            </property>
+            <property name="accessibleDescription">
              <string>default scale for new score views</string>
             </property>
             <property name="suffix">
@@ -1632,6 +2108,15 @@
           </item>
           <item row="0" column="2">
            <widget class="QToolButton" name="instrumentList1Button">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose Instrument list 1</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting a instrument list file</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -1648,7 +2133,14 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="instrumentList1"/>
+           <widget class="QLineEdit" name="instrumentList1">
+            <property name="accessibleName">
+             <string>Instrument list 1</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to a instrument list file</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_87">
@@ -1661,10 +2153,26 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="defaultStyle"/>
+           <widget class="QLineEdit" name="defaultStyle">
+            <property name="accessibleName">
+             <string>Style</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to style file</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="2">
            <widget class="QToolButton" name="defaultStyleButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose style</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting a style file</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -1681,20 +2189,52 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="partStyle"/>
+           <widget class="QLineEdit" name="partStyle">
+            <property name="accessibleName">
+             <string>Style for part</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to style file for part</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="2">
            <widget class="QToolButton" name="partStyleButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose style for part</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting a style file for part</string>
+            </property>
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="instrumentList2"/>
+           <widget class="QLineEdit" name="instrumentList2">
+            <property name="accessibleName">
+             <string>Instrument list 2</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to a instrument list file</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="2">
            <widget class="QToolButton" name="instrumentList2Button">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose Instrument list 2</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting a instrument list file</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -1720,7 +2260,10 @@
      </widget>
      <widget class="QWidget" name="tabIO">
       <property name="accessibleName">
-       <string/>
+       <string>I/O Tab</string>
+      </property>
+      <property name="accessibleDescription">
+       <string>Attention: Any changes on this page require a restart of MuseScore.</string>
       </property>
       <attribute name="title">
        <string>I/O</string>
@@ -1728,6 +2271,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
         <widget class="QGroupBox" name="pulseaudioDriver">
+         <property name="accessibleName">
+          <string>Pulse Audio</string>
+         </property>
          <property name="title">
           <string>PulseAudio</string>
          </property>
@@ -1746,6 +2292,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Port Audio</string>
          </property>
          <property name="title">
           <string>PortAudio</string>
@@ -1788,6 +2337,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>API</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose API</string>
+            </property>
            </widget>
           </item>
           <item row="2" column="0">
@@ -1811,6 +2366,12 @@
               <height>25</height>
              </size>
             </property>
+            <property name="accessibleName">
+             <string>MIDI Input</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose MIDI Input</string>
+            </property>
            </widget>
           </item>
           <item row="0" column="2">
@@ -1831,6 +2392,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>Device</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose device</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -1843,6 +2410,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>ALSA audio</string>
          </property>
          <property name="title">
           <string>ALSA audio</string>
@@ -1869,6 +2439,12 @@
           </item>
           <item row="1" column="3">
            <widget class="QSpinBox" name="alsaFragments">
+            <property name="accessibleName">
+             <string>Fragments</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose number of fragments</string>
+            </property>
             <property name="minimum">
              <number>2</number>
             </property>
@@ -1899,6 +2475,12 @@
           </item>
           <item row="1" column="5">
            <widget class="QComboBox" name="alsaPeriodSize">
+            <property name="accessibleName">
+             <string>Period Size</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose period size</string>
+            </property>
             <item>
              <property name="text">
               <string>4096</string>
@@ -1961,6 +2543,12 @@
           </item>
           <item row="1" column="1">
            <widget class="QComboBox" name="alsaSampleRate">
+            <property name="accessibleName">
+             <string>Sample rate</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose sample rate</string>
+            </property>
             <item>
              <property name="text">
               <string>192000</string>
@@ -2000,6 +2588,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QLineEdit" name="alsaDevice">
+            <property name="accessibleName">
+             <string>Device</string>
+            </property>
             <property name="text">
              <string>default</string>
             </property>
@@ -2015,6 +2606,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>JACK audio server</string>
          </property>
          <property name="title">
           <string>JACK audio server</string>
@@ -2043,6 +2637,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Use JACK MIDI</string>
             </property>
             <property name="text">
              <string>Use JACK MIDI</string>
@@ -2080,6 +2677,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>Ports</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose number of ports</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -2115,6 +2718,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>Remember last connection(s)</string>
+            </property>
             <property name="text">
              <string>Remember last connection(s)</string>
             </property>
@@ -2131,6 +2737,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="accessibleName">
+             <string>Use JACK Transport</string>
+            </property>
             <property name="text">
              <string>Use JACK Transport</string>
             </property>
@@ -2143,6 +2752,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Timebase Master</string>
             </property>
             <property name="text">
              <string>Timebase Master</string>
@@ -2232,7 +2844,7 @@
      </widget>
      <widget class="QWidget" name="tabImport">
       <property name="accessibleName">
-       <string/>
+       <string>Import Tab</string>
       </property>
       <attribute name="title">
        <string>Import</string>
@@ -2249,6 +2861,9 @@
          <layout class="QVBoxLayout">
           <item>
            <widget class="QRadioButton" name="useImportBuildinStyle">
+            <property name="accessibleName">
+             <string>Build in style</string>
+            </property>
             <property name="text">
              <string>Built in style</string>
             </property>
@@ -2258,16 +2873,32 @@
            <layout class="QHBoxLayout">
             <item>
              <widget class="QRadioButton" name="useImportStyleFile">
+              <property name="accessibleName">
+               <string>Use style file</string>
+              </property>
               <property name="text">
                <string>Use style file:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="importStyleFile"/>
+             <widget class="QLineEdit" name="importStyleFile">
+              <property name="accessibleName">
+               <string>Use style file</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Insert path to style file</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="styleFileButton">
+              <property name="accessibleName">
+               <string>Choose style</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Opens a file dialog for selecting a style file</string>
+              </property>
               <property name="text">
                <string>Browse...</string>
               </property>
@@ -2297,7 +2928,14 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QComboBox" name="importCharsetListOve"/>
+             <widget class="QComboBox" name="importCharsetListOve">
+              <property name="accessibleName">
+               <string>Overture import character set</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Choose Overture import character set</string>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_23">
@@ -2307,7 +2945,14 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QComboBox" name="importCharsetListGP"/>
+             <widget class="QComboBox" name="importCharsetListGP">
+              <property name="accessibleName">
+               <string>Guitar Pro import character set</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Choose Guitar Pro import character set</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -2322,6 +2967,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>MusicXML</string>
+         </property>
          <property name="title">
           <string>MusicXML</string>
          </property>
@@ -2331,6 +2979,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
            <widget class="QCheckBox" name="importLayout">
+            <property name="accessibleName">
+             <string>Import layout</string>
+            </property>
             <property name="text">
              <string>Import layout</string>
             </property>
@@ -2338,6 +2989,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="importBreaks">
+            <property name="accessibleName">
+             <string>Import system and page breaks</string>
+            </property>
             <property name="text">
              <string>Import system and page breaks</string>
             </property>
@@ -2354,6 +3008,9 @@
            <height>100</height>
           </size>
          </property>
+         <property name="accessibleName">
+          <string>MIDI</string>
+         </property>
          <property name="title">
           <string>MIDI</string>
          </property>
@@ -2367,6 +3024,12 @@
           </item>
           <item>
            <widget class="QComboBox" name="shortestNote">
+            <property name="accessibleName">
+             <string>Shortest note</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose the shortest note value</string>
+            </property>
             <property name="currentIndex">
              <number>2</number>
             </property>
@@ -2430,7 +3093,7 @@
      </widget>
      <widget class="QWidget" name="tabExport">
       <property name="accessibleName">
-       <string/>
+       <string>Export Tab</string>
       </property>
       <attribute name="title">
        <string>Export</string>
@@ -2454,6 +3117,9 @@
           </item>
           <item row="1" column="0">
            <widget class="QCheckBox" name="pngTransparent">
+            <property name="accessibleName">
+             <string>Transparent background</string>
+            </property>
             <property name="text">
              <string>Transparent background</string>
             </property>
@@ -2474,6 +3140,12 @@
           </item>
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="pngResolution">
+            <property name="accessibleName">
+             <string>Resolution DPI</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose resolution DPI</string>
+            </property>
             <property name="minimum">
              <double>32.000000000000000</double>
             </property>
@@ -2496,6 +3168,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>MIDI</string>
+         </property>
          <property name="title">
           <string>MIDI</string>
          </property>
@@ -2505,6 +3180,9 @@
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QCheckBox" name="expandRepeats">
+            <property name="accessibleName">
+             <string>Expand repeats</string>
+            </property>
             <property name="text">
              <string>Expand repeats</string>
             </property>
@@ -2515,6 +3193,9 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_16">
+         <property name="accessibleName">
+          <string>Audio</string>
+         </property>
          <property name="title">
           <string>Audio</string>
          </property>
@@ -2528,6 +3209,12 @@
           </item>
           <item>
            <widget class="QComboBox" name="exportAudioSampleRate">
+            <property name="accessibleName">
+             <string>Sample rate</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose sample rate</string>
+            </property>
             <item>
              <property name="text">
               <string>44100</string>
@@ -2564,6 +3251,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>MusicXML</string>
+         </property>
          <property name="title">
           <string>MusicXML</string>
          </property>
@@ -2573,6 +3263,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
            <widget class="QGroupBox" name="exportLayout">
+            <property name="accessibleName">
+             <string>Export layout</string>
+            </property>
             <property name="title">
              <string>Export layout</string>
             </property>
@@ -2582,6 +3275,9 @@
             <layout class="QVBoxLayout" name="verticalLayout_11">
              <item>
               <widget class="QRadioButton" name="exportAllBreaks">
+               <property name="accessibleName">
+                <string>Export all system and page breaks</string>
+               </property>
                <property name="text">
                 <string>Export all system and page breaks</string>
                </property>
@@ -2589,6 +3285,9 @@
              </item>
              <item>
               <widget class="QRadioButton" name="exportManualBreaks">
+               <property name="accessibleName">
+                <string>Export manually added system and page breaks only</string>
+               </property>
                <property name="text">
                 <string>Export manually added system and page breaks only</string>
                </property>
@@ -2596,6 +3295,9 @@
              </item>
              <item>
               <widget class="QRadioButton" name="exportNoBreaks">
+               <property name="accessibleName">
+                <string>Do not export system or page breaks</string>
+               </property>
                <property name="text">
                 <string>Do not export system or page breaks</string>
                </property>
@@ -2627,7 +3329,7 @@
      </widget>
      <widget class="QWidget" name="tabShortcuts">
       <property name="accessibleName">
-       <string/>
+       <string>Shortcuts Tab</string>
       </property>
       <attribute name="title">
        <string>Shortcuts</string>
@@ -2650,6 +3352,12 @@
        </property>
        <item>
         <widget class="QTreeWidget" name="shortcutList">
+         <property name="accessibleName">
+          <string>Shortcuts table</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Here you can configure shorcuts for actions</string>
+         </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
@@ -2699,6 +3407,12 @@
          </property>
          <item>
           <widget class="QPushButton" name="resetShortcut">
+           <property name="accessibleName">
+            <string>Reset Shortcut to default</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Resets the shortcuts to their default assignement</string>
+           </property>
            <property name="text">
             <string>Reset Shortcut to Default</string>
            </property>
@@ -2706,6 +3420,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="clearShortcut">
+           <property name="accessibleName">
+            <string>Clear</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Clears the shorcut assignment for the selected action</string>
+           </property>
            <property name="text">
             <string>Clear</string>
            </property>
@@ -2713,6 +3433,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="defineShortcut">
+           <property name="accessibleName">
+            <string>Define</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Opens a dialog for defining a new shorcut for the selected action</string>
+           </property>
            <property name="text">
             <string>Define...</string>
            </property>
@@ -2733,6 +3459,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="printShortcuts">
+           <property name="accessibleName">
+            <string>Print</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Print the shorcuts list</string>
+           </property>
            <property name="text">
             <string>Print</string>
            </property>
@@ -2744,7 +3476,7 @@
      </widget>
      <widget class="QWidget" name="tabUpdate">
       <property name="accessibleName">
-       <string/>
+       <string>Update Tab</string>
       </property>
       <attribute name="title">
        <string>Update</string>
@@ -2752,6 +3484,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
         <widget class="QGroupBox" name="groupBox_17">
+         <property name="accessibleName">
+          <string>Automatic Update Check</string>
+         </property>
          <property name="title">
           <string>Automatic Update Check</string>
          </property>
@@ -2769,7 +3504,14 @@
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QComboBox" name="checkUpdateStartup"/>
+             <widget class="QComboBox" name="checkUpdateStartup">
+              <property name="accessibleName">
+               <string>Check for new versions of MuseScore on startup</string>
+              </property>
+              <property name="accessibleDescription">
+               <string>Choose interval</string>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="horizontalSpacer_5">
@@ -2827,6 +3569,143 @@
    <header>recordbutton.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>General</tabstop>
+  <tabstop>emptySession</tabstop>
+  <tabstop>lastSession</tabstop>
+  <tabstop>newSession</tabstop>
+  <tabstop>scoreSession</tabstop>
+  <tabstop>sessionScore</tabstop>
+  <tabstop>startWithButton</tabstop>
+  <tabstop>showSplashScreen</tabstop>
+  <tabstop>myScores</tabstop>
+  <tabstop>myScoresButton</tabstop>
+  <tabstop>myStyles</tabstop>
+  <tabstop>myStylesButton</tabstop>
+  <tabstop>myTemplates</tabstop>
+  <tabstop>myTemplatesButton</tabstop>
+  <tabstop>myPlugins</tabstop>
+  <tabstop>myPluginsButton</tabstop>
+  <tabstop>sfPath</tabstop>
+  <tabstop>mySoundfontsButton</tabstop>
+  <tabstop>sfzPath</tabstop>
+  <tabstop>mySfzButton</tabstop>
+  <tabstop>myImages</tabstop>
+  <tabstop>myImagesButton</tabstop>
+  <tabstop>language</tabstop>
+  <tabstop>styleName</tabstop>
+  <tabstop>animations</tabstop>
+  <tabstop>iconWidth</tabstop>
+  <tabstop>iconHeight</tabstop>
+  <tabstop>autoSave</tabstop>
+  <tabstop>autoSaveTime</tabstop>
+  <tabstop>oscServer</tabstop>
+  <tabstop>oscPort</tabstop>
+  <tabstop>playPanelShow</tabstop>
+  <tabstop>navigatorShow</tabstop>
+  <tabstop>webPanelShow</tabstop>
+  <tabstop>bgColorButton</tabstop>
+  <tabstop>bgWallpaperButton</tabstop>
+  <tabstop>bgColorLabel</tabstop>
+  <tabstop>bgWallpaper</tabstop>
+  <tabstop>bgWallpaperSelect</tabstop>
+  <tabstop>fgColorButton</tabstop>
+  <tabstop>fgWallpaperButton</tabstop>
+  <tabstop>fgColorLabel</tabstop>
+  <tabstop>fgWallpaper</tabstop>
+  <tabstop>fgWallpaperSelect</tabstop>
+  <tabstop>drawAntialiased</tabstop>
+  <tabstop>proximity</tabstop>
+  <tabstop>enableMidiInput</tabstop>
+  <tabstop>playNotes</tabstop>
+  <tabstop>defaultPlayDuration</tabstop>
+  <tabstop>warnPitchRange</tabstop>
+  <tabstop>rcGroup</tabstop>
+  <tabstop>rewindActive</tabstop>
+  <tabstop>recordRewind</tabstop>
+  <tabstop>togglePlayActive</tabstop>
+  <tabstop>recordTogglePlay</tabstop>
+  <tabstop>playActive</tabstop>
+  <tabstop>recordPlay</tabstop>
+  <tabstop>stopActive</tabstop>
+  <tabstop>recordStop</tabstop>
+  <tabstop>editModeActive</tabstop>
+  <tabstop>recordEditMode</tabstop>
+  <tabstop>rca2</tabstop>
+  <tabstop>rcr2</tabstop>
+  <tabstop>rca3</tabstop>
+  <tabstop>rcr3</tabstop>
+  <tabstop>rca4</tabstop>
+  <tabstop>rcr4</tabstop>
+  <tabstop>rca5</tabstop>
+  <tabstop>rcr5</tabstop>
+  <tabstop>rca6</tabstop>
+  <tabstop>rcr6</tabstop>
+  <tabstop>rca7</tabstop>
+  <tabstop>rcr7</tabstop>
+  <tabstop>rca8</tabstop>
+  <tabstop>rcr8</tabstop>
+  <tabstop>rca9</tabstop>
+  <tabstop>rcr9</tabstop>
+  <tabstop>rca10</tabstop>
+  <tabstop>rcr10</tabstop>
+  <tabstop>rca11</tabstop>
+  <tabstop>rcr11</tabstop>
+  <tabstop>rca12</tabstop>
+  <tabstop>rcr12</tabstop>
+  <tabstop>midiRemoteControlClear</tabstop>
+  <tabstop>instrumentList1</tabstop>
+  <tabstop>instrumentList1Button</tabstop>
+  <tabstop>instrumentList2</tabstop>
+  <tabstop>instrumentList2Button</tabstop>
+  <tabstop>defaultStyle</tabstop>
+  <tabstop>defaultStyleButton</tabstop>
+  <tabstop>partStyle</tabstop>
+  <tabstop>partStyleButton</tabstop>
+  <tabstop>scale</tabstop>
+  <tabstop>pulseaudioDriver</tabstop>
+  <tabstop>portaudioDriver</tabstop>
+  <tabstop>portaudioApi</tabstop>
+  <tabstop>portaudioDevice</tabstop>
+  <tabstop>portMidiInput</tabstop>
+  <tabstop>alsaDriver</tabstop>
+  <tabstop>alsaDevice</tabstop>
+  <tabstop>alsaSampleRate</tabstop>
+  <tabstop>alsaFragments</tabstop>
+  <tabstop>alsaPeriodSize</tabstop>
+  <tabstop>jackDriver</tabstop>
+  <tabstop>useJackAudio</tabstop>
+  <tabstop>useJackMidi</tabstop>
+  <tabstop>midiPorts</tabstop>
+  <tabstop>rememberLastMidiConnections</tabstop>
+  <tabstop>useJackTransport</tabstop>
+  <tabstop>becomeTimebaseMaster</tabstop>
+  <tabstop>useImportBuildinStyle</tabstop>
+  <tabstop>useImportStyleFile</tabstop>
+  <tabstop>importStyleFile</tabstop>
+  <tabstop>styleFileButton</tabstop>
+  <tabstop>importCharsetListGP</tabstop>
+  <tabstop>importCharsetListOve</tabstop>
+  <tabstop>importLayout</tabstop>
+  <tabstop>importBreaks</tabstop>
+  <tabstop>shortestNote</tabstop>
+  <tabstop>pngResolution</tabstop>
+  <tabstop>pngTransparent</tabstop>
+  <tabstop>expandRepeats</tabstop>
+  <tabstop>exportAudioSampleRate</tabstop>
+  <tabstop>exportLayout</tabstop>
+  <tabstop>exportAllBreaks</tabstop>
+  <tabstop>exportManualBreaks</tabstop>
+  <tabstop>exportNoBreaks</tabstop>
+  <tabstop>shortcutList</tabstop>
+  <tabstop>resetShortcut</tabstop>
+  <tabstop>clearShortcut</tabstop>
+  <tabstop>defineShortcut</tabstop>
+  <tabstop>printShortcuts</tabstop>
+  <tabstop>checkUpdateStartup</tabstop>
+  <tabstop>resetToDefault</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
