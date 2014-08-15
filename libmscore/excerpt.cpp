@@ -120,7 +120,7 @@ Score* createExcerpt(const QList<Part*>& parts)
 
       foreach (Part* part, parts) {
             Part* p = new Part(score);
-            p->setInstrument(*part->instr());
+            p->setInstrument(*part->instr(), 0);
 
             foreach (Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score, p);
