@@ -21,7 +21,7 @@
 #ifndef __NEWWIZARD_H__
 #define __NEWWIZARD_H__
 
-#include "ui_instrwizard.h"
+// #include "ui_instrwizard.h"
 #include "ui_timesigwizard.h"
 #include "ui_newwizard.h"
 
@@ -34,7 +34,9 @@ namespace Ms {
 class Score;
 class Palette;
 class StaffListItem;
+class InstrumentsWidget;
 
+#if 0
 //---------------------------------------------------------
 //   InstrumentWizard
 //---------------------------------------------------------
@@ -69,6 +71,7 @@ class InstrumentWizard : public QWidget, private Ui::InstrumentWizard {
       void createInstruments(Score*);
       void init();
       };
+#endif
 
 //---------------------------------------------------------
 //   TimesigWizard
@@ -128,7 +131,7 @@ class NewWizardPage2 : public QWizardPage {
       Q_OBJECT
 
       bool complete;
-      InstrumentWizard* w;
+      InstrumentsWidget* w;
 
    public slots:
       void setComplete(bool);
@@ -136,7 +139,7 @@ class NewWizardPage2 : public QWizardPage {
    public:
       NewWizardPage2(QWidget* parent = 0);
       virtual bool isComplete() const  { return complete; }
-      void createInstruments(Score* s) { w->createInstruments(s); }
+      void createInstruments(Score* s);
       virtual void initializePage();
       };
 
