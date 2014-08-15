@@ -147,6 +147,7 @@ class Harmony : public Text {
       HDegree degree(int i) const;
       void clearDegrees();
       const QList<HDegree>& degreeList() const;
+      const ParsedChord* parsedForm();
 
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
