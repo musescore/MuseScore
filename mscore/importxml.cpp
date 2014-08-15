@@ -3521,8 +3521,8 @@ static void tupletAssert()
             && int(TDuration::DurationType::V_WHOLE)   == int(TDuration::DurationType::V_BREVE)   + 1
             && int(TDuration::DurationType::V_HALF)    == int(TDuration::DurationType::V_WHOLE)   + 1
             && int(TDuration::DurationType::V_QUARTER) == int(TDuration::DurationType::V_HALF)    + 1
-            && int(TDuration::DurationType::V_EIGHT)   == int(TDuration::DurationType::V_QUARTER) + 1
-            && int(TDuration::DurationType::V_16TH)    == int(TDuration::DurationType::V_EIGHT)   + 1
+            && int(TDuration::DurationType::V_EIGHTH)  == int(TDuration::DurationType::V_QUARTER) + 1
+            && int(TDuration::DurationType::V_16TH)    == int(TDuration::DurationType::V_EIGHTH)  + 1
             && int(TDuration::DurationType::V_32ND)    == int(TDuration::DurationType::V_16TH)    + 1
             && int(TDuration::DurationType::V_64TH)    == int(TDuration::DurationType::V_32ND)    + 1
             && int(TDuration::DurationType::V_128TH)   == int(TDuration::DurationType::V_64TH)    + 1

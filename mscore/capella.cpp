@@ -128,7 +128,7 @@ static void SetCapGraceDuration(Chord* chord,ChordObj* o)
       else if (o->t == TIMESTEP::D256)
             ((Chord*)chord)->setDurationType(TDuration::DurationType::V_256TH);
       else
-            ((Chord*)chord)->setDurationType(TDuration::DurationType::V_EIGHT);
+            ((Chord*)chord)->setDurationType(TDuration::DurationType::V_EIGHTH);
       }
 
 //---------------------------------------------------------

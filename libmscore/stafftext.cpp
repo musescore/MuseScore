@@ -57,7 +57,7 @@ void StaffText::write(Xml& xml) const
       if (swing()) {
             QString swingUnit;
             if (swingParameters()->swingUnit == MScore::division / 2)
-                  swingUnit = TDuration(TDuration::DurationType::V_EIGHT).name();
+                  swingUnit = TDuration(TDuration::DurationType::V_EIGHTH).name();
             else if (swingParameters()->swingUnit == MScore::division / 4)
                   swingUnit = TDuration(TDuration::DurationType::V_16TH).name();
             else
@@ -124,7 +124,7 @@ void StaffText::read(XmlReader& e)
           else if (tag == "swing") {
                   QString swingUnit = e.attribute("unit","");
                   int unit = 0;
-                  if (swingUnit == TDuration(TDuration::DurationType::V_EIGHT).name())
+                  if (swingUnit == TDuration(TDuration::DurationType::V_EIGHTH).name())
                         unit = MScore::division / 2;
                   else if (swingUnit == TDuration(TDuration::DurationType::V_16TH).name())
                         unit = MScore:: division / 4;
