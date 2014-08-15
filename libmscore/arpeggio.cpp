@@ -53,7 +53,8 @@ void Arpeggio::setHeight(qreal h)
 
 void Arpeggio::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Arpeggio");
       Element::writeProperties(xml);
       xml.tag("subtype", int(_arpeggioType));

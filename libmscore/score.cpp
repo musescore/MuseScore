@@ -2865,7 +2865,7 @@ void Score::selectRange(Element* e, int staffIdx)
 
                         _selection.setStaffStart(staffIdx);
                         _selection.setStaffEnd(staffIdx + 1);
-                        if(_selection.staffStart() > cr->staffIdx())
+                        if (_selection.staffStart() > cr->staffIdx())
                               _selection.setStaffStart(cr->staffIdx());
                         else if (cr->staffIdx() >= _selection.staffEnd())
                               _selection.setStaffEnd(cr->staffIdx() + 1);
@@ -2979,23 +2979,19 @@ void Score::collectMatch(void* data, Element* e)
       p->el.append(e);
       }
 
+//---------------------------------------------------------
+//   selectSimilar
+//---------------------------------------------------------
+
 void Score::selectSimilar(Element* e, bool sameStaff)
       {
       Element::Type type = e->type();
-//TODO      int subtype      = e->subtype();
+      Score* score = e->score();
 
       ElementPattern pattern;
-      pattern.subtypeValid = true;
-//TODO      if (type == VOLTA_SEGMENT) {
-            // Volta* volta = static_cast<VoltaSegment*>(e)->volta();
-            // type    = volta->type();
-            // subtype = volta->subtype();
-            pattern.subtypeValid = false;
-//            }
-
-      Score* score = e->score();
       pattern.type    = int(type);
-      pattern.subtype = 0; // TODO subtype;
+      pattern.subtype = 0;
+      pattern.subtypeValid = false;
       pattern.staffStart = sameStaff ? e->staffIdx() : -1;
       pattern.staffEnd = sameStaff ? e->staffIdx()+1 : -1;
       pattern.voice   = -1;
@@ -3004,10 +3000,14 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       score->scanElements(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      foreach(Element* e, pattern.el) {
+      foreach (Element* e, pattern.el) {
             score->select(e, SelectType::ADD, 0);
             }
       }
+
+//---------------------------------------------------------
+//   selectSimilarInRange
+//---------------------------------------------------------
 
 void Score::selectSimilarInRange(Element* e)
       {
@@ -3026,10 +3026,11 @@ void Score::selectSimilarInRange(Element* e)
       score->scanElementsInRange(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      foreach(Element* e, pattern.el) {
+      foreach (Element* e, pattern.el) {
                   score->select(e, SelectType::ADD, 0);
             }
       }
+
 //---------------------------------------------------------
 //   lassoSelect
 //---------------------------------------------------------

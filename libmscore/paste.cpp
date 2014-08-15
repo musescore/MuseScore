@@ -525,7 +525,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                   break;
                   }
             QString version = e.attribute("version", "NONE");
-            if(version != MSC_VERSION)
+            if (version != MSC_VERSION)
                   break;
 
             while (e.readNextStartElement()) {
@@ -738,7 +738,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             Element::Type type = Element::readType(e, &dragOffset, &duration);
 
             QList<Element*> els;
-            if(_selection.isSingle())
+            if (_selection.isSingle())
                   els.append(_selection.element());
             else
                   els.append(_selection.elements());
@@ -787,7 +787,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   return PasteStatus::DEST_TUPLET;
             else {
                   QByteArray data(ms->data(mimeStaffListFormat));
-                  if(MScore::debugMode)
+                  if (MScore::debugMode)
                         qDebug("paste <%s>", data.data());
                   XmlReader e(data);
                   e.setPasteMode(true);
@@ -796,8 +796,6 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                         }
                   }
             }
-
-
       else if (ms->hasFormat(mimeSymbolListFormat)) {
             ChordRest* cr = 0;
             if (_selection.isRange())
@@ -821,14 +819,9 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   if (MScore::debugMode)
                         qDebug("paste <%s>", data.data());
                   XmlReader e(data);
-//            QPointF dragOffset;
-//            Fraction duration(1, 4);
-//            Element::Type type = Element::readType(e, &dragOffset, &duration);
                   pasteSymbols(e, cr);
                   }
             }
-
-
       else {
             qDebug("cannot paste selState %d staffList %hhd",
                _selection.state(), ms->hasFormat(mimeStaffListFormat));

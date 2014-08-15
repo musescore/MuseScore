@@ -204,7 +204,8 @@ int Dynamic::velocity() const
 
 void Dynamic::write(Xml& xml) const
       {
-      if(!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Dynamic");
       xml.tag("subtype", dynamicTypeName());
       writeProperty(xml, P_ID::VELOCITY);
