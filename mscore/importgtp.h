@@ -48,9 +48,7 @@ static const int GP_MAX_LYRIC_LINES = 5;
 static const int GP_MAX_TRACK_NUMBER = 32;
 static const int GP_MAX_STRING_NUMBER = 7;
 static const int GP_DEFAULT_PERCUSSION_CHANNEL = 9;
-
 static const int GP_INVALID_KEYSIG = 127;
-
 static const int GP_VOLTA_BINARY = 1;
 static const int GP_VOLTA_FLAGS = 2;
 
@@ -102,6 +100,59 @@ struct GpBar {
 
 class GuitarPro {
    protected:
+
+      // note effect bit masks
+      static const uchar EFFECT_BEND = 0x1;
+      static const uchar EFFECT_STACATTO = 0x1;
+      static const uchar EFFECT_HAMMER = 0x2;
+      static const uchar EFFECT_PALM_MUTE = 0x2;
+      static const uchar EFFECT_TREMOLO = 0x4;
+      static const uchar EFFECT_LET_RING = 0x8;
+      static const uchar EFFECT_SLIDE = 0x8;
+      static const uchar EFFECT_GRACE = 0x10;
+      static const uchar EFFECT_ARTIFICIAL_HARMONIC = 0x10;
+      static const uchar EFFECT_TRILL = 0x20;
+      static const uchar EFFECT_GHOST = 0x01;
+
+      // arpeggio direction masks
+      static const uchar ARPEGGIO_UP = 0xa;
+      static const uchar ARPEGGIO_DOWN = 0x2;
+
+      // note bit masks
+      static const uchar NOTE_GHOST = 0x04;
+      static const uchar NOTE_DEAD = 0x20;
+      static const uchar NOTE_DYNAMIC = 0x10;
+      static const uchar NOTE_FRET = 0x20;
+      static const uchar NOTE_FINGERING = 0x80;
+      static const uchar NOTE_MARCATO = 0x02;
+      static const uchar NOTE_SFORZATO = 0x40;
+      static const uchar NOTE_SLUR = 0x8;
+      static const uchar NOTE_APPOGIATURA = 0x02;
+
+      // beat bit masks
+      static const uchar BEAT_FADE = 0x10;
+      static const uchar BEAT_EFFECT = 0x20;
+      static const uchar BEAT_TREMOLO = 0x04;
+      static const uchar BEAT_ARPEGGIO = 0x40;
+      static const uchar BEAT_STROKE_DIR = 0x02;
+      static const uchar BEAT_DOTTED = 0x01;
+      static const uchar BEAT_PAUSE = 0x40;
+      static const uchar BEAT_TUPLET = 0x20;
+      static const uchar BEAT_LYRICS = 0x4;
+      static const uchar BEAT_EFFECTS = 0x8;
+      static const uchar BEAT_MIX_CHANGE = 0x10;
+      static const uchar BEAT_CHORD = 0x2;
+
+      // score bit masks
+      static const uchar SCORE_TIMESIG_NUMERATOR = 0x1;
+      static const uchar SCORE_TIMESIG_DENOMINATOR = 0x2;
+      static const uchar SCORE_REPEAT_START = 0x4;
+      static const uchar SCORE_REPEAT_END = 0x8;
+      static const uchar SCORE_MARKER = 0x20;
+      static const uchar SCORE_VOLTA = 0x10;
+      static const uchar SCORE_KEYSIG = 0x40;
+      static const uchar SCORE_DOUBLE_BAR = 0x80;
+
       static const char* errmsg[];
       int version;
       int key;

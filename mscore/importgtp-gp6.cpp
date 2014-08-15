@@ -227,13 +227,8 @@ void GuitarPro6::readGPX(QByteArray* buffer) {
 void GuitarPro6::parseFile(char* filename, QByteArray* data)
       {
       // test to check if we are dealing with the score
-      if (!strcmp(filename, "score.gpif")) {
+      if (!strcmp(filename, "score.gpif"))
             readGpif(data);
-            QFile file("/tmp/score.gpif");
-            file.open(QIODevice::WriteOnly);
-            file.write(*data);
-            file.close();
-            }
       }
 
 
@@ -1857,7 +1852,6 @@ void GuitarPro6::readGpif(QByteArray* data)
 void GuitarPro6::read(QFile* fp)
       {
       f = fp;
-
       slides = new QMap<int,int>();
 
       previousTempo = -1;
