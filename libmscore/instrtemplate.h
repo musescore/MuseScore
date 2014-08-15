@@ -98,6 +98,7 @@ class InstrumentTemplate {
       void read(XmlReader&);
       int nstaves() const { return staves; }
       void setStaves(int val) { staves = val; }
+      ClefTypeList clefType(int staffIdx) const;
       };
 
 //---------------------------------------------------------
