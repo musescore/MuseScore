@@ -743,6 +743,17 @@ void InstrumentGenre::read(XmlReader& e)
             }
      }
 
+//---------------------------------------------------------
+//   clefType
+//---------------------------------------------------------
+
+ClefTypeList InstrumentTemplate::clefType(int staffIdx) const
+      {
+      if (staffIdx < staves)
+            return clefTypes[staffIdx];
+      return ClefTypeList(ClefType::G);
+      }
+
 }
 
 
