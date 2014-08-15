@@ -112,6 +112,7 @@ InstrumentData::InstrumentData(const InstrumentData& i)
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
       _channel      = i._channel;
+      _clefType     = i._clefType;
       }
 
 //---------------------------------------------------------
