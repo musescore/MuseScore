@@ -3095,7 +3095,7 @@ static void readStringData(StringData* t, QDomElement de)
             if (tag == "staff-lines") {
                   if (val > 0) {
                         // resize the string table and init with zeroes
-                        t->stringList() = QVector<int>(val).toList();
+                        t->stringList() = QVector<instrString>(val).toList();
                         }
                   else
                         qDebug("Tablature::readMusicXML: illegal staff-lines %d", val);
@@ -3120,7 +3120,7 @@ static void readStringData(StringData* t, QDomElement de)
                   if (0 < line && line <= t->stringList().size()) {
                         int pitch = MusicXMLStepAltOct2Pitch(step[0].toLatin1(), alter, octave);
                         if (pitch >= 0)
-                              t->stringList()[line - 1] = pitch;
+                              t->stringList()[line - 1].pitch = pitch;
                         else
                               qDebug("Tablature::readMusicXML invalid string %d tuning step/alter/oct %s/%d/%d",
                                      line, qPrintable(step), alter, octave);

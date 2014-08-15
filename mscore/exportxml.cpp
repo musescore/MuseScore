@@ -4319,12 +4319,12 @@ void ExportMusicXml::write(QIODevice* dev)
                                           xml.stag("staff-details");
                                     xml.tag("staff-lines", st->lines());
                                     if (st->isTabStaff() && instrument->stringData()) {
-                                          QList<int> l = instrument->stringData()->stringList();
+                                          QList<instrString> l = instrument->stringData()->stringList();
                                           for (int i = 0; i < l.size(); i++) {
                                                 char step  = ' ';
                                                 int alter  = 0;
                                                 int octave = 0;
-                                                midipitch2xml(l.at(i), step, alter, octave);
+                                                midipitch2xml(l.at(i).pitch, step, alter, octave);
                                                 xml.stag(QString("staff-tuning line=\"%1\"").arg(i+1));
                                                 xml.tag("tuning-step", QString("%1").arg(step));
                                                 if (alter)
