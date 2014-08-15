@@ -52,7 +52,7 @@
       <mark value="ghost">×</mark>
    </fretFont>
    <fretFont>
-      <family>FreeSerifMscore</family>
+      <family>FreeSerif</family>
       <displayName>MuseScore Tab Serif</displayName>
       <defaultPitch>9</defaultPitch>
       <defaultYOffset>0.0</defaultYOffset>
