@@ -2186,7 +2186,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_FOTO,
          0,
          "fotomode",
-         QT_TRANSLATE_NOOP("action","Toggle foto mode"),
+         QT_TRANSLATE_NOOP("action","Toggle screenshot mode"),
          Icons::fotomode_ICON
          ),
 #ifdef OMR
