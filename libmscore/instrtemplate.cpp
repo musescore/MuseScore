@@ -751,7 +751,7 @@ ClefTypeList InstrumentTemplate::clefType(int staffIdx) const
       {
       if (staffIdx < staves)
             return clefTypes[staffIdx];
-      return ClefTypeList(ClefType::G);
+      return clefTypes[0];
       }
 
 }
