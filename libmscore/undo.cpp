@@ -720,13 +720,13 @@ void Score::undoRemoveStaff(Staff* staff)
 //    idx - index of staff in part
 //---------------------------------------------------------
 
-void Score::undoInsertStaff(Staff* staff, int idx)
+void Score::undoInsertStaff(Staff* staff, int idx, bool createRests)
       {
       undo(new InsertStaff(staff, idx));
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            m->cmdAddStaves(idx, idx+1, true);
+            m->cmdAddStaves(idx, idx+1, createRests);
             if (m->hasMMRest())
-                  m->mmRest()->cmdAddStaves(idx, idx+1, true);
+                  m->mmRest()->cmdAddStaves(idx, idx+1, createRests);
             }
 
       adjustBracketsIns(idx, idx+1);

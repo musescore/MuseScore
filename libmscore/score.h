@@ -520,7 +520,7 @@ class Score : public QObject {
       void undoRemovePart(Part* part, int idx);
       void undoInsertPart(Part* part, int idx);
       void undoRemoveStaff(Staff* staff);
-      void undoInsertStaff(Staff* staff, int idx);
+      void undoInsertStaff(Staff* staff, int idx, bool createRests=true);
       void undoChangeInvisible(Element*, bool);
       void undoChangeBracketSpan(Staff* staff, int column, int span);
       void undoChangeTuning(Note*, qreal);
