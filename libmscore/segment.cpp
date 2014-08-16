@@ -378,7 +378,6 @@ void Segment::insertStaff(int staff)
             if (staffIdx >= staff && !e->systemFlag())
                   e->setTrack(e->track() + VOICES);
             }
-
       fixStaffIdx();
       }
 
@@ -661,12 +660,11 @@ void Segment::removeGeneratedElements()
 
 void Segment::sortStaves(QList<int>& dst)
       {
-      QList<Element*>   dl;
+      QList<Element*> dl;
 
       for (int i = 0; i < dst.size(); ++i) {
             int startTrack = dst[i] * VOICES;
             int endTrack   = startTrack + VOICES;
-            dl.reserve(VOICES);
             for (int k = startTrack; k < endTrack; ++k)
                   dl.append(_elist[k]);
             }

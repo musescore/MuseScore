@@ -256,7 +256,6 @@ void TextProp::styleIndexChanged(int i)
       {
       int idx = styles->itemData(i).toInt();
       setTextStyle(_score->textStyle(TextStyleType(idx)));
-      printf("style index changed %d\n", idx);
       }
 
 }
