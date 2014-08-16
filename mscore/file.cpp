@@ -160,33 +160,33 @@ static QString createDefaultFileName(QString fn)
 
 static bool readScoreError(const QString& name, Score::FileError error, bool ask)
       {
-      QString msg = QString(QT_TRANSLATE_NOOP(file, "Cannot read file %1:\n")).arg(name);
+      QString msg = QObject::tr("Cannot read file %1:\n").arg(name);
       bool canIgnore = false;
       switch(error) {
             case Score::FileError::FILE_NO_ERROR:
                   return false;
             case Score::FileError::FILE_BAD_FORMAT:
-                  msg += QT_TRANSLATE_NOOP(file, "bad format");
+                  msg +=  QObject::tr("bad format");
                   break;
             case Score::FileError::FILE_UNKNOWN_TYPE:
-                  msg += QT_TRANSLATE_NOOP(file, "unknown type");
+                  msg += QObject::tr("unknown type");
                   break;
             case Score::FileError::FILE_NO_ROOTFILE:
                   break;
             case Score::FileError::FILE_TOO_OLD:
-                  msg += QT_TRANSLATE_NOOP(file, "It was last saved with version 0.9.5 or older.<br>"
+                  msg += QObject::tr("It was last saved with version 0.9.5 or older.<br>"
                          "You can convert this score by opening and then saving with"
                          " MuseScore version 1.x</a>");
                   canIgnore = true;
                   break;
             case Score::FileError::FILE_TOO_NEW:
-                  msg += QT_TRANSLATE_NOOP(file, "This score was saved using a newer version of MuseScore.<br>\n"
+                  msg += QObject::tr("This score was saved using a newer version of MuseScore.<br>\n"
                          "Visit the <a href=\"http://musescore.org\">MuseScore website</a>"
                          " to obtain the latest version.");
                   canIgnore = true;
                   break;
             case Score::FileError::FILE_NOT_FOUND:
-                  msg = QString(QT_TRANSLATE_NOOP(file, "File not found %1")).arg(name);
+                  msg = QObject::tr("File not found %1").arg(name);
                   break;
             case Score::FileError::FILE_ERROR:
             case Score::FileError::FILE_OPEN_ERROR:
@@ -201,7 +201,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             }
       if (canIgnore && ask)  {
             QMessageBox msgBox;
-            msgBox.setWindowTitle(QT_TRANSLATE_NOOP(file, "MuseScore: Load Error"));
+            msgBox.setWindowTitle(QObject::tr("MuseScore: Load Error"));
             msgBox.setText(msg);
             msgBox.setTextFormat(Qt::RichText);
             msgBox.setIcon(QMessageBox::Warning);
@@ -211,7 +211,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             return msgBox.exec() == QMessageBox::Ignore;
             }
       else
-            QMessageBox::critical(0, QT_TRANSLATE_NOOP(file, "MuseScore: Load Error"), msg);
+            QMessageBox::critical(0, QObject::tr("MuseScore: Load Error"), msg);
       return rv;
       }
 
