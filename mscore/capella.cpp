@@ -855,7 +855,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             midiPatch = cl->sound;
 
-            Staff* s = new Staff(score, part);
+            Staff* s = new Staff(score);
+            s->setPart(part);
             if (cl->bPercussion)
                   part->setMidiProgram(0, 128);
             else

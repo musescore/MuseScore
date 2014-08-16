@@ -256,41 +256,37 @@ void MuseScore::editInstrList()
                   const InstrumentTemplate* t = ((PartListItem*)item)->it;
                   part = new Part(rootScore);
                   part->initFromInstrTemplate(t);
+                  rootScore->cmdInsertPart(part, staffIdx);
 
                   pli->part = part;
                   QTreeWidgetItem* ci = 0;
-                  rstaff = 0;
                   QList<Staff*> linked;
-                  QList<Staff*> nonLinked;
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(ci);
-                        Staff* staff       = new Staff(rootScore, part);
+                        Staff* staff       = new Staff(rootScore);
+                        staff->setPart(part);
                         sli->setStaff(staff);
 
                         staff->init(t, sli->staffType(), cidx);
                         staff->setDefaultClefType(sli->defaultClefType());
-                        rootScore->undoInsertStaff(staff, staffIdx + rstaff);
+
+                        rootScore->undoInsertStaff(staff, cidx);
+                        ++staffIdx;
+
                         Staff* linkedStaff = part->staves()->front();
                         if (sli->linked() && linkedStaff != staff) {
                               cloneStaff(linkedStaff, staff);
                               linked.append(staff);
                               }
-                        else {
-                              nonLinked.append(staff);
-                              }
-                        ++rstaff;
                         }
                   if (linked.size() == 0)
                         part->staves()->front()->setBarLineSpan(part->nstaves());
-
-                  rootScore->cmdInsertPart(part, staffIdx);
 
                   //insert keysigs
                   int sidx = rootScore->staffIdx(part);
                   int eidx = sidx + part->nstaves();
                   if (firstStaff)
                         rootScore->adjustKeySigs(sidx, eidx, tmpKeymap);
-                  staffIdx += rstaff;
                   }
             else {
                   part = pli->part;
@@ -304,29 +300,16 @@ void MuseScore::editInstrList()
                               rootScore->systems()->clear();
                               Staff* staff = sli->staff();
                               int sidx = staff->idx();
-                              int eidx = sidx + 1;
-                              for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
-                                    m->cmdRemoveStaves(sidx, eidx);
-                                    if (m->hasMMRest())
-                                          m->mmRest()->cmdRemoveStaves(sidx, eidx);
-                                    }
                               rootScore->cmdRemoveStaff(sidx);
                               }
                         else if (sli->op() == ListItemOp::ADD) {
-                              Staff* staff = new Staff(rootScore, part);
+                              Staff* staff = new Staff(rootScore);
+                              staff->setPart(part);
+                              staff->initFromStaffType(sli->staffType());
                               sli->setStaff(staff);
 
                               rootScore->undoInsertStaff(staff, rstaff);
 
-                              for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
-                                    // do not create whole measure rests for linked staves
-                                    m->cmdAddStaves(staffIdx, staffIdx+1, !sli->linked());
-                                    if (m->hasMMRest())
-                                          m->mmRest()->cmdAddStaves(staffIdx, staffIdx+1, !sli->linked());
-                                    }
-
-                              rootScore->adjustBracketsIns(staffIdx, staffIdx+1);
-                              staff->initFromStaffType(sli->staffType());
                               Key nKey = part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
@@ -395,15 +378,21 @@ void MuseScore::editInstrList()
             }
 
       QList<int> dl;
+      int idx2 = 0;
+      bool sort = false;
       for(Staff* staff : dst) {
             int idx = rootScore->staves().indexOf(staff);
             if (idx == -1)
                   qDebug("staff in dialog(%p) not found in score", staff);
             else
                   dl.push_back(idx);
+            if (idx != idx2)
+                  sort = true;
+            ++idx2;
             }
 
-      rootScore->undo(new SortStaves(rootScore, dl));
+      if (sort)
+            rootScore->undo(new SortStaves(rootScore, dl));
 
       //
       // check for valid barLineSpan and bracketSpan

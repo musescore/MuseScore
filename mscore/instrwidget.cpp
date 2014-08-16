@@ -923,7 +923,8 @@ void InstrumentsWidget::createInstruments(Score* cs)
                   if (ci->isHidden())
                         continue;
                   StaffListItem* sli = (StaffListItem*)ci;
-                  Staff* staff       = new Staff(cs, part);
+                  Staff* staff       = new Staff(cs);
+                  staff->setPart(part);
                   sli->setStaff(staff);
                   ++rstaff;
 
@@ -951,23 +952,6 @@ void InstrumentsWidget::createInstruments(Score* cs)
                   m->cmdAddStaves(sidx, eidx, true);
             staffIdx += rstaff;
             }
-      //
-      //    sort staves
-      //
-      QList<Staff*> dst;
-      for (int idx = 0; (item = pl->topLevelItem(idx)); ++idx) {
-            PartListItem* pli = (PartListItem*)item;
-            if (pli->op == ListItemOp::I_DELETE)
-                  continue;
-            QTreeWidgetItem* ci = 0;
-            for (int cidx = 0; (ci = item->child(cidx)); ++cidx) {
-                  StaffListItem* sli = (StaffListItem*) ci;
-                  if (sli->op() == ListItemOp::I_DELETE)
-                        continue;
-                  dst.push_back(sli->staff());
-                  }
-            }
-
       //
       // check for bar lines
       //
@@ -1015,5 +999,4 @@ QTreeWidget* InstrumentsWidget::getPartiturList()
       {
       return partiturList;
       }
-
 }

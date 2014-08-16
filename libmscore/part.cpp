@@ -66,7 +66,8 @@ void Part::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Staff") {
-                  Staff* staff = new Staff(_score, this);
+                  Staff* staff = new Staff(_score);
+                  staff->setPart(this);
                   _score->staves().push_back(staff);
                   _staves.push_back(staff);
                   staff->read(e);
@@ -131,7 +132,8 @@ void Part::setStaves(int n)
             }
       int staffIdx = _score->staffIdx(this) + ns;
       for (int i = ns; i < n; ++i) {
-            Staff* staff = new Staff(_score, this);
+            Staff* staff = new Staff(_score);
+            staff->setPart(this);
             _staves.push_back(staff);
             _score->staves().insert(staffIdx, staff);
             for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
