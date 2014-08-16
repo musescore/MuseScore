@@ -4773,7 +4773,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   return;
                   }
             is.setDrumNote(pitch);
-            is.setTrack(is.track() / VOICES + voice);
+            is.setTrack((is.track() / VOICES) * VOICES + voice);
             octave = pitch / 12;
             }
       else {
