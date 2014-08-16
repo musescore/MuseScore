@@ -63,8 +63,7 @@ QString pitch2string(int v)
       QString o;
       o.sprintf("%d", octave);
       int i = v % 12;
-      QString s(octave < 0 ? valu[i] : vall[i]);
-      return s + o;
+      return qApp->translate("awlutils", octave < 0 ? valu[i] : vall[i]) + o;
       }
 }
 
