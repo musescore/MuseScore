@@ -86,7 +86,7 @@ struct BracketItem {
 struct SwingParameters {
       int swingUnit;
       int swingRatio;
-};
+      };
 
 //---------------------------------------------------------
 //    Staff
@@ -100,6 +100,8 @@ class Staff : public QObject {
       Part* _part;
 
       ClefList clefs;
+      ClefTypeList _defaultClefType;
+
       KeyList _keys;
       std::map<int,TimeSig*> timesigs;
 
@@ -149,7 +151,9 @@ class Staff : public QObject {
       QList <BracketItem> brackets() const { return _brackets; }
       void cleanupBrackets();
 
-      ClefTypeList clefTypeList(int tick) const;
+      ClefTypeList clefType(int tick) const;
+      ClefTypeList defaultClefType() const           { return _defaultClefType; }
+      void setDefaultClefType(const ClefTypeList& l) { _defaultClefType = l; }
       ClefType clef(int tick) const;
 
       void setClef(Clef*);
