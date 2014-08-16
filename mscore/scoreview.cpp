@@ -1604,7 +1604,8 @@ void ScoreView::setShadowNote(const QPointF& p)
 static void paintElement(void* data, Element* e)
       {
       QPainter* p = static_cast<QPainter*>(data);
-      QPointF pos(e->canvasPos());
+//      QPointF pos(e->canvasPos());
+      QPointF pos(e->pos());
       p->translate(pos);
       e->draw(p);
       p->translate(-pos);
