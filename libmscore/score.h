@@ -468,7 +468,6 @@ class Score : public QObject {
       void addMeasure(MeasureBase*, MeasureBase*);
       void readStaff(XmlReader&);
 
-      void cmdInsertPart(Part*, int);
       void cmdRemovePart(Part*);
       void cmdAddTie();
       void cmdAddHairpin(bool);
