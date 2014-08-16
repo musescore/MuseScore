@@ -228,7 +228,6 @@ void MuseScore::editInstrList()
       QTreeWidget* pl = instrList->partiturList();
       Part* part   = 0;
       int staffIdx = 0;
-      int rstaff   = 0;
 
       QTreeWidgetItem* item = 0;
       for (int idx = 0; (item = pl->topLevelItem(idx)); ++idx) {
@@ -248,7 +247,7 @@ void MuseScore::editInstrList()
 
       item = 0;
       for (int idx = 0; (item = pl->topLevelItem(idx)); ++idx) {
-            rstaff = 0;
+            int rstaff = 0;
             PartListItem* pli = static_cast<PartListItem*>(item);
             if (pli->op == ListItemOp::I_DELETE)
                   rootScore->cmdRemovePart(pli->part);

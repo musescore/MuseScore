@@ -408,7 +408,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   if (txt != vs->volta()->text())
                         score()->undoChangeVoltaText(vs->volta(), txt);
                   if (l != vs->volta()->endings()) {
-                        printf("===change endings\n");
                         score()->undoChangeVoltaEnding(vs->volta(), l);
                         }
                   }

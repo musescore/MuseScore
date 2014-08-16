@@ -720,9 +720,10 @@ void Score::undoRemoveStaff(Staff* staff)
 //    idx - index of staff in part
 //---------------------------------------------------------
 
-void Score::undoInsertStaff(Staff* staff, int idx, bool createRests)
+void Score::undoInsertStaff(Staff* staff, int ridx, bool createRests)
       {
-      undo(new InsertStaff(staff, idx));
+      undo(new InsertStaff(staff, ridx));
+      int idx = staffIdx(staff->part()) + ridx;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             m->cmdAddStaves(idx, idx+1, createRests);
             if (m->hasMMRest())
@@ -1608,10 +1609,10 @@ void RemovePart::redo()
 //   InsertStaff
 //---------------------------------------------------------
 
-InsertStaff::InsertStaff(Staff* p, int i)
+InsertStaff::InsertStaff(Staff* p, int _ridx)
       {
       staff = p;
-      ridx  = i;
+      ridx  = _ridx;
       }
 
 void InsertStaff::undo()
