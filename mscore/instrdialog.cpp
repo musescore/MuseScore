@@ -306,6 +306,7 @@ void MuseScore::editInstrList()
                               staff->setPart(part);
                               staff->initFromStaffType(sli->staffType());
                               sli->setStaff(staff);
+                              staff->setDefaultClefType(sli->defaultClefType());
 
                               rootScore->undoInsertStaff(staff, rstaff);
 

@@ -768,10 +768,9 @@ void InstrumentData::addShortName(const StaffName& f)
 ClefTypeList InstrumentData::clefType(int staffIdx) const
       {
       if (staffIdx >= _clefType.size()) {
-            if (staffIdx == 1)
-                  return ClefTypeList(ClefType::F, ClefType::F);
-            else
-                  return ClefTypeList(ClefType::G, ClefType::G);
+            if (_clefType.isEmpty())
+                  return ClefTypeList(staffIdx == 1 ? ClefType::F : ClefType::G);
+            return _clefType[0];
             }
       return _clefType[staffIdx];
       }

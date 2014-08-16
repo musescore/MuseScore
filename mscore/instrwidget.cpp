@@ -793,12 +793,23 @@ StaffListItem* InstrumentsWidget::on_belowButton_clicked()
       Staff* staff        = sli->staff();
       PartListItem* pli   = static_cast<PartListItem*>(sli->QTreeWidgetItem::parent());
       StaffListItem* nsli = new StaffListItem();
-      nsli->setStaff(staff);
-      if (staff)
+//      nsli->setStaff(staff);
+      nsli->setStaff(0);
+//      if (staff)
             nsli->setOp(ListItemOp::ADD);
-      pli->insertChild(pli->indexOfChild(sli)+1, nsli);
+      int ridx = pli->indexOfChild(sli) + 1;
+      pli->insertChild(ridx, nsli);
       nsli->initStaffTypeCombo();               // StaffListItem needs to be inserted in the tree hierarchy
       nsli->setStaffType(sli->staffType());     // before a widget can be set into it
+
+      ClefTypeList clefType;
+      if (pli->it)
+            clefType = pli->it->clefType(ridx);
+      else
+            clefType = pli->part->instr(0)->clefType(ridx);
+      nsli->setDefaultClefType(clefType);
+      pli->updateClefs();
+
       partiturList->clearSelection();           // should not be necessary
       partiturList->setItemSelected(nsli, true);
       pli->updateClefs();
