@@ -283,7 +283,8 @@ void OveToMScore::createStructure() {
 
             for(int j=0; j<partStaffCount; ++j){
                   //OVE::Track* track = ove_->getTrack(i, j);
-                  Staff* staff = new Staff(score_, part);
+                  Staff* staff = new Staff(score_);
+                  staff->setPart(part);
 
                   part->staves()->push_back(staff);
                   score_->staves().push_back(staff);

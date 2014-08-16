@@ -368,7 +368,8 @@ void GuitarPro6::readTracks(QDomNode* track)
       while (!nextTrack.isNull()) {
             QDomNode currentNode = nextTrack.firstChild();
             Part* part = new Part(score);
-            Staff* s = new Staff(score, part);
+            Staff* s = new Staff(score);
+            s->setPart(part);
             while (!currentNode.isNull()) {
                   QString nodeName = currentNode.nodeName();
                   if (nodeName == "Name")

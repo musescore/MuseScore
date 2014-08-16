@@ -716,7 +716,8 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
       for (int idx = 0; idx < ntracks; ++idx) {
             MTrack& track = tracks[idx];
             Part* part   = new Part(score);
-            Staff* s     = new Staff(score, part);
+            Staff* s     = new Staff(score);
+            s->setPart(part);
             part->insertStaff(s, 0);
             score->staves().push_back(s);
             track.staff = s;
@@ -734,7 +735,8 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                         s->setBracket(0, BracketType::BRACE);
                         s->setBracketSpan(0, 2);
 
-                        Staff* ss = new Staff(score, part);
+                        Staff* ss = new Staff(score);
+                        ss->setPart(part);
                         part->insertStaff(ss, 1);
                         score->staves().push_back(ss);
                         ++idx;

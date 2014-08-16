@@ -123,7 +123,8 @@ Score* createExcerpt(const QList<Part*>& parts)
             p->setInstrument(*part->instr(), 0);
 
             foreach (Staff* staff, *part->staves()) {
-                  Staff* s = new Staff(score, p);
+                  Staff* s = new Staff(score);
+                  s->setPart(p);
                   s->setStaffType(staff->staffType());
                   s->linkTo(staff);
                   p->staves()->append(s);

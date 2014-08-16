@@ -217,7 +217,8 @@ void Part::read114(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Staff") {
-                  Staff* staff = new Staff(_score, this);
+                  Staff* staff = new Staff(_score);
+                  staff->setPart(this);
                   _score->staves().push_back(staff);
                   _staves.push_back(staff);
                   staff->read114(e);

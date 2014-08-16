@@ -96,8 +96,8 @@ struct SwingParameters {
 class Staff : public QObject {
       Q_OBJECT
 
-      Score* _score;
-      Part* _part;
+      Score* _score ;
+      Part* _part       { 0 };
 
       ClefList clefs;
       ClefTypeList _defaultClefType;
@@ -127,7 +127,6 @@ class Staff : public QObject {
 
    public:
       Staff(Score* = 0);
-      Staff(Score*, Part*);
       ~Staff();
       void init(const InstrumentTemplate*, const StaffType *staffType, int);
       void initFromStaffType(const StaffType* staffType);

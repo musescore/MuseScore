@@ -159,16 +159,8 @@ QString Staff::partName() const
 
 Staff::Staff(Score* s)
       {
-      _score          = s;
-      _part           = 0;
-      _barLineTo      = (lines()-1)*2;
-      }
-
-Staff::Staff(Score* s, Part* p)
-      {
-      _score          = s;
-      _part           = p;
-      _barLineTo      = (lines()-1)*2;
+      _score     = s;
+      _barLineTo = (lines()-1)*2;
       }
 
 //---------------------------------------------------------
