@@ -1440,6 +1440,7 @@ RemoveElement::RemoveElement(Element* e)
                   }
             // remove any slurs pointing to this chor/rest
             QList<Spanner*> sl;
+            int tick = static_cast<ChordRest*>(element)->tick();
             for (auto i : score->spanner()) {     // TODO: dont search whole list
                   Spanner* s = i.second;
                   if (pendingSlur && pendingSlur->linkList().contains(s)) {
@@ -1450,6 +1451,8 @@ RemoveElement::RemoveElement(Element* e)
                         continue;
                         }
                   if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e))
+                        sl.append(s);
+                  else if ((s->tick() == tick) && (s->track() == element->track()))
                         sl.append(s);
                   }
             for (auto s : sl)       // actually remove scheduled spanners
