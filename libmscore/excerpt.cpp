@@ -126,6 +126,7 @@ Score* createExcerpt(const QList<Part*>& parts)
                   Staff* s = new Staff(score);
                   s->setPart(p);
                   s->setStaffType(staff->staffType());
+                  s->setDefaultClefType(staff->defaultClefType());
                   s->linkTo(staff);
                   p->staves()->append(s);
                   score->staves().append(s);
