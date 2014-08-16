@@ -154,7 +154,8 @@ void TestSelectionRangeDelete::deleteSegmentWithSpanner()
       size_t spanners = score->spanner().size();
 
       score->select(chordRestAtBeat(score, 0),SelectType::RANGE);
-      verifyNoDelete(score,spanners);
+//      verifyNoDelete(score,spanners);
+      verifyDelete(score,spanners);
       score->deselectAll();
 
       score->select(chordRestAtBeat(score, 1),SelectType::RANGE);
