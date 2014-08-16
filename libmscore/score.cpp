@@ -2157,13 +2157,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       Part*  p  = s->part();
       Staff* ns = new Staff(this);
       ns->setPart(p);
-      undoInsertStaff(ns, staffIdx+1);
-
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            m->cmdAddStaves(staffIdx+1, staffIdx+2, false);
-            if (m->hasMMRest())
-                  m->mmRest()->cmdAddStaves(staffIdx+1, staffIdx+2, false);
-            }
+      undoInsertStaff(ns, staffIdx+1, false);
 
       Clef* clef = new Clef(this);
       clef->setClefType(ClefType::F);
@@ -2187,10 +2181,9 @@ void Score::splitStaff(int staffIdx, int splitPoint)
 
       for (Segment* s = firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             for (int voice = 0; voice < VOICES; ++voice) {
-                  ChordRest* cr = static_cast<ChordRest*>(s->element(strack + voice));
-                  if (cr == 0 || cr->type() == Element::Type::REST)
+                  Chord* c = static_cast<Chord*>(s->element(strack + voice));
+                  if (c == 0 || c->type() != Element::Type::CHORD)
                         continue;
-                  Chord* c = static_cast<Chord*>(cr);
                   QList<Note*> removeNotes;
                   foreach(Note* note, c->notes()) {
                         if (note->pitch() >= splitPoint)
@@ -2199,8 +2192,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         Q_ASSERT(!chord || (chord->type() == Element::Type::CHORD));
                         if (chord == 0) {
                               chord = new Chord(*c);
-                              foreach(Note* note, chord->notes())
-                                    delete note;
+                              qDeleteAll(chord->notes());
                               chord->notes().clear();
                               chord->setTrack(dtrack + voice);
                               undoAddElement(chord);
