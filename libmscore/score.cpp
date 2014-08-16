@@ -2277,28 +2277,6 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       }
 
 //---------------------------------------------------------
-//   cmdInsertPart
-//    insert before staffIdx
-//---------------------------------------------------------
-
-void Score::cmdInsertPart(Part* part, int staffIdx)
-      {
-      undoInsertPart(part, staffIdx);
-
-#if 0
-      int sidx = this->staffIdx(part);
-      int eidx = sidx + part->nstaves();
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            m->cmdAddStaves(sidx, eidx, true);
-            if (m->hasMMRest())
-                  m->mmRest()->cmdAddStaves(sidx, eidx, true);
-            }
-
-      adjustBracketsIns(sidx, eidx);
-#endif
-      }
-
-//---------------------------------------------------------
 //   cmdRemovePart
 //---------------------------------------------------------
 
@@ -2306,17 +2284,7 @@ void Score::cmdRemovePart(Part* part)
       {
       int sidx   = staffIdx(part);
       int n      = part->nstaves();
-#if 0
-      int eidx   = sidx + n;
-      //
-      //    adjust measures
-      //
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            m->cmdRemoveStaves(sidx, eidx);
-            if (m->hasMMRest())
-                  m->mmRest()->cmdRemoveStaves(sidx, eidx);
-            }
-#endif
+
       for (int i = 0; i < n; ++i)
             cmdRemoveStaff(sidx);
 
@@ -2355,17 +2323,10 @@ void Score::removePart(Part* part)
 
 void Score::insertStaff(Staff* staff, int ridx)
       {
-      int idx = staffIdx(staff->part()) + ridx;
-      _staves.insert(idx, staff);
       staff->part()->insertStaff(staff, ridx);
 
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            m->cmdAddStaves(idx, idx+1, true);
-            if (m->hasMMRest())
-                  m->mmRest()->cmdAddStaves(idx, idx+1, true);
-            }
-
-      adjustBracketsIns(idx, idx+1);
+      int idx = staffIdx(staff->part()) + ridx;
+      _staves.insert(idx, staff);
 
       for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
             Spanner* s = i->second;
@@ -2378,6 +2339,28 @@ void Score::insertStaff(Staff* staff, int ridx)
                         }
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   removeStaff
+//---------------------------------------------------------
+
+void Score::removeStaff(Staff* staff)
+      {
+      int idx = staffIdx(staff);
+      for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
+            Spanner* s = i->second;
+            if (s->staffIdx() > idx) {
+                  int t = s->track() - VOICES;
+                  s->setTrack(t >=0 ? t : 0);
+                  if (s->track2() != -1) {
+                        t = s->track2() - VOICES;
+                        s->setTrack2(t >=0 ? t : s->track());
+                        }
+                  }
+            }
+      _staves.removeAll(staff);
+      staff->part()->removeStaff(staff);
       }
 
 //---------------------------------------------------------
@@ -2500,37 +2483,6 @@ void Score::cmdRemoveStaff(int staffIdx)
                   }
             s->score()->undo(new UnlinkStaff(s2, s));
             }
-      }
-
-//---------------------------------------------------------
-//   removeStaff
-//---------------------------------------------------------
-
-void Score::removeStaff(Staff* staff)
-      {
-      int idx = staffIdx(staff);
-      for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
-            Spanner* s = i->second;
-            if (s->staffIdx() > idx) {
-                  int t = s->track() - VOICES;
-                  s->setTrack(t >=0 ? t : 0);
-                  if (s->track2() != -1) {
-                        t = s->track2() - VOICES;
-                        s->setTrack2(t >=0 ? t : s->track());
-                        }
-                  }
-            }
-      _staves.removeAll(staff);
-      staff->part()->removeStaff(staff);
-      //
-      //    adjust measures
-      //
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            m->cmdRemoveStaves(idx, idx+1);
-            if (m->hasMMRest())
-                  m->mmRest()->cmdRemoveStaves(idx, idx+1);
-            }
-
       }
 
 //---------------------------------------------------------
@@ -3373,7 +3325,7 @@ void Score::appendPart(const QString& name)
             }
 
       part->staves()->front()->setBarLineSpan(part->nstaves());
-      cmdInsertPart(part, n);
+      undoInsertPart(part, n);
       fixTicks();
       rebuildMidiMapping();
       }

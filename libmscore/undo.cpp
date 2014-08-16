@@ -702,6 +702,16 @@ void Score::undoInsertPart(Part* part, int idx)
 
 void Score::undoRemoveStaff(Staff* staff)
       {
+      int idx = staffIdx(staff);
+      //
+      //    adjust measures
+      //
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            m->cmdRemoveStaves(idx, idx+1);
+            if (m->hasMMRest())
+                  m->mmRest()->cmdRemoveStaves(idx, idx+1);
+            }
+
       undo(new RemoveStaff(staff));
       }
 
@@ -713,6 +723,13 @@ void Score::undoRemoveStaff(Staff* staff)
 void Score::undoInsertStaff(Staff* staff, int idx)
       {
       undo(new InsertStaff(staff, idx));
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            m->cmdAddStaves(idx, idx+1, true);
+            if (m->hasMMRest())
+                  m->mmRest()->cmdAddStaves(idx, idx+1, true);
+            }
+
+      adjustBracketsIns(idx, idx+1);
       }
 
 //---------------------------------------------------------

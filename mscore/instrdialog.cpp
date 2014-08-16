@@ -256,7 +256,7 @@ void MuseScore::editInstrList()
                   const InstrumentTemplate* t = ((PartListItem*)item)->it;
                   part = new Part(rootScore);
                   part->initFromInstrTemplate(t);
-                  rootScore->cmdInsertPart(part, staffIdx);
+                  rootScore->undo(new InsertPart(part, staffIdx));
 
                   pli->part = part;
                   QTreeWidgetItem* ci = 0;
