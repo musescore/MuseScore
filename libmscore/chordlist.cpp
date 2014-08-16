@@ -1693,8 +1693,7 @@ bool ChordList::read(const QString& name)
             return false;
       QFile f(path);
       if (!f.open(QIODevice::ReadOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Cannot open chord description:\n%1\n%2");
-            MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
+            MScore::lastError = QObject::tr("Cannot open chord description:\n%1\n%2").arg(f.fileName()).arg(f.errorString());
             qDebug("ChordList::read failed: <%s>", qPrintable(path));
             return false;
             }
@@ -1730,8 +1729,7 @@ bool ChordList::write(const QString& name) const
       QFile f(info.filePath());
 
       if (!f.open(QIODevice::WriteOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Open Chord Description\n%1\nfailed: %2");
-            MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
+            MScore::lastError = QObject::tr("Open Chord Description\n%1\nfailed: %2").arg(f.fileName()).arg(f.errorString());
             return false;
             }
 
@@ -1742,8 +1740,7 @@ bool ChordList::write(const QString& name) const
       write(xml);
       xml.etag();
       if (f.error() != QFile::NoError) {
-            QString s = QT_TRANSLATE_NOOP("file", "Write Chord Description failed: %1");
-            MScore::lastError = s.arg(f.errorString());
+            MScore::lastError = QObject::tr("Write Chord Description failed: %1").arg(f.errorString());
             }
       return true;
       }

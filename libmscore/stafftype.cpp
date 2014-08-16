@@ -862,9 +862,8 @@ bool StaffType::readConfigFile(const QString& fileName)
       QFile f(path);
 
       if (!fi.exists() || !f.open(QIODevice::ReadOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Cannot open tablature font description:\n%1\n%2");
-            MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
-qDebug("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
+            MScore::lastError = QObject::tr("Cannot open tablature font description:\n%1\n%2").arg(f.fileName()).arg(f.errorString());
+            qDebug("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
             return false;
             }
 
