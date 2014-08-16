@@ -166,7 +166,7 @@ void Clef::layout()
                   else                          // if generated, replace with initial clef type
                         // TODO : instead of initial staff clef (which is assumed to be compatible)
                         // use the last compatible clef previously found in staff
-                        _clefTypes = stf->clefTypeList(0);
+                        _clefTypes = stf->clefType(0);
                   }
 
             //

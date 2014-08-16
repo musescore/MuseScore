@@ -61,15 +61,6 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   setScore
-//---------------------------------------------------------
-
-void InstrumentsDialog::setScore(Score* s)
-      {
-      instrumentsWidget->setScore(s);
-      }
-
-//---------------------------------------------------------
 //   accept
 //---------------------------------------------------------
 
@@ -164,9 +155,9 @@ void InstrumentsDialog::writeSettings()
 //   genPartList
 //---------------------------------------------------------
 
-void InstrumentsDialog::genPartList()
+void InstrumentsDialog::genPartList(Score* s)
       {
-      instrumentsWidget->genPartList();
+      instrumentsWidget->genPartList(s);
       }
 
 //---------------------------------------------------------
@@ -193,8 +184,7 @@ void MuseScore::editInstrList()
             return;
             }
       Score* rootScore = cs->rootScore();
-      instrList->setScore(rootScore);
-      instrList->genPartList();
+      instrList->genPartList(rootScore);
       rootScore->startCmd();
       rootScore->deselectAll();
       int rv = instrList->exec();
@@ -249,7 +239,7 @@ void MuseScore::editInstrList()
             int staves = 0;
             for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                   StaffListItem* sli = static_cast<StaffListItem*>(ci);
-                  if (sli->op != ListItemOp::I_DELETE)
+                  if (sli->op() != ListItemOp::I_DELETE)
                         ++staves;
                   }
             if (staves == 0)
@@ -275,10 +265,10 @@ void MuseScore::editInstrList()
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(ci);
                         Staff* staff       = new Staff(rootScore, part);
-                        sli->staff         = staff;
+                        sli->setStaff(staff);
 
                         staff->init(t, sli->staffType(), cidx);
-
+                        staff->setDefaultClefType(sli->defaultClefType());
                         rootScore->undoInsertStaff(staff, staffIdx + rstaff);
                         Staff* linkedStaff = part->staves()->front();
                         if (sli->linked() && linkedStaff != staff) {
@@ -310,9 +300,9 @@ void MuseScore::editInstrList()
                   QTreeWidgetItem* ci = 0;
                   for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                         StaffListItem* sli = (StaffListItem*)ci;
-                        if (sli->op == ListItemOp::I_DELETE) {
+                        if (sli->op() == ListItemOp::I_DELETE) {
                               rootScore->systems()->clear();
-                              Staff* staff = sli->staff;
+                              Staff* staff = sli->staff();
                               int sidx = staff->idx();
                               int eidx = sidx + 1;
                               for (Measure* m = rootScore->firstMeasure(); m; m = m->nextMeasure()) {
@@ -322,9 +312,9 @@ void MuseScore::editInstrList()
                                     }
                               rootScore->cmdRemoveStaff(sidx);
                               }
-                        else if (sli->op == ListItemOp::ADD) {
+                        else if (sli->op() == ListItemOp::ADD) {
                               Staff* staff = new Staff(rootScore, part);
-                              sli->staff   = staff;
+                              sli->setStaff(staff);
 
                               rootScore->undoInsertStaff(staff, rstaff);
 
@@ -362,9 +352,9 @@ void MuseScore::editInstrList()
                               ++staffIdx;
                               ++rstaff;
                               }
-                        else if (sli->op == ListItemOp::UPDATE) {
+                        else if (sli->op() == ListItemOp::UPDATE) {
                               // check changes in staff type
-                              Staff* staff = sli->staff;
+                              Staff* staff = sli->staff();
                               const StaffType* stfType = sli->staffType();
                               // before changing staff type, check if notes need to be updated
                               // (true if changing into or away from TAB)
@@ -398,9 +388,9 @@ void MuseScore::editInstrList()
             QTreeWidgetItem* ci = 0;
             for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
                   StaffListItem* sli = (StaffListItem*) ci;
-                  if (sli->op == ListItemOp::I_DELETE)
+                  if (sli->op() == ListItemOp::I_DELETE)
                         continue;
-                  dst.push_back(sli->staff);
+                  dst.push_back(sli->staff());
                   }
             }
 

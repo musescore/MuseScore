@@ -520,7 +520,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               Clef* clef = static_cast<Clef*>(oe);
                               int   tick = seg->tick();
                               if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffGroup()
-                                          && dstStaff->clefTypeList(tick) != clef->clefTypeList()) {
+                                          && dstStaff->clefType(tick) != clef->clefTypeList()) {
                                     ne = oe->clone();
                                     }
                               }

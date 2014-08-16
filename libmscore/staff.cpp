@@ -185,26 +185,22 @@ Staff::~Staff()
       }
 
 //---------------------------------------------------------
-//   Staff::clefTypeList
+//   Staff::clefType
 //---------------------------------------------------------
 
-ClefTypeList Staff::clefTypeList(int tick) const
+ClefTypeList Staff::clefType(int tick) const
       {
       ClefTypeList ct = clefs.clef(tick);
       if (ct._concertClef == ClefType::INVALID) {
             switch(_staffType.group()) {
-                  case StaffGroup::TAB: {
-                        ClefType t = ClefType(score()->styleI(StyleIdx::tabClef));
-                        ct._concertClef = t;
-                        ct._transposingClef = t;
-                        }
+                  case StaffGroup::TAB:
+                        ct = ClefTypeList(ClefType(score()->styleI(StyleIdx::tabClef)));
                         break;
                   case StaffGroup::STANDARD:
-                        ct = part()->instr(tick)->clefType(rstaff());
+                        ct = defaultClefType();
                         break;
                   case StaffGroup::PERCUSSION:
-                        ct._concertClef = ClefType::PERC;
-                        ct._transposingClef = ClefType::PERC;
+                        ct = ClefTypeList(ClefType::PERC);
                         break;
                   }
             }
@@ -217,7 +213,7 @@ ClefTypeList Staff::clefTypeList(int tick) const
 
 ClefType Staff::clef(int tick) const
       {
-      ClefTypeList c = clefTypeList(tick);
+      ClefTypeList c = clefType(tick);
       return score()->styleB(StyleIdx::concertPitch) ? c._concertClef : c._transposingClef;
       }
 
@@ -414,6 +410,15 @@ void Staff::write(Xml& xml) const
             }
 
       _staffType.write(xml);
+      ClefTypeList ct = _defaultClefType;
+      if (ct._concertClef == ct._transposingClef) {
+            if (ct._concertClef != ClefType::G)
+                  xml.tag("defaultClef", ClefInfo::tag(ct._concertClef));
+            }
+      else {
+            xml.tag("defaultConcertClef", ClefInfo::tag(ct._concertClef));
+            xml.tag("defaultTransposingClef", ClefInfo::tag(ct._transposingClef));
+            }
 
       if (small() && !xml.excerptmode)    // switch small staves to normal ones when extracting part
             xml.tag("small", small());
@@ -479,6 +484,19 @@ void Staff::read(XmlReader& e)
                   // (1-line staff bar lines are special)
                   _barLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
                   _barLineTo   = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (lines() - 1) * 2);
+                  }
+            else if (tag == "defaultClef") {           // sets both default transposing and concert clef
+                  QString val(e.readElementText());
+                  ClefType ct = Clef::clefType(val);
+                  setDefaultClefType(ClefTypeList(ct, ct));
+                  }
+            else if (tag == "defaultConcertClef") {
+                  QString val(e.readElementText());
+                  setDefaultClefType(ClefTypeList(Clef::clefType(val), defaultClefType()._transposingClef));
+                  }
+            else if (tag == "defaultTransposingClef") {
+                  QString val(e.readElementText());
+                  setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, Clef::clefType(val)));
                   }
             else if (tag == "small")
                   setSmall(e.readInt());
@@ -816,6 +834,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
             pst = StaffType::getDefaultPreset(t->staffGroup);
 
       setStaffType(pst);
+      setDefaultClefType(t->clefType(cidx));
 //      if (pst->group() == ArticulationShowIn::PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
 //            setLines(t->staffLines[cidx]);      // use number of lines from instr. template
       }

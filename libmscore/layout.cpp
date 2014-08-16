@@ -1534,11 +1534,11 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         Segment* s = m->undoGetSegment(Segment::Type::Clef, tick);
                         clef->setParent(s);
                         clef->layout();
-                        clef->setClefType(staff->clefTypeList(tick));  // set before add !
+                        clef->setClefType(staff->clefType(tick));  // set before add !
                         undoAddElement(clef);
                         }
                   else if (clef->generated()) {
-                        ClefTypeList cl = staff->clefTypeList(tick);
+                        ClefTypeList cl = staff->clefType(tick);
                         if (cl != clef->clefTypeList())
                               undo(new ChangeClefType(clef, cl._concertClef, cl._transposingClef));
                         }
