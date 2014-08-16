@@ -68,8 +68,6 @@
           <program value="27"/>
           <controller ctrl="7" value="119"/>
           <controller ctrl="10" value="63"/>
-          <controller ctrl="93" value="255"/>
-          <controller ctrl="91" value="255"/>
           </Channel>
         </Instrument>
       </Part>
@@ -101,7 +99,8 @@
           </Tempo>
         <Rest>
           <lid>5</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -125,7 +124,8 @@
       <Measure number="3">
         <Rest>
           <lid>11</lid>
-          <durationType>whole</durationType>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -218,8 +218,6 @@
             <program value="27"/>
             <controller ctrl="7" value="119"/>
             <controller ctrl="10" value="63"/>
-            <controller ctrl="93" value="255"/>
-            <controller ctrl="91" value="255"/>
             </Channel>
           </Instrument>
         </Part>
@@ -255,7 +253,8 @@
             </Tempo>
           <Rest>
             <lid>5</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -279,7 +278,8 @@
         <Measure number="3">
           <Rest>
             <lid>11</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
@@ -295,7 +295,8 @@
             </KeySig>
           <Rest>
             <lid>5</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -314,7 +315,8 @@
         <Measure number="3">
           <Rest>
             <lid>11</lid>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration z="1" n="1"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>

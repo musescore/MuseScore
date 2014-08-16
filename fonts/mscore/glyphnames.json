@@ -290,6 +290,21 @@
     "guitarFadeOut": {
         "codepoint": "U+e844"
     },
+    "guitarVolumeSwell": {
+        "codepoint": "U+e845"
+    },
+    "wiggleSawtooth": {
+        "codepoint": "U+EABB"
+    },
+    "wiggleSawtoothWide": {
+        "codepoint": "U+EABC"
+    },
+    "wiggleVibratoLargeFaster": {
+        "codepoint": "U+EAE4"
+    },
+    "wiggleVibratoLargeSlowest": {
+        "codepoint": "U+EAE8"
+    },
     "keyboardPedalHeel1": {
         "codepoint": "U+e172"
     },
@@ -631,6 +646,12 @@
     },
     "timeSigParensRightSmall": {
         "codepoint": "U+E0A3"
+    },
+    "timeSigParensLeft": {
+        "codepoint": "U+E094"
+    },
+    "timeSigParensRight": {
+        "codepoint": "U+E095"
     },
     "timeSigPlusSmall": {
         "codepoint": "U+E09D"

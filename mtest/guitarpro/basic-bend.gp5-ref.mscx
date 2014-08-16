@@ -68,8 +68,6 @@
           <program value="25"/>
           <controller ctrl="7" value="127"/>
           <controller ctrl="10" value="63"/>
-          <controller ctrl="93" value="255"/>
-          <controller ctrl="91" value="255"/>
           </Channel>
         </Instrument>
       </Part>
@@ -99,16 +97,11 @@
           <velocity>96</velocity>
           <lid>4</lid>
           </Dynamic>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>5</lid>
-          <text><sym>noteQuarterUp</sym> = 120</text>
-          </Tempo>
         <Chord>
-          <lid>6</lid>
+          <lid>5</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>7</lid>
+            <lid>6</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -124,15 +117,15 @@
             </Note>
           </Chord>
         <Rest>
+          <lid>8</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
           <lid>9</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
           <lid>10</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>11</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -226,8 +219,6 @@
             <program value="25"/>
             <controller ctrl="7" value="127"/>
             <controller ctrl="10" value="63"/>
-            <controller ctrl="93" value="255"/>
-            <controller ctrl="91" value="255"/>
             </Channel>
           </Instrument>
         </Part>
@@ -261,16 +252,11 @@
             <velocity>96</velocity>
             <lid>4</lid>
             </Dynamic>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>5</lid>
-            <text><sym>noteQuarterUp</sym> = 120</text>
-            </Tempo>
           <Chord>
-            <lid>6</lid>
+            <lid>5</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>7</lid>
+              <lid>6</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -286,15 +272,15 @@
               </Note>
             </Chord>
           <Rest>
+            <lid>8</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <lid>9</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>10</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -310,10 +296,10 @@
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>6</lid>
+            <lid>5</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>7</lid>
+              <lid>6</lid>
               <Bend>
                 <point time="0" pitch="0" vibrato="0"/>
                 <point time="30" pitch="100" vibrato="0"/>
@@ -326,15 +312,15 @@
               </Note>
             </Chord>
           <Rest>
+            <lid>8</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <lid>9</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>10</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>

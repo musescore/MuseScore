@@ -89,7 +89,7 @@ InstrumentData::InstrumentData()
       _maxPitchA   = 127;
       _minPitchP   = 0;
       _maxPitchP   = 127;
-      _useDrumset  = false;
+      _useDrumset  = NONE;
       _drumset     = 0;
       }
 
@@ -266,9 +266,13 @@ void InstrumentData::read(XmlReader& e)
             else if (tag == "transposeDiatonic")
                   _transpose.diatonic = e.readInt();
             else if (tag == "useDrumset") {
-                  _useDrumset = e.readInt();
-                  if (_useDrumset)
-                        _drumset = new Drumset(*smDrumset);
+                  int drumset = e.readInt();
+                  if (!drumset)
+                        _useDrumset = NONE;
+                  else  {
+                        _useDrumset = DEFAULT_DRUMS;
+                         _drumset = new Drumset(*smDrumset);
+                        }
                   }
             else if (tag == "Drum") {
                   // if we see on of this tags, a custom drumset will
@@ -687,11 +691,20 @@ bool StaffName::operator==(const StaffName& i) const
 //   setUseDrumset
 //---------------------------------------------------------
 
-void InstrumentData::setUseDrumset(bool val)
+void InstrumentData::setUseDrumset(DrumsetKind val)
       {
       _useDrumset = val;
-      if (val && _drumset == 0) {
-            _drumset = new Drumset(*smDrumset);
+      if (val != NONE && _drumset == 0) {
+            switch (val) {
+                  case DEFAULT_DRUMS:
+                        _drumset = new Drumset(*smDrumset);
+                        break;
+                  case GUITAR_PRO:
+                        _drumset = new Drumset(*gpDrumset);
+                        break;
+                  default:
+                        break;
+                  }
             }
       }
 
@@ -977,7 +990,7 @@ Drumset* Instrument::drumset() const
 //   useDrumset
 //---------------------------------------------------------
 
-bool Instrument::useDrumset() const
+DrumsetKind Instrument::useDrumset() const
       {
       return d->useDrumset();
       }
@@ -986,7 +999,7 @@ bool Instrument::useDrumset() const
 //   setUseDrumset
 //---------------------------------------------------------
 
-void Instrument::setUseDrumset(bool val)
+void Instrument::setUseDrumset(DrumsetKind val)
       {
       d->setUseDrumset(val);
       }
@@ -1268,7 +1281,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
       if (t->useDrumset) {
-            instr.setUseDrumset(true);
+            instr.setUseDrumset(DEFAULT_DRUMS);
             instr.setDrumset(new Drumset(*((t->drumset) ? t->drumset : smDrumset)));
             }
       for (int i = 0; i < t->nstaves(); ++i)

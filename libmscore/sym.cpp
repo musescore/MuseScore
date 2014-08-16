@@ -5014,7 +5014,12 @@ QVector<oldName> oldNames = {
       {"umarcato",                              SymId::articMarcatoAbove },         // scripts.umarcato
       {"dmarcato",                              SymId::articMarcatoBelow },         // scripts.dmarcato
       {"fadein",                                SymId::guitarFadeIn },              // scripts.fadein
-      {"fadeout",                               SymId::guitarFadeOut },             // scripts.fadein
+      {"fadeout",                               SymId::guitarFadeOut },             // scripts.fadeout
+      {"volumeswell",                           SymId::guitarVolumeSwell },         // scripts.volumeswell
+      {"wigglesawtooth",                        SymId::wiggleSawtooth },            // scripts.wiggleSawtooth
+      {"wigglesawtoothwide",                    SymId::wiggleSawtoothWide },        // scripts.wiggleSawtoothWide
+      {"wigglevibratolargefaster",              SymId::wiggleVibratoLargeFaster },  // scripts.wiggleVibratoLargeFaster
+      {"wigglevibratolargeslowest",             SymId::wiggleVibratoLargeSlowest }, // scripts.wiggleVibratoLargeSlowest
       {"ouvert",                                SymId::brassMuteOpen },             // scripts.open
       {"halfopen",                              SymId::brassMuteHalfClosed },       // scripts.halfopen CHECK!!! pre 2.0 only
       {"plus stop",                             SymId::brassMuteClosed },           // scripts.stopped

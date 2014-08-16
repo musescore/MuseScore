@@ -67,6 +67,7 @@ class Drumset {
       };
 
 extern Drumset* smDrumset;
+extern Drumset* gpDrumset;
 extern void initDrumset();
 
 
