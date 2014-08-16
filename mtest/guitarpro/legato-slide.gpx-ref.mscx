@@ -121,15 +121,20 @@
           <lid>5</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <Dynamic>
+          <subtype>mf</subtype>
+          <velocity>80</velocity>
+          <lid>6</lid>
+          </Dynamic>
         <Slur id="2">
-          <lid>13</lid>
+          <lid>15</lid>
           <track>0</track>
           </Slur>
         <Chord>
-          <lid>6</lid>
+          <lid>7</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>7</lid>
+            <lid>8</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>7</fret>
@@ -137,11 +142,16 @@
             </Note>
           <Slur type="start" id="2"/>
           </Chord>
+        <Dynamic>
+          <subtype>mp</subtype>
+          <velocity>64</velocity>
+          <lid>9</lid>
+          </Dynamic>
         <Chord>
-          <lid>8</lid>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>9</lid>
+            <lid>11</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>9</fret>
@@ -149,12 +159,12 @@
             </Note>
           <Glissando>
             <subtype>0</subtype>
-            <lid>10</lid>
+            <lid>12</lid>
             </Glissando>
           <Slur type="stop" id="2"/>
           </Chord>
         <Rest>
-          <lid>11</lid>
+          <lid>13</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -305,15 +315,20 @@
             <lid>5</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <lid>6</lid>
+            </Dynamic>
           <Slur id="3">
-            <lid>13</lid>
+            <lid>15</lid>
             <track>0</track>
             </Slur>
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
@@ -321,11 +336,16 @@
               </Note>
             <Slur type="start" id="3"/>
             </Chord>
+          <Dynamic>
+            <subtype>mp</subtype>
+            <velocity>64</velocity>
+            <lid>9</lid>
+            </Dynamic>
           <Chord>
-            <lid>8</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>9</lid>
+              <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
@@ -333,12 +353,12 @@
               </Note>
             <Glissando>
               <subtype>0</subtype>
-              <lid>10</lid>
+              <lid>12</lid>
               </Glissando>
             <Slur type="stop" id="3"/>
             </Chord>
           <Rest>
-            <lid>11</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -358,14 +378,14 @@
             <durationType>quarter</durationType>
             </Rest>
           <Slur id="4">
-            <lid>13</lid>
+            <lid>15</lid>
             <track>4</track>
             </Slur>
           <Chord>
-            <lid>6</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>7</lid>
+              <lid>8</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
@@ -374,10 +394,10 @@
             <Slur type="start" id="4"/>
             </Chord>
           <Chord>
-            <lid>8</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>9</lid>
+              <lid>11</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
@@ -385,12 +405,12 @@
               </Note>
             <Glissando>
               <subtype>0</subtype>
-              <lid>10</lid>
+              <lid>12</lid>
               </Glissando>
             <Slur type="stop" id="4"/>
             </Chord>
           <Rest>
-            <lid>11</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>

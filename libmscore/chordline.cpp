@@ -30,6 +30,8 @@ ChordLine::ChordLine(Score* s)
       modified = false;
       _chordLineType = ChordLineType::NOTYPE;
       _straight = false;
+      _lengthX = 0.0;
+      _lengthY = 0.0;
       }
 
 ChordLine::ChordLine(const ChordLine& cl)
@@ -39,6 +41,8 @@ ChordLine::ChordLine(const ChordLine& cl)
       modified = cl.modified;
       _chordLineType = cl._chordLineType;
       _straight = cl._straight;
+      _lengthX = cl._lengthX;
+      _lengthY = cl._lengthY;
       }
 
 //---------------------------------------------------------
@@ -106,7 +110,49 @@ void ChordLine::layout()
       else
             setPos(0.0, 0.0);
       QRectF r(path.boundingRect());
-      bbox().setRect(r.x() * _spatium, r.y() * _spatium, r.width() * _spatium, r.height() * _spatium);
+      int x1, y1, width, height = 0;
+
+      /* layout of sides have been fine-tuned below to get the
+         bounding box fitting around the slide, factoring in spatium,
+         length of slide, height, and offset from note, plus some
+         extra space for user mis-click error. These values have been
+         set to match Guitar Pro behaviour. */
+
+      // negative gradient after note
+      if (_straight && _chordLineType == ChordLineType::FALL) {
+            x1 = r.x() + _spatium;
+            y1 = r.height() + _spatium * 0.8 + _lengthY * 0.95;
+            width =  r.width() + _spatium * 2 + _lengthX;
+            height = -r.height() - _spatium * 2 - _lengthY * 0.95;
+            }
+      // positive gradient after note
+      else if (_straight && _chordLineType ==  ChordLineType::DOIT) {
+            x1 = r.x() + _spatium;
+            y1 = r.y() + _spatium * 0.5 - _lengthY * 0.15;
+            width =  r.width() + _spatium * 2.2 + _lengthX * 0.95;
+            height = -r.height() - _spatium * 2 + _lengthY * 0.95;
+            }
+      // negative gradient before note
+      else if (_straight && _chordLineType == ChordLineType::SCOOP) {
+            x1 = -r.x() - _spatium * 1.3;
+            y1 = -r.y() / 4 - _spatium * 0.5;
+            width =  -r.width() - _spatium * 2.5 + _lengthX;
+            height = r.height() - _spatium * 1.9  + _lengthY * 1.1;
+            }
+      // positive gradient before note
+      else if (_straight && _chordLineType == ChordLineType::PLOP) {
+            x1 = -r.x() - _spatium * 1.2;
+            y1 = -r.y() + _spatium * 1.5 + _lengthY;
+            width =  -r.width() - _spatium * 2.9 + _lengthX * 1.15;
+            height = -r.height() - _spatium * 2.5 - _lengthY * 0.93;
+            }
+      else  {
+            x1 = r.x() * _spatium;
+            y1 = r.y() * _spatium;
+            width = r.width() * _spatium;
+            height = r.height() * _spatium;
+            }
+      bbox().setRect(x1, y1, width, height);
       }
 
 //---------------------------------------------------------
@@ -164,6 +210,11 @@ void ChordLine::read(XmlReader& e)
                   setChordLineType(ChordLineType(e.readInt()));
              else if (tag == "straight")
                   setStraight(e.readInt());
+             else if (tag == "lengthX")
+                  setLengthX(e.readInt());
+             else if (tag == "lengthY")
+                  setLengthY(e.readInt());
+
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -178,6 +229,8 @@ void ChordLine::write(Xml& xml) const
       xml.stag(name());
       xml.tag("subtype", int(_chordLineType));
       xml.tag("straight", _straight, false);
+      xml.tag("lengthX", _lengthX, 0.0);
+      xml.tag("lengthY", _lengthY, 0.0);
       Element::writeProperties(xml);
       if (modified) {
             int n = path.elementCount();
@@ -206,18 +259,23 @@ void ChordLine::draw(QPainter* painter) const
             pen.setWidthF(_spatium * .15);
             pen.setCapStyle(Qt::RoundCap);
             painter->setPen(pen);
+
+            /* we use constants below in order to shift the drawing of
+               straight lines away from the notehead. This will gave
+               almost identical results to the Guitar Pro
+               represenation. */
+
+            // negative gradient after note
             if (_chordLineType == ChordLineType::FALL)
-                  painter->drawLine(QLineF(20.0, -4.0, 30.0, 4.0));
+                  painter->drawLine(QLineF(_spatium + 3.0, -_spatium + 2.0, _spatium * 3 + _lengthX, 2.0 + _spatium / 2 + _lengthY));
+            // positive gradient, after note
             else if (_chordLineType == ChordLineType::DOIT)
-                  painter->drawLine(QLineF(20.0, 4.0, 30.0, -4.0));
-            else if (_chordLineType == ChordLineType::SCOOP) {
-                  painter->translate(-50.0, -5.0);
-                  painter->drawLine(QLineF(20.0, -4.0, 30.0, 4.0));
-                  }
-            else if (_chordLineType == ChordLineType::PLOP) {
-                  painter->translate(-50.0, 5.0);
-                  painter->drawLine(QLineF(20.0, 4.0, 30.0, -4.0));
-                  }
+                  painter->drawLine(QLineF(_spatium + 3.0, _spatium / 3 - 2.0, _spatium * 3 + _lengthX, -2.0 - _spatium / 2 + _lengthY));
+            else if (_chordLineType == ChordLineType::SCOOP)
+                  painter->drawLine(QLineF(-3.5 * _spatium + _lengthX, -_spatium * 2 + _lengthY, -_spatium - 2.0, -_spatium / 2));
+            else if (_chordLineType == ChordLineType::PLOP)
+                  painter->drawLine(QLineF(-3.5 * _spatium + _lengthX, _spatium + 3.0 + _lengthY, -_spatium - 3.0, -_spatium / 5));
+
             painter->restore();
             }
       else  {
@@ -238,6 +296,20 @@ void ChordLine::editDrag(const EditData& ed)
       int n = path.elementCount();
       QPainterPath p;
       qreal sp = spatium();
+      _lengthX += ed.delta.x();
+      _lengthY += ed.delta.y();
+
+      // used to limit how grips can affect the slide, stops the user from being able to turn one kind of slide into another
+      int slideBoundary = 5;
+      if ((_chordLineType == ChordLineType::PLOP || _chordLineType == ChordLineType::FALL) && _lengthY < -slideBoundary)
+            _lengthY = -slideBoundary;
+      else if ((_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT) && _lengthX < -slideBoundary)
+            _lengthX = -slideBoundary;
+      else if ((_chordLineType == ChordLineType::DOIT || _chordLineType == ChordLineType::SCOOP) && _lengthY > slideBoundary)
+            _lengthY = slideBoundary;
+      else if ((_chordLineType == ChordLineType::SCOOP || _chordLineType == ChordLineType::PLOP)  && _lengthX > slideBoundary)
+            _lengthX = slideBoundary;
+
       qreal dx = ed.delta.x() / sp;
       qreal dy = ed.delta.y() / sp;
       for (int i = 0; i < n; ++i) {
@@ -288,13 +360,35 @@ void ChordLine::editDrag(const EditData& ed)
 void ChordLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       int n = path.elementCount();
-      *grips = n;
-      *defaultGrip = n - 1;
       QPointF cp(pagePos());
       qreal sp = spatium();
-      for (int i = 0; i < n; ++i)
-            grip[i].translate(cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp));
-      }
+      if (_straight) {
+            // calculate grip to be near the head of the slide rather than near the notehead
+            int xOffsetAfterNote = sp * 3 + 2;
+            int xOffsetBeforeNote = sp * 3 + 4;
+            int yOffsetAterNote = -sp;
+            int yOffsetBeforeNote = sp + 4;
+            if (_chordLineType == ChordLineType::DOIT)
+                  grip[0].translate(QPointF(xOffsetAfterNote, yOffsetAterNote));
+            else if (_chordLineType == ChordLineType::FALL)
+                  grip[0].translate(QPointF(xOffsetAfterNote, -yOffsetAterNote));
+            else if (_chordLineType == ChordLineType::SCOOP)
+                  grip[0].translate(QPointF(-xOffsetBeforeNote, -yOffsetBeforeNote));
+            else if (_chordLineType == ChordLineType::PLOP)
+                  grip[0].translate(QPointF(-xOffsetBeforeNote, yOffsetBeforeNote));
 
+            // limit the number of grips to one
+            *grips = 1;
+            // translate on the length and height - stops the grips from goint past boundries of slide
+            grip[0].translate(cp + QPointF(_lengthX, _lengthY));
+            }
+      else  {
+            *grips = n;
+            *defaultGrip = n - 1;
+            for (int i = 0; i < n; ++i)
+                  grip[i].translate(cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp));
+
+            }
+      }
 }
 

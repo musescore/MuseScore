@@ -1301,7 +1301,12 @@ void Score::cmdFlip()
                      || a->articulationType() == ArticulationType::Tenuto
                      || a->articulationType() == ArticulationType::Sforzatoaccent
                      || a->articulationType() == ArticulationType::FadeIn
-                     || a->articulationType() == ArticulationType::FadeOut) {
+                     || a->articulationType() == ArticulationType::FadeOut
+                     || a->articulationType() == ArticulationType::VolumeSwell
+                     || a->articulationType() == ArticulationType::WiggleSawtooth
+                     || a->articulationType() == ArticulationType::WiggleSawtoothWide
+                     || a->articulationType() == ArticulationType::WiggleVibratoLargeFaster
+                     || a->articulationType() == ArticulationType::WiggleVibratoLargeSlowest) {
                         ArticulationAnchor aa = a->anchor();
                         if (aa == ArticulationAnchor::TOP_CHORD)
                               aa = ArticulationAnchor::BOTTOM_CHORD;

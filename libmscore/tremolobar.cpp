@@ -62,7 +62,7 @@ void TremoloBar::layout()
 //      qreal y = notePos.y() - _spatium;
 //      qreal x2, y2;
 
-      QRectF bb (0, 0, _spatium*3, -_spatium * 4);
+      QRectF bb (0, 0, _spatium, -_spatium * 5);
 #if 0
       for (int pt = 0; pt < n; ++pt) {
             if (pt == (n-1))
@@ -93,19 +93,24 @@ void TremoloBar::draw(QPainter* painter) const
       painter->setFont(f);
 
       int n    = _points.size();
-//      int pt   = 0;
-//      qreal x = noteWidth;
-//      qreal y = -_spatium * .8;
-//      qreal x2, y2;
 
-      for (int pt = 0; pt < n; ++pt) {
-            if (pt == (n-1))
-                  break;
-//            int pitch = _points[pt].pitch;
+      int previousTime = _points[0].time;
+      int previousPitch = _points[0].pitch;
+      /* we place the tremolo bars starting slightly before the
+       *  notehead, and end it slightly after, drawing above the
+       *  note. The values specified in Guitar Pro are very large, too
+       *  large for the scale used in Musescore. We used the
+       *  timeFactor and pitchFactor below to reduce these values down
+       *  consistently to values that make sense to draw with the
+       *  Musescore scale. */
+      int timeFactor = 10;
+      int pitchFactor = 25;
+      for (int pt = 1; pt < n; ++pt) {
+            painter->drawLine(QLineF(previousTime/timeFactor, -previousPitch/pitchFactor-_spatium*3,
+                                     _points[pt].time/timeFactor, -_points[pt].pitch/pitchFactor-_spatium*3));
+            previousTime = _points[pt].time;
+            previousPitch = _points[pt].pitch;
             }
-      //debug:
-      painter->drawLine(QLineF(0.0, 0.0, _spatium*1.5, _spatium*3));
-      painter->drawLine(QLineF(_spatium*1.5, _spatium*3, _spatium*3, 0.0));
       }
 
 //---------------------------------------------------------

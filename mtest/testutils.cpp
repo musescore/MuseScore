@@ -180,6 +180,7 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith) co
       args.append(saveName);
       args.append(root + "/" + compareWith);
       QProcess p;
+      //qDebug() << "Running " << cmd << " with arg1:" << saveName << " and arg2: " << compareWith;
       p.start(cmd, args);
       if (!p.waitForFinished())
             return false;
