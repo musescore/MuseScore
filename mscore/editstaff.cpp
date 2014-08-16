@@ -109,7 +109,7 @@ void EditStaff::updateStaffType()
       showClef->setChecked(staffType->genClef());
       showTimesig->setChecked(staffType->genTimesig());
       showBarlines->setChecked(staffType->showBarlines());
-      staffGroupName->setText(staffType->groupName());
+      staffGroupName->setText(qApp->translate("Staff type group name", staffType->groupName()));
       }
 
 //---------------------------------------------------------
