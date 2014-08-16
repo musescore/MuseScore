@@ -3509,5 +3509,25 @@ ChordRest* Score::findCRinStaff(int tick, int track) const
       return nullptr;
       }
 
+//---------------------------------------------------------
+//   setSoloMute
+//   called once at opening file, adds soloMute marks
+//---------------------------------------------------------
+
+void Score::setSoloMute()
+      {
+      for (int i = 0; i < _midiMapping.size(); i++) {
+            Channel* b = _midiMapping[i].articulation;
+            if (b->solo) {
+                  b->soloMute = false;
+                  for (int j = 0; j < _midiMapping.size(); j++) {
+                        Channel* a = _midiMapping[j].articulation;
+                        a->soloMute = (i != j && !a->solo);
+                        a->solo     = (i == j || a->solo);
+                        }
+                  }
+            }
+      }
+
 }
 
