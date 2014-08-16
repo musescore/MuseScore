@@ -1817,6 +1817,10 @@ Element* Score::move(const QString& cmd)
                   el = static_cast<Chord*>(el)->upNote();       // originally downNote
             _playNote = true;
             select(el, SelectType::SINGLE, 0);
+            if (noteEntryMode()) {
+                  foreach (MuseScoreView* view ,viewer)
+                        view->moveCursor();
+                  }
             }
       return el;
       }
