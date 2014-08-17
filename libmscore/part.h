@@ -32,6 +32,8 @@ class InstrumentTemplate;
 //   @P shortName  QString
 //   @P volume     int
 //   @P mute       bool
+//   @P endTrack   int
+//   @P startTrack int
 //---------------------------------------------------------
 
 class Part : public QObject {
@@ -43,6 +45,8 @@ class Part : public QObject {
       Q_PROPERTY(QString shortName READ shortName WRITE setShortName)
       Q_PROPERTY(int volume READ volume WRITE setVolume)
       Q_PROPERTY(bool mute READ mute WRITE setMute)
+      Q_PROPERTY(int endTrack READ endTrack)
+      Q_PROPERTY(int startTrack READ startTrack)
 
       Score* _score;
 

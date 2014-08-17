@@ -41,6 +41,7 @@ class System;
 //   @P prev            Ms::Segment       the previous segment in the whole score; null at first score segment (read-only)
 //   @P prevInMeasure   Ms::Segment       the previous segment in measure; null at first measure segment (read-only)
 //   @P segmentType     Ms::Segment::Type (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
+//   @P tick            int               midi tick position (read only)
 //------------------------------------------------------------------------
 
 /**
@@ -60,6 +61,7 @@ class Segment : public Element {
       Q_PROPERTY(Ms::Segment*       prev              READ prev1)
       Q_PROPERTY(Ms::Segment*       prevInMeasure     READ prev)
       Q_PROPERTY(Ms::Segment::Type  segmentType       READ segmentType WRITE setSegmentType)
+      Q_PROPERTY(int                tick              READ tick)
       Q_ENUMS(Type)
 
 public:
