@@ -1691,6 +1691,7 @@ void Score::cmdDeleteSelection()
       if (selection().isRange()) {
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
+
             int stick1 = selection().tickStart();
             int stick2 = selection().tickEnd();
 
@@ -1718,11 +1719,12 @@ void Score::cmdDeleteSelection()
                         }
                   }
             for (int track = track1; track < track2; ++track) {
-                  if(!selectionFilter().canSelectVoice(track)) continue;
+                  if (!selectionFilter().canSelectVoice(track))
+                        continue;
                   Fraction f;
                   int tick  = -1;
                   Tuplet* tuplet = 0;
-                  for (Segment* s = s1; s != s2; s = s->next1()) {
+                  for (Segment* s = s1; s && (s != s2); s = s->next1MM()) {
                         if (s->element(track) && s->segmentType() == Segment::Type::Breath) {
                               deleteItem(s->element(track));
                               continue;
@@ -1787,7 +1789,7 @@ void Score::cmdDeleteSelection()
                         if (fullMeasure) {
                               // handle this as special case to be able to
                               // fix broken measures:
-                              for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
+                              for (Measure* m = s1->measure(); m; m = m->nextMeasureMM()) {
                                     Staff* staff = Score::staff(track / VOICES);
                                     int tick = m->tick();
                                     Fraction f = staff->timeSig(tick)->sig();
@@ -1820,6 +1822,7 @@ void Score::cmdDeleteSelection()
             foreach(Element* e, el)
                   deleteItem(e);
             }
+      deselectAll();
       _layoutAll = true;
       }
 

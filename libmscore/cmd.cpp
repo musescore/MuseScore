@@ -2295,6 +2295,7 @@ void Score::cmd(const QAction* a)
             transposeSemitone(-1);
       else if (cmd == "toggle-mmrest") {
             bool val = !styleB(StyleIdx::createMultiMeasureRests);
+            deselectAll();
             undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
             }
       else if (cmd == "add-brackets") {

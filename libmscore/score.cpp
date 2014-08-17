@@ -1651,20 +1651,11 @@ Measure* Score::lastMeasure() const
 
 Measure* Score::lastMeasureMM() const
       {
-      MeasureBase* mb = _measures.last();
-      for (; mb; mb = mb->prev()) {
-            if (mb->type() != Element::Type::MEASURE)
-                  continue;
-            if (!styleB(StyleIdx::createMultiMeasureRests))
-                  break;
-            Measure* m = static_cast<Measure*>(mb);
-            if (m->mmRestCount() < 0)
-                  continue;
-            if (m->hasMMRest())
-                  mb = m->mmRest();
-            break;
-            }
-      return static_cast<Measure*>(mb);
+      Measure* m = lastMeasure();
+      Measure* m1 = m->mmRest1();
+      if (m1)
+           return m1;
+      return m;
       }
 
 //---------------------------------------------------------
