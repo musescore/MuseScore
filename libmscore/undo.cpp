@@ -1047,6 +1047,21 @@ void Score::undoAddElement(Element* element)
                   ne->setTrack(ntrack);
                   ne->setParent(seg);
                   undo(new AddElement(ne));
+                  // transpose harmony if necessary
+                  if (element->type() == Element::Type::HARMONY && ne != element) {
+                        Harmony* h = static_cast<Harmony*>(ne);
+                        if (score->styleB(StyleIdx::concertPitch) != element->score()->styleB(StyleIdx::concertPitch)) {
+                              Part* partDest = h->staff()->part();
+                              Interval interval = partDest->instr()->transpose();
+                              if (!interval.isZero()) {
+                                    if (!score->styleB(StyleIdx::concertPitch))
+                                          interval.flip();
+                                    int rootTpc = transposeTpc(h->rootTpc(), interval, false);
+                                    int baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                                    score->undoTransposeHarmony(h, rootTpc, baseTpc);
+                                    }
+                              }
+                        }
                   }
             else if (element->type() == Element::Type::SLUR
                || element->type() == Element::Type::HAIRPIN

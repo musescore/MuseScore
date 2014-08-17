@@ -618,6 +618,18 @@ void Harmony::endEdit()
                         continue;
                   Harmony* h = static_cast<Harmony*>(e);
                   h->setHarmony(text());
+                  // transpose if necessary
+                  if (score()->styleB(StyleIdx::concertPitch) != h->score()->styleB(StyleIdx::concertPitch)) {
+                        Part* partDest = h->staff()->part();
+                        Interval interval = partDest->instr()->transpose();
+                        if (!interval.isZero()) {
+                              if (!h->score()->styleB(StyleIdx::concertPitch))
+                                    interval.flip();
+                              int rootTpc = transposeTpc(h->rootTpc(), interval, false);
+                              int baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                              h->score()->undoTransposeHarmony(h, rootTpc, baseTpc);
+                              }
+                        }
                   }
             }
       score()->setLayoutAll(true);  // done in Text::endEdit() too, but no harm being sure
