@@ -104,7 +104,7 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::wiggleVibratoLargeSlowest, SymId::wiggleVibratoLargeSlowest,
-            "wigglevibratolargeslowest", QT_TRANSLATE_NOOP("articulation", "wide vibrato large slowest"),
+            "wigglevibratolargeslowest", QT_TRANSLATE_NOOP("articulation", "wiggle vibrato large slowest"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::brassMuteOpen, SymId::brassMuteOpen,
