@@ -109,7 +109,7 @@ void EditStaff::updateStaffType()
       showClef->setChecked(staffType->genClef());
       showTimesig->setChecked(staffType->genTimesig());
       showBarlines->setChecked(staffType->showBarlines());
-      staffGroupName->setText(staffType->groupName());
+      staffGroupName->setText(qApp->translate("Staff type group name", staffType->groupName()));
       }
 
 //---------------------------------------------------------
@@ -421,7 +421,7 @@ static const char* g_cNoteName[] = {
 
 QString EditStaff::midiCodeToStr(int midiCode)
       {
-      return QString("%1 %2").arg(g_cNoteName[midiCode % 12]).arg(midiCode / 12 - 1);
+      return QString("%1 %2").arg(qApp->translate("editstaff", g_cNoteName[midiCode % 12])).arg(midiCode / 12 - 1);
       }
 
 //---------------------------------------------------------

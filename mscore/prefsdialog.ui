@@ -1510,7 +1510,7 @@
           <item row="3" column="4">
            <widget class="QLabel" name="label_40">
             <property name="text">
-             <string>8th note</string>
+             <string>Eighth note</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1546,7 +1546,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="accessibleName">
-             <string>Quater note is active</string>
+             <string>Quarter note is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1559,7 +1559,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="accessibleName">
-             <string>Quater note record</string>
+             <string>Quarter note record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1572,7 +1572,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="accessibleName">
-             <string>8th note is active</string>
+             <string>Eighth note is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1585,7 +1585,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="accessibleName">
-             <string>8th note record</string>
+             <string>Eighth note record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1950,7 +1950,7 @@
           <item row="1" column="8">
            <widget class="QLabel" name="label_43">
             <property name="text">
-             <string>64nd note</string>
+             <string>64th note</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1963,7 +1963,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="accessibleName">
-             <string>64nd note is active</string>
+             <string>64th note is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1976,7 +1976,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="accessibleName">
-             <string>64nd note record</string>
+             <string>64th note record</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3356,7 +3356,7 @@
           <string>Shortcuts table</string>
          </property>
          <property name="accessibleDescription">
-          <string>Here you can configure shorcuts for actions</string>
+          <string>Here you can configure shortcuts for actions</string>
          </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
@@ -3411,7 +3411,7 @@
             <string>Reset Shortcut to default</string>
            </property>
            <property name="accessibleDescription">
-            <string>Resets the shortcuts to their default assignement</string>
+            <string>Resets the shortcuts to their default assignment</string>
            </property>
            <property name="text">
             <string>Reset Shortcut to Default</string>
@@ -3424,7 +3424,7 @@
             <string>Clear</string>
            </property>
            <property name="accessibleDescription">
-            <string>Clears the shorcut assignment for the selected action</string>
+            <string>Clears the shortcut assignment for the selected action</string>
            </property>
            <property name="text">
             <string>Clear</string>
@@ -3437,7 +3437,7 @@
             <string>Define</string>
            </property>
            <property name="accessibleDescription">
-            <string>Opens a dialog for defining a new shorcut for the selected action</string>
+            <string>Opens a dialog for defining a new shortcut for the selected action</string>
            </property>
            <property name="text">
             <string>Define...</string>
@@ -3463,7 +3463,7 @@
             <string>Print</string>
            </property>
            <property name="accessibleDescription">
-            <string>Print the shorcuts list</string>
+            <string>Print the shortcuts list</string>
            </property>
            <property name="text">
             <string>Print</string>

@@ -331,7 +331,7 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::genCourtesyClef,         genCourtesyClef->isChecked());
       lstyle.set(StyleIdx::swingRatio,              swingBox->value());
       if (swingEighth->isChecked())
-            lstyle.set(StyleIdx::swingUnit, QString(TDuration(TDuration::DurationType::V_EIGHT).name()));
+            lstyle.set(StyleIdx::swingUnit, QString(TDuration(TDuration::DurationType::V_EIGHTH).name()));
       else if (swingSixteenth->isChecked())
             lstyle.set(StyleIdx::swingUnit, QString(TDuration(TDuration::DurationType::V_16TH).name()));
       else if (SwingOff->isChecked())
@@ -604,7 +604,7 @@ void EditStyle::setValues()
       genCourtesyClef->setChecked(lstyle.value(StyleIdx::genCourtesyClef).toBool());
       swingBox->setValue(lstyle.value(StyleIdx::swingRatio).toInt());
       QString unit(lstyle.value(StyleIdx::swingUnit).toString());
-      if (unit == TDuration(TDuration::DurationType::V_EIGHT).name()) {
+      if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
             swingEighth->setChecked(true);
             swingBox->setEnabled(true);
             }
@@ -815,7 +815,7 @@ void EditStyle::setSwingParams(bool checked)
             swingBox->setEnabled(false);
             }
       else if (swingEighth->isChecked()) {
-            lstyle.set(StyleIdx::swingUnit, TDuration(TDuration::DurationType::V_EIGHT).name());
+            lstyle.set(StyleIdx::swingUnit, TDuration(TDuration::DurationType::V_EIGHTH).name());
             swingBox->setEnabled(true);
             }
       else if (swingSixteenth->isChecked()) {

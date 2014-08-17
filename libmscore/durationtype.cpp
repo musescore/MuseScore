@@ -92,7 +92,7 @@ int TDuration::ticks() const
             case DurationType::V_64TH:      t = MScore::division / 16;   break;
             case DurationType::V_32ND:      t = MScore::division / 8;    break;
             case DurationType::V_16TH:      t = MScore::division / 4;    break;
-            case DurationType::V_EIGHT:     t = MScore::division / 2;    break;
+            case DurationType::V_EIGHTH:    t = MScore::division / 2;    break;
             case DurationType::V_HALF:      t = MScore::division * 2;    break;
             case DurationType::V_WHOLE:     t = MScore::division * 4;    break;
             case DurationType::V_BREVE:     t = MScore::division * 8;    break;
@@ -118,7 +118,7 @@ QString TDuration::name() const
       {
       switch(_val) {
             case DurationType::V_QUARTER:   return "quarter";
-            case DurationType::V_EIGHT:     return "eighth";
+            case DurationType::V_EIGHTH:    return "eighth";
             case DurationType::V_1024TH:    return "1024th";
             case DurationType::V_512TH:     return "512th";
             case DurationType::V_256TH:     return "256th";
@@ -153,7 +153,7 @@ NoteHead::Type TDuration::headType() const
             case DurationType::V_64TH:
             case DurationType::V_32ND:
             case DurationType::V_16TH:
-            case DurationType::V_EIGHT:
+            case DurationType::V_EIGHTH:
             case DurationType::V_QUARTER:
                   headType = NoteHead::Type::HEAD_QUARTER;
                   break;
@@ -186,8 +186,8 @@ NoteHead::Type TDuration::headType() const
 int TDuration::hooks() const
       {
       static const int table[] = {
-         // V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHT, V_16TH,
-            0,      0,       0,       0,      0,         1,       2,
+         // V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHTH, V_16TH,
+            0,      0,       0,       0,      0,         1,        2,
          // V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
             3,      4,       5,       6,      7,       8,
          // V_ZERO, V_MEASURE, V_INVALID
@@ -210,7 +210,7 @@ bool TDuration::hasStem() const
             case DurationType::V_64TH:
             case DurationType::V_32ND:
             case DurationType::V_16TH:
-            case DurationType::V_EIGHT:
+            case DurationType::V_EIGHTH:
             case DurationType::V_QUARTER:
             case DurationType::V_HALF:
             case DurationType::V_LONG:
@@ -239,7 +239,7 @@ void TDuration::setType(const QString& s)
       if (s == "quarter")
             _val = DurationType::V_QUARTER;
       else if (s == "eighth")
-            _val = DurationType::V_EIGHT;
+            _val = DurationType::V_EIGHTH;
       else if (s == "1024th")
             _val = DurationType::V_1024TH;
       else if (s == "512th")
@@ -362,7 +362,7 @@ Fraction TDuration::fraction() const
             case DurationType::V_64TH:      n = 64;       break;
             case DurationType::V_32ND:      n = 32;       break;
             case DurationType::V_16TH:      n = 16;       break;
-            case DurationType::V_EIGHT:     n = 8;        break;
+            case DurationType::V_EIGHTH:    n = 8;        break;
             case DurationType::V_QUARTER:   n = 4;        break;
             case DurationType::V_HALF:      n = 2;        break;
             case DurationType::V_WHOLE:     n = 1;        break;
@@ -394,7 +394,7 @@ TDuration::TDuration(const Fraction& _f)
             case 1:     _val = DurationType::V_WHOLE; break;
             case 2:     _val = DurationType::V_HALF; break;
             case 4:     _val = DurationType::V_QUARTER; break;
-            case 8:     _val = DurationType::V_EIGHT; break;
+            case 8:     _val = DurationType::V_EIGHTH; break;
             case 16:    _val = DurationType::V_16TH; break;
             case 32:    _val = DurationType::V_32ND; break;
             case 64:    _val = DurationType::V_64TH; break;
@@ -526,7 +526,7 @@ void TDuration::print() const
             case DurationType::V_WHOLE:     s = "Whole";   break;
             case DurationType::V_HALF:      s = "Half";    break;
             case DurationType::V_QUARTER:   s = "Quarter"; break;
-            case DurationType::V_EIGHT:     s = "Eighth";   break;
+            case DurationType::V_EIGHTH:    s = "Eighth";   break;
             case DurationType::V_16TH:      s = "16th";    break;
             case DurationType::V_32ND:      s = "32nd";    break;
             case DurationType::V_64TH:      s = "64th";    break;

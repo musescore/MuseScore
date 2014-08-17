@@ -1978,7 +1978,7 @@ void Chord::layoutPitched()
                  case TDuration::DurationType::V_WHOLE:   fc = 3.8; break;
                  case TDuration::DurationType::V_HALF:    fc = 3.6; break;
                  case TDuration::DurationType::V_QUARTER: fc = 2.1; break;
-                 case TDuration::DurationType::V_EIGHT:   fc = 1.4; break;
+                 case TDuration::DurationType::V_EIGHTH:  fc = 1.4; break;
                  case TDuration::DurationType::V_16TH:    fc = 1.2; break;
                  default: fc = 1;
                  }
@@ -2201,7 +2201,7 @@ void Chord::layoutTablature()
                  case TDuration::DurationType::V_WHOLE:   fc = 3.8; break;
                  case TDuration::DurationType::V_HALF:    fc = 3.6; break;
                  case TDuration::DurationType::V_QUARTER: fc = 2.1; break;
-                 case TDuration::DurationType::V_EIGHT:   fc = 1.4; break;
+                 case TDuration::DurationType::V_EIGHTH:  fc = 1.4; break;
                  case TDuration::DurationType::V_16TH:    fc = 1.2; break;
                  default: fc = 1;
                  }

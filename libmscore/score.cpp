@@ -2581,7 +2581,7 @@ void Score::padToggle(Pad n)
                   _is.setDuration(TDuration::DurationType::V_QUARTER);
                   break;
             case Pad::NOTE8:
-                  _is.setDuration(TDuration::DurationType::V_EIGHT);
+                  _is.setDuration(TDuration::DurationType::V_EIGHTH);
                   break;
             case Pad::NOTE16:
                   _is.setDuration(TDuration::DurationType::V_16TH);

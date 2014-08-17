@@ -2732,7 +2732,7 @@ static bool findUnit(TDuration::DurationType val, QString& unit)
       switch (val) {
             case TDuration::DurationType::V_HALF: unit = "half"; break;
             case TDuration::DurationType::V_QUARTER: unit = "quarter"; break;
-            case TDuration::DurationType::V_EIGHT: unit = "eighth"; break;
+            case TDuration::DurationType::V_EIGHTH: unit = "eighth"; break;
             default: qDebug("findUnit: unknown DurationType %hhd", val);
             }
       return true;

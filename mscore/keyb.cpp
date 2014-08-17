@@ -313,7 +313,7 @@ void MuseScore::updateInputState(Score* score)
       getAction("pad-note-1")->setChecked(is.duration()  == TDuration::DurationType::V_WHOLE);
       getAction("pad-note-2")->setChecked(is.duration()  == TDuration::DurationType::V_HALF);
       getAction("pad-note-4")->setChecked(is.duration()  == TDuration::DurationType::V_QUARTER);
-      getAction("pad-note-8")->setChecked(is.duration()  == TDuration::DurationType::V_EIGHT);
+      getAction("pad-note-8")->setChecked(is.duration()  == TDuration::DurationType::V_EIGHTH);
       getAction("pad-note-16")->setChecked(is.duration() == TDuration::DurationType::V_16TH);
       getAction("pad-note-32")->setChecked(is.duration() == TDuration::DurationType::V_32ND);
       getAction("pad-note-64")->setChecked(is.duration() == TDuration::DurationType::V_64TH);

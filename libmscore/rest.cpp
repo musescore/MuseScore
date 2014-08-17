@@ -288,7 +288,7 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
                   return (line <= -3 || line >= (lines - 2)) ? SymId::restHalfLegerLine : SymId::restHalf;
             case TDuration::DurationType::V_QUARTER:
                   return SymId::restQuarter;
-            case TDuration::DurationType::V_EIGHT:
+            case TDuration::DurationType::V_EIGHTH:
                   return SymId::rest8th;
             case TDuration::DurationType::V_16TH:
                   return SymId::rest16th;
@@ -447,7 +447,7 @@ int Rest::computeLineOffset()
                   case TDuration::DurationType::V_QUARTER:
                         lineOffset = up ? -4 : 4;
                         break;
-                  case TDuration::DurationType::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHTH:
                         lineOffset = up ? -4 : 4;
                         break;
                   case TDuration::DurationType::V_16TH:
@@ -482,7 +482,7 @@ int Rest::computeLineOffset()
                         break;
                   case TDuration::DurationType::V_HALF:
                   case TDuration::DurationType::V_QUARTER:
-                  case TDuration::DurationType::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHTH:
                   case TDuration::DurationType::V_16TH:
                   case TDuration::DurationType::V_32ND:
                   case TDuration::DurationType::V_64TH:
