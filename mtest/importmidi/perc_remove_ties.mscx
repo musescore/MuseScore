@@ -219,14 +219,14 @@
           <head>1</head>
           <line>4</line>
           <voice>0</voice>
-          <name>open high conga</name>
+          <name>Open High Conga</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="64">
           <head>1</head>
           <line>6</line>
           <voice>0</voice>
-          <name>low conga</name>
+          <name>Low Conga</name>
           <stem>1</stem>
           </Drum>
         <Channel>

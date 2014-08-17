@@ -179,8 +179,8 @@ void initDrumset()
       smDrumset->drum(56) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride (Bell)"),        NoteHead::Group::HEAD_TRIANGLE, 1, MScore::Direction::UP);
       smDrumset->drum(57) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride (Bell)"),        NoteHead::Group::HEAD_CROSS,   -3, MScore::Direction::UP);
       smDrumset->drum(59) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride (Bell)"),        NoteHead::Group::HEAD_CROSS,    2, MScore::Direction::UP);
-      smDrumset->drum(63) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "open high conga"),    NoteHead::Group::HEAD_CROSS,    4, MScore::Direction::UP);
-      smDrumset->drum(64) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "low conga"),          NoteHead::Group::HEAD_CROSS,    6, MScore::Direction::UP);
+      smDrumset->drum(63) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open High Conga"),    NoteHead::Group::HEAD_CROSS,    4, MScore::Direction::UP);
+      smDrumset->drum(64) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Conga"),          NoteHead::Group::HEAD_CROSS,    6, MScore::Direction::UP);
       }
 
 }
