@@ -182,6 +182,9 @@ class System : public Element {
 
       QList<SpannerSegment*>& spannerSegments()             { return _spannerSegments; }
       const QList<SpannerSegment*>& spannerSegments() const { return _spannerSegments; }
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
       };
 
 typedef QList<System*>::iterator iSystem;

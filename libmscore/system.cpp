@@ -1073,5 +1073,40 @@ void System::read(XmlReader& e)
             }
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* System::nextElement()
+      {
+      Measure* m = firstMeasure();
+      if (m) {
+            Segment* firstSeg = m->segments()->first();
+            if (firstSeg)
+                  return firstSeg->element(0);
+            }
+      return score()->firstElement();
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* System::prevElement()
+      {
+      Segment* seg = firstMeasure()->first();
+      Element* re = 0;
+      while (!re) {
+            seg = seg->prev1MM();
+            if (!seg)
+                  return score()->lastElement();
+
+            if (seg->segmentType() == Segment::Type::EndBarLine)
+                  score()->inputState().setTrack((score()->staves().size() - 1) * VOICES); //corection
+
+            re = seg->lastElement(score()->staves().size() - 1);
+            }
+      return re;
+      }
 }
 

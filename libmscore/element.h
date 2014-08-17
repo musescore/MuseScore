@@ -569,6 +569,9 @@ class Element : public QObject {
       QString toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
 
+      virtual Element* nextElement();  //< Used for navigation
+      virtual Element* prevElement();  //< next-element and prev-element command
+
       bool concertPitch() const;
       };
 

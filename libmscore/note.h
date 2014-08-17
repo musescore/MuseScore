@@ -420,6 +420,9 @@ class Note : public Element {
 
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
       };
 
 // extern const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)];

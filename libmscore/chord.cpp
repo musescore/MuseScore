@@ -2815,5 +2815,44 @@ TremoloChordType Chord::tremoloChordType() const
             }
       return TremoloChordType::TremoloSingle;
       }
+
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Chord::nextElement()
+      {
+      for (int v = track() + 1; staffIdx() == v/VOICES; ++v) {
+            Element* e = segment()->element(v);
+            if (e) {
+                  if (e->type() == Element::Type::CHORD)
+                        return static_cast<Chord*>(e)->notes().back();
+
+                  return e;
+                  }
+            }
+
+      return ChordRest::nextElement();
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Chord::prevElement()
+      {
+      for (int v = track() - 1; staffIdx() == v/VOICES; --v) {
+            Element* e = segment()->element(v);
+            if (e) {
+                  if (e->type() == Element::Type::CHORD)
+                        return static_cast<Chord*>(e)->notes().first();
+
+                  return e;
+                  }
+            }
+
+      return ChordRest::prevElement();
+      }
+
 }
 

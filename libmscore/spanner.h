@@ -77,6 +77,8 @@ class SpannerSegment : public Element {
       virtual void reset() override;
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
       };
 
 //----------------------------------------------------------------------------------
@@ -173,6 +175,8 @@ class Spanner : public Element {
 
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
 
       friend class SpannerSegment;
       };
