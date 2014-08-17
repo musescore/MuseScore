@@ -65,7 +65,7 @@ class InstrumentTemplate {
 
       StaffGroup  staffGroup;
       const StaffType* staffTypePreset;
-      bool useDrumset;
+      DrumsetKind useDrumset;
       Drumset* drumset;
 
       StringData stringData;

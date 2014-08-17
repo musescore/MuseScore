@@ -894,11 +894,11 @@ void Score::rebuildMidiMapping()
       foreach(Part* part, _parts) {
             InstrumentList* il = part->instrList();
             for (auto i = il->begin(); i != il->end(); ++i) {
-                  bool drum = i->second.useDrumset();
+                  DrumsetKind drum = i->second.useDrumset();
                   for (int k = 0; k < i->second.channel().size(); ++k) {
                         Channel* a = &(i->second.channel(k));
                         MidiMapping mm;
-                        if (drum) {
+                        if (drum != DrumsetKind::NONE) {
                               mm.port    = port;
                               mm.channel = 9;
                               }

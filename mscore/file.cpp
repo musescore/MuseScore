@@ -595,7 +595,7 @@ void MuseScore::newFile()
                         Segment* s = measure->getSegment(ts, 0);
                         s->add(ts);
                         Part* part = staff->part();
-                        if (!part->instr()->useDrumset()) {
+                        if (part->instr()->useDrumset() == DrumsetKind::NONE) {
                               //
                               // transpose key
                               //

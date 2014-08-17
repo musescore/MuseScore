@@ -274,7 +274,7 @@ void Part::read114(XmlReader& e)
       if (_partName.isEmpty())
             _partName = instr(0)->trackName();
 
-      if (instr(0)->useDrumset()) {
+      if (instr(0)->useDrumset() != DrumsetKind::NONE) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
                   staff->setStaffType(StaffType::getDefaultPreset(StaffGroup::PERCUSSION));

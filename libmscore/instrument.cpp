@@ -89,7 +89,7 @@ InstrumentData::InstrumentData()
       _maxPitchA   = 127;
       _minPitchP   = 0;
       _maxPitchP   = 127;
-      _useDrumset  = NONE;
+      _useDrumset  = DrumsetKind::NONE;
       _drumset     = 0;
       }
 
@@ -173,8 +173,8 @@ void InstrumentData::write(Xml& xml) const
             xml.tag("transposeDiatonic", _transpose.diatonic);
       if (_transpose.chromatic)
             xml.tag("transposeChromatic", _transpose.chromatic);
-      if (_useDrumset) {
-            xml.tag("useDrumset", _useDrumset);
+      if (_useDrumset != DrumsetKind::NONE) {
+            xml.tag("useDrumset", int(_useDrumset));
             _drumset->save(xml);
             }
       for (int i = 0; i < _clefType.size(); ++i) {
@@ -268,9 +268,9 @@ void InstrumentData::read(XmlReader& e)
             else if (tag == "useDrumset") {
                   int drumset = e.readInt();
                   if (!drumset)
-                        _useDrumset = NONE;
+                        _useDrumset = DrumsetKind::NONE;
                   else  {
-                        _useDrumset = DEFAULT_DRUMS;
+                        _useDrumset = DrumsetKind::DEFAULT_DRUMS;
                          _drumset = new Drumset(*smDrumset);
                         }
                   }
@@ -346,7 +346,7 @@ void InstrumentData::read(XmlReader& e)
             a.pan     = pan;
             _channel.append(a);
             }
-      if (_useDrumset) {
+      if (_useDrumset != DrumsetKind::NONE) {
             if (_channel[0].bank == 0)
                   _channel[0].bank = 128;
             _channel[0].updateInitList();
@@ -694,12 +694,12 @@ bool StaffName::operator==(const StaffName& i) const
 void InstrumentData::setUseDrumset(DrumsetKind val)
       {
       _useDrumset = val;
-      if (val != NONE && _drumset == 0) {
+      if (val != DrumsetKind::NONE && _drumset == 0) {
             switch (val) {
-                  case DEFAULT_DRUMS:
+                  case DrumsetKind::DEFAULT_DRUMS:
                         _drumset = new Drumset(*smDrumset);
                         break;
-                  case GUITAR_PRO:
+                  case DrumsetKind::GUITAR_PRO:
                         _drumset = new Drumset(*gpDrumset);
                         break;
                   default:
@@ -1279,8 +1279,8 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
             instr.addShortName(StaffName(sn.name, sn.pos));
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
-      if (t->useDrumset) {
-            instr.setUseDrumset(DEFAULT_DRUMS);
+      if (t->useDrumset != DrumsetKind::NONE) {
+            instr.setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
             instr.setDrumset(new Drumset(*((t->drumset) ? t->drumset : smDrumset)));
             }
       for (int i = 0; i < t->nstaves(); ++i)
