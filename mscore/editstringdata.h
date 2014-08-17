@@ -21,6 +21,7 @@
 #define EDITSTRINGDATA_H
 
 #include "ui_editstringdata.h"
+#include "libmscore/stringdata.h"
 
 namespace Ms {
 
@@ -33,11 +34,11 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase {
 
       int*              _frets;
       bool              _modified;
-      QList<int> *      _strings;         // pointer to original string list
-      QList<int>        _stringsLoc;      // local working copy of string list
+      QList<instrString>* _strings;         // pointer to original string list
+      QList<instrString>  _stringsLoc;      // local working copy of string list
 
    public:
-      EditStringData(QWidget *parent, QList<int> * strings, int * frets);
+      EditStringData(QWidget *parent, QList<instrString> * strings, int * frets);
       ~EditStringData();
 
    protected:
@@ -47,6 +48,7 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase {
       void accept();
       void deleteStringClicked();
       void editStringClicked();
+      void listItemClicked(QTableWidgetItem * item);
       void newStringClicked();
       };
 

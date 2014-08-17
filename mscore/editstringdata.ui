@@ -26,7 +26,24 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0">
        <item>
-        <widget class="QListWidget" name="stringList"/>
+        <widget class="QTableWidget" name="stringList">
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>50</number>
+         </attribute>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Open</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Pitch</string>
+          </property>
+         </column>
+        </widget>
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -88,6 +105,9 @@
          <property name="text">
           <string>Number of frets:</string>
          </property>
+         <property name="buddy">
+          <cstring>numOfFrets</cstring>
+         </property>
         </widget>
        </item>
        <item>
@@ -132,9 +152,14 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <tabstops>
+  <tabstop>stringList</tabstop>
+  <tabstop>newString</tabstop>
+  <tabstop>editString</tabstop>
+  <tabstop>deleteString</tabstop>
+  <tabstop>numOfFrets</tabstop>
+ </tabstops>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

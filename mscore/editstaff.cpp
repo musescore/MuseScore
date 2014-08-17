@@ -386,8 +386,8 @@ void EditStaff::showInstrumentDialog()
 
 void EditStaff::editStringDataClicked()
       {
-      int         frets = instrument.stringData()->frets();
-      QList<int>  stringList = instrument.stringData()->stringList();
+      int                     frets = instrument.stringData()->frets();
+      QList<instrString>      stringList = instrument.stringData()->stringList();
 
       EditStringData* esd = new EditStringData(this, &stringList, &frets);
       esd->setWindowModality(Qt::WindowModal);
