@@ -12,6 +12,7 @@
 
 #include "resourceManager.h"
 #include "ui_resourceManager.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 
 namespace Ms {
 
@@ -25,7 +26,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
-      baseAddr = "http://extensions.musescore.org/";
+      baseAddr = "http://extensions.musescore.org/2.0/";
       displayPlugins();
       displayLanguages();
       languagesTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
@@ -92,12 +93,20 @@ void ResourceManager::displayLanguages()
             
             languagesTable->setIndexWidget(languagesTable->model()->index(row, col++), temp);
             
-            QString local = dataPath + "/locale/" + filename;
-            QFileInfo fileLocal(local);
-            if(!fileLocal.exists())
-                  local = mscoreGlobalShare + "locale/" + filename;;
+            // get hash mscore and instruments
+            QJsonObject mscoreObject = value.value("mscore").toObject();
+            QString hashMscore = mscoreObject.value("hash").toString();
+            QString filenameMscore = mscoreObject.value("file_name").toString();
+            
+            bool verifyMScore = verifyLanguageFile(filenameMscore, hashMscore);
 
-            if(verifyFile(local, hashValue)) { // compare local file with distant hash
+            QJsonObject instrumentsObject = value.value("instruments").toObject();
+            QString hashInstruments = instrumentsObject.value("hash").toString();
+            QString filenameInstruments = instrumentsObject.value("file_name").toString();
+            
+            bool verifyInstruments = verifyLanguageFile(filenameMscore, hashMscore);
+
+            if (verifyMScore || verifyInstruments) { // compare local file with distant hash
                   temp->setText(tr("No update"));
                   temp->setDisabled(1);
                   }
@@ -106,6 +115,16 @@ void ResourceManager::displayLanguages()
                   }
             row++;
             }
+      }
+
+bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
+      {
+      QString local = dataPath + "/locale/" + filename;
+      QFileInfo fileLocal(local);
+      if(!fileLocal.exists())
+            local = mscoreGlobalShare + "locale/" + filename;;
+
+	return verifyFile(local, hash);
       }
 
 void ResourceManager::download()
@@ -127,7 +146,34 @@ void ResourceManager::download()
             button->setEnabled(1);
             }
       else {
-            button->setText(tr("Updated"));
+      	// unzip and delete
+            MQZipReader zipFile(localPath);
+            QFileInfo zfi(localPath);
+            QString destinationDir(zfi.absolutePath());
+            QList<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
+            bool result = true;
+            foreach (MQZipReader::FileInfo fi, allFiles) {
+                  const QString absPath = destinationDir + QDir::separator() + fi.filePath;
+                  if (fi.isFile) {
+                        QFile f(absPath);
+                        if (!f.open(QIODevice::WriteOnly)) {
+                              result = false;
+                              break;
+                              }
+                        f.write(zipFile.fileData(fi.filePath));
+                        f.setPermissions(fi.permissions);
+                        f.close();
+                        }
+                  }
+            
+            if (result) {
+                  QFile::remove(localPath);
+                  button->setText(tr("Updated"));
+                  }
+            else {
+                  button->setText(tr("Failed, try again"));
+                  button->setEnabled(1);
+                  }
             }
       }
 

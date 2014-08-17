@@ -28,6 +28,7 @@ public:
     void displayLanguages();
     void displayPlugins();
     bool verifyFile(QString path, QString hash);
+    bool verifyLanguageFile(QString filename, QString hash);
 
 private:
     QMap <QPushButton *, QString> buttonMap; 	// QPushButton -> filename
