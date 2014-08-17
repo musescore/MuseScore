@@ -3029,20 +3029,12 @@ void ScoreView::startNoteEntry()
             el = _score->searchNote(0, track);
             Q_ASSERT(el);
             }
-      // if on grace note, move to parent
-      if (el->type() == Element::Type::NOTE) {
-            Note* n = static_cast<Note*>(el);
-            Chord* c = n->chord();
-            if (c && c->isGrace())
-                  el = c->parent();
-            }
-      // if chord selected, choose top note
       if (el->type() == Element::Type::CHORD) {
             Chord* c = static_cast<Chord*>(el);
             note = c->selectedNote();
             if (note == 0)
                   note = c->upNote();
-            el = note;
+            el    = note;
             }
       TDuration d(is.duration());
       if (!d.isValid() || d.isZero() || d.type() == TDuration::DurationType::V_MEASURE)
