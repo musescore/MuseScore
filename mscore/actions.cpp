@@ -1456,7 +1456,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          ShortcutFlags::A_CMD,
          "beam32",
-         QT_TRANSLATE_NOOP("action","Beam 32nd sub"),
+         QT_TRANSLATE_NOOP("action","Beam 16th sub"),
          Icons::beam32_ICON
          ),
       Shortcut(
@@ -1464,7 +1464,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "beam64",
-         QT_TRANSLATE_NOOP("action","Beam 64th sub"),
+         QT_TRANSLATE_NOOP("action","Beam 32nd sub"),
          Icons::beam64_ICON
          ),
       Shortcut(
