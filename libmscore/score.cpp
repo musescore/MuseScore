@@ -67,6 +67,7 @@
 #include "instrtemplate.h"
 #include "cursor.h"
 #include "sym.h"
+#include "instrchange.h"
 
 namespace Ms {
 
@@ -884,93 +885,157 @@ void Score::appendPart(Part* p)
 
 //---------------------------------------------------------
 //   rebuildMidiMapping
+//   1. Remove mappings to deleted instruments
+//   2. Add mappings to new instruments
+//   3. Set mappings in order you see in Add->Instruments
 //---------------------------------------------------------
 
 void Score::rebuildMidiMapping()
       {
-      // Update channels if part of them is already assigned
-      if (_midiMapping.size() != 0) {
-            foreach(Part* part, _parts) {
-                  InstrumentList* il = part->instrList();
-                  for (auto i = il->begin(); i != il->end(); ++i) {
-                        bool drum = i->second.useDrumset();
-                        for (int k = 0; k < i->second.channel().size(); ++k) {
-                              bool found = false;
-                              int maxport = 0, maxchannel = 0;
-                              foreach(MidiMapping mm, _midiMapping) {
-                                    if (i->second.channel(k).channel == mm.articulation->channel) {
-                                          found = true;
-                                          break;
+      // 1. Remove mappings to deleted instruments
+      bool needMixerUpdate = false; // update mixer after rebuilding
+      bool taken[MAX_MIDI_PORT*16] = {false};  // Already taken midi channels. Format: port*16+channel
+      int offset = 0;
+      for (int index = 0; index < _midiMapping.size(); index++) {
+            bool found = false;
+            bool wrongArt = true;
+            Channel* validPointer = 0;  // If first of Instrument_change elements deleted,
+                                        // _midiMapping[index].articulation pointer would be wrong
+                                        // Let's reassign it with the validPointer;
+            for (auto p = _parts.begin(); p != _parts.end() && !found; p++) {
+                  if (*p != _midiMapping[index].part)
+                        continue;
+                  InstrumentList* il = (*p)->instrList();
+                  for (auto i = il->begin(); i != il->end() && !found; ++i) {
+                        for (int k = 0; k < i->second.channel().size() && !found; ++k) {
+                              if ((_midiMapping[index].articulation == &(i->second.channel(k))
+                                  || i->second.channel(k).channel == index) && i->second.channel(k).channel != -1) {
+                                    if (offset != 0) {
+                                          // Shift an array to remove the hole
+                                          _midiMapping[index-offset] = _midiMapping[index];
+                                          _midiMapping[index-offset].articulation->channel -= offset;
+                                          needMixerUpdate = true;
                                           }
-                                    if (mm.port > maxport)
-                                          maxport = mm.port;
-                                    if (mm.channel >maxchannel)
-                                          maxchannel = mm.channel;
+                                    taken[_midiMapping[index-offset].port*16+_midiMapping[index-offset].channel] = true;
+                                    found = true;
+                                    validPointer = &(i->second.channel(k));
                                     }
-                              if (!found) {
-                                    if (MScore::debugMode)
-                                          qDebug()<<"Found unassigned channel, k: "<<k;
-                                    Channel* a = &(i->second.channel(k));
-                                    MidiMapping mm;
-                                    if (drum) {
-                                          mm.port    = maxport;
-                                          mm.channel = 9;
-                                          }
-                                    else {
-                                          mm.port    = (maxchannel == 15) ? maxport + 1 :maxport;
-                                          mm.channel = (maxchannel == 15) ? 0 :maxchannel + 1;
-                                          }
-                                    mm.part         = part;
-                                    mm.articulation = a;
-                                    _midiMapping.append(mm);
-                                    a->channel = _midiMapping.size()-1;
-                                    }
+                              if (_midiMapping[index].articulation == &(i->second.channel(k)))
+                                  wrongArt = false;
                               }
                         }
                   }
-            updateMaxPort();
-            dumpMidiMapping();
-            return;
+            if (!found) {
+                  offset++;
+                  }
+            else if (wrongArt) {
+                  needMixerUpdate = true;
+                  if (validPointer)
+                        _midiMapping[index].articulation = validPointer;
+                  else
+                        qDebug()<<"valid pointer not found :(";
+                  }
             }
-      // Channels was not assigned. Set default channels 1,2,3...
-      _midiMapping.clear();
-      int port    = 0;
-      int channel = 0;
-      int idx     = 0;
-      foreach(Part* part, _parts) {
+
+      // We have int(offset) deleted instruments, let's remove their mappings
+      for (int index = 0; index < offset; index++)
+            _midiMapping.removeLast();
+
+      // 2. Add mappings to new instruments
+      int holeIdx = 0;
+      // Index of the current unique instrument
+      int index   = 0;
+      // How many instrument linked to a specific channel [i]
+      int mmchannels[999] = {0};
+      foreach (Part* part, _parts) {
             InstrumentList* il = part->instrList();
             for (auto i = il->begin(); i != il->end(); ++i) {
                   DrumsetKind drum = i->second.useDrumset();
-                  for (int k = 0; k < i->second.channel().size(); ++k) {
-                        Channel* a = &(i->second.channel(k));
-                        MidiMapping mm;
-                        if (drum != DrumsetKind::NONE) {
-                              mm.port    = port;
-                              mm.channel = 9;
+                  for (int k = 0; k < i->second.channel().size(); ++k) {       // first channel of the first instrument
+                        if (mmchannels[i->second.channel(k).channel] == 0 && !(part == _parts.first() &&i == il->begin() && k == 0))
+                              index++;
+                        mmchannels[i->second.channel(k).channel]++;
+                        int chan = i->second.channel(k).channel;
+                        bool initialized = false; // true if this channel already have a midi mapping
+                        bool needSwap = (chan != index && mmchannels[chan] == 1);    // true if current mapping item is out of order (see comment to the function)
+                        if (chan >= 0 && chan < _midiMapping.size()) {
+                              if (_midiMapping[chan].part == part && _midiMapping[chan].articulation->channel == i->second.channel(k).channel)
+                                    initialized = true;
                               }
-                        else {
-                              mm.port    = port;
-                              mm.channel = channel;
-                              if (channel == 15) {
-                                    channel = 0;
-                                    ++port;
+
+                        if (initialized && needSwap) {
+                              // 3. Set mappings in order you see in Add->Instruments
+                              bool sameChan = false;
+                              if (i != il->begin()) {
+                                    auto t = i; // hack for viloin
+                                    t--;
+                                    sameChan = (t->second.channel(0).channel == chan);
+                                    }
+                              if (!(index >= _midiMapping.size() || sameChan)) {
+                                    needMixerUpdate = true;
+                                    mmchannels[i->second.channel(k).channel]--;
+                                    mmchannels[index]++;
+                                    MidiMapping tmp = _midiMapping[index];
+                                    _midiMapping[index] = _midiMapping[chan];
+                                    _midiMapping[chan]  = tmp;
+                                    foreach (Part* p, _parts) {
+                                          InstrumentList* ll = p->instrList();
+                                          for (auto che = ll->begin(); che != ll->end(); che++) {
+                                                for (int _k = 0; _k< che->second.channel().size(); _k++) {
+                                                      if (che->second.channel(_k).channel == chan)
+                                                            che->second.channel(_k).channel = index;
+                                                      else if (che->second.channel(_k).channel == index)
+                                                            che->second.channel(_k).channel = chan;
+                                                      }
+                                                // Update instr_change instruments
+                                                InstrumentChange* ic = part->getInstrumentChangeByTick(che->first);
+                                                if (ic) {
+                                                      for (int _k = 0; _k <ic->instrument().channel().size(); _k++) {
+                                                            if (ic->instrument().channel(_k).channel == chan)
+                                                                  ic->setChannelNum(_k, index);
+                                                            else if (ic->instrument().channel(_k).channel == index)
+                                                                  ic->setChannelNum(_k, chan);
+                                                            }
+                                                      }
+                                                }
+                                          }
+                                    }
+                              }
+                        if (!initialized) {
+                              needMixerUpdate = true;
+                              Channel* a = &(i->second.channel(k));
+                              MidiMapping mm;
+                              if (drum != DrumsetKind::NONE) {
+                                    mm.port    = 0;
+                                    mm.channel = 9;
                                     }
                               else {
-                                    ++channel;
-                                    if (channel == 9)
-                                          ++channel;
+                                    // Searching for the "hole" in taken ports
+                                    for (;holeIdx < MAX_MIDI_PORT*16; holeIdx++) {
+                                          if (taken[holeIdx] == false && holeIdx % 16 != 9) {
+                                                mm.port    = holeIdx / 16;
+                                                mm.channel = holeIdx % 16;
+                                                holeIdx++;
+                                                break;
+                                                }
+                                          }
                                     }
+                              mm.part         = part;
+                              mm.articulation = a;
+                              _midiMapping.append(mm);
+                              a->channel = _midiMapping.size()-1;
+                              InstrumentChange* ic = part->getInstrumentChangeByTick(i->first);
+                              if (ic)
+                                    ic->setChannel(k, i->second.channel(k));
                               }
-                        mm.part         = part;
-                        mm.articulation = a;
-                        _midiMapping.append(mm);
-                        a->channel = idx;
-                        ++idx;
                         }
+
                   }
             }
       updateMaxPort();
       dumpMidiMapping();
+      if (needMixerUpdate)
+            emit updateMixer();
       }
 
 //---------------------------------------------------------
@@ -1020,12 +1085,20 @@ void Score::setMaxPortNumber(int maxport) {
 
 void Score::checkDefaultMidiMapping()
       {
+      // We can't have default midi mapping with instrument changes
+      foreach(Part* part, _parts) {
+            InstrumentList* il = part->instrList();
+            if (il->size() > 1) {
+                  defMidiMapping = false;
+                  return;
+                  }
+      }
       bool def = true;
       int port = 0;
       int channel = 0;
       int idx = 0;
       foreach (MidiMapping mm, _midiMapping) {
-                  bool drum = false;
+                  DrumsetKind drum = DrumsetKind::NONE;
                   bool found = false;
                   foreach(Part* part, _parts) {
                         if (found)
@@ -1042,9 +1115,9 @@ void Score::checkDefaultMidiMapping()
                               }
                         }
                   if (MScore::debugMode)
-                        qDebug()<<"idx:"<<idx<<",drum: "<<drum<<",checking...p: "<<port<<", ch: "<<channel<<", mm.p: "<<(int)mm.port<<", mm.ch: "<<(int)mm.channel;
+                        qDebug()<<"idx:"<<idx<<",drum: "<<(drum != DrumsetKind::NONE)<<",checking...p: "<<port<<", ch: "<<channel<<", mm.p: "<<(int)mm.port<<", mm.ch: "<<(int)mm.channel;
 
-                  if (drum) {
+                  if (drum != DrumsetKind::NONE) {
                         if (mm.port != port || mm.channel != 9) {
                               def = false;
                               break;
@@ -1073,6 +1146,66 @@ void Score::checkDefaultMidiMapping()
       }
 
 //---------------------------------------------------------
+//   rebuildOldMidiMapping
+//   called once at loading file with version < PR #1083
+//---------------------------------------------------------
+
+void Score::rebuildOldMidiMapping()
+      {
+      _midiMapping.clear();
+      int port    = 0;
+      int channel = 0;
+      int idx     = 0;
+      foreach(Part* part, _parts) {
+            InstrumentList* il = part->instrList();
+            for (auto i = il->begin(); i != il->end(); i++) {
+                  bool drum = i->second.useDrumset() != DrumsetKind::NONE;
+                  for (int k = 0; k < i->second.channel().size(); k++) {
+                        Instrument* first = 0;
+                        InstrumentList* ll = part->instrList();
+                        for (auto instr = ll->begin(); instr != i && first == 0; instr++) {
+                              for (int _k = 0; _k < instr->second.channel().size() && first == 0; _k++) {
+                                    if (instr->second.channel(_k).program == i->second.channel(k).program)
+                                          first = &(instr->second);
+                                    }
+                              }
+
+                        if (first) {
+                              for (int k = 0; k < min(i->second.channel().size(), first->channel().size()); k++)
+                                    i->second.channel(k).channel = first->channel(k).channel;
+                              }
+                        else {
+                              Channel* a = &(i->second.channel(k));
+                              MidiMapping mm;
+                              if (drum != false) {
+                                    mm.port    = port;
+                                    mm.channel = 9;
+                                    }
+                              else {
+                                    mm.port    = port;
+                                    mm.channel = channel;
+                                    if (channel == 15) {
+                                          channel = 0;
+                                          ++port;
+                                          }
+                                    else {
+                                          ++channel;
+                                          if (channel == 9)
+                                                ++channel;
+                                          }
+                                    }
+                              mm.part         = part;
+                              mm.articulation = a;
+                              _midiMapping.append(mm);
+                              a->channel = idx;
+                              ++idx;
+                              }
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   dumpMidiMapping
 //---------------------------------------------------------
 
@@ -1081,7 +1214,7 @@ void Score::dumpMidiMapping() {
             return;
       qDebug("====dump midi mapping ==");
       foreach(MidiMapping mm, _midiMapping)
-            qDebug()<<"mm port:"<<(int)mm.port<<", channel: "<<(int)mm.channel;
+            qDebug()<<"mm port:"<<(int)mm.port<<", channel: "<<(int)mm.channel<<", part: "<<mm.part<<", art: "<<mm.articulation;
       }
 
 //---------------------------------------------------------

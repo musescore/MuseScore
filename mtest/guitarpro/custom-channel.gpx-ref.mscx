@@ -60,6 +60,7 @@
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <clef>G8vb</clef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -87,7 +88,6 @@
           </Articulation>
         <Channel>
           <program value="25"/>
-          <channel>0</channel>
           <midiPort>1</midiPort>
           <midiChannel>1</midiChannel>
           </Channel>
@@ -107,6 +107,7 @@
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <clef>G8vb</clef>
         <StringData>
           <frets>21</frets>
           <string>40</string>
@@ -134,7 +135,6 @@
           </Articulation>
         <Channel>
           <program value="25"/>
-          <channel>1</channel>
           <midiPort>2</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
@@ -259,7 +259,7 @@
         <Staff id="2">
           <linkedTo>1</linkedTo>
           <StaffType group="tablature">
-            <name>Tab. 6-str common</name>
+            <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
             <timesig>0</timesig>
@@ -290,6 +290,7 @@
           <maxPitchP>83</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
+          <clef>G8vb</clef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -367,10 +368,6 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <Clef>
-            <concertClefType>TAB</concertClefType>
-            <transposingClefType>TAB</transposingClefType>
-            </Clef>
           <KeySig>
             <lid>2</lid>
             <accidental>0</accidental>
@@ -438,7 +435,7 @@
         <Staff id="2">
           <linkedTo>2</linkedTo>
           <StaffType group="tablature">
-            <name>Tab. 6-str common</name>
+            <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
             <timesig>0</timesig>
@@ -469,6 +466,7 @@
           <maxPitchP>83</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
+          <clef>G8vb</clef>
           <StringData>
             <frets>21</frets>
             <string>40</string>
@@ -546,10 +544,6 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <Clef>
-            <concertClefType>TAB</concertClefType>
-            <transposingClefType>TAB</transposingClefType>
-            </Clef>
           <KeySig>
             <lid>9</lid>
             <accidental>0</accidental>

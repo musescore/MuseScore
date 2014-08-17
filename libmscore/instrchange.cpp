@@ -56,7 +56,7 @@ void InstrumentChange::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Instrument")
-                  _instrument.read(e, staff() ? staff()->part() : 0);
+                  _instrument.read(e, staff() ? staff()->part() : 0, true);
             else if (!Text::readProperties(e))
                   e.unknown();
             }

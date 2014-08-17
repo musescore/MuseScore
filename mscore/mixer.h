@@ -60,6 +60,7 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
       void setPart(Part*, Channel*);
       void sync(bool syncControls);
       void syncChannel(Channel*);
+      void updateInstrChange();
       };
 
 //---------------------------------------------------------

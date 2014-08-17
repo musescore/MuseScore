@@ -68,9 +68,6 @@
           <program value="12"/>
           <controller ctrl="7" value="95"/>
           <controller ctrl="10" value="63"/>
-          <controller ctrl="93" value="255"/>
-          <controller ctrl="91" value="255"/>
-          <channel>0</channel>
           <midiPort>0</midiPort>
           <midiChannel>8</midiChannel>
           </Channel>

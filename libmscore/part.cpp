@@ -18,6 +18,7 @@
 #include "note.h"
 #include "drumset.h"
 #include "instrtemplate.h"
+#include "instrchange.h"
 #include "text.h"
 #include "measure.h"
 #include "stringdata.h"
@@ -421,5 +422,20 @@ int Part::endTrack() const
       return _staves.back()->idx() * VOICES + VOICES;
       }
 
+//---------------------------------------------------------
+//   getInstrumentChangeByTick
+//---------------------------------------------------------
+
+InstrumentChange* Part::getInstrumentChangeByTick(int tick)
+      {
+      Segment* s = score()->tick2segmentMM(tick, true, Segment::Type::ChordRest);
+      if (s) {
+            foreach(Element* e1, s->annotations()) {
+                  if (e1->type() == Element::Type::INSTRUMENT_CHANGE)
+                        return static_cast<InstrumentChange*>(e1);
+                  }
+            }
+      return 0;
+      }
 }
 

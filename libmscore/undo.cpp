@@ -1181,8 +1181,12 @@ void Score::undoAddElement(Element* element)
                   Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
                   InstrumentChange* nis = static_cast<InstrumentChange*>(ne);
                   nis->setParent(ns1);
-                  if (is->instrument().channel().isEmpty() || is->instrument().channel(0).program == -1)
-                        nis->setInstrument(*staff->part()->instr(s1->tick()));
+                  if (is->instrument().channel().isEmpty() || is->instrument().channel(0).program == -1) {
+                        // To keep adresses of channels in instr()->channel[]
+                        // we should use a temporal object
+                        Instrument temp = *staff->part()->instr(s1->tick());
+                        nis->setInstrument(temp);
+                        }
                   else
                         nis->setInstrument(is->instrument());
                   undo(new AddElement(nis));

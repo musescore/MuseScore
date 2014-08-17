@@ -752,6 +752,7 @@ class Score : public QObject {
       void checkDefaultMidiMapping();
       bool exportMidiMapping() {return !defMidiMapping;}     
       void rebuildMidiMapping();
+      void rebuildOldMidiMapping();
       void updateChannel();
       void updateSwing();
       void updateMaxPort();

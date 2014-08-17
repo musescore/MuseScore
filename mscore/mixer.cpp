@@ -21,6 +21,7 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/part.h"
+#include "libmscore/instrchange.h"
 #include "mixer.h"
 #include "seq.h"
 #include "libmscore/undo.h"
@@ -402,7 +403,7 @@ void PartEdit::channelChanged(int)
             }
 
       int newChannel = p*16+c;
-      if (part->instr()->useDrumset())
+      if (part->instr()->useDrumset() != DrumsetKind::NONE)
             newChannel = p*16+9; // Port 9 is special for drums
 
       // Set new channel
@@ -465,6 +466,9 @@ void PartEdit::channelChanged(int)
 
 void PartEdit::sync(bool syncControls)
       {
+      // Sync Instrument_Change elements with the same channel
+      // (displayed in mixer as one instrument)
+      updateInstrChange();
       // Sync instruments with same midi port and channel
       if (!syncControls)
             return;
@@ -524,5 +528,28 @@ void PartEdit::syncChannel(Channel* from)
       channel->descr = descr;
       channel->channel = ch;
       }
+
+//---------------------------------------------------------
+//   updateInstrChange
+//   update Instrument_Change elements that have the same channel
+//---------------------------------------------------------
+
+void PartEdit::updateInstrChange()
+      {
+      // Few Instrument_Changes could have one channel only
+      // if they're in one part
+      InstrumentList* il = part->instrList();
+      for (auto i = il->begin(); i != il->end(); ++i) {
+            for (int k = 0; k < i->second.channel().size(); ++k) {
+                  if (i->second.channel(k).channel == channel->channel) {
+                        i->second.setChannel(k, *channel); // update channel in instrumentList
+                        InstrumentChange* ic = part->getInstrumentChangeByTick(i->first);// update instrument_change
+                        if (ic)
+                              ic->setChannel(k, *channel);
+                        }
+                  }
+            }
+      }
+
 }
 

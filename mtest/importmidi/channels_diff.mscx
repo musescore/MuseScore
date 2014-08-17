@@ -51,7 +51,6 @@
         <trackName></trackName>
         <Channel>
           <program value="73"/>
-          <channel>0</channel>
           <midiPort>2</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>
@@ -68,7 +67,6 @@
         <trackName></trackName>
         <Channel>
           <program value="73"/>
-          <channel>1</channel>
           <midiPort>1</midiPort>
           <midiChannel>1</midiChannel>
           </Channel>
@@ -85,7 +83,6 @@
         <trackName></trackName>
         <Channel>
           <program value="73"/>
-          <channel>2</channel>
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>

@@ -23,6 +23,7 @@ class Xml;
 class Staff;
 class Score;
 class InstrumentTemplate;
+class InstrumentChange;
 
 //---------------------------------------------------------
 //   @@ Part
@@ -119,6 +120,7 @@ class Part : public QObject {
 
       QVariant getProperty(int id) const;
       void setProperty(int id, const QVariant& property);
+      InstrumentChange* getInstrumentChangeByTick(int tick);
       };
 
 

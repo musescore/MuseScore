@@ -80,7 +80,6 @@
         <Channel>
           <program value="0"/>
           <controller ctrl="7" value="156"/>
-          <channel>0</channel>
           <midiPort>0</midiPort>
           <midiChannel>4</midiChannel>
           </Channel>
@@ -128,19 +127,16 @@
         <Channel>
           <program value="40"/>
           <controller ctrl="7" value="156"/>
-          <channel>1</channel>
           <midiPort>1</midiPort>
           <midiChannel>3</midiChannel>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
-          <channel>2</channel>
           <midiPort>2</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
-          <channel>3</channel>
           <midiPort>3</midiPort>
           <midiChannel>1</midiChannel>
           </Channel>
@@ -180,7 +176,6 @@
           </Articulation>
         <Channel>
           <program value="73"/>
-          <channel>4</channel>
           <midiPort>4</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>

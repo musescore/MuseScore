@@ -1135,6 +1135,13 @@ bool Score::read(XmlReader& e)
             _showOmr = false;
 
       fixTicks();
+
+      // for compatibility with old versions before PR #1083
+      foreach (Score* sc, scoreList()) {
+            if (!sc->parts().empty() &&  sc->parts()[0]->instr()->channel(0).channel == -1)
+                  sc->rebuildOldMidiMapping();
+            }
+
       rebuildMidiMapping();
       updateChannel();
 //      updateNotes();          // only for parts needed?
