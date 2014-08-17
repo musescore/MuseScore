@@ -323,7 +323,7 @@ void Measure::layoutChords0(Segment* segment, int startTrack)
 void Measure::layoutCR0(ChordRest* cr, qreal mm)
       {
       Drumset* drumset = 0;
-      if (cr->staff()->part()->instr()->useDrumset())
+      if (cr->staff()->part()->instr()->useDrumset() != DrumsetKind::NONE)
             drumset = cr->staff()->part()->instr()->drumset();
 
       qreal m = mm;

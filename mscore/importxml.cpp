@@ -1797,7 +1797,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                   if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
                         part->staff(j)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
             // set drumset for instrument
-            part->instr()->setUseDrumset(DEFAULT_DRUMS);
+            part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
             part->instr()->setDrumset(drumset);
             part->instr()->channel(0).bank = 128;
             part->instr()->channel(0).updateInitList();
