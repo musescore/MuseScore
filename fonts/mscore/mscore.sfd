@@ -1,7 +1,11 @@
 SplineFontDB: 3.0
 FontName: MScore
+FullName: MScore for scores
 FamilyName: MScore
+Weight: Regular
 Copyright: 
+Version: 
+DefaultBaseFilename: mscore
 ItalicAngle: 0
 UnderlinePosition: -51
 UnderlineWidth: 51
@@ -16,7 +20,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1403170689
-ModificationTime: 1408233069
+ModificationTime: 1408272330
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
@@ -52,7 +56,7 @@ OS2UnicodeRanges: 00000001.10000000.00000000.00000000
 Lookup: 258 0 0 "'kern' Horizontal Kerning in Latin lookup 0"  {"'kern' Horizontal Kerning in Latin lookup 0 subtable"  } ['kern' ('latn' <'dflt' > ) ]
 MarkAttachClasses: 1
 DEI: 91125
-LangName: 1033 "" "" "" "FontForge : MScore : 23-4-2014" 
+LangName: 1033 
 Encoding: UnicodeBmp
 UnicodeInterp: none
 NameList: Adobe Glyph List
