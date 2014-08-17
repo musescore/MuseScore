@@ -441,12 +441,14 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
 
 static void warnTupletCrossing()
       {
-      if (!MScore::noGui)
-            QMessageBox::warning(0,
-               QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore"),
-               QT_TRANSLATE_NOOP("addRemoveTimeSig", "Cannot rewrite measures:\n"
-               "tuplet would cross measure")
-               );
+      if (!MScore::noGui) {
+            const char* tt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore");
+            const char* mt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "Cannot rewrite measures:\n"
+               "tuplet would cross measure");
+
+            QMessageBox::warning(0, qApp->translate("addRemoveTimeSig", tt),
+               qApp->translate("addRemoveTimeSig", mt));
+            }
       }
 
 //---------------------------------------------------------

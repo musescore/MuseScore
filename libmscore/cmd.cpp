@@ -2138,7 +2138,7 @@ void Score::cmd(const QAction* a)
                   case TDuration::DurationType::V_QUARTER:
                         padToggle(Pad::NOTE2);
                         break;
-                  case TDuration::DurationType::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHTH:
                         padToggle(Pad::NOTE4);
                         break;
                   case TDuration::DurationType::V_16TH:
@@ -2174,7 +2174,7 @@ void Score::cmd(const QAction* a)
                   case TDuration::DurationType::V_QUARTER:
                         padToggle(Pad::NOTE8);
                         break;
-                  case TDuration::DurationType::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHTH:
                         padToggle(Pad::NOTE16);
                         break;
                   case TDuration::DurationType::V_16TH:

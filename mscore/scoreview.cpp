@@ -2683,7 +2683,7 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "rest-4")
             cmdEnterRest(TDuration(TDuration::DurationType::V_QUARTER));
       else if (cmd == "rest-8")
-            cmdEnterRest(TDuration(TDuration::DurationType::V_EIGHT));
+            cmdEnterRest(TDuration(TDuration::DurationType::V_EIGHTH));
       else if (cmd.startsWith("interval")) {
             int n = cmd.mid(8).toInt();
             QList<Note*> nl = _score->selection().noteList();

@@ -952,7 +952,7 @@ TDuration OveNoteType_To_Duration(OVE::NoteType noteType){
                   break;
                   }
             case OVE::NoteType::Note_Eight: {
-                  d.setType(TDuration::DurationType::V_EIGHT);
+                  d.setType(TDuration::DurationType::V_EIGHTH);
                   break;
                   }
             case OVE::NoteType::Note_Sixteen: {
@@ -1425,7 +1425,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                                     ((Ms::Chord*) cr)->setNoteType(NoteType::GRACE32);
                                     cr->setDurationType(TDuration::DurationType::V_32ND);
                                     } else {
-                                    cr->setDurationType(TDuration::DurationType::V_EIGHT);
+                                    cr->setDurationType(TDuration::DurationType::V_EIGHTH);
                                     }
 
                               // st = Segment::Type::Grace;

@@ -96,9 +96,9 @@ Beam::Mode Groups::beamMode(int tick, TDuration::DurationType d) const
       {
       int shift;
       switch (d) {
-            case TDuration::DurationType::V_EIGHT: shift = 0; break;
-            case TDuration::DurationType::V_16TH:  shift = 4; break;
-            case TDuration::DurationType::V_32ND:  shift = 8; break;
+            case TDuration::DurationType::V_EIGHTH: shift = 0; break;
+            case TDuration::DurationType::V_16TH:   shift = 4; break;
+            case TDuration::DurationType::V_32ND:   shift = 8; break;
             default:
                   return Beam::Mode::AUTO;
             }
@@ -196,9 +196,9 @@ void Groups::addStop(int pos, TDuration::DurationType d, Beam::Mode bm)
       {
       int shift;
       switch (d) {
-            case TDuration::DurationType::V_EIGHT: shift = 0; break;
-            case TDuration::DurationType::V_16TH:  shift = 4; break;
-            case TDuration::DurationType::V_32ND:  shift = 8; break;
+            case TDuration::DurationType::V_EIGHTH: shift = 0; break;
+            case TDuration::DurationType::V_16TH:   shift = 4; break;
+            case TDuration::DurationType::V_32ND:   shift = 8; break;
             default:
                   return;
             }

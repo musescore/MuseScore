@@ -601,7 +601,7 @@ SwingParameters Staff::swing(int tick) const
       int swingUnit;
       QString unit = score()->styleSt(StyleIdx::swingUnit);
       int swingRatio = score()->styleI(StyleIdx::swingRatio);
-      if (unit == TDuration(TDuration::DurationType::V_EIGHT).name()) {
+      if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
             swingUnit = MScore::division / 2;
             }
       else if (unit == TDuration(TDuration::DurationType::V_16TH).name())

@@ -208,6 +208,6 @@ static const char* g_cNoteName[] = {
 
 QString EditStringData::midiCodeToStr(int midiCode)
       {
-      return QString("%1 %2").arg(g_cNoteName[midiCode % 12]).arg(midiCode / 12 - 1);
+      return QString("%1 %2").arg(qApp->translate("editstringdata", g_cNoteName[midiCode % 12])).arg(midiCode / 12 - 1);
       }
 }

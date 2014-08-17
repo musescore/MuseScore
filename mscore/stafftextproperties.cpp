@@ -36,7 +36,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
       int tick = static_cast<Segment*>(st->parent())->tick();
       foreach(const Channel& a, part->instr(tick)->channel()) {
             if (a.name.isEmpty() || a.name == "normal")
-                  cb->addItem(QT_TR_NOOP("normal"));
+                  cb->addItem(QObject::tr("normal"));
             else
                   cb->addItem(a.name);
             }

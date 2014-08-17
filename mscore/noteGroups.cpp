@@ -95,7 +95,7 @@ void NoteGroups::setSig(Fraction sig, const Groups& g)
       chords32.clear();
       Fraction f = _sig.reduced();
       int n   = f.numerator() * (8 / f.denominator());
-      view8->setScore(createScore(n, TDuration::DurationType::V_EIGHT, &chords8));
+      view8->setScore(createScore(n, TDuration::DurationType::V_EIGHTH, &chords8));
       n   = f.numerator() * (16 / f.denominator());
       view16->setScore(createScore(n, TDuration::DurationType::V_16TH, &chords16));
       n   = f.numerator() * (32 / f.denominator());
