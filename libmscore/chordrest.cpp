@@ -1173,5 +1173,24 @@ Segment* ChordRest::nextSegmentAfterCR(Segment::Type types) const
             }
       return 0;
       }
+
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* ChordRest::nextElement()
+      {
+      return segment()->firstInNextSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* ChordRest::prevElement()
+      {
+      return segment()->lastInPrevSegments(staffIdx());
+      }
+
 }
 

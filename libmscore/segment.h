@@ -200,6 +200,14 @@ public:
 
       bool operator<(const Segment&) const;
       bool operator>(const Segment&) const;
+
+
+      Element* firstInNextSegments(int activeStaff); //<
+      Element* lastInPrevSegments(int activeStaff);   //<
+      Element* firstElement(int staff);              //<  These methods are used for navigation
+      Element* lastElement(int staff);               //<  for next-element and prev-element
+protected:                                           //
+      Element* getElement(int staff);                //<
       };
 
 constexpr Segment::Type operator| (Segment::Type t1, Segment::Type t2) {

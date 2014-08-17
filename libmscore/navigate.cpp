@@ -9,7 +9,6 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
-
 #include "navigate.h"
 #include "element.h"
 #include "clef.h"
@@ -25,6 +24,10 @@
 #include "input.h"
 #include "measure.h"
 #include "page.h"
+#include "spanner.h"
+#include "system.h"
+#include "staff.h"
+#include "barline.h"
 
 namespace Ms {
 
@@ -226,6 +229,39 @@ Note* Score::downAltCtrl(Note* note) const
       }
 
 //---------------------------------------------------------
+//   firstElement
+//---------------------------------------------------------
+
+Element* Score::firstElement()
+      {
+      return this->firstSegment()->element(0);
+      }
+
+//---------------------------------------------------------
+//   lastElement
+//---------------------------------------------------------
+
+Element* Score::lastElement()
+      {
+      Element* re =0;
+      Segment* seg = this->lastSegment();
+      while (true) {
+            for(int i = (this->staves().size() -1) * VOICES; i < this->staves().size() * VOICES; i++){
+                  if(seg->element(i) != 0){
+                        re = seg->element(i);
+                        }
+                  }
+            if(re){
+                  if(re->type() == Element::Type::CHORD){
+                        return static_cast<Chord*>(re)->notes().first();
+                        }
+                  return re;
+                  }
+            seg = seg->prev1MM(Segment::Type::All);
+            }
+      }
+
+//---------------------------------------------------------
 //   upStaff
 //---------------------------------------------------------
 
@@ -409,7 +445,7 @@ ChordRest* Score::prevMeasure(ChordRest* element)
       bool last = false;
 
       if ((selection().isRange())
-         && selection().isEndActive() && selection().startSegment()->tick() <= startTick)
+          && selection().isEndActive() && selection().startSegment()->tick() <= startTick)
             last = true;
       else if (element->tick() != startTick) {
             measure = element->measure();

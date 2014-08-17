@@ -163,6 +163,9 @@ class ChordRest : public DurationElement {
       void writeBeam(Xml& xml);
 
       Segment* nextSegmentAfterCR(Segment::Type types) const;
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
       };
 
 

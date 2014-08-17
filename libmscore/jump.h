@@ -79,6 +79,8 @@ class Jump : public Text {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+      Element* nextElement() override;
+      Element* prevElement() override;
       };
 
 }     // namespace Ms

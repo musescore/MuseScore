@@ -701,5 +701,22 @@ QVariant Ambitus::propertyDefault(P_ID id) const
       return QVariant();
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Ambitus::nextElement()
+      {
+      return segment()->firstInNextSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Ambitus::prevElement()
+      {
+      return segment()->lastInPrevSegments(staffIdx());
+      }
 }
 

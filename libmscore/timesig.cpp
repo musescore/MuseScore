@@ -547,5 +547,23 @@ void TimeSig::layout()
             layout1();
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* TimeSig::nextElement()
+      {
+      return segment()->firstInNextSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* TimeSig::prevElement()
+      {
+      return segment()->lastInPrevSegments(staffIdx());
+      }
+
 }
 
