@@ -1419,6 +1419,7 @@ void HarmonyView::setElement(Element* e)
       else
             hb.bassName->setText(harmony->baseName());
       hb.chordId->setValue(harmony->id());
+      //hb.chordName->setText(harmony->parsedForm()->handle());
       hb.chordName->setText(harmony->hTextName());
       hb.userName->setText(harmony->hUserName());
 
