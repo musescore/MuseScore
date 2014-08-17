@@ -75,7 +75,8 @@ void Lyrics::scanElements(void* data, void (*func)(void*, Element*), bool)
 
 void Lyrics::write(Xml& xml) const
       {
-      if(!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Lyrics");
       if (_no)
             xml.tag("no", _no);

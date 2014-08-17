@@ -270,7 +270,8 @@ void Articulation::read(XmlReader& e)
 
 void Articulation::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Articulation");
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
