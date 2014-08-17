@@ -40,12 +40,12 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       void initTestCase();
       void copypasteArticulation()  { copypaste("articulation", Element::Type::ARTICULATION); }
       void copypasteChordNames()    { copypaste("chordnames", Element::Type::HARMONY); }
-      void copypasteChordNames1()    { copypaste("chordnames-01", Element::Type::HARMONY); }
+      void copypasteChordNames1()   { copypaste("chordnames-01", Element::Type::HARMONY); }
       void copypasteFiguredBass()   { copypaste("figuredbass", Element::Type::FIGURED_BASS); }
       void copypasteLyrics()        { copypaste("lyrics", Element::Type::LYRICS); }
 
-      void copypasteRange()  { copypastepart("range", Element::Type::ARTICULATION); }
-      void copypasteRange1()  { copypastedifferentvoice("range-01", Element::Type::ARTICULATION); }
+      void copypasteRange()         { copypastepart("range", Element::Type::ARTICULATION); }
+      void copypasteRange1()        { copypastedifferentvoice("range-01", Element::Type::ARTICULATION); }
 
       void copypasteArticulationRest()   { copypaste("articulation-rest", Element::Type::ARTICULATION); }
       void copypasteFermataRest()        { copypaste("fermata-rest", Element::Type::ARTICULATION); }

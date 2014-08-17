@@ -197,7 +197,6 @@ void TestSelectionRangeDelete::deleteVoice(int voice, QString idx)
 
       QVERIFY(saveCompareScore(score, QString("selectionrangedelete%1.mscx").arg(idx),
          DIR + QString("selectionrangedelete%1-ref.mscx").arg(idx)));
-
       delete score;
       }
 
