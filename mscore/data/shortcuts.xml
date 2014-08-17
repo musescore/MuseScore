@@ -261,20 +261,20 @@
     <seq>Ctrl+Alt+Up</seq>
     </SC>
   <SC>
-    <key>home</key>
-	<seq>Ctrl+Home</seq>
-	</SC>
+    <key>first-element</key>
+    <seq>Ctrl+Home</seq>
+    </SC>
   <SC>
-    <key>end</key>
-	<seq>Ctrl+End</seg>
-	</SC>
+    <key>last-element</key>
+    <seq>Ctrl+End</seq>
+    </SC>
   <SC>
     <key>next-element</key>
-	<seq>Ctrl+Alt+Shift+Right</seq>
+    <seq>Ctrl+Alt+Shift+Right</seq>
     </SC>
   <SC>
     <key>prev-element</key>
-	<seq>Ctrl+Alt+Shift+Left</seq>
+    <seq>Ctrl+Alt+Shift+Left</seq>
     </SC>
   <SC>
     <key>move-up</key>
