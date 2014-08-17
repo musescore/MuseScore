@@ -5559,11 +5559,11 @@ Element* ScoreView::elementNear(QPointF p)
 //   posChanged
 //---------------------------------------------------------
 
-void ScoreView::posChanged(POS pos, unsigned /*tick*/)
+void ScoreView::posChanged(POS pos, unsigned tick)
       {
       switch (pos) {
             case POS::CURRENT:
-                  moveCursor();
+                  moveCursor(tick);
                   break;
             case POS::LEFT:
                   _curLoopIn->move(_score->pos(POS::LEFT));
