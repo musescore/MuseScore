@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>880</width>
-    <height>573</height>
+    <height>576</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -149,6 +149,13 @@
             </property>
             <property name="wordWrap">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="updateTranslation">
+            <property name="text">
+             <string>Update translations and get new languages</string>
             </property>
            </widget>
           </item>
@@ -442,75 +449,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="1" rowspan="2">
-        <widget class="QGroupBox" name="groupBox_12">
-         <property name="title">
-          <string>Style</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_9">
-          <item row="0" column="0">
-           <widget class="QComboBox" name="styleName">
-            <property name="accessibleName">
-             <string>Select style</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>dark</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>light</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="iconHeight">
-            <property name="accessibleName">
-             <string>Icon Height</string>
-            </property>
-            <property name="minimum">
-             <number>5</number>
-            </property>
-            <property name="value">
-             <number>20</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_26">
-            <property name="text">
-             <string>Icon size:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSpinBox" name="iconWidth">
-            <property name="accessibleName">
-             <string>Icon Width</string>
-            </property>
-            <property name="minimum">
-             <number>5</number>
-            </property>
-            <property name="value">
-             <number>20</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="animations">
-            <property name="accessibleName">
-             <string>Animations</string>
-            </property>
-            <property name="text">
-             <string>Animations</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>
@@ -812,6 +750,75 @@
             </property>
             <property name="text">
              <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1" rowspan="2">
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="title">
+          <string>Style</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_9">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="styleName">
+            <property name="accessibleName">
+             <string>Select style</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>dark</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>light</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QSpinBox" name="iconHeight">
+            <property name="accessibleName">
+             <string>Icon Height</string>
+            </property>
+            <property name="minimum">
+             <number>5</number>
+            </property>
+            <property name="value">
+             <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>Icon size:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="iconWidth">
+            <property name="accessibleName">
+             <string>Icon Width</string>
+            </property>
+            <property name="minimum">
+             <number>5</number>
+            </property>
+            <property name="value">
+             <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="animations">
+            <property name="accessibleName">
+             <string>Animations</string>
+            </property>
+            <property name="text">
+             <string>Animations</string>
             </property>
            </widget>
           </item>
@@ -3593,6 +3600,7 @@
   <tabstop>myImages</tabstop>
   <tabstop>myImagesButton</tabstop>
   <tabstop>language</tabstop>
+  <tabstop>updateTranslation</tabstop>
   <tabstop>styleName</tabstop>
   <tabstop>animations</tabstop>
   <tabstop>iconWidth</tabstop>
