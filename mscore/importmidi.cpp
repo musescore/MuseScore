@@ -385,7 +385,7 @@ void setMusicNotesFromMidi(Score *score,
                            Chord *chord,
                            const ReducedFraction &tick,
                            const Drumset *drumset,
-                           bool useDrumset)
+                           DrumsetKind useDrumset)
       {
       auto actualFraction = ReducedFraction(chord->actualFraction());
 
@@ -410,7 +410,7 @@ void setMusicNotesFromMidi(Score *score,
             el.append(NoteEvent(0, ron, rlen));
             note->setPlayEvents(el);
 
-            if (useDrumset) {
+            if (useDrumset != DrumsetKind::NONE) {
                   if (!drumset->isValid(mn.pitch))
                         qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
                   else {
@@ -452,7 +452,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
       Score* score = staff->score();
       const int track = staff->idx() * VOICES + voice;
       Drumset* drumset = staff->part()->instr()->drumset();
-      const bool useDrumset = staff->part()->instr()->useDrumset();
+      const DrumsetKind useDrumset = staff->part()->instr()->useDrumset();
 
       const auto& opers = preferences.midiImportOperations.data()->trackOpers;
       const int currentTrack = preferences.midiImportOperations.currentTrack();
@@ -725,7 +725,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
             if (track.mtrack->drumTrack()) {
                   s->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   part->instr()->setDrumset(smDrumset);
-                  part->instr()->setUseDrumset(DEFAULT_DRUMS);
+                  part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
                   }
             else {
                   if (idx < (tracks.size() - 1) && idx >= 0

@@ -115,7 +115,7 @@ struct Channel {
 //   Instrument
 //---------------------------------------------------------
 
-enum DrumsetKind {NONE, DEFAULT_DRUMS, GUITAR_PRO};
+enum class DrumsetKind : char { NONE, DEFAULT_DRUMS, GUITAR_PRO };
 
 class InstrumentData;
 

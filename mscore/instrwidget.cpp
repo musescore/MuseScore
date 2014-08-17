@@ -107,7 +107,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // or a memory leak may result
 
       bool canUseTabs = false; // assume only normal staves are applicable
-      bool canUsePerc = false;
+      DrumsetKind canUsePerc = DrumsetKind::NONE;
       PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
 
       // PartListItem has different members filled out if used in New Score Wizard
@@ -117,14 +117,14 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
                         ( (part->part && part->part->instr(0)) ? part->part->instr(0)->stringData() : 0);
             canUseTabs = stringData && stringData->strings() > 0;
             canUsePerc = part->it ? part->it->useDrumset :
-                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->useDrumset() : false);
+                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->useDrumset() : DrumsetKind::NONE);
             }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
       int idx = 0;
       for (const StaffType& st : StaffType::presets()) {
-            if ( (st.group() == StaffGroup::STANDARD && !canUsePerc)    // percussion excludes standard
-                        || (st.group() == StaffGroup::PERCUSSION && canUsePerc)
+            if ( (st.group() == StaffGroup::STANDARD && (canUsePerc == DrumsetKind::NONE))    // percussion excludes standard
+                        || (st.group() == StaffGroup::PERCUSSION && (canUsePerc != DrumsetKind::NONE))
                         || (st.group() == StaffGroup::TAB && canUseTabs)) {
                   _staffTypeCombo->addItem(st.name(), idx);
                   }
@@ -790,7 +790,7 @@ StaffListItem* InstrumentsWidget::on_belowButton_clicked()
             return 0;
 
       StaffListItem* sli  = static_cast<StaffListItem*>(item);
-      Staff* staff        = sli->staff();
+//      Staff* staff        = sli->staff();
       PartListItem* pli   = static_cast<PartListItem*>(sli->QTreeWidgetItem::parent());
       StaffListItem* nsli = new StaffListItem();
 //      nsli->setStaff(staff);
