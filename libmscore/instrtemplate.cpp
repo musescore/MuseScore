@@ -121,7 +121,7 @@ InstrumentTemplate::InstrumentTemplate()
       maxPitchP          = 127;
       staffGroup         = StaffGroup::STANDARD;
       staffTypePreset    = 0;
-      useDrumset         = false;
+      useDrumset         = DrumsetKind::NONE;
       drumset            = 0;
       extended           = false;
 
@@ -273,8 +273,8 @@ void InstrumentTemplate::write(Xml& xml) const
             xml.tag("transposeDiatonic", transpose.diatonic);
       if (transpose.chromatic)
             xml.tag("transposeChromatic", transpose.chromatic);
-      if (useDrumset)
-            xml.tag("drumset", useDrumset);
+      if (useDrumset != DrumsetKind::NONE)
+            xml.tag("drumset", int(useDrumset));
       if (drumset)
             drumset->save(xml);
       foreach(const NamedEventList& a, midiActions)
@@ -420,7 +420,7 @@ void InstrumentTemplate::read(XmlReader& e)
             else if (tag == "StringData")
                   stringData.read(e);
             else if (tag == "drumset")
-                  useDrumset = e.readInt();
+                  useDrumset = DrumsetKind(e.readInt());
             else if (tag == "Drum") {
                   // if we see one of this tags, a custom drumset will
                   // be created
@@ -520,7 +520,7 @@ void InstrumentTemplate::read(XmlReader& e)
             a.pan         = 60;
             channel.append(a);
             }
-      if (useDrumset) {
+      if (useDrumset != DrumsetKind::NONE) {
             if (channel[0].bank == 0)
                   channel[0].bank = 128;
             channel[0].updateInitList();

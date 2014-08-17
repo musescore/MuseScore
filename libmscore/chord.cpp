@@ -1580,7 +1580,7 @@ void Chord::updateNotes(AccidentalState* as)
             c->updateNotes(as);
 
       Drumset* drumset = 0;
-      if (staff()->part()->instr()->useDrumset())
+      if (staff()->part()->instr()->useDrumset() != DrumsetKind::NONE)
             drumset = staff()->part()->instr()->drumset();
 
       QList<Note*> nl(notes());

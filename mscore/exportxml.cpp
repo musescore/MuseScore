@@ -274,7 +274,7 @@ class ExportMusicXml {
       TrillHash trillStop;
 
       int findBracket(const TextLine* tl) const;
-      void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset);
+      void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset);
       void rest(Rest* chord, int staff);
       void clef(int staff, ClefType clef);
       void timesig(TimeSig* tsig);
@@ -2115,7 +2115,7 @@ static void writeBeam(Xml& xml, ChordRest* cr, Beam* b)
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset)
+void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset)
       {
       /*
       qDebug("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",
@@ -2181,18 +2181,18 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
             }
             else {
-                  if (!useDrumset) {
+                  if (useDrumset == DrumsetKind::NONE) {
                         pitch2xml(note, step, alter, octave);
                   }
                   else {
                         unpitch2xml(note, step, octave);
                   }
             }
-            xml.stag(useDrumset ? "unpitched" : "pitch");
-            xml.tag(useDrumset ? "display-step" : "step", step);
+            xml.stag(useDrumset != DrumsetKind::NONE ? "unpitched" : "pitch");
+            xml.tag(useDrumset != DrumsetKind::NONE ? "display-step" : "step", step);
             if (alter)
                   xml.tag("alter", alter);
-            xml.tag(useDrumset ? "display-octave" : "octave", octave);
+            xml.tag(useDrumset != DrumsetKind::NONE ? "display-octave" : "octave", octave);
             xml.etag();
 
             // duration
@@ -2205,7 +2205,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   xml.tagE("tie type=\"start\"");
 
             // instrument for unpitched
-            if (useDrumset)
+            if (useDrumset != DrumsetKind::NONE)
                   xml.tagE(QString("instrument id=\"P%1-I%2\"").arg(_score->parts().indexOf(note->staff()->part()) + 1).arg(note->pitch() + 1));
 
             // voice
@@ -4023,7 +4023,7 @@ void ExportMusicXml::write(QIODevice* dev)
             if (!part->shortName().isEmpty())
                   xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
-            if (part->instr()->useDrumset()) {
+            if (part->instr()->useDrumset() != DrumsetKind::NONE) {
                   Drumset* drumset = part->instr()->drumset();
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
