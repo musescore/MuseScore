@@ -157,7 +157,5 @@
 #include <QQuickPaintedItem>
 #include <QQuickView>
 
-#include <QAccessibleWidget>
-
 #endif
 
