@@ -59,6 +59,7 @@
 #include "importmidi_simplify.h"
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
+#include "importmidi_key.h"
 
 #include <set>
 
@@ -991,6 +992,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       score->connectTies();
       MidiLyrics::setLyricsToScore(trackList);
       MidiTempo::setTempo(tracks, score);
+      MidiKey::setMainKeySig(trackList);
       }
 
 void loadMidiData(MidiFile &mf)
