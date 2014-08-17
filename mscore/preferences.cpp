@@ -42,6 +42,7 @@
 #include "fluid/fluid.h"
 #include "pathlistdialog.h"
 #include "mstyle/mconfig.h"
+#include "resourceManager.h"
 
 namespace Ms {
 
@@ -624,7 +625,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
       connect(mySfzButton, SIGNAL(clicked()), SLOT(changeSfzPaths()));
 
-
+      connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
       connect(partStyleButton,        SIGNAL(clicked()), SLOT(selectPartStyle()));
@@ -1671,6 +1672,16 @@ void PreferenceDialog::changeSfzPaths()
       pld.setPath(sfzPath->text());
       if(pld.exec())
             sfzPath->setText(pld.path());
+      }
+
+//---------------------------------------------------------
+//   updateLanguagesClicked
+//---------------------------------------------------------
+
+void PreferenceDialog::updateTranslationClicked()
+      {
+      ResourceManager r(0);
+      r.exec();
       }
 
 //---------------------------------------------------------
