@@ -236,6 +236,7 @@ enum class PasteStatus : char {
 //   @P npages          int               number of pages (read only)
 //   @P nstaves         int               number of staves (read only)
 //   @P ntracks         int               number of tracks (staves * 4) (read only)
+//   @P parts           array[Ms::Part]   the list of parts (read only)
 //---------------------------------------------------------
 
 class Score : public QObject {
@@ -249,6 +250,7 @@ class Score : public QObject {
       Q_PROPERTY(int                npages            READ npages)
       Q_PROPERTY(int                nstaves           READ nstaves)
       Q_PROPERTY(int                ntracks           READ ntracks)
+      Q_PROPERTY(QQmlListProperty<Ms::Part> parts     READ qmlParts)
 
    public:
       enum class FileError : char {
@@ -440,6 +442,8 @@ class Score : public QObject {
       void selectAdd(Element* e);
       void selectRange(Element* e, int staffIdx);
 
+      QQmlListProperty<Ms::Part> qmlParts() { return QQmlListProperty<Ms::Part>(this, _parts); }
+
    protected:
       void createPlayEvents(Chord*);
       SynthesizerState _synthesizerState;
@@ -560,7 +564,7 @@ class Score : public QObject {
       // undo/redo ops
       void addArticulation(ArticulationType);
       void changeAccidental(Accidental::Type);
-      void changeAccidental(Note* oNote, Accidental::Type);
+      Q_INVOKABLE void changeAccidental(Note* oNote, Ms::Accidental::Type);
 
       void addElement(Element*);
       void removeElement(Element*);
