@@ -244,6 +244,7 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 void EditStyle::apply()
       {
       getValues();
+      cs->deselectAll();
       cs->undo(new ChangeStyle(cs, lstyle));
       cs->update();
       }
