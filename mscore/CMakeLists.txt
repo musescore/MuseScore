@@ -274,7 +274,7 @@ add_executable ( ${ExecutableName}
       importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp
       importmidi_inner.cpp importmidi_tie.cpp importmidi_tuplet_voice.cpp importmidi_beat.cpp
       importmidi_tuplet_detect.cpp  importmidi_tuplet_filter.cpp importmidi_tuplet_tonotes.cpp
-      importmidi_simplify.cpp importmidi_voice.cpp importmidi_view.cpp
+      importmidi_simplify.cpp importmidi_voice.cpp importmidi_view.cpp importmidi_key.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp
       continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
