@@ -101,7 +101,7 @@
           <head>0</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Square Click</name>
+          <name>Snare Click</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="33">
@@ -234,14 +234,14 @@
           <head>2</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Ride Symbol 1</name>
+          <name>Ride Cymbal 1</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="52">
           <head>1</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Chinese Symbol</name>
+          <name>Chinese Cymbal</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="53">
@@ -262,7 +262,7 @@
           <head>0</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Splash Symbol</name>
+          <name>Splash Cymbal</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="56">
@@ -276,7 +276,7 @@
           <head>2</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Crash Symbol 2</name>
+          <name>Crash Cymbal 2</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="58">
@@ -290,7 +290,7 @@
           <head>2</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Ride Symbol 2</name>
+          <name>Ride Cymbal 2</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="60">
@@ -472,7 +472,7 @@
           <head>0</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Castinets</name>
+          <name>Castanets</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="86">
@@ -1388,7 +1388,7 @@
             <head>0</head>
             <line>3</line>
             <voice>0</voice>
-            <name>Square Click</name>
+            <name>Snare Click</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="33">
@@ -1521,14 +1521,14 @@
             <head>2</head>
             <line>-1</line>
             <voice>0</voice>
-            <name>Ride Symbol 1</name>
+            <name>Ride Cymbal 1</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="52">
             <head>1</head>
             <line>-1</line>
             <voice>0</voice>
-            <name>Chinese Symbol</name>
+            <name>Chinese Cymbal</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="53">
@@ -1549,7 +1549,7 @@
             <head>0</head>
             <line>3</line>
             <voice>0</voice>
-            <name>Splash Symbol</name>
+            <name>Splash Cymbal</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="56">
@@ -1563,7 +1563,7 @@
             <head>2</head>
             <line>-1</line>
             <voice>0</voice>
-            <name>Crash Symbol 2</name>
+            <name>Crash Cymbal 2</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="58">
@@ -1577,7 +1577,7 @@
             <head>2</head>
             <line>-1</line>
             <voice>0</voice>
-            <name>Ride Symbol 2</name>
+            <name>Ride Cymbal 2</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="60">
@@ -1759,7 +1759,7 @@
             <head>0</head>
             <line>3</line>
             <voice>0</voice>
-            <name>Castinets</name>
+            <name>Castanets</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="86">
