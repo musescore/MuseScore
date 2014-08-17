@@ -4944,6 +4944,10 @@ int main(int argc, char* av[])
 
       int files = 0;
       if (MScore::noGui) {
+#ifdef Q_OS_MAC
+            // see issue #28706: Hangup in converter mode with MusicXML source
+            qApp->processEvents();
+#endif
             loadScores(argv);
             exit(processNonGui() ? 0 : -1);
             }
