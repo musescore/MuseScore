@@ -520,7 +520,7 @@ QString EditStaffType::createUniqueStaffTypeName(StaffGroup group)
 
 void EditStaffType::savePresets()
       {
-      printf("savePresets\n");
+      qDebug("savePresets");
       }
 
 //---------------------------------------------------------
@@ -529,7 +529,7 @@ void EditStaffType::savePresets()
 
 void EditStaffType::loadPresets()
       {
-      printf("loadPresets\n");
+      qDebug("loadPresets");
       }
 
 //---------------------------------------------------------
