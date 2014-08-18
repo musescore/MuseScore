@@ -998,6 +998,12 @@ Palette* MuseScore::newTextPalette()
       st->setText(tr("system-text"));
       sp->append(st, tr("System Text"));
 
+      st = new StaffText(gscore);
+      st->setTextStyleType(TextStyleType::TEMPO);
+      st->setText(tr("Swing"));
+      sp->append(st, tr("Swing"));
+      st->setSwing(true);
+
       RehearsalMark* rhm = new RehearsalMark(gscore);
       rhm->setTrack(0);
       rhm->setText("B1");
