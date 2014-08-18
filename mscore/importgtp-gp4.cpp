@@ -811,9 +811,8 @@ void GuitarPro4::read(QFile* fp)
                               }
                         else if (slurs[staffIdx] && hasSlur) {
                               }
-                        if (slide) {
+                        if (cr && (cr->type() == Element::Type::CHORD) && slide > 0)
                               createSlide(convertGP4SlideNum(slide), cr, staffIdx);
-                        }
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         createSlur(hasSlur, staffIdx, cr);
                         tick += cr->actualTicks();
