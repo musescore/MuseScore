@@ -213,8 +213,8 @@ void StringData::fretChords(Chord * chord) const
             nString     = nNewString    = note->string();
             nFret       = nNewFret      = note->fret();
             note->setFretConflict(false);       // assume no conflicts on this note
-            // if no fretting yet or current fretting is no longer valid
-            if (nString == STRING_NONE || nFret == FRET_NONE || getPitch(nString, nFret) != note->pitch()) {
+            // if no fretting (any invalid fretting has been erased by sortChordNotes() )
+            if (nString == STRING_NONE /*|| nFret == FRET_NONE || getPitch(nString, nFret) != note->pitch()*/) {
                   // get a new fretting
                   if(!convertPitch(note->pitch(), &nNewString, &nNewFret) ) {
                         // no way to fit this note in this tab:
@@ -277,18 +277,31 @@ void StringData::fretChords(Chord * chord) const
 
 //---------------------------------------------------------
 //   sortChordNotes
-//   Adds to sortedNotes the notes of Chord in string/pitch order
+//    Adds to sortedNotes the notes of Chord in string/pitch order
+//    Note: notes are sorted first by string (top string being 0),
+//          then by negated pitch (higher pitches resulting in lower key),
+//          then by order of submission to disambiguate notes with the same pitch.
+//          Everything else being equal, this makes notes in higher-numbered voices
+//          to be sorted after notes in lower-numbered voices (voice 2 after voice 1 and so on)
+//    Notes without a string assigned yet, are sorted according to the lowest string which can accommodate them.
 //---------------------------------------------------------
 
 void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *chord, int* count) const
 {
-      int   key;
+      int   key, string, fret;
 
       foreach(Note * note, chord->notes()) {
-            key = note->string()*100000;
-            if(key < 0)                               // in case string is -1
-                  key = -key;
-            key -= note->pitch() * 100 + *count;      // disambiguate notes of equal pitch
+            string      = note->string();
+            fret        = note->fret();
+            // if note not fretted yet or current fretting no longer valid,
+            // use most convenient string as key
+            if (string <= STRING_NONE || fret <= FRET_NONE
+                        || getPitch(string, fret) != note->pitch()) {
+                  note->setString(STRING_NONE);
+                  convertPitch(note->pitch(), &string, &fret);
+                  }
+            key = string * 100000;
+            key += -note->pitch() * 100 + *count;     // disambiguate notes of equal pitch
             sortedNotes.insert(key, note);
             (*count)++;
             }
