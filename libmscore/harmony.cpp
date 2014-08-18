@@ -1452,4 +1452,45 @@ const ParsedChord* Harmony::parsedForm()
       return _parsedForm;
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Harmony::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + harmonyName();
+      }
+
+//---------------------------------------------------------
+//   screenReaderInfo
+//---------------------------------------------------------
+
+QString Harmony::screenReaderInfo()
+      {
+      QString rez = Element::accessibleInfo();
+      if (_rootTpc != Tpc::TPC_INVALID)
+            rez += " " + tpc2name(_rootTpc, NoteSpellingType::STANDARD, false, true);
+
+      if (parsedForm() && !hTextName().isEmpty()) {
+            QString aux = parsedForm()->handle();
+            aux = aux.replace("#", tr("sharp")).replace("<", "");
+            QString extension = "";
+
+            foreach (QString s, aux.split(">", QString::SkipEmptyParts)) {
+                  if(!s.contains("blues"))
+                        s.replace("b", tr("flat"));
+                  extension += s + " ";
+                  }
+            rez += " " + extension;
+            }
+      else {
+            rez += " " + hTextName();
+            }
+
+      if (_baseTpc != Tpc::TPC_INVALID)
+            rez += + " / " + tpc2name(_baseTpc, NoteSpellingType::STANDARD, false, true);
+
+      return rez;
+      }
+
 }

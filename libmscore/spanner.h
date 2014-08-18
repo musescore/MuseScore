@@ -77,8 +77,11 @@ class SpannerSegment : public Element {
       virtual void reset() override;
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
+
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+      virtual bool isSpannerSegment() const override { return true; }
+      virtual QString accessibleInfo() override;
       };
 
 //----------------------------------------------------------------------------------
@@ -177,6 +180,8 @@ class Spanner : public Element {
       virtual void setVisible(bool f) override;
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+
+      virtual bool isSpanner() const override { return true; }
 
       friend class SpannerSegment;
       };

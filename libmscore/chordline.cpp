@@ -19,6 +19,14 @@
 
 namespace Ms {
 
+const char* scorelineNames[] = {
+      QT_TR_NOOP("fall"),
+      QT_TR_NOOP("doit"),
+      QT_TR_NOOP("plop"),
+      QT_TR_NOOP("scoop"),
+      };
+
+
 //---------------------------------------------------------
 //   ChordLine
 //---------------------------------------------------------
@@ -390,5 +398,18 @@ void ChordLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 
             }
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString ChordLine::accessibleInfo()
+      {
+      QString rez = Element::accessibleInfo();
+      if(chordLineType() != ChordLineType::NOTYPE)
+            rez = rez + " " + scorelineNames[static_cast<int>(chordLineType()) - 1];
+      return rez;
+      }
+
 }
 

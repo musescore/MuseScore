@@ -516,29 +516,28 @@ QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots, bool prin
 //   print
 //---------------------------------------------------------
 
-void TDuration::print() const
+QString TDuration::durationTypeUserName() const
       {
-      qDebug("TDuration(");
-      const char* s = "?";
+      QString s = QObject::tr("Custom");
       switch(_val) {
-            case DurationType::V_LONG:      s = "Long";    break;
-            case DurationType::V_BREVE:     s = "Breve";   break;
-            case DurationType::V_WHOLE:     s = "Whole";   break;
-            case DurationType::V_HALF:      s = "Half";    break;
-            case DurationType::V_QUARTER:   s = "Quarter"; break;
-            case DurationType::V_EIGHTH:    s = "Eighth";   break;
-            case DurationType::V_16TH:      s = "16th";    break;
-            case DurationType::V_32ND:      s = "32nd";    break;
-            case DurationType::V_64TH:      s = "64th";    break;
-            case DurationType::V_128TH:     s = "128th";   break;
-            case DurationType::V_256TH:     s = "256th";   break;
-            case DurationType::V_512TH:     s = "512th";   break;
-            case DurationType::V_1024TH:    s = "1024th";  break;
-            case DurationType::V_ZERO:      s = "Zero";    break;
-            case DurationType::V_MEASURE:   s = "Measure"; break;
-            case DurationType::V_INVALID:   s = "Invalid"; break;
+            case DurationType::V_LONG:      s = QObject::tr("Long"   ); break;
+            case DurationType::V_BREVE:     s = QObject::tr("Breve"  ); break;
+            case DurationType::V_WHOLE:     s = QObject::tr("Whole"  ); break;
+            case DurationType::V_HALF:      s = QObject::tr("Half"   ); break;
+            case DurationType::V_QUARTER:   s = QObject::tr("Quarter"); break;
+            case DurationType::V_EIGHTH:     s = QObject::tr("Eighth" ); break;
+            case DurationType::V_16TH:      s = QObject::tr("16th"   ); break;
+            case DurationType::V_32ND:      s = QObject::tr("32nd"   ); break;
+            case DurationType::V_64TH:      s = QObject::tr("64th"   ); break;
+            case DurationType::V_128TH:     s = QObject::tr("128th"  ); break;
+            case DurationType::V_256TH:     s = QObject::tr("256th"  ); break;
+            case DurationType::V_512TH:     s = QObject::tr("512th"  ); break;
+            case DurationType::V_1024TH:    s = QObject::tr("1024th" ); break;
+            case DurationType::V_ZERO:      s = QObject::tr("Zero"   ); break;
+            case DurationType::V_MEASURE:   s = QObject::tr("Measure"); break;
+            case DurationType::V_INVALID:   s = QObject::tr("Invalid"); break;
             };
-      qDebug("   %s,dots=%d)", s, _dots);
+      return s;
       }
 
 //---------------------------------------------------------

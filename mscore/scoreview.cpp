@@ -2482,8 +2482,9 @@ void ScoreView::cmd(const QAction* a)
       if (MScore::debugMode)
             qDebug("ScoreView::cmd <%s>", qPrintable(cmd));
 
-      if (cmd == "escape")
+      if (cmd == "escape") {
             sm->postEvent(new CommandEvent(cmd));
+            }
       else if (cmd == "note-input" || cmd == "copy" || cmd == "paste"
          || cmd == "cut" || cmd == "fotomode") {
             sm->postEvent(new CommandEvent(cmd));

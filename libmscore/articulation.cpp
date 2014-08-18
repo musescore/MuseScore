@@ -626,6 +626,16 @@ qreal Articulation::mag() const
       {
       return parent() ? parent()->mag() * score()->styleD(StyleIdx::articulationMag): 1.0;
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Articulation::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + subtypeUserName();
+      }
+
 }
 
 

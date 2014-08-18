@@ -86,7 +86,7 @@ class Dynamic : public Text {
       Segment* segment() const                    { return (Segment*)parent(); }
       Measure* measure() const                    { return (Measure*)parent()->parent(); }
 
-      void setDynamicType(Type val)      { _dynamicType = val; }
+      void setDynamicType(Type val)      { _dynamicType = val;   }
       void setDynamicType(const QString&);
       QString dynamicTypeName() const;
       Type dynamicType() const            { return _dynamicType; }
@@ -113,8 +113,9 @@ class Dynamic : public Text {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool     setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      };
 
+      virtual QString accessibleInfo() override;
+      };
 
 }     // namespace Ms
 
