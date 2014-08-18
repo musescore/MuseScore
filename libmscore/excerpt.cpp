@@ -104,6 +104,15 @@ Score* createExcerpt(const QList<Part*>& parts)
       QList<int> srcStaves;
 
       Score* oscore = parts.front()->score();
+
+      // create score title frame if necessary (so excerpts will have linked title frames)
+      MeasureBase* m = oscore->measures()->first();
+      if (!m || m->type() != Element::Type::VBOX) {
+            MeasureBase* nmeasure = new VBox(oscore);
+            nmeasure->setTick(0);
+            oscore->addMeasure(nmeasure, m);
+            }
+
       Score* score  = new Score(oscore);
 
       // clone layer:
@@ -137,7 +146,7 @@ Score* createExcerpt(const QList<Part*>& parts)
       cloneStaves(oscore, score, srcStaves);
 
       //
-      // create excerpt title
+      // create excerpt title if necessary (it shouldn't be)
       //
       MeasureBase* measure = score->first();
       if (!measure || (measure->type() != Element::Type::VBOX)) {
