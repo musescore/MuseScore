@@ -921,7 +921,7 @@ void Staff::undoSetColor(const QColor& /*val*/)
 void Staff::insertTime(int tick, int len)
       {
       KeyList kl2;
-      for (auto i = _keys.upper_bound(tick); i != _keys.end();) {
+      for (auto i = _keys.lower_bound(tick); i != _keys.end();) {
             Key kse = i->second;
             int k   = i->first;
             _keys.erase(i++);
@@ -930,7 +930,7 @@ void Staff::insertTime(int tick, int len)
       _keys.insert(kl2.begin(), kl2.end());
 
       ClefList cl2;
-      for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
+      for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
             int key = i->first;
             clefs.erase(i++);
