@@ -708,7 +708,7 @@ Score::FileError Score::read114(XmlReader& e)
             qreal tempo = i->second.tempo;
             if (tempomap()->tempo(tick) != tempo) {
                   TempoText* tt = new TempoText(this);
-                  tt->setText(QString("<sym>noteQuarterUp</sym> = %1").arg(qRound(tempo*60)));
+                  tt->setText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(qRound(tempo*60)));
                   tt->setTempo(tempo);
                   tt->setTrack(0);
                   tt->setVisible(false);

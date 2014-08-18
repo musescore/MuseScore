@@ -958,12 +958,12 @@ Palette* MuseScore::newTempoPalette()
       sp->setDrawGrid(true);
 
       static const TempoPattern tp[] = {
-            TempoPattern("<sym>noteHalfUp</sym> = 80", 80.0/30.0),                        // 1/2
-            TempoPattern("<sym>noteQuarterUp</sym> = 80", 80.0/60.0),                     // 1/4
-            TempoPattern("<sym>note8thUp</sym> = 80", 80.0/120.0),                    // 1/8
-            TempoPattern("<sym>noteHalfUp</sym><sym>space</sym><sym>textAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
-            TempoPattern("<sym>noteQuarterUp</sym><sym>space</sym><sym>textAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
-            TempoPattern("<sym>note8thUp</sym><sym>textAugmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
+            TempoPattern("<sym>unicodeNoteHalfUp</sym> = 80", 80.0/30.0),                        // 1/2
+            TempoPattern("<sym>unicodeNoteQuarterUp</sym> = 80", 80.0/60.0),                     // 1/4
+            TempoPattern("<sym>unicodeNote8thUp</sym> = 80", 80.0/120.0),                    // 1/8
+            TempoPattern("<sym>unicodeNoteHalfUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
+            TempoPattern("<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
+            TempoPattern("<sym>unicodeNote8thUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
             };
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
@@ -1271,40 +1271,40 @@ void MuseScore::addTempo()
 
       SigEvent event = cs->sigmap()->timesig(cr->tick());
       Fraction f = event.nominal();
-      QString text("<sym>noteQuarterUp</sym> = 80");
+      QString text("<sym>unicodeNoteQuarterUp</sym> = 80");
       switch (f.denominator()) {
             case 1:
-                  text = "<sym>noteWhole</sym> = 80";
+                  text = "<sym>unicodeNoteWhole</sym> = 80";
                   break;
             case 2:
-                  text = "<sym>noteHalfUp</sym> = 80";
+                  text = "<sym>unicodeNoteHalfUp</sym> = 80";
                   break;
             case 4:
-                  text = "<sym>noteQuarterUp</sym> = 80";
+                  text = "<sym>unicodeNoteQuarterUp</sym> = 80";
                   break;
             case 8:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>noteQuarterUp</sym><sym>space</sym><sym>textAugmentationDot</sym> = 80";
+                        text = "<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>note8thUp</sym> = 80";
+                        text = "<sym>unicodeNote8thUp</sym> = 80";
                   break;
             case 16:
                   if(f.numerator() % 3 == 0)
-                        text = text = "<sym>note8thUp</sym><sym>textAugmentationDot</sym> = 80";
+                        text = text = "<sym>unicodeNote8thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>note16thUp</sym> = 80";
+                        text = "<sym>unicodeNote16thUp</sym> = 80";
                   break;
             case 32:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>note16thUp</sym><sym>textAugmentationDot</sym> = 80";
+                        text = "<sym>unicodeNote16thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>note32thUp</sym> = 80";
+                        text = "<sym>unicodeNote32thUp</sym> = 80";
                   break;
             case 64:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>note32thUp</sym><sym>textAugmentationDot</sym> = 80";
+                        text = "<sym>unicodeNote32thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>note64thUp</sym> = 80";
+                        text = "<sym>unicodeNote64thUp</sym> = 80";
                   break;
             default:
                   break;

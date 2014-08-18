@@ -87,15 +87,15 @@ struct TempoPattern {
 // note: findTempoDuration requires the longer patterns to be before the shorter patterns in tp
 
 static const TempoPattern tp[] = {
-      TempoPattern("<sym>noteHalfUp</sym>\\s*<sym>textAugmentationDot</sym>",    1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
-      TempoPattern("<sym>noteHalfUp</sym><sym>space</sym><sym>textAugmentationDot</sym>",    1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
-      TempoPattern("<sym>noteQuarterUp</sym>\\s*<sym>textAugmentationDot</sym>", 1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
-      TempoPattern("<sym>noteQuarterUp</sym><sym>space</sym><sym>textAugmentationDot</sym>", 1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
-      TempoPattern("<sym>note8thUp</sym>\\s*<sym>textAugmentationDot</sym>",     1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
-      TempoPattern("<sym>note8thUp</sym><sym>space</sym><sym>textAugmentationDot</sym>",     1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
-      TempoPattern("<sym>noteHalfUp</sym>",                                      1.0/30.0,  TDuration::DurationType::V_HALF),       // 1/2
-      TempoPattern("<sym>noteQuarterUp</sym>",                                   1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
-      TempoPattern("<sym>note8thUp</sym>",                                       1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
+      TempoPattern("<sym>unicodeNoteHalfUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",    1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
+      TempoPattern("<sym>unicodeNoteHalfUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym>",    1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
+      TempoPattern("<sym>unicodeNoteQuarterUp</sym>\\s*<sym>unicodeAugmentationDot</sym>", 1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
+      TempoPattern("<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym>", 1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
+      TempoPattern("<sym>unicodeNote8thUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",     1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
+      TempoPattern("<sym>unicodeNote8thUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym>",     1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
+      TempoPattern("<sym>unicodeNoteHalfUp</sym>",                                      1.0/30.0,  TDuration::DurationType::V_HALF),       // 1/2
+      TempoPattern("<sym>unicodeNoteQuarterUp</sym>",                                   1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
+      TempoPattern("<sym>unicodeNote8thUp</sym>",                                       1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
       };
       
 //---------------------------------------------------------
