@@ -5563,7 +5563,10 @@ void ScoreView::posChanged(POS pos, unsigned tick)
       {
       switch (pos) {
             case POS::CURRENT:
-                  moveCursor(tick);
+                  if (noteEntryMode())
+                        moveCursor();     // update input cursor position
+                  else
+                        moveCursor(tick); // update play position
                   break;
             case POS::LEFT:
                   _curLoopIn->move(_score->pos(POS::LEFT));
