@@ -5,7 +5,6 @@
     <tick>0</tick>
     <Ottava id="2">
       <subtype>8va</subtype>
-      <endHook>1</endHook>
       <track>0</track>
       </Ottava>
     <Chord>
