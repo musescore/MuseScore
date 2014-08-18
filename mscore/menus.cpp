@@ -1001,8 +1001,8 @@ Palette* MuseScore::newTextPalette()
       st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::TEMPO);
       st->setText(tr("Swing"));
-      sp->append(st, tr("Swing"));
       st->setSwing(true);
+      sp->append(st, tr("Swing")); 
 
       RehearsalMark* rhm = new RehearsalMark(gscore);
       rhm->setTrack(0);
