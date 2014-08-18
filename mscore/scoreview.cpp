@@ -1872,6 +1872,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       if (sel.isRange()) {
             Segment* ss = sel.startSegment();
             Segment* es = sel.endSegment();
+
             if (!ss)
                   return;
             p.setBrush(Qt::NoBrush);
