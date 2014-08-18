@@ -21,6 +21,7 @@
       <score-instrument id="P1-I3">
         <instrument-name>Piano 1</instrument-name>
         </score-instrument>
+      <midi-device id="P1-I3" port="1"></midi-device>
       <midi-instrument id="P1-I3">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
@@ -33,6 +34,7 @@
       <score-instrument id="P2-I3">
         <instrument-name>Piano 2</instrument-name>
         </score-instrument>
+      <midi-device id="P2-I3" port="1"></midi-device>
       <midi-instrument id="P2-I3">
         <midi-channel>2</midi-channel>
         <midi-program>1</midi-program>

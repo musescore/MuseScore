@@ -18,6 +18,7 @@
 #include "stringdata.h"
 #include "instrtemplate.h"
 #include "mscore.h"
+#include "score.h"
 
 namespace Ms {
 
@@ -152,7 +153,7 @@ void StaffName::read(XmlReader& e)
 //   InstrumentData::write
 //---------------------------------------------------------
 
-void InstrumentData::write(Xml& xml) const
+void InstrumentData::write(Xml& xml, Part* part) const
       {
       xml.stag("Instrument");
       foreach(const StaffName& doc, _longNames)
@@ -209,7 +210,7 @@ void InstrumentData::write(Xml& xml) const
       foreach(const MidiArticulation& a, _articulation)
             a.write(xml);
       foreach(const Channel& a, _channel)
-            a.write(xml);
+            a.write(xml, part);
       xml.etag();
       }
 
@@ -217,7 +218,7 @@ void InstrumentData::write(Xml& xml) const
 //   InstrumentData::read
 //---------------------------------------------------------
 
-void InstrumentData::read(XmlReader& e)
+void InstrumentData::read(XmlReader& e, Part* part, bool fromInstrChange)
       {
       int program = -1;
       int bank    = 0;
@@ -300,8 +301,10 @@ void InstrumentData::read(XmlReader& e)
                   }
             else if (tag == "Channel" || tag == "channel") {
                   Channel a;
-                  a.read(e);
+                  a.read(e, part, fromInstrChange, _channel.size());
                   _channel.append(a);
+                  if (part != 0 && a.channel != -1 && a.channel < part->score()->midiMapping()->size() && part->score()->midiMapping(a.channel)->articulation == 0)
+                        part->score()->midiMapping(a.channel)->articulation = &_channel[_channel.size() - 1];
                   }
             else if (tag == "clef") {           // sets both transposing and concert clef
                   int idx = e.intAttribute("staff", 1) - 1;
@@ -344,6 +347,7 @@ void InstrumentData::read(XmlReader& e)
             a.bank    = bank;
             a.volume  = volume;
             a.pan     = pan;
+            a.channel = -1;
             _channel.append(a);
             }
       if (_useDrumset != DrumsetKind::NONE) {
@@ -399,7 +403,7 @@ Channel::Channel()
 //   write
 //---------------------------------------------------------
 
-void Channel::write(Xml& xml) const
+void Channel::write(Xml& xml, Part* part) const
       {
       if (name.isEmpty() || name == "normal")
             xml.stag("Channel");
@@ -435,6 +439,10 @@ void Channel::write(Xml& xml) const
             xml.tag("mute", mute);
       if (solo)
             xml.tag("solo", solo);
+      if (part != 0 && part->score()->exportMidiMapping()) {
+            xml.tag("midiPort",    part->score()->midiMapping(channel)->port);
+            xml.tag("midiChannel", part->score()->midiMapping(channel)->channel);
+            }
       foreach(const NamedEventList& a, midiActions)
             a.write(xml, "MidiAction");
       foreach(const MidiArticulation& a, articulation)
@@ -446,7 +454,7 @@ void Channel::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Channel::read(XmlReader& e)
+void Channel::read(XmlReader& e, Part* part, bool fromInstrChange, int channelN)
       {
       // synti = 0;
       name = e.attribute("name");
@@ -514,6 +522,55 @@ void Channel::read(XmlReader& e)
                   mute = e.readInt();
             else if (tag == "solo")
                   solo = e.readInt();
+            else if (tag == "midiPort") {
+                  int midiPort = e.readInt();
+                  if (part != 0) {
+                        if (!fromInstrChange) {
+                              MidiMapping mm;
+                              mm.port    = -1;
+                              mm.channel = -1;
+                              mm.part    = part;
+                              mm.articulation = 0; // Assign articulation after return
+                              part->score()->midiMapping()->append(mm);
+                              channel = part->score()->midiMapping()->size() - 1;
+                              part->score()->midiMapping(channel)->port = midiPort;
+                              }
+                        else {
+                              // Reading instrument from Instrument Change element
+                              // Checking if we already have instruments with this program
+                              Instrument* first = 0;
+                              InstrumentList* ll = part->instrList();
+                              for (auto instr = ll->begin(); instr != ll->end() && first == 0; instr++) {
+                                    for (int _k = 0; _k < instr->second.channel().size() && first == 0; _k++) {
+                                          if (instr->second.channel(_k).program == program && instr->second.channel(_k).channel != -1)
+                                                first = &(instr->second);
+                                          }
+                                    }
+                              // This instrument is not unique, there are already instruments with the same
+                              // midi program.
+                              if (first) {
+                                    if (channelN < first->channel().size())
+                                          channel = first->channel(channelN).channel;
+                                    }
+                              else {
+                                    // Create a new channel and midi mapping
+                                    MidiMapping mm;
+                                    mm.port    = -1;
+                                    mm.channel = -1;
+                                    mm.part    = part;
+                                    mm.articulation = 0; // Assign articulation after return
+                                    part->score()->midiMapping()->append(mm);
+                                    channel = part->score()->midiMapping()->size() - 1;
+                                    part->score()->midiMapping(channel)->port = midiPort;
+                                    }
+                              }
+                        }
+                  }
+            else if (tag == "midiChannel") {
+                  if (part != 0)
+                        part->score()->midiMapping(channel)->channel = e.readInt();
+                  }
+
             else
                   e.unknown();
             }
@@ -827,18 +884,18 @@ bool Instrument::operator==(const Instrument& s) const
 //   read
 //---------------------------------------------------------
 
-void Instrument::read(XmlReader& e)
+void Instrument::read(XmlReader& e, Part* part, bool fromInstrChange)
       {
-      d->read(e);
+      d->read(e, part, fromInstrChange);
       }
 
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
-void Instrument::write(Xml& xml) const
+void Instrument::write(Xml& xml, Part* part) const
       {
-      d->write(xml);
+      d->write(xml, part);
       }
 
 //---------------------------------------------------------

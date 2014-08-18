@@ -23,6 +23,7 @@ class Xml;
 class Staff;
 class Score;
 class InstrumentTemplate;
+class InstrumentChange;
 
 //---------------------------------------------------------
 //   @@ Part
@@ -99,7 +100,8 @@ class Part : public QObject {
       void setMidiProgram(int, int bank = 0);
 
       int midiChannel() const;
-      void setMidiChannel(int) const;
+      int midiPort() const;
+      void setMidiChannel(int, int port = -1);
 
       void insertStaff(Staff*, int idx);
       void removeStaff(Staff*);
@@ -118,6 +120,7 @@ class Part : public QObject {
 
       QVariant getProperty(int id) const;
       void setProperty(int id, const QVariant& property);
+      InstrumentChange* getInstrumentChangeByTick(int tick);
       };
 
 

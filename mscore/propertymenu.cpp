@@ -537,9 +537,51 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             if (si.exec()) {
                   const InstrumentTemplate* it = si.instrTemplate();
                   if (it) {
-                        ic->setInstrument(Instrument::fromTemplate(it));
+                        Instrument a = Instrument::fromTemplate(it);
+                        Instrument* first = 0; // The first instrument with the same program within the part
+                        int count = 0; // How many instruments with the same channel we have
+                        InstrumentList* ll = ic->staff()->part()->instrList();
+                        for (auto instr = ll->begin(); instr != ll->end(); instr++) {
+                              for (int _k = 0; _k < instr->second.channel().size(); _k++) {
+                                    if (first == 0 && instr->second.channel(_k).program == a.channel(0).program)
+                                          first = &(instr->second);
+                                    if (instr->second.channel(_k).channel == ic->instrument().channel(0).channel)
+                                          count++;
+                                    }
+                              }
+                        // true if this instrument had an own channel and was already initialized
+                        bool hadOwnChannel = (count <= 1 && ic->instrument().channel(0).channel != -1);
+
+                        if (first) {// Now not own channel
+                              // This instrument is not unique, there are already instruments with the same
+                              // midi program.
+                              if (hadOwnChannel) {
+                                    // Instrument was unique before was changed, we have to clear the midi mapping
+                                    for (int k = 0; k < ic->instrument().channel().size(); k++)
+                                          ic->staff()->score()->midiMapping(ic->instrument().channel(k).channel)->channel = -1;
+                                    }
+                              // This instrument should not have an unique channel. Let's use an existing
+                              // channel from first->channel()
+                              for (int k = 0; k < min(a.channel().size(), first->channel().size()); k++)
+                                    a.channel(k).channel = first->channel(k).channel;
+                              }
+                        else {
+                              // This instrument is unique and it should have an unique channel
+                              if (hadOwnChannel) {
+                                    // If instrument was unique before was changed, just save the channel
+                                    for (int k = 0; k < min(a.channel().size(), ic->instrument().channel().size()); k++)
+                                          a.channel(k).channel = ic->instrument().channel(k).channel;
+                                    }
+                              else {
+                                    // ... or create a new one. It would be initialized in score::rebuildMidiMapping()
+                                    for (int k = 0; k < a.channel().size(); k++)
+                                          a.channel(k).channel = -1;
+                                    }
+                              }
+                        ic->setInstrument(a);
                         score()->undo(new ChangeInstrument(ic, ic->instrument()));
                         score()->updateChannel();
+                        mscore->instrumentChanged();
                         }
                   else
                         qDebug("no template selected?");

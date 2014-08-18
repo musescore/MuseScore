@@ -25,6 +25,7 @@ class Xml;
 class XmlReader;
 class Drumset;
 class StringData;
+class Part;
 
 //---------------------------------------------------------
 //   StaffName
@@ -105,8 +106,8 @@ struct Channel {
       QList<MidiArticulation> articulation;
 
       Channel();
-      void write(Xml&) const;
-      void read(XmlReader&);
+      void write(Xml&, Part* part) const;
+      void read(XmlReader&, Part* part, bool fromInstrChange = false, int channelN = 0);
       void updateInitList() const;
       bool operator==(const Channel& c) { return (name == c.name) && (channel == c.channel); }
       };
@@ -129,8 +130,8 @@ class Instrument {
       Instrument& operator=(const Instrument&);
       bool operator==(const Instrument&) const;
 
-      void read(XmlReader&);
-      void write(Xml& xml) const;
+      void read(XmlReader&, Part* part, bool fromInstrChange = false);
+      void write(Xml& xml, Part* part) const;
       NamedEventList* midiAction(const QString& s, int channel) const;
       int channelIdx(const QString& s) const;
       void updateVelocity(int* velocity, int channel, const QString& name);

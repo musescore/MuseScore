@@ -27,8 +27,10 @@
 #include "libmscore/score.h"
 #include "libmscore/repeatlist.h"
 #include "mscore/playpanel.h"
-
 #include <jack/midiport.h>
+
+// Prevent killing sequencer with wrong data
+#define less128(__less) ((__less >=0 && __less <=127) ? __less : 0)
 
 namespace Ms {
 
@@ -55,6 +57,33 @@ JackAudio::~JackAudio()
                      strerror(errno));
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   updateOutPortNumber
+//   Add/remove JACK MIDI Out ports
+//---------------------------------------------------------
+
+void JackAudio::updateOutPortNumber(int maxport)
+      {
+      if (!preferences.useJackMidi)
+            return;
+      bool oldremember = preferences.rememberLastConnections;
+      preferences.rememberLastConnections = true;
+
+      if (maxport > midiOutputPorts.size()) {
+            for (int i = midiOutputPorts.size(); i < maxport; ++i)
+                  registerPort(QString("mscore-midi-%1").arg(i+1), false, true);
+            restoreMidiConnections();
+            }
+      else if (maxport < midiOutputPorts.size()) {
+            rememberMidiConnections();
+            for(int i = midiOutputPorts.size() - 1; i>=maxport; --i) {
+                  unregisterPort(midiOutputPorts[i]);
+                  midiOutputPorts.removeAt(i);
+                  }
+            }
+      preferences.rememberLastConnections = oldremember;
       }
 
 //---------------------------------------------------------
@@ -440,8 +469,7 @@ bool JackAudio::init(bool hot)
             }
 
       if (preferences.useJackMidi) {
-            for (int i = 0; i < preferences.midiPorts; ++i)
-                  registerPort(QString("mscore-midi-%1").arg(i+1), false, true);
+            registerPort(QString("mscore-midi-1"), false, true);
             registerPort(QString("mscore-midiin-1"), true, true);
             }
       return true;
@@ -499,8 +527,8 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
       if (!preferences.useJackMidi)
             return;
 
-      int portIdx = e.channel() / 16;
-      int chan    = e.channel() % 16;
+      int portIdx = seq->score()->midiPort(e.channel());
+      int chan    = seq->score()->midiChannel(e.channel());
 
 // qDebug("JackAudio::putEvent %d:%d  pos %d(%d)", portIdx, chan, framePos, _segmentSize);
 
@@ -513,11 +541,14 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
             const char* portName = jack_port_name(port);
             int a     = e.dataA();
             int b     = e.dataB();
-            qDebug("MidiOut<%s>: jackMidi: %02x %i %i", portName, e.type(), a, b);
+            qDebug("MidiOut<%s>: jackMidi: %02x %02x %02x, chan: %i", portName, e.type(), a, b, chan);
             // e.dump();
             }
       void* pb = jack_port_get_buffer(port, _segmentSize);
 
+      if (pb == NULL) {
+            qDebug()<<"jack_port_get_buffer failed, cannot send anything";
+            }
       if (framePos >= _segmentSize) {
             qDebug("JackAudio::putEvent: time out of range %d(seg=%d)", framePos, _segmentSize);
             if (framePos > _segmentSize)
@@ -529,6 +560,16 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
             case ME_NOTEOFF:
             case ME_POLYAFTER:
             case ME_CONTROLLER:
+                  if (e.dataA() == CTRL_PROGRAM) {
+                        unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
+                        if (p == 0) {
+                              qDebug("JackMidi: buffer overflow, event lost");
+                              return;
+                              }
+                        p[0] = ME_PROGRAM | chan;
+                        p[1] = less128(e.dataB());
+                        break;
+                        }
             case ME_PITCHBEND:
                   {
                   unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
@@ -537,8 +578,8 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
                         return;
                         }
                   p[0] = e.type() | chan;
-                  p[1] = e.dataA();
-                  p[2] = e.dataB();
+                  p[1] = less128(e.dataA());
+                  p[2] = less128(e.dataB());
                   }
                   break;
 
@@ -551,7 +592,7 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
                         return;
                         }
                   p[0] = e.type() | chan;
-                  p[1] = e.dataA();
+                  p[1] = less128(e.dataA());
                   }
                   break;
           // Do we really need to handle ME_SYSEX?
@@ -889,25 +930,11 @@ void JackAudio::hotPlug()
 
       // Midi connections
       if (preferences.useJackMidi) {
-            if (midiOutputPorts.size()<preferences.midiPorts) {
-                  for (int i = midiOutputPorts.size(); i < preferences.midiPorts; ++i)
-                        registerPort(QString("mscore-midi-%1").arg(i+1), false, true);
-                  }
-            else if (midiOutputPorts.size()>preferences.midiPorts) {
-                  for(int i = midiOutputPorts.size()-1; i>=preferences.midiPorts; --i) {
-                        unregisterPort(midiOutputPorts[i]);
-                        midiOutputPorts.removeAt(i);
-                        }
-                  }
-
             if (midiInputPorts.size() == 0)
                   registerPort(QString("mscore-midiin-1"), true, true);
             }
       else { // No midi
-            foreach(jack_port_t* mp, midiOutputPorts) {
-                  unregisterPort(mp);
-                  midiOutputPorts.removeOne(mp);
-                  }
+            updateOutPortNumber(0);
             if (midiInputPorts.size() != 0) {
                   unregisterPort(midiInputPorts[0]);
                   midiInputPorts.removeOne(midiInputPorts[0]);

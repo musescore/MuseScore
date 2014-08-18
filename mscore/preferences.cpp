@@ -129,7 +129,6 @@ void Preferences::init()
       usePortaudioAudio = true;
 #endif
 
-      midiPorts          = 2;
       rememberLastConnections = true;
 
       alsaDevice         = "default";
@@ -260,7 +259,6 @@ void Preferences::write()
       s.setValue("jackTimebaseMaster", jackTimebaseMaster);
       s.setValue("usePortaudioAudio",  usePortaudioAudio);
       s.setValue("usePulseAudio",      usePulseAudio);
-      s.setValue("midiPorts",          midiPorts);
       s.setValue("rememberLastMidiConnections", rememberLastConnections);
 
       s.setValue("alsaDevice",         alsaDevice);
@@ -429,7 +427,6 @@ void Preferences::read()
       MScore::playRepeats      = s.value("playRepeats", MScore::playRepeats).toBool();
       MScore::panPlayback      = s.value("panPlayback", MScore::panPlayback).toBool();
       alternateNoteEntryMethod = s.value("alternateNoteEntry", alternateNoteEntryMethod).toBool();
-      midiPorts                = s.value("midiPorts", midiPorts).toInt();
       rememberLastConnections  = s.value("rememberLastMidiConnections", rememberLastConnections).toBool();
       proximity                = s.value("proximity", proximity).toInt();
       autoSave                 = s.value("autoSave", autoSave).toBool();
@@ -854,7 +851,6 @@ void PreferenceDialog::updateValues()
             case MusicxmlExportBreaks::NO:      exportNoBreaks->setChecked(true); break;
             }
 
-      midiPorts->setValue(prefs.midiPorts);
       rememberLastMidiConnections->setChecked(prefs.rememberLastConnections);
       proximity->setValue(prefs.proximity);
       autoSave->setChecked(prefs.autoSave);
@@ -1270,7 +1266,6 @@ void PreferenceDialog::apply()
 
       prefs.useJackTransport   = jackDriver->isChecked() && useJackTransport->isChecked();
       prefs.jackTimebaseMaster = becomeTimebaseMaster->isChecked();
-      prefs.midiPorts          = midiPorts->value();
       prefs.rememberLastConnections = rememberLastMidiConnections->isChecked();
 
       bool wasJack = (prefs.useJackMidi || prefs.useJackAudio);

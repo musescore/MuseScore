@@ -280,7 +280,7 @@ void InstrumentTemplate::write(Xml& xml) const
       foreach(const NamedEventList& a, midiActions)
             a.write(xml, "MidiAction");
       foreach(const Channel& a, channel)
-            a.write(xml);
+            a.write(xml, 0);
       foreach(const MidiArticulation& ma, articulation) {
             bool isGlobal = false;
             foreach(const MidiArticulation& ga, Ms::articulation) {
@@ -437,7 +437,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   }
             else if (tag == "Channel" || tag == "channel") {
                   Channel a;
-                  a.read(e);
+                  a.read(e, 0);
                   channel.append(a);
                   }
             else if (tag == "Articulation") {

@@ -36,6 +36,8 @@ class InstrumentChange : public Text  {
 
       Instrument instrument() const           { return _instrument; }
       void setInstrument(const Instrument& i) { _instrument = i;    }
+      void setChannelNum(int i, int ch)       { _instrument.channel(i).channel = ch; }
+      void setChannel(int k, const Channel& ch) { _instrument.setChannel(k, ch);     }
       Segment* segment() const                { return (Segment*)parent(); }
       };
 

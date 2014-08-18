@@ -21,7 +21,6 @@
 #include "ove.h"
 
 #include "globals.h"
-#include "musescore.h"
 #include "libmscore/sig.h"
 #include "libmscore/tempo.h"
 #include "libmscore/arpeggio.h"
@@ -64,6 +63,7 @@
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
+#include "ove.h"
 
 using namespace Ms;
 
@@ -577,6 +577,7 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
             }
 
       part->setMidiProgram(track->getPatch());
+      part->setMidiChannel(track->getChannel());
 
       if (ove_->getShowTransposeTrack() && track->getTranspose() != 0 ) {
             Ms::Interval interval = part->instr()->transpose();
@@ -2041,6 +2042,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
       for(i=0; i<repeats.size(); ++i){
             OVE::RepeatSymbol* repeatPtr = static_cast<OVE::RepeatSymbol*>(repeats[i]);
             OVE::RepeatType type = repeatPtr->getRepeatType();
+            //int absTick = mtt_->getTick(measure->no(), repeatPtr->getTick());
             Element* e = 0;
 
             switch(type) {

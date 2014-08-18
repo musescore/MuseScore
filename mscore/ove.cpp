@@ -3977,12 +3977,12 @@ bool TrackParse::parse() {
       for( i=0; i<nodes.size(); ++i ) {
             oveTrack->addDrum(nodes[i]);
             }
+      // There is one channel per voice and 8 voices per track -> 8 channels per track at the same time
+      // We support only one channel per track so let's use the channel of the first voice
+      if (voices.size() != 0)
+            oveTrack->setChannel(voices[0]->getChannel());
 
       /* if( !Jump(17) ) { return false; }
-
-   // voice 0 channel
-   if( !ReadBuffer(placeHolder, 1) ) { return false; }
-   oveTrack->setChannel(placeHolder.toUnsignedInt());
 
    // to be continued. if anything important...*/
 

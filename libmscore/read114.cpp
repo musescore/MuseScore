@@ -225,7 +225,7 @@ void Part::read114(XmlReader& e)
                   }
             else if (tag == "Instrument") {
                   Instrument* instrument = instr(0);
-                  instrument->read(e);
+                  instrument->read(e, 0);
                   // add string data from MIDI program number, if possible
                   if (instrument->stringData()->strings() == 0
                               && instrument->channel().count() > 0

@@ -352,6 +352,10 @@ class TestImportMidi : public QObject, public MTest
       void voiceSeparationIntersect() { voiceSeparation("voice_intersect"); }
       void voiceSeparationTuplet() { voiceSeparation("voice_tuplet", true); }
       void voiceSeparationCentral() { voiceSeparation("voice_central"); }
+      
+      // ports/channels import
+      void differentChannels() { dontSimplify("channels_diff"); }
+      void sameChannels() { dontSimplify("channels_same"); }
       };
 
 //---------------------------------------------------------

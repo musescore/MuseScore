@@ -80,6 +80,8 @@
           </Articulation>
         <Channel>
           <program value="73"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -117,6 +119,8 @@
           </Articulation>
         <Channel>
           <program value="68"/>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -190,9 +194,13 @@
               </Articulation>
             <Channel>
               <program value="56"/>
+              <midiPort>0</midiPort>
+              <midiChannel>1</midiChannel>
               </Channel>
             <Channel name="mute">
               <program value="59"/>
+              <midiPort>0</midiPort>
+              <midiChannel>2</midiChannel>
               </Channel>
             </Instrument>
           <text>Trumpet</text>
@@ -420,9 +428,13 @@
               </Articulation>
             <Channel>
               <program value="56"/>
+              <midiPort>0</midiPort>
+              <midiChannel>4</midiChannel>
               </Channel>
             <Channel name="mute">
               <program value="59"/>
+              <midiPort>0</midiPort>
+              <midiChannel>5</midiChannel>
               </Channel>
             </Instrument>
           <text>Trumpet</text>

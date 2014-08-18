@@ -268,6 +268,9 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   break;
             case META_TIME_SIGNATURE:
                   break;                  // added earlier
+            case META_PORT_CHANGE:
+                  staff->part()->setMidiChannel(-1, data[0]);
+                  break;
             default:
                   if (MScore::debugMode)
                         qDebug("unknown meta type 0x%02x", mm.metaType());

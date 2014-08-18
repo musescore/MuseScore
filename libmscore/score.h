@@ -300,6 +300,7 @@ class Score : public QObject {
 
       QQueue<MidiInputEvent> midiInputQueue;
       QList<MidiMapping> _midiMapping;
+      bool defMidiMapping;     // If channels have default mapping there is no need to export them
 
       RepeatList* _repeatList;
       TimeSigMap* _sigmap;
@@ -374,6 +375,7 @@ class Score : public QObject {
       PlayMode _playMode;
 
       qreal _noteHeadWidth;
+      int maxPortNumber;
 
       //------------------
 
@@ -447,7 +449,7 @@ class Score : public QObject {
    signals:
       void posChanged(POS, unsigned);
       void playlistChanged();
-
+      void updateMixer();
    public:
       Score();
       Score(const MStyle*);
@@ -745,9 +747,17 @@ class Score : public QObject {
       int midiChannel(int idx) const;
       QList<MidiMapping>* midiMapping()       { return &_midiMapping;          }
       MidiMapping* midiMapping(int channel)   { return &_midiMapping[channel]; }
+
+      void dumpMidiMapping();
+      void checkDefaultMidiMapping();
+      bool exportMidiMapping() {return !defMidiMapping;}     
       void rebuildMidiMapping();
+      void rebuildOldMidiMapping();
       void updateChannel();
       void updateSwing();
+      void updateMaxPort();
+      int getMaxPortNumber() const;
+      void setMaxPortNumber(int);
 
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 

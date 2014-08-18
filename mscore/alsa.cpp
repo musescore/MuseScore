@@ -764,6 +764,16 @@ void AlsaAudio::midiRead()
       {
       midiDriver->read();
       }
+
+//---------------------------------------------------------
+//   updateOutPortNumber
+//   Add/remove ALSA MIDI Out ports
+//---------------------------------------------------------
+
+void AlsaAudio::updateOutPortNumber(int maxport)
+      {
+      static_cast<AlsaMidiDriver*>(midiDriver)->updateInPortNumber(maxport);
+      }
 }
 
 #endif

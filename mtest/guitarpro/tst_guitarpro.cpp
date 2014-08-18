@@ -134,6 +134,9 @@ private slots:
       void gpxCopyright()    { gpReadTest("copyright", "gpx"); }
       void gpxFreeTime()     { gpReadTest("free-time", "gpx"); }
       void gpxRepeatBar()    { gpReadTest("repeated-bars", "gpx"); }
+      void gp4CustomChannel()   { gpReadTest("custom-channel", "gp4"); }
+      void gp5CustomChannel()   { gpReadTest("custom-channel", "gp5"); }
+      void gpxCustomChannel()   { gpReadTest("custom-channel", "gpx"); }
       };
 
 //---------------------------------------------------------

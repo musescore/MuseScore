@@ -41,13 +41,14 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
       Part* part;
 
    private slots:
-      void patchChanged(int);
-      void volChanged(double);
-      void panChanged(double);
-      void reverbChanged(double);
-      void chorusChanged(double);
-      void muteChanged(bool);
-      void soloToggled(bool);
+      void patchChanged(int, bool syncControls = true);
+      void volChanged(double, bool syncControls = true);
+      void panChanged(double, bool syncControls = true);
+      void reverbChanged(double, bool syncControls = true);
+      void chorusChanged(double, bool syncControls = true);
+      void muteChanged(bool, bool syncControls = true);
+      void soloToggled(bool, bool syncControls = true);
+      void channelChanged(int);
 
    public slots:
 
@@ -57,6 +58,9 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
    public:
       PartEdit(QWidget* parent = 0);
       void setPart(Part*, Channel*);
+      void sync(bool syncControls);
+      void syncChannel(Channel*);
+      void updateInstrChange();
       };
 
 //---------------------------------------------------------
@@ -77,7 +81,7 @@ class Mixer : public QScrollArea
 
    public slots:
       void patchListChanged();
-
+      void updateAll() { if (cs) updateAll(cs); }
    signals:
       void closed(bool);
 

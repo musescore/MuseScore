@@ -15,6 +15,7 @@
 
 #include "instrument.h"
 #include "stringdata.h"
+#include "part.h"
 
 namespace Ms {
 
@@ -44,8 +45,8 @@ class InstrumentData : public QSharedData {
       InstrumentData(const InstrumentData&);
       ~InstrumentData();
 
-      void read(XmlReader&);
-      void write(Xml& xml) const;
+      void read(XmlReader&, Ms::Part* part, bool fromInstrChange);
+      void write(Xml& xml, Part* part) const;
       NamedEventList* midiAction(const QString& s, int channel) const;
       int channelIdx(const QString& s) const;
       void updateVelocity(int* velocity, int channel, const QString& name);

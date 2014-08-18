@@ -231,6 +231,9 @@ bool Seq::init(bool hotPlug)
             return false;
             }
       running = true;
+
+      if(cs)
+            cs->updateMaxPort();
       return true;
       }
 
@@ -518,6 +521,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
 
 void Seq::processMessages()
       {
+      _driver->updateOutPortNumber(seq->score()->getMaxPortNumber() + 1); // if equal, it does nothing
       for (;;) {
             if (toSeq.isEmpty())
                   break;
@@ -703,6 +707,7 @@ void Seq::process(unsigned n, float* buffer)
                               _driver->startTransport();
                               }
                         }
+                  initInstrumentsRT();
                   // Need to change state after calling collectEvents()
                   state = Transport::PLAY;
                   if (mscore->countIn() && cs->playMode() == PlayMode::SYNTHESIZER) {
@@ -715,7 +720,7 @@ void Seq::process(unsigned n, float* buffer)
             else if (state == Transport::PLAY && driverState == Transport::STOP) {
                   state = Transport::STOP;
                   // Muting all notes
-                  stopNotes();
+                  stopNotesRT();
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
@@ -921,6 +926,7 @@ void Seq::process(unsigned n, float* buffer)
 
 //---------------------------------------------------------
 //   initInstruments
+//   called from GUI thread
 //---------------------------------------------------------
 
 void Seq::initInstruments()
@@ -932,6 +938,25 @@ void Seq::initInstruments()
                         continue;
                   NPlayEvent event(e.type(), channel->channel, e.dataA(), e.dataB());
                   sendEvent(event);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   initInstrumentsRT
+//   called from realtime thread
+//---------------------------------------------------------
+
+void Seq::initInstrumentsRT()
+      {
+      foreach(const MidiMapping& mm, *cs->midiMapping()) {
+            Channel* channel = mm.articulation;
+            channel->updateInitList();
+            foreach(const MidiCoreEvent& e, channel->init) {
+                  if (e.type() == ME_INVALID)
+                        continue;
+                  NPlayEvent event(e.type(), channel->channel, e.dataA(), e.dataB());
+                  putEvent(event);
                   }
             }
       }
@@ -959,6 +984,8 @@ void Seq::collectEvents()
       playPos  = events.cbegin();
       mutex.unlock();
 
+      if(cs)
+            cs->updateMaxPort();
       playlistChanged = false;
       }
 
@@ -991,7 +1018,7 @@ void Seq::setPos(int utick)
       {
       if (cs == 0)
             return;
-      stopNotes();
+      stopNotesRT();
 
       int ucur;
       if (playPos != events.end())
@@ -1118,22 +1145,47 @@ void Seq::stopNoteTimer()
 
 //---------------------------------------------------------
 //   stopNotes
+//   called from GUI thread
 //---------------------------------------------------------
 
 void Seq::stopNotes(int channel)
       {
-      // Stop motes in all channels
+      // Stop notes in all channels
       if (channel == -1) {
-            for(int ch=0; ch<cs->midiMapping()->size();ch++) {
+            for(int ch=0; ch<cs->midiMapping()->size(); ch++) {
+                  sendEvent(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
+                  for(int i=0; i<128; i++)
+                        sendEvent(NPlayEvent(ME_NOTEOFF, ch, i, 0));
+                  }
+            }
+      else {
+            sendEvent(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
+            for(int i=0; i<128; i++)
+                  sendEvent(NPlayEvent(ME_NOTEOFF, channel, i, 0));
+            }
+      if (preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
+            _synti->allNotesOff(channel);
+      }
+
+//---------------------------------------------------------
+//   stopNotesRT
+//   called from realtime thread
+//---------------------------------------------------------
+
+void Seq::stopNotesRT(int channel)
+      {
+      // Stop notes in all channels
+      if (channel == -1) {
+            for(int ch=0; ch<cs->midiMapping()->size(); ch++) {
                   putEvent(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
                   for(int i=0; i<128; i++)
-                        putEvent(NPlayEvent(ME_NOTEOFF,ch,i,0));
+                        putEvent(NPlayEvent(ME_NOTEOFF, ch, i, 0));
                   }
             }
       else {
             putEvent(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
             for(int i=0; i<128; i++)
-                  putEvent(NPlayEvent(ME_NOTEOFF,channel,i,0));
+                  putEvent(NPlayEvent(ME_NOTEOFF, channel, i, 0));
             }
       if (preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
             _synti->allNotesOff(channel);
@@ -1347,7 +1399,7 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
             }
       int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
       _synti->play(event, syntiIdx);
-      if (preferences.useJackMidi && _driver != 0)
+      if (_driver != 0 && (preferences.useJackMidi || preferences.useAlsaAudio))
             _driver->putEvent(event, framePos);
       }
 
