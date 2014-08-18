@@ -3468,5 +3468,41 @@ ChordRest* Score::findCR(int tick, int track) const
       return nullptr;
       }
 
+//---------------------------------------------------------
+//   findCRinStaff
+//    find chord/rest <= tick in staff
+//---------------------------------------------------------
+
+ChordRest* Score::findCRinStaff(int tick, int track) const
+      {
+      Measure* m = tick2measureMM(tick);
+      if (!m) {
+            qDebug("findCR: no measure for tick %d", tick);
+            return nullptr;
+            }
+      // attach to first rest all spanner when mmRest
+      if (m->isMMRest())
+            tick = m->tick();
+      Segment* s = m->first(Segment::Type::ChordRest);
+      int strack = (track / VOICES) * VOICES;
+      int etrack = strack + VOICES;
+      int actualTrack = strack;
+
+      for (Segment* ns = s; ; ns = ns->next(Segment::Type::ChordRest)) {
+            if (ns == 0 || ns->tick() > tick)
+                  break;
+            for (int t = strack; t < etrack; ++t) {
+                  if (ns->element(t)) {
+                        s = ns;
+                        actualTrack = t;
+                        break;
+                        }
+                  }
+            }
+      if (s)
+            return static_cast<ChordRest*>(s->element(actualTrack));
+      return nullptr;
+      }
+
 }
 

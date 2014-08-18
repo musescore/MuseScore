@@ -415,6 +415,9 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_ID::END_TEXT_STYLE:
                   return QVariant::fromValue(score()->textStyle(TextStyleType::OTTAVA));
 
+            case P_ID::END_HOOK:
+                  return true;
+
             default:
                   return TextLine::propertyDefault(propertyId);
             }
