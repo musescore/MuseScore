@@ -2582,8 +2582,11 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else if (cmd == "play") {
-            if (seq && seq->canStart())
+            if (seq && seq->canStart()) {
+                  if (noteEntryMode())          // force out of entry mode
+                        sm->postEvent(new CommandEvent("note-input"));
                   sm->postEvent(new CommandEvent(cmd));
+                  }
             else
                   getAction("play")->setChecked(false);
             }
