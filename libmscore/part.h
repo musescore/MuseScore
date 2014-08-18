@@ -32,8 +32,8 @@ class InstrumentTemplate;
 //   @P shortName  QString
 //   @P volume     int
 //   @P mute       bool
-//   @P endTrack   int
-//   @P startTrack int
+//   @P endTrack   int      (read only)
+//   @P startTrack int      (read only)
 //---------------------------------------------------------
 
 class Part : public QObject {
