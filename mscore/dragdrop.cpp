@@ -79,9 +79,12 @@ bool ScoreView::dragTimeAnchorElement(const QPointF& pos)
             qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
             QPointF anchor(seg->canvasBoundingRect().x(), y);
             setDropAnchor(QLineF(pos, anchor));
+            dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
             dragElement->setTrack(staffIdx * VOICES);
+            dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
             return true;
             }
+      dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
       setDropTarget(0);
       return false;
       }
@@ -104,6 +107,7 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
             setDropAnchor(QLineF(pos, anchor));
             return true;
             }
+      dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
       setDropTarget(0);
       return false;
       }
