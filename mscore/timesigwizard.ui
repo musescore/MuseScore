@@ -145,7 +145,7 @@
          <string>Cut time</string>
         </property>
         <property name="accessibleName">
-         <string>Cut Common Time</string>
+         <string>Cut Time</string>
         </property>
         <property name="text">
          <string notr="true"/>
