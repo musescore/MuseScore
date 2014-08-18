@@ -2292,7 +2292,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
       Measure * measure = NULL;
       QPainter * p = NULL;
 
-      qreal w=1.0, h=1.0, margin=0.0;
+      qreal w=1.0, h=1.0;
       uint count = 1;
 
       int ticksFromBeg = 0;
@@ -2311,13 +2311,16 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
 
       score->setPrinting(true);
 
-
+      
       foreach( Page* page, score->pages() )
       foreach( System* sys, *(page->systems()) ) {
+            qreal top_margin = score->styleS(StyleIdx::systemFrameDistance).val()*sys->spatium();
+            qreal bot_margin = score->styleS(StyleIdx::frameSystemDistance).val()*sys->spatium();
+            qreal v_margin = score->styleS(StyleIdx::staffDistance).val()*sys->spatium();      
 
-            margin = score->styleS(StyleIdx::systemFrameDistance).val()*sys->spatium();
-            w = sys->width()+2*margin;
-            h = sys->height() + 2*margin;
+            w = sys->width() + 2*v_margin;
+            h = sys->height() + top_margin + bot_margin;
+ 
 
             svgname = fi.baseName()+QString::number(count++)+".svg";
             qts << "# " << svgname << endl;
@@ -2327,7 +2330,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
             svgbuf->open(QIODevice::ReadWrite);
 
             p = getSvgPainter(svgbuf,w,h,mag);
-            p->translate(-(sys->pagePos().rx()-margin), -(sys->staffYpage(0)-margin) );
+            p->translate(-(sys->pagePos().rx()-v_margin), -(sys->staffYpage(0)-top_margin) );
 
             // Collect together all elements belonging to this system!
             QList<const Element*> elems;
