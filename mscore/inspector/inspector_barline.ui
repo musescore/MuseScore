@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Barline Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -64,7 +67,11 @@
       <number>0</number>
      </property>
      <item row="0" column="1">
-      <widget class="QComboBox" name="type"/>
+      <widget class="QComboBox" name="type">
+       <property name="accessibleName">
+        <string>Type</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
@@ -89,6 +96,9 @@
       <widget class="QToolButton" name="resetType">
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Type value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -139,12 +149,18 @@
        <property name="value">
         <number>0</number>
        </property>
+       <property name="accessibleName">
+        <string>Span from</string>
+       </property>
       </widget>
      </item>
      <item row="1" column="1">
       <widget class="QSpinBox" name="span">
        <property name="minimum">
         <number>1</number>
+       </property>
+       <property name="accessibleName">
+        <string>Span</string>
        </property>
       </widget>
      </item>
@@ -162,12 +178,19 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QSpinBox" name="spanTo"/>
+      <widget class="QSpinBox" name="spanTo">
+       <property name="accessibleName">
+        <string>Span to</string>
+       </property>
+      </widget>
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetSpan">
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Span value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -189,6 +212,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Span from value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -208,6 +234,9 @@
       <widget class="QToolButton" name="resetSpanTo">
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Span to value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -238,12 +267,19 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QComboBox" name="spanType"/>
+      <widget class="QComboBox" name="spanType">
+       <property name="accessibleName">
+        <string>Spantype</string>
+       </property>
+      </widget>
      </item>
      <item row="4" column="2">
       <widget class="QToolButton" name="resetSpanType">
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Span type value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -264,6 +300,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>type</tabstop>
+  <tabstop>resetType</tabstop>
+  <tabstop>span</tabstop>
+  <tabstop>resetSpan</tabstop>
+  <tabstop>spanFrom</tabstop>
+  <tabstop>resetSpanFrom</tabstop>
+  <tabstop>spanTo</tabstop>
+  <tabstop>resetSpanTo</tabstop>
+  <tabstop>spanType</tabstop>
+  <tabstop>resetSpanType</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

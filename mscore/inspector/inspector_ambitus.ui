@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Ambitus Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -36,6 +39,9 @@
        <weight>75</weight>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="accessibleName">
+      <string/>
      </property>
      <property name="text">
       <string>Part Range</string>
@@ -92,6 +98,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Head group</string>
        </property>
        <property name="frame">
         <bool>true</bool>
@@ -170,6 +179,9 @@
      </item>
      <item row="4" column="1">
       <widget class="QDoubleSpinBox" name="lineWidth">
+       <property name="accessibleName">
+        <string>Line width</string>
+       </property>
        <property name="suffix">
         <string>sp</string>
        </property>
@@ -191,6 +203,9 @@
        </property>
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Line width value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -229,6 +244,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Bottom note</string>
          </property>
          <property name="maxVisibleItems">
           <number>15</number>
@@ -430,6 +448,9 @@
        </item>
        <item>
         <widget class="QSpinBox" name="bottomOctave">
+         <property name="accessibleName">
+          <string>Oct</string>
+         </property>
          <property name="minimum">
           <number>-1</number>
          </property>
@@ -442,6 +463,12 @@
      </item>
      <item row="3" column="0" colspan="2">
       <widget class="QCheckBox" name="hasLine">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Has line</string>
+       </property>
        <property name="text">
         <string>Has line</string>
        </property>
@@ -457,6 +484,9 @@
        </property>
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Has line value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -502,6 +532,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Top note</string>
          </property>
          <property name="maxVisibleItems">
           <number>15</number>
@@ -703,6 +736,9 @@
        </item>
        <item>
         <widget class="QSpinBox" name="topOctave">
+         <property name="accessibleName">
+          <string>Oct</string>
+         </property>
          <property name="minimum">
           <number>-1</number>
          </property>
@@ -720,6 +756,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Head type</string>
        </property>
        <property name="frame">
         <bool>true</bool>
@@ -762,6 +801,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Head group value</string>
+       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
@@ -798,6 +840,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Direction value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -830,6 +875,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="updateRange">
+         <property name="accessibleName">
+          <string>Update range</string>
+         </property>
          <property name="text">
           <string>Update Range</string>
          </property>
@@ -860,6 +908,9 @@
        </property>
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Head type value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -896,6 +947,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Direction</string>
        </property>
        <property name="frame">
         <bool>true</bool>

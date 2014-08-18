@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Element Group Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -65,6 +68,9 @@
      </property>
      <item row="0" column="1">
       <widget class="QPushButton" name="setColor">
+       <property name="accessibleName">
+        <string>Set Color</string>
+       </property>
        <property name="text">
         <string>Set Color</string>
        </property>
@@ -72,6 +78,9 @@
      </item>
      <item row="0" column="0">
       <widget class="Awl::ColorLabel" name="color">
+       <property name="accessibleName">
+        <string>Color</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -79,6 +88,9 @@
      </item>
      <item row="1" column="0">
       <widget class="QPushButton" name="setVisible">
+       <property name="accessibleName">
+        <string>Set Visible</string>
+       </property>
        <property name="text">
         <string>Set Visible</string>
        </property>
@@ -86,6 +98,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QPushButton" name="setInvisible">
+       <property name="accessibleName">
+        <string>Set Invisible</string>
+       </property>
        <property name="text">
         <string>Set Invisible</string>
        </property>
@@ -103,8 +118,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
