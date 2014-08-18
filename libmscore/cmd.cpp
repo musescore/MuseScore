@@ -1686,12 +1686,12 @@ bool Score::processMidiInput()
 Element* Score::move(const QString& cmd)
       {
       ChordRest* cr;
-      if (selection().activeCR())
+      if (noteEntryMode())
+            cr = inputState().cr();
+      else if (selection().activeCR())
             cr = selection().activeCR();
       else
             cr = selection().lastChordRest();
-      if (cr == 0 && noteEntryMode())
-            cr = inputState().cr();
 
       // no chord/rest found? look for another type of element
       if (cr == 0) {
