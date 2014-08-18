@@ -131,7 +131,6 @@
           </Chord>
         <Ottava id="2">
           <subtype>8va</subtype>
-          <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
           <lineStyle>1</lineStyle>
           <Segment>
