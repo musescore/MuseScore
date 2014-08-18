@@ -98,7 +98,7 @@
         <Tempo>
           <tempo>1.68333</tempo>
           <lid>4</lid>
-          <text><sym>noteQuarterUp</sym> = 101</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 101</text>
           </Tempo>
         <Rest>
           <lid>5</lid>
@@ -1160,7 +1160,7 @@
           <Tempo>
             <tempo>1.68333</tempo>
             <lid>4</lid>
-            <text><sym>noteQuarterUp</sym> = 101</text>
+            <text><sym>unicodeNoteQuarterUp</sym> = 101</text>
             </Tempo>
           <Rest>
             <lid>5</lid>

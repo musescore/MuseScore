@@ -101,7 +101,7 @@
         <Tempo>
           <tempo>2</tempo>
           <lid>4</lid>
-          <text><sym>noteQuarterUp</sym> = 120</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Volta id="2">
           <lid>113</lid>
@@ -961,7 +961,7 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>4</lid>
-            <text><sym>noteQuarterUp</sym> = 120</text>
+            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Volta id="9">
             <lid>113</lid>
