@@ -524,6 +524,26 @@ Element* KeySig::prevElement()
       return segment()->lastInPrevSegments(staffIdx());
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString KeySig::accessibleInfo()
+      {
+      QString keySigType;
+      if (isCustom())
+            keySigType =  tr("Custom");
+
+      if (key() == Key::C)
+            return keyNames[14];
+      int keyInt = static_cast<int>(key());
+      if (keyInt < 0)
+            keySigType = keyNames[(7 + keyInt) * 2 + 1];
+      else
+            keySigType = keyNames[(keyInt - 1) * 2];
+      return Element::accessibleInfo() + " " + keySigType;
+      }
+
 }
 
 

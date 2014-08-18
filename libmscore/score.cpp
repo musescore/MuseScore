@@ -337,6 +337,7 @@ Score::Score()
       _tempomap = new TempoMap;
       _sigmap   = new TimeSigMap();
       _style    = *(MScore::defaultStyle());
+      accInfo = tr("No selection");
       }
 
 Score::Score(const MStyle* s)
@@ -347,6 +348,7 @@ Score::Score(const MStyle* s)
       _tempomap = new TempoMap;
       _sigmap   = new TimeSigMap();
       _style    = *s;
+      accInfo = tr("No selection");
       }
 
 //
@@ -383,6 +385,7 @@ Score::Score(Score* parent)
             }
 
       _synthesizerState = parent->_synthesizerState;
+       accInfo = tr("No selection");
       }
 
 Score::Score(Score* parent, const MStyle* s)
@@ -391,6 +394,7 @@ Score::Score(Score* parent, const MStyle* s)
       _parentScore = parent;
       init();
       _style    = *s;
+      accInfo = tr("No selection");
       }
 
 //---------------------------------------------------------
@@ -2710,8 +2714,9 @@ void Score::selectSingle(Element* e, int staffIdx)
             _selection.add(e);
             _is.setTrack(e->track());
             selState = SelState::LIST;
-            if (e->type() == Element::Type::NOTE)
+            if (e->type() == Element::Type::NOTE) {
                   e = e->parent();
+                  }
             if (e->type() == Element::Type::REST || e->type() == Element::Type::CHORD) {
                   _is.setLastSegment(_is.segment());
                   _is.setSegment(static_cast<ChordRest*>(e)->segment());

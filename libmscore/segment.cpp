@@ -1166,4 +1166,59 @@ Element* Segment::lastElement(int staff)
        return 0;
        }
 
+QString Segment::accessibleExtraInfo()
+      {
+      QString rez = "";
+      if (!this->annotations().empty()) {
+            rez = rez + tr("Annotations: ");
+            foreach (Element* a, this->annotations()) {
+                  switch(a->type()) {
+                        case Element::Type::DYNAMIC:
+                              //they are added in the chordrest, because they are for only one staff
+                               break;
+                        default:
+                               rez = rez + " " + a->accessibleInfo();
+                        }
+                  }
+            }
+
+      QString startSpanners = "";
+      QString endSpanners = "";
+      SpannerMap smap = score()->spannerMap();
+      std::vector< ::Interval<Spanner*> > spanners = smap.findOverlapping(this->tick(), this->tick());
+      for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
+            ::Interval<Spanner*> interval = *i;
+            Spanner* s = interval.value;
+            if (this->segmentType() == Segment::Type::EndBarLine       ||
+               this->segmentType() == Segment::Type::BarLine           ||
+               this->segmentType() == Segment::Type::StartRepeatBarLine) {
+                  if (s->type() != Element::Type::VOLTA)
+                        continue;
+                  }
+            else {
+                  if (s->type() == Element::Type::VOLTA ||
+                      s->type() == Element::Type::TIE    ) //ties are added in Note
+                        continue;
+                  }
+
+            if (s->tick() == this->tick())
+                  startSpanners += tr("Start of ") + s->accessibleInfo();
+
+            Segment* seg = 0;
+            switch (s->type()) {
+                  case Element::Type::VOLTA:
+                  case Element::Type::SLUR:
+                        seg = this;
+                        break;
+                  default:
+                        seg = this->next1MM(Segment::Type::ChordRest);
+                        break;
+                  }
+
+            if (seg && s->tick2() == seg->tick())
+                  endSpanners += tr("End of ") + s->accessibleInfo();
+            }
+      return rez + " " + startSpanners + " " + endSpanners;
+      }
+
 }           // namespace Ms

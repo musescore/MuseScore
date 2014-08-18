@@ -66,5 +66,18 @@ void Fingering::reset()
       score()->undoChangeProperty(this, P_ID::USER_OFF, no);
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Fingering::accessibleInfo()
+      {
+      QString rez = Element::accessibleInfo();
+      if (textStyleType() == TextStyleType::STRING_NUMBER) {
+            rez += " " + tr("String number");
+            }
+      return rez + " " + text();
+      }
+
 }
 

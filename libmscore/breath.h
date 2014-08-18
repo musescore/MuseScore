@@ -52,6 +52,7 @@ class Breath : public Element {
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+      virtual QString accessibleInfo() override;
       };
 
 

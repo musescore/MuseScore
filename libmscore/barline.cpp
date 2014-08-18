@@ -20,6 +20,7 @@
 #include "articulation.h"
 #include "stafftype.h"
 #include "xml.h"
+#include "marker.h"
 
 namespace Ms {
 
@@ -50,6 +51,22 @@ static const char* barLineNames[] = {
       QT_TRANSLATE_NOOP("barline", "dotted")
       };
 
+const barLineTableItem barLineTable[] = {
+        { BarLineType::NORMAL,       QT_TRANSLATE_NOOP("Palette", "Normal") },
+        { BarLineType::BROKEN,       QT_TRANSLATE_NOOP("Palette", "Dashed style") },
+        { BarLineType::DOTTED,       QT_TRANSLATE_NOOP("Palette", "Dotted style") },
+        { BarLineType::END,          QT_TRANSLATE_NOOP("Palette", "End Bar style") },
+        { BarLineType::DOUBLE,       QT_TRANSLATE_NOOP("Palette", "Double Bar style") },
+        { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
+        { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
+        { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
+      };
+
+unsigned int barLineTableSize()
+      {
+      return sizeof(barLineTable)/sizeof(*barLineTable);
+      }
+
 //---------------------------------------------------------
 //   userTypeName
 //---------------------------------------------------------
@@ -58,6 +75,16 @@ QString BarLine::userTypeName(BarLineType t)
       {
       return qApp->translate("barline", barLineNames[int(t)]);
       }
+
+QString BarLine::userTypeName2(BarLineType t)
+      {
+      for (unsigned i = 0; i < sizeof(barLineTable)/sizeof(*barLineTable); ++i) {
+           if(barLineTable[i].type == t)
+                 return barLineTable[i].name;
+           }
+      return QString();
+      }
+
 
 //---------------------------------------------------------
 //   BarLine
@@ -1153,6 +1180,77 @@ Element* BarLine::prevElement()
             return static_cast<Segment*>(parent())->lastInPrevSegments(score()->inputState().prevTrack() / VOICES);
 
       return parent()->prevElement();
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString BarLine::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + BarLine::userTypeName2(this->barLineType());
+      }
+
+//---------------------------------------------------------
+//   accessibleExtraInfo
+//---------------------------------------------------------
+
+QString BarLine::accessibleExtraInfo()
+      {
+      if (parent()->type() == Element::Type::SEGMENT) {
+            Segment* seg = static_cast<Segment*>(parent());
+            QString rez = "";
+
+            foreach(Element* e, *el())
+                  rez += " " + e->screenReaderInfo();
+
+            foreach (Element* e, seg->annotations()) {
+                  if (e->track() == track())
+                        rez += " " + e->screenReaderInfo();
+                  }
+            Measure* m = seg->measure();
+
+            if (m) {
+                  //jumps
+                  foreach (Element* e, *m->el()) {
+                        if(e->type() == Element::Type::JUMP)
+                              rez+= " " + e->screenReaderInfo();
+                        if(e->type() == Element::Type::MARKER) {
+                              Marker* m = static_cast<Marker*>(e);
+                              if (m->markerType() == Marker::Type::FINE)
+                                    rez += " " + e->screenReaderInfo();
+                              }
+
+                        }
+                  //markers
+                  Measure* nextM = m->nextMeasureMM();
+                  if (nextM) {
+                        foreach (Element* e, *nextM->el()) {
+                              if(e->type() == Element::Type::MARKER)
+                                    if(static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)
+                                          continue; //added above^
+                                    rez += " " + e->screenReaderInfo();
+                              }
+                        }
+                  }
+
+            int tick = seg->tick();
+            SpannerMap smap = score()->spannerMap();
+            std::vector< ::Interval<Spanner*> > spanners = smap.findOverlapping(tick, tick);
+            for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
+                  ::Interval<Spanner*> interval = *i;
+                  Spanner* s = interval.value;
+                  if (s->type() == Element::Type::VOLTA) {
+                        if(s->tick() == tick)
+                              rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                        if(s->tick2() == tick)
+                              rez += " " + tr("End of %1").arg(s->screenReaderInfo());
+                        }
+                  }
+            return rez;
+            }
+
+      return Element::accessibleExtraInfo();
       }
 
 }

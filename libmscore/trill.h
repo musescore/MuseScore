@@ -92,6 +92,7 @@ class Trill : public SLine {
       void setTrillType(Type tt)          { _trillType = tt; }
       Type trillType() const              { return _trillType; }
       QString trillTypeName() const;
+      QString trillTypeUserName();
       Accidental* accidental() const      { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a; }
 
@@ -102,8 +103,18 @@ class Trill : public SLine {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
       virtual void setYoff(qreal) override;
+
+      virtual QString accessibleInfo() override;
       };
 
+struct TrillTableItem {
+      Trill::Type type;
+      const char* name;
+      QString userName;
+      };
+
+extern const TrillTableItem trillTable[];
+extern int trillTableSize();
 
 }     // namespace Ms
 

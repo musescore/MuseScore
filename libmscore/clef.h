@@ -31,6 +31,7 @@ class Segment;
 
 static const int NO_CLEF = -1000;
 
+
 //---------------------------------------------------------
 //   ClefType
 //---------------------------------------------------------
@@ -186,8 +187,8 @@ class Clef : public Element {
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+      QString accessibleInfo() override;
       };
-
 
 }     // namespace Ms
 #endif

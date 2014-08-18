@@ -303,6 +303,7 @@ class Text : public Element {
       static QString convertToHtml(const QString&, const TextStyle&);
 
       void undoSetText(const QString& s) { undoChangeProperty(P_ID::TEXT, s); }
+      virtual QString accessibleInfo() override;
       };
 
 

@@ -78,6 +78,8 @@ class Tremolo : public Element {
       Fraction tremoloLen() const;
       bool twoNotes() const { return tremoloType() > TremoloType::R64; } // is it a two note tremolo?
       int lines() const { return _lines; }
+
+      virtual QString accessibleInfo() override;
       };
 
 

@@ -44,6 +44,7 @@ class Marker : public Text {
             USER
             };
 
+
    private:
       Type _markerType;
       QString _label;               ///< referenced from Jump() element
@@ -55,6 +56,7 @@ class Marker : public Text {
 
       void setMarkerType(Type t);
       Type markerType() const          { return _markerType; }
+      QString markerTypeUserName();
 
       virtual Marker* clone() const override      { return new Marker(*this); }
       virtual Element::Type type() const override { return Element::Type::MARKER; }
@@ -80,8 +82,16 @@ class Marker : public Text {
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
+      virtual QString accessibleInfo() override;
       };
 
+typedef struct {
+      Marker::Type type;
+      QString name;
+      } MarkerTypeItem;
+
+extern const MarkerTypeItem markerTypeTable[];
+int markerTypeTableSize();
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Marker::Type);
