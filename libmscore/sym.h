@@ -2425,6 +2425,18 @@ enum class SymId {
       noteheadDoubleWholeAlt,             // double whole with double side bars
       sixStringTabClefSerif,              // TAB clef in script style
 
+//    Unicode alternates
+      unicodeNoteDoubleWhole,
+      unicodeNoteWhole,
+      unicodeNoteHalfUp,
+      unicodeNoteQuarterUp,
+      unicodeNote8thUp,
+      unicodeNote16thUp,
+      unicodeNote32ndUp,
+      unicodeNote64thUp,
+      unicodeNote128thUp,
+      unicodeAugmentationDot,
+      
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
       ornamentPrallMordent,

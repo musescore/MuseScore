@@ -289,18 +289,6 @@ void TextBlock::layout(Text* t)
                   QRectF r;
                   if (f.format.type() == CharFormatType::SYMBOL) {
                         r = fm.tightBoundingRect(f.text).translated(f.pos);
-                        // Hack for tempo text position
-                        // SMuFL defines them in the middle of the staff and advise the use of OpenType ligature
-                        // As of today, Qt doesn't support OT ligature... so...
-                        if (f.ids.contains(SymId::noteQuarterUp) || f.ids.contains(SymId::noteHalfUp)
-                            || f.ids.contains(SymId::note8thUp) || f.ids.contains(SymId::note16thUp)
-                            || f.ids.contains(SymId::note32ndUp) || f.ids.contains(SymId::note64thUp)
-                            || f.ids.contains(SymId::note128thUp) || f.ids.contains(SymId::note512thUp)
-                            || f.ids.contains(SymId::note1024thUp) || f.ids.contains(SymId::textAugmentationDot)) {
-                              qreal voffset = fm.xHeight();   // use original height
-                              voffset *= tempotextOffset;
-                              f.pos.ry() += voffset;
-                              }
                         }
                   else
                         r = fm.boundingRect(f.text).translated(f.pos);
@@ -2490,14 +2478,14 @@ QString Text::convertFromHtml(const QString& ss) const
             s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));    //natural
             s.replace(QChar(0xe10c), QString("<sym>accidentalSharp</sym>"));    // sharp
             s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));    // flat
-            s.replace(QChar(0xe104), QString("<sym>noteHalfUp</sym>")),    // note2_Sym
-            s.replace(QChar(0xe105), QString("<sym>noteQuarterUp</sym>"));    // note4_Sym
-            s.replace(QChar(0xe106), QString("<sym>note8thUp</sym>"));    // note8_Sym
-            s.replace(QChar(0xe107), QString("<sym>note16thUp</sym>"));    // note16_Sym
-            s.replace(QChar(0xe108), QString("<sym>note32ndUp</sym>"));    // note32_Sym
-            s.replace(QChar(0xe109), QString("<sym>note64thUp</sym>"));    // note64_Sym
-            s.replace(QChar(0xe10a), QString("<sym>textAugmentationDot</sym>"));    // dot
-            s.replace(QChar(0xe10b), QString("<sym>textAugmentationDot</sym> <sym>textAugmentationDot</sym>"));    // dotdot
+            s.replace(QChar(0xe104), QString("<sym>unicodeNoteHalfUp</sym>")),    // note2_Sym
+            s.replace(QChar(0xe105), QString("<sym>unicodeNoteQuarterUp</sym>"));    // note4_Sym
+            s.replace(QChar(0xe106), QString("<sym>unicodeNote8thUp</sym>"));    // note8_Sym
+            s.replace(QChar(0xe107), QString("<sym>unicodeNote16thUp</sym>"));    // note16_Sym
+            s.replace(QChar(0xe108), QString("<sym>unicodeNote32ndUp</sym>"));    // note32_Sym
+            s.replace(QChar(0xe109), QString("<sym>unicodeNote64thUp</sym>"));    // note64_Sym
+            s.replace(QChar(0xe10a), QString("<sym>unicodeAugmentationDot</sym>"));    // dot
+            s.replace(QChar(0xe10b), QString("<sym>unicodeAugmentationDot</sym> <sym>unicodeAugmentationDot</sym>"));    // dotdot
             s.replace(QChar(0xe167), QString("<sym>segno</sym>"));    // segno
             s.replace(QChar(0xe168), QString("<sym>coda</sym>"));    // coda
             s.replace(QChar(0xe169), QString("<sym>codaSquare</sym>"));    // varcoda
