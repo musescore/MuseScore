@@ -229,7 +229,9 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             return;
             }
 
+      // all spanners live in voice 0 (except slurs/ties)
       int track = staffIdx == -1 ? -1 : staffIdx * VOICES;
+
       spanner->setTrack(track);
       spanner->setTrack2(track);
 
