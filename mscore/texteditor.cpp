@@ -100,6 +100,9 @@ TextEditor::TextEditor(QWidget* parent)
       edit = new QTextEdit;
       vl->addWidget(edit);
 
+      dialogButtons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+      vl->addWidget(dialogButtons);
+
       charFormatChanged(edit->currentCharFormat());
       cursorPositionChanged();
 
@@ -115,6 +118,9 @@ TextEditor::TextEditor(QWidget* parent)
       connect(edit, SIGNAL(cursorPositionChanged()), SLOT(cursorPositionChanged()));
       connect(typefaceSize,        SIGNAL(valueChanged(double)), SLOT(sizeChanged(double)));
       connect(typefaceFamily,      SIGNAL(currentFontChanged(const QFont&)), SLOT(fontChanged(const QFont&)));
+      connect(dialogButtons,       SIGNAL(accepted()), this, SLOT(okClicked()));
+      connect(dialogButtons,       SIGNAL(rejected()), this, SLOT(cancelClicked()));
+      connect(this,                SIGNAL(rejected()), SLOT(cancelEditing()));
       }
 
 //---------------------------------------------------------
@@ -123,7 +129,9 @@ TextEditor::TextEditor(QWidget* parent)
 
 void TextEditor::setHtml(const QString& txt)
       {
-      edit->setHtml(txt);
+      originalText = txt;
+      edit->setHtml(originalText);
+      editAsHtml = true;
       }
 
 //---------------------------------------------------------
@@ -141,7 +149,9 @@ QString TextEditor::toHtml() const
 
 void TextEditor::setPlainText(const QString& txt)
       {
-      edit->setPlainText(txt);
+      originalText = txt;
+      edit->setPlainText(originalText);
+      editAsHtml = false;
       }
 
 //---------------------------------------------------------
@@ -179,6 +189,36 @@ QString editHtml(const QString& s, const QString& title)
       editor.setHtml(s);
       editor.exec();
       return editor.toHtml();
+      }
+
+//---------------------------------------------------------
+//   okClicked
+//---------------------------------------------------------
+
+void TextEditor::okClicked()
+      {
+      accept();
+      }
+
+//---------------------------------------------------------
+//   cancelClicked
+//---------------------------------------------------------
+
+void TextEditor::cancelClicked()
+      {
+      reject();
+      }
+
+//---------------------------------------------------------
+//   cancel
+//---------------------------------------------------------
+
+void TextEditor::cancelEditing()
+      {
+      if (editAsHtml)
+            edit->setHtml(originalText);
+      else
+            edit->setPlainText(originalText);
       }
 
 //---------------------------------------------------------
