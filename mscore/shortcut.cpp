@@ -243,8 +243,10 @@ QAction* Shortcut::action() const
             s += ")";
             _action->setToolTip(s);
             }
+
       if (_icon != Icons::Invalid_ICON)
             _action->setIcon(*icons[int(_icon)]);
+
       return _action;
       }
 
@@ -273,6 +275,16 @@ QString Shortcut::keysToString() const
             s += Shortcut::keySeqToString(_keys[i], QKeySequence::NativeText);
             }
       return s;
+      }
+
+//---------------------------------------------------------
+//   getMenuShortcutString
+//---------------------------------------------------------
+
+QString Shortcut::getMenuShortcutString(const QMenu *menu)
+      {
+      int shortcutKeyPosition = menu->title().indexOf('&') + 1;
+      return QString("Alt+") + menu->title().at(shortcutKeyPosition);
       }
 
 //---------------------------------------------------------
