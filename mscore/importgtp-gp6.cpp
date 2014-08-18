@@ -1236,7 +1236,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             delete art;
                                                       }
 
-
+                                                if (cr && (cr->type() == Element::Type::CHORD) && slide > 0)
                                                 createSlide(slide, cr, staffIdx);
                                                 note->setTpcFromPitch();
 
