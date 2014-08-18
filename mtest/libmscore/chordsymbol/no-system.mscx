@@ -52,6 +52,8 @@
       <Page>
         <System>
           </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -131,6 +133,13 @@
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>Title</style>
+          <text>Title</text>
+          </Text>
+        </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G</concertClefType>
