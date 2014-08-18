@@ -1715,7 +1715,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Add picture")
          ),
       Shortcut(
-         MsWidget::MAIN_WINDOW,
+         MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "play",

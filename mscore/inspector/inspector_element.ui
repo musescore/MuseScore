@@ -19,6 +19,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Element Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -114,6 +117,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Horizontal offset</string>
+       </property>
        <property name="prefix">
         <string notr="true"/>
        </property>
@@ -158,6 +164,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Reset Horizontal offset value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -181,6 +190,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Vertical offset</string>
+       </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
        </property>
@@ -202,6 +214,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Vertical offset value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -245,6 +260,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Reset Visible value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -267,6 +285,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Color value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -299,6 +320,9 @@
      </item>
      <item row="4" column="2">
       <widget class="QToolButton" name="hRaster">
+       <property name="accessibleName">
+        <string/>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -325,6 +349,9 @@
          <height>0</height>
         </size>
        </property>
+       <property name="accessibleName">
+        <string>Color</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -343,6 +370,12 @@
          <width>0</width>
          <height>28</height>
         </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Visible</string>
        </property>
        <property name="text">
         <string>Visible</string>

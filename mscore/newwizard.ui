@@ -22,7 +22,14 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QLineEdit" name="title"/>
+    <widget class="QLineEdit" name="title">
+     <property name="accessibleName">
+      <string>Title</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Insert title here</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
@@ -32,7 +39,14 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="subtitle"/>
+    <widget class="QLineEdit" name="subtitle">
+     <property name="accessibleName">
+      <string>Subtitle</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Insert subtitle here</string>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_3">
@@ -42,7 +56,14 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLineEdit" name="composer"/>
+    <widget class="QLineEdit" name="composer">
+     <property name="accessibleName">
+      <string>Composer</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Insert composer's name here</string>
+     </property>
+    </widget>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_4">
@@ -52,7 +73,14 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QLineEdit" name="poet"/>
+    <widget class="QLineEdit" name="poet">
+     <property name="accessibleName">
+      <string>Lyricist</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Insert lyricist's name here</string>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_5">
@@ -62,7 +90,14 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QLineEdit" name="copyright"/>
+    <widget class="QLineEdit" name="copyright">
+     <property name="accessibleName">
+      <string>Copyright</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Insert copyright here</string>
+     </property>
+    </widget>
    </item>
    <item row="6" column="0" colspan="2">
     <widget class="QRadioButton" name="rb1">

@@ -67,7 +67,6 @@ void MuseScore::showInspector(bool visible)
             }
       if (inspector)
             inspector->setVisible(visible);
-      a->setChecked(visible);
       }
 
 //---------------------------------------------------------
@@ -80,6 +79,7 @@ Inspector::Inspector(QWidget* parent)
       setObjectName("inspector");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
       sa = new QScrollArea;
+      sa->setAccessibleName(tr("Inspector Subwindow"));
       sa->setFrameShape(QFrame::NoFrame);
       sa->setWidgetResizable(true);
       setWidget(sa);
@@ -237,34 +237,34 @@ void Inspector::setElements(const QList<Element*>& l)
                   ww->deleteLater();
             sa->setWidget(ie);
 
-            //setting focus policies for every widget and
-            //removing every widget from the tabbing order until suport for
-            //accessibility is provided
+            //focus policies were set by hand in each inspector_*.ui. this code just helps keeping them like they are
+            //also fixes mac problem. on Mac Qt::TabFocus doesn't work, but Qt::StrongFocus works
             QList<QWidget*> widgets = ie->findChildren<QWidget*>();
             for (int i = 0; i < widgets.size(); i++) {
                   QWidget* currentWidget = widgets.at(i);
                   switch (currentWidget->focusPolicy()) {
                         case Qt::TabFocus:
-                              currentWidget->setFocusPolicy(Qt::NoFocus);
-                              break;
+#if defined(Q_OS_MAC)
+                              currentWidget->setFocusPolicy(Qt::StrongFocus);
+#endif
                         case Qt::WheelFocus:
                         case Qt::StrongFocus:
-                        case Qt::ClickFocus:
+#if defined(Q_OS_MAC)
+//leave them like they are
+#else
                               if (currentWidget->parent()->inherits("QAbstractSpinBox") ||
-                                  currentWidget->inherits("QLineEdit")) {
-                                    currentWidget->setFocusPolicy(Qt::ClickFocus);
-                                    }
-                              else {
-                                    currentWidget->setFocusPolicy(Qt::NoFocus);
-                                    }
+                                  currentWidget->inherits("QAbstractSpinBox")           ||
+                                  currentWidget->inherits("QLineEdit")) ; //leave it like it is
+                              else
+                                   currentWidget->setFocusPolicy(Qt::TabFocus);
+#endif
                               break;
                         case Qt::NoFocus:
+                        case Qt::ClickFocus:
+                                    currentWidget->setFocusPolicy(Qt::NoFocus);
                               break;
                         }
                   }
-
-            // setMinimumWidth(ie->width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
-            setMinimumWidth(ie->sizeHint().width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
             }
       _element = e;
       ie->setElement();

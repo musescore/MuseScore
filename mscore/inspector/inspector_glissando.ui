@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Glissando Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -36,6 +39,9 @@
        <weight>75</weight>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="accessibleName">
+      <string/>
      </property>
      <property name="text">
       <string>Glissando</string>
@@ -85,6 +91,9 @@
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetText">
+       <property name="accessibleName">
+        <string>Reset Text value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -102,6 +111,9 @@
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetType">
+       <property name="accessibleName">
+        <string>Reset Type value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -119,6 +131,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="type">
+       <property name="accessibleName">
+        <string>Type</string>
+       </property>
        <item>
         <property name="text">
          <string>straight</string>
@@ -132,10 +147,17 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="text"/>
+      <widget class="QLineEdit" name="text">
+       <property name="accessibleName">
+        <string>Text</string>
+       </property>
+      </widget>
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetShowText">
+       <property name="accessibleName">
+        <string>Reset Show Text value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -153,6 +175,12 @@
      </item>
      <item row="2" column="0" colspan="2">
       <widget class="QCheckBox" name="showText">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Show Text</string>
+       </property>
        <property name="text">
         <string>Show Text</string>
        </property>

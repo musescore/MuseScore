@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Jump Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -67,7 +70,11 @@
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="1">
-      <widget class="QLineEdit" name="jumpTo"/>
+      <widget class="QLineEdit" name="jumpTo">
+       <property name="accessibleName">
+        <string>Jump to</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
@@ -91,13 +98,24 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="playUntil"/>
+      <widget class="QLineEdit" name="playUntil">
+       <property name="accessibleName">
+        <string>Play until</string>
+       </property>
+      </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="continueAt"/>
+      <widget class="QLineEdit" name="continueAt">
+       <property name="accessibleName">
+        <string>Continue at</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetJumpTo">
+       <property name="accessibleName">
+        <string>Reset Jump to value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -109,6 +127,9 @@
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetPlayUntil">
+       <property name="accessibleName">
+        <string>Reset Play until value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -120,6 +141,9 @@
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetContinueAt">
+       <property name="accessibleName">
+        <string>Reset Continue at value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>

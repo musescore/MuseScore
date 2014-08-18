@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="whatsThis">
+   <string>Tuplet Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -68,6 +71,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Number Type value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -88,6 +94,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Bracket Type value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -105,6 +114,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QComboBox" name="numberType">
+       <property name="accessibleName">
+        <string>Number Type</string>
+       </property>
        <item>
         <property name="text">
          <string>Number</string>
@@ -138,6 +150,9 @@
      </item>
      <item row="2" column="1">
       <widget class="QComboBox" name="bracketType">
+       <property name="accessibleName">
+        <string>Bracket Type</string>
+       </property>
        <item>
         <property name="text">
          <string>Automatic</string>
@@ -164,6 +179,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="direction">
+       <property name="accessibleName">
+        <string>Direction</string>
+       </property>
        <item>
         <property name="text">
          <string>Auto</string>
@@ -183,6 +201,9 @@
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetDirection">
+       <property name="accessibleName">
+        <string>Reset Direction value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>

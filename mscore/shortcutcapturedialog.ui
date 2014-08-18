@@ -58,6 +58,9 @@
    </item>
    <item row="2" column="1">
     <widget class="QLineEdit" name="oshrtLabel">
+     <property name="accessibleName">
+      <string>Old shortcuts</string>
+     </property>
      <property name="readOnly">
       <bool>true</bool>
      </property>
@@ -72,6 +75,12 @@
    </item>
    <item row="3" column="1">
     <widget class="QLineEdit" name="nshrtLabel">
+     <property name="accessibleName">
+      <string>New shortcut</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Type to set shortcut</string>
+     </property>
      <property name="readOnly">
       <bool>true</bool>
      </property>
@@ -98,7 +107,13 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QToolButton" name="clearButton">
+      <widget class="QPushButton" name="clearButton">
+       <property name="accessibleName">
+        <string>Clear</string>
+       </property>
+       <property name="accessibleDescription">
+        <string/>
+       </property>
        <property name="text">
         <string>Clear</string>
        </property>
@@ -119,6 +134,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="addButton">
+       <property name="accessibleName">
+        <string>Add</string>
+       </property>
        <property name="text">
         <string>Add</string>
        </property>
@@ -128,6 +146,9 @@
       <widget class="QPushButton" name="replaceButton">
        <property name="enabled">
         <bool>false</bool>
+       </property>
+       <property name="accessibleName">
+        <string>Replace</string>
        </property>
        <property name="text">
         <string>Replace</string>
@@ -139,6 +160,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="cancelButton">
+       <property name="accessibleName">
+        <string>Cancel</string>
+       </property>
        <property name="text">
         <string>Cancel</string>
        </property>
