@@ -119,6 +119,8 @@ void Score::endCmd()
             if (s->layoutAll()) {
                   s->_updateAll  = true;
                   s->doLayout();
+                  if (s != this)
+                        s->deselectAll();
                   }
             const InputState& is = s->inputState();
             if (is.noteEntryMode() && is.segment())
@@ -161,6 +163,8 @@ void Score::update()
                   s->setUpdateAll(true);
                   s->doLayout();
                   }
+            if (s != this)
+                  s->deselectAll();
             s->end1();
             }
       }

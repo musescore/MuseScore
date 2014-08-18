@@ -1726,7 +1726,7 @@ void Score::cmdDeleteSelection()
                   Fraction f;
                   int tick  = -1;
                   Tuplet* tuplet = 0;
-                  for (Segment* s = s1; s && (s != s2); s = s->next1MM()) {
+                  for (Segment* s = s1; s && (s != s2); s = s->next1()) {
                         if (s->element(track) && s->segmentType() == Segment::Type::Breath) {
                               deleteItem(s->element(track));
                               continue;
@@ -1788,10 +1788,12 @@ void Score::cmdDeleteSelection()
                               }
                         }
                   if (f.isValid() && !f.isZero()) {
+// fullMeasure = false;
+
                         if (fullMeasure) {
                               // handle this as special case to be able to
                               // fix broken measures:
-                              for (Measure* m = s1->measure(); m; m = m->nextMeasureMM()) {
+                              for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
                                     Staff* staff = Score::staff(track / VOICES);
                                     int tick = m->tick();
                                     Fraction f = staff->timeSig(tick)->sig();
