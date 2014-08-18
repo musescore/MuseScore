@@ -1788,11 +1788,13 @@ void Score::cmdDeleteSelection()
                               }
                         }
                   if (f.isValid() && !f.isZero()) {
-// fullMeasure = false;
+                        fullMeasure = false;          // HACK
 
                         if (fullMeasure) {
                               // handle this as special case to be able to
                               // fix broken measures:
+
+                              // ws: does not work as TimeSig may be already removed
                               for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
                                     Staff* staff = Score::staff(track / VOICES);
                                     int tick = m->tick();
