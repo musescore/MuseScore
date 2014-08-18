@@ -22,7 +22,7 @@
      <item>
       <widget class="QComboBox" name="instrumentGenreFilter">
        <property name="accessibleName">
-        <string>Instrument Gendre Filter</string>
+        <string>Instrument Genre Filter</string>
        </property>
       </widget>
      </item>
