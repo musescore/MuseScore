@@ -265,8 +265,8 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       if (r & 0x8) {
             int rrr = readChar();
 qDebug("  3beat read 0x%02x", rrr);
-            }
-      if (slide)
+           }
+      if (cr && (cr->type() == Element::Type::CHORD) && slide > 0)
             createSlide(slide, cr, staffIdx);
       restsForEmptyBeats(segment, measure, cr, l, track, tick);
       return cr ? cr->actualTicks() : measure->ticks();
