@@ -723,7 +723,7 @@ void EditStyle::setValues()
       musicalTextFont->addItem("Bravura Text", "Bravura Text");
       musicalTextFont->addItem("MuseJazz", "MuseJazz");
       QString tfont(lstyle.value(StyleIdx::MusicalTextFont).toString());
-      idx = tfont == "Bravura Text" ? 1 : 0;
+      idx = musicalTextFont->findData(tfont);
       musicalTextFont->setCurrentIndex(idx);
 
       showHeader->setChecked(lstyle.value(StyleIdx::showHeader).toBool());
