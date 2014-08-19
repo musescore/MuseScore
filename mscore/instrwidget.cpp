@@ -845,8 +845,12 @@ void InstrumentsWidget::on_search_textChanged(const QString &searchPhrase)
 
 void InstrumentsWidget::on_clearSearch_clicked()
       {
+      if (search->text().isEmpty())
+            return;
+
       search->clear();
-      filterInstruments (instrumentList);
+      QString id = instrumentGenreFilter->currentData().toString();
+      filterInstruments (instrumentList, id);
       }
 
 //---------------------------------------------------------
