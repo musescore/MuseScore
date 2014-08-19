@@ -569,10 +569,11 @@ void FretDiagram::readMusicXML(XmlReader& e)
 
 void FretDiagram::writeMusicXML(Xml& xml) const
       {
-      qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
+      //qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
             xml.stag("frame");
             xml.tag("frame-strings", strings());
             xml.tag("frame-frets", frets());
+            xml.tag("first-fret", fretOffset()+1 );
             QString strDots = "'";
             QString strMarker = "'";
             QString strFingering = "'";
@@ -588,8 +589,8 @@ void FretDiagram::writeMusicXML(Xml& xml) const
                         xml.etag();
                   }
             }
-            qDebug("FretDiagram::writeMusicXML() this %p dots %s marker %s fingering %s",
-                   this, qPrintable(strDots), qPrintable(strMarker), qPrintable(strFingering));
+            //qDebug("FretDiagram::writeMusicXML() this %p dots %s marker %s fingering %s",
+            //       this, qPrintable(strDots), qPrintable(strMarker), qPrintable(strFingering));
             /*
             xml.tag("root-step", tpc2stepName(rootTpc));
             int alter = tpc2alter(rootTpc);

@@ -5206,6 +5206,9 @@ static void readFretDiagram(FretDiagram* fd, QDomElement de)
                   else
                         qDebug("FretDiagram::readMusicXML: illegal frame-fret %d", val);
                   }
+            else if (tag == "first-fret") {
+                  fd->setFretOffset(val-1);
+            }
             else if (tag == "frame-note") {
                   int fret   = -1;
                   int string = -1;
@@ -5213,7 +5216,7 @@ static void readFretDiagram(FretDiagram* fd, QDomElement de)
                         const QString& tag(ee.tagName());
                         int val = ee.text().toInt();
                         if (tag == "fret")
-                              fret = val;
+                              fret = val - fd->fretOffset();
                         else if (tag == "string")
                               string = val;
                         else
