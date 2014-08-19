@@ -873,8 +873,6 @@
             </System>
           <System>
             </System>
-          <System>
-            </System>
           </Page>
         </PageList>
       <Part>
@@ -1332,6 +1330,10 @@
           </Measure>
         <Measure number="7">
           <startRepeat/>
+          <BarLine>
+            <subtype>start-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           <endSpanner id="12"/>
           <Volta id="13">
             <lid>117</lid>
@@ -1986,6 +1988,10 @@
             </Chord>
           </Measure>
         <Measure number="7">
+          <BarLine>
+            <subtype>start-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           <endSpanner id="12"/>
           <Chord>
             <lid>59</lid>
