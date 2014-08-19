@@ -55,7 +55,7 @@ Measure* Score::tick2measure(int tick) const
       // check last measure
       if (lm && (tick >= lm->tick()) && (tick <= lm->endTick()))
             return lm;
-      qDebug("-tick2measure %d (max %d) not found", tick, lm ? lm->tick() : -1);
+      qDebug("tick2measure %d (max %d) not found", tick, lm ? lm->tick() : -1);
       return 0;
       }
 
@@ -77,7 +77,7 @@ Measure* Score::tick2measureMM(int tick) const
       // check last measure
       if (lm && (tick >= lm->tick()) && (tick <= lm->endTick()))
             return lm;
-      qDebug("-tick2measure %d (max %d) not found", tick, lm ? lm->tick() : -1);
+      qDebug("tick2measureMM %d (max %d) not found", tick, lm ? lm->tick() : -1);
       return 0;
       }
 
