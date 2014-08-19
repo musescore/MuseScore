@@ -4010,6 +4010,31 @@ static Accidental::Type convertAccidental(QString mxmlName)
       }
 
 //---------------------------------------------------------
+//   microtonalGuess
+//---------------------------------------------------------
+
+/**
+ Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum Accidental::Type.
+ Works only for quarter tone and three-quarters tone accidentals.
+ */
+
+static Accidental::Type microtonalGuess(double val)
+      {
+      if (val == 0.5)
+            return Accidental::Type::SHARP_SLASH;
+      else if (val == -0.5)
+            return Accidental::Type::MIRRORED_FLAT;
+      else if (val == 1.5)
+            return Accidental::Type::SHARP_SLASH4;
+      else if (val == -1.5)
+            return Accidental::Type::MIRRORED_FLAT2;
+      else
+            qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);
+      // default: return Accidental::Type::NONE
+      return Accidental::Type::NONE;
+      }
+
+//---------------------------------------------------------
 //   convertNotehead
 //---------------------------------------------------------
 
@@ -4778,10 +4803,17 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                               step = ee.text();
                         else if (ee.tagName() == "alter") {    // -1=flat 1=sharp (0.5=quarter sharp)
                               bool ok;
-                              alter = MxmlSupport::stringToInt(ee.text(), &ok); // fractions not supported by mscore
+                              QString altertext = ee.text();
+                              alter = MxmlSupport::stringToInt(altertext, &ok); // fractions not supported by mscore
                               if (!ok || alter < -2 || alter > 2) {
                                     qDebug("ImportXml: bad 'alter' value: %s at line %d col %d",
-                                           qPrintable(ee.text()), ee.lineNumber(), ee.columnNumber());
+                                           qPrintable(altertext), ee.lineNumber(), ee.columnNumber());
+                                    if (qAbs(alter)<2) { // try to see if a microtonal accidental is needed
+                                          bool ok2;
+                                          double altervalue = altertext.toDouble(&ok2);
+                                          if (ok2 && (accidental == Accidental::Type::NONE))
+                                                accidental = microtonalGuess(altervalue);
+                                          }
                                     alter = 0;
                                     }
                               }
