@@ -3977,7 +3977,7 @@ static Accidental::Type convertAccidental(QString mxmlName)
       map["sharp-sharp"] = Accidental::Type::SHARP2;
       map["flat-flat"] = Accidental::Type::FLAT2;
       map["double-flat"] = Accidental::Type::FLAT2;
-      map["natural-flat"] = Accidental::Type::NONE;
+      map["natural-flat"] = Accidental::Type::FLAT;
 
       map["quarter-flat"] = Accidental::Type::MIRRORED_FLAT;
       map["quarter-sharp"] = Accidental::Type::SHARP_SLASH;
@@ -3999,7 +3999,7 @@ static Accidental::Type convertAccidental(QString mxmlName)
       map["sori"] = Accidental::Type::SORI;
       map["koron"] = Accidental::Type::KORON;
 
-      map["natural-sharp"] = Accidental::Type::NONE;
+      map["natural-sharp"] = Accidental::Type::SHARP;
 
       if (map.contains(mxmlName))
             return map.value(mxmlName);
