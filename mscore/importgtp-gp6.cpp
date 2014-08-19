@@ -52,6 +52,7 @@
 #include "libmscore/sym.h"
 #include "libmscore/ottava.h"
 #include "libmscore/marker.h"
+#include "libmscore/notedot.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -800,6 +801,16 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 QString variation;
 
                                                 Note* note = new Note(score);
+                                                if (dotted) {
+                                                      // there is at most one dotted note in this guitar pro version
+                                                      NoteDot* dot = new NoteDot(score);
+                                                      dot->setIdx(dotted);
+                                                      dot->setParent(note);
+                                                      dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
+                                                      dot->setVisible(true);
+                                                      note->add(dot);
+                                                      }
+
                                                 Chord* chord = static_cast<Chord*>(cr);
                                                 chord->add(note);
 

@@ -47,6 +47,7 @@
 #include "libmscore/volta.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/fingering.h"
+#include "libmscore/notedot.h"
 #include "preferences.h"
 
 
@@ -242,6 +243,15 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             for (int i = 6; i >= 0; --i) {
                   if (strings & (1 << i) && ((6-i) < numStrings)) {
                         Note* note = new Note(score);
+                        if (dotted) {
+                              // there is at most one dotted note in this guitar pro version
+                              NoteDot* dot = new NoteDot(score);
+                              dot->setIdx(0);
+                              dot->setParent(note);
+                              dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
+                              dot->setVisible(true);
+                              note->add(dot);
+                              }
                         static_cast<Chord*>(cr)->add(note);
 
                         hasSlur = readNote(6-i, note);
@@ -665,7 +675,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
                    slur->setTick2(cr2->tick());
                    slur->setTrack(cr1->track());
                    slur->setTrack2(cr2->track());
-                   slur->setParent(cr1);
+                   // this case specifies only two-note slurs, don't set a parent
                    score->undoAddElement(slur);
                    }
             }
@@ -817,10 +827,8 @@ bool GuitarPro5::readNote(int string, Note* note)
             f->reset();
             }
 
-      if (noteBits & 0x1) {
-            qDebug("Detected 0x1 mask, skipped 8");
+      if (noteBits & 0x1)
             skip(8);
-            }
 
       // check if a note is supposed to be accented, and give it the marcato type
       if (noteBits & NOTE_MARCATO) {
