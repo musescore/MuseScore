@@ -2190,8 +2190,22 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
             }
             xml.stag(useDrumset != DrumsetKind::NONE ? "unpitched" : "pitch");
             xml.tag(useDrumset != DrumsetKind::NONE ? "display-step" : "step", step);
-            if (alter)
+            // Check for microtonal accidentals and overwrite "alter" tag
+            Accidental* acc = note->accidental();
+            double alter2 = 0.0;
+            if (acc) {
+                  switch (acc->accidentalType()) {
+                        case Accidental::Type::MIRRORED_FLAT:  alter2 = -0.5; break;
+                        case Accidental::Type::SHARP_SLASH:    alter2 = 0.5;  break;
+                        case Accidental::Type::MIRRORED_FLAT2: alter2 = -1.5; break;
+                        case Accidental::Type::SHARP_SLASH4:   alter2 = 1.5;  break;
+                        default:                                             break;
+                        }
+                  }
+            if (alter && !alter2)
                   xml.tag("alter", alter);
+            if (!alter && alter2)
+                  xml.tag("alter", alter2);
             xml.tag(useDrumset != DrumsetKind::NONE ? "display-octave" : "octave", octave);
             xml.etag();
 
@@ -2239,7 +2253,6 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
                   xml.tagE("dot");
 
             // accidental
-            Accidental* acc = note->accidental();
             if (acc) {
                   /*
                         MusicXML accidental names include:
@@ -2254,18 +2267,21 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
                         case Accidental::Type::SHARP2:             s = "double-sharp";         break;
                         case Accidental::Type::FLAT2:              s = "flat-flat";            break;
                         case Accidental::Type::NATURAL:            s = "natural";              break;
-                        case Accidental::Type::FLAT_SLASH:         s = "quarter-flat";         break; // (alternative)
+                        case Accidental::Type::FLAT_SLASH:         s = "slash-flat";           break;
                         case Accidental::Type::MIRRORED_FLAT:      s = "quarter-flat";         break; // (recommended by Michael)
-                        case Accidental::Type::FLAT_ARROW_UP:      s = "quarter-flat";         break; // (alternative)
-                        case Accidental::Type::NATURAL_ARROW_DOWN: s = "quarter-flat";         break; // (alternative)
+                        case Accidental::Type::FLAT_ARROW_UP:      s = "flat-up";              break;
+                        case Accidental::Type::NATURAL_ARROW_DOWN: s = "natural-down";         break;
                         case Accidental::Type::SHARP_SLASH:        s = "quarter-sharp";        break; // (recommended by Michael)
-                        case Accidental::Type::SHARP_ARROW_DOWN:   s = "quarter-sharp";        break; // (alternative)
-                        case Accidental::Type::NATURAL_ARROW_UP:   s = "quarter-sharp";        break; // (alternative)
+                        case Accidental::Type::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
+                        case Accidental::Type::NATURAL_ARROW_UP:   s = "natural-up";           break;
                         case Accidental::Type::MIRRORED_FLAT2:     s = "three-quarters-flat";  break; // (recommended by Michael)
-                        case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break; // (alternative)
-                        case Accidental::Type::FLAT_ARROW_DOWN:    s = "three-quarters-flat";  break; // (alternative)
+                        case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break; // (alternative) - not used ?
+                        case Accidental::Type::FLAT_ARROW_DOWN:    s = "flat-down";            break;
                         case Accidental::Type::SHARP_SLASH4:       s = "three-quarters-sharp"; break; // (recommended by Michael)
-                        case Accidental::Type::SHARP_ARROW_UP:     s = "three-quarters-sharp"; break; // (alternate)
+                        case Accidental::Type::SHARP_ARROW_UP:     s = "sharp-up";             break;
+                        case Accidental::Type::SHARP_SLASH3:       s = "slash-quarter-sharp";  break;
+                        case Accidental::Type::FLAT_SLASH2:        s = "double-slash-flat";    break;
+                        case Accidental::Type::SHARP_SLASH2:       s = "slash-sharp";          break;
                         case Accidental::Type::SORI:               s = "sori";                 break; //sori
                         case Accidental::Type::KORON:              s = "koron";                break; //koron
                         default:
