@@ -1751,7 +1751,7 @@ QString Note::noteTypeUserName()
       {
       switch (noteType()) {
             case NoteType::ACCIACCATURA:
-                  return tr("Accaciatura");
+                  return tr("Acciaccatura");
             case NoteType::APPOGGIATURA:
                   return tr("Appoggiatura");
             case NoteType::GRACE8_AFTER:

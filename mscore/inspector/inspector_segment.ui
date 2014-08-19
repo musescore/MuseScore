@@ -91,7 +91,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Leading</string>
+        <string>Leading space</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -116,7 +116,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Trailing</string>
+        <string>Trailing space</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -151,7 +151,7 @@
         <string>reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Leading value</string>
+        <string>Reset Leading space value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -174,7 +174,7 @@
         <string>reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Trailing value</string>
+        <string>Reset Trailing space value</string>
        </property>
        <property name="text">
         <string>...</string>

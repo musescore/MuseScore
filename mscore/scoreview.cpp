@@ -2445,7 +2445,7 @@ void ScoreView::normalPaste()
                   errorMessage->showMessage(tr("cannot paste into tuplet"), "pasteTuplet");
                   break;
             case PasteStatus::TUPLET_CROSSES_BAR:
-                  errorMessage->showMessage(tr("tuplet cannot cross bars"), "tupletCrossBar");
+                  errorMessage->showMessage(tr("tuplet cannot cross barlines"), "tupletCrossBar");
                   _score->undo()->current()->unwind();
                   break;
             default:
