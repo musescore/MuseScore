@@ -532,10 +532,10 @@ QString KeySig::accessibleInfo()
       {
       QString keySigType;
       if (isCustom())
-            keySigType =  tr("Custom");
+            return tr("%1 Custom").arg(Element::accessibleInfo());
 
       if (key() == Key::C)
-            return keyNames[14];
+            return Element::accessibleInfo() + " " + keyNames[14];
       int keyInt = static_cast<int>(key());
       if (keyInt < 0)
             keySigType = keyNames[(7 + keyInt) * 2 + 1];
