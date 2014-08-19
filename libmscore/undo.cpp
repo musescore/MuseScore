@@ -703,6 +703,7 @@ void Score::undoInsertPart(Part* part, int idx)
 void Score::undoRemoveStaff(Staff* staff)
       {
       int idx = staffIdx(staff);
+      Q_ASSERT(idx >= 0);
       //
       //    adjust measures
       //
@@ -3645,7 +3646,7 @@ void Unlink::redo()
                   break;
                   }
             }
-      Q_ASSERT(le);
+//      Q_ASSERT(le);
       e->unlink();
       }
 

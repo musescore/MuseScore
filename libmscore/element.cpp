@@ -372,7 +372,8 @@ void Element::unlink()
 
             // if link list is empty, remove list
             if (_links->size() <= 1) {
-                  _links->front()->_links = 0;
+                  if (!_links->empty())         // abnormal case: only "this" is in list
+                        _links->front()->_links = 0;
                   delete _links;
                   }
             _links = 0;
