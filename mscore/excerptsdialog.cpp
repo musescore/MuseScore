@@ -281,18 +281,23 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       Excerpt* e = static_cast<ExcerptItem*>(cur)->excerpt();
       if (e->score())
             return;
-      Score* nscore = Ms::createExcerpt(e->parts());
-      if (nscore == 0)
+      if (e->parts().isEmpty())
             return;
+
+      Score* nscore = new Score(e->parts().front()->score());
       e->setScore(nscore);
+
+      score->startCmd();
+      score->undo(new AddExcerpt(nscore));
+
+      Ms::createExcerpt(nscore, e->parts());
+      score->endCmd();
+
       nscore->setName(e->title());
       nscore->rebuildMidiMapping();
       nscore->updateChannel();
       nscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       nscore->setLayoutAll(true);
-      score->startCmd();
-      score->undo(new AddExcerpt(nscore));
-      score->endCmd();
       nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       partList->setEnabled(false);
