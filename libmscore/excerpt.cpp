@@ -97,14 +97,11 @@ static void localSetScore(void* score, Element* element)
 //   createExcerpt
 //---------------------------------------------------------
 
-Score* createExcerpt(const QList<Part*>& parts)
+void createExcerpt(Score* score, const QList<Part*>& parts)
       {
-      if (parts.isEmpty())
-            return 0;
       QList<int> srcStaves;
 
       Score* oscore = parts.front()->score();
-      Score* score  = new Score(oscore);
 
       // clone layer:
       for (int i = 0; i < 32; ++i) {
@@ -139,13 +136,13 @@ Score* createExcerpt(const QList<Part*>& parts)
       //
       // create excerpt title
       //
-      MeasureBase* measure = score->first();
-      if (!measure || (measure->type() != Element::Type::VBOX)) {
-            MeasureBase* nmeasure = new VBox(score);
-            nmeasure->setTick(0);
-            score->addMeasure(nmeasure, measure);
-            measure = nmeasure;
-            }
+      MeasureBase* measure = oscore->first();
+
+      // create title frame for all scores if not already there
+      if (!measure || (measure->type() != Element::Type::VBOX))
+            oscore->insertMeasure(Element::Type::VBOX, measure);
+
+      measure = score->first();
       QString partLabel = parts.front()->longName();
       if (!partLabel.isEmpty()) {
             Text* txt = new Text(score);
@@ -201,7 +198,6 @@ Score* createExcerpt(const QList<Part*>& parts)
 
       score->setLayoutAll(true);
       score->doLayout();
-      return score;
       }
 
 //---------------------------------------------------------

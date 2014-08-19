@@ -730,15 +730,16 @@ Score::FileError Score::read114(XmlReader& e)
                   _excerpts.removeOne(excerpt);
                   continue;
                   }
-            Score* nscore = Ms::createExcerpt(excerpt->parts());
-            if (nscore) {
+            if (!excerpt->parts().isEmpty()) {
+                  Score* nscore = new Score(this);
+                  excerpt->setScore(nscore);
+                  Ms::createExcerpt(nscore, excerpt->parts());
                   nscore->setName(excerpt->title());
                   nscore->rebuildMidiMapping();
                   nscore->updateChannel();
                   nscore->updateNotes();
                   nscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
                   nscore->doLayout();
-                  excerpt->setScore(nscore);
                   }
             }
 

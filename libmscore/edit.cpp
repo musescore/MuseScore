@@ -2221,7 +2221,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
 
       QList<pair<Score*, MeasureBase*>> ml;
       for (Score* score : scoreList())
-            ml.append(pair<Score*,MeasureBase*>(score,searchMeasureBase(score, measure)));
+            ml.append(pair<Score*,MeasureBase*>(score, searchMeasureBase(score, measure)));
 
       MeasureBase* omb = nullptr;
       for (pair<Score*, MeasureBase*> p : ml) {
