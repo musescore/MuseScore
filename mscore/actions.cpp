@@ -133,12 +133,14 @@ Shortcut Shortcut::sc[] = {
          ),
 
       Shortcut(
+         Ms::MAIN_WINDOW,
          STATE_NORMAL,
          0,
          "linearize",
          Qt::ApplicationShortcut,
          QT_TRANSLATE_NOOP("action","Linearize"),
          QT_TRANSLATE_NOOP("action","Linearize")
+         QT_TRANSLATE_NOOP("action","Linearize score")
          ),
 
       Shortcut(
