@@ -2485,6 +2485,30 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_TEXT_EDIT,
+         0,
+         "key-signatures",
+         QT_TRANSLATE_NOOP("action","Key Signatures..."),
+         QT_TRANSLATE_NOOP("action","Show key signature palette")
+         ),
+      Shortcut(
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_TEXT_EDIT,
+         0,
+         "time-signatures",
+         QT_TRANSLATE_NOOP("action","Time Signatures..."),
+         QT_TRANSLATE_NOOP("action","Show time signature palette")
+         ),
+      Shortcut(
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_TEXT_EDIT,
+         0,
+         "symbols",
+         QT_TRANSLATE_NOOP("action","Symbols..."),
+         QT_TRANSLATE_NOOP("action","Show symbol palette")
+         ),
+      Shortcut(
+         MsWidget::MAIN_WINDOW,
          STATE_NORMAL,
          0,
          "viewmode",
