@@ -2182,8 +2182,12 @@ static void loadScores(const QStringList& argv)
                         case SessionStart::SCORE:
                               {
                               Score* score = mscore->readScore(preferences.startScore);
-                              if (score == 0)
+                              if (preferences.startScore.startsWith(":/"))
+                                    score->setCreated(true);
+                              if (score == 0) {
                                     score = mscore->readScore(":/data/My_First_Score.mscx");
+                                    score->setCreated(true);
+                                    }
                               if (score)
                                     currentScoreView = mscore->appendScore(score);
                               }
