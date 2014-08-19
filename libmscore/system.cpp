@@ -511,7 +511,7 @@ void System::setInstrumentNames(bool longName)
       if (isVbox())                 // ignore vbox
             return;
       if (!score()->showInstrumentNames()
-              || (score()->styleB(StyleIdx::hideInstrumentNameIfOneInstrument) && _staves.size() == 1)) {
+              || (score()->styleB(StyleIdx::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
             for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                   SysStaff* staff = _staves[staffIdx];
                   foreach(InstrumentName* t, staff->instrumentNames)
