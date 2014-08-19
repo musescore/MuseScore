@@ -2312,6 +2312,10 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                      || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::Type::SHARP   && !accTmp.value(ln))) {
                                      nt->accidental()->setRole(Accidental::Role::USER);
                                      }
+                               else if  (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() != Accidental::Type::NATURAL) {
+                                     nt->accidental()->setRole(Accidental::Role::USER);
+                                     accTmp.replace(ln, false);
+                                     }
                                else {
                                      accTmp.replace(ln, true);
                                      }
