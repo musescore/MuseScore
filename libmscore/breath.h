@@ -49,6 +49,10 @@ class Breath : public Element {
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
       virtual QPointF pagePos() const override;      ///< position in page coordinates
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
+      virtual QString accessibleInfo() override;
       };
 
 

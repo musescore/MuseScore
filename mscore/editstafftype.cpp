@@ -39,14 +39,13 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setupUi(this);
 
+      // needed to have separate sets of radio buttons
       QButtonGroup* bg1 = new QButtonGroup(this);
       bg1->addButton(numbersRadio);
       bg1->addButton(lettersRadio);
-
       QButtonGroup* bg2 = new QButtonGroup(this);
       bg2->addButton(onLinesRadio);
       bg2->addButton(aboveLinesRadio);
-
       QButtonGroup* bg3 = new QButtonGroup(this);
       bg3->addButton(linesThroughRadio);
       bg3->addButton(linesBrokenRadio);
@@ -96,9 +95,12 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
 
-      connect(genKeysigPercussion,       SIGNAL(toggled(bool)),   SLOT(updatePreview()));
-      connect(showLedgerLinesPercussion, SIGNAL(toggled(bool)),   SLOT(updatePreview()));
-      connect(stemlessPercussion,        SIGNAL(toggled(bool)),   SLOT(updatePreview()));
+      connect(genKeysigPitched,           SIGNAL(toggled(bool)),  SLOT(updatePreview()));
+      connect(showLedgerLinesPitched,     SIGNAL(toggled(bool)),  SLOT(updatePreview()));
+      connect(stemlessPitched,            SIGNAL(toggled(bool)),  SLOT(updatePreview()));
+      connect(genKeysigPercussion,        SIGNAL(toggled(bool)),  SLOT(updatePreview()));
+      connect(showLedgerLinesPercussion,  SIGNAL(toggled(bool)),  SLOT(updatePreview()));
+      connect(stemlessPercussion,         SIGNAL(toggled(bool)),  SLOT(updatePreview()));
 
       connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
@@ -177,7 +179,9 @@ void EditStaffType::setValues()
                   fretY->setValue(staffType.fretFontUserY());
 
                   numbersRadio->setChecked(staffType.useNumbers());
+                  lettersRadio->setChecked(!staffType.useNumbers());
                   onLinesRadio->setChecked(staffType.onLines());
+                  aboveLinesRadio->setChecked(!staffType.onLines());
                   linesThroughRadio->setChecked(staffType.linesThrough());
                   linesBrokenRadio->setChecked(!staffType.linesThrough());
 
@@ -516,7 +520,7 @@ QString EditStaffType::createUniqueStaffTypeName(StaffGroup group)
 
 void EditStaffType::savePresets()
       {
-      printf("savePresets\n");
+      qDebug("savePresets");
       }
 
 //---------------------------------------------------------
@@ -525,7 +529,7 @@ void EditStaffType::savePresets()
 
 void EditStaffType::loadPresets()
       {
-      printf("loadPresets\n");
+      qDebug("loadPresets");
       }
 
 //---------------------------------------------------------

@@ -79,9 +79,12 @@ bool ScoreView::dragTimeAnchorElement(const QPointF& pos)
             qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
             QPointF anchor(seg->canvasBoundingRect().x(), y);
             setDropAnchor(QLineF(pos, anchor));
+            dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
             dragElement->setTrack(staffIdx * VOICES);
+            dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
             return true;
             }
+      dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
       setDropTarget(0);
       return false;
       }
@@ -104,6 +107,7 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
             setDropAnchor(QLineF(pos, anchor));
             return true;
             }
+      dragElement->score()->addRefresh(dragElement->canvasBoundingRect());
       setDropTarget(0);
       return false;
       }
@@ -189,7 +193,13 @@ void ScoreView::dragSymbol(const QPointF& pos)
       const Element* e = el.isEmpty() ? 0 : el[0];
       if (e && (e->type() == Element::Type::NOTE || e->type() == Element::Type::SYMBOL
          || e->type() == Element::Type::IMAGE || e->type() == Element::Type::TEXT)) {
-            if (e->acceptDrop(this, pos, dragElement)) {
+            DropData dropData;
+            dropData.view       = this;
+            dropData.pos        = pos;
+            dropData.element    = dragElement;
+            dropData.modifiers  = 0;
+
+            if (e->acceptDrop(dropData)) {
                   setDropTarget(e);
                   return;
                   }
@@ -216,6 +226,13 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
       // convert window to canvas position
       QPointF pos(imatrix.map(QPointF(event->pos())));
+
+      DropData dropData;
+      dropData.view       = this;
+      dropData.pos        = pos;
+      dropData.dragOffset = dragOffset;
+      dropData.element    = dragElement;
+      dropData.modifiers  = event->keyboardModifiers();
 
       if (dragElement) {
             switch(dragElement->type()) {
@@ -271,16 +288,9 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                         QList<Element*> el = elementsAt(pos);
                         bool found = false;
                         foreach(const Element* e, el) {
-                              if (e->acceptDrop(this, pos, dragElement)) {
+                              if (e->acceptDrop(dropData)) {
                                     if (e->type() != Element::Type::MEASURE)
                                           setDropTarget(const_cast<Element*>(e));
-                                    else {
-                                          if (dragElement->type() == Element::Type::TIMESIG
-                                             && (event->keyboardModifiers() & Qt::ControlModifier)) {
-                                                // TODO: reduce drop rectangle to staff
-                                                setDropRectangle(e->canvasBoundingRect());
-                                                }
-                                          }
                                     found = true;
                                     break;
                                     }
@@ -409,7 +419,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                               _score->addRefresh(el->canvasBoundingRect());
                               _score->addRefresh(dragElement->canvasBoundingRect());
 
-                              if (!el->acceptDrop(this, pos, dragElement)) {
+                              if (!el->acceptDrop(dropData)) {
                                     qDebug("drop %s onto %s not accepted", dragElement->name(), el->name());
                                     break;
                                     }
@@ -458,7 +468,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                         {
                         Element* el = 0;
                         for (const Element* e : elementsAt(pos)) {
-                              if (e->acceptDrop(this, pos, dragElement)) {
+                              if (e->acceptDrop(dropData)) {
                                     el = const_cast<Element*>(e);
                                     break;
                                     }
@@ -514,7 +524,8 @@ void ScoreView::dropEvent(QDropEvent* event)
 
                   Element* el = elementAt(pos);
                   if (el) {
-                        if (el->acceptDrop(this, pos, s)) {
+                        dropData.element = s;
+                        if (el->acceptDrop(dropData)) {
                               dropData.element = s;
                               el->drop(dropData);
                               }

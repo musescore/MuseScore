@@ -11,6 +11,8 @@
 //=============================================================================
 
 #include "text.h"
+#include "jump.h"
+#include "marker.h"
 #include "score.h"
 #include "segment.h"
 #include "measure.h"
@@ -199,9 +201,10 @@ QFont TextFragment::font(const Text* t) const
             ScoreFont* sf = ScoreFont::fallbackFont();
             for (SymId id : ids)
                   text.append(sf->toString(id));
-            font.setFamily(t->score()->styleSt(StyleIdx::MusicalTextFont));
+            QString sfn = t->score()->styleSt(StyleIdx::MusicalTextFont);
+            font.setFamily(sfn);
             font.setWeight(QFont::Normal);      // if not set we get system default
-            font.setStyleStrategy(QFont::NoFontMerging);
+            //font.setStyleStrategy(QFont::NoFontMerging);
             font.setHintingPreference(QFont::PreferVerticalHinting);
             }
       if (format.valign() != VerticalAlignment::AlignNormal)
@@ -237,15 +240,28 @@ void TextBlock::layout(Text* t)
       Element* e = t->parent();
       if (e && t->layoutToParentWidth()) {
             layoutWidth = e->width();
-            if (e->type() == Element::Type::HBOX || e->type() == Element::Type::VBOX || e->type() == Element::Type::TBOX) {
-                  Box* b = static_cast<Box*>(e);
-                  layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
-                  lm = b->leftMargin() * MScore::DPMM;
-                  }
-            else if (e->type() == Element::Type::PAGE) {
-                  Page* p = static_cast<Page*>(e);
-                  layoutWidth -= (p->lm() + p->rm());
-                  lm = p->lm();
+            switch(e->type()) {
+                  case Element::Type::HBOX:
+                  case Element::Type::VBOX:
+                  case Element::Type::TBOX: {
+                        Box* b = static_cast<Box*>(e);
+                        layoutWidth -= ((b->leftMargin() + b->rightMargin()) * MScore::DPMM);
+                        lm = b->leftMargin() * MScore::DPMM;
+                        }
+                        break;
+                  case Element::Type::PAGE: {
+                        Page* p = static_cast<Page*>(e);
+                        layoutWidth -= (p->lm() + p->rm());
+                        lm = p->lm();
+                        }
+                        break;
+                  case Element::Type::MEASURE: {
+                        Measure* m = static_cast<Measure*>(e);
+                        layoutWidth = m->bbox().width();
+                        }
+                        break;
+                  default:
+                        break;
                   }
             }
       if (_text.isEmpty()) {
@@ -273,18 +289,6 @@ void TextBlock::layout(Text* t)
                   QRectF r;
                   if (f.format.type() == CharFormatType::SYMBOL) {
                         r = fm.tightBoundingRect(f.text).translated(f.pos);
-                        // Hack for tempo text position
-                        // SMuFL defines them in the middle of the staff and advise the use of OpenType ligature
-                        // As of today, Qt doesn't support OT ligature... so...
-                        if (f.ids.contains(SymId::noteQuarterUp) || f.ids.contains(SymId::noteHalfUp)
-                            || f.ids.contains(SymId::note8thUp) || f.ids.contains(SymId::note16thUp)
-                            || f.ids.contains(SymId::note32ndUp) || f.ids.contains(SymId::note64thUp)
-                            || f.ids.contains(SymId::note128thUp) || f.ids.contains(SymId::note512thUp)
-                            || f.ids.contains(SymId::note1024thUp) || f.ids.contains(SymId::textAugmentationDot)) {
-                              qreal voffset = fm.xHeight();   // use original height
-                              voffset *= tempotextOffset;
-                              f.pos.ry() += voffset;
-                              }
                         }
                   else
                         r = fm.boundingRect(f.text).translated(f.pos);
@@ -1194,6 +1198,8 @@ void Text::layout1()
                         h = p->height() - p->tm() - p->bm();
                         yoff = p->tm();
                         }
+                  else if (parent()->type() == Element::Type::MEASURE)
+                        h = 0;
                   else
                         h  = parent()->height();
                   }
@@ -1438,7 +1444,22 @@ QString Text::plainText(bool noSym) const
                   if (format.type() == CharFormatType::TEXT) {
                         s += f.text;
                         }
-                  else if (!noSym){
+                  else if (noSym) {
+                        // do some simple symbol substitution
+                        for (SymId id : f.ids) {
+                              switch (id) {
+                                    case SymId::accidentalFlat:
+                                          s += "b";
+                                          break;
+                                    case SymId::accidentalSharp:
+                                          s += "#";
+                                          break;
+                                    default:
+                                          break;
+                                    }
+                              }
+                        }
+                  else {
                         for (SymId id : f.ids)
                               s += QString("<sym>%1</sym>").arg(Sym::id2name(id));
                         }
@@ -1467,6 +1488,7 @@ void Text::endEdit()
                   }
             }
       textChanged();
+      score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
@@ -2265,9 +2287,9 @@ void Text::layoutEdit()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Text::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Text::acceptDrop(const DropData& data) const
       {
-      Element::Type type = e->type();
+      Element::Type type = data.element->type();
       return type == Element::Type::SYMBOL || type == Element::Type::FSYMBOL;
       }
 
@@ -2456,14 +2478,14 @@ QString Text::convertFromHtml(const QString& ss) const
             s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));    //natural
             s.replace(QChar(0xe10c), QString("<sym>accidentalSharp</sym>"));    // sharp
             s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));    // flat
-            s.replace(QChar(0xe104), QString("<sym>noteHalfUp</sym>")),    // note2_Sym
-            s.replace(QChar(0xe105), QString("<sym>noteQuarterUp</sym>"));    // note4_Sym
-            s.replace(QChar(0xe106), QString("<sym>note8thUp</sym>"));    // note8_Sym
-            s.replace(QChar(0xe107), QString("<sym>note16thUp</sym>"));    // note16_Sym
-            s.replace(QChar(0xe108), QString("<sym>note32ndUp</sym>"));    // note32_Sym
-            s.replace(QChar(0xe109), QString("<sym>note64thUp</sym>"));    // note64_Sym
-            s.replace(QChar(0xe10a), QString("<sym>textAugmentationDot</sym>"));    // dot
-            s.replace(QChar(0xe10b), QString("<sym>textAugmentationDot</sym> <sym>textAugmentationDot</sym>"));    // dotdot
+            s.replace(QChar(0xe104), QString("<sym>unicodeNoteHalfUp</sym>")),    // note2_Sym
+            s.replace(QChar(0xe105), QString("<sym>unicodeNoteQuarterUp</sym>"));    // note4_Sym
+            s.replace(QChar(0xe106), QString("<sym>unicodeNote8thUp</sym>"));    // note8_Sym
+            s.replace(QChar(0xe107), QString("<sym>unicodeNote16thUp</sym>"));    // note16_Sym
+            s.replace(QChar(0xe108), QString("<sym>unicodeNote32ndUp</sym>"));    // note32_Sym
+            s.replace(QChar(0xe109), QString("<sym>unicodeNote64thUp</sym>"));    // note64_Sym
+            s.replace(QChar(0xe10a), QString("<sym>unicodeAugmentationDot</sym>"));    // dot
+            s.replace(QChar(0xe10b), QString("<sym>unicodeAugmentationDot</sym> <sym>unicodeAugmentationDot</sym>"));    // dotdot
             s.replace(QChar(0xe167), QString("<sym>segno</sym>"));    // segno
             s.replace(QChar(0xe168), QString("<sym>coda</sym>"));    // coda
             s.replace(QChar(0xe169), QString("<sym>codaSquare</sym>"));    // varcoda
@@ -2481,6 +2503,39 @@ QString Text::convertToHtml(const QString& s, const TextStyle& st)
       qreal size     = st.size();
       QString family = st.family();
       return QString("<html><body style=\"font-family:'%1'; font-size:%2pt;\">%3</body></html>").arg(family).arg(size).arg(s);
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Text::accessibleInfo()
+      {
+      QString rez;
+      switch (textStyleType()) {
+            case TextStyleType::TITLE:
+                  rez = tr ("Title");
+                  break;
+            case TextStyleType::SUBTITLE:
+                  rez = tr ("Subtitle");
+                  break;
+            case TextStyleType::COMPOSER:
+                  rez = tr("Composer");
+                  break;
+            case TextStyleType::POET:
+                  rez = tr ("Poet");
+                  break;
+            case TextStyleType::TRANSLATOR:
+                  rez = tr ("Translator");
+                  break;
+            case TextStyleType::MEASURE_NUMBER:
+                  rez = tr ("Measure number");
+                  break;
+            default:
+                  rez = Element::accessibleInfo();
+                  break;
+            }
+      return  rez + " " + text();
       }
 }
 

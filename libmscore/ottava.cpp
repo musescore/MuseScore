@@ -237,7 +237,8 @@ void Ottava::endEdit()
 
 void Ottava::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       writeProperty(xml, P_ID::NUMBERS_ONLY);
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
@@ -349,8 +350,8 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
                   numbersOnlyStyle = PropertyStyle::UNSTYLED;
                   break;
 
-            case P_ID::SPANNER_TICK2:
-                  setTick2(val.toInt());
+            case P_ID::SPANNER_TICKS:
+                  setTicks(val.toInt());
                   staff()->updateOttava();
                   break;
 
@@ -413,6 +414,9 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_ID::CONTINUE_TEXT_STYLE:
             case P_ID::END_TEXT_STYLE:
                   return QVariant::fromValue(score()->textStyle(TextStyleType::OTTAVA));
+
+            case P_ID::END_HOOK:
+                  return true;
 
             default:
                   return TextLine::propertyDefault(propertyId);
@@ -535,6 +539,15 @@ void Ottava::reset()
       setOttavaType(_ottavaType);
 
       TextLine::reset();
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Ottava::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + ottavaDefault[static_cast<int>(ottavaType())].name;
       }
 }
 

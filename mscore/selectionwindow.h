@@ -9,8 +9,8 @@ class SelectionWindow : public QDockWidget {
       Q_OBJECT
 
       Score* _score;
-
       QListWidget* _listWidget;
+
       virtual void closeEvent(QCloseEvent*);
       virtual void hideEvent (QHideEvent* event);
       void updateFilteredElements();

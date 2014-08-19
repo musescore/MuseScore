@@ -36,7 +36,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
       int tick = static_cast<Segment*>(st->parent())->tick();
       foreach(const Channel& a, part->instr(tick)->channel()) {
             if (a.name.isEmpty() || a.name == "normal")
-                  cb->addItem(QT_TR_NOOP("normal"));
+                  cb->addItem(QObject::tr("normal"));
             else
                   cb->addItem(a.name);
             }
@@ -56,6 +56,10 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
             setWindowTitle(tr("MuseScore: Staff Text Properties"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       staffText = st;
+
+#ifndef AEOLUS
+	tabWidget->removeTab(2);
+#endif
 
       vb[0][0] = voice1_1;
       vb[0][1] = voice1_2;
@@ -122,7 +126,30 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
                   mapper->setMapping(vb[col][row], (col << 8) + row);
                   }
             }
+
+      if (staffText->swing()) {
+            setSwingBox->setChecked(true);
+            if (st->swingParameters()->swingUnit == MScore::division/2) {
+                  swingBox->setEnabled(true);
+                  swingEighth->setChecked(true);
+                  swingBox->setValue(st->swingParameters()->swingRatio);
+                  }
+            else if (st->swingParameters()->swingUnit == MScore::division/4) {
+                  swingBox->setEnabled(true);
+                  swingSixteenth->setChecked(true);
+                  swingBox->setValue(st->swingParameters()->swingRatio);
+                  }
+            else if (st->swingParameters()->swingUnit == 0) {
+                 swingBox->setEnabled(false);
+                 SwingOff->setChecked(true);
+                 swingBox->setValue(st->swingParameters()->swingRatio);
+                 }
+            }
+
       connect(mapper, SIGNAL(mapped(int)), SLOT(voiceButtonClicked(int)));
+      connect(SwingOff, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
+      connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
+      connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
 
       //---------------------------------------------------
       //    setup midi actions
@@ -219,6 +246,22 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
 
       curTabIndex = tabWidget->currentIndex();
       connect(tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
+      }
+
+//---------------------------------------------------------
+//   setSwingParameters
+//---------------------------------------------------------
+
+void StaffTextProperties::setSwingControls(bool checked)
+      {
+      if (!checked)
+            return;
+      if (SwingOff->isChecked())
+            swingBox->setEnabled(false);
+      else if (swingEighth->isChecked())
+            swingBox->setEnabled(true);
+      else if (swingSixteenth->isChecked())
+            swingBox->setEnabled(true);
       }
 
 //---------------------------------------------------------
@@ -374,8 +417,23 @@ void StaffTextProperties::saveValues()
                         }
                   }
             }
-
+      if (setSwingBox->isChecked()) {
+            staffText->setSwing(true);
+            if (SwingOff->isChecked()) {
+                  staffText->setSwingParameters(0, swingBox->value());
+                  swingBox->setEnabled(false);
+                  }
+            else if (swingEighth->isChecked()) {
+                  staffText->setSwingParameters(MScore::division/2, swingBox->value());
+                  swingBox->setEnabled(true);
+                  }
+            else if (swingSixteenth->isChecked()) {
+                  staffText->setSwingParameters(MScore::division/4, swingBox->value());
+                  swingBox->setEnabled(true);
+                  }
+            }
       staffText->score()->updateChannel();
+      staffText->score()->updateSwing();
       staffText->score()->setPlaylistDirty(true);
       }
 }

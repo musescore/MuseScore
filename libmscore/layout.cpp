@@ -10,7 +10,6 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-// #include <fenv.h>
 #include "page.h"
 #include "sig.h"
 #include "key.h"
@@ -171,17 +170,21 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             maxDownWidth = qMax(maxDownWidth, hw);
             }
 
-      qreal sp = staff->spatium();
-      qreal upOffset = 0.0;
-      qreal downOffset = 0.0;
-      qreal dotAdjust = 0.0;  // additional chord offset to account for dots
+      qreal sp                      = staff->spatium();
+      qreal upOffset                = 0.0;      // offset to apply to upstem chords
+      qreal downOffset              = 0.0;      // offset to apply to downstem chords
+      qreal dotAdjust               = 0.0;      // additional chord offset to account for dots
+      qreal dotAdjustThreshold      = 0.0;      // if it exceeds this amount
 
       // centering adjustments for whole note, breve, and small chords
-      qreal centerUp = 0.0;
-      qreal oversizeUp = 0.0;
-      qreal centerDown = 0.0;
       qreal headDiff;
-      qreal centerThreshold = 0.1 * sp;
+      qreal centerUp          = 0.0;      // offset to apply in order to center upstem chords
+      qreal oversizeUp        = 0.0;      // adjustment to oversized upstem chord needed if laid out to the right
+      qreal centerDown        = 0.0;      // offset to apply in order to center downstem chords
+      qreal centerAdjustUp    = 0.0;      // adjustment to upstem chord needed after centering donwstem chord
+      qreal centerAdjustDown  = 0.0;      // adjustment to downstem chord needed after centering upstem chord
+      qreal centerThreshold   = 0.1 * sp; // only center chords if they differ from nominal by this amount
+
       headDiff = maxUpWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             // larger than nominal
@@ -192,14 +195,17 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       else if (-headDiff > centerThreshold) {
             // smaller than nominal
             centerUp = headDiff * -0.5;
+            centerAdjustDown = centerUp;
             }
       headDiff = maxDownWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             centerDown = headDiff * -0.5;
             maxDownWidth = nominalWidth - centerDown;
             }
-      else if (-headDiff > centerThreshold)
+      else if (-headDiff > centerThreshold) {
             centerDown = headDiff * -0.5;
+            centerAdjustUp = centerDown;
+            }
 
       // handle conflict between upstem and downstem chords
 
@@ -371,6 +377,13 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         else
                               downDots = 0; // no need to adjust for dots in this case
                         upOffset = qMax(clearLeft, clearRight);
+                        // if downstem chord is small, don't center
+                        // and we might not need as much dot adjustment either
+                        if (centerDown > 0.0) {
+                              centerDown = 0.0;
+                              centerAdjustUp = 0.0;
+                              dotAdjustThreshold = (upOffset - maxDownWidth) + maxUpWidth - 0.3 * sp;
+                              }
                         }
 
                   }
@@ -396,6 +409,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   if (dots > 1)
                         dotAdjust += point(styleS(StyleIdx::dotDotDistance)) * (dots - 1);
                   dotAdjust *= mag;
+                  // only by amount over threshold
+                  dotAdjust = qMax(dotAdjust - dotAdjustThreshold, 0.0);
                   }
             if (separation == 1)
                   dotAdjust += 0.1 * sp;
@@ -409,7 +424,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   Chord* chord = static_cast<Chord*>(e);
                   if (chord->up()) {
                         if (upOffset != 0.0) {
-                              chord->rxpos() += upOffset + oversizeUp;
+                              chord->rxpos() += upOffset + centerAdjustUp + oversizeUp;
                               if (downDots && !upDots)
                                     chord->rxpos() += dotAdjust;
                               }
@@ -418,7 +433,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         }
                   else {
                         if (downOffset != 0.0) {
-                              chord->rxpos() += downOffset;
+                              chord->rxpos() += downOffset + centerAdjustDown;
                               if (upDots && !downDots)
                                     chord->rxpos() += dotAdjust;
                               }
@@ -576,13 +591,14 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
       qreal gap = lower->top - upper->bottom;
 
       // no conflict at all if there is sufficient vertical gap between accidentals
-      if (gap >= pd)
+      // the arrangement of accidentals into columns assumes accidentals an octave apart *do* clear
+      if (gap >= pd || lower->line - upper->line >= 7)
             return false;
 
       qreal allowableOverlap = qMax(upper->descent, lower->ascent) - pd;
 
       // accidentals that are "close" (small gap or even slight overlap)
-      if (qAbs(gap) <= 0.25 * sp) {
+      if (qAbs(gap) <= 0.33 * sp) {
             // acceptable with slight offset
             // if one of the accidentals can subsume the overlap
             // and both accidentals allow it
@@ -629,6 +645,10 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
 static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffset, QList<Note*>& leftNotes, qreal pnd, qreal pd, qreal sp)
       {
       qreal lx = colOffset;
+      Accidental* acc = me->note->accidental();
+      qreal mag = acc->mag();
+      pnd *= mag;
+      pd *= mag;
 
       // extra space for ledger lines
       if (me->line <= -2 || me->line >= me->note->staff()->lines() * 2)
@@ -644,9 +664,9 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
             if (me->top - lnBottom <= pnd && lnTop - me->bottom <= pnd) {
                   // undercut note above if possible
                   if (lnBottom - me->top <= me->ascent - pnd)
-                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear - pnd);
+                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear);
                   else
-                        lx = qMin(lx, ln->x() + ln->chord()->x() - pnd);
+                        lx = qMin(lx, ln->x() + ln->chord()->x());
                   }
             else if (lnTop > me->bottom)
                   break;
@@ -655,7 +675,6 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
       // clear other accidentals
       bool conflictAbove = false;
       bool conflictBelow = false;
-      Accidental* acc = me->note->accidental();
 
       if (above)
             conflictAbove = resolveAccidentals(me, above, lx, pd, sp);
@@ -664,9 +683,9 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
       if (conflictAbove || conflictBelow)
             me->x = lx - acc->width() - acc->bbox().x();
       else if (colOffset != 0.0)
-            me->x = lx - pd * acc->mag() - acc->width() - acc->bbox().x();
+            me->x = lx - pd - acc->width() - acc->bbox().x();
       else
-            me->x = lx - pnd * acc->mag() - acc->width() - acc->bbox().x();
+            me->x = lx - pnd - acc->width() - acc->bbox().x();
 
       return me->x;
 
@@ -923,7 +942,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                               below = k;
                               }
                         // check to see if accidental can fit in slot
-                        qreal myPd = pd * me->note->mag();
+                        qreal myPd = pd * me->note->accidental()->mag();
                         bool conflict = false;
                         if (above != -1 && me->top - aclist[above].bottom < myPd)
                               conflict = true;
@@ -1355,7 +1374,7 @@ void Score::doLayout()
             }
       for (auto s : _spanner.map()) {
             Spanner* sp = s.second;
-            if (sp->type() == Element::Type::OTTAVA && sp->tick2() == -1) {
+            if (sp->type() == Element::Type::OTTAVA && sp->ticks() == 0) {
                   sp->setTick2(lastMeasure()->endTick());
                   sp->staff()->updateOttava();
                   }
@@ -1510,16 +1529,16 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef = new Clef(this);
                         clef->setTrack(i * VOICES);
                         clef->setSmall(false);
-                        clef->setGenerated(staff->clef(tick) == staff->clef(tick-1));
+                        clef->setGenerated(true);
 
                         Segment* s = m->undoGetSegment(Segment::Type::Clef, tick);
                         clef->setParent(s);
                         clef->layout();
-                        clef->setClefType(staff->clefTypeList(tick));  // set before add !
+                        clef->setClefType(staff->clefType(tick));  // set before add !
                         undoAddElement(clef);
                         }
                   else if (clef->generated()) {
-                        ClefTypeList cl = staff->clefTypeList(tick);
+                        ClefTypeList cl = staff->clefType(tick);
                         if (cl != clef->clefTypeList())
                               undo(new ChangeClefType(clef, cl._concertClef, cl._transposingClef));
                         }
@@ -1821,8 +1840,11 @@ void Score::createMMRests()
                   mmr->setPrev(m->prev());
                   m = lm;
                   }
-            else if (m->mmRest())
-                  undo(new ChangeMMRest(m, 0));
+            else {
+                  if (m->mmRest())
+                        undo(new ChangeMMRest(m, 0));
+                  m->setMMRestCount(0);
+                  }
             }
 /* Update Notes After creating mmRest Because on load, mmRest->next() was not set
 on first pass in updateNotes() and break occur */
@@ -2069,6 +2091,8 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       //
       int staves = _staves.size();
       int staffIdx = 0;
+      bool systemIsEmpty = true;
+
       foreach (Staff* staff, _staves) {
             SysStaff* s  = system->staff(staffIdx);
             bool oldShow = s->show();
@@ -2119,8 +2143,12 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                               }
                         }
                   s->setShow(hideStaff ? false : staff->show());
+                  if (s->show()) {
+                        systemIsEmpty = false;
+                        }
                   }
             else {
+                  systemIsEmpty = false;
                   s->setShow(true);
                   }
 
@@ -2132,6 +2160,14 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                         }
                   }
             ++staffIdx;
+            }
+      if (systemIsEmpty) {
+            foreach (Staff* staff, _staves) {
+                  SysStaff* s  = system->staff(staff->idx());
+                  if (staff->showIfEmpty() && !s->show()) {
+                        s->setShow(true);
+                        }
+                  }
             }
       }
 
@@ -2325,7 +2361,7 @@ Page* Score::addPage()
 ///   Rebuild tie connections.
 //---------------------------------------------------------
 
-void Score::connectTies()
+void Score::connectTies(bool silent)
       {
       int tracks = nstaves() * VOICES;
       Measure* m = firstMeasure();
@@ -2347,9 +2383,11 @@ void Score::connectTies()
                         else
                               nnote = searchTieNote(n);
                         if (nnote == 0) {
-                              qDebug("next note at %d track %d for tie not found", s->tick(), i);
-                              delete tie;
-                              n->setTieFor(0);
+                              if (!silent) {
+                                    qDebug("next note at %d track %d for tie not found (version %d)", s->tick(), i, _mscVersion);
+                                    delete tie;
+                                    n->setTieFor(0);
+                                    }
                               }
                         else {
                               tie->setEndNote(nnote);

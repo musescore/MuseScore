@@ -47,7 +47,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
@@ -171,7 +171,7 @@
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>

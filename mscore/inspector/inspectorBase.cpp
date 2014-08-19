@@ -27,6 +27,7 @@ namespace Ms {
 InspectorBase::InspectorBase(QWidget* parent)
    : QWidget(parent)
       {
+      setAccessibleName(tr("Inspector"));
       resetMapper  = new QSignalMapper(this);
       valueMapper  = new QSignalMapper(this);
       blockSignals = false;

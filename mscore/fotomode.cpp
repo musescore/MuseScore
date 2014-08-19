@@ -402,10 +402,10 @@ void ScoreView::doDragFoto(QMouseEvent* ev)
       QRectF rr(_foto->rect());
       r = _matrix.mapRect(rr);
       QSize sz(r.size().toSize());
-      mscore->statusBar()->showMessage(QString("%1 x %2").arg(sz.width()).arg(sz.height()), 3000);
+      //mscore->statusBar()->showMessage(QString("%1 x %2").arg(sz.width()).arg(sz.height()), 3000);
 
       update();
-      mscore->showMessage("drag", 2000);
+      //mscore->showMessage("drag", 2000);
       }
 
 //---------------------------------------------------------
@@ -578,7 +578,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       QMenu* popup = new QMenu(this);
       popup->setSeparatorsCollapsible(false);
       QAction* a = popup->addSeparator();
-      a->setText(tr("Foto-Mode"));
+      a->setText(tr("Screenshot Mode"));
 
       a = getAction("copy");
       a->setEnabled(true);
@@ -594,13 +594,13 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
 
       popup->addSeparator();
       for (int i = 0; i < 4; ++i) {
-            a = new QAction(resizeEntry[i].text, this);
+            a = new QAction(qApp->translate("fotomode", resizeEntry[i].text), this);
             a->setData(resizeEntry[i].label);
             popup->addAction(a);
             }
       QMenu* setSize = new QMenu(tr("Set Standard Size..."));
       for (int i = 0; i < 4; ++i) {
-            a = new QAction(setSizeEntry[i].text, this);
+            a = new QAction(qApp->translate("fotomode", setSizeEntry[i].text), this);
             a->setData(setSizeEntry[i].label);
             setSize->addAction(a);
             }

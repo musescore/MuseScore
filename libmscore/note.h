@@ -285,6 +285,7 @@ class Note : public Element {
       int tpc() const;
       int tpc1() const            { return _tpc[0]; }     // non transposed tpc
       int tpc2() const            { return _tpc[1]; }     // transposed tpc
+      QString tpcUserName(bool explicitAccidental = false);
 
       void setTpc(int v);
       void setTpc1(int v)         { _tpc[0] = v; }
@@ -330,13 +331,12 @@ class Note : public Element {
 
       Chord* chord() const            { return (Chord*)parent(); }
       void setChord(Chord* a)         { setParent((Element*)a);  }
-
       void draw(QPainter*) const;
 
       void read(XmlReader&);
       void write(Xml& xml) const;
 
-      bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      bool acceptDrop(const DropData&) const override;
       Element* drop(const DropData&);
 
       bool hidden() const                       { return _hidden; }
@@ -345,6 +345,7 @@ class Note : public Element {
       void setDotsHidden(bool val)              { _dotsHidden = val;  }
 
       NoteType noteType() const;
+      QString  noteTypeUserName();
 
       ElementList el()                            { return _el; }
       const ElementList el() const                { return _el; }
@@ -415,11 +416,17 @@ class Note : public Element {
       void setMark(bool v) const      { _mark = v;   }
       virtual void setScore(Score* s);
       void setDotY(MScore::Direction);
-      
+
       void addBracket();
 
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
+      virtual QString accessibleInfo() override;
+      virtual QString screenReaderInfo() override;
+      virtual QString accessibleExtraInfo() override;
       };
 
 // extern const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)];

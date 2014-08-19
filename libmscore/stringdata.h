@@ -24,10 +24,18 @@ class Note;
 //   StringData
 //---------------------------------------------------------
 
+// defines the string of an instrument
+struct instrString {
+      int   pitch;      // the pitch of the string
+      bool  open;       // true: string is open | false: string is fretted
+
+      bool operator==(const instrString& d) const { return d.pitch == pitch && d.open == open; }
+      };
+
 class StringData {
 //      QList<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
 //      int         _frets = 19;
-      QList<int>  stringTable {  };                         // no strings by default
+      QList<instrString>  stringTable {  };                   // no strings by default
       int         _frets = 0;
 
       static bool bFretting;
@@ -37,16 +45,16 @@ class StringData {
 public:
       StringData() {}
       StringData(int numFrets, int numStrings, int strings[]);
-      StringData(int numFrets, QList<int>& strings);
+      StringData(int numFrets, QList<instrString>& strings);
       bool        convertPitch(int pitch, int* string, int* fret) const;
       int         fret(int pitch, int string) const;
       void        fretChords(Chord * chord) const;
       int         getPitch(int string, int fret) const;
-      int         strings() const         { return stringTable.size(); }
-      QList<int>  stringList() const      { return stringTable; }
-      QList<int>&  stringList()           { return stringTable; }
-      int         frets() const           { return _frets; }
-      void        setFrets(int val)       { _frets = val; }
+      int         strings() const               { return stringTable.size(); }
+      QList<instrString>  stringList() const    { return stringTable; }
+      QList<instrString>&  stringList()         { return stringTable; }
+      int         frets() const                 { return _frets; }
+      void        setFrets(int val)             { _frets = val; }
       void        read(XmlReader&);
       void        write(Xml&) const;
 //      void        readMusicXML(XmlReader& de);

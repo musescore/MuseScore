@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Accidental Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -36,6 +39,9 @@
        <weight>75</weight>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="accessibleName">
+      <string/>
      </property>
      <property name="text">
       <string>Accidental</string>
@@ -68,6 +74,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Small value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -91,6 +100,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Small</string>
+       </property>
        <property name="text">
         <string>Small</string>
        </property>
@@ -100,6 +115,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>small</tabstop>
+  <tabstop>resetSmall</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

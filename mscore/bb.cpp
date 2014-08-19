@@ -393,8 +393,9 @@ Score::FileError importBB(Score* score, const QString& name)
             ntracks = 1;
       for (int i = 0; i < ntracks; ++i) {
             Part* part = new Part(score);
-            Staff* s   = new Staff(score, part, 0);
-            part->insertStaff(s);
+            Staff* s   = new Staff(score);
+            s->setPart(part);
+            part->insertStaff(s, 0);
             score->staves().append(s);
             score->appendPart(part);
             }
@@ -548,10 +549,10 @@ Score::FileError importBB(Score* score, const QString& name)
 
 int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int track)
       {
-      Staff* cstaff    = score->staff(track/VOICES);
-      Drumset* drumset = cstaff->part()->instr()->drumset();
-      bool useDrumset  = cstaff->part()->instr()->useDrumset();
-      int tick         = notes->at(0)->mc.ontime();
+      Staff* cstaff          = score->staff(track/VOICES);
+      Drumset* drumset       = cstaff->part()->instr()->drumset();
+      DrumsetKind useDrumset = cstaff->part()->instr()->useDrumset();
+      int tick               = notes->at(0)->mc.ontime();
 
       //
       // look for len of shortest note
@@ -590,7 +591,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
                   note->setTrack(track);
                   chord->add(note);
 
-                  if (useDrumset) {
+                  if (useDrumset != DrumsetKind::NONE) {
                         if (!drumset->isValid(mn.pitch())) {
                               qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                               }

@@ -43,18 +43,18 @@ class Rest : public ChordRest {
       Rest(Score* s = 0);
       Rest(Score*, const TDuration&);
       Rest(const Rest&, bool link = false);
+
+      virtual Element::Type type() const override { return Element::Type::REST; }
       Rest &operator=(const Rest&) = delete;
 
       virtual Rest* clone() const override        { return new Rest(*this, false); }
       virtual Rest* linkedClone() const           { return new Rest(*this, true); }
-      virtual Element::Type type() const override { return Element::Type::REST; }
-
       virtual Measure* measure() const override   { return parent() ? (Measure*)(parent()->parent()) : 0; }
       virtual qreal mag() const override;
       virtual void draw(QPainter*) const override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
       virtual void layout() override;
 
@@ -74,8 +74,9 @@ class Rest : public ChordRest {
       virtual QPointF stemPos() const;
       virtual qreal stemPosX() const;
       virtual QPointF stemPosBeam() const;
-      };
 
+      virtual QString accessibleInfo() override;
+      };
 
 }     // namespace Ms
 #endif

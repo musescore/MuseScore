@@ -35,6 +35,7 @@ class InputState {
       TDuration   _duration    { TDuration::DurationType::V_INVALID };  // currently duration
       int         _drumNote    { -1 };
       int         _track       { 0 };
+      int         _prevTrack   { 0 };                       // used for navigation
       Segment*    _lastSegment { 0 };
       Segment*    _segment     { 0 };                       // current segment
       int         _string      { VISUAL_STRING_NONE };      // visual string selected for input (TAB staves only)
@@ -70,9 +71,10 @@ class InputState {
       int drumNote() const                { return _drumNote;       }
       void setDrumNote(int v)             { _drumNote = v;          }
 
-      int voice() const                   { return _track % VOICES; }
+      int voice() const                   { return _track == -1 ? 0 : (_track % VOICES); }
       int track() const                   { return _track;          }
-      void setTrack(int v)                { _track = v;             }
+      void setTrack(int v)                { _prevTrack = _track; _track = v; }
+      int prevTrack() const               { return _prevTrack;      }
 
       int string() const                  { return _string;             }
       void setString(int val)             { _string = val;              }

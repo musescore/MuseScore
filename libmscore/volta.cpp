@@ -176,15 +176,6 @@ void Volta::undoSetVoltaType(Type val)
       }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Volta::layout()
-      {
-      TextLine::layout();
-      }
-
-//---------------------------------------------------------
 //   setText
 //---------------------------------------------------------
 
@@ -313,8 +304,9 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
                         return false;
                   break;
             }
-      layout();
-      score()->addRefresh(pageBoundingRect());
+      // layout();
+      // score()->addRefresh(pageBoundingRect());
+      score()->setLayoutAll(true);
       return true;
       }
 
@@ -420,5 +412,12 @@ void Volta::reset()
       TextLine::reset();
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Volta::accessibleInfo(){
+      return Element::accessibleInfo() + " " + text();
+      }
 }
 

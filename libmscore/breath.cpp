@@ -53,7 +53,8 @@ void Breath::layout()
 
 void Breath::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Breath");
       xml.tag("subtype", _breathType);
       Element::writeProperties(xml);
@@ -108,5 +109,37 @@ QPointF Breath::pagePos() const
       return QPointF(pageX(), yp);
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Breath::nextElement()
+      {
+      return segment()->firstInNextSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Breath::prevElement()
+      {
+      return segment()->lastInPrevSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Breath::accessibleInfo()
+      {
+      switch (breathType()) {
+            case 2:
+            case 3:
+                  return tr("Caesura");
+            default:
+                  return tr("Breath");
+            }
+      }
 }
 

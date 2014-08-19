@@ -63,6 +63,7 @@ Shortcuts marked with the STATE_NEVER state should NEVER used directly as shortc
 ---------------------------------------------------------*/
 
 #include "icons.h"
+#include "globals.h"
 
 namespace Ms {
 
@@ -90,44 +91,59 @@ class Shortcut {
       int _flags         { 0 };
 
       QList<QKeySequence> _keys;     //! shortcut list
+
       QKeySequence::StandardKey _standardKey { QKeySequence::UnknownKey };
       Qt::ShortcutContext _context           { Qt::WindowShortcut };
       Icons _icon                            { Icons::Invalid_ICON };
       mutable QAction* _action               { 0 };             //! cached action
+      MsWidget _assignedWidget;             //! the widget where the action will be assigned
 
       static Shortcut sc[];
       static QMap<QString, Shortcut*> _shortcuts;
 
    public:
+
       Shortcut() {}
-      Shortcut(int state, int flags,
+      Shortcut(
+         Ms::MsWidget assignedWidget,
+         int state, int flags,
          const char* name,
          Qt::ShortcutContext cont,
          const char* d,
          const char* txt = 0,
          const char* h = 0,
          Icons i = Icons::Invalid_ICON);
-      Shortcut(int state, int flags,
+      Shortcut(
+         Ms::MsWidget assignedWidget,
+         int state, int flags,
          const char* name,
          const char* d,
          const char* txt = 0,
          const char* h = 0,
          Icons i = Icons::Invalid_ICON);
-      Shortcut(int state, int flags,
+      Shortcut(
+         Ms::MsWidget assignedWidget,
+         int state, int flags,
          const char* name,
          const char* d,
          Icons i);
-      Shortcut(int state, int flags,
+      Shortcut(
+         Ms::MsWidget assignedWidget,
+         int state, int flags,
          const char* name,
          const char* d,
          const char* txt,
          Icons i);
-      Shortcut(int state, int flags,
+      Shortcut(
+         Ms::MsWidget assignedWidget,
+         int state, int flags,
          const char* name,
          Qt::ShortcutContext cont,
          const char* d,
          Icons i);
-      Shortcut(int state, int flags,
+      Shortcut(
+         Ms::MsWidget assignedWidget,
+         int state, int flags,
          const char* name,
          Qt::ShortcutContext cont,
          const char* d,
@@ -143,6 +159,7 @@ class Shortcut {
       QString descr() const;
       QString text() const;
       QString help() const;
+      MsWidget assignedWidget() const { return _assignedWidget; }
       void clear();           //! remove shortcuts
       void reset();           //! reset to buildin
       void addShortcut(const QKeySequence&);
@@ -156,6 +173,8 @@ class Shortcut {
 
       bool compareKeys(const Shortcut&) const;
       QString keysToString() const;
+      static QString getMenuShortcutString(const QMenu* menu);
+
       void write(Ms::Xml&) const;
       void read(Ms::XmlReader&);
 
@@ -166,6 +185,8 @@ class Shortcut {
       static bool dirty;
       static Shortcut* getShortcut(const char* key);
       static const QMap<QString, Shortcut*>& shortcuts() { return _shortcuts; }
+      static QActionGroup* getActionGroupForWidget(MsWidget w);
+      static QActionGroup* getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext);
 
       static QString keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt);
       static QKeySequence keySeqFromString(const QString& str, QKeySequence::SequenceFormat fmt);

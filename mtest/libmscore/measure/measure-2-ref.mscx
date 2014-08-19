@@ -49,14 +49,14 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2"/>
         <barLineSpan>2</barLineSpan>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="0"/>
         <barLineSpan>0</barLineSpan>
@@ -93,7 +93,7 @@
     <Part>
       <Staff id="3">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
@@ -402,7 +402,7 @@
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="1" span="2"/>
           <barLineSpan>2</barLineSpan>
@@ -410,7 +410,7 @@
         <Staff id="2">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="-1" span="0"/>
           <barLineSpan>0</barLineSpan>
@@ -662,7 +662,7 @@
         <Staff id="1">
           <linkedTo>3</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>

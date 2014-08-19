@@ -630,7 +630,7 @@ ScoreView::ScoreView(QWidget* parent)
       setAcceptDrops(true);
       setAttribute(Qt::WA_OpaquePaintEvent);
       setAttribute(Qt::WA_NoSystemBackground);
-      setFocusPolicy(Qt::StrongFocus);
+      setFocusPolicy(Qt::ClickFocus);
       setAttribute(Qt::WA_InputMethodEnabled);
       setAttribute(Qt::WA_KeyCompression);
       setAttribute(Qt::WA_StaticContents);
@@ -1573,7 +1573,7 @@ void ScoreView::setShadowNote(const QPointF& p)
       int line                    = pos.line;
       NoteHead::Type noteHead       = is.duration().headType();
 
-      if (instr->useDrumset()) {
+      if (instr->useDrumset() != DrumsetKind::NONE) {
             Drumset* ds  = instr->drumset();
             int pitch    = is.drumNote();
             if (pitch >= 0 && ds->isValid(pitch)) {
@@ -1641,7 +1641,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             _foto->draw(&vp);
       shadowNote->draw(&vp);
 
-      if (dragElement)
+      if (dragElement && dragElement->type() != Element::Type::MEASURE)
             dragElement->scanElements(&vp, paintElement, false);
       if (!dropAnchor.isNull()) {
             QPen pen(QBrush(QColor(80, 0, 0)), 2.0 / vp.worldTransform().m11(), Qt::DotLine);
@@ -1871,6 +1871,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       if (sel.isRange()) {
             Segment* ss = sel.startSegment();
             Segment* es = sel.endSegment();
+
             if (!ss)
                   return;
             p.setBrush(Qt::NoBrush);
@@ -2465,6 +2466,8 @@ void ScoreView::cmdGotoElement(Element* e)
             if (e->type() == Element::Type::NOTE)
                   score()->setPlayNote(true);
             score()->select(e, SelectType::SINGLE, 0);
+            if (e)
+                  adjustCanvasPosition(e, false);
             moveCursor();
             }
       }
@@ -2479,8 +2482,9 @@ void ScoreView::cmd(const QAction* a)
       if (MScore::debugMode)
             qDebug("ScoreView::cmd <%s>", qPrintable(cmd));
 
-      if (cmd == "escape")
+      if (cmd == "escape") {
             sm->postEvent(new CommandEvent(cmd));
+            }
       else if (cmd == "note-input" || cmd == "copy" || cmd == "paste"
          || cmd == "cut" || cmd == "fotomode") {
             sm->postEvent(new CommandEvent(cmd));
@@ -2579,8 +2583,11 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else if (cmd == "play") {
-            if (seq && seq->canStart())
+            if (seq && seq->canStart()) {
+                  if (noteEntryMode())          // force out of entry mode
+                        sm->postEvent(new CommandEvent("note-input"));
                   sm->postEvent(new CommandEvent(cmd));
+                  }
             else
                   getAction("play")->setChecked(false);
             }
@@ -2673,6 +2680,33 @@ void ScoreView::cmd(const QAction* a)
             if (el && el->type() == Element::Type::NOTE)
                   cmdGotoElement(score()->downAltCtrl(static_cast<Note*>(el)));
             }
+      else if (cmd == "next-element"){
+            Element* el = score()->selection().element();
+            if (!el && !score()->selection().elements().isEmpty() )
+                el = score()->selection().elements().first();
+
+            //cmdGotoElement(score()->nextElement(el));
+            if (el)
+                  cmdGotoElement(el->nextElement());
+            else
+                  cmdGotoElement(score()->firstElement());
+            }
+      else if (cmd == "prev-element"){
+            Element* el = score()->selection().element();
+            if (!el && !score()->selection().elements().isEmpty())
+                el = score()->selection().elements().last();
+
+            if (el)
+                  cmdGotoElement(el->prevElement());
+            else
+                  cmdGotoElement(score()->lastElement());
+      }
+      else if (cmd == "first-element"){
+            cmdGotoElement(score()->firstElement());
+      }
+      else if (cmd == "last-element"){
+            cmdGotoElement(score()->lastElement());
+      }
       else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
       else if (cmd == "rest-1")
@@ -2682,7 +2716,7 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "rest-4")
             cmdEnterRest(TDuration(TDuration::DurationType::V_QUARTER));
       else if (cmd == "rest-8")
-            cmdEnterRest(TDuration(TDuration::DurationType::V_EIGHT));
+            cmdEnterRest(TDuration(TDuration::DurationType::V_EIGHTH));
       else if (cmd.startsWith("interval")) {
             int n = cmd.mid(8).toInt();
             QList<Note*> nl = _score->selection().noteList();
@@ -4148,7 +4182,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
       _score->startCmd();
       for (Note* n : _score->selection().noteList()) {
             Staff* staff = n->staff();
-            if (staff->part()->instr()->useDrumset())
+            if (staff->part()->instr()->useDrumset() != DrumsetKind::NONE)
                   continue;
             if (staff->isTabStaff()) {
                   int string = n->line() + (up ? 1 : -1);
@@ -4773,7 +4807,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   return;
                   }
             is.setDrumNote(pitch);
-            is.setTrack(is.track() / VOICES + voice);
+            is.setTrack((is.track() / VOICES) * VOICES + voice);
             octave = pitch / 12;
             }
       else {
@@ -4959,7 +4993,6 @@ void ScoreView::cmdAddText(TEXT type)
 
       if (s) {
             _score->undoAddElement(s);
-            _score->setLayoutAll(true);
             _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
             startEdit(s);
@@ -5530,11 +5563,14 @@ Element* ScoreView::elementNear(QPointF p)
 //   posChanged
 //---------------------------------------------------------
 
-void ScoreView::posChanged(POS pos, unsigned /*tick*/)
+void ScoreView::posChanged(POS pos, unsigned tick)
       {
       switch (pos) {
             case POS::CURRENT:
-                  moveCursor();
+                  if (noteEntryMode())
+                        moveCursor();     // update input cursor position
+                  else
+                        moveCursor(tick); // update play position
                   break;
             case POS::LEFT:
                   _curLoopIn->move(_score->pos(POS::LEFT));

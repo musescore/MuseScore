@@ -274,7 +274,7 @@ class ExportMusicXml {
       TrillHash trillStop;
 
       int findBracket(const TextLine* tl) const;
-      void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset);
+      void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset);
       void rest(Rest* chord, int staff);
       void clef(int staff, ClefType clef);
       void timesig(TimeSig* tsig);
@@ -1052,7 +1052,7 @@ static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QS
       mttm.write(xml);
       xml.etag();
       }
-      
+
 //---------------------------------------------------------
 //   parentHeight
 //---------------------------------------------------------
@@ -1060,10 +1060,10 @@ static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QS
 static double parentHeight(const Element* element)
       {
             const Element* parent = element->parent();
-            
+
             if (!parent)
                   return 0;
-            
+
             if (parent->type() == Element::Type::VBOX) {
                   return parent->height();
                   }
@@ -1105,7 +1105,7 @@ void ExportMusicXml::credits(Xml& xml)
                         Align al = text->textStyle().align();
                         QString just;
                         QString val;
-                        
+
                         if (al & AlignmentFlags::RIGHT) {
                               just = "right";
                               tx   = w - rm;
@@ -1118,7 +1118,7 @@ void ExportMusicXml::credits(Xml& xml)
                               just = "left";
                               tx   = lm;
                               }
-                        
+
                         if (al & AlignmentFlags::BOTTOM) {
                               val = "bottom";
                               ty -= ph;
@@ -1135,7 +1135,7 @@ void ExportMusicXml::credits(Xml& xml)
                               val = "top";
                               // ty already set correctly
                               }
-                        
+
                         creditWords(xml, _score, tx, ty, just, val, text->text(), text->textStyle());
                         }
                   }
@@ -1187,11 +1187,11 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
 
 static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       {
-            
+
       const Staff* st = note->staff();
       const Instrument* instr = st->part()->instr();
       const Interval intval = instr->transpose();
-            
+
       s      = tpc2stepName(note->tpc());
       alter  = tpc2alterByKey(note->tpc(), Key::C);
       // note that pitch must be converted to concert pitch
@@ -2115,7 +2115,7 @@ static void writeBeam(Xml& xml, ChordRest* cr, Beam* b)
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset)
+void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset)
       {
       /*
       qDebug("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",
@@ -2181,18 +2181,18 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
             }
             else {
-                  if (!useDrumset) {
+                  if (useDrumset == DrumsetKind::NONE) {
                         pitch2xml(note, step, alter, octave);
                   }
                   else {
                         unpitch2xml(note, step, octave);
                   }
             }
-            xml.stag(useDrumset ? "unpitched" : "pitch");
-            xml.tag(useDrumset ? "display-step" : "step", step);
+            xml.stag(useDrumset != DrumsetKind::NONE ? "unpitched" : "pitch");
+            xml.tag(useDrumset != DrumsetKind::NONE ? "display-step" : "step", step);
             if (alter)
                   xml.tag("alter", alter);
-            xml.tag(useDrumset ? "display-octave" : "octave", octave);
+            xml.tag(useDrumset != DrumsetKind::NONE ? "display-octave" : "octave", octave);
             xml.etag();
 
             // duration
@@ -2205,7 +2205,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   xml.tagE("tie type=\"start\"");
 
             // instrument for unpitched
-            if (useDrumset)
+            if (useDrumset != DrumsetKind::NONE)
                   xml.tagE(QString("instrument id=\"P%1-I%2\"").arg(_score->parts().indexOf(note->staff()->part()) + 1).arg(note->pitch() + 1));
 
             // voice
@@ -2732,7 +2732,7 @@ static bool findUnit(TDuration::DurationType val, QString& unit)
       switch (val) {
             case TDuration::DurationType::V_HALF: unit = "half"; break;
             case TDuration::DurationType::V_QUARTER: unit = "quarter"; break;
-            case TDuration::DurationType::V_EIGHT: unit = "eighth"; break;
+            case TDuration::DurationType::V_EIGHTH: unit = "eighth"; break;
             default: qDebug("findUnit: unknown DurationType %hhd", val);
             }
       return true;
@@ -3439,72 +3439,39 @@ static int findTrackForAnnotations(int track, Segment* seg)
 static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int strack, int etrack, int track)
       {
       // loop over all segments
-      for (Segment* seg = m->first(); seg; seg = seg->next()) {
-            if (seg->segmentType() == Segment::Type::ChordRest) {
-                  foreach(const Element* e, seg->annotations()) {
-#ifdef DEBUG_REPEATS
-                        qDebug("repeatAtMeasureStart seg %p elem %p type %d (%s) track %d",
-                               seg, e, e->type(), qPrintable(e->subtypeName()), e->track());
-#endif
-                        int wtrack = -1; // track to write jump
-                        if (strack <= e->track() && e->track() < etrack)
-                              wtrack = findTrackForAnnotations(e->track(), seg);
-                        if (track == wtrack) {
-                              switch (e->type()) {
-                                    case Element::Type::SYMBOL:
-                                    case Element::Type::TEMPO_TEXT:
-                                    case Element::Type::STAFF_TEXT:
-                                    case Element::Type::TEXT:
-                                    case Element::Type::DYNAMIC:
-                                    case Element::Type::HARMONY:
-                                    case Element::Type::FIGURED_BASS:
-                                    case Element::Type::REHEARSAL_MARK:
-                                    case Element::Type::FRET_DIAGRAM:
-                                    case Element::Type::JUMP: // note: all jumps are handled at measure stop
-                                          break;
-                                    case Element::Type::MARKER:
-                                          {
-                                          // filter out the markers at measure Start
-                                          const Marker* const mk = static_cast<const Marker* const>(e);
-                                          Marker::Type mtp = mk->markerType();
-#ifdef DEBUG_REPEATS
-                                          qDebug("repeatAtMeasureStart: marker type %d", mtp);
-#endif
-                                          if (   mtp == Marker::Type::SEGNO
-                                                 || mtp == Marker::Type::CODA
-                                                 ) {
-                                                qDebug(" -> handled");
-                                                attr.doAttr(xml, false);
-                                                directionMarker(xml, mk);
-                                                }
-                                          else if (   mtp == Marker::Type::FINE
-                                                      || mtp == Marker::Type::TOCODA
-                                                      ) {
-#ifdef DEBUG_REPEATS
-                                                qDebug(" -> ignored");
-#endif
-                                                // ignore
-                                                }
-                                          else {
-#ifdef DEBUG_REPEATS
-                                                qDebug(" -> not implemented");
-#endif
-                                                qDebug("repeatAtMeasureStart: marker %hhd not implemented", mtp);
-                                                }
-                                          }
-                                          break;
-                                    default:
-                                          qDebug("repeatAtMeasureStart: direction type %s at tick %d not implemented",
-                                                 Element::name(e->type()), seg->tick());
-                                          break;
-                                    }
+      for (Element* e : *m->el()) {
+            int wtrack = -1; // track to write jump
+            if (strack <= e->track() && e->track() < etrack)
+                  wtrack = findTrackForAnnotations(e->track(), m->first(Segment::Type::ChordRest));
+            if (track != wtrack)
+                  continue;
+            switch (e->type()) {
+                  case Element::Type::MARKER:
+                        {
+                        // filter out the markers at measure Start
+                        const Marker* const mk = static_cast<const Marker* const>(e);
+                        Marker::Type mtp = mk->markerType();
+                        if (   mtp == Marker::Type::SEGNO
+                               || mtp == Marker::Type::CODA
+                               ) {
+                              qDebug(" -> handled");
+                              attr.doAttr(xml, false);
+                              directionMarker(xml, mk);
+                              }
+                        else if (   mtp == Marker::Type::FINE
+                                    || mtp == Marker::Type::TOCODA
+                                    ) {
+                              // ignore
                               }
                         else {
-#ifdef DEBUG_REPEATS
-                              qDebug("repeatAtMeasureStart: no track found");
-#endif
+                              qDebug("repeatAtMeasureStart: marker %hhd not implemented", mtp);
                               }
-                        } // foreach
+                        }
+                        break;
+                  default:
+                        qDebug("repeatAtMeasureStart: direction type %s at tick %d not implemented",
+                               Element::name(e->type()), m->tick());
+                        break;
                   }
             }
       }
@@ -3515,76 +3482,36 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
 
 static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, int track)
       {
-      // loop over all segments
-      for (Segment* seg = m->first(); seg; seg = seg->next()) {
-            if (seg->segmentType() == Segment::Type::ChordRest) {
-                  foreach(const Element* e, seg->annotations()) {
-#ifdef DEBUG_REPEATS
-                        qDebug("repeatAtMeasureStop seg %p elem %p type %d (%s) track %d",
-                               seg, e, e->type(), qPrintable(e->subtypeName()), e->track());
-#endif
-                        int wtrack = -1; // track to write jump
-                        if (strack <= e->track() && e->track() < etrack)
-                              wtrack = findTrackForAnnotations(e->track(), seg);
-                        if (track == wtrack) {
-                              switch (e->type()) {
-                                    case Element::Type::SYMBOL:
-                                    case Element::Type::TEMPO_TEXT:
-                                    case Element::Type::STAFF_TEXT:
-                                    case Element::Type::TEXT:
-                                    case Element::Type::DYNAMIC:
-                                    case Element::Type::HARMONY:
-                                    case Element::Type::FIGURED_BASS:
-                                    case Element::Type::REHEARSAL_MARK:
-                                    case Element::Type::FRET_DIAGRAM:
-                                          break;
-                                    case Element::Type::MARKER:
-                                          {
-                                          // filter out the markers at measure stop
-                                          const Marker* const mk = static_cast<const Marker* const>(e);
-                                          Marker::Type mtp = mk->markerType();
-#ifdef DEBUG_REPEATS
-                                          qDebug("repeatAtMeasureStop: marker type %d", mtp);
-#endif
-                                          if (   mtp == Marker::Type::FINE
-                                                 || mtp == Marker::Type::TOCODA
-                                                 ) {
-#ifdef DEBUG_REPEATS
-                                                qDebug(" -> handled");
-#endif
-                                                directionMarker(xml, mk);
-                                                }
-                                          else if (   mtp == Marker::Type::SEGNO
-                                                      || mtp == Marker::Type::CODA
-                                                      ) {
-#ifdef DEBUG_REPEATS
-                                                qDebug(" -> ignored");
-#endif
-                                                // ignore
-                                                }
-                                          else {
-#ifdef DEBUG_REPEATS
-                                                qDebug(" -> not implemented");
-#endif
-                                                qDebug("repeatAtMeasureStop: marker %hhd not implemented", mtp);
-                                                }
-                                          }
-                                          break;
-                                    case Element::Type::JUMP:
-                                          directionJump(xml, static_cast<const Jump* const>(e));
-                                          break;
-                                    default:
-                                          qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
-                                                 Element::name(e->type()), seg->tick());
-                                          break;
-                                    }
+      for (Element* e : *m->el()) {
+            int wtrack = -1; // track to write jump
+            if (strack <= e->track() && e->track() < etrack)
+                  wtrack = findTrackForAnnotations(e->track(), m->first(Segment::Type::ChordRest));
+            if (track != wtrack)
+                  continue;
+            switch (e->type()) {
+                  case Element::Type::MARKER:
+                        {
+                        // filter out the markers at measure stop
+                        const Marker* const mk = static_cast<const Marker* const>(e);
+                        Marker::Type mtp = mk->markerType();
+                        if (mtp == Marker::Type::FINE || mtp == Marker::Type::TOCODA) {
+                              directionMarker(xml, mk);
+                              }
+                        else if (mtp == Marker::Type::SEGNO || mtp == Marker::Type::CODA) {
+                              // ignore
                               }
                         else {
-#ifdef DEBUG_REPEATS
-                              qDebug("repeatAtMeasureStop: no track found");
-#endif
+                              qDebug("repeatAtMeasureStop: marker %hhd not implemented", mtp);
                               }
-                        } // foreach
+                        }
+                        break;
+                  case Element::Type::JUMP:
+                        directionJump(xml, static_cast<const Jump* const>(e));
+                        break;
+                  default:
+                        qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
+                               Element::name(e->type()), m->tick());
+                        break;
                   }
             }
       }
@@ -4096,7 +4023,7 @@ void ExportMusicXml::write(QIODevice* dev)
             if (!part->shortName().isEmpty())
                   xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
-            if (part->instr()->useDrumset()) {
+            if (part->instr()->useDrumset() != DrumsetKind::NONE) {
                   Drumset* drumset = part->instr()->drumset();
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
@@ -4392,12 +4319,12 @@ void ExportMusicXml::write(QIODevice* dev)
                                           xml.stag("staff-details");
                                     xml.tag("staff-lines", st->lines());
                                     if (st->isTabStaff() && instrument->stringData()) {
-                                          QList<int> l = instrument->stringData()->stringList();
+                                          QList<instrString> l = instrument->stringData()->stringList();
                                           for (int i = 0; i < l.size(); i++) {
                                                 char step  = ' ';
                                                 int alter  = 0;
                                                 int octave = 0;
-                                                midipitch2xml(l.at(i), step, alter, octave);
+                                                midipitch2xml(l.at(i).pitch, step, alter, octave);
                                                 xml.stag(QString("staff-tuning line=\"%1\"").arg(i+1));
                                                 xml.tag("tuning-step", QString("%1").arg(step));
                                                 if (alter)

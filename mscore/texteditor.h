@@ -40,6 +40,7 @@ class TextEditor : public QDialog {
       QToolButton* typefaceSuperscript;
       QDoubleSpinBox* typefaceSize;
       QFontComboBox* typefaceFamily;
+      QDialogButtonBox* dialogButtons;
 
    private slots:
       void toggleBold(bool);
@@ -54,6 +55,13 @@ class TextEditor : public QDialog {
       void cursorPositionChanged();
       void sizeChanged(double);
       void fontChanged(const QFont&);
+      void okClicked();
+      void cancelClicked();
+      void cancelEditing();
+
+   private:
+      bool editAsHtml;
+      QString originalText;
 
    public:
       TextEditor(QWidget* parent = 0);

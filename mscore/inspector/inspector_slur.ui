@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Slur Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -38,7 +41,7 @@
       </font>
      </property>
      <property name="text">
-      <string notr="true">Slur/Tie</string>
+      <string>Slur/Tie</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -73,6 +76,9 @@
        </property>
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Line type value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -109,6 +115,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Line type</string>
        </property>
        <item>
         <property name="text">

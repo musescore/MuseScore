@@ -104,6 +104,7 @@ void KeySig::layout()
 
       if (staff() && !staff()->genKeySig()) {     // no key sigs on TAB staves
             qDeleteAll(keySymbols);
+            keySymbols.clear();
             return;
             }
 
@@ -269,9 +270,9 @@ void KeySig::draw(QPainter* p) const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool KeySig::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool KeySig::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::KEYSIG;
+      return data.element->type() == Element::Type::KEYSIG;
       }
 
 //---------------------------------------------------------
@@ -503,6 +504,44 @@ QVariant KeySig::propertyDefault(P_ID id) const
             case P_ID::SHOW_COURTESY:      return true;
             default:                   return Element::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* KeySig::nextElement()
+      {
+      return segment()->firstInNextSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* KeySig::prevElement()
+      {
+      return segment()->lastInPrevSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString KeySig::accessibleInfo()
+      {
+      QString keySigType;
+      if (isCustom())
+            keySigType =  tr("Custom");
+
+      if (key() == Key::C)
+            return keyNames[14];
+      int keyInt = static_cast<int>(key());
+      if (keyInt < 0)
+            keySigType = keyNames[(7 + keyInt) * 2 + 1];
+      else
+            keySigType = keyNames[(keyInt - 1) * 2];
+      return Element::accessibleInfo() + " " + keySigType;
       }
 
 }

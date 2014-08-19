@@ -224,33 +224,52 @@
         <enum>QFrame::Plain</enum>
        </property>
        <property name="lineWidth">
-        <number>2</number>
+        <number>0</number>
        </property>
        <property name="currentIndex">
         <number>0</number>
        </property>
        <widget class="QWidget" name="page">
-        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0,0">
+        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
-          <widget class="QCheckBox" name="showLedgerLinesPitched">
-           <property name="text">
-            <string>Ledger lines</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="genKeysigPitched">
-           <property name="text">
-            <string>Key signature</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="stemlessPitched">
-           <property name="text">
-            <string>Stemless</string>
-           </property>
-          </widget>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="genKeysigPitched">
+             <property name="text">
+              <string>Show key signature</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QCheckBox" name="showLedgerLinesPitched">
+             <property name="text">
+              <string>Show ledger lines</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QCheckBox" name="stemlessPitched">
+             <property name="text">
+              <string>Stemless</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <spacer name="verticalSpacer_2">
@@ -269,26 +288,45 @@
        </widget>
        <widget class="QWidget" name="page_3">
         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
-          <widget class="QCheckBox" name="showLedgerLinesPercussion">
-           <property name="text">
-            <string>Ledger lines</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="genKeysigPercussion">
-           <property name="text">
-            <string>Key signature</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="stemlessPercussion">
-           <property name="text">
-            <string>Stemless</string>
-           </property>
-          </widget>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="genKeysigPercussion">
+             <property name="text">
+              <string>Show Key signature</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QCheckBox" name="stemlessPercussion">
+             <property name="text">
+              <string>Stemless</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QCheckBox" name="showLedgerLinesPercussion">
+             <property name="text">
+              <string>Show ledger lines</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <spacer name="verticalSpacer_3">
@@ -448,8 +486,8 @@
                 </item>
                 <item>
                  <layout class="QGridLayout" name="gridLayout">
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="numbersLabel">
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="onStringsLabel">
                     <property name="minimumSize">
                      <size>
                       <width>120</width>
@@ -457,10 +495,64 @@
                      </size>
                     </property>
                     <property name="text">
-                     <string>Marks are:</string>
+                     <string>Marks are drawn:</string>
                     </property>
                     <property name="buddy">
-                     <cstring>numbersRadio</cstring>
+                     <cstring>onLinesRadio</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QRadioButton" name="onLinesRadio">
+                    <property name="minimumSize">
+                     <size>
+                      <width>110</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>On lines</string>
+                    </property>
+                    <property name="checked">
+                     <bool>false</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QRadioButton" name="linesThroughRadio">
+                    <property name="minimumSize">
+                     <size>
+                      <width>110</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Continuous</string>
+                    </property>
+                    <property name="checked">
+                     <bool>false</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="linesThroughLabel">
+                    <property name="minimumSize">
+                     <size>
+                      <width>120</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Lines are:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>linesThroughRadio</cstring>
                     </property>
                    </widget>
                   </item>
@@ -486,6 +578,22 @@
                     </attribute>
                    </widget>
                   </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="numbersLabel">
+                    <property name="minimumSize">
+                     <size>
+                      <width>120</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Marks are:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>numbersRadio</cstring>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="0" column="2">
                    <widget class="QRadioButton" name="lettersRadio">
                     <property name="text">
@@ -499,42 +607,7 @@
                     </attribute>
                    </widget>
                   </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="onStringsLabel">
-                    <property name="minimumSize">
-                     <size>
-                      <width>120</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Marks are drawn:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>onLinesRadio</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1" rowspan="2">
-                   <widget class="QRadioButton" name="onLinesRadio">
-                    <property name="minimumSize">
-                     <size>
-                      <width>110</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>On lines</string>
-                    </property>
-                    <property name="checked">
-                     <bool>false</bool>
-                    </property>
-                    <property name="autoExclusive">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2" rowspan="2">
+                  <item row="2" column="2">
                    <widget class="QRadioButton" name="aboveLinesRadio">
                     <property name="text">
                      <string>Above lines</string>
@@ -544,45 +617,13 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="0" rowspan="2">
-                   <widget class="QLabel" name="linesThroughLabel">
-                    <property name="minimumSize">
-                     <size>
-                      <width>120</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Lines are:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>linesThroughRadio</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QRadioButton" name="linesThroughRadio">
-                    <property name="minimumSize">
-                     <size>
-                      <width>110</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Continuous</string>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
-                    </property>
-                    <property name="autoExclusive">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
+                  <item row="4" column="2">
                    <widget class="QRadioButton" name="linesBrokenRadio">
                     <property name="text">
                      <string>Broken</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
                     </property>
                     <property name="autoExclusive">
                      <bool>true</bool>
@@ -1170,11 +1211,11 @@
   <tabstop>genClef</tabstop>
   <tabstop>genTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
-  <tabstop>showLedgerLinesPitched</tabstop>
   <tabstop>genKeysigPitched</tabstop>
+  <tabstop>showLedgerLinesPitched</tabstop>
   <tabstop>stemlessPitched</tabstop>
-  <tabstop>showLedgerLinesPercussion</tabstop>
   <tabstop>genKeysigPercussion</tabstop>
+  <tabstop>showLedgerLinesPercussion</tabstop>
   <tabstop>stemlessPercussion</tabstop>
   <tabstop>upsideDown</tabstop>
   <tabstop>tabWidget</tabstop>
@@ -1204,7 +1245,6 @@
   <tabstop>templateCombo</tabstop>
   <tabstop>templateReset</tabstop>
   <tabstop>addToTemplates</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>

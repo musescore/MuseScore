@@ -51,7 +51,7 @@ class Stem : public Element {
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader& e);
       virtual void reset();
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
 
       virtual QVariant getProperty(P_ID propertyId) const;

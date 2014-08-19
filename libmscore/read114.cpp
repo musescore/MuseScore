@@ -214,15 +214,14 @@ void Staff::read114(XmlReader& e)
 
 void Part::read114(XmlReader& e)
       {
-      int rstaff = 0;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Staff") {
-                  Staff* staff = new Staff(_score, this, rstaff);
+                  Staff* staff = new Staff(_score);
+                  staff->setPart(this);
                   _score->staves().push_back(staff);
                   _staves.push_back(staff);
                   staff->read114(e);
-                  ++rstaff;
                   }
             else if (tag == "Instrument") {
                   Instrument* instrument = instr(0);
@@ -275,7 +274,7 @@ void Part::read114(XmlReader& e)
       if (_partName.isEmpty())
             _partName = instr(0)->trackName();
 
-      if (instr(0)->useDrumset()) {
+      if (instr(0)->useDrumset() != DrumsetKind::NONE) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
                   staff->setStaffType(StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
@@ -477,9 +476,9 @@ Score::FileError Score::read114(XmlReader& e)
                         e.initTick(s->tick());      // update current tick
                   if (s->track2() == -1)
                         s->setTrack2(s->track());
-                  if (s->tick2() == -1) {
+                  if (s->ticks() == 0) {
                         delete s;
-                        qDebug("invalid spanner %s tick2: %d", s->name(), s->tick2());
+                        qDebug("zero spanner %s ticks: %d", s->name(), s->ticks());
                         }
                   else {
                         addSpanner(s);
@@ -669,7 +668,7 @@ Score::FileError Score::read114(XmlReader& e)
       _fileDivision = MScore::division;
 
       //
-      //    sanity check for barLineSpan
+      //    sanity check for barLineSpan and update ottavas
       //
       foreach(Staff* staff, _staves) {
             int barLineSpan = staff->barLineSpan();
@@ -679,11 +678,12 @@ Score::FileError Score::read114(XmlReader& e)
                   qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
                   staff->setBarLineSpan(n - idx);
                   }
+            staff->updateOttava();
             }
 
       // adjust some styles
-      if (style(StyleIdx::lyricsDistance) == MScore::baseStyle()->value(StyleIdx::lyricsDistance))
-            style()->set(StyleIdx::lyricsDistance, 2.0f);
+      qreal lmbd = styleD(StyleIdx::lyricsMinBottomDistance);
+      style()->set(StyleIdx::lyricsMinBottomDistance, lmbd + 4.0);
       if (style(StyleIdx::voltaY) == MScore::baseStyle()->value(StyleIdx::voltaY))
             style()->set(StyleIdx::voltaY, -2.0f);
       if (style(StyleIdx::hideEmptyStaves).toBool()) // http://musescore.org/en/node/16228
@@ -708,7 +708,7 @@ Score::FileError Score::read114(XmlReader& e)
             qreal tempo = i->second.tempo;
             if (tempomap()->tempo(tick) != tempo) {
                   TempoText* tt = new TempoText(this);
-                  tt->setText(QString("<sym>noteQuarterUp</sym> = %1").arg(qRound(tempo*60)));
+                  tt->setText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(qRound(tempo*60)));
                   tt->setTempo(tempo);
                   tt->setTrack(0);
                   tt->setVisible(false);

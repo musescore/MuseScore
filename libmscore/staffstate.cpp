@@ -173,7 +173,7 @@ QString StaffState::staffStateTypeName() const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool StaffState::acceptDrop(MuseScoreView*, const QPointF&, Element*) const
+bool StaffState::acceptDrop(const DropData&) const
       {
       return false;
       }

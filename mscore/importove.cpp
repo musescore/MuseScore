@@ -283,7 +283,8 @@ void OveToMScore::createStructure() {
 
             for(int j=0; j<partStaffCount; ++j){
                   //OVE::Track* track = ove_->getTrack(i, j);
-                  Staff* staff = new Staff(score_, part, j);
+                  Staff* staff = new Staff(score_);
+                  staff->setPart(part);
 
                   part->staves()->push_back(staff);
                   score_->staves().push_back(staff);
@@ -608,7 +609,7 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
 
             part->instr()->channel(0).bank = 128;
             part->setMidiProgram(0);
-            part->instr()->setUseDrumset(true);
+            part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
             part->instr()->setDrumset(drumset);
             }
       }
@@ -951,7 +952,7 @@ TDuration OveNoteType_To_Duration(OVE::NoteType noteType){
                   break;
                   }
             case OVE::NoteType::Note_Eight: {
-                  d.setType(TDuration::DurationType::V_EIGHT);
+                  d.setType(TDuration::DurationType::V_EIGHTH);
                   break;
                   }
             case OVE::NoteType::Note_Sixteen: {
@@ -1424,7 +1425,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                                     ((Ms::Chord*) cr)->setNoteType(NoteType::GRACE32);
                                     cr->setDurationType(TDuration::DurationType::V_32ND);
                                     } else {
-                                    cr->setDurationType(TDuration::DurationType::V_EIGHT);
+                                    cr->setDurationType(TDuration::DurationType::V_EIGHTH);
                                     }
 
                               // st = Segment::Type::Grace;
@@ -2040,7 +2041,6 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
       for(i=0; i<repeats.size(); ++i){
             OVE::RepeatSymbol* repeatPtr = static_cast<OVE::RepeatSymbol*>(repeats[i]);
             OVE::RepeatType type = repeatPtr->getRepeatType();
-            int absTick = mtt_->getTick(measure->no(), repeatPtr->getTick());
             Element* e = 0;
 
             switch(type) {
@@ -2098,9 +2098,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 
             if(e != 0){
                   e->setTrack(track);
-                  Segment* s = measure->getSegment(e, absTick);
-                  s->add(e);
-                  //measure->add(e);
+                  measure->add(e);
                   }
             }
 

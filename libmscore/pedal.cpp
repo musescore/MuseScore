@@ -270,7 +270,7 @@ void Pedal::styleChanged()
 //    return System() coordinates
 //---------------------------------------------------------
 
-QPointF Pedal::linePos(GripLine grip, System** sys)
+QPointF Pedal::linePos(GripLine grip, System** sys) const
       {
       qreal x;
       qreal nhw = score()->noteHeadWidth();

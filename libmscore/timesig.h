@@ -59,12 +59,13 @@ class TimeSig : public Element {
       TimeSigType _timeSigType;
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
-      QPointF pz, pn;
+      QPointF pz, pn, pointLargeLeftParen, pointLargeRightParen;
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
       bool _showCourtesySig;
       bool customText;        // if false, sz and sn are calculated from actualSig()
       bool _needLayout;
+      bool _largeParentheses;
       Groups _groups;
 
       void layout1();
@@ -98,7 +99,7 @@ class TimeSig : public Element {
       int numeratorStretch() const       { return _stretch.numerator(); }
       int denominatorStretch() const     { return _stretch.denominator(); }
 
-      bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      bool acceptDrop(const DropData&) const override;
       Element* drop(const DropData&);
 
       Segment* segment() const           { return (Segment*)parent(); }
@@ -116,6 +117,8 @@ class TimeSig : public Element {
       void setDenominatorString(const QString&);
       void undoSetDenominatorString(const QString&);
 
+      void setLargeParentheses(bool v)    { _largeParentheses = v;    }
+
       void setFrom(const TimeSig*);
 
       QVariant getProperty(P_ID propertyId) const;
@@ -131,8 +134,11 @@ class TimeSig : public Element {
 
       Fraction globalSig() const           { return (_sig * _stretch).reduced();  }
       void setGlobalSig(const Fraction& f) { _stretch = (_sig / f).reduced(); }
-      };
 
+      virtual Element* nextElement();
+      virtual Element* prevElement();
+      virtual QString accessibleInfo() override;
+      };
 
 }     // namespace Ms
 #endif

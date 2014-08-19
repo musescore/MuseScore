@@ -93,7 +93,7 @@
         <Tempo>
           <tempo>4.16667</tempo>
           <lid>3</lid>
-          <text><sym>noteQuarterUp</sym> = 250</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
           </Tempo>
         <Chord>
           <lid>4</lid>
@@ -190,7 +190,7 @@
         <Tempo>
           <tempo>1.33333</tempo>
           <lid>22</lid>
-          <text><sym>noteQuarterUp</sym> = 80</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 80</text>
           </Tempo>
         <Chord>
           <lid>23</lid>
@@ -297,7 +297,7 @@
         <Staff id="2">
           <linkedTo>1</linkedTo>
           <StaffType group="tablature">
-            <name>Tab. 6-str common</name>
+            <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
             <timesig>0</timesig>
@@ -365,7 +365,7 @@
           <Tempo>
             <tempo>4.16667</tempo>
             <lid>3</lid>
-            <text><sym>noteQuarterUp</sym> = 250</text>
+            <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
             </Tempo>
           <Chord>
             <lid>4</lid>
@@ -462,7 +462,7 @@
           <Tempo>
             <tempo>1.33333</tempo>
             <lid>22</lid>
-            <text><sym>noteQuarterUp</sym> = 80</text>
+            <text><sym>unicodeNoteQuarterUp</sym> = 80</text>
             </Tempo>
           <Chord>
             <lid>23</lid>
@@ -525,10 +525,6 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <Clef>
-            <concertClefType>TAB</concertClefType>
-            <transposingClefType>TAB</transposingClefType>
-            </Clef>
           <Chord>
             <lid>4</lid>
             <durationType>quarter</durationType>

@@ -25,7 +25,7 @@ namespace Ms {
 class TDuration {
    public:
       enum class DurationType : char {
-            V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHT, V_16TH,
+            V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHTH, V_16TH,
             V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
             V_ZERO, V_MEASURE,  V_INVALID
             };
@@ -66,7 +66,7 @@ class TDuration {
       int dots() const    { return _dots; }
       void setDots(int v);
       Fraction fraction() const;
-      void print() const;
+      QString durationTypeUserName() const;
       };
 
 extern QList<TDuration> toDurationList(

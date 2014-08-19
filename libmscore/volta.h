@@ -71,7 +71,6 @@ private:
       virtual Volta* clone()       const override { return new Volta(*this); }
       virtual Element::Type type() const override { return Element::Type::VOLTA; }
       virtual LineSegment* createLineSegment() override;
-      virtual void layout() override;
 
       virtual void write(Xml&) const override;
       virtual void read(XmlReader& e) override;
@@ -98,6 +97,7 @@ private:
       virtual void setYoff(qreal);
       virtual void reset() override;
       virtual bool systemFlag() const override  { return true;  }
+      virtual QString accessibleInfo() override;
       };
 
 }     // namespace Ms

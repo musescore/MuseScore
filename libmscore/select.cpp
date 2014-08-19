@@ -64,9 +64,9 @@ Selection::Selection(Score* s)
       _startSegment  = 0;
       _endSegment    = 0;
       _activeSegment = 0;
-      _staffStart     = 0;
-      _staffEnd       = 0;
-      _activeTrack    = 0;
+      _staffStart    = 0;
+      _staffEnd      = 0;
+      _activeTrack   = 0;
       }
 
 //---------------------------------------------------------
@@ -273,9 +273,9 @@ void Selection::clear()
       _startSegment  = 0;
       _endSegment    = 0;
       _activeSegment = 0;
-      _staffStart     = 0;
-      _staffEnd       = 0;
-      _activeTrack    = 0;
+      _staffStart    = 0;
+      _staffEnd      = 0;
+      _activeTrack   = 0;
       setState(SelState::NONE);
       }
 
@@ -299,6 +299,10 @@ void Selection::add(Element* el)
       _el.append(el);
       update();
       }
+
+//---------------------------------------------------------
+//   canSelect
+//---------------------------------------------------------
 
 bool SelectionFilter::canSelect(const Element* e) const
       {
@@ -328,7 +332,7 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::FRET_DIAGRAM);
       if (e->type() == Element::Type::BREATH)
           return isFiltered(SelectionFilterType::BREATH);
-      if (e->isText()) //turns out that only TEXT INSTRCHANGE AND STAFFTEXT are caught here, rest are system thus not in selection
+      if (e->isText()) // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
           return isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
           return isFiltered(SelectionFilterType::OTHER_LINE);
@@ -339,11 +343,35 @@ bool SelectionFilter::canSelect(const Element* e) const
       return true;
       }
 
+//---------------------------------------------------------
+//   canSelectVoice
+//---------------------------------------------------------
+
+bool SelectionFilter::canSelectVoice(int track) const
+      {
+      int voice = track % VOICES;
+      switch (voice) {
+            case 0: return isFiltered(SelectionFilterType::FIRST_VOICE);
+            case 1: return isFiltered(SelectionFilterType::SECOND_VOICE);
+            case 2: return isFiltered(SelectionFilterType::THIRD_VOICE);
+            case 3: return isFiltered(SelectionFilterType::FOURTH_VOICE);
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   appendFiltered
+//---------------------------------------------------------
+
 void Selection::appendFiltered(Element* e)
       {
       if (selectionFilter().canSelect(e))
             _el.append(e);
       }
+
+//---------------------------------------------------------
+//   appendChord
+//---------------------------------------------------------
 
 void Selection::appendChord(Chord* chord)
       {
@@ -359,7 +387,7 @@ void Selection::appendChord(Chord* chord)
             if (note->accidental()) _el.append(note->accidental());
             foreach(Element* el, note->el())
                   appendFiltered(el);
-            for(int x = 0; x < MAX_DOTS; x++)
+            for (int x = 0; x < MAX_DOTS; x++)
                   if (note->dot(x) != 0) _el.append(note->dot(x));
 
             if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
@@ -395,6 +423,8 @@ void Selection::updateSelectedElements()
       int endTrack   = _staffEnd * VOICES;
 
       for (int st = startTrack; st < endTrack; ++st) {
+            if (!canSelectVoice(st))
+                  continue;
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
                   if (s->segmentType() == Segment::Type::EndBarLine)  // do not select end bar line
                         continue;
@@ -413,7 +443,7 @@ void Selection::updateSelectedElements()
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(e);
                         for (Chord* graceNote : chord->graceNotes())
-                              if(canSelect(graceNote)) appendChord(graceNote);
+                              if (canSelect(graceNote)) appendChord(graceNote);
                         appendChord(chord);
                         }
                   else {
@@ -426,51 +456,7 @@ void Selection::updateSelectedElements()
                               continue;
                         appendFiltered(e);
                         }
-#if 0 // TODO-S
-                  for(Spanner* sp = s->spannerFor(); sp; sp = sp->next()) {
-                        if (sp->track() < startTrack || sp->track() >= endTrack)
-                              continue;
-                        if (sp->endElement()->type() == Element::SEGMENT) {
-                              Segment* s2 = static_cast<Segment*>(sp->endElement());
-                              if (_endSegment && (s2->tick() < _endSegment->tick()))
-                                    _el.append(sp);
-                              }
-                        else {
-                              qDebug("1spanner element type %s", sp->endElement()->name());
-                              }
-                        }
-#endif
                   }
-
-#if 0 // TODO-S
-            // for each measure in the selection, check if it contains spanners within our selection
-            Measure* sm = _startSegment->measure();
-            Measure* em = _endSegment ? _endSegment->measure()->nextMeasure() : 0;
-            // int endTick = _endSegment ? _endSegment->tick() : score()->lastMeasure()->endTick();
-            for (Measure* m = sm; m && m != em; m = m->nextMeasure()) {
-
-                  for(Spanner* sp = m->spannerFor(); sp; sp = sp->next()) {
-                        // ignore spanners belonging to other tracks
-                        if (sp->track() < startTrack || sp->track() >= endTrack)
-                              continue;
-                        // if spanner ends between _startSegment and _endSegment, select it
-                        if (sp->endElement()->type() == Element::Type::SEGMENT) {
-                              Segment* s2 = static_cast<Segment*>(sp->endElement());
-                              if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
-                                    _el.append(sp);
-                              }
-                        else if (sp->endElement()->type() == Element::Type::MEASURE) {
-                              Measure* s2 = static_cast<Measure*>(sp->endElement());
-                              if (s2->tick() >= _startSegment->tick() && s2->tick() < endTick)
-                                    _el.append(sp);
-                              }
-                        else {
-                              qDebug("2spanner element type %s", sp->endElement()->name());
-                              }
-                        }
-
-                  }
-#endif
             }
       int stick = startSegment()->tick();
       int etick = tickEnd();
@@ -485,7 +471,7 @@ void Selection::updateSelectedElements()
                       if (canSelect(sp->startChord()) && canSelect(sp->endChord()))
                         appendFiltered(sp); // slur with start or end in range selection
             }
-            else if((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
+            else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
                   appendFiltered(sp); // spanner with start and end in range selection
             }
       update();
@@ -558,10 +544,8 @@ void Selection::updateState()
 
 void Selection::setState(SelState s)
       {
-//      if (_state != s) {
-            _state = s;
-            _score->setSelectionChanged(true);
-//            }
+      _state = s;
+      _score->setSelectionChanged(true);
       }
 
 //---------------------------------------------------------
@@ -608,6 +592,9 @@ QByteArray Selection::mimeData() const
       return a;
       }
 
+//---------------------------------------------------------
+//   hasElementInTrack
+//---------------------------------------------------------
 
 bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
       {
@@ -616,6 +603,19 @@ bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
                   return true;
             }
       return false;
+      }
+
+//---------------------------------------------------------
+//   firstElementInTrack
+//---------------------------------------------------------
+
+int firstElementInTrack(Segment* startSeg, Segment* endSeg, int track)
+      {
+      for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
+            if (seg->element(track))
+                  return seg->tick();
+            }
+      return -1;
       }
 
 //---------------------------------------------------------
@@ -641,11 +641,7 @@ QByteArray Selection::staffMimeData() const
             int startTrack = staffIdx * VOICES;
             int endTrack   = startTrack + VOICES;
 
-            int voices = 0;
-            for(int voice = 0; voice < 4; voice++) {
-                  voices |= hasElementInTrack(seg1, seg2, startTrack + voice) << voice;
-                  }
-            xml.stag(QString("Staff id=\"%1\" voices=\"%2\"").arg(staffIdx).arg(voices));
+            xml.stag(QString("Staff id=\"%1\"").arg(staffIdx));
 
             Staff* staff = score()->staff(staffIdx);
             Part* part = staff->part();
@@ -654,6 +650,13 @@ QByteArray Selection::staffMimeData() const
                   xml.tag("transposeChromatic", interval.chromatic);
             if (interval.diatonic)
                   xml.tag("transposeDiatonic", interval.diatonic);
+            for (int voice = 0; voice < VOICES; voice++) {
+                  if (hasElementInTrack(seg1, seg2, startTrack + voice)
+                     && xml.canWriteVoice(voice)) {
+                        int offset = firstElementInTrack(seg1, seg2, startTrack+voice) - tickStart();
+                        xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
+                        }
+                  }
             score()->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true);
             xml.etag();
             }
@@ -1080,7 +1083,13 @@ QList<Note*> Selection::uniqueNotes(int track) const
 
 void Selection::extendRangeSelection(ChordRest* cr)
       {
-            extendRangeSelection(cr->segment(),cr->segment()->nextCR(cr->track()),cr->staffIdx(),cr->tick(),cr->tick());
+            extendRangeSelection(cr->segment(),
+                                 cr->nextSegmentAfterCR(Segment::Type::ChordRest
+                                                             | Segment::Type::EndBarLine
+                                                             | Segment::Type::Clef),
+                                 cr->staffIdx(),
+                                 cr->tick(),
+                                 cr->tick());
       }
 
 //---------------------------------------------------------
@@ -1120,10 +1129,18 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
       }
 
+//---------------------------------------------------------
+//   selectionFilter
+//---------------------------------------------------------
+
 SelectionFilter Selection::selectionFilter() const
       {
       return _score->selectionFilter();
       }
+
+//---------------------------------------------------------
+//   setFiltered
+//---------------------------------------------------------
 
 void SelectionFilter::setFiltered(SelectionFilterType type, bool set)
       {

@@ -119,6 +119,8 @@ void Score::endCmd()
             if (s->layoutAll()) {
                   s->_updateAll  = true;
                   s->doLayout();
+                  if (s != this)
+                        s->deselectAll();
                   }
             const InputState& is = s->inputState();
             if (is.noteEntryMode() && is.segment())
@@ -161,6 +163,8 @@ void Score::update()
                   s->setUpdateAll(true);
                   s->doLayout();
                   }
+            if (s != this)
+                  s->deselectAll();
             s->end1();
             }
       }
@@ -229,7 +233,9 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             return;
             }
 
+      // all spanners live in voice 0 (except slurs/ties)
       int track = staffIdx == -1 ? -1 : staffIdx * VOICES;
+
       spanner->setTrack(track);
       spanner->setTrack2(track);
 
@@ -556,7 +562,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   // extend slur
                   //
                   Chord* chord = static_cast<Note*>(nr)->chord();
-                  _is.slur()->undoChangeProperty(P_ID::SPANNER_TICK2, chord->tick());
+                  _is.slur()->undoChangeProperty(P_ID::SPANNER_TICKS, chord->tick() - _is.slur()->tick());
                   for (Element* e : _is.slur()->linkList()) {
                         Slur* slur = static_cast<Slur*>(e);
                         for (Element* e : chord->linkList()) {
@@ -717,25 +723,32 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
 //---------------------------------------------------------
 //   makeGap1
-//    make time gap at tick by removing/shortening
+//    make time gap for each voice
+//    starting at tick+voiceOffset[voice] by removing/shortening
 //    chord/rest
 //    - cr is top level (not part of a tuplet)
 //    - do not stop at measure end
 //---------------------------------------------------------
 
-bool Score::makeGap1(int tick, int staffIdx, Fraction len, int voices)
+bool Score::makeGap1(int baseTick, int staffIdx, Fraction len, int voiceOffset[VOICES])
       {
-      Segment* seg = tick2segment(tick, true, Segment::Type::ChordRest);
+      Segment* seg = tick2segment(baseTick, true, Segment::Type::ChordRest);
       if (!seg) {
-            qDebug("1:makeGap1: no segment at %d", tick);
+            qDebug("1:makeGap1: no segment to paste at tick %d", baseTick);
             return false;
             }
       int strack = staffIdx * VOICES;
-      for (int track = strack; track < strack + 4; track++) {
-            if (!(voices & (1 << (track-strack))))
+      for (int track = strack; track < strack + VOICES; track++) {
+            if (voiceOffset[track-strack] == -1)
                   continue;
-            bool result = makeGapVoice(seg, track, len, tick);
-            if(track == strack && !result)
+            int tick = baseTick + voiceOffset[track-strack];
+            Measure* m   = tick2measure(tick);
+            seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
+
+            Fraction newLen = len - Fraction::fromTicks(voiceOffset[track-strack]);
+            Q_ASSERT(newLen.numerator() != 0);
+            bool result = makeGapVoice(seg, track, newLen, tick);
+            if(track == strack && !result) // makeGap failed for first voice
                   return false;
             }
       return true;
@@ -750,8 +763,10 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             Segment* seg1 = seg->prev(Segment::Type::ChordRest);;
             for (;;) {
                   if (seg1 == 0) {
-                        qDebug("1:makeGap1: no segment at %d", tick);
-                        return false;
+                        qDebug("1:makeGapVoice: no segment before tick %d", tick);
+                        // this happens only for voices other than voice 1
+                        expandVoice(seg, track);
+                        return makeGapVoice(seg,track,len,tick);
                         }
                   if (seg1->element(track))
                         break;
@@ -765,7 +780,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             for (;;) {
                   seg1 = seg1->next1(Segment::Type::ChordRest);
                   if (seg1 == 0) {
-                        qDebug("2:makeGap1: no segment");
+                        qDebug("2:makeGapVoice: no segment");
                         return false;
                         }
                   if (seg1->element(track)) {
@@ -777,12 +792,12 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
 
       for (;;) {
             if (!cr) {
-                  qDebug("makeGap1: cannot make gap");
+                  qDebug("3:makeGapVoice: cannot make gap");
                   return false;
                   }
             Fraction l = makeGap(cr->segment(), cr->track(), len, 0);
             if (l.isZero()) {
-                  qDebug("makeGap1: makeGap returns zero gap");
+                  qDebug("4:makeGapVoice: makeGap returns zero gap");
                   return false;
                   }
             len -= l;
@@ -798,6 +813,10 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
                         qDebug("===EOS reached");
                         return true;
                         }
+                  }
+            // first segment in measure was removed, have to recreate it
+            if(m->tick() != m->segments()->first()->tick()) {
+                  m->undoGetSegment(Segment::Type::ChordRest,m->tick());
                   }
             Segment* s = m->first(Segment::Type::ChordRest);
             int track  = cr->track();
@@ -1566,17 +1585,6 @@ void Score::cmdAddStretch(qreal val)
       }
 
 //---------------------------------------------------------
-//   cmdInsertClef
-//---------------------------------------------------------
-
-void Score::cmdInsertClef(ClefType type)
-      {
-      if (!noteEntryMode())
-            return;
-      undoChangeClef(staff(inputTrack()/VOICES), inputState().segment(), type);
-      }
-
-//---------------------------------------------------------
 //   cmdResetBeamMode
 //---------------------------------------------------------
 
@@ -1684,12 +1692,12 @@ bool Score::processMidiInput()
 Element* Score::move(const QString& cmd)
       {
       ChordRest* cr;
-      if (selection().activeCR())
+      if (noteEntryMode())
+            cr = inputState().cr();
+      else if (selection().activeCR())
             cr = selection().activeCR();
       else
             cr = selection().lastChordRest();
-      if (cr == 0 && noteEntryMode())
-            cr = inputState().cr();
 
       // no chord/rest found? look for another type of element
       if (cr == 0) {
@@ -1765,7 +1773,7 @@ Element* Score::move(const QString& cmd)
             el = nextChordRest(cr);
             }
       else if (cmd == "prev-chord") {
-            if (noteEntryMode()) {
+            if (noteEntryMode() && _is.segment()) {
                   Segment* s = _is.segment()->prev1();
                   //
                   // if _is._segment is first chord/rest segment in measure
@@ -1815,6 +1823,10 @@ Element* Score::move(const QString& cmd)
                   el = static_cast<Chord*>(el)->upNote();       // originally downNote
             _playNote = true;
             select(el, SelectType::SINGLE, 0);
+            if (noteEntryMode()) {
+                  foreach (MuseScoreView* view ,viewer)
+                        view->moveCursor();
+                  }
             }
       return el;
       }
@@ -2136,7 +2148,7 @@ void Score::cmd(const QAction* a)
                   case TDuration::DurationType::V_QUARTER:
                         padToggle(Pad::NOTE2);
                         break;
-                  case TDuration::DurationType::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHTH:
                         padToggle(Pad::NOTE4);
                         break;
                   case TDuration::DurationType::V_16TH:
@@ -2172,7 +2184,7 @@ void Score::cmd(const QAction* a)
                   case TDuration::DurationType::V_QUARTER:
                         padToggle(Pad::NOTE8);
                         break;
-                  case TDuration::DurationType::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHTH:
                         padToggle(Pad::NOTE16);
                         break;
                   case TDuration::DurationType::V_16TH:
@@ -2293,6 +2305,7 @@ void Score::cmd(const QAction* a)
             transposeSemitone(-1);
       else if (cmd == "toggle-mmrest") {
             bool val = !styleB(StyleIdx::createMultiMeasureRests);
+            deselectAll();
             undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
             }
       else if (cmd == "add-brackets") {
@@ -2300,6 +2313,17 @@ void Score::cmd(const QAction* a)
       }
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
+      }
+
+//---------------------------------------------------------
+//   cmdInsertClef
+//---------------------------------------------------------
+
+void Score::cmdInsertClef(ClefType type)
+      {
+      if (!noteEntryMode())
+            return;
+      undoChangeClef(staff(inputTrack()/VOICES), inputState().segment(), type);
       }
 
 //---------------------------------------------------------
@@ -2312,22 +2336,28 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
       Clef* gclef = 0;
       for (Element* e : cr->linkList()) {
             ChordRest* cr = static_cast<ChordRest*>(e);
-            Score* score = cr->score();
+            Score* score  = cr->score();
 
             //
             // create a clef segment before cr if it does not exist
             //
-            Segment* s = cr->segment();
+            Segment* s  = cr->segment();
             Segment* cs = s->prev();
+            int tick    = s->tick();
             if (!cs || cs->segmentType() != Segment::Type::Clef) {
-                  cs = new Segment(cr->measure(), Segment::Type::Clef, s->tick());
+                  cs = new Segment(cr->measure(), Segment::Type::Clef, tick);
                   cs->setNext(s);
                   score->undo(new AddElement(cs));
+                  }
+            else if (cs == cr->measure()->first() && cr->measure()->prevMeasure()) {
+                  // move to end of previous measure
+                  Measure* m = cr->measure()->prevMeasure();
+                  cs = m->undoGetSegment(Segment::Type::Clef, tick);
                   }
             Clef* c = static_cast<Clef*>(gclef ? gclef->linkedClone() : clef->clone());
             gclef = c;
             c->setParent(cs);
-            c->setScore(cs->score());
+            c->setScore(score);
             c->setTrack(cr->staffIdx() * VOICES);
             if (cs->element(c->track()))
                   score->undo(new RemoveElement(cs->element(c->track())));

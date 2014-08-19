@@ -111,6 +111,19 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
       }
 
 //---------------------------------------------------------
+//   undoUnlink
+//---------------------------------------------------------
+
+void ChordRest::undoUnlink()
+      {
+      DurationElement::undoUnlink();
+      for (Articulation* a : _articulations)
+            a->undoUnlink();
+      for (Lyrics* l : _lyricsList)
+            l->undoUnlink();
+      }
+
+//---------------------------------------------------------
 //   ChordRest
 //---------------------------------------------------------
 
@@ -317,25 +330,23 @@ bool ChordRest::readProperties(XmlReader& e)
                   qDebug("ChordRest::read(): Slur id %d not found", id);
             else {
                   QString atype(e.attribute("type"));
-                  Slur* slur = static_cast<Slur*>(spanner);
                   if (atype == "start") {
-                        slur->setTick(e.tick());
-                        slur->setTrack(track());
-                        slur->setStartElement(this);
-                        //spanner was added in read114 with wrong tick
-                        score()->removeSpanner(slur);
-                        score()->addSpanner(slur);
+                        spanner->setTick(e.tick());
+                        spanner->setTrack(track());
+                        if (spanner->type() == Element::Type::SLUR)
+                              spanner->setStartElement(this);
                         if (e.pasteMode()) {
-                              for (Element* e : slur->linkList()) {
-                                    if (e == slur)
+                              for (Element* e : spanner->linkList()) {
+                                    if (e == spanner)
                                           continue;
-                                    Slur* ls = static_cast<Slur*>(e);
-                                    ls->setTick(slur->tick());
+                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    ls->setTick(spanner->tick());
                                     for (Element* ee : linkList()) {
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack(cr->track());
-                                                ls->setStartElement(cr);
+                                                if (ls->type() == Element::Type::SLUR)
+                                                      ls->setStartElement(cr);
                                                 break;
                                                 }
                                           }
@@ -343,23 +354,25 @@ bool ChordRest::readProperties(XmlReader& e)
                               }
                         }
                   else if (atype == "stop") {
-                        slur->setTick2(e.tick());
-                        slur->setTrack2(track());
-                        slur->setEndElement(this);
-                        Chord* start = static_cast<Chord*>(slur->startElement());
+                        spanner->setTick2(e.tick());
+                        spanner->setTrack2(track());
+                        if (spanner->type() == Element::Type::SLUR)
+                              spanner->setEndElement(this);
+                        Chord* start = static_cast<Chord*>(spanner->startElement());
                         if (start)
-                              slur->setTrack(start->track());
+                              spanner->setTrack(start->track());
                         if (e.pasteMode()) {
-                              for (Element* e : slur->linkList()) {
-                                    if (e == slur)
+                              for (Element* e : spanner->linkList()) {
+                                    if (e == spanner)
                                           continue;
-                                    Slur* ls = static_cast<Slur*>(e);
-                                    ls->setTick2(slur->tick2());
+                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    ls->setTick2(spanner->tick2());
                                     for (Element* ee : linkList()) {
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack2(cr->track());
-                                                ls->setEndElement(cr);
+                                                if (ls->type() == Element::Type::SLUR)
+                                                      ls->setEndElement(cr);
                                                 break;
                                                 }
                                           }
@@ -912,6 +925,56 @@ void ChordRest::setDurationType(const TDuration& v)
       _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
+QString ChordRest::durationUserName()
+      {
+      QString duration = tr("Duration:");
+      QString tupletType = "";
+      if(tuplet()) {
+              switch (tuplet()->ratio().numerator()) {
+                  case 2:
+                        tupletType += " " + tr("Duplet");
+                        break;
+                  case 3:
+                        tupletType += " " + tr("Triplet");
+                        break;
+                  case 4:
+                        tupletType += " " + tr("Quadruplet");
+                        break;
+                  case 5:
+                        tupletType += " " + tr("Quinplet");
+                        break;
+                  case 6:
+                        tupletType += " " + tr("Sextuplet");
+                        break;
+                  case 7:
+                        tupletType += " " + tr("Septuplet");
+                        break;
+                  case 8:
+                        tupletType += " " + tr("Octuplet");
+                        break;
+                  case 9:
+                        tupletType += " " + tr("Nontuplet");
+                        break;
+                  default:
+                        tupletType += " " + tr("Custom Tuplet");
+                  }
+            }
+      QString dotString = "";
+
+      switch (dots()) {
+            case 1:
+                  dotString += " " + tr("Dotted");
+                  break;
+            case 2:
+                  dotString += " " + tr("Double dotted");
+                  break;
+            case 3:
+                  dotString += " " + tr("Triple dotted");
+                  break;
+            }
+      return duration + tupletType + dotString + " " + durationType().durationTypeUserName() + " " + tr("note");
+      }
+
 //---------------------------------------------------------
 //   setTrack
 //---------------------------------------------------------
@@ -1144,5 +1207,84 @@ void ChordRest::writeBeam(Xml& xml)
 #endif
       }
 
+//---------------------------------------------------------
+//   nextSegmentAfterCR
+//    returns first segment at tick CR->tick + CR->actualTicks
+//    of given types
+//---------------------------------------------------------
+
+Segment* ChordRest::nextSegmentAfterCR(Segment::Type types) const
+      {
+      for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
+            // chordrest ends at tick+actualTicks
+            // we return the segment at or after the end of the chordrest
+            if (s->tick() >= tick() + actualTicks())
+                  return s;
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* ChordRest::nextElement()
+      {
+      return segment()->firstInNextSegments(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* ChordRest::prevElement()
+      {
+      return segment()->lastInPrevSegments(staffIdx());
+      }
+
+QString ChordRest::accessibleExtraInfo()
+      {
+      QString rez = "";
+      foreach (Articulation* a, articulations())
+            rez = rez + " " + a->screenReaderInfo();
+
+      foreach (Element* l, lyricsList())
+            rez = rez + " " + l->screenReaderInfo();
+
+      if(segment()) {
+            foreach (Element* e, segment()->annotations()) {
+                  if (e->staffIdx() == staffIdx() )
+                        rez = rez + " " + e->screenReaderInfo();
+                  }
+
+            SpannerMap smap = score()->spannerMap();
+            std::vector< ::Interval<Spanner*> > spanners = smap.findOverlapping(tick(), tick());
+            for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
+                  ::Interval<Spanner*> interval = *i;
+                  Spanner* s = interval.value;
+                  if (s->type() == Element::Type::VOLTA || //voltas are added for barlines
+                      s->type() == Element::Type::TIE    ) //ties are added in notes
+                        continue;
+
+                  Segment* seg = 0;
+                  if (s->type() == Element::Type::SLUR) {
+                        if(s->tick() == tick() && s->track() == track())
+                              rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                        if(s->tick2() == tick() && s->track2() == track())
+                              rez += " " + tr("End of %1").arg(s->screenReaderInfo());
+                        }
+                  else  {
+                        if(s->tick() == tick() && s->staffIdx() == staffIdx())
+                              rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                        seg = segment()->next1MM(Segment::Type::ChordRest);
+                        if (!seg)
+                              continue;
+                        if(s->tick2() == seg->tick() && s->staffIdx() == staffIdx())
+                              rez += " " + tr("End of %1").arg(s->screenReaderInfo());
+                        }
+                  }
+            }
+      return rez;
+      }
 }
 

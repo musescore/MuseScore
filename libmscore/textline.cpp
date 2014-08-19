@@ -209,6 +209,7 @@ void TextLineSegment::layout1()
                   }
             else {
                   _endText->setTextStyleType(tl->_endText->textStyleType());
+                  _endText->setTextStyle(tl->_endText->textStyle());
                   _endText->setText(tl->_endText->text());
                   }
             }
@@ -536,7 +537,8 @@ void TextLine::setEndText(const QString& s)
 
 void TextLine::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       writeProperties(xml);
       xml.etag();
@@ -644,6 +646,8 @@ void TextLine::writeProperties(Xml& xml) const
       if (_beginText) {
             bool textDiff  = _beginText->text() != propertyDefault(P_ID::BEGIN_TEXT).toString();
             bool styleDiff = _beginText->textStyle() != propertyDefault(P_ID::BEGIN_TEXT_STYLE).value<TextStyle>();
+            if (styleDiff)
+                  textDiff = true;
             if (textDiff || styleDiff) {
                   xml.stag("beginText");
                   _beginText->writeProperties(xml, textDiff, styleDiff);
@@ -653,6 +657,8 @@ void TextLine::writeProperties(Xml& xml) const
       if (_continueText) {
             bool textDiff  = _continueText->text() != propertyDefault(P_ID::CONTINUE_TEXT).toString();
             bool styleDiff = _continueText->textStyle() != propertyDefault(P_ID::CONTINUE_TEXT_STYLE).value<TextStyle>();
+            if (styleDiff)
+                  textDiff = true;
             if (textDiff || styleDiff) {
                   xml.stag("continueText");
                   _continueText->writeProperties(xml, textDiff, styleDiff);
@@ -662,6 +668,8 @@ void TextLine::writeProperties(Xml& xml) const
       if (_endText) {
             bool textDiff  = _endText->text() != propertyDefault(P_ID::END_TEXT).toString();
             bool styleDiff = _endText->textStyle() != propertyDefault(P_ID::END_TEXT_STYLE).value<TextStyle>();
+            if (styleDiff)
+                  textDiff = true;
             if (textDiff || styleDiff) {
                   xml.stag("endText");
                   _endText->writeProperties(xml, textDiff, styleDiff);

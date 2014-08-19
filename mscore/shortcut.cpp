@@ -27,7 +27,7 @@ extern QString dataPath;
 //   Shortcut
 //---------------------------------------------------------
 
-Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
+Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, Qt::ShortcutContext cont,
    const char* txt, const char* d, const char* h, Icons i)
       {
       _key         = name;
@@ -38,9 +38,10 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
       _flags       = f;
       _context     = cont;
       _icon        = i;
+      _assignedWidget = assignedWidget;
       }
 
-Shortcut::Shortcut(int s, int f, const char* name,
+Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name,
    const char* txt, const char* d, const char* h, Icons i)
       {
       _key         = name;
@@ -50,9 +51,10 @@ Shortcut::Shortcut(int s, int f, const char* name,
       _state       = s;
       _flags       = f;
       _icon        = i;
+      _assignedWidget = assignedWidget;
       }
 
-Shortcut::Shortcut(int s, int f, const char* name, const char* txt,
+Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, const char* txt,
    const char* d, Icons i)
       {
       _key         = name;
@@ -62,9 +64,10 @@ Shortcut::Shortcut(int s, int f, const char* name, const char* txt,
       _state       = s;
       _flags       = f;
       _icon        = i;
+      _assignedWidget = assignedWidget;
       }
 
-Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
+Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, Qt::ShortcutContext cont,
    const char* txt, const char* d, Icons i)
       {
       _key         = name;
@@ -75,9 +78,10 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
       _flags       = f;
       _context     = cont;
       _icon        = i;
+      _assignedWidget = assignedWidget;
       }
 
-Shortcut::Shortcut(int s, int f, const char* name, const char* txt, Icons i)
+Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, const char* txt, Icons i)
       {
       _key         = name;
       _text        = txt;
@@ -86,9 +90,10 @@ Shortcut::Shortcut(int s, int f, const char* name, const char* txt, Icons i)
       _state       = s;
       _flags       = f;
       _icon        = i;
+      _assignedWidget = assignedWidget;
       }
 
-Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
+Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, Qt::ShortcutContext cont,
    const char* txt, Icons i)
       {
       _key         = name;
@@ -99,6 +104,7 @@ Shortcut::Shortcut(int s, int f, const char* name, Qt::ShortcutContext cont,
       _flags       = f;
       _context     = cont;
       _icon        = i;
+      _assignedWidget = assignedWidget;
       }
 
 Shortcut::Shortcut(const Shortcut& sc)
@@ -113,6 +119,7 @@ Shortcut::Shortcut(const Shortcut& sc)
       _keys        = sc._keys;
       _context     = sc._context;
       _icon        = sc._icon;
+      _assignedWidget = sc._assignedWidget;
       }
 
 //---------------------------------------------------------
@@ -236,8 +243,10 @@ QAction* Shortcut::action() const
             s += ")";
             _action->setToolTip(s);
             }
+
       if (_icon != Icons::Invalid_ICON)
             _action->setIcon(*icons[int(_icon)]);
+
       return _action;
       }
 
@@ -266,6 +275,16 @@ QString Shortcut::keysToString() const
             s += Shortcut::keySeqToString(_keys[i], QKeySequence::NativeText);
             }
       return s;
+      }
+
+//---------------------------------------------------------
+//   getMenuShortcutString
+//---------------------------------------------------------
+
+QString Shortcut::getMenuShortcutString(const QMenu *menu)
+      {
+      int shortcutKeyPosition = menu->title().indexOf('&') + 1;
+      return QString("Alt+") + menu->title().at(shortcutKeyPosition);
       }
 
 //---------------------------------------------------------
@@ -476,6 +495,33 @@ static QList<Shortcut1*> loadDefaultShortcuts()
             }
       return list;
       }
+//---------------------------------------------------------
+//    getActionGroupForWidget
+//---------------------------------------------------------
+QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w)
+      {
+      QActionGroup* ag = new QActionGroup(NULL);
+      ag->setExclusive(false);
+      ag->setEnabled(true);
+      foreach (Shortcut* s, Shortcut::shortcuts()) {
+            if (s->assignedWidget() == w) {
+                  QAction* a = s->action();
+                  if (a)
+                        ag->addAction(s->action());
+                  }
+            }
+      return ag;
+      }
+
+QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext)
+      {
+      QActionGroup* ag = Shortcut::getActionGroupForWidget(w);
+      foreach (QAction* a, ag->actions()) {
+            a->setShortcutContext(newShortcutContext);
+            }
+      return ag;
+      }
+
 
 //---------------------------------------------------------
 //   resetToBuildin

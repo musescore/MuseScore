@@ -186,9 +186,10 @@ void LayoutBreak::spatiumChanged(qreal, qreal)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool LayoutBreak::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool LayoutBreak::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() != layoutBreakType();
+      return data.element->type() == Element::Type::LAYOUT_BREAK
+         && static_cast<LayoutBreak*>(data.element)->layoutBreakType() != layoutBreakType();
       }
 
 //---------------------------------------------------------

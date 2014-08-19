@@ -55,6 +55,7 @@ echo "      $1/share/locale/mscore_vi.ts \\"
 echo "      $1/share/locale/mscore_zh_CN.ts \\"
 echo "      $1/share/locale/mscore_zh_TW.ts"
 
+
 echo "FORMS = \\"
 uis=`find $1 -name "*.ui"`
 for a in $uis; do

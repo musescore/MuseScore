@@ -33,11 +33,7 @@ Volta* Score::searchVolta(int tick) const
             if (s->type() != Element::Type::VOLTA)
                   continue;
             Volta* volta = static_cast<Volta*>(s);
-            int tick1 = volta->tick();
-            Measure* m = tick2measure(volta->tick2());
-            int tick2 = m->endTick();
-// qDebug("spanner %s %d - %d %d", s->name(), tick, tick1, tick2);
-            if (tick >= tick1 && tick < tick2)
+            if (tick >= volta->tick() && tick < volta->tick2())
                   return volta;
             }
       return 0;
@@ -49,27 +45,19 @@ Volta* Score::searchVolta(int tick) const
 
 Measure* Score::searchLabel(const QString& s)
       {
-// qDebug("searchLabel<%s>", qPrintable(s));
-      if (s == "start") {
-// qDebug("   found %p", firstMeasure());
+      if (s == "start")
             return firstMeasure();
-            }
-      else if (s == "end") {
-// qDebug("   found %p", firstMeasure());
+      else if (s == "end")
             return lastMeasure();
-            }
-      for (Segment* segment = firstMeasure()->first(); segment; segment = segment->next1()) {
-            foreach(const Element* e, segment->annotations()) {
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            for (auto e : *m->el()) {
                   if (e->type() == Element::Type::MARKER) {
                         const Marker* marker = static_cast<const Marker*>(e);
-                        if (marker->label() == s) {
-// qDebug("   found %p", segment->measure());
-                              return segment->measure();
-                              }
+                        if (marker->label() == s)
+                              return m;
                         }
                   }
             }
-// qDebug("   found %p", 0);
       return 0;
       }
 
@@ -238,7 +226,7 @@ int RepeatList::utime2utick(qreal t) const
 
 void RepeatList::dump() const
       {
-return;
+#if 0
       qDebug("==Dump Repeat List:==");
       foreach(const RepeatSegment* s, *this) {
             qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
@@ -250,6 +238,7 @@ return;
                s->len / 480 / 4,
                s->utime, s->timeOffset);
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -299,22 +288,18 @@ void RepeatList::unwind()
                               append(rs);
                               rs = new RepeatSegment;
                               }
-                        rs->tick = m->tick() + m->ticks();
+                        rs->tick = m->endTick();
                         }
                   }
             else {
                   // Jumps are only accepted outside of other repeats
                   if (flags & Repeat::JUMP) {
                         Jump* s = 0;
-                        for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                              foreach(Element* e, seg->annotations()) {
-                                    if (e->type() == Element::Type::JUMP) {
-                                          s = static_cast<Jump*>(e);
-                                          break;
-                                          }
-                                    }
-                              if (s)
+                        foreach(Element* e, *m->el()) {
+                              if (e->type() == Element::Type::JUMP) {
+                                    s = static_cast<Jump*>(e);
                                     break;
+                                    }
                               }
                         if (s) {
                               Measure* nm = _score->searchLabel(s->jumpTo());
@@ -323,7 +308,7 @@ void RepeatList::unwind()
                               isGoto      = true;
 
                               if (nm && endRepeat) {
-                                    rs->len = m->tick() + m->ticks() - rs->tick;
+                                    rs->len = m->endTick() - rs->tick;
                                     append(rs);
                                     rs = new RepeatSegment;
                                     rs->tick  = nm->tick();
@@ -339,7 +324,7 @@ void RepeatList::unwind()
             if (isGoto && (endRepeat == m)) {
                   if (continueAt == 0) {
 // qDebug("  isGoto && endReapeat == %p, continueAt == 0", m);
-                        rs->len = m->tick() + m->ticks() - rs->tick;
+                        rs->len = m->endTick() - rs->tick;
                         if (rs->len)
                               append(rs);
                         else
@@ -348,7 +333,7 @@ void RepeatList::unwind()
                         dump();
                         return;
                         }
-                  rs->len = m->tick() + m->ticks() - rs->tick;
+                  rs->len = m->endTick() - rs->tick;
                   append(rs);
                   rs       = new RepeatSegment;
                   rs->tick = continueAt->tick();
@@ -380,7 +365,7 @@ void RepeatList::unwind()
 
       if (rs) {
             Measure* lm = _score->lastMeasure();
-            rs->len     = lm->tick() - rs->tick + lm->ticks();
+            rs->len     = lm->endTick() - rs->tick;
             if (rs->len)
                   append(rs);
             else

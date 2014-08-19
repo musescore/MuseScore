@@ -34,7 +34,8 @@ Fingering::Fingering(Score* s)
 
 void Fingering::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag(name());
       Text::writeProperties(xml);
       xml.etag();
@@ -63,6 +64,19 @@ void Fingering::reset()
       QPointF no(userOff());
       setUserOff(o);
       score()->undoChangeProperty(this, P_ID::USER_OFF, no);
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Fingering::accessibleInfo()
+      {
+      QString rez = Element::accessibleInfo();
+      if (textStyleType() == TextStyleType::STRING_NUMBER) {
+            rez += " " + tr("String number");
+            }
+      return rez + " " + text();
       }
 
 }

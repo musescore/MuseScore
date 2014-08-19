@@ -42,6 +42,7 @@
 #include "fluid/fluid.h"
 #include "pathlistdialog.h"
 #include "mstyle/mconfig.h"
+#include "resourceManager.h"
 
 namespace Ms {
 
@@ -140,7 +141,7 @@ void Preferences::init()
 
       antialiasedDrawing       = true;
       sessionStart             = SessionStart::SCORE;
-      startScore               = ":/data/Promenade_Example.mscz";
+      startScore               = ":/data/My_First_Score.mscx";
       defaultStyleFile         = "";
       showSplashScreen         = true;
 
@@ -624,7 +625,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
       connect(mySfzButton, SIGNAL(clicked()), SLOT(changeSfzPaths()));
 
-
+      connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
       connect(partStyleButton,        SIGNAL(clicked()), SLOT(selectPartStyle()));
@@ -1042,7 +1043,8 @@ void PreferenceDialog::updateSCListView()
                   newItem->setIcon(0, *icons[int(s->icon())]);
             newItem->setText(1, s->keysToString());
             newItem->setData(0, Qt::UserRole, s->key());
-            shortcutList->addTopLevelItem(newItem);
+            if (enableExperimental || (strncmp(s->key(), "media", 5) != 0 && strncmp(s->key(), "layer", 5) != 0 && strncmp(s->key(), "insert-fretframe", 16) != 0))
+                shortcutList->addTopLevelItem(newItem);
             }
       shortcutList->resizeColumnToContents(0);
       }
@@ -1670,6 +1672,16 @@ void PreferenceDialog::changeSfzPaths()
       pld.setPath(sfzPath->text());
       if(pld.exec())
             sfzPath->setText(pld.path());
+      }
+
+//---------------------------------------------------------
+//   updateLanguagesClicked
+//---------------------------------------------------------
+
+void PreferenceDialog::updateTranslationClicked()
+      {
+      ResourceManager r(0);
+      r.exec();
       }
 
 //---------------------------------------------------------

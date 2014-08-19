@@ -318,8 +318,7 @@ bool Score::saveFile()
       {
       QString suffix = info.suffix();
       if (info.exists() && !info.isWritable()) {
-            QString s = QT_TRANSLATE_NOOP("file", "The following file is locked: \n%1 \n\nTry saving to a different location.");
-            MScore::lastError = s.arg(info.filePath());
+            MScore::lastError = tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(info.filePath());
             return false;
             }
 
@@ -350,9 +349,7 @@ bool Score::saveFile()
       QString tempName = info.filePath() + QString(".temp");
       QFile temp(tempName);
       if (!temp.open(QIODevice::WriteOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Open Temp File\n%1\nfailed: ")
-               + QString(strerror(errno));
-            MScore::lastError = s.arg(tempName);
+            MScore::lastError = tr("Open Temp File\n%1\nfailed: %2").arg(tempName).arg(QString(strerror(errno)));
             return false;
             }
       try {
@@ -366,8 +363,7 @@ bool Score::saveFile()
             return false;
             }
       if (temp.error() != QFile::NoError) {
-            MScore::lastError = QT_TRANSLATE_NOOP("file",
-               "MuseScore: Save File failed: ") + temp.errorString();
+            MScore::lastError = tr("MuseScore: Save File failed: %1").arg(temp.errorString());
             temp.close();
             return false;
             }
@@ -410,9 +406,7 @@ bool Score::saveFile()
       // rename temp name into file name
       //
       if (!QFile::rename(tempName, name)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Renaming temp. file <%1> to <%2> failed:\n")
-               + QString(strerror(errno));
-            MScore::lastError = s.arg(tempName).arg(name);
+            MScore::lastError = tr("Renaming temp. file <%1> to <%2> failed:\n%3").arg(tempName).arg(name).arg(QString(strerror(errno)));
             return false;
             }
       // make file readable by all
@@ -433,7 +427,7 @@ void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
       {
       QFile fp(info.filePath());
       if (!fp.open(QIODevice::WriteOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Open File\n%1\nfailed: ")
+            QString s = tr("Open File\n%1\nfailed: ")
                + QString(strerror(errno));
             throw(s.arg(info.filePath()));
             }
@@ -523,9 +517,7 @@ bool Score::saveFile(QFileInfo& info)
             info.setFile(info.filePath() + ".mscx");
       QFile fp(info.filePath());
       if (!fp.open(QIODevice::WriteOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Open File\n%1\nfailed: ")
-               + QString(strerror(errno));
-            MScore::lastError = s.arg(info.filePath());
+            MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath()).arg(QString(strerror(errno)));
             return false;
             }
       saveFile(&fp, false);
@@ -568,9 +560,7 @@ bool Score::saveStyle(const QString& name)
             info.setFile(info.filePath() + ext);
       QFile f(info.filePath());
       if (!f.open(QIODevice::WriteOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Open Style File\n%1\nfailed: ")
-               + QString(strerror(errno));
-            MScore::lastError = s.arg(f.fileName());
+            MScore::lastError = tr("Open Style File\n%1\nfailed: %2").arg(f.fileName().arg(QString(strerror(errno))));
             return false;
             }
 
@@ -580,8 +570,7 @@ bool Score::saveStyle(const QString& name)
       _style.save(xml, false);     // save complete style
       xml.etag();
       if (f.error() != QFile::NoError) {
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "Write Style failed: ")
-               + f.errorString();
+            MScore::lastError = tr("Write Style failed: %1").arg(f.errorString());
             return false;
             }
       return true;
@@ -674,7 +663,7 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       MQZipReader uz(name);
       if (!uz.exists()) {
             qDebug("loadCompressedMsc: <%s> not found", qPrintable(name));
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "file not found");
+            MScore::lastError = tr("file not found");
             return FileError::FILE_NOT_FOUND;
             }
 
@@ -867,11 +856,11 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
       foreach (LinkedElements* le, _elinks)
             le->setLid(this, id++);
       _elinks.clear();
-
-      // check all spanners for missing end (tick2 == -1)
+#if 0
+      // check all spanners for missing end
       QList<Spanner*> sl;
       for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
-            if (i->second->tick2() == -1)
+            if (i->second->ticks() == 0)
                   sl.append(i->second);
             }
       int lastTick = lastMeasure()->endTick();
@@ -880,6 +869,7 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
             _spanner.removeSpanner(s);
             _spanner.addSpanner(s);
             }
+#endif
       for (Staff* s : _staves)
             s->updateOttava();
 
@@ -931,7 +921,6 @@ bool Score::read(XmlReader& e)
                         st = new StaffType;
                         }
 #endif
-                  qDebug("Score::read  staffType idx %d", e.intAttribute("idx"));
                   StaffType st;
                   st.read(e);
                   e.staffType().append(st);
@@ -974,6 +963,7 @@ bool Score::read(XmlReader& e)
                   layer.name = e.attribute("name");
                   layer.tags = e.attribute("mask").toUInt();
                   _layer.append(layer);
+                  e.readNext();
                   }
             else if (tag == "currentLayer")
                   _currentLayer = e.readInt();
@@ -1261,6 +1251,8 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
       for (int track = strack; track < etrack; ++track) {
+            if (!xml.canWriteVoice(track))
+                  continue;
             for (Segment* segment = fs; segment && segment != ls; segment = segment->next1()) {
                   if (track == 0)
                         segment->setWritten(false);
@@ -1317,10 +1309,10 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                           s->write(xml);
                                           }
                                     }
-                              if (s->tick2() == segment->tick()
+                              if ((s->tick2() == segment->tick())
+                                 && s->type() != Element::Type::SLUR
                                  && (s->track2() == track || s->track2() == -1)
                                  && (!clip || s->tick() >= fs->tick())
-                                 && (s->type() != Element::Type::SLUR)
                                  ) {
                                     if (needTick) {
                                           xml.tag("tick", segment->tick() - xml.tickDiff);
@@ -1336,6 +1328,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         continue;
 
                   if (e->generated()) {
+#if 0
                         if ((xml.curTick - xml.tickDiff) == 0) {
                               if (e->type() == Element::Type::CLEF) {
                                     if (needTick) {
@@ -1346,6 +1339,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                     e->write(xml);
                                     }
                               }
+#endif
                         continue;
                         }
                   if (needTick) {

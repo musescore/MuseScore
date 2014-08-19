@@ -261,6 +261,22 @@
     <seq>Ctrl+Alt+Up</seq>
     </SC>
   <SC>
+    <key>first-element</key>
+    <seq>Ctrl+Home</seq>
+    </SC>
+  <SC>
+    <key>last-element</key>
+    <seq>Ctrl+End</seq>
+    </SC>
+  <SC>
+    <key>next-element</key>
+    <seq>Ctrl+Alt+Shift+Right</seq>
+    </SC>
+  <SC>
+    <key>prev-element</key>
+    <seq>Ctrl+Alt+Shift+Left</seq>
+    </SC>
+  <SC>
     <key>move-up</key>
     <seq>Ctrl+Shift+Up</seq>
     </SC>
@@ -612,9 +628,9 @@
     <key>clef-bass</key>
     <seq>Ctrl+Y,Ctrl+2</seq>
     </SC>
-  <SC>
+   <SC>
     <key>system-break</key>
-    <seq>Return</seq>
+   <seq>Return</seq>
     </SC>
   <SC>
     <key>page-break</key>

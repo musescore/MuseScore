@@ -5,11 +5,8 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
       <frameSystemDistance>21</frameSystemDistance>
       <clefLeftMargin>4</clefLeftMargin>
-      <beamMinLen>1.32</beamMinLen>
-      <beamNoSlope>0</beamNoSlope>
       <TextStyle>
         <halign>center</halign>
         <valign>top</valign>
@@ -62,7 +59,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
@@ -97,7 +94,7 @@
     <Part>
       <Staff id="2">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
@@ -402,10 +399,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
         <frameSystemDistance>21</frameSystemDistance>
-        <beamMinLen>1.32</beamMinLen>
-        <beamNoSlope>0</beamNoSlope>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <TextStyle>
           <halign>center</halign>
@@ -449,7 +443,7 @@
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
@@ -642,10 +636,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
         <frameSystemDistance>21</frameSystemDistance>
-        <beamMinLen>1.32</beamMinLen>
-        <beamNoSlope>0</beamNoSlope>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <TextStyle>
           <halign>center</halign>
@@ -689,7 +680,7 @@
         <Staff id="1">
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
-            <name>Standard</name>
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>

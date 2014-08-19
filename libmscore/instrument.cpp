@@ -89,7 +89,7 @@ InstrumentData::InstrumentData()
       _maxPitchA   = 127;
       _minPitchP   = 0;
       _maxPitchP   = 127;
-      _useDrumset  = false;
+      _useDrumset  = DrumsetKind::NONE;
       _drumset     = 0;
       }
 
@@ -112,6 +112,7 @@ InstrumentData::InstrumentData(const InstrumentData& i)
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
       _channel      = i._channel;
+      _clefType     = i._clefType;
       }
 
 //---------------------------------------------------------
@@ -172,10 +173,35 @@ void InstrumentData::write(Xml& xml) const
             xml.tag("transposeDiatonic", _transpose.diatonic);
       if (_transpose.chromatic)
             xml.tag("transposeChromatic", _transpose.chromatic);
-      if (_useDrumset) {
-            xml.tag("useDrumset", _useDrumset);
+      if (_useDrumset != DrumsetKind::NONE) {
+            xml.tag("useDrumset", int(_useDrumset));
             _drumset->save(xml);
             }
+      for (int i = 0; i < _clefType.size(); ++i) {
+            ClefTypeList ct = _clefType[i];
+            if (ct._concertClef == ct._transposingClef) {
+                  if (ct._concertClef != ClefType::G) {
+                        QString tag = ClefInfo::tag(ct._concertClef);
+                        if (i)
+                              xml.tag(QString("clef staff=\"%1\"").arg(i+1), tag);
+                        else
+                              xml.tag("clef", tag);
+                        }
+                  }
+            else {
+                  QString tag1 = ClefInfo::tag(ct._concertClef);
+                  QString tag2 = ClefInfo::tag(ct._transposingClef);
+                  if (i) {
+                        xml.tag(QString("concertClef staff=\"%1\"").arg(i+1), tag1);
+                        xml.tag(QString("transposingClef staff=\"%1\"").arg(i+1), tag2);
+                        }
+                  else {
+                        xml.tag("concertClef", tag1);
+                        xml.tag("transposingClef", tag2);
+                        }
+                  }
+            }
+
       if (!(_stringData == StringData()))
             _stringData.write(xml);
       foreach(const NamedEventList& a, _midiActions)
@@ -240,9 +266,13 @@ void InstrumentData::read(XmlReader& e)
             else if (tag == "transposeDiatonic")
                   _transpose.diatonic = e.readInt();
             else if (tag == "useDrumset") {
-                  _useDrumset = e.readInt();
-                  if (_useDrumset)
-                        _drumset = new Drumset(*smDrumset);
+                  int drumset = e.readInt();
+                  if (!drumset)
+                        _useDrumset = DrumsetKind::NONE;
+                  else  {
+                        _useDrumset = DrumsetKind::DEFAULT_DRUMS;
+                         _drumset = new Drumset(*smDrumset);
+                        }
                   }
             else if (tag == "Drum") {
                   // if we see on of this tags, a custom drumset will
@@ -273,15 +303,32 @@ void InstrumentData::read(XmlReader& e)
                   a.read(e);
                   _channel.append(a);
                   }
-            else if (tag == "chorus")     // obsolete
+            else if (tag == "clef") {           // sets both transposing and concert clef
+                  int idx = e.intAttribute("staff", 1) - 1;
+                  QString val(e.readElementText());
+                  ClefType ct = Clef::clefType(val);
+                  setClefType(idx, ClefTypeList(ct, ct));
+                  }
+            else if (tag == "concertClef") {
+                  int idx = e.intAttribute("staff", 1) - 1;
+                  QString val(e.readElementText());
+                  setClefType(idx, ClefTypeList(Clef::clefType(val), clefType(idx)._transposingClef));
+                  }
+            else if (tag == "transposingClef") {
+                  int idx = e.intAttribute("staff", 1) - 1;
+                  QString val(e.readElementText());
+                  setClefType(idx, ClefTypeList(clefType(idx)._concertClef, Clef::clefType(val)));
+                  }
+
+            else if (tag == "chorus")           // obsolete
                   chorus = e.readInt();
-            else if (tag == "reverb")     // obsolete
+            else if (tag == "reverb")           // obsolete
                   reverb = e.readInt();
-            else if (tag == "midiProgram")  // obsolete
+            else if (tag == "midiProgram")      // obsolete
                   program = e.readInt();
-            else if (tag == "volume")     // obsolete
+            else if (tag == "volume")           // obsolete
                   volume = e.readInt();
-            else if (tag == "pan")        // obsolete
+            else if (tag == "pan")              // obsolete
                   pan = e.readInt();
             else if (tag == "midiChannel")      // obsolete
                   e.skipCurrentElement();
@@ -299,7 +346,7 @@ void InstrumentData::read(XmlReader& e)
             a.pan     = pan;
             _channel.append(a);
             }
-      if (_useDrumset) {
+      if (_useDrumset != DrumsetKind::NONE) {
             if (_channel[0].bank == 0)
                   _channel[0].bank = 128;
             _channel[0].updateInitList();
@@ -644,11 +691,20 @@ bool StaffName::operator==(const StaffName& i) const
 //   setUseDrumset
 //---------------------------------------------------------
 
-void InstrumentData::setUseDrumset(bool val)
+void InstrumentData::setUseDrumset(DrumsetKind val)
       {
       _useDrumset = val;
-      if (val && _drumset == 0) {
-            _drumset = new Drumset(*smDrumset);
+      if (val != DrumsetKind::NONE && _drumset == 0) {
+            switch (val) {
+                  case DrumsetKind::DEFAULT_DRUMS:
+                        _drumset = new Drumset(*smDrumset);
+                        break;
+                  case DrumsetKind::GUITAR_PRO:
+                        _drumset = new Drumset(*gpDrumset);
+                        break;
+                  default:
+                        break;
+                  }
             }
       }
 
@@ -703,6 +759,31 @@ void InstrumentData::addLongName(const StaffName& f)
 void InstrumentData::addShortName(const StaffName& f)
       {
       _shortNames.append(f);
+      }
+
+//---------------------------------------------------------
+//   clefType
+//---------------------------------------------------------
+
+ClefTypeList InstrumentData::clefType(int staffIdx) const
+      {
+      if (staffIdx >= _clefType.size()) {
+            if (_clefType.isEmpty())
+                  return ClefTypeList(staffIdx == 1 ? ClefType::F : ClefType::G);
+            return _clefType[0];
+            }
+      return _clefType[staffIdx];
+      }
+
+//---------------------------------------------------------
+//   setClefType
+//---------------------------------------------------------
+
+void InstrumentData::setClefType(int staffIdx, const ClefTypeList& c)
+      {
+      while (_clefType.size() <= staffIdx)
+            _clefType.append(ClefTypeList());
+      _clefType[staffIdx] = c;
       }
 
 //---------------------------------------------------------
@@ -908,7 +989,7 @@ Drumset* Instrument::drumset() const
 //   useDrumset
 //---------------------------------------------------------
 
-bool Instrument::useDrumset() const
+DrumsetKind Instrument::useDrumset() const
       {
       return d->useDrumset();
       }
@@ -917,7 +998,7 @@ bool Instrument::useDrumset() const
 //   setUseDrumset
 //---------------------------------------------------------
 
-void Instrument::setUseDrumset(bool val)
+void Instrument::setUseDrumset(DrumsetKind val)
       {
       d->setUseDrumset(val);
       }
@@ -1019,6 +1100,24 @@ void Instrument::setChannel(const QList<Channel>& l)
 void Instrument::setChannel(int i, const Channel& c)
       {
       d->setChannel(i, c);
+      }
+
+//---------------------------------------------------------
+//   clefType
+//---------------------------------------------------------
+
+ClefTypeList Instrument::clefType(int staffIdx) const
+      {
+      return d->clefType(staffIdx);
+      }
+
+//---------------------------------------------------------
+//   setClefType
+//---------------------------------------------------------
+
+void Instrument::setClefType(int staffIdx, const ClefTypeList& cl)
+      {
+      d->setClefType(staffIdx, cl);
       }
 
 //---------------------------------------------------------
@@ -1180,10 +1279,12 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
             instr.addShortName(StaffName(sn.name, sn.pos));
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
-      if (t->useDrumset) {
-            instr.setUseDrumset(true);
+      if (t->useDrumset != DrumsetKind::NONE) {
+            instr.setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
             instr.setDrumset(new Drumset(*((t->drumset) ? t->drumset : smDrumset)));
             }
+      for (int i = 0; i < t->nstaves(); ++i)
+            instr.setClefType(i, t->clefTypes[i]);
       instr.setMidiActions(t->midiActions);
       instr.setArticulation(t->articulation);
       instr.setChannel(t->channel);

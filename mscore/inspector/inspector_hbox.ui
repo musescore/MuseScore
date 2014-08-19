@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Horizontal Frame Inspector</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -74,6 +77,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Right Gap</string>
+       </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
        </property>
@@ -103,6 +109,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Width</string>
+       </property>
        <property name="suffix">
         <string>sp</string>
        </property>
@@ -121,6 +130,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Left Gap</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -155,6 +167,9 @@
        <property name="toolTip">
         <string>reset value</string>
        </property>
+       <property name="accessibleName">
+        <string>Reset Left Gap value</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -174,6 +189,9 @@
       <widget class="QToolButton" name="resetRightGap">
        <property name="toolTip">
         <string>reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Right Gap value</string>
        </property>
        <property name="text">
         <string>...</string>

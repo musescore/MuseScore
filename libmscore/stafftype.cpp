@@ -25,7 +25,7 @@ namespace Ms {
 //   StaffTypeTablature
 //---------------------------------------------------------
 
-#define TAB_DEFAULT_DUR_YOFFS (-1.75)
+#define TAB_DEFAULT_DUR_YOFFS (-1.0)
 
 QList<TablatureFretFont>     StaffType::_fretFonts      = QList<TablatureFretFont>();
 QList<TablatureDurationFont> StaffType::_durationFonts  = QList<TablatureDurationFont>();
@@ -114,16 +114,18 @@ const char* StaffType::groupName(StaffGroup r)
 
 bool StaffType::operator==(const StaffType& st) const
       {
-      if (!isSameStructure(st) || st._name != _name)        // common to all type groups
+      if (!isSameStructure(st) || st._xmlName != _xmlName) {        // common to all type groups
             return false;
+            }
       if (_group == StaffGroup::TAB) {                      // TAB-specific
-            return st._durationFontIdx  == _durationFontIdx
+            bool v = st._durationFontIdx  == _durationFontIdx
                && st._durationFontSize  == _durationFontSize
                && st._durationFontUserY == _durationFontUserY
                && st._fretFontIdx       == _fretFontIdx
                && st._fretFontSize      == _fretFontSize
                && st._fretFontUserY     == _fretFontUserY
                ;
+            return v;
             }
       return true;
       }
@@ -197,8 +199,8 @@ void StaffType::setLines(int val)
 void StaffType::write(Xml& xml) const
       {
       xml.stag(QString("StaffType group=\"%1\"").arg(fileGroupNames[(int)_group]));
-      if (!_name.isEmpty())
-            xml.tag("name", _name);
+      if (!_xmlName.isEmpty())
+            xml.tag("name", _xmlName);
       if (_lines != 5)
             xml.tag("lines", _lines);
       if (_lineDistance.val() != 1.0)
@@ -258,7 +260,7 @@ void StaffType::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
-                  setName(e.readElementText());
+                  setXmlName(e.readElementText());
             else if (tag == "lines")
                   setLines(e.readInt());
             else if (tag == "lineDistance")
@@ -860,9 +862,8 @@ bool StaffType::readConfigFile(const QString& fileName)
       QFile f(path);
 
       if (!fi.exists() || !f.open(QIODevice::ReadOnly)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Cannot open tablature font description:\n%1\n%2");
-            MScore::lastError = s.arg(f.fileName()).arg(f.errorString());
-qDebug("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
+            MScore::lastError = QObject::tr("Cannot open tablature font description:\n%1\n%2").arg(f.fileName()).arg(f.errorString());
+            qDebug("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
             return false;
             }
 

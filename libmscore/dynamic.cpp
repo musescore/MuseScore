@@ -204,7 +204,8 @@ int Dynamic::velocity() const
 
 void Dynamic::write(Xml& xml) const
       {
-      if(!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Dynamic");
       xml.tag("subtype", dynamicTypeName());
       writeProperty(xml, P_ID::VELOCITY);
@@ -437,6 +438,15 @@ QVariant Dynamic::propertyDefault(P_ID id) const
             case P_ID::VELOCITY:        return -1;
             default:                    return Text::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Dynamic::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + this->dynamicTypeName();
       }
 
 }

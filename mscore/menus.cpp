@@ -221,16 +221,16 @@ Palette* MuseScore::newKeySigPalette()
       for (int i = 0; i < 7; ++i) {
             KeySig* k = new KeySig(gscore);
             k->setKey(Key(i + 1));
-            sp->append(k, keyNames[i*2]);
+            sp->append(k, qApp->translate("MuseScore", keyNames[i*2]));
             }
       for (int i = -7; i < 0; ++i) {
             KeySig* k = new KeySig(gscore);
             k->setKey(Key(i));
-            sp->append(k, keyNames[(7 + i) * 2 + 1]);
+            sp->append(k, qApp->translate("MuseScore", keyNames[(7 + i) * 2 + 1]));
             }
       KeySig* k = new KeySig(gscore);
       k->setKey(Key::C);
-      sp->append(k, keyNames[14]);
+      sp->append(k, qApp->translate("MuseScore", keyNames[14]));
       return sp;
       }
 
@@ -257,7 +257,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
             for (auto i : types) {
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(Accidental::Type(i));
-                  sp->append(s, s->subtypeUserName());
+                  sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
                   }
             }
       else {
@@ -265,7 +265,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
                   Accidental* s = new Accidental(gscore);
                   s->setAccidentalType(Accidental::Type(i));
                   if (s->symbol() != SymId::noSym)
-                        sp->append(s, s->subtypeUserName());
+                        sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
                   else
                         delete s;
                   }
@@ -292,23 +292,10 @@ Palette* MuseScore::newBarLinePalette()
       sp->setGrid(42, 38);
 
       // bar line styles
-      struct {
-            BarLineType type;
-            const char* name;
-            } t[] = {
-            { BarLineType::NORMAL,       QT_TRANSLATE_NOOP("Palette", "Normal") },
-            { BarLineType::BROKEN,       QT_TRANSLATE_NOOP("Palette", "Dashed style") },
-            { BarLineType::DOTTED,       QT_TRANSLATE_NOOP("Palette", "Dotted style") },
-            { BarLineType::END,          QT_TRANSLATE_NOOP("Palette", "End Bar style") },
-            { BarLineType::DOUBLE,       QT_TRANSLATE_NOOP("Palette", "Double Bar style") },
-            { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
-            { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
-            { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
-            };
-      for (unsigned i = 0; i < sizeof(t)/sizeof(*t); ++i) {
+      for (unsigned i = 0; i < barLineTableSize(); ++i) {
             BarLine* b  = new BarLine(gscore);
-            b->setBarLineType(t[i].type);
-            sp->append(b, t[i].name);
+            b->setBarLineType(barLineTable[i].type);
+            sp->append(b, barLineTable[i].name);
             }
 
       // bar line spans
@@ -346,57 +333,21 @@ Palette* MuseScore::newRepeatsPalette()
       RepeatMeasure* rm = new RepeatMeasure(gscore);
       sp->append(rm, tr("Repeat measure sign"));
 
-      Marker* mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::SEGNO);
-      sp->append(mk, tr("Segno"));
+      for (int i = 0; i < markerTypeTableSize(); i++) {
+            if(markerTypeTable[i].type == Marker::Type::CODETTA) //not in smufl
+                  continue;
 
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::VARSEGNO);
-      sp->append(mk, tr("Segno Variation"));
+            Marker* mk = new Marker(gscore);
+            mk->setMarkerType(markerTypeTable[i].type);
+            sp->append(mk, markerTypeTable[i].name);
+            }
 
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::CODA);
-      sp->append(mk, tr("Coda"));
+      for (int i = 0; i < jumpTypeTableSize(); i++) {
+            Jump* jp = new Jump(gscore);
+            jp->setJumpType(jumpTypeTable[i].type);
+            sp->append(jp, jumpTypeTable[i].userText);
+            }
 
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::VARCODA);
-      sp->append(mk, tr("Varied coda"));
-
-/*      mk = new Marker(gscore);                      // not in smufl
-      mk->setMarkerType(Marker::Type::CODETTA);
-      sp->append(mk, tr("Codetta"));
-  */
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::FINE);
-      sp->append(mk, tr("Fine"));
-
-      Jump* jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DC);
-      sp->append(jp, tr("Da Capo"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DC_AL_FINE);
-      sp->append(jp, tr("Da Capo al Fine"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DC_AL_CODA);
-      sp->append(jp, tr("Da Capo al Coda"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DS_AL_CODA);
-      sp->append(jp, tr("D.S. al Coda"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DS_AL_FINE);
-      sp->append(jp, tr("D.S. al Fine"));
-
-      jp = new Jump(gscore);
-      jp->setJumpType(Jump::Type::DS);
-      sp->append(jp, tr("D.S."));
-
-      mk = new Marker(gscore);
-      mk->setMarkerType(Marker::Type::TOCODA);
-      sp->append(mk, tr("To Coda"));
       return sp;
       }
 
@@ -487,7 +438,7 @@ Palette* MuseScore::newTremoloPalette()
       for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
             Tremolo* tremolo = new Tremolo(gscore);
             tremolo->setTremoloType(TremoloType(i));
-            sp->append(tremolo, tremolo->subtypeName());
+            sp->append(tremolo, qApp->translate("Tremolo", qPrintable(tremolo->subtypeName())));
             }
       return sp;
       }
@@ -550,6 +501,7 @@ Palette* MuseScore::newArticulationsPalette()
       tb->points().append(PitchValue(30, -100, false));
       tb->points().append(PitchValue(60,    0, false));
       sp->append(tb, qApp->translate("articulation", "Tremolo Bar"));
+
       return sp;
       }
 
@@ -628,12 +580,6 @@ Palette* MuseScore::newArpeggioPalette()
             }
 
       //fall and doits
-      const char* scorelineNames[] = {
-            QT_TR_NOOP("fall"),
-            QT_TR_NOOP("doit"),
-            QT_TR_NOOP("plop"),
-            QT_TR_NOOP("scoop"),
-            };
 
       ChordLine* cl = new ChordLine(gscore);
       cl->setChordLineType(ChordLineType::FALL);
@@ -650,6 +596,27 @@ Palette* MuseScore::newArpeggioPalette()
       cl = new ChordLine(gscore);
       cl->setChordLineType(ChordLineType::SCOOP);
       sp->append(cl, tr(scorelineNames[3]));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(ChordLineType::FALL);
+      cl->setStraight(true);
+      sp->append(cl, qApp->translate("articulation", "Slide out down"));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(ChordLineType::DOIT);
+      cl->setStraight(true);
+      sp->append(cl, qApp->translate("articulation", "Slide out up"));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(ChordLineType::SCOOP);
+      cl->setStraight(true);
+      sp->append(cl, qApp->translate("articulation", "Slide in below"));
+
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(ChordLineType::PLOP);
+      cl->setStraight(true);
+      sp->append(cl, qApp->translate("articulation", "Slide in above"));
+
 
       return sp;
       }
@@ -721,7 +688,7 @@ Palette* MuseScore::newBagpipeEmbellishmentPalette()
       for (int i = 0; i < BagpipeEmbellishment::nEmbellishments(); ++i) {
             BagpipeEmbellishment* b  = new BagpipeEmbellishment(gscore);
             b->setEmbelType(i);
-            sp->append(b, BagpipeEmbellishment::BagpipeEmbellishmentList[i].name);
+            sp->append(b, qApp->translate("bagpipe", BagpipeEmbellishment::BagpipeEmbellishmentList[i].name));
             }
 
       return sp;
@@ -857,29 +824,13 @@ Palette* MuseScore::newLinesPalette()
       pedal->setEndHook(true);
       sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
 
-      Trill* trill = new Trill(gscore);
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Trill line"));
 
-      trill = new Trill(gscore);
-      trill->setTrillType("upprall");
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Upprall line"));
-
-      trill = new Trill(gscore);
-      trill->setTrillType("downprall");
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Downprall line"));
-
-      trill = new Trill(gscore);
-      trill->setTrillType("prallprall");
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Prallprall line"));
-
-      trill = new Trill(gscore);
-      trill->setTrillType("pure");
-      trill->setLen(w);
-      sp->append(trill, QT_TRANSLATE_NOOP("Palette", "Wavy line"));
+      for (int i = 0; i < trillTableSize(); i++) {
+            Trill* trill = new Trill(gscore);
+            trill->setTrillType(trillTable[i].type);
+            trill->setLen(w);
+            sp->append(trill, trillTable[i].userName);
+            }
 
       TextLine* textLine = new TextLine(gscore);
       textLine->setLen(w);
@@ -936,12 +887,12 @@ Palette* MuseScore::newTempoPalette()
       sp->setDrawGrid(true);
 
       static const TempoPattern tp[] = {
-            TempoPattern("<sym>noteHalfUp</sym> = 80", 80.0/30.0),                        // 1/2
-            TempoPattern("<sym>noteQuarterUp</sym> = 80", 80.0/60.0),                     // 1/4
-            TempoPattern("<sym>note8thUp</sym> = 80", 80.0/120.0),                    // 1/8
-            TempoPattern("<sym>noteHalfUp</sym><sym>space</sym><sym>textAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
-            TempoPattern("<sym>noteQuarterUp</sym><sym>space</sym><sym>textAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
-            TempoPattern("<sym>note8thUp</sym><sym>textAugmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
+            TempoPattern("<sym>unicodeNoteHalfUp</sym> = 80", 80.0/30.0),                        // 1/2
+            TempoPattern("<sym>unicodeNoteQuarterUp</sym> = 80", 80.0/60.0),                     // 1/4
+            TempoPattern("<sym>unicodeNote8thUp</sym> = 80", 80.0/120.0),                    // 1/8
+            TempoPattern("<sym>unicodeNoteHalfUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
+            TempoPattern("<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
+            TempoPattern("<sym>unicodeNote8thUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
             };
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
@@ -1249,40 +1200,40 @@ void MuseScore::addTempo()
 
       SigEvent event = cs->sigmap()->timesig(cr->tick());
       Fraction f = event.nominal();
-      QString text("<sym>noteQuarterUp</sym> = 80");
+      QString text("<sym>unicodeNoteQuarterUp</sym> = 80");
       switch (f.denominator()) {
             case 1:
-                  text = "<sym>noteWhole</sym> = 80";
+                  text = "<sym>unicodeNoteWhole</sym> = 80";
                   break;
             case 2:
-                  text = "<sym>noteHalfUp</sym> = 80";
+                  text = "<sym>unicodeNoteHalfUp</sym> = 80";
                   break;
             case 4:
-                  text = "<sym>noteQuarterUp</sym> = 80";
+                  text = "<sym>unicodeNoteQuarterUp</sym> = 80";
                   break;
             case 8:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>noteQuarterUp</sym><sym>space</sym><sym>textAugmentationDot</sym> = 80";
+                        text = "<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>note8thUp</sym> = 80";
+                        text = "<sym>unicodeNote8thUp</sym> = 80";
                   break;
             case 16:
                   if(f.numerator() % 3 == 0)
-                        text = text = "<sym>note8thUp</sym><sym>textAugmentationDot</sym> = 80";
+                        text = text = "<sym>unicodeNote8thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>note16thUp</sym> = 80";
+                        text = "<sym>unicodeNote16thUp</sym> = 80";
                   break;
             case 32:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>note16thUp</sym><sym>textAugmentationDot</sym> = 80";
+                        text = "<sym>unicodeNote16thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>note32thUp</sym> = 80";
+                        text = "<sym>unicodeNote32thUp</sym> = 80";
                   break;
             case 64:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>note32thUp</sym><sym>textAugmentationDot</sym> = 80";
+                        text = "<sym>unicodeNote32thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>note64thUp</sym> = 80";
+                        text = "<sym>unicodeNote64thUp</sym> = 80";
                   break;
             default:
                   break;

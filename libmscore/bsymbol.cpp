@@ -128,9 +128,9 @@ void BSymbol::scanElements(void* data, void (*func)(void*, Element*), bool all)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool BSymbol::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool BSymbol::acceptDrop(const DropData& data) const
       {
-      Element::Type type = e->type();
+      Element::Type type = data.element->type();
       return type == Element::Type::SYMBOL || type == Element::Type::IMAGE;
       }
 

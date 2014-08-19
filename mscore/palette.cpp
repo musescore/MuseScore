@@ -261,17 +261,18 @@ void Palette::mousePressEvent(QMouseEvent* ev)
 
 static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element* e, QPointF pt = QPointF())
       {
-      if (target->acceptDrop(viewer, pt, e)) {
+      DropData dropData;
+      dropData.view       = viewer;
+      dropData.pos        = pt;
+      dropData.dragOffset = pt;
+      dropData.modifiers  = 0;
+      dropData.element    = e;
+
+      if (target->acceptDrop(dropData)) {
             Element* ne = e->clone();
             ne->setScore(score);
 
-            DropData dropData;
-            dropData.view       = viewer;
-            dropData.pos        = pt;
-            dropData.dragOffset = pt;
-            dropData.modifiers  = 0;
             dropData.element    = ne;
-
             ne = target->drop(dropData);
             if (ne)
                   score->select(ne, SelectType::SINGLE, 0);
@@ -302,7 +303,6 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       if (element == 0)
             return;
       ScoreView* viewer = mscore->currentScoreView();
-
 
       if (viewer->mscoreState() != STATE_EDIT
          && viewer->mscoreState() != STATE_LYRICS_EDIT
@@ -354,6 +354,8 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
          && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
          && viewer->mscoreState() != STATE_TEXT_EDIT) { //Already in startCmd mode in this case
             score->endCmd();
+            if (viewer->mscoreState() == STATE_NOTE_ENTRY_DRUM)
+                  viewer->moveCursor();
             }
       mscore->endCmd();
       }

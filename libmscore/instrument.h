@@ -16,6 +16,7 @@
 #include "mscore.h"
 #include "synthesizer/event.h"
 #include "interval.h"
+#include "clef.h"
 
 namespace Ms {
 
@@ -114,6 +115,8 @@ struct Channel {
 //   Instrument
 //---------------------------------------------------------
 
+enum class DrumsetKind : char { NONE, DEFAULT_DRUMS, GUITAR_PRO };
+
 class InstrumentData;
 
 class Instrument {
@@ -146,12 +149,14 @@ class Instrument {
 
       void setDrumset(Drumset* ds);       // drumset is now owned by Instrument
       Drumset* drumset() const;
-      bool useDrumset() const;
-      void setUseDrumset(bool val);
+      DrumsetKind useDrumset() const;
+      void setUseDrumset(DrumsetKind val);
       void setAmateurPitchRange(int a, int b);
       void setProfessionalPitchRange(int a, int b);
       Channel& channel(int idx);
       const Channel& channel(int idx) const;
+      ClefTypeList clefType(int staffIdx) const;
+      void setClefType(int staffIdx, const ClefTypeList&);
 
       const QList<NamedEventList>& midiActions() const;
       const QList<MidiArticulation>& articulation() const;

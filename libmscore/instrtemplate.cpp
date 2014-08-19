@@ -73,7 +73,7 @@ static int readStaffIdx(XmlReader& e)
 void InstrumentGroup::read(XmlReader& e)
       {
       id       = e.attribute("id");
-      name     = e.attribute("name");
+      name     = qApp->translate("InstrumentsXML", e.attribute("name").toUtf8().data());
       extended = e.intAttribute("extended", 0);
 
       while (e.readNextStartElement()) {
@@ -98,7 +98,7 @@ void InstrumentGroup::read(XmlReader& e)
                         qDebug("instrument reference not found <%s>", e.text().toUtf8().data());
                   }
             else if (tag == "name")
-                  name = e.readElementText();
+                  name = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
             else if (tag == "extended")
                   extended = e.readInt();
             else
@@ -121,7 +121,7 @@ InstrumentTemplate::InstrumentTemplate()
       maxPitchP          = 127;
       staffGroup         = StaffGroup::STANDARD;
       staffTypePreset    = 0;
-      useDrumset         = false;
+      useDrumset         = DrumsetKind::NONE;
       drumset            = 0;
       extended           = false;
 
@@ -273,8 +273,8 @@ void InstrumentTemplate::write(Xml& xml) const
             xml.tag("transposeDiatonic", transpose.diatonic);
       if (transpose.chromatic)
             xml.tag("transposeChromatic", transpose.chromatic);
-      if (useDrumset)
-            xml.tag("drumset", useDrumset);
+      if (useDrumset != DrumsetKind::NONE)
+            xml.tag("drumset", int(useDrumset));
       if (drumset)
             drumset->save(xml);
       foreach(const NamedEventList& a, midiActions)
@@ -339,7 +339,7 @@ void InstrumentTemplate::read(XmlReader& e)
                               longNames.erase(i);
                         break;
                         }
-                  longNames.append(StaffName(e.readElementText(), pos));
+                  longNames.append(StaffName(qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
                   }
             else if (tag == "shortName" || tag == "short-name") {   // "short-name" is obsolete
                   int pos = e.intAttribute("pos", 0);
@@ -348,10 +348,10 @@ void InstrumentTemplate::read(XmlReader& e)
                               shortNames.erase(i);
                         break;
                         }
-                  shortNames.append(StaffName(e.readElementText(), pos));
+                  shortNames.append(StaffName(qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
                   }
             else if (tag == "trackName")
-                  trackName = e.readElementText();
+                  trackName = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
             else if (tag == "description")
                   description = e.readElementText();
             else if (tag == "extended")
@@ -420,7 +420,7 @@ void InstrumentTemplate::read(XmlReader& e)
             else if (tag == "StringData")
                   stringData.read(e);
             else if (tag == "drumset")
-                  useDrumset = e.readInt();
+                  useDrumset = DrumsetKind(e.readInt());
             else if (tag == "Drum") {
                   // if we see one of this tags, a custom drumset will
                   // be created
@@ -520,7 +520,7 @@ void InstrumentTemplate::read(XmlReader& e)
             a.pan         = 60;
             channel.append(a);
             }
-      if (useDrumset) {
+      if (useDrumset != DrumsetKind::NONE) {
             if (channel[0].bank == 0)
                   channel[0].bank = 128;
             channel[0].updateInitList();
@@ -736,12 +736,23 @@ void InstrumentGenre::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name") {
-                  name = e.readElementText();
+                  name = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
             }
             else
                   e.unknown();
             }
      }
+
+//---------------------------------------------------------
+//   clefType
+//---------------------------------------------------------
+
+ClefTypeList InstrumentTemplate::clefType(int staffIdx) const
+      {
+      if (staffIdx < staves)
+            return clefTypes[staffIdx];
+      return clefTypes[0];
+      }
 
 }
 

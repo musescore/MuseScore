@@ -421,9 +421,6 @@ bool TrackList::write(int track, Measure* measure) const
                               }
                         }
                   }
-//            else if (e->type() == Element::KEYSIG) {
-//                  // keysig has to be at start of measure
-//                  }
             else if (e->type() == Element::Type::BAR_LINE) {
                   if (pos.numerator() == 0 && m) {
                         BarLineType t = static_cast<BarLine*>(e)->barLineType();
@@ -448,11 +445,12 @@ bool TrackList::write(int track, Measure* measure) const
       //
       // connect ties
       //
+
       for (Segment* s = measure->first(); s; s = s->next1()) {
-            Element* el = s->element(track);
-            if (el == 0 || el->type() != Element::Type::CHORD)
+            Chord* chord = static_cast<Chord*>(s->element(track));
+            if (chord == 0 || chord->type() != Element::Type::CHORD)
                   continue;
-            foreach (Note* n, static_cast<Chord*>(el)->notes()) {
+            foreach (Note* n, chord->notes()) {
                   Tie* tie = n->tieFor();
                   if (!tie)
                         continue;

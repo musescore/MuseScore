@@ -34,6 +34,16 @@ extern bool converterMode;
 extern double converterDpi;
 
 //---------------------------------------------------------
+// MsWidget
+// used to assign actions (shortcuts) to the apropriate
+// widget (actions.cpp, shortcuts.cpp)
+//---------------------------------------------------------
+enum MsWidget {
+      MAIN_WINDOW = 0,
+      SCORE_TAB   = 1 << 0
+      };
+
+//---------------------------------------------------------
 //    ScoreState
 //    used also to mask out shortcuts (actions.cpp)
 //---------------------------------------------------------

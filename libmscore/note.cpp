@@ -9,7 +9,8 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
-
+#include <QLabel>
+#include <QList>
 /**
  \file
  Implementation of classes Note and ShadowNote.
@@ -118,10 +119,22 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
    }
 };
 
-
+// same order as NoteHead::Group
 static const char* noteHeadNames[] = {
-      "normal","cross","diamond","triangle","slash","xcircle"
-      ,"do","re","mi","fa","sol","la","ti","alt. brevis"
+    QT_TRANSLATE_NOOP("noteheadnames", "normal"),
+    QT_TRANSLATE_NOOP("noteheadnames", "cross"),
+    QT_TRANSLATE_NOOP("noteheadnames", "diamond"),
+    QT_TRANSLATE_NOOP("noteheadnames", "triangle"),
+    QT_TRANSLATE_NOOP("noteheadnames", "mi"),
+    QT_TRANSLATE_NOOP("noteheadnames", "slash"),
+    QT_TRANSLATE_NOOP("noteheadnames", "xcircle"),
+    QT_TRANSLATE_NOOP("noteheadnames", "do"),
+    QT_TRANSLATE_NOOP("noteheadnames", "re"),
+    QT_TRANSLATE_NOOP("noteheadnames", "fa"),
+    QT_TRANSLATE_NOOP("noteheadnames", "la"),
+    QT_TRANSLATE_NOOP("noteheadnames", "ti"),
+    QT_TRANSLATE_NOOP("noteheadnames", "sol"),
+    QT_TRANSLATE_NOOP("noteheadnames", "alt. brevis")
 };
 
 //---------------------------------------------------------
@@ -182,8 +195,11 @@ Note::Note(Score* s)
       _line              = 0;
       _fret              = -1;
       _string            = -1;
-      _fretConflict      = false;
       _ghost             = false;
+      _hidden            = false;
+      _dotsHidden        = false;
+      _fretConflict      = false;
+
       _lineOffset        = 0;
       _tieFor            = 0;
       _tieBack           = 0;
@@ -192,7 +208,6 @@ Note::Note(Score* s)
       _headGroup         = NoteHead::Group::HEAD_NORMAL;
       _headType          = NoteHead::Type::HEAD_AUTO;
 
-      _hidden            = false;
       _subchannel        = 0;
 
       _veloType          = ValueType::OFFSET_VAL;
@@ -230,6 +245,7 @@ Note::Note(const Note& n, bool link)
       _pitch             = n._pitch;
       _tpc[0]            = n._tpc[0];
       _tpc[1]            = n._tpc[1];
+      _dotsHidden        = n._dotsHidden;
       _hidden            = n._hidden;
       _play              = n._play;
       _tuning            = n._tuning;
@@ -399,6 +415,13 @@ void Note::undoSetTpc(int v)
 int Note::tpc() const
       {
       return _tpc[concertPitchIdx()];
+      }
+
+QString Note::tpcUserName(bool explicitAccidental)
+      {
+      QString pitch = tr("Pitch: %1").arg(tpc2name(tpc(), NoteSpellingType::STANDARD, false, explicitAccidental));
+      QString octave = QString::number((this->pitch() / 12) - 2);
+      return pitch + (explicitAccidental ? " " : "") + octave;
       }
 
 //---------------------------------------------------------
@@ -687,7 +710,7 @@ void Note::draw(QPainter* painter) const
             // draw background, if required
             if (!tab->linesThrough() || fretConflict()) {
                   qreal d  = spatium() * .1;
-                  QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY(), bbox().width() + 2*d, tab->fretMaskH());
+                  QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY()*magS(), bbox().width() + 2*d, tab->fretMaskH()*magS());
                   // we do not know which viewer did this draw() call
                   // so update all:
                   foreach(MuseScoreView* view, score()->getViewer())
@@ -1186,8 +1209,9 @@ void Note::endDrag()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Note::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Note::acceptDrop(const DropData& data) const
       {
+      Element* e = data.element;
       Element::Type type = e->type();
       return (type == Element::Type::ARTICULATION
          || type == Element::Type::CHORDLINE
@@ -1462,7 +1486,7 @@ void Note::addBracket()
       }
 
 //---------------------------------------------------------
-//   setDotPosition
+//   setDotY
 //---------------------------------------------------------
 
 void Note::setDotY(MScore::Direction pos)
@@ -1561,20 +1585,26 @@ void Note::layout2()
 
       int dots = chord()->dots();
       if (dots) {
-            qreal d  = point(score()->styleS(StyleIdx::dotNoteDistance));
-            qreal dd = point(score()->styleS(StyleIdx::dotDotDistance));
+            qreal d  = score()->point(score()->styleS(StyleIdx::dotNoteDistance)) * mag();
+            qreal dd = score()->point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
 
             // if TAB and stems through staff
             if (staff()->isTabStaff()) {
+                  StaffType* tab = staff()->staffType();
+                  if (!tab->stemThrough())            // if !stemThrough, there are no dots at all:
+                        return;                       // stop here
+
+                  // with TAB's, dot Y is not calculated during layoutChords3(),
+                  // as layoutChords3() is not even called for TAB's;
+                  // setDotY() actually also manages creation/deletion of NoteDot's
+                  setDotY(MScore::Direction::AUTO);
+
                   // with TAB's, dotPosX is not set:
                   // get dot X from width of fret text and use TAB default spacing
                   x = width();
                   dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
                   d = dd * 0.5;
-                  StaffType* tab = staff()->staffType();
-                  if (!tab->stemThrough())
-                        return;
                   }
 
             // apply to dots
@@ -1711,6 +1741,32 @@ void Note::layout10(AccidentalState* as)
 NoteType Note::noteType() const
       {
       return chord()->noteType();
+      }
+
+//---------------------------------------------------------
+//   noteTypeUserName
+//---------------------------------------------------------
+
+QString Note::noteTypeUserName()
+      {
+      switch (noteType()) {
+            case NoteType::ACCIACCATURA:
+                  return tr("Accaciatura");
+            case NoteType::APPOGGIATURA:
+                  return tr("Appoggiatura");
+            case NoteType::GRACE8_AFTER:
+            case NoteType::GRACE16_AFTER:
+            case NoteType::GRACE32_AFTER:
+                  return tr("Grace note after");
+            case NoteType::GRACE4:
+            case NoteType::GRACE16:
+            case NoteType::GRACE32:            
+                  return tr("Grace note before");
+            case NoteType::INVALID:
+                  return tr("Invalid note");
+            default:
+                  return tr("Note");
+            }
       }
 
 //---------------------------------------------------------
@@ -2349,6 +2405,64 @@ void Note::setScore(Score* s)
       }
 
 //---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Note::accessibleInfo()
+      {
+      QString duration = chord()->durationUserName();
+      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      return noteTypeUserName() + " " + tpcUserName(false) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      }
+
+//---------------------------------------------------------
+//   screenReaderInfo
+//---------------------------------------------------------
+
+QString Note::screenReaderInfo()
+      {
+      QString duration = chord()->durationUserName();
+      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      return noteTypeUserName() + " " + tpcUserName(true) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      }
+
+//---------------------------------------------------------
+//   accessibleExtraInfo
+//---------------------------------------------------------
+
+QString Note::accessibleExtraInfo()
+      {
+      QString rez = "";
+      if (accidental()) {
+            rez += " " + accidental()->screenReaderInfo();
+            }
+      if (!el().isEmpty()) {
+            foreach (Element* e, el()) {
+                  rez = rez + " " + e->screenReaderInfo();
+                  }
+            }
+      if (tieFor())
+            rez += " " + tr("Start of %1").arg(tieFor()->screenReaderInfo());
+
+      if (tieBack())
+            rez += " " + tr("End of %1").arg(tieBack()->screenReaderInfo());
+
+      if (!spannerFor().isEmpty()) {
+            foreach (Spanner* s, spannerFor()) {
+                  rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                  }
+            }
+      if (!spannerBack().isEmpty()) {
+            foreach (Spanner* s, spannerBack()) {
+                  rez += " " + tr("End of %2").arg(s->screenReaderInfo());
+                  }
+            }
+
+      rez = rez + " " + chord()->accessibleExtraInfo();
+      return rez;
+      }
+
+//---------------------------------------------------------
 //   noteVal
 //---------------------------------------------------------
 
@@ -2385,6 +2499,36 @@ const char* NoteHead::groupToGroupName(NoteHead::Group group)
 QString Note::subtypeName() const
       {
       return NoteHead::groupToGroupName(_headGroup);
+      }
+
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Note::nextElement()
+      {
+      if (chord()->isGrace())
+            return Element::nextElement();
+
+      QList<Note*> notes = chord()->notes();
+      int idx = notes.indexOf(this);
+      if (idx == 0)
+            return chord()->nextElement();
+
+      return notes.at(idx - 1);
+      }
+
+Element* Note::prevElement()
+      {
+      if (chord()->isGrace())
+            return Element::prevElement();
+
+      QList<Note*> notes = chord()->notes();
+      int idx = notes.indexOf(this);
+      if (idx == notes.size() - 1)
+            return chord()->prevElement();
+
+      return notes.at(idx + 1);
       }
 
 }

@@ -19,7 +19,7 @@
 #=============================================================================
 
 subdirs(templates wallpaper locale styles sound manual
-   workspaces)
+   workspaces instruments)
 
 install (DIRECTORY
       plugins

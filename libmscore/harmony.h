@@ -104,6 +104,7 @@ class Harmony : public Text {
       ~Harmony();
       virtual Harmony* clone() const           { return new Harmony(*this); }
       virtual Element::Type type() const       { return Element::Type::HARMONY; }
+      virtual bool systemFlag() const override { return false;  }
 
       void setId(int d)                        { _id = d; }
       int id() const                           { return _id;           }
@@ -146,6 +147,7 @@ class Harmony : public Text {
       HDegree degree(int i) const;
       void clearDegrees();
       const QList<HDegree>& degreeList() const;
+      const ParsedChord* parsedForm();
 
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
@@ -176,6 +178,9 @@ class Harmony : public Text {
       void setHarmony(const QString& s);
       virtual QPainterPath shape() const;
       void calculateBoundingRect();
+
+      virtual QString accessibleInfo() override;
+      virtual QString screenReaderInfo() override;
       };
 
 

@@ -94,15 +94,18 @@ bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
             //
             // init instruments
             //
-            foreach(const Part* part, score->parts()) {
-                  foreach(const Channel& a, part->instr()->channel()) {
-                        a.updateInitList();
-                        foreach(MidiCoreEvent e, a.init) {
-                              if (e.type() == ME_INVALID)
-                                    continue;
-                              e.setChannel(a.channel);
-                              int syntiIdx= synti->index(score->midiMapping(a.channel)->articulation->synti);
-                              synti->play(e, syntiIdx);
+            foreach(Part* part, score->parts()) {
+                  InstrumentList* il = part->instrList();
+                  for(auto i = il->begin(); i!= il->end(); i++) {
+                        foreach(const Channel& a, i->second.channel()) {
+                              a.updateInitList();
+                              foreach(MidiCoreEvent e, a.init) {
+                                    if (e.type() == ME_INVALID)
+                                          continue;
+                                    e.setChannel(a.channel);
+                                    int syntiIdx= synti->index(score->midiMapping(a.channel)->articulation->synti);
+                                    synti->play(e, syntiIdx);
+                                    }
                               }
                         }
                   }

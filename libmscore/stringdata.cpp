@@ -26,20 +26,22 @@ bool StringData::bFretting = false;
 
 StringData::StringData(int numFrets, int numStrings, int strings[])
       {
+      instrString strg = { 0, false};
       _frets = numFrets;
 
-      stringTable.clear();
-      for (int i = 0; i < numStrings; i++)
-            stringTable.append(strings[i]);
+      for (int i = 0; i < numStrings; i++) {
+            strg.pitch = strings[i];
+            stringTable.append(strg);
+            }
       }
 
-StringData::StringData(int numFrets, QList<int>& strings)
+StringData::StringData(int numFrets, QList<instrString>& strings)
       {
       _frets = numFrets;
 
       stringTable.clear();
-      foreach(int i, strings)
-            stringTable.append( i);
+      foreach(instrString i, strings)
+            stringTable.append(i);
       }
 
 //---------------------------------------------------------
@@ -53,8 +55,12 @@ void StringData::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "frets")
                   _frets = e.readInt();
-            else if (tag == "string")
-                  stringTable.append(e.readInt());
+            else if (tag == "string") {
+                  instrString strg;
+                  strg.open  = e.intAttribute("open", 0);
+                  strg.pitch = e.readInt();
+                  stringTable.append(strg);
+                  }
             else
                   e.unknown();
             }
@@ -68,8 +74,12 @@ void StringData::write(Xml& xml) const
       {
       xml.stag("StringData");
       xml.tag("frets", _frets);
-      foreach(int pitch, stringTable)
-            xml.tag("string", pitch);
+      foreach(instrString strg, stringTable) {
+            if (strg.open)
+                  xml.tag("string open=\"1\"", strg.pitch);
+            else
+                  xml.tag("string", strg.pitch);
+            }
       xml.etag();
       }
 
@@ -93,17 +103,21 @@ bool StringData::convertPitch(int pitch, int* string, int* fret) const
             return false;
 
       // if above max fret on highest string, fret on first string, but return failure
-      if (pitch > stringTable.at(strings-1) + _frets) {
+      if(pitch > stringTable.at(strings-1).pitch + _frets) {
             *string = 0;
             *fret   = 0;
             return false;
             }
 
       // look for a suitable string, starting from the highest
+      // NOTE: this assumes there are always enough frets to fill
+      // the interval between any fretted string and the next
       for (int i = strings-1; i >=0; i--) {
-            if(pitch >= stringTable.at(i)) {
+            instrString strg = stringTable.at(i);
+            if(pitch >= strg.pitch) {
+                  if (pitch == strg.pitch || !strg.open)
                   *string = strings - i - 1;
-                  *fret   = pitch - stringTable.at(i);
+                  *fret   = pitch - strg.pitch;
                   return true;
                   }
             }
@@ -125,7 +139,8 @@ int StringData::getPitch(int string, int fret) const
       int strings = stringTable.size();
       if (strings < 1)
             return INVALID_PITCH;
-      return stringTable[strings - string - 1] + fret;
+      instrString strg = stringTable.at(strings - string - 1);
+      return strg.pitch + (strg.open ? 0 : fret);
       }
 
 //---------------------------------------------------------
@@ -137,13 +152,14 @@ int StringData::getPitch(int string, int fret) const
 int StringData::fret(int pitch, int string) const
       {
       int strings = stringTable.size();
-      if (strings < 1)
+      if (strings < 1)                          // no strings at all!
             return FRET_NONE;
 
-      if (string < 0 || string >= strings)
+      if (string < 0 || string >= strings)      // no such a string
             return FRET_NONE;
-      int fret = pitch - stringTable[strings - string - 1];
-      if (fret < 0 || fret >= _frets)
+      int fret = pitch - stringTable[strings - string - 1].pitch;
+      // fret number is invalid or string cannot be fretted
+      if (fret < 0 || fret >= _frets || (fret > 0 && stringTable[strings - string - 1].open))
             return FRET_NONE;
       return fret;
       }

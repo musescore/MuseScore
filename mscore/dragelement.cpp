@@ -113,6 +113,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       Element* e = _score->getSelectedElement();
       if (e) {
             QLineF anchor = e->dragAnchor();
+
             if (!anchor.isNull())
                   setDropAnchor(anchor);
             else

@@ -63,15 +63,14 @@ Staff* Part::staff(int idx) const
 
 void Part::read(XmlReader& e)
       {
-      int rstaff = 0;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Staff") {
-                  Staff* staff = new Staff(_score, this, rstaff);
+                  Staff* staff = new Staff(_score);
+                  staff->setPart(this);
                   _score->staves().push_back(staff);
                   _staves.push_back(staff);
                   staff->read(e);
-                  ++rstaff;
                   }
             else if (tag == "Instrument")
                   instr(0)->read(e);
@@ -133,7 +132,8 @@ void Part::setStaves(int n)
             }
       int staffIdx = _score->staffIdx(this) + ns;
       for (int i = ns; i < n; ++i) {
-            Staff* staff = new Staff(_score, this, i);
+            Staff* staff = new Staff(_score);
+            staff->setPart(this);
             _staves.push_back(staff);
             _score->staves().insert(staffIdx, staff);
             for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
@@ -149,16 +149,12 @@ void Part::setStaves(int n)
 //   insertStaff
 //---------------------------------------------------------
 
-void Part::insertStaff(Staff* staff)
+void Part::insertStaff(Staff* staff, int idx)
       {
-      int idx = staff->rstaff();
-      if (idx > _staves.size())
+      if (idx < 0 || idx > _staves.size())
             idx = _staves.size();
       _staves.insert(idx, staff);
       staff->setPart(this);
-      idx = 0;
-      foreach(Staff* staff, _staves)
-            staff->setRstaff(idx++);
       }
 
 //---------------------------------------------------------
@@ -171,9 +167,6 @@ void Part::removeStaff(Staff* staff)
             qDebug("Part::removeStaff: not found %p", staff);
             return;
             }
-      int idx = 0;
-      foreach(Staff* staff, _staves)
-            staff->setRstaff(idx++);
       }
 
 //---------------------------------------------------------
@@ -204,7 +197,7 @@ bool Part::mute() const
 {
       return instr(0)->channel(0).mute;
 }
-      
+
 void Part::setMute(bool mute)
 {
       instr(0)->channel(0).mute = mute;

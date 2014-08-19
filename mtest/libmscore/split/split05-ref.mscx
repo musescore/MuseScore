@@ -49,7 +49,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
@@ -149,7 +149,6 @@
             <tpc>15</tpc>
             </Note>
           <Slur type="stop" id="2"/>
-          <Slur type="stop" id="3"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>

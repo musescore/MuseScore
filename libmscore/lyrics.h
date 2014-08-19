@@ -53,7 +53,7 @@ class Lyrics : public Text {
       virtual Lyrics* clone() const override      { return new Lyrics(*this); }
       virtual Element::Type type() const override { return Element::Type::LYRICS; }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
 
       Segment* segment() const     { return (Segment*)parent()->parent(); }
@@ -81,10 +81,10 @@ class Lyrics : public Text {
 
       void clearSeparator()            { _separator.clear(); } // TODO: memory leak
       QList<Line*>* separatorList()    { return &_separator; }
-      
+
       using Text::paste;
       void paste(MuseScoreView * scoreview);
-      
+
       Text* verseNumber() const        { return _verseNumber; }
       void setVerseNumber(Text* t)     { _verseNumber = t;    }
 

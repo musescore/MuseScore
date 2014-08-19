@@ -41,7 +41,7 @@ class TrillSegment : public LineSegment {
       virtual Element::Type type() const override  { return Element::Type::TRILL_SEGMENT; }
       virtual TrillSegment* clone() const override { return new TrillSegment(*this); }
       virtual void draw(QPainter*) const override;
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
       virtual void layout() override;
       virtual QVariant getProperty(P_ID propertyId) const override;
@@ -92,6 +92,7 @@ class Trill : public SLine {
       void setTrillType(Type tt)          { _trillType = tt; }
       Type trillType() const              { return _trillType; }
       QString trillTypeName() const;
+      QString trillTypeUserName();
       Accidental* accidental() const      { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a; }
 
@@ -102,8 +103,18 @@ class Trill : public SLine {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
       virtual void setYoff(qreal) override;
+
+      virtual QString accessibleInfo() override;
       };
 
+struct TrillTableItem {
+      Trill::Type type;
+      const char* name;
+      QString userName;
+      };
+
+extern const TrillTableItem trillTable[];
+extern int trillTableSize();
 
 }     // namespace Ms
 

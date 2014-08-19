@@ -430,6 +430,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
 
       if (!range.write(rootScore(), fm->tick()))
             qFatal("Cannot write measures");
+      connectTies(true);
 
       return true;
       }
@@ -440,12 +441,14 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
 
 static void warnTupletCrossing()
       {
-      if (!MScore::noGui)
-            QMessageBox::warning(0,
-               QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore"),
-               QT_TRANSLATE_NOOP("addRemoveTimeSig", "Cannot rewrite measures:\n"
-               "tuplet would cross measure")
-               );
+      if (!MScore::noGui) {
+            const char* tt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore");
+            const char* mt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "Cannot rewrite measures:\n"
+               "tuplet would cross measure");
+
+            QMessageBox::warning(0, qApp->translate("addRemoveTimeSig", tt),
+               qApp->translate("addRemoveTimeSig", mt));
+            }
       }
 
 //---------------------------------------------------------
@@ -457,6 +460,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns)
       {
       Measure* lm  = fm;
       Measure* fm1 = fm;
+
       //
       // split into Measure segments fm-lm
       //
@@ -535,6 +539,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             ts->setParent(seg);
             ts->setTrack(track);
             ts->setStretch((ns / fm->timesig()).reduced());
+            ts->setSelected(false);
             undoAddElement(ts);
             timesigStretchChanged(ts, fm, staffIdx);
             return;
@@ -600,6 +605,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         else {
                               undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
                                     ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
+                              nsig->setSelected(false);
                               nsig->setDropTarget(0);       // DEBUG
                               }
                         }
@@ -1297,7 +1303,12 @@ void Score::cmdFlip()
                      || a->articulationType() == ArticulationType::Tenuto
                      || a->articulationType() == ArticulationType::Sforzatoaccent
                      || a->articulationType() == ArticulationType::FadeIn
-                     || a->articulationType() == ArticulationType::FadeOut) {
+                     || a->articulationType() == ArticulationType::FadeOut
+                     || a->articulationType() == ArticulationType::VolumeSwell
+                     || a->articulationType() == ArticulationType::WiggleSawtooth
+                     || a->articulationType() == ArticulationType::WiggleSawtoothWide
+                     || a->articulationType() == ArticulationType::WiggleVibratoLargeFaster
+                     || a->articulationType() == ArticulationType::WiggleVibratoLargeSlowest) {
                         ArticulationAnchor aa = a->anchor();
                         if (aa == ArticulationAnchor::TOP_CHORD)
                               aa = ArticulationAnchor::BOTTOM_CHORD;
@@ -1486,8 +1497,11 @@ void Score::deleteItem(Element* el)
                   cmdDeleteTuplet(static_cast<Tuplet*>(el), true);
                   break;
 
-            case Element::Type::MEASURE:
-                  undoRemoveMeasures(static_cast<Measure*>(el), static_cast<Measure*>(el));
+            case Element::Type::MEASURE: {
+                  Measure* m = static_cast<Measure*>(el);
+                  undoRemoveMeasures(m, m);
+                  undoInsertTime(m->tick(), -(m->endTick() - m->tick()));
+                  }
                   break;
 
             case Element::Type::BRACKET:
@@ -1526,9 +1540,19 @@ void Score::deleteItem(Element* el)
                               }
                         }
                   else {
+                        if (clef->generated()) {
+                              // find the real clef if this is a cautionary one
+                              Measure* m = clef->measure();
+                              if (m && m->prevMeasure()) {
+                                    int tick = m->tick();
+                                    m = m->prevMeasure();
+                                    Segment* s = m->findSegment(Segment::Type::Clef, tick);
+                                    if (s && s->element(clef->track()))
+                                          clef = static_cast<Clef*>(s->element(clef->track()));
+                                    }
+                              }
                         undoRemoveElement(clef);
                         }
-                  // cmdUpdateNotes();
                   }
                   break;
 
@@ -1619,6 +1643,7 @@ void Score::cmdDeleteSelectedMeasures()
             Measure* ie = score->tick2measure(endTick);
 
             undoRemoveMeasures(is, ie);
+            undoInsertTime(is->tick(), -(ie->endTick() - is->tick()));
 
             // adjust views
             Measure* focusOn = is->prevMeasure() ? is->prevMeasure() : firstMeasure();
@@ -1668,6 +1693,7 @@ void Score::cmdDeleteSelection()
       if (selection().isRange()) {
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
+
             int stick1 = selection().tickStart();
             int stick2 = selection().tickEnd();
 
@@ -1695,10 +1721,12 @@ void Score::cmdDeleteSelection()
                         }
                   }
             for (int track = track1; track < track2; ++track) {
+                  if (!selectionFilter().canSelectVoice(track))
+                        continue;
                   Fraction f;
                   int tick  = -1;
                   Tuplet* tuplet = 0;
-                  for (Segment* s = s1; s != s2; s = s->next1()) {
+                  for (Segment* s = s1; s && (s != s2); s = s->next1()) {
                         if (s->element(track) && s->segmentType() == Segment::Type::Breath) {
                               deleteItem(s->element(track));
                               continue;
@@ -1760,9 +1788,13 @@ void Score::cmdDeleteSelection()
                               }
                         }
                   if (f.isValid() && !f.isZero()) {
+                        fullMeasure = false;          // HACK
+
                         if (fullMeasure) {
                               // handle this as special case to be able to
                               // fix broken measures:
+
+                              // ws: does not work as TimeSig may be already removed
                               for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
                                     Staff* staff = Score::staff(track / VOICES);
                                     int tick = m->tick();
@@ -1796,6 +1828,7 @@ void Score::cmdDeleteSelection()
             foreach(Element* e, el)
                   deleteItem(e);
             }
+      deselectAll();
       _layoutAll = true;
       }
 
@@ -2122,13 +2155,14 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
             int track = (cr->track() / VOICES) * VOICES;
             ncr = s ? static_cast<ChordRest*>(s->element(track)) : 0;
             }
-      _is.setSegment(ncr ? ncr->segment() : 0);
-      if (doSelect)
-            select(ncr, SelectType::SINGLE, 0);
-      if (ncr)
+      if (ncr) {
+            _is.setSegment(ncr->segment());
+            if (doSelect)
+                  select(ncr, SelectType::SINGLE, 0);
             setPlayPos(ncr->tick());
-      for (MuseScoreView* v : viewer)
-            v->moveCursor();
+            for (MuseScoreView* v : viewer)
+                  v->moveCursor();
+            }
       }
 
 //---------------------------------------------------------

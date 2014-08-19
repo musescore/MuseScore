@@ -16,6 +16,7 @@
 #include "symbol.h"
 #include "duration.h"
 #include "beam.h"
+#include "segment.h"
 
 namespace Ms {
 
@@ -76,8 +77,10 @@ class ChordRest : public DurationElement {
       ChordRest(const ChordRest&, bool link = false);
       ChordRest &operator=(const ChordRest&) = delete;
       ~ChordRest();
+
       virtual Element::Type type() const = 0;
       virtual Element* drop(const DropData&);
+      virtual void undoUnlink() override;
 
       virtual Segment* segment() const           { return (Segment*)parent(); }
       virtual Measure* measure() const = 0;
@@ -134,6 +137,7 @@ class ChordRest : public DurationElement {
       int actualDots() const  { return _durationType.dots(); }
       int durationTypeTicks() { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks()
                                     : _durationType.ticks(); }
+      QString durationUserName();
 
       virtual void setTrack(int val);
       virtual int tick() const;
@@ -158,6 +162,11 @@ class ChordRest : public DurationElement {
       bool isGraceBefore() const;
       bool isGraceAfter() const;
       void writeBeam(Xml& xml);
+      Segment* nextSegmentAfterCR(Segment::Type types) const;
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
+      virtual QString accessibleExtraInfo() override;
       };
 
 

@@ -159,18 +159,8 @@ QString Staff::partName() const
 
 Staff::Staff(Score* s)
       {
-      _score          = s;
-      _rstaff         = 0;
-      _part           = 0;
-      _barLineTo      = (lines()-1)*2;
-      }
-
-Staff::Staff(Score* s, Part* p, int rs)
-      {
-      _score          = s;
-      _rstaff         = rs;
-      _part           = p;
-      _barLineTo      = (lines()-1)*2;
+      _score     = s;
+      _barLineTo = (lines()-1)*2;
       }
 
 //---------------------------------------------------------
@@ -187,12 +177,26 @@ Staff::~Staff()
       }
 
 //---------------------------------------------------------
-//   Staff::clefTypeList
+//   Staff::clefType
 //---------------------------------------------------------
 
-ClefTypeList Staff::clefTypeList(int tick) const
+ClefTypeList Staff::clefType(int tick) const
       {
-      return clefs.clef(tick);
+      ClefTypeList ct = clefs.clef(tick);
+      if (ct._concertClef == ClefType::INVALID) {
+            switch(_staffType.group()) {
+                  case StaffGroup::TAB:
+                        ct = ClefTypeList(ClefType(score()->styleI(StyleIdx::tabClef)));
+                        break;
+                  case StaffGroup::STANDARD:
+                        ct = defaultClefType();
+                        break;
+                  case StaffGroup::PERCUSSION:
+                        ct = ClefTypeList(ClefType::PERC);
+                        break;
+                  }
+            }
+      return ct;
       }
 
 //---------------------------------------------------------
@@ -201,31 +205,8 @@ ClefTypeList Staff::clefTypeList(int tick) const
 
 ClefType Staff::clef(int tick) const
       {
-      ClefTypeList c = clefTypeList(tick);
+      ClefTypeList c = clefType(tick);
       return score()->styleB(StyleIdx::concertPitch) ? c._concertClef : c._transposingClef;
-      }
-
-//---------------------------------------------------------
-//   setInitialClef
-//---------------------------------------------------------
-
-void Staff::setInitialClef(ClefType ct)
-      {
-      clefs.setInitial(ClefTypeList(ct,ct));
-      }
-
-void Staff::setInitialClef(const ClefTypeList& ctl)
-      {
-      clefs.setInitial(ctl);
-      }
-
-//---------------------------------------------------------
-//   initialClefTypeList
-//---------------------------------------------------------
-
-ClefTypeList Staff::initialClefTypeList() const
-      {
-      return clefs.initial();
       }
 
 //---------------------------------------------------------
@@ -234,6 +215,8 @@ ClefTypeList Staff::initialClefTypeList() const
 
 void Staff::setClef(Clef* clef)
       {
+      if (clef->generated())
+            return;
       int tick = clef->segment()->tick();
       for (Segment* s = clef->segment()->next(); s && s->tick() == tick; s = s->next()) {
             if (s->segmentType() == Segment::Type::Clef && s->element(clef->track())) {
@@ -250,8 +233,9 @@ void Staff::setClef(Clef* clef)
 
 void Staff::removeClef(Clef* clef)
       {
+      if (clef->generated())
+            return;
       int tick = clef->segment()->tick();
-
       for (Segment* s = clef->segment()->next(); s && s->tick() == tick; s = s->next()) {
             if (s->segmentType() == Segment::Type::Clef && s->element(clef->track())) {
                   // removal of this clef has no effect on the clefs list
@@ -418,6 +402,15 @@ void Staff::write(Xml& xml) const
             }
 
       _staffType.write(xml);
+      ClefTypeList ct = _defaultClefType;
+      if (ct._concertClef == ct._transposingClef) {
+            if (ct._concertClef != ClefType::G)
+                  xml.tag("defaultClef", ClefInfo::tag(ct._concertClef));
+            }
+      else {
+            xml.tag("defaultConcertClef", ClefInfo::tag(ct._concertClef));
+            xml.tag("defaultTransposingClef", ClefInfo::tag(ct._transposingClef));
+            }
 
       if (small() && !xml.excerptmode)    // switch small staves to normal ones when extracting part
             xml.tag("small", small());
@@ -425,6 +418,8 @@ void Staff::write(Xml& xml) const
             xml.tag("invisible", invisible());
       if (neverHide())
             xml.tag("neverHide", neverHide());
+      if (showIfEmpty())
+            xml.tag("showIfSystemEmpty", showIfEmpty());
 
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
@@ -451,6 +446,8 @@ void Staff::write(Xml& xml) const
             }
       if (_userDist != 0.0)
             xml.tag("distOffset", _userDist / spatium());
+      if (_userMag != 1.0)
+            xml.tag("mag", _userMag);
       if (color() != Qt::black)
             xml.tag("color", color());
       xml.etag();
@@ -466,7 +463,7 @@ void Staff::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "type") {    // obsolete
                   int staffTypeIdx = e.readInt();
-                  qDebug("Staff::read staffTypeIdx %d", staffTypeIdx);
+                  qDebug("obsolete: Staff::read staffTypeIdx %d", staffTypeIdx);
                   _staffType = *StaffType::preset(StaffTypes(staffTypeIdx));
                   // set default barLineFrom and barLineTo according to staff type num. of lines
                   // (1-line staff bar lines are special)
@@ -480,12 +477,27 @@ void Staff::read(XmlReader& e)
                   _barLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
                   _barLineTo   = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (lines() - 1) * 2);
                   }
+            else if (tag == "defaultClef") {           // sets both default transposing and concert clef
+                  QString val(e.readElementText());
+                  ClefType ct = Clef::clefType(val);
+                  setDefaultClefType(ClefTypeList(ct, ct));
+                  }
+            else if (tag == "defaultConcertClef") {
+                  QString val(e.readElementText());
+                  setDefaultClefType(ClefTypeList(Clef::clefType(val), defaultClefType()._transposingClef));
+                  }
+            else if (tag == "defaultTransposingClef") {
+                  QString val(e.readElementText());
+                  setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, Clef::clefType(val)));
+                  }
             else if (tag == "small")
                   setSmall(e.readInt());
             else if (tag == "invisible")
                   setInvisible(e.readInt());
             else if (tag == "neverHide")
                   setNeverHide(e.readInt());
+            else if (tag == "showIfSystemEmpty")
+                  setShowIfEmpty(e.readInt());
             else if (tag == "keylist")
                   _keys.read(e, _score);
             else if (tag == "bracket") {
@@ -515,6 +527,13 @@ void Staff::read(XmlReader& e)
                   }
             else if (tag == "distOffset")
                   _userDist = e.readDouble() * spatium();
+            else if (tag == "mag") {
+                  _userMag = e.readDouble();
+                  if (_userMag < 0.1)
+                        _userMag = 0.1;
+                  else if (_userMag > 10.0)
+                        _userMag = 10;
+                  }
             else if (tag == "linkedTo") {
                   int v = e.readInt() - 1;
                   //
@@ -569,7 +588,35 @@ qreal Staff::spatium() const
 
 qreal Staff::mag() const
       {
-      return _small ? score()->styleD(StyleIdx::smallStaffMag) : 1.0;
+      return (_small ? score()->styleD(StyleIdx::smallStaffMag) : 1.0) * userMag();
+      }
+
+//---------------------------------------------------------
+//   swing
+//---------------------------------------------------------
+
+SwingParameters Staff::swing(int tick) const
+      {
+      SwingParameters sp;
+      int swingUnit;
+      QString unit = score()->styleSt(StyleIdx::swingUnit);
+      int swingRatio = score()->styleI(StyleIdx::swingRatio);
+      if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
+            swingUnit = MScore::division / 2;
+            }
+      else if (unit == TDuration(TDuration::DurationType::V_16TH).name())
+            swingUnit = MScore::division / 4;
+      else if (unit == TDuration(TDuration::DurationType::V_ZERO).name())
+            swingUnit = 0;
+      sp.swingRatio = swingRatio;
+      sp.swingUnit = swingUnit;
+      if (_swingList.isEmpty())
+            return sp;
+      QMap<int, SwingParameters>::const_iterator i = _swingList.upperBound(tick);
+      if (i == _swingList.begin())
+            return sp;
+      --i;
+      return i.value();
       }
 
 //---------------------------------------------------------
@@ -664,8 +711,15 @@ void Staff::linkTo(Staff* staff)
 
 void Staff::unlink(Staff* staff)
       {
+      if (!_linkedStaves)
+            return;
       Q_ASSERT(_linkedStaves->staves().contains(staff));
       _linkedStaves->remove(staff);
+      if (_linkedStaves->staves().size() <= 1) {
+            delete _linkedStaves;
+            _linkedStaves = 0;
+            }
+      staff->_linkedStaves = 0;
       }
 
 //---------------------------------------------------------
@@ -749,28 +803,6 @@ void Staff::setStaffType(const StaffType* st)
             else                                // update barLineFrom/To in whole score context
                   score()->updateBarLineSpans(sIdx, linesOld, linesNew /*, true*/);
             }
-
-      //
-      //    check for right clef-type and fix
-      //    if necessary
-      //
-      ClefType ct    = clefs.initial()._concertClef;
-      StaffGroup csg = ClefInfo::staffGroup(ct);
-
-      if (_staffType.group() != csg) {
-            switch(_staffType.group()) {
-                  case StaffGroup::TAB:
-                        ct = ClefType(score()->styleI(StyleIdx::tabClef));
-                        break;
-                  case StaffGroup::STANDARD:
-                        ct = ClefType::G;       // TODO: use preferred clef for instrument
-                        break;
-                  case StaffGroup::PERCUSSION:
-                        ct = ClefType::PERC;
-                        break;
-                  }
-            setInitialClef(ct);
-            }
       }
 
 //---------------------------------------------------------
@@ -794,6 +826,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
             pst = StaffType::getDefaultPreset(t->staffGroup);
 
       setStaffType(pst);
+      setDefaultClefType(t->clefType(cidx));
 //      if (pst->group() == ArticulationShowIn::PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
 //            setLines(t->staffLines[cidx]);      // use number of lines from instr. template
       }
@@ -888,7 +921,7 @@ void Staff::undoSetColor(const QColor& /*val*/)
 void Staff::insertTime(int tick, int len)
       {
       KeyList kl2;
-      for (auto i = _keys.upper_bound(tick); i != _keys.end();) {
+      for (auto i = _keys.lower_bound(tick); i != _keys.end();) {
             Key kse = i->second;
             int k   = i->first;
             _keys.erase(i++);
@@ -897,7 +930,7 @@ void Staff::insertTime(int tick, int len)
       _keys.insert(kl2.begin(), kl2.end());
 
       ClefList cl2;
-      for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
+      for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
             int key = i->first;
             clefs.erase(i++);
@@ -921,5 +954,31 @@ QList<Staff*> Staff::staffList() const
       return staffList;
       }
 
+//---------------------------------------------------------
+//   setBarLineTo
+//---------------------------------------------------------
+
+void Staff::setBarLineTo(int val)
+      {
+      _barLineTo = val;
+      }
+
+//---------------------------------------------------------
+//   rstaff
+//---------------------------------------------------------
+
+int Staff::rstaff() const
+      {
+      return _part->staves()->indexOf((Staff*)this, 0);
+      }
+
+//---------------------------------------------------------
+//   isTop
+//---------------------------------------------------------
+
+bool Staff::isTop() const
+      {
+      return _part->staves()->front() == this;
+      }
 }
 

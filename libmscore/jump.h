@@ -27,6 +27,7 @@ namespace Ms {
 //   @P jumpType    Ms::Jump::Type (DC, DC_AL_FINE, DC_AL_CODA, DS_AL_CODA, DS_AL_FINE, DS, USER) (read only)
 //---------------------------------------------------------
 
+
 class Jump : public Text {
       Q_OBJECT
 
@@ -55,9 +56,12 @@ class Jump : public Text {
 
       void setJumpType(Type t);
       Type jumpType() const;
+      QString jumpTypeUserName() const;
 
       virtual Jump* clone()          const { return new Jump(*this); }
       virtual Element::Type type()   const { return Element::Type::JUMP; }
+
+      Measure* measure() const         { return (Measure*)parent(); }
 
       virtual void read(XmlReader&);
       virtual void write(Xml& xml)   const;
@@ -77,7 +81,25 @@ class Jump : public Text {
       virtual QVariant getProperty(P_ID propertyId) const;
       virtual bool setProperty(P_ID propertyId, const QVariant&);
       virtual QVariant propertyDefault(P_ID) const;
+
+      Element* nextElement() override;
+      Element* prevElement() override;
+      virtual QString accessibleInfo() override;
       };
+
+
+struct JumpTypeTable {
+      Jump::Type type;
+      TextStyleType textStyleType;
+      const char* text;
+      const char* jumpTo;
+      const char* playUntil;
+      const char* continueAt;
+      QString userText;
+      };
+
+extern const JumpTypeTable jumpTypeTable[];
+int jumpTypeTableSize();
 
 }     // namespace Ms
 

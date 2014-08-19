@@ -27,14 +27,14 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const char* tremoloName[] = {
-      QT_TR_NOOP("Eighth through stem"),
-      QT_TR_NOOP("16th through stem"),
-      QT_TR_NOOP("32nd through stem"),
-      QT_TR_NOOP("64th through stem"),
-      QT_TR_NOOP("Eighth between notes"),
-      QT_TR_NOOP("16th between notes"),
-      QT_TR_NOOP("32nd between notes"),
-      QT_TR_NOOP("64th between notes")
+      QT_TRANSLATE_NOOP("Tremolo", "Eighth through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "16th through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "32nd through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "64th through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "Eighth between notes"),
+      QT_TRANSLATE_NOOP("Tremolo", "16th between notes"),
+      QT_TRANSLATE_NOOP("Tremolo", "32nd between notes"),
+      QT_TRANSLATE_NOOP("Tremolo", "64th between notes")
       };
 
 Tremolo::Tremolo(Score* score)
@@ -251,7 +251,8 @@ void Tremolo::layout()
 
 void Tremolo::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag(name());
       xml.tag("subtype", tremoloTypeName());
       Element::writeProperties(xml);
@@ -337,9 +338,22 @@ Fraction Tremolo::tremoloLen() const
       return f;
       }
 
+//---------------------------------------------------------
+//   subtypeName
+//---------------------------------------------------------
+
 QString Tremolo::subtypeName() const
       {
-      return tr(tremoloName[subtype() - int(TremoloType::R8)]);
+      return tremoloName[subtype() - int(TremoloType::R8)];
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Tremolo::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + subtypeName();
       }
 
 }

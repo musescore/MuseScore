@@ -88,7 +88,7 @@ class BarLine : public Element {
       virtual void remove(Element*);
       virtual QPainterPath shape() const;
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
       void setCustomSpan(bool val)    { _customSpan = val;    }
       void setCustomSubtype(bool val) { _customSubtype = val; }
@@ -113,9 +113,11 @@ class BarLine : public Element {
       const ElementList* el() const      { return &_el; }
 
       static QString userTypeName(BarLineType);
+      static QString userTypeName2(BarLineType);
+
       QString barLineTypeName() const;
       void setBarLineType(const QString& s);
-      void setBarLineType(BarLineType i) { _barLineType = i;      }
+      void setBarLineType(BarLineType i) { _barLineType = i;     }
       BarLineType barLineType() const    { return _barLineType;  }
 
       virtual QVariant getProperty(P_ID propertyId) const override;
@@ -127,8 +129,19 @@ class BarLine : public Element {
       static void  setCtrlDrag(bool val)  { ctrlDrag = val; }
       static void  setShiftDrag(bool val)  { shiftDrag = val; }
       static qreal layoutWidth(Score*, BarLineType, qreal mag);
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
+      QString accessibleInfo() override;
+      QString accessibleExtraInfo() override;
       };
 
+typedef struct {
+      BarLineType type;
+      const char* name;
+      } barLineTableItem;
+extern const barLineTableItem barLineTable[];
+unsigned int barLineTableSize();
 
 }     // namespace Ms
 #endif

@@ -138,6 +138,7 @@ class ParsedChord {
       const QString& xmlParens() const          { return _xmlParens; }
       const QStringList& xmlDegrees() const     { return _xmlDegrees; }
       int keys() const                          { return chord.getKeys(); }
+      const QString& handle() const             { return _handle; }
       operator QString() const                  { return _handle; }
       bool operator==(const ParsedChord& c) const     { return (this->_handle == c._handle); }
       bool operator!=(const ParsedChord& c) const     { return !(*this == c); }

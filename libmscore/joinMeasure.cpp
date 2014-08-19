@@ -31,7 +31,11 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       ScoreRange range;
       range.read(m1->first(), m2->last());
 
+      int tick = m1->tick();
+      int len  = m2->endTick() - tick;
       undoRemoveMeasures(m1, m2);
+      undoInsertTime(tick, -len);
+
       Measure* m = static_cast<Measure*>(insertMeasure(Element::Type::MEASURE, m2->next(), true));
       fixTicks();
 

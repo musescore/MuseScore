@@ -16,10 +16,10 @@
         <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>		
 	<file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
 	<file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>		
-        <file alias="data/instruments.xml">../share/templates/instruments.xml</file>
+        <file alias="data/instruments.xml">../share/instruments/instruments.xml</file>
         <file>data/splash.jpg</file>
-        <file alias="data/Promenade_Example.mscz">../demos/promenade.mscz</file>
-        <file alias="data/tab_sample.mscx">../share/templates/tab_sample.mscx</file>
+        <file>data/My_First_Score.mscx</file>
+        <file>data/tab_sample.mscx</file>
         <file>data/style.qss</file>
         <file>data/mscore.png</file>
         <file>data/cancel.png</file>

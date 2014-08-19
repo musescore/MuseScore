@@ -184,7 +184,8 @@ Harmony::~Harmony()
 
 void Harmony::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Harmony");
       if (_leftParen)
             xml.tagE("leftParen");
@@ -326,9 +327,11 @@ void Harmony::read(XmlReader& e)
             // we need to strip away the markup
             // this removes any user-applied formatting,
             // but we no longer support user-applied formatting for chord symbols anyhow
+            // with any luck, the resulting text will be parseable now, so give it a shot
             createLayout();
-            _textName = plainText();
-            setText(_textName);
+            QString s = plainText(true);
+            setHarmony(s);
+            return;
             }
 
       // render chord from description (or _textName)
@@ -616,9 +619,21 @@ void Harmony::endEdit()
                         continue;
                   Harmony* h = static_cast<Harmony*>(e);
                   h->setHarmony(text());
+                  // transpose if necessary
+                  if (score()->styleB(StyleIdx::concertPitch) != h->score()->styleB(StyleIdx::concertPitch)) {
+                        Part* partDest = h->staff()->part();
+                        Interval interval = partDest->instr()->transpose();
+                        if (!interval.isZero()) {
+                              if (!h->score()->styleB(StyleIdx::concertPitch))
+                                    interval.flip();
+                              int rootTpc = transposeTpc(h->rootTpc(), interval, false);
+                              int baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                              h->score()->undoTransposeHarmony(h, rootTpc, baseTpc);
+                              }
+                        }
                   }
             }
-      score()->setLayoutAll(true);
+      score()->setLayoutAll(true);  // done in Text::endEdit() too, but no harm being sure
       }
 
 //---------------------------------------------------------
@@ -1423,5 +1438,59 @@ const QList<HDegree>& Harmony::degreeList() const
       return _degreeList;
       }
 
-}
+//---------------------------------------------------------
+//   parsedForm
+//---------------------------------------------------------
 
+const ParsedChord* Harmony::parsedForm()
+      {
+      if (!_parsedForm) {
+            ChordList* cl = score()->style()->chordList();
+            _parsedForm = new ParsedChord();
+            _parsedForm->parse(_textName, cl, false);
+            }
+      return _parsedForm;
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Harmony::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + harmonyName();
+      }
+
+//---------------------------------------------------------
+//   screenReaderInfo
+//---------------------------------------------------------
+
+QString Harmony::screenReaderInfo()
+      {
+      QString rez = Element::accessibleInfo();
+      if (_rootTpc != Tpc::TPC_INVALID)
+            rez += " " + tpc2name(_rootTpc, NoteSpellingType::STANDARD, false, true);
+
+      if (parsedForm() && !hTextName().isEmpty()) {
+            QString aux = parsedForm()->handle();
+            aux = aux.replace("#", tr("sharp")).replace("<", "");
+            QString extension = "";
+
+            foreach (QString s, aux.split(">", QString::SkipEmptyParts)) {
+                  if(!s.contains("blues"))
+                        s.replace("b", tr("flat"));
+                  extension += s + " ";
+                  }
+            rez += " " + extension;
+            }
+      else {
+            rez += " " + hTextName();
+            }
+
+      if (_baseTpc != Tpc::TPC_INVALID)
+            rez += + " / " + tpc2name(_baseTpc, NoteSpellingType::STANDARD, false, true);
+
+      return rez;
+      }
+
+}

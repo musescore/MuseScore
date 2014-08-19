@@ -77,6 +77,11 @@ class SpannerSegment : public Element {
       virtual void reset() override;
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
+      virtual bool isSpannerSegment() const override { return true; }
+      virtual QString accessibleInfo() override;
       };
 
 //----------------------------------------------------------------------------------
@@ -101,12 +106,12 @@ class Spanner : public Element {
       Q_PROPERTY(int                 tick2   READ tick2   WRITE setTick2)
       Q_PROPERTY(Ms::Spanner::Anchor anchor  READ anchor  WRITE setAnchor)
 
-      Anchor _anchor = Anchor::SEGMENT;
-      Element* _startElement = 0;
-      Element* _endElement = 0;
-      int _tick = -1;
-      int _tick2 = -1;
-      int _track2 = -1;
+      Anchor _anchor         { Anchor::SEGMENT };
+      Element* _startElement { 0  };
+      Element* _endElement   { 0  };
+      int _tick              { -1 };
+      int _ticks             {  0 };
+      int _track2            { -1 };
 
       static QList<QPointF> userOffsets;
       static QList<QPointF> userOffsets2;
@@ -125,9 +130,10 @@ class Spanner : public Element {
 
       int tick() const         { return _tick;          }
       void setTick(int v)      { _tick = v;             }
-      int tickLen() const      { return _tick2 - _tick; }
-      int tick2() const        { return _tick2;         }
-      void setTick2(int v)     { _tick2 = v;            }
+      int tick2() const        { return _tick + _ticks; }
+      void setTick2(int v)     { _ticks = v - _tick;    }
+      int ticks() const        { return _ticks;         }
+      void setTicks(int v)     { _ticks = v;            }
       int track2() const       { return _track2;        }
       void setTrack2(int v)    { _track2 = v;           }
 
@@ -155,8 +161,8 @@ class Spanner : public Element {
       Element* startElement() const    { return _startElement; }
       Element* endElement() const      { return _endElement;   }
 
-      void setStartElement(Element* e) { _startElement = e; }
-      void setEndElement(Element* e)   { _endElement = e; }
+      void setStartElement(Element* e);
+      void setEndElement(Element* e);
 
       void setStartChord(Chord*);
       void setEndChord(Chord*);
@@ -172,6 +178,10 @@ class Spanner : public Element {
 
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
+
+      virtual bool isSpanner() const override { return true; }
 
       friend class SpannerSegment;
       };

@@ -271,6 +271,31 @@ Chord::Chord(const Chord& c, bool link)
       }
 
 //---------------------------------------------------------
+//   undoUnlink
+//---------------------------------------------------------
+
+void Chord::undoUnlink()
+      {
+      ChordRest::undoUnlink();
+      for (Note* n : _notes)
+            n->undoUnlink();
+      for (Chord* gn : graceNotes())
+            gn->undoUnlink();
+
+      if (_glissando)
+            _glissando->undoUnlink();
+      if (_arpeggio)
+            _arpeggio->undoUnlink();
+      if (_tremolo && !_tremolo->twoNotes())
+            _tremolo->undoUnlink();
+
+      for (Element* e : el()) {
+            if (e->type() == Element::Type::CHORDLINE)
+                  e->undoUnlink();
+            }
+      }
+
+//---------------------------------------------------------
 //   ~Chord
 //---------------------------------------------------------
 
@@ -1555,7 +1580,7 @@ void Chord::updateNotes(AccidentalState* as)
             c->updateNotes(as);
 
       Drumset* drumset = 0;
-      if (staff()->part()->instr()->useDrumset())
+      if (staff()->part()->instr()->useDrumset() != DrumsetKind::NONE)
             drumset = staff()->part()->instr()->drumset();
 
       QList<Note*> nl(notes());
@@ -1953,7 +1978,7 @@ void Chord::layoutPitched()
                  case TDuration::DurationType::V_WHOLE:   fc = 3.8; break;
                  case TDuration::DurationType::V_HALF:    fc = 3.6; break;
                  case TDuration::DurationType::V_QUARTER: fc = 2.1; break;
-                 case TDuration::DurationType::V_EIGHT:   fc = 1.4; break;
+                 case TDuration::DurationType::V_EIGHTH:  fc = 1.4; break;
                  case TDuration::DurationType::V_16TH:    fc = 1.2; break;
                  default: fc = 1;
                  }
@@ -2039,10 +2064,14 @@ void Chord::layoutTablature()
       // remove stems
       if (tab->slashStyle() || _noStem || durationType().type() <
          (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
-            delete _stem;
-            delete _hook;
-            _stem = 0;
-            _hook = 0;
+            // delete _stem;
+            // delete _hook;
+            // _stem = 0;
+            // _hook = 0;
+            if (_stem)
+                  score()->undo(new RemoveElement(_stem));
+            if (_hook)
+                  score()->undo(new RemoveElement(_hook));
             }
       // if stem is required but missing, add it;
       // set stem position (stem length is set in Chord:layoutStem() )
@@ -2172,7 +2201,7 @@ void Chord::layoutTablature()
                  case TDuration::DurationType::V_WHOLE:   fc = 3.8; break;
                  case TDuration::DurationType::V_HALF:    fc = 3.6; break;
                  case TDuration::DurationType::V_QUARTER: fc = 2.1; break;
-                 case TDuration::DurationType::V_EIGHT:   fc = 1.4; break;
+                 case TDuration::DurationType::V_EIGHTH:  fc = 1.4; break;
                  case TDuration::DurationType::V_16TH:    fc = 1.2; break;
                  default: fc = 1;
                  }
@@ -2785,6 +2814,72 @@ TremoloChordType Chord::tremoloChordType() const
                   }
             }
       return TremoloChordType::TremoloSingle;
+      }
+
+
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Chord::nextElement()
+      {
+      for (int v = track() + 1; staffIdx() == v/VOICES; ++v) {
+            Element* e = segment()->element(v);
+            if (e) {
+                  if (e->type() == Element::Type::CHORD)
+                        return static_cast<Chord*>(e)->notes().back();
+
+                  return e;
+                  }
+            }
+
+      return ChordRest::nextElement();
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Chord::prevElement()
+      {
+      for (int v = track() - 1; staffIdx() == v/VOICES; --v) {
+            Element* e = segment()->element(v);
+            if (e) {
+                  if (e->type() == Element::Type::CHORD)
+                        return static_cast<Chord*>(e)->notes().first();
+
+                  return e;
+                  }
+            }
+
+      return ChordRest::prevElement();
+      }
+
+QString Chord::accessibleExtraInfo()
+      {
+      QString rez = "";
+
+      if (!isGrace()) {
+            foreach (Chord* c, graceNotes()) {
+                  foreach (Note* n, c->notes()) {
+                        rez = " " + n->screenReaderInfo();
+                        }
+                  }
+            }
+
+      if (arpeggio())
+            rez = rez + " " + arpeggio()->screenReaderInfo();
+
+      if (tremolo())
+            rez = rez + " " + tremolo()->screenReaderInfo();
+
+      if (glissando())
+            rez = rez + " " + glissando()->screenReaderInfo();
+
+      foreach (Element* e, el())
+            rez = rez + " " + e->screenReaderInfo();
+
+      return rez + " " + ChordRest::accessibleExtraInfo();
       }
 }
 

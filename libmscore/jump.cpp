@@ -13,6 +13,7 @@
 #include "jump.h"
 #include "score.h"
 #include "xml.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -20,22 +21,19 @@ namespace Ms {
 //   JumpTypeTable
 //---------------------------------------------------------
 
-struct JumpTypeTable {
-      Jump::Type type;
-      const char* text;
-      const char* jumpTo;
-      const char* playUntil;
-      const char* continueAt;
+const JumpTypeTable jumpTypeTable[] = {
+      { Jump::Type::DC,         TextStyleType::REPEAT_RIGHT, "D.C.",         "start", "end",  "",      QObject::tr("Da Capo")        },
+      { Jump::Type::DC_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" ,     QObject::tr("Da Capo al Fine")},
+      { Jump::Type::DC_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab", QObject::tr("Da Capo al Coda")},
+      { Jump::Type::DS_AL_CODA, TextStyleType::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab", QObject::tr("D.S. al Coda")   },
+      { Jump::Type::DS_AL_FINE, TextStyleType::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "",      QObject::tr("D.S. al Fine")   },
+      { Jump::Type::DS,         TextStyleType::REPEAT_RIGHT, "D.S.",         "segno", "end",  "",      QObject::tr("D.S.")           }
       };
 
-static const JumpTypeTable jumpTypeTable[] = {
-      { Jump::Type::DC,         "D.C.",         "start", "end",  "" },
-      { Jump::Type::DC_AL_FINE, "D.C. al Fine", "start", "fine", "" },
-      { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab" },
-      { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab" },
-      { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "" },
-      { Jump::Type::DS,         "D.S.",         "segno", "end",  "" }
-      };
+int jumpTypeTableSize()
+      {
+      return sizeof(jumpTypeTable)/sizeof(JumpTypeTable);
+      }
 
 //---------------------------------------------------------
 //   Jump
@@ -45,7 +43,8 @@ Jump::Jump(Score* s)
    : Text(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      setTextStyleType(TextStyleType::REPEAT);
+      setTextStyleType(TextStyleType::REPEAT_RIGHT);
+      setLayoutToParentWidth(true);
       }
 
 //---------------------------------------------------------
@@ -60,6 +59,7 @@ void Jump::setJumpType(Type t)
                   setJumpTo(p.jumpTo);
                   setPlayUntil(p.playUntil);
                   setContinueAt(p.continueAt);
+                  setTextStyleType(p.textStyleType);
                   break;
                   }
             }
@@ -76,6 +76,14 @@ Jump::Type Jump::jumpType() const
                   return t.type;
             }
       return Type::USER;
+      }
+
+QString Jump::jumpTypeUserName() const
+      {
+      int idx = static_cast<int>(this->jumpType());
+      if(idx < jumpTypeTableSize())
+            return jumpTypeTable[idx].userText;
+      return QString("Custom");
       }
 
 //---------------------------------------------------------
@@ -201,6 +209,33 @@ QVariant Jump::propertyDefault(P_ID propertyId) const
       return Text::propertyDefault(propertyId);
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* Jump::nextElement()
+      {
+      Segment* seg = measure()->last();
+      return seg->firstElement(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* Jump::prevElement()
+      {
+      return nextElement();
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Jump::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + this->jumpTypeUserName();
+      }
 
 }
 

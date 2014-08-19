@@ -304,6 +304,7 @@ void System::layout2()
       qreal y = 0.0;
       int lastStaffIdx  = 0;   // last visible staff
       int firstStaffIdx = -1;
+      qreal lastStaffDistanceDown = 0.0;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff = score()->staff(staffIdx);
             StyleIdx downDistance;
@@ -335,6 +336,7 @@ void System::layout2()
 
             SysStaff* s    = _staves[staffIdx];
             qreal distDown = score()->styleS(downDistance).val() * _spatium + userDist;
+            qreal nominalDistDown = distDown;
             qreal distUp   = 0.0;
             int n = ml.size();
             for (int i = 0; i < n; ++i) {
@@ -356,6 +358,7 @@ void System::layout2()
             s->bbox().setRect(_leftMargin, y + dup, width() - _leftMargin, sHeight);
             y += dup + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
+            lastStaffDistanceDown = distDown - nominalDistDown;
             if (firstStaffIdx == -1)
                   firstStaffIdx = staffIdx;
             }
@@ -363,6 +366,8 @@ void System::layout2()
             firstStaffIdx = 0;
 
       qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
+      if (lastStaffIdx < nstaves - 1)
+            systemHeight += lastStaffDistanceDown;
       setHeight(systemHeight);
 
       int n = ml.size();
@@ -510,18 +515,17 @@ void System::setInstrumentNames(bool longName)
             for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                   SysStaff* staff = _staves[staffIdx];
                   foreach(InstrumentName* t, staff->instrumentNames)
-                        //score()->undoRemoveElement(t);
                         score()->removeElement(t);
                   }
             return;
             }
+
       int tick = ml.isEmpty() ? 0 : ml.front()->tick();
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             SysStaff* staff = _staves[staffIdx];
             Staff* s        = score()->staff(staffIdx);
             if (!s->isTop()) {
                   foreach(InstrumentName* t, staff->instrumentNames)
-                        //score()->undoRemoveElement(t);
                         score()->removeElement(t);
                   continue;
                   }
@@ -539,7 +543,6 @@ void System::setInstrumentNames(bool longName)
                         iname->setParent(this);
                         iname->setTrack(staffIdx * VOICES);
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
-                        // score()->undoAddElement(iname);
                         score()->addElement(iname);
                         }
                   iname->setText(sn.name);
@@ -547,7 +550,6 @@ void System::setInstrumentNames(bool longName)
                   ++idx;
                   }
             for (; idx < staff->instrumentNames.size(); ++idx)
-                  // score()->undoRemoveElement(staff->instrumentNames[idx]);
                   score()->removeElement(staff->instrumentNames[idx]);
             }
       }
@@ -1030,10 +1032,10 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 qreal System::staffYpage(int staffIdx) const
       {
-      if (_staves.size() <= staffIdx) {
-            qDebug("staffY: staves %d <= staffIdx %d, vbox %d",
+      if (_staves.size() <= staffIdx || staffIdx < 0) {
+            qDebug("staffY: staves %d: bad staffIdx %d, vbox %d",
                _staves.size(), staffIdx, _vbox);
-            // abort();
+//            abort();
             return pagePos().y();
             }
       return _staves[staffIdx]->y() + y(); // pagePos().y();
@@ -1071,5 +1073,40 @@ void System::read(XmlReader& e)
             }
       }
 
+//---------------------------------------------------------
+//   nextElement
+//---------------------------------------------------------
+
+Element* System::nextElement()
+      {
+      Measure* m = firstMeasure();
+      if (m) {
+            Segment* firstSeg = m->segments()->first();
+            if (firstSeg)
+                  return firstSeg->element(0);
+            }
+      return score()->firstElement();
+      }
+
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
+Element* System::prevElement()
+      {
+      Segment* seg = firstMeasure()->first();
+      Element* re = 0;
+      while (!re) {
+            seg = seg->prev1MM();
+            if (!seg)
+                  return score()->lastElement();
+
+            if (seg->segmentType() == Segment::Type::EndBarLine)
+                  score()->inputState().setTrack((score()->staves().size() - 1) * VOICES); //corection
+
+            re = seg->lastElement(score()->staves().size() - 1);
+            }
+      return re;
+      }
 }
 

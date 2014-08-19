@@ -85,13 +85,11 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual ~PianorollEditor();
 
       void setStaff(Staff* staff);
-//      Score* score() const { return _score; }
       void heartBeat(Seq*);
 
       virtual void dataChanged(const QRectF&);
       virtual void updateAll();
       virtual void adjustCanvasPosition(const Element*, bool);
-      virtual void setScore(Score*) {}
       virtual void removeScore();
       virtual void changeEditElement(Element*);
       virtual QCursor cursor() const;

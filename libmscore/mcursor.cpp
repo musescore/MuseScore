@@ -154,7 +154,8 @@ void MCursor::move(int t, int tick)
 void MCursor::addPart(const QString& instrument)
       {
       Part* part   = new Part(_score);
-      Staff* staff = new Staff(_score, part, 0);
+      Staff* staff = new Staff(_score);
+      staff->setPart(part);
       InstrumentTemplate* it = searchTemplate(instrument);
       if (it == 0) {
             qFatal("Did not find instrument <%s>", qPrintable(instrument));

@@ -75,7 +75,8 @@ void Lyrics::scanElements(void* data, void (*func)(void*, Element*), bool)
 
 void Lyrics::write(Xml& xml) const
       {
-      if(!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Lyrics");
       if (_no)
             xml.tag("no", _no);
@@ -253,7 +254,7 @@ void Lyrics::paste(MuseScoreView* scoreview)
       QStringList sl = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
       if (sl.isEmpty())
             return;
-      
+
       QStringList hyph = sl[0].split("-");
       bool minus = false;
       if(hyph.length() > 1) {
@@ -298,9 +299,9 @@ int Lyrics::endTick() const
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Lyrics::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Lyrics::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::TEXT;
+      return data.element->type() == Element::Type::TEXT;
       }
 
 //---------------------------------------------------------

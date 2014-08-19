@@ -325,7 +325,8 @@ LineSegment* Hairpin::createLineSegment()
 
 void Hairpin::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       int id = xml.spannerId(this);
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
       xml.tag("subtype", int(_hairpinType));
@@ -571,5 +572,20 @@ void Hairpin::reset()
       SLine::reset();
       }
 
+QString Hairpin::accessibleInfo()
+      {
+      QString rez = SLine::accessibleInfo();
+      switch (hairpinType()) {
+            case Type::CRESCENDO:
+                  rez += " " + tr("Crescendo");
+                  break;
+            case Type::DECRESCENDO:
+                  rez += " " + tr("Descrescendo");
+                  break;
+            default:
+                  rez += " " + tr("Custom");
+            }
+      return rez;
+      }
 }
 

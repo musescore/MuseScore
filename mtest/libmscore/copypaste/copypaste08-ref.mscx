@@ -49,7 +49,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
@@ -120,7 +120,6 @@
           </Chord>
         <Ottava id="2">
           <subtype>8va</subtype>
-          <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
           <lineStyle>1</lineStyle>
           <beginText>

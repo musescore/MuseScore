@@ -434,7 +434,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
       QFile schemaFile(":/schema/musicxml.xsd");
       if (!schemaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qDebug("initMusicXmlSchema() could not open resource musicxml.xsd");
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "Internal error: could not open resource musicxml.xsd\n");
+            MScore::lastError = QObject::tr("Internal error: could not open resource musicxml.xsd\n");
             return false;
             }
 
@@ -455,7 +455,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
       schema.load(schemaBa);
       if (!schema.isValid()) {
             qDebug("initMusicXmlSchema() internal error: MusicXML schema is invalid");
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "Internal error: MusicXML schema is invalid\n");
+            MScore::lastError = QObject::tr("Internal error: MusicXML schema is invalid\n");
             return false;
             }
 
@@ -503,8 +503,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
       int line, column;
       QString err;
       if (!container.setContent(data, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Error reading container.xml at line %1 column %2: %3\n");
-            MScore::lastError = s.arg(line).arg(column).arg(err);
+            MScore::lastError = QObject::tr("Error reading container.xml at line %1 column %2: %3\n").arg(line).arg(column).arg(err);
             return false;
             }
 
@@ -533,7 +532,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
 
       if (rootfile == "") {
             qDebug("can't find rootfile in: %s", qPrintable(qf->fileName()));
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "can't find rootfile\n");
+            MScore::lastError = QObject::tr("Can't find rootfile\n%1").arg(qf->fileName());
             return false;
             }
 
@@ -572,9 +571,8 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
             qDebug("importMusicXml() file '%s' is a valid MusicXML file", qPrintable(name));
       else {
             qDebug("importMusicXml() file '%s' is not a valid MusicXML file", qPrintable(name));
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "this is not a valid MusicXML file\n");
-            QString text = QString("File '%1' is not a valid MusicXML file").arg(name);
-            if (musicXMLValidationErrorDialog(text, messageHandler.getErrors()) != QMessageBox::Yes)
+            MScore::lastError = QObject::tr("File '%1' is not a valid MusicXML file").arg(name);
+            if (musicXMLValidationErrorDialog(MScore::lastError, messageHandler.getErrors()) != QMessageBox::Yes)
                   return Score::FileError::FILE_USER_ABORT;
             }
 
@@ -599,8 +597,7 @@ static Score::FileError doImport(Score* score, const QString& name, QIODevice* d
       int column;
       QString err;
       if (!doc.setContent(dev, false, &err, &line, &column)) {
-            QString s = QT_TRANSLATE_NOOP("file", "Error at line %1 column %2: %3\n");
-            MScore::lastError = s.arg(line).arg(column).arg(err);
+            MScore::lastError = QObject::tr("Error at line %1 column %2: %3\n").arg(line).arg(column).arg(err);
             return Score::FileError::FILE_BAD_FORMAT;
             }
       docName = name; // set filename for domError
@@ -663,7 +660,7 @@ Score::FileError importMusicXml(Score* score, const QString& name)
             return Score::FileError::FILE_NOT_FOUND;
       if (!xmlFile.open(QIODevice::ReadOnly)) {
             qDebug("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open MusicXML file\n");
+            MScore::lastError = QObject::tr("Could not open MusicXML file\n%1").arg(name);
             return Score::FileError::FILE_OPEN_ERROR;
             }
 
@@ -691,7 +688,7 @@ Score::FileError importCompressedMusicXml(Score* score, const QString& name)
             return Score::FileError::FILE_NOT_FOUND;
       if (!mxlFile.open(QIODevice::ReadOnly)) {
             qDebug("importCompressedMusicXml() could not open compressed MusicXML file '%s'", qPrintable(name));
-            MScore::lastError = QT_TRANSLATE_NOOP("file", "could not open compressed MusicXML file\n");
+            MScore::lastError = QObject::tr("Could not open compressed MusicXML file\n%1").arg(name);
             return Score::FileError::FILE_OPEN_ERROR;
             }
 
@@ -1084,7 +1081,8 @@ void MusicXml::scorePartwise(QDomElement ee)
                         Part* part = new Part(score);
                         part->setId(id);
                         score->appendPart(part);
-                        Staff* staff = new Staff(score, part, 0);
+                        Staff* staff = new Staff(score);
+                        staff->setPart(part);
                         part->staves()->push_back(staff);
                         score->staves().push_back(staff);
                         tuplets.resize(VOICES); // part now contains one staff, thus VOICES voices
@@ -1297,16 +1295,11 @@ void MusicXml::scorePartwise(QDomElement ee)
       // now attach all jumps and markers to segments
       // simply use the first SegChordRest in the measure
       for (int i = 0; i < jumpsMarkers.size(); i++) {
-            Segment* seg = jumpsMarkers.at(i).meas()->first(Segment::Type::ChordRest);
+            Measure* meas = jumpsMarkers.at(i).meas();
             qDebug("jumpsMarkers jm %p meas %p ",
-                   jumpsMarkers.at(i).el(), jumpsMarkers.at(i).meas());
-            if (seg) {
-                  qDebug("attach to seg %p", seg);
-                  seg->add(jumpsMarkers.at(i).el());
-                  }
-            else {
-                  qDebug("no segment found");
-                  }
+            jumpsMarkers.at(i).el(), meas);
+            qDebug("attach to measure %p", meas);
+            meas->add(jumpsMarkers.at(i).el());
             }
       }
 
@@ -1801,7 +1794,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                   if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
                         part->staff(j)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
             // set drumset for instrument
-            part->instr()->setUseDrumset(true);
+            part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
             part->instr()->setDrumset(drumset);
             part->instr()->channel(0).bank = 128;
             part->instr()->channel(0).updateInitList();
@@ -3100,7 +3093,7 @@ static void readStringData(StringData* t, QDomElement de)
             if (tag == "staff-lines") {
                   if (val > 0) {
                         // resize the string table and init with zeroes
-                        t->stringList() = QVector<int>(val).toList();
+                        t->stringList() = QVector<instrString>(val).toList();
                         }
                   else
                         qDebug("Tablature::readMusicXML: illegal staff-lines %d", val);
@@ -3125,7 +3118,7 @@ static void readStringData(StringData* t, QDomElement de)
                   if (0 < line && line <= t->stringList().size()) {
                         int pitch = MusicXMLStepAltOct2Pitch(step[0].toLatin1(), alter, octave);
                         if (pitch >= 0)
-                              t->stringList()[line - 1] = pitch;
+                              t->stringList()[line - 1].pitch = pitch;
                         else
                               qDebug("Tablature::readMusicXML invalid string %d tuning step/alter/oct %s/%d/%d",
                                      line, qPrintable(step), alter, octave);
@@ -3525,8 +3518,8 @@ static void tupletAssert()
             && int(TDuration::DurationType::V_WHOLE)   == int(TDuration::DurationType::V_BREVE)   + 1
             && int(TDuration::DurationType::V_HALF)    == int(TDuration::DurationType::V_WHOLE)   + 1
             && int(TDuration::DurationType::V_QUARTER) == int(TDuration::DurationType::V_HALF)    + 1
-            && int(TDuration::DurationType::V_EIGHT)   == int(TDuration::DurationType::V_QUARTER) + 1
-            && int(TDuration::DurationType::V_16TH)    == int(TDuration::DurationType::V_EIGHT)   + 1
+            && int(TDuration::DurationType::V_EIGHTH)  == int(TDuration::DurationType::V_QUARTER) + 1
+            && int(TDuration::DurationType::V_16TH)    == int(TDuration::DurationType::V_EIGHTH)  + 1
             && int(TDuration::DurationType::V_32ND)    == int(TDuration::DurationType::V_16TH)    + 1
             && int(TDuration::DurationType::V_64TH)    == int(TDuration::DurationType::V_32ND)    + 1
             && int(TDuration::DurationType::V_128TH)   == int(TDuration::DurationType::V_64TH)    + 1

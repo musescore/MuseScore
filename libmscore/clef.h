@@ -31,6 +31,7 @@ class Segment;
 
 static const int NO_CLEF = -1000;
 
+
 //---------------------------------------------------------
 //   ClefType
 //---------------------------------------------------------
@@ -71,6 +72,7 @@ struct ClefTypeList {
 
       ClefTypeList() {}
       ClefTypeList(ClefType a, ClefType b) : _concertClef(a), _transposingClef(b) {}
+      ClefTypeList(ClefType a) : _concertClef(a), _transposingClef(a) {}
       bool operator==(const ClefTypeList& t) const;
       bool operator!=(const ClefTypeList& t) const;
       };
@@ -143,7 +145,7 @@ class Clef : public Element {
       Segment* segment() const           { return (Segment*)parent(); }
       Measure* measure() const           { return (Measure*)parent()->parent(); }
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
       virtual void layout();
       virtual void draw(QPainter*) const;
@@ -182,8 +184,11 @@ class Clef : public Element {
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
-      };
 
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
+      QString accessibleInfo() override;
+      };
 
 }     // namespace Ms
 #endif

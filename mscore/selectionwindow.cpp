@@ -20,12 +20,12 @@ static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "Slurs"),
       QT_TRANSLATE_NOOP("selectionfilter", "Figured Bass"),
       QT_TRANSLATE_NOOP("selectionfilter", "Ottava"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Pedal Line"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Other Line"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Arpeggio"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Glissando"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Fret Diagram"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Breath"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Pedal Lines"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Other Lines"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Arpeggios"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Glissandi"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Fretboard Diagrams"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Breathmarks"),
       QT_TRANSLATE_NOOP("selectionfilter", "Tremolo"),
       QT_TRANSLATE_NOOP("selectionfilter", "Grace Notes")
       };
@@ -45,7 +45,7 @@ SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
             _listWidget->setSelectionMode(QAbstractItemView::NoSelection);
 
       for (int row = 0; row < numLabels; row++) {
-            QListWidgetItem *listItem = new QListWidgetItem(labels[row],_listWidget);
+            QListWidgetItem *listItem = new QListWidgetItem(qApp->translate("selectionfilter", labels[row]),_listWidget);
             listItem->setData(Qt::UserRole, QVariant(1 << row));
             listItem->setCheckState(Qt::Unchecked);
             _listWidget->addItem(listItem);

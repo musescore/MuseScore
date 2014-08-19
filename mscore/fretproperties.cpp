@@ -99,8 +99,8 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
       double fretDist   = _spatium * .8;
       int _strings      = diagram->strings();
       int _frets        = diagram->frets();
-      char* _dots       = diagram->dots();
-      char* _marker     = diagram->marker();
+//      char* _dots       = diagram->dots();
+//      char* _marker     = diagram->marker();
 
       double w  = (_strings - 1) * stringDist;
       double xo = (width() - w) * .5;
@@ -137,25 +137,25 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
             }
       for (int i = 0; i < _strings; ++i) {
             p.setPen(Qt::NoPen);
-            if (_dots && _dots[i]) {
+            if (diagram->dot(i)) {
                   double dotd = stringDist * .6 + lw1;
-                  int fret = _dots[i] - 1;
+                  int fret = diagram->dot(i) - 1;
                   double x = stringDist * i - dotd * .5;
                   double y = fretDist * fret + fretDist * .5 - dotd * .5;
                   p.drawEllipse(QRectF(x, y, dotd, dotd));
                   }
             p.setPen(pen);
-            if (_marker && _marker[i]) {
+            if (diagram->marker(i)) {
                   p.setFont(font);
                   double x = stringDist * i;
                   double y = -fretDist * .1;
                   p.drawText(QRectF(x, y, 0.0, 0.0),
-                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QChar(_marker[i]));
+                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QChar(diagram->marker(i)));
                   }
             }
-      if (cfret > 0 && cfret <= _frets && cstring >= 0 && cstring < _strings) {
+      if ((cfret > 0) && (cfret <= _frets) && (cstring >= 0) && (cstring < _strings)) {
             double dotd;
-            if (_dots[cstring] != cfret) {
+            if (diagram->dot(cstring) != cfret) {
                   p.setPen(Qt::NoPen);
                   dotd = stringDist * .6 + lw1;
                   }
@@ -219,30 +219,28 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
       if (fret < 0 || fret > _frets || string < 0 || string >= _strings)
             return;
 
-      char* _marker = diagram->marker();
-      char* _dots   = diagram->dots();
       if (fret == 0) {
-            switch(_marker[string]) {
+            switch (diagram->marker(string)) {
                   case 'O':
-                        _marker[string] = 'X';
+                        diagram->setMarker(string, 'X');
                         break;
                   case 'X':
-                        _marker[string] = 'O';
+                        diagram->setMarker(string, 0);
                         break;
                   default:
-                        _marker[string] = 'O';
-                        _dots[string] = 0;
+                        diagram->setDot(string, 0);
+                        diagram->setMarker(string, 'O');
                         break;
                   }
             }
       else {
-            if (_dots[string] == fret) {
-                  _dots[string] = 0;
-                  _marker[string] = 'O';
+            if (diagram->dot(string) == fret) {
+                  diagram->setDot(string, 0);
+                  diagram->setMarker(string, 'O');
                   }
             else {
-                  _dots[string] = fret;
-                  _marker[string] = 0;
+                  diagram->setDot(string, fret);
+                  diagram->setMarker(string, 0);
                   }
             }
       update();

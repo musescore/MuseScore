@@ -126,12 +126,12 @@ typedef  CreditWordsList::const_iterator ciCreditWords;
 
 class JumpMarkerDesc {
       Element* _el;
-      const Measure* _meas;
+      Measure* _meas;
 
 public:
-      JumpMarkerDesc(Element* el, const Measure* meas) : _el(el), _meas(meas) {}
+      JumpMarkerDesc(Element* el, Measure* meas) : _el(el), _meas(meas) {}
       Element* el() const { return _el; }
-      const Measure* meas() const { return _meas; }
+      Measure* meas() const { return _meas; }
       };
 
 typedef QList<JumpMarkerDesc> JumpMarkerDescList;
@@ -203,7 +203,7 @@ class MusicXml {
       void xmlPart(QDomElement, QString id);
       void xmlScorePart(QDomElement node, QString id, int& parts);
       Measure* xmlMeasure(Part*, QDomElement, int, Fraction measureLen, KeySig*);
-      void xmlAttributes(Measure*, int stave, QDomElement node, KeySig*);   
+      void xmlAttributes(Measure*, int stave, QDomElement node, KeySig*);
       void xmlLyric(int trk, QDomElement e,
                     QMap<int, Lyrics*>& numbrdLyrics,
                     QMap<int, Lyrics*>& defyLyrics,

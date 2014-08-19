@@ -48,6 +48,8 @@ class TestSelectionFilter : public QObject, public MTest
       void filterOtherText()        { testFilter(14,SelectionFilterType::OTHER_TEXT); }
       void filterOtherLine()        { testFilterSpanner(15,SelectionFilterType::OTHER_LINE); }
       void filterTremolo()          { testFilter(16,SelectionFilterType::TREMOLO); }
+      void filterVoice1()           { testFilter(17,SelectionFilterType::FIRST_VOICE); }
+      void filterVoice2()           { testFilter(18,SelectionFilterType::SECOND_VOICE); }
       };
 
 //---------------------------------------------------------
@@ -66,6 +68,8 @@ void TestSelectionFilter::initTestCase()
 void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
       {
       Score* score = readScore(DIR + QString("selectionfilter%1.mscx").arg(idx));
+      score->doLayout();
+
       Measure* m1 = score->firstMeasure();
 
       QVERIFY(m1 != 0);
@@ -85,11 +89,19 @@ void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
 
       QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1.xml").arg(idx),
          DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
+
+      delete score;
       }
+
+//---------------------------------------------------------
+//   testFilterSpanner
+//---------------------------------------------------------
 
 void TestSelectionFilter::testFilterSpanner(int idx, SelectionFilterType filter)
       {
       Score* score = readScore(DIR + QString("selectionfilter%1.mscx").arg(idx));
+      score->doLayout();
+
       Measure* m1 = score->firstMeasure();
       Measure* m2 = score->firstMeasure()->nextMeasure();
 
@@ -111,6 +123,8 @@ void TestSelectionFilter::testFilterSpanner(int idx, SelectionFilterType filter)
 
       QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1.xml").arg(idx),
          DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
+
+      delete score;
       }
 
 QTEST_MAIN(TestSelectionFilter)

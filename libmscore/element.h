@@ -39,9 +39,11 @@ class TextStyle;
 class Element;
 enum class SymId;
 
+
 //---------------------------------------------------------
 //   ElementFlag
 //---------------------------------------------------------
+
 
 enum class ElementFlag : char {
       DROP_TARGET  = 0x2,
@@ -301,11 +303,9 @@ class Element : public QObject {
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
-
    protected:
       Score* _score;
       QPointF _startDragPosition;   ///< used during drag
-
    public:
       Element(Score* s = 0);
       Element(const Element&);
@@ -317,7 +317,7 @@ class Element : public QObject {
 
       void linkTo(Element*);
       void unlink();
-      void undoUnlink();
+      virtual void undoUnlink();
       int lid() const                         { return _links ? _links->lid() : 0; }
       const LinkedElements* links() const     { return _links;      }
       void setLinks(LinkedElements* le)       { _links = le;        }
@@ -467,7 +467,7 @@ class Element : public QObject {
  Reimplemented by elements that accept drops. Used to change cursor shape while
  dragging to indicate drop targets.
 */
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const { return false; }
+      virtual bool acceptDrop(const DropData&) const { return false; }
 
 /**
  Handle a dropped element at canvas relative \a pos of given element
@@ -492,11 +492,13 @@ class Element : public QObject {
 
       virtual void reset();
 
-      virtual qreal mag() const                { return _mag;   }
-      qreal magS() const;
+      virtual qreal mag() const        { return _mag;   }
       void setMag(qreal val)           { _mag = val;    }
+      qreal magS() const;
 
       bool isText() const;
+      virtual bool isSpanner() const           { return false; }
+      virtual bool isSpannerSegment() const    { return false; }
 
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
@@ -569,7 +571,15 @@ class Element : public QObject {
       QString toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
 
+      virtual Element* nextElement();  //< Used for navigation
+      virtual Element* prevElement();  //< next-element and prev-element command
+
       bool concertPitch() const;
+      virtual QString accessibleInfo();                                  //< used to populate the status bar
+      virtual QString screenReaderInfo()    { return accessibleInfo(); } //< by default returns accessibleInfo, but can be overriden
+                                                                         //  if the screen-reader needs a special string (see note for example)
+      virtual QString accessibleExtraInfo() { return QString();        } //< used to return info that will be appended to accessibleInfo
+                                                                         // and passed only to the screen-reader
       };
 
 //---------------------------------------------------------
@@ -701,6 +711,8 @@ extern void collectElements(void* data, Element* e);
 
 
 }     // namespace Ms
+
+
 
 Q_DECLARE_METATYPE(Ms::Element::Type);
 Q_DECLARE_METATYPE(Ms::Element::Placement);

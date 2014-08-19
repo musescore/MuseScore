@@ -246,7 +246,7 @@ class Measure : public MeasureBase {
       void sortStaves(QList<int>& dst);
 
       void dump() const;
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const override;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
 
       int repeatCount() const         { return _repeatCount; }
@@ -320,6 +320,10 @@ class Measure : public MeasureBase {
       void setMMRestCount(int n)    { _mmRestCount = n;    }
       Measure* mmRestFirst() const;
       Measure* mmRestLast() const;
+
+      Element* nextElement(int staff);
+      Element* prevElement(int staff);
+      virtual QString accessibleInfo() override;
       };
 
 }     // namespace Ms

@@ -10,7 +10,6 @@
     <lyricsDistance>3.5</lyricsDistance>
     <lyricsMinBottomDistance>2</lyricsMinBottomDistance>
     <lyricsLineHeight>1</lyricsLineHeight>
-    <figuredBassFontFamily>MScoreBC</figuredBassFontFamily>
     <figuredBassFontSize>8</figuredBassFontSize>
     <figuredBassYOffset>6</figuredBassYOffset>
     <figuredBassLineHeight>1</figuredBassLineHeight>
@@ -54,8 +53,6 @@
     <accidentalNoteDistance>0.22</accidentalNoteDistance>
     <beamWidth>0.5</beamWidth>
     <beamDistance>0.5</beamDistance>
-    <beamMinLen>1.32</beamMinLen>
-    <beamNoSlope>0</beamNoSlope>
     <dotMag>1</dotMag>
     <dotNoteDistance>0.35</dotNoteDistance>
     <dotRestDistance>0.25</dotRestDistance>

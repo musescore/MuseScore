@@ -122,8 +122,10 @@ void Rest::draw(QPainter* painter) const
             int dots = durationType().dots();
             if (dots) {
                   qreal y = dotline * _spatium * .5;
+                  qreal dnd = point(score()->styleS(StyleIdx::dotNoteDistance)) * mag();
+                  qreal ddd = point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
                   for (int i = 1; i <= dots; ++i) {
-                        qreal x = symWidth(_sym) + point(score()->styleS(StyleIdx::dotNoteDistance)) * i;
+                        qreal x = symWidth(_sym) + dnd + ddd * (i - 1);
                         drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
                         }
                   }
@@ -177,8 +179,9 @@ QRectF Rest::drag(EditData* data)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Rest::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Rest::acceptDrop(const DropData& data) const
       {
+      Element* e = data.element;
       Element::Type type = e->type();
       if (
          (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
@@ -285,7 +288,7 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
                   return (line <= -3 || line >= (lines - 2)) ? SymId::restHalfLegerLine : SymId::restHalf;
             case TDuration::DurationType::V_QUARTER:
                   return SymId::restQuarter;
-            case TDuration::DurationType::V_EIGHT:
+            case TDuration::DurationType::V_EIGHTH:
                   return SymId::rest8th;
             case TDuration::DurationType::V_16TH:
                   return SymId::rest16th;
@@ -444,7 +447,7 @@ int Rest::computeLineOffset()
                   case TDuration::DurationType::V_QUARTER:
                         lineOffset = up ? -4 : 4;
                         break;
-                  case TDuration::DurationType::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHTH:
                         lineOffset = up ? -4 : 4;
                         break;
                   case TDuration::DurationType::V_16TH:
@@ -479,7 +482,7 @@ int Rest::computeLineOffset()
                         break;
                   case TDuration::DurationType::V_HALF:
                   case TDuration::DurationType::V_QUARTER:
-                  case TDuration::DurationType::V_EIGHT:
+                  case TDuration::DurationType::V_EIGHTH:
                   case TDuration::DurationType::V_16TH:
                   case TDuration::DurationType::V_32ND:
                   case TDuration::DurationType::V_64TH:
@@ -621,5 +624,16 @@ qreal Rest::stemPosX() const
       else
             return bbox().left();
       }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Rest::accessibleInfo()
+      {
+      QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
+      return Element::accessibleInfo() + " " + durationUserName() + " " + voice ;
+      }
+
 }
 

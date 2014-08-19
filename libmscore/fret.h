@@ -76,17 +76,18 @@ class FretDiagram : public Element {
       int maxFrets() const        { return _maxFrets;   }
       void setMaxFrets(int val)   { _maxFrets = val;    }
 
-      char* dots()      { return _dots;   }
-      char* marker()    { return _marker; }
+      char dot(int s) const       { return _dots      ? _dots[s]      : 0; }
+      char marker(int s) const    { return _marker    ? _marker[s]    : 0; }
+      char fingering(int s) const { return _fingering ? _fingering[s] : 0; }
+
       Harmony* harmony() const { return _harmony; }
 
-      char* fingering() { return _fingering; }
       void init(Ms::StringData *, Chord*);
 
       virtual void add(Element*);
       virtual void remove(Element*);
 
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);

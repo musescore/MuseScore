@@ -58,7 +58,7 @@ class KeySig : public Element {
       virtual KeySig* clone() const       { return new KeySig(*this); }
       virtual void draw(QPainter*) const;
       virtual Element::Type type() const  { return Element::Type::KEYSIG; }
-      virtual bool acceptDrop(MuseScoreView*, const QPointF&, Element*) const;
+      virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&);
       virtual void layout();
       virtual qreal mag() const;
@@ -90,10 +90,13 @@ class KeySig : public Element {
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
+
+      virtual Element* nextElement() override;
+      virtual Element* prevElement() override;
+      virtual QString accessibleInfo() override;
       };
 
 extern const char* keyNames[];
-
 
 }     // namespace Ms
 #endif

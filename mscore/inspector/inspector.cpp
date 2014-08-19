@@ -67,7 +67,6 @@ void MuseScore::showInspector(bool visible)
             }
       if (inspector)
             inspector->setVisible(visible);
-      a->setChecked(visible);
       }
 
 //---------------------------------------------------------
@@ -80,9 +79,11 @@ Inspector::Inspector(QWidget* parent)
       setObjectName("inspector");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
       sa = new QScrollArea;
+      sa->setAccessibleName(tr("Inspector Subwindow"));
       sa->setFrameShape(QFrame::NoFrame);
       sa->setWidgetResizable(true);
       setWidget(sa);
+      sa->setFocusPolicy(Qt::NoFocus);
 
       _inspectorEdit = false;
       ie             = 0;
@@ -123,8 +124,6 @@ void Inspector::setElements(const QList<Element*>& l)
       Element* e = l.isEmpty() ? 0 : l[0];
       if (e == 0 || _element == 0 || (_el != l)) {
             _el = l;
-            if (ie)
-                  ie->deleteLater();
             ie = 0;
             _element = e;
 
@@ -233,9 +232,39 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         }
                   }
+            QWidget* ww = sa->takeWidget();
+            if (ww)
+                  ww->deleteLater();
             sa->setWidget(ie);
-            // setMinimumWidth(ie->width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
-            setMinimumWidth(ie->sizeHint().width() + sa->frameWidth() * 2 + (width() - sa->width()) + 3);
+
+            //focus policies were set by hand in each inspector_*.ui. this code just helps keeping them like they are
+            //also fixes mac problem. on Mac Qt::TabFocus doesn't work, but Qt::StrongFocus works
+            QList<QWidget*> widgets = ie->findChildren<QWidget*>();
+            for (int i = 0; i < widgets.size(); i++) {
+                  QWidget* currentWidget = widgets.at(i);
+                  switch (currentWidget->focusPolicy()) {
+                        case Qt::TabFocus:
+#if defined(Q_OS_MAC)
+                              currentWidget->setFocusPolicy(Qt::StrongFocus);
+#endif
+                        case Qt::WheelFocus:
+                        case Qt::StrongFocus:
+#if defined(Q_OS_MAC)
+//leave them like they are
+#else
+                              if (currentWidget->parent()->inherits("QAbstractSpinBox") ||
+                                  currentWidget->inherits("QAbstractSpinBox")           ||
+                                  currentWidget->inherits("QLineEdit")) ; //leave it like it is
+                              else
+                                   currentWidget->setFocusPolicy(Qt::TabFocus);
+#endif
+                              break;
+                        case Qt::NoFocus:
+                        case Qt::ClickFocus:
+                                    currentWidget->setFocusPolicy(Qt::NoFocus);
+                              break;
+                        }
+                  }
             }
       _element = e;
       ie->setElement();
@@ -573,7 +602,7 @@ void InspectorText::setElement()
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
             if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(ts.at(i).name(), i);
+                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toLatin1().data()), i);
             }
       t.style->blockSignals(false);
       InspectorBase::setElement();
@@ -618,7 +647,7 @@ void InspectorTempoText::setElement()
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
             if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(ts.at(i).name(), i);
+                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toLatin1().data()), i);
             }
       t.style->blockSignals(false);
       InspectorBase::setElement();
@@ -671,7 +700,7 @@ void InspectorDynamic::setElement()
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
             if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(ts.at(i).name(), i);
+                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toLatin1().data()), i);
             }
       t.style->blockSignals(false);
       InspectorBase::setElement();
@@ -738,7 +767,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       b.setupUi(addWidget());
 
       for (const char* name : builtinSpanNames)
-            b.spanType->addItem(tr(name));
+            b.spanType->addItem(qApp->translate("inspector", name));
       for (BarLineType t : types)
             b.type->addItem(BarLine::userTypeName(t), int(t));
 

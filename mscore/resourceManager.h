@@ -28,10 +28,11 @@ public:
     void displayLanguages();
     void displayPlugins();
     bool verifyFile(QString path, QString hash);
+    bool verifyLanguageFile(QString filename, QString hash);
 
 private:
-    QMap <QPushButton *, QString> buttonMap;
-    QMap <QPushButton *, QString> buttonHashMap;
+    QMap <QPushButton *, QString> buttonMap; 	// QPushButton -> filename
+    QMap <QPushButton *, QString> buttonHashMap;// QPushButton -> hash of the file
     QString baseAddr;
 
 public slots:

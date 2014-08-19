@@ -13,14 +13,24 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="accessibleName">
+   <string>Instrument wizard</string>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,0,15">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QComboBox" name="instrumentGenreFilter"/>
+      <widget class="QComboBox" name="instrumentGenreFilter">
+       <property name="accessibleName">
+        <string>Instrument Genre Filter</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QTreeWidget" name="instrumentList">
+       <property name="accessibleName">
+        <string>Instrument List</string>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -56,6 +66,9 @@
        </property>
        <item>
         <widget class="QLineEdit" name="search">
+         <property name="accessibleName">
+          <string>Search</string>
+         </property>
          <property name="placeholderText">
           <string>Search</string>
          </property>
@@ -63,6 +76,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="clearSearch">
+         <property name="accessibleName">
+          <string>Clear</string>
+         </property>
          <property name="text">
           <string>Clear</string>
          </property>
@@ -95,6 +111,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Add</string>
+       </property>
        <property name="text">
         <string>Add</string>
        </property>
@@ -107,6 +126,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Remove</string>
        </property>
        <property name="text">
         <string>Remove</string>
@@ -134,6 +156,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Up</string>
+       </property>
        <property name="text">
         <string>Up</string>
        </property>
@@ -146,6 +171,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Down</string>
        </property>
        <property name="text">
         <string>Down</string>
@@ -173,6 +201,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="accessibleName">
+        <string>Add Staff</string>
+       </property>
        <property name="text">
         <string>Add Staff</string>
        </property>
@@ -180,6 +211,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="linkedButton">
+       <property name="accessibleName">
+        <string>Add Linked Staff</string>
+       </property>
        <property name="text">
         <string>Add Linked Staff</string>
        </property>
@@ -202,6 +236,9 @@
    </item>
    <item>
     <widget class="QTreeWidget" name="partiturList">
+     <property name="accessibleName">
+      <string>Added Instruments</string>
+     </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
@@ -244,9 +281,10 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>instrumentGenreFilter</tabstop>
+  <tabstop>instrumentList</tabstop>
   <tabstop>search</tabstop>
   <tabstop>clearSearch</tabstop>
-  <tabstop>instrumentList</tabstop>
   <tabstop>addButton</tabstop>
   <tabstop>removeButton</tabstop>
   <tabstop>upButton</tabstop>

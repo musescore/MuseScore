@@ -225,34 +225,34 @@ int tpc2alterByKey(int tpc, Key key) {
 //    return note name
 //---------------------------------------------------------
 
-QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase)
+QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool explicitAccidental)
       {
       QString s;
       QString acc;
-      tpc2name(tpc, spelling, lowerCase, s, acc);
-      return s + acc;
+      tpc2name(tpc, spelling, lowerCase, s, acc, explicitAccidental);
+      return s + (explicitAccidental ? " " : "") + acc;
       }
 
 //---------------------------------------------------------
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QString& acc)
+void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QString& acc, bool explicitAccidental)
       {
       int n;
       tpc2name(tpc, spelling, lowerCase, s, n);
       switch (n) {
-            case -2: acc = "bb" ; break;
+            case -2: acc = explicitAccidental ? QObject::tr("double flat") : "bb" ; break;
             case -1:
                   if (spelling != NoteSpellingType::GERMAN)
-                        acc = "b";
+                        acc = explicitAccidental ? QObject::tr("flat") : "b";
                   else
                         // render flats as "es" except for A and E, which get "s"
                         acc = (tpc == 10 || tpc == 11) ? "s" : "es";
                   break;
             case  0: acc = ""; break;
-            case  1: acc = (spelling != NoteSpellingType::GERMAN) ? "#" : "is"; break;
-            case  2: acc = "##"; break;
+            case  1: acc = (spelling != NoteSpellingType::GERMAN) ? (explicitAccidental ? QObject::tr("sharp") : "#") : "is"; break;
+            case  2: acc = explicitAccidental ? QObject::tr("double sharp") : "##"; break;
             default:
                   qDebug("tpc2name(%d): acc %d", tpc, n);
                   acc = "";

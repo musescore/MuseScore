@@ -23,6 +23,20 @@
 
 namespace Ms {
 
+
+// must be in sync with Trill::Type
+const TrillTableItem trillTable[] = {
+      { Trill::Type::TRILL_LINE,      "trill",      QObject::tr("Trill line")          },
+      { Trill::Type::UPPRALL_LINE,    "upprall",    QObject::tr("Upprall line")        },
+      { Trill::Type::DOWNPRALL_LINE,  "downprall",  QObject::tr("Downprall line")      },
+      { Trill::Type::PRALLPRALL_LINE, "prallprall", QObject::tr("Prallprall line")     },
+      { Trill::Type::PURE_LINE      , "pure",       QObject::tr("Wavy line")           }
+};
+
+int trillTableSize() {
+      return sizeof(trillTable)/sizeof(TrillTableItem);
+      }
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -156,9 +170,9 @@ void TrillSegment::layout()
 //   acceptDrop
 //---------------------------------------------------------
 
-bool TrillSegment::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool TrillSegment::acceptDrop(const DropData& data) const
       {
-      if (e->type() == Element::Type::ACCIDENTAL)
+      if (data.element->type() == Element::Type::ACCIDENTAL)
             return true;
       return false;
       }
@@ -299,7 +313,8 @@ void Trill::layout()
       //
       Segment* seg1  = startSegment();
       Segment* seg2  = endSegment();
-      if (seg2
+      if (seg1
+         && seg2
          && (seg1->system() == seg2->system())
          && (spannerSegments().size() == 1)
          && (seg2->tick() == seg2->measure()->tick())
@@ -336,7 +351,8 @@ LineSegment* Trill::createLineSegment()
 
 void Trill::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       xml.tag("subtype", trillTypeName());
       SLine::writeProperties(xml);
@@ -410,6 +426,15 @@ QString Trill::trillTypeName() const
                   qDebug("unknown Trill subtype %hhd", trillType());
                   return "?";
             }
+      }
+
+//---------------------------------------------------------
+//   trillTypeName
+//---------------------------------------------------------
+
+QString Trill::trillTypeUserName()
+      {
+      return trillTable[static_cast<int>(trillType())].userName;
       }
 
 //---------------------------------------------------------
@@ -489,6 +514,15 @@ void Trill::undoSetTrillType(Type val)
 void Trill::setYoff(qreal val)
       {
       rUserYoffset() += (val - score()->styleS(StyleIdx::trillY).val()) * spatium();
+      }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Trill::accessibleInfo()
+      {
+      return Element::accessibleInfo() + " " + trillTypeUserName();
       }
 }
 

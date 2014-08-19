@@ -328,7 +328,8 @@ void FretDiagram::layout()
 
 void FretDiagram::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("FretDiagram");
       Element::writeProperties(xml);
 
@@ -413,14 +414,14 @@ void FretDiagram::setDot(int string, int fret)
 //   setMarker
 //---------------------------------------------------------
 
-void FretDiagram::setMarker(int string, int marker)
+void FretDiagram::setMarker(int string, int m)
       {
       if (_marker == 0) {
             _marker = new char[_strings];
             memset(_marker, 0, _strings);
             }
       if (0 <= string && string < _strings)
-            _marker[string] = marker;
+            _marker[string] = m;
       }
 
 //---------------------------------------------------------
@@ -467,9 +468,9 @@ void FretDiagram::remove(Element* e)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool FretDiagram::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool FretDiagram::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::HARMONY;
+      return data.element->type() == Element::Type::HARMONY;
       }
 
 //---------------------------------------------------------

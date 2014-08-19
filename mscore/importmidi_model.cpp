@@ -179,7 +179,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back(QCoreApplication::translate("MIDI import operations", "128th"));
                   }
             QString headerName() const { return QCoreApplication::translate(
-                                                "MIDI import operations", "Max quantization"); }
+                                                "MIDI import operations", "Max. quantization"); }
             QVariant value(int trackIndex) const
                   {
                   return _values[(int)_opers.quantValue.value(trackIndex)];
@@ -201,7 +201,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back("4");
                   }
             QString headerName() const { return QCoreApplication::translate(
-                                                      "MIDI import operations", "Max voices"); }
+                                                      "MIDI import operations", "Max. voices"); }
             QVariant value(int trackIndex) const
                   {
                   return _values[(int)_opers.maxVoiceCount.value(trackIndex)];

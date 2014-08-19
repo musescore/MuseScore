@@ -28,34 +28,35 @@ namespace Ms {
 //    To edit the string data (tuning and number of frets) for an instrument
 //---------------------------------------------------------
 
-EditStringData::EditStringData(QWidget *parent, QList<int> * strings, int * frets)
+EditStringData::EditStringData(QWidget *parent, QList<instrString> * strings, int * frets)
    : QDialog(parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       _strings = strings;
+      QStringList hdrLabels;
+      int         numOfStrings = _strings->size();
+      hdrLabels << tr("Open", "string data") << tr("Pitch", "string data");
+      stringList->setHorizontalHeaderLabels(hdrLabels);
+      stringList->setRowCount(numOfStrings);
       // if any string, insert into string list control and select the first one
-      if(_strings->size()) {
-            int   i, j;
-            // insert into local working copy sorting by decreasing MIDI code value
-/*            foreach(i, *_strings) {
-                  for(j=_stringsLoc.size()-1; j >= 0 && i > _stringsLoc[j]; j--)
-                        ;
-                  _stringsLoc.insert(j+1, i);
-                  }
-            // add to string list dlg control
-            foreach(i, _stringsLoc)
-                  stringList->addItem(midiCodeToStr(i));
-            stringList->setCurrentRow(0);
-*/
+
+      if(numOfStrings > 0) {
+            int   i;
+            instrString strg;
             // insert into local working copy and into string list dlg control
             // IN REVERSED ORDER
-            for(i=_strings->size()-1; i >= 0; i--) {
-                  j = (*_strings)[i];
-                  _stringsLoc.append(j);
-                  stringList->addItem(midiCodeToStr(j));
+            for(i=0; i < numOfStrings; i++) {
+                  strg = (*_strings)[numOfStrings - i - 1];
+                  _stringsLoc.append(strg);
+                  QTableWidgetItem *newCheck = new QTableWidgetItem();
+                  newCheck->setFlags(Qt::ItemFlag(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
+                  newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
+                  stringList->setItem(i, 0, newCheck);
+                  QTableWidgetItem *newPitch = new QTableWidgetItem(midiCodeToStr(strg.pitch));
+                  stringList->setItem(i, 1, newPitch);
                   }
-            stringList->setCurrentRow(0);
+            stringList->setCurrentCell(0, 1);
             }
       // if no string yet, disable buttons acting on individual string
       else {
@@ -69,27 +70,15 @@ EditStringData::EditStringData(QWidget *parent, QList<int> * strings, int * fret
       connect(deleteString, SIGNAL(clicked()), SLOT(deleteStringClicked()));
       connect(editString,   SIGNAL(clicked()), SLOT(editStringClicked()));
       connect(newString,    SIGNAL(clicked()), SLOT(newStringClicked()));
-      connect(stringList,   SIGNAL(doubleClicked(QModelIndex)), SLOT(editStringClicked()));
+      connect(stringList,   SIGNAL(doubleClicked(QModelIndex)),     SLOT(editStringClicked()));
+      connect(stringList,   SIGNAL(itemClicked(QTableWidgetItem*)), SLOT(listItemClicked(QTableWidgetItem *)));
       _modified = false;
       }
 
 EditStringData::~EditStringData()
 {
-//    delete ui;
 }
-/*
-void EditStringData::changeEvent(QEvent *e)
-{
-      QDialog::changeEvent(e);
-      switch (e->type()) {
-            case QEvent::LanguageChange:
-                  retranslateUi(this);
-                  break;
-            default:
-                  break;
-      }
-}
-*/
+
 //---------------------------------------------------------
 //   deleteStringClicked
 //---------------------------------------------------------
@@ -102,7 +91,7 @@ void EditStringData::deleteStringClicked()
       _stringsLoc.removeAt(i);
       stringList->model()->removeRow(i);
       // if no more items, disable buttons acting on individual string
-      if (stringList->count() == 0) {
+      if (stringList->rowCount() == 0) {
             editString->setEnabled(false);
             deleteString->setEnabled(false);
             }
@@ -118,14 +107,32 @@ void EditStringData::editStringClicked()
       int         i = stringList->currentRow();
       int         newCode;
 
-      EditPitch* ep = new EditPitch(this, _stringsLoc[i]);
+      EditPitch* ep = new EditPitch(this, _stringsLoc[i].pitch);
       if ( (newCode=ep->exec()) != -1) {
             // update item value in local string list and item text in dlg list control
-            _stringsLoc[i] = newCode;
-            QListWidgetItem * item = stringList->item(i);
+            _stringsLoc[i].pitch = newCode;
+            QTableWidgetItem * item = stringList->item(i, 1);
             item->setText(midiCodeToStr(newCode));
             _modified = true;
             }
+      }
+
+//---------------------------------------------------------
+//   listItemClicked
+//---------------------------------------------------------
+
+void EditStringData::listItemClicked(QTableWidgetItem * item)
+      {
+      int col = item->column();
+      if (col != 0)                 // ignore clicks not on check boxes
+            return;
+      int row = item->row();
+
+      // flip openness in local string list, then sync dlg list ctrl
+      bool open = !_stringsLoc[row].open;
+      _stringsLoc[row].open = open;
+      stringList->item(row, col)->setCheckState(open ? Qt::Checked : Qt::Unchecked);
+      _modified = true;
       }
 
 //---------------------------------------------------------
@@ -138,24 +145,22 @@ void EditStringData::newStringClicked()
 
       EditPitch* ep = new EditPitch(this);
       if ( (newCode=ep->exec()) != -1) {
-            // find sorted postion for new string tuning value
-/*            for(i=_stringsLoc.size()-1; i >= 0 && newCode > _stringsLoc[i]; i--)
-                  ;
+            // add below selected string or at the end if no selected string
+            i = stringList->currentRow() + 1;
+            if(i <= 0)
+                  i = stringList->rowCount();
             // insert in local string list and in dlg list control
-            _stringsLoc.insert(i+1, newCode);
-            stringList->insertItem(i+1, midiCodeToStr(newCode));
+            instrString strg = {newCode, 0};
+            _stringsLoc.insert(i, strg);
+            stringList->insertRow(i);
+            QTableWidgetItem *newCheck = new QTableWidgetItem();
+            newCheck->setFlags(Qt::ItemFlag(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
+            newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
+            stringList->setItem(i, 0, newCheck);
+            QTableWidgetItem *newPitch = new QTableWidgetItem(midiCodeToStr(strg.pitch));
+            stringList->setItem(i, 1, newPitch);
             // select last added item and ensure buttons are active
-            stringList->setCurrentRow(i+1);
-*/
-            // add below selected string o at the end if no selected string
-            i = stringList->currentRow();
-            if(i < 0)
-                  i = stringList->count() - 1;
-            // insert in local string list and in dlg list control
-            _stringsLoc.insert(i+1, newCode);
-            stringList->insertItem(i+1, midiCodeToStr(newCode));
-            // select last added item and ensure buttons are active
-            stringList->setCurrentRow(i+1);
+            stringList->setCurrentCell(i, 1);
             editString->setEnabled(true);
             deleteString->setEnabled(true);
             _modified = true;
@@ -208,6 +213,6 @@ static const char* g_cNoteName[] = {
 
 QString EditStringData::midiCodeToStr(int midiCode)
       {
-      return QString("%1 %2").arg(g_cNoteName[midiCode % 12]).arg(midiCode / 12 - 1);
+      return QString("%1 %2").arg(qApp->translate("editstringdata", g_cNoteName[midiCode % 12])).arg(midiCode / 12 - 1);
       }
 }

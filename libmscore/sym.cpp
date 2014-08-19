@@ -2434,6 +2434,18 @@ QVector<const char*> Sym::symNames = {
       "noteheadDoubleWholeAlt",           // double whole with double side bars
       "6stringTabClefSerif",              // TAB clef in script style
 
+//    Unicode alternates
+      "unicodeNoteDoubleWhole",
+      "unicodeNoteWhole",
+      "unicodeNoteHalfUp",
+      "unicodeNoteQuarterUp",
+      "unicodeNote8thUp",
+      "unicodeNote16thUp",
+      "unicodeNote32ndUp",
+      "unicodeNote64thUp",
+      "unicodeNote128thUp",
+      "unicodeAugmentationDot",
+
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
       "ornamentPrallMordent",
@@ -4850,6 +4862,18 @@ QVector<QString> Sym::symUserNames = {
       "noteheadDoubleWholeAlt",           // double whole with double side bars
       "6StringTabClefSerif",              // TAB clef in script style
 
+//    Unicode
+      "unicodeNoteDoubleWhole",
+      "unicodeNoteWhole",
+      "unicodeNoteHalfUp",
+      "unicodeNoteQuarterUp",
+      "unicodeNote8thUp",
+      "unicodeNote16thUp",
+      "unicodeNote32ndUp",
+      "unicodeNote64thUp",
+      "unicodeNote128thUp",
+      "unicodeAugmentationDot",
+
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
       "ornamentPrallMordent",
@@ -5014,7 +5038,12 @@ QVector<oldName> oldNames = {
       {"umarcato",                              SymId::articMarcatoAbove },         // scripts.umarcato
       {"dmarcato",                              SymId::articMarcatoBelow },         // scripts.dmarcato
       {"fadein",                                SymId::guitarFadeIn },              // scripts.fadein
-      {"fadeout",                               SymId::guitarFadeOut },             // scripts.fadein
+      {"fadeout",                               SymId::guitarFadeOut },             // scripts.fadeout
+      {"volumeswell",                           SymId::guitarVolumeSwell },         // scripts.volumeswell
+      {"wigglesawtooth",                        SymId::wiggleSawtooth },            // scripts.wiggleSawtooth
+      {"wigglesawtoothwide",                    SymId::wiggleSawtoothWide },        // scripts.wiggleSawtoothWide
+      {"wigglevibratolargefaster",              SymId::wiggleVibratoLargeFaster },  // scripts.wiggleVibratoLargeFaster
+      {"wigglevibratolargeslowest",             SymId::wiggleVibratoLargeSlowest }, // scripts.wiggleVibratoLargeSlowest
       {"ouvert",                                SymId::brassMuteOpen },             // scripts.open
       {"halfopen",                              SymId::brassMuteHalfClosed },       // scripts.halfopen CHECK!!! pre 2.0 only
       {"plus stop",                             SymId::brassMuteClosed },           // scripts.stopped
@@ -5266,6 +5295,7 @@ void initScoreFonts()
             Sym::lonhash.insert(i.name, SymId(i.symId));
       QFont::insertSubstitution("MScore Text", "Bravura Text");
       QFont::insertSubstitution("ScoreFont", "Bravura Text");
+      QFont::insertSubstitution("MuseJazz", "Bravura Text");
       }
 
 //---------------------------------------------------------
@@ -5521,6 +5551,31 @@ void ScoreFont::load()
                         }
                   }
             }
+      // Unicode
+      struct UnicodeAlternate {
+            SymId       id;
+            QString string;
+            }
+      unicodes[] = {
+             { SymId::unicodeNoteDoubleWhole, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5c)) },
+             { SymId::unicodeNoteWhole, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5d)) },
+             { SymId::unicodeNoteHalfUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5e)) },
+      	 { SymId::unicodeNoteQuarterUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5f)) },
+             { SymId::unicodeNote8thUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd60)) },
+             { SymId::unicodeNote16thUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd61)) },
+             { SymId::unicodeNote32ndUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd62)) },
+             { SymId::unicodeNote64thUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd63)) },
+             { SymId::unicodeNote128thUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd64)) },
+             { SymId::unicodeAugmentationDot, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd6D)) }
+             };
+      
+      for (const UnicodeAlternate& unicode : unicodes) {
+            Sym* sym = &_symbols[int(unicode.id)];
+            sym->setString(unicode.string);
+            sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+            }
+      
+      
       // add space symbol
       Sym* sym = &_symbols[int(SymId::space)];
       sym->setString("\u0020");

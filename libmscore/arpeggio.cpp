@@ -53,7 +53,8 @@ void Arpeggio::setHeight(qreal h)
 
 void Arpeggio::write(Xml& xml) const
       {
-      if (!xml.canWrite(this)) return;
+      if (!xml.canWrite(this))
+            return;
       xml.stag("Arpeggio");
       Element::writeProperties(xml);
       xml.tag("subtype", int(_arpeggioType));
@@ -359,9 +360,9 @@ void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
 //   acceptDrop
 //---------------------------------------------------------
 
-bool Arpeggio::acceptDrop(MuseScoreView*, const QPointF&, Element* e) const
+bool Arpeggio::acceptDrop(const DropData& data) const
       {
-      return e->type() == Element::Type::ARPEGGIO;
+      return data.element->type() == Element::Type::ARPEGGIO;
       }
 
 //---------------------------------------------------------

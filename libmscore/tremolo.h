@@ -55,7 +55,7 @@ class Tremolo : public Element {
       virtual Tremolo* clone() const     { return new Tremolo(*this); }
       virtual Element::Type type() const { return Element::Type::TREMOLO; }
       virtual int subtype() const         { return (int) _tremoloType; }
-      virtual QString subtypeName() const;// { return tr(tremoloName[subtype() - int(TremoloType::R8)]); }
+      virtual QString subtypeName() const;
 
       QString tremoloTypeName() const;
       void setTremoloType(const QString& s);
@@ -78,6 +78,8 @@ class Tremolo : public Element {
       Fraction tremoloLen() const;
       bool twoNotes() const { return tremoloType() > TremoloType::R64; } // is it a two note tremolo?
       int lines() const { return _lines; }
+
+      virtual QString accessibleInfo() override;
       };
 
 

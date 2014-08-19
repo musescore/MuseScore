@@ -75,6 +75,7 @@ class LineSegment : public SpannerSegment {
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QLineF dragAnchor() const override;
       };
 
 //---------------------------------------------------------
@@ -91,7 +92,7 @@ class SLine : public Spanner {
       bool _diagonal;
 
    protected:
-      virtual QPointF linePos(GripLine grip, System** system);
+      virtual QPointF linePos(GripLine grip, System** system) const;
 
    public:
       SLine(Score* s);

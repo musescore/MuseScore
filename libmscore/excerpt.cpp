@@ -120,17 +120,17 @@ Score* createExcerpt(const QList<Part*>& parts)
 
       foreach (Part* part, parts) {
             Part* p = new Part(score);
-            p->setInstrument(*part->instr());
-            int idx = 0;
+            p->setInstrument(*part->instr(), 0);
+
             foreach (Staff* staff, *part->staves()) {
-                  Staff* s = new Staff(score, p, idx);
-                  s->setInitialClef(staff->initialClefTypeList());
+                  Staff* s = new Staff(score);
+                  s->setPart(p);
                   s->setStaffType(staff->staffType());
+                  s->setDefaultClefType(staff->defaultClefType());
                   s->linkTo(staff);
                   p->staves()->append(s);
                   score->staves().append(s);
                   srcStaves.append(oscore->staffIdx(staff));
-                  ++idx;
                   }
             score->appendPart(p);
             }
@@ -504,9 +504,6 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
       int srcStaffIdx = score->staffIdx(srcStaff);
       int dstStaffIdx = score->staffIdx(dstStaff);
 
-      if (srcStaff->staffGroup() == dstStaff->staffGroup())
-            dstStaff->setInitialClef(srcStaff->initialClefTypeList());
-
       for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             int sTrack = srcStaffIdx * VOICES;
             int eTrack = sTrack + VOICES;
@@ -525,7 +522,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               Clef* clef = static_cast<Clef*>(oe);
                               int   tick = seg->tick();
                               if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffGroup()
-                                          && dstStaff->clefTypeList(tick) != clef->clefTypeList()) {
+                                          && dstStaff->clefType(tick) != clef->clefTypeList()) {
                                     ne = oe->clone();
                                     }
                               }
@@ -640,7 +637,6 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
 
       TieMap tieMap;
 
-      dstStaff->setInitialClef(srcStaff->initialClefTypeList());
       int srcStaffIdx = oscore->staffIdx(srcStaff);
       int dstStaffIdx = score->staffIdx(dstStaff);
 

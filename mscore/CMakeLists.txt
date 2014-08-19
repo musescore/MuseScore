@@ -35,7 +35,7 @@ if (SCRIPT_INTERFACE)
 endif (SCRIPT_INTERFACE)
 
 QT4_WRAP_UI (ui_headers
-      insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui
+      insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui measureproperties.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui voltaproperties.ui timesigproperties.ui boxproperties.ui
@@ -123,7 +123,7 @@ endif (OMR)
 
 
 QT4_WRAP_CPP (mocs
-      scoreview.h editinstrument.h editstyle.h instrdialog.h
+      scoreview.h editinstrument.h editstyle.h instrdialog.h instrwidget.h
       musescore.h navigator.h pagesettings.h palette.h mixer.h playpanel.h
       measureproperties.h seq.h textpalette.h textstyle.h selectionwindow.h
       timedialog.h symboldialog.h shortcutcapturedialog.h simplebutton.h
@@ -152,7 +152,7 @@ QT4_WRAP_CPP (mocs
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
       importmidi_panel.h importmidi_delegate.h importmidi_view.h
       debugger/debugger.h
-      resourceManager.h downloadUtils.h
+      resourceManager.h downloadUtils.h accessibletoolbutton.h scoreaccessibility.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -160,7 +160,12 @@ QT4_WRAP_CPP (mocs
 if (APPLE)
       QT4_ADD_RESOURCES (qrc_files musescore.qrc)
 else (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc musescorefonts.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc
+            musescorefonts-MScore.qrc
+            musescorefonts-Gonville.qrc
+            musescorefonts-Bravura.qrc
+            musescorefonts-MuseJazz.qrc
+            musescorefonts-Free.qrc)
 endif (APPLE)
 
 
@@ -224,7 +229,7 @@ add_executable ( ${ExecutableName}
       ${INCS}
 
       actions.cpp scoreview.cpp editinstrument.cpp editstyle.cpp
-      icons.cpp importbww.cpp instrdialog.cpp
+      icons.cpp importbww.cpp instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp importmidi.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
@@ -272,7 +277,7 @@ add_executable ( ${ExecutableName}
       importmidi_simplify.cpp importmidi_voice.cpp importmidi_view.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp
-      continuouspanel.cpp
+      continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
 
       ${OMR_FILES}
       ${AUDIO}

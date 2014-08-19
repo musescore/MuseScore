@@ -32,22 +32,24 @@ namespace Ms {
 enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 
 //---------------------------------------------------------
-//   noteHeadNames
+//   noteHeadNames (see also libmscore/note.{h,cpp})
+//   same order as NoteHead::Group, sol and altbrevis omitted,
+//   as not being useful for drums
 //---------------------------------------------------------
 
 const char* noteHeadNames[int(NoteHead::Group::HEAD_GROUPS)] = {
-      QT_TRANSLATE_NOOP("noteheadnames", "normal"),
-      QT_TRANSLATE_NOOP("noteheadnames", "cross"),
-      QT_TRANSLATE_NOOP("noteheadnames", "diamond"),
-      QT_TRANSLATE_NOOP("noteheadnames", "triangle"),
-      QT_TRANSLATE_NOOP("noteheadnames", "mi"),
-      QT_TRANSLATE_NOOP("noteheadnames", "slash"),
-      QT_TRANSLATE_NOOP("noteheadnames", "xcircle"),
-      QT_TRANSLATE_NOOP("noteheadnames", "do"),
-      QT_TRANSLATE_NOOP("noteheadnames", "re"),
-      QT_TRANSLATE_NOOP("noteheadnames", "fa"),
-      QT_TRANSLATE_NOOP("noteheadnames", "la"),
-      QT_TRANSLATE_NOOP("noteheadnames", "ti"),
+      QT_TRANSLATE_NOOP("EditDrumset", "normal"),
+      QT_TRANSLATE_NOOP("EditDrumset", "cross"),
+      QT_TRANSLATE_NOOP("EditDrumset", "diamond"),
+      QT_TRANSLATE_NOOP("EditDrumset", "triangle"),
+      QT_TRANSLATE_NOOP("EditDrumset", "mi"),
+      QT_TRANSLATE_NOOP("EditDrumset", "slash"),
+      QT_TRANSLATE_NOOP("EditDrumset", "xcircle"),
+      QT_TRANSLATE_NOOP("EditDrumset", "do"),
+      QT_TRANSLATE_NOOP("EditDrumset", "re"),
+      QT_TRANSLATE_NOOP("EditDrumset", "fa"),
+      QT_TRANSLATE_NOOP("EditDrumset", "la"),
+      QT_TRANSLATE_NOOP("EditDrumset", "ti"),
       };
 
 //---------------------------------------------------------
@@ -70,7 +72,7 @@ EditDrumset::EditDrumset(Drumset* ds, QWidget* parent)
 
       noteHead->addItem(tr("invalid"));
       for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS) - 2 ; ++i)
-            noteHead->addItem(noteHeadNames[i]);
+            noteHead->addItem(tr(noteHeadNames[i]));
 
       connect(pitchList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
          SLOT(itemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));

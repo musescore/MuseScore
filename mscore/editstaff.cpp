@@ -50,6 +50,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       orgStaff = s;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setModal(true);
 
       Part* part        = orgStaff->part();
       instrument        = *part->instr();
@@ -62,6 +63,8 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       staff->setStaffType(orgStaff->staffType());
       staff->setPart(part);
       staff->setNeverHide(orgStaff->neverHide());
+      staff->setShowIfEmpty(orgStaff->showIfEmpty());
+      staff->setUserMag(orgStaff->userMag());
 
       // hide string data controls if instrument has no strings
       stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
@@ -72,7 +75,8 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       color->setColor(s->color());
       partName->setText(part->partName());
       neverHide->setChecked(staff->neverHide());
-
+      showIfEmpty->setChecked(staff->showIfEmpty());
+      mag->setValue(staff->userMag() * 100.0);
       updateStaffType();
       updateInstrument();
 
@@ -105,7 +109,7 @@ void EditStaff::updateStaffType()
       showClef->setChecked(staffType->genClef());
       showTimesig->setChecked(staffType->genTimesig());
       showBarlines->setChecked(staffType->showBarlines());
-      staffGroupName->setText(staffType->groupName());
+      staffGroupName->setText(qApp->translate("Staff type group name", staffType->groupName()));
       }
 
 //---------------------------------------------------------
@@ -235,6 +239,8 @@ void EditStaff::apply()
       qreal userDist = spinExtraDistance->value();
       QColor col     = color->color();
       bool nhide     = neverHide->isChecked();
+      bool ifEmpty   = showIfEmpty->isChecked();
+      qreal scale    = mag->value() / 100.0;
 
       if (!(instrument == *part->instr()) || part->partName() != partName->text()) {
             Interval v1 = instrument.transpose();
@@ -252,8 +258,11 @@ void EditStaff::apply()
          || userDist != staff->userDist()
          || col != staff->color()
          || nhide != staff->neverHide()
-         )
-            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide));
+         || ifEmpty != staff->showIfEmpty()
+         || scale != staff->userMag()
+         ) {
+            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide, ifEmpty, scale));
+            }
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {
             // updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
@@ -287,8 +296,8 @@ void EditStaff::editLongNameClicked()
 void EditStaff::minPitchAClicked()
       {
       int         newCode;
-
       EditPitch* ep = new EditPitch(this, instrument.minPitchA() );
+      ep->setWindowModality(Qt::WindowModal);
       if ( (newCode=ep->exec()) != -1) {
             minPitchA->setText(midiCodeToStr(newCode));
             _minPitchA = newCode;
@@ -298,8 +307,8 @@ void EditStaff::minPitchAClicked()
 void EditStaff::maxPitchAClicked()
       {
       int         newCode;
-
       EditPitch* ep = new EditPitch(this, instrument.maxPitchA() );
+      ep->setWindowModality(Qt::WindowModal);
       if ( (newCode=ep->exec()) != -1) {
             maxPitchA->setText(midiCodeToStr(newCode));
             _maxPitchA = newCode;
@@ -309,8 +318,8 @@ void EditStaff::maxPitchAClicked()
 void EditStaff::minPitchPClicked()
       {
       int         newCode;
-
       EditPitch* ep = new EditPitch(this, instrument.minPitchP() );
+      ep->setWindowModality(Qt::WindowModal);
       if ( (newCode=ep->exec()) != -1) {
             minPitchP->setText(midiCodeToStr(newCode));
             _minPitchP = newCode;
@@ -320,8 +329,8 @@ void EditStaff::minPitchPClicked()
 void EditStaff::maxPitchPClicked()
       {
       int         newCode;
-
       EditPitch* ep = new EditPitch(this, instrument.maxPitchP() );
+      ep->setWindowModality(Qt::WindowModal);
       if ( (newCode=ep->exec()) != -1) {
             maxPitchP->setText(midiCodeToStr(newCode));
             _maxPitchP = newCode;
@@ -364,6 +373,7 @@ void EditStaff::showBarlinesChanged()
 void EditStaff::showInstrumentDialog()
       {
       SelectInstrument si(instrument, this);
+      si.setWindowModality(Qt::WindowModal);
       if (si.exec()) {
             instrument = Instrument::fromTemplate(si.instrTemplate());
             updateInstrument();
@@ -376,10 +386,11 @@ void EditStaff::showInstrumentDialog()
 
 void EditStaff::editStringDataClicked()
       {
-      int         frets = instrument.stringData()->frets();
-      QList<int>  stringList = instrument.stringData()->stringList();
+      int                     frets = instrument.stringData()->frets();
+      QList<instrString>      stringList = instrument.stringData()->stringList();
 
       EditStringData* esd = new EditStringData(this, &stringList, &frets);
+      esd->setWindowModality(Qt::WindowModal);
       if (esd->exec()) {
             StringData stringData(frets, stringList);
             // detect number of strings going from 0 to !0 or vice versa
@@ -410,7 +421,7 @@ static const char* g_cNoteName[] = {
 
 QString EditStaff::midiCodeToStr(int midiCode)
       {
-      return QString("%1 %2").arg(g_cNoteName[midiCode % 12]).arg(midiCode / 12 - 1);
+      return QString("%1 %2").arg(qApp->translate("editstaff", g_cNoteName[midiCode % 12])).arg(midiCode / 12 - 1);
       }
 
 //---------------------------------------------------------
@@ -420,6 +431,7 @@ QString EditStaff::midiCodeToStr(int midiCode)
 void EditStaff::showStaffTypeDialog()
       {
       EditStaffType editor(this, staff);
+      editor.setWindowModality(Qt::WindowModal);
       if (editor.exec()) {
             staff->setStaffType(editor.getStaffType());
             updateStaffType();
