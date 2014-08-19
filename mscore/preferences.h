@@ -171,8 +171,6 @@ struct Preferences {
 
       QString workspace;
 
-      bool firstStartWeb;
-
       bool dirty;
 
       QList<PluginDescription> pluginList;

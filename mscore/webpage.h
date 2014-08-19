@@ -85,14 +85,9 @@ class MyWebView: public QWebView
 
    public slots:
       void link(const QUrl& url);
-      void stopBusyAndClose(bool);
-      void stopBusyAndFirst(bool);
-      void stopBusyStatic(bool);
       void setBusy();
-
-   private:
-      void stopBusy(bool val, bool close);
-
+      void stopBusy(bool val);
+     
    public:
       MyWebView(QWidget *parent = 0);
       ~MyWebView();

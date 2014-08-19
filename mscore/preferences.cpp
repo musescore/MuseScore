@@ -217,8 +217,6 @@ void Preferences::init()
       exportAudioSampleRate   = exportAudioSampleRates[0];
 
       workspace               = "default";
-
-      firstStartWeb = true;
       };
 
 //---------------------------------------------------------
@@ -342,8 +340,6 @@ void Preferences::write()
       s.setValue("exportAudioSampleRate", exportAudioSampleRate);
 
       s.setValue("workspace", workspace);
-
-      s.setValue("firstStartWeb", firstStartWeb);
 
       //update
       s.setValue("checkUpdateStartup", checkUpdateStartup);
@@ -498,8 +494,6 @@ void Preferences::read()
       exportAudioSampleRate = s.value("exportAudioSampleRate", exportAudioSampleRate).toInt();
 
       workspace          = s.value("workspace", workspace).toString();
-
-      firstStartWeb = s.value("firstStartWeb", true).toBool();
 
       checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toInt();
       if (checkUpdateStartup == 0)

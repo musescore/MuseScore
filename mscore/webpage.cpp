@@ -128,16 +128,14 @@ MyWebView::MyWebView(QWidget *parent):
 
 MyWebView::~MyWebView()
       {
-      disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusyAndClose(bool)));
-      disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusyAndFirst(bool)));
-      disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusyStatic(bool)));
+      disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusy(bool)));
       }
 
 //---------------------------------------------------------
 //   stopBusy
 //---------------------------------------------------------
 
-void MyWebView::stopBusy(bool val, bool close)
+void MyWebView::stopBusy(bool val)
       {
       if (!val) {
             setHtml(QString("<html><head>"
@@ -157,32 +155,11 @@ void MyWebView::stopBusy(bool val, bool close)
             .arg(tr("Could not<br /> connect"))
             .arg(tr("To connect with the community, <br /> you need to have internet <br /> connection enabled"))
             .arg(tr("Retry"))
-            .arg(tr("Close this permanently"))
-            , QUrl("qrc:/"));
-            if(!preferences.firstStartWeb && close)
-                  mscore->showWebPanel(false);
+            .arg(tr("Close this permanently")),
+            QUrl("qrc:/"));
             }
       mscore->hideProgressBar();
       setCursor(Qt::ArrowCursor);
-      }
-
-void MyWebView::stopBusyAndClose(bool val)
-      {
-      stopBusy(val, true);
-      }
-
-void MyWebView::stopBusyAndFirst(bool val)
-      {
-      stopBusy(val, false);
-      if(val && preferences.firstStartWeb) {
-            preferences.firstStartWeb = false;
-            preferences.dirty = true;
-            }
-      }
-
-void MyWebView::stopBusyStatic(bool val)
-      {
-      stopBusy(val, false);
       }
 
 //---------------------------------------------------------
@@ -238,40 +215,10 @@ WebPageDockWidget::WebPageDockWidget(MuseScore* /*mscore*/, QWidget* parent)
       QWebFrame* frame = web->webPage()->mainFrame();
       connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(addToJavascript()));
 
-      if(preferences.firstStartWeb) {
-            connect(web, SIGNAL(loadFinished(bool)), web, SLOT(stopBusyStatic(bool)));
-            web->setBusy();
-            web->setHtml(QString("<html><head>"
-                  "<script type=\"text/javascript\">"
-                  "      function closePermanently() { mscore.closeWebPanelPermanently(); return false; }</script>"
-                  "      <link rel=\"stylesheet\" href=\"data/webview.css\" type=\"text/css\" /></head>"
-                  "<body>"
-                  "<div id=\"content\">"
-                  "<div id=\"middle\">"
-                  "  <div class=\"title\" align=\"center\"><h2>%1</h2></div>"
-                  "  <ul><li>%2</li>"
-                  "  <li>%3</li>"
-                  "  <li>%4</li>"
-                  "  <li>%5</li></ul>"
-                  "  <div align=\"center\"><a class=\"button\" href=\"#\" onClick=\"return panel.load();\">%6</a></div>"
-                  "  <div align=\"center\"><a class=\"close\" href=\"#\" onclick=\"return closePermanently();\">%7</div>"
-                  "</div></div>"
-                  "</body></html>")
-                  .arg(tr("Connect with the <br /> Community"))
-                  .arg(tr("Find help"))
-                  .arg(tr("Improve your skills"))
-                  .arg(tr("Read the latest news"))
-                  .arg(tr("Download free sheet music"))
-                  .arg(tr("Start"))
-                  .arg(tr("Close this permanently"))
-                  , QUrl("qrc:/"));
-            }
-      else{
-            //And not load !
-            connect(web, SIGNAL(loadFinished(bool)), web, SLOT(stopBusyAndClose(bool)));
-            web->setBusy();
-            web->load(QNetworkRequest(webUrl()));
-            }
+      connect(web, SIGNAL(loadFinished(bool)), web, SLOT(stopBusy(bool)));
+      web->setBusy();
+      web->load(QNetworkRequest(webUrl()));
+      
       setWidget(web);
 
       //removing every widget from the tabbing order until suport for
@@ -316,7 +263,6 @@ QObject* WebPageDockWidget::currentScore() {
 
 void WebPageDockWidget::load()
       {
-      connect(web, SIGNAL(loadFinished(bool)), web, SLOT(stopBusyAndFirst(bool)));
       web->setBusy();
       web->load(QNetworkRequest(webUrl()));
       }
