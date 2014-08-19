@@ -1235,8 +1235,8 @@ QString BarLine::accessibleExtraInfo()
                   }
 
             int tick = seg->tick();
-            SpannerMap smap = score()->spannerMap();
-            std::vector< ::Interval<Spanner*> > spanners = smap.findOverlapping(tick, tick);
+
+            std::vector< ::Interval<Spanner*> > spanners = score()->spannerMap().findOverlapping(tick, tick);
             for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
                   ::Interval<Spanner*> interval = *i;
                   Spanner* s = interval.value;
