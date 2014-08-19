@@ -23,10 +23,10 @@ namespace Ms {
 
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
-const QString g_groupNames[STAFF_GROUP_MAX] = {
-      QString(QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF")),
-      QString(QT_TRANSLATE_NOOP("staff group header name", "PERCUSSION STAFF")),
-      QString(QT_TRANSLATE_NOOP("staff group header name", "TABLATURE STAFF"))
+const char* g_groupNames[STAFF_GROUP_MAX] = {
+      QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF"),
+      QT_TRANSLATE_NOOP("staff group header name", "PERCUSSION STAFF"),
+      QT_TRANSLATE_NOOP("staff group header name", "TABLATURE STAFF")
 };
 
 //---------------------------------------------------------
@@ -151,7 +151,7 @@ void EditStaffType::setValues()
       StaffGroup group = staffType.group();
       int idx = int(group);
       stack->setCurrentIndex(idx);
-      groupName->setText(g_groupNames[idx]);
+      groupName->setText(qApp->translate("staff group header name", g_groupNames[idx]));
 //      groupCombo->setCurrentIndex(idx);
 
       name->setText(staffType.name());

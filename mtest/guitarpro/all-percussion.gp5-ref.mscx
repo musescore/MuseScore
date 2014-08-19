@@ -101,7 +101,7 @@
           <head>0</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Snare Click</name>
+          <name>Square Click</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="33">
@@ -297,7 +297,7 @@
           <head>0</head>
           <line>8</line>
           <voice>0</voice>
-          <name>High Bongo</name>
+          <name>Hi Bongo</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="61">
@@ -458,7 +458,7 @@
           <head>0</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Jingle Bell</name>
+          <name>Sleigh Bell</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="84">
@@ -1388,7 +1388,7 @@
             <head>0</head>
             <line>3</line>
             <voice>0</voice>
-            <name>Snare Click</name>
+            <name>Square Click</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="33">
@@ -1584,7 +1584,7 @@
             <head>0</head>
             <line>8</line>
             <voice>0</voice>
-            <name>High Bongo</name>
+            <name>Hi Bongo</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="61">
@@ -1745,7 +1745,7 @@
             <head>0</head>
             <line>3</line>
             <voice>0</voice>
-            <name>Jingle Bell</name>
+            <name>Sleigh Bell</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="84">

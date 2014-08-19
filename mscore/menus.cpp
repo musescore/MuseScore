@@ -921,12 +921,12 @@ Palette* MuseScore::newTextPalette()
 
       StaffText* st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::STAFF);
-      st->setText(tr("staff-text"));
+      st->setText(tr("Staff Text"));
       sp->append(st, tr("Staff Text"));
 
       st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::SYSTEM);
-      st->setText(tr("system-text"));
+      st->setText(tr("System Text"));
       sp->append(st, tr("System Text"));
 
       st = new StaffText(gscore);
