@@ -143,11 +143,13 @@ void createExcerpt(Score* score, const QList<Part*>& parts)
             oscore->insertMeasure(Element::Type::VBOX, measure);
 
       measure = score->first();
+      Q_ASSERT(measure->type() == Element::Type::VBOX);
       QString partLabel = parts.front()->longName();
       if (!partLabel.isEmpty()) {
             Text* txt = new Text(score);
             txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
             txt->setText(partLabel);
+            txt->setTrack(0);
             measure->add(txt);
             }
 

@@ -52,6 +52,8 @@
       <Page>
         <System>
           </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -131,6 +133,10 @@
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <lid>12</lid>
+        </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G</concertClefType>
@@ -188,14 +194,14 @@
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
-          <lid>12</lid>
+          <lid>13</lid>
           </Clef>
         <KeySig>
-          <lid>13</lid>
+          <lid>14</lid>
           <accidental>3</accidental>
           </KeySig>
         <TimeSig>
-          <lid>14</lid>
+          <lid>15</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -203,42 +209,42 @@
         <Harmony>
           <root>17</root>
           <name>7</name>
-          <lid>15</lid>
+          <lid>16</lid>
           </Harmony>
         <Chord>
-          <lid>16</lid>
+          <lid>17</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>17</lid>
+            <lid>18</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <tpc2>17</tpc2>
             </Note>
           </Chord>
         <Rest>
-          <lid>18</lid>
+          <lid>19</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>19</lid>
+          <lid>20</lid>
           <durationType>half</durationType>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>20</lid>
+          <lid>21</lid>
           </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>21</lid>
+          <lid>22</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>22</lid>
+          <lid>23</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -329,6 +335,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <lid>12</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Flute</text>
@@ -477,6 +484,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <lid>12</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Alto Saxophone</text>
@@ -486,14 +494,14 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <lid>12</lid>
+            <lid>13</lid>
             </Clef>
           <KeySig>
-            <lid>13</lid>
+            <lid>14</lid>
             <accidental>3</accidental>
             </KeySig>
           <TimeSig>
-            <lid>14</lid>
+            <lid>15</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -501,42 +509,42 @@
           <Harmony>
             <root>17</root>
             <name>7</name>
-            <lid>15</lid>
+            <lid>16</lid>
             </Harmony>
           <Chord>
-            <lid>16</lid>
+            <lid>17</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>18</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>17</tpc2>
               </Note>
             </Chord>
           <Rest>
-            <lid>18</lid>
+            <lid>19</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>19</lid>
+            <lid>20</lid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
-            <lid>20</lid>
+            <lid>21</lid>
             </BarLine>
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>21</lid>
+            <lid>22</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>22</lid>
+            <lid>23</lid>
             </BarLine>
           </Measure>
         </Staff>

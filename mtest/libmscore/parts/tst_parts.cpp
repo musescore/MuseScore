@@ -133,7 +133,8 @@ void TestParts::createParts(Score* score)
       //
       QList<Part*> parts;
       parts.append(score->parts().at(0));
-      Score* nscore = ::createExcerpt(parts);
+      Score* nscore = new Score(score);
+      ::createExcerpt(nscore, parts);
       QVERIFY(nscore);
 
       nscore->setName(parts.front()->partName());
@@ -145,7 +146,8 @@ void TestParts::createParts(Score* score)
       //
       parts.clear();
       parts.append(score->parts().at(1));
-      nscore = ::createExcerpt(parts);
+      nscore = new Score(score);
+      ::createExcerpt(nscore, parts);
       QVERIFY(nscore);
 
       nscore->setName(parts.front()->partName());
