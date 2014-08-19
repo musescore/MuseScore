@@ -256,24 +256,26 @@ QString TempoText::accessibleInfo()
       {
       TDuration t;
       int len;
-      int x = findTempoDuration(text(), len, t);
-      QString dots;
+      int x = findTempoDuration(plainText(), len, t);
+      if (x != -1) {
+            QString dots;
 
-      switch (t.dots()) {
-            case 1: dots = tr("Dotted");
-                  break;
-            case 2: dots = tr("Double dotted");
-                  break;
-            case 3: dots = tr("Triple dotted");
-                  break;
-            default:
-                  dots = "";
-                  break;
-            }
+            switch (t.dots()) {
+                  case 1: dots = tr("Dotted");
+                        break;
+                  case 2: dots = tr("Double dotted");
+                        break;
+                  case 3: dots = tr("Triple dotted");
+                        break;
+                  default:
+                        dots = "";
+                        break;
+                  }
 
-      QString bpm = text().split(" = ").back();
-      if(x != -1)
+            QString bpm = plainText().split(" = ").back();
+
             return Element::accessibleInfo() + dots + " " + t.durationTypeUserName() + " " + tr("note = %1").arg(bpm);
+            }
       else
             return Text::accessibleInfo();
       }
