@@ -80,6 +80,9 @@
 #include "libmscore/image.h"
 #include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
+#include "libmscore/tiemap.h"
+#include "libmscore/measurebase.h"
+
 
 #include "thirdparty/qzip/qzipwriter_p.h"
 
@@ -2405,63 +2408,86 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
       }
 
 
+void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
+
+      Score * fscore = fm->score();
+
+      fscore->select(fm);
+      fscore->select(lm,SelectType::RANGE);
+      QString mimeType = fscore->selection().mimeType();
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, fscore->selection().mimeData());
+
+
+      Measure * last = 0;
+      last = static_cast<Measure*>(score->insertMeasure(Element::Type::MEASURE,0,false));
+
+      score->select(last);
+      score->startCmd();
+      score->cmdPaste(mimeData,0);
+      score->endCmd();
+}
+
+
 bool MuseScore::newLinearized(Score* old_score)
       {
 
       Score* score = old_score->clone();
 
-      Measure * m1 = score->firstMeasure();
-      //Measure * m2 = m1->nextMeasure();
+      // Remove all measures
+      score->select(score->firstMeasure());
+      score->select(score->lastMeasure());
+      score->startCmd();
+      score->cmdDeleteSelectedMeasures();
+      score->endCmd();
 
-      //Measure * mn = m1->clone();
+      
+      // Figure out repeat structure and traverse it
+      old_score->repeatList()->unwind();
+      old_score->setPlaylistDirty(true);
 
-      //mn->setTick(m2->tick());
+      foreach (const RepeatSegment* rs, *(old_score->repeatList()) ) {
+         int startTick  = rs->tick;
+         int endTick    = startTick + rs->len;
 
-      //score->fixTicks();
+         Measure * mf = old_score->tick2measure(startTick);
+         Measure * ml = ml;
 
-      //score->undo(new InsertMeasure(mn, searchMeasureBase(score,m2)));
+         for (ml=mf; ml; ml = ml->nextMeasure()) {
+            if (ml->tick() + ml->ticks() >= endTick) break;
+         }
+         appendCopiesOfMeasures(score,mf,ml);
+      }
 
-      score->insertMeasure(Element::Type::MEASURE,m1->nextMeasure(),true);
+      // Remove volta markers
+      for (const std::pair<int,Spanner*>& p : score->spannerMap().map()) {
+         Spanner* s = p.second;
+         if (s->type() != Element::Type::VOLTA) continue;
+         qDebug("VOLTA!");
+         score->deleteItem(s);
+      }
 
-      score->rebuildMidiMapping();
+      for(Measure * m = score->firstMeasure(); m; m=m->nextMeasure()) {
+         // Remove repeats
+         if (m->repeatFlags()!=Repeat::NONE) { 
+            m->setRepeatFlags(Repeat::NONE);
+            m->setRepeatCount(0);
+         }
+         // Remove coda/fine labels and jumps
+         for (auto e : *m->el())
+            if (e->type() == Element::Type::MARKER || 
+               e->type() == Element::Type::JUMP) {
+               //qDebug("JUMP? %s",qPrintable(e->userName()));
+               score->deleteItem(e);
+            }
+      }
+
+      // Postprocessing stuff
+      score->setLayoutAll(true);
+      score->fixTicks();
       score->doLayout();
       setCurrentScoreView(appendScore(score));
 
-      /*
-      // Preliminary work for score linearization
-      
-      score->repeatList()->unwind();
-
-      Measure* fm = score->firstMeasure();
-      if (!fm)
-            return false;
-
-
-
-      for (Segment* s = fm->first(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
-            qDebug("Tick %i",s->tick());
-         }
-
-
-      Measure* lastMeasure = 0;
-      foreach (const RepeatSegment* rs, *(score->repeatList()) ) {
-            int startTick  = rs->tick;
-            int endTick    = startTick + rs->len;
-            int tickOffset = rs->utick - rs->tick;
-            for (Measure* m = score->tick2measure(startTick); m; m = m->nextMeasure()) {
-                  if (lastMeasure && m->isRepeatMeasure(score->parts().first()) ) {
-                        int offset = m->tick() - lastMeasure->tick();
-                        qDebug("Rl:%i %i %i",m->tick(),m->tick()+tickOffset,offset);
-                        }
-                  else {
-                        lastMeasure = m;
-                        qDebug("R :%i %i",m->tick(),m->tick()+tickOffset);
-                        }
-                  if (m->tick() + m->ticks() >= endTick)
-                        break;
-                  }
-            }
-      */
       return true;
       }
 }
