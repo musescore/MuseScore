@@ -2535,7 +2535,7 @@ QString Text::accessibleInfo()
                   rez = Element::accessibleInfo();
                   break;
             }
-      return  rez + " " + text();
+      return  rez + " " + plainText();
       }
 }
 
