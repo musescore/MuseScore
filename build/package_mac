@@ -3,7 +3,7 @@ APPNAME=mscore
 LONG_NAME=MuseScore
 
 WORKING_DIRECTORY=applebuild
-BACKGROUND=build/musescore-dmg-background.png
+BACKGROUND=build/packaging/musescore-dmg-background.png
 APP_PATH=applebuild/${APPNAME}.app
  
 VOLNAME=${LONG_NAME}-${VERSION}

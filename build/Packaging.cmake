@@ -32,26 +32,22 @@ endif (MSCORE_UNSTABLE)
 SET(CPACK_NSIS_COMPRESSOR "/FINAL /SOLID lzma")
 
 IF(MINGW)
-    SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore")
+
+    SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore 2")
+    SET(CPACK_PACKAGE_NAME    "MuseScore")
     # There is a bug in NSI that does not handle full unix paths properly. Make
     # sure there is at least one set of four (4) backlasshes.
-    SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/mscore/data\\\\installerhead.bmp")
+    SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/build/packaging\\\\installer_head_nsis.bmp")
     SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\mscore.exe,0")
     SET(CPACK_NSIS_DISPLAY_NAME "MuseScore ${MUSESCORE_VERSION_FULL}")
     SET(CPACK_NSIS_HELP_LINK "http://www.musescore.org/")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://www.musescore.org/")
-    SET(CPACK_NSIS_CONTACT "ws@wschweer.de")
+    SET(CPACK_NSIS_CONTACT "info@musescore.org")
     SET(CPACK_NSIS_MODIFY_PATH OFF)
     SET(CPACK_STRIP_FILES "mscore.exe")
 
     # File types association:
-    SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build\\\\FileAssociation.nsh")
-
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-        Push \\\"ATENDATA\\\"
-        Push \\\"$INSTDIR\\\\share\\\\aten\\\"
-        Call WriteEnvStr
-    ")
+    SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
 
     SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
         \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\mscore.exe\\\"
@@ -61,6 +57,18 @@ IF(MINGW)
         \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
         \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed MuseScore File\\\"
     ")
+
+  file(TO_CMAKE_PATH $ENV{PROGRAMFILES} PROGRAMFILES)
+  SET(CPACK_WIX_ROOT "${PROGRAMFILES}/WiX Toolset v3.8")
+  SET(CPACK_WIX_UPGRADE_GUID "1409F702-2AF8-46C0-86BB-C0B40D8F3910")
+  SET(CPACK_WIX_LICENSE_RTF   "${PROJECT_SOURCE_DIR}/LICENSE.rtf")
+  SET(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/mscore/data/mscore.ico")
+  SET(CPACK_WIX_UI_BANNER "${PROJECT_SOURCE_DIR}/build/packaging/installer_banner_wix.bmp")
+  SET(CPACK_WIX_UI_DIALOG "${PROJECT_SOURCE_DIR}/build/packaging/installer_background_wix.bmp")
+
+  set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/packaging" ${CMAKE_MODULE_PATH}) # Use custom version of NSIS.InstallOptions.ini
+
+    
 ELSE(MINGW)
     SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/mscore/data/mscore.bmp")
     SET(CPACK_STRIP_FILES "mscore")
@@ -79,10 +87,10 @@ set(CPACK_DEBIAN_PACKAGE_PRIORITY     "optional")
 set(CPACK_DEBIAN_PACKAGE_RECOMMENDS   "")
 set(CPACK_DEBIAN_PACKAGE_SUGGESTS     "")
 
-set(CPACK_PACKAGE_CONTACT       "ws@schweer.de")
+set(CPACK_PACKAGE_CONTACT       "info@musescore.org")
 
 if (MINGW)
-  set(CPACK_GENERATOR             "NSIS")
+  set(CPACK_GENERATOR             "NSIS;WIX")
 else (MINGW)
    if (NOT APPLE)
      set(CPACK_GENERATOR             "DEB;TBZ2")

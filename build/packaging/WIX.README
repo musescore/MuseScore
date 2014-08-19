@@ -1,0 +1,3 @@
+The Wix.template.in file contains one absolute path to the exe file. It needs to be changed.
+It also contains the version number of MuseScore.
+Both values are variables at the beginning of the file.
