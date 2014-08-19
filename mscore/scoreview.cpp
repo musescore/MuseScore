@@ -1405,6 +1405,7 @@ void ScoreView::moveCursor()
       double x        = segment->canvasPos().x();
       double y        = system->staffYpage(staffIdx) + system->page()->pos().y();
       double _spatium = score()->spatium();
+      x              -= qMin(segment->pos().x() - score()->styleD(StyleIdx::barNoteDistance) * _spatium, 0.0);
 
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
