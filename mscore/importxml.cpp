@@ -2312,7 +2312,8 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                      || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::Type::SHARP   && !accTmp.value(ln))) {
                                      nt->accidental()->setRole(Accidental::Role::USER);
                                      }
-                               else if  (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() != Accidental::Type::NATURAL) {
+                               else if  ((nt->accidental()->accidentalType() > Accidental::Type::NATURAL) && (nt->accidental()->accidentalType() < Accidental::Type::END)) { // microtonal accidental
+                                     alter = 0;
                                      nt->accidental()->setRole(Accidental::Role::USER);
                                      accTmp.replace(ln, false);
                                      }
@@ -3991,8 +3992,8 @@ static Accidental::Type convertAccidental(QString mxmlName)
       map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
       map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
 
-      map["slash-quarter-sharp"] = Accidental::Type::MIRRORED_FLAT_SLASH;
-      map["slash-sharp"] = Accidental::Type::SHARP_SLASH;
+      map["slash-quarter-sharp"] = Accidental::Type::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
+      map["slash-sharp"] = Accidental::Type::SHARP_SLASH2; // SHARP_SLASH; ?
       map["slash-flat"] = Accidental::Type::FLAT_SLASH;
       map["double-slash-flat"] = Accidental::Type::FLAT_SLASH2;
 
