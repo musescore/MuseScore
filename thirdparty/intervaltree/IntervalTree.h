@@ -21,17 +21,17 @@ public:
     { }
 };
 
-template <class T, typename K = int>
+template <class T, typename K>
 int intervalStart(const Interval<T,K>& i) {
     return i.start;
 }
 
-template <class T, typename K = int>
+template <class T, typename K>
 int intervalStop(const Interval<T,K>& i) {
     return i.stop;
 }
 
-template <class T, typename K = int>
+template <class T, typename K>
 ostream& operator<<(ostream& out, Interval<T,K>& i) {
     out << "Interval(" << i.start << ", " << i.stop << "): " << i.value;
     return out;
@@ -112,12 +112,13 @@ public:
     {
 
         --depth;
+        IntervalStartSorter<T,K> intervalStartSorter;
         if (depth == 0 || (ivals.size() < minbucket && ivals.size() < maxbucket)) {
+            sort(ivals.begin(), ivals.end(), intervalStartSorter);
             intervals = ivals;
         } else {
             if (leftextent == 0 && rightextent == 0) {
                 // sort intervals by start
-                IntervalStartSorter<T,K> intervalStartSorter;
                 sort(ivals.begin(), ivals.end(), intervalStartSorter);
             }
 
