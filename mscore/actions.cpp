@@ -2363,7 +2363,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "plugin-creator",
          Qt::ApplicationShortcut,
@@ -2371,7 +2371,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "plugin-manager",
          Qt::ApplicationShortcut,
