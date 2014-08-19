@@ -37,7 +37,11 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QComboBox" name="instrumentGenreFilter"/>
+        <widget class="QComboBox" name="instrumentGenreFilter">
+         <property name="accessibleName">
+          <string>Instrument Genre Filter</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QTreeWidget" name="instrumentList">
@@ -46,6 +50,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Instrument list</string>
          </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
@@ -85,6 +92,9 @@
            <property name="focusPolicy">
             <enum>Qt::StrongFocus</enum>
            </property>
+           <property name="accessibleName">
+            <string>Search</string>
+           </property>
            <property name="inputMask">
             <string notr="true"/>
            </property>
@@ -95,6 +105,12 @@
          </item>
          <item>
           <widget class="QPushButton" name="clearSearch">
+           <property name="accessibleName">
+            <string>Clear</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Clear Search box</string>
+           </property>
            <property name="text">
             <string>Clear</string>
            </property>
@@ -145,14 +161,11 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text">
+         <property name="accessibleName">
           <string>Add</string>
          </property>
-         <property name="autoDefault">
-          <bool>true</bool>
-         </property>
-         <property name="default">
-          <bool>true</bool>
+         <property name="text">
+          <string>Add</string>
          </property>
         </widget>
        </item>
@@ -163,6 +176,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Remove</string>
          </property>
          <property name="text">
           <string>Remove</string>
@@ -190,6 +206,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>Up</string>
+         </property>
          <property name="text">
           <string>Up</string>
          </property>
@@ -202,6 +221,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Down</string>
          </property>
          <property name="text">
           <string>Down</string>
@@ -229,6 +251,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>Add Staff</string>
+         </property>
          <property name="text">
           <string>Add Staff</string>
          </property>
@@ -241,6 +266,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Add Linked Staff</string>
          </property>
          <property name="text">
           <string>Add Linked Staff</string>
@@ -268,6 +296,9 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="accessibleName">
+       <string>Partitur List</string>
       </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
@@ -315,9 +346,10 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>instrumentGenreFilter</tabstop>
+  <tabstop>instrumentList</tabstop>
   <tabstop>search</tabstop>
   <tabstop>clearSearch</tabstop>
-  <tabstop>instrumentList</tabstop>
   <tabstop>addButton</tabstop>
   <tabstop>removeButton</tabstop>
   <tabstop>upButton</tabstop>
