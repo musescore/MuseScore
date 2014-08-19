@@ -3482,7 +3482,7 @@ ChordRest* Score::findCRinStaff(int tick, int track) const
       {
       Measure* m = tick2measureMM(tick);
       if (!m) {
-            qDebug("findCR: no measure for tick %d", tick);
+            qDebug("findCRinStaff: no measure for tick %d", tick);
             return nullptr;
             }
       // attach to first rest all spanner when mmRest

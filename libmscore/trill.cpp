@@ -305,6 +305,8 @@ void Trill::layout()
       SLine::layout();
       if (score() == gscore)
             return;
+      if (spannerSegments().empty())
+            return;
       TrillSegment* ls = static_cast<TrillSegment*>(frontSegment());
       //
       // special case:
@@ -329,6 +331,8 @@ void Trill::layout()
                   ls->layout();
                   }
             }
+      if (spannerSegments().empty())
+            qDebug("Trill: no segments");
       if (_accidental)
             _accidental->setParent(ls);
       }
