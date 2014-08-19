@@ -155,7 +155,7 @@
           <item>
            <widget class="QPushButton" name="updateTranslation">
             <property name="text">
-             <string>Update translations and get new languages</string>
+             <string>Update translations</string>
             </property>
            </widget>
           </item>
