@@ -808,6 +808,8 @@ Element* ChordRest::drop(const DropData& data)
                   NoteVal nval;
                   nval.pitch = note->pitch();
                   nval.headGroup = note->headGroup();
+                  nval.fret = note->fret();
+                  nval.string = note->string();
                   score()->setNoteRest(segment(), track(), nval, data.duration, MScore::Direction::AUTO);
                   delete e;
                   }
