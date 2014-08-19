@@ -346,7 +346,7 @@
         <item>
          <widget class="QCheckBox" name="drumset" >
           <property name="text" >
-           <string>drumset</string>
+           <string>Drumset</string>
           </property>
          </widget>
         </item>
