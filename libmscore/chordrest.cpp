@@ -1251,16 +1251,16 @@ QString ChordRest::accessibleExtraInfo()
       foreach (Element* l, lyricsList())
             rez = rez + " " + l->screenReaderInfo();
 
-      if(segment()) {
+      if (segment()) {
             foreach (Element* e, segment()->annotations()) {
                   if (e->staffIdx() == staffIdx() )
                         rez = rez + " " + e->screenReaderInfo();
                   }
 
-            SpannerMap smap = score()->spannerMap();
-            std::vector< ::Interval<Spanner*> > spanners = smap.findOverlapping(tick(), tick());
-            for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
-                  ::Interval<Spanner*> interval = *i;
+            SpannerMap& smap = score()->spannerMap();
+            auto spanners = smap.findOverlapping(tick(), tick());
+            for (auto i = spanners.begin(); i < spanners.end(); i++) {
+                  const ::Interval<Spanner*> interval = *i;
                   Spanner* s = interval.value;
                   if (s->type() == Element::Type::VOLTA || //voltas are added for barlines
                       s->type() == Element::Type::TIE    ) //ties are added in notes
@@ -1268,18 +1268,18 @@ QString ChordRest::accessibleExtraInfo()
 
                   Segment* seg = 0;
                   if (s->type() == Element::Type::SLUR) {
-                        if(s->tick() == tick() && s->track() == track())
+                        if (s->tick() == tick() && s->track() == track())
                               rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
-                        if(s->tick2() == tick() && s->track2() == track())
+                        if (s->tick2() == tick() && s->track2() == track())
                               rez += " " + tr("End of %1").arg(s->screenReaderInfo());
                         }
                   else  {
-                        if(s->tick() == tick() && s->staffIdx() == staffIdx())
+                        if (s->tick() == tick() && s->staffIdx() == staffIdx())
                               rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
                         seg = segment()->next1MM(Segment::Type::ChordRest);
                         if (!seg)
                               continue;
-                        if(s->tick2() == seg->tick() && s->staffIdx() == staffIdx())
+                        if (s->tick2() == seg->tick() && s->staffIdx() == staffIdx())
                               rez += " " + tr("End of %1").arg(s->screenReaderInfo());
                         }
                   }
