@@ -47,6 +47,7 @@
 #include "libmscore/volta.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/fingering.h"
+#include "libmscore/notedot.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -336,7 +337,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                          slur->setTick2(cr2->tick());
                          slur->setTrack(cr1->track());
                          slur->setTrack2(cr2->track());
-                         slur->setParent(cr1);
+                         // this case specifies only two-note slurs, don't set a parent
                          score->undoAddElement(slur);
                          }
                   }
@@ -734,11 +735,8 @@ void GuitarPro4::read(QFile* fp)
                               cr = new Rest(score);
                               }
                         else {
-                              if(!segment->cr(track)) {
+                              if(!segment->cr(track))
                                     cr = new Chord(score);
-                                    Chord* chord = static_cast<Chord*>(cr);
-                                    applyBeatEffects(chord, beatEffects);
-                                    }
                               }
 
                         cr->setTrack(track);
@@ -780,12 +778,24 @@ void GuitarPro4::read(QFile* fp)
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
+                                    // apply dotted notes to the note
+                                    if (dotted) {
+                                          // there is at most one dotted note in this guitar pro version
+                                          NoteDot* dot = new NoteDot(score);
+                                          dot->setIdx(0);
+                                          dot->setParent(note);
+                                          dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
+                                          dot->setVisible(true);
+                                          note->add(dot);
+                                          }
                                     static_cast<Chord*>(cr)->add(note);
 
                                     hasSlur = readNote(6-i, staffIdx, note);
                                     note->setTpcFromPitch();
                                     }
                               }
+                        if (cr && (cr->type() == Element::Type::CHORD))
+                              applyBeatEffects(static_cast<Chord*>(cr), beatEffects);
 
                         // if we see that a tied note has been constructed do not create the tie
                         if (slides[track] == -2) {
