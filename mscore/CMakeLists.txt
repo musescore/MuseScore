@@ -443,6 +443,10 @@ if (MINGW)
       ${CROSSQT}/plugins/printsupport/windowsprintersupport.dll
       DESTINATION bin/printsupport)
 
+    install(FILES
+      ${CROSSQT}/plugins/accessible/qtaccessiblewidgets.dll
+      DESTINATION bin/accessible)
+
     install(DIRECTORY
       ${CROSSQT}/qml
       DESTINATION .
