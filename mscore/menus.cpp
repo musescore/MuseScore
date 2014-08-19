@@ -547,6 +547,8 @@ Palette* MuseScore::newBreathPalette()
       sp->setDrawGrid(true);
 
       for (int i = 0; i < 4; ++i) {
+      	if (i == 1) // do not add two similar breaths. //TODO add support for other break mark
+                  continue;
             Breath* a = new Breath(gscore);
             a->setBreathType(i);
             if (i < 2)
