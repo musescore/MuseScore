@@ -79,7 +79,7 @@
      <item row="1" column="1">
       <widget class="QComboBox" name="hairpinType">
        <property name="accessibleName">
-        <string>Tyoe</string>
+        <string>Type</string>
        </property>
        <item>
         <property name="text">

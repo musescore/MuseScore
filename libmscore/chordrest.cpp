@@ -941,7 +941,7 @@ QString ChordRest::durationUserName()
                         tupletType += " " + tr("Quadruplet");
                         break;
                   case 5:
-                        tupletType += " " + tr("Quinplet");
+                        tupletType += " " + tr("Quintuplet");
                         break;
                   case 6:
                         tupletType += " " + tr("Sextuplet");
@@ -953,7 +953,7 @@ QString ChordRest::durationUserName()
                         tupletType += " " + tr("Octuplet");
                         break;
                   case 9:
-                        tupletType += " " + tr("Nontuplet");
+                        tupletType += " " + tr("Nonuplet");
                         break;
                   default:
                         tupletType += " " + tr("Custom Tuplet");

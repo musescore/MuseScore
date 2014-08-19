@@ -525,7 +525,7 @@ QString TDuration::durationTypeUserName() const
             case DurationType::V_WHOLE:     s = QObject::tr("Whole"  ); break;
             case DurationType::V_HALF:      s = QObject::tr("Half"   ); break;
             case DurationType::V_QUARTER:   s = QObject::tr("Quarter"); break;
-            case DurationType::V_EIGHTH:     s = QObject::tr("Eighth" ); break;
+            case DurationType::V_EIGHTH:    s = QObject::tr("Eighth" ); break;
             case DurationType::V_16TH:      s = QObject::tr("16th"   ); break;
             case DurationType::V_32ND:      s = QObject::tr("32nd"   ); break;
             case DurationType::V_64TH:      s = QObject::tr("64th"   ); break;
