@@ -54,9 +54,21 @@ LineProperties::LineProperties(TextLine* l, QWidget* parent)
       otl = l;
       tl  = l->clone();
 
-      beginText->setText(otl->beginText());
-      continueText->setText(otl->continueText());
-      endText->setText(otl->endText());
+      Text* t = otl->beginTextElement();
+      if (t) {
+            t->layout();
+            beginText->setText(t->plainText());
+            }
+      t = otl->continueTextElement();
+      if (t) {
+            t->layout();
+            continueText->setText(t->plainText());
+            }
+      t = otl->endTextElement();
+      if (t) {
+            t->layout();
+            endText->setText(t->plainText());
+            }
 
       setTextPlace(otl->beginTextPlace(),    beginTextPlace);
       setTextPlace(otl->continueTextPlace(), continueTextPlace);
