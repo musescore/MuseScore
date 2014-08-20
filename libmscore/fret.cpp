@@ -585,7 +585,7 @@ void FretDiagram::writeMusicXML(Xml& xml) const
                   if (_marker[i] != 88) {
                         xml.stag("frame-note");
                         xml.tag("string", strings() - i);
-                        xml.tag("fret", _dots[i]);
+                        xml.tag("fret", _dots[i]+fretOffset() );
                         xml.etag();
                   }
             }

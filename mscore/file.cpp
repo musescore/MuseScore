@@ -2412,8 +2412,8 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
 
       Score * fscore = fm->score();
 
-      fscore->select(fm);
-      fscore->select(lm,SelectType::RANGE);
+      fscore->select(fm,SelectType::SINGLE,0);
+      fscore->select(lm,SelectType::RANGE,score->nstaves()-1);
       QString mimeType = fscore->selection().mimeType();
       QMimeData* mimeData = new QMimeData;
       mimeData->setData(mimeType, fscore->selection().mimeData());
@@ -2442,13 +2442,17 @@ bool MuseScore::newLinearized(Score* old_score)
       score->endCmd();
 
       
+      //old_score->deselectAll(); 
       // Figure out repeat structure and traverse it
       old_score->repeatList()->unwind();
       old_score->setPlaylistDirty(true);
 
+      //int count=0;
       foreach (const RepeatSegment* rs, *(old_score->repeatList()) ) {
          int startTick  = rs->tick;
          int endTick    = startTick + rs->len;
+
+         qDebug("Segment %i-%i",startTick,endTick);
 
          Measure * mf = old_score->tick2measure(startTick);
          Measure * ml = ml;
@@ -2457,14 +2461,18 @@ bool MuseScore::newLinearized(Score* old_score)
             if (ml->tick() + ml->ticks() >= endTick) break;
          }
          appendCopiesOfMeasures(score,mf,ml);
+
+         //count++;
+         //if (count==4) break;
       }
 
+      
       // Remove volta markers
       for (const std::pair<int,Spanner*>& p : score->spannerMap().map()) {
          Spanner* s = p.second;
          if (s->type() != Element::Type::VOLTA) continue;
-         qDebug("VOLTA!");
-         score->deleteItem(s);
+         //qDebug("VOLTA!");
+         score->removeSpanner(s);
       }
 
       for(Measure * m = score->firstMeasure(); m; m=m->nextMeasure()) {
@@ -2481,6 +2489,9 @@ bool MuseScore::newLinearized(Score* old_score)
                score->deleteItem(e);
             }
       }
+      
+      // score->deselectAll();
+      //old_score->deselectAll();
 
       // Postprocessing stuff
       score->setLayoutAll(true);
