@@ -412,6 +412,10 @@
     <key>delete</key>
     <seq>Del</seq>
     </SC>
+    <SC>
+      <key>delete-single-element</key>
+      <seq>Shift+Del</seq>
+      </SC>
   <SC>
     <key>delete-measures</key>
     <seq>Ctrl+Del</seq>

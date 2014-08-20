@@ -1353,7 +1353,7 @@ void Score::cmdFlip()
 //   deleteItem
 //---------------------------------------------------------
 
-void Score::deleteItem(Element* el)
+void Score::deleteItem(Element* el, bool inOtherStaves)
       {
       if (!el)
             return;
@@ -1373,9 +1373,23 @@ void Score::deleteItem(Element* el)
                   break;
 
             case Element::Type::KEYSIG:
-                  undoRemoveElement(el);
+                  {
+                  if (!inOtherStaves) {
+                        undoRemoveElement(el);
+                        }
+                  else {
+                        Segment* seg = static_cast<Segment*>(el->parent());
+                        for (int staffIdx = 0; staffIdx < staves().size(); staffIdx++) {
+                              Element* el = seg->element(staffIdx*VOICES);
+                              if (el) {
+                                    undoRemoveElement(el);
+                                    }
+                              }
+                        }
+
                   cmdUpdateNotes();
                   break;
+                  }
 
             case Element::Type::NOTE:
                   {
@@ -1682,6 +1696,17 @@ void Score::cmdDeleteSelectedMeasures()
 
       select(0, SelectType::SINGLE, 0);
       _is.setSegment(0);        // invalidate position
+      }
+
+//---------------------------------------------------------
+//   cmdDeleteSelectedElement
+//---------------------------------------------------------
+
+void Score::cmdDeleteSelectedElement()
+      {
+      if (!selection().isSingle()) return;
+      Element* el = selection().element();
+      deleteItem(el, false);
       }
 
 //---------------------------------------------------------

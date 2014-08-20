@@ -952,6 +952,13 @@ Shortcut Shortcut::sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
          ShortcutFlags::A_CMD,
+         "delete-single-element",
+         QT_TRANSLATE_NOOP("action","Delete single element")
+    ),
+      Shortcut(
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
          "full-measure-rest",
          QT_TRANSLATE_NOOP("action","Full Measure Rest"),
          QT_TRANSLATE_NOOP("action","Full Measure Rest"),

@@ -572,10 +572,11 @@ class Score : public QObject {
       void addPitch(int pitch, bool addFlag);
       Note* addNote(Chord*, NoteVal& noteVal);
 
-      void deleteItem(Element*);
+      void deleteItem(Element*, bool inOtherStaves = true);
       void cmdDeleteSelectedMeasures();
       void cmdDeleteSelection();
       void cmdFullMeasureRest();
+      void cmdDeleteSelectedElement();
 
       void putNote(const QPointF& pos, bool replace);
       void putNote(const Position& pos, bool replace);
