@@ -3168,11 +3168,9 @@ void Score::cmdSelectAll()
       {
       if (_measures.size() == 0)
             return;
-      _selection.setState(SelState::RANGE);
-      Segment* s1 = firstMeasureMM()->first();
-      Segment* s2 = lastMeasureMM()->last();
-      _selection.setRange(s1, s2, 0, nstaves());
-      _selection.updateSelectedElements();
+      deselectAll();
+      selectRange(firstMeasureMM(), 0);
+      selectRange(lastMeasureMM(), nstaves() - 1);
       setUpdateAll(true);
       end();
       }
