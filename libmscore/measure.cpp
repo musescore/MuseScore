@@ -830,8 +830,11 @@ void Measure::add(Element* el)
                   if (s) {
                         if (st == Segment::Type::ChordRest) {
                               while (s && s->segmentType() != st && s->tick() == t) {
-                                    if (s->segmentType() == Segment::Type::EndBarLine)
+                                    if (s->segmentType() == Segment::Type::EndBarLine
+                                                || s->segmentType() == Segment::Type::Breath // place chord _before_ breath
+                                                ) {
                                           break;
+                                          }
                                     s = s->next();
                                     }
                               }
