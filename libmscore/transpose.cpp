@@ -346,6 +346,11 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
 
       Segment* s1 = _selection.startSegment();
+      // if range starts with first CR of measure
+      // then start looping from very beginning of measure
+      // so we include key signature and can transpose that if requested
+      if (!s1->rtick())
+            s1 = s1->measure()->first();
       Segment* s2 = _selection.endSegment();
       for (Segment* segment = s1; segment && segment != s2; segment = segment->next1()) {
             for (int st : tracks) {
