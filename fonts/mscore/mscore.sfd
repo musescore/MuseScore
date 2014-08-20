@@ -20,7 +20,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1403170689
-ModificationTime: 1408533967
+ModificationTime: 1408572516
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
@@ -63,7 +63,7 @@ NameList: Adobe Glyph List
 DisplaySize: -72
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 60270 10 8
+WinInfo: 60300 10 8
 BeginPrivate: 7
 BlueValues 21 [0 0 256 257 478 478]
 OtherBlues 11 [-141 -141]
@@ -12879,20 +12879,20 @@ Encoding: 60334 60334 278
 Width: 128
 VWidth: 0
 Flags: W
-HStem: 36 128<25.4912 102.509>
-VStem: 0 128<61.4912 138.509>
+HStem: 64 128<25.4912 102.509>
+VStem: 0 128<89.4912 166.509>
 LayerCount: 2
 Fore
 SplineSet
-0 100 m 0
- 0 111 8 124 24 140 c 0
- 40 156 53 164 64 164 c 0
- 75 164 88 156 104 140 c 0
- 120 124 128 111 128 100 c 0
- 128 89 120 76 104 60 c 0
- 88 44 75 36 64 36 c 0
- 53 36 40 44 24 60 c 0
- 8 76 0 89 0 100 c 0
+24 168 m 0
+ 40 184 53 192 64 192 c 0
+ 75 192 88 184 104 168 c 0
+ 120 152 128 139 128 128 c 0
+ 128 117 120 104 104 88 c 0
+ 88 72 75 64 64 64 c 0
+ 53 64 40 72 24 88 c 0
+ 8 104 0 117 0 128 c 0
+ 0 139 8 152 24 168 c 0
 EndSplineSet
 EndChar
 
@@ -12900,7 +12900,9 @@ StartChar: uniEBAF
 Encoding: 60335 60335 279
 Width: 328
 VWidth: 0
-Flags: HW
+Flags: W
+HStem: 64 128<25.4912 102.509 225.491 302.509>
+VStem: 0 128<89.4912 166.509> 200 128<89.4912 166.509>
 LayerCount: 2
 Fore
 Refer: 278 60334 N 1 0 0 1 0 0 2
@@ -12911,7 +12913,10 @@ StartChar: uniEBB0
 Encoding: 60336 60336 280
 Width: 428
 VWidth: 0
-Flags: HW
+Flags: W
+HStem: 64 128<25.4912 102.509 175.491 252.509 325.491 402.509>
+VStem: 0 128<89.4912 166.509> 150 128<89.4912 166.509> 300 128<89.4912 166.509>
+CounterMasks: 1 70
 LayerCount: 2
 Fore
 Refer: 278 60334 N 1 0 0 1 0 0 2
@@ -12921,18 +12926,19 @@ EndChar
 
 StartChar: uniEBAD
 Encoding: 60333 60333 281
-Width: 75
+Width: 48
 VWidth: 0
-Flags: MW
-VStem: 0 75<0 200>
+Flags: W
+HStem: 28 200<0 48>
+VStem: 0 48<28 228>
 LayerCount: 2
 Fore
 SplineSet
-0 200 m 25
- 75 200 l 25
- 75 0 l 25
- 0 0 l 25
- 0 200 l 25
+0 228 m 25
+ 48 228 l 25
+ 48 28 l 25
+ 0 28 l 25
+ 0 228 l 25
 EndSplineSet
 EndChar
 EndChars
