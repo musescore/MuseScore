@@ -965,6 +965,8 @@ class Score : public QObject {
       void removeSpanner(Spanner*);
       void addSpanner(Spanner*);
 
+      Hairpin* addHairpin(bool crescendo, int tickStart, int ticks, int track);
+
       ChordRest* findCR(int tick, int track) const;
       ChordRest* findCRinStaff(int tick, int track) const;
       void layoutSpanner();

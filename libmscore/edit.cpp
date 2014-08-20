@@ -1900,7 +1900,7 @@ void Score::cmdFullMeasureRest()
 
 //---------------------------------------------------------
 //   addLyrics
-//    called from Keyboard Accelerator & menue
+//    called from Keyboard Accelerator & menu
 //---------------------------------------------------------
 
 Lyrics* Score::addLyrics()
@@ -1934,6 +1934,20 @@ Lyrics* Score::addLyrics()
       undoAddElement(lyrics);
       select(lyrics, SelectType::SINGLE, 0);
       return lyrics;
+      }
+
+//---------------------------------------------------------
+//   addLyrics
+//---------------------------------------------------------
+Hairpin* Score::addHairpin(bool decrescendo, int tickStart, int ticks, int track)
+      {
+      Hairpin* pin = new Hairpin(this);
+      pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESCENDO : Hairpin::Type::CRESCENDO);
+      pin->setTrack(track);
+      pin->setTick(tickStart);
+      pin->setTicks(ticks);
+      undoAddElement(pin);
+      return pin;
       }
 
 //---------------------------------------------------------
