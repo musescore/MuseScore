@@ -4152,8 +4152,8 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
       Hairpin* pin = new Hairpin(_score);
       pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESCENDO : Hairpin::Type::CRESCENDO);
       pin->setTrack(cr1->track());
-      pin->setTick(cr1->segment()->tick());
-      pin->setTick2(cr2->segment()->tick());
+      pin->setTick(cr1->tick());
+      pin->setTick2(cr2->tick() + cr2->actualTicks());
       _score->undoAddElement(pin);
       pin->layout();
       _score->endCmd();
