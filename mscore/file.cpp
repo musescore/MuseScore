@@ -2433,21 +2433,13 @@ bool MuseScore::newLinearized(Score* old_score)
       {
 
       Score* score = old_score->clone();
-
-      // Remove all measures
-      score->select(score->firstMeasure());
-      score->select(score->lastMeasure());
-      score->startCmd();
-      score->cmdDeleteSelectedMeasures();
-      score->endCmd();
-
       
       //old_score->deselectAll(); 
       // Figure out repeat structure and traverse it
       old_score->repeatList()->unwind();
       old_score->setPlaylistDirty(true);
-
-      //int count=0;
+/*
+      bool copy=false;
       foreach (const RepeatSegment* rs, *(old_score->repeatList()) ) {
          int startTick  = rs->tick;
          int endTick    = startTick + rs->len;
@@ -2457,15 +2449,36 @@ bool MuseScore::newLinearized(Score* old_score)
          Measure * mf = old_score->tick2measure(startTick);
          Measure * ml = ml;
 
+         if (count==0 && startTick==0) ml = score->tick2measure(startTick);
+
          for (ml=mf; ml; ml = ml->nextMeasure()) {
             if (ml->tick() + ml->ticks() >= endTick) break;
          }
-         appendCopiesOfMeasures(score,mf,ml);
 
-         //count++;
-         //if (count==4) break;
+         // First segment can be done in-place
+         if (!copy) {
+            if (startTick==0) // keep first segment in place
+               ml = ml?ml->nextMeasure():ml;
+            else { // remove everything and copy things over
+               copy=true;
+               ml = score->firstMeasure();
+            }
+
+            // Remove all measures past the first jump
+            if (ml) {
+               score->select(ml);
+               score->select(score->lastMeasure());
+               score->startCmd();
+               score->cmdDeleteSelectedMeasures();
+               score->endCmd(); 
+            }
+         }
+         
+         if (copy) appendCopiesOfMeasures(score,mf,ml);
+
+         copy = true;;
       }
-
+*/
       
       // Remove volta markers
       for (const std::pair<int,Spanner*>& p : score->spannerMap().map()) {
