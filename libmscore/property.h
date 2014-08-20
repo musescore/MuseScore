@@ -202,6 +202,8 @@ enum class P_ID : unsigned char {
       SLUR_UOFF3,
       SLUR_UOFF4,
 
+      STAFF_MOVE,
+
       END
       };
 

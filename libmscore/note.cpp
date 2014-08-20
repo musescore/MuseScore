@@ -1760,7 +1760,7 @@ QString Note::noteTypeUserName()
                   return tr("Grace note after");
             case NoteType::GRACE4:
             case NoteType::GRACE16:
-            case NoteType::GRACE32:            
+            case NoteType::GRACE32:
                   return tr("Grace note before");
             case NoteType::INVALID:
                   return tr("Invalid note");
@@ -2038,6 +2038,10 @@ void Note::updateAccidental(AccidentalState* as)
 
 void Note::updateRelLine(int relLine, bool undoable)
       {
+      int idx = staffIdx() + chord()->staffMove();
+      if (idx < 0 && chord()->staffMove())                    // can happen if a staff is removed
+            chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
+
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
       int line = relStep(relLine, clef);
