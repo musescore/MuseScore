@@ -1250,6 +1250,7 @@ qDebug("createRevision");
 void Score::writeSegments(Xml& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
+      QList<Spanner*> span;
       for (int track = strack; track < etrack; ++track) {
             if (!xml.canWriteVoice(track))
                   continue;
@@ -1300,13 +1301,19 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                     continue;
 
                               if (s->track() == track) {
-                                    if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
+                                    bool end = false;
+                                    if (s->anchor() == Spanner::Anchor::CHORD || s->anchor() == Spanner::Anchor::NOTE)
+                                          end = s->tick2() < endTick;
+                                    else
+                                          end = s->tick2() <= endTick;
+                                    if (s->tick() == segment->tick() && (!clip || end)) {
                                           if (needTick) {
                                                 xml.tag("tick", segment->tick() - xml.tickDiff);
                                                 xml.curTick = segment->tick();
                                                 needTick = false;
                                                 }
                                           s->write(xml);
+                                          span.append(s);
                                           }
                                     }
                               if ((s->tick2() == segment->tick())
@@ -1320,6 +1327,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                           needTick = false;
                                           }
                                     xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+                                    span.removeAll(s);
                                     }
                               }
                         }
@@ -1361,6 +1369,10 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   segment->write(xml);    // write only once
                   }
             }
+      
+      for (Spanner* s : span) {
+      	xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+      	}
       }
 
 //---------------------------------------------------------

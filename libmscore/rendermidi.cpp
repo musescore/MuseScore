@@ -708,7 +708,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                   }
             else if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
                   int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
-                  if (!t)
+                  if (t == 0) // avoid crash on very short tremolo
                         t = 1;
                   int n = chord->durationTicks() / t;
                   int l = 1000 / n;

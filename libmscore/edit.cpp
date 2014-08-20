@@ -1235,7 +1235,7 @@ void Score::cmdAddOttava(Ottava::Type type)
 
       ottava->setTrack(cr1->track());
       ottava->setTick(cr1->tick());
-      ottava->setTick2(cr2->tick());
+      ottava->setTick2(cr2->tick() + cr2->actualTicks());
       undoAddElement(ottava);
       if (!noteEntryMode())
             select(ottava, SelectType::SINGLE, 0);

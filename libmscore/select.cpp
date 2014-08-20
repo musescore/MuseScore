@@ -471,7 +471,7 @@ void Selection::updateSelectedElements()
                       if (canSelect(sp->startChord()) && canSelect(sp->endChord()))
                         appendFiltered(sp); // slur with start or end in range selection
             }
-            else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
+            else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick))
                   appendFiltered(sp); // spanner with start and end in range selection
             }
       update();
