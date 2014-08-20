@@ -833,6 +833,9 @@ void InstrumentsWidget::on_linkedButton_clicked()
 
 void InstrumentsWidget::on_search_textChanged(const QString &searchPhrase)
       {
+      if (searchPhrase.isEmpty())
+            return;
+
       filterInstruments(instrumentList, searchPhrase);
       instrumentGenreFilter->blockSignals(true);
       instrumentGenreFilter->setCurrentIndex(0);
@@ -846,7 +849,8 @@ void InstrumentsWidget::on_search_textChanged(const QString &searchPhrase)
 void InstrumentsWidget::on_clearSearch_clicked()
       {
       search->clear();
-      filterInstruments (instrumentList);
+      QString genre = instrumentGenreFilter->currentData().toString();
+      filterInstrumentsByGenre(instrumentList, genre);
       }
 
 //---------------------------------------------------------
