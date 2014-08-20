@@ -4153,9 +4153,7 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
                   if (!cr1)
                        continue;
                   if (cr2 == 0)
-                       cr2 = nextChordRest(cr1);
-                  if (cr2 == 0)
-                       continue;
+                       cr2 = cr1;
                   _score->addHairpin(decrescendo, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
                   }
             _score->endCmd();
@@ -4168,9 +4166,7 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
             if (!cr1)
                   return;
             if (cr2 == 0)
-                  cr2 = nextChordRest(cr1);
-            if (cr2 == 0)
-                  return;
+                  cr2 = cr1;
 
             _score->startCmd();
             Hairpin* pin = _score->addHairpin(decrescendo, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());

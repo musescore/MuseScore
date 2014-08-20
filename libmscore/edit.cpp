@@ -1940,13 +1940,13 @@ Lyrics* Score::addLyrics()
 //   addHairpin
 //---------------------------------------------------------
 
-Hairpin* Score::addHairpin(bool decrescendo, int tickStart, int ticks, int track)
+Hairpin* Score::addHairpin(bool decrescendo, int tickStart, int tickEnd, int track)
       {
       Hairpin* pin = new Hairpin(this);
       pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESCENDO : Hairpin::Type::CRESCENDO);
       pin->setTrack(track);
       pin->setTick(tickStart);
-      pin->setTicks(ticks);
+      pin->setTick2(tickEnd);
       undoAddElement(pin);
       return pin;
       }
