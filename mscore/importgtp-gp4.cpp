@@ -281,7 +281,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                         gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                         gn->setGhost(true);
                         }
-                  gn->setFret((fret != 255)?fret:0);
+                  if (fret == 255)
+                        fret = 0;
+                  gn->setFret(fret);
                   gn->setString(string);
                   int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret);
                   gn->setPitch(grace_pitch);
@@ -401,6 +403,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
+      // dead note represented as high numbers - fix to zero
+      if (fretNumber > 99 || fretNumber == -1)
+            fretNumber = 0;
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
       note->setFret(fretNumber);
       note->setString(string);
