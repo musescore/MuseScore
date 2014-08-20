@@ -1369,10 +1369,12 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   segment->write(xml);    // write only once
                   }
             }
-      
-      for (Spanner* s : span) {
-      	xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
-      	}
+      if (clip) {
+            for (Spanner* s : span) {
+                  if (s->type() != Element::Type::SLUR)
+                        xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+                  }
+            }
       }
 
 //---------------------------------------------------------
