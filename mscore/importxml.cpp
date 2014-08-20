@@ -2312,7 +2312,8 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                      || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::Type::SHARP   && !accTmp.value(ln))) {
                                      nt->accidental()->setRole(Accidental::Role::USER);
                                      }
-                               else if  (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() != Accidental::Type::NATURAL) {
+                               else if  ((nt->accidental()->accidentalType() > Accidental::Type::NATURAL) && (nt->accidental()->accidentalType() < Accidental::Type::END)) { // microtonal accidental
+                                     alter = 0;
                                      nt->accidental()->setRole(Accidental::Role::USER);
                                      accTmp.replace(ln, false);
                                      }
@@ -3977,7 +3978,7 @@ static Accidental::Type convertAccidental(QString mxmlName)
       map["sharp-sharp"] = Accidental::Type::SHARP2;
       map["flat-flat"] = Accidental::Type::FLAT2;
       map["double-flat"] = Accidental::Type::FLAT2;
-      map["natural-flat"] = Accidental::Type::NONE;
+      map["natural-flat"] = Accidental::Type::FLAT;
 
       map["quarter-flat"] = Accidental::Type::MIRRORED_FLAT;
       map["quarter-sharp"] = Accidental::Type::SHARP_SLASH;
@@ -3991,20 +3992,45 @@ static Accidental::Type convertAccidental(QString mxmlName)
       map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
       map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
 
-      map["slash-quarter-sharp"] = Accidental::Type::MIRRORED_FLAT_SLASH;
-      map["slash-sharp"] = Accidental::Type::SHARP_SLASH;
+      map["slash-quarter-sharp"] = Accidental::Type::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
+      map["slash-sharp"] = Accidental::Type::SHARP_SLASH2; // SHARP_SLASH; ?
       map["slash-flat"] = Accidental::Type::FLAT_SLASH;
       map["double-slash-flat"] = Accidental::Type::FLAT_SLASH2;
 
       map["sori"] = Accidental::Type::SORI;
       map["koron"] = Accidental::Type::KORON;
 
-      map["natural-sharp"] = Accidental::Type::NONE;
+      map["natural-sharp"] = Accidental::Type::SHARP;
 
       if (map.contains(mxmlName))
             return map.value(mxmlName);
       else
             qDebug("unknown accidental %s", qPrintable(mxmlName));
+      // default: return Accidental::Type::NONE
+      return Accidental::Type::NONE;
+      }
+
+//---------------------------------------------------------
+//   microtonalGuess
+//---------------------------------------------------------
+
+/**
+ Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum Accidental::Type.
+ Works only for quarter tone and three-quarters tone accidentals.
+ */
+
+static Accidental::Type microtonalGuess(double val)
+      {
+      if (val == 0.5)
+            return Accidental::Type::SHARP_SLASH;
+      else if (val == -0.5)
+            return Accidental::Type::MIRRORED_FLAT;
+      else if (val == 1.5)
+            return Accidental::Type::SHARP_SLASH4;
+      else if (val == -1.5)
+            return Accidental::Type::MIRRORED_FLAT2;
+      else
+            qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);
       // default: return Accidental::Type::NONE
       return Accidental::Type::NONE;
       }
@@ -4778,10 +4804,17 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                               step = ee.text();
                         else if (ee.tagName() == "alter") {    // -1=flat 1=sharp (0.5=quarter sharp)
                               bool ok;
-                              alter = MxmlSupport::stringToInt(ee.text(), &ok); // fractions not supported by mscore
+                              QString altertext = ee.text();
+                              alter = MxmlSupport::stringToInt(altertext, &ok); // fractions not supported by mscore
                               if (!ok || alter < -2 || alter > 2) {
                                     qDebug("ImportXml: bad 'alter' value: %s at line %d col %d",
-                                           qPrintable(ee.text()), ee.lineNumber(), ee.columnNumber());
+                                           qPrintable(altertext), ee.lineNumber(), ee.columnNumber());
+                                    bool ok2;
+                                    double altervalue = altertext.toDouble(&ok2);
+                                    if (ok2 && (qAbs(altervalue) < 2.0) && (accidental == Accidental::Type::NONE)) {
+                                          // try to see if a microtonal accidental is needed
+                                          accidental = microtonalGuess(altervalue);
+                                          }
                                     alter = 0;
                                     }
                               }
