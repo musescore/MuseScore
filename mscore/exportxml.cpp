@@ -2206,6 +2206,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
                   xml.tag("alter", alter);
             if (!alter && alter2)
                   xml.tag("alter", alter2);
+            // TODO what if both alter and alter2 are present? For Example: playing with transposing instruments
             xml.tag(useDrumset != DrumsetKind::NONE ? "display-octave" : "octave", octave);
             xml.etag();
 
@@ -2255,10 +2256,14 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
             // accidental
             if (acc) {
                   /*
-                        MusicXML accidental names include:
+                        MusicXML 2.0 accidental names include:
                         sharp,natural, flat, double-sharp, sharp-sharp, flat-flat,
                         natural-sharp, natural-flat, quarter-flat, quarter-sharp,
-                        three-quarters-flat, and three-quarters-sharp
+                        three-quarters-flat, and three-quarters-sharp.
+                        Added in MusicXml 3.0: sharp-down, sharp-up, natural-down, natural-up,
+                        flat-down, flat-up, triple-sharp, triple-flat, slash-quarter-sharp,
+                        slash-sharp, slash-flat, double-slash-flat, sharp-1, sharp-2,
+                        sharp-3, sharp-5, flat-1, flat-2, flat-3, flat-4, sori, and koron.
                     */
                   QString s;
                   switch (acc->accidentalType()) {
