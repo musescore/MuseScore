@@ -344,6 +344,22 @@
     "mensuralProlation2": {
         "codepoint": "U+E9D1"
     },
+    "luteFingeringRHFirst": {
+        "codepoint": "U+EBAE",
+        "description": "Right-hand fingering, first finger"
+    },
+    "luteFingeringRHSecond": {
+        "codepoint": "U+EBAF",
+        "description": "Right-hand fingering, second finger"
+    },
+    "luteFingeringRHThird": {
+        "codepoint": "U+EBB0",
+        "description": "Right-hand fingering, third finger"
+    },
+    "luteFingeringRHThumb": {
+        "codepoint": "U+EBAD",
+        "description": "Right-hand fingering, thumb"
+    },
     "mensuralProlation3": {
         "codepoint": "U+E9D2"
     },

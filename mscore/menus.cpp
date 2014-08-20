@@ -418,9 +418,22 @@ Palette* MuseScore::newFingeringPalette()
             f->setText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
+      // Symbol-based fingerings:
       Symbol* symbol = new Symbol(gscore);
       symbol->setSym(SymId::stringsThumbPosition);
-      sp->append(symbol, tr("Thumb"));
+      sp->append(symbol, tr("Thumb position"));
+      symbol = new Symbol(gscore);
+      symbol->setSym(SymId::luteFingeringRHThumb);
+      sp->append(symbol, tr("Lute thumb fingering"));
+      symbol = new Symbol(gscore);
+      symbol->setSym(SymId::luteFingeringRHFirst);
+      sp->append(symbol, tr("Lute fingering 1"));
+      symbol = new Symbol(gscore);
+      symbol->setSym(SymId::luteFingeringRHSecond);
+      sp->append(symbol, tr("Lute fingering 2"));
+      symbol = new Symbol(gscore);
+      symbol->setSym(SymId::luteFingeringRHThird);
+      sp->append(symbol, tr("Lute fingering 3"));
       return sp;
       }
 
