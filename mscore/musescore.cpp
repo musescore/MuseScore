@@ -4083,11 +4083,16 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             saveAs(cs, true);
       else if (cmd == "file-new")
             newFile();
-      else if (cmd == "quit") {
+      else if (cmd == "quit")
             close();
-            }
       else if (cmd == "masterpalette")
             showMasterPalette();
+      else if (cmd == "key-signatures")
+            showMasterPalette(tr("Key Signatures"));
+      else if (cmd == "time-signatures")
+            showMasterPalette(tr("Time Signatures"));
+      else if (cmd == "symbols")
+            showMasterPalette(tr("Symbols"));
       else if (cmd == "toggle-statusbar") {
             preferences.showStatusBar = a->isChecked();
             _statusBar->setVisible(preferences.showStatusBar);

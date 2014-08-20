@@ -120,7 +120,15 @@ SymId commonScoreSymbols[] = {
       SymId::cClef,
       SymId::lyricsElisionNarrow,
       SymId::lyricsElision,
-      SymId::lyricsElisionWide
+      SymId::lyricsElisionWide,
+      SymId::dynamicPiano,
+      SymId::dynamicMezzo,
+      SymId::dynamicForte,
+      SymId::dynamicNiente,
+      SymId::dynamicRinforzando,
+      SymId::dynamicSforzando,
+      SymId::dynamicZ,
+      SymId::space
       };
 
 int commonTextSymbols[] = {
@@ -207,7 +215,6 @@ int commonTextSymbols[] = {
       0x0135,
       0x015d,
       0x016d,
-
 
       0x00BC,
       0x00BD,

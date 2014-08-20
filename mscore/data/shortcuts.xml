@@ -767,6 +767,18 @@
     <seq>Shift+F9</seq>
     </SC>
   <SC>
+    <key>key-signatures</key>
+    <seq>Shift+K</seq>
+    </SC>
+  <SC>
+    <key>time-signatures</key>
+    <seq>Shift+T</seq>
+    </SC>
+  <SC>
+    <key>symbols</key>
+    <seq>Z</seq>
+    </SC>
+  <SC>
     <key>next-lyric</key>
     <seq>Space</seq>
     </SC>

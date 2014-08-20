@@ -1608,13 +1608,33 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
             default:
                   break;
             }
-      if (modifiers & Qt::ControlModifier) {
+      if ((modifiers & Qt::ControlModifier) && (modifiers & Qt::ShiftModifier)) {
             switch (key) {
+                  case Qt::Key_B:
+                        insertSym(SymId::accidentalFlat);
+                        s.clear();
+                        break;
+                  case Qt::Key_NumberSign:
+                        insertSym(SymId::accidentalSharp);
+                        s.clear();
+                        break;
+                  case Qt::Key_H:
+                        insertSym(SymId::accidentalNatural);
+                        s.clear();
+                        break;
+                  case Qt::Key_Space:
+                        insertSym(SymId::space);
+                        s.clear();
+                        break;
                   case Qt::Key_F:
                         insertSym(SymId::dynamicForte);
                         s.clear();
                         break;
                   case Qt::Key_M:
+                        insertSym(SymId::dynamicMezzo);
+                        s.clear();
+                        break;
+                  case Qt::Key_N:
                         insertSym(SymId::dynamicNiente);
                         s.clear();
                         break;
@@ -1622,17 +1642,20 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                         insertSym(SymId::dynamicPiano);
                         s.clear();
                         break;
-                  case Qt::Key_Z:
-                        insertSym(SymId::dynamicZ);
-                        s.clear();
-                        break;
                   case Qt::Key_S:
                         insertSym(SymId::dynamicSforzando);
                         s.clear();
                         break;
                   case Qt::Key_R:
-                        s.clear();
                         insertSym(SymId::dynamicRinforzando);
+                        s.clear();
+                        break;
+                  case Qt::Key_Z:
+                        // Ctrl+Z is normally "undo"
+                        // but this code gets hit even if you are also holding Shift
+                        // so Shift+Ctrl+Z works
+                        insertSym(SymId::dynamicZ);
+                        s.clear();
                         break;
                   }
             }
