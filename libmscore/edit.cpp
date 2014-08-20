@@ -1937,8 +1937,9 @@ Lyrics* Score::addLyrics()
       }
 
 //---------------------------------------------------------
-//   addLyrics
+//   addHairpin
 //---------------------------------------------------------
+
 Hairpin* Score::addHairpin(bool decrescendo, int tickStart, int ticks, int track)
       {
       Hairpin* pin = new Hairpin(this);

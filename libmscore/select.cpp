@@ -431,6 +431,10 @@ void Selection::updateSelectedElements()
                   Element* e = s->element(st);
                   if (!e)
                         continue;
+                  if (e->generated())
+                        continue;
+                  if (e->type() == Element::Type::TIMESIG)
+                        continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         for (Element* e : cr->lyricsList()) {
