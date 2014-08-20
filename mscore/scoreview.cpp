@@ -4138,39 +4138,53 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
 
 void ScoreView::cmdAddHairpin(bool decrescendo)
       {
-      ChordRest* cr1;
-      ChordRest* cr2;
-      _score->getSelectedChordRest2(&cr1, &cr2);
-      if (!cr1)
-            return;
-      if (cr2 == 0)
-            cr2 = nextChordRest(cr1);
-      if (cr2 == 0)
-            return;
-
-      _score->startCmd();
-      Hairpin* pin = new Hairpin(_score);
-      pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESCENDO : Hairpin::Type::CRESCENDO);
-      pin->setTrack(cr1->track());
-      pin->setTick(cr1->tick());
-      pin->setTick2(cr2->tick() + cr2->actualTicks());
-      _score->undoAddElement(pin);
-      pin->layout();
-      _score->endCmd();
-      _score->startCmd();
-
-      const QList<SpannerSegment*>& el = pin->spannerSegments();
-
-      if (noteEntryMode()) {
+      Selection selection = _score->selection();
+      // add hairpin on each staff if possible
+      if (selection.isRange() && selection.staffStart() != selection.staffEnd() - 1) {
+            _score->startCmd();
+            for (int staffIdx = selection.staffStart() ; staffIdx < selection.staffEnd(); ++staffIdx) {
+                  ChordRest* cr1 = selection.firstChordRest(staffIdx * VOICES);
+                  ChordRest* cr2 = selection.lastChordRest(staffIdx * VOICES);
+                  if (!cr1)
+                       continue;
+                  if (cr2 == 0)
+                       cr2 = nextChordRest(cr1);
+                  if (cr2 == 0)
+                       continue;
+                  _score->addHairpin(decrescendo, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
+                  }
             _score->endCmd();
+            _score->startCmd();
             }
       else {
-            if (!el.isEmpty()) {
-                  editObject = el.front();
-                  sm->postEvent(new CommandEvent("edit"));  // calls startCmd()
-                  }
-            else
+            ChordRest* cr1;
+            ChordRest* cr2;
+            _score->getSelectedChordRest2(&cr1, &cr2);
+            if (!cr1)
+                  return;
+            if (cr2 == 0)
+                  cr2 = nextChordRest(cr1);
+            if (cr2 == 0)
+                  return;
+
+            _score->startCmd();
+            Hairpin* pin = _score->addHairpin(decrescendo, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
+            pin->layout();
+            _score->endCmd();
+            _score->startCmd();
+
+            const QList<SpannerSegment*>& el = pin->spannerSegments();
+            if (noteEntryMode()) {
                   _score->endCmd();
+                  }
+            else {
+                  if (!el.isEmpty()) {
+                        editObject = el.front();
+                        sm->postEvent(new CommandEvent("edit"));  // calls startCmd()
+                        }
+                  else
+                        _score->endCmd();
+                  }
             }
       }
 
