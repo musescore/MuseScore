@@ -639,8 +639,9 @@ Fraction GuitarPro::len2fraction(int len)
             case  3: l.set(1, 32);   break;
             case  4: l.set(1, 64);   break;
             case  5: l.set(1, 128);  break;
+            // set to len - in some cases we get whacky numbers for this (40, 28...)
             default:
-                  qFatal("unknown beat len: %d", len);
+                  l.set(1,len);
             }
       return l;
       }
@@ -1449,7 +1450,6 @@ void GuitarPro1::readNote(int string, Note* note)
             else if (variant == 3) {                 // dead notes
                   note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                   note->setGhost(true);
-                  qDebug("DeathNote tick %d pitch %d", note->chord()->segment()->tick(), note->pitch());
                   }
             else
                   qDebug("unknown note variant: %d", variant);
@@ -1520,7 +1520,9 @@ void GuitarPro1::readNote(int string, Note* note)
                         gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                         gn->setGhost(true);
                         }
-                  gn->setFret((fret != 255)?fret:0);
+                  if (fret == 255)
+                        fret = 0;
+                  gn->setFret(fret);
                   gn->setString(string);
                   int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret);
                   gn->setPitch(grace_pitch);
@@ -1609,6 +1611,9 @@ void GuitarPro1::readNote(int string, Note* note)
             note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
+      // dead note represented as high numbers - fix to zero
+      if (fretNumber > 99 || fretNumber == -1)
+            fretNumber = 0;
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
       note->setFret(fretNumber);
       note->setString(string);
@@ -1941,7 +1946,7 @@ void GuitarPro3::read(QFile* fp)
                               else  {
                                     skip(25);
                                     name = readPascalString(34);
-                                    readChord(segment, track, numStrings, name, true);
+                                    readChord(segment, track, numStrings, name, false);
                                     skip(36);
                                     }
                               }
@@ -1951,8 +1956,9 @@ void GuitarPro3::read(QFile* fp)
                               lyrics = new Lyrics(score);
                               lyrics->setText(txt);
                               }
+                        int beatEffects = 0;
                         if (beatBits & BEAT_EFFECTS)
-                              readBeatEffects(track, segment);
+                              beatEffects = readBeatEffects(track, segment);
 
                         if (beatBits & BEAT_MIX_CHANGE) {
                               readMixChange(measure);
@@ -2024,6 +2030,8 @@ void GuitarPro3::read(QFile* fp)
                                     note->setTpcFromPitch();
                                     }
                               }
+                        if (cr && (cr->type() == Element::Type::CHORD))
+                              applyBeatEffects(static_cast<Chord*>(cr), beatEffects);
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         tick += cr->actualTicks();
                         }
@@ -2040,6 +2048,7 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
 
       if (fxBits & BEAT_EFFECT) {
             effects = readUChar();      // effect 1-tapping, 2-slapping, 3-popping
+            readInt(); // we don't need this integer
             }
 
       if (fxBits & BEAT_ARPEGGIO) {
