@@ -192,8 +192,8 @@ void ChordRest::writeProperties(Xml& xml) const
       writeProperty(xml, P_ID::SMALL);
       if (actualDurationType().dots())
             xml.tag("dots", actualDurationType().dots());
-      if (_staffMove)
-            xml.tag("move", _staffMove);
+      writeProperty(xml, P_ID::STAFF_MOVE);
+
       if (actualDurationType().isValid())
             xml.tag("durationType", actualDurationType().name());
 
@@ -1121,9 +1121,10 @@ void ChordRest::undoSetBeamMode(Beam::Mode mode)
 QVariant ChordRest::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ID::SMALL:     return QVariant(small());
-            case P_ID::BEAM_MODE: return int(beamMode());
-            default:          return DurationElement::getProperty(propertyId);
+            case P_ID::SMALL:      return QVariant(small());
+            case P_ID::BEAM_MODE:  return int(beamMode());
+            case P_ID::STAFF_MOVE: return staffMove();
+            default:               return DurationElement::getProperty(propertyId);
             }
       }
 
@@ -1134,9 +1135,10 @@ QVariant ChordRest::getProperty(P_ID propertyId) const
 bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_ID::SMALL:     setSmall(v.toBool()); break;
-            case P_ID::BEAM_MODE: setBeamMode(Beam::Mode(v.toInt())); break;
-            default:          return DurationElement::setProperty(propertyId, v);
+            case P_ID::SMALL:      setSmall(v.toBool()); break;
+            case P_ID::BEAM_MODE:  setBeamMode(Beam::Mode(v.toInt())); break;
+            case P_ID::STAFF_MOVE: setStaffMove(v.toInt()); break;
+            default:               return DurationElement::setProperty(propertyId, v);
             }
       score()->setLayoutAll(true);
       return true;
@@ -1149,8 +1151,9 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
 QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ID::SMALL:     return false;
-            case P_ID::BEAM_MODE: return int(Beam::Mode::AUTO);
+            case P_ID::SMALL:      return false;
+            case P_ID::BEAM_MODE:  return int(Beam::Mode::AUTO);
+            case P_ID::STAFF_MOVE: return 0;
             default:          return DurationElement::propertyDefault(propertyId);
             }
       score()->setLayoutAll(true);

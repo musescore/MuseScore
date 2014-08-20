@@ -205,6 +205,8 @@ static const PropertyData propertyList[] = {
       { P_ID::SLUR_UOFF3,          false,  "o3",             P_TYPE::POINT  },
       { P_ID::SLUR_UOFF4,          false,  "o4",             P_TYPE::POINT  },
 
+      { P_ID::STAFF_MOVE,          true,  "move",          P_TYPE::INT },
+
       { P_ID::END,                 false, "",              P_TYPE::INT      }
       };
 
