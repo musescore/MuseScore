@@ -4809,11 +4809,11 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                               if (!ok || alter < -2 || alter > 2) {
                                     qDebug("ImportXml: bad 'alter' value: %s at line %d col %d",
                                            qPrintable(altertext), ee.lineNumber(), ee.columnNumber());
-                                    if (qAbs(alter)<2) { // try to see if a microtonal accidental is needed
-                                          bool ok2;
-                                          double altervalue = altertext.toDouble(&ok2);
-                                          if (ok2 && (accidental == Accidental::Type::NONE))
-                                                accidental = microtonalGuess(altervalue);
+                                    bool ok2;
+                                    double altervalue = altertext.toDouble(&ok2);
+                                    if (ok2 && (qAbs(altervalue) < 2.0) && (accidental == Accidental::Type::NONE)) {
+                                          // try to see if a microtonal accidental is needed
+                                          accidental = microtonalGuess(altervalue);
                                           }
                                     alter = 0;
                                     }
