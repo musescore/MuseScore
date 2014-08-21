@@ -1864,6 +1864,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             score->setCreated(true); // force save as for imported files
             }
       score->rebuildMidiMapping();
+      score->setSoloMute();
       score->setSaved(false);
       score->updateNotes();
       return Score::FileError::FILE_NO_ERROR;
