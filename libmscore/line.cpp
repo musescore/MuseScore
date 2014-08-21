@@ -476,11 +476,11 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                               if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
                                     qreal x2 = 0.0;
                                     qreal sp = endElement()->staff()->spatium();
-                                    int track = track2();
+                                    int t = track2();
                                     Segment* seg = static_cast<Segment*>(endElement()->parent())->next();
                                     for ( ; seg; seg = seg->next()) {
                                           if (seg->segmentType() == Segment::Type::ChordRest) {
-                                                if (track != -1 && !seg->element(track)) {
+                                                if (t!= -1 && !seg->element(t)) {
                                                       continue;
                                                       }
                                                 x2 = seg->x() - sp;     // 1sp shy of next chord
