@@ -736,7 +736,7 @@ Segment* Measure::findSegment(Segment::Type st, int t)
       for (s = first(); s && s->tick() < t; s = s->next())
             ;
       for (; s && s->tick() == t; s = s->next()) {
-            if (s->segmentType() == st)
+            if (s->segmentType() & st)
                   return s;
             }
       return 0;
