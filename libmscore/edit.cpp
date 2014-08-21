@@ -1945,6 +1945,7 @@ Hairpin* Score::addHairpin(bool decrescendo, int tickStart, int tickEnd, int tra
       Hairpin* pin = new Hairpin(this);
       pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESCENDO : Hairpin::Type::CRESCENDO);
       pin->setTrack(track);
+      pin->setTrack2(track);
       pin->setTick(tickStart);
       pin->setTick2(tickEnd);
       undoAddElement(pin);
