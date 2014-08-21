@@ -542,14 +542,14 @@ void GuitarPro::readLyrics()
 void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
       {
       // shift slide
-      if (slide == 1) {
+      if (slide == SHIFT_SLIDE) {
             Glissando* s = new Glissando(score);
             s->setText("");
             s->setGlissandoType(Glissando::Type::STRAIGHT);
             cr->add(s);
             }
       // legato slide
-      else if (slide == 2) {
+      else if (slide == LEGATO_SLIDE) {
             Segment* prevSeg = cr->segment()->prev1(Segment::Type::ChordRest);
                   Element* e = prevSeg->element(staffIdx);
                   if (e) {
@@ -565,28 +565,28 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
             cr->add(s);
             }
       // slide out downwards (fall)
-      else if (slide == 4) {
+      else if (slide == SLIDE_OUT_DOWN) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::FALL);
             cl->setStraight(true);
             cr->add(cl);
             }
       // slide out upwards (doit)
-      else if (slide == 8) {
+      else if (slide == SLIDE_OUT_UP) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::DOIT);
             cl->setStraight(true);
             cr->add(cl);
             }
       // slide in from below (plop)
-      else if (slide == 16) {
+      else if (slide == SLIDE_IN_BELOW) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::PLOP);
             cl->setStraight(true);
             cr->add(cl);
             }
       // slide in from above (scoop)
-      else if (slide == 32) {
+      else if (slide == SLIDE_IN_ABOVE) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::SCOOP);
             cl->setStraight(true);
@@ -1584,6 +1584,8 @@ void GuitarPro1::readNote(int string, Note* note)
                   }
             if (modMask1 & EFFECT_LET_RING) {         // let ring
                   }
+            if (modMask1 & EFFECT_SLIDE_OLD)
+                  slides[note->chord()->track()] = SHIFT_SLIDE;
 
             if (version >= 400) {
                   if (modMask2 & EFFECT_STACATTO) {
@@ -1591,8 +1593,6 @@ void GuitarPro1::readNote(int string, Note* note)
                   if (modMask2 & EFFECT_PALM_MUTE) {
                         }
                   if (modMask2 & EFFECT_TREMOLO)
-                        readUChar();
-                  if (modMask2 & EFFECT_SLIDE)
                         readUChar();
                   if (modMask2 & EFFECT_ARTIFICIAL_HARMONIC)
                         readUChar();
@@ -1929,6 +1929,10 @@ void GuitarPro3::read(QFile* fp)
                         if (beatBits & BEAT_PAUSE)
                               /*pause =*/ readUChar();
 
+                        slide = -1;
+                        if (slides.contains(track))
+                              slide = slides.take(track);
+
                         int len = readChar();
                         int tuple = 0;
                         if (beatBits & BEAT_TUPLET)
@@ -2030,8 +2034,12 @@ void GuitarPro3::read(QFile* fp)
                                     note->setTpcFromPitch();
                                     }
                               }
-                        if (cr && (cr->type() == Element::Type::CHORD))
+                        if (cr && (cr->type() == Element::Type::CHORD)) {
                               applyBeatEffects(static_cast<Chord*>(cr), beatEffects);
+                              if (slide > 0)
+                                    createSlide(slide, cr, staffIdx);
+                              }
+
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         tick += cr->actualTicks();
                         }
