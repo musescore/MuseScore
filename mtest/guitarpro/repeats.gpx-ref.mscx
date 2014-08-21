@@ -148,6 +148,10 @@
             <string>2</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>end-start-repeat</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <startRepeat/>
@@ -180,6 +184,10 @@
             <string>2</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <endRepeat>2</endRepeat>
@@ -373,6 +381,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end-start-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <startRepeat/>
@@ -405,6 +417,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <endRepeat>2</endRepeat>
@@ -460,6 +476,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end-start-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -491,6 +511,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <KeySig>

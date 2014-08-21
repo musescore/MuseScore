@@ -103,6 +103,10 @@
           <lid>6</lid>
           <durationType>half</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <KeySig>
@@ -1033,6 +1037,10 @@
             <lid>6</lid>
             <durationType>half</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -1853,6 +1861,10 @@
             <lid>6</lid>
             <durationType>half</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>

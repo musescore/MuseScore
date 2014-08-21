@@ -102,6 +102,10 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <Chord>
@@ -132,6 +136,10 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <LayoutBreak>
@@ -166,6 +174,10 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <Clef>
@@ -200,6 +212,10 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="5">
         <Chord>
@@ -230,6 +246,10 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="6">
         <LayoutBreak>
@@ -243,6 +263,11 @@
             <tpc>19</tpc>
             </Note>
           </Chord>
+        <tick>11520</tick>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       </Staff>
     </Score>

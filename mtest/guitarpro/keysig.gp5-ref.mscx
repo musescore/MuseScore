@@ -160,6 +160,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <KeySig>
@@ -210,6 +214,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <KeySig>
@@ -263,6 +271,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <KeySig>
@@ -322,6 +334,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="5">
         <KeySig>
@@ -381,6 +397,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="6">
         <KeySig>
@@ -440,6 +460,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="7">
         <KeySig>
@@ -502,6 +526,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="8">
         <KeySig>
@@ -558,6 +586,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="9">
         <KeySig>
@@ -608,6 +640,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="10">
         <KeySig>
@@ -661,6 +697,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="11">
         <KeySig>
@@ -717,6 +757,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="12">
         <KeySig>
@@ -773,6 +817,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="13">
         <KeySig>
@@ -832,6 +880,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="14">
         <KeySig>
@@ -891,6 +943,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="15">
         <KeySig>
@@ -953,6 +1009,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="16">
         <KeySig>
@@ -1003,6 +1063,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="17">
         <KeySig>
@@ -1056,6 +1120,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="18">
         <KeySig>
@@ -1109,6 +1177,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="19">
         <KeySig>
@@ -1165,6 +1237,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="20">
         <KeySig>
@@ -1227,6 +1303,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="21">
         <KeySig>
@@ -1286,6 +1366,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="22">
         <KeySig>
@@ -1345,6 +1429,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="23">
         <KeySig>
@@ -1404,6 +1492,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="24">
         <KeySig>
@@ -1454,6 +1546,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="25">
         <KeySig>
@@ -1507,6 +1603,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="26">
         <KeySig>
@@ -1563,6 +1663,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="27">
         <KeySig>
@@ -1619,6 +1723,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="28">
         <KeySig>
@@ -1675,6 +1783,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="29">
         <KeySig>
@@ -1737,6 +1849,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="30">
         <KeySig>
@@ -1796,6 +1912,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="31">
         <KeySig>
@@ -1846,6 +1966,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="32">
         <Chord>
@@ -2079,6 +2203,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -2129,6 +2257,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <KeySig>
@@ -2182,6 +2314,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <KeySig>
@@ -2241,6 +2377,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="5">
           <KeySig>
@@ -2300,6 +2440,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="6">
           <KeySig>
@@ -2359,6 +2503,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="7">
           <KeySig>
@@ -2421,6 +2569,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="8">
           <KeySig>
@@ -2477,6 +2629,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="9">
           <KeySig>
@@ -2527,6 +2683,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="10">
           <KeySig>
@@ -2580,6 +2740,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="11">
           <KeySig>
@@ -2636,6 +2800,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="12">
           <KeySig>
@@ -2692,6 +2860,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="13">
           <KeySig>
@@ -2751,6 +2923,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="14">
           <KeySig>
@@ -2810,6 +2986,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="15">
           <KeySig>
@@ -2872,6 +3052,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="16">
           <KeySig>
@@ -2922,6 +3106,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="17">
           <KeySig>
@@ -2975,6 +3163,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="18">
           <KeySig>
@@ -3028,6 +3220,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="19">
           <KeySig>
@@ -3084,6 +3280,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="20">
           <KeySig>
@@ -3146,6 +3346,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="21">
           <KeySig>
@@ -3205,6 +3409,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="22">
           <KeySig>
@@ -3264,6 +3472,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="23">
           <KeySig>
@@ -3323,6 +3535,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="24">
           <KeySig>
@@ -3373,6 +3589,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="25">
           <KeySig>
@@ -3426,6 +3646,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="26">
           <KeySig>
@@ -3482,6 +3706,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="27">
           <KeySig>
@@ -3538,6 +3766,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="28">
           <KeySig>
@@ -3594,6 +3826,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="29">
           <KeySig>
@@ -3656,6 +3892,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="30">
           <KeySig>
@@ -3715,6 +3955,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="31">
           <KeySig>
@@ -3765,6 +4009,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="32">
           <Chord>
@@ -3867,6 +4115,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -3917,6 +4169,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <KeySig>
@@ -3967,6 +4223,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <KeySig>
@@ -4017,6 +4277,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="5">
           <KeySig>
@@ -4067,6 +4331,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="6">
           <KeySig>
@@ -4117,6 +4385,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="7">
           <KeySig>
@@ -4167,6 +4439,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="8">
           <KeySig>
@@ -4217,6 +4493,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="9">
           <KeySig>
@@ -4267,6 +4547,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="10">
           <KeySig>
@@ -4317,6 +4601,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="11">
           <KeySig>
@@ -4367,6 +4655,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="12">
           <KeySig>
@@ -4417,6 +4709,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="13">
           <KeySig>
@@ -4467,6 +4763,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="14">
           <KeySig>
@@ -4517,6 +4817,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="15">
           <KeySig>
@@ -4567,6 +4871,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="16">
           <KeySig>
@@ -4617,6 +4925,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="17">
           <KeySig>
@@ -4667,6 +4979,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="18">
           <KeySig>
@@ -4717,6 +5033,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="19">
           <KeySig>
@@ -4767,6 +5087,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="20">
           <KeySig>
@@ -4817,6 +5141,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="21">
           <KeySig>
@@ -4867,6 +5195,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="22">
           <KeySig>
@@ -4917,6 +5249,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="23">
           <KeySig>
@@ -4967,6 +5303,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="24">
           <KeySig>
@@ -5017,6 +5357,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="25">
           <KeySig>
@@ -5067,6 +5411,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="26">
           <KeySig>
@@ -5117,6 +5465,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="27">
           <KeySig>
@@ -5167,6 +5519,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="28">
           <KeySig>
@@ -5217,6 +5573,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="29">
           <KeySig>
@@ -5267,6 +5627,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="30">
           <KeySig>
@@ -5317,6 +5681,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="31">
           <KeySig>
@@ -5367,6 +5735,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="32">
           <Chord>

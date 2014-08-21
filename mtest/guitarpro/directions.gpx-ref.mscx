@@ -153,6 +153,10 @@
           <lid>11</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <StaffText>
@@ -168,6 +172,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <KeySig>
@@ -197,6 +205,10 @@
           <lid>22</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <StaffText>
@@ -212,6 +224,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="5">
         <KeySig>
@@ -241,6 +257,10 @@
           <lid>33</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="6">
         <StaffText>
@@ -256,6 +276,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="7">
         <KeySig>
@@ -285,6 +309,10 @@
           <lid>44</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="8">
         <StaffText>
@@ -300,6 +328,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="9">
         <KeySig>
@@ -311,6 +343,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="10">
         <StaffText>
@@ -326,6 +362,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="11">
         <KeySig>
@@ -337,6 +377,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="12">
         <StaffText>
@@ -352,6 +396,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="13">
         <KeySig>
@@ -363,6 +411,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="14">
         <StaffText>
@@ -378,6 +430,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="15">
         <KeySig>
@@ -389,6 +445,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="16">
         <StaffText>
@@ -404,6 +464,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="17">
         <KeySig>
@@ -415,6 +479,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="18">
         <KeySig>
@@ -426,6 +494,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="19">
         <StaffText>
@@ -441,6 +513,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="20">
         <KeySig>
@@ -452,6 +528,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="21">
         <KeySig>
@@ -463,6 +543,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="22">
         <StaffText>
@@ -478,6 +562,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="23">
         <KeySig>
@@ -489,6 +577,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="24">
         <KeySig>
@@ -500,6 +592,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="25">
         <StaffText>
@@ -515,6 +611,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="26">
         <KeySig>
@@ -526,6 +626,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="27">
         <StaffText>
@@ -541,6 +645,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="28">
         <KeySig>
@@ -552,6 +660,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="29">
         <StaffText>
@@ -567,6 +679,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="30">
         <KeySig>
@@ -578,6 +694,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="31">
         <KeySig>
@@ -593,6 +713,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="32">
         <KeySig>
@@ -604,6 +728,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="33">
         <KeySig>
@@ -627,6 +755,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="34">
         <KeySig>
@@ -642,6 +774,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="35">
         <KeySig>
@@ -845,6 +981,10 @@
             <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <StaffText>
@@ -860,6 +1000,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <KeySig>
@@ -889,6 +1033,10 @@
             <lid>22</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <StaffText>
@@ -904,6 +1052,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="5">
           <KeySig>
@@ -933,6 +1085,10 @@
             <lid>33</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="6">
           <StaffText>
@@ -948,6 +1104,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="7">
           <KeySig>
@@ -977,6 +1137,10 @@
             <lid>44</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="8">
           <StaffText>
@@ -992,6 +1156,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="9">
           <KeySig>
@@ -1003,6 +1171,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="10">
           <StaffText>
@@ -1018,6 +1190,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="11">
           <KeySig>
@@ -1029,6 +1205,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="12">
           <StaffText>
@@ -1044,6 +1224,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="13">
           <KeySig>
@@ -1055,6 +1239,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="14">
           <StaffText>
@@ -1070,6 +1258,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="15">
           <KeySig>
@@ -1081,6 +1273,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="16">
           <StaffText>
@@ -1096,6 +1292,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="17">
           <KeySig>
@@ -1107,6 +1307,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="18">
           <KeySig>
@@ -1118,6 +1322,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="19">
           <StaffText>
@@ -1133,6 +1341,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="20">
           <KeySig>
@@ -1144,6 +1356,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="21">
           <KeySig>
@@ -1155,6 +1371,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="22">
           <StaffText>
@@ -1170,6 +1390,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="23">
           <KeySig>
@@ -1181,6 +1405,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="24">
           <KeySig>
@@ -1192,6 +1420,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="25">
           <StaffText>
@@ -1207,6 +1439,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="26">
           <KeySig>
@@ -1218,6 +1454,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="27">
           <StaffText>
@@ -1233,6 +1473,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="28">
           <KeySig>
@@ -1244,6 +1488,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="29">
           <StaffText>
@@ -1259,6 +1507,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="30">
           <KeySig>
@@ -1270,6 +1522,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="31">
           <KeySig>
@@ -1285,6 +1541,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="32">
           <KeySig>
@@ -1296,6 +1556,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="33">
           <KeySig>
@@ -1319,6 +1583,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="34">
           <KeySig>
@@ -1334,6 +1602,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="35">
           <KeySig>
@@ -1392,6 +1664,10 @@
             <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -1403,6 +1679,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <KeySig>
@@ -1432,6 +1712,10 @@
             <lid>22</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <KeySig>
@@ -1443,6 +1727,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="5">
           <KeySig>
@@ -1472,6 +1760,10 @@
             <lid>33</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="6">
           <KeySig>
@@ -1483,6 +1775,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="7">
           <KeySig>
@@ -1512,6 +1808,10 @@
             <lid>44</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="8">
           <KeySig>
@@ -1523,6 +1823,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="9">
           <KeySig>
@@ -1534,6 +1838,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="10">
           <KeySig>
@@ -1545,6 +1853,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="11">
           <KeySig>
@@ -1556,6 +1868,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="12">
           <KeySig>
@@ -1567,6 +1883,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="13">
           <KeySig>
@@ -1578,6 +1898,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="14">
           <KeySig>
@@ -1589,6 +1913,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="15">
           <KeySig>
@@ -1600,6 +1928,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="16">
           <KeySig>
@@ -1611,6 +1943,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="17">
           <KeySig>
@@ -1622,6 +1958,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="18">
           <KeySig>
@@ -1633,6 +1973,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="19">
           <KeySig>
@@ -1644,6 +1988,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="20">
           <KeySig>
@@ -1655,6 +2003,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="21">
           <KeySig>
@@ -1666,6 +2018,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="22">
           <KeySig>
@@ -1677,6 +2033,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="23">
           <KeySig>
@@ -1688,6 +2048,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="24">
           <KeySig>
@@ -1699,6 +2063,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="25">
           <KeySig>
@@ -1710,6 +2078,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="26">
           <KeySig>
@@ -1721,6 +2093,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="27">
           <KeySig>
@@ -1732,6 +2108,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="28">
           <KeySig>
@@ -1743,6 +2123,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="29">
           <KeySig>
@@ -1754,6 +2138,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="30">
           <KeySig>
@@ -1765,6 +2153,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="31">
           <KeySig>
@@ -1776,6 +2168,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="32">
           <KeySig>
@@ -1787,6 +2183,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="33">
           <KeySig>
@@ -1802,6 +2202,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="34">
           <KeySig>
@@ -1813,6 +2217,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="35">
           <KeySig>

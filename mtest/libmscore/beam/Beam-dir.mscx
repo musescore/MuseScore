@@ -424,6 +424,10 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="5">
         <Beam id="9">
@@ -465,6 +469,10 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="6">
         <LayoutBreak>

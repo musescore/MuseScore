@@ -150,6 +150,7 @@ Measure::Measure(Score* s)
       _irregular             = false;
       _breakMultiMeasureRest = false;
       _breakMMRest           = false;
+      _endBarLineColor       = MScore::defaultColor;
       _endBarLineGenerated   = false;
       _endBarLineVisible     = true;
       _endBarLineType        = BarLineType::NORMAL;
@@ -185,13 +186,13 @@ Measure::Measure(const Measure& m)
       _irregular             = m._irregular;
       _breakMultiMeasureRest = m._breakMultiMeasureRest;
       _breakMMRest           = m._breakMMRest;
+      _endBarLineColor       = m._endBarLineColor;
       _endBarLineGenerated   = m._endBarLineGenerated;
       _endBarLineVisible     = m._endBarLineVisible;
       _endBarLineType        = m._endBarLineType;
       _mmRest                = m._mmRest;
       _mmRestCount           = m._mmRestCount;
       _playbackCount         = m._playbackCount;
-      _endBarLineColor       = m._endBarLineColor;
       }
 
 //---------------------------------------------------------

@@ -117,6 +117,10 @@
             </Note>
           <Slur type="stop" id="2"/>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       </Staff>
     </Score>

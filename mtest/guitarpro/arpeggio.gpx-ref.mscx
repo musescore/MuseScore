@@ -151,6 +151,10 @@
             <subtype>1</subtype>
             </Arpeggio>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <KeySig>
@@ -364,6 +368,10 @@
               <subtype>1</subtype>
               </Arpeggio>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -440,6 +448,10 @@
               <subtype>1</subtype>
               </Arpeggio>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>

@@ -149,6 +149,10 @@
           <lid>11</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <KeySig>
@@ -182,6 +186,10 @@
           <lid>19</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <KeySig>
@@ -215,6 +223,10 @@
           <lid>27</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <KeySig>
@@ -424,6 +436,10 @@
             <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -457,6 +473,10 @@
             <lid>19</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <KeySig>
@@ -490,6 +510,10 @@
             <lid>27</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <KeySig>
@@ -562,6 +586,10 @@
             <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -595,6 +623,10 @@
             <lid>19</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <KeySig>
@@ -628,6 +660,10 @@
             <lid>27</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <KeySig>

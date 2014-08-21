@@ -161,6 +161,10 @@
             <string>0</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>end-repeat</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <endSpanner id="2"/>
@@ -214,6 +218,10 @@
             <string>2</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <Volta id="3">
@@ -277,6 +285,10 @@
             <string>1</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <endSpanner id="3"/>
@@ -341,6 +353,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="5">
         <endSpanner id="4"/>
@@ -397,6 +413,10 @@
             <string>5</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="6">
         <Volta id="5">
@@ -457,6 +477,10 @@
             <string>5</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="7">
         <startRepeat/>
@@ -523,6 +547,10 @@
             <string>0</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="8">
         <endRepeat>1</endRepeat>
@@ -582,6 +610,10 @@
             <string>0</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>end-repeat</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="9">
         <endSpanner id="7"/>
@@ -643,6 +675,10 @@
             <string>0</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="10">
         <endSpanner id="8"/>
@@ -693,6 +729,11 @@
             <string>0</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
+        <tick>17280</tick>
         </Measure>
       <Measure number="11">
         <Chord>
@@ -745,6 +786,10 @@
             <string>0</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="12">
         <Chord>
@@ -991,6 +1036,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <endSpanner id="9"/>
@@ -1044,6 +1093,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <Volta id="10">
@@ -1107,6 +1160,10 @@
               <string>1</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <endSpanner id="10"/>
@@ -1171,6 +1228,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="5">
           <endSpanner id="11"/>
@@ -1227,6 +1288,10 @@
               <string>5</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="6">
           <Volta id="12">
@@ -1287,6 +1352,10 @@
               <string>5</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="7">
           <startRepeat/>
@@ -1353,6 +1422,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="8">
           <endRepeat>1</endRepeat>
@@ -1412,6 +1485,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="9">
           <endSpanner id="14"/>
@@ -1473,6 +1550,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="10">
           <endSpanner id="15"/>
@@ -1523,6 +1604,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="11">
           <Chord>
@@ -1575,6 +1660,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="12">
           <Chord>
@@ -1685,6 +1774,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <Chord>
@@ -1731,6 +1824,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <Chord>
@@ -1777,6 +1874,10 @@
               <string>1</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <Chord>
@@ -1823,6 +1924,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="5">
           <Chord>
@@ -1869,6 +1974,10 @@
               <string>5</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="6">
           <Chord>
@@ -1915,6 +2024,10 @@
               <string>5</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="7">
           <BarLine>
@@ -1965,6 +2078,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="8">
           <Chord>
@@ -2011,6 +2128,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="9">
           <Chord>
@@ -2057,6 +2178,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="10">
           <Chord>
@@ -2103,6 +2228,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="11">
           <Chord>
@@ -2149,6 +2278,10 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="12">
           <Chord>
