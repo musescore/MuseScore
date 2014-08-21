@@ -232,10 +232,6 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
-        <tick>5760</tick>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
         </Measure>
       </Staff>
     <Score>
@@ -491,10 +487,6 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
-          <tick>5760</tick>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -596,7 +588,6 @@
             <lid>23</lid>
             <accidental>0</accidental>
             </KeySig>
-          <endSpanner id="3"/>
           <Chord>
             <lid>24</lid>
             <durationType>whole</durationType>
@@ -612,10 +603,6 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
-          <tick>5760</tick>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
           </Measure>
         </Staff>
       <name>S-Gt</name>

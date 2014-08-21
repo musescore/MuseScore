@@ -231,10 +231,6 @@
             <string>1</string>
             </Note>
           </Chord>
-        <tick>1920</tick>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
         </Measure>
       <Measure number="3">
         <Volta id="3">
@@ -362,10 +358,6 @@
             <string>3</string>
             </Note>
           </Chord>
-        <tick>5760</tick>
-        <endSpanner id="3"/>
-        <endSpanner id="3"/>
-        <endSpanner id="3"/>
         </Measure>
       <Measure number="5">
         <endSpanner id="4"/>
@@ -422,10 +414,6 @@
             <string>4</string>
             </Note>
           </Chord>
-        <tick>7680</tick>
-        <endSpanner id="4"/>
-        <endSpanner id="4"/>
-        <endSpanner id="4"/>
         </Measure>
       <Measure number="6">
         <Volta id="5">
@@ -552,10 +540,6 @@
             <string>0</string>
             </Note>
           </Chord>
-        <tick>11520</tick>
-        <endSpanner id="5"/>
-        <endSpanner id="5"/>
-        <endSpanner id="5"/>
         </Measure>
       <Measure number="8">
         <endRepeat>1</endRepeat>
@@ -615,10 +599,6 @@
             <string>0</string>
             </Note>
           </Chord>
-        <tick>13440</tick>
-        <endSpanner id="6"/>
-        <endSpanner id="6"/>
-        <endSpanner id="6"/>
         </Measure>
       <Measure number="9">
         <endSpanner id="7"/>
@@ -690,10 +670,7 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
-        <tick>15360</tick>
-        <endSpanner id="7"/>
-        <endSpanner id="7"/>
-        <endSpanner id="7"/>
+        <endSpanner id="8"/>
         </Measure>
       </Staff>
     <Score>
@@ -948,10 +925,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
-          <endSpanner id="9"/>
-          <endSpanner id="9"/>
-          <endSpanner id="9"/>
           </Measure>
         <Measure number="3">
           <Volta id="10">
@@ -1079,10 +1052,6 @@
               <string>3</string>
               </Note>
             </Chord>
-          <tick>5760</tick>
-          <endSpanner id="10"/>
-          <endSpanner id="10"/>
-          <endSpanner id="10"/>
           </Measure>
         <Measure number="5">
           <endSpanner id="11"/>
@@ -1139,10 +1108,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>7680</tick>
-          <endSpanner id="11"/>
-          <endSpanner id="11"/>
-          <endSpanner id="11"/>
           </Measure>
         <Measure number="6">
           <Volta id="12">
@@ -1269,10 +1234,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>11520</tick>
-          <endSpanner id="12"/>
-          <endSpanner id="12"/>
-          <endSpanner id="12"/>
           </Measure>
         <Measure number="8">
           <endRepeat>1</endRepeat>
@@ -1332,10 +1293,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>13440</tick>
-          <endSpanner id="13"/>
-          <endSpanner id="13"/>
-          <endSpanner id="13"/>
           </Measure>
         <Measure number="9">
           <endSpanner id="14"/>
@@ -1407,10 +1364,7 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
-          <tick>15360</tick>
-          <endSpanner id="14"/>
-          <endSpanner id="14"/>
-          <endSpanner id="14"/>
+          <endSpanner id="15"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -1465,7 +1419,6 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <endSpanner id="9"/>
           <Chord>
             <lid>18</lid>
             <durationType>quarter</durationType>
@@ -1510,10 +1463,6 @@
               <string>1</string>
               </Note>
             </Chord>
-          <tick>1920</tick>
-          <endSpanner id="9"/>
-          <endSpanner id="9"/>
-          <endSpanner id="9"/>
           </Measure>
         <Measure number="3">
           <Chord>
@@ -1562,7 +1511,6 @@
             </Chord>
           </Measure>
         <Measure number="4">
-          <endSpanner id="10"/>
           <Chord>
             <lid>36</lid>
             <durationType>quarter</durationType>
@@ -1607,13 +1555,8 @@
               <string>3</string>
               </Note>
             </Chord>
-          <tick>5760</tick>
-          <endSpanner id="10"/>
-          <endSpanner id="10"/>
-          <endSpanner id="10"/>
           </Measure>
         <Measure number="5">
-          <endSpanner id="11"/>
           <Chord>
             <lid>45</lid>
             <durationType>quarter</durationType>
@@ -1658,10 +1601,6 @@
               <string>4</string>
               </Note>
             </Chord>
-          <tick>7680</tick>
-          <endSpanner id="11"/>
-          <endSpanner id="11"/>
-          <endSpanner id="11"/>
           </Measure>
         <Measure number="6">
           <Chord>
@@ -1714,7 +1653,6 @@
             <subtype>start-repeat</subtype>
             <span>1</span>
             </BarLine>
-          <endSpanner id="12"/>
           <Chord>
             <lid>63</lid>
             <durationType>quarter</durationType>
@@ -1759,13 +1697,8 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>11520</tick>
-          <endSpanner id="12"/>
-          <endSpanner id="12"/>
-          <endSpanner id="12"/>
           </Measure>
         <Measure number="8">
-          <endSpanner id="13"/>
           <Chord>
             <lid>72</lid>
             <durationType>quarter</durationType>
@@ -1810,13 +1743,8 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>13440</tick>
-          <endSpanner id="13"/>
-          <endSpanner id="13"/>
-          <endSpanner id="13"/>
           </Measure>
         <Measure number="9">
-          <endSpanner id="14"/>
           <Chord>
             <lid>81</lid>
             <durationType>quarter</durationType>
@@ -1865,10 +1793,6 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
-          <tick>15360</tick>
-          <endSpanner id="14"/>
-          <endSpanner id="14"/>
-          <endSpanner id="14"/>
           </Measure>
         </Staff>
       <name>Track 1</name>
