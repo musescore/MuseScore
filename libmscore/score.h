@@ -927,6 +927,7 @@ class Score : public QObject {
       void setInstrumentsChanged(bool val)  { _instrumentsChanged = val; }
       bool selectionChanged() const         { return _selectionChanged; }
       void setSelectionChanged(bool val)    { _selectionChanged = val;  }
+      void setSoloMute();
 
       LayoutMode layoutMode() const         { return _layoutMode; }
       void setLayoutMode(LayoutMode lm);
