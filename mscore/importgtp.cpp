@@ -528,8 +528,16 @@ void GuitarPro::readBend(Note* note)
 
 void GuitarPro::readLyrics()
       {
-      readInt();        // lyric track
-      for (int i = 0; i < 5; ++i) {
+      gpLyrics.lyricTrack = readInt();        // lyric track
+      gpLyrics.fromBeat = readInt();
+      gpLyrics.beatCounter = 0;
+
+      QString lyrics = readWordPascalString();
+      lyrics.replace(QRegExp("\n"), " ");
+      lyrics.replace(QRegExp("\r"), " ");
+      gpLyrics.lyrics = lyrics.split(" ", QString::KeepEmptyParts);
+
+      for (int i = 0; i < 4; ++i) {
             readInt();
             readWordPascalString();
             }
