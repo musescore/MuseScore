@@ -2417,6 +2417,7 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
       QString mimeType = fscore->selection().mimeType();
       QMimeData* mimeData = new QMimeData;
       mimeData->setData(mimeType, fscore->selection().mimeData());
+      fscore->deselectAll();
 
 
       Measure * last = 0;
@@ -2426,6 +2427,7 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
       score->startCmd();
       score->cmdPaste(mimeData,0);
       score->endCmd();
+      score->deselectAll();
 }
 
 
@@ -2438,7 +2440,7 @@ bool MuseScore::newLinearized(Score* old_score)
       // Figure out repeat structure and traverse it
       old_score->repeatList()->unwind();
       old_score->setPlaylistDirty(true);
-/*
+
       bool copy=false;
       foreach (const RepeatSegment* rs, *(old_score->repeatList()) ) {
          int startTick  = rs->tick;
@@ -2449,7 +2451,8 @@ bool MuseScore::newLinearized(Score* old_score)
          Measure * mf = old_score->tick2measure(startTick);
          Measure * ml = ml;
 
-         if (count==0 && startTick==0) ml = score->tick2measure(startTick);
+
+         if (!copy && startTick==0) ml = score->tick2measure(startTick);
 
          for (ml=mf; ml; ml = ml->nextMeasure()) {
             if (ml->tick() + ml->ticks() >= endTick) break;
@@ -2465,9 +2468,9 @@ bool MuseScore::newLinearized(Score* old_score)
             }
 
             // Remove all measures past the first jump
-            if (ml) {
-               score->select(ml);
-               score->select(score->lastMeasure());
+            if (ml) {  
+               score->select(ml,SelectType::SINGLE);
+               score->select(score->lastMeasure(),SelectType::RANGE);
                score->startCmd();
                score->cmdDeleteSelectedMeasures();
                score->endCmd(); 
@@ -2478,7 +2481,7 @@ bool MuseScore::newLinearized(Score* old_score)
 
          copy = true;;
       }
-*/
+
       
       // Remove volta markers
       for (const std::pair<int,Spanner*>& p : score->spannerMap().map()) {

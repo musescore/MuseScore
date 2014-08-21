@@ -134,8 +134,8 @@ Shortcut Shortcut::sc[] = {
 
       Shortcut(
          Ms::MAIN_WINDOW,
-         STATE_NORMAL,
-         0,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
+         ShortcutFlags::A_SCORE,
          "linearize",
          Qt::ApplicationShortcut,
          QT_TRANSLATE_NOOP("action","Linearize"),
