@@ -1234,6 +1234,7 @@ void Score::cmdAddOttava(Ottava::Type type)
       ottava->setOttavaType(type);
 
       ottava->setTrack(cr1->track());
+      ottava->setTrack2(cr1->track());
       ottava->setTick(cr1->tick());
       ottava->setTick2(cr2->tick() + cr2->actualTicks());
       undoAddElement(ottava);
@@ -1945,6 +1946,7 @@ Hairpin* Score::addHairpin(bool decrescendo, int tickStart, int tickEnd, int tra
       Hairpin* pin = new Hairpin(this);
       pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESCENDO : Hairpin::Type::CRESCENDO);
       pin->setTrack(track);
+      pin->setTrack2(track);
       pin->setTick(tickStart);
       pin->setTick2(tickEnd);
       undoAddElement(pin);
