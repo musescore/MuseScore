@@ -403,7 +403,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
             Measure* nlm = 0;
             Measure* nfm = 0;
             int tick     = 0;
-            bool endBarGenerated = m1->endBarLineGenerated();
+//            bool endBarGenerated = m1->endBarLineGenerated();
             for (int i = 0; i < nm; ++i) {
                   Measure* m = new Measure(s);
                   m->setPrev(nlm);
@@ -412,7 +412,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
                   m->setTimesig(ns);
                   m->setLen(ns);
                   m->setTick(tick);
-                  m->setEndBarLineType(BarLineType::NORMAL, endBarGenerated);
+//                  m->setEndBarLineType(BarLineType::NORMAL, endBarGenerated);
+                  m->setEndBarLineType(BarLineType::NORMAL, false);
                   tick += m->ticks();
                   nlm = m;
                   if (nfm == 0)
@@ -2254,18 +2255,18 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   if (score == rootScore())
                         omb = static_cast<Measure*>(mb);
                   bool createEndBar    = false;
-                  bool endBarGenerated = false;
+//                  bool endBarGenerated = false;
                   if (!measure) {
                         Measure* lm = score->lastMeasure();
                         if (lm && lm->endBarLineType() == BarLineType::END) {
                               createEndBar = true;
-                              if (!lm->endBarLineGenerated()) {
+//                              if (!lm->endBarLineGenerated()) {
                                     score->undoChangeEndBarLineType(lm, BarLineType::NORMAL);
-                                    }
-                              else {
-                                    endBarGenerated = true;
-                                    lm->setEndBarLineType(BarLineType::NORMAL, true);
-                                    }
+//                                    }
+//                              else {
+//                                    endBarGenerated = true;
+//                                    lm->setEndBarLineType(BarLineType::NORMAL, true);
+//                                    }
                               }
                         else if (lm == nullptr)
                               createEndBar = true;
@@ -2342,7 +2343,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         // Measure* lm = score->lastMeasure();
                         // if (lm)
                         //      lm->setEndBarLineType(BarLineType::END, endBarGenerated);
-                        m->setEndBarLineType(BarLineType::END, endBarGenerated);
+                        m->setEndBarLineType(BarLineType::END, false);
                         }
                   score->fixTicks();
                   }

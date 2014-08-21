@@ -38,6 +38,8 @@ class TestBarline : public QObject, public MTest
       void barline04();
       void barline05();
       void barline06();
+      void barline07();
+      void barline08();
       };
 
 //---------------------------------------------------------
@@ -334,6 +336,75 @@ void TestBarline::barline06()
             msrNo++;
             }
 //      QVERIFY(saveCompareScore(score, "barline06.mscx", DIR + "barline06-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   barline07 - 'Generated' status of inserted measure bar lines
+///   Inserts two measures between second and third measures and
+///   cgeck bar lines of all involved measure do not have 'generated' status
+//
+//    NO REFERENCE SCORE IS USED.
+//---------------------------------------------------------
+
+void TestBarline::barline07()
+      {
+      char  msg[256];
+      Score* score = readScore(DIR + "barline07.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // 'go' to 3rd measure
+      Measure* msr = score->firstMeasure();
+      for (int i=0; i < 2; i++)
+            msr = msr->nextMeasure();
+      // insert 2 measures
+      score->insertMeasure(Element::Type::MEASURE, msr, false);
+      score->insertMeasure(Element::Type::MEASURE, msr, false);
+      score->doLayout();
+      // check 'generated' status
+      msr = score->firstMeasure();
+      for (int i = 0; i < 5; i++) {
+            Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick() + msr->ticks());
+            sprintf(msg, "No bar line segment in measure %d.", i+1);
+            QVERIFY2(seg != nullptr, msg);
+            BarLine* bar = static_cast<BarLine*>(seg->element(0));
+            sprintf(msg, "Bar line in measure %d is generated.", i+1);
+            QVERIFY2(!bar->generated(), msg);
+            msr = msr->nextMeasure();
+      }
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   barline08 - 'Generated' status of appended measure bar lines
+///   Appends two measures and check bar lines of all involved measure do not have 'generated' status
+//
+//    NO REFERENCE SCORE IS USED.
+//---------------------------------------------------------
+
+void TestBarline::barline08()
+      {
+      char  msg[256];
+      Score* score = readScore(DIR + "barline08.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // appends 2 measures
+      score->insertMeasure(Element::Type::MEASURE, 0, false);
+      score->insertMeasure(Element::Type::MEASURE, 0, false);
+      score->doLayout();
+      // check 'generated' status
+      Measure* msr = score->firstMeasure();
+      for (int i = 0; msr != nullptr; i++) {
+            Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick() + msr->ticks());
+            sprintf(msg, "No bar line segment in measure %d.", i+1);
+            QVERIFY2(seg != nullptr, msg);
+            BarLine* bar = static_cast<BarLine*>(seg->element(0));
+            sprintf(msg, "Bar line in measure %d is generated.", i+1);
+            QVERIFY2(!bar->generated(), msg);
+            msr = msr->nextMeasure();
+      }
       delete score;
       }
 

@@ -150,7 +150,7 @@ Measure::Measure(Score* s)
       _irregular             = false;
       _breakMultiMeasureRest = false;
       _breakMMRest           = false;
-      _endBarLineGenerated   = true;
+      _endBarLineGenerated   = false;
       _endBarLineVisible     = true;
       _endBarLineType        = BarLineType::NORMAL;
       _mmRest                = 0;
