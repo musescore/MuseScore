@@ -2387,7 +2387,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "resource-manager",
          Qt::ApplicationShortcut,
@@ -2477,7 +2477,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_TEXT_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "masterpalette",
          QT_TRANSLATE_NOOP("action","Master Palette..."),
@@ -2485,7 +2485,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_TEXT_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "key-signatures",
          QT_TRANSLATE_NOOP("action","Key Signatures..."),
@@ -2493,7 +2493,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_TEXT_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "time-signatures",
          QT_TRANSLATE_NOOP("action","Time Signatures..."),
@@ -2501,7 +2501,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_TEXT_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "symbols",
          QT_TRANSLATE_NOOP("action","Symbols..."),
