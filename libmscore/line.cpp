@@ -219,7 +219,11 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
                         if ((s2->system()->firstMeasure() == s2->measure())
                            && (s2->tick() == s2->measure()->tick()))
                               bspDirty = true;
-                        s2 = nextSeg1(s2, track);
+                        Segment* ns2 = nextSeg1(s2, track);
+                        if (ns2)
+                              s2 = ns2;
+                        else
+                              s2 = score()->lastSegment();
                         }
                   }
             if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick())
