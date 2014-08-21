@@ -712,6 +712,14 @@ void GuitarPro4::read(QFile* fp)
                               lyrics = new Lyrics(score);
                               lyrics->setText(readDelphiString());
                               }
+                        gpLyrics.beatCounter++;
+                        if (gpLyrics.beatCounter >= gpLyrics.fromBeat && gpLyrics.lyricTrack == staffIdx + 1) {
+                              int index = gpLyrics.beatCounter - gpLyrics.fromBeat;
+                              if (index < gpLyrics.lyrics.size()) {
+                                    lyrics = new Lyrics(score);
+                                    lyrics->setText(gpLyrics.lyrics[index]);
+                                    }
+                              }
                         int beatEffects = 0;
                         if (beatBits & BEAT_EFFECTS)
                               beatEffects = readBeatEffects(track, segment);
