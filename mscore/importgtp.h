@@ -79,6 +79,13 @@ struct GPFermata {
       int timeDivision;
 };
 
+struct GPLyrics {
+      QStringList lyrics;
+      int fromBeat;
+      int beatCounter;
+      int lyricTrack;
+};
+
 struct GpBar {
       Fraction timesig;
       bool freeTime;
@@ -179,6 +186,7 @@ class GuitarPro {
       int tempo;
       QMap<int,int> slides;
 
+      GPLyrics gpLyrics;
       int slide;
       int voltaSequence;
       QTextCodec* _codec;

@@ -176,6 +176,14 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             lyrics = new Lyrics(score);
             lyrics->setText(txt);
             }
+      gpLyrics.beatCounter++;
+      if (gpLyrics.beatCounter >= gpLyrics.fromBeat && gpLyrics.lyricTrack == staffIdx+1) {
+            int index = gpLyrics.beatCounter - gpLyrics.fromBeat;
+            if (index < gpLyrics.lyrics.size()) {
+                  lyrics = new Lyrics(score);
+                  lyrics->setText(gpLyrics.lyrics[index]);
+                  }
+            }
       int beatEffects = 0;
       if (beatBits & BEAT_EFFECTS)
             beatEffects = readBeatEffects(track, segment);
