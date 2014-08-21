@@ -129,8 +129,16 @@ void ScoreAccessibility::currentInfoChanged()
             QString rez = e->accessibleInfo();
             if (!barsAndBeats.isEmpty())
                   rez += "; " + barsAndBeats;
+
+            QString staff = "";
+            if (e->staffIdx() + 1) {
+                  staff = tr("Staff %1").arg(QString::number(e->staffIdx() + 1));
+                  rez = QString("%1; %2").arg(rez).arg(staff);
+                  }
+
             statusBarLabel->setText(rez);
-            score->setAccessibleInfo(e->screenReaderInfo() + barsAndBeats + " " + e->accessibleExtraInfo());
+            QString screenReaderRez = QString("%1%2 %3 %4").arg(e->screenReaderInfo()).arg(barsAndBeats).arg(staff).arg(e->accessibleExtraInfo());
+            score->setAccessibleInfo(screenReaderRez);
             }
       else if (score->selection().isRange()) {
             QString barsAndBeats = "";
