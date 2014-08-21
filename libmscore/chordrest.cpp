@@ -974,7 +974,7 @@ QString ChordRest::durationUserName()
                   dotString += " " + tr("Triple dotted");
                   break;
             }
-      return duration + tupletType + dotString + " " + durationType().durationTypeUserName() + " " + tr("note");
+      return duration + tupletType + dotString + " " + durationType().durationTypeUserName();
       }
 
 //---------------------------------------------------------
