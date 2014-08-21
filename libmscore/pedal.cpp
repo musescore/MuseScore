@@ -274,7 +274,7 @@ QPointF Pedal::linePos(GripLine grip, System** sys) const
       {
       qreal x;
       qreal nhw = score()->noteHeadWidth();
-      System* s;
+      System* s = nullptr;
       if (grip == GripLine::START) {
             ChordRest* c = static_cast<ChordRest*>(startElement());
             s = c->segment()->system();
@@ -283,12 +283,36 @@ QPointF Pedal::linePos(GripLine grip, System** sys) const
                   x += nhw * .5;
             }
       else {
-            ChordRest* c = static_cast<ChordRest*>(endElement());
-            if (c) {
-                  s = c->segment()->system();
-                  x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+            ChordRest* c = nullptr;
+            Element* e = endElement();
+            if (!e || e == startElement()) {
+                  // pedal marking on single note - extend to next note or end of measure
+                  Segment* seg = startSegment();
+                  if (seg) {
+                        seg = seg->next();
+                        for ( ; seg; seg = seg->next()) {
+                              if (seg->segmentType() == Segment::Type::ChordRest) {
+                                    if (seg->element(track()))
+                                          break;
+                                    }
+                              else if (seg->segmentType() == Segment::Type::EndBarLine) {
+                                    break;
+                                    }
+                              }
+                        }
+                  if (seg) {
+                        s = seg->system();
+                        x = seg->pos().x() + seg->measure()->pos().x() - nhw * 2;
+                        }
                   }
             else {
+                  c = static_cast<ChordRest*>(endElement());
+                  if (c) {
+                        s = c->segment()->system();
+                        x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+                        }
+                  }
+            if (!s) {
                   int t = tick2();
                   Measure* m = score()->tick2measure(t);
                   s = m->system();
