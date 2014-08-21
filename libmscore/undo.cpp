@@ -465,25 +465,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, Key key)
                         lks->linkTo(nks);
                   else
                         lks = nks;
-                  }
-            //
-            // change all following generated keysigs
-            //
-            Measure* lm = measure->nextMeasure();
-            for (; lm; lm = lm->nextMeasure()) {
-                  Segment* s = lm->findSegment(Segment::Type::KeySig | Segment::Type::KeySigAnnounce, lm->tick());
-                  if (!s)
-                        continue;
-                  KeySig* ks = static_cast<KeySig*>(s->element(track));
-                  if (!ks)
-                        continue;
-                  if (!ks->generated())
-                        break;
-                  if (ks->key() != key) {
-                        KeySigEvent kse = ks->keySigEvent();
-                        kse.setKey(key);
-                        undo(new ChangeKeySig(ks, kse, ks->showCourtesy()));
-                        }
+                  cmdUpdateNotes();
                   }
             }
       }
@@ -1891,6 +1873,7 @@ void ChangeKeySig::flip()
 
       keysig->setKeySigEvent(ks);
       keysig->setShowCourtesy(showCourtesy);
+      keysig->measure()->setDirty();
 
       int tick = keysig->segment()->tick();
       // update keys if keysig was not generated

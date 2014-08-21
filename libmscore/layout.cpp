@@ -1783,15 +1783,18 @@ void Score::createMMRests()
                               ns = mmr->undoGetSegment(Segment::Type::KeySig, m->tick());
                         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                               int track = staffIdx * VOICES;
-                              KeySig* ts = static_cast<KeySig*>(cs->element(track));
+                              KeySig* ts  = static_cast<KeySig*>(cs->element(track));
+                              KeySig* nts = static_cast<KeySig*>(ns->element(track));
                               if (ts) {
-                                    if (ns->element(track) == 0) {
+                                    if (!nts) {
                                           KeySig* nks = ts->clone();
                                           nks->setParent(ns);
                                           undo(new AddElement(nks));
                                           }
                                     else {
-                                          //TODO: check if same key signature
+                                          if (nts->keySigEvent() != ts->keySigEvent()) {
+                                                undo(new ChangeKeySig(nts, ts->keySigEvent(), nts->showCourtesy()));
+                                                }
                                           }
                                     }
                               }
