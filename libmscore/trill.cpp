@@ -300,19 +300,20 @@ void Trill::remove(Element* e)
 
 void Trill::layout()
       {
-      qreal _spatium = spatium();
-
       SLine::layout();
       if (score() == gscore)
             return;
       if (spannerSegments().empty())
             return;
       TrillSegment* ls = static_cast<TrillSegment*>(frontSegment());
+#if 0
+// this is now handled differently, in SLine::linePos
       //
       // special case:
       // if end segment is first chord/rest segment in measure,
       // shorten trill line so it ends at end of previous measure
       //
+      qreal _spatium = spatium();
       Segment* seg1  = startSegment();
       Segment* seg2  = endSegment();
       if (seg1
@@ -331,6 +332,7 @@ void Trill::layout()
                   ls->layout();
                   }
             }
+#endif
       if (spannerSegments().empty())
             qDebug("Trill: no segments");
       if (_accidental)
