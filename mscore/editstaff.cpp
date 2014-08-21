@@ -393,7 +393,40 @@ void EditStaff::editStringDataClicked()
       esd->setWindowModality(Qt::WindowModal);
       if (esd->exec()) {
             StringData stringData(frets, stringList);
-            // detect number of strings going from 0 to !0 or vice versa
+
+            // update instrument pitch ranges as necessary
+            if (stringList.size() > 0) {
+                  // get new string range bottom and top
+                  // as we have to choose an int size, INT16 are surely beyond midi pitch limits
+                  int oldHighestStringPitch     = INT16_MIN;
+                  int highestStringPitch        = INT16_MIN;
+                  int lowestStringPitch         = INT16_MAX;
+                  for (const instrString& str : stringList) {
+                        if (str.pitch > highestStringPitch) highestStringPitch = str.pitch;
+                        if (str.pitch < lowestStringPitch)  lowestStringPitch  = str.pitch;
+                        }
+                  // get old string range bottom
+                  for (const instrString& str : instrument.stringData()->stringList())
+                        if (str.pitch > oldHighestStringPitch) oldHighestStringPitch = str.pitch;
+                  // if there were no string, arbitrarely set old top to maxPitchA
+                  if (oldHighestStringPitch == INT16_MIN)
+                        oldHighestStringPitch = instrument.maxPitchA();
+
+                  // range bottom is surely the pitch of the lowest string
+                  instrument.setMinPitchA(lowestStringPitch);
+                  instrument.setMinPitchP(lowestStringPitch);
+                  // range top should keep the same interval with the highest string it has now
+                  instrument.setMaxPitchA(instrument.maxPitchA() + highestStringPitch - oldHighestStringPitch);
+                  instrument.setMaxPitchP(instrument.maxPitchP() + highestStringPitch - oldHighestStringPitch);
+                  // update dlg controls
+                  minPitchA->setText(midiCodeToStr(instrument.minPitchA()));
+                  maxPitchA->setText(midiCodeToStr(instrument.maxPitchA()));
+                  minPitchP->setText(midiCodeToStr(instrument.minPitchP()));
+                  maxPitchP->setText(midiCodeToStr(instrument.maxPitchP()));
+                  // if no longer there is any string, leave everything as it is now
+                  }
+
+            // update instrument data and dlg controls
             instrument.setStringData(stringData);
             numOfStrings->setText(QString::number(stringData.strings()));
             }
