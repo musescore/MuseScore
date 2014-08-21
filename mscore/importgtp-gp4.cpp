@@ -475,19 +475,19 @@ int GuitarPro4::convertGP4SlideNum(int slide)
       switch (slide) {
             // slide out downwards
             case 3:
-                  return 4;
+                  return SLIDE_OUT_DOWN;
                   break;
             // slide out upwards
             case 4:
-                  return 8;
+                  return SLIDE_OUT_UP;
                   break;
             // slide in from above
             case 254:
-                  return 32;
+                  return SLIDE_IN_ABOVE;
                   break;
             // slide in from below
             case 255:
-                  return 16;
+                  return SLIDE_IN_BELOW;
                   break;
             }
       return slide;

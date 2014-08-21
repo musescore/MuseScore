@@ -108,6 +108,7 @@ class GuitarPro {
       static const uchar EFFECT_PALM_MUTE = 0x2;
       static const uchar EFFECT_TREMOLO = 0x4;
       static const uchar EFFECT_LET_RING = 0x8;
+      static const uchar EFFECT_SLIDE_OLD = 0x4;
       static const uchar EFFECT_SLIDE = 0x8;
       static const uchar EFFECT_GRACE = 0x10;
       static const uchar EFFECT_ARTIFICIAL_HARMONIC = 0x10;
@@ -153,6 +154,14 @@ class GuitarPro {
       static const uchar SCORE_KEYSIG = 0x40;
       static const uchar SCORE_DOUBLE_BAR = 0x80;
 
+      // slide kinds
+      static const int SHIFT_SLIDE = 1;
+      static const int LEGATO_SLIDE = 2;
+      static const int SLIDE_OUT_DOWN = 4;
+      static const int SLIDE_OUT_UP = 8;
+      static const int SLIDE_IN_BELOW = 16;
+      static const int SLIDE_IN_ABOVE = 32;
+
       static const char* errmsg[];
       int version;
       int key;
@@ -170,6 +179,7 @@ class GuitarPro {
       int tempo;
       QMap<int,int> slides;
 
+      int slide;
       int voltaSequence;
       QTextCodec* _codec;
       Slur** slurs;
@@ -273,7 +283,6 @@ class GuitarPro3 : public GuitarPro1 {
 
 class GuitarPro4 : public GuitarPro {
 
-      int slide;
       void readInfo();
       bool readNote(int string, int staffIdx, Note* note);
       virtual int readBeatEffects(int track, Segment* segment);
@@ -291,7 +300,6 @@ class GuitarPro4 : public GuitarPro {
 
 class GuitarPro5 : public GuitarPro {
 
-      int slide;
       void readInfo();
       void readPageSetup();
       virtual int readBeatEffects(int track, Segment* segment);
