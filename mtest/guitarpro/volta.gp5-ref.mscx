@@ -1428,8 +1428,8 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
+        <endSpanner id="3"/>
         <tick>11520</tick>
-        <endSpanner id="2"/>
         <Chord>
           <lid>166</lid>
           <track>1</track>
@@ -1468,9 +1468,6 @@
             <string>0</string>
             </Note>
           </Chord>
-        <tick>11520</tick>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
         </Measure>
       </Staff>
     <Score>
@@ -2964,8 +2961,8 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
+          <endSpanner id="5"/>
           <tick>11520</tick>
-          <endSpanner id="4"/>
           <Chord>
             <lid>166</lid>
             <track>1</track>
@@ -3004,9 +3001,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>11520</tick>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -4284,7 +4278,6 @@
             </Chord>
           </Measure>
         <Measure number="9">
-          <endSpanner id="4"/>
           <Rest>
             <lid>165</lid>
             <durationType>measure</durationType>
@@ -4295,7 +4288,6 @@
             <span>1</span>
             </BarLine>
           <tick>11520</tick>
-          <endSpanner id="4"/>
           <Chord>
             <lid>166</lid>
             <track>5</track>
@@ -4334,9 +4326,6 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>11520</tick>
-          <endSpanner id="4"/>
-          <endSpanner id="4"/>
           </Measure>
         </Staff>
       <name>Guitar</name>

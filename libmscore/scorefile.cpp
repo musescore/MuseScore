@@ -1250,7 +1250,7 @@ qDebug("createRevision");
 void Score::writeSegments(Xml& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
-      QList<Spanner*> span;
+      int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
       for (int track = strack; track < etrack; ++track) {
             if (!xml.canWriteVoice(track))
                   continue;
@@ -1293,7 +1293,6 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   Measure* m = segment->measure();
                   // don't write spanners for multi measure rests
                   if ((!(m && m->isMMRest())) && (segment->segmentType() & Segment::Type::ChordRest)) {
-                        int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
                         auto endIt = spanner().upper_bound(endTick);
                         for (auto i = spanner().begin(); i != endIt; ++i) {
                               Spanner* s = i->second;
@@ -1313,12 +1312,11 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                                 needTick = false;
                                                 }
                                           s->write(xml);
-                                          span.append(s);
                                           }
                                     }
                               if ((s->tick2() == segment->tick())
                                  && s->type() != Element::Type::SLUR
-                                 && (s->track2() == track || s->track2() == -1)
+                                 && (s->track2() == track || (s->track2() == -1 && s->track() == track))
                                  && (!clip || s->tick() >= fs->tick())
                                  ) {
                                     if (needTick) {
@@ -1327,7 +1325,6 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                           needTick = false;
                                           }
                                     xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
-                                    span.removeAll(s);
                                     }
                               }
                         }
@@ -1368,11 +1365,21 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   e->write(xml);
                   segment->write(xml);    // write only once
                   }
-            }
-      if (clip) {
-            for (Spanner* s : span) {
-                  if (s->type() != Element::Type::SLUR)
-                        xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+            //write spanner ending after the last segment, on the last tick
+            if (clip || ls == 0) {
+                  auto endIt = spanner().upper_bound(endTick);
+                  for (auto i = spanner().begin(); i != endIt; ++i) {
+                        Spanner* s = i->second;
+                        if (s->generated() || !xml.canWrite(s))
+                              continue;
+                        if ((s->tick2() == endTick)
+                          && s->type() != Element::Type::SLUR
+                          && (s->track2() == track || (s->track2() == -1 && s->track() == track))
+                          && (!clip || s->tick() >= fs->tick())
+                          ) {
+                              xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+                              }
+                        }
                   }
             }
       }
