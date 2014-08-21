@@ -532,16 +532,16 @@ QString KeySig::accessibleInfo()
       {
       QString keySigType;
       if (isCustom())
-            return tr("%1 Custom").arg(Element::accessibleInfo());
+            return tr("%1: Custom").arg(Element::accessibleInfo());
 
       if (key() == Key::C)
-            return Element::accessibleInfo() + " " + keyNames[14];
+            return QString("%1: %2").arg(Element::accessibleInfo()).arg(keyNames[14]);
       int keyInt = static_cast<int>(key());
       if (keyInt < 0)
             keySigType = keyNames[(7 + keyInt) * 2 + 1];
       else
             keySigType = keyNames[(keyInt - 1) * 2];
-      return Element::accessibleInfo() + " " + keySigType;
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(keySigType);
       }
 
 }

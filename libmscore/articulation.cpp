@@ -633,7 +633,7 @@ qreal Articulation::mag() const
 
 QString Articulation::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + subtypeUserName();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(subtypeUserName());
       }
 
 }

@@ -76,7 +76,7 @@ QString Fingering::accessibleInfo()
       if (textStyleType() == TextStyleType::STRING_NUMBER) {
             rez += " " + tr("String number");
             }
-      return rez + " " + text();
+      return QString("%1: %2").arg(rez).arg(text());
       }
 
 }

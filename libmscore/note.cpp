@@ -2416,7 +2416,8 @@ QString Note::accessibleInfo()
       {
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      return noteTypeUserName() + " " + tpcUserName(false) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      //return noteTypeUserName() + " " + tpcUserName(false) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      return QString("%1; %2; %3%4").arg(noteTypeUserName()).arg(tpcUserName(false)).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -2427,7 +2428,8 @@ QString Note::screenReaderInfo()
       {
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      return noteTypeUserName() + " " + tpcUserName(true) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      //return noteTypeUserName() + " " + tpcUserName(true) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(tpcUserName(true)).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -2438,31 +2440,31 @@ QString Note::accessibleExtraInfo()
       {
       QString rez = "";
       if (accidental()) {
-            rez += " " + accidental()->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(accidental()->screenReaderInfo());
             }
       if (!el().isEmpty()) {
             foreach (Element* e, el()) {
-                  rez = rez + " " + e->screenReaderInfo();
+                  rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
             }
       if (tieFor())
-            rez += " " + tr("Start of %1").arg(tieFor()->screenReaderInfo());
+            rez = tr("%1 Start of %2").arg(rez).arg(tieFor()->screenReaderInfo());
 
       if (tieBack())
-            rez += " " + tr("End of %1").arg(tieBack()->screenReaderInfo());
+            rez = tr("%1 End of %2").arg(rez).arg(tieBack()->screenReaderInfo());
 
       if (!spannerFor().isEmpty()) {
             foreach (Spanner* s, spannerFor()) {
-                  rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                  rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
       if (!spannerBack().isEmpty()) {
             foreach (Spanner* s, spannerBack()) {
-                  rez += " " + tr("End of %2").arg(s->screenReaderInfo());
+                  rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
 
-      rez = rez + " " + chord()->accessibleExtraInfo();
+      rez = QString("%1 %2").arg(rez).arg(chord()->accessibleExtraInfo());
       return rez;
       }
 
