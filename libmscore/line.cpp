@@ -17,6 +17,7 @@
 #include "score.h"
 #include "xml.h"
 #include "system.h"
+#include "staff.h"
 #include "utils.h"
 #include "barline.h"
 #include "chord.h"
@@ -465,8 +466,38 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                         cr = static_cast<ChordRest*>(startElement());
                   else {
                         cr = static_cast<ChordRest*>(endElement());
-                        if (cr)
-                              x += cr->width();
+                        if (type() == Element::Type::OTTAVA) {
+                              // lay out to right edge of note (including dots)
+                              if (cr)
+                                    x += cr->segment()->width();
+                              }
+                        else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL) {
+                              // lay out all the way to next CR or (almost to) barline
+                              if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
+                                    qreal x2 = 0.0;
+                                    qreal sp = endElement()->staff()->spatium();
+                                    int track = track2();
+                                    Segment* seg = static_cast<Segment*>(endElement()->parent())->next();
+                                    for ( ; seg; seg = seg->next()) {
+                                          if (seg->segmentType() == Segment::Type::ChordRest) {
+                                                if (track != -1 && !seg->element(track)) {
+                                                      continue;
+                                                      }
+                                                x2 = seg->x() - sp;     // 1sp shy of next chord
+                                                break;
+                                                }
+                                          else if (seg->segmentType() == Segment::Type::EndBarLine) {
+                                                x2 = seg->x() - sp;
+                                                break;
+                                                }
+                                          }
+                                    if (!seg) {
+                                          // no end segment found, use measure width
+                                          x2 = endElement()->parent()->parent()->width() - sp;
+                                          }
+                                    x += x2 - endElement()->parent()->x();
+                                    }
+                              }
                         }
 
                   int t = grip == GripLine::START ? tick() : tick2();
