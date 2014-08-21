@@ -550,10 +550,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             FretDiagram* nFret = const_cast<FretDiagram*>(fd->clone());
             FretDiagramProperties fp(nFret, 0);
             int rv = fp.exec();
+            nFret->layout();
             if (rv) {
-                  nFret->layout();
-                  score()->undoChangeElement(fd, nFret);
-                  return;
+                  for (Element* e : fd->linkList()) {
+                        FretDiagram* f = static_cast<FretDiagram*>(nFret->clone());
+                        f->setScore(e->score());
+                        e->score()->undoChangeElement(e, f);
+                        }
                   }
             delete nFret;
             }
