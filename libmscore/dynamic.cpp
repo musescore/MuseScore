@@ -446,7 +446,7 @@ QVariant Dynamic::propertyDefault(P_ID id) const
 
 QString Dynamic::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + this->dynamicTypeName();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(this->dynamicTypeName());
       }
 
 }

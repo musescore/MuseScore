@@ -528,7 +528,7 @@ void Trill::setYoff(qreal val)
 
 QString Trill::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + trillTypeUserName();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(trillTypeUserName());
       }
 }
 

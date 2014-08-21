@@ -2862,24 +2862,24 @@ QString Chord::accessibleExtraInfo()
       if (!isGrace()) {
             foreach (Chord* c, graceNotes()) {
                   foreach (Note* n, c->notes()) {
-                        rez = " " + n->screenReaderInfo();
+                        rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
                         }
                   }
             }
 
       if (arpeggio())
-            rez = rez + " " + arpeggio()->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(arpeggio()->screenReaderInfo());
 
       if (tremolo())
-            rez = rez + " " + tremolo()->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(tremolo()->screenReaderInfo());
 
       if (glissando())
-            rez = rez + " " + glissando()->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(glissando()->screenReaderInfo());
 
       foreach (Element* e, el())
-            rez = rez + " " + e->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
 
-      return rez + " " + ChordRest::accessibleExtraInfo();
+      return QString("%1 %2").arg(rez).arg(ChordRest::accessibleExtraInfo());
       }
 }
 

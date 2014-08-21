@@ -2558,7 +2558,7 @@ QString Text::accessibleInfo()
                   rez = Element::accessibleInfo();
                   break;
             }
-      return  rez + " " + plainText();
+      return  QString("%1: %2").arg(rez).arg(plainText());
       }
 }
 

@@ -632,7 +632,7 @@ qreal Rest::stemPosX() const
 QString Rest::accessibleInfo()
       {
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      return Element::accessibleInfo() + " " + durationUserName() + " " + voice ;
+      return QString("%1; %2; %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
       }
 
 }

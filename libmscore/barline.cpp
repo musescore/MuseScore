@@ -1188,7 +1188,7 @@ Element* BarLine::prevElement()
 
 QString BarLine::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + BarLine::userTypeName2(this->barLineType());
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(BarLine::userTypeName2(this->barLineType()));
       }
 
 //---------------------------------------------------------
@@ -1202,11 +1202,11 @@ QString BarLine::accessibleExtraInfo()
             QString rez = "";
 
             foreach(Element* e, *el())
-                  rez += " " + e->screenReaderInfo();
+                  rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
 
             foreach (Element* e, seg->annotations()) {
                   if (e->track() == track())
-                        rez += " " + e->screenReaderInfo();
+                        rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
             Measure* m = seg->measure();
 
@@ -1214,11 +1214,11 @@ QString BarLine::accessibleExtraInfo()
                   //jumps
                   foreach (Element* e, *m->el()) {
                         if(e->type() == Element::Type::JUMP)
-                              rez+= " " + e->screenReaderInfo();
+                              rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                         if(e->type() == Element::Type::MARKER) {
                               Marker* m = static_cast<Marker*>(e);
                               if (m->markerType() == Marker::Type::FINE)
-                                    rez += " " + e->screenReaderInfo();
+                                    rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                               }
 
                         }
@@ -1229,7 +1229,7 @@ QString BarLine::accessibleExtraInfo()
                               if(e->type() == Element::Type::MARKER)
                                     if(static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)
                                           continue; //added above^
-                                    rez += " " + e->screenReaderInfo();
+                                    rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                               }
                         }
                   }
@@ -1242,9 +1242,9 @@ QString BarLine::accessibleExtraInfo()
                   Spanner* s = interval.value;
                   if (s->type() == Element::Type::VOLTA) {
                         if(s->tick() == tick)
-                              rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                              rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                         if(s->tick2() == tick)
-                              rez += " " + tr("End of %1").arg(s->screenReaderInfo());
+                              rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                         }
                   }
             return rez;

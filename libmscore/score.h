@@ -993,7 +993,7 @@ class Score : public QObject {
       Element* lastElement();
 
       void cmdInsertClef(Clef* clef, ChordRest* cr);
-      void setAccessibleInfo(QString s) { accInfo = s.remove(":"); }
+      void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
       QString accessibleInfo()          { return accInfo;          }
 
       friend class ChangeSynthesizerState;

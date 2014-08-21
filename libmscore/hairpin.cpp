@@ -577,13 +577,13 @@ QString Hairpin::accessibleInfo()
       QString rez = SLine::accessibleInfo();
       switch (hairpinType()) {
             case Type::CRESCENDO:
-                  rez += " " + tr("Crescendo");
+                  rez += ": " + tr("Crescendo");
                   break;
             case Type::DECRESCENDO:
-                  rez += " " + tr("Descrescendo");
+                  rez += ": " + tr("Descrescendo");
                   break;
             default:
-                  rez += " " + tr("Custom");
+                  rez += ": " + tr("Custom");
             }
       return rez;
       }
