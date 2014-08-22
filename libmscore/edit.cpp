@@ -2409,7 +2409,6 @@ void Score::checkSpanner(int startTick, int endTick)
                   }
             else {
                   // remove spanner if there is no start element
-                  Segment* seg = tick2segmentMM(s->tick(), false, Segment::Type::ChordRest);
                   s->computeStartElement();
                   if (!s->startElement())
                         sl.append(s);
