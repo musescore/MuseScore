@@ -1452,7 +1452,7 @@ RemoveElement::RemoveElement(Element* e)
                         }
                   if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e))
                         sl.append(s);
-                  else if ((s->tick() == tick) && (s->track() == element->track()))
+                  else if ((s->tick() == tick) && (s->track() == element->track()) && (s->anchor() != Spanner::Anchor::MEASURE))
                         sl.append(s);
                   }
             for (auto s : sl)       // actually remove scheduled spanners
