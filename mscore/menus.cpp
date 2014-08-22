@@ -1074,12 +1074,12 @@ void MuseScore::setAdvancedPalette()
 */
 
       FretDiagram* fret = new FretDiagram(gscore);
-      fret->setDot(5, 1);
+      fret->setDot(4, 1);
       fret->setDot(2, 2);
       fret->setDot(1, 3);
       fret->setMarker(0, 'X');
       fret->setMarker(3, 'O');
-      fret->setMarker(4, 'O');
+      fret->setMarker(5, 'O');
       sp->append(fret, tr("Fretboard Diagram"));
 
       paletteBox->addPalette(sp);
