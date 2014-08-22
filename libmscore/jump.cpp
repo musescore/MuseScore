@@ -234,7 +234,7 @@ Element* Jump::prevElement()
 
 QString Jump::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + this->jumpTypeUserName();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(this->jumpTypeUserName());
       }
 
 }

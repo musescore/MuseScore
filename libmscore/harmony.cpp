@@ -1458,7 +1458,7 @@ const ParsedChord* Harmony::parsedForm()
 
 QString Harmony::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + harmonyName();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(harmonyName());
       }
 
 //---------------------------------------------------------
@@ -1469,7 +1469,7 @@ QString Harmony::screenReaderInfo()
       {
       QString rez = Element::accessibleInfo();
       if (_rootTpc != Tpc::TPC_INVALID)
-            rez += " " + tpc2name(_rootTpc, NoteSpellingType::STANDARD, false, true);
+            rez = QString("%1 %2").arg(rez).arg(tpc2name(_rootTpc, NoteSpellingType::STANDARD, false, true));
 
       if (parsedForm() && !hTextName().isEmpty()) {
             QString aux = parsedForm()->handle();
@@ -1481,14 +1481,14 @@ QString Harmony::screenReaderInfo()
                         s.replace("b", tr("flat"));
                   extension += s + " ";
                   }
-            rez += " " + extension;
+            rez = QString("%1 %2").arg(rez).arg(extension);
             }
       else {
-            rez += " " + hTextName();
+            rez = QString("%1 %2").arg(rez).arg(hTextName());
             }
 
       if (_baseTpc != Tpc::TPC_INVALID)
-            rez += + " / " + tpc2name(_baseTpc, NoteSpellingType::STANDARD, false, true);
+            rez = QString("%1 / %2").arg(rez).arg(tpc2name(_baseTpc, NoteSpellingType::STANDARD, false, true));
 
       return rez;
       }

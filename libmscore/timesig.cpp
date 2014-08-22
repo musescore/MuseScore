@@ -580,7 +580,7 @@ QString TimeSig::accessibleInfo()
             default:
                   timeSigString = tr("%1/%2 time").arg(QString::number(numerator())).arg(QString::number(denominator()));
             }
-      return Element::accessibleInfo() + " " + timeSigString;
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(timeSigString);
       }
 
 }

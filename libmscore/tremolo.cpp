@@ -353,7 +353,7 @@ QString Tremolo::subtypeName() const
 
 QString Tremolo::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + subtypeName();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(subtypeName());
       }
 
 }
