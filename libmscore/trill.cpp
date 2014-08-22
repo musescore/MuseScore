@@ -26,11 +26,11 @@ namespace Ms {
 
 // must be in sync with Trill::Type
 const TrillTableItem trillTable[] = {
-      { Trill::Type::TRILL_LINE,      "trill",      QObject::tr("Trill line")          },
-      { Trill::Type::UPPRALL_LINE,    "upprall",    QObject::tr("Upprall line")        },
-      { Trill::Type::DOWNPRALL_LINE,  "downprall",  QObject::tr("Downprall line")      },
-      { Trill::Type::PRALLPRALL_LINE, "prallprall", QObject::tr("Prallprall line")     },
-      { Trill::Type::PURE_LINE      , "pure",       QObject::tr("Wavy line")           }
+      { Trill::Type::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("trillType", "Trill line")          },
+      { Trill::Type::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("trillType", "Upprall line")        },
+      { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line")      },
+      { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     },
+      { Trill::Type::PURE_LINE      , "pure",       QT_TRANSLATE_NOOP("trillType", "Wavy line")           }
 };
 
 int trillTableSize() {
@@ -440,7 +440,7 @@ QString Trill::trillTypeName() const
 
 QString Trill::trillTypeUserName()
       {
-      return trillTable[static_cast<int>(trillType())].userName;
+      return qApp->translate("trillType", qPrintable(trillTable[static_cast<int>(trillType())].userName));
       }
 
 //---------------------------------------------------------

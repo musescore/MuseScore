@@ -20,14 +20,14 @@ namespace Ms {
 
 //must be in sync with Marker::Type enum
 const MarkerTypeItem markerTypeTable[] = {
-      { Marker::Type::SEGNO   , QObject::tr("Segno")          },
-      { Marker::Type::VARSEGNO, QObject::tr("Segno Variation")},
-      { Marker::Type::CODA    , QObject::tr("Coda")           },
-      { Marker::Type::VARCODA , QObject::tr("Varied coda")    },
-      { Marker::Type::CODETTA , QObject::tr("Codetta")        },
-      { Marker::Type::FINE    , QObject::tr("Fine")           },
-      { Marker::Type::TOCODA  , QObject::tr("To Coda")        },
-      { Marker::Type::USER    , QObject::tr("Custom")         }
+      { Marker::Type::SEGNO   , QT_TRANSLATE_NOOP("markerType", "Segno")          },
+      { Marker::Type::VARSEGNO, QT_TRANSLATE_NOOP("markerType", "Segno Variation")},
+      { Marker::Type::CODA    , QT_TRANSLATE_NOOP("markerType", "Coda")           },
+      { Marker::Type::VARCODA , QT_TRANSLATE_NOOP("markerType", "Varied coda")    },
+      { Marker::Type::CODETTA , QT_TRANSLATE_NOOP("markerType", "Codetta")        },
+      { Marker::Type::FINE    , QT_TRANSLATE_NOOP("markerType", "Fine")           },
+      { Marker::Type::TOCODA  , QT_TRANSLATE_NOOP("markerType", "To Coda")        },
+      { Marker::Type::USER    , QT_TRANSLATE_NOOP("markerType", "Custom")         }
       };
 
 int markerTypeTableSize()
@@ -107,7 +107,7 @@ void Marker::setMarkerType(Type t)
 
 QString Marker::markerTypeUserName()
       {
-      return markerTypeTable[static_cast<int>(_markerType)].name;
+      return qApp->translate("musescore", qPrintable(markerTypeTable[static_cast<int>(_markerType)].name));
       }
 
 //---------------------------------------------------------

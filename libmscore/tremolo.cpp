@@ -344,7 +344,7 @@ Fraction Tremolo::tremoloLen() const
 
 QString Tremolo::subtypeName() const
       {
-      return tremoloName[subtype() - int(TremoloType::R8)];
+      return qApp->translate("Tremolo", tremoloName[subtype() - int(TremoloType::R8)]);
       }
 
 //---------------------------------------------------------

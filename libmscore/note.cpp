@@ -2504,7 +2504,7 @@ const char* NoteHead::groupToGroupName(NoteHead::Group group)
 
 QString Note::subtypeName() const
       {
-      return NoteHead::groupToGroupName(_headGroup);
+      return qApp->translate("noteheadnames", NoteHead::groupToGroupName(_headGroup));
       }
 
 //---------------------------------------------------------

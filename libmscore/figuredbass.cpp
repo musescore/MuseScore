@@ -1712,7 +1712,7 @@ FiguredBass* Score::addFiguredBass()
                   QMessageBox::information(0,
                      QMessageBox::tr("MuseScore"),
                      QMessageBox::tr("No note or figured bass selected:\n"
-                        "please select a single note or figured bass and retry.\n"),
+                        "Please select a single note or figured bass and retry.\n"),
                      QMessageBox::Ok, QMessageBox::NoButton);
             return 0;
             }

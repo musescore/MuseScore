@@ -535,12 +535,12 @@ QString KeySig::accessibleInfo()
             return tr("%1: Custom").arg(Element::accessibleInfo());
 
       if (key() == Key::C)
-            return QString("%1: %2").arg(Element::accessibleInfo()).arg(keyNames[14]);
+            return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("MuseScore", keyNames[14]));
       int keyInt = static_cast<int>(key());
       if (keyInt < 0)
-            keySigType = keyNames[(7 + keyInt) * 2 + 1];
+            keySigType = qApp->translate("MuseScore", keyNames[(7 + keyInt) * 2 + 1]);
       else
-            keySigType = keyNames[(keyInt - 1) * 2];
+            keySigType = qApp->translate("MuseScore", keyNames[(keyInt - 1) * 2]);
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(keySigType);
       }
 
