@@ -101,6 +101,13 @@ void ScoreView::endEdit()
             harmonyEndEdit();
       else if (tp == Element::Type::FIGURED_BASS)
             figuredBassEndEdit();
+
+      if (editObject->isText()) {
+            Text* text = static_cast<Text*>(editObject);
+            if (text->isEmpty())
+                  _score->undoRemoveElement(text);
+            editObject = nullptr;
+            }
       _score->endCmd();
       mscore->endCmd();
 
@@ -109,7 +116,7 @@ void ScoreView::endEdit()
             _score->select(curElement);
             _score->end();
             }
-      editObject     = 0;
+      editObject     = nullptr;
       grips          = 0;
       }
 
