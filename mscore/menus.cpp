@@ -339,13 +339,13 @@ Palette* MuseScore::newRepeatsPalette()
 
             Marker* mk = new Marker(gscore);
             mk->setMarkerType(markerTypeTable[i].type);
-            sp->append(mk, markerTypeTable[i].name);
+            sp->append(mk, qApp->translate("markerType", qPrintable(markerTypeTable[i].name)));
             }
 
       for (int i = 0; i < jumpTypeTableSize(); i++) {
             Jump* jp = new Jump(gscore);
             jp->setJumpType(jumpTypeTable[i].type);
-            sp->append(jp, jumpTypeTable[i].userText);
+            sp->append(jp, qApp->translate("jumpType", qPrintable(jumpTypeTable[i].userText)));
             }
 
       return sp;
@@ -831,7 +831,7 @@ Palette* MuseScore::newLinesPalette()
             Trill* trill = new Trill(gscore);
             trill->setTrillType(trillTable[i].type);
             trill->setLen(w);
-            sp->append(trill, trillTable[i].userName);
+            sp->append(trill, qApp->translate("trillType", qPrintable(trillTable[i].userName)));
             }
 
       TextLine* textLine = new TextLine(gscore);

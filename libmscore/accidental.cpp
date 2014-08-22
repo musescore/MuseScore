@@ -481,7 +481,7 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
 
 QString Accidental::accessibleInfo()
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(Accidental::subtype2name(accidentalType()));
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("accidental", Accidental::subtype2name(accidentalType())));
       }
 
 }

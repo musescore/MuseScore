@@ -433,7 +433,7 @@ ChordRest* Articulation::chordRest() const
 
 QString Articulation::subtypeUserName() const
       {
-      return articulationList[int(articulationType())].description;
+      return qApp->translate("articulation", qPrintable(articulationList[int(articulationType())].description));
       }
 
 //---------------------------------------------------------

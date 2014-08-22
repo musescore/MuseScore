@@ -1723,7 +1723,7 @@ void MuseScore::dropEvent(QDropEvent* event)
             else {
                   QMessageBox::critical(0,
                         tr("MuseScore: Load Error"),
-                        tr("Open failed: unknown file extension or broken file"));
+                        tr("Open failed: Unknown file extension or broken file"));
                   }
 
             event->acceptProposedAction();
@@ -4427,7 +4427,7 @@ void MuseScore::closeScore(Score* score)
 void MuseScore::noteTooShortForTupletDialog()
       {
       QMessageBox::warning(this, tr("MuseScore: Warning"),
-        tr("Cannot create tuplet: note value too short")
+        tr("Cannot create tuplet: Note value is too short")
         );
       }
 
