@@ -153,6 +153,10 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <Tempo>
@@ -307,6 +311,10 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
@@ -475,6 +483,10 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>2</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <breakMultiMeasureRest/>
@@ -726,6 +738,10 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <breakMultiMeasureRest/>

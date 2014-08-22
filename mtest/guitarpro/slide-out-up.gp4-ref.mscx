@@ -186,6 +186,10 @@
             <lid>21</lid>
             </ChordLine>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
@@ -407,6 +411,10 @@
               <lid>21</lid>
               </ChordLine>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <Rest>
@@ -491,6 +499,10 @@
               <lid>21</lid>
               </ChordLine>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <Rest>

@@ -98,6 +98,11 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <tick>1440</tick>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       </Staff>
     <Staff id="2">

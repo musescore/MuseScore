@@ -178,227 +178,382 @@
           <lid>11</lid>
           <durationType>quarter</durationType>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>12</lid>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>13</lid>
+          <lid>14</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>15</lid>
+          </BarLine>
         </Measure>
       <Measure number="3">
-        <Rest>
-          <lid>15</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="4">
         <Rest>
           <lid>17</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>18</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="4">
+        <Rest>
+          <lid>20</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>21</lid>
+          </BarLine>
         </Measure>
       <Measure number="5">
-        <Rest>
-          <lid>19</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="6">
-        <Rest>
-          <lid>21</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
-      <Measure number="7">
         <Rest>
           <lid>23</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>24</lid>
+          </BarLine>
         </Measure>
-      <Measure number="8">
+      <Measure number="6">
         <Rest>
-          <lid>25</lid>
+          <lid>26</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        </Measure>
-      <Measure number="9">
-        <Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
           <lid>27</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+          </BarLine>
         </Measure>
-      <Measure number="10">
+      <Measure number="7">
         <Rest>
           <lid>29</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>30</lid>
+          </BarLine>
         </Measure>
-      <Measure number="11">
+      <Measure number="8">
         <Rest>
-          <lid>31</lid>
+          <lid>32</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        </Measure>
-      <Measure number="12">
-        <Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
           <lid>33</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+          </BarLine>
         </Measure>
-      <Measure number="13">
+      <Measure number="9">
         <Rest>
           <lid>35</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>36</lid>
+          </BarLine>
         </Measure>
-      <Measure number="14">
+      <Measure number="10">
         <Rest>
-          <lid>37</lid>
+          <lid>38</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        </Measure>
-      <Measure number="15">
-        <Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
           <lid>39</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+          </BarLine>
         </Measure>
-      <Measure number="16">
+      <Measure number="11">
         <Rest>
           <lid>41</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>42</lid>
+          </BarLine>
         </Measure>
-      <Measure number="17">
+      <Measure number="12">
         <Rest>
-          <lid>43</lid>
+          <lid>44</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        </Measure>
-      <Measure number="18">
-        <Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
           <lid>45</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+          </BarLine>
         </Measure>
-      <Measure number="19">
+      <Measure number="13">
         <Rest>
           <lid>47</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>48</lid>
+          </BarLine>
         </Measure>
-      <Measure number="20">
+      <Measure number="14">
         <Rest>
-          <lid>49</lid>
+          <lid>50</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        </Measure>
-      <Measure number="21">
-        <Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
           <lid>51</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+          </BarLine>
         </Measure>
-      <Measure number="22">
+      <Measure number="15">
         <Rest>
           <lid>53</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>54</lid>
+          </BarLine>
         </Measure>
-      <Measure number="23">
+      <Measure number="16">
         <Rest>
-          <lid>55</lid>
+          <lid>56</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        </Measure>
-      <Measure number="24">
-        <Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
           <lid>57</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+          </BarLine>
         </Measure>
-      <Measure number="25">
+      <Measure number="17">
         <Rest>
           <lid>59</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>60</lid>
+          </BarLine>
         </Measure>
-      <Measure number="26">
+      <Measure number="18">
         <Rest>
-          <lid>61</lid>
+          <lid>62</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        </Measure>
-      <Measure number="27">
-        <Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
           <lid>63</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+          </BarLine>
         </Measure>
-      <Measure number="28">
+      <Measure number="19">
         <Rest>
           <lid>65</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>66</lid>
+          </BarLine>
         </Measure>
-      <Measure number="29">
+      <Measure number="20">
         <Rest>
-          <lid>67</lid>
+          <lid>68</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        </Measure>
-      <Measure number="30">
-        <Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
           <lid>69</lid>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+          </BarLine>
         </Measure>
-      <Measure number="31">
+      <Measure number="21">
         <Rest>
           <lid>71</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>72</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="22">
+        <Rest>
+          <lid>74</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>75</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="23">
+        <Rest>
+          <lid>77</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>78</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="24">
+        <Rest>
+          <lid>80</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>81</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="25">
+        <Rest>
+          <lid>83</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>84</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="26">
+        <Rest>
+          <lid>86</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>87</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="27">
+        <Rest>
+          <lid>89</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>90</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="28">
+        <Rest>
+          <lid>92</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>93</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="29">
+        <Rest>
+          <lid>95</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>96</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="30">
+        <Rest>
+          <lid>98</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>99</lid>
+          </BarLine>
+        </Measure>
+      <Measure number="31">
+        <Rest>
+          <lid>101</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>102</lid>
+          </BarLine>
         </Measure>
       <Measure number="32">
         <Rest>
-          <lid>73</lid>
+          <lid>104</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>74</lid>
+          <lid>105</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -407,271 +562,426 @@
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>77</lid>
+          <lid>108</lid>
           </Clef>
         <TimeSig>
-          <lid>78</lid>
+          <lid>109</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>79</lid>
+          <lid>110</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>80</lid>
+            <lid>111</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
-          <lid>81</lid>
+          <lid>112</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>82</lid>
+            <lid>113</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             </Note>
           </Chord>
         <Chord>
-          <lid>83</lid>
+          <lid>114</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>84</lid>
+            <lid>115</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             </Note>
           </Chord>
         <Chord>
-          <lid>85</lid>
+          <lid>116</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>86</lid>
+            <lid>117</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>118</lid>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>87</lid>
+          <lid>119</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>120</lid>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
-          <lid>88</lid>
+          <lid>121</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>122</lid>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
-          <lid>89</lid>
+          <lid>123</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>124</lid>
+          </BarLine>
         </Measure>
       <Measure number="5">
         <Rest>
-          <lid>90</lid>
+          <lid>125</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>126</lid>
+          </BarLine>
         </Measure>
       <Measure number="6">
         <Rest>
-          <lid>91</lid>
+          <lid>127</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>128</lid>
+          </BarLine>
         </Measure>
       <Measure number="7">
         <Rest>
-          <lid>92</lid>
+          <lid>129</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>130</lid>
+          </BarLine>
         </Measure>
       <Measure number="8">
         <Rest>
-          <lid>93</lid>
+          <lid>131</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>132</lid>
+          </BarLine>
         </Measure>
       <Measure number="9">
         <Rest>
-          <lid>94</lid>
+          <lid>133</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>134</lid>
+          </BarLine>
         </Measure>
       <Measure number="10">
         <Rest>
-          <lid>95</lid>
+          <lid>135</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>136</lid>
+          </BarLine>
         </Measure>
       <Measure number="11">
         <Rest>
-          <lid>96</lid>
+          <lid>137</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>138</lid>
+          </BarLine>
         </Measure>
       <Measure number="12">
         <Rest>
-          <lid>97</lid>
+          <lid>139</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>140</lid>
+          </BarLine>
         </Measure>
       <Measure number="13">
         <Rest>
-          <lid>98</lid>
+          <lid>141</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>142</lid>
+          </BarLine>
         </Measure>
       <Measure number="14">
         <Rest>
-          <lid>99</lid>
+          <lid>143</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>144</lid>
+          </BarLine>
         </Measure>
       <Measure number="15">
         <Rest>
-          <lid>100</lid>
+          <lid>145</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>146</lid>
+          </BarLine>
         </Measure>
       <Measure number="16">
         <Rest>
-          <lid>101</lid>
+          <lid>147</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>148</lid>
+          </BarLine>
         </Measure>
       <Measure number="17">
         <Rest>
-          <lid>102</lid>
+          <lid>149</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>150</lid>
+          </BarLine>
         </Measure>
       <Measure number="18">
         <Rest>
-          <lid>103</lid>
+          <lid>151</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>152</lid>
+          </BarLine>
         </Measure>
       <Measure number="19">
         <Rest>
-          <lid>104</lid>
+          <lid>153</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>154</lid>
+          </BarLine>
         </Measure>
       <Measure number="20">
         <Rest>
-          <lid>105</lid>
+          <lid>155</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>156</lid>
+          </BarLine>
         </Measure>
       <Measure number="21">
         <Rest>
-          <lid>106</lid>
+          <lid>157</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>158</lid>
+          </BarLine>
         </Measure>
       <Measure number="22">
         <Rest>
-          <lid>107</lid>
+          <lid>159</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>160</lid>
+          </BarLine>
         </Measure>
       <Measure number="23">
         <Rest>
-          <lid>108</lid>
+          <lid>161</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>162</lid>
+          </BarLine>
         </Measure>
       <Measure number="24">
         <Rest>
-          <lid>109</lid>
+          <lid>163</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>164</lid>
+          </BarLine>
         </Measure>
       <Measure number="25">
         <Rest>
-          <lid>110</lid>
+          <lid>165</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>166</lid>
+          </BarLine>
         </Measure>
       <Measure number="26">
         <Rest>
-          <lid>111</lid>
+          <lid>167</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>168</lid>
+          </BarLine>
         </Measure>
       <Measure number="27">
         <Rest>
-          <lid>112</lid>
+          <lid>169</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>170</lid>
+          </BarLine>
         </Measure>
       <Measure number="28">
         <Rest>
-          <lid>113</lid>
+          <lid>171</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>172</lid>
+          </BarLine>
         </Measure>
       <Measure number="29">
         <Rest>
-          <lid>114</lid>
+          <lid>173</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>174</lid>
+          </BarLine>
         </Measure>
       <Measure number="30">
         <Rest>
-          <lid>115</lid>
+          <lid>175</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>176</lid>
+          </BarLine>
         </Measure>
       <Measure number="31">
         <Rest>
-          <lid>116</lid>
+          <lid>177</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          <lid>178</lid>
+          </BarLine>
         </Measure>
       <Measure number="32">
         <Rest>
-          <lid>117</lid>
+          <lid>179</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>118</lid>
+          <lid>180</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -812,227 +1122,382 @@
             <lid>11</lid>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>12</lid>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>13</lid>
+            <lid>14</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>15</lid>
+            </BarLine>
           </Measure>
         <Measure number="3">
-          <Rest>
-            <lid>15</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="4">
           <Rest>
             <lid>17</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>18</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="4">
+          <Rest>
+            <lid>20</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>21</lid>
+            </BarLine>
           </Measure>
         <Measure number="5">
-          <Rest>
-            <lid>19</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="6">
-          <Rest>
-            <lid>21</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
-          </Measure>
-        <Measure number="7">
           <Rest>
             <lid>23</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>24</lid>
+            </BarLine>
           </Measure>
-        <Measure number="8">
+        <Measure number="6">
           <Rest>
-            <lid>25</lid>
+            <lid>26</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          </Measure>
-        <Measure number="9">
-          <Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
             <lid>27</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
+            </BarLine>
           </Measure>
-        <Measure number="10">
+        <Measure number="7">
           <Rest>
             <lid>29</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>30</lid>
+            </BarLine>
           </Measure>
-        <Measure number="11">
+        <Measure number="8">
           <Rest>
-            <lid>31</lid>
+            <lid>32</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          </Measure>
-        <Measure number="12">
-          <Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
             <lid>33</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
+            </BarLine>
           </Measure>
-        <Measure number="13">
+        <Measure number="9">
           <Rest>
             <lid>35</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>36</lid>
+            </BarLine>
           </Measure>
-        <Measure number="14">
+        <Measure number="10">
           <Rest>
-            <lid>37</lid>
+            <lid>38</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          </Measure>
-        <Measure number="15">
-          <Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
             <lid>39</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
+            </BarLine>
           </Measure>
-        <Measure number="16">
+        <Measure number="11">
           <Rest>
             <lid>41</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>42</lid>
+            </BarLine>
           </Measure>
-        <Measure number="17">
+        <Measure number="12">
           <Rest>
-            <lid>43</lid>
+            <lid>44</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          </Measure>
-        <Measure number="18">
-          <Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
             <lid>45</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
+            </BarLine>
           </Measure>
-        <Measure number="19">
+        <Measure number="13">
           <Rest>
             <lid>47</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>48</lid>
+            </BarLine>
           </Measure>
-        <Measure number="20">
+        <Measure number="14">
           <Rest>
-            <lid>49</lid>
+            <lid>50</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          </Measure>
-        <Measure number="21">
-          <Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
             <lid>51</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
+            </BarLine>
           </Measure>
-        <Measure number="22">
+        <Measure number="15">
           <Rest>
             <lid>53</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>54</lid>
+            </BarLine>
           </Measure>
-        <Measure number="23">
+        <Measure number="16">
           <Rest>
-            <lid>55</lid>
+            <lid>56</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          </Measure>
-        <Measure number="24">
-          <Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
             <lid>57</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
+            </BarLine>
           </Measure>
-        <Measure number="25">
+        <Measure number="17">
           <Rest>
             <lid>59</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>60</lid>
+            </BarLine>
           </Measure>
-        <Measure number="26">
+        <Measure number="18">
           <Rest>
-            <lid>61</lid>
+            <lid>62</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          </Measure>
-        <Measure number="27">
-          <Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
             <lid>63</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
+            </BarLine>
           </Measure>
-        <Measure number="28">
+        <Measure number="19">
           <Rest>
             <lid>65</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>66</lid>
+            </BarLine>
           </Measure>
-        <Measure number="29">
+        <Measure number="20">
           <Rest>
-            <lid>67</lid>
+            <lid>68</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
-          </Measure>
-        <Measure number="30">
-          <Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
             <lid>69</lid>
-            <durationType>measure</durationType>
-            <duration z="4" n="4"/>
-            </Rest>
+            </BarLine>
           </Measure>
-        <Measure number="31">
+        <Measure number="21">
           <Rest>
             <lid>71</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>72</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="22">
+          <Rest>
+            <lid>74</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>75</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="23">
+          <Rest>
+            <lid>77</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>78</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="24">
+          <Rest>
+            <lid>80</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>81</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="25">
+          <Rest>
+            <lid>83</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>84</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="26">
+          <Rest>
+            <lid>86</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>87</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="27">
+          <Rest>
+            <lid>89</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>90</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="28">
+          <Rest>
+            <lid>92</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>93</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="29">
+          <Rest>
+            <lid>95</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>96</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="30">
+          <Rest>
+            <lid>98</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>99</lid>
+            </BarLine>
+          </Measure>
+        <Measure number="31">
+          <Rest>
+            <lid>101</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>102</lid>
+            </BarLine>
           </Measure>
         <Measure number="32">
           <Rest>
-            <lid>73</lid>
+            <lid>104</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>74</lid>
+            <lid>105</lid>
             </BarLine>
           </Measure>
         </Staff>
@@ -1131,10 +1596,10 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>77</lid>
+            <lid>108</lid>
             </Clef>
           <TimeSig>
-            <lid>78</lid>
+            <lid>109</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -1145,262 +1610,417 @@
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>
-            <lid>79</lid>
+            <lid>110</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>80</lid>
+              <lid>111</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <lid>81</lid>
+            <lid>112</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>82</lid>
+              <lid>113</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <lid>83</lid>
+            <lid>114</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>84</lid>
+              <lid>115</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
-            <lid>85</lid>
+            <lid>116</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>86</lid>
+              <lid>117</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>118</lid>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>87</lid>
+            <lid>119</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>120</lid>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <Rest>
-            <lid>88</lid>
+            <lid>121</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>122</lid>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <Rest>
-            <lid>89</lid>
+            <lid>123</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>124</lid>
+            </BarLine>
           </Measure>
         <Measure number="5">
           <Rest>
-            <lid>90</lid>
+            <lid>125</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>126</lid>
+            </BarLine>
           </Measure>
         <Measure number="6">
           <Rest>
-            <lid>91</lid>
+            <lid>127</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>128</lid>
+            </BarLine>
           </Measure>
         <Measure number="7">
           <Rest>
-            <lid>92</lid>
+            <lid>129</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>130</lid>
+            </BarLine>
           </Measure>
         <Measure number="8">
           <Rest>
-            <lid>93</lid>
+            <lid>131</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>132</lid>
+            </BarLine>
           </Measure>
         <Measure number="9">
           <Rest>
-            <lid>94</lid>
+            <lid>133</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>134</lid>
+            </BarLine>
           </Measure>
         <Measure number="10">
           <Rest>
-            <lid>95</lid>
+            <lid>135</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>136</lid>
+            </BarLine>
           </Measure>
         <Measure number="11">
           <Rest>
-            <lid>96</lid>
+            <lid>137</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>138</lid>
+            </BarLine>
           </Measure>
         <Measure number="12">
           <Rest>
-            <lid>97</lid>
+            <lid>139</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>140</lid>
+            </BarLine>
           </Measure>
         <Measure number="13">
           <Rest>
-            <lid>98</lid>
+            <lid>141</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>142</lid>
+            </BarLine>
           </Measure>
         <Measure number="14">
           <Rest>
-            <lid>99</lid>
+            <lid>143</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>144</lid>
+            </BarLine>
           </Measure>
         <Measure number="15">
           <Rest>
-            <lid>100</lid>
+            <lid>145</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>146</lid>
+            </BarLine>
           </Measure>
         <Measure number="16">
           <Rest>
-            <lid>101</lid>
+            <lid>147</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>148</lid>
+            </BarLine>
           </Measure>
         <Measure number="17">
           <Rest>
-            <lid>102</lid>
+            <lid>149</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>150</lid>
+            </BarLine>
           </Measure>
         <Measure number="18">
           <Rest>
-            <lid>103</lid>
+            <lid>151</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>152</lid>
+            </BarLine>
           </Measure>
         <Measure number="19">
           <Rest>
-            <lid>104</lid>
+            <lid>153</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>154</lid>
+            </BarLine>
           </Measure>
         <Measure number="20">
           <Rest>
-            <lid>105</lid>
+            <lid>155</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>156</lid>
+            </BarLine>
           </Measure>
         <Measure number="21">
           <Rest>
-            <lid>106</lid>
+            <lid>157</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>158</lid>
+            </BarLine>
           </Measure>
         <Measure number="22">
           <Rest>
-            <lid>107</lid>
+            <lid>159</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>160</lid>
+            </BarLine>
           </Measure>
         <Measure number="23">
           <Rest>
-            <lid>108</lid>
+            <lid>161</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>162</lid>
+            </BarLine>
           </Measure>
         <Measure number="24">
           <Rest>
-            <lid>109</lid>
+            <lid>163</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>164</lid>
+            </BarLine>
           </Measure>
         <Measure number="25">
           <Rest>
-            <lid>110</lid>
+            <lid>165</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>166</lid>
+            </BarLine>
           </Measure>
         <Measure number="26">
           <Rest>
-            <lid>111</lid>
+            <lid>167</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>168</lid>
+            </BarLine>
           </Measure>
         <Measure number="27">
           <Rest>
-            <lid>112</lid>
+            <lid>169</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>170</lid>
+            </BarLine>
           </Measure>
         <Measure number="28">
           <Rest>
-            <lid>113</lid>
+            <lid>171</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>172</lid>
+            </BarLine>
           </Measure>
         <Measure number="29">
           <Rest>
-            <lid>114</lid>
+            <lid>173</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>174</lid>
+            </BarLine>
           </Measure>
         <Measure number="30">
           <Rest>
-            <lid>115</lid>
+            <lid>175</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>176</lid>
+            </BarLine>
           </Measure>
         <Measure number="31">
           <Rest>
-            <lid>116</lid>
+            <lid>177</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            <lid>178</lid>
+            </BarLine>
           </Measure>
         <Measure number="32">
           <Rest>
-            <lid>117</lid>
+            <lid>179</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>118</lid>
+            <lid>180</lid>
             </BarLine>
           </Measure>
         </Staff>

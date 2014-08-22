@@ -147,6 +147,10 @@
             <string>2</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <endRepeat>3</endRepeat>
@@ -179,6 +183,10 @@
             <string>2</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>end-repeat</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <KeySig>
@@ -210,6 +218,10 @@
             <string>2</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <KeySig>
@@ -402,6 +414,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <endRepeat>3</endRepeat>
@@ -434,6 +450,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <KeySig>
@@ -465,6 +485,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <KeySig>
@@ -520,6 +544,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <KeySig>
@@ -551,6 +579,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end-repeat</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <KeySig>
@@ -582,6 +614,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="4">
           <KeySig>

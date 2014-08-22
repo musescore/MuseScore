@@ -168,6 +168,10 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <Slur id="3">
@@ -203,6 +207,10 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <Slur id="4">
@@ -238,6 +246,10 @@
             </Note>
           <Slur type="stop" id="4"/>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="4">
         <LayoutBreak>
@@ -276,6 +288,10 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="5">
         <Chord>
@@ -307,6 +323,10 @@
             </Note>
           <Slur type="stop" id="5"/>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="6">
         <Slur id="6">
@@ -343,6 +363,10 @@
             </Note>
           <Slur type="stop" id="7"/>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         <tick>9600</tick>
         <Chord>
           <track>1</track>
@@ -421,6 +445,10 @@
             </Note>
           <Slur type="stop" id="8"/>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         <tick>11520</tick>
         <Slur id="9">
           <track>1</track>
@@ -507,6 +535,10 @@
             </Note>
           <Slur type="stop" id="11"/>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         <tick>13440</tick>
         <Slur id="12">
           <track>1</track>
@@ -590,6 +622,10 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="10">
         <Chord>
@@ -620,6 +656,10 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         <tick>17280</tick>
         <Chord>
           <track>1</track>
@@ -669,6 +709,10 @@
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>2</span>
+          </BarLine>
         </Measure>
       <Measure number="12">
         <LayoutBreak>

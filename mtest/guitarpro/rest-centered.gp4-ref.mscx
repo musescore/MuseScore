@@ -107,6 +107,10 @@
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="2">
         <Dynamic>
@@ -125,6 +129,10 @@
             <string>4</string>
             </Note>
           </Chord>
+        <BarLine>
+          <subtype>normal</subtype>
+          <span>1</span>
+          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
@@ -266,6 +274,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <Dynamic>
@@ -284,6 +296,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <Rest>
@@ -308,6 +324,10 @@
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="2">
           <Chord>
@@ -321,6 +341,10 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>normal</subtype>
+            <span>1</span>
+            </BarLine>
           </Measure>
         <Measure number="3">
           <Rest>
