@@ -1030,6 +1030,7 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
             expandVoice(s, track);
             cr1 = static_cast<ChordRest*>(s->element(track));
             }
+//      checkSpanner(cr->tick(), cr->tick() + d.ticks());
       connectTies();
       }
 

@@ -1394,6 +1394,8 @@ void Score::doLayout()
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM())
             m->layout2();
 
+      checkSpanner(0, lastSegment()->tick());
+
       for (auto s : _spanner.map()) {           // DEBUG
             Spanner* sp = s.second;
             if (sp->type() == Element::Type::SLUR) {

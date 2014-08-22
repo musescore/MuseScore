@@ -211,7 +211,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                         }
                   case Spanner::Anchor::CHORD:
                         spanner()->setTick(static_cast<Chord*>(element)->tick());
-                        spanner()->setStartChord(static_cast<Chord*>(element));
+                        spanner()->setStartElement(element);
                         break;
                   case Spanner::Anchor::SEGMENT:
                   case Spanner::Anchor::MEASURE:
@@ -232,7 +232,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   case Spanner::Anchor::CHORD:
                         spanner()->setTick2(static_cast<Chord*>(element)->tick());
                         spanner()->setTrack2(element->track());
-                        spanner()->setEndChord(static_cast<Chord*>(element));
+                        spanner()->setEndElement(element);
                         break;
 
                   case Spanner::Anchor::SEGMENT:
@@ -781,10 +781,6 @@ void Slur::slurPosChord(SlurPos* sp)
 
 void Slur::slurPos(SlurPos* sp)
       {
-//      if (anchor() == Anchor::CHORD) {
-//            slurPosChord(sp);
-//            return;
-//            }
       qreal _spatium = spatium();
 
       if (endCR() == 0) {

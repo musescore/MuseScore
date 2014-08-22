@@ -1429,6 +1429,7 @@ RemoveElement::RemoveElement(Element* e)
 
       Score* score = element->score();
       if (element->isChordRest()) {
+#if 0
             // do not delete pending slur in note entry mode
             Slur* pendingSlur = 0;
             for (Score* sc : score->scoreList()) {
@@ -1456,7 +1457,7 @@ RemoveElement::RemoveElement(Element* e)
                   }
             for (auto s : sl)       // actually remove scheduled spanners
                   score->undo(new RemoveElement(s));
-
+#endif
             ChordRest* cr = static_cast<ChordRest*>(element);
             if (cr->tuplet() && cr->tuplet()->elements().empty())
                   score->undo(new RemoveElement(cr->tuplet()));
