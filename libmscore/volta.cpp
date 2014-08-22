@@ -417,7 +417,7 @@ void Volta::reset()
 //---------------------------------------------------------
 
 QString Volta::accessibleInfo(){
-      return Element::accessibleInfo() + " " + text();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(text());
       }
 }
 

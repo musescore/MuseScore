@@ -274,7 +274,8 @@ QString TempoText::accessibleInfo()
 
             QString bpm = plainText().split(" = ").back();
 
-            return Element::accessibleInfo() + dots + " " + t.durationTypeUserName() + " " + tr("note = %1").arg(bpm);
+            //return Element::accessibleInfo() + dots + " " + t.durationTypeUserName() + " " + tr("note = %1").arg(bpm);
+            return QString("%1: %2 %3 %4").arg(Element::accessibleInfo()).arg(dots).arg(t.durationTypeUserName()).arg(tr("note = %1").arg(bpm));
             }
       else
             return Text::accessibleInfo();

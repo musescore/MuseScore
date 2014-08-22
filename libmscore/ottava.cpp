@@ -547,7 +547,7 @@ void Ottava::reset()
 
 QString Ottava::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + ottavaDefault[static_cast<int>(ottavaType())].name;
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(ottavaDefault[static_cast<int>(ottavaType())].name);
       }
 }
 

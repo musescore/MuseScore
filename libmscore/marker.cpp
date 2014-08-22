@@ -332,7 +332,7 @@ Element* Marker::prevElement()
 
 QString Marker::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + markerTypeUserName();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(markerTypeUserName());
       }
 
 }

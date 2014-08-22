@@ -4047,7 +4047,7 @@ Element* Measure::prevElement(int staff)
 
 QString Measure::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + QString::number(no() + 1);
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(QString::number(no() + 1));
       }
 
 }
