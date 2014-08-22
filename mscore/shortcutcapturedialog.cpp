@@ -18,7 +18,6 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-
 #include "shortcutcapturedialog.h"
 #include "musescore.h"
 #include "shortcut.h"
@@ -143,7 +142,17 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
             if (conflict)
                   break;
             }
+
       messageLabel->setText(msgString);
+
+      if (conflict) {
+            if (!nshrtLabel->accessibleName().contains(tr("Shortcut conflicts with")))
+                  nshrtLabel->setAccessibleName(msgString);
+            }
+      else {
+            if (!nshrtLabel->accessibleName().contains("New shortcut"))
+                  nshrtLabel->setAccessibleName(tr("New shortcut"));
+            }
       addButton->setEnabled(conflict == false);
       replaceButton->setEnabled(conflict == false);
 //      nshrtLabel->setText(key.toString(QKeySequence::NativeText));
@@ -169,6 +178,10 @@ qDebug("capture key 0x%x  modifiers 0x%x virt 0x%x scan 0x%x <%s><%s>",
 
 void ShortcutCaptureDialog::clearClicked()
       {
+      if (!nshrtLabel->accessibleName().contains("New shortcut"))
+            nshrtLabel->setAccessibleName(tr("New shortcut"));
+
+      nshrtLabel->setAccessibleName(tr("New shortcut"));
       addButton->setEnabled(false);
       replaceButton->setEnabled(false);
       nshrtLabel->setText("");
