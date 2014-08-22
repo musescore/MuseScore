@@ -418,9 +418,6 @@ Palette* MuseScore::newFingeringPalette()
             f->setText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
-      Symbol* symbol = new Symbol(gscore);
-      symbol->setSym(SymId::stringsThumbPosition);
-      sp->append(symbol, tr("Thumb"));
       return sp;
       }
 
