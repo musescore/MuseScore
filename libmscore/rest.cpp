@@ -41,7 +41,6 @@ Rest::Rest(Score* s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = Beam::Mode::NONE;
-      dotline    = -1;
       _sym       = SymId::restQuarter;
       }
 
@@ -50,7 +49,6 @@ Rest::Rest(Score* s, const TDuration& d)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = Beam::Mode::NONE;
-      dotline    = -1;
       _sym       = SymId::restQuarter;
       setDurationType(d);
       if (d.fraction().isValid())

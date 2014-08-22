@@ -30,8 +30,8 @@ class Rest : public ChordRest {
 
       // values calculated by layout:
       SymId _sym;
-      int dotline;            // depends on rest symbol
-      qreal _mmWidth;         // width of multi measure rest
+      int dotline    { -1  };       // depends on rest symbol
+      qreal _mmWidth { 0.0 };       // width of multi measure rest
 
       virtual QRectF drag(EditData*) override;
       virtual qreal upPos()   const override;
