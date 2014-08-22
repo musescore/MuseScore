@@ -2381,15 +2381,20 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
 //---------------------------------------------------------
 //   checkSpanner
 //    check if spanners are still valid as anchors may
-//    have changed or be removed
+//    have changed or be removed.
+//    Spanners need to have a start anchor. Slurs need a
+//    start and end anchor.
 //---------------------------------------------------------
 
 void Score::checkSpanner(int startTick, int endTick)
       {
       QList<Spanner*> sl;
       auto spanners = _spanner.findOverlapping(startTick, endTick);
+// printf("checkSpanner %d %d\n", startTick, endTick);
       for (auto i = spanners.begin(); i < spanners.end(); i++) {
             Spanner* s = i->value;
+
+//            printf("   %s %d %d\n", s->name(), s->tick(), s->tick2());
 
             if (s->type() == Element::Type::SLUR) {
                   Segment* seg = tick2segmentMM(s->tick(), false, Segment::Type::ChordRest);
@@ -2401,6 +2406,7 @@ void Score::checkSpanner(int startTick, int endTick)
                   }
             else {
                   // remove spanner if there is no start element
+                  Segment* seg = tick2segmentMM(s->tick(), false, Segment::Type::ChordRest);
                   s->computeStartElement();
                   if (!s->startElement())
                         sl.append(s);

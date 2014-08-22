@@ -397,8 +397,20 @@ QVariant Spanner::propertyDefault(P_ID propertyId) const
 void Spanner::computeStartElement()
       {
       switch (_anchor) {
-            case Anchor::SEGMENT:
-                  _startElement = score()->findCRinStaff(tick(), track());
+            case Anchor::SEGMENT: {
+                  Segment* seg = score()->tick2segmentMM(tick(), false, Segment::Type::ChordRest);
+                  int strack = (track() / VOICES) * VOICES;
+                  int etrack = strack + VOICES;
+                  _startElement = 0;
+                  if (seg) {
+                        for (int t = strack; t < etrack; ++t) {
+                              if (seg->element(t)) {
+                                    _startElement = seg->element(t);
+                                    break;
+                                    }
+                              }
+                        }
+                  }
                   break;
 
             case Anchor::MEASURE:
