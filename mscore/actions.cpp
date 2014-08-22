@@ -680,8 +680,8 @@ Shortcut Shortcut::sc[] = {
          ShortcutFlags::A_CMD,
          "next-element",
          QT_TRANSLATE_NOOP("action","Next element"),
-         QT_TRANSLATE_NOOP("action","Go to next element"),
-         QT_TRANSLATE_NOOP("action","Go to next element")
+         QT_TRANSLATE_NOOP("action","Accessibility: next element"),
+         QT_TRANSLATE_NOOP("action","Accessibility: next element")
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
@@ -689,8 +689,8 @@ Shortcut Shortcut::sc[] = {
          ShortcutFlags::A_CMD,
          "prev-element",
          QT_TRANSLATE_NOOP("action","Previous element"),
-         QT_TRANSLATE_NOOP("action","Go to previous element"),
-         QT_TRANSLATE_NOOP("action","Go to previous element")
+         QT_TRANSLATE_NOOP("action","Accessibility: previous element"),
+         QT_TRANSLATE_NOOP("action","Accessibility: previous element")
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
