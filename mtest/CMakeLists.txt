@@ -23,6 +23,18 @@ if (OMR)
 set(OMR_SRC ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp)
 endif (OMR)
 
+QT4_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MScore.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Gonville.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Bravura.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MuseJazz.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Free.qrc
+      )
+
+add_library (testResources STATIC
+      ${qrc_files}
+      )
+
 QT4_WRAP_CPP (mtestMocs
 #      ${PROJECT_SOURCE_DIR}/mscore/musescore.h
       ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.h

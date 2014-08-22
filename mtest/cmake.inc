@@ -11,18 +11,9 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-QT4_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
-            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MScore.qrc
-            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Gonville.qrc
-            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Bravura.qrc
-            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MuseJazz.qrc
-            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Free.qrc
-      )
-
 add_executable(
       ${TARGET}
       ${ui_headers}
-      ${qrc_files}
       ${mocs}
       ${TARGET}.cpp
       )
@@ -31,6 +22,7 @@ target_link_libraries(
       ${TARGET}
       ${QT_QTTEST_LIBRARY}
       testutils
+      testResources
       libmscore
       synthesizer
       midi
