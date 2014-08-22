@@ -444,7 +444,7 @@ static void warnTupletCrossing()
       if (!MScore::noGui) {
             const char* tt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "MuseScore");
             const char* mt = QT_TRANSLATE_NOOP("addRemoveTimeSig", "Cannot rewrite measures:\n"
-               "tuplet would cross measure");
+               "Tuplet would cross measure");
 
             QMessageBox::warning(0, qApp->translate("addRemoveTimeSig", tt),
                qApp->translate("addRemoveTimeSig", mt));

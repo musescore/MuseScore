@@ -658,7 +658,7 @@ Element* Clef::prevElement()
 
 QString Clef::accessibleInfo()
       {
-      return ClefInfo::name(clefType());
+      return qApp->translate("clefTable", ClefInfo::name(clefType()));
       }
 
 }

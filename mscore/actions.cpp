@@ -1177,7 +1177,7 @@ Shortcut Shortcut::sc[] = {
          ShortcutFlags::A_CMD,
          "pad-note-8",
          QT_TRANSLATE_NOOP("action","Eighth note"),
-         QT_TRANSLATE_NOOP("action","Note duration: Eighth"),
+         QT_TRANSLATE_NOOP("action","Note duration: eighth"),
          QT_TRANSLATE_NOOP("action","Eighth note"),
          Icons::note8_ICON
          ),
@@ -1386,9 +1386,9 @@ Shortcut Shortcut::sc[] = {
           0,
         /* no stroke: Eighth*/
          "grace8after",
-         QT_TRANSLATE_NOOP("action","Grace: Eighth after"),
+         QT_TRANSLATE_NOOP("action","Grace: eighth after"),
          QT_TRANSLATE_NOOP("action","Add Eighth grace note after"),
-         QT_TRANSLATE_NOOP("action","Grace: Eighth after"),
+         QT_TRANSLATE_NOOP("action","Grace: eighth after"),
          Icons::grace8after_ICON
          ),
       Shortcut(
@@ -2043,7 +2043,7 @@ Shortcut Shortcut::sc[] = {
          0,
          "rest-8",
          QT_TRANSLATE_NOOP("action","Eighth rest"),
-         QT_TRANSLATE_NOOP("action","Note entry: Eighth rest")
+         QT_TRANSLATE_NOOP("action","Note entry: eighth rest")
          ),
       Shortcut(                     // mapped to undo in note entry mode
          MsWidget::SCORE_TAB,
@@ -2621,7 +2621,7 @@ Shortcut Shortcut::sc[] = {
          ShortcutFlags::A_CMD,
          "pad-note-8-TAB",
          QT_TRANSLATE_NOOP("action","Eighth note (TAB)"),
-         QT_TRANSLATE_NOOP("action","Note duration: Eighth (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: eighth (TAB)"),
          QT_TRANSLATE_NOOP("action","Eighth note"),
          Icons::note8_ICON
          ),

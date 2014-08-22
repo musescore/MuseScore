@@ -434,7 +434,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
       QFile schemaFile(":/schema/musicxml.xsd");
       if (!schemaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qDebug("initMusicXmlSchema() could not open resource musicxml.xsd");
-            MScore::lastError = QObject::tr("Internal error: could not open resource musicxml.xsd\n");
+            MScore::lastError = QObject::tr("Internal error: Could not open resource musicxml.xsd\n");
             return false;
             }
 
