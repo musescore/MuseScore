@@ -777,11 +777,8 @@ bool SLine::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "tick2") {               // obsolete
-            if (tick() == -1) // not necessarily set (for first note of score?) #30151
-                  setTick(0);
+      if (tag == "tick2")                 // obsolete
             setTick2(e.readInt());
-            }
       else if (tag == "tick")             // obsolete
             setTick(e.readInt());
       else if (tag == "ticks")
