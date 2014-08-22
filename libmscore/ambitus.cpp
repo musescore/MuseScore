@@ -724,7 +724,7 @@ Element* Ambitus::prevElement()
 //---------------------------------------------------------
 QString Ambitus::accessibleInfo()
       {
-      return tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(Element::screenReaderInfo())\
+      return tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(Element::accessibleInfo())\
                                                           .arg(tpc2name(topTpc(), NoteSpellingType::STANDARD, false, false))\
                                                           .arg(QString::number(topOctave()))\
                                                           .arg(tpc2name(bottomTpc(), NoteSpellingType::STANDARD, false, false))\
