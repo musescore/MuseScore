@@ -896,7 +896,7 @@ qDebug("putNote at tick %d staff %d line %d clef %d",
       const StringData* stringData = 0;
       StaffType* tab = 0;
 
-      switch(st->staffType()->group()) {
+      switch (st->staffType()->group()) {
             case StaffGroup::PERCUSSION: {
                   if (_is.rest())
                         break;
@@ -950,7 +950,7 @@ qDebug("putNote at tick %d staff %d line %d clef %d",
             // retrieve total duration of current chord
             TDuration d = cr->durationType();
             // if not in replace mode AND chord duration == input duration AND not rest input
-            // we need to add to current chord (otherwise, we will need to replace it or create a new onw)
+            // we need to add to current chord (otherwise, we will need to replace it or create a new one)
             if (!replace
                && (d == _is.duration())
                && (cr->type() == Element::Type::CHORD)
@@ -958,8 +958,8 @@ qDebug("putNote at tick %d staff %d line %d clef %d",
                   {
                   if (st->isTabStaff()) {      // TAB
                         // if a note on same string already exists, update to new pitch/fret
-                        foreach(Note * note, static_cast<Chord*>(cr)->notes())
-                              if(note->string() == nval.string) {       // if string is the same
+                        foreach (Note* note, static_cast<Chord*>(cr)->notes())
+                              if (note->string() == nval.string) {       // if string is the same
                                     // if adding a new digit will keep fret number within fret limit,
                                     // add a digit to existing fret number
                                     if (stringData) {
@@ -972,16 +972,19 @@ qDebug("putNote at tick %d staff %d line %d clef %d",
                                                 qDebug("can't increase fret to %d", fret);
                                           }
                                     // set fret number (orignal or combined) in all linked notes
-//                                    int tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST);
+                                    // int tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST);
                                     foreach (Element* e, note->linkList()) {
                                           Note* linkedNote = static_cast<Note*>(e);
-                                          nval.tpc = linkedNote->tpc1default(nval.pitch);
+                                          int tpc1 = linkedNote->tpc1default(nval.pitch);
+                                          int tpc2 = linkedNote->tpc2default(nval.pitch);
                                           Staff* staff = linkedNote->staff();
                                           if (staff->isTabStaff()) {
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_ID::PITCH, nval.pitch);
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_ID::TPC1,  nval.tpc);
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_ID::FRET,  nval.fret);
-                                                (static_cast<Note*>(linkedNote))->undoChangeProperty(P_ID::STRING,nval.string);
+                                                linkedNote->undoChangeProperty(P_ID::PITCH, nval.pitch);
+                                                linkedNote->undoChangeProperty(P_ID::TPC1,  tpc1);
+                                                linkedNote->undoChangeProperty(P_ID::TPC2,  tpc2);
+                                                linkedNote->undoChangeProperty(P_ID::FRET,  nval.fret);
+                                                linkedNote->undoChangeProperty(P_ID::STRING,nval.string);
+                                                nval.tpc = linkedNote->tpc();
                                                 }
                                           else if (staff->isPitchedStaff()) {
                                                 // TODO: check tpc2
