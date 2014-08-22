@@ -223,9 +223,14 @@ void Box::read(XmlReader& e)
                   else {
                         t = new Text(score());
                         t->read(e);
-                        add(t);
-                        if (score()->mscVersion() <= 114)
-                              t->setLayoutToParentWidth(true);
+                        if (t->isEmpty()) {
+                              qDebug("read empty text");
+                              }
+                        else {
+                              add(t);
+                              if (score()->mscVersion() <= 114)
+                                    t->setLayoutToParentWidth(true);
+                              }
                         }
                   }
             else if (tag == "Symbol") {

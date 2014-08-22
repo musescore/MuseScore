@@ -180,7 +180,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="line">
+         <widget class="QPushButton" name="lineButton">
           <property name="text">
            <string notr="true">Line</string>
           </property>

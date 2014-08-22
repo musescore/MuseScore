@@ -558,6 +558,7 @@ void Debugger::updateElement(Element* el)
       {
       if (el == 0 || !isVisible())
             return;
+
       if (cs != el->score())
             updateList(el->score());
       for (int i = 0;; ++i) {
@@ -2106,6 +2107,16 @@ LineSegmentView::LineSegmentView()
    : ShowElementBase()
       {
       lb.setupUi(addWidget());
+      connect(lb.lineButton, SIGNAL(clicked()), SLOT(lineClicked()));
+      }
+
+//---------------------------------------------------------
+//   lineClicked
+//---------------------------------------------------------
+
+void LineSegmentView::lineClicked()
+      {
+      emit elementChanged(((LineSegment*)element())->spanner());
       }
 
 //---------------------------------------------------------
@@ -2122,6 +2133,8 @@ void LineSegmentView::setElement(Element* e)
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
       lb.offset2y->setValue(vs->userOff2().y());
+
+      emit elementChanged(((Chord*)element())->hook());
       }
 
 //---------------------------------------------------------
@@ -2589,7 +2602,7 @@ void TextLineSegmentView::setElement(Element* e)
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
       lb.offset2y->setValue(vs->userOff2().y());
-      connect(lb.line, SIGNAL(clicked()), SLOT(lineClicked()));
+      connect(lb.lineButton, SIGNAL(clicked()), SLOT(lineClicked()));
       }
 
 //---------------------------------------------------------

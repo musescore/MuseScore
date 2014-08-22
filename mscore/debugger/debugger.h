@@ -565,6 +565,9 @@ class LineSegmentView : public ShowElementBase {
 
       Ui::LineSegmentBase lb;
 
+   private slots:
+      void lineClicked();
+
    public:
       LineSegmentView();
       virtual void setElement(Element*);
