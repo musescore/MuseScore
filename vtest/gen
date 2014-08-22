@@ -20,7 +20,6 @@ fi
 # "compare" - image magick compare program
 #
 if test -n "$1"; then
-      echo hallo?
       SRC=$1
 else
       SRC="mmrest-1 bravura-mmrest mmrest-2 mmrest-4 mmrest-5 mmrest-6 mmrest-7 mmrest-8 mmrest-9\
@@ -49,7 +48,7 @@ cd html
 for src in $SRC; do
       echo process ../$src
       cp ../$src-ref.png .
-      ../$MSCORE ../$src.mscz -r $DPI -o $src.png
+      ../$MSCORE ../$src.mscz -r $DPI -o $src.png > /dev/null 2>&1
       compare $src-1.png $src-ref.png $src-diff.png
       done
 
