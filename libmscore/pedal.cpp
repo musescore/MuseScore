@@ -310,6 +310,8 @@ QPointF Pedal::linePos(GripLine grip, System** sys) const
                   if (c) {
                         s = c->segment()->system();
                         x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+                        if (c && c->durationType() == TDuration::DurationType::V_MEASURE)
+                              x -= c->x();
                         }
                   }
             if (!s) {

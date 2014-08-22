@@ -125,7 +125,9 @@ void TextLineSegment::draw(QPainter* painter) const
       else
             endHookWidth = 0;
 
-      painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
+      // don't draw backwards lines (or hooks) if text is longer than nominal line length
+      if (pp1.x() < pp2.x())
+            painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
       if (tl->beginHook()
          && (spannerSegmentType() == SpannerSegmentType::SINGLE
@@ -134,7 +136,8 @@ void TextLineSegment::draw(QPainter* painter) const
             qreal hh = tl->beginHookHeight().val() * _spatium;
             painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x() - beginHookWidth, pp1.y() + hh));
             }
-      if (tl->endHook()
+
+      if (tl->endHook() && pp1.x() < pp2.x()
          && (spannerSegmentType() == SpannerSegmentType::SINGLE
              || spannerSegmentType() == SpannerSegmentType::END)
          ) {
