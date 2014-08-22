@@ -79,9 +79,28 @@ do
         done
     fi 
 done
+
 #homebrew libs may not be writable force it?
 chmod -R +w /usr/local/Cellar/
 macdeployqt ${VOLUME}/${APPNAME}.app
+
+for f in $(find "${VOLUME}/${APPNAME}.app/Contents" -iname "*");
+do
+  lipo -remove ppc7400 "$f" -output "$f" > /dev/null 2>&1
+  lipo -remove x86 "$f" -output "$f" > /dev/null 2>&1
+  lipo -remove ppc "$f" -output "$f" > /dev/null 2>&1
+done
+
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/PlugIns/mediaservice
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/PlugIns/audio
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/PlugIns/sqldrivers
+
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/Enginio.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtBluetooth.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebSockets.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtTest.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtNfc.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtScriptTools.*
 
 mv ${VOLUME}/${APPNAME}.app  ${VOLUME}/${LONG_NAME}.app 
 
@@ -89,6 +108,7 @@ mv ${VOLUME}/${APPNAME}.app  ${VOLUME}/${LONG_NAME}.app
 mkdir -p ${VOLUME}/Pictures
 # fixme: path
 cp  ${BACKGROUND} ${VOLUME}/Pictures/background.png
+
 # symlink applications
 ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}
