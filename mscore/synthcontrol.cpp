@@ -321,6 +321,11 @@ void SynthControl::updateGui()
       idx = synti->indexOfEffect(1);
       effectB->setCurrentIndex(idx);
       effectStackB->setCurrentIndex(idx);
+      for (Synthesizer* s : synti->synthesizer()) {
+            if (strcmp(s->name(), "Aeolus") == 0)    // no gui for aeolus
+                  continue;
+            s->gui()->synthesizerChanged();
+            }
       }
 
 //---------------------------------------------------------
