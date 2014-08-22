@@ -333,8 +333,8 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
                          Slur* slur = new Slur(score);
                          slur->setAnchor(Spanner::Anchor::CHORD);
-                         slur->setStartChord(static_cast<Chord*>(cr1));
-                         slur->setEndChord(static_cast<Chord*>(cr2));
+                         slur->setStartElement(cr1);
+                         slur->setEndElement(cr2);
                          slur->setTick(cr1->tick());
                          slur->setTick2(cr2->tick());
                          slur->setTrack(cr1->track());

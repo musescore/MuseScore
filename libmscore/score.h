@@ -566,8 +566,6 @@ class Score : public QObject {
       void addElement(Element*);
       void removeElement(Element*);
 
-      void cmdAddSpanner(Spanner* e, const QPointF& pos);
-
       Note* addPitch(NoteVal&, bool addFlag);
       void addPitch(int pitch, bool addFlag);
       Note* addNote(Chord*, NoteVal& noteVal);
@@ -965,6 +963,8 @@ class Score : public QObject {
       bool isSpannerStartEnd(int tick, int track) const;
       void removeSpanner(Spanner*);
       void addSpanner(Spanner*);
+      void cmdAddSpanner(Spanner* e, const QPointF& pos);
+      void checkSpanner(int startTick, int lastTick);
 
       Hairpin* addHairpin(bool crescendo, int tickStart, int tickEnd, int track);
 

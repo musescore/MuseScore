@@ -1579,8 +1579,8 @@ void GuitarPro1::readNote(int string, Note* note)
                          ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                          Slur* slur = new Slur(score);
-                         slur->setStartChord(static_cast<Chord*>(cr1));
-                         slur->setEndChord(static_cast<Chord*>(cr2));
+                         slur->setStartElement(cr1);
+                         slur->setEndElement(cr2);
                          slur->setTick(cr1->tick());
                          slur->setTick2(cr2->tick());
                          slur->setTrack(cr1->track());

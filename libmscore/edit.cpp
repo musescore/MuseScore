@@ -2378,5 +2378,36 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
       return omb;
       }
 
+//---------------------------------------------------------
+//   checkSpanner
+//    check if spanners are still valid as anchors may
+//    have changed or be removed
+//---------------------------------------------------------
+
+void Score::checkSpanner(int startTick, int endTick)
+      {
+      QList<Spanner*> sl;
+      auto spanners = _spanner.findOverlapping(startTick, endTick);
+      for (auto i = spanners.begin(); i < spanners.end(); i++) {
+            Spanner* s = i->value;
+
+            if (s->type() == Element::Type::SLUR) {
+                  Segment* seg = tick2segmentMM(s->tick(), false, Segment::Type::ChordRest);
+                  if (!seg || !seg->element(s->track()))
+                        sl.append(s);
+                  seg = tick2segmentMM(s->tick2(), false, Segment::Type::ChordRest);
+                  if (!seg || !seg->element(s->track2()))
+                        sl.append(s);
+                  }
+            else {
+                  // remove spanner if there is no start element
+                  s->computeStartElement();
+                  if (!s->startElement())
+                        sl.append(s);
+                  }
+            }
+      for (auto s : sl)       // actually remove scheduled spanners
+            undo(new RemoveElement(s));
+      }
 }
 
