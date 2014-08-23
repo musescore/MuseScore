@@ -1879,6 +1879,16 @@ void Note::setSmall(bool val)
 //   setLine
 //---------------------------------------------------------
 
+void Note::setAccidentalType(Accidental::Type type)
+      {
+      if (_score)
+      	_score->changeAccidental(this, type);
+      }
+
+//---------------------------------------------------------
+//   setLine
+//---------------------------------------------------------
+
 void Note::setLine(int n)
       {
       _line = n;

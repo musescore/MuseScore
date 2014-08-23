@@ -1376,10 +1376,18 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
 void Score::changeAccidental(Note* note, Accidental::Type accidental)
       {
       Chord* chord     = note->chord();
+      if (!chord)
+            return;
       Segment* segment = chord->segment();
+      if (!segment)
+            return;
       Measure* measure = segment->measure();
+      if (!measure)
+            return;
       int tick         = segment->tick();
       Staff* estaff    = staff(chord->staffIdx() + chord->staffMove());
+      if (!estaff)
+            return;
       ClefType clef    = estaff->clef(tick);
       int step         = ClefInfo::pitchOffset(clef) - note->line();
       while (step < 0)
