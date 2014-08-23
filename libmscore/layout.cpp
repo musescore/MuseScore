@@ -1372,13 +1372,16 @@ void Score::doLayout()
                         e->layout();
                   }
             }
+
+      checkSpanner(0, lastSegment()->tick());
+
       for (auto s : _spanner.map()) {
             Spanner* sp = s.second;
             if (sp->type() == Element::Type::OTTAVA && sp->ticks() == 0) {
                   sp->setTick2(lastMeasure()->endTick());
                   sp->staff()->updateOttava();
                   }
-            // 1.3 scores can have ties in this list
+            // 1.3 scores can have ties in this list (ws: should not happen anymore)
             if (sp->type() != Element::Type::TIE) {
                   if (sp->tick() == -1) {
                         qDebug("bad spanner %s %d - %d", sp->name(), sp->tick(), sp->tick2());
@@ -1393,8 +1396,6 @@ void Score::doLayout()
             }
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM())
             m->layout2();
-
-      checkSpanner(0, lastSegment()->tick());
 
       for (auto s : _spanner.map()) {           // DEBUG
             Spanner* sp = s.second;
