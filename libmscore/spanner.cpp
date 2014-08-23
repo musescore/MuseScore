@@ -487,7 +487,7 @@ ChordRest* Spanner::startCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
       if (!_startElement)
-            computeStartElement();
+            _startElement = score()->findCR(tick(), track());
       return static_cast<ChordRest*>(_startElement);
       }
 
