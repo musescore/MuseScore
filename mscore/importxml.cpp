@@ -2609,7 +2609,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       bool coda = false;
       bool segno = false;
       int ottavasize = 0;
-      bool pedalLine = false;
+      QString pedalLine;
+      QString pedalSign;
       int number = 1;
       QString lineEnd;
       // qreal endLength;
@@ -2639,7 +2640,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               }
                         else if (dirType == "pedal") {
                               type = ee.attribute(QString("type"));
-                              pedalLine = ee.attribute(QString("line")) == "yes";
+                              pedalLine = ee.attribute(QString("line"));
+                              pedalSign = ee.attribute(QString("sign"));
                               }
                         else if (dirType == "dynamics") {
                               QDomElement eee = ee.firstChildElement();
@@ -2882,9 +2884,16 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             addElem(t, track, placement, measure, tick);
             }
       else if (dirType == "pedal") {
-            if (pedalLine) {
+            if (pedalLine != "yes" && pedalSign == "") pedalSign = "yes"; // MusicXML 2.0 compatibility
+            if (pedalLine == "yes" && pedalSign == "") pedalSign = "no";  // MusicXML 2.0 compatibility
+            if (pedalLine == "yes") {
                   if (type == "start") {
                         Pedal* new_pedal = new Pedal(score);
+                        if (pedalSign == "yes")
+                              new_pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+                        else
+                              new_pedal->setBeginHook(true);
+                        new_pedal->setEndHook(true);
                         checkSpannerOverlap(pedal, new_pedal, "pedal");
                         pedal = new_pedal;
                         if (placement == "") placement = "below";
@@ -2894,8 +2903,28 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         handleSpannerStop(pedal, "pedal", tick, spanners);
                         pedal = 0;
                         }
+                  else if (type == "change") {
+                        // pedal change is implemented as two separate pedals
+                        // first stop the first one
+                        // TODO: this is not yet correct, the spanner must be stopped after the NEXT note
+                        static_cast<Pedal*>(pedal)->setEndHookType(HookType::HOOK_45);
+                        handleSpannerStop(pedal, "pedal", tick, spanners);
+                        pedal = 0;
+                        // then start a new one
+                        Pedal* new_pedal = new Pedal(score);
+                        new_pedal->setBeginHook(true);
+                        new_pedal->setBeginHookType(HookType::HOOK_45);
+                        new_pedal->setEndHook(true);
+                        checkSpannerOverlap(pedal, new_pedal, "pedal");
+                        pedal = new_pedal;
+                        if (placement == "") placement = "below";
+                        handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
+                        }
+                  else if (type == "continue") {
+                        // ignore
+                        }
                   else
-                        qDebug("unknown pedal %s", qPrintable(type));
+                        qDebug("unknown pedal type %s", qPrintable(type));
                   }
             else {
                   Symbol* s = new Symbol(score);
@@ -2906,7 +2935,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else if (type == "stop")
                         s->setSym(SymId::keyboardPedalUp);
                   else
-                        qDebug("unknown pedal %s", type.toLatin1().data());
+                        qDebug("unknown pedal type %s", qPrintable(type));
                   if (hasYoffset) s->setYoff(yoffset);
                   addElem(s, track, placement, measure, tick);
                   }
