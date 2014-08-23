@@ -1892,7 +1892,10 @@ void Note::setAccidentalType(Accidental::Type type)
 void Note::setLine(int n)
       {
       _line = n;
-      rypos() = (_line + staff()->staffType()->stepOffset()) * spatium() * .5;
+      int off = 0;
+      if (staff())
+            off = staff()->staffType()->stepOffset();
+      rypos() = (_line + off) * spatium() * .5;
       }
 
 //---------------------------------------------------------
