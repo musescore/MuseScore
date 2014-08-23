@@ -283,5 +283,16 @@ inline void Cursor::firstChordRestInTrack()
             _segment = _segment->next1(Segment::Type::ChordRest);
       }
 
+//---------------------------------------------------------
+//   qmlKeySignature
+//   read access to key signature in current track
+//   at current position
+//---------------------------------------------------------
+
+int Cursor::qmlKeySignature()
+      {
+	    Staff *staff = _score->staves()[staffIdx()];
+            return (int) staff->key(tick());
+      }
 }
 
