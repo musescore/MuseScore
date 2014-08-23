@@ -180,9 +180,9 @@ void StaffType::setLines(int val)
                         _stepOffset = 0;
                         break;
                   case 2:
-                  case 3:
                         _stepOffset = -2;
                         break;
+                  case 3:
                   default:
                         _stepOffset = 0;
                         break;
@@ -1011,7 +1011,7 @@ void StaffType::initStaffTypes()
 //                       group,              xml-name,  human-readable-name,        lin dst clef  bars stmless time  key  ledger
          StaffType(StaffGroup::STANDARD,   "stdNormal", QObject::tr("Standard"),      5, 1, true, true, false, true, true,  true),
          StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),  1, 1, true, true, false, true, false, true),
-         StaffType(StaffGroup::PERCUSSION, "perc3Line", QObject::tr("Perc. 3 lines"), 3, 1, true, true, false, true, false, true),
+         StaffType(StaffGroup::PERCUSSION, "perc3Line", QObject::tr("Perc. 3 lines"), 3, 2, true, true, false, true, false, true),
          StaffType(StaffGroup::PERCUSSION, "perc5Line", QObject::tr("Perc. 5 lines"), 5, 1, true, true, false, true, false, true),
 //                 group               xml-name,         human-readable-name         lin dist  clef   bars stemless time      duration font     size off genDur     fret font         size off  thru  minim style       onLin  rests  stmDn  stmThr upsDn  nums
          StaffType(StaffGroup::TAB, "tab6StrSimple", QObject::tr("Tab. 6-str simple"), 6, 1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, true),
