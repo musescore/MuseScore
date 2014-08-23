@@ -98,9 +98,7 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/PlugIns/sqldrivers
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/Enginio.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtBluetooth.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebSockets.*
-rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtTest.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtNfc.*
-rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtScriptTools.*
 
 mv ${VOLUME}/${APPNAME}.app  ${VOLUME}/${LONG_NAME}.app 
 
