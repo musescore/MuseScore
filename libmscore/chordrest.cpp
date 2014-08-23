@@ -332,6 +332,8 @@ bool ChordRest::readProperties(XmlReader& e)
                   QString atype(e.attribute("type"));
                   if (atype == "start") {
                         spanner->setTick(e.tick());
+                        if (spanner->ticks() > 0) // stop has been read first, ticks is tick2 - (-1)
+                        	spanner->setTick2(spanner->ticks() - 1);
                         spanner->setTrack(track());
                         if (spanner->type() == Element::Type::SLUR)
                               spanner->setStartElement(this);
