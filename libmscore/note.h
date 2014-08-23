@@ -22,6 +22,7 @@
 #include "symbol.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
+#include "accidental.h"
 
 class QPainter;
 
@@ -133,10 +134,11 @@ struct NoteVal {
 //   @P headGroup        Ms::NoteHead::Group     (HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT)
 //   @P headType         Ms::NoteHead::Type      (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
 //   @P elements         array[Ms::Element]      list of elements attached to note head
-//   @P accidental      Ms::Accidental          note accidental (null if none)
-//   @P dots            array[Ms::NoteDot]      list of note dots (empty if none)
-//   @P tieFor          Ms::Tie                 note forward tie (null if none, read only)
-//   @P tieBack         Ms::Tie                 note backward tie (null if none, read only)
+//   @P accidental       Ms::Accidental          note accidental (null if none)
+//   @P accidentalType   Ms::Accidental::Type    note accidental type
+//   @P dots             array[Ms::NoteDot]      list of note dots (empty if none)
+//   @P tieFor           Ms::Tie                 note forward tie (null if none, read only)
+//   @P tieBack          Ms::Tie                 note backward tie (null if none, read only)
 //---------------------------------------------------------------------------------------
 
 class Note : public Element {
@@ -164,6 +166,7 @@ class Note : public Element {
       Q_PROPERTY(Ms::NoteHead::Type headType             READ headType         WRITE undoSetHeadType)
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
       Q_PROPERTY(Ms::Accidental* accidental              READ accidental)
+      Q_PROPERTY(Ms::Accidental::Type accidentalType     READ accidentalType   WRITE setAccidentalType)
       Q_PROPERTY(QQmlListProperty<Ms::NoteDot> dots      READ qmlDots)
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
       Q_PROPERTY(Ms::Tie* tieBack                        READ tieBack)
@@ -299,6 +302,9 @@ class Note : public Element {
 
       Accidental* accidental() const    { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }
+      
+      Accidental::Type accidentalType() const { return _accidental ? _accidental->accidentalType() : Accidental::Type::NONE; }
+      void setAccidentalType(Accidental::Type type);
 
       int line() const                { return _line + _lineOffset;   }
       void setLine(int n);
