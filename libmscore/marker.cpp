@@ -107,7 +107,7 @@ void Marker::setMarkerType(Type t)
 
 QString Marker::markerTypeUserName()
       {
-      return qApp->translate("musescore", qPrintable(markerTypeTable[static_cast<int>(_markerType)].name));
+      return qApp->translate("markerType", qPrintable(markerTypeTable[static_cast<int>(_markerType)].name));
       }
 
 //---------------------------------------------------------
