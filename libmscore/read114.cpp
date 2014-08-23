@@ -287,13 +287,13 @@ void Part::read114(XmlReader& e)
                   int bf    = staff->barLineFrom();
                   int bt    = staff->barLineTo();
                   staff->setStaffType(StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
-#if 0
-                  // this allows 3-line percussion staves to keep the double spacing they had in 1.3
-                  // however, the line assignments will be wrong, so it won't really work
-                  if (lines == 3)
+
+                  // this allows 2/3-line percussion staves to keep the double spacing they had in 1.3
+
+                  if (lines == 2 || lines == 3)
                         staff->staffType()->setLineDistance(Spatium(2.0));
-#endif
-                  staff->setLines(lines);
+
+                  staff->setLines(lines);       // this also sets stepOffset
                   staff->setBarLineFrom(bf);
                   staff->setBarLineTo(bt);
                   }

@@ -1882,7 +1882,7 @@ void Note::setSmall(bool val)
 void Note::setLine(int n)
       {
       _line = n;
-      rypos() = _line * spatium() * .5;
+      rypos() = (_line + staff()->staffType()->stepOffset()) * spatium() * .5;
       }
 
 //---------------------------------------------------------
