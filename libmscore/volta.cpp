@@ -190,7 +190,10 @@ void Volta::setText(const QString& s)
 
 QString Volta::text() const
       {
-      return _beginText->text();
+      if (_beginText)
+            return _beginText->text();
+      else
+            return QString();
       }
 
 //---------------------------------------------------------
@@ -416,8 +419,10 @@ void Volta::reset()
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Volta::accessibleInfo(){
+QString Volta::accessibleInfo()
+      {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(text());
       }
+
 }
 
