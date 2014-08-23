@@ -30,9 +30,10 @@
 #include "preferences.h"
 #include "libmscore/score.h"
 
+
 namespace Ms {
 
-static const char* staticUrl = "http://connect.musescore.com";
+static const char* staticUrl = "https://connect.musescore.com";
 
 //---------------------------------------------------------
 //   MyNetworkAccessManager
@@ -111,6 +112,9 @@ MyWebView::MyWebView(QWidget *parent):
 
       m_page.setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
       QNetworkAccessManager *networkManager = new MyNetworkAccessManager(this);
+#ifndef QT_NO_OPENSSL
+      connect(networkManager,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),this, SLOT(onIgnoreSSLErrors(QNetworkReply*,QList<QSslError>)));
+#endif
       m_page.setNetworkAccessManager(networkManager);
       setPage(&m_page);
 
@@ -130,6 +134,19 @@ MyWebView::~MyWebView()
       {
       disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusy(bool)));
       }
+
+#ifndef QT_NO_OPENSSL
+/**
+Slot connected to the sslErrors signal of QNetworkAccessManager
+When this slot is called, call ignoreSslErrors method of QNetworkReply
+*/
+void MyWebView::ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors)
+      {      
+      foreach (const QSslError &error, sslErrors)
+            qDebug("Ignore SSL error: %d %s", error.error(), qPrintable(error.errorString()));
+      reply->ignoreSslErrors(sslErrors);
+      }
+#endif
 
 //---------------------------------------------------------
 //   stopBusy

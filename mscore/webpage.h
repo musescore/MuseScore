@@ -87,6 +87,10 @@ class MyWebView: public QWebView
       void link(const QUrl& url);
       void setBusy();
       void stopBusy(bool val);
+
+#ifndef QT_NO_OPENSSL
+      void ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors);
+#endif
      
    public:
       MyWebView(QWidget *parent = 0);
