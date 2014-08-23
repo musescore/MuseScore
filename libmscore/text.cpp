@@ -2558,7 +2558,13 @@ QString Text::accessibleInfo()
                   rez = Element::accessibleInfo();
                   break;
             }
-      return  QString("%1: %2").arg(rez).arg(plainText(true));
+      QString s = plainText(true).simplified();
+      if (s.length() > 20) {
+            s.truncate(20);
+            s += "...";
+            }
+      return  QString("%1: %2").arg(rez).arg(s);
       }
+
 }
 
