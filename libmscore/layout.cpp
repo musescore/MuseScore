@@ -1373,7 +1373,8 @@ void Score::doLayout()
                   }
             }
 
-      checkSpanner(0, lastSegment()->tick());
+      if (lastSegment())
+            checkSpanner(0, lastSegment()->tick());
 
       for (auto s : _spanner.map()) {
             Spanner* sp = s.second;
