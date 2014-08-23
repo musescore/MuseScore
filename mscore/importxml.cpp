@@ -5252,6 +5252,8 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       {
       // type:
 
+      FretDiagram* fd = NULL;
+
       // placement:
       double rx = 0.1 * e.attribute("relative-x", "0").toDouble();
       double ry = -0.1 * e.attribute("relative-y", "0").toDouble();
@@ -5380,13 +5382,15 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
                         }
                   }
             else if (tag == "frame") {
+
                   qDebug("xmlHarmony: found harmony frame");
-                  FretDiagram* fd = new FretDiagram(score);
+                  fd = new FretDiagram(score);
                   fd->setTrack(staff * VOICES);
                   // read frame into FretDiagram
                   readFretDiagram(fd, e);
                   Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
                   s->add(fd);
+
                   }
             else if (tag == "level")
                   domNotImplemented(e);
@@ -5410,6 +5414,14 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       ha->render();
 
       ha->setVisible(printObject == "yes");
+
+      if (fd) {
+            ha->layout();
+            fd->layout();
+            qreal dx = (ha->x()+ha->width()/2) - (fd->x()+fd->width()/2);
+            fd->setUserXoffset(fd->rUserXoffset()+dx);
+            qDebug("CHORD DELTA %f %f %f",dx,ha->width(),fd->width());
+      }
 
       // TODO-LV: do this only if ha points to a valid harmony
       // harmony = ha;
