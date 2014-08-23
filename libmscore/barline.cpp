@@ -52,11 +52,11 @@ static const char* barLineNames[] = {
       };
 
 const barLineTableItem barLineTable[] = {
-        { BarLineType::NORMAL,       QT_TRANSLATE_NOOP("Palette", "Normal") },
-        { BarLineType::BROKEN,       QT_TRANSLATE_NOOP("Palette", "Dashed style") },
-        { BarLineType::DOTTED,       QT_TRANSLATE_NOOP("Palette", "Dotted style") },
-        { BarLineType::END,          QT_TRANSLATE_NOOP("Palette", "End Bar style") },
-        { BarLineType::DOUBLE,       QT_TRANSLATE_NOOP("Palette", "Double Bar style") },
+        { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal") },
+        { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed style") },
+        { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted style") },
+        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "End Bar style") },
+        { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double Bar style") },
         { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
         { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
         { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
@@ -80,7 +80,7 @@ QString BarLine::userTypeName2(BarLineType t)
       {
       for (unsigned i = 0; i < sizeof(barLineTable)/sizeof(*barLineTable); ++i) {
            if(barLineTable[i].type == t)
-                 return barLineTable[i].name;
+                 return qApp->translate("Palette", barLineTable[i].name);
            }
       return QString();
       }
