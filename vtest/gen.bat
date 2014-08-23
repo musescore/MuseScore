@@ -9,7 +9,7 @@ set SRC=mmrest-1,bravura-mmrest,mmrest-2,mmrest-4,mmrest-5,mmrest-6,mmrest-7,mmr
  emmentaler-3,bravura-3,emmentaler-4,bravura-4,emmentaler-5,bravura-5, ^
  emmentaler-6,bravura-6,emmentaler-7,bravura-7, ^
  emmentaler-8,bravura-8,emmentaler-9,bravura-9,emmentaler-10,bravura-10, ^
- emmentlar-11,bravura-11,frametext,ottava,slurs-1,slurs-2,hairpins-1,pedal-1 ^
+ emmentlar-11,bravura-11,frametext,ottava,slurs-1,slurs-2,hairpins-1,pedal-1,line-1, ^
  chord-layout-1,chord-layout-2,chord-layout-3,chord-layout-4,chord-layout-5, ^
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
  chord-layout-11,chord-layout-12,chord-layout-13,chord-layout-13, ^
