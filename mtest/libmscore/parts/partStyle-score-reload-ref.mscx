@@ -470,10 +470,6 @@
             <style>Title</style>
             <text>Style Score</text>
             </Text>
-          <Text>
-            <style>Instrument Name (Part)</style>
-            <text></text>
-            </Text>
           </VBox>
         <Measure number="1">
           <Clef>
@@ -704,10 +700,6 @@
           <Text>
             <style>Title</style>
             <text>Style Score</text>
-            </Text>
-          <Text>
-            <style>Instrument Name (Part)</style>
-            <text></text>
             </Text>
           </VBox>
         <Measure number="1">

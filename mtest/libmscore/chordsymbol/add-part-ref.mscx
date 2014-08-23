@@ -215,10 +215,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <Text>
-            <style>Instrument Name (Part)</style>
-            <text></text>
-            </Text>
           </VBox>
         <Measure number="1">
           <Clef>
