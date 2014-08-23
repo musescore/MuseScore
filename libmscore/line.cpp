@@ -466,8 +466,9 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
             case Spanner::Anchor::SEGMENT:
                   {
                   ChordRest* cr;
-                  if (grip == GripLine::START)
+                  if (grip == GripLine::START) {
                         cr = static_cast<ChordRest*>(startElement());
+                        }
                   else {
                         cr = static_cast<ChordRest*>(endElement());
                         if (type() == Element::Type::OTTAVA) {
@@ -475,7 +476,7 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                               if (cr)
                                     x += cr->segment()->width();
                               }
-                        else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL) {
+                        else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL || type() == Element::Type::TEXTLINE) {
                               // lay out all the way to next CR or (almost to) barline
                               if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
                                     qreal x2 = 0.0;
@@ -484,7 +485,7 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                                     Segment* seg = static_cast<Segment*>(endElement()->parent())->next();
                                     for ( ; seg; seg = seg->next()) {
                                           if (seg->segmentType() == Segment::Type::ChordRest) {
-                                                if (t!= -1 && !seg->element(t)) {
+                                                if (t != -1 && !seg->element(t)) {
                                                       continue;
                                                       }
                                                 x2 = seg->x() - sp;     // 1sp shy of next chord
@@ -503,6 +504,9 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                                     }
                               }
                         }
+
+                  if (cr && cr->durationType() == TDuration::DurationType::V_MEASURE)
+                        x -= cr->x();
 
                   int t = grip == GripLine::START ? tick() : tick2();
                   Measure* m = cr ? cr->measure() : score()->tick2measure(t);
