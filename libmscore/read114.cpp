@@ -37,6 +37,7 @@
 #include "tempo.h"
 #include "tempotext.h"
 #include "clef.h"
+#include "barline.h"
 
 namespace Ms {
 
@@ -168,8 +169,14 @@ void Staff::read114(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "lines")
-                  setLines(e.readInt());
+            if (tag == "lines") {
+                  int lines = e.readInt();
+                  setLines(lines);
+                  if (lines != 5) {
+                        _barLineFrom = (lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
+                        _barLineTo   = (lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (lines - 1) * 2);
+                        }
+                  }
             else if (tag == "small")
                   setSmall(e.readInt());
             else if (tag == "invisible")
@@ -277,8 +284,18 @@ void Part::read114(XmlReader& e)
       if (instr(0)->useDrumset() != DrumsetKind::NONE) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
+                  int bf    = staff->barLineFrom();
+                  int bt    = staff->barLineTo();
                   staff->setStaffType(StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
+#if 0
+                  // this allows 3-line percussion staves to keep the double spacing they had in 1.3
+                  // however, the line assignments will be wrong, so it won't really work
+                  if (lines == 3)
+                        staff->staffType()->setLineDistance(Spatium(2.0));
+#endif
                   staff->setLines(lines);
+                  staff->setBarLineFrom(bf);
+                  staff->setBarLineTo(bt);
                   }
             }
       //set default articulations
