@@ -31,6 +31,40 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   transposeChord
+//---------------------------------------------------------
+
+static void transposeChord(Chord* c, Interval srcTranspose)
+      {
+      // set note track
+      // check if staffMove moves a note to a
+      // nonexistant staff
+      //
+      int track  = c->track();
+      int nn     = (track / VOICES) + c->staffMove();
+      if (nn < 0 || nn >= c->score()->nstaves())
+            c->setStaffMove(0);
+      Part* part = c->staff()->part();
+      Interval dstTranspose = part->instr()->transpose();
+
+      if (srcTranspose != dstTranspose) {
+            if (!dstTranspose.isZero()) {
+                  dstTranspose.flip();
+                  for (Note* n : c->notes()) {
+                        int npitch;
+                        int ntpc;
+                        transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, dstTranspose, true);
+                        n->setTpc2(ntpc);
+                        }
+                  }
+            else {
+                  for (Note* n : c->notes())
+                        n->setTpc2(n->tpc1());
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   pasteStaff
 //    return false if paste fails
 //---------------------------------------------------------
@@ -143,6 +177,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                                           for (int i = 0; i < graceNotes.size(); ++i) {
                                                 Chord* gc = graceNotes[i];
                                                 gc->setGraceIndex(i);
+                                                transposeChord(gc, e.transpose());
                                                 chord->add(gc);
                                                 }
                                           graceNotes.clear();
@@ -372,39 +407,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
 void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose)
       {
 // qDebug("pasteChordRest %s at %d", cr->name(), tick);
-      if (cr->type() == Element::Type::CHORD) {
-            // set note track
-            // check if staffMove moves a note to a
-            // nonexistant staff
-            //
-            Chord* c   = static_cast<Chord*>(cr);
-            int track  = cr->track();
-            int nn     = (track / VOICES) + c->staffMove();
-            if (nn < 0 || nn >= nstaves())
-                  c->setStaffMove(0);
-            Part* part = c->staff()->part();
-            Interval dstTranspose = part->instr()->transpose();
-
-            if (srcTranspose != dstTranspose) {
-//                  qDebug("transpose %d-%d  %d-%d",
-//                     srcTranspose.diatonic, srcTranspose.chromatic,
-//                     dstTranspose.diatonic, dstTranspose.chromatic);
-
-                  if (!dstTranspose.isZero()) {
-                        dstTranspose.flip();
-                        for (Note* n : c->notes()) {
-                              int npitch;
-                              int ntpc;
-                              transposeInterval(n->pitch(), n->tpc1(), &npitch, &ntpc, dstTranspose, true);
-                              n->setTpc2(ntpc);
-                              }
-                        }
-                  else {
-                        for (Note* n : c->notes())
-                              n->setTpc2(n->tpc1());
-                        }
-                  }
-            }
+      if (cr->type() == Element::Type::CHORD)
+            transposeChord(static_cast<Chord*>(cr), srcTranspose);
 
       Measure* measure = tick2measure(tick);
       if (!measure)
