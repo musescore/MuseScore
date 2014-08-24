@@ -124,7 +124,7 @@ void createExcerpt(Score* score, const QList<Part*>& parts)
                   s->setPart(p);
                   s->setStaffType(staff->staffType());
                   s->setDefaultClefType(staff->defaultClefType());
-                  s->linkTo(staff);
+                  score->undo(new LinkStaff(s, staff));
                   p->staves()->append(s);
                   score->staves().append(s);
                   srcStaves.append(oscore->staffIdx(staff));
