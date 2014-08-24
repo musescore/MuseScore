@@ -721,12 +721,14 @@ void GuitarPro::createMeasures()
                   }
             if (i == 0 || (bars[i].keysig != GP_INVALID_KEYSIG)) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                        KeySig* t = new KeySig(score);
                         int keysig = bars[i].keysig != GP_INVALID_KEYSIG ? bars[i].keysig : key;
-                        t->setKey(Key(keysig));
-                        t->setTrack(staffIdx * VOICES);
-                        Segment* s = m->getSegment(Segment::Type::KeySig, tick);
-                        s->add(t);
+                        if (tick == 0 || score->staff(staffIdx)->key(tick) != Key(keysig)) {
+                              KeySig* t = new KeySig(score);
+                              t->setKey(Key(keysig));
+                              t->setTrack(staffIdx * VOICES);
+                              Segment* s = m->getSegment(Segment::Type::KeySig, tick);
+                              s->add(t);
+                              }
                         }
                   }
             readVolta(&bars[i].volta, m);
@@ -2141,6 +2143,7 @@ void GuitarPro::createCrecDim(int staffIdx, int track, int tick, bool crec)
             hairpins[staffIdx]->setHairpinType(Hairpin::Type::DECRESCENDO);
       hairpins[staffIdx]->setTick(tick);
       hairpins[staffIdx]->setTick2(tick);
+      hairpins[staffIdx]->setTrack(track);
       hairpins[staffIdx]->setTrack(track);
       score->undoAddElement(hairpins[staffIdx]);
       }

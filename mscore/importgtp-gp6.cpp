@@ -1433,7 +1433,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                   // get the clef of the bar and apply
                   if (!currentNode.nodeName().compare("Clef")) {
                         QString clefString = currentNode.toElement().text();
-                        ClefType clefId;
+                        ClefType clefId = ClefType::G3;
                         if (!clefString.compare("F4"))
                               clefId = ClefType::F8;
                         else if (!clefString.compare("G2"))
@@ -1445,15 +1445,18 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                         Clef* newClef = new Clef(score);
                         newClef->setClefType(clefId);
                         newClef->setTrack(staffIdx * VOICES);
-                        Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
                         // only add the clef to the bar if it differs from previous measure
                         if (measure->prevMeasure()) {
                               if (clefId != oldClefId[staffIdx]) {
+                                    Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
                                     segment->add(newClef);
                                     oldClefId[staffIdx] = clefId;
                                     }
+                              else
+                                    delete newClef;
                               }
                         else  {
+                              Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
                               segment->add(newClef);
                               oldClefId[staffIdx] = clefId;
                               }
