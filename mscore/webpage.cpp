@@ -113,7 +113,7 @@ MyWebView::MyWebView(QWidget *parent):
       m_page.setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
       QNetworkAccessManager *networkManager = new MyNetworkAccessManager(this);
 #ifndef QT_NO_OPENSSL
-      connect(networkManager,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),this, SLOT(onIgnoreSSLErrors(QNetworkReply*,QList<QSslError>)));
+      connect(networkManager,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),this, SLOT(ignoreSSLErrors(QNetworkReply*,QList<QSslError>)));
 #endif
       m_page.setNetworkAccessManager(networkManager);
       setPage(&m_page);
