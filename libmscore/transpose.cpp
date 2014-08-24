@@ -379,11 +379,14 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               }
                         }
                   else if (e->type() == Element::Type::KEYSIG && trKeys && mode != TransposeMode::DIATONICALLY) {
-                        KeySig* ks = static_cast<KeySig*>(e);
-                        Key nKey = transposeKey(ks->key(), interval);
-                        KeySigEvent ke = ks->keySigEvent();
-                        ke.setKey(nKey);
-                        undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                        QList<Element*> ll = e->linkList();
+                        for (Element* e : ll) {
+                              KeySig* ks = static_cast<KeySig*>(e);
+                              Key nKey = transposeKey(ks->key(), interval);
+                              KeySigEvent ke = ks->keySigEvent();
+                              ke.setKey(nKey);
+                              undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                              }
                         }
                   }
             if (transposeChordNames) {
@@ -432,7 +435,11 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         Key key  = st->key(s->tick());
                         Key nKey = transposeKey(key, interval);
                         KeySigEvent ke(nKey);
-                        undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                        QList<Element*> ll = ks->linkList();
+                        for (Element* e : ll) {
+                              KeySig* ks = static_cast<KeySig*>(e);
+                              undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                              }
                         }
                   }
             }
