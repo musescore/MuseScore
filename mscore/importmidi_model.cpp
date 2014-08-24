@@ -908,8 +908,10 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
 
 QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int role) const
       {
-      if (section < 0 || section >= (int)_columns.size())
+      if ((orientation == Qt::Vertical && !isRowValid(section))
+                  || (orientation == Qt::Horizontal && !isColumnValid(section))) {
             return QVariant();
+            }
 
       if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
             if (!_columns.empty()) {
@@ -933,9 +935,14 @@ bool TracksModel::isTrackIndexValid(int trackIndex) const
       return trackIndex >= -1 && trackIndex < _trackCount;
       }
 
+bool TracksModel::isRowValid(int row) const
+      {
+      return row >= 0 && ((_trackCount == 1) ? row < _trackCount : row <= _trackCount);
+      }
+
 bool TracksModel::isColumnValid(int column) const
       {
-      return (column >= 0 && column < (int)_columns.size());
+      return column >= 0 && column < (int)_columns.size();
       }
 
 } // namespace Ms
