@@ -299,8 +299,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               }
                         Tremolo* tremolo = 0;
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
-                              Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
-
+                              Segment* ns = nullptr; //create segment later, on demand
                               foreach (Element* e, oseg->annotations()) {
                                     if (e->generated())
                                           continue;
@@ -313,6 +312,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           ne->setReadPos(QPointF());
                                           ne->setTrack(track == -1 ? 0 : track);
                                           ne->setScore(score);
+                                          if (!ns)
+                                                ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                                           ns->add(ne);
                                           // for chord symbols,
                                           // re-render with new style settings
@@ -416,6 +417,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                 }
                                           }
                                     }
+                              if (!ns)
+                                    ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                               ns->add(ne);
                               }
                         }
