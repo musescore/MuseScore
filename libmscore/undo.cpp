@@ -446,20 +446,23 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, Key key)
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
             int diff = -staff->part()->instr()->transpose().chromatic;
+            Key nkey;
             if (diff && !score->styleB(StyleIdx::concertPitch))
-                  key = transposeKey(key, diff);
+                  nkey = transposeKey(key, diff);
+            else
+                  nkey = key;
 
             if (ks) {
                   ks->undoChangeProperty(P_ID::GENERATED, false);
                   KeySigEvent kse = ks->keySigEvent();
-                  kse.setKey(key);
+                  kse.setKey(nkey);
                   undo(new ChangeKeySig(ks, kse, ks->showCourtesy()));
                   }
             else {
                   KeySig* nks = new KeySig(score);
                   nks->setParent(s);
                   nks->setTrack(track);
-                  nks->setKey(key);
+                  nks->setKey(nkey);
                   undo(new AddElement(nks));
                   if (lks)
                         lks->linkTo(nks);
