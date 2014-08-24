@@ -141,6 +141,7 @@ typedef QList<JumpMarkerDesc> JumpMarkerDescList;
 //---------------------------------------------------------
 
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
+typedef QMap<SLine*, QPair<int, int> > MusicXmlSpannerMap;
 
 /**
  The MusicXML importer.
@@ -154,7 +155,6 @@ class MusicXml {
       Fraction fractionTSig;                    ///< Current timesig as fraction
 
       Slur* slur[MAX_NUMBER_LEVEL];
-
       TextLine* bracket[MAX_BRACKETS];
       TextLine* dashes[MAX_DASHES];
 
@@ -177,11 +177,11 @@ class MusicXml {
       JumpMarkerDescList jumpsMarkers;
 
       MusicXmlPartGroupList partGroupList;
-      QMap<Spanner*, QPair<int, int> > spanners;
+      MusicXmlSpannerMap spanners;
 
       Ottava* ottava;                            ///< Current ottava
       Trill* trill;                              ///< Current trill
-      Pedal* pedal;                              ///< Current pedal
+      SLine* pedal;                              ///< Current pedal
       Harmony* harmony;                          ///< Current harmony
       Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
@@ -208,7 +208,7 @@ class MusicXml {
                     QMap<int, Lyrics*>& numbrdLyrics,
                     QMap<int, Lyrics*>& defyLyrics,
                     QList<Lyrics*>& unNumbrdLyrics);
-      void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
+      void xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ticks, QDomElement node);
       Note* xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement node, QList<Chord*>& graceNotes, int& alt);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       StaffTypes xmlClef(QDomElement, int staffIdx, Measure*);
