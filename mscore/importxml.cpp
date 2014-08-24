@@ -4142,7 +4142,7 @@ static void xmlFermata(ChordRest* cr, QDomElement e)
  Read MusicXML notations.
  */
 
-void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement e)
+void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ticks, QDomElement e)
       {
       Measure* measure = cr->measure();
       int track = cr->track();
@@ -4182,15 +4182,13 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               bool endSlur = false;
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
-                                    if(cr->isGrace()){
+                                    if(cr->isGrace())
                                           slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
-                                          slur[slurNo]->setParent(cr);
-                                          }
                                     if (lineType == "dotted")
                                           slur[slurNo]->setLineType(1);
                                     else if (lineType == "dashed")
                                           slur[slurNo]->setLineType(2);
-                                    slur[slurNo]->setTick(cr->tick());
+                                    slur[slurNo]->setTick(tick);
                                     slur[slurNo]->setStartElement(cr);
                                     }
                               else
@@ -4200,13 +4198,11 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     slur[slurNo]->setSlurDirection(MScore::Direction::UP);
                               else if (pl == "below")
                                     slur[slurNo]->setSlurDirection(MScore::Direction::DOWN);
-                              //slur[slurNo]->setStart(tick, trk + voice);
-                              //slur[slurNo]->setTrack((staff + relStaff) * VOICES);
                               slur[slurNo]->setTrack(track);
                               slur[slurNo]->setTrack2(track);
                               score->addElement(slur[slurNo]);
                               if (endSlur) {
-                                    slur[slurNo]->setTick(cr->tick());
+                                    slur[slurNo]->setTick(tick);
                                     slur[slurNo]->setStartElement(cr);
                                     slur[slurNo] = 0;
                                     }
@@ -4214,7 +4210,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         else if (slurType == "stop") {
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
-                                    slur[slurNo]->setTick2(cr->tick());
+                                    slur[slurNo]->setTick2(tick);
                                     slur[slurNo]->setTrack2(track);
                                     slur[slurNo]->setEndElement(cr);
                                     }
@@ -4225,13 +4221,15 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                           slur[slurNo]->setStartElement(cr);
                                           }
                                     else {
-                                          slur[slurNo]->setTick2(cr->tick());
+                                          slur[slurNo]->setTick2(tick);
                                           slur[slurNo]->setTrack2(track);
                                           slur[slurNo]->setEndElement(cr);
                                           }
                                     slur[slurNo] = 0;
                                     }
                               }
+                        else if (slurType == "continue")
+                              ; // ignore
                         else
                               qDebug("unknown slur type %s", qPrintable(slurType));
                         }
@@ -5197,7 +5195,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             }
 
       foreach(QDomElement de, notations) {
-            xmlNotations(note, cr, trk, ticks, de);
+            xmlNotations(note, cr, trk, loc_tick, ticks, de);
             }
 
       // add lyrics found by xmlLyric
