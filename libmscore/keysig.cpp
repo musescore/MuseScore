@@ -281,13 +281,11 @@ bool KeySig::acceptDrop(const DropData& data) const
 
 Element* KeySig::drop(const DropData& data)
       {
-      Element* e = data.element;
-      if (e->type() != Element::Type::KEYSIG) {
-            delete e;
+      KeySig* ks = static_cast<KeySig*>(data.element);
+      if (ks->type() != Element::Type::KEYSIG) {
+            delete ks;
             return 0;
             }
-
-      KeySig* ks    = static_cast<KeySig*>(e);
       KeySigEvent k = ks->keySigEvent();
       if (k.custom() && (score()->customKeySigIdx(ks) == -1))
             score()->addCustomKeySig(ks);
