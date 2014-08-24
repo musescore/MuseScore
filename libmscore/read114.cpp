@@ -565,6 +565,8 @@ Score::FileError Score::read114(XmlReader& e)
                         qDebug("read114: Key tick %d", tick);
                         continue;
                         }
+                  if (tick == 0 && i->second == Key::C)
+                        continue;
                   Measure* m = tick2measure(tick);
                   if (!m)           //empty score
                         break;
