@@ -3142,7 +3142,7 @@ void Measure::layoutX(qreal stretch)
                                     minDistance = qMax(minDistance, minNoteDistance);
                                     }
                               else {
-                                    bool firstClef = (segmentIdx == 1) && (pt == Segment::Type::Clef);
+                                    bool firstClef = (pt == Segment::Type::Clef) && (pSeg && pSeg->rtick() == 0);
                                     if ((pt & Segment::Type::KeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
