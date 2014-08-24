@@ -797,7 +797,10 @@ void Measure::add(Element* el)
 
       switch (type) {
             case Element::Type::TEXT:
-                  staves[el->staffIdx()]->setNoText(static_cast<Text*>(el));
+                  {
+                  if (el->staffIdx() < staves.size())
+                        staves[el->staffIdx()]->setNoText(static_cast<Text*>(el));
+                  }
                   break;
 
             case Element::Type::TUPLET:
