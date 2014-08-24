@@ -2546,7 +2546,7 @@ QString Text::accessibleInfo()
                   rez = tr("Composer");
                   break;
             case TextStyleType::POET:
-                  rez = tr ("Poet");
+                  rez = tr ("Lyricist");
                   break;
             case TextStyleType::TRANSLATOR:
                   rez = tr ("Translator");
