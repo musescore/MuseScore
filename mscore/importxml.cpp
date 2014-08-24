@@ -2356,11 +2356,11 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
 // SLine placement is modified by changing the first segments user offset
 // As the SLine has just been created, it does not have any segment yet
 
-static void setSLinePlacement(SLine* sli, float spatium, const QString placement, bool /*hasYoff*/, qreal /*yoff*/)
+static void setSLinePlacement(SLine* sli, const QString placement)
       {
       /*
-      qDebug("setSLinePlacement sli %p type %d s=%g pl='%s' hasy=%d yoff=%g",
-             sli, sli->type(), spatium, qPrintable(placement), hasYoff, yoff);
+      qDebug("setSLinePlacement sli %p type %d s=%g pl='%s'",
+             sli, sli->type(), sli->score()->spatium(), qPrintable(placement));
        */
 
       // calc y offset assuming five line staff and default style
@@ -2390,7 +2390,7 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
       // add linesegment containing the user offset
       LineSegment* tls= sli->createLineSegment();
       //qDebug("   y = %g", y);
-      y *= spatium;
+      y *= sli->score()->spatium();
       tls->setUserOff(QPointF(0, y));
       sli->add(tls);
       }
@@ -2399,12 +2399,11 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
 //   addElem
 //---------------------------------------------------------
 
-static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Score* score, QString& placement,
-                    qreal /*rx*/, qreal /*ry*/, int /* offset */, Measure* measure, int tick)
+static void addElem(Element* el, int track, QString& placement, Measure* measure, int tick)
       {
       /*
-      qDebug("addElem el %p hasYoff %d staff %d rstaff %d placement %s rx %g ry %g tick %d",
-             el, hasYoffset, staff, rstaff, qPrintable(placement), rx, ry, tick);
+      qDebug("addElem el %p track %d placement %s tick %d",
+             el, track, qPrintable(placement), tick);
        */
 
       // calc y offset assuming five line staff and default style
@@ -2438,9 +2437,9 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
       if (placement == "above") y += offsAbove;
       if (placement == "below") y += offsBelow;
       //qDebug("   y = %g", y);
-      y *= score->spatium();
+      y *= el->score()->spatium();
       el->setUserOff(QPoint(0, y));
-      el->setTrack((staff + rstaff) * VOICES);
+      el->setTrack(track);
       Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
       s->add(el);
       }
@@ -2512,6 +2511,46 @@ static void metronome(QDomElement e, Text* t)
       }
 
 //---------------------------------------------------------
+//   checkSpannerOverlap
+//---------------------------------------------------------
+
+static void checkSpannerOverlap(SLine* cur_sp, SLine* new_sp, QString type)
+      {
+      if (cur_sp) {
+            qDebug("overlapping %s not supported", qPrintable(type));
+            delete new_sp;
+            return;
+            }
+      }
+      
+//---------------------------------------------------------
+//   handleSpannerStart
+//---------------------------------------------------------
+      
+static void handleSpannerStart(SLine* new_sp, QString /* type */, int track, QString& placement, int tick, MusicXmlSpannerMap& spanners)
+      {
+      new_sp->setTrack(track);
+      setSLinePlacement(new_sp, placement);
+      spanners[new_sp] = QPair<int, int>(tick, -1);
+      //qDebug("%s %p inserted at first tick %d", qPrintable(type), new_sp, tick);
+      }
+      
+//---------------------------------------------------------
+//   handleSpannerStop
+//---------------------------------------------------------
+
+static void handleSpannerStop(SLine* cur_sp, QString type, int tick, MusicXmlSpannerMap& spanners)
+      {
+      if (!cur_sp) {
+            qDebug("%s stop without start", qPrintable(type));
+            return;
+            }
+
+      spanners[cur_sp].second = tick;
+      //qDebug("pedal %p second tick %d", cur_sp, tick);
+      }
+
+//---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
 
@@ -2550,7 +2589,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       QString fontStyle = "";
       QString fontSize = "";
       int offset = 0; // not supported yet
-      int rstaff = 0;
+      int track = 0;
       QStringList dynamics;
       // int spread;
       qreal rx = 0.0;
@@ -2570,7 +2609,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       bool coda = false;
       bool segno = false;
       int ottavasize = 0;
-      bool pedalLine = false;
+      QString pedalLine;
+      QString pedalSign;
       int number = 1;
       QString lineEnd;
       // qreal endLength;
@@ -2600,7 +2640,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               }
                         else if (dirType == "pedal") {
                               type = ee.attribute(QString("type"));
-                              pedalLine = ee.attribute(QString("line")) == "yes";
+                              pedalLine = ee.attribute(QString("line"));
+                              pedalSign = ee.attribute(QString("sign"));
                               }
                         else if (dirType == "dynamics") {
                               QDomElement eee = ee.firstChildElement();
@@ -2659,9 +2700,10 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   offset = (e.text().toInt() * MScore::division)/divisions;
             else if (e.tagName() == "staff") {
                   // DEBUG: <staff>0</staff>
-                  rstaff = e.text().toInt() - 1;
+                  int rstaff = e.text().toInt() - 1;
                   if (rstaff < 0)         // ???
                         rstaff = 0;
+                  track = (staff + rstaff) * VOICES;
                   }
             else if (e.tagName() == "voice")
                   domNotImplemented(e);
@@ -2782,12 +2824,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   jp->setJumpType(Jump::Type::DS_AL_FINE);
                   }
             if (jp) {
-                  jp->setTrack((staff + rstaff) * VOICES);
+                  jp->setTrack(track);
                   qDebug("jumpsMarkers adding jm %p meas %p",jp, measure);
                   jumpsMarkers.append(JumpMarkerDesc(jp, measure));
                   }
             if (m) {
-                  m->setTrack((staff + rstaff) * VOICES);
+                  m->setTrack(track);
                   qDebug("jumpsMarkers adding jm %p meas %p",m, measure);
                   jumpsMarkers.append(JumpMarkerDesc(m, measure));
                   }
@@ -2831,8 +2873,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             t->setPlainText(txt);
             if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
-            addElem(t, hasYoffset, staff, rstaff, score, placement,
-                       rx, ry, offset, measure, tick);
+            addElem(t, track, placement, measure, tick);
             }
       else if (dirType == "rehearsal") {
             Text* t = new RehearsalMark(score);
@@ -2840,38 +2881,50 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             else t->setPlacement(placement == "above" ? Element::Placement::ABOVE : Element::Placement::BELOW);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
-            addElem(t, hasYoffset, staff, rstaff, score, placement,
-                       rx, ry, offset, measure, tick);
+            addElem(t, track, placement, measure, tick);
             }
       else if (dirType == "pedal") {
-            if (pedalLine) {
+            if (pedalLine != "yes" && pedalSign == "") pedalSign = "yes"; // MusicXML 2.0 compatibility
+            if (pedalLine == "yes" && pedalSign == "") pedalSign = "no";  // MusicXML 2.0 compatibility
+            if (pedalLine == "yes") {
                   if (type == "start") {
-                        if (pedal) {
-                              qDebug("overlapping pedal lines not supported");
-                              }
-                        else {
-                              pedal = new Pedal(score);
-                              pedal->setTrack((staff + rstaff) * VOICES);
-                              if (placement == "") placement = "below";
-                              setSLinePlacement(pedal,
-                                                score->spatium(), placement,
-                                                hasYoffset, yoffset);
-                              spanners[pedal] = QPair<int, int>(tick, -1);
-                              // qDebug("pedal=%p inserted at first tick %d", pedal, tick);
-                              }
+                        Pedal* new_pedal = new Pedal(score);
+                        if (pedalSign == "yes")
+                              new_pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+                        else
+                              new_pedal->setBeginHook(true);
+                        new_pedal->setEndHook(true);
+                        checkSpannerOverlap(pedal, new_pedal, "pedal");
+                        pedal = new_pedal;
+                        if (placement == "") placement = "below";
+                        handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
                         }
                   else if (type == "stop") {
-                        if (!pedal) {
-                              qDebug("pedal line stop without start");
-                              }
-                        else {
-                              spanners[pedal].second = tick;
-                              // qDebug("pedal=%p second tick %d", pedal, tick);
-                              pedal = 0;
-                              }
+                        handleSpannerStop(pedal, "pedal", tick, spanners);
+                        pedal = 0;
+                        }
+                  else if (type == "change") {
+                        // pedal change is implemented as two separate pedals
+                        // first stop the first one
+                        // TODO: this is not yet correct, the spanner must be stopped after the NEXT note
+                        static_cast<Pedal*>(pedal)->setEndHookType(HookType::HOOK_45);
+                        handleSpannerStop(pedal, "pedal", tick, spanners);
+                        pedal = 0;
+                        // then start a new one
+                        Pedal* new_pedal = new Pedal(score);
+                        new_pedal->setBeginHook(true);
+                        new_pedal->setBeginHookType(HookType::HOOK_45);
+                        new_pedal->setEndHook(true);
+                        checkSpannerOverlap(pedal, new_pedal, "pedal");
+                        pedal = new_pedal;
+                        if (placement == "") placement = "below";
+                        handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
+                        }
+                  else if (type == "continue") {
+                        // ignore
                         }
                   else
-                        qDebug("unknown pedal %s", qPrintable(type));
+                        qDebug("unknown pedal type %s", qPrintable(type));
                   }
             else {
                   Symbol* s = new Symbol(score);
@@ -2882,10 +2935,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else if (type == "stop")
                         s->setSym(SymId::keyboardPedalUp);
                   else
-                        qDebug("unknown pedal %s", type.toLatin1().data());
+                        qDebug("unknown pedal type %s", qPrintable(type));
                   if (hasYoffset) s->setYoff(yoffset);
-                  addElem(s, hasYoffset, staff, rstaff, score, placement,
-                          rx, ry, offset, measure, tick);
+                  addElem(s, track, placement, measure, tick);
                   }
             }
       else if (dirType == "dynamics") {
@@ -2903,173 +2955,126 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         dyn->setVelocity( dynaValue );
                         }
                   if (hasYoffset) dyn->textStyle().setYoff(yoffset);
-                  addElem(dyn, hasYoffset, staff, rstaff, score, placement,
-                             rx, ry, offset, measure, tick);
+                  addElem(dyn, track, placement, measure, tick);
                   }
             }
       else if (dirType == "wedge") {
             // qDebug("wedge type='%s' hairpin=%p", qPrintable(type), hairpin);
-            // bool above = (placement == "above");
             if (type == "crescendo" || type == "diminuendo") {
-                  if (hairpin) {
-                        qDebug("overlapping wedge not supported");
-                        }
-                  else {
-                        hairpin = new Hairpin(score);
-                        hairpin->setHairpinType(type == "crescendo"
-                                                ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
-                        setSLinePlacement(hairpin,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
-                        hairpin->setTrack((staff + rstaff) * VOICES);
-                        if( niente == "yes")
-                            hairpin->setHairpinCircledTip( true );
-                        spanners[hairpin] = QPair<int, int>(tick, -1);
-                        // qDebug("hairpin=%p inserted at first tick %d", hairpin, tick);
-                        }
+                  Hairpin* new_hairpin = new Hairpin(score);
+                  checkSpannerOverlap(hairpin, new_hairpin, "hairpin");
+                  hairpin = new_hairpin;
+                  hairpin->setHairpinType(type == "crescendo"
+                                          ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
+                  if (niente == "yes")
+                      hairpin->setHairpinCircledTip(true);
+                  handleSpannerStart(hairpin, "hairpin", track, placement, tick, spanners);
                   }
             else if (type == "stop") {
-                  if (!hairpin) {
-                        qDebug("wedge stop without start");
-                        }
-                  else {
-                        if( niente == "yes")
-                            hairpin->setHairpinCircledTip( true );
-                        spanners[hairpin].second = tick;
-                        // qDebug("hairpin=%p second tick %d", hairpin, tick);
-                        hairpin = 0;
-                        }
+                  if (hairpin && niente == "yes")
+                      hairpin->setHairpinCircledTip(true);
+                  handleSpannerStop(hairpin, "wedge", tick, spanners);
+                  hairpin = 0;
                   }
             else
                   qDebug("unknown wedge type: %s", qPrintable(type));
             }
       else if (dirType == "bracket") {
-            int n = number-1;
-            TextLine* b = bracket[n];
+            int n = number - 1;
+            TextLine*& b = bracket[n];
             if (type == "start") {
-                  if (b) {
-                        qDebug("overlapping bracket number %d", number);
+                  TextLine* new_b = new TextLine(score);
+                  checkSpannerOverlap(b, new_b, "bracket");
+                  b = new_b;
+
+                  if (placement == "") placement = "above";  // set default
+
+                  b->setBeginHook(lineEnd != "none");
+                  if (lineEnd == "up")
+                        b->setBeginHookHeight(-1 * b->beginHookHeight());
+
+                  // hack: assume there was a words element before the bracket
+                  if (!txt.isEmpty()) {
+                        b->setBeginText(txt, TextStyleType::TEXTLINE);
                         }
-                  else {
-                        b = new TextLine(score);
 
-                        if (placement == "") placement = "above";  // set default
-                        setSLinePlacement(b,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
+                  if (lineType == "solid")
+                        b->setLineStyle(Qt::SolidLine);
+                  else if (lineType == "dashed")
+                        b->setLineStyle(Qt::DashLine);
+                  else if (lineType == "dotted")
+                        b->setLineStyle(Qt::DotLine);
+                  else
+                        qDebug("unsupported line-type: %s", lineType.toLatin1().data());
 
-                        b->setBeginHook(lineEnd != "none");
-                        if (lineEnd == "up")
-                              b->setBeginHookHeight(-1 * b->beginHookHeight());
-
-                        // hack: assume there was a words element before the bracket
-                        if (!txt.isEmpty()) {
-                              b->setBeginText(txt, TextStyleType::TEXTLINE);
-                              }
-
-                        if (lineType == "solid")
-                              b->setLineStyle(Qt::SolidLine);
-                        else if (lineType == "dashed")
-                              b->setLineStyle(Qt::DashLine);
-                        else if (lineType == "dotted")
-                              b->setLineStyle(Qt::DotLine);
-                        else
-                              qDebug("unsupported line-type: %s", lineType.toLatin1().data());
-
-                        b->setTrack((staff + rstaff) * VOICES);
-                        spanners[b] = QPair<int, int>(tick, -1);
-                        bracket[n] = b;
-                        //qDebug("bracket=%p inserted at first tick %d", b, tick);
-                        }
+                  handleSpannerStart(b, QString("bracket %1").arg(number), track, placement, tick, spanners);
+                  //qDebug("bracket=%p inserted at first tick %d", b, tick);
                   }
             else if (type == "stop") {
-                  if (!b)
-                        qDebug("bracket stop without start, number %d", number);
-                  else {
+                  if (b) {
                         b->setEndHook(lineEnd != "none");
                         if (lineEnd == "up")
                               b->setEndHookHeight(-1 * b->endHookHeight());
-                        spanners[b].second = tick;
-                        bracket[n] = 0;
-                        //qDebug("bracket=%p second tick %d", b, tick);
                         }
+                  handleSpannerStop(b, QString("bracket %1").arg(number), tick, spanners);
+                  //qDebug("bracket=%p second tick %d", b, tick);
+                  b = 0;
                   }
             }
       else if (dirType == "dashes") {
-            int n = number-1;
-            TextLine* b = dashes[n];
+            int n = number - 1;
+            TextLine*& b = dashes[n];
             if (type == "start") {
-                  if (b) {
-                        qDebug("overlapping dashes, number %d", number);
+                  TextLine* new_b = new TextLine(score);
+                  checkSpannerOverlap(b, new_b, "dashes");
+                  b = new_b;
+
+                  if (placement == "") placement = "above";  // set default
+
+                  // hack: assume there was a words element before the dashes
+                  if (!txt.isEmpty()) {
+                        b->setBeginText(txt, TextStyleType::TEXTLINE);
                         }
-                  else {
-                        b = new TextLine(score);
 
-                        if (placement == "") placement = "above";  // set default
-                        setSLinePlacement(b,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
+                  b->setBeginHook(false);
+                  b->setEndHook(false);
+                  b->setLineStyle(Qt::DashLine);
 
-                        // hack: assume there was a words element before the dashes
-                        if (!txt.isEmpty()) {
-                              b->setBeginText(txt, TextStyleType::TEXTLINE);
-                              }
-
-                        b->setBeginHook(false);
-                        b->setLineStyle(Qt::DashLine);
-                        b->setTrack((staff + rstaff) * VOICES);
-                        spanners[b] = QPair<int, int>(tick, -1);
-                        dashes[n] = b;
-                        //qDebug("dashes=%p inserted at first tick %d", b, tick);
-                        }
+                  handleSpannerStart(b, QString("dashes %1").arg(number), track, placement, tick, spanners);
+                  //qDebug("dashes=%p inserted at first tick %d", b, tick);
                   }
             else if (type == "stop") {
-                  if (!b) {
-                        qDebug("dashes stop without start, number %d", number);
-                        }
-                  else {
-                        // TODO: MuseScore doesn't support lines which start and end on different staves
-                        b->setEndHook(false);
-                        spanners[b].second = tick;
-                        dashes[n] = 0;
-                        //qDebug("dashes=%p second tick %d", b, tick);
-                        }
+                  // TODO: MuseScore doesn't support lines which start and end on different staves
+                  handleSpannerStop(b, QString("dashes %1").arg(number), tick, spanners);
+                  //qDebug("dashes=%p second tick %d", b, tick);
+                  b = 0;
                   }
             }
       else if (dirType == "octave-shift") {
             if (type == "up" || type == "down") {
-                  if (ottava) {
-                        qDebug("overlapping octave-shift not supported");
+                  if (!(ottavasize == 8 || ottavasize == 15)) {
+                        qDebug("unknown octave-shift size %d", ottavasize);
                         }
                   else {
-                        if (!(ottavasize == 8 || ottavasize == 15)) {
-                              qDebug("unknown octave-shift size %d", ottavasize);
-                              }
-                        else {
-                              ottava = new Ottava(score);
-                              ottava->setTrack((staff + rstaff) * VOICES);
-                              if (type == "down" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VA);
-                              if (type == "down" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
-                              if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
-                              if (type ==   "up" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MB);
-                              if (placement == "") placement = "above";  // set default
-                              setSLinePlacement(ottava,
-                                                score->spatium(), placement,
-                                                hasYoffset, yoffset);
-                              spanners[ottava] = QPair<int, int>(tick, -1);
-                              //qDebug("ottava=%p inserted at first tick %d", ottava, tick);
-                              }
+                        Ottava* new_ottava = new Ottava(score);
+                        checkSpannerOverlap(ottava, new_ottava, "dashes");
+                        ottava = new_ottava;
+
+                        if (placement == "") placement = "above";  // set default
+
+                        if (type == "down" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VA);
+                        if (type == "down" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
+                        if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
+                        if (type ==   "up" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MB);
+
+                        handleSpannerStart(ottava, "octave-shift", track, placement, tick, spanners);
+                        //qDebug("ottava=%p inserted at first tick %d", ottava, tick);
                         }
                   }
             else if (type == "stop") {
-                  if (!ottava) {
-                        qDebug("octave-shift stop without start");
-                        }
-                  else {
-                        spanners[ottava].second = tick;
-                        //qDebug("ottava=%p second tick %d", ottava, tick);
-                        ottava = 0;
-                        }
+                  handleSpannerStop(ottava, "octave-shift", tick, spanners);
+                  //qDebug("ottava=%p second tick %d", ottava, tick);
+                  ottava = 0;
                   }
             }
       }
@@ -4137,7 +4142,7 @@ static void xmlFermata(ChordRest* cr, QDomElement e)
  Read MusicXML notations.
  */
 
-void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement e)
+void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ticks, QDomElement e)
       {
       Measure* measure = cr->measure();
       int track = cr->track();
@@ -4177,15 +4182,13 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                               bool endSlur = false;
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
-                                    if(cr->isGrace()){
+                                    if(cr->isGrace())
                                           slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
-                                          slur[slurNo]->setParent(cr);
-                                          }
                                     if (lineType == "dotted")
                                           slur[slurNo]->setLineType(1);
                                     else if (lineType == "dashed")
                                           slur[slurNo]->setLineType(2);
-                                    slur[slurNo]->setTick(cr->tick());
+                                    slur[slurNo]->setTick(tick);
                                     slur[slurNo]->setStartElement(cr);
                                     }
                               else
@@ -4195,13 +4198,11 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                     slur[slurNo]->setSlurDirection(MScore::Direction::UP);
                               else if (pl == "below")
                                     slur[slurNo]->setSlurDirection(MScore::Direction::DOWN);
-                              //slur[slurNo]->setStart(tick, trk + voice);
-                              //slur[slurNo]->setTrack((staff + relStaff) * VOICES);
                               slur[slurNo]->setTrack(track);
                               slur[slurNo]->setTrack2(track);
                               score->addElement(slur[slurNo]);
                               if (endSlur) {
-                                    slur[slurNo]->setTick(cr->tick());
+                                    slur[slurNo]->setTick(tick);
                                     slur[slurNo]->setStartElement(cr);
                                     slur[slurNo] = 0;
                                     }
@@ -4209,7 +4210,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         else if (slurType == "stop") {
                               if (slur[slurNo] == 0) {
                                     slur[slurNo] = new Slur(score);
-                                    slur[slurNo]->setTick2(cr->tick());
+                                    slur[slurNo]->setTick2(tick);
                                     slur[slurNo]->setTrack2(track);
                                     slur[slurNo]->setEndElement(cr);
                                     }
@@ -4220,13 +4221,15 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                                           slur[slurNo]->setStartElement(cr);
                                           }
                                     else {
-                                          slur[slurNo]->setTick2(cr->tick());
+                                          slur[slurNo]->setTick2(tick);
                                           slur[slurNo]->setTrack2(track);
                                           slur[slurNo]->setEndElement(cr);
                                           }
                                     slur[slurNo] = 0;
                                     }
                               }
+                        else if (slurType == "continue")
+                              ; // ignore
                         else
                               qDebug("unknown slur type %s", qPrintable(slurType));
                         }
@@ -4531,8 +4534,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             Dynamic* dyn = new Dynamic(score);
             dyn->setDynamicType(*it);
             if (hasYoffset) dyn->textStyle().setYoff(yoffset);
-            addElem(dyn, hasYoffset, track / VOICES /* staff */, 0 /* rstaff */, score, placement,
-                       rx, ry, 0 /*offset */, measure, tick);
+            addElem(dyn, track, placement, measure, tick);
             }
 
       }
@@ -5193,7 +5195,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             }
 
       foreach(QDomElement de, notations) {
-            xmlNotations(note, cr, trk, ticks, de);
+            xmlNotations(note, cr, trk, loc_tick, ticks, de);
             }
 
       // add lyrics found by xmlLyric
