@@ -65,7 +65,7 @@
           <voice>1</voice>
           <name>Bass Drum 1</name>
           <stem>2</stem>
-          <shortcut>C</shortcut>
+          <shortcut>B</shortcut>
           </Drum>
         <Drum pitch="37">
           <head>1</head>
@@ -80,6 +80,7 @@
           <voice>0</voice>
           <name>Acoustic Snare</name>
           <stem>1</stem>
+          <shortcut>A</shortcut>
           </Drum>
         <Drum pitch="40">
           <head>0</head>
@@ -101,6 +102,7 @@
           <voice>0</voice>
           <name>Closed Hi-Hat</name>
           <stem>1</stem>
+          <shortcut>G</shortcut>
           </Drum>
         <Drum pitch="43">
           <head>0</head>
@@ -122,6 +124,7 @@
           <voice>0</voice>
           <name>Low Tom</name>
           <stem>1</stem>
+          <shortcut>F</shortcut>
           </Drum>
         <Drum pitch="46">
           <head>1</head>
@@ -150,6 +153,7 @@
           <voice>0</voice>
           <name>Crash Cymbal 1</name>
           <stem>1</stem>
+          <shortcut>C</shortcut>
           </Drum>
         <Drum pitch="50">
           <head>0</head>
@@ -157,6 +161,7 @@
           <voice>0</voice>
           <name>High Tom</name>
           <stem>1</stem>
+          <shortcut>E</shortcut>
           </Drum>
         <Drum pitch="51">
           <head>1</head>
