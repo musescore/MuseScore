@@ -135,7 +135,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>12</lid>
+        <lid>11</lid>
         </VBox>
       <Measure number="1">
         <Clef>
@@ -143,49 +143,45 @@
           <transposingClefType>G</transposingClefType>
           <lid>0</lid>
           </Clef>
-        <KeySig>
-          <lid>1</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
-          <lid>2</lid>
+          <lid>1</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>3</lid>
+          <lid>2</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>4</lid>
+            <lid>3</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
         <Rest>
-          <lid>5</lid>
+          <lid>4</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>6</lid>
+          <lid>5</lid>
           <durationType>half</durationType>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>7</lid>
+          <lid>6</lid>
           </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>9</lid>
+          <lid>8</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>10</lid>
+          <lid>9</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -194,14 +190,14 @@
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
-          <lid>13</lid>
+          <lid>12</lid>
           </Clef>
         <KeySig>
-          <lid>14</lid>
+          <lid>13</lid>
           <accidental>3</accidental>
           </KeySig>
         <TimeSig>
-          <lid>15</lid>
+          <lid>14</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -209,42 +205,42 @@
         <Harmony>
           <root>17</root>
           <name>7</name>
-          <lid>16</lid>
+          <lid>15</lid>
           </Harmony>
         <Chord>
-          <lid>17</lid>
+          <lid>16</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>18</lid>
+            <lid>17</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <tpc2>17</tpc2>
             </Note>
           </Chord>
         <Rest>
-          <lid>19</lid>
+          <lid>18</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>20</lid>
+          <lid>19</lid>
           <durationType>half</durationType>
           </Rest>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
-          <lid>21</lid>
+          <lid>20</lid>
           </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
-          <lid>22</lid>
+          <lid>21</lid>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>23</lid>
+          <lid>22</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -335,7 +331,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>12</lid>
+          <lid>11</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Flute</text>
@@ -347,49 +343,45 @@
             <transposingClefType>G</transposingClefType>
             <lid>0</lid>
             </Clef>
-          <KeySig>
-            <lid>1</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TimeSig>
-            <lid>2</lid>
+            <lid>1</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Chord>
-            <lid>3</lid>
+            <lid>2</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>4</lid>
+              <lid>3</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <lid>5</lid>
+            <lid>4</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>6</lid>
+            <lid>5</lid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
-            <lid>7</lid>
+            <lid>6</lid>
             </BarLine>
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>10</lid>
+            <lid>9</lid>
             </BarLine>
           </Measure>
         </Staff>
@@ -484,7 +476,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>12</lid>
+          <lid>11</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Alto Saxophone</text>
@@ -494,14 +486,14 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <lid>13</lid>
+            <lid>12</lid>
             </Clef>
           <KeySig>
-            <lid>14</lid>
+            <lid>13</lid>
             <accidental>3</accidental>
             </KeySig>
           <TimeSig>
-            <lid>15</lid>
+            <lid>14</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -509,42 +501,42 @@
           <Harmony>
             <root>17</root>
             <name>7</name>
-            <lid>16</lid>
+            <lid>15</lid>
             </Harmony>
           <Chord>
-            <lid>17</lid>
+            <lid>16</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>18</lid>
+              <lid>17</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>17</tpc2>
               </Note>
             </Chord>
           <Rest>
-            <lid>19</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>20</lid>
+            <lid>19</lid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
-            <lid>21</lid>
+            <lid>20</lid>
             </BarLine>
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>22</lid>
+            <lid>21</lid>
             <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>23</lid>
+            <lid>22</lid>
             </BarLine>
           </Measure>
         </Staff>
