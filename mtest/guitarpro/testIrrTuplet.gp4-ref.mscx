@@ -131,6 +131,7 @@
           <durationType>quarter</durationType>
           </Rest>
         <Tuplet id="1">
+          <lid>13</lid>
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
           <baseNote>eighth</baseNote>
@@ -147,21 +148,21 @@
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <lid>13</lid>
+          <lid>14</lid>
           </Dynamic>
         <Beam id="1">
           <l1>11</l1>
           <l2>11</l2>
           </Beam>
         <Chord>
-          <lid>14</lid>
+          <lid>15</lid>
           <Tuplet>1</Tuplet>
           <durationType>16th</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>15</lid>
+            <lid>16</lid>
             <Tie id="2">
-              <lid>16</lid>
+              <lid>17</lid>
               </Tie>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -170,12 +171,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>17</lid>
+          <lid>18</lid>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>18</lid>
+            <lid>19</lid>
             <endSpanner id="2"/>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -184,12 +185,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>19</lid>
+          <lid>20</lid>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>20</lid>
+            <lid>21</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -357,12 +358,11 @@
             <durationType>quarter</durationType>
             </Rest>
           <Tuplet id="2">
-            <track>4</track>
+            <lid>13</lid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
-              <track>4</track>
               <style>Tuplet</style>
               <text>3</text>
               </Number>
@@ -375,21 +375,21 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <lid>13</lid>
+            <lid>14</lid>
             </Dynamic>
           <Beam id="2">
             <l1>11</l1>
             <l2>11</l2>
             </Beam>
           <Chord>
-            <lid>14</lid>
+            <lid>15</lid>
             <Tuplet>2</Tuplet>
             <durationType>16th</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>15</lid>
+              <lid>16</lid>
               <Tie id="3">
-                <lid>16</lid>
+                <lid>17</lid>
                 </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -398,12 +398,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>17</lid>
+            <lid>18</lid>
             <Tuplet>2</Tuplet>
             <durationType>eighth</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>18</lid>
+              <lid>19</lid>
               <endSpanner id="3"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -412,12 +412,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>19</lid>
+            <lid>20</lid>
             <Tuplet>2</Tuplet>
             <durationType>eighth</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>20</lid>
+              <lid>21</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -448,6 +448,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Tuplet id="3">
+            <lid>13</lid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -466,14 +467,14 @@
             <l2>46</l2>
             </Beam>
           <Chord>
-            <lid>14</lid>
+            <lid>15</lid>
             <Tuplet>3</Tuplet>
             <durationType>16th</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>15</lid>
+              <lid>16</lid>
               <Tie id="4">
-                <lid>16</lid>
+                <lid>17</lid>
                 </Tie>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -482,12 +483,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>17</lid>
+            <lid>18</lid>
             <Tuplet>3</Tuplet>
             <durationType>eighth</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>18</lid>
+              <lid>19</lid>
               <endSpanner id="4"/>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -496,12 +497,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>19</lid>
+            <lid>20</lid>
             <Tuplet>3</Tuplet>
             <durationType>eighth</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>20</lid>
+              <lid>21</lid>
               <pitch>75</pitch>
               <tpc>11</tpc>
               <fret>16</fret>
