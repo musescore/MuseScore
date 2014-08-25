@@ -244,12 +244,28 @@ QVariant TempoText::propertyDefault(P_ID id) const
 
 void TempoText::layout()
       {
-      Text::layout();
+      setPos(textStyle().offset(spatium()));
+      Text::layout1();
+      Segment* s = segment();
+      if (s && !s->rtick()) {
+            // tempo text on first chordrest of measure should align over time sig if present
+            Segment* p = segment()->prev(Segment::Type::TimeSig);
+            if (p) {
+                  rxpos() -= s->x() - p->x();
+                  Element* e = p->element(staffIdx() * VOICES);
+                  if (e)
+                        rxpos() += e->x();
+                  }
+            // correct user offset in older scores
+            if (score()->mscVersion() <= 114 && !userOff().isNull())
+                  rUserXoffset() += s->x() - p->x();
+            }
       if (placement() == Element::Placement::BELOW) {
             rypos() = -rypos() + 4 * spatium();
             // rUserYoffset() *= -1;
             // text height ?
             }
+      adjustReadPos();
       }
 
 QString TempoText::accessibleInfo()
