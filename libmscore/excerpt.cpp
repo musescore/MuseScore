@@ -355,7 +355,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     if (ot) {
                                           Tuplet* nt = tupletMap.findNew(ot);
                                           if (nt == 0) {
-                                                nt = new Tuplet(*ot);
+                                                // nt = new Tuplet(*ot);
+                                                nt = static_cast<Tuplet*>(ot->linkedClone());
                                                 nt->clear();
                                                 nt->setTrack(track);
                                                 nt->setScore(score);
@@ -542,7 +543,8 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               if (ot) {
                                     Tuplet* nt = tupletMap.findNew(ot);
                                     if (nt == 0) {
-                                          nt = new Tuplet(*ot);
+                                          // nt = new Tuplet(*ot);
+                                          nt = static_cast<Tuplet*>(ot->linkedClone());
                                           nt->clear();
                                           nt->setTrack(dstTrack);
                                           nt->setParent(m);
@@ -667,7 +669,8 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                               if (ot) {
                                     Tuplet* nt = tupletMap.findNew(ot);
                                     if (nt == 0) {
-                                          nt = new Tuplet(*ot);
+                                          // nt = new Tuplet(*ot);
+                                          nt = static_cast<Tuplet*>(ot->linkedClone());
                                           nt->clear();
                                           nt->setTrack(dstTrack);
                                           nt->setParent(m);
