@@ -616,8 +616,11 @@ void Measure::layout2()
       for (int staffIdx = 0; staffIdx < staves.size(); ++staffIdx) {
             MStaff* ms = staves.at(staffIdx);
             Text* t = ms->noText();
-            if (t)
+            if (t) {
+                  Q_ASSERT(t->score() == score());
+                  Q_ASSERT(t->parent() == this);
                   t->setTrack(staffIdx * VOICES);
+                  }
             if (smn && ((staffIdx == nn) || nas)) {
                   if (t == 0) {
                         t = new Text(score());
@@ -626,14 +629,15 @@ void Measure::layout2()
                         t->setGenerated(true);
                         t->setTextStyleType(TextStyleType::MEASURE_NUMBER);
                         t->setParent(this);
-                        score()->undoAddElement(t);
+                        score()->undo(new AddElement(t));
+                        // score()->undoAddElement(t);
                         }
                   t->setText(s);
                   t->layout();
                   }
             else {
                   if (t)
-                        score()->undoRemoveElement(t);
+                        score()->undo(new RemoveElement(t));
                   }
             }
 
@@ -897,6 +901,9 @@ void Measure::add(Element* el)
 
 void Measure::remove(Element* el)
       {
+      Q_ASSERT(el->parent() == this);
+      Q_ASSERT(el->score() == score());
+
       setDirty();
       switch(el->type()) {
             case Element::Type::TEXT:
@@ -1069,8 +1076,15 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
 
       _score->undo(new RemoveStaves(this, sStaff, eStaff));
 
-      for (int i = eStaff - 1; i >= sStaff; --i)
-            _score->undo(new RemoveMStaff(this, *(staves.begin()+i), i));
+      for (int i = eStaff - 1; i >= sStaff; --i) {
+            MStaff* ms = *(staves.begin()+i);
+            Text* t = ms->noText();
+            if (t) {
+//                  t->undoUnlink();
+//                  _score->undo(new RemoveElement(t));
+                  }
+            _score->undo(new RemoveMStaff(this, ms, i));
+            }
 
       // barLine
       // TODO

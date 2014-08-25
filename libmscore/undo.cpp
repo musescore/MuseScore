@@ -687,12 +687,12 @@ void Score::undoInsertPart(Part* part, int idx)
 
 void Score::undoRemoveStaff(Staff* staff)
       {
-      int idx = staffIdx(staff);
+      int idx = staff->idx();
       Q_ASSERT(idx >= 0);
       //
       //    adjust measures
       //
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+      for (Measure* m = staff->score()->firstMeasure(); m; m = m->nextMeasure()) {
             m->cmdRemoveStaves(idx, idx+1);
             if (m->hasMMRest())
                   m->mmRest()->cmdRemoveStaves(idx, idx+1);

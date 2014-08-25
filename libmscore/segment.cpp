@@ -424,6 +424,8 @@ void Segment::add(Element* el)
 
       int track = el->track();
       Q_ASSERT(track != -1);
+      Q_ASSERT(el->score() == score());
+      Q_ASSERT(score()->nstaves() * VOICES == _elist.size());
 
       switch (el->type()) {
             case Element::Type::REPEAT_MEASURE:
@@ -502,8 +504,10 @@ void Segment::add(Element* el)
 
             case Element::Type::BAR_LINE:
             case Element::Type::BREATH:
-                  checkElement(el, track);
-                  _elist[track] = el;
+                  if (track < score()->nstaves() * VOICES) {
+                        checkElement(el, track);
+                        _elist[track] = el;
+                        }
                   empty = false;
                   break;
 

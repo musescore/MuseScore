@@ -110,6 +110,7 @@
           <l2>16</l2>
           </Beam>
         <Tuplet id="1">
+          <lid>9</lid>
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
           <baseNote>eighth</baseNote>
@@ -133,13 +134,13 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>9</lid>
+          <lid>10</lid>
           <Tuplet>1</Tuplet>
           <dots>1</dots>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>10</lid>
+            <lid>11</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <fret>8</fret>
@@ -147,15 +148,15 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>11</lid>
+          <lid>12</lid>
           <Tuplet>1</Tuplet>
           <dots>1</dots>
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <lid>12</lid>
+            <lid>13</lid>
             <Tie id="2">
-              <lid>13</lid>
+              <lid>14</lid>
               </Tie>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -164,10 +165,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>14</lid>
+          <lid>15</lid>
           <durationType>16th</durationType>
           <Note>
-            <lid>15</lid>
+            <lid>16</lid>
             <endSpanner id="2"/>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -312,12 +313,11 @@
             <l2>16</l2>
             </Beam>
           <Tuplet id="2">
-            <track>4</track>
+            <lid>9</lid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
-              <track>4</track>
               <style>Tuplet</style>
               <text>3</text>
               </Number>
@@ -337,13 +337,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>10</lid>
             <Tuplet>2</Tuplet>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>10</lid>
+              <lid>11</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>8</fret>
@@ -351,15 +351,15 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>12</lid>
             <Tuplet>2</Tuplet>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Beam>2</Beam>
             <Note>
-              <lid>12</lid>
+              <lid>13</lid>
               <Tie id="3">
-                <lid>13</lid>
+                <lid>14</lid>
                 </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -368,11 +368,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>14</lid>
+            <lid>15</lid>
             <durationType>16th</durationType>
-            <Beam>2</Beam>
             <Note>
-              <lid>15</lid>
+              <lid>16</lid>
               <endSpanner id="3"/>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -405,6 +404,7 @@
             <l2>46</l2>
             </Beam>
           <Tuplet id="3">
+            <lid>9</lid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -428,13 +428,13 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>10</lid>
             <Tuplet>3</Tuplet>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>10</lid>
+              <lid>11</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>8</fret>
@@ -442,15 +442,15 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>12</lid>
             <Tuplet>3</Tuplet>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Beam>3</Beam>
             <Note>
-              <lid>12</lid>
+              <lid>13</lid>
               <Tie id="4">
-                <lid>13</lid>
+                <lid>14</lid>
                 </Tie>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -459,10 +459,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>14</lid>
+            <lid>15</lid>
             <durationType>16th</durationType>
             <Note>
-              <lid>15</lid>
+              <lid>16</lid>
               <endSpanner id="4"/>
               <pitch>74</pitch>
               <tpc>16</tpc>
