@@ -20,6 +20,9 @@
 
 install(FILES
       drumset_fr.drm
+      04-Jazz-Jazz_Lead_Sheet.mscx
+      04-Jazz-Jazz_Combo.mscx
+      04-Jazz-Jazz_Big_Band.mscx
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )
 
