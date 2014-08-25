@@ -232,6 +232,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                         }
                   tuplet->setTrack(cr->track());
                   tuplet->setBaseLen(l);
+                  tuplet->setDuration(l * tuplet->ratio().denominator());
                   cr->setTuplet(tuplet);
                   tuplet->add(cr);
                   }

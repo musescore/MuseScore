@@ -1322,6 +1322,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                           tuplet->setTrack(cr->track());
                                           tuplet->setBaseLen(l);
                                           tuplet->setRatio(Fraction(currentNode.attributes().namedItem("num").toAttr().value().toInt(),currentNode.attributes().namedItem("den").toAttr().value().toInt()));
+                                          tuplet->setDuration(l * tuplet->ratio().denominator());
                                           tuplet->add(cr);
                                     }
                                     else
