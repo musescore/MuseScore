@@ -551,30 +551,34 @@ void MuseScore::newFile()
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
       Measure* pm = score->firstMeasure();
+      
+      Measure* nm;
       for (int i = 0; i < measures; ++i) {
-            Measure* m;
             if (pm) {
-                  m  = pm;
+                  nm  = pm;
                   pm = pm->nextMeasure();
                   }
             else {
-                  m = new Measure(score);
-                  score->measures()->add(m);
+                  nm = new Measure(score);
+                  score->measures()->add(nm);
                   }
-            m->setTimesig(timesig);
-            m->setLen(timesig);
+            nm->setTimesig(timesig);
+            nm->setLen(timesig);
             if (pickupMeasure) {
                   if (i == 0) {
-                        m->setIrregular(true);        // dont count pickup measure
-                        m->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
+                        nm->setIrregular(true);        // dont count pickup measure
+                        nm->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
                         }
                   /*else if (i == (measures - 1)) {
                         // last measure is shorter
                         m->setLen(timesig - Fraction(pickupTimesigZ, pickupTimesigN));
                         }*/
                   }
-            m->setEndBarLineType(i == (measures - 1) ? BarLineType::END : BarLineType::NORMAL, false);
+            nm->setEndBarLineType(i == (measures - 1) ? BarLineType::END : BarLineType::NORMAL, false);
             }
+      //delete unused measures if any
+      if (nm->nextMeasure())
+      	score->undoRemoveMeasures(nm->nextMeasure(), score->lastMeasure());
 
       int tick = 0;
       for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
