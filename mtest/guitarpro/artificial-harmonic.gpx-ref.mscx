@@ -239,24 +239,20 @@
           </Chord>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>23</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>24</lid>
+          <lid>23</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>27</lid>
+            <lid>26</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>25</lid>
+            <lid>24</lid>
             <Text>
-              <lid>26</lid>
+              <lid>25</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -272,19 +268,19 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>28</lid>
+          <lid>27</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>31</lid>
+            <lid>30</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>10</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>29</lid>
+            <lid>28</lid>
             <Text>
-              <lid>30</lid>
+              <lid>29</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -300,19 +296,19 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>32</lid>
+          <lid>31</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>35</lid>
+            <lid>34</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>33</lid>
+            <lid>32</lid>
             <Text>
-              <lid>34</lid>
+              <lid>33</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -328,19 +324,19 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>36</lid>
+          <lid>35</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>39</lid>
+            <lid>38</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>5</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>37</lid>
+            <lid>36</lid>
             <Text>
-              <lid>38</lid>
+              <lid>37</lid>
               <style></style>
               <halign>center</halign>
               <valign>center</valign>
@@ -621,24 +617,20 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>23</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>24</lid>
+            <lid>23</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>27</lid>
+              <lid>26</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>25</lid>
+              <lid>24</lid>
               <Text>
-                <lid>26</lid>
+                <lid>25</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -654,19 +646,19 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>28</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>31</lid>
+              <lid>30</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>29</lid>
+              <lid>28</lid>
               <Text>
-                <lid>30</lid>
+                <lid>29</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -682,19 +674,19 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>32</lid>
+            <lid>31</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>35</lid>
+              <lid>34</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>33</lid>
+              <lid>32</lid>
               <Text>
-                <lid>34</lid>
+                <lid>33</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -710,19 +702,19 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>36</lid>
+            <lid>35</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>39</lid>
+              <lid>38</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>37</lid>
+              <lid>36</lid>
               <Text>
-                <lid>38</lid>
+                <lid>37</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -863,24 +855,20 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>23</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>24</lid>
+            <lid>23</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>27</lid>
+              <lid>26</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>25</lid>
+              <lid>24</lid>
               <Text>
-                <lid>26</lid>
+                <lid>25</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -896,19 +884,19 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>28</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>31</lid>
+              <lid>30</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>10</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>29</lid>
+              <lid>28</lid>
               <Text>
-                <lid>30</lid>
+                <lid>29</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -924,19 +912,19 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>32</lid>
+            <lid>31</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>35</lid>
+              <lid>34</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>33</lid>
+              <lid>32</lid>
               <Text>
-                <lid>34</lid>
+                <lid>33</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>
@@ -952,19 +940,19 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>36</lid>
+            <lid>35</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>39</lid>
+              <lid>38</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>37</lid>
+              <lid>36</lid>
               <Text>
-                <lid>38</lid>
+                <lid>37</lid>
                 <style></style>
                 <halign>center</halign>
                 <valign>center</valign>

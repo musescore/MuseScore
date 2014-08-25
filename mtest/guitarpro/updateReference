@@ -12,7 +12,7 @@ cp   $MSCORE/trill.gp4.mscx trill.gp4-ref.mscx
 cp   $MSCORE/dynamic.gp5.mscx dynamic.gp5-ref.mscx
 cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
 cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx
-cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
+#cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
 cp   $MSCORE/volta.gp5.mscx volta.gp5-ref.mscx
 cp   $MSCORE/volta.gp4.mscx volta.gp4-ref.mscx
 cp   $MSCORE/volta.gp3.mscx volta.gp3-ref.mscx
@@ -77,7 +77,8 @@ cp   $MSCORE/arpeggio.gpx.mscx arpeggio.gpx-ref.mscx
 cp   $MSCORE/brush.gpx.mscx brush.gpx-ref.mscx
 cp   $MSCORE/brush.gp5.mscx brush.gp5-ref.mscx
 cp   $MSCORE/brush.gp4.mscx brush.gp4-ref.mscx
-cp   $MSCORE/repeats.gp4.mscx repeats.gp4-ref.mscx
+#cp   $MSCORE/repeats.gp4.mscx repeats.gp4-ref.mscx
+cp   $MSCORE/repeats.gpx.mscx repeats.gpx-ref.mscx
 cp   $MSCORE/volta.gpx.mscx volta.gpx-ref.mscx
 cp   $MSCORE/grace-before-beat.gpx.mscx grace-before-beat.gpx-ref.mscx
 cp   $MSCORE/grace-on-beat.gpx.mscx grace-on-beat.gpx-ref.mscx
