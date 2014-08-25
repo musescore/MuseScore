@@ -152,26 +152,26 @@
           </Rest>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>13</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <TremoloBar>
           <point time="0" pitch="0" vibrato="0"/>
           <point time="50" pitch="150" vibrato="0"/>
           <point time="100" pitch="0" vibrato="0"/>
           </TremoloBar>
         <Chord>
-          <lid>15</lid>
+          <lid>14</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>16</lid>
+            <lid>15</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
             <string>4</string>
             </Note>
           </Chord>
+        <Rest>
+          <lid>16</lid>
+          <durationType>quarter</durationType>
+          </Rest>
         <Rest>
           <lid>17</lid>
           <durationType>quarter</durationType>
@@ -180,26 +180,18 @@
           <lid>18</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <Rest>
-          <lid>19</lid>
-          <durationType>quarter</durationType>
-          </Rest>
         </Measure>
       <Measure number="3">
-        <KeySig>
-          <lid>21</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <TremoloBar>
           <point time="0" pitch="0" vibrato="0"/>
           <point time="50" pitch="-550" vibrato="0"/>
           <point time="100" pitch="-550" vibrato="0"/>
           </TremoloBar>
         <Chord>
-          <lid>23</lid>
+          <lid>21</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>24</lid>
+            <lid>22</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>1</fret>
@@ -212,10 +204,10 @@
           <point time="100" pitch="-400" vibrato="0"/>
           </TremoloBar>
         <Chord>
-          <lid>26</lid>
+          <lid>24</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>27</lid>
+            <lid>25</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -223,22 +215,33 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>28</lid>
+          <lid>26</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>29</lid>
+          <lid>27</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="4">
-        <KeySig>
-          <lid>31</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <TremoloBar>
           <point time="0" pitch="0" vibrato="0"/>
           <point time="50" pitch="200" vibrato="0"/>
+          <point time="100" pitch="300" vibrato="0"/>
+          </TremoloBar>
+        <Chord>
+          <lid>30</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>31</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <fret>1</fret>
+            <string>1</string>
+            </Note>
+          </Chord>
+        <TremoloBar>
+          <point time="0" pitch="300" vibrato="0"/>
           <point time="100" pitch="300" vibrato="0"/>
           </TremoloBar>
         <Chord>
@@ -252,27 +255,12 @@
             <string>1</string>
             </Note>
           </Chord>
-        <TremoloBar>
-          <point time="0" pitch="300" vibrato="0"/>
-          <point time="100" pitch="300" vibrato="0"/>
-          </TremoloBar>
-        <Chord>
-          <lid>36</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>37</lid>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            <fret>1</fret>
-            <string>1</string>
-            </Note>
-          </Chord>
         <Rest>
-          <lid>38</lid>
+          <lid>35</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>39</lid>
+          <lid>36</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -454,26 +442,26 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>13</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TremoloBar>
             <point time="0" pitch="0" vibrato="0"/>
             <point time="50" pitch="150" vibrato="0"/>
             <point time="100" pitch="0" vibrato="0"/>
             </TremoloBar>
           <Chord>
-            <lid>15</lid>
+            <lid>14</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
               <string>4</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>16</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>17</lid>
             <durationType>quarter</durationType>
@@ -482,26 +470,18 @@
             <lid>18</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>19</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>21</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TremoloBar>
             <point time="0" pitch="0" vibrato="0"/>
             <point time="50" pitch="-550" vibrato="0"/>
             <point time="100" pitch="-550" vibrato="0"/>
             </TremoloBar>
           <Chord>
-            <lid>23</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>24</lid>
+              <lid>22</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -514,10 +494,10 @@
             <point time="100" pitch="-400" vibrato="0"/>
             </TremoloBar>
           <Chord>
-            <lid>26</lid>
+            <lid>24</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>27</lid>
+              <lid>25</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -525,22 +505,33 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>28</lid>
+            <lid>26</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>29</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
-          <KeySig>
-            <lid>31</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TremoloBar>
             <point time="0" pitch="0" vibrato="0"/>
             <point time="50" pitch="200" vibrato="0"/>
+            <point time="100" pitch="300" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <lid>30</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>31</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <TremoloBar>
+            <point time="0" pitch="300" vibrato="0"/>
             <point time="100" pitch="300" vibrato="0"/>
             </TremoloBar>
           <Chord>
@@ -554,27 +545,12 @@
               <string>1</string>
               </Note>
             </Chord>
-          <TremoloBar>
-            <point time="0" pitch="300" vibrato="0"/>
-            <point time="100" pitch="300" vibrato="0"/>
-            </TremoloBar>
-          <Chord>
-            <lid>36</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>37</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
           <Rest>
-            <lid>38</lid>
+            <lid>35</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>39</lid>
+            <lid>36</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -619,26 +595,26 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>13</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TremoloBar>
             <point time="0" pitch="0" vibrato="0"/>
             <point time="50" pitch="150" vibrato="0"/>
             <point time="100" pitch="0" vibrato="0"/>
             </TremoloBar>
           <Chord>
-            <lid>15</lid>
+            <lid>14</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
               <string>4</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>16</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>17</lid>
             <durationType>quarter</durationType>
@@ -647,26 +623,18 @@
             <lid>18</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>19</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>21</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TremoloBar>
             <point time="0" pitch="0" vibrato="0"/>
             <point time="50" pitch="-550" vibrato="0"/>
             <point time="100" pitch="-550" vibrato="0"/>
             </TremoloBar>
           <Chord>
-            <lid>23</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>24</lid>
+              <lid>22</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -679,10 +647,10 @@
             <point time="100" pitch="-400" vibrato="0"/>
             </TremoloBar>
           <Chord>
-            <lid>26</lid>
+            <lid>24</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>27</lid>
+              <lid>25</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -690,22 +658,33 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>28</lid>
+            <lid>26</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>29</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
-          <KeySig>
-            <lid>31</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TremoloBar>
             <point time="0" pitch="0" vibrato="0"/>
             <point time="50" pitch="200" vibrato="0"/>
+            <point time="100" pitch="300" vibrato="0"/>
+            </TremoloBar>
+          <Chord>
+            <lid>30</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>31</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <TremoloBar>
+            <point time="0" pitch="300" vibrato="0"/>
             <point time="100" pitch="300" vibrato="0"/>
             </TremoloBar>
           <Chord>
@@ -719,27 +698,12 @@
               <string>1</string>
               </Note>
             </Chord>
-          <TremoloBar>
-            <point time="0" pitch="300" vibrato="0"/>
-            <point time="100" pitch="300" vibrato="0"/>
-            </TremoloBar>
-          <Chord>
-            <lid>36</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>37</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
           <Rest>
-            <lid>38</lid>
+            <lid>35</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>39</lid>
+            <lid>36</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
