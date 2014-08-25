@@ -22,7 +22,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1271071127
-ModificationTime: 1408111653
+ModificationTime: 1409004373
 PfmFamily: 33
 TTFWeight: 500
 TTFWidth: 5
@@ -92,7 +92,7 @@ Grid
   Named: "x-height" 
 EndSplineSet
 TeXData: 1 0 0 250880 125440 83626 530944 -1048576 83626 783286 444596 497025 792723 393216 433062 380633 303038 157286 324010 404750 52429 2506097 1059062 262144
-BeginChars: 1114112 307
+BeginChars: 1114112 306
 
 StartChar: parenleft
 Encoding: 40 40 0
@@ -14704,7 +14704,7 @@ StartChar: u1D15D
 Encoding: 119133 119133 287
 Width: 1269
 VWidth: 0
-Flags: WO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -14735,14 +14735,13 @@ SplineSet
  12.2109 237.846 12.2109 237.846 21 388 c 28,46,47
  26.79 486.91 26.79 486.91 84 567 c 28,20,21
 EndSplineSet
-Validated: 524321
 EndChar
 
 StartChar: u1D15E
 Encoding: 119134 119134 288
 Width: 1080
 VWidth: 0
-Flags: WO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -14788,14 +14787,13 @@ SplineSet
  30.6777 175.818 30.6777 175.818 47 320 c 28,73,74
  60.4531 438.83 60.4531 438.83 117 518 c 28,47,48
 EndSplineSet
-Validated: 524325
 EndChar
 
 StartChar: u1D15F
 Encoding: 119135 119135 289
 Width: 1080
 VWidth: 0
-Flags: WO
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -14830,7 +14828,6 @@ SplineSet
  37 66 37 66 47 167 c 24,53,54
  54 229 54 229 116 291 c 24,27,28
 EndSplineSet
-Validated: 37
 EndChar
 
 StartChar: u1D160
@@ -14886,7 +14883,6 @@ SplineSet
  37 66 37 66 47 167 c 28,78,79
  54 229 54 229 116 291 c 28,52,53
 EndSplineSet
-Validated: 37
 EndChar
 
 StartChar: u1D161
@@ -14956,22 +14952,10 @@ SplineSet
  37 66 37 66 47 167 c 28,102,103
  54 229 54 229 116 291 c 28,76,77
 EndSplineSet
-Validated: 37
-EndChar
-
-StartChar: u1D16D
-Encoding: 119149 119149 292
-Width: 404
-VWidth: 0
-Flags: W
-LayerCount: 2
-Fore
-Refer: 299 57831 S 1 0 0 1 0 -670 2
-Validated: 98305
 EndChar
 
 StartChar: u1D10B
-Encoding: 119051 119051 293
+Encoding: 119051 119051 292
 Width: 1287
 VWidth: 0
 Flags: W
@@ -15065,7 +15049,7 @@ Validated: 33
 EndChar
 
 StartChar: u1D10C
-Encoding: 119052 119052 294
+Encoding: 119052 119052 293
 Width: 1643
 VWidth: 0
 Flags: W
@@ -15167,7 +15151,7 @@ Validated: 33
 EndChar
 
 StartChar: uniE047
-Encoding: 57415 57415 295
+Encoding: 57415 57415 294
 Width: 1287
 VWidth: 0
 Flags: W
@@ -15178,7 +15162,7 @@ Validated: 32769
 EndChar
 
 StartChar: uniE048
-Encoding: 57416 57416 296
+Encoding: 57416 57416 295
 Width: 1643
 VWidth: 0
 Flags: W
@@ -15189,7 +15173,7 @@ Validated: 32769
 EndChar
 
 StartChar: uniE1D3
-Encoding: 57811 57811 297
+Encoding: 57811 57811 296
 Width: 1080
 VWidth: 0
 Flags: W
@@ -15242,7 +15226,7 @@ Validated: 37
 EndChar
 
 StartChar: uniE1D5
-Encoding: 57813 57813 298
+Encoding: 57813 57813 297
 Width: 1592
 VWidth: 0
 Flags: W
@@ -15284,7 +15268,7 @@ Validated: 37
 EndChar
 
 StartChar: uniE1E7
-Encoding: 57831 57831 299
+Encoding: 57831 57831 298
 Width: 404
 VWidth: 0
 Flags: W
@@ -15306,7 +15290,7 @@ Validated: 33
 EndChar
 
 StartChar: uniE1D9
-Encoding: 57817 57817 300
+Encoding: 57817 57817 299
 Width: 1531
 VWidth: 0
 Flags: W
@@ -15376,7 +15360,7 @@ Validated: 37
 EndChar
 
 StartChar: uniE1D2
-Encoding: 57810 57810 301
+Encoding: 57810 57810 300
 Width: 1269
 VWidth: 0
 Flags: W
@@ -15414,7 +15398,7 @@ Validated: 33
 EndChar
 
 StartChar: uniE1D7
-Encoding: 57815 57815 302
+Encoding: 57815 57815 301
 Width: 1516
 VWidth: 0
 Flags: W
@@ -15470,18 +15454,18 @@ Validated: 37
 EndChar
 
 StartChar: uniE1FC
-Encoding: 57852 57852 303
+Encoding: 57852 57852 302
 Width: 404
 VWidth: 0
 Flags: W
 LayerCount: 2
 Fore
-Refer: 299 57831 N 1 0 0 1 0 0 2
+Refer: 298 57831 N 1 0 0 1 0 0 2
 Validated: 32769
 EndChar
 
 StartChar: uniE260
-Encoding: 57952 57952 304
+Encoding: 57952 57952 303
 Width: 684
 VWidth: 1597
 Flags: W
@@ -15547,7 +15531,7 @@ Validated: 1
 EndChar
 
 StartChar: uniE261
-Encoding: 57953 57953 305
+Encoding: 57953 57953 304
 Width: 706
 VWidth: 0
 Flags: W
@@ -15608,7 +15592,7 @@ Validated: 33
 EndChar
 
 StartChar: uniE262
-Encoding: 57954 57954 306
+Encoding: 57954 57954 305
 Width: 958
 VWidth: 1597
 Flags: W
