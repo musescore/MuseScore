@@ -188,12 +188,8 @@
           </Chord>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>19</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Rest>
-          <lid>20</lid>
+          <lid>19</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -412,12 +408,8 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>19</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Rest>
-            <lid>20</lid>
+            <lid>19</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -499,12 +491,8 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>19</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Rest>
-            <lid>20</lid>
+            <lid>19</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>

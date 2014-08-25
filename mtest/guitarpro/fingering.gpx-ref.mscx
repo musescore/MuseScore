@@ -188,17 +188,13 @@
           </Chord>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>19</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>20</lid>
+          <lid>19</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>21</lid>
+            <lid>20</lid>
             <Fingering>
-              <lid>22</lid>
+              <lid>21</lid>
               <pos x="0.6498" y="-1.6"/>
               <text>3</text>
               </Fingering>
@@ -209,15 +205,15 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>23</lid>
+          <lid>22</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>24</lid>
+            <lid>23</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
             <Fingering>
-              <lid>25</lid>
+              <lid>24</lid>
               <pos x="0.6498" y="-1.6"/>
               <text>4</text>
               </Fingering>
@@ -228,15 +224,15 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>26</lid>
+          <lid>25</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>27</lid>
+            <lid>26</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
             <Fingering>
-              <lid>28</lid>
+              <lid>27</lid>
               <pos x="0.6498" y="-1.6"/>
               <text>P</text>
               </Fingering>
@@ -247,15 +243,15 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>29</lid>
+          <lid>28</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>30</lid>
+            <lid>29</lid>
             <Accidental>
               <subtype>natural</subtype>
               </Accidental>
             <Fingering>
-              <lid>31</lid>
+              <lid>30</lid>
               <pos x="0.6864" y="-1.6"/>
               <text>I</text>
               </Fingering>
@@ -267,17 +263,13 @@
           </Chord>
         </Measure>
       <Measure number="3">
-        <KeySig>
-          <lid>33</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>34</lid>
+          <lid>32</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>35</lid>
+            <lid>33</lid>
             <Fingering>
-              <lid>36</lid>
+              <lid>34</lid>
               <pos x="0.6498" y="-1.6"/>
               <text>M</text>
               </Fingering>
@@ -288,15 +280,15 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>37</lid>
+          <lid>35</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>38</lid>
+            <lid>36</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
             <Fingering>
-              <lid>39</lid>
+              <lid>37</lid>
               <pos x="0.6864" y="-1.6"/>
               <text>A</text>
               </Fingering>
@@ -307,12 +299,12 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>40</lid>
+          <lid>38</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>41</lid>
+            <lid>39</lid>
             <Fingering>
-              <lid>42</lid>
+              <lid>40</lid>
               <pos x="0.6498" y="-1.6"/>
               <text>C</text>
               </Fingering>
@@ -323,7 +315,7 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>43</lid>
+          <lid>41</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -541,17 +533,13 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>19</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>20</lid>
+            <lid>19</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>21</lid>
+              <lid>20</lid>
               <Fingering>
-                <lid>22</lid>
+                <lid>21</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>3</text>
                 </Fingering>
@@ -562,15 +550,15 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>23</lid>
+            <lid>22</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>24</lid>
+              <lid>23</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
               <Fingering>
-                <lid>25</lid>
+                <lid>24</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>4</text>
                 </Fingering>
@@ -581,15 +569,15 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>26</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>27</lid>
+              <lid>26</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
               <Fingering>
-                <lid>28</lid>
+                <lid>27</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>P</text>
                 </Fingering>
@@ -600,15 +588,15 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>29</lid>
+            <lid>28</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>30</lid>
+              <lid>29</lid>
               <Accidental>
                 <subtype>natural</subtype>
                 </Accidental>
               <Fingering>
-                <lid>31</lid>
+                <lid>30</lid>
                 <pos x="0.6864" y="-1.6"/>
                 <text>I</text>
                 </Fingering>
@@ -620,17 +608,13 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>33</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>34</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>35</lid>
+              <lid>33</lid>
               <Fingering>
-                <lid>36</lid>
+                <lid>34</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>M</text>
                 </Fingering>
@@ -641,15 +625,15 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>37</lid>
+            <lid>35</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>38</lid>
+              <lid>36</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
               <Fingering>
-                <lid>39</lid>
+                <lid>37</lid>
                 <pos x="0.6864" y="-1.6"/>
                 <text>A</text>
                 </Fingering>
@@ -660,12 +644,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>40</lid>
+            <lid>38</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>41</lid>
+              <lid>39</lid>
               <Fingering>
-                <lid>42</lid>
+                <lid>40</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>C</text>
                 </Fingering>
@@ -676,7 +660,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>43</lid>
+            <lid>41</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -757,17 +741,13 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>19</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>20</lid>
+            <lid>19</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>21</lid>
+              <lid>20</lid>
               <Fingering>
-                <lid>22</lid>
+                <lid>21</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>3</text>
                 </Fingering>
@@ -778,12 +758,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>23</lid>
+            <lid>22</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>24</lid>
+              <lid>23</lid>
               <Fingering>
-                <lid>25</lid>
+                <lid>24</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>4</text>
                 </Fingering>
@@ -794,12 +774,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>26</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>27</lid>
+              <lid>26</lid>
               <Fingering>
-                <lid>28</lid>
+                <lid>27</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>P</text>
                 </Fingering>
@@ -810,12 +790,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>29</lid>
+            <lid>28</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>30</lid>
+              <lid>29</lid>
               <Fingering>
-                <lid>31</lid>
+                <lid>30</lid>
                 <pos x="0.6864" y="-1.6"/>
                 <text>I</text>
                 </Fingering>
@@ -827,17 +807,13 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>33</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>34</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>35</lid>
+              <lid>33</lid>
               <Fingering>
-                <lid>36</lid>
+                <lid>34</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>M</text>
                 </Fingering>
@@ -848,12 +824,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>37</lid>
+            <lid>35</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>38</lid>
+              <lid>36</lid>
               <Fingering>
-                <lid>39</lid>
+                <lid>37</lid>
                 <pos x="0.6864" y="-1.6"/>
                 <text>A</text>
                 </Fingering>
@@ -864,12 +840,12 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>40</lid>
+            <lid>38</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>41</lid>
+              <lid>39</lid>
               <Fingering>
-                <lid>42</lid>
+                <lid>40</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>C</text>
                 </Fingering>
@@ -880,7 +856,7 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>43</lid>
+            <lid>41</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>

@@ -153,36 +153,32 @@
           </Chord>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>12</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>13</lid>
+          <lid>12</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>14</lid>
+            <lid>13</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>15</lid>
+            <lid>14</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>3</fret>
             <string>3</string>
             </Note>
           <Note>
-            <lid>16</lid>
+            <lid>15</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
             <string>2</string>
             </Note>
           <Arpeggio>
-            <lid>17</lid>
+            <lid>16</lid>
             <subtype>2</subtype>
             </Arpeggio>
           </Chord>
@@ -366,36 +362,32 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>12</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>13</lid>
+            <lid>12</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>16</lid>
+              <lid>15</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Arpeggio>
-              <lid>17</lid>
+              <lid>16</lid>
               <subtype>2</subtype>
               </Arpeggio>
             </Chord>
@@ -442,36 +434,32 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>12</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>13</lid>
+            <lid>12</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>16</lid>
+              <lid>15</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Arpeggio>
-              <lid>17</lid>
+              <lid>16</lid>
               <subtype>2</subtype>
               </Arpeggio>
             </Chord>
