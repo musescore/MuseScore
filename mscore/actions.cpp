@@ -564,7 +564,7 @@ Shortcut Shortcut::sc[] = {
          "stretch+",
          QT_TRANSLATE_NOOP("action","Add More Stretch"),
          QT_TRANSLATE_NOOP("action","Add more stretch"),
-         QT_TRANSLATE_NOOP("action","Add more stretch to selected measure")
+         QT_TRANSLATE_NOOP("action","Add more stretch to selected measures")
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
@@ -573,7 +573,7 @@ Shortcut Shortcut::sc[] = {
          "stretch-",
          QT_TRANSLATE_NOOP("action","Add Less Stretch"),
          QT_TRANSLATE_NOOP("action","Add less stretch"),
-         QT_TRANSLATE_NOOP("action","Add less stretch to selected measure")
+         QT_TRANSLATE_NOOP("action","Add less stretch to selected measures")
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
