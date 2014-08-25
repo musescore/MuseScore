@@ -165,7 +165,7 @@ class Seq : public QObject, public Sequencer {
       void setRelTempo(double);
       void seek(int utick);
       void seekRT(int utick);
-      void stopNotes(int channel = -1);
+      void stopNotes(int channel = -1, bool realTime = false);
       void start();
       void stop();
       void setPos(POS, unsigned);
@@ -214,7 +214,7 @@ class Seq : public QObject, public Sequencer {
       void setScoreView(ScoreView*);
       Score* score() const   { return cs; }
       ScoreView* viewer() const { return cv; }
-      void initInstruments();
+      void initInstruments(bool realTime = false);
 
       Driver* driver()                                 { return _driver; }
       void setDriver(Driver* d)                        { _driver = d;    }
