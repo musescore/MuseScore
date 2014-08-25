@@ -2588,12 +2588,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       QString fontWeight = "";
       QString fontStyle = "";
       QString fontSize = "";
-      int offset = 0; // not supported yet
+      // int offset = 0; // not supported yet
       int track = 0;
       QStringList dynamics;
       // int spread;
-      qreal rx = 0.0;
-      qreal ry = 0.0;
+      // qreal rx = 0.0;
+      // qreal ry = 0.0;
       qreal yoffset = 0.0; // actually this is default-y
       // qreal xoffset;
       bool hasYoffset = false;
@@ -2623,8 +2623,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         // IMPORT_LAYOUT
                         dirType = ee.tagName();
                         if (preferences.musicxmlImportLayout) {
-                              ry      = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
-                              rx      = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
+                              // ry      = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
+                              // rx      = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
                               yoffset = ee.attribute("default-y").toDouble(&hasYoffset) * -0.1;
                               // xoffset = ee.attribute("default-x", "0.0").toDouble() * 0.1;
                               }
@@ -2696,8 +2696,8 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   tempo = e.attribute("tempo");
                   dynaVelocity = e.attribute("dynamics");
                   }
-            else if (e.tagName() == "offset")
-                  offset = (e.text().toInt() * MScore::division)/divisions;
+            //else if (e.tagName() == "offset")
+                  //offset = (e.text().toInt() * MScore::division)/divisions;
             else if (e.tagName() == "staff") {
                   // DEBUG: <staff>0</staff>
                   int rstaff = e.text().toInt() - 1;
@@ -4155,8 +4155,8 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
       QString tremoloType;
       QString placement;
       QStringList dynamics;
-      qreal rx = 0.0;
-      qreal ry = 0.0;
+      // qreal rx = 0.0;
+      // qreal ry = 0.0;
       qreal yoffset = 0.0; // actually this is default-y
       // qreal xoffset = 0.0; // not used
       bool hasYoffset = false;
@@ -4279,8 +4279,8 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                   // IMPORT_LAYOUT
                   placement = ee.attribute("placement");
                   if (preferences.musicxmlImportLayout) {
-                        ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
-                        rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
+                        // ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
+                        // rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
                         yoffset   = ee.attribute("default-y").toDouble(&hasYoffset) * -0.1;
                         // xoffset   = ee.attribute("default-x", "0.0").toDouble() * 0.1;
                         }
