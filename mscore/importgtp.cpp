@@ -961,6 +961,7 @@ void GuitarPro1::read(QFile* fp)
                                     }
                               tuplet->setTrack(track);
                               tuplet->setBaseLen(l);
+                              tuplet->setDuration(l * tuplet->ratio().denominator());
                               cr->setTuplet(tuplet);
                               tuplet->add(cr);  //TODOxxx
                               }
@@ -1409,6 +1410,7 @@ void GuitarPro2::read(QFile* fp)
                                     }
                               tuplet->setTrack(track);
                               tuplet->setBaseLen(l);
+                              tuplet->setDuration(l * tuplet->ratio().denominator());
                               cr->setTuplet(tuplet);
                               tuplet->add(cr);
                               }
@@ -2020,6 +2022,7 @@ void GuitarPro3::read(QFile* fp)
                                     }
                               tuplet->setTrack(track);
                               tuplet->setBaseLen(l);
+                              tuplet->setDuration(l * tuplet->ratio().denominator());
                               cr->setTuplet(tuplet);
                               tuplet->add(cr);
                               }

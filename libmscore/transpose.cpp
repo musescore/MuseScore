@@ -411,6 +411,25 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         }
                   }
             }
+      //
+      // create missing key signatures
+      //
+      if (trKeys && (mode != TransposeMode::DIATONICALLY) && (s1->tick() == 0)) {
+            Segment* seg = firstMeasure()->findSegment(Segment::Type::KeySig, 0);
+            Key nKey = transposeKey(Key::C, interval);
+            if (seg == 0) {
+                  for (int st : tracks) {
+                        if (st % VOICES)
+                              continue;
+                        KeySig* ks = new KeySig(this);
+                        ks->setTrack(st);
+                        ks->setKey(nKey);
+                        Segment* seg = firstMeasure()->undoGetSegment(Segment::Type::KeySig, 0);
+                        ks->setParent(seg);
+                        undoAddElement(ks);
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -425,11 +444,14 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
             if (st->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
 
+            bool createKey = tickStart == 0;
             for (Segment* s = firstSegment(Segment::Type::KeySig); s; s = s->next1(Segment::Type::KeySig)) {
                   if (s->tick() < tickStart)
                         continue;
                   if (s->tick() >= tickEnd)
                         break;
+                  if (s->tick() == 0)
+                        createKey = false;
                   KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
                   if (ks) {
                         Key key  = st->key(s->tick());
@@ -441,6 +463,17 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                               undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
                               }
                         }
+                  }
+            if (createKey) {
+                  Key key  = Key::C;
+                  Key nKey = transposeKey(key, interval);
+                  KeySigEvent ke(nKey);
+                  KeySig* ks = new KeySig(this);
+                  ks->setTrack(staffIdx * VOICES);
+                  ks->setKey(nKey);
+                  Segment* seg = firstMeasure()->undoGetSegment(Segment::Type::KeySig, 0);
+                  ks->setParent(seg);
+                  undoAddElement(ks);
                   }
             }
       }

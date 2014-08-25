@@ -25,5 +25,23 @@ RehearsalMark::RehearsalMark(Score* s)
       setTextStyleType(TextStyleType::REHEARSAL_MARK);
       }
 
+void RehearsalMark::layout()
+      {
+      setPos(textStyle().offset(spatium()));
+      Text::layout1();
+      Segment* s = segment();
+      if (s && !s->rtick()) {
+            // rehearsal mark on first chordrest of measure should align over barline
+            rxpos() -= s->x();
+#if 0
+            // if there is a clef, align right after that instead
+            Segment* p = segment()->prev(Segment::Type::Clef);
+            if (p)
+                  rxpos() += p->next()->x();
+#endif
+            }
+      adjustReadPos();
+      }
+
 }
 

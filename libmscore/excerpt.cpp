@@ -355,7 +355,8 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     if (ot) {
                                           Tuplet* nt = tupletMap.findNew(ot);
                                           if (nt == 0) {
-                                                nt = new Tuplet(*ot);
+                                                // nt = new Tuplet(*ot);
+                                                nt = static_cast<Tuplet*>(ot->linkedClone());
                                                 nt->clear();
                                                 nt->setTrack(track);
                                                 nt->setScore(score);
@@ -533,6 +534,12 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               ne->setTrack(dstTrack);
                               ne->setParent(seg);
                               ne->setScore(score);
+                              if (ne->isChordRest()) {
+                                    ChordRest* ncr = static_cast<ChordRest*>(ne);
+                                    if (ncr->tuplet()) {
+                                          ncr->setTuplet(0); //TODO nested tuplets
+                                          }
+                                    }
                               score->undoAddElement(ne);
                               }
                         if (oe->isChordRest()) {
@@ -540,16 +547,18 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               ChordRest* ncr = static_cast<ChordRest*>(ne);
                               Tuplet* ot     = ocr->tuplet();
                               if (ot) {
+                                    ot->setTrack(ocr->track());
                                     Tuplet* nt = tupletMap.findNew(ot);
                                     if (nt == 0) {
-                                          nt = new Tuplet(*ot);
+                                          // nt = new Tuplet(*ot);
+                                          nt = static_cast<Tuplet*>(ot->linkedClone());
                                           nt->clear();
                                           nt->setTrack(dstTrack);
                                           nt->setParent(m);
                                           tupletMap.add(ot, nt);
                                           }
-                                    ncr->setTuplet(nt);
                                     nt->add(ncr);
+                                    ncr->setTuplet(nt);
                                     }
                               foreach (Element* e, seg->annotations()) {
                                     if (e->generated() || e->systemFlag())
@@ -667,7 +676,8 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                               if (ot) {
                                     Tuplet* nt = tupletMap.findNew(ot);
                                     if (nt == 0) {
-                                          nt = new Tuplet(*ot);
+                                          // nt = new Tuplet(*ot);
+                                          nt = static_cast<Tuplet*>(ot->linkedClone());
                                           nt->clear();
                                           nt->setTrack(dstTrack);
                                           nt->setParent(m);

@@ -64,6 +64,8 @@ static const Mod defaultMod[] = {
         12700.0 },
       };
 
+static const Mod forcePanMod = { GEN_PAN, 10, FLUID_MOD_CC | FLUID_MOD_LINEAR | FLUID_MOD_BIPOLAR | FLUID_MOD_POSITIVE, 0, 0, 1000.0 };
+
 //---------------------------------------------------------
 //   Fluid
 //---------------------------------------------------------
@@ -550,6 +552,7 @@ Voice* Fluid::alloc_voice(unsigned id, Sample* sample, int chan, int key, int ve
       /* add the default modulators to the synthesis process. */
       for (unsigned i = 0; i < sizeof(defaultMod)/sizeof(*defaultMod); ++i)
             v->add_mod(&defaultMod[i],  FLUID_VOICE_DEFAULT);
+      v->add_mod(&forcePanMod, FLUID_VOICE_OVERWRITE);
       return v;
       }
 

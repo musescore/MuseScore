@@ -124,9 +124,6 @@
           <concertClefType>G8va</concertClefType>
           <transposingClefType>G8va</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
@@ -202,9 +199,6 @@
       </Staff>
     <Staff id="2">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
