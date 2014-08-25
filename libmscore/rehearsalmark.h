@@ -29,6 +29,7 @@ class RehearsalMark : public Text  {
       virtual RehearsalMark* clone() const { return new RehearsalMark(*this); }
       virtual Element::Type type() const   { return Element::Type::REHEARSAL_MARK; }
       Segment* segment() const             { return (Segment*)parent(); }
+      virtual void layout() override;
       };
 
 
