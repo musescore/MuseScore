@@ -151,25 +151,25 @@
           </Rest>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>13</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>15</lid>
+          <lid>14</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>wigglevibratolargeslowest</subtype>
-            <lid>14</lid>
+            <lid>13</lid>
             </Articulation>
           <Note>
-            <lid>16</lid>
+            <lid>15</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <Rest>
+          <lid>16</lid>
+          <durationType>quarter</durationType>
+          </Rest>
         <Rest>
           <lid>17</lid>
           <durationType>quarter</durationType>
@@ -178,58 +178,46 @@
           <lid>18</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <Rest>
-          <lid>19</lid>
-          <durationType>quarter</durationType>
-          </Rest>
         </Measure>
       <Measure number="3">
-        <KeySig>
-          <lid>21</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>23</lid>
+          <lid>21</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>wigglesawtooth</subtype>
-            <lid>22</lid>
+            <lid>20</lid>
             </Articulation>
           <Note>
-            <lid>24</lid>
+            <lid>22</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <Rest>
+          <lid>23</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>24</lid>
+          <durationType>quarter</durationType>
+          </Rest>
         <Rest>
           <lid>25</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <Rest>
-          <lid>26</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>27</lid>
-          <durationType>quarter</durationType>
-          </Rest>
         </Measure>
       <Measure number="4">
-        <KeySig>
-          <lid>29</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>31</lid>
+          <lid>28</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>wigglesawtoothwide</subtype>
-            <lid>30</lid>
+            <lid>27</lid>
             </Articulation>
           <Note>
-            <lid>32</lid>
+            <lid>29</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -237,15 +225,15 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>33</lid>
+          <lid>30</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>34</lid>
+          <lid>31</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>35</lid>
+          <lid>32</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -426,25 +414,25 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>13</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>15</lid>
+            <lid>14</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglevibratolargeslowest</subtype>
-              <lid>14</lid>
+              <lid>13</lid>
               </Articulation>
             <Note>
-              <lid>16</lid>
+              <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>16</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>17</lid>
             <durationType>quarter</durationType>
@@ -453,58 +441,46 @@
             <lid>18</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>19</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>21</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>23</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglesawtooth</subtype>
-              <lid>22</lid>
+              <lid>20</lid>
               </Articulation>
             <Note>
-              <lid>24</lid>
+              <lid>22</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>23</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>24</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>25</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>26</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>27</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="4">
-          <KeySig>
-            <lid>29</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>31</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglesawtoothwide</subtype>
-              <lid>30</lid>
+              <lid>27</lid>
               </Articulation>
             <Note>
-              <lid>32</lid>
+              <lid>29</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -512,15 +488,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>33</lid>
+            <lid>30</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>34</lid>
+            <lid>31</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>35</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -564,25 +540,25 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>13</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>15</lid>
+            <lid>14</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglevibratolargeslowest</subtype>
-              <lid>14</lid>
+              <lid>13</lid>
               </Articulation>
             <Note>
-              <lid>16</lid>
+              <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>16</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>17</lid>
             <durationType>quarter</durationType>
@@ -591,58 +567,46 @@
             <lid>18</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>19</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>21</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>23</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglesawtooth</subtype>
-              <lid>22</lid>
+              <lid>20</lid>
               </Articulation>
             <Note>
-              <lid>24</lid>
+              <lid>22</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>23</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>24</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>25</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>26</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>27</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="4">
-          <KeySig>
-            <lid>29</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>31</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglesawtoothwide</subtype>
-              <lid>30</lid>
+              <lid>27</lid>
               </Articulation>
             <Note>
-              <lid>32</lid>
+              <lid>29</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -650,15 +614,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>33</lid>
+            <lid>30</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>34</lid>
+            <lid>31</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>35</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>

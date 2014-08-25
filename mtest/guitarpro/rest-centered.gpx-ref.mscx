@@ -124,20 +124,16 @@
           </Rest>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>7</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>8</lid>
+          <lid>7</lid>
           </Dynamic>
         <Chord>
-          <lid>9</lid>
+          <lid>8</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>10</lid>
+            <lid>9</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -146,12 +142,8 @@
           </Chord>
         </Measure>
       <Measure number="3">
-        <KeySig>
-          <lid>12</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Rest>
-          <lid>13</lid>
+          <lid>11</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -306,20 +298,16 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>7</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>8</lid>
+            <lid>7</lid>
             </Dynamic>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -328,12 +316,8 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>12</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Rest>
-            <lid>13</lid>
+            <lid>11</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -356,15 +340,11 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>7</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -373,12 +353,8 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>12</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Rest>
-            <lid>13</lid>
+            <lid>11</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>

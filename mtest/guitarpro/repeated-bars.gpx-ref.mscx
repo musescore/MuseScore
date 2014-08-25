@@ -168,12 +168,8 @@
           </Chord>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>15</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <RepeatMeasure>
-          <lid>16</lid>
+          <lid>15</lid>
           <duration z="4" n="4"/>
           </RepeatMeasure>
         <tick>3840</tick>
@@ -372,12 +368,8 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>15</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <RepeatMeasure>
-            <lid>16</lid>
+            <lid>15</lid>
             <duration z="4" n="4"/>
             </RepeatMeasure>
           <tick>3840</tick>
@@ -439,12 +431,8 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>15</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <RepeatMeasure>
-            <lid>16</lid>
+            <lid>15</lid>
             <duration z="4" n="4"/>
             </RepeatMeasure>
           <tick>3840</tick>

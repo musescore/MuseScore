@@ -151,29 +151,25 @@
         </Measure>
       <Measure number="2">
         <startRepeat/>
-        <KeySig>
-          <lid>11</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>12</lid>
+          <lid>11</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>13</lid>
+            <lid>12</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>14</lid>
+            <lid>13</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>3</fret>
             <string>3</string>
             </Note>
           <Note>
-            <lid>15</lid>
+            <lid>14</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -183,15 +179,11 @@
         </Measure>
       <Measure number="3">
         <endRepeat>2</endRepeat>
-        <KeySig>
-          <lid>17</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>18</lid>
+          <lid>16</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>19</lid>
+            <lid>17</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>5</fret>
@@ -376,29 +368,25 @@
           </Measure>
         <Measure number="2">
           <startRepeat/>
-          <KeySig>
-            <lid>11</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>12</lid>
+            <lid>11</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>13</lid>
+              <lid>12</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -408,15 +396,11 @@
           </Measure>
         <Measure number="3">
           <endRepeat>2</endRepeat>
-          <KeySig>
-            <lid>17</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>18</lid>
+            <lid>16</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>17</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -462,29 +446,25 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>11</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>12</lid>
+            <lid>11</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>13</lid>
+              <lid>12</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -493,15 +473,11 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>17</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>18</lid>
+            <lid>16</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>17</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
