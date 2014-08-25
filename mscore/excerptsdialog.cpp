@@ -287,13 +287,13 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       Score* nscore = new Score(e->parts().front()->score());
       e->setScore(nscore);
 
+      nscore->setName(e->title()); // needed before AddExcerpt
+      
       score->startCmd();
       score->undo(new AddExcerpt(nscore));
-
       Ms::createExcerpt(nscore, e->parts());
       score->endCmd();
 
-      nscore->setName(e->title());
       nscore->rebuildMidiMapping();
       nscore->updateChannel();
       nscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
