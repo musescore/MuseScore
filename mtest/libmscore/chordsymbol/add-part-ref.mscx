@@ -94,12 +94,8 @@
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
           </Clef>
-        <KeySig>
-          <lid>1</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
-          <lid>2</lid>
+          <lid>1</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
@@ -110,22 +106,22 @@
           <lid>7</lid>
           </Harmony>
         <Chord>
-          <lid>3</lid>
+          <lid>2</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>4</lid>
+            <lid>3</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
         <Rest>
-          <lid>5</lid>
+          <lid>4</lid>
           <durationType>half</durationType>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
-          <lid>6</lid>
+          <lid>5</lid>
           </BarLine>
         </Measure>
       </Staff>
@@ -221,12 +217,8 @@
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
             </Clef>
-          <KeySig>
-            <lid>1</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <TimeSig>
-            <lid>2</lid>
+            <lid>1</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
@@ -237,22 +229,22 @@
             <lid>7</lid>
             </Harmony>
           <Chord>
-            <lid>3</lid>
+            <lid>2</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>4</lid>
+              <lid>3</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <lid>5</lid>
+            <lid>4</lid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <lid>6</lid>
+            <lid>5</lid>
             </BarLine>
           </Measure>
         </Staff>
