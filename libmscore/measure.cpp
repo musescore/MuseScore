@@ -2747,7 +2747,7 @@ bool Measure::isMeasureRest(int staffIdx)
             }
       else {
             strack = staffIdx * VOICES;
-            etrack = staffIdx * VOICES + VOICES;
+            etrack = strack + VOICES;
             }
       for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             for (int track = strack; track < etrack; ++track) {
