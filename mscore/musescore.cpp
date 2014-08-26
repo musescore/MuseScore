@@ -1434,7 +1434,7 @@ static void usage()
         "   -n        start with new score\n"
         "   -I        dump midi input\n"
         "   -O        dump midi output\n"
-        "   -o file   export to 'file'; format depends on file extension\n"
+        "   -o file   export to 'file'; format depends on file's extension\n"
         "   -r dpi    set output resolution for image export\n"
         "   -S style  load style file\n"
         "   -p name   execute named plugin\n"
@@ -1443,7 +1443,7 @@ static void usage()
         "   -i        load icons from INSTALLPATH/icons\n"
         "   -e        enable experimental features\n"
         "   -c dir    override config/settings folder\n"
-        "   -t        set testMode flag for all files\n"
+        "   -t        set testMode flag for all files; also usefull for creating templates\n"
         "   -M file   specify MIDI import operations file\n"
         );
 
