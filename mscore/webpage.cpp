@@ -33,7 +33,7 @@
 
 namespace Ms {
 
-static const char* staticUrl = "https://connect.musescore.com";
+static const char* staticUrl = "http://connect.musescore.com";
 
 //---------------------------------------------------------
 //   MyNetworkAccessManager
