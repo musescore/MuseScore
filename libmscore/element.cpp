@@ -1660,7 +1660,9 @@ bool Element::isText() const
          || type() == Element::Type::REHEARSAL_MARK
          || type() == Element::Type::INSTRUMENT_CHANGE
          || type() == Element::Type::FIGURED_BASS
-         || type() == Element::Type::TEMPO_TEXT;
+         || type() == Element::Type::TEMPO_TEXT
+         || type() == Element::Type::INSTRUMENT_NAME
+         ;
       }
 
 //---------------------------------------------------------
