@@ -6,17 +6,6 @@
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0.1</lastSystemFillLimit>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>center</valign>
-        <xoffset>1</xoffset>
-        <yoffset>0</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Instrument Name (Long)</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -136,18 +125,16 @@ B</longName>
         <bracket type="-1" span="0"/>
         <barLineSpan>0</barLineSpan>
         </Staff>
-      <trackName>Piano</trackName>
+      <trackName>Pipe Organ</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <trackName>Piano</trackName>
-        <minPitchP>21</minPitchP>
-        <maxPitchP>108</maxPitchP>
-        <minPitchA>21</minPitchA>
-        <maxPitchA>108</maxPitchA>
+        <longName pos="0">Organ</longName>
+        <shortName pos="0">Org.</shortName>
+        <trackName>Pipe Organ</trackName>
         <clef staff="2">F</clef>
+        <clef staff="3">F8vb</clef>
         <Articulation>
           <velocity>100</velocity>
-          <gateTime>95</gateTime>
+          <gateTime>100</gateTime>
           </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
@@ -162,7 +149,7 @@ B</longName>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="0"/>
+          <program value="75"/>
           </Channel>
         </Instrument>
       </Part>
