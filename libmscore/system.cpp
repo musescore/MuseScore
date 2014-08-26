@@ -201,7 +201,7 @@ void System::layout(qreal xo1)
                   }
             if (!s->show())
                   continue;
-            foreach(InstrumentName* t, _staves[staffIdx]->instrumentNames) {
+            for (InstrumentName* t : _staves[staffIdx]->instrumentNames) {
                   t->layout();
                   qreal w = t->width() + point(instrumentNameOffset);
                   if (w > xoff2)
@@ -211,7 +211,6 @@ void System::layout(qreal xo1)
 
       for (Bracket* b : bl)
             score()->undoRemoveElement(b);
-//      qDeleteAll(bl);   // delete unused brackets
 
       //---------------------------------------------------
       //  layout  SysStaff and StaffLines
@@ -263,12 +262,12 @@ void System::layout(qreal xo1)
       //---------------------------------------------------
 
       for (Bracket* b : _brackets) {
-            qreal xo     = -xo1;
-            for (Bracket* b2 : _brackets) {
+            qreal xo = -xo1;
+            for (const Bracket* b2 : _brackets) {
                    if (b->level() > b2->level() &&
-                   ((b->firstStaff() >= b2->firstStaff() && b->firstStaff() <= b2->lastStaff()) ||
-                   (b->lastStaff() >= b2->firstStaff() && b->lastStaff() <= b2->lastStaff())))
-                         xo += b2->width() + bd;
+                      ((b->firstStaff() >= b2->firstStaff() && b->firstStaff() <= b2->lastStaff()) ||
+                      (b->lastStaff() >= b2->firstStaff() && b->lastStaff() <= b2->lastStaff())))
+                        xo += b2->width() + bd;
                    }
             b->rxpos() = _leftMargin - xo - b->width();
             }
@@ -278,15 +277,26 @@ void System::layout(qreal xo1)
       //---------------------------------------------------
 
       int idx = 0;
-      foreach (const Part* p, score()->parts()) {
+      for (const Part* p : score()->parts()) {
             SysStaff* s = staff(idx);
-            int nstaves = p->nstaves();
             if (s->show() && p->show()) {
-                  foreach(InstrumentName* t, s->instrumentNames) {
-                        t->rxpos() = xoff2 - point(instrumentNameOffset) + xo1;
+                  for (InstrumentName* t : s->instrumentNames) {
+                        switch (t->textStyle().align() & AlignmentFlags::HMASK) {
+                              case int(AlignmentFlags::LEFT):
+                                    t->rxpos() = 0;
+                                    break;
+                              case int(AlignmentFlags::HCENTER):
+                                    t->rxpos() = (xoff2 - point(instrumentNameOffset) + xo1) * .5;
+                                    break;
+                              case int(AlignmentFlags::RIGHT):
+                              default:
+                                    t->rxpos() = xoff2 - point(instrumentNameOffset) + xo1;
+                                    break;
+                              }
+                        t->rxpos() += t->textStyle().offset(t->spatium()).x();
                         }
                   }
-            idx += nstaves;
+            idx += p->nstaves();
             }
       }
 
@@ -437,18 +447,15 @@ void System::layout2()
 
       int staffIdx = 0;
       n = score()->parts().size();
-      for (int i = 0; i < n; ++i) {
-            Part* p = score()->parts().at(i);
+      for (Part* p : score()->parts()) {
             SysStaff* s = staff(staffIdx);
             int nstaves = p->nstaves();
-            int nn = s->instrumentNames.size();
-            for (int k = 0; k < nn; ++k) {
-                  InstrumentName* t = s->instrumentNames.at(k);
+            for (InstrumentName* t : s->instrumentNames) {
                   //
                   // override Text->layout()
                   //
                   qreal y1, y2;
-                  switch(t->layoutPos()) {
+                  switch (t->layoutPos()) {
                         default:
                         case 0:           // center at part
                               y1 = s->bbox().top();
@@ -475,8 +482,7 @@ void System::layout2()
                               y2 = staff(staffIdx + 2)->bbox().bottom();
                               break;
                         }
-                  qreal y  = y1 + (y2 - y1) * .5;
-                  t->rypos() = y;
+                  t->rypos() = y1 + (y2 - y1) * .5 + t->textStyle().offset(t->spatium()).y();
                   }
             staffIdx += nstaves;
             }
@@ -851,7 +857,7 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
 
       const TextStyle& ts = l->textStyle();
       qreal lmag          = qreal(ts.size()) / 11.0;
-      qreal staffMag = l->staff()->mag();
+      qreal staffMag      = l->staff()->mag();
 
       if (l->ticks()) {
             // melisma
@@ -983,20 +989,20 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
       if (_barLine)
             func(data, _barLine);
 
-      foreach(Bracket* b, _brackets)
+      for (Bracket* b : _brackets)
             func(data, b);
 
       int idx = 0;
-      foreach (SysStaff* st, _staves) {
+      for (const SysStaff* st : _staves) {
             if (!all && !(st->show() && score()->staff(idx)->show())) {
                   ++idx;
                   continue;
                   }
-            foreach (InstrumentName* t, st->instrumentNames)
+            for (InstrumentName* t : st->instrumentNames)
                   func(data, t);
             ++idx;
             }
-      foreach (SpannerSegment* ss, _spannerSegments) {
+      for (SpannerSegment* ss : _spannerSegments) {
             int staffIdx = ss->spanner()->staffIdx();
             if (staffIdx == -1) {
                   qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->name(), ss->spanner());
@@ -1015,7 +1021,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         v1 = mstaff->visible();
                         }
                   bool v2 = true;
-                  if(!v1 && ee && (ee->type() == Element::Type::CHORD || ee->type() == Element::Type::REST)) {
+                  if (!v1 && ee && (ee->type() == Element::Type::CHORD || ee->type() == Element::Type::REST)) {
                         ChordRest* cr = static_cast<ChordRest*>(ee);
                         Measure* m    = cr->measure();
                         MStaff* mstaff = m->mstaff(cr->staffIdx());
