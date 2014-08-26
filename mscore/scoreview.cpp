@@ -5634,7 +5634,7 @@ void ScoreView::cmdMoveCR(bool left)
 
             for (ChordRest* cr1 : crl) {
                   ChordRest* cr2 = left ? prevChordRest(cr1) : nextChordRest(cr1);
-                  if (cr2) {
+                  if (cr2 && cr1->measure() == cr2->measure()) {
                         _score->startCmd();
                         _score->undo(new SwapCR(cr1, cr2));
                         _score->endCmd();

@@ -494,7 +494,7 @@ MuseScore::MuseScore()
       _statusBar->addPermanentWidget(new QWidget(this), 2);
       _statusBar->addPermanentWidget(new QWidget(this), 100);
       _statusBar->addPermanentWidget(_modeText, 0);
-      
+
       if (enableExperimental) {
             layerSwitch = new QComboBox(this);
             layerSwitch->setToolTip(tr("switch layer"));
@@ -1541,7 +1541,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   // set midi import panel
       QString fileName = cs ? cs->fileInfo()->filePath() : "";
       midiPanelOnSwitchToFile(fileName);
-	
+
       if (enableExperimental) {
             updateLayer();
             updatePlayMode();
@@ -2599,8 +2599,7 @@ void MuseScore::changeState(ScoreState val)
                   a->setEnabled(driver);
                   }
             else {
-                  bool enable = s->state() & val;
-                  a->setEnabled(enable);
+                  a->setEnabled(s->state() & val);
                   }
             }
 
@@ -3903,7 +3902,7 @@ void MuseScore::transpose()
             //
 
             cs->cmdSelectAll();
-            
+
             }
       bool rangeSelection = cs->selection().isRange();
       TransposeDialog td;
