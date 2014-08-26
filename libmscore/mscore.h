@@ -65,9 +65,9 @@ static const qreal SPATIUM20 = 5.0 / PPI; // size of Spatium for 20pt font in in
 static const int MAX_STAVES = 4;
 #define MMSP(x)  Spatium((x) * .1)
 
-static const char mimeSymbolFormat[]      = "application/mscore/symbol";
-static const char mimeSymbolListFormat[]  = "application/mscore/symbollist";
-static const char mimeStaffListFormat[]   = "application/mscore/stafflist";
+static const char mimeSymbolFormat[]      = "application/musescore/symbol";
+static const char mimeSymbolListFormat[]  = "application/musescore/symbollist";
+static const char mimeStaffListFormat[]   = "application/musescore/stafflist";
 
 static const int  VISUAL_STRING_NONE      = -2;       // no ordinal for the visual repres. of string (0 = topmost in TAB)
 static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
