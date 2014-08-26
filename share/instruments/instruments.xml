@@ -6467,8 +6467,8 @@
                   <musicXMLid>voice.child</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-77</aPitchRange>
-                  <pPitchRange>60-81</pPitchRange>
+                  <aPitchRange>60-81</aPitchRange>
+                  <pPitchRange>60-84</pPitchRange>
                   <Channel>
                         <program value="52"/>
                   </Channel>
@@ -6498,7 +6498,7 @@
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>57-77</aPitchRange>
-                  <pPitchRange>57-77</pPitchRange>
+                  <pPitchRange>57-81</pPitchRange>
                   <Channel>
                         <program value="52"/>
                   </Channel>
@@ -6513,7 +6513,7 @@
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-74</aPitchRange>
-                  <pPitchRange>55-77</pPitchRange>
+                  <pPitchRange>52-77</pPitchRange>
                   <Channel>
                         <program value="52"/>
                   </Channel>
@@ -6529,7 +6529,7 @@
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>55-74</aPitchRange>
-                  <pPitchRange>55-77</pPitchRange>
+                  <pPitchRange>52-77</pPitchRange>
                   <Channel>
                         <program value="52"/>
                   </Channel>
@@ -6542,7 +6542,7 @@
                   <musicXMLid>voice.countertenor</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>57-76</aPitchRange>
+                  <aPitchRange>55-76</aPitchRange>
                   <pPitchRange>55-79</pPitchRange>
                   <Channel>
                         <program value="52"/>
@@ -6571,7 +6571,7 @@
                   <musicXMLid>voice.baritone</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>41-62</aPitchRange>
+                  <aPitchRange>43-64</aPitchRange>
                   <pPitchRange>41-65</pPitchRange>
                   <Channel>
                         <program value="52"/>
@@ -6587,8 +6587,8 @@
                   <musicXMLid>voice.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>41-59</aPitchRange>
-                  <pPitchRange>40-62</pPitchRange>
+                  <aPitchRange>41-60</aPitchRange>
+                  <pPitchRange>38-62</pPitchRange>
                   <Channel>
                         <program value="52"/>
                   </Channel>
