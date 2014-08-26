@@ -19,8 +19,8 @@
 #=============================================================================
 
 REVISION  = `cat mscore/revision.h`
-VERSION   = "2.0b-${REVISION}"
-
+#VERSION   = "2.0b-${REVISION}"
+VERSION = 2.0beta1
 PREFIX=../applebuild
 
 XCODEPROJ = mscore.xcodeproj

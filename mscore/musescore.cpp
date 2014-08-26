@@ -4594,7 +4594,7 @@ int main(int argc, char* av[])
 
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
-      QCoreApplication::setApplicationName("MuseScoreDevelopment");
+      QCoreApplication::setApplicationName("MuseScore2");
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       Q_INIT_RESOURCE(zita);
       Q_INIT_RESOURCE(noeffect);
