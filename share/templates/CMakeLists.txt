@@ -22,14 +22,14 @@ install(FILES
       drumset_fr.drm
       01-General-Bass_Clef.mscx
       01-General-Treble_Clef.mscx
-      02-Choir-Choir_SATB_Closed_Score.mscx
-      02-Choir-Choir_SATB_Closed_Score_with_Organ.mscx
-      02-Choir-Choir_SATB_Closed_Score_with_Piano.mscx
-      02-Choir-Choir_SATB_with_Organ.mscx
-      02-Choir-Choir_SATB_with_Piano.mscx
-      02-Choir-Liturgical_Unmetrical.mscx
-      02-Choir-Liturgical_Unmetrical_with_Organ.mscx
+      02-Choral-Liturgical_Unmetrical.mscx
+      02-Choral-Liturgical_Unmetrical_with_Organ.mscx
       02-Choral-SATB.mscx
+      02-Choral-SATB_Closed_Score.mscx
+      02-Choral-SATB_Closed_Score_with_Organ.mscx
+      02-Choral-SATB_Closed_Score_with_Piano.mscx
+      02-Choral-SATB_with_Organ.mscx
+      02-Choral-SATB_with_Piano.mscx
       02-Choral-Voice_Piano.mscx
       03-Solo-Guitar.mscx
       03-Solo-Guitar_Standard_Tablature.mscx
