@@ -284,6 +284,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                         else if (tag == "Dynamic"
                            || tag == "Symbol"
                            || tag == "FretDiagram"
+                           || tag == "TremoloBar"
                            || tag == "Marker"
                            || tag == "Jump"
                            || tag == "Image"

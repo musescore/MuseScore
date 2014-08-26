@@ -202,6 +202,7 @@ bool Rest::acceptDrop(const DropData& data) const
          || (type == Element::Type::STAFF_TEXT)
          || (type == Element::Type::REHEARSAL_MARK)
          || (type == Element::Type::FRET_DIAGRAM)
+         || (type == Element::Type::TREMOLOBAR)
          || (type == Element::Type::SYMBOL)
          ) {
             return true;

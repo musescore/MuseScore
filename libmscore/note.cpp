@@ -1254,6 +1254,7 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == Element::Type::STAFF_TEXT)
          || (type == Element::Type::TEMPO_TEXT)
          || (type == Element::Type::BEND && (staff()->isTabStaff()))
+         || (type == Element::Type::TREMOLOBAR)
          || (type == Element::Type::FRET_DIAGRAM));
       }
 

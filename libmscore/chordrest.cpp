@@ -798,6 +798,7 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   return e;
             case Element::Type::FRET_DIAGRAM:
+            case Element::Type::TREMOLOBAR:
             case Element::Type::SYMBOL:
                   e->setTrack(track());
                   e->setParent(segment());
