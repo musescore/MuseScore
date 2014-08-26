@@ -339,13 +339,13 @@ Palette* MuseScore::newRepeatsPalette()
 
             Marker* mk = new Marker(gscore);
             mk->setMarkerType(markerTypeTable[i].type);
-            sp->append(mk, qApp->translate("markerType", qPrintable(markerTypeTable[i].name)));
+            sp->append(mk, qApp->translate("markerType", markerTypeTable[i].name.toUtf8().constData()));
             }
 
       for (int i = 0; i < jumpTypeTableSize(); i++) {
             Jump* jp = new Jump(gscore);
             jp->setJumpType(jumpTypeTable[i].type);
-            sp->append(jp, qApp->translate("jumpType", qPrintable(jumpTypeTable[i].userText)));
+            sp->append(jp, qApp->translate("jumpType", jumpTypeTable[i].userText.toUtf8().constData()));
             }
 
       return sp;
@@ -435,7 +435,7 @@ Palette* MuseScore::newTremoloPalette()
       for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
             Tremolo* tremolo = new Tremolo(gscore);
             tremolo->setTremoloType(TremoloType(i));
-            sp->append(tremolo, qApp->translate("Tremolo", qPrintable(tremolo->subtypeName())));
+            sp->append(tremolo, qApp->translate("Tremolo", tremolo->subtypeName().toUtf8().constData()));
             }
       return sp;
       }
@@ -485,7 +485,7 @@ Palette* MuseScore::newArticulationsPalette()
       for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             Articulation* s = new Articulation(gscore);
             s->setArticulationType(ArticulationType(i));
-            sp->append(s, qApp->translate("articulation", qPrintable(s->subtypeUserName())));
+            sp->append(s, qApp->translate("articulation", s->subtypeUserName().toUtf8().constData()));
             }
       Bend* bend = new Bend(gscore);
       bend->points().append(PitchValue(0,    0, false));
@@ -828,7 +828,7 @@ Palette* MuseScore::newLinesPalette()
             Trill* trill = new Trill(gscore);
             trill->setTrillType(trillTable[i].type);
             trill->setLen(w);
-            sp->append(trill, qApp->translate("trillType", qPrintable(trillTable[i].userName)));
+            sp->append(trill, qApp->translate("trillType", trillTable[i].userName.toUtf8().constData()));
             }
 
       TextLine* textLine = new TextLine(gscore);

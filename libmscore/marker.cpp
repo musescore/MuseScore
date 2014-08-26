@@ -107,7 +107,7 @@ void Marker::setMarkerType(Type t)
 
 QString Marker::markerTypeUserName()
       {
-      return qApp->translate("markerType", qPrintable(markerTypeTable[static_cast<int>(_markerType)].name));
+      return qApp->translate("markerType", markerTypeTable[static_cast<int>(_markerType)].name.toUtf8().constData());
       }
 
 //---------------------------------------------------------
