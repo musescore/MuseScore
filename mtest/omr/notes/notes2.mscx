@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
-  <programVersion>2.0.0</programVersion>
-  <programRevision>5524:5526M</programRevision>
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <SyntiSettings>
-      </SyntiSettings>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -31,24 +27,37 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">notes1</metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="1" span="2"/>
         <barLineSpan>2</barLineSpan>
         </Staff>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         <barLineSpan>0</barLineSpan>
         </Staff>
@@ -59,7 +68,7 @@
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
-        <Articulation name="">
+        <Articulation>
           <velocity>100</velocity>
           <gateTime>70</gateTime>
           </Articulation>
@@ -76,13 +85,9 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <controller tick="0" channel="0" ctrl="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="32" value="0"/>
-          <program tick="0" channel="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="7" value="100"/>
-          <controller tick="0" channel="0" ctrl="10" value="64"/>
-          <controller tick="0" channel="0" ctrl="93" value="30"/>
-          <controller tick="0" channel="0" ctrl="91" value="30"/>
+          <program value="0"/>
+          <controller ctrl="93" value="30"/>
+          <controller ctrl="91" value="30"/>
           </Channel>
         </Instrument>
       </Part>
@@ -99,11 +104,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -223,11 +223,6 @@
           <concertClefType>F</concertClefType>
           <transposingClefType>F</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          <showCourtesySig>1</showCourtesySig>
-          <showNaturals>1</showNaturals>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -39,6 +39,10 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
+      <Page>
+        <System>
+          </System>
+        </Page>
       </PageList>
     <Part>
       <Staff id="1">
@@ -60,22 +64,28 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>6</sigN>
           <sigD>8</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Beam id="1">
+          <l1>-4</l1>
+          <l2>-4</l2>
+          </Beam>
         <Tuplet id="1">
           <normalNotes>3</normalNotes>
           <actualNotes>4</actualNotes>
           <baseNote>eighth</baseNote>
+          <Number>
+            <style>Tuplet</style>
+            <text>4</text>
+            </Number>
           </Tuplet>
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -93,6 +103,7 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -110,6 +121,7 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -127,6 +139,7 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -141,8 +154,13 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Beam id="2">
+          <l1>23</l1>
+          <l2>23</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -159,6 +177,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -175,6 +194,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>

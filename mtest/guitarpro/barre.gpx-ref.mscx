@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -94,18 +94,14 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
           <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>3</lid>
           <sigN>4</sigN>
@@ -127,7 +123,7 @@
           <durationType>quarter</durationType>
           <Note>
             <lid>7</lid>
-            <Text>
+            <Fingering>
               <lid>8</lid>
               <style></style>
               <halign>center</halign>
@@ -135,7 +131,7 @@
               <xoffset>0</xoffset>
               <yoffset>-2</yoffset>
               <text>1/2B XV</text>
-              </Text>
+              </Fingering>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -158,7 +154,7 @@
           <durationType>quarter</durationType>
           <Note>
             <lid>12</lid>
-            <Text>
+            <Fingering>
               <lid>13</lid>
               <style></style>
               <halign>center</halign>
@@ -166,7 +162,7 @@
               <xoffset>0</xoffset>
               <yoffset>-2</yoffset>
               <text>B VIII</text>
-              </Text>
+              </Fingering>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -251,7 +247,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Acoustic Guitar</trackName>
         <Instrument>
           <longName pos="0">Acoustic Guitar</longName>
           <shortName pos="0">Guit.</shortName>
@@ -294,7 +290,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Acoustic Guitar</text>
@@ -304,12 +300,8 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
             <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>3</lid>
             <sigN>4</sigN>
@@ -331,7 +323,7 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Text>
+              <Fingering>
                 <lid>8</lid>
                 <style></style>
                 <halign>center</halign>
@@ -339,7 +331,7 @@
                 <xoffset>0</xoffset>
                 <yoffset>-2</yoffset>
                 <text>1/2B XV</text>
-                </Text>
+                </Fingering>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -362,7 +354,7 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>12</lid>
-              <Text>
+              <Fingering>
                 <lid>13</lid>
                 <style></style>
                 <halign>center</halign>
@@ -370,7 +362,7 @@
                 <xoffset>0</xoffset>
                 <yoffset>-2</yoffset>
                 <text>B VIII</text>
-                </Text>
+                </Fingering>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -389,16 +381,12 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>7</lid>
-              <Text>
+              <Fingering>
                 <lid>8</lid>
                 <style></style>
                 <halign>center</halign>
@@ -406,7 +394,7 @@
                 <xoffset>0</xoffset>
                 <yoffset>-2</yoffset>
                 <text>1/2B XV</text>
-                </Text>
+                </Fingering>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -429,7 +417,7 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>12</lid>
-              <Text>
+              <Fingering>
                 <lid>13</lid>
                 <style></style>
                 <halign>center</halign>
@@ -437,7 +425,7 @@
                 <xoffset>0</xoffset>
                 <yoffset>-2</yoffset>
                 <text>B VIII</text>
-                </Text>
+                </Fingering>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>

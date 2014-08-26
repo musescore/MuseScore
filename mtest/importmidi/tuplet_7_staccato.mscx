@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -39,6 +39,10 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
+      <Page>
+        <System>
+          </System>
+        </Page>
       </PageList>
     <Part>
       <Staff id="1">
@@ -60,18 +64,23 @@
           <concertClefType>F</concertClefType>
           <transposingClefType>F</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Beam id="1">
+          <l1>27</l1>
+          <l2>27</l2>
+          </Beam>
         <Tuplet id="1">
           <normalNotes>8</normalNotes>
           <actualNotes>7</actualNotes>
           <baseNote>32nd</baseNote>
+          <Number>
+            <style>Tuplet</style>
+            <text>7</text>
+            </Number>
           </Tuplet>
         <Chord>
           <Tuplet>1</Tuplet>
@@ -79,6 +88,7 @@
           <Articulation>
             <subtype>staccato</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -99,6 +109,7 @@
           <Articulation>
             <subtype>staccato</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -117,6 +128,7 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>32nd</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -137,6 +149,7 @@
           <Articulation>
             <subtype>staccato</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -158,6 +171,7 @@
           <Articulation>
             <subtype>staccato</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -178,6 +192,7 @@
           <Articulation>
             <subtype>staccato</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -199,6 +214,7 @@
           <Articulation>
             <subtype>staccato</subtype>
             </Articulation>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>

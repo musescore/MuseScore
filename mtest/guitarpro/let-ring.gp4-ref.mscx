@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -74,18 +74,14 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
           <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>3</lid>
           <sigN>4</sigN>
@@ -122,7 +118,7 @@
           <durationType>quarter</durationType>
           <Note>
             <lid>10</lid>
-            <Text>
+            <Fingering>
               <lid>11</lid>
               <style></style>
               <halign>center</halign>
@@ -131,7 +127,7 @@
               <yoffset>-2</yoffset>
               <italic>1</italic>
               <text>let ring</text>
-              </Text>
+              </Fingering>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -268,7 +264,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Electric Guitar</text>
@@ -278,12 +274,8 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
             <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>3</lid>
             <sigN>4</sigN>
@@ -320,7 +312,7 @@
             <durationType>quarter</durationType>
             <Note>
               <lid>10</lid>
-              <Text>
+              <Fingering>
                 <lid>11</lid>
                 <style></style>
                 <halign>center</halign>
@@ -329,7 +321,7 @@
                 <yoffset>-2</yoffset>
                 <italic>1</italic>
                 <text>let ring</text>
-                </Text>
+                </Fingering>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -377,16 +369,12 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
             <lid>9</lid>
             <durationType>quarter</durationType>
             <Note>
               <lid>10</lid>
-              <Text>
+              <Fingering>
                 <lid>11</lid>
                 <style></style>
                 <halign>center</halign>
@@ -395,7 +383,7 @@
                 <yoffset>-2</yoffset>
                 <italic>1</italic>
                 <text>let ring</text>
-                </Text>
+                </Fingering>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>

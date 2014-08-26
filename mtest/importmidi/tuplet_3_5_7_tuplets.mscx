@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -39,6 +39,10 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
+      <Page>
+        <System>
+          </System>
+        </Page>
       </PageList>
     <Part>
       <Staff id="1">
@@ -60,22 +64,28 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Beam id="1">
+          <l1>-15</l1>
+          <l2>-15</l2>
+          </Beam>
         <Tuplet id="1">
           <normalNotes>2</normalNotes>
           <actualNotes>3</actualNotes>
           <baseNote>eighth</baseNote>
+          <Number>
+            <style>Tuplet</style>
+            <text>3</text>
+            </Number>
           </Tuplet>
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -93,6 +103,7 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -110,6 +121,7 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -131,16 +143,27 @@
           <durationType>half</durationType>
           </Rest>
         <tick>0</tick>
+        <Beam id="2">
+          <track>1</track>
+          <l1>19</l1>
+          <l2>16</l2>
+          </Beam>
         <Tuplet id="2">
           <track>1</track>
           <normalNotes>4</normalNotes>
           <actualNotes>5</actualNotes>
           <baseNote>16th</baseNote>
+          <Number>
+            <track>1</track>
+            <style>Tuplet</style>
+            <text>5</text>
+            </Number>
           </Tuplet>
         <Chord>
           <track>1</track>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <track>1</track>
             <Events>
@@ -160,6 +183,7 @@
           <track>1</track>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <track>1</track>
             <Events>
@@ -179,6 +203,7 @@
           <track>1</track>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <track>1</track>
             <Events>
@@ -198,6 +223,7 @@
           <track>1</track>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <track>1</track>
             <Events>
@@ -217,6 +243,7 @@
           <track>1</track>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <track>1</track>
             <Events>
@@ -287,16 +314,27 @@
             </Note>
           </Chord>
         <tick>0</tick>
+        <Beam id="3">
+          <track>2</track>
+          <l1>5</l1>
+          <l2>1</l2>
+          </Beam>
         <Tuplet id="3">
           <track>2</track>
           <normalNotes>8</normalNotes>
           <actualNotes>7</actualNotes>
           <baseNote>32nd</baseNote>
+          <Number>
+            <track>2</track>
+            <style>Tuplet</style>
+            <text>7</text>
+            </Number>
           </Tuplet>
         <Chord>
           <track>2</track>
           <Tuplet>3</Tuplet>
           <durationType>32nd</durationType>
+          <Beam>3</Beam>
           <Note>
             <track>2</track>
             <Events>
@@ -316,6 +354,7 @@
           <track>2</track>
           <Tuplet>3</Tuplet>
           <durationType>32nd</durationType>
+          <Beam>3</Beam>
           <Note>
             <track>2</track>
             <Events>
@@ -336,6 +375,7 @@
           <track>2</track>
           <Tuplet>3</Tuplet>
           <durationType>32nd</durationType>
+          <Beam>3</Beam>
           <Note>
             <track>2</track>
             <Events>
@@ -355,6 +395,7 @@
           <track>2</track>
           <Tuplet>3</Tuplet>
           <durationType>32nd</durationType>
+          <Beam>3</Beam>
           <Note>
             <track>2</track>
             <Events>
@@ -375,6 +416,7 @@
           <track>2</track>
           <Tuplet>3</Tuplet>
           <durationType>32nd</durationType>
+          <Beam>3</Beam>
           <Note>
             <track>2</track>
             <Events>
@@ -394,6 +436,7 @@
           <track>2</track>
           <Tuplet>3</Tuplet>
           <durationType>32nd</durationType>
+          <Beam>3</Beam>
           <Note>
             <track>2</track>
             <Events>
@@ -414,6 +457,7 @@
           <track>2</track>
           <Tuplet>3</Tuplet>
           <durationType>32nd</durationType>
+          <Beam>3</Beam>
           <Note>
             <track>2</track>
             <Events>

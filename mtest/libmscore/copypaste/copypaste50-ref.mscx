@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -252,7 +252,6 @@
           </Chord>
         <Slur id="3">
           <track>4</track>
-          <track2>0</track2>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>

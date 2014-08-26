@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -33,35 +33,42 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="1" span="2"/>
         <barLineSpan>2</barLineSpan>
         </Staff>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         </Staff>
       <trackName></trackName>
       <Instrument>
         <trackName></trackName>
-        <Channel name="normal">
-          <controller tick="0" channel="0" ctrl="0" value="0"/>
-          <controller tick="0" channel="0" ctrl="32" value="0"/>
-          <controller tick="0" channel="0" ctrl="7" value="100"/>
-          <controller tick="0" channel="0" ctrl="10" value="64"/>
-          <controller tick="0" channel="0" ctrl="93" value="30"/>
-          <controller tick="0" channel="0" ctrl="91" value="30"/>
+        <Channel>
+          <controller ctrl="93" value="30"/>
+          <controller ctrl="91" value="30"/>
           </Channel>
         </Instrument>
       </Part>
@@ -93,7 +100,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -116,7 +123,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -139,7 +146,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
           <pause>3</pause>
@@ -199,7 +206,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Chord>
           <durationType>half</durationType>
           <Note>
@@ -222,7 +229,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -245,7 +252,7 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="1">
+      <Measure number="4">
         <Chord>
           <durationType>half</durationType>
           <Note>

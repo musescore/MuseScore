@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -94,18 +94,14 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
           <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>3</lid>
           <sigN>4</sigN>
@@ -123,7 +119,7 @@
           <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Slur id="2">
-          <lid>16</lid>
+          <lid>15</lid>
           <track>0</track>
           </Slur>
         <Chord>
@@ -251,7 +247,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Acoustic Guitar</trackName>
         <Instrument>
           <longName pos="0">Acoustic Guitar</longName>
           <shortName pos="0">Guit.</shortName>
@@ -294,7 +290,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Acoustic Guitar</text>
@@ -304,12 +300,8 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
             <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>3</lid>
             <sigN>4</sigN>
@@ -327,7 +319,7 @@
             <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Slur id="3">
-            <lid>16</lid>
+            <lid>15</lid>
             <track>0</track>
             </Slur>
           <Chord>
@@ -389,12 +381,8 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Slur id="4">
-            <lid>16</lid>
+            <lid>15</lid>
             <track>4</track>
             </Slur>
           <Chord>

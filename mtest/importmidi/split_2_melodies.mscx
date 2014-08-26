@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -39,6 +39,10 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
+      <Page>
+        <System>
+          </System>
+        </Page>
       </PageList>
     <Part>
       <Staff id="1">
@@ -70,8 +74,13 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Beam id="1">
+          <l1>23</l1>
+          <l2>17</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -88,6 +97,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -104,6 +114,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -120,6 +131,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -134,8 +146,13 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Beam id="2">
+          <l1>20</l1>
+          <l2>20</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -152,6 +169,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -168,6 +186,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -184,6 +203,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -211,8 +231,13 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Beam id="3">
+          <l1>4</l1>
+          <l2>4</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <Events>
               <Event>
@@ -229,6 +254,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <Events>
               <Event>
@@ -245,6 +271,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <Events>
               <Event>
@@ -261,6 +288,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Note>
             <Events>
               <Event>
@@ -275,8 +303,13 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Beam id="4">
+          <l1>-4</l1>
+          <l2>-4</l2>
+          </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Note>
             <Events>
               <Event>
@@ -293,6 +326,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Note>
             <Events>
               <Event>
@@ -309,6 +343,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Note>
             <Events>
               <Event>
@@ -325,6 +360,7 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Note>
             <Events>
               <Event>

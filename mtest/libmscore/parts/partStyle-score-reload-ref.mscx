@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -50,6 +50,10 @@
     <metaTag name="workTitle">Style Score</metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -157,7 +161,7 @@
           <lid>4</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Chord>
           <lid>5</lid>
           <durationType>whole</durationType>
@@ -173,7 +177,7 @@
           <lid>7</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <Chord>
           <lid>8</lid>
           <durationType>whole</durationType>
@@ -189,7 +193,7 @@
           <lid>10</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="4">
         <Chord>
           <lid>11</lid>
           <durationType>whole</durationType>
@@ -205,7 +209,7 @@
           <lid>13</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="5">
         <Chord>
           <lid>14</lid>
           <durationType>whole</durationType>
@@ -221,7 +225,7 @@
           <lid>16</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="6">
         <Chord>
           <lid>17</lid>
           <durationType>whole</durationType>
@@ -237,7 +241,7 @@
           <lid>19</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="7">
         <Chord>
           <lid>20</lid>
           <durationType>whole</durationType>
@@ -253,7 +257,7 @@
           <lid>22</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="8">
         <Chord>
           <lid>23</lid>
           <durationType>whole</durationType>
@@ -293,7 +297,7 @@
           <lid>28</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <Rest>
           <lid>29</lid>
           <durationType>measure</durationType>
@@ -305,7 +309,7 @@
           <lid>30</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <Rest>
           <lid>31</lid>
           <durationType>measure</durationType>
@@ -317,7 +321,7 @@
           <lid>32</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="4">
         <Rest>
           <lid>33</lid>
           <durationType>measure</durationType>
@@ -329,7 +333,7 @@
           <lid>34</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="5">
         <Rest>
           <lid>35</lid>
           <durationType>measure</durationType>
@@ -341,7 +345,7 @@
           <lid>36</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="6">
         <Rest>
           <lid>37</lid>
           <durationType>measure</durationType>
@@ -353,7 +357,7 @@
           <lid>38</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="7">
         <Rest>
           <lid>39</lid>
           <durationType>measure</durationType>
@@ -365,7 +369,7 @@
           <lid>40</lid>
           </BarLine>
         </Measure>
-      <Measure number="1">
+      <Measure number="8">
         <Rest>
           <lid>41</lid>
           <durationType>measure</durationType>
@@ -417,6 +421,10 @@
       <showMargins>0</showMargins>
       <PageList>
         <Page>
+          <System>
+            </System>
+          <System>
+            </System>
           </Page>
         </PageList>
       <Part>
@@ -489,7 +497,7 @@
             <lid>4</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="2">
           <Chord>
             <lid>5</lid>
             <durationType>whole</durationType>
@@ -505,7 +513,7 @@
             <lid>7</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="3">
           <Chord>
             <lid>8</lid>
             <durationType>whole</durationType>
@@ -521,7 +529,7 @@
             <lid>10</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="4">
           <Chord>
             <lid>11</lid>
             <durationType>whole</durationType>
@@ -537,7 +545,7 @@
             <lid>13</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="5">
           <Chord>
             <lid>14</lid>
             <durationType>whole</durationType>
@@ -553,7 +561,7 @@
             <lid>16</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="6">
           <Chord>
             <lid>17</lid>
             <durationType>whole</durationType>
@@ -569,7 +577,7 @@
             <lid>19</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="7">
           <Chord>
             <lid>20</lid>
             <durationType>whole</durationType>
@@ -585,7 +593,7 @@
             <lid>22</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="8">
           <Chord>
             <lid>23</lid>
             <durationType>whole</durationType>
@@ -643,6 +651,10 @@
       <showMargins>0</showMargins>
       <PageList>
         <Page>
+          <System>
+            </System>
+          <System>
+            </System>
           </Page>
         </PageList>
       <Part>
@@ -712,7 +724,24 @@
             <lid>28</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="1" len="32/4">
+          <multiMeasureRest>8</multiMeasureRest>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            </Rest>
+          <tick>15360</tick>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>1920</tick>
+        <Measure number="2">
           <Rest>
             <lid>29</lid>
             <durationType>measure</durationType>
@@ -724,7 +753,7 @@
             <lid>30</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="3">
           <Rest>
             <lid>31</lid>
             <durationType>measure</durationType>
@@ -736,7 +765,7 @@
             <lid>32</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="4">
           <Rest>
             <lid>33</lid>
             <durationType>measure</durationType>
@@ -748,7 +777,7 @@
             <lid>34</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="5">
           <Rest>
             <lid>35</lid>
             <durationType>measure</durationType>
@@ -760,7 +789,7 @@
             <lid>36</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="6">
           <Rest>
             <lid>37</lid>
             <durationType>measure</durationType>
@@ -772,7 +801,7 @@
             <lid>38</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="7">
           <Rest>
             <lid>39</lid>
             <durationType>measure</durationType>
@@ -784,7 +813,7 @@
             <lid>40</lid>
             </BarLine>
           </Measure>
-        <Measure number="1">
+        <Measure number="8">
           <Rest>
             <lid>41</lid>
             <durationType>measure</durationType>

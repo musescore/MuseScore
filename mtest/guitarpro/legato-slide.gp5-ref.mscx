@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -74,18 +74,14 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
           <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>3</lid>
           <sigN>4</sigN>
@@ -102,7 +98,7 @@
           <lid>5</lid>
           </Dynamic>
         <Slur id="2">
-          <lid>18</lid>
+          <lid>17</lid>
           <track>0</track>
           </Slur>
         <Chord>
@@ -260,7 +256,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Track 1</text>
@@ -270,12 +266,8 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
             <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>3</lid>
             <sigN>4</sigN>
@@ -292,7 +284,7 @@
             <lid>5</lid>
             </Dynamic>
           <Slur id="3">
-            <lid>18</lid>
+            <lid>17</lid>
             <track>0</track>
             </Slur>
           <Chord>
@@ -361,16 +353,12 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Rest>
             <lid>4</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Slur id="4">
-            <lid>18</lid>
+            <lid>17</lid>
             <track>4</track>
             </Slur>
           <Chord>

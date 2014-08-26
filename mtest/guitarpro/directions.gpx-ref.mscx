@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -98,28 +98,24 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <StaffText>
           <lid>2</lid>
-          <text>fine</text>
-          </StaffText>
-        <KeySig>
-          <lid>3</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>4</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <StaffText>
+          <lid>3</lid>
+          <text>fine</text>
+          </StaffText>
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
@@ -156,21 +152,21 @@
         </Measure>
       <Measure number="2">
         <StaffText>
-          <lid>13</lid>
+          <lid>12</lid>
           <text>Da Capo</text>
           </StaffText>
         <Rest>
-          <lid>14</lid>
+          <lid>13</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="3">
         <Chord>
-          <lid>16</lid>
+          <lid>14</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>17</lid>
+            <lid>15</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -178,35 +174,35 @@
             </Note>
           </Chord>
         <Rest>
+          <lid>16</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>17</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
           <lid>18</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>19</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>20</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="4">
         <StaffText>
-          <lid>22</lid>
+          <lid>19</lid>
           <text>D.C. al Coda</text>
           </StaffText>
         <Rest>
-          <lid>23</lid>
+          <lid>20</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="5">
         <Chord>
-          <lid>25</lid>
+          <lid>21</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>26</lid>
+            <lid>22</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -214,35 +210,35 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>27</lid>
+          <lid>23</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>28</lid>
+          <lid>24</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>29</lid>
+          <lid>25</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="6">
         <StaffText>
-          <lid>31</lid>
+          <lid>26</lid>
           <text>D.C. al Double Coda</text>
           </StaffText>
         <Rest>
-          <lid>32</lid>
+          <lid>27</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="7">
         <Chord>
-          <lid>34</lid>
+          <lid>28</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>35</lid>
+            <lid>29</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -250,40 +246,94 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>36</lid>
+          <lid>30</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>37</lid>
+          <lid>31</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>38</lid>
+          <lid>32</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="8">
         <StaffText>
-          <lid>40</lid>
+          <lid>33</lid>
           <text>D.C. al Fine</text>
           </StaffText>
         <Rest>
-          <lid>41</lid>
+          <lid>34</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="9">
         <Rest>
-          <lid>43</lid>
+          <lid>35</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="10">
         <StaffText>
-          <lid>45</lid>
+          <lid>36</lid>
           <text>D.S. al Coda</text>
+          </StaffText>
+        <Rest>
+          <lid>37</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="11">
+        <Rest>
+          <lid>38</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="12">
+        <StaffText>
+          <lid>39</lid>
+          <text>D.S. al Double Coda</text>
+          </StaffText>
+        <Rest>
+          <lid>40</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="13">
+        <Rest>
+          <lid>41</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="14">
+        <StaffText>
+          <lid>42</lid>
+          <text>D.S. al Fine</text>
+          </StaffText>
+        <Rest>
+          <lid>43</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="15">
+        <Rest>
+          <lid>44</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="16">
+        <StaffText>
+          <lid>45</lid>
+          <text>Da Segno Segno</text>
           </StaffText>
         <Rest>
           <lid>46</lid>
@@ -291,53 +341,92 @@
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
-      <Measure number="11">
+      <Measure number="17">
+        <Rest>
+          <lid>47</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="18">
         <Rest>
           <lid>48</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
-      <Measure number="12">
+      <Measure number="19">
         <StaffText>
-          <lid>50</lid>
-          <text>D.S. al Double Coda</text>
+          <lid>49</lid>
+          <text>D.S.S. al Coda</text>
           </StaffText>
+        <Rest>
+          <lid>50</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="20">
         <Rest>
           <lid>51</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
-      <Measure number="13">
+      <Measure number="21">
         <Rest>
-          <lid>53</lid>
+          <lid>52</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
-      <Measure number="14">
+      <Measure number="22">
         <StaffText>
-          <lid>55</lid>
-          <text>D.S. al Fine</text>
+          <lid>53</lid>
+          <text>D.S.S. al Double Coda</text>
           </StaffText>
+        <Rest>
+          <lid>54</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="23">
+        <Rest>
+          <lid>55</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="24">
         <Rest>
           <lid>56</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
-      <Measure number="15">
+      <Measure number="25">
+        <StaffText>
+          <lid>57</lid>
+          <text>D.S.S. al Fine</text>
+          </StaffText>
         <Rest>
           <lid>58</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
-      <Measure number="16">
+      <Measure number="26">
+        <Rest>
+          <lid>59</lid>
+          <durationType>measure</durationType>
+          <duration z="1" n="1"/>
+          </Rest>
+        </Measure>
+      <Measure number="27">
         <StaffText>
           <lid>60</lid>
-          <text>Da Segno Segno</text>
+          <text>Da Coda</text>
           </StaffText>
         <Rest>
           <lid>61</lid>
@@ -345,120 +434,27 @@
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
-      <Measure number="17">
-        <Rest>
-          <lid>63</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="18">
-        <Rest>
-          <lid>65</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="19">
-        <StaffText>
-          <lid>67</lid>
-          <text>D.S.S. al Coda</text>
-          </StaffText>
-        <Rest>
-          <lid>68</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="20">
-        <Rest>
-          <lid>70</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="21">
-        <Rest>
-          <lid>72</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="22">
-        <StaffText>
-          <lid>74</lid>
-          <text>D.S.S. al Double Coda</text>
-          </StaffText>
-        <Rest>
-          <lid>75</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="23">
-        <Rest>
-          <lid>77</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="24">
-        <Rest>
-          <lid>79</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="25">
-        <StaffText>
-          <lid>81</lid>
-          <text>D.S.S. al Fine</text>
-          </StaffText>
-        <Rest>
-          <lid>82</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="26">
-        <Rest>
-          <lid>84</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
-      <Measure number="27">
-        <StaffText>
-          <lid>86</lid>
-          <text>Da Coda</text>
-          </StaffText>
-        <Rest>
-          <lid>87</lid>
-          <durationType>measure</durationType>
-          <duration z="1" n="1"/>
-          </Rest>
-        </Measure>
       <Measure number="28">
         <Rest>
-          <lid>89</lid>
+          <lid>62</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="29">
         <StaffText>
-          <lid>91</lid>
+          <lid>63</lid>
           <text>Da Double Coda</text>
           </StaffText>
         <Rest>
-          <lid>92</lid>
+          <lid>64</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="30">
         <Rest>
-          <lid>94</lid>
+          <lid>65</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -466,17 +462,17 @@
       <Measure number="31">
         <Symbol>
           <name>segno</name>
-          <lid>96</lid>
+          <lid>66</lid>
           </Symbol>
         <Rest>
-          <lid>97</lid>
+          <lid>67</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
         </Measure>
       <Measure number="32">
         <Rest>
-          <lid>99</lid>
+          <lid>68</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -484,18 +480,18 @@
       <Measure number="33">
         <Symbol>
           <name>segno</name>
-          <lid>101</lid>
+          <lid>69</lid>
           </Symbol>
         <Symbol>
           <name>segno</name>
-          <lid>102</lid>
+          <lid>70</lid>
           </Symbol>
         <Symbol>
           <name>segno</name>
-          <lid>112</lid>
+          <lid>77</lid>
           </Symbol>
         <Rest>
-          <lid>103</lid>
+          <lid>71</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -503,10 +499,10 @@
       <Measure number="34">
         <Symbol>
           <name>coda</name>
-          <lid>105</lid>
+          <lid>72</lid>
           </Symbol>
         <Rest>
-          <lid>106</lid>
+          <lid>73</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -514,18 +510,18 @@
       <Measure number="35">
         <Symbol>
           <name>coda</name>
-          <lid>108</lid>
+          <lid>74</lid>
           </Symbol>
         <Symbol>
           <name>coda</name>
-          <lid>109</lid>
+          <lid>75</lid>
           </Symbol>
         <Symbol>
           <name>coda</name>
-          <lid>113</lid>
+          <lid>78</lid>
           </Symbol>
         <Rest>
-          <lid>110</lid>
+          <lid>76</lid>
           <durationType>measure</durationType>
           <duration z="1" n="1"/>
           </Rest>
@@ -605,7 +601,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Electric Guitar</trackName>
         <Instrument>
           <longName pos="0">Electric Guitar</longName>
           <shortName pos="0">El. Guit.</shortName>
@@ -648,7 +644,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Electric Guitar</text>
@@ -658,22 +654,18 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <StaffText>
             <lid>2</lid>
-            <text>fine</text>
-            </StaffText>
-          <KeySig>
-            <lid>3</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>4</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
+          <StaffText>
+            <lid>3</lid>
+            <text>fine</text>
+            </StaffText>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
@@ -710,21 +702,21 @@
           </Measure>
         <Measure number="2">
           <StaffText>
-            <lid>13</lid>
+            <lid>12</lid>
             <text>Da Capo</text>
             </StaffText>
           <Rest>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="3">
           <Chord>
-            <lid>16</lid>
+            <lid>14</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -732,35 +724,35 @@
               </Note>
             </Chord>
           <Rest>
+            <lid>16</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>17</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <lid>18</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>19</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>20</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
           <StaffText>
-            <lid>22</lid>
+            <lid>19</lid>
             <text>D.C. al Coda</text>
             </StaffText>
           <Rest>
-            <lid>23</lid>
+            <lid>20</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="5">
           <Chord>
-            <lid>25</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>22</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -768,35 +760,35 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>27</lid>
+            <lid>23</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>28</lid>
+            <lid>24</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>29</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="6">
           <StaffText>
-            <lid>31</lid>
+            <lid>26</lid>
             <text>D.C. al Double Coda</text>
             </StaffText>
           <Rest>
-            <lid>32</lid>
+            <lid>27</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="7">
           <Chord>
-            <lid>34</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>35</lid>
+              <lid>29</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -804,33 +796,38 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>36</lid>
+            <lid>30</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>37</lid>
+            <lid>31</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>38</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="8">
           <StaffText>
-            <lid>40</lid>
+            <lid>33</lid>
             <text>D.C. al Fine</text>
             </StaffText>
           <Rest>
-            <lid>41</lid>
+            <lid>34</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="8" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
+          <StaffText>
+            <lid>33</lid>
+            <text>D.C. al Fine</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>17280</tick>
           <BarLine>
@@ -841,26 +838,31 @@
         <tick>15360</tick>
         <Measure number="9">
           <Rest>
-            <lid>43</lid>
+            <lid>35</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="10">
           <StaffText>
-            <lid>45</lid>
+            <lid>36</lid>
             <text>D.S. al Coda</text>
             </StaffText>
           <Rest>
-            <lid>46</lid>
+            <lid>37</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="10" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
+          <StaffText>
+            <lid>36</lid>
+            <text>D.S. al Coda</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>21120</tick>
           <BarLine>
@@ -871,26 +873,31 @@
         <tick>19200</tick>
         <Measure number="11">
           <Rest>
-            <lid>48</lid>
+            <lid>38</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="12">
           <StaffText>
-            <lid>50</lid>
+            <lid>39</lid>
             <text>D.S. al Double Coda</text>
             </StaffText>
           <Rest>
-            <lid>51</lid>
+            <lid>40</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="12" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
+          <StaffText>
+            <lid>39</lid>
+            <text>D.S. al Double Coda</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>24960</tick>
           <BarLine>
@@ -901,26 +908,31 @@
         <tick>23040</tick>
         <Measure number="13">
           <Rest>
-            <lid>53</lid>
+            <lid>41</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="14">
           <StaffText>
-            <lid>55</lid>
+            <lid>42</lid>
             <text>D.S. al Fine</text>
             </StaffText>
           <Rest>
-            <lid>56</lid>
+            <lid>43</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="14" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
+          <StaffText>
+            <lid>42</lid>
+            <text>D.S. al Fine</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>28800</tick>
           <BarLine>
@@ -931,26 +943,31 @@
         <tick>26880</tick>
         <Measure number="15">
           <Rest>
-            <lid>58</lid>
+            <lid>44</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="16">
           <StaffText>
-            <lid>60</lid>
+            <lid>45</lid>
             <text>Da Segno Segno</text>
             </StaffText>
           <Rest>
-            <lid>61</lid>
+            <lid>46</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="16" len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
+          <StaffText>
+            <lid>45</lid>
+            <text>Da Segno Segno</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>34560</tick>
           <BarLine>
@@ -961,33 +978,38 @@
         <tick>30720</tick>
         <Measure number="17">
           <Rest>
-            <lid>63</lid>
+            <lid>47</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="18">
           <Rest>
-            <lid>65</lid>
+            <lid>48</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="19">
           <StaffText>
-            <lid>67</lid>
+            <lid>49</lid>
             <text>D.S.S. al Coda</text>
             </StaffText>
           <Rest>
-            <lid>68</lid>
+            <lid>50</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="19" len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
+          <StaffText>
+            <lid>49</lid>
+            <text>D.S.S. al Coda</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>40320</tick>
           <BarLine>
@@ -998,33 +1020,38 @@
         <tick>36480</tick>
         <Measure number="20">
           <Rest>
-            <lid>70</lid>
+            <lid>51</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="21">
           <Rest>
-            <lid>72</lid>
+            <lid>52</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="22">
           <StaffText>
-            <lid>74</lid>
+            <lid>53</lid>
             <text>D.S.S. al Double Coda</text>
             </StaffText>
           <Rest>
-            <lid>75</lid>
+            <lid>54</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="22" len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
+          <StaffText>
+            <lid>53</lid>
+            <text>D.S.S. al Double Coda</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>46080</tick>
           <BarLine>
@@ -1035,33 +1062,38 @@
         <tick>42240</tick>
         <Measure number="23">
           <Rest>
-            <lid>77</lid>
+            <lid>55</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="24">
           <Rest>
-            <lid>79</lid>
+            <lid>56</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="25">
           <StaffText>
-            <lid>81</lid>
+            <lid>57</lid>
             <text>D.S.S. al Fine</text>
             </StaffText>
           <Rest>
-            <lid>82</lid>
+            <lid>58</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="25" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
+          <StaffText>
+            <lid>57</lid>
+            <text>D.S.S. al Fine</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>49920</tick>
           <BarLine>
@@ -1072,26 +1104,31 @@
         <tick>48000</tick>
         <Measure number="26">
           <Rest>
-            <lid>84</lid>
+            <lid>59</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="27">
           <StaffText>
-            <lid>86</lid>
+            <lid>60</lid>
             <text>Da Coda</text>
             </StaffText>
           <Rest>
-            <lid>87</lid>
+            <lid>61</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="27" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
+          <StaffText>
+            <lid>60</lid>
+            <text>Da Coda</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>53760</tick>
           <BarLine>
@@ -1102,26 +1139,31 @@
         <tick>51840</tick>
         <Measure number="28">
           <Rest>
-            <lid>89</lid>
+            <lid>62</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="29">
           <StaffText>
-            <lid>91</lid>
+            <lid>63</lid>
             <text>Da Double Coda</text>
             </StaffText>
           <Rest>
-            <lid>92</lid>
+            <lid>64</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="29" len="8/4">
           <multiMeasureRest>2</multiMeasureRest>
+          <StaffText>
+            <lid>63</lid>
+            <text>Da Double Coda</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>57600</tick>
           <BarLine>
@@ -1132,7 +1174,7 @@
         <tick>55680</tick>
         <Measure number="30">
           <Rest>
-            <lid>94</lid>
+            <lid>65</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1140,17 +1182,17 @@
         <Measure number="31">
           <Symbol>
             <name>segno</name>
-            <lid>96</lid>
+            <lid>66</lid>
             </Symbol>
           <Rest>
-            <lid>97</lid>
+            <lid>67</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="32">
           <Rest>
-            <lid>99</lid>
+            <lid>68</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1158,18 +1200,18 @@
         <Measure number="33">
           <Symbol>
             <name>segno</name>
-            <lid>101</lid>
+            <lid>69</lid>
             </Symbol>
           <Symbol>
             <name>segno</name>
-            <lid>102</lid>
+            <lid>70</lid>
             </Symbol>
           <Symbol>
             <name>segno</name>
-            <lid>112</lid>
+            <lid>77</lid>
             </Symbol>
           <Rest>
-            <lid>103</lid>
+            <lid>71</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1177,10 +1219,10 @@
         <Measure number="34">
           <Symbol>
             <name>coda</name>
-            <lid>105</lid>
+            <lid>72</lid>
             </Symbol>
           <Rest>
-            <lid>106</lid>
+            <lid>73</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1188,18 +1230,18 @@
         <Measure number="35">
           <Symbol>
             <name>coda</name>
-            <lid>108</lid>
+            <lid>74</lid>
             </Symbol>
           <Symbol>
             <name>coda</name>
-            <lid>109</lid>
+            <lid>75</lid>
             </Symbol>
           <Symbol>
             <name>coda</name>
-            <lid>113</lid>
+            <lid>78</lid>
             </Symbol>
           <Rest>
-            <lid>110</lid>
+            <lid>76</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1211,10 +1253,6 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <KeySig>
-            <lid>3</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
             <lid>7</lid>
             <durationType>quarter</durationType>
@@ -1241,17 +1279,17 @@
           </Measure>
         <Measure number="2">
           <Rest>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="3">
           <Chord>
-            <lid>16</lid>
+            <lid>14</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>15</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -1259,31 +1297,31 @@
               </Note>
             </Chord>
           <Rest>
+            <lid>16</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>17</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <lid>18</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>19</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>20</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
           <Rest>
-            <lid>23</lid>
+            <lid>20</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="5">
           <Chord>
-            <lid>25</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>22</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -1291,31 +1329,31 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>27</lid>
+            <lid>23</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>28</lid>
+            <lid>24</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>29</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="6">
           <Rest>
-            <lid>32</lid>
+            <lid>27</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="7">
           <Chord>
-            <lid>34</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>35</lid>
+              <lid>29</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -1323,21 +1361,21 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>36</lid>
+            <lid>30</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>37</lid>
+            <lid>31</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>38</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="8">
           <Rest>
-            <lid>41</lid>
+            <lid>34</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1346,6 +1384,7 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>17280</tick>
           <BarLine>
@@ -1356,14 +1395,14 @@
         <tick>15360</tick>
         <Measure number="9">
           <Rest>
-            <lid>43</lid>
+            <lid>35</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="10">
           <Rest>
-            <lid>46</lid>
+            <lid>37</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1372,6 +1411,7 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>21120</tick>
           <BarLine>
@@ -1382,14 +1422,14 @@
         <tick>19200</tick>
         <Measure number="11">
           <Rest>
-            <lid>48</lid>
+            <lid>38</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="12">
           <Rest>
-            <lid>51</lid>
+            <lid>40</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1398,6 +1438,7 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>24960</tick>
           <BarLine>
@@ -1408,14 +1449,14 @@
         <tick>23040</tick>
         <Measure number="13">
           <Rest>
-            <lid>53</lid>
+            <lid>41</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="14">
           <Rest>
-            <lid>56</lid>
+            <lid>43</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1424,6 +1465,7 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>28800</tick>
           <BarLine>
@@ -1434,14 +1476,14 @@
         <tick>26880</tick>
         <Measure number="15">
           <Rest>
-            <lid>58</lid>
+            <lid>44</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="16">
           <Rest>
-            <lid>61</lid>
+            <lid>46</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1450,6 +1492,7 @@
           <multiMeasureRest>3</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>34560</tick>
           <BarLine>
@@ -1460,21 +1503,21 @@
         <tick>30720</tick>
         <Measure number="17">
           <Rest>
-            <lid>63</lid>
+            <lid>47</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="18">
           <Rest>
-            <lid>65</lid>
+            <lid>48</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="19">
           <Rest>
-            <lid>68</lid>
+            <lid>50</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1483,6 +1526,7 @@
           <multiMeasureRest>3</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>40320</tick>
           <BarLine>
@@ -1493,21 +1537,21 @@
         <tick>36480</tick>
         <Measure number="20">
           <Rest>
-            <lid>70</lid>
+            <lid>51</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="21">
           <Rest>
-            <lid>72</lid>
+            <lid>52</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="22">
           <Rest>
-            <lid>75</lid>
+            <lid>54</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1516,6 +1560,7 @@
           <multiMeasureRest>3</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>46080</tick>
           <BarLine>
@@ -1526,21 +1571,21 @@
         <tick>42240</tick>
         <Measure number="23">
           <Rest>
-            <lid>77</lid>
+            <lid>55</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="24">
           <Rest>
-            <lid>79</lid>
+            <lid>56</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="25">
           <Rest>
-            <lid>82</lid>
+            <lid>58</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1549,6 +1594,7 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>49920</tick>
           <BarLine>
@@ -1559,14 +1605,14 @@
         <tick>48000</tick>
         <Measure number="26">
           <Rest>
-            <lid>84</lid>
+            <lid>59</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="27">
           <Rest>
-            <lid>87</lid>
+            <lid>61</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1575,6 +1621,7 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>53760</tick>
           <BarLine>
@@ -1585,14 +1632,14 @@
         <tick>51840</tick>
         <Measure number="28">
           <Rest>
-            <lid>89</lid>
+            <lid>62</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="29">
           <Rest>
-            <lid>92</lid>
+            <lid>64</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1601,6 +1648,7 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>57600</tick>
           <BarLine>
@@ -1611,21 +1659,21 @@
         <tick>55680</tick>
         <Measure number="30">
           <Rest>
-            <lid>94</lid>
+            <lid>65</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="31">
           <Rest>
-            <lid>97</lid>
+            <lid>67</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="32">
           <Rest>
-            <lid>99</lid>
+            <lid>68</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1633,17 +1681,17 @@
         <Measure number="33">
           <Symbol>
             <name>segno</name>
-            <lid>112</lid>
+            <lid>77</lid>
             </Symbol>
           <Rest>
-            <lid>103</lid>
+            <lid>71</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
           </Measure>
         <Measure number="34">
           <Rest>
-            <lid>106</lid>
+            <lid>73</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
@@ -1651,10 +1699,10 @@
         <Measure number="35">
           <Symbol>
             <name>coda</name>
-            <lid>113</lid>
+            <lid>78</lid>
             </Symbol>
           <Rest>
-            <lid>110</lid>
+            <lid>76</lid>
             <durationType>measure</durationType>
             <duration z="1" n="1"/>
             </Rest>
