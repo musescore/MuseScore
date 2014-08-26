@@ -15,8 +15,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "1.24"
-static const int MSCVERSION = 124;
+#define MSC_VERSION     "2.00"
+static const int MSCVERSION = 200;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -45,6 +45,7 @@ static const int MSCVERSION = 124;
 //    1.24  default image size is spatium dependent
 //      -   symbol numbers in TextLine() replaced by symbol names
 //          TextStyle: frameWidth, paddingWidth are now in Spatium units (instead of mm)
+//    2.00  (Version 2.0)
 
 
 class MStyle;
