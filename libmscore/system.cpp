@@ -262,11 +262,14 @@ void System::layout(qreal xo1)
       //  layout brackets
       //---------------------------------------------------
 
-      foreach (Bracket* b, _brackets) {
+      for (Bracket* b : _brackets) {
             qreal xo     = -xo1;
-            int level   = b->level();
-            for (int i = 0; i < level; ++i)
-                  xo += bracketWidth[i] + bd;
+            for (Bracket* b2 : _brackets) {
+                   if (b->level() > b2->level() &&
+                   ((b->firstStaff() >= b2->firstStaff() && b->firstStaff() <= b2->lastStaff()) ||
+                   (b->lastStaff() >= b2->firstStaff() && b->lastStaff() <= b2->lastStaff())))
+                         xo += b2->width() + bd;
+                   }
             b->rxpos() = _leftMargin - xo - b->width();
             }
 
