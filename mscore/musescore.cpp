@@ -5029,7 +5029,7 @@ int main(int argc, char* av[])
             sc->finish(mscore);
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
-
+#if 0
       if (preferences.sessionStart == SessionStart::EMPTY && files == 0) {
             QDialog* start = new StartDialog(0);
             switch(start->exec()) {
@@ -5041,7 +5041,7 @@ int main(int argc, char* av[])
                         break;
                   }
             }
-
+#endif
       return qApp->exec();
       }
 
