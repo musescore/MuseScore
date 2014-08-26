@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -163,7 +163,7 @@
             <lid>9</lid>
             <Symbol>
               <name>gClef</name>
-              <lid>118</lid>
+              <lid>87</lid>
               </Symbol>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -799,7 +799,7 @@
               <lid>9</lid>
               <Symbol>
                 <name>gClef</name>
-                <lid>118</lid>
+                <lid>87</lid>
                 </Symbol>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -830,6 +830,7 @@
           <multiMeasureRest>31</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>61440</tick>
           <BarLine>
@@ -1208,6 +1209,7 @@
           <multiMeasureRest>31</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>61440</tick>
           <BarLine>

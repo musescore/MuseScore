@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -94,18 +94,14 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
           <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>3</lid>
           <sigN>4</sigN>
@@ -151,7 +147,7 @@
       <Measure number="2">
         <endRepeat>3</endRepeat>
         <Volta id="2">
-          <lid>24</lid>
+          <lid>20</lid>
           <beginText>
             <style>Volta</style>
             <text>1,2</text>
@@ -159,24 +155,24 @@
           <endings></endings>
           </Volta>
         <Chord>
-          <lid>11</lid>
+          <lid>10</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>13</lid>
+            <lid>12</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>0</fret>
             <string>3</string>
             </Note>
           <Note>
-            <lid>12</lid>
+            <lid>11</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>14</lid>
+            <lid>13</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -187,7 +183,7 @@
       <Measure number="3">
         <endSpanner id="2"/>
         <Volta id="3">
-          <lid>25</lid>
+          <lid>21</lid>
           <beginText>
             <style>Volta</style>
             <text>3</text>
@@ -195,24 +191,24 @@
           <endings></endings>
           </Volta>
         <Chord>
-          <lid>16</lid>
+          <lid>14</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>17</lid>
+            <lid>15</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>18</lid>
+            <lid>16</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>3</fret>
             <string>3</string>
             </Note>
           <Note>
-            <lid>19</lid>
+            <lid>17</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -223,10 +219,10 @@
       <Measure number="4">
         <endSpanner id="3"/>
         <Chord>
-          <lid>21</lid>
+          <lid>18</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>22</lid>
+            <lid>19</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>5</fret>
@@ -307,7 +303,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Acoustic Guitar</trackName>
         <Instrument>
           <longName pos="0">Acoustic Guitar</longName>
           <shortName pos="0">Guit.</shortName>
@@ -350,7 +346,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Acoustic Guitar</text>
@@ -360,12 +356,8 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
             <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>3</lid>
             <sigN>4</sigN>
@@ -411,7 +403,7 @@
         <Measure number="2">
           <endRepeat>3</endRepeat>
           <Volta id="4">
-            <lid>24</lid>
+            <lid>20</lid>
             <beginText>
               <style>Volta</style>
               <text>1,2</text>
@@ -419,24 +411,24 @@
             <endings></endings>
             </Volta>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>13</lid>
+              <lid>12</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>12</lid>
+              <lid>11</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -447,7 +439,7 @@
         <Measure number="3">
           <endSpanner id="4"/>
           <Volta id="5">
-            <lid>25</lid>
+            <lid>21</lid>
             <beginText>
               <style>Volta</style>
               <text>3</text>
@@ -455,24 +447,24 @@
             <endings></endings>
             </Volta>
           <Chord>
-            <lid>16</lid>
+            <lid>14</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>15</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>18</lid>
+              <lid>16</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>19</lid>
+              <lid>17</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -483,10 +475,10 @@
         <Measure number="4">
           <endSpanner id="5"/>
           <Chord>
-            <lid>21</lid>
+            <lid>18</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>22</lid>
+              <lid>19</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -501,10 +493,6 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
             <lid>6</lid>
             <durationType>whole</durationType>
@@ -533,24 +521,24 @@
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>13</lid>
+              <lid>12</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>12</lid>
+              <lid>11</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -560,24 +548,24 @@
           </Measure>
         <Measure number="3">
           <Chord>
-            <lid>16</lid>
+            <lid>14</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>15</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>18</lid>
+              <lid>16</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>19</lid>
+              <lid>17</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -587,10 +575,10 @@
           </Measure>
         <Measure number="4">
           <Chord>
-            <lid>21</lid>
+            <lid>18</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>22</lid>
+              <lid>19</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>

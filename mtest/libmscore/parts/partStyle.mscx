@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -57,7 +57,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
@@ -90,7 +92,9 @@
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Oboe</trackName>
@@ -135,9 +139,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -253,9 +254,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>

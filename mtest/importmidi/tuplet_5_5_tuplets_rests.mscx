@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -39,6 +39,10 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <PageList>
+      <Page>
+        <System>
+          </System>
+        </Page>
       </PageList>
     <Part>
       <Staff id="1">
@@ -65,9 +69,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -77,6 +78,10 @@
           <normalNotes>4</normalNotes>
           <actualNotes>5</actualNotes>
           <baseNote>16th</baseNote>
+          <Number>
+            <style>Tuplet</style>
+            <text>5</text>
+            </Number>
           </Tuplet>
         <Chord>
           <Tuplet>1</Tuplet>
@@ -99,9 +104,14 @@
           <Tuplet>1</Tuplet>
           <durationType>16th</durationType>
           </Rest>
+        <Beam id="1">
+          <l1>19</l1>
+          <l2>20</l2>
+          </Beam>
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -119,6 +129,7 @@
         <Chord>
           <Tuplet>1</Tuplet>
           <durationType>16th</durationType>
+          <Beam>1</Beam>
           <Note>
             <Events>
               <Event>
@@ -189,23 +200,30 @@
           <concertClefType>F</concertClefType>
           <transposingClefType>F</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Beam id="2">
+          <l1>-7</l1>
+          <l2>-7</l2>
+          </Beam>
         <Tuplet id="2">
           <track>1</track>
           <normalNotes>4</normalNotes>
           <actualNotes>5</actualNotes>
           <baseNote>16th</baseNote>
+          <Number>
+            <track>1</track>
+            <style>Tuplet</style>
+            <text>5</text>
+            </Number>
           </Tuplet>
         <Chord>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -223,6 +241,7 @@
         <Chord>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -240,6 +259,7 @@
         <Chord>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -257,6 +277,7 @@
         <Chord>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>
@@ -274,6 +295,7 @@
         <Chord>
           <Tuplet>2</Tuplet>
           <durationType>16th</durationType>
+          <Beam>2</Beam>
           <Note>
             <Events>
               <Event>

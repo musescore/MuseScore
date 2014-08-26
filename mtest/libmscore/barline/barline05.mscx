@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -46,7 +46,9 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         </Staff>
       <trackName>Violin</trackName>
       <Instrument>
@@ -86,7 +88,9 @@
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Violin</trackName>
@@ -127,7 +131,9 @@
       </Part>
     <Part>
       <Staff id="3">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Viola</trackName>
@@ -168,7 +174,9 @@
       </Part>
     <Part>
       <Staff id="4">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Violoncello</trackName>
@@ -213,9 +221,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <subtype>1</subtype>
           <sigN>4</sigN>
@@ -312,9 +317,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <subtype>1</subtype>
           <sigN>4</sigN>
@@ -409,9 +411,6 @@
           <concertClefType>C3</concertClefType>
           <transposingClefType>C3</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <subtype>1</subtype>
           <sigN>4</sigN>
@@ -506,9 +505,6 @@
           <concertClefType>F</concertClefType>
           <transposingClefType>F</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <subtype>1</subtype>
           <sigN>4</sigN>

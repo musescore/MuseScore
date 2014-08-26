@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -94,18 +94,14 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
           <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>3</lid>
           <sigN>4</sigN>
@@ -152,20 +148,24 @@
         </Measure>
       <Measure number="2">
         <Chord>
-          <lid>14</lid>
+          <lid>13</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>wigglevibratolargeslowest</subtype>
-            <lid>13</lid>
+            <lid>12</lid>
             </Articulation>
           <Note>
-            <lid>15</lid>
+            <lid>14</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
+        <Rest>
+          <lid>15</lid>
+          <durationType>quarter</durationType>
+          </Rest>
         <Rest>
           <lid>16</lid>
           <durationType>quarter</durationType>
@@ -174,21 +174,17 @@
           <lid>17</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <Rest>
-          <lid>18</lid>
-          <durationType>quarter</durationType>
-          </Rest>
         </Measure>
       <Measure number="3">
         <Chord>
-          <lid>21</lid>
+          <lid>19</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>wigglesawtooth</subtype>
-            <lid>20</lid>
+            <lid>18</lid>
             </Articulation>
           <Note>
-            <lid>22</lid>
+            <lid>20</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -196,28 +192,28 @@
             </Note>
           </Chord>
         <Rest>
+          <lid>21</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>22</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
           <lid>23</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>24</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>25</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="4">
         <Chord>
-          <lid>28</lid>
+          <lid>25</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>wigglesawtoothwide</subtype>
-            <lid>27</lid>
+            <lid>24</lid>
             </Articulation>
           <Note>
-            <lid>29</lid>
+            <lid>26</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
@@ -225,15 +221,15 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>30</lid>
+          <lid>27</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>31</lid>
+          <lid>28</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <lid>32</lid>
+          <lid>29</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -310,7 +306,7 @@
             </StaffType>
           <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Electric Guitar</trackName>
         <Instrument>
           <longName pos="0">Electric Guitar</longName>
           <shortName pos="0">El. Guit.</shortName>
@@ -353,7 +349,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Electric Guitar</text>
@@ -363,12 +359,8 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
             <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>3</lid>
             <sigN>4</sigN>
@@ -415,20 +407,24 @@
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglevibratolargeslowest</subtype>
-              <lid>13</lid>
+              <lid>12</lid>
               </Articulation>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>15</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>16</lid>
             <durationType>quarter</durationType>
@@ -437,21 +433,17 @@
             <lid>17</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>18</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="3">
           <Chord>
-            <lid>21</lid>
+            <lid>19</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglesawtooth</subtype>
-              <lid>20</lid>
+              <lid>18</lid>
               </Articulation>
             <Note>
-              <lid>22</lid>
+              <lid>20</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -459,28 +451,28 @@
               </Note>
             </Chord>
           <Rest>
+            <lid>21</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>22</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <lid>23</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>24</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>25</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
           <Chord>
-            <lid>28</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglesawtoothwide</subtype>
-              <lid>27</lid>
+              <lid>24</lid>
               </Articulation>
             <Note>
-              <lid>29</lid>
+              <lid>26</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -488,15 +480,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>30</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>31</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>32</lid>
+            <lid>29</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -507,10 +499,6 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
             <lid>7</lid>
             <durationType>quarter</durationType>
@@ -541,20 +529,24 @@
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglevibratolargeslowest</subtype>
-              <lid>13</lid>
+              <lid>12</lid>
               </Articulation>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
+          <Rest>
+            <lid>15</lid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Rest>
             <lid>16</lid>
             <durationType>quarter</durationType>
@@ -563,21 +555,17 @@
             <lid>17</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <lid>18</lid>
-            <durationType>quarter</durationType>
-            </Rest>
           </Measure>
         <Measure number="3">
           <Chord>
-            <lid>21</lid>
+            <lid>19</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglesawtooth</subtype>
-              <lid>20</lid>
+              <lid>18</lid>
               </Articulation>
             <Note>
-              <lid>22</lid>
+              <lid>20</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -585,28 +573,28 @@
               </Note>
             </Chord>
           <Rest>
+            <lid>21</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>22</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
             <lid>23</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>24</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>25</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
           <Chord>
-            <lid>28</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>wigglesawtoothwide</subtype>
-              <lid>27</lid>
+              <lid>24</lid>
               </Articulation>
             <Note>
-              <lid>29</lid>
+              <lid>26</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
@@ -614,15 +602,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>30</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>31</lid>
+            <lid>28</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <lid>32</lid>
+            <lid>29</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>

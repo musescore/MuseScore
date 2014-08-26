@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -162,7 +162,7 @@
           <Note>
             <lid>9</lid>
             <Fingering>
-              <lid>118</lid>
+              <lid>87</lid>
               <pos x="0.6498" y="-1.6"/>
               <text>3</text>
               </Fingering>
@@ -799,7 +799,7 @@
             <Note>
               <lid>9</lid>
               <Fingering>
-                <lid>118</lid>
+                <lid>87</lid>
                 <pos x="0.6498" y="-1.6"/>
                 <text>3</text>
                 </Fingering>
@@ -832,6 +832,7 @@
           <multiMeasureRest>31</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>61440</tick>
           <BarLine>
@@ -1210,6 +1211,7 @@
           <multiMeasureRest>31</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="4" n="4"/>
             </Rest>
           <tick>61440</tick>
           <BarLine>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -76,25 +76,25 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
+          <lid>2</lid>
           </Clef>
         <TimeSig>
-          <lid>2</lid>
+          <lid>3</lid>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <lid>3</lid>
+          <lid>4</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>4</lid>
+            <lid>5</lid>
             <Accidental>
               <subtype>flat</subtype>
               </Accidental>
@@ -105,10 +105,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>5</lid>
+          <lid>6</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>6</lid>
+            <lid>7</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
             <fret>2</fret>
@@ -214,7 +214,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Track 1</text>
@@ -224,19 +224,19 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
+            <lid>2</lid>
             </Clef>
           <TimeSig>
-            <lid>2</lid>
+            <lid>3</lid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             <showCourtesySig>1</showCourtesySig>
             </TimeSig>
           <Chord>
-            <lid>3</lid>
+            <lid>4</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>4</lid>
+              <lid>5</lid>
               <Accidental>
                 <subtype>flat</subtype>
                 </Accidental>
@@ -247,10 +247,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -266,10 +266,10 @@
       <Staff id="2">
         <Measure number="1">
           <Chord>
-            <lid>3</lid>
+            <lid>4</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>4</lid>
+              <lid>5</lid>
               <pitch>58</pitch>
               <tpc>12</tpc>
               <fret>3</fret>
@@ -277,10 +277,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>5</lid>
+            <lid>6</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>6</lid>
+              <lid>7</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -92,9 +92,6 @@
           </Text>
         </VBox>
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <Harmony>
           <root>14</root>
           <extension>2</extension>

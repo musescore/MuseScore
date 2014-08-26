@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -74,18 +74,14 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>G8vb</concertClefType>
           <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
           <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>3</lid>
           <sigN>4</sigN>
@@ -166,13 +162,13 @@
         <Dynamic>
           <subtype>mf</subtype>
           <velocity>80</velocity>
-          <lid>18</lid>
+          <lid>17</lid>
           </Dynamic>
         <Chord>
-          <lid>19</lid>
+          <lid>18</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>20</lid>
+            <lid>19</lid>
             <pitch>69</pitch>
             <tpc>17</tpc>
             <fret>5</fret>
@@ -182,13 +178,13 @@
         <Dynamic>
           <subtype>f</subtype>
           <velocity>96</velocity>
-          <lid>21</lid>
+          <lid>20</lid>
           </Dynamic>
         <Chord>
-          <lid>22</lid>
+          <lid>21</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>23</lid>
+            <lid>22</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>8</fret>
@@ -198,13 +194,13 @@
         <Dynamic>
           <subtype>ff</subtype>
           <velocity>112</velocity>
-          <lid>24</lid>
+          <lid>23</lid>
           </Dynamic>
         <Chord>
-          <lid>25</lid>
+          <lid>24</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>26</lid>
+            <lid>25</lid>
             <pitch>65</pitch>
             <tpc>13</tpc>
             <fret>6</fret>
@@ -214,13 +210,13 @@
         <Dynamic>
           <subtype>fff</subtype>
           <velocity>126</velocity>
-          <lid>27</lid>
+          <lid>26</lid>
           </Dynamic>
         <Chord>
-          <lid>28</lid>
+          <lid>27</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>29</lid>
+            <lid>28</lid>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <fret>5</fret>
@@ -324,7 +320,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Track 1</text>
@@ -334,12 +330,8 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
             <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>3</lid>
             <sigN>4</sigN>
@@ -420,13 +412,13 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <lid>18</lid>
+            <lid>17</lid>
             </Dynamic>
           <Chord>
-            <lid>19</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>20</lid>
+              <lid>19</lid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -436,13 +428,13 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <lid>21</lid>
+            <lid>20</lid>
             </Dynamic>
           <Chord>
-            <lid>22</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>23</lid>
+              <lid>22</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -452,13 +444,13 @@
           <Dynamic>
             <subtype>ff</subtype>
             <velocity>112</velocity>
-            <lid>24</lid>
+            <lid>23</lid>
             </Dynamic>
           <Chord>
-            <lid>25</lid>
+            <lid>24</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>25</lid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>6</fret>
@@ -468,13 +460,13 @@
           <Dynamic>
             <subtype>fff</subtype>
             <velocity>126</velocity>
-            <lid>27</lid>
+            <lid>26</lid>
             </Dynamic>
           <Chord>
-            <lid>28</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>29</lid>
+              <lid>28</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
@@ -489,10 +481,6 @@
         </Staff>
       <Staff id="2">
         <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
@@ -540,10 +528,10 @@
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>19</lid>
+            <lid>18</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>20</lid>
+              <lid>19</lid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -551,10 +539,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>22</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>23</lid>
+              <lid>22</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>8</fret>
@@ -562,10 +550,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>25</lid>
+            <lid>24</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>25</lid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>6</fret>
@@ -573,10 +561,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>28</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>29</lid>
+              <lid>28</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>5</fret>

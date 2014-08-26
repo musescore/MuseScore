@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -61,7 +61,7 @@
       <Instrument>
         <longName pos="0">Percussions</longName>
         <trackName></trackName>
-        <useDrumset>2</useDrumset>
+        <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>0</head>
           <line>3</line>
@@ -509,18 +509,14 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <lid>1</lid>
         </VBox>
       <Measure number="1">
         <Clef>
           <concertClefType>PERC</concertClefType>
           <transposingClefType>PERC</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
           <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
+          </Clef>
         <TimeSig>
           <lid>3</lid>
           <sigN>4</sigN>
@@ -589,10 +585,10 @@
         </Measure>
       <Measure number="2">
         <Chord>
-          <lid>15</lid>
+          <lid>14</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>16</lid>
+            <lid>15</lid>
             <pitch>31</pitch>
             <tpc>15</tpc>
             <head>1</head>
@@ -601,10 +597,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>17</lid>
+          <lid>16</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>18</lid>
+            <lid>17</lid>
             <pitch>32</pitch>
             <tpc>22</tpc>
             <fret>32</fret>
@@ -614,10 +610,10 @@
         </Measure>
       <Measure number="3">
         <Chord>
-          <lid>20</lid>
+          <lid>18</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>21</lid>
+            <lid>19</lid>
             <pitch>33</pitch>
             <tpc>17</tpc>
             <head>1</head>
@@ -626,10 +622,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>22</lid>
+          <lid>20</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>23</lid>
+            <lid>21</lid>
             <pitch>34</pitch>
             <tpc>12</tpc>
             <fret>34</fret>
@@ -639,10 +635,10 @@
         </Measure>
       <Measure number="4">
         <Chord>
-          <lid>25</lid>
+          <lid>22</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>26</lid>
+            <lid>23</lid>
             <pitch>35</pitch>
             <tpc>19</tpc>
             <fret>35</fret>
@@ -650,10 +646,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>27</lid>
+          <lid>24</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>28</lid>
+            <lid>25</lid>
             <pitch>36</pitch>
             <tpc>14</tpc>
             <fret>36</fret>
@@ -663,10 +659,10 @@
         </Measure>
       <Measure number="5">
         <Chord>
-          <lid>30</lid>
+          <lid>26</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>31</lid>
+            <lid>27</lid>
             <pitch>37</pitch>
             <tpc>21</tpc>
             <head>1</head>
@@ -675,10 +671,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>32</lid>
+          <lid>28</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>33</lid>
+            <lid>29</lid>
             <pitch>38</pitch>
             <tpc>16</tpc>
             <fret>38</fret>
@@ -688,10 +684,10 @@
         </Measure>
       <Measure number="6">
         <Chord>
-          <lid>35</lid>
+          <lid>30</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>36</lid>
+            <lid>31</lid>
             <pitch>39</pitch>
             <tpc>11</tpc>
             <fret>39</fret>
@@ -699,10 +695,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>37</lid>
+          <lid>32</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>38</lid>
+            <lid>33</lid>
             <pitch>40</pitch>
             <tpc>18</tpc>
             <fret>40</fret>
@@ -712,10 +708,10 @@
         </Measure>
       <Measure number="7">
         <Chord>
-          <lid>40</lid>
+          <lid>34</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>41</lid>
+            <lid>35</lid>
             <pitch>41</pitch>
             <tpc>13</tpc>
             <fret>41</fret>
@@ -723,10 +719,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>42</lid>
+          <lid>36</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>43</lid>
+            <lid>37</lid>
             <pitch>42</pitch>
             <tpc>20</tpc>
             <head>1</head>
@@ -737,10 +733,10 @@
         </Measure>
       <Measure number="8">
         <Chord>
-          <lid>45</lid>
+          <lid>38</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>46</lid>
+            <lid>39</lid>
             <pitch>43</pitch>
             <tpc>15</tpc>
             <fret>43</fret>
@@ -748,10 +744,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>47</lid>
+          <lid>40</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>48</lid>
+            <lid>41</lid>
             <pitch>44</pitch>
             <tpc>22</tpc>
             <head>1</head>
@@ -762,10 +758,10 @@
         </Measure>
       <Measure number="9">
         <Chord>
-          <lid>50</lid>
+          <lid>42</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>51</lid>
+            <lid>43</lid>
             <pitch>45</pitch>
             <tpc>17</tpc>
             <fret>45</fret>
@@ -773,10 +769,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>52</lid>
+          <lid>44</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>53</lid>
+            <lid>45</lid>
             <pitch>46</pitch>
             <tpc>12</tpc>
             <head>1</head>
@@ -787,10 +783,10 @@
         </Measure>
       <Measure number="10">
         <Chord>
-          <lid>55</lid>
+          <lid>46</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>56</lid>
+            <lid>47</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
             <fret>47</fret>
@@ -798,10 +794,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>57</lid>
+          <lid>48</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>58</lid>
+            <lid>49</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>48</fret>
@@ -811,10 +807,10 @@
         </Measure>
       <Measure number="11">
         <Chord>
-          <lid>60</lid>
+          <lid>50</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>61</lid>
+            <lid>51</lid>
             <pitch>49</pitch>
             <tpc>21</tpc>
             <head>2</head>
@@ -823,10 +819,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>62</lid>
+          <lid>52</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>63</lid>
+            <lid>53</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>50</fret>
@@ -836,10 +832,10 @@
         </Measure>
       <Measure number="12">
         <Chord>
-          <lid>65</lid>
+          <lid>54</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>66</lid>
+            <lid>55</lid>
             <pitch>51</pitch>
             <tpc>11</tpc>
             <head>2</head>
@@ -848,10 +844,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>67</lid>
+          <lid>56</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>68</lid>
+            <lid>57</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <head>1</head>
@@ -862,10 +858,10 @@
         </Measure>
       <Measure number="13">
         <Chord>
-          <lid>70</lid>
+          <lid>58</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>71</lid>
+            <lid>59</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <head>2</head>
@@ -874,10 +870,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>72</lid>
+          <lid>60</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>73</lid>
+            <lid>61</lid>
             <pitch>54</pitch>
             <tpc>20</tpc>
             <head>1</head>
@@ -888,10 +884,10 @@
         </Measure>
       <Measure number="14">
         <Chord>
-          <lid>75</lid>
+          <lid>62</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>76</lid>
+            <lid>63</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>55</fret>
@@ -899,10 +895,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>77</lid>
+          <lid>64</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>78</lid>
+            <lid>65</lid>
             <pitch>56</pitch>
             <tpc>22</tpc>
             <fret>56</fret>
@@ -912,10 +908,10 @@
         </Measure>
       <Measure number="15">
         <Chord>
-          <lid>80</lid>
+          <lid>66</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>81</lid>
+            <lid>67</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <head>2</head>
@@ -924,10 +920,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>82</lid>
+          <lid>68</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>83</lid>
+            <lid>69</lid>
             <pitch>58</pitch>
             <tpc>12</tpc>
             <fret>58</fret>
@@ -937,10 +933,10 @@
         </Measure>
       <Measure number="16">
         <Chord>
-          <lid>85</lid>
+          <lid>70</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>86</lid>
+            <lid>71</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <head>2</head>
@@ -949,10 +945,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>87</lid>
+          <lid>72</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>88</lid>
+            <lid>73</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>60</fret>
@@ -962,10 +958,10 @@
         </Measure>
       <Measure number="17">
         <Chord>
-          <lid>90</lid>
+          <lid>74</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>91</lid>
+            <lid>75</lid>
             <pitch>61</pitch>
             <tpc>21</tpc>
             <fret>61</fret>
@@ -973,10 +969,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>92</lid>
+          <lid>76</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>93</lid>
+            <lid>77</lid>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <head>1</head>
@@ -987,10 +983,10 @@
         </Measure>
       <Measure number="18">
         <Chord>
-          <lid>95</lid>
+          <lid>78</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>96</lid>
+            <lid>79</lid>
             <pitch>63</pitch>
             <tpc>11</tpc>
             <head>1</head>
@@ -999,10 +995,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>97</lid>
+          <lid>80</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>98</lid>
+            <lid>81</lid>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <head>1</head>
@@ -1013,10 +1009,10 @@
         </Measure>
       <Measure number="19">
         <Chord>
-          <lid>100</lid>
+          <lid>82</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>101</lid>
+            <lid>83</lid>
             <pitch>65</pitch>
             <tpc>13</tpc>
             <head>1</head>
@@ -1025,10 +1021,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>102</lid>
+          <lid>84</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>103</lid>
+            <lid>85</lid>
             <pitch>66</pitch>
             <tpc>20</tpc>
             <head>1</head>
@@ -1039,10 +1035,10 @@
         </Measure>
       <Measure number="20">
         <Chord>
-          <lid>105</lid>
+          <lid>86</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>106</lid>
+            <lid>87</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <fret>67</fret>
@@ -1050,10 +1046,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>107</lid>
+          <lid>88</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>108</lid>
+            <lid>89</lid>
             <pitch>68</pitch>
             <tpc>22</tpc>
             <fret>68</fret>
@@ -1063,10 +1059,10 @@
         </Measure>
       <Measure number="21">
         <Chord>
-          <lid>110</lid>
+          <lid>90</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>111</lid>
+            <lid>91</lid>
             <pitch>69</pitch>
             <tpc>17</tpc>
             <fret>69</fret>
@@ -1074,10 +1070,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>112</lid>
+          <lid>92</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>113</lid>
+            <lid>93</lid>
             <pitch>70</pitch>
             <tpc>12</tpc>
             <fret>70</fret>
@@ -1087,10 +1083,10 @@
         </Measure>
       <Measure number="22">
         <Chord>
-          <lid>115</lid>
+          <lid>94</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>116</lid>
+            <lid>95</lid>
             <pitch>71</pitch>
             <tpc>19</tpc>
             <fret>71</fret>
@@ -1098,10 +1094,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>117</lid>
+          <lid>96</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>118</lid>
+            <lid>97</lid>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <fret>72</fret>
@@ -1111,10 +1107,10 @@
         </Measure>
       <Measure number="23">
         <Chord>
-          <lid>120</lid>
+          <lid>98</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>121</lid>
+            <lid>99</lid>
             <pitch>73</pitch>
             <tpc>21</tpc>
             <fret>73</fret>
@@ -1122,10 +1118,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>122</lid>
+          <lid>100</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>123</lid>
+            <lid>101</lid>
             <pitch>74</pitch>
             <tpc>16</tpc>
             <fret>74</fret>
@@ -1135,10 +1131,10 @@
         </Measure>
       <Measure number="24">
         <Chord>
-          <lid>125</lid>
+          <lid>102</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>126</lid>
+            <lid>103</lid>
             <pitch>75</pitch>
             <tpc>11</tpc>
             <fret>75</fret>
@@ -1146,10 +1142,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>127</lid>
+          <lid>104</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>128</lid>
+            <lid>105</lid>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <fret>76</fret>
@@ -1159,10 +1155,10 @@
         </Measure>
       <Measure number="25">
         <Chord>
-          <lid>130</lid>
+          <lid>106</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>131</lid>
+            <lid>107</lid>
             <pitch>77</pitch>
             <tpc>13</tpc>
             <fret>77</fret>
@@ -1170,10 +1166,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>132</lid>
+          <lid>108</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>133</lid>
+            <lid>109</lid>
             <pitch>78</pitch>
             <tpc>20</tpc>
             <fret>78</fret>
@@ -1183,10 +1179,10 @@
         </Measure>
       <Measure number="26">
         <Chord>
-          <lid>135</lid>
+          <lid>110</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>136</lid>
+            <lid>111</lid>
             <pitch>79</pitch>
             <tpc>15</tpc>
             <fret>79</fret>
@@ -1194,10 +1190,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>137</lid>
+          <lid>112</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>138</lid>
+            <lid>113</lid>
             <pitch>80</pitch>
             <tpc>22</tpc>
             <fret>80</fret>
@@ -1207,10 +1203,10 @@
         </Measure>
       <Measure number="27">
         <Chord>
-          <lid>140</lid>
+          <lid>114</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>141</lid>
+            <lid>115</lid>
             <pitch>81</pitch>
             <tpc>17</tpc>
             <fret>81</fret>
@@ -1218,10 +1214,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>142</lid>
+          <lid>116</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>143</lid>
+            <lid>117</lid>
             <pitch>82</pitch>
             <tpc>12</tpc>
             <fret>82</fret>
@@ -1231,10 +1227,10 @@
         </Measure>
       <Measure number="28">
         <Chord>
-          <lid>145</lid>
+          <lid>118</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>146</lid>
+            <lid>119</lid>
             <pitch>83</pitch>
             <tpc>19</tpc>
             <fret>83</fret>
@@ -1242,10 +1238,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>147</lid>
+          <lid>120</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>148</lid>
+            <lid>121</lid>
             <pitch>84</pitch>
             <tpc>14</tpc>
             <fret>84</fret>
@@ -1255,10 +1251,10 @@
         </Measure>
       <Measure number="29">
         <Chord>
-          <lid>150</lid>
+          <lid>122</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>151</lid>
+            <lid>123</lid>
             <pitch>85</pitch>
             <tpc>21</tpc>
             <fret>85</fret>
@@ -1266,10 +1262,10 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>152</lid>
+          <lid>124</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>153</lid>
+            <lid>125</lid>
             <pitch>86</pitch>
             <tpc>16</tpc>
             <fret>86</fret>
@@ -1279,10 +1275,10 @@
         </Measure>
       <Measure number="30">
         <Chord>
-          <lid>155</lid>
+          <lid>126</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>156</lid>
+            <lid>127</lid>
             <pitch>87</pitch>
             <tpc>11</tpc>
             <fret>87</fret>
@@ -1348,7 +1344,7 @@
         <Instrument>
           <longName pos="0">Percussions</longName>
           <trackName></trackName>
-          <useDrumset>2</useDrumset>
+          <useDrumset>1</useDrumset>
           <Drum pitch="27">
             <head>0</head>
             <line>3</line>
@@ -1796,7 +1792,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <lid>1</lid>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Percussions</text>
@@ -1806,12 +1802,8 @@
           <Clef>
             <concertClefType>PERC</concertClefType>
             <transposingClefType>PERC</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
             <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
+            </Clef>
           <TimeSig>
             <lid>3</lid>
             <sigN>4</sigN>
@@ -1880,10 +1872,10 @@
           </Measure>
         <Measure number="2">
           <Chord>
-            <lid>15</lid>
+            <lid>14</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>16</lid>
+              <lid>15</lid>
               <pitch>31</pitch>
               <tpc>15</tpc>
               <head>1</head>
@@ -1892,10 +1884,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>17</lid>
+            <lid>16</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>18</lid>
+              <lid>17</lid>
               <pitch>32</pitch>
               <tpc>22</tpc>
               <fret>32</fret>
@@ -1905,10 +1897,10 @@
           </Measure>
         <Measure number="3">
           <Chord>
-            <lid>20</lid>
+            <lid>18</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>21</lid>
+              <lid>19</lid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>1</head>
@@ -1917,10 +1909,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>22</lid>
+            <lid>20</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>23</lid>
+              <lid>21</lid>
               <pitch>34</pitch>
               <tpc>12</tpc>
               <fret>34</fret>
@@ -1930,10 +1922,10 @@
           </Measure>
         <Measure number="4">
           <Chord>
-            <lid>25</lid>
+            <lid>22</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>26</lid>
+              <lid>23</lid>
               <pitch>35</pitch>
               <tpc>19</tpc>
               <fret>35</fret>
@@ -1941,10 +1933,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>27</lid>
+            <lid>24</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>28</lid>
+              <lid>25</lid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               <fret>36</fret>
@@ -1954,10 +1946,10 @@
           </Measure>
         <Measure number="5">
           <Chord>
-            <lid>30</lid>
+            <lid>26</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>31</lid>
+              <lid>27</lid>
               <pitch>37</pitch>
               <tpc>21</tpc>
               <head>1</head>
@@ -1966,10 +1958,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>32</lid>
+            <lid>28</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>33</lid>
+              <lid>29</lid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>38</fret>
@@ -1979,10 +1971,10 @@
           </Measure>
         <Measure number="6">
           <Chord>
-            <lid>35</lid>
+            <lid>30</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>36</lid>
+              <lid>31</lid>
               <pitch>39</pitch>
               <tpc>11</tpc>
               <fret>39</fret>
@@ -1990,10 +1982,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>37</lid>
+            <lid>32</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>38</lid>
+              <lid>33</lid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>40</fret>
@@ -2003,10 +1995,10 @@
           </Measure>
         <Measure number="7">
           <Chord>
-            <lid>40</lid>
+            <lid>34</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>41</lid>
+              <lid>35</lid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               <fret>41</fret>
@@ -2014,10 +2006,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>42</lid>
+            <lid>36</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>43</lid>
+              <lid>37</lid>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <head>1</head>
@@ -2028,10 +2020,10 @@
           </Measure>
         <Measure number="8">
           <Chord>
-            <lid>45</lid>
+            <lid>38</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>46</lid>
+              <lid>39</lid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <fret>43</fret>
@@ -2039,10 +2031,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>47</lid>
+            <lid>40</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>48</lid>
+              <lid>41</lid>
               <pitch>44</pitch>
               <tpc>22</tpc>
               <head>1</head>
@@ -2053,10 +2045,10 @@
           </Measure>
         <Measure number="9">
           <Chord>
-            <lid>50</lid>
+            <lid>42</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>51</lid>
+              <lid>43</lid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>45</fret>
@@ -2064,10 +2056,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>52</lid>
+            <lid>44</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>53</lid>
+              <lid>45</lid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>1</head>
@@ -2078,10 +2070,10 @@
           </Measure>
         <Measure number="10">
           <Chord>
-            <lid>55</lid>
+            <lid>46</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>56</lid>
+              <lid>47</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>47</fret>
@@ -2089,10 +2081,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>57</lid>
+            <lid>48</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>58</lid>
+              <lid>49</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>48</fret>
@@ -2102,10 +2094,10 @@
           </Measure>
         <Measure number="11">
           <Chord>
-            <lid>60</lid>
+            <lid>50</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>61</lid>
+              <lid>51</lid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               <head>2</head>
@@ -2114,10 +2106,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>62</lid>
+            <lid>52</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>63</lid>
+              <lid>53</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>50</fret>
@@ -2127,10 +2119,10 @@
           </Measure>
         <Measure number="12">
           <Chord>
-            <lid>65</lid>
+            <lid>54</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>66</lid>
+              <lid>55</lid>
               <pitch>51</pitch>
               <tpc>11</tpc>
               <head>2</head>
@@ -2139,10 +2131,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>67</lid>
+            <lid>56</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>68</lid>
+              <lid>57</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <head>1</head>
@@ -2153,10 +2145,10 @@
           </Measure>
         <Measure number="13">
           <Chord>
-            <lid>70</lid>
+            <lid>58</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>71</lid>
+              <lid>59</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <head>2</head>
@@ -2165,10 +2157,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>72</lid>
+            <lid>60</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>73</lid>
+              <lid>61</lid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <head>1</head>
@@ -2179,10 +2171,10 @@
           </Measure>
         <Measure number="14">
           <Chord>
-            <lid>75</lid>
+            <lid>62</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>76</lid>
+              <lid>63</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>55</fret>
@@ -2190,10 +2182,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>77</lid>
+            <lid>64</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>78</lid>
+              <lid>65</lid>
               <pitch>56</pitch>
               <tpc>22</tpc>
               <fret>56</fret>
@@ -2203,10 +2195,10 @@
           </Measure>
         <Measure number="15">
           <Chord>
-            <lid>80</lid>
+            <lid>66</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>81</lid>
+              <lid>67</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <head>2</head>
@@ -2215,10 +2207,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>82</lid>
+            <lid>68</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>83</lid>
+              <lid>69</lid>
               <pitch>58</pitch>
               <tpc>12</tpc>
               <fret>58</fret>
@@ -2228,10 +2220,10 @@
           </Measure>
         <Measure number="16">
           <Chord>
-            <lid>85</lid>
+            <lid>70</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>86</lid>
+              <lid>71</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <head>2</head>
@@ -2240,10 +2232,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>87</lid>
+            <lid>72</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>88</lid>
+              <lid>73</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>60</fret>
@@ -2253,10 +2245,10 @@
           </Measure>
         <Measure number="17">
           <Chord>
-            <lid>90</lid>
+            <lid>74</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>91</lid>
+              <lid>75</lid>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <fret>61</fret>
@@ -2264,10 +2256,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>92</lid>
+            <lid>76</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>93</lid>
+              <lid>77</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <head>1</head>
@@ -2278,10 +2270,10 @@
           </Measure>
         <Measure number="18">
           <Chord>
-            <lid>95</lid>
+            <lid>78</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>96</lid>
+              <lid>79</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <head>1</head>
@@ -2290,10 +2282,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>97</lid>
+            <lid>80</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>98</lid>
+              <lid>81</lid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <head>1</head>
@@ -2304,10 +2296,10 @@
           </Measure>
         <Measure number="19">
           <Chord>
-            <lid>100</lid>
+            <lid>82</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>101</lid>
+              <lid>83</lid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <head>1</head>
@@ -2316,10 +2308,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>102</lid>
+            <lid>84</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>103</lid>
+              <lid>85</lid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <head>1</head>
@@ -2330,10 +2322,10 @@
           </Measure>
         <Measure number="20">
           <Chord>
-            <lid>105</lid>
+            <lid>86</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>106</lid>
+              <lid>87</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>67</fret>
@@ -2341,10 +2333,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>107</lid>
+            <lid>88</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>108</lid>
+              <lid>89</lid>
               <pitch>68</pitch>
               <tpc>22</tpc>
               <fret>68</fret>
@@ -2354,10 +2346,10 @@
           </Measure>
         <Measure number="21">
           <Chord>
-            <lid>110</lid>
+            <lid>90</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>111</lid>
+              <lid>91</lid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>69</fret>
@@ -2365,10 +2357,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>112</lid>
+            <lid>92</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>113</lid>
+              <lid>93</lid>
               <pitch>70</pitch>
               <tpc>12</tpc>
               <fret>70</fret>
@@ -2378,10 +2370,10 @@
           </Measure>
         <Measure number="22">
           <Chord>
-            <lid>115</lid>
+            <lid>94</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>116</lid>
+              <lid>95</lid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>71</fret>
@@ -2389,10 +2381,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>117</lid>
+            <lid>96</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>118</lid>
+              <lid>97</lid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>72</fret>
@@ -2402,10 +2394,10 @@
           </Measure>
         <Measure number="23">
           <Chord>
-            <lid>120</lid>
+            <lid>98</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>121</lid>
+              <lid>99</lid>
               <pitch>73</pitch>
               <tpc>21</tpc>
               <fret>73</fret>
@@ -2413,10 +2405,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>122</lid>
+            <lid>100</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>123</lid>
+              <lid>101</lid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>74</fret>
@@ -2426,10 +2418,10 @@
           </Measure>
         <Measure number="24">
           <Chord>
-            <lid>125</lid>
+            <lid>102</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>126</lid>
+              <lid>103</lid>
               <pitch>75</pitch>
               <tpc>11</tpc>
               <fret>75</fret>
@@ -2437,10 +2429,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>127</lid>
+            <lid>104</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>128</lid>
+              <lid>105</lid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <fret>76</fret>
@@ -2450,10 +2442,10 @@
           </Measure>
         <Measure number="25">
           <Chord>
-            <lid>130</lid>
+            <lid>106</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>131</lid>
+              <lid>107</lid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <fret>77</fret>
@@ -2461,10 +2453,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>132</lid>
+            <lid>108</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>133</lid>
+              <lid>109</lid>
               <pitch>78</pitch>
               <tpc>20</tpc>
               <fret>78</fret>
@@ -2474,10 +2466,10 @@
           </Measure>
         <Measure number="26">
           <Chord>
-            <lid>135</lid>
+            <lid>110</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>136</lid>
+              <lid>111</lid>
               <pitch>79</pitch>
               <tpc>15</tpc>
               <fret>79</fret>
@@ -2485,10 +2477,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>137</lid>
+            <lid>112</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>138</lid>
+              <lid>113</lid>
               <pitch>80</pitch>
               <tpc>22</tpc>
               <fret>80</fret>
@@ -2498,10 +2490,10 @@
           </Measure>
         <Measure number="27">
           <Chord>
-            <lid>140</lid>
+            <lid>114</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>141</lid>
+              <lid>115</lid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               <fret>81</fret>
@@ -2509,10 +2501,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>142</lid>
+            <lid>116</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>143</lid>
+              <lid>117</lid>
               <pitch>82</pitch>
               <tpc>12</tpc>
               <fret>82</fret>
@@ -2522,10 +2514,10 @@
           </Measure>
         <Measure number="28">
           <Chord>
-            <lid>145</lid>
+            <lid>118</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>146</lid>
+              <lid>119</lid>
               <pitch>83</pitch>
               <tpc>19</tpc>
               <fret>83</fret>
@@ -2533,10 +2525,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>147</lid>
+            <lid>120</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>148</lid>
+              <lid>121</lid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               <fret>84</fret>
@@ -2546,10 +2538,10 @@
           </Measure>
         <Measure number="29">
           <Chord>
-            <lid>150</lid>
+            <lid>122</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>151</lid>
+              <lid>123</lid>
               <pitch>85</pitch>
               <tpc>21</tpc>
               <fret>85</fret>
@@ -2557,10 +2549,10 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>152</lid>
+            <lid>124</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>153</lid>
+              <lid>125</lid>
               <pitch>86</pitch>
               <tpc>16</tpc>
               <fret>86</fret>
@@ -2570,10 +2562,10 @@
           </Measure>
         <Measure number="30">
           <Chord>
-            <lid>155</lid>
+            <lid>126</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>156</lid>
+              <lid>127</lid>
               <pitch>87</pitch>
               <tpc>11</tpc>
               <fret>87</fret>
