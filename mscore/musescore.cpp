@@ -3286,13 +3286,13 @@ void MuseScore::removeSessionFile()
 void MuseScore::autoSaveTimerTimeout()
       {
       bool sessionChanged = false;
-      foreach(Score* s, scoreList) {
+      foreach (Score* s, scoreList) {
             if (s->autosaveDirty()) {
                   QString tmp = s->tmpName();
                   if (!tmp.isEmpty()) {
                         QFileInfo fi(tmp);
                         // TODO: cannot catch exeption here:
-                        cs->saveCompressedFile(fi, false);
+                        s->saveCompressedFile(fi, false);
                         }
                   else {
                         QDir dir;
