@@ -6,6 +6,15 @@
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0.1</lastSystemFillLimit>
+      <TextStyle>
+        <halign>center</halign>
+        <valign>center</valign>
+        <offsetType>absolute</offsetType>
+        <name>Instrument Name (Long)</name>
+        <family>FreeSerif</family>
+        <size>12</size>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        </TextStyle>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -44,11 +53,11 @@
           </StaffType>
         <bracket type="0" span="2"/>
         </Staff>
-      <trackName>Soprano</trackName>
+      <trackName>Soprano/Alto</trackName>
       <Instrument>
         <longName pos="0">S
 A</longName>
-        <trackName>Soprano</trackName>
+        <trackName>Soprano/Alto</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>84</maxPitchP>
         <minPitchA>55</minPitchA>
@@ -82,11 +91,11 @@ A</longName>
         <defaultClef>F</defaultClef>
         <bracket type="-1" span="0"/>
         </Staff>
-      <trackName>Baritone</trackName>
+      <trackName>Tenor/Bass</trackName>
       <Instrument>
         <longName pos="0">T
 B</longName>
-        <trackName>Baritone</trackName>
+        <trackName>Tenor/Bass</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>69</maxPitchP>
         <minPitchA>41</minPitchA>
