@@ -2141,6 +2141,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "Harmony"
                || tag == "FretDiagram"
+               || tag == "TremoloBar"
                || tag == "Symbol"
                || tag == "Tempo"
                || tag == "StaffText"
