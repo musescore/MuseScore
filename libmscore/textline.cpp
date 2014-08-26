@@ -629,17 +629,12 @@ QString TextLine::endText() const
 
 void TextLine::writeProperties(Xml& xml) const
       {
-      if (_beginHook) {
-            writeProperty(xml, P_ID::BEGIN_HOOK);
-            writeProperty(xml, P_ID::BEGIN_HOOK_HEIGHT);
-            writeProperty(xml, P_ID::BEGIN_HOOK_TYPE);
-            }
-      if (_endHook) {
-            writeProperty(xml, P_ID::END_HOOK);
-            writeProperty(xml, P_ID::END_HOOK_HEIGHT);
-            writeProperty(xml, P_ID::END_HOOK_TYPE);
-            }
-
+      writeProperty(xml, P_ID::BEGIN_HOOK);
+      writeProperty(xml, P_ID::BEGIN_HOOK_HEIGHT);
+      writeProperty(xml, P_ID::BEGIN_HOOK_TYPE);
+      writeProperty(xml, P_ID::END_HOOK);
+      writeProperty(xml, P_ID::END_HOOK_HEIGHT);
+      writeProperty(xml, P_ID::END_HOOK_TYPE);
       writeProperty(xml, P_ID::BEGIN_TEXT_PLACE);
       writeProperty(xml, P_ID::CONTINUE_TEXT_PLACE);
       writeProperty(xml, P_ID::END_TEXT_PLACE);
