@@ -106,6 +106,7 @@ void PageSettings::setScore(Score* s)
 
       pageGroup->setCurrentIndex(index);
       buttonApplyToAllParts->setEnabled(s->parentScore() != nullptr);
+      updateValues();
       updatePreview(0);
       }
 
@@ -596,7 +597,7 @@ void PageSettings::pageWidthChanged(double val)
 
 void PageSettings::updatePreview(int val)
       {
-      updateValues();
+//      updateValues();
       switch(val) {
             case 0:
                   preview->score()->doLayout();
