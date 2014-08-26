@@ -1,6 +1,6 @@
 VERSION=2.0
 APPNAME=mscore
-LONG_NAME=MuseScore
+LONG_NAME="MuseScore"
 
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.png
@@ -100,7 +100,7 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtBluetooth.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebSockets.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtNfc.*
 
-mv ${VOLUME}/${APPNAME}.app  ${VOLUME}/${LONG_NAME}.app 
+mv ${VOLUME}/${APPNAME}.app  ${VOLUME}/${LONG_NAME}\ 2.app
 
 # copy in background image
 mkdir -p ${VOLUME}/Pictures
