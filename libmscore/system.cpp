@@ -447,42 +447,58 @@ void System::layout2()
 
       int staffIdx = 0;
       n = score()->parts().size();
+
       for (Part* p : score()->parts()) {
             SysStaff* s = staff(staffIdx);
+            SysStaff* s2;
             int nstaves = p->nstaves();
-            for (InstrumentName* t : s->instrumentNames) {
-                  //
-                  // override Text->layout()
-                  //
-                  qreal y1, y2;
-                  switch (t->layoutPos()) {
-                        default:
-                        case 0:           // center at part
-                              y1 = s->bbox().top();
-                              y2 = staff(staffIdx + nstaves - 1)->bbox().bottom();
-                              break;
-                        case 1:           // center at first staff
-                              y1 = s->bbox().top();
-                              y2 = s->bbox().bottom();
-                              break;
-                        case 2:           // center between first and second staff
-                              y1 = s->bbox().top();
-                              y2 = staff(staffIdx + 1)->bbox().bottom();
-                              break;
-                        case 3:           // center at second staff
-                              y1 = staff(staffIdx + 1)->bbox().top();
-                              y2 = staff(staffIdx + 1)->bbox().bottom();
-                              break;
-                        case 4:           // center between first and second staff
-                              y1 = staff(staffIdx + 1)->bbox().top();
-                              y2 = staff(staffIdx + 2)->bbox().bottom();
-                              break;
-                        case 5:           // center at third staff
-                              y1 = staff(staffIdx + 2)->bbox().top();
-                              y2 = staff(staffIdx + 2)->bbox().bottom();
-                              break;
+            if (s->show()) {
+                  for (InstrumentName* t : s->instrumentNames) {
+                        //
+                        // override Text->layout()
+                        //
+                        qreal y1, y2;
+                        switch (t->layoutPos()) {
+                              default:
+                              case 0:           // center at part
+                                    y1 = s->bbox().top();
+                                    s2 = staff(staffIdx);
+                                    for (int i = staffIdx + nstaves - 1; i > 0; --i) {
+                                          SysStaff* s = staff(i);
+                                          if (s->show()) {
+                                                s2 = s;
+                                                break;
+                                                }
+                                          }
+                                    y2 = s2->bbox().bottom();
+                                    break;
+                              case 1:           // center at first staff
+                                    y1 = s->bbox().top();
+                                    y2 = s->bbox().bottom();
+                                    break;
+
+                              // TODO:
+                              // sort out invisible staves
+
+                              case 2:           // center between first and second staff
+                                    y1 = s->bbox().top();
+                                    y2 = staff(staffIdx + 1)->bbox().bottom();
+                                    break;
+                              case 3:           // center at second staff
+                                    y1 = staff(staffIdx + 1)->bbox().top();
+                                    y2 = staff(staffIdx + 1)->bbox().bottom();
+                                    break;
+                              case 4:           // center between first and second staff
+                                    y1 = staff(staffIdx + 1)->bbox().top();
+                                    y2 = staff(staffIdx + 2)->bbox().bottom();
+                                    break;
+                              case 5:           // center at third staff
+                                    y1 = staff(staffIdx + 2)->bbox().top();
+                                    y2 = staff(staffIdx + 2)->bbox().bottom();
+                                    break;
+                              }
+                        t->rypos() = y1 + (y2 - y1) * .5 + t->textStyle().offset(t->spatium()).y();
                         }
-                  t->rypos() = y1 + (y2 - y1) * .5 + t->textStyle().offset(t->spatium()).y();
                   }
             staffIdx += nstaves;
             }
@@ -545,7 +561,6 @@ void System::setInstrumentNames(bool longName)
             int idx = 0;
             foreach(const StaffName& sn, names) {
                   InstrumentName* iname = staff->instrumentNames.value(idx);
-
                   if (iname == 0) {
                         iname = new InstrumentName(score());
                         iname->setGenerated(true);
@@ -670,7 +685,6 @@ void System::add(Element* el)
 
 void System::remove(Element* el)
       {
-//no!      el->setParent(0);
       switch (el->type()) {
             case Element::Type::INSTRUMENT_NAME:
                   _staves[el->staffIdx()]->instrumentNames.removeOne(static_cast<InstrumentName*>(el));
@@ -994,12 +1008,10 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
       int idx = 0;
       for (const SysStaff* st : _staves) {
-            if (!all && !(st->show() && score()->staff(idx)->show())) {
-                  ++idx;
-                  continue;
+            if (all || st->show()) {
+                  for (InstrumentName* t : st->instrumentNames)
+                        func(data, t);
                   }
-            for (InstrumentName* t : st->instrumentNames)
-                  func(data, t);
             ++idx;
             }
       for (SpannerSegment* ss : _spannerSegments) {
