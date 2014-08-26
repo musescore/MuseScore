@@ -190,6 +190,10 @@ void Tie::slurPos(SlurPos* sp)
             }
       Chord* ec   = endNote()->chord();
       sp->system2 = ec->measure()->system();
+      if (!sp->system2) {
+            qDebug("Tie::slurPos no system2");
+            sp->system2 = sp->system1;
+            }
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
             xo = endNote()->x() - hw * 0.12;
       else if (shortStart)
