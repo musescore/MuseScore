@@ -61,7 +61,7 @@ A</longName>
         <minPitchP>55</minPitchP>
         <maxPitchP>84</maxPitchP>
         <minPitchA>55</minPitchA>
-        <maxPitchA>81</maxPitchA>
+        <maxPitchA>79</maxPitchA>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -96,10 +96,10 @@ A</longName>
         <longName pos="0">T
 B</longName>
         <trackName>Tenor/Bass</trackName>
-        <minPitchP>38</minPitchP>
-        <maxPitchP>69</maxPitchP>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>72</maxPitchP>
         <minPitchA>41</minPitchA>
-        <maxPitchA>67</maxPitchA>
+        <maxPitchA>69</maxPitchA>
         <clef>F</clef>
         <Articulation>
           <velocity>100</velocity>
