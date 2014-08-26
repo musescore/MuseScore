@@ -132,7 +132,7 @@ void DrumTools::updateDrumset()
             QString shortcut;
             if (sc)
                   shortcut = QChar(sc);
-            drumPalette->append(chord, qApp->translate("drumset", qPrintable(drumset->name(pitch))), shortcut);
+            drumPalette->append(chord, qApp->translate("drumset", drumset->name(pitch).toUtf8().constData()), shortcut);
             ++i;
             }
       }

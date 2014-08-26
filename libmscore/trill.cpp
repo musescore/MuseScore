@@ -440,7 +440,7 @@ QString Trill::trillTypeName() const
 
 QString Trill::trillTypeUserName()
       {
-      return qApp->translate("trillType", qPrintable(trillTable[static_cast<int>(trillType())].userName));
+      return qApp->translate("trillType", trillTable[static_cast<int>(trillType())].userName.toUtf8().constData());
       }
 
 //---------------------------------------------------------
