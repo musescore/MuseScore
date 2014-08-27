@@ -1416,7 +1416,10 @@ void AddElement::redo()
 const char* AddElement::name() const
       {
       static char buffer[64];
-      sprintf(buffer, "Add: %s", element->name());
+      if (element->isText())
+            snprintf(buffer, 64, "Add: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->text()));
+      else
+            snprintf(buffer, 64, "Add: %s", element->name());
       return buffer;
       }
 #endif
@@ -1539,11 +1542,13 @@ void RemoveElement::redo()
 const char* RemoveElement::name() const
       {
       static char buffer[64];
-      sprintf(buffer, "Remove: %s", element->name());
+      if (element->isText())
+            snprintf(buffer, 64, "Rem: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->text()));
+      else
+            snprintf(buffer, 64, "Rem: %s", element->name());
       return buffer;
       }
 #endif
-
 
 //---------------------------------------------------------
 //   ChangeConcertPitch

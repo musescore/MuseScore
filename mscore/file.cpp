@@ -333,7 +333,6 @@ Score* MuseScore::readScore(const QString& name)
             score = 0;
             }
       allowShowMidiPanel(name);
-
       return score;
       }
 
@@ -551,7 +550,7 @@ void MuseScore::newFile()
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
       Measure* pm = score->firstMeasure();
-      
+
       Measure* nm;
       for (int i = 0; i < measures; ++i) {
             if (pm) {
@@ -1867,10 +1866,18 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             score->connectTies();
             score->setCreated(true); // force save as for imported files
             }
-      score->rebuildMidiMapping();
-      score->setSoloMute();
+
+      score->setLayoutAll(true);
+      for (Score* s : score->scoreList()) {
+            s->setPlaylistDirty(true);
+            s->rebuildMidiMapping();
+            s->updateChannel();
+            s->updateNotes();
+            s->setSoloMute();
+            s->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
+            }
       score->setSaved(false);
-      score->updateNotes();
+      score->update();
       return Score::FileError::FILE_NO_ERROR;
       }
 
