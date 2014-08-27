@@ -175,9 +175,11 @@ void ScoreAccessibility::updateAccessibilityInfo()
       currentInfoChanged();
       ScoreView* w = static_cast<MuseScore*>(mainWindow)->currentScoreView();
 
-      //getInspector->isAncestorOf is used so that inspector doesn't lose focus
+      //getInspector->isAncestorOf is used so that inspector and search dialog don't loose focus
       //when this method is called
-      if ( (qApp->focusWidget() != w) && !mscore->getInspector()->isAncestorOf(qApp->focusWidget())) {
+      if ( (qApp->focusWidget() != w) &&
+           !mscore->getInspector()->isAncestorOf(qApp->focusWidget()) &&
+           (mscore->getSearchDialog() && !mscore->getSearchDialog()->isAncestorOf(qApp->focusWidget()))) {
             w->setFocus();
             }
       QObject* obj = static_cast<QObject*>(w);
