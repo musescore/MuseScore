@@ -2361,18 +2361,9 @@ Score::FileError importGTP(Score* score, const QString& name)
 //      album
 //      copyright
 
-      score->setSaved(false);
       score->setCreated(true);
       delete gp;
 
-      score->setPlaylistDirty(true);
-      score->rebuildMidiMapping();
-      score->updateChannel();
-      score->updateNotes();
-
-      score->setLayoutAll(true);
-      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
-      score->doLayout();
       return Score::FileError::FILE_NO_ERROR;
       }
 }

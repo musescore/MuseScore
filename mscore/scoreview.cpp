@@ -947,9 +947,9 @@ void ScoreView::setScore(Score* s)
             connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
             connect(this, SIGNAL(viewRectChanged()), this, SLOT(updateContinuousPanel()));
 
-            s->setLayoutMode(LayoutMode::PAGE);
-            s->setLayoutAll(true);
-            s->update();
+//            s->setLayoutMode(LayoutMode::PAGE);
+//            s->setLayoutAll(true);
+//            s->update();
             }
       }
 
@@ -1153,8 +1153,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             MeasureProperties im(obj);
             im.exec();
             }
-      _score->setLayoutAll(true);
       if (_score->undo()->active()) {
+            _score->setLayoutAll(true);
             _score->endCmd();
             mscore->endCmd();
             }

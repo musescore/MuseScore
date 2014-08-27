@@ -259,6 +259,7 @@ void Measure::remove(Segment* el)
 
       // Q_ASSERT(!score()->undoRedo());
       Q_ASSERT(el->type() == Element::Type::SEGMENT);
+      Q_ASSERT(el->score() == score());
       if (el->prev()) {
             Q_ASSERT(el->prev()->next() == el);
             }

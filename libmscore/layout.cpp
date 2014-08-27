@@ -1268,6 +1268,14 @@ void Score::layoutStage3()
 
 void Score::doLayout()
       {
+// printf("doLayout %p cmd %d undo empty %d\n", this, undo()->active(), undo()->isEmpty());
+      if (!undo()->active() && !undo()->isEmpty() && !undoRedo()) {
+            qDebug("layout outside cmd and dirty undo");
+            // _layoutAll = false;
+            // abort();
+            // return;
+            }
+
       _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / (MScore::DPI * SPATIUM20));
 
@@ -1309,6 +1317,8 @@ void Score::doLayout()
             page->setNo(0);
             page->setPos(0.0, 0.0);
             page->rebuildBspTree();
+            qDebug("layout: empty score");
+            _layoutAll = false;
             return;
             }
 
@@ -1539,7 +1549,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef->setParent(s);
                         clef->layout();
                         clef->setClefType(staff->clefType(tick));  // set before add !
-                        undoAddElement(clef);
+                        undo(new AddElement(clef));
+                        // undoAddElement(clef);
                         }
                   else if (clef->generated()) {
                         ClefTypeList cl = staff->clefType(tick);
@@ -1549,7 +1560,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   }
             else {
                   if (clef && clef->generated())
-                        undoRemoveElement(clef);
+                        undo(new RemoveElement(clef));
+                        // undoRemoveElement(clef);
                   }
             ++i;
             }
@@ -1933,7 +1945,6 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
       {
       if (undoRedo())   // no change possible in this state
             return layoutSystem1(minWidth, isFirstSystem, longName);
-
       System* system = getNextSystem(isFirstSystem, false);
 
       qreal xo = 0;
@@ -2085,7 +2096,6 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
       return continueFlag && curMeasure;
       }
-
 
 //---------------------------------------------------------
 //   hideEmptyStaves
