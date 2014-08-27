@@ -231,8 +231,9 @@ void EditStaff::apply()
       instrument.setMaxPitchA(_maxPitchA);
       instrument.setMinPitchP(_minPitchP);
       instrument.setMaxPitchP(_maxPitchP);
-      instrument.setShortName(shortName->toPlainText());
-      instrument.setLongName(longName->toPlainText());
+      Text text(0);
+      instrument.setShortName(text.convertFromHtml(shortName->toHtml()));
+      instrument.setLongName(text.convertFromHtml(longName->toHtml()));
 
       bool s         = small->isChecked();
       bool inv       = invisible->isChecked();
@@ -241,7 +242,7 @@ void EditStaff::apply()
       bool nhide     = neverHide->isChecked();
       bool ifEmpty   = showIfEmpty->isChecked();
       qreal scale    = mag->value() / 100.0;
-      
+
       QString newPartName = partName->text().simplified();
       if (!(instrument == *part->instr()) || part->partName() != newPartName) {
             Interval v1 = instrument.transpose();

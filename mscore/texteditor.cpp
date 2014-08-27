@@ -79,6 +79,7 @@ TextEditor::TextEditor(QWidget* parent)
       typefaceSuperscript->setCheckable(true);
 
       typefaceSize = new QDoubleSpinBox(this);
+      typefaceSize->setRange(0.0, 100.0);
       typefaceFamily = new QFontComboBox(this);
 
       hl->addWidget(typefaceBold);
