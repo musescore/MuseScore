@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>920</width>
-    <height>623</height>
+    <height>656</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -112,7 +112,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
+        <item row="0" column="1">
          <widget class="QLabel" name="labelShortName">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -141,27 +141,13 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
+        <item row="1" column="1">
          <widget class="QTextEdit" name="shortName">
           <property name="minimumSize">
            <size>
             <width>0</width>
             <height>40</height>
            </size>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QToolButton" name="editLongName">
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QToolButton" name="editShortName">
-          <property name="text">
-           <string>...</string>
           </property>
          </widget>
         </item>
@@ -890,9 +876,7 @@
   <tabstop>instrumentName</tabstop>
   <tabstop>changeInstrument</tabstop>
   <tabstop>longName</tabstop>
-  <tabstop>editLongName</tabstop>
   <tabstop>shortName</tabstop>
-  <tabstop>editShortName</tabstop>
   <tabstop>minPitchA</tabstop>
   <tabstop>minPitchASelect</tabstop>
   <tabstop>maxPitchA</tabstop>

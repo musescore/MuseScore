@@ -58,8 +58,6 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void editStringDataClicked();
       void showInstrumentDialog();
       void showStaffTypeDialog();
-      void editShortNameClicked();
-      void editLongNameClicked();
       void minPitchAClicked();
       void maxPitchAClicked();
       void minPitchPClicked();
@@ -69,6 +67,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void showClefChanged();
       void showTimeSigChanged();
       void showBarlinesChanged();
+
 
    signals:
       void instrumentChanged();
