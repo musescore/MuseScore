@@ -241,12 +241,13 @@ void EditStaff::apply()
       bool nhide     = neverHide->isChecked();
       bool ifEmpty   = showIfEmpty->isChecked();
       qreal scale    = mag->value() / 100.0;
-
-      if (!(instrument == *part->instr()) || part->partName() != partName->text()) {
+      
+      QString newPartName = partName->text().simplified();
+      if (!(instrument == *part->instr()) || part->partName() != newPartName) {
             Interval v1 = instrument.transpose();
             Interval v2 = part->instr()->transpose();
 
-            score->undo(new ChangePart(part, instrument, partName->text()));
+            score->undo(new ChangePart(part, instrument, newPartName));
             emit instrumentChanged();
 
             if (v1 != v2)
