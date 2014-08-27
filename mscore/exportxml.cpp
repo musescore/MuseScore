@@ -1400,7 +1400,13 @@ void ExportMusicXml::barlineRight(Measure* m)
       if (volta)
             ending(xml, volta, false);
       if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT)
-            xml.tagE("repeat direction=\"backward\"");
+      {
+          if (m->repeatCount() > 2) {
+              xml.tagE("repeat direction=\"backward\" times=\"%i\"",m->repeatCount());
+          }else{
+              xml.tagE("repeat direction=\"backward\"");
+          }
+      }
       xml.etag();
       }
 
