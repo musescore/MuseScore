@@ -2498,7 +2498,7 @@ QString Text::convertFromHtml(const QString& ss) const
                   }
             }
 
-      if (score()->mscVersion() <= 114) {
+      if (score() && score()->mscVersion() <= 114) {
             s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));    //natural
             s.replace(QChar(0xe10c), QString("<sym>accidentalSharp</sym>"));    // sharp
             s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));    // flat
