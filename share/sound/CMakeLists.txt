@@ -20,6 +20,7 @@
 
 install(FILES
       FluidR3Mono_GM.sf3
+      FluidR3Mono_License.md
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       )
 
