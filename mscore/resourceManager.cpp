@@ -165,7 +165,7 @@ void ResourceManager::download()
                         f.close();
                         }
                   }
-            
+            zipFile.close();
             if (result) {
                   QFile::remove(localPath);
                   button->setText(tr("Updated"));
