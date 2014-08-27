@@ -387,6 +387,24 @@ QVariant Box::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
+//   copyValues
+//---------------------------------------------------------
+
+void Box::copyValues(Box* origin)
+      {
+      _boxHeight = origin->boxHeight();
+      _boxWidth = origin->boxWidth();
+
+      qreal factor = magS() / origin->magS();
+      _bottomGap = origin->bottomGap() * factor;
+      _topGap = origin->topGap() * factor;
+      _bottomMargin = origin->bottomMargin() * factor;
+      _topMargin = origin->topMargin() * factor;
+      _leftMargin = origin->leftMargin() * factor;
+      _rightMargin = origin->rightMargin() * factor;
+      }
+
+//---------------------------------------------------------
 //   HBox
 //---------------------------------------------------------
 
