@@ -79,6 +79,7 @@ class Box : public MeasureBase {
       void setTopGap(qreal val)       { _topGap = val;        }
       qreal bottomGap() const         { return _bottomGap;    }
       void setBottomGap(qreal val)    { _bottomGap = val;     }
+      void copyValues(Box* origin);
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

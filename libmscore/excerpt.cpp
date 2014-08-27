@@ -140,10 +140,15 @@ void createExcerpt(Score* score, const QList<Part*>& parts)
 
       // create title frame for all scores if not already there
       if (!measure || (measure->type() != Element::Type::VBOX))
-            oscore->insertMeasure(Element::Type::VBOX, measure);
+            measure = oscore->insertMeasure(Element::Type::VBOX, measure);
 
+      VBox* titleFrameScore = static_cast<VBox*>(measure);
       measure = score->first();
+
       Q_ASSERT(measure->type() == Element::Type::VBOX);
+
+      VBox* titleFramePart = static_cast<VBox*>(measure);
+      titleFramePart->copyValues(titleFrameScore);
       QString partLabel = parts.front()->longName();
       if (!partLabel.isEmpty()) {
             Text* txt = new Text(score);
