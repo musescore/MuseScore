@@ -1,6 +1,8 @@
 VERSION=2.0
 APPNAME=mscore
 LONG_NAME=MuseScore
+LONGER_NAME="MuseScore 2"
+
 
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.png
@@ -27,7 +29,7 @@ function set_bundle_display_options() {
             delay 1 -- sync
             set icon size of the icon view options of container window to 128
             set arrangement of the icon view options of container window to not arranged
-            set position of item "MuseScore.app" to {400,125}
+            set position of item "${LONGER_NAME}.app" to {400,125}
             close
             open
             set position of item "Applications" to {150,125}
@@ -100,7 +102,7 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtBluetooth.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebSockets.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtNfc.*
 
-mv ${VOLUME}/${APPNAME}.app  ${VOLUME}/${LONG_NAME}.app 
+mv ${VOLUME}/${APPNAME}.app  "${VOLUME}/${LONGER_NAME}.app"
 
 # copy in background image
 mkdir -p ${VOLUME}/Pictures
