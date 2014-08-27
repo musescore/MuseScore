@@ -2113,6 +2113,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                   QString endingType;
                   QString endingText;
                   QString repeat;
+                  QString count;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "bar-style")
                               barStyle = ee.text();
@@ -2122,7 +2123,14 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                               endingText = ee.text();
                               }
                         else if (ee.tagName() == "repeat")
+                        {
                               repeat = ee.attribute("direction");
+                              count = ee.attribute("times");
+                            if (count.isEmpty()) {
+                                count = "2";
+                            }
+                              measure->setRepeatCount(count.toInt());
+                        }
                         else
                               domError(ee);
                         }
