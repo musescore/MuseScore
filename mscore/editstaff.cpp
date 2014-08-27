@@ -83,8 +83,8 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
       connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
       connect(changeStaffType,      SIGNAL(clicked()),            SLOT(showStaffTypeDialog()));
-      connect(editShortName,        SIGNAL(clicked()),            SLOT(editShortNameClicked()));
-      connect(editLongName,         SIGNAL(clicked()),            SLOT(editLongNameClicked()));
+//      connect(editShortName,        SIGNAL(clicked()),            SLOT(editShortNameClicked()));
+//      connect(editLongName,         SIGNAL(clicked()),            SLOT(editLongNameClicked()));
       connect(minPitchASelect,      SIGNAL(clicked()),            SLOT(minPitchAClicked()));
       connect(maxPitchASelect,      SIGNAL(clicked()),            SLOT(maxPitchAClicked()));
       connect(minPitchPSelect,      SIGNAL(clicked()),            SLOT(minPitchPClicked()));
@@ -122,11 +122,12 @@ void EditStaff::updateInstrument()
 
       QList<StaffName>& snl = instrument.shortNames();
       QString df = snl.isEmpty() ? "" : snl[0].name;
-      shortName->setText(df);
+      shortName->setPlainText(df);
 
       QList<StaffName>& lnl = instrument.longNames();
       df = lnl.isEmpty() ? "" : lnl[0].name;
-      longName->setText(df);
+
+      longName->setPlainText(df);
 
       if (partName->text() == instrumentName->text())    // Updates part name if no custom name has been set before
             partName->setText(instrument.trackName());
@@ -232,8 +233,10 @@ void EditStaff::apply()
       instrument.setMinPitchP(_minPitchP);
       instrument.setMaxPitchP(_maxPitchP);
       Text text(0);
-      instrument.setShortName(text.convertFromHtml(shortName->toHtml()));
-      instrument.setLongName(text.convertFromHtml(longName->toHtml()));
+//      instrument.setShortName(text.convertFromHtml(shortName->toHtml()));
+      instrument.setShortName(shortName->toPlainText());
+//      instrument.setLongName(text.convertFromHtml(longName->toHtml()));
+      instrument.setLongName(longName->toPlainText());
 
       bool s         = small->isChecked();
       bool inv       = invisible->isChecked();
@@ -273,22 +276,6 @@ void EditStaff::apply()
 
       score->update();
       score->updateChannel();
-      }
-
-//---------------------------------------------------------
-//   edit...NameClicked
-//---------------------------------------------------------
-
-void EditStaff::editShortNameClicked()
-      {
-      QString s = editHtml(shortName->toHtml(), tr("Edit Short Name"));
-      shortName->setHtml(s);
-      }
-
-void EditStaff::editLongNameClicked()
-      {
-      QString s = editHtml(longName->toHtml(), tr("Edit Long Name"));
-      longName->setHtml(s);
       }
 
 //---------------------------------------------------------
