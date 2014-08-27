@@ -86,8 +86,8 @@ void Lyrics::write(Xml& xml) const
                   };
             xml.tag("syllabic", sl[int(_syllabic)]);
             }
-      if (_ticks)
-            xml.tag("ticks", _ticks);
+      writeProperty(xml, P_ID::LYRIC_TICKS);
+
       Text::writeProperties(xml);
       if (_verseNumber) {
             xml.stag("Number");
@@ -353,7 +353,11 @@ void Lyrics::endEdit()
 
 QVariant Lyrics::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
+            case P_ID::SYLLABIC:
+                  return int(_syllabic);
+            case P_ID::LYRIC_TICKS:
+                  return _ticks;
             default:
                   return Text::getProperty(propertyId);
             }
@@ -365,7 +369,13 @@ QVariant Lyrics::getProperty(P_ID propertyId) const
 
 bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
+            case P_ID::SYLLABIC:
+                  _syllabic = Syllabic(v.toInt());
+                  break;
+            case P_ID::LYRIC_TICKS:
+                  _ticks = v.toInt();
+                  break;
             default:
                   if (!Text::setProperty(propertyId, v))
                         return false;
@@ -381,7 +391,11 @@ bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Lyrics::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
+            case P_ID::SYLLABIC:
+                  return int(Syllabic::SINGLE);
+            case P_ID::LYRIC_TICKS:
+                  return 0;
             default: return Text::propertyDefault(id);
             }
       }

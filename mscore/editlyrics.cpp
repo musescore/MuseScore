@@ -137,10 +137,10 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                   case Lyrics::Syllabic::BEGIN:
                         break;
                   case Lyrics::Syllabic::END:
-                        lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
+                        lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
                         break;
                   case Lyrics::Syllabic::MIDDLE:
-                        lyrics->setSyllabic(Lyrics::Syllabic::BEGIN);
+                        lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
                         break;
                   }
             switch(oldLyrics->syllabic()) {
@@ -148,10 +148,10 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                   case Lyrics::Syllabic::END:
                         break;
                   case Lyrics::Syllabic::BEGIN:
-                        oldLyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
+                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
                         break;
                   case Lyrics::Syllabic::MIDDLE:
-                        oldLyrics->setSyllabic(Lyrics::Syllabic::END);
+                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
                         break;
                   }
             }
@@ -179,7 +179,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
 void ScoreView::lyricsMinus()
       {
-      Lyrics* lyrics   = (Lyrics*)editObject;
+      Lyrics* lyrics   = static_cast<Lyrics*>(editObject);
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
@@ -193,9 +193,8 @@ void ScoreView::lyricsMinus()
             if (el &&  el->type() == Element::Type::CHORD)
                   break;
             }
-      if (nextSegment == 0) {
+      if (nextSegment == 0)
             return;
-            }
 
       // search previous lyric
       Lyrics* oldLyrics = 0;
@@ -223,12 +222,11 @@ void ScoreView::lyricsMinus()
             lyrics->setNo(verse);
             lyrics->setSyllabic(Lyrics::Syllabic::END);
             }
-
-      if(lyrics->syllabic()==Lyrics::Syllabic::BEGIN) {
-            lyrics->setSyllabic(Lyrics::Syllabic::MIDDLE);
-            }
-      else if(lyrics->syllabic()==Lyrics::Syllabic::SINGLE) {
-            lyrics->setSyllabic(Lyrics::Syllabic::END);
+      else {
+            if (lyrics->syllabic() == Lyrics::Syllabic::BEGIN)
+                  lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::MIDDLE));
+            else if (lyrics->syllabic() == Lyrics::Syllabic::SINGLE)
+                  lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
             }
 
       if (oldLyrics) {
@@ -237,15 +235,15 @@ void ScoreView::lyricsMinus()
                   case Lyrics::Syllabic::MIDDLE:
                         break;
                   case Lyrics::Syllabic::SINGLE:
-                        oldLyrics->setSyllabic(Lyrics::Syllabic::BEGIN);
+                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
                         break;
                   case Lyrics::Syllabic::END:
-                        oldLyrics->setSyllabic(Lyrics::Syllabic::MIDDLE);
+                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::MIDDLE));
                         break;
                   }
             }
 
-      if(newLyrics)
+      if (newLyrics)
           _score->undoAddElement(lyrics);
 
       _score->select(lyrics, SelectType::SINGLE, 0);
@@ -300,11 +298,11 @@ void ScoreView::lyricsUnderscore()
                         case Lyrics::Syllabic::END:
                               break;
                         default:
-                              oldLyrics->setSyllabic(Lyrics::Syllabic::END);
+                              oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
                               break;
                         }
                   if (oldLyrics->segment()->tick() < endTick)
-                        oldLyrics->setTicks(endTick - oldLyrics->segment()->tick());
+                        oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - oldLyrics->segment()->tick());
                   }
             return;
             }
@@ -318,9 +316,10 @@ void ScoreView::lyricsUnderscore()
             lyrics->setTrack(track);
             lyrics->setParent(nextSegment->element(track));
             lyrics->setNo(verse);
+            lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             }
-
-      lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
+      else
+            lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
 
       if (oldLyrics) {
             switch(oldLyrics->syllabic()) {
@@ -328,11 +327,11 @@ void ScoreView::lyricsUnderscore()
                   case Lyrics::Syllabic::END:
                         break;
                   default:
-                        oldLyrics->setSyllabic(Lyrics::Syllabic::END);
+                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
                         break;
                   }
             if (oldLyrics->segment()->tick() < endTick)
-                  oldLyrics->setTicks(endTick - oldLyrics->segment()->tick());
+                  oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - oldLyrics->segment()->tick());
             }
       if (newLyrics)
             _score->undoAddElement(lyrics);
@@ -383,11 +382,11 @@ void ScoreView::lyricsReturn()
 
 void ScoreView::lyricsEndEdit()
       {
-      Lyrics* lyrics = (Lyrics*)editObject;
+      Lyrics* lyrics = static_cast<Lyrics*>(editObject);
       int endTick    = lyrics->segment()->tick();
 
       // search previous lyric:
-      int verse    = lyrics->no();
+      int verse = lyrics->no();
       int track = lyrics->track();
 
       // search previous lyric
@@ -403,13 +402,12 @@ void ScoreView::lyricsEndEdit()
             segment = segment->prev1(Segment::Type::ChordRest);
             }
 
-//      if (lyrics->isEmpty() && origL->isEmpty())
       if (lyrics->isEmpty())
             lyrics->parent()->remove(lyrics);
       else {
             if (oldLyrics && oldLyrics->syllabic() == Lyrics::Syllabic::END) {
                   if (oldLyrics->endTick() >= endTick)
-                        oldLyrics->setTicks(0);
+                        oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
                   }
             }
       }

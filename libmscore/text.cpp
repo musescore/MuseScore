@@ -22,6 +22,7 @@
 #include "textframe.h"
 #include "sym.h"
 #include "xml.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -32,6 +33,7 @@ static const qreal superScriptOffset = -0.5;       // of x-height
 static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
 TextCursor Text::_cursor;
+QString Text::oldText;
 
 //---------------------------------------------------------
 //   operator==
@@ -1278,25 +1280,6 @@ qreal Text::baseLine() const
       }
 
 //---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Text::startEdit(MuseScoreView*, const QPointF& pt)
-      {
-      setEditMode(true);
-      _cursor.setLine(0);
-      _cursor.setColumn(0);
-      _cursor.clearSelection();
-      if (_layout.isEmpty())
-            layout();
-      if (setCursor(pt))
-            updateCursorFormat(&_cursor);
-      else
-            _cursor.initFromStyle(textStyle());
-      undoPushProperty(P_ID::TEXT);
-      }
-
-//---------------------------------------------------------
 //   XmlNesting
 //---------------------------------------------------------
 
@@ -1471,6 +1454,26 @@ QString Text::plainText(bool noSym) const
       }
 
 //---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Text::startEdit(MuseScoreView*, const QPointF& pt)
+      {
+      setEditMode(true);
+      _cursor.setLine(0);
+      _cursor.setColumn(0);
+      _cursor.clearSelection();
+      if (_layout.isEmpty())
+            layout();
+      if (setCursor(pt))
+            updateCursorFormat(&_cursor);
+      else
+            _cursor.initFromStyle(textStyle());
+      oldText = _text;
+//      undoPushProperty(P_ID::TEXT);
+      }
+
+//---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
@@ -1481,14 +1484,12 @@ void Text::endEdit()
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
 
       genText();
-      if (links()) {
-            foreach (Element* e, *links()) {
-                  if (e != this)
-                        e->undoChangeProperty(P_ID::TEXT, _text);
-                  }
+
+      if (_text != oldText) {
+            for (Element* e : linkList())
+                  score()->undo()->push1(new ChangeProperty(e, P_ID::TEXT, oldText));
             }
       textChanged();
-      score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------

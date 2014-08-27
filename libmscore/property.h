@@ -203,6 +203,8 @@ enum class P_ID : unsigned char {
       SLUR_UOFF4,
 
       STAFF_MOVE,
+      SYLLABIC,
+      LYRIC_TICKS,
 
       END
       };

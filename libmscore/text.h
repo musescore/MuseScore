@@ -179,6 +179,7 @@ class Text : public Element {
       Q_PROPERTY(QString text READ text WRITE undoSetText)
 
       QString _text;
+      static QString oldText;      // used to remember original text in edit mode
       QList<TextBlock> _layout;
       TextStyleType _styleIndex;
 
