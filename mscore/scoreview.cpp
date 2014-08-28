@@ -3685,6 +3685,8 @@ void ScoreView::pageEnd()
 
 void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       {
+// printf("adjustCanvasPosition <%s>\n", el->name());
+
       if (score()->layoutMode() == LayoutMode::LINE) {
             qreal xo;  // new x offset
             qreal curPosR = _cursor->rect().right();
@@ -3729,6 +3731,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       else
             return;
 
+      int staffIdx = el->staffIdx();
       System* sys = m->system();
       if (!sys)
             return;
@@ -3736,7 +3739,11 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       QPointF p(el->canvasPos());
       QRectF r(imatrix.mapRect(geometry()));
       QRectF mRect(m->canvasBoundingRect());
-      QRectF sysRect(sys->canvasBoundingRect());
+      QRectF sysRect;
+      if (staffIdx == -1)
+            sysRect = sys->canvasBoundingRect();
+      else
+            sysRect = sys->staff(staffIdx)->bbox();
 
       // only try to track measure if not during playback
       if (!playBack)
@@ -3747,6 +3754,12 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       QRectF showRect = QRectF(mRect.x(), sysRect.y(), mRect.width(), sysRect.height())
                         .adjusted(-border, -border, border, border);
 
+/*      printf("%f %f %f %f   %f %f %f %f  %d\n",
+            showRect.x(), showRect.y(), showRect.width(), showRect.height(),
+            r.x(), r.y(), r.width(), r.height(),
+            r.contains(showRect)
+            );
+  */
       // canvas is not as wide as measure, track note instead
       if (r.width() < showRect.width()) {
             showRect.setX(p.x());
