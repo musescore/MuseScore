@@ -2243,7 +2243,9 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
       for (Score* score : scoreList())
             ml.append(pair<Score*,MeasureBase*>(score, searchMeasureBase(score, measure)));
 
-      MeasureBase* omb = nullptr;
+      MeasureBase* omb = nullptr;   // measure base in "this" score
+      MeasureBase* rmb = nullptr;   // measure base in root score (for linking)
+
       for (pair<Score*, MeasureBase*> p : ml) {
             Score* score    = p.first;
             MeasureBase* im = p.second;
@@ -2350,8 +2352,11 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   score->fixTicks();
                   }
             else {
-                  if (mb != omb)
-                        mb->linkTo(omb);
+                  // a frame, not a measure
+                  if (score == rootScore())
+                        rmb = mb;
+                  else if (rmb && mb != rmb)
+                        mb->linkTo(rmb);
                   undo(new InsertMeasure(mb, im));
                   }
             }
