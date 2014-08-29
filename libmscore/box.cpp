@@ -157,7 +157,7 @@ void Box::endEdit()
 void Box::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
       {
       *grips = 1;
-      *defaultGrip = 1;
+      *defaultGrip = 0;
       QRectF r(abbox());
       if (type() == Element::Type::HBOX)
             grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
