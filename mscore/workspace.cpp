@@ -31,7 +31,6 @@
 namespace Ms {
 
 bool Workspace::workspacesRead = false;
-QList<Workspace*> Workspace::_workspaces;
 Workspace* Workspace::currentWorkspace;
 
 Workspace Workspace::_advancedWorkspace {
@@ -40,6 +39,11 @@ Workspace Workspace::_advancedWorkspace {
 
 Workspace Workspace::_basicWorkspace {
       tr("Basic"), QString("Basic"), false, true
+      };
+
+QList<Workspace*> Workspace::_workspaces {
+      &_basicWorkspace,
+      &_advancedWorkspace
       };
 
 //---------------------------------------------------------
@@ -199,11 +203,8 @@ void Workspace::initWorkspace()
                   break;
                   }
             }
-      if (currentWorkspace == 0) {
-            currentWorkspace = new Workspace;
-            currentWorkspace->setName("default");
-            Workspace::workspaces().append(currentWorkspace);
-            }
+      if (currentWorkspace == 0)
+            currentWorkspace = Workspace::workspaces().at(0);
       }
 
 //---------------------------------------------------------
@@ -398,9 +399,6 @@ void Workspace::save()
 QList<Workspace*>& Workspace::workspaces()
       {
       if (!workspacesRead) {
-            _workspaces.append(&_advancedWorkspace);
-            _workspaces.append(&_basicWorkspace);
-
             QStringList path;
             path << mscoreGlobalShare + "workspaces";
             path << dataPath + "/workspaces";
