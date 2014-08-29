@@ -35,11 +35,11 @@ QList<Workspace*> Workspace::_workspaces;
 Workspace* Workspace::currentWorkspace;
 
 Workspace Workspace::_advancedWorkspace {
-      QString("Advanced"), QString("Advanced"), false, true
+      tr("Advanced"), QString("Advanced"), false, true
       };
 
 Workspace Workspace::_basicWorkspace {
-      QString("Basic"), QString("Basic"), false, true
+      tr("Basic"), QString("Basic"), false, true
       };
 
 //---------------------------------------------------------
