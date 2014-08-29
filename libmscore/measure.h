@@ -281,7 +281,7 @@ class Measure : public MeasureBase {
 
       AccidentalVal findAccidental(Note*) const;
       AccidentalVal findAccidental(Segment* s, int staffIdx, int line) const;
-      void exchangeVoice(int, int, int, int);
+      void exchangeVoice(int voice1, int voice2, int staffIdx);
       void checkMultiVoices(int staffIdx);
       bool hasVoice(int track) const;
       bool isMeasureRest(int staffIdx);
