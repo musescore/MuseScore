@@ -120,11 +120,13 @@ void ResourceManager::displayLanguages()
 bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       {
       QString local = dataPath + "/locale/" + filename;
+      QString global = mscoreGlobalShare + "locale/" + filename;
       QFileInfo fileLocal(local);
-      if(!fileLocal.exists())
-            local = mscoreGlobalShare + "locale/" + filename;;
+      QFileInfo fileGlobal(global);
+      if(!fileLocal.exists() || (fileLocal.lastModified() <= fileGlobal.lastModified()) )
+            local = mscoreGlobalShare + "locale/" + filename;
 
-	return verifyFile(local, hash);
+      return verifyFile(local, hash);
       }
 
 void ResourceManager::download()
@@ -146,7 +148,7 @@ void ResourceManager::download()
             button->setEnabled(1);
             }
       else {
-      	// unzip and delete
+            // unzip and delete
             MQZipReader zipFile(localPath);
             QFileInfo zfi(localPath);
             QString destinationDir(zfi.absolutePath());

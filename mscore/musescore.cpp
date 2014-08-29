@@ -2083,8 +2083,12 @@ void loadTranslation(QString filename, QString localeName)
 
       //      qDebug() << userFi.exists();
       //      qDebug() << userFi.lastModified() << defaultFi.lastModified();
-      if (userFi.exists() && userFi.lastModified() > defaultFi.lastModified())
-            lp = userlp;
+      if (userFi.exists()) {
+            if (userFi.lastModified() > defaultFi.lastModified())
+                  lp = userlp;
+            else
+                  QFile::remove(userlp + ".qm");
+      }
 
       if (MScore::debugMode) qDebug("load translator <%s>", qPrintable(lp));
       bool success = translator->load(lp);
