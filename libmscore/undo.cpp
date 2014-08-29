@@ -635,7 +635,19 @@ void Score::undoTransposeHarmony(Harmony* h, int rootTpc, int baseTpc)
 
 void Score::undoExchangeVoice(Measure* measure, int v1, int v2, int staff1, int staff2)
       {
-      undo(new ExchangeVoice(measure, v1, v2, staff1, staff2));
+      int tick = measure->tick();
+      QSet<Staff*> sl;
+      for (int staffIdx = staff1; staffIdx < staff2; ++staffIdx) {
+            for (Staff* s : staff(staffIdx)->staffList())
+                  sl.insert(s);
+            }
+      for (Staff* s : sl) {
+            Measure* m = s->score()->tick2measure(tick);
+            undo(new ExchangeVoice(m, v1, v2, s->idx()));
+            }
+
+      // make sure voice 0 is complete
+
       if (v1 == 0 || v2 == 0) {
             for (int staffIdx = staff1; staffIdx < staff2; ++staffIdx) {
                   // check for complete timeline of voice 0
@@ -2109,23 +2121,22 @@ void TransposeHarmony::flip()
 //   ExchangeVoice
 //---------------------------------------------------------
 
-ExchangeVoice::ExchangeVoice(Measure* m, int _val1, int _val2, int _staff1, int _staff2)
+ExchangeVoice::ExchangeVoice(Measure* m, int _val1, int _val2, int _staff)
       {
       measure = m;
       val1    = _val1;
       val2    = _val2;
-      staff1  = _staff1;
-      staff2  = _staff2;
+      staff   = _staff;
       }
 
 void ExchangeVoice::undo()
       {
-      measure->exchangeVoice(val2, val1, staff1, staff2);
+      measure->exchangeVoice(val2, val1, staff);
       }
 
 void ExchangeVoice::redo()
       {
-      measure->exchangeVoice(val1, val2, staff1, staff2);
+      measure->exchangeVoice(val1, val2, staff);
       }
 
 //---------------------------------------------------------

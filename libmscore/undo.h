@@ -513,10 +513,10 @@ class TransposeHarmony : public UndoCommand {
 class ExchangeVoice : public UndoCommand {
       Measure* measure;
       int val1, val2;
-      int staff1, staff2;
+      int staff;
 
    public:
-      ExchangeVoice(Measure*, int val1, int val2, int staff1, int staff2);
+      ExchangeVoice(Measure*, int val1, int val2, int staff);
       virtual void undo();
       virtual void redo();
       UNDO_NAME("ExchangeVoice")

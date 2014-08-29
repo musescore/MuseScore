@@ -2680,17 +2680,15 @@ void Measure::sortStaves(QList<int>& dst)
 //   exchangeVoice
 //---------------------------------------------------------
 
-void Measure::exchangeVoice(int v1, int v2, int staffIdx1, int staffIdx2)
+void Measure::exchangeVoice(int v1, int v2, int staffIdx)
       {
-      for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++ staffIdx) {
-            for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
-                  int strack = staffIdx * VOICES + v1;
-                  int dtrack = staffIdx * VOICES + v2;
-                  s->swapElements(strack, dtrack);
-                  }
-            MStaff* ms = mstaff(staffIdx);
-            ms->hasVoices = true;
+      for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+            int strack = staffIdx * VOICES + v1;
+            int dtrack = staffIdx * VOICES + v2;
+            s->swapElements(strack, dtrack);
             }
+      MStaff* ms = mstaff(staffIdx);
+      ms->hasVoices = true;
       }
 
 //---------------------------------------------------------
