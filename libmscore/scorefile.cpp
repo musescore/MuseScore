@@ -1066,8 +1066,11 @@ bool Score::read(XmlReader& e)
                               e.unknown();
                         }
                   }
-            else if (tag == "name")
-                  setName(e.readElementText());
+            else if (tag == "name") {
+                  QString n = e.readElementText();
+                  if (parentScore()) //ignore the name if it's not a child score
+                        setName(n);
+                  }
             else if (tag == "page-layout") {    // obsolete
                   if (_layoutMode != LayoutMode::FLOAT && _layoutMode != LayoutMode::SYSTEM) {
                         PageFormat pf;
