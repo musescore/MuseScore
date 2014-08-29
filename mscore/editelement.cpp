@@ -89,8 +89,8 @@ void ScoreView::endEdit()
             score()->addRefresh(grip[i]);
 
       editObject->endEdit();
-      if (mscore->getInspector())
-            mscore->getInspector()->setElement(0);
+      if (mscore->inspector())
+            mscore->inspector()->setElement(0);
 
       _score->addRefresh(editObject->canvasBoundingRect());
 

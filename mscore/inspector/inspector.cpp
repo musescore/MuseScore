@@ -57,16 +57,16 @@ namespace Ms {
 void MuseScore::showInspector(bool visible)
       {
       QAction* a = getAction("inspector");
-      if (!inspector) {
-            inspector = new Inspector();
-            connect(inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
-            addDockWidget(Qt::RightDockWidgetArea, inspector);
+      if (!_inspector) {
+            _inspector = new Inspector();
+            connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+            addDockWidget(Qt::RightDockWidgetArea, _inspector);
             }
       if (visible) {
             updateInspector();
             }
-      if (inspector)
-            inspector->setVisible(visible);
+      if (_inspector)
+            _inspector->setVisible(visible);
       }
 
 //---------------------------------------------------------

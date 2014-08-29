@@ -282,8 +282,8 @@ void MuseScore::closeEvent(QCloseEvent* ev)
             debugger->writeSettings();
 
 #ifdef SCRIPT_INTERFACE
-      if (pluginCreator)
-            pluginCreator->writeSettings();
+      if (_pluginCreator)
+            _pluginCreator->writeSettings();
 #endif
       if (synthControl)
             synthControl->writeSettings();
@@ -378,7 +378,7 @@ MuseScore::MuseScore()
       cs                    = 0;
       cv                    = 0;
       se                    = 0;    // script engine
-      pluginCreator         = 0;
+      _pluginCreator         = 0;
       pluginManager         = 0;
       pluginMapper          = 0;
       debugger              = 0;
@@ -399,7 +399,7 @@ MuseScore::MuseScore()
       keyEditor             = 0;
       pageSettings          = 0;
       paletteBox            = 0;
-      inspector             = 0;
+      _inspector             = 0;
       omrPanel              = 0;
       _midiinEnabled        = true;
       newWizard             = 0;
@@ -1339,19 +1339,19 @@ void MuseScore::selectionChanged(SelState selectionState)
 
 void MuseScore::updateInspector()
       {
-      if (!inspector)
+      if (!_inspector)
             return;
       if (cs) {
             if (state() == STATE_EDIT)
-                  inspector->setElement(cv->getEditObject());
+                  _inspector->setElement(cv->getEditObject());
             else if (state() == STATE_FOTO)
-                  inspector->setElement(cv->fotoLasso());
+                  _inspector->setElement(cv->fotoLasso());
             else {
-                  inspector->setElements(cs->selection().elements());
+                  _inspector->setElements(cs->selection().elements());
                   }
             }
       else
-            inspector->setElement(0);
+            _inspector->setElement(0);
       }
 
 //---------------------------------------------------------
@@ -1571,8 +1571,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   navigator()->setScoreView(view);
                   navigator()->setScore(0);
                   }
-            if (inspector)
-                  inspector->setElement(0);
+            if (_inspector)
+                  _inspector->setElement(0);
             viewModeCombo->setEnabled(false);
             if (_textTools) {
                   _textTools->hide();
@@ -2707,8 +2707,8 @@ void MuseScore::changeState(ScoreState val)
                   if (e->type() != Element::Type::FIGURED_BASS && e->type() != Element::Type::HARMONY)   // do not show text tools for f.b.
                         textTools()->show();
                   }
-            if (inspector)
-                  inspector->setElement(e);
+            if (_inspector)
+                  _inspector->setElement(e);
             }
       }
 
@@ -2724,7 +2724,7 @@ void MuseScore::writeSettings()
       settings.setValue("pos", pos());
       settings.setValue("maximized", isMaximized());
       settings.setValue("showPanel", paletteBox && paletteBox->isVisible());
-      settings.setValue("showInspector", inspector && inspector->isVisible());
+      settings.setValue("showInspector", _inspector && _inspector->isVisible());
       settings.setValue("showPianoKeyboard", _pianoTools && _pianoTools->isVisible());
       settings.setValue("state", saveState());
       settings.setValue("splitScreen", _splitScreen);
@@ -3607,15 +3607,15 @@ void MuseScore::showPluginCreator(QAction* a)
 #ifdef SCRIPT_INTERFACE
       bool on = a->isChecked();
       if (on) {
-            if (pluginCreator == 0) {
-                  pluginCreator = new PluginCreator(0);
-                  connect(pluginCreator, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
+            if (_pluginCreator == 0) {
+                  _pluginCreator = new PluginCreator(0);
+                  connect(_pluginCreator, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
                   }
-            pluginCreator->show();
+            _pluginCreator->show();
             }
       else {
-            if (pluginCreator)
-                  pluginCreator->hide();
+            if (_pluginCreator)
+                  _pluginCreator->hide();
             }
 #endif
       }
@@ -4020,8 +4020,8 @@ void MuseScore::endCmd()
             ScoreAccessibility::instance()->updateAccessibilityInfo();
             }
       else {
-            if (inspector)
-                  inspector->setElement(0);
+            if (_inspector)
+                  _inspector->setElement(0);
             selectionChanged(SelState::NONE);
             }
       }
@@ -4127,13 +4127,13 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             midiinToggled(a->isChecked());
       else if (cmd == "undo") {
             undo();
-            if (inspector)
-                  inspector->reset();
+            if (_inspector)
+                  _inspector->reset();
             }
       else if (cmd == "redo") {
             redo();
-            if (inspector)
-                  inspector->reset();
+            if (_inspector)
+                  _inspector->reset();
             }
       else if (cmd == "toggle-palette")
             showPalette(a->isChecked());
@@ -4339,7 +4339,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   //isAncestorOf is called to see if a widget from inspector has focus
                   //if so, the focus doesn't get shifted to the score, unless escape is
                   //pressed, or the user clicks in the score
-                  if(!getInspector()->isAncestorOf(qApp->focusWidget()) || cmd == "escape")
+                  if(!inspector()->isAncestorOf(qApp->focusWidget()) || cmd == "escape")
                         cv->setFocus();
                   cv->cmd(a);
                   }
