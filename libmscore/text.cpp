@@ -1470,7 +1470,8 @@ void Text::startEdit(MuseScoreView*, const QPointF& pt)
       else
             _cursor.initFromStyle(textStyle());
       oldText = _text;
-//      undoPushProperty(P_ID::TEXT);
+      // instead of dong this here, wait until we find out if text is actually changed
+      //undoPushProperty(P_ID::TEXT);
       }
 
 //---------------------------------------------------------
@@ -1486,10 +1487,32 @@ void Text::endEdit()
       genText();
 
       if (_text != oldText) {
-            for (Element* e : linkList())
-                  score()->undo()->push1(new ChangeProperty(e, P_ID::TEXT, oldText));
+            for (Element* e : linkList()) {
+                  // this line was added in https://github.com/musescore/MuseScore/commit/dcf963b3d6140fa550c08af18d9fb6f6e59733a3
+                  // it replaced the commented-out call to undoPushProperty in startEdit() above
+                  // the two calls do the same thing, but by doing it here, we can avoid the need if the text hasn't changed
+                  // note we are also doing it for each linked element now whereas before we did it only for the edited element itself
+                  // that is because the old text was already being pushed by undoChangeProperty
+                  // when we called it for the linked elements
+                  // by also checking for empty old text, we avoid creating an unnecessary element on undo stack
+                  // that returns us to the initial empty text created upon startEdit()
+                  if (!oldText.isEmpty())
+                        score()->undo()->push1(new ChangeProperty(e, P_ID::TEXT, oldText));
+                  // because we are pushing each individual linked element's old text to the undo stack,
+                  // we don't actually need to call the undo version of change property here
+                  e->setProperty(P_ID::TEXT, _text);
+                  // the change mentioned above eliminated the following line, which is where the linked elements actually got their text set
+                  // one would think this line alone would be enough to make undo work
+                  // but it is not, because by the time we get here, we've already overwritten _text for the current item
+                  // that is why formerly we skipped this call for "this"
+                  // and this was safe because we formerly pushed the old text for "this" back in startEdit()
+                  //if (e != this) e->undoChangeProperty(P_ID::TEXT, _text);
+                  }
             }
       textChanged();
+      // formerly we needed to setLayoutAll here to force the text to be laid out after editing
+      // but now that we are calling setProperty for all elements - including "this"
+      // it is no longer necessary
       }
 
 //---------------------------------------------------------
