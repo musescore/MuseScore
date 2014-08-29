@@ -252,7 +252,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       MeasuresDialog* measuresDialog;
       InsertMeasuresDialog* insertMeasuresDialog;
       MasterPalette* masterPalette;
-      PluginCreator* pluginCreator;
+      PluginCreator* _pluginCreator;
       PluginManager* pluginManager;
       SelectionWindow* selectionWindow;
 
@@ -285,7 +285,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       NewWizard* newWizard;
 
       PaletteBox* paletteBox;
-      Inspector* inspector;
+      Inspector* _inspector;
       OmrPanel* omrPanel;
 
       bool _midiinEnabled;
@@ -649,8 +649,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newBarLinePalette();
       static Palette* newLinesPalette();
 
-      Inspector* getInspector()           { return inspector; }
-      PluginCreator* getPluginCreator()   { return pluginCreator; }
+      Inspector* inspector()           { return _inspector; }
+      PluginCreator* pluginCreator()   { return _pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
       void showMessage(const QString& s, int timeout);
       void helpBrowser(const QString = QString()) const;

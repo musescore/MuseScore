@@ -268,7 +268,7 @@ static void qmlMsgHandler(QtMsgType type, const char* msg)
                   break;
             */
             }
-      mscore->getPluginCreator()->msg(s);
+      mscore->pluginCreator()->msg(s);
       }
 
 //---------------------------------------------------------

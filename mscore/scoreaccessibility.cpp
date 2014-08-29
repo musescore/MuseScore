@@ -178,7 +178,7 @@ void ScoreAccessibility::updateAccessibilityInfo()
       //getInspector->isAncestorOf is used so that inspector and search dialog don't loose focus
       //when this method is called
       if ( (qApp->focusWidget() != w) &&
-           !mscore->getInspector()->isAncestorOf(qApp->focusWidget()) &&
+           !mscore->inspector()->isAncestorOf(qApp->focusWidget()) &&
            (mscore->getSearchDialog() && !mscore->getSearchDialog()->isAncestorOf(qApp->focusWidget()))) {
             w->setFocus();
             }
