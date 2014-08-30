@@ -263,7 +263,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuStyle;
       AlbumManager* albumManager;
 
-      QWidget* searchDialog;
+      QWidget* _searchDialog;
       QComboBox* searchCombo;
 
       PlayPanel* playPanel;
@@ -611,7 +611,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Q_INVOKABLE QString getLocaleISOCode() const;
       Navigator* navigator() const;
       NScrollArea* navigatorScrollArea() const { return _navigator; }
-      QWidget*   getSearchDialog() const;
+      QWidget*   searchDialog() const;
       void updateLayer();
       void updatePlayMode();
       bool loop() const              { return loopAction->isChecked(); }
