@@ -29,7 +29,7 @@
      id="namedview4"
      showgrid="true"
      inkscape:zoom="19.666667"
-     inkscape:cx="4.2901296"
+     inkscape:cx="-4.2522431"
      inkscape:cy="10.576879"
      inkscape:window-x="938"
      inkscape:window-y="176"
@@ -63,22 +63,22 @@
   </defs>
   <path
      style="fill:none;stroke:#ffffff;stroke-width:1.26491106px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 4,18 4,2"
+     d="M 18,16 2,16"
      id="path2986"
      inkscape:connector-curvature="0" />
   <path
      style="fill:none;stroke:#ffffff;stroke-width:1.26491106px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 8,18 8,2"
+     d="M 18,12 2,12"
      id="path2988"
      inkscape:connector-curvature="0" />
   <path
      style="fill:none;stroke:#ffffff;stroke-width:1.26491106px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 12,18 12,2"
+     d="M 18,8 2,8"
      id="path2990"
      inkscape:connector-curvature="0" />
   <path
      style="fill:none;stroke:#ffffff;stroke-width:1.26491106px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 16,18 16,2"
+     d="M 18,4 2,4"
      id="path2992"
      inkscape:connector-curvature="0" />
 </svg>
