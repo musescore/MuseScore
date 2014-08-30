@@ -1256,8 +1256,11 @@ QString ChordRest::accessibleExtraInfo()
       foreach (Articulation* a, articulations())
             rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
 
-      foreach (Element* l, lyricsList())
+      foreach (Element* l, lyricsList()) {
+            if (!l)
+                  continue;
             rez = QString("%1 %2").arg(rez).arg(l->screenReaderInfo());
+            }
 
       if (segment()) {
             foreach (Element* e, segment()->annotations()) {
