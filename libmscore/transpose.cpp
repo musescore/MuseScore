@@ -457,11 +457,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         Key key  = st->key(s->tick());
                         Key nKey = transposeKey(key, interval);
                         KeySigEvent ke(nKey);
-                        QList<Element*> ll = ks->linkList();
-                        for (Element* e : ll) {
-                              KeySig* ks = static_cast<KeySig*>(e);
-                              undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
-                              }
+                        undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
                         }
                   }
             if (createKey) {
