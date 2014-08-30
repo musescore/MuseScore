@@ -2451,7 +2451,7 @@ QVariant Chord::propertyDefault(P_ID propertyId) const
             case P_ID::SMALL:          return false;
             case P_ID::STEM_DIRECTION: return int(MScore::Direction::AUTO);
             default:
-                  return ChordRest::getProperty(propertyId);
+                  return ChordRest::propertyDefault(propertyId);
             }
       }
 
