@@ -305,13 +305,13 @@
       </widget>
      </item>
      <item row="3" column="2">
-      <widget class="QToolButton" name="vRaster">
+      <widget class="QToolButton" name="hRaster">
        <property name="text">
         <string>...</string>
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/vraster.svg</normaloff>:/data/icons/vraster.svg</iconset>
+         <normaloff>:/data/icons/hraster.svg</normaloff>:/data/icons/hraster.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -319,7 +319,7 @@
       </widget>
      </item>
      <item row="4" column="2">
-      <widget class="QToolButton" name="hRaster">
+      <widget class="QToolButton" name="vRaster">
        <property name="accessibleName">
         <string/>
        </property>
@@ -328,7 +328,7 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/hraster.svg</normaloff>:/data/icons/hraster.svg</iconset>
+         <normaloff>:/data/icons/vraster.svg</normaloff>:/data/icons/vraster.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -399,10 +399,10 @@
   <tabstop>resetVisible</tabstop>
   <tabstop>resetColor</tabstop>
   <tabstop>offsetX</tabstop>
-  <tabstop>vRaster</tabstop>
+  <tabstop>hRaster</tabstop>
   <tabstop>resetX</tabstop>
   <tabstop>offsetY</tabstop>
-  <tabstop>hRaster</tabstop>
+  <tabstop>vRaster</tabstop>
   <tabstop>resetY</tabstop>
  </tabstops>
  <resources>
