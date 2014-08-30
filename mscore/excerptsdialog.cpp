@@ -288,7 +288,8 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       e->setScore(nscore);
 
       nscore->setName(e->title()); // needed before AddExcerpt
-      
+      nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+
       score->startCmd();
       score->undo(new AddExcerpt(nscore));
       Ms::createExcerpt(nscore, e->parts());
@@ -298,7 +299,6 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       nscore->updateChannel();
       nscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       nscore->setLayoutAll(true);
-      nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       partList->setEnabled(false);
       title->setEnabled(false);
