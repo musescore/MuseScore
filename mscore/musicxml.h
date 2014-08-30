@@ -181,7 +181,7 @@ class MusicXml {
 
       Ottava* ottava;                            ///< Current ottava
       Trill* trill;                              ///< Current trill
-      SLine* pedal;                              ///< Current pedal
+      Pedal* pedal;                              ///< Current pedal
       Harmony* harmony;                          ///< Current harmony
       Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
