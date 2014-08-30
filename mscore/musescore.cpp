@@ -606,7 +606,7 @@ MuseScore::MuseScore()
             tab2 = 0;
       layout->addWidget(splitter);
 
-      searchDialog = 0;
+      _searchDialog = 0;
 
       //---------------------------------------------------
       //    Transport Action
@@ -3138,7 +3138,7 @@ void MuseScore::searchTextChanged(const QString& s)
 
 void MuseScore::endSearch()
       {
-      searchDialog->hide();
+      _searchDialog->hide();
       if (cv)
             cv->setFocus();
       }
@@ -4383,9 +4383,9 @@ Navigator* MuseScore::navigator() const
 //   getSearchDialog
 //---------------------------------------------------------
 
-QWidget* MuseScore::getSearchDialog() const
+QWidget* MuseScore::searchDialog() const
       {
-      return searchDialog;
+      return _searchDialog;
       }
 
 //---------------------------------------------------------
@@ -4528,12 +4528,12 @@ void MuseScore::updateDrumTools()
 
 void MuseScore::showSearchDialog()
       {
-      if (searchDialog == 0) {
-            searchDialog = new QWidget;
-            searchDialog->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+      if (_searchDialog == 0) {
+            _searchDialog = new QWidget;
+            _searchDialog->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
             QHBoxLayout* searchDialogLayout = new QHBoxLayout;
-            searchDialog->setLayout(searchDialogLayout);
-            layout->insertWidget(2, searchDialog);
+            _searchDialog->setLayout(searchDialogLayout);
+            layout->insertWidget(2, _searchDialog);
 
             QToolButton* searchExit = new QToolButton;
             searchExit->setAutoRaise(true);
@@ -4550,7 +4550,7 @@ void MuseScore::showSearchDialog()
             searchDialogLayout->addWidget(searchCombo);
 
             searchDialogLayout->addStretch(10);
-            searchDialog->hide();
+            _searchDialog->hide();
 
             qDebug("Line edit %p", searchCombo->lineEdit());
 
@@ -4563,7 +4563,7 @@ void MuseScore::showSearchDialog()
 
       searchCombo->clearEditText();
       searchCombo->setFocus();
-      searchDialog->show();
+      _searchDialog->show();
       }
 
 #ifndef SCRIPT_INTERFACE
