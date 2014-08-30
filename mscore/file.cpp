@@ -607,6 +607,9 @@ void MuseScore::newFile()
                                     int diff = -part->instr()->transpose().chromatic;
                                     nKey.setKey(transposeKey(nKey.key(), diff));
                                     }
+                              // initialize key to invalid to make sure that the subsequent setKey() takes effect
+                              // otherwise, it will not add a key of C since that is the default
+                              staff->setKey(0, Key::INVALID);
                               staff->setKey(0, nKey.key());
                               KeySig* keysig = new KeySig(score);
                               keysig->setTrack(staffIdx * VOICES);
