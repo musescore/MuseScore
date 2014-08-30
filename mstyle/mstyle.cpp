@@ -1796,7 +1796,7 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
                         }
                   }
 
-            const QPalette local(widget->parentWidget() ? widget->parentWidget()->palette() : palette);
+            const QPalette local(widget && widget->parentWidget() ? widget->parentWidget()->palette() : palette);
 
             // check whether parent has autofill background flag
             if (const QWidget* parent = _helper.checkAutoFillBackground(widget))
@@ -1820,15 +1820,15 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
       const bool isInToolBar( widget && qobject_cast<const QToolBar*>( widget->parent() ) );
 
       // toolbar engine
-      const bool toolBarAnimated( isInToolBar && widget && ( animations().toolBarEngine().isAnimated( widget->parentWidget() ) || animations().toolBarEngine().isFollowMouseAnimated( widget->parentWidget() ) ) );
-      const QRect animatedRect( (isInToolBar && widget) ? animations().toolBarEngine().animatedRect( widget->parentWidget() ) : QRect() );
+      const bool toolBarAnimated( isInToolBar /*&& widget */ && ( animations().toolBarEngine().isAnimated( widget->parentWidget() ) || animations().toolBarEngine().isFollowMouseAnimated( widget->parentWidget() ) ) );
+      const QRect animatedRect( (isInToolBar /* && widget */) ? animations().toolBarEngine().animatedRect( widget->parentWidget() ) : QRect() );
 #if 0 // yet (?) unused
       const QRect childRect( (widget && widget->parentWidget()) ? r.translated( widget->mapToParent( QPoint(0, 0) ) ) : QRect() );
 #endif
       const QRect currentRect(  widget ? animations().toolBarEngine().currentRect( widget->parentWidget() ) : QRect() );
-      const bool current( isInToolBar && widget && widget->parentWidget() && currentRect.intersects( r.translated( widget->mapToParent( QPoint(0, 0) ) ) ) );
-      const bool toolBarTimerActive( isInToolBar && widget && animations().toolBarEngine().isTimerActive( widget->parentWidget() ) );
-      const qreal toolBarOpacity( ( isInToolBar && widget ) ? animations().toolBarEngine().opacity( widget->parentWidget() ) : 0 );
+      const bool current( isInToolBar /* && widget */ && widget->parentWidget() && currentRect.intersects( r.translated( widget->mapToParent( QPoint(0, 0) ) ) ) );
+      const bool toolBarTimerActive( isInToolBar /* && widget */ && animations().toolBarEngine().isTimerActive( widget->parentWidget() ) );
+      const qreal toolBarOpacity( ( isInToolBar /* && widget */) ? animations().toolBarEngine().opacity( widget->parentWidget() ) : 0 );
 
       // toolbutton engine
       if ( isInToolBar && !toolBarAnimated ) {
@@ -1912,7 +1912,7 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
       // normal (auto-raised) toolbuttons
       if (flags & (State_Sunken | State_On)) {
             // painter->setBrush(palette.color(QPalette::Base));           // button Background
-            painter->setBrush(widget->palette().color(QPalette::Base));           // button Background
+            painter->setBrush(widget ? widget->palette().color(QPalette::Base) : palette.color(QPalette::Base));           // button Background
             painter->setPen(Qt::NoPen);
             _helper.fillHole(*painter, slitRect.adjusted(-2, -2, 4, 4));
             QColor color(palette.color(QPalette::Window));
@@ -3080,7 +3080,7 @@ QColor MgStyle::scrollBarArrowColor( const QStyleOption* option, const SubContro
       const bool animated( animations().scrollBarEngine().isAnimated( widget, control ) );
       const qreal opacity( animations().scrollBarEngine().opacity( widget, control ) );
 
-      QPoint position( hover ? widget->mapFromGlobal( QCursor::pos() ) : QPoint( -1, -1 ) );
+      QPoint position( hover && widget ? widget->mapFromGlobal( QCursor::pos() ) : QPoint( -1, -1 ) );
       if ( hover && r.contains( position ) ) {
             // we need to update the arrow controlRect on fly because there is no
             // way to get it from the styles directly, outside of repaint events
@@ -4190,8 +4190,8 @@ bool MgStyle::drawToolButtonComplexControl( const QStyleOptionComplex* option, Q
 
       // toolbar animation
       const bool toolBarAnimated( isInToolBar && animations().toolBarEngine().isAnimated( widget->parentWidget() ) );
-      const QRect animatedRect( animations().toolBarEngine().animatedRect( widget->parentWidget() ) );
-      const QRect currentRect( animations().toolBarEngine().currentRect( widget->parentWidget() ) );
+      const QRect animatedRect( animations().toolBarEngine().animatedRect( widget ? widget->parentWidget() : NULL) );
+      const QRect currentRect( animations().toolBarEngine().currentRect( widget ? widget->parentWidget() : NULL) );
       const bool current( isInToolBar && currentRect.intersects( rect.translated( widget->mapToParent( QPoint(0, 0) ) ) ) );
       const bool toolBarTimerActive( isInToolBar && animations().toolBarEngine().isTimerActive( widget->parentWidget() ) );
 
@@ -4262,8 +4262,10 @@ bool MgStyle::eventFilterComboBoxContainer( QWidget* widget, QEvent* event ) {
 
             case QEvent::Show:
             case QEvent::Resize: {
-                  if ( !_helper.hasAlphaChannel(widget) ) widget->setMask(_helper.roundedMask( widget->rect() ));
-                  else widget->clearMask();
+                  if(widget) {
+                        if ( !_helper.hasAlphaChannel(widget) ) widget->setMask(_helper.roundedMask( widget->rect() ));
+                        else widget->clearMask();
+                  }
                   return false;
                   }
 
@@ -4273,8 +4275,8 @@ bool MgStyle::eventFilterComboBoxContainer( QWidget* widget, QEvent* event ) {
                   QPaintEvent* paintEvent = static_cast<QPaintEvent*>( event );
                   painter.setClipRegion(paintEvent->region());
 
-                  const QRect r( widget->rect() );
-                  const QColor color( widget->palette().color( widget->window()->backgroundRole() ) );
+                  const QRect r( widget ? widget->rect() : QRect());
+                  const QColor color( widget->palette().color( widget->window()->backgroundRole() ) );    // TODO
                   const bool hasAlpha( _helper.hasAlphaChannel( widget ) );
 
                   if ( hasAlpha ) {
@@ -4287,7 +4289,7 @@ bool MgStyle::eventFilterComboBoxContainer( QWidget* widget, QEvent* event ) {
                         }
 
                   // background
-                  _helper.renderMenuBackground( &painter, paintEvent->rect(), widget, widget->palette() );
+                  _helper.renderMenuBackground( &painter, paintEvent->rect(), widget, widget->palette());    // TODO
 
                   // frame
                   if ( hasAlpha ) painter.setClipping( false );
@@ -4395,7 +4397,7 @@ bool MgStyle::eventFilterScrollBar( QWidget* widget, QEvent* event ) {
       if ( event->type() == QEvent::Paint ) {
             QPainter painter( widget );
             painter.setClipRegion( static_cast<QPaintEvent*>( event )->region() );
-            _helper.renderWindowBackground(&painter, widget->rect(), widget, widget->palette());
+            _helper.renderWindowBackground(&painter, widget ? widget->rect() : QRect(), widget, widget ? widget->palette() : QApplication::palette());
             }
 
       return false;
@@ -4875,7 +4877,7 @@ bool MgStyle::drawMenuItemControl(const QStyleOption* option, QPainter* painter,
                   toolButtonOpt.subControls = SC_ToolButton;
                   toolButtonOpt.icon        =  menuItemOption->icon;
 
-                  toolButtonOpt.font = widget->font();
+                  toolButtonOpt.font = widget->font();     // TODO Inherit font from environment
                   toolButtonOpt.font.setBold(true);
 
                   toolButtonOpt.iconSize = QSize(
@@ -7120,6 +7122,9 @@ bool MgStyle::drawToolButtonLabelControl(const QStyleOption* option, QPainter* p
 QRect MgStyle::groupBoxSubControlRect( const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget ) const {
       QRect r = option->rect;
 
+//      QObjectUserData *temp = this->userData(1);
+      if(!widget)
+            widget = qobject_cast<const QWidget*>(QApplication::baseWidget );
       //
       switch (subControl) {
 
@@ -7160,12 +7165,16 @@ QRect MgStyle::groupBoxSubControlRect( const QStyleOptionComplex* option, SubCon
                   if ( !gbOpt) break;
 
                   const bool isFlat( gbOpt->features & QStyleOptionFrameV2::Flat );
-                  QFont font = widget->font();
+                  QFontMetrics fontMetrics = gbOpt->QStyleOption::fontMetrics;
+                  if(widget) {
+                        QFont font = widget->font();
 
-                  // calculate text width assuming bold text in flat group boxes
-                  if ( isFlat ) font.setBold(true);
+                        // calculate text width assuming bold text in flat group boxes
+                        if ( isFlat ) font.setBold(true);
 
-                  QFontMetrics fontMetrics = QFontMetrics(font);
+                        fontMetrics = QFontMetrics(font);
+                  }
+
                   const int h( fontMetrics.height() );
                   const int tw( fontMetrics.size(Qt::TextShowMnemonic, gbOpt->text + QLatin1String("  ")).width() );
                   r.setHeight(h);
