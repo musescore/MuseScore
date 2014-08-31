@@ -165,8 +165,8 @@ void MScore::init()
 
       lastError           = "";
 
-      layoutBreakColor    = QColor("#1778db");
-      frameMarginColor    = QColor("#1778db");
+      layoutBreakColor    = QColor("#5999db");
+      frameMarginColor    = QColor("#5999db");
       bgColor.setNamedColor("#dddddd");
 
       _defaultStyle         = new MStyle();
