@@ -411,9 +411,6 @@ void MuseScore::pluginTriggered(int idx)
 
       QmlPlugin* p = qobject_cast<QmlPlugin*>(obj);
 
-      QList <QWidget*>widgetList = engine->rootContext().findChildren('', <QWidget *>);
-      QApplication::setProperty('baseWidget', widgetList->first());
-
       if (p->pluginType() == "dock" || p->pluginType() == "dialog") {
             QQuickView* view = new QQuickView(engine, 0);
             view->setSource(QUrl::fromLocalFile(pp));
