@@ -166,72 +166,72 @@ struct DecoDefaultColors {
 
 SetDefaultColors defaultViewColors = {
             { 255, 255, 255 }, // Background
-            { 248, 247, 246 }, // Alternate
-            {  24,  22,  21 }, // Normal
-            { 137, 136, 135 }, // Inactive
+            { 246, 247, 248 }, // Alternate
+            {  21,  22,  24 }, // Normal
+            { 135, 136, 137 }, // Inactive
             { 255, 128, 224 }, // Active
             {   0,  87, 174 }, // Link
             { 100,  74, 155 }, // Visited
-            { 191,   3,   3 }, // Negative
-            { 176, 128,   0 }, // Neutral
+            { 201,  23,  10 }, // Negative
+            { 146, 137,   0 }, // Neutral
             {   0, 110,  40 }  // Positive
       };
 
 SetDefaultColors defaultWindowColors = {
-            { 213, 209, 207 }, // Background
-            { 218, 217, 216 }, // Alternate
-            {  27,  25,  24 }, // Normal
-            { 137, 136, 135 }, // Inactive
+            { 207, 209, 213 }, // Background
+            { 216, 217, 218 }, // Alternate
+            {  24,  25,  27 }, // Normal
+            { 135, 136, 137 }, // Inactive
             { 255, 128, 224 }, // Active
             {   0,  87, 174 }, // Link
             { 100,  74, 155 }, // Visited
-            { 191,   3,   3 }, // Negative
-            { 176, 128,   0 }, // Neutral
+            { 201,  23,  10 }, // Negative
+            { 146, 137,   0 }, // Neutral
             { 0,   110,  40 }  // Positive
       };
 
 SetDefaultColors defaultButtonColors = {
-            { 207, 204, 201 }, // Background
-            { 224, 223, 222 }, // Alternate
-            {  27,  25,  24 }, // Normal
-            { 137, 136, 135 }, // Inactive
+            { 201, 204, 207 }, // Background
+            { 222, 223, 224 }, // Alternate
+            {  24,  25,  27 }, // Normal
+            { 135, 136, 137 }, // Inactive
             { 255, 128, 224 }, // Active
             {   0,  87, 174 }, // Link
             { 100,  74, 155 }, // Visited
-            { 191,   3,   3 }, // Negative
-            { 176, 128,   0 }, // Neutral
+            { 201,  23,  10 }, // Negative
+            { 146, 137,   0 }, // Neutral
             {   0, 110,  40 }  // Positive
       };
 
 SetDefaultColors defaultSelectionColors = {
-            {  67, 172, 232 }, // Background
-            {  62, 138, 204 }, // Alternate
+            {  23, 120, 219 }, // Background
+            {  65, 113, 162 }, // Alternate
             { 255, 255, 255 }, // Normal
             { 165, 193, 228 }, // Inactive
             { 255, 128, 224 }, // Active
             {   0,  49, 110 }, // Link
             {  69,  40, 134 }, // Visited
-            { 156,  14,  14 }, // Negative
-            { 255, 221,   0 }, // Neutral
-            { 128, 255, 128 }  // Positive
+            { 201,  23,  10 }, // Negative
+            { 251, 240,   0 }, // Neutral
+            { 173, 212, 186 }  // Positive
       };
 
 SetDefaultColors defaultTooltipColors = {
             { 190, 223, 255 }, // Background
             { 196, 224, 255 }, // Alternate
-            {  37,  35,  33 }, // Normal
-            { 137, 136, 135 }, // Inactive
+            {  33,  35,  37 }, // Normal
+            { 135, 136, 137 }, // Inactive
             { 255, 128, 224 }, // Active
             {   0,  87, 174 }, // Link
             { 100,  74, 155 }, // Visited
-            { 191,   3,   3 }, // Negative
-            { 176, 128,   0 }, // Neutral
+            { 201,  23,  10 }, // Negative
+            { 171, 161,   0 }, // Neutral
             {   0, 110,  40 }  // Positive
       };
 
 DecoDefaultColors defaultDecorationColors = {
-            { 110, 214, 255 }, // Hover
-            {  58, 167, 221 }, // Focus
+            {  23, 120, 219 }, // Hover
+            { 149, 156, 164 }, // Focus
       };
 
 //---------------------------------------------------------
