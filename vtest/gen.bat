@@ -5,7 +5,7 @@ rem "compare" - image magick compare program
 
 set SRC=mmrest-1,bravura-mmrest,mmrest-2,mmrest-4,mmrest-5,mmrest-6,mmrest-7,mmrest-8,mmrest-9, ^
  fmrest-1,fmrest-2,fmrest-3,fmrest-4,fmrest-5,fmrest-6,measure-repeat-1, ^
- noteheadposition-1,valign-1,emmentaler-1,bravura-1,emmentaler-2,bravura-2, ^
+ noteheadposition-1,valign-1,valign-2,emmentaler-1,bravura-1,emmentaler-2,bravura-2, ^
  emmentaler-3,bravura-3,emmentaler-4,bravura-4,emmentaler-5,bravura-5, ^
  emmentaler-6,bravura-6,emmentaler-7,bravura-7, ^
  emmentaler-8,bravura-8,emmentaler-9,bravura-9,emmentaler-10,bravura-10, ^
