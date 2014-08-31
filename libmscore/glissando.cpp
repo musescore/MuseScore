@@ -14,6 +14,7 @@
 #include "glissando.h"
 #include "chord.h"
 #include "ledgerline.h"
+#include "navigate.h"
 #include "note.h"
 #include "notedot.h"
 #include "score.h"
@@ -60,18 +61,7 @@ void Glissando::layout()
       if (chord == 0)
             return;
       Note* anchor2   = chord->upNote();
-      Segment* s = chord->segment();
-      s = s->prev1();
-      while (s) {
-            if ((s->segmentType() & (Segment::Type::ChordRest)) && s->element(track()))
-                  break;
-            s = s->prev1();
-            }
-      if (s == 0) {
-            qDebug("no segment for first note of glissando found");
-            return;
-            }
-      ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
+      ChordRest* cr = prevChordRest(chord);
       if (cr == 0 || cr->type() != Element::Type::CHORD) {
             qDebug("no first note for glissando found, track %d", track());
             return;
