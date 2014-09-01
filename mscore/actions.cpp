@@ -2246,7 +2246,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "hraster",
-         QT_TRANSLATE_NOOP("action","Enable horizontal raster"),
+         QT_TRANSLATE_NOOP("action","Enable snap to horizontal grid"),
          Icons::hraster_ICON
          ),
       Shortcut(
@@ -2254,7 +2254,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "vraster",
-         QT_TRANSLATE_NOOP("action","Enable vertical raster"),
+         QT_TRANSLATE_NOOP("action","Enable snap to vertical grid"),
          Icons::vraster_ICON
          ),
       Shortcut(
@@ -2262,7 +2262,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "config-raster",
-         QT_TRANSLATE_NOOP("action","Configure raster")
+         QT_TRANSLATE_NOOP("action","Configure grid")
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
