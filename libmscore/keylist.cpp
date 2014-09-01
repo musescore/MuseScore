@@ -38,7 +38,9 @@ Key KeyList::key(int tick) const
 
 void KeyList::setKey(int tick, Key k)
       {
-      if (key(tick) == k)
+      // no need to add to map if key is same as current
+      // except for default C keysig at beginning of score
+      if (key(tick) == k && (tick > 0 || k != Key::C))
             return;
       if (tick > 0 && key(tick-1) == k)
             erase(tick);

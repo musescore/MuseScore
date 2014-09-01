@@ -99,6 +99,9 @@
           </Text>
         </VBox>
       <Measure number="1">
+        <KeySig>
+          <accidental>0</accidental>
+          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>

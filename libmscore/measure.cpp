@@ -2086,19 +2086,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                   ks->setTrack(e.track());
                   ks->read(e);
                   int curTick = e.tick();
-                  if (ks->key() == Key::C && curTick == 0) {
-                        // ignore empty key signature
-                        qDebug("remove keysig c at tick 0");
-                        delete ks;
-                        }
-                  else {
-                        // if key sig not at beginning of measure => courtesy key sig
-                        bool courtesySig = (curTick > tick());
-                        segment = getSegment(courtesySig ? Segment::Type::KeySigAnnounce : Segment::Type::KeySig, curTick);
-                        segment->add(ks);
-                        if (!courtesySig)
-                              staff->setKey(curTick, ks->key());
-                        }
+                  // if key sig not at beginning of measure => courtesy key sig
+                  bool courtesySig = (curTick > tick());
+                  segment = getSegment(courtesySig ? Segment::Type::KeySigAnnounce : Segment::Type::KeySig, curTick);
+                  segment->add(ks);
+                  if (!courtesySig)
+                        staff->setKey(curTick, ks->key());
                   }
             else if (tag == "Lyrics") {       // obsolete, keep for compatibility with version 114
                   Element* element = Element::name2Element(tag, score());
