@@ -3247,7 +3247,7 @@ void MgStyle::renderSliderTickmarks( QPainter* painter, const QStyleOptionSlider
 //---------------------------------------------------------
 
 QPolygonF MgStyle::genericArrow(MgStyle::ArrowOrientation orientation, MgStyle::ArrowSize size) const {
-      QPolygonF a(3);
+      QPolygonF a;
 
       switch (orientation) {
             case ArrowUp: {
