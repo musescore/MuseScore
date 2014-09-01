@@ -31,7 +31,15 @@ PluginManager::PluginManager(QWidget* parent)
       connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
          SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
       connect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
+      readSettings();
+      }
 
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void PluginManager::init()
+      {
       prefs = preferences;
       //
       // initialize local shortcut table
@@ -44,10 +52,11 @@ PluginManager::PluginManager(QWidget* parent)
             localShortcuts[s->key()] = new Shortcut(*s);
       shortcutsChanged = false;
 
-      prefs.updatePluginList();
-      int n = prefs.pluginList.size();
+      preferences.updatePluginList();
+      int n = preferences.pluginList.size();
+      pluginList->clear();
       for (int i = 0; i < n; ++i) {
-            const PluginDescription& d = prefs.pluginList[i];
+            const PluginDescription& d = preferences.pluginList[i];
             QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).baseName(),  pluginList);
             item->setFlags(item->flags() | Qt::ItemIsEnabled);
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
@@ -57,7 +66,6 @@ PluginManager::PluginManager(QWidget* parent)
             pluginList->setCurrentRow(0);
             pluginListItemChanged(pluginList->item(0), 0);
             }
-      readSettings();
       }
 
 //---------------------------------------------------------
@@ -76,6 +84,14 @@ void PluginManager::accept()
                         }
                   }
             Shortcut::dirty = true;
+            }
+      int n = prefs.pluginList.size();
+      for (int i = 0; i < n; ++i) {
+            PluginDescription& d = prefs.pluginList[i];
+            if (d.load)
+                  mscore->registerPlugin(&d);
+            else
+                  mscore->unregisterPlugin(&d);
             }
       preferences = prefs;
       preferences.write();
@@ -119,23 +135,6 @@ void PluginManager::pluginLoadToggled(QListWidgetItem* item)
       int idx = item->data(Qt::UserRole).toInt();
       PluginDescription* d = &prefs.pluginList[idx];
       d->load = (item->checkState() == Qt::Checked);
-      prefs.dirty = true;
-      }
-
-
-
-//---------------------------------------------------------
-//   pluginLoadToggled
-//---------------------------------------------------------
-
-void PluginManager::pluginLoadToggled(bool val)
-      {
-      QListWidgetItem* item = pluginList->currentItem();
-      if (!item)
-            return;
-      int idx = item->data(Qt::UserRole).toInt();
-      PluginDescription* d = &prefs.pluginList[idx];
-      d->load = val;
       prefs.dirty = true;
       }
 
