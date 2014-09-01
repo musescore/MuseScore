@@ -18,7 +18,7 @@ set SRC=mmrest-1,bravura-mmrest,mmrest-2,mmrest-4,mmrest-5,mmrest-6,mmrest-7,mmr
  tie-1,tie-2,grace-1,grace-2,grace-3,harmony-1,harmony-2,harmony-3,beams-1,beams-2, ^
  user-offset-1,user-offset-2,chord-space-1,tablature-1,image-1
 
-set MSCORE=..\win32install\bin\mscore.exe
+set MSCORE=..\win32install\bin\MuseScore2.exe
 set DPI=130
 set F=vtest.html
 

@@ -39,20 +39,20 @@ IF(MINGW)
     # There is a bug in NSI that does not handle full unix paths properly. Make
     # sure there is at least one set of four (4) backlasshes.
     SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/build/packaging\\\\installer_head_nsis.bmp")
-    SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\mscore.exe,0")
+    SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\MuseScore2.exe,0")
     SET(CPACK_NSIS_DISPLAY_NAME "MuseScore ${MUSESCORE_VERSION_FULL}")
     SET(CPACK_NSIS_HELP_LINK "http://www.musescore.org/")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://www.musescore.org/")
     SET(CPACK_NSIS_CONTACT "info@musescore.org")
     SET(CPACK_NSIS_MODIFY_PATH OFF)
-    SET(CPACK_STRIP_FILES "mscore.exe")
+    SET(CPACK_STRIP_FILES "MuseScore2.exe")
 
     # File types association:
     SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
 
     SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-        \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\mscore.exe\\\"
-        \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\mscore.exe\\\"
+        \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\MuseScore2.exe\\\"
+        \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\MuseScore2.exe\\\"
     ")
     SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
         \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
