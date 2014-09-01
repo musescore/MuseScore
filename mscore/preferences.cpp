@@ -1832,6 +1832,16 @@ void Preferences::updatePluginList()
       foreach(QString pluginPath, pluginPathList) {
             Ms::updatePluginList(pluginPathList, pluginPath, pluginList);
             }
+      //remove non existing files
+      auto i = pluginList.begin();
+      while (i != pluginList.end()) {
+            PluginDescription d = *i;
+            QFileInfo fi(d.path);
+            if (!fi.exists())
+                  i = pluginList.erase(i);
+            else
+                  ++i;
+            }
       }
 
 //---------------------------------------------------------
