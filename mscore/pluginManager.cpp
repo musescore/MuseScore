@@ -28,9 +28,6 @@ PluginManager::PluginManager(QWidget* parent)
       {
       setupUi(this);
       connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
-      connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-         SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
-      connect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
       readSettings();
       }
 
@@ -40,7 +37,6 @@ PluginManager::PluginManager(QWidget* parent)
 
 void PluginManager::init()
       {
-      prefs = preferences;
       //
       // initialize local shortcut table
       //    we need a deep copy to be able to rewind all
@@ -62,10 +58,14 @@ void PluginManager::init()
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, i);
             }
+      prefs = preferences;
       if (n) {
             pluginList->setCurrentRow(0);
             pluginListItemChanged(pluginList->item(0), 0);
             }
+      connect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
+      connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
+         SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
       }
 
 //---------------------------------------------------------
@@ -95,6 +95,8 @@ void PluginManager::accept()
             }
       preferences = prefs;
       preferences.write();
+      disconnect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)));
+      disconnect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)));
       QDialog::accept();
       }
 
