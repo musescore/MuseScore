@@ -810,13 +810,19 @@ Qt::ItemFlags TracksModel::itemFlags(int row, int col) const
       const int trackIndex = trackIndexFromRow(row);
 
       if (_columns[col]->isVisible(trackIndex)) {
-            if (_columns[col]->value(0).type() == QVariant::Bool)
+            if (_columns[col]->value(0).type() == QVariant::Bool) {
                   flags |= Qt::ItemIsUserCheckable;
-            else if (_columns[col]->isEditable()
-                     && editableSingleTrack(trackIndex, col)) {
-                  QVariant value = _columns[col]->value(0);
-                  if (value.type() != QVariant::Bool)       // not checkboxes
+                  }
+            else {
+                  if (trackIndex == -1) {
                         flags |= Qt::ItemIsEditable;
+                        }
+                  else if (_columns[col]->isEditable()
+                           && editableSingleTrack(trackIndex, col)) {
+                        QVariant value = _columns[col]->value(0);
+                        if (value.type() != QVariant::Bool)       // not checkboxes
+                              flags |= Qt::ItemIsEditable;
+                        }
                   }
             }
       return flags;
@@ -831,12 +837,17 @@ Qt::ItemFlags TracksModel::flags(const QModelIndex &index) const
       const int trackIndex = trackIndexFromRow(index.row());
 
       if (trackIndex == -1) {       // all tracks row
-            for (int i = 0; i < _trackCount; ++i) {
-                  const auto newFlags = itemFlags(rowFromTrackIndex(i), index.column());
-                  if (newFlags) {
-                        flags |= newFlags;
-                        break;
+            if (!_columns[index.column()]->isForAllTracksOnly()) {
+                  for (int i = 0; i < _trackCount; ++i) {
+                        const auto newFlags = itemFlags(rowFromTrackIndex(i), index.column());
+                        if (newFlags) {
+                              flags |= newFlags;
+                              break;
+                              }
                         }
+                  }
+            else {
+                  flags |= itemFlags(index.row(), index.column());
                   }
             }
       else {
@@ -897,8 +908,10 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
 
 QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int role) const
       {
-      if (section < 0 || section >= (int)_columns.size())
+      if ((orientation == Qt::Vertical && !isRowValid(section))
+                  || (orientation == Qt::Horizontal && !isColumnValid(section))) {
             return QVariant();
+            }
 
       if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
             if (!_columns.empty()) {
@@ -922,9 +935,14 @@ bool TracksModel::isTrackIndexValid(int trackIndex) const
       return trackIndex >= -1 && trackIndex < _trackCount;
       }
 
+bool TracksModel::isRowValid(int row) const
+      {
+      return row >= 0 && ((_trackCount == 1) ? row < _trackCount : row <= _trackCount);
+      }
+
 bool TracksModel::isColumnValid(int column) const
       {
-      return (column >= 0 && column < (int)_columns.size());
+      return column >= 0 && column < (int)_columns.size();
       }
 
 } // namespace Ms

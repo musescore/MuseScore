@@ -164,7 +164,7 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                         }
                   }
             const auto basicQuant = Quantize::quantValueToFraction(
-                                    opers.data()->trackOpers.quantValue.defaultValue());
+                        opers.data()->trackOpers.quantValue.value(mtrack.indexOfOperation));
 
             MChord::setBarIndexes(mtrack.chords, basicQuant, lastTick, sigmap);
             MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick, basicQuant);
@@ -716,14 +716,10 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
       for (int idx = 0; idx < ntracks; ++idx) {
             MTrack& track = tracks[idx];
             Part* part   = new Part(score);
-            Staff* s     = new Staff(score);
-            s->setPart(part);
-            part->insertStaff(s, 0);
-            score->staves().push_back(s);
-            track.staff = s;
 
             if (track.mtrack->drumTrack()) {
-                  s->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  part->setStaves(1);
+                  part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   part->instr()->setDrumset(smDrumset);
                   part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
                   }
@@ -732,17 +728,20 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                               && isGrandStaff(tracks[idx], tracks[idx + 1])) {
                                     // assume that the current track and the next track
                                     // form a piano part
-                        s->setBracket(0, BracketType::BRACE);
-                        s->setBracketSpan(0, 2);
+                        part->setStaves(2);
+                        part->staff(0)->setBracket(0, BracketType::BRACE);
+                        part->staff(0)->setBracketSpan(0, 2);
 
-                        Staff* ss = new Staff(score);
-                        ss->setPart(part);
-                        part->insertStaff(ss, 1);
-                        score->staves().push_back(ss);
                         ++idx;
-                        tracks[idx].staff = ss;
+                        tracks[idx].staff = part->staff(1);
+                        }
+                  else {
+                        part->setStaves(1);
                         }
                   }
+
+            track.staff = part->staff(0);
+            part->staves()->front()->setBarLineSpan(part->nstaves());
             score->appendPart(part);
             }
       }
