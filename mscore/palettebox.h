@@ -14,8 +14,6 @@
 #ifndef __PALETTE_BOX_H__
 #define __PALETTE_BOX_H__
 
-#include "palette.h"
-
 namespace Ms {
 
 class Xml;
