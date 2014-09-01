@@ -3622,7 +3622,7 @@ void MuseScore::showPluginCreator(QAction* a)
 //   showPluginManager
 //---------------------------------------------------------
 
-void MuseScore::showPluginManager(QAction* a)
+void MuseScore::showPluginManager()
       {
 #ifdef SCRIPT_INTERFACE
             if (!pluginManager)
@@ -4187,7 +4187,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "plugin-creator")
             showPluginCreator(a);
       else if (cmd == "plugin-manager")
-            showPluginManager(a);
+            showPluginManager();
       else if(cmd == "resource-manager"){
             ResourceManager r(0);
             r.exec();
