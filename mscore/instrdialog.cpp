@@ -212,7 +212,14 @@ void MuseScore::editInstrList()
                   break;
                   }
             }
-      //normalize the keyevent to concert pitch if necessary
+
+      // if the original key map had no entry for tick 0, that indicates an implied key of C
+      // but we need to create this explicitly in the new staff for the sake of transposition
+      auto i = tmpKeymap.begin();
+      if (i == tmpKeymap.end() || i->first != 0)
+            tmpKeymap[0] = Key::C;
+
+      // normalize the keyevent to concert pitch if necessary
       if (firstStaff && !rootScore->styleB(StyleIdx::concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
             int interval = firstStaff->part()->instr()->transpose().chromatic;
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
