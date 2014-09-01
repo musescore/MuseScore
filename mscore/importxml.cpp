@@ -1757,7 +1757,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             Spanner* sp = i.key();
             int tick1 = i.value().first;
             int tick2 = i.value().second;
-            //qDebug("spanner %p tp %d tick1 %d tick2 %d", sp, sp->type(), tick1, tick2);
+            //qDebug("spanner %p tp %hhd tick1 %d tick2 %d", sp, sp->type(), tick1, tick2);
             sp->setTick(tick1);
             sp->setTick2(tick2);
             sp->score()->addElement(sp);
@@ -2522,19 +2522,29 @@ static void metronome(QDomElement e, Text* t)
 //   checkSpannerOverlap
 //---------------------------------------------------------
 
-static void checkSpannerOverlap(SLine* cur_sp, SLine* new_sp, QString type)
+// check for overlapping spanners
+// if necessary, delete the (incorrectly allocated) new one
+// return the right one to use
+
+static SLine* checkSpannerOverlap(SLine* cur_sp, SLine* new_sp, QString type)
       {
+      //qDebug("checkSpannerOverlap(cur_sp %p, new_sp %p, type %s)", cur_sp, new_sp, qPrintable(type));
       if (cur_sp) {
             qDebug("overlapping %s not supported", qPrintable(type));
             delete new_sp;
-            return;
+            return cur_sp;
             }
+      else
+            return new_sp;
       }
       
 //---------------------------------------------------------
 //   handleSpannerStart
 //---------------------------------------------------------
-      
+
+// note that in case of overlapping spanners, handleSpannerStart is called for every spanner
+// as spanners QMap allows only one value per key, this does not hurt at all
+
 static void handleSpannerStart(SLine* new_sp, QString /* type */, int track, QString& placement, int tick, MusicXmlSpannerMap& spanners)
       {
       new_sp->setTrack(track);
@@ -2896,14 +2906,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             if (pedalLine == "yes" && pedalSign == "") pedalSign = "no";  // MusicXML 2.0 compatibility
             if (pedalLine == "yes") {
                   if (type == "start") {
-                        Pedal* new_pedal = new Pedal(score);
+                        pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
                         if (pedalSign == "yes")
-                              new_pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+                              pedal->setBeginText("<sym>keyboardPedalPed</sym>");
                         else
-                              new_pedal->setBeginHook(true);
-                        new_pedal->setEndHook(true);
-                        checkSpannerOverlap(pedal, new_pedal, "pedal");
-                        pedal = new_pedal;
+                              pedal->setBeginHook(true);
+                        pedal->setEndHook(true);
                         if (placement == "") placement = "below";
                         handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
                         }
@@ -2915,16 +2923,14 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         // pedal change is implemented as two separate pedals
                         // first stop the first one
                         // TODO: this is not yet correct, the spanner must be stopped after the NEXT note
-                        static_cast<Pedal*>(pedal)->setEndHookType(HookType::HOOK_45);
+                        pedal->setEndHookType(HookType::HOOK_45);
                         handleSpannerStop(pedal, "pedal", tick, spanners);
                         pedal = 0;
                         // then start a new one
-                        Pedal* new_pedal = new Pedal(score);
-                        new_pedal->setBeginHook(true);
-                        new_pedal->setBeginHookType(HookType::HOOK_45);
-                        new_pedal->setEndHook(true);
-                        checkSpannerOverlap(pedal, new_pedal, "pedal");
-                        pedal = new_pedal;
+                        pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
+                        pedal->setBeginHook(true);
+                        pedal->setBeginHookType(HookType::HOOK_45);
+                        pedal->setEndHook(true);
                         if (placement == "") placement = "below";
                         handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
                         }
@@ -2969,9 +2975,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       else if (dirType == "wedge") {
             // qDebug("wedge type='%s' hairpin=%p", qPrintable(type), hairpin);
             if (type == "crescendo" || type == "diminuendo") {
-                  Hairpin* new_hairpin = new Hairpin(score);
-                  checkSpannerOverlap(hairpin, new_hairpin, "hairpin");
-                  hairpin = new_hairpin;
+                  hairpin = static_cast<Hairpin*>(checkSpannerOverlap(hairpin, new Hairpin(score), "hairpin"));
                   hairpin->setHairpinType(type == "crescendo"
                                           ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
                   if (niente == "yes")
@@ -2991,9 +2995,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             int n = number - 1;
             TextLine*& b = bracket[n];
             if (type == "start") {
-                  TextLine* new_b = new TextLine(score);
-                  checkSpannerOverlap(b, new_b, "bracket");
-                  b = new_b;
+                  b = static_cast<TextLine*>(checkSpannerOverlap(b, new TextLine(score), "bracket"));
 
                   if (placement == "") placement = "above";  // set default
 
@@ -3033,9 +3035,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             int n = number - 1;
             TextLine*& b = dashes[n];
             if (type == "start") {
-                  TextLine* new_b = new TextLine(score);
-                  checkSpannerOverlap(b, new_b, "dashes");
-                  b = new_b;
+                  b = static_cast<TextLine*>(checkSpannerOverlap(b, new TextLine(score), "dashes"));
 
                   if (placement == "") placement = "above";  // set default
 
@@ -3064,9 +3064,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         qDebug("unknown octave-shift size %d", ottavasize);
                         }
                   else {
-                        Ottava* new_ottava = new Ottava(score);
-                        checkSpannerOverlap(ottava, new_ottava, "dashes");
-                        ottava = new_ottava;
+                        ottava = static_cast<Ottava*>(checkSpannerOverlap(ottava, new Ottava(score), "octave-shift"));
 
                         if (placement == "") placement = "above";  // set default
 
