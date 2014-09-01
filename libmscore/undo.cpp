@@ -433,8 +433,11 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, Key key)
       {
       KeySig* lks = 0;
       foreach (Staff* staff, ostaff->staffList()) {
-            Score* score = staff->score();
 
+            if (staff->isDrumStaff())
+                  continue;
+
+            Score* score = staff->score();
             Measure* measure = score->tick2measure(tick);
             if (!measure) {
                   qDebug("measure for tick %d not found!", tick);
