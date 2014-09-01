@@ -920,8 +920,15 @@ void Staff::undoSetColor(const QColor& /*val*/)
 
 void Staff::insertTime(int tick, int len)
       {
+      // when inserting measures directly in front of a key change,
+      // using lower_bound() (for tick != 0) means the key change at that point is moved later
+      // so the measures being inserted get the old key signature
+      // if we wish to make this work like clefs (see below),
+      // we would need to move the key signature from this measure to the first inserted measure
+      // but either way, at the begining of the staff, we need to keep the original key,
+      // so we use upper_bound() in that case, and the initial key signature is moved in insertMeasure()
       KeyList kl2;
-      for (auto i = _keys.lower_bound(tick); i != _keys.end();) {
+      for (auto i = tick ? _keys.lower_bound(tick) : _keys.upper_bound(tick); i != _keys.end();) {
             Key kse = i->second;
             int k   = i->first;
             _keys.erase(i++);
@@ -929,8 +936,15 @@ void Staff::insertTime(int tick, int len)
             }
       _keys.insert(kl2.begin(), kl2.end());
 
+      // when inserting measures directly in front of a clef change,
+      // using upper_bound() means the clef change remains in its original location
+      // so the measures being inserted get the new clef
+      // this make sense because the clef change technically happens at the end of the previous measure
+      // if we wish to make this work like key signatures (see above),
+      // we would need to move the clef from the previous measure to the last inserted measure
+      // and be sure to continue to handle the initial clef well
       ClefList cl2;
-      for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
+      for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
             int key = i->first;
             clefs.erase(i++);
