@@ -506,7 +506,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateDrumTools();
       void showWebPanel(bool on);
       void showPluginCreator(QAction*);
-      void showPluginManager(QAction*);
+      void showPluginManager();
 
       void updateTabNames();
       QProgressBar* showProgressBar();
