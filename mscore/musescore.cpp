@@ -1065,9 +1065,7 @@ MuseScore::MuseScore()
       QMenu* menuPlugins = mb->addMenu(tr("&Plugins"));
       menuPlugins->setObjectName("Plugins");
 
-      a = getAction("plugin-manager");
-      a->setCheckable(true);
-      menuPlugins->addAction(a);
+      menuPlugins->addAction(getAction("plugin-manager"));
 
       a = getAction("plugin-creator");
       a->setCheckable(true);
@@ -3627,18 +3625,9 @@ void MuseScore::showPluginCreator(QAction* a)
 void MuseScore::showPluginManager(QAction* a)
       {
 #ifdef SCRIPT_INTERFACE
-      bool on = a->isChecked();
-      if (on) {
-            if (pluginManager == 0) {
+            if (!pluginManager)
                   pluginManager = new PluginManager(0);
-                  connect(pluginManager, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
-                  }
             pluginManager->show();
-            }
-      else {
-            if (pluginManager)
-                  pluginManager->hide();
-            }
 #endif
       }
 
