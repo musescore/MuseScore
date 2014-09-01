@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Edit Raster</string>
+   <string>MuseScore: Edit Grid</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -21,20 +21,20 @@
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Edit Raster</string>
+          <string>Edit Grid</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0" rowspan="2">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>horizontal Raster:</string>
+             <string>horizontal Grid:</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>vertical  Raster:</string>
+             <string>vertical  Grid:</string>
             </property>
            </widget>
           </item>
@@ -110,9 +110,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
