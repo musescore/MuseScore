@@ -283,6 +283,9 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
       if (!s.isEmpty())
             ml += s;
       
+      if(ml.isEmpty())
+            return;
+            
       int n            = ml.size();
       QWidget* curMenu = menuBar();
       
