@@ -1618,7 +1618,10 @@ static bool validMMRestMeasure(Measure* m)
 
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
-                  if (e->type() != Element::Type::REHEARSAL_MARK && e->type() != Element::Type::TEMPO_TEXT && e->type() != Element::Type::STAFF_TEXT)
+                  if (e->type() != Element::Type::REHEARSAL_MARK &&
+                      e->type() != Element::Type::TEMPO_TEXT &&
+                      e->type() != Element::Type::HARMONY &&
+                      e->type() != Element::Type::STAFF_TEXT)
                         return false;
                   }
             }
@@ -1646,7 +1649,7 @@ static bool breakMultiMeasureRest(Measure* m)
             for (Element* e : s->annotations()) {
                   if (e->type() == Element::Type::REHEARSAL_MARK ||
                       e->type() == Element::Type::TEMPO_TEXT ||
-                      (e->type() == Element::Type::STAFF_TEXT && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
+                      ((e->type() == Element::Type::HARMONY || e->type() == Element::Type::STAFF_TEXT) && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
                         return true;
                   }
             }
@@ -1819,12 +1822,15 @@ void Score::createMMRests()
                         undo(new RemoveElement(ns));
 
                   //
-                  // check for rehearsal mark and tempo text
+                  // check for rehearsal mark etc.
                   //
                   cs = m->findSegment(Segment::Type::ChordRest, m->tick());
                   if (cs) {
                         for (Element* e : cs->annotations()) {
-                              if (e->type() != Element::Type::REHEARSAL_MARK && e->type() != Element::Type::TEMPO_TEXT && e->type() != Element::Type::STAFF_TEXT)
+                              if (e->type() != Element::Type::REHEARSAL_MARK &&
+                                  e->type() != Element::Type::TEMPO_TEXT &&
+                                  e->type() != Element::Type::HARMONY &&
+                                  e->type() != Element::Type::STAFF_TEXT)
                                     continue;
 
                               bool found = false;
@@ -1842,7 +1848,10 @@ void Score::createMMRests()
                               }
                         }
                   for (Element* e : s->annotations()) {
-                        if (e->type() != Element::Type::REHEARSAL_MARK && e->type() != Element::Type::TEMPO_TEXT &&  e->type() != Element::Type::STAFF_TEXT)
+                        if (e->type() != Element::Type::REHEARSAL_MARK &&
+                            e->type() != Element::Type::TEMPO_TEXT &&
+                            e->type() != Element::Type::HARMONY &&
+                            e->type() != Element::Type::STAFF_TEXT)
                               continue;
                         bool found = false;
                         for (Element* ee : cs->annotations()) {
