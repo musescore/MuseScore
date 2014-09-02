@@ -108,6 +108,7 @@ enum class MeasureNumberMode : char {
 //
 //   @P firstSegment    Ms::Segment       the first segment of the measure (read-only)
 //   @P lastSegment     Ms::Segment       the last segment of the measure (read-only)
+//   @P no              int               the measure number (read-only)
 //---------------------------------------------------------
 
 class Measure : public MeasureBase {
@@ -115,6 +116,7 @@ class Measure : public MeasureBase {
 
       Q_PROPERTY(Ms::Segment* firstSegment      READ last)
       Q_PROPERTY(Ms::Segment* lastSegment       READ first)
+      Q_PROPERTY(int          no                READ no)
 
       SegmentList _segments;
 

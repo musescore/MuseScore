@@ -58,6 +58,8 @@ class Cursor : public QObject {
       Score* _score;
       int _track;
       bool _expandRepeats;
+      RepeatSegment* _curRepeatSegment;
+      int _curRepeatSegmentIndex;
 
       //state
       Segment* _segment;
@@ -67,7 +69,7 @@ class Cursor : public QObject {
 
    public:
       Cursor(Score* c = 0);
-      Cursor(Score*, bool);
+      Cursor(Score*, bool expandRepeats);
 
       Score* score() const                    { return _score;    }
       void setScore(Score* s);
@@ -84,6 +86,12 @@ class Cursor : public QObject {
       Element* element() const;
       Segment* segment() const                { return _segment;  }
       Measure* measure() const;
+
+      RepeatSegment* repeatSegment() const    { return _curRepeatSegment;  }
+      void setRepeatSegment(RepeatSegment* s) { _curRepeatSegment = s;     }
+      int repeatSegmentIndex()                { return _curRepeatSegmentIndex; }
+      void setRepeatSegmentIndex(int idx)     { _curRepeatSegmentIndex = idx; }
+      bool expandRepeats()                     { return _expandRepeats; }
 
       int tick();
       double time();

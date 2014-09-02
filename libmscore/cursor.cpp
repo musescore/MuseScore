@@ -35,7 +35,20 @@ Cursor::Cursor(Score* s)
       {
       _track   = 0;
       _segment = 0;
+      _expandRepeats = false;
       setScore(s);
+      }
+
+Cursor::Cursor(Score* s, bool expandRepeats)
+   : QObject(0)
+      {
+      _track   = 0;
+      _segment = 0;
+      _expandRepeats = expandRepeats;
+      setScore(s);
+      _curRepeatSegment = 0;
+      _curRepeatSegmentIndex = 0;
+      _score->updateRepeatList(expandRepeats);
       }
 
 void Cursor::setScore(Score* s)
@@ -56,6 +69,10 @@ void Cursor::rewind(int type)
       if (type == 0) {
             _segment = 0;
             Measure* m = _score->firstMeasure();
+            if (expandRepeats() && !_score->repeatList()->isEmpty()){
+                  _curRepeatSegment = _score->repeatList()->first();
+                  _curRepeatSegmentIndex = 0;
+                  }
             if (m) {
                   _segment = m->first(Segment::Type::ChordRest);
                   firstChordRestInTrack();
@@ -86,6 +103,26 @@ bool Cursor::next()
             return false;
       _segment = _segment->next1(Segment::Type::ChordRest);
       firstChordRestInTrack();
+
+      RepeatSegment* rs = repeatSegment();
+      if (rs && expandRepeats()){
+            int startTick  = rs->tick;
+            int endTick    = startTick + rs->len;
+            if ((_segment  && (_segment->tick() >= endTick) ) || (!_segment) ){
+                  int rsIdx = repeatSegmentIndex();
+                  rsIdx ++;
+                  if (rsIdx < score()->repeatList()->size()){ //there is a next repeat segment
+                        rs = score()->repeatList()->at(rsIdx);
+                        setRepeatSegment(rs);
+                        setRepeatSegmentIndex(rsIdx);
+                        Measure* m = score()->tick2measure(rs->tick);
+                        _segment = m ? m->first() : 0;
+                        }
+                  else
+                        _segment = 0;
+                  }
+            }
+
       _score->inputState().setTrack(_track);
       _score->inputState().setSegment(_segment);
       return _segment != 0;
@@ -102,6 +139,26 @@ bool Cursor::nextMeasure()
       if (_segment == 0)
             return false;
       Measure* m = _segment->measure()->nextMeasure();
+
+      RepeatSegment* rs = repeatSegment();
+      if (rs && expandRepeats()){
+            int startTick  = rs->tick;
+            int endTick    = startTick + rs->len;
+            if ((m  && (m->tick() + m->ticks() > endTick) ) || (!m) ){
+                  int rsIdx = repeatSegmentIndex();
+                  rsIdx ++;
+                  if (rsIdx < score()->repeatList()->size()) {       //there is a next repeat segment
+                        rs = score()->repeatList()->at(rsIdx);
+                        setRepeatSegment(rs);
+                        setRepeatSegmentIndex(rsIdx);
+                        m = score()->tick2measure(rs->tick);
+                        }
+                  else{
+                        m = 0;
+                        }
+                  }
+            }
+
       if (m == 0) {
             _segment = 0;
             return false;
@@ -179,7 +236,11 @@ void Cursor::setDuration(int z, int n)
 
 int Cursor::tick()
       {
-      return (_segment) ? _segment->tick() : 0;
+      int offset = 0;
+      RepeatSegment* rs = repeatSegment();
+      if (rs && expandRepeats())
+          offset = rs->utick - rs->tick;
+      return (_segment) ? _segment->tick() + offset : 0;
       }
 
 //---------------------------------------------------------
