@@ -145,6 +145,12 @@ void Cursor::add(Element* s)
             s->setParent(m);
             _score->undoAddElement(s);
             }
+      else if (s->type() == Element::Type::NOTE) {
+            // note needs parent set to chord it belongs to
+            Note* note = static_cast<Note*>(s);
+            note->setChord(static_cast<Chord*>(element()));
+            _score->undoAddElement(s);
+            }
       else {
             _score->undoAddElement(s);
             }

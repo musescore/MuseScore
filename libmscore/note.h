@@ -152,9 +152,9 @@ class Note : public Element {
       Q_PROPERTY(int fret                                READ fret             WRITE undoSetFret)
       Q_PROPERTY(int string                              READ string           WRITE undoSetString)
       Q_PROPERTY(int tpc                                 READ tpc)
-      Q_PROPERTY(int tpc1                                READ tpc1             WRITE undoSetTpc1)
-      Q_PROPERTY(int tpc2                                READ tpc2             WRITE undoSetTpc2)
-      Q_PROPERTY(int pitch                               READ pitch            WRITE undoSetPitch)
+      Q_PROPERTY(int tpc1                                READ tpc1             WRITE qmlSetTpc1)
+      Q_PROPERTY(int tpc2                                READ tpc2             WRITE qmlSetTpc2)
+      Q_PROPERTY(int pitch                               READ pitch            WRITE qmlSetPitch)
       Q_PROPERTY(int ppitch                              READ ppitch)
       Q_PROPERTY(bool ghost                              READ ghost            WRITE undoSetGhost)
       Q_PROPERTY(bool hidden                             READ hidden)
@@ -280,6 +280,9 @@ class Note : public Element {
       void setPitch(int val);
       void undoSetPitch(int val);
       void setPitch(int pitch, int tpc1, int tpc2);
+      void qmlSetPitch(int pitch);
+      void qmlSetTpc1(int v);
+      void qmlSetTpc2(int v);
       int pitch() const                   { return _pitch;    }
       int ppitch() const;           ///< playback pitch
       int epitch() const;           ///< effective pitch

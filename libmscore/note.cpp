@@ -2695,5 +2695,56 @@ void Note::setAccidentalType(AccidentalType type)
       	_score->changeAccidental(this, type);
       }
 
+//---------------------------------------------------------
+//   qml wrappers for pitch, tpc1 and tpc2 properties
+//
+//   notes that have not been added to the score and thus
+//   don't have a valid pointer chord() must
+//   not be passed to the undo system.
+//---------------------------------------------------------
 
+void Note::qmlSetPitch(int pitch) {
+      if (pitch < 0 || pitch > 127)
+            // invalid pitch
+            return;
+
+      if (chord()) {
+            // use undo function since we're included in the score
+            undoSetPitch(pitch);
+            }
+      else {
+            // change the property since we're not included in the score
+            _pitch = pitch;
+            }
+      }
+
+void Note::qmlSetTpc1(int v) {
+      if (!tpcIsValid(v))
+            // invalid tpc
+            return;
+
+      if (chord()) {
+            // use undo function since we're included in the score
+            undoSetTpc1(v);
+            }
+      else {
+            // change the property since we're not included in the score
+            setTpc1(v);
+            }
+      }
+
+void Note::qmlSetTpc2(int v) {
+      if (!tpcIsValid(v))
+            // invalid tpc
+            return;
+
+      if (chord()) {
+            // use undo function since we're included in the score
+            undoSetTpc2(v);
+            }
+      else {
+            // change the property since we're not included in the score
+            setTpc2(v);
+            }
+      }
 }
