@@ -76,6 +76,7 @@
   <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
 
   <chord id="1">
+    <name></name>
     <render></render>
     </chord>
   <chord id="2">
