@@ -51,6 +51,8 @@ static const int MAX_DOTS = 3;
 
 class NoteHead : public Symbol {
       Q_OBJECT
+      Q_ENUMS(Group)
+      Q_ENUMS(Type)
 
    public:
       enum class Group : signed char {
@@ -80,6 +82,7 @@ class NoteHead : public Symbol {
             HEAD_TYPES
             };
 
+      NoteHead() : Symbol(0) {}
       NoteHead(Score* s) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&) = delete;
       virtual NoteHead* clone() const    { return new NoteHead(*this); }
@@ -171,8 +174,6 @@ class Note : public Element {
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
       Q_PROPERTY(Ms::Tie* tieBack                        READ tieBack)
       Q_ENUMS(ValueType)
-      Q_ENUMS(Ms::NoteHead::Group)
-      Q_ENUMS(Ms::NoteHead::Type)
       Q_ENUMS(Ms::MScore::Direction)
       Q_ENUMS(Ms::MScore::DirectionH)
 
