@@ -34,11 +34,11 @@ bool Workspace::workspacesRead = false;
 Workspace* Workspace::currentWorkspace;
 
 Workspace Workspace::_advancedWorkspace {
-      tr("Advanced"), QString("Advanced"), false, true
+      QT_TR_NOOP("Advanced"), QString("Advanced"), false, true
       };
 
 Workspace Workspace::_basicWorkspace {
-      tr("Basic"), QString("Basic"), false, true
+      QT_TR_NOOP("Basic"), QString("Basic"), false, true
       };
 
 QList<Workspace*> Workspace::_workspaces {
@@ -75,7 +75,7 @@ void MuseScore::showWorkspaceMenu()
 
       const QList<Workspace*> pl = Workspace::workspaces();
       foreach (Workspace* p, pl) {
-            QAction* a = workspaces->addAction(p->name());
+            QAction* a = workspaces->addAction(qApp->translate("Ms::Workspace", p->name().toUtf8()));
             a->setCheckable(true);
             a->setData(p->path());
             a->setChecked(a->text() == preferences.workspace);
@@ -172,12 +172,12 @@ void MuseScore::changeWorkspace(QAction* a)
       preferences.workspace = a->text();
       preferences.dirty = true;
       foreach(Workspace* p, Workspace::workspaces()) {
-            if (p->name() == a->text()) {
+            if (qApp->translate("Ms::Workspace", p->name().toUtf8()) == a->text()) {
                   changeWorkspace(p);
                   return;
                   }
             }
-      qDebug("   workspace not found");
+      qDebug("   workspace \"%s\" not found", qPrintable(a->text()));
       }
 
 //---------------------------------------------------------
