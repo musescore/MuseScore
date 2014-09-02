@@ -4199,7 +4199,7 @@ Please choose a different file name.</source>
     <message>
         <location filename="" line="326436454"/>
         <source>Left</source>
-        <translation>→</translation>
+        <translation>←</translation>
     </message>
     <message>
         <location filename="" line="326436454"/>
@@ -4209,7 +4209,7 @@ Please choose a different file name.</source>
     <message>
         <location filename="" line="326436454"/>
         <source>Right</source>
-        <translation>←</translation>
+        <translation>→</translation>
     </message>
     <message>
         <location filename="" line="326436454"/>
