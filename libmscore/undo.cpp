@@ -927,6 +927,7 @@ void Score::undoAddElement(Element* element)
       if (ostaff == 0 || (
          et    != Element::Type::ARTICULATION
          && et != Element::Type::CHORDLINE
+         && et != Element::Type::LYRICS
          && et != Element::Type::SLUR
          && et != Element::Type::TIE
          && et != Element::Type::NOTE
@@ -949,7 +950,7 @@ void Score::undoAddElement(Element* element)
             return;
             }
 
-      foreach(Staff* staff, ostaff->staffList()) {
+      foreach (Staff* staff, ostaff->staffList()) {
             Score* score = staff->score();
             int staffIdx = score->staffIdx(staff);
             Element* ne;
@@ -1015,9 +1016,10 @@ void Score::undoAddElement(Element* element)
                         }
                   undo(new AddElement(na));
                   }
-            else if (element->type() == Element::Type::CHORDLINE) {
-                  ChordLine* a     = static_cast<ChordLine*>(element);
-                  Segment* segment = a->chord()->segment();
+            else if (element->type() == Element::Type::CHORDLINE
+               || element->type() == Element::Type::LYRICS) {
+                  ChordRest* cr    = static_cast<ChordRest*>(element->parent());
+                  Segment* segment = cr->segment();
                   int tick         = segment->tick();
                   Measure* m       = score->tick2measure(tick);
                   Segment* seg     = m->findSegment(Segment::Type::ChordRest, tick);
@@ -1025,7 +1027,7 @@ void Score::undoAddElement(Element* element)
                         qDebug("undoAddSegment: segment not found");
                         break;
                         }
-                  int ntrack    = staffIdx * VOICES + a->voice();
+                  int ntrack    = staffIdx * VOICES + element->voice();
                   ne->setTrack(ntrack);
                   ChordRest* ncr = static_cast<ChordRest*>(seg->element(ntrack));
                   ne->setParent(ncr);
