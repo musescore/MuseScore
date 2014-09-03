@@ -938,7 +938,7 @@ niet hernoemen naar
     </message>
 </context>
 <context>
-    <name>QDialogButtonBox</name>
+    <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
         <translation>Ok</translation>
