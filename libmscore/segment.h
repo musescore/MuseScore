@@ -42,6 +42,7 @@ class System;
 //   @P prevInMeasure   Ms::Segment       the previous segment in measure; null at first measure segment (read-only)
 //   @P segmentType     Ms::Segment::Type (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
 //   @P tick            int               midi tick position (read only)
+//   @P annotations     array[Ms::Element] the list of annotations (read only)
 //------------------------------------------------------------------------
 
 /**
@@ -62,6 +63,7 @@ class Segment : public Element {
       Q_PROPERTY(Ms::Segment*       prevInMeasure     READ prev)
       Q_PROPERTY(Ms::Segment::Type  segmentType       READ segmentType WRITE setSegmentType)
       Q_PROPERTY(int                tick              READ tick)
+      Q_PROPERTY(QQmlListProperty<Ms::Element> annotations READ qmlAnnotations)
       Q_ENUMS(Type)
 
 public:
@@ -95,6 +97,7 @@ public:
       QList<qreal>   _dotPosX;     ///< size = staves
 
       std::vector<Element*> _annotations;
+      QList<Element*> _qmlAnnotations;
 
       QList<Element*> _elist;      ///< Element storage, size = staves * VOICES.
 
@@ -183,6 +186,8 @@ public:
       void clearAnnotations();
       void removeAnnotation(Element* e);
       bool findAnnotationOrElement(Element::Type type, int minTrack, int maxTrack);
+
+      QQmlListProperty<Ms::Element> qmlAnnotations();
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
       void setDotPosX(int staffIdx, qreal val)   { _dotPosX[staffIdx] = val;   }
