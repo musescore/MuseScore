@@ -733,6 +733,7 @@ void MusicXml::import(Score* s)
       ottava = 0;
       trill = 0;
       pedal = 0;
+      pedalContinue = 0;
       harmony = 0;
       tremStart = 0;
       hairpin = 0;
@@ -2930,9 +2931,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else if (type == "change") {
                         // pedal change is implemented as two separate pedals
                         // first stop the first one
-                        // TODO: this is not yet correct, the spanner must be stopped after the NEXT note
                         pedal->setEndHookType(HookType::HOOK_45);
                         handleSpannerStop(pedal, "pedal", tick, spanners);
+                        pedalContinue = pedal; // mark for later fixup
                         pedal = 0;
                         // then start a new one
                         pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
@@ -5234,6 +5235,13 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   fb->setTicks(tick + ticks - fb->segment()->tick());
             }
       figBassExtend = false;
+
+      // fixup pedal type="change" to end at the end of this note
+      // note tick is still at note start
+      if (pedalContinue) {
+            handleSpannerStop(pedalContinue, "pedal", tick + ticks, spanners);
+            pedalContinue = 0;
+            }
 
       if (!chord)
             prevtick = tick;  // remember tick where last chordrest was inserted
