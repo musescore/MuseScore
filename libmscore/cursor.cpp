@@ -168,6 +168,26 @@ void Cursor::addNote(int pitch)
       }
 
 //---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void Cursor::remove(Element* s)
+      {
+      if (!_segment)
+            return;
+
+      // some safety checks
+      if (!s)
+            return;
+      if (!(s->score() == _score))
+            return;
+      if (!s->parent())
+            return;
+
+      _score->undoRemoveElement(s);
+      }
+
+//---------------------------------------------------------
 //   setDuration
 //---------------------------------------------------------
 
