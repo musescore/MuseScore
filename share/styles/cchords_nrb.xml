@@ -378,6 +378,7 @@
   <renderBase>/ m:0:1 :n :a m:0:-1</renderBase>
 
   <chord id="1">
+    <name></name>
     <render></render>
     </chord>
   <chord id="2">
