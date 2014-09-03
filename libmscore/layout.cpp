@@ -50,6 +50,7 @@
 #include "notedot.h"
 #include "element.h"
 #include "tremolo.h"
+#include "marker.h"
 
 namespace Ms {
 
@@ -1658,6 +1659,30 @@ static bool breakMultiMeasureRest(Measure* m)
                   return true;
             }
 
+      // break for marker in this measure
+      for (Element* e : *m->el()) {
+            if (e->type() == Element::Type::MARKER) {
+                  Marker* mark = static_cast<Marker*>(e);
+                  if (!(mark->textStyle().align() & AlignmentFlags::RIGHT))
+                        return true;
+                  }
+            }
+
+      // break for marker & jump in previous measure
+      Measure* pm = m->prevMeasure();
+      if (pm) {
+            for (Element* e : *pm->el()) {
+                  if (e->type() == Element::Type::JUMP) {
+                        return true;
+                        }
+                  else if (e->type() == Element::Type::MARKER) {
+                        Marker* mark = static_cast<Marker*>(e);
+                        if (mark->textStyle().align() & AlignmentFlags::RIGHT)
+                              return true;
+                        }
+                  }
+            }
+
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
                   if (e->type() == Element::Type::REHEARSAL_MARK ||
@@ -1740,6 +1765,11 @@ void Score::createMMRests()
 
                   qDeleteAll(*mmr->el());
                   mmr->el()->clear();
+
+                  for (Element* e : *m->el()) {
+                        if (e->type() == Element::Type::MARKER)
+                              mmr->add(e->clone());
+                        }
 
                   for (Element* e : *lm->el())
                         mmr->add(e->clone());
