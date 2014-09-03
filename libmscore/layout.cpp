@@ -183,14 +183,23 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       qreal centerDown        = 0.0;      // offset to apply in order to center downstem chords
       qreal centerAdjustUp    = 0.0;      // adjustment to upstem chord needed after centering donwstem chord
       qreal centerAdjustDown  = 0.0;      // adjustment to downstem chord needed after centering upstem chord
-      qreal centerThreshold   = 0.1 * sp; // only center chords if they differ from nominal by this amount
+
+      // only center chords if they differ from nominal by at least this amount
+      // this avoids unnecessary centering on differences due only to floating point roundoff
+      // it also allows for the possibility of disabling centering
+      // for notes only "slightly" larger than nominal, like half notes
+      // but this will result in them not being aligned with each other between voices
+      // unless you change to left alignment as described in the comments below
+      qreal centerThreshold   = 0.01 * sp;
 
       headDiff = maxUpWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             // larger than nominal
             centerUp = headDiff * 0.5;
-            oversizeUp = headDiff;
+            // to left align rather than center, change the above to
+            //centerUp = headDiff;
             maxUpWidth = nominalWidth + centerUp;
+            oversizeUp = headDiff;
             }
       else if (-headDiff > centerThreshold) {
             // smaller than nominal
@@ -199,10 +208,14 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             }
       headDiff = maxDownWidth - nominalWidth;
       if (headDiff > centerThreshold) {
+            // larger than nominal
             centerDown = headDiff * -0.5;
+            // to left align rather than center, change the above to
+            //centerAdjustUp = headDiff;
             maxDownWidth = nominalWidth - centerDown;
             }
       else if (-headDiff > centerThreshold) {
+            // smaller than nominal
             centerDown = headDiff * -0.5;
             centerAdjustUp = centerDown;
             }
