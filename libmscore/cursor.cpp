@@ -184,6 +184,14 @@ void Cursor::remove(Element* s)
       if (!s->parent())
             return;
 
+      // make sure not to remove last note of chord
+      // since this will crash
+      if (s->type() == Element::Type::NOTE) {
+            Note* note = static_cast<Note*>(s);
+            if (note->chord()->notes().size() < 2)
+                  return;
+            }
+
       _score->undoRemoveElement(s);
       }
 
