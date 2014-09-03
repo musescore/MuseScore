@@ -703,6 +703,12 @@ void Seq::process(unsigned n, float* buffer)
                               _driver->startTransport();
                               }
                         }
+                  if (preferences.useJackMidi) { // TODO same for ALSA Midi
+                        // Initializing instruments every time we start playback.
+                        // External synth can have wrong values, for example
+                        // if we switch between scores
+                        initInstruments(true);
+                        }
                   // Need to change state after calling collectEvents()
                   state = Transport::PLAY;
                   if (mscore->countIn() && cs->playMode() == PlayMode::SYNTHESIZER) {
@@ -715,7 +721,7 @@ void Seq::process(unsigned n, float* buffer)
             else if (state == Transport::PLAY && driverState == Transport::STOP) {
                   state = Transport::STOP;
                   // Muting all notes
-                  stopNotes();
+                  stopNotes(-1, true);
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
                               qDebug("Seq.cpp - Process - Loop whole score. playPos = %d     cs->pos() = %d", playPos->first,cs->pos());
@@ -923,7 +929,7 @@ void Seq::process(unsigned n, float* buffer)
 //   initInstruments
 //---------------------------------------------------------
 
-void Seq::initInstruments()
+void Seq::initInstruments(bool realTime)
       {
       foreach(const MidiMapping& mm, *cs->midiMapping()) {
             Channel* channel = mm.articulation;
@@ -931,7 +937,10 @@ void Seq::initInstruments()
                   if (e.type() == ME_INVALID)
                         continue;
                   NPlayEvent event(e.type(), channel->channel, e.dataA(), e.dataB());
-                  sendEvent(event);
+                  if (realTime)
+                        putEvent(event);
+                  else
+                        sendEvent(event);
                   }
             }
       }
@@ -991,7 +1000,7 @@ void Seq::setPos(int utick)
       {
       if (cs == 0)
             return;
-      stopNotes();
+      stopNotes(-1, true);
 
       int ucur;
       if (playPos != events.end())
@@ -1120,20 +1129,27 @@ void Seq::stopNoteTimer()
 //   stopNotes
 //---------------------------------------------------------
 
-void Seq::stopNotes(int channel)
+void Seq::stopNotes(int channel, bool realTime)
       {
-      // Stop motes in all channels
+      auto send = [this, realTime](const NPlayEvent& event) {
+            if (realTime)
+                  putEvent(event);
+            else
+                  sendEvent(event);
+            };
+
+      // Stop notes in all channels
       if (channel == -1) {
-            for(int ch=0; ch<cs->midiMapping()->size();ch++) {
-                  putEvent(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
-                  for(int i=0; i<128; i++)
-                        putEvent(NPlayEvent(ME_NOTEOFF,ch,i,0));
+            for(int ch = 0; ch < cs->midiMapping()->size(); ch++) {
+                  send(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
+                  for(int i = 0; i < 128; i++)
+                        send(NPlayEvent(ME_NOTEOFF, ch, i, 0));
                   }
             }
       else {
-            putEvent(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
-            for(int i=0; i<128; i++)
-                  putEvent(NPlayEvent(ME_NOTEOFF,channel,i,0));
+            send(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
+            for(int i = 0; i < 128; i++)
+                  send(NPlayEvent(ME_NOTEOFF, channel, i, 0));
             }
       if (preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
             _synti->allNotesOff(channel);
