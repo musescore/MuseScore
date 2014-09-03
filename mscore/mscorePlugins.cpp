@@ -444,6 +444,8 @@ void MuseScore::pluginTriggered(int idx)
                   view->show();
                   }
             }
+      else
+            connect(engine, SIGNAL(quit()), p, SLOT(close()));
 
       // dont call startCmd for non modal dialog
       if (cs && p->pluginType() != "dock")

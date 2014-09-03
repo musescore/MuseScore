@@ -389,6 +389,7 @@ void PluginCreator::load()
       if (path.isEmpty())
             return;
       QFile f(path);
+      QFileInfo fi(f);
       if (f.open(QIODevice::ReadOnly)) {
             textEdit->setPlainText(f.readAll());
             run->setEnabled(true);
@@ -398,8 +399,9 @@ void PluginCreator::load()
             path = QString();
             }
       created = false;
-      setTitle(path);
       setState(PCState::CLEAN);
+      setTitle( fi.baseName() );
+      setToolTip(path);
       raise();
       }
 
@@ -415,12 +417,20 @@ void PluginCreator::savePlugin()
                   return;
             }
       QFile f(path);
+      QFileInfo fi(f);
+      if(fi.suffix() != "qml" ) {
+            QMessageBox::critical(mscore, tr("MuseScore: Save Plugin"), tr("cannot determine file type"));
+            return;
+      }
+
       if (f.open(QIODevice::WriteOnly)) {
             f.write(textEdit->toPlainText().toUtf8());
             f.close();
             textEdit->document()->setModified(false);
             created = false;
             setState(PCState::CLEAN);
+            setTitle( fi.baseName() );
+            setToolTip(path);
             }
       else {
             // TODO
@@ -460,6 +470,8 @@ void PluginCreator::newPlugin()
          "      }\n");
       textEdit->setPlainText(s);
       setState(PCState::CLEAN);
+      setTitle(path);
+      setToolTip(path);
       raise();
       }
 
