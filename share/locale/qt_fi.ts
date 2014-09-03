@@ -922,7 +922,7 @@ to
     </message>
 </context>
 <context>
-    <name>QDialogButtonBox</name>
+    <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
         <translation>OK</translation>
