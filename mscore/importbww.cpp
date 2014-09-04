@@ -186,6 +186,7 @@ private:
       Ms::Volta* lastVolta;                                 ///< Current volta
       unsigned int tempo;                               ///< Tempo (0 = not specified)
       unsigned int ending;                              ///< Current ending
+      QList<Ms::Chord*> currentGraceNotes;
       };
 
 /**
@@ -400,9 +401,14 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
             }
       cr->add(note);
       // add chord to measure
-      Ms::Segment* s = currentMeasure->getSegment(cr, tick);
-      s->add(cr);
       if (!grace) {
+            Ms::Segment* s = currentMeasure->getSegment(cr, tick);
+            s->add(cr);
+            if (!currentGraceNotes.isEmpty()) {
+                  for (int i = currentGraceNotes.size() - 1; i >=0; i--)
+                        cr->add(currentGraceNotes.at(i));
+                  currentGraceNotes.clear();
+                  }
             doTriplet(cr, triplet);
             int tickBefore = tick;
             tick += ticks;
@@ -413,6 +419,9 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
                      << "tick:" << tick
                      << "nl:" << nl.print()
             ;
+            }
+      else {
+            currentGraceNotes.append(cr);
             }
       }
 
@@ -560,6 +569,7 @@ Score::FileError importBww(Score* score, const QString& path)
       Bww::Lexer lex(&fp);
       Bww::MsScWriter wrt;
       wrt.setScore(score);
+      score->style()->set(StyleIdx::measureSpacing, 1.0);
       Bww::Parser p(lex, wrt);
       p.parse();
 
