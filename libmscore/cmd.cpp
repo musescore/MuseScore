@@ -2100,6 +2100,8 @@ void Score::cmd(const QAction* a)
             cmdAddOttava(Ottava::Type::OTTAVA_8VA);
       else if (cmd == "add-8vb")
             cmdAddOttava(Ottava::Type::OTTAVA_8VB);
+      else if (cmd == "delete-single-element")
+            cmdDeleteSelectedElement();
       else if (cmd == "delete-measures")
             cmdDeleteSelectedMeasures();
       else if (cmd == "time-delete") {
