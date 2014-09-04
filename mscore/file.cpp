@@ -1291,7 +1291,7 @@ QString MuseScore::getPluginFilename(bool open)
             myPlugins.setFile(QDir::home(), preferences.myPluginsPath);
       QString defaultPath = myPlugins.absoluteFilePath();
 
-      QString name  = createDefaultFileName();
+      QString name  = createDefaultFileName("Plugin");
       QString fname = QString("%1/%2.qml").arg(defaultPath).arg(name);
       if (preferences.nativeDialogs) {
             QString fn;
