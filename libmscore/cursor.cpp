@@ -294,5 +294,150 @@ int Cursor::qmlKeySignature()
 	    Staff *staff = _score->staves()[staffIdx()];
             return (int) staff->key(tick());
       }
+
+//---------------------------------------------------------
+//   inSelection
+//---------------------------------------------------------
+
+bool Cursor::inSelection()
+      {
+      if (!_segment)
+            return false;
+
+      // check if after start of selection
+      Segment* seg = _score->selection().startSegment();
+      int track = _score->selection().staffStart() * VOICES;
+
+      if (!seg)
+            return(false); // don't have selection
+      if (seg->tick() > tick())
+            return false; // selection starts later
+      if (track > _track)
+            return false; // our track is not included in the selection
+
+      // check if before end of selection
+      seg = _score->selection().endSegment();
+      track = (_score->selection().staffEnd() * VOICES) - 1;
+
+      if (_track > track)
+            return false; // our track is not included in the selection
+      if (!seg)
+            return true; // selection contains last measure
+      if (tick() < seg->tick())
+            return true;
+      else
+            return false;
+      }
+
+//---------------------------------------------------------
+//   hasSelection
+//---------------------------------------------------------
+
+bool Cursor::hasSelection()
+      {
+      if (_score->selection().startSegment())
+            return true;
+      else
+            return false;
+      }
+
+//---------------------------------------------------------
+//   iterate()
+//
+//   reset iterator
+//---------------------------------------------------------
+
+void Cursor::iterate(bool type)
+      {
+      switch (type) {
+            case false: // iterate through whole score
+                  _iterationType = 0;
+                  setTrack(0);
+                  rewind(0);
+                  break;
+            case true:  // iterate through selection
+                  if (!hasSelection())
+                        _iterationType = -1;
+                  else {
+                        _iterationType = 1;
+                        rewind(1);
+                        }
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
+//   iterating()
+//---------------------------------------------------------
+
+bool Cursor::iterating()
+      {
+      switch (_iterationType) {
+            case 0:
+            case 1:
+                  return true;
+            default:
+                  return false;
+            }
+      }
+
+//---------------------------------------------------------
+//   nextTrack()
+//---------------------------------------------------------
+
+void Cursor::nextTrack()
+      {
+      int tracks = _score->nstaves() * VOICES;
+      if ((_track + 1) >= tracks) {
+            _iterationType = -1; // done iterating
+            return;
+            }
+
+      switch (_iterationType) {
+            case 0:
+                  setTrack(_track + 1);
+                  rewind(0);
+                  break;
+            case 1:
+                  int nextTrack = _track + 1;
+                  if ((_track + 1) >= (_score->selection().staffEnd() * VOICES))
+                        _iterationType = -1; // done iterating
+                  else {
+                        rewind(1);
+                        setTrack(nextTrack);
+                        }
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
+//   nextStaff()
+//---------------------------------------------------------
+
+void Cursor::nextStaff()
+      {
+      int tracks = _score->nstaves() * VOICES;
+      int nextTrack = (staffIdx() + 1) * VOICES;
+      if (nextTrack >= tracks) {
+            _iterationType = -1; // done iterating
+            return;
+            }
+
+      switch (_iterationType) {
+            case 0:
+                  setTrack(nextTrack);
+                  rewind(0);
+                  break;
+            case 1:
+                  if (nextTrack >= (_score->selection().staffEnd() * VOICES))
+                        _iterationType = -1; // done iterating
+                  else {
+                        rewind(1);
+                        setTrack(nextTrack);
+                        }
+                  break;
+            }
+      }
+
 }
 

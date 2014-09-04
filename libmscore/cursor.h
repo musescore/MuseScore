@@ -31,6 +31,8 @@ class Measure;
 //   @P track     int           current track
 //   @P staffIdx  int           current staff (track / 4)
 //   @P voice     int           current voice (track % 4)
+//   @P inSelection bool        true if current position is part of the selection (read only)
+//   @P hasSelection bool       true if something is selected (read-only)
 //   @P element   Ms::Element*  current element at track, read only
 //   @P segment   Ms::Segment*  current segment, read only
 //   @P measure   Ms::Measure*  current measure, read only
@@ -45,7 +47,8 @@ class Cursor : public QObject {
       Q_PROPERTY(int track          READ track         WRITE setTrack)
       Q_PROPERTY(int staffIdx       READ staffIdx      WRITE setStaffIdx)
       Q_PROPERTY(int voice          READ voice         WRITE setVoice)
-
+      Q_PROPERTY(bool hasSelection  READ hasSelection)
+      Q_PROPERTY(bool inSelection   READ inSelection)
       Q_PROPERTY(Ms::Element* element READ element)
       Q_PROPERTY(Ms::Segment* segment READ segment)
       Q_PROPERTY(Ms::Measure* measure READ measure)
@@ -58,6 +61,7 @@ class Cursor : public QObject {
       Score* _score;
       int _track;
       bool _expandRepeats;
+      int _iterationType;
 
       //state
       Segment* _segment;
@@ -81,6 +85,9 @@ class Cursor : public QObject {
       int voice() const;
       void setVoice(int v);
 
+      bool inSelection();
+      bool hasSelection();
+
       Element* element() const;
       Segment* segment() const                { return _segment;  }
       Measure* measure() const;
@@ -95,6 +102,16 @@ class Cursor : public QObject {
       //@   type=1      rewind to start of selection
       //@   type=2      rewind to end of selection
       Q_INVOKABLE void rewind(int type);
+
+      //@ iterate
+      //@   type=false  iterate through whole score
+      //@   type=true   iterate through selection
+      Q_INVOKABLE void iterate(bool type);
+      Q_INVOKABLE bool iterating();
+      //@ nextTrack() sets iterator to next track(voice)
+      Q_INVOKABLE void nextTrack();
+      //@ nextStaff() sets iterator to next staff
+      Q_INVOKABLE void nextStaff();
 
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();
