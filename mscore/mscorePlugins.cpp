@@ -419,7 +419,7 @@ void MuseScore::pluginTriggered(int idx)
             view->setSource(QUrl::fromLocalFile(pp));
             view->setTitle(p->menuPath().mid(p->menuPath().lastIndexOf(".") + 1));
             view->setColor(QApplication::palette().color(QPalette::Window));
-            //p->setParentItem(view->contentItem());
+            p->setParentItem(view->contentItem());
             //view->setWidth(p->width());
             //view->setHeight(p->height());
             view->setResizeMode(QQuickView::SizeRootObjectToView);
