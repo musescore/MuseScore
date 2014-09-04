@@ -350,12 +350,12 @@ bool Cursor::hasSelection()
 void Cursor::iterate(bool type)
       {
       switch (type) {
-            case false: // iterate through whole score
+            case false: // iterate over whole score
                   _iterationType = 0;
                   setTrack(0);
                   rewind(0);
                   break;
-            case true:  // iterate through selection
+            case true:  // iterate over selection
                   if (!hasSelection())
                         _iterationType = -1;
                   else {
@@ -376,7 +376,7 @@ bool Cursor::iterating()
             case 0:
             case 1:
                   return true;
-            default:
+            case -1:
                   return false;
             }
       }

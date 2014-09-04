@@ -32,13 +32,13 @@ class Measure;
 //   @P staffIdx  int           current staff (track / 4)
 //   @P voice     int           current voice (track % 4)
 //   @P inSelection bool        true if current position is part of the selection (read only)
-//   @P hasSelection bool       true if something is selected (read-only)
+//   @P hasSelection bool       true if there is a selection (read only)
 //   @P element   Ms::Element*  current element at track, read only
 //   @P segment   Ms::Segment*  current segment, read only
 //   @P measure   Ms::Measure*  current measure, read only
 //   @P tick      int           midi tick position, read only
 //   @P time      double        time at tick position, read only
-//   @P keySignature int        key signature of current staff at tick pos. (read only) 
+//   @P keySignature int        key signature of current staff at tick pos (read only) 
 //   @P score     Ms::Score*    associated score
 //---------------------------------------------------------
 
@@ -104,8 +104,8 @@ class Cursor : public QObject {
       Q_INVOKABLE void rewind(int type);
 
       //@ iterate
-      //@   type=false  iterate through whole score
-      //@   type=true   iterate through selection
+      //@   type=false  iterate over whole score
+      //@   type=true   iterate over selection
       Q_INVOKABLE void iterate(bool type);
       Q_INVOKABLE bool iterating();
       //@ nextTrack() sets iterator to next track(voice)
