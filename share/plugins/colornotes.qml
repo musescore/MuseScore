@@ -34,15 +34,27 @@ MuseScore {
       function applyToNotesInSelection(func) {
             var cursor = curScore.newCursor();
             cursor.rewind(1);
-            var startStaff  = cursor.staffIdx;
-            cursor.rewind(2);
-            var endStaff   = cursor.staffIdx;
-            var endTick    = cursor.tick // if no selection, end of score
+            var startStaff;
+            var endStaff;
+            var endTick;
             var fullScore = false;
             if (!cursor.segment) { // no selection
                   fullScore = true;
                   startStaff = 0; // start with 1st staff
                   endStaff = curScore.nstaves - 1; // and end with last
+            } else {
+                  startStaff = cursor.staffIdx;
+                  cursor.rewind(2);
+                  if (cursor.tick == 0) {
+                        // this happens when the selection includes
+                        // the last measure of the score.
+                        // rewind(2) goes behind the last segment (where
+                        // there's none) and sets tick=0
+                        endTick = curScore.lastSegment.tick + 1;
+                  } else {
+                        endTick = cursor.tick;
+                  }
+                  endStaff = cursor.staffIdx;
             }
             console.log(startStaff + " - " + endStaff + " - " + endTick)
             for (var staff = startStaff; staff <= endStaff; staff++) {
