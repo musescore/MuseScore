@@ -1124,7 +1124,7 @@ to
     </message>
 </context>
 <context>
-    <name>QDialogButtonBox</name>
+    <name>QPlatformTheme</name>
     <message>
         <location filename="" line="326436454"/>
         <source>OK</source>
