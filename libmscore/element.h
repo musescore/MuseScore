@@ -445,6 +445,7 @@ class Element : public QObject {
       // debug functions
       virtual void dump() const;
       Q_INVOKABLE const char* name() const;
+      Q_INVOKABLE QString nameStr() { return QString(name()); };
       virtual QString subtypeName() const;
       virtual QString userName() const;
       void dumpQPointF(const char*) const;
