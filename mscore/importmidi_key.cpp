@@ -42,6 +42,8 @@ Key findKey(const QList<MTrack> &tracks)
       std::vector<int> counts(octave);
 
       for (const auto &track: tracks) {
+            if (track.mtrack->drumTrack())
+                  continue;
             for (auto it = track.chords.begin(); it != track.chords.end(); ++it) {
                   const auto next = std::next(it);
                   if (next == track.chords.end())
@@ -83,6 +85,8 @@ void setMainKeySig(QList<MTrack> &tracks)
       {
       const Key key = findKey(tracks);
       for (MTrack &track: tracks) {
+            if (track.mtrack->drumTrack())
+                  continue;
             auto &opers = preferences.midiImportOperations;
             MidiOperations::CurrentTrackSetter setCurrentTrack{opers, track.indexOfOperation};
             if (!track.hasKey || opers.data()->trackOpers.isHumanPerformance.value())
