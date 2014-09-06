@@ -438,6 +438,7 @@ class ChangeChordNoStem : public UndoCommand {
 class ChangeEndBarLineType : public UndoCommand {
       Measure* measure;
       BarLineType subtype;
+      bool endBarLineGenerated;
       void flip();
 
    public:

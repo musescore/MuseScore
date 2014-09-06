@@ -2431,16 +2431,16 @@ bool Measure::setStartRepeatBarLine(bool val)
 
             if (span && val && (bl == 0)) {
                   // no barline were we need one:
-                  bl = new BarLine(score());
-                  bl->setTrack(track);
-                  bl->setBarLineType(BarLineType::START_REPEAT);
                   if (s == 0) {
                         if (score()->undoRedo()) {
                               return false;
                               }
                         s = undoGetSegment(Segment::Type::StartRepeatBarLine, tick());
                         }
-                  bl->setParent(s);
+                  bl = new BarLine(score());
+                  bl->setTrack(track);
+                  bl->setParent(s);             // let the bar line know it belongs to a StartRepeatBarLine segment
+                  bl->setBarLineType(BarLineType::START_REPEAT);
                   score()->undoAddElement(bl);
                   changed = true;
                   }
@@ -2555,10 +2555,10 @@ bool Measure::createEndBarLines()
                         bl = new BarLine(score());
                         bl->setVisible(_endBarLineVisible);
                         bl->setColor(_endBarLineColor);
-                        bl->setGenerated(_endBarLineGenerated);
-                        bl->setBarLineType(_endBarLineType);
-                        bl->setParent(seg);
+                        bl->setParent(seg);           // let the bar line know the segment and track it belongs to
                         bl->setTrack(track);
+                        bl->setBarLineType(_endBarLineType);
+                        bl->setGenerated(_endBarLineGenerated);
                         score()->undoAddElement(bl);
                         changed = true;
                         }
@@ -2571,8 +2571,10 @@ bool Measure::createEndBarLines()
                               changed = true;
                               }
                         // or clear custom subtype flag if same type as measure
-                        if (bl->barLineType() == _endBarLineType && bl->customSubtype())
+                        if (bl->barLineType() == _endBarLineType && bl->customSubtype()) {
                               bl->setCustomSubtype(false);
+                              bl->setGenerated(bl->el()->empty() && _endBarLineGenerated);
+                              }
 
                         // if a bar line exists for this staff (cbl) but
                         // it is not the bar line we are dealing with (bl),

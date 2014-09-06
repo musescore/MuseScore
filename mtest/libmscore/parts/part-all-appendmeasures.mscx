@@ -592,11 +592,6 @@
           <lid>112</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          <lid>113</lid>
-          </BarLine>
         </Measure>
       <Measure number="33">
         <Rest>
@@ -933,11 +928,6 @@
           <lid>170</lid>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          <lid>171</lid>
-          </BarLine>
         </Measure>
       <Measure number="33">
         <Rest>
@@ -1500,11 +1490,6 @@
             <lid>112</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>113</lid>
-            </BarLine>
           </Measure>
         <Measure number="33">
           <Rest>
@@ -1951,11 +1936,6 @@
             <lid>170</lid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>171</lid>
-            </BarLine>
           </Measure>
         <Measure number="33">
           <Rest>

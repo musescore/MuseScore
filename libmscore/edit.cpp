@@ -2259,18 +2259,11 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   if (score == rootScore())
                         omb = static_cast<Measure*>(mb);
                   bool createEndBar    = false;
-                  bool endBarGenerated = false;
                   if (!measure) {
                         Measure* lm = score->lastMeasure();
                         if (lm && lm->endBarLineType() == BarLineType::END) {
                               createEndBar = true;
-                              if (!lm->endBarLineGenerated()) {
-                                    score->undoChangeEndBarLineType(lm, BarLineType::NORMAL);
-                                    }
-                              else {
-                                    endBarGenerated = true;
-                                    lm->setEndBarLineType(BarLineType::NORMAL, true);
-                                    }
+                              score->undoChangeEndBarLineType(lm, BarLineType::NORMAL);
                               }
                         else if (lm == nullptr)
                               createEndBar = true;
@@ -2344,10 +2337,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         undoAddElement(nClef);
                         }
                   if (createEndBar) {
-                        // Measure* lm = score->lastMeasure();
-                        // if (lm)
-                        //      lm->setEndBarLineType(BarLineType::END, endBarGenerated);
-                        m->setEndBarLineType(BarLineType::END, endBarGenerated);
+                        m->setEndBarLineType(BarLineType::END, false);
                         }
                   score->fixTicks();
                   }
