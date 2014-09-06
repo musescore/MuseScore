@@ -65,6 +65,8 @@ class ScoreTab : public QWidget {
 
    public:
       ScoreTab(QList<Score*>*, QWidget* parent = 0);
+      ~ScoreTab();
+
       void insertTab(Score*);
       void setTabText(int, const QString&);
       int currentIndex() const;
