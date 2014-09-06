@@ -94,14 +94,14 @@ void Model::init()
       // init audio
       Divis* D = _divis;
       for (int d = 0; d < _ndivis; d++, D++) {
-            M_new_divis* M = new M_new_divis ();
-            M->_flags = D->_flags;
-            M->_dmask = D->_dmask;
-            M->_asect = D->_asect;
-            M->_swell = D->_param [Divis::SWELL].fval();
-            M->_tfreq = D->_param [Divis::TFREQ].fval();
-            M->_tmodd = D->_param [Divis::TMODD].fval();
-            _aeolus->newDivis(M);
+            M_new_divis M;
+            M._flags = D->_flags;
+            M._dmask = D->_dmask;
+            M._asect = D->_asect;
+            M._swell = D->_param [Divis::SWELL].fval();
+            M._tfreq = D->_param [Divis::TFREQ].fval();
+            M._tmodd = D->_param [Divis::TMODD].fval();
+            _aeolus->newDivis(&M);
             }
 
       init_iface();
@@ -471,57 +471,57 @@ int Model::read_instr ()
                   else if (sscanf (q, "%s%d%d%n", t1, &k, &s, &n) != 3)
                         stat = ARGS;
                   else
-	    {
-		q += n;
-		if (_ndivis == NDIVIS)
-		{
-		    fprintf (stderr, "Line %d: can't create more than %d divisions\n", line, NDIVIS);
-		    stat = ERROR;
-		}
-		else if (strlen (t1) > 15) stat = BAD_STR1;
-		else if ((k < 0) || (k > _nkeybd)) stat = BAD_KEYBD;
-		else if ((s < 1) || (s > NASECT))  stat = BAD_ASECT;
-		else
-		{
-		    D = _divis + _ndivis++;
-		    strcpy (D->_label, t1);
+          {
+            q += n;
+            if (_ndivis == NDIVIS)
+            {
+                fprintf (stderr, "Line %d: can't create more than %d divisions\n", line, NDIVIS);
+                stat = ERROR;
+            }
+            else if (strlen (t1) > 15) stat = BAD_STR1;
+            else if ((k < 0) || (k > _nkeybd)) stat = BAD_KEYBD;
+            else if ((s < 1) || (s > NASECT))  stat = BAD_ASECT;
+            else
+            {
+                D = _divis + _ndivis++;
+                strcpy (D->_label, t1);
                     if (_nasect < s) _nasect = s;
-		    D->_asect = s - 1;
+                D->_asect = s - 1;
                     D->_keybd = k - 1;
-		    if (k--) D->_dmask = _keybd [k]._flags & 127;
-		}
-	    }
-	}
+                if (k--) D->_dmask = _keybd [k]._flags & 127;
+            }
+          }
+      }
         else if (! strcmp (p, "/divis/end"))
         {
-	    if (!D || G) stat = BAD_SCOPE;
+          if (!D || G) stat = BAD_SCOPE;
             else D = 0;
-	}
+      }
         else if (! strcmp (p, "/group/new"))
         {
-	    if (D || G) stat = BAD_SCOPE;
+          if (D || G) stat = BAD_SCOPE;
             else if (sscanf (q, "%s%n", t1, &n) != 1) stat = ARGS;
             else
-	    {
-		q += n;
-		if (_ngroup == NGROUP)
-		{
-		    fprintf (stderr, "Line %d: can't create more than %d groups\n", line, NGROUP);
-		    stat = ERROR;
-		}
-		else if (strlen (t1) > 15) stat = BAD_STR1;
-		else
-		{
-		    G = _group + _ngroup++;
-		    strcpy (G->_label, t1);
-		}
-	    }
-	}
+          {
+            q += n;
+            if (_ngroup == NGROUP)
+            {
+                fprintf (stderr, "Line %d: can't create more than %d groups\n", line, NGROUP);
+                stat = ERROR;
+            }
+            else if (strlen (t1) > 15) stat = BAD_STR1;
+            else
+            {
+                G = _group + _ngroup++;
+                strcpy (G->_label, t1);
+            }
+          }
+      }
         else if (! strcmp (p, "/group/end"))
         {
-	    if (D || !G) stat = BAD_SCOPE;
+          if (D || !G) stat = BAD_SCOPE;
             else G = 0;
-	}
+      }
 
             else if (! strcmp (p, "/tuning")) {
                   if (D || G)
@@ -537,195 +537,195 @@ int Model::read_instr ()
 
         else if (! strcmp (p, "/rank"))
         {
-	    if (!D && G) stat = BAD_SCOPE;
+          if (!D && G) stat = BAD_SCOPE;
             else if (sscanf (q, "%c%d%s%n", &c, &d, t1, &n) != 3) stat = ARGS;
             else
-	    {
-   	        q += n;
+          {
+              q += n;
                 if (D->_nrank == Divis::NRANK)
-		{
-		    fprintf (stderr, "Line %d: can't create more than %d ranks per division\n", line, Divis::NRANK);
-		    stat = ERROR;
-		}
+            {
+                fprintf (stderr, "Line %d: can't create more than %d ranks per division\n", line, Divis::NRANK);
+                stat = ERROR;
+            }
                 else if (strlen (t1) > 63) stat = BAD_STR1;
                 else
-		{
+            {
                     A = new Addsynth;
-        	    strcpy (A->_filename, t1);
+                strcpy (A->_filename, t1);
                     if (A->load (_stops))
-		    {
-			stat = ERROR;
-			delete A;
- 		    }
+                {
+                  stat = ERROR;
+                  delete A;
+                }
                     else
-		    {
+                {
                         A->_pan = c;
                         A->_del = d;
-			R = D->_ranks + D->_nrank++;
+                  R = D->_ranks + D->_nrank++;
                         R->_count = 0;
                         R->_sdef = A;
                         R->_wave = 0;
-		    }
- 		}
-	    }
-	}
+                }
+            }
+          }
+      }
         else if (! strcmp (p, "/tremul"))
         {
-	    if (D)
-	    {
+          if (D)
+          {
             float val1;
             float val2;
-		if (sscanf (q, "%f%f%n", &val1, &val2, &n) != 2)
+            if (sscanf (q, "%f%f%n", &val1, &val2, &n) != 2)
                stat = ARGS;
             else {
                 D->_param[Divis::TFREQ].set(val1);
                 D->_param[Divis::TMODD].set(val2);
-		    q += n;
-		    D->_flags |= Divis::HAS_TREM;
-		}
-	    }
-	    else if (G)
-	    {
-		if (sscanf (q, "%d%s%s%n", &d, t1, t2, &n) != 3) stat = ARGS;
+                q += n;
+                D->_flags |= Divis::HAS_TREM;
+            }
+          }
+          else if (G)
+          {
+            if (sscanf (q, "%d%s%s%n", &d, t1, t2, &n) != 3) stat = ARGS;
                 else
-		{
-		    q += n;
+            {
+                q += n;
                     if (G->_nifelm == Group::NIFELM) stat = BAD_IFACE;
                     else if ((d < 1) || (d > _ndivis)) stat = BAD_DIVIS;
-	   	    else if (strlen (t1) >  7) stat = BAD_STR1;
-		    else if (strlen (t2) > 31) stat = BAD_STR2;
+                else if (strlen (t1) >  7) stat = BAD_STR1;
+                else if (strlen (t2) > 31) stat = BAD_STR2;
                     else
-		    {
+                {
                         d--;
-			I = G->_ifelms + G->_nifelm++;
-			strcpy (I->_mnemo, t1);
-			strcpy (I->_label, t2);
-			I->_type = Ifelm::TREMUL;
-			I->_action0 = (16 << 24) | (d << 16) | 0;
-			I->_action1 = (16 << 24) | (d << 16) | 1;
-		    }
-		}
-	    }
+                  I = G->_ifelms + G->_nifelm++;
+                  strcpy (I->_mnemo, t1);
+                  strcpy (I->_label, t2);
+                  I->_type = Ifelm::TREMUL;
+                  I->_action0 = (16 << 24) | (d << 16) | 0;
+                  I->_action1 = (16 << 24) | (d << 16) | 1;
+                }
+            }
+          }
             else stat = BAD_SCOPE;
-	}
+      }
         else if (! strcmp (p, "/swell"))
         {
-	    if (!D || G) stat = BAD_SCOPE;
+          if (!D || G) stat = BAD_SCOPE;
             else D->_flags |= Divis::HAS_SWELL;
-	}
+      }
         else if (! strcmp (p, "/stop"))
         {
-	    if (D || !G) stat = BAD_SCOPE;
+          if (D || !G) stat = BAD_SCOPE;
             else if (sscanf (q, "%d%d%d%n", &k, &d, &r, &n) != 3) stat = ARGS;
             else
-	    {
-    	        q += n;
+          {
+              q += n;
                 if (G->_nifelm == Group::NIFELM) stat = BAD_IFACE;
                 else if ((k < 0) || (k > _nkeybd)) stat = BAD_KEYBD;
                 else if ((d < 1) || (d > _ndivis)) stat = BAD_DIVIS;
                 else if ((r < 1) || (r > _divis [d - 1]._nrank)) stat = BAD_RANK;
                 else
-		{
+            {
                     k--;
                     d--;
                     r--;
-		    I = G->_ifelms + G->_nifelm++;
+                I = G->_ifelms + G->_nifelm++;
                     R = _divis [d]._ranks + r;
                     strcpy (I->_label, R->_sdef->_stopname);
                     strcpy (I->_mnemo, R->_sdef->_mnemonic);
                     I->_keybd = k;
                     if (k >= 0)
-		    {
+                {
                         I->_type = Ifelm::KBDRANK;
-			k = _keybd [k]._flags & 127;
-		    }
-		    else
-		    {
+                  k = _keybd [k]._flags & 127;
+                }
+                else
+                {
                         I->_type = Ifelm::DIVRANK;
-			k = 128;
-		    }
+                  k = 128;
+                }
                     I->_action0 = (6 << 24) | (d << 16) | (r << 8) | k;
                     I->_action1 = (7 << 24) | (d << 16) | (r << 8) | k;
-    		}
-	    }
-	}
+            }
+          }
+      }
         else if (! strcmp (p, "/coupler"))
         {
-	    if (D || !G) stat = BAD_SCOPE;
+          if (D || !G) stat = BAD_SCOPE;
             else if (sscanf (q, "%d%d%s%s%n", &k, &d, t1, t2, &n) != 4) stat = ARGS;
             else
-	    {
-		q += n;
+          {
+            q += n;
                 if (G->_nifelm == Group::NIFELM) stat = BAD_IFACE;
                 else if ((k < 1) || (k > _nkeybd)) stat = BAD_KEYBD;
                 else if ((d < 1) || (d > _ndivis)) stat = BAD_DIVIS;
-		else if (strlen (t1) >  7) stat = BAD_STR1;
-		else if (strlen (t2) > 31) stat = BAD_STR2;
+            else if (strlen (t1) >  7) stat = BAD_STR1;
+            else if (strlen (t2) > 31) stat = BAD_STR2;
                 else
-		{
+            {
                     k--;
                     d--;
-		    I = G->_ifelms + G->_nifelm++;
+                I = G->_ifelms + G->_nifelm++;
                     strcpy (I->_mnemo, t1);
                     strcpy (I->_label, t2);
                     I->_type = Ifelm::COUPLER;
-	            I->_keybd = k;
+                  I->_keybd = k;
                     k = _keybd [k]._flags & 127;
                     I->_action0 = (4 << 24) | (d << 16) | k;
                     I->_action1 = (5 << 24) | (d << 16) | k;
-		}
-	    }
-	}
+            }
+          }
+      }
         else stat = COMM;
 
         if (stat <= DONE)
-	{
+      {
             while (isspace (*q)) q++;
             if (*q > ' ') stat = MORE;
-	}
+      }
 
         switch (stat)
-	{
+      {
         case COMM:
-	    fprintf (stderr, "Line %d: unknown command '%s'\n", line, p);
+          fprintf (stderr, "Line %d: unknown command '%s'\n", line, p);
             break;
         case ARGS:
-	    fprintf (stderr, "Line %d: missing arguments in '%s' command\n", line, p);
+          fprintf (stderr, "Line %d: missing arguments in '%s' command\n", line, p);
             break;
         case MORE:
-	    fprintf (stderr, "Line %d: extra arguments in '%s' command\n", line, p);
+          fprintf (stderr, "Line %d: extra arguments in '%s' command\n", line, p);
             break;
         case NO_INSTR:
-	    fprintf (stderr, "Line %d: command '%s' outside instrument scope\n", line, p);
+          fprintf (stderr, "Line %d: command '%s' outside instrument scope\n", line, p);
             break;
         case IN_INSTR:
-	    fprintf (stderr, "Line %d: command '%s' inside instrument scope\n", line, p);
+          fprintf (stderr, "Line %d: command '%s' inside instrument scope\n", line, p);
             break;
         case BAD_SCOPE:
-	    fprintf (stderr, "Line %d: command '%s' in wrong scope\n", line, p);
+          fprintf (stderr, "Line %d: command '%s' in wrong scope\n", line, p);
             break;
         case BAD_ASECT:
-	    fprintf (stderr, "Line %d: no section '%d'\n", line, s);
+          fprintf (stderr, "Line %d: no section '%d'\n", line, s);
             break;
         case BAD_RANK:
-	    fprintf (stderr, "Line %d: no rank '%d' in division '%d'\n", line, r, d);
+          fprintf (stderr, "Line %d: no rank '%d' in division '%d'\n", line, r, d);
             break;
         case BAD_KEYBD:
-	    fprintf (stderr, "Line %d: no keyboard '%d'\n", line, k);
+          fprintf (stderr, "Line %d: no keyboard '%d'\n", line, k);
             break;
         case BAD_DIVIS:
-	    fprintf (stderr, "Line %d: no division '%d'\n", line, d);
+          fprintf (stderr, "Line %d: no division '%d'\n", line, d);
             break;
         case BAD_IFACE:
-	    fprintf (stderr, "Line %d: can't create more than '%d' elements per group\n", line, Group::NIFELM);
+          fprintf (stderr, "Line %d: can't create more than '%d' elements per group\n", line, Group::NIFELM);
             break;
         case BAD_STR1:
-	    fprintf (stderr, "Line %d: string '%s' is too long\n", line, t1);
+          fprintf (stderr, "Line %d: string '%s' is too long\n", line, t1);
             break;
         case BAD_STR2:
-	    fprintf (stderr, "Line %d: string '%s' is too long\n", line, t1);
+          fprintf (stderr, "Line %d: string '%s' is too long\n", line, t1);
             break;
-	}
+      }
     }
 
       f.close();
@@ -748,7 +748,7 @@ int Model::write_instr()
     sprintf (buff, "%s/definition", _instr);
     if (! (F = fopen (buff, "w")))
     {
-	fprintf (stderr, "Can't open '%s' for writing\n", buff);
+      fprintf (stderr, "Can't open '%s' for writing\n", buff);
         return 1;
     }
     printf ("Writing '%s'\n", buff);
@@ -763,21 +763,21 @@ int Model::write_instr()
     fprintf (F, "\n# Keyboards\n#\n");
     for (k = 0; k < _nkeybd; k++)
     {
-	if (_keybd [k]._flags & Keybd::IS_PEDAL) fprintf (F, "/pedal/new    %s\n", _keybd [k]._label);
+      if (_keybd [k]._flags & Keybd::IS_PEDAL) fprintf (F, "/pedal/new    %s\n", _keybd [k]._label);
         else                                     fprintf (F, "/manual/new   %s\n", _keybd [k]._label);
     }
 
     fprintf (F, "\n# Divisions\n#\n");
     for (d = 0; d < _ndivis; d++)
     {
-	D = _divis + d;
+      D = _divis + d;
         fprintf (F, "/divis/new    %-7s  %d  %d\n", D->_label, D->_keybd + 1, D->_asect + 1);
         for (r = 0; r < D->_nrank; r++)
-	{
+      {
             R = D->_ranks + r;
-	    A = R->_sdef;
+          A = R->_sdef;
             fprintf (F, "/rank         %c %3d  %s\n", A->_pan, A->_del, A->_filename);
-	}
+      }
         if (D->_flags & Divis::HAS_SWELL) fprintf (F, "/swell\n");
         if (D->_flags & Divis::HAS_TREM) fprintf (F, "/tremul       %3.1f  %3.1f\n",
                                                   D->_param [Divis::TFREQ].fval(), D->_param [Divis::TMODD].fval());
@@ -787,34 +787,34 @@ int Model::write_instr()
     fprintf (F, "# Interface groups\n#\n");
     for (g = 0; g < _ngroup; g++)
     {
-	G = _group + g;
+      G = _group + g;
         fprintf (F, "/group/new    %-7s\n", G->_label);
         for (i = 0; i < G->_nifelm; i++)
-	{
-	    I = G->_ifelms + i;
+      {
+          I = G->_ifelms + i;
             switch (I->_type)
-	    {
-	    case Ifelm::DIVRANK:
-	    case Ifelm::KBDRANK:
+          {
+          case Ifelm::DIVRANK:
+          case Ifelm::KBDRANK:
                 k = I->_keybd;
                 d = (I->_action0 >> 16) & 255;
                 r = (I->_action0 >>  8) & 255;
                 fprintf (F, "/stop         %d   %d  %2d\n", k + 1, d + 1, r + 1);
-		break;
+            break;
 
-	    case Ifelm::COUPLER:
+          case Ifelm::COUPLER:
                 k = I->_keybd;
                 d = (I->_action0 >> 16) & 255;
                 fprintf (F, "/coupler      %d   %d   %-7s  %s\n", k + 1, d + 1, I->_mnemo, I->_label);
-		break;
+            break;
 
-	    case Ifelm::TREMUL:
+          case Ifelm::TREMUL:
                 d = (I->_action0 >> 16) & 255;
                 D = _divis + d;
                 fprintf (F, "/tremul       %d       %-7s  %s\n", d + 1, I->_mnemo, I->_label);
-		break;
-	    }
-	}
+            break;
+          }
+      }
         fprintf (F, "/group/end\n\n");
     }
 
