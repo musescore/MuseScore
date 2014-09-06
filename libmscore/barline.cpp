@@ -93,7 +93,7 @@ QString BarLine::userTypeName2(BarLineType t)
 BarLine::BarLine(Score* s)
    : Element(s)
       {
-      setBarLineType(BarLineType::NORMAL);
+      _barLineType = BarLineType::NORMAL;
       _span     = 1;
       _spanFrom = 0;
       _spanTo   = DEFAULT_BARLINE_TO;
@@ -484,7 +484,7 @@ void BarLine::read(XmlReader& e)
                               case  6: ct = BarLineType::END_START_REPEAT; break;
                               case  7: ct = BarLineType::DOTTED; break;
                               }
-                        setBarLineType(ct);
+                        _barLineType = ct;     // set type directly, without triggering setBarLineType() checks
                         }
                   if (parent() && parent()->type() == Element::Type::SEGMENT) {
                         Measure* m = static_cast<Segment*>(parent())->measure();
@@ -989,6 +989,9 @@ QString BarLine::barLineTypeName() const
 
 //---------------------------------------------------------
 //   setBarLineType
+//
+//    Set the bar line type from the type name string.
+//    Does not update _customSubtype or _generated flags: to be used when reading from a score file
 //---------------------------------------------------------
 
 void BarLine::setBarLineType(const QString& s)
@@ -1075,6 +1078,84 @@ void BarLine::updateCustomSpan()
       }
 
 //---------------------------------------------------------
+//   updateCustomType
+//
+//    Turns off _customSubtype flag if bar line type is the same of the context it is in
+//    (usually the endBarLineType of the measure); turns it on otherwise.
+//---------------------------------------------------------
+
+void BarLine::updateCustomType()
+      {
+      BarLineType refType = BarLineType::NORMAL;
+      if (parent()) {
+            if (parent()->type() == Element::Type::SEGMENT) {
+                  Segment* seg = static_cast<Segment*>(parent());
+                  switch (seg->segmentType()) {
+                        case Segment::Type::StartRepeatBarLine:
+                              // if a start-repeat segment, ref. type is START_REPEAT
+                              // if measure has relevant repeat flag or none if measure hasn't
+                              refType = (seg->measure()->repeatFlags() & Repeat::START) != 0
+                                          ? BarLineType::START_REPEAT : BarLineType(-1);
+                              break;
+                        case Segment::Type::BarLine:
+                              // if a non-end-measure bar line, type is always custom
+                              refType = BarLineType(-1);           // use an invalid type
+                              break;
+                        case Segment::Type::EndBarLine:
+                              // if end-measure bar line, reference type is the measure endBarLinetype
+                              refType = seg->measure()->endBarLineType();
+                              break;
+                        default:                      // keep lint happy!
+                              break;
+                        }
+                  }
+            // if parent is not a segment, it can only be a system and NORMAL can be used as ref. type
+            }
+      _customSubtype = (_barLineType != refType);
+      updateGenerated(!_customSubtype);         // if _customSubType, _genereated is surely false
+      }
+
+//---------------------------------------------------------
+//   updateGenerated
+//
+//    Sets the _generated status flag by checking all the bar line properties are at default values.
+//
+//    canBeTrue: optional parameter; if set to false, the _generated flag is unconditionally set to false
+//          without checking the individual properties; to be used when a non-default condition is already known
+//          to speed up the function.
+//---------------------------------------------------------
+
+void BarLine::updateGenerated(bool canBeTrue)
+      {
+      if (!canBeTrue)
+            setGenerated(false);
+      else {
+            bool generatedType = !_customSubtype;     // if customSubType, assume not generated
+            if (parent()) {
+                  if (parent()->type() == Element::Type::SEGMENT) {
+                        // if bar line belongs to an EndBarLine segment,
+                        // combine with measure endBarLineGenerated flag
+                        if (static_cast<Segment*>(parent())->segmentType() == Segment::Type::EndBarLine)
+                              generatedType &= static_cast<Segment*>(parent())->measure()->endBarLineGenerated();
+                        // if any other segment (namely, StartBarLine and BarLine), bar line is not generated
+                        else
+                              generatedType = false;
+                  }
+                  // if bar line does not belongs to a segment, it belongs to a system and is generated only if NORMAL
+                  else
+                        generatedType = (_barLineType == BarLineType::NORMAL);
+            }
+            // set to generated only if all properties are non-customized
+            setGenerated(
+                  color()           == MScore::defaultColor
+                  && _visible       == true
+                  && generatedType  == true
+                  && _customSpan    == false
+                  );
+            }
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -1103,8 +1184,7 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
       {
       switch(id) {
             case P_ID::SUBTYPE:
-                  _barLineType = BarLineType(v.toInt());
-                  _customSubtype = parent() && (static_cast<Segment*>(parent())->measure())->endBarLineType() != _barLineType;
+                  setBarLineType(BarLineType(v.toInt()));
                   break;
             case P_ID::BARLINE_SPAN:
                   setSpan(v.toInt());
