@@ -202,7 +202,7 @@ Palette* MuseScore::newDynamicsPalette(bool master)
                   sp->append(dynamic, dynamic->dynamicTypeName());
                   }
             }
-            
+
       return sp;
       }
 
@@ -276,7 +276,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
       QAction* action = s->action();
       QIcon icon(action->icon());
       ik->setAction("add-brackets", icon);
-            sp->append(ik, s->help());
+      sp->append(ik, s->help());
       return sp;
       }
 
@@ -544,7 +544,7 @@ Palette* MuseScore::newBreathPalette()
       sp->setDrawGrid(true);
 
       for (int i = 0; i < 4; ++i) {
-      	if (i == 1) // do not add two similar breaths. //TODO add support for other break mark
+            if (i == 1) // do not add two similar breaths. //TODO add support for other break mark
                   continue;
             Breath* a = new Breath(gscore);
             a->setBreathType(i);
@@ -930,7 +930,7 @@ Palette* MuseScore::newTextPalette()
       st->setTextStyleType(TextStyleType::TEMPO);
       st->setText(tr("Swing"));
       st->setSwing(true);
-      sp->append(st, tr("Swing")); 
+      sp->append(st, tr("Swing"));
 
       RehearsalMark* rhm = new RehearsalMark(gscore);
       rhm->setTrack(0);

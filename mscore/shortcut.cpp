@@ -152,7 +152,7 @@ void Shortcut::setKeys(const QList<QKeySequence>& ks)
 
 QString Shortcut::descr() const
       {
-      return qApp->translate("action", _descr);
+      return qApp->translate("action", _descr.toStdString().c_str());
       }
 
 //---------------------------------------------------------
@@ -161,7 +161,7 @@ QString Shortcut::descr() const
 
 QString Shortcut::text() const
       {
-      return qApp->translate("action", _text);
+      return qApp->translate("action", _text.toStdString().c_str());
       }
 
 //---------------------------------------------------------
@@ -170,7 +170,7 @@ QString Shortcut::text() const
 
 QString Shortcut::help() const
       {
-      return qApp->translate("action", _help);
+      return qApp->translate("action", _help.toStdString().c_str());
       }
 
 //---------------------------------------------------------
@@ -222,7 +222,7 @@ QAction* Shortcut::action() const
             _action->setShortcuts(_keys);
 
       _action->setShortcutContext(_context);
-      if (_help) {
+      if (!_help.isEmpty()) {
             _action->setToolTip(help());
             _action->setWhatsThis(help());
             }
