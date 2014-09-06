@@ -526,9 +526,9 @@ MuseScore::MuseScore()
       mainWindow->setChildrenCollapsible(false);
       mainWindow->setOrientation(Qt::Vertical);
 
-      QLayout* mlayout = new QVBoxLayout;
-      mlayout->setMargin(0);
-      mlayout->setSpacing(0);
+//      QLayout* mlayout = new QVBoxLayout;
+//      mlayout->setMargin(0);
+//      mlayout->setSpacing(0);
 //      mainWindow->setLayout(mlayout);
 
       QWidget* mainScore = new QWidget;
