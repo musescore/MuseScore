@@ -82,7 +82,7 @@ static const int KEYSEQ_SIZE = 4;
 //---------------------------------------------------------
 
 class Shortcut {
-      const char* _key   { 0 };    //! xml tag name for configuration file
+      QString _key;                //! xml tag name for configuration file
       const char* _descr { 0 };    //! descriptor, shown in editor
       const char* _text  { 0 };    //! text as shown on buttons or menus
       const char* _help  { 0 };    //! ballon help
@@ -155,7 +155,7 @@ class Shortcut {
 
       QAction* action() const;
 
-      const char* key() const { return _key; }
+      QString key() const { return _key; }
       QString descr() const;
       QString text() const;
       QString help() const;
