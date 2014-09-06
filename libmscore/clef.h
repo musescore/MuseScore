@@ -137,6 +137,7 @@ class Clef : public Element {
    public:
       Clef(Score*);
       Clef(const Clef&);
+      ~Clef();
       virtual Clef* clone() const        { return new Clef(*this); }
       virtual Element::Type type() const { return Element::Type::CLEF; }
       virtual void setSelected(bool f);
