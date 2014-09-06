@@ -2516,7 +2516,7 @@ class Sym {
 
 class ScoreFont {
       QFont _font;
-      QFontMetricsF* _fm = 0;
+      QFontMetricsF _fm;
       QVector<Sym> _symbols;
       QString _name;
       QString _family;
@@ -2530,9 +2530,9 @@ class ScoreFont {
       void load();
 
    public:
-      ScoreFont() {}
+      ScoreFont() : _fm(_font) {}
       ScoreFont(const char* n, const char* f, const char* p, const char* fn)
-         : _name(n), _family(f), _fontPath(p), _filename(fn) {
+         : _fm(_font), _name(n), _family(f), _fontPath(p), _filename(fn) {
             _symbols = QVector<Sym>(int(SymId::lastSym) + 1);
             }
 
@@ -2554,9 +2554,9 @@ class ScoreFont {
       QString symToHtml(SymId, SymId, int leftMargin=0);
       QPixmap sym2pixmap(SymId id, qreal mag);
 
-      qreal height(SymId id, qreal mag) const         { return _fm->tightBoundingRect(toString(id)).height() * mag; }
+      qreal height(SymId id, qreal mag) const         { return _fm.tightBoundingRect(toString(id)).height() * mag; }
       qreal width(SymId id, qreal mag) const          { return _symbols[int(id)].width() * mag;  }
-      qreal width(const QString& s, qreal mag) const  { return _fm->width(s) * mag;  }
+      qreal width(const QString& s, qreal mag) const  { return _fm.width(s) * mag;  }
       const QRectF bbox(SymId id, qreal mag) const;
       const QRectF bbox(const QString& s, qreal mag) const;
       QPointF attach(SymId id, qreal mag) const       { return _symbols[int(id)].attach() * mag;   }
