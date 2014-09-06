@@ -258,6 +258,8 @@ void TracksView::setFrozenColCount(int count)
 
 void TracksView::setItemDelegate(SeparatorDelegate *delegate)
       {
+      if (delegate == _delegate)
+            return;
       delete _delegate;
       _delegate = delegate;
       QTableView::setItemDelegate(delegate);
