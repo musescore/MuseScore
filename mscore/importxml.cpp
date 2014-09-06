@@ -2073,13 +2073,21 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                   // IMPORT_LAYOUT
                   QString newSystem = e.attribute("new-system", "no");
                   QString newPage   = e.attribute("new-page", "no");
+                  int blankPage = e.attribute("blank-page", "0").toInt();
                   //
                   // in MScore the break happens _after_ the marked measure:
                   //
-                  Measure* pm = (Measure*)(measure->prev());      // TODO: MeasureBase
-                  if (pm == 0)
+                  MeasureBase* pm = measure->prevMeasure();  // We insert VBox only for title, no HBox for the moment
+                  if (pm == 0) {
                         qDebug("ImportXml: warning: break on first measure");
-                  else {
+                        if (blankPage == 1) { // blank title page, insert a VBOX if needed
+                              pm = measure->prev();
+                              if (pm == 0) {
+                                    pm = score->insertMeasure(Element::Type::VBOX, measure);
+                                    }
+                              }
+                        }
+                  if (pm) {
                         if (preferences.musicxmlImportBreaks
                             && (newSystem == "yes" || newPage == "yes")) {
                               LayoutBreak* lb = new LayoutBreak(score);
