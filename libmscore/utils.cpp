@@ -112,7 +112,7 @@ Segment* Score::tick2segment(int tick, bool first, Segment::Type st, bool useMMr
       if (useMMrest) {
             m = tick2measureMM(tick);
             // When mmRest force tick to the first segment of mmRest.
-            if (m->isMMRest())
+            if (m && m->isMMRest())
                   tick = m->tick();
             }
       else
