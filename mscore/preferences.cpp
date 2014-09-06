@@ -1037,11 +1037,17 @@ void PreferenceDialog::updateSCListView()
                   newItem->setIcon(0, *icons[int(s->icon())]);
             newItem->setText(1, s->keysToString());
             newItem->setData(0, Qt::UserRole, s->key());
-            QString accessibleInfo = tr("Action: %1; Shortcut: %2").arg(newItem->text(0)).arg(newItem->text(1).isEmpty() ? tr("No shortcut defined") : newItem->text(1));
+            QString accessibleInfo = tr("Action: %1; Shortcut: %2")
+                        .arg(newItem->text(0)).arg(newItem->text(1).isEmpty()
+                                          ? tr("No shortcut defined") : newItem->text(1));
             newItem->setData(0, Qt::AccessibleTextRole, accessibleInfo);
             newItem->setData(1, Qt::AccessibleTextRole, accessibleInfo);
-            if (enableExperimental || (strncmp(s->key(), "media", 5) != 0 && strncmp(s->key(), "layer", 5) != 0 && strncmp(s->key(), "insert-fretframe", 16) != 0))
-                shortcutList->addTopLevelItem(newItem);
+            if (enableExperimental
+                        || (!s->key().startsWith("media")
+                            && !s->key().startsWith("layer")
+                            && !s->key().startsWith("insert-fretframe"))) {
+                  shortcutList->addTopLevelItem(newItem);
+                  }
             }
       shortcutList->resizeColumnToContents(0);
       }

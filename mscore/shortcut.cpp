@@ -314,7 +314,7 @@ void Shortcut::init()
       //
       _shortcuts.clear();
       for (unsigned i = 0;; ++i) {
-            if (sc[i]._key == 0)
+            if (sc[i]._key.isEmpty())
                   break;
             _shortcuts[sc[i]._key] = &sc[i];
             }
@@ -338,7 +338,7 @@ void Shortcut::save()
       xml.stag("Shortcuts");
       for (unsigned i = 0;; ++i) {
             Shortcut* s = &sc[i];
-            if (s->_key == 0)
+            if (s->_key.isEmpty())
                   break;
             s->write(xml);
             }
@@ -371,7 +371,7 @@ void Shortcut::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "key")
-                  _key = strdup(e.readElementText().toLatin1().data());      // memory leak!
+                  _key = e.readElementText();
             else if (tag == "std")
                   _standardKey = QKeySequence::StandardKey(e.readInt());
             else if (tag == "seq")
@@ -550,7 +550,7 @@ void Shortcut::reset()
       _keys.clear();
       QList<Shortcut1*> sl = loadDefaultShortcuts();
       foreach(Shortcut1* sc, sl) {
-            if (strcmp(sc->key.toStdString().c_str(), _key) == 0) {
+            if (sc->key == _key) {
                   setKeys(sc->keys);
                   setStandardKey(sc->standardKey);
                   break;
