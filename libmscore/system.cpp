@@ -549,7 +549,7 @@ void System::setInstrumentNames(bool longName)
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             SysStaff* staff = _staves[staffIdx];
             Staff* s        = score()->staff(staffIdx);
-            if (!s->isTop()) {
+            if (!s->isTop() || !s->show()) {
                   foreach(InstrumentName* t, staff->instrumentNames)
                         score()->removeElement(t);
                   continue;
