@@ -56,8 +56,8 @@ KeySig::KeySig(const KeySig& k)
    : Element(k)
       {
       _showCourtesy = k._showCourtesy;
-      foreach(KeySym* ks, k.keySymbols)
-            keySymbols.append(new KeySym(*ks));
+      for (const KeySym& ks: k.keySymbols)
+            keySymbols.append(ks);
       _sig = k._sig;
       _hideNaturals = false;
       }
@@ -75,7 +75,7 @@ qreal KeySig::mag() const
 //   setCustom
 //---------------------------------------------------------
 
-void KeySig::setCustom(const QList<KeySym*>& symbols)
+void KeySig::setCustom(const QList<KeySym>& symbols)
       {
       _sig.setCustomType(0);
       keySymbols = symbols;
@@ -87,9 +87,9 @@ void KeySig::setCustom(const QList<KeySym*>& symbols)
 
 void KeySig::addLayout(SymId sym, qreal x, int line)
       {
-      KeySym* ks = new KeySym;
-      ks->sym    = sym;
-      ks->spos   = QPointF(x, qreal(line) * .5);
+      KeySym ks;
+      ks.sym    = sym;
+      ks.spos   = QPointF(x, qreal(line) * .5);
       keySymbols.append(ks);
       }
 
@@ -103,20 +103,18 @@ void KeySig::layout()
       setbbox(QRectF());
 
       if (staff() && !staff()->genKeySig()) {     // no key sigs on TAB staves
-            qDeleteAll(keySymbols);
             keySymbols.clear();
             return;
             }
 
       if (isCustom()) {
-            foreach(KeySym* ks, keySymbols) {
-                  ks->pos = ks->spos * _spatium;
-                  addbbox(symBbox(ks->sym).translated(ks->pos));
+            for (KeySym& ks: keySymbols) {
+                  ks.pos = ks.spos * _spatium;
+                  addbbox(symBbox(ks.sym).translated(ks.pos));
                   }
             return;
             }
 
-      qDeleteAll(keySymbols);
       keySymbols.clear();
 
       // determine current clef for this staff
@@ -249,9 +247,9 @@ void KeySig::layout()
 
       // compute bbox
       setbbox(QRectF());
-      for (KeySym* ks : keySymbols) {
-            ks->pos = ks->spos * _spatium;
-            addbbox(symBbox(ks->sym).translated(ks->pos));
+      for (KeySym& ks : keySymbols) {
+            ks.pos = ks.spos * _spatium;
+            addbbox(symBbox(ks.sym).translated(ks.pos));
             }
       }
 
@@ -262,8 +260,8 @@ void KeySig::layout()
 void KeySig::draw(QPainter* p) const
       {
       p->setPen(curColor());
-      foreach(const KeySym* ks, keySymbols)
-            drawSymbol(ks->sym, p, QPointF(ks->pos.x(), ks->pos.y()));
+      for (const KeySym& ks: keySymbols)
+            drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));
       }
 
 //---------------------------------------------------------
@@ -334,10 +332,10 @@ void KeySig::write(Xml& xml) const
       Element::writeProperties(xml);
       if (_sig.custom()) {
             xml.tag("custom", _sig.customType());
-            foreach(const KeySym* ks, keySymbols) {
+            for (const KeySym& ks: keySymbols) {
                   xml.stag("KeySym");
-                  xml.tag("sym", int(ks->sym));
-                  xml.tag("pos", ks->spos);
+                  xml.tag("sym", int(ks.sym));
+                  xml.tag("pos", ks.spos);
                   xml.etag();
                   }
             }
@@ -361,13 +359,13 @@ void KeySig::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "KeySym") {
-                  KeySym* ks = new KeySym;
+                  KeySym ks;
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "sym")
-                              ks->sym = SymId(e.readInt());
+                              ks.sym = SymId(e.readInt());
                         else if (tag == "pos")
-                              ks->spos = e.readPoint();
+                              ks.spos = e.readPoint();
                         else
                               e.unknown();
                         }
@@ -408,11 +406,9 @@ bool KeySig::operator==(const KeySig& k) const
             if (n != k.keySymbols.size())
                   return false;
             for (int i = 0; i < n; ++i) {
-                  KeySym* ks1 = keySymbols[i];
-                  KeySym* ks2 = k.keySymbols[i];
-                  if (ks1->sym != ks2->sym)
+                  if (keySymbols[i].sym != k.keySymbols[i].sym)
                         return false;
-                  if (ks1->spos != ks2->spos)
+                  if (keySymbols[i].spos != k.keySymbols[i].spos)
                         return false;
                   }
             return true;
@@ -432,11 +428,7 @@ void KeySig::changeKeySigEvent(const KeySigEvent& t)
             KeySig* ks = _score->customKeySig(t.customType());
             if (!ks)
                   return;
-            foreach(KeySym* k, keySymbols)
-                  delete k;
-            keySymbols.clear();
-            foreach(KeySym* k, ks->keySymbols)
-                  keySymbols.append(new KeySym(*k));
+            keySymbols = ks->keySymbols;
             }
       setKeySigEvent(t);
       }
