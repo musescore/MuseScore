@@ -41,6 +41,11 @@
 
 namespace Ms {
 
+PaletteCell::~PaletteCell()
+      {
+      delete element;
+      }
+
 //---------------------------------------------------------
 //   needsStaff
 //    should a staff been drawn if e is used as icon in
