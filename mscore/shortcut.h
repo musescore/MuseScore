@@ -183,7 +183,7 @@ class Shortcut {
       static void save();
       static void resetToDefault();
       static bool dirty;
-      static Shortcut* getShortcut(const char* key);
+      static Shortcut* getShortcut(const QString& key);
       static const QMap<QString, Shortcut*>& shortcuts() { return _shortcuts; }
       static QActionGroup* getActionGroupForWidget(MsWidget w);
       static QActionGroup* getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext);

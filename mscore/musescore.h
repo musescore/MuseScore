@@ -103,7 +103,7 @@ extern const char* voiceActions[];
 
 struct IconAction {
       IconType subtype;
-      const char* action;
+      const QString action;
       };
 
 //---------------------------------------------------------
@@ -374,7 +374,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveFile();
       bool saveFile(Score* score);
       void fingeringMenu();
-      
+
       int  pluginIdxFromPath(QString pluginPath);
       void startDebugger();
       void midiinToggled(bool);
@@ -654,7 +654,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreView* currentScoreView() const { return cv; }
       void showMessage(const QString& s, int timeout);
       void helpBrowser(const QString = QString()) const;
-      
+
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);
       };
@@ -666,7 +666,7 @@ extern MasterSynthesizer* synti;
 MasterSynthesizer* synthesizerFactory();
 Driver* driverFactory(Seq*, QString driver);
 
-extern QAction* getAction(const char*);
+extern QAction* getAction(const QString&);
 extern Shortcut* midiActionMap[128];
 extern void loadTranslation(QString fileName, QString localeName);
 extern void setMscoreLocale(QString localeName);

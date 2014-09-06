@@ -26,18 +26,18 @@ class Icon : public Element {
       Q_OBJECT
 
       IconType _iconType;
-      const char* _action;
+      QString _action;
       QIcon _icon;
 
    public:
-      Icon(Score* s) : Element(s), _iconType(IconType::NONE), _action(0) { }
+      Icon(Score* s) : Element(s), _iconType(IconType::NONE) { }
       virtual Icon* clone() const        { return new Icon(*this);    }
       virtual Element::Type type() const { return Element::Type::ICON;  }
       IconType iconType() const          { return _iconType;          }
       void setIconType(IconType val)     { _iconType = val;           }
-      void setAction(const char* s, const QIcon& i)   { _action = s; _icon = i;  }
-      const char* action() const         { return _action;            }
-      QIcon icon() const                 { return _icon;              }
+      void setAction(const QString& s, const QIcon& i)   { _action = s; _icon = i;  }
+      QString action() const             { return _action; }
+      QIcon icon() const                 { return _icon;   }
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
       };

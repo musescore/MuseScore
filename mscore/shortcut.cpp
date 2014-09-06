@@ -177,11 +177,11 @@ QString Shortcut::help() const
 //   getShortcut
 //---------------------------------------------------------
 
-Shortcut* Shortcut::getShortcut(const char* id)
+Shortcut* Shortcut::getShortcut(const QString& id)
       {
       Shortcut* s = _shortcuts.value(id);
       if (s == 0) {
-            qDebug("Internal error: shortcut <%s> not found", id);
+            qDebug("Internal error: shortcut <%s> not found", id.toStdString().c_str());
             return 0;
             }
       return s;
@@ -192,7 +192,7 @@ Shortcut* Shortcut::getShortcut(const char* id)
 //    returns action for shortcut
 //---------------------------------------------------------
 
-QAction* getAction(const char* id)
+QAction* getAction(const QString& id)
       {
       Shortcut* s = Shortcut::getShortcut(id);
       if (s)
@@ -409,7 +409,7 @@ void Shortcut::load()
                                     const QStringRef& tag(e.name());
                                     if (tag == "key") {
                                           QString val(e.readElementText());
-                                          sc = getShortcut(val.toLatin1().data());
+                                          sc = getShortcut(val);
                                           if (!sc)
                                                 qDebug("cannot find shortcut <%s>", qPrintable(val));
                                           else
@@ -445,12 +445,11 @@ void Shortcut::load()
 //---------------------------------------------------------
 
 struct Shortcut1 {
-      char* key;
+      QString key;
       QList<QKeySequence> keys;
       QKeySequence::StandardKey standardKey;
 
-      Shortcut1()  { key = 0; standardKey = QKeySequence::UnknownKey; }
-      ~Shortcut1() { if (key) free(key); }
+      Shortcut1()  { standardKey = QKeySequence::UnknownKey; }
       };
 
 //---------------------------------------------------------
@@ -471,11 +470,10 @@ static QList<Shortcut1*> loadDefaultShortcuts()
                   while (e.readNextStartElement()) {
                         if (e.name() == "SC") {
                               Shortcut1* sc = new Shortcut1;
-                              sc->key = 0;
                               while (e.readNextStartElement()) {
                                     const QStringRef& tag(e.name());
                                     if (tag == "key")
-                                          sc->key = strdup(e.readElementText().toLatin1().data());
+                                          sc->key = e.readElementText();
                                     else if (tag == "std")
                                           sc->standardKey = QKeySequence::StandardKey(e.readInt());
                                     else if (tag == "seq")
@@ -552,7 +550,7 @@ void Shortcut::reset()
       _keys.clear();
       QList<Shortcut1*> sl = loadDefaultShortcuts();
       foreach(Shortcut1* sc, sl) {
-            if (strcmp(sc->key, _key) == 0) {
+            if (strcmp(sc->key.toStdString().c_str(), _key) == 0) {
                   setKeys(sc->keys);
                   setStandardKey(sc->standardKey);
                   break;
