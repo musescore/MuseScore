@@ -77,6 +77,7 @@ MuseScore {
                         i++
                     }
                     curScore.endCmd()
+                    endCmd();
                     Qt.quit()
                 }
             }

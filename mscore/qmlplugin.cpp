@@ -14,12 +14,14 @@
 #include "shortcut.h"
 #include "musescoreCore.h"
 #include "libmscore/score.h"
+#include "musescore.h"
 
 #include <QQmlEngine>
 
 namespace Ms {
 
 extern MuseScoreCore* mscoreCore;
+extern MuseScore* mscore;
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -136,6 +138,18 @@ void QmlPlugin::cmd(const QString& s)
 MsProcess* QmlPlugin::newQProcess()
       {
       return 0; // TODO: new MsProcess(this);
+      }
+
+//---------------------------------------------------------
+//   endCmd
+//
+//   this calls MuseScore::endCmd which needs to be called
+//   if a plugin has changed a score
+//---------------------------------------------------------
+
+void QmlPlugin::endCmd()
+      {
+      mscore->endCmd();
       }
 }
 
