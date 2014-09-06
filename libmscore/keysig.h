@@ -48,7 +48,7 @@ class KeySig : public Element {
 
       bool _showCourtesy;
       bool _hideNaturals;     // used in layout to override score style (needed for the Continuous panel)
-      QList<KeySym*> keySymbols;
+      QList<KeySym> keySymbols;
       KeySigEvent _sig;
       void addLayout(SymId sym, qreal x, int y);
 
@@ -68,7 +68,7 @@ class KeySig : public Element {
       Segment* segment() const            { return (Segment*)parent(); }
       Measure* measure() const            { return parent() ? (Measure*)parent()->parent() : nullptr; }
       Space space() const;
-      void setCustom(const QList<KeySym*>& symbols);
+      void setCustom(const QList<KeySym>& symbols);
       virtual void write(Xml&) const;
       virtual void read(XmlReader&);
       //@ -7 (flats) -- +7 (sharps)
