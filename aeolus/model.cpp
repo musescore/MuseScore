@@ -186,26 +186,26 @@ void Model::proc_rank (int g, int i, int comm)
                   }
             else if (R->_count != _count) {
                   R->_count = _count;
-                  M_def_rank* M = new M_def_rank (comm);
-                  M->_divis = d;
-                  M->_rank  = r;
-                  M->_group = g;
-                  M->_ifelm = i;
-                  M->_fsamp = _aeolus->_fsamp;
-                  M->_fbase = _fbase;
-                  M->_scale = scales [_itemp]._data;
-                  M->_sdef  = R->_sdef;
-                  M->_wave  = R->_wave;
-                  M->_path  = _waves;
+                  M_def_rank M(comm);
+                  M._divis = d;
+                  M._rank  = r;
+                  M._group = g;
+                  M._ifelm = i;
+                  M._fsamp = _aeolus->_fsamp;
+                  M._fbase = _fbase;
+                  M._scale = scales [_itemp]._data;
+                  M._sdef  = R->_sdef;
+                  M._wave  = R->_wave;
+                  M._path  = _waves;
 
-//WS                  send_event(TO_IFACE, new M_ifc_ifelm (MT_IFC_ELATT, M->_group, M->_ifelm));
+//WS                  send_event(TO_IFACE, new M_ifc_ifelm (MT_IFC_ELATT, M._group, M._ifelm));
 
-                  M->_wave = new Rankwave (M->_sdef->_n0, M->_sdef->_n1);
-                  if (M->_wave->load (M->_path, M->_sdef, M->_fsamp, M->_fbase, M->_scale))
-                        M->_wave->gen_waves (M->_sdef, M->_fsamp, M->_fbase, M->_scale);
+                  M._wave = new Rankwave (M._sdef->_n0, M._sdef->_n1);
+                  if (M._wave->load (M._path, M._sdef, M._fsamp, M._fbase, M._scale))
+                        M._wave->gen_waves (M._sdef, M._fsamp, M._fbase, M._scale);
 
-                  _aeolus->_divisp [M->_divis]->set_rank (M->_rank, M->_wave,  M->_sdef->_pan, M->_sdef->_del);
-                  _divis [M->_divis]._ranks [M->_rank]._wave = M->_wave;
+                  _aeolus->_divisp [M._divis]->set_rank (M._rank, M._wave,  M._sdef->_pan, M._sdef->_del);
+                  _divis [M._divis]._ranks [M._rank]._wave = M._wave;
                   }
             }
       }
