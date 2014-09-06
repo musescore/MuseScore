@@ -2077,7 +2077,7 @@ void loadTranslation(QString filename, QString localeName)
                   defaultFi = shortDefaultFi;
                   defaultlp = shortDefaultlp;
                   }
-      	}
+            }
 
       //      qDebug() << userFi.exists();
       //      qDebug() << userFi.lastModified() << defaultFi.lastModified();
