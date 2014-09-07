@@ -3163,7 +3163,7 @@ void Measure::layoutX(qreal stretch)
                                     minDistance = qMax(minDistance, minNoteDistance);
                                     }
                               else {
-                                    bool firstClef = (segmentIdx == 1) && (pt == Segment::Type::Clef);
+                                    bool firstClef = (pt == Segment::Type::Clef) && (pSeg && pSeg->rtick() == 0);
                                     if ((pt & Segment::Type::KeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
@@ -3251,6 +3251,10 @@ void Measure::layoutX(qreal stretch)
                               minDistance = score()->styleS(StyleIdx::clefLeftMargin).val() * _spatium;
                         else if (segType == Segment::Type::StartRepeatBarLine)
                               minDistance = .5 * _spatium;
+                        else if (segType == Segment::Type::TimeSig && pt == Segment::Type::Clef) {
+                              // missing key signature, but allocate default margin anyhow
+                              minDistance = score()->styleS(StyleIdx::keysigLeftMargin).val() * _spatium;
+                              }
                         else if ((segType == Segment::Type::EndBarLine) && segmentIdx) {
                               if (pt == Segment::Type::Clef)
                                     minDistance = score()->styleS(StyleIdx::clefBarlineDistance).val() * _spatium;
@@ -3482,8 +3486,7 @@ void Measure::layoutX(qreal stretch)
                         continue;
                   Element::Type t = e->type();
                   Rest* rest = static_cast<Rest*>(e);
-                  if (((track % VOICES) == 0) &&
-                     (t == Element::Type::REPEAT_MEASURE || (t == Element::Type::REST && (isMMRest() || rest->isFullMeasureRest())))) {
+                  if (t == Element::Type::REPEAT_MEASURE || (t == Element::Type::REST && (isMMRest() || rest->isFullMeasureRest()))) {
                         //
                         // element has to be centered in free space
                         //    x1 - left measure position of free space
@@ -3495,11 +3498,13 @@ void Measure::layoutX(qreal stretch)
                               //
                               qreal x1 = 0.0, x2;
                               Segment* ss = first();
-                              for (; ss->segmentType() != Segment::Type::ChordRest; ss = ss->next())
-                                    ;
-                              // if (s != first()) {
-                              if (ss != first()) {
-                                    ss = ss->prev();
+                              Segment* ps = nullptr;
+                              for (; ss->segmentType() != Segment::Type::ChordRest; ss = ss->next()) {
+                                    if (!ss->isEmpty())
+                                          ps = ss;
+                                    }
+                              if (ps) {
+                                    ss = ps;
                                     for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                                           int track = staffIdx * VOICES;
                                           Element* e = ss->element(track);
@@ -3536,10 +3541,13 @@ void Measure::layoutX(qreal stretch)
                               qreal x1 = 0.0;
                               qreal x2 = this->width();
                               Segment* ss = first();
-                              for (; ss->segmentType() != Segment::Type::ChordRest; ss = ss->next())
-                                    ;
-                              if (ss != first()) {
-                                    ss = ss->prev();
+                              Segment* ps = nullptr;
+                              for (; ss->segmentType() != Segment::Type::ChordRest; ss = ss->next()) {
+                                    if (!ss->isEmpty())
+                                          ps = ss;
+                                    }
+                              if (ps) {
+                                    ss = ps;
                                     for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                                           int track = staffIdx * VOICES;
                                           Element* e = ss->element(track);
@@ -3555,7 +3563,7 @@ void Measure::layoutX(qreal stretch)
                               if (ns)
                                     x2 = ns->x();
 
-                              rest->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s->x();
+                              rest->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s->x() - e->bbox().x();
                               rest->adjustReadPos();
                               }
                         }

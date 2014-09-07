@@ -3516,7 +3516,7 @@ qreal Score::computeMinWidth(Segment* fs)
                                     }
                               else {
                                     // if (pt & (Segment::Type::KeySig | Segment::Type::Clef))
-                                    bool firstClef = (segmentIdx == 1) && (pt == Segment::Type::Clef);
+                                    bool firstClef = (pt == Segment::Type::Clef) && (pSeg && pSeg->rtick() == 0);
                                     if ((pt & Segment::Type::KeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
@@ -3592,6 +3592,10 @@ qreal Score::computeMinWidth(Segment* fs)
                               minDistance = styleP(StyleIdx::clefLeftMargin);
                         else if (segType == Segment::Type::StartRepeatBarLine)
                               minDistance = .5 * _spatium;
+                        else if (segType == Segment::Type::TimeSig && pt == Segment::Type::Clef) {
+                              // missing key signature, but allocate default margin anyhow
+                              minDistance = styleP(StyleIdx::keysigLeftMargin);
+                              }
                         else if ((segType == Segment::Type::EndBarLine) && segmentIdx) {
                               if (pt == Segment::Type::Clef)
                                     minDistance = styleP(StyleIdx::clefBarlineDistance);
