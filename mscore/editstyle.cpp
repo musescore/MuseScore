@@ -692,12 +692,13 @@ void EditStyle::setValues()
                   continue;
             ArticulationAnchor st  = lstyle.articulationAnchor(i);
             int idx = 0;
-            if (st == ArticulationAnchor::TOP_STAFF)
-                  idx = 0;
-            else if (st == ArticulationAnchor::BOTTOM_STAFF)
-                  idx = 1;
-            else if (st == ArticulationAnchor::CHORD)
-                  idx = 2;
+            switch (st) {
+                  case ArticulationAnchor::TOP_STAFF:       idx = 0;    break;
+                  case ArticulationAnchor::BOTTOM_STAFF:    idx = 1;    break;
+                  case ArticulationAnchor::CHORD:           idx = 2;    break;
+                  case ArticulationAnchor::TOP_CHORD:       idx = 3;    break;
+                  case ArticulationAnchor::BOTTOM_CHORD:    idx = 4;    break;
+                  }
             cb->setCurrentIndex(idx);
             }
 
