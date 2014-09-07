@@ -70,7 +70,7 @@ class BarLine : public Element {
       void drawDots(QPainter* painter, qreal x) const;
       void updateCustomSpan();
       void updateCustomType();
-      void updateGenerated(bool canBeTrue);
+      void updateGenerated(bool canBeTrue = true);
 
    public:
       BarLine(Score*);
