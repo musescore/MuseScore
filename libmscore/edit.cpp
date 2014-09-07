@@ -971,27 +971,10 @@ qDebug("putNote at tick %d staff %d line %d clef %d",
                                           else
                                                 qDebug("can't increase fret to %d", fret);
                                           }
-                                    // set fret number (orignal or combined) in all linked notes
-                                    // int tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST);
-                                    foreach (Element* e, note->linkList()) {
-                                          Note* linkedNote = static_cast<Note*>(e);
-                                          int tpc1 = linkedNote->tpc1default(nval.pitch);
-                                          int tpc2 = linkedNote->tpc2default(nval.pitch);
-                                          Staff* staff = linkedNote->staff();
-                                          if (staff->isTabStaff()) {
-                                                linkedNote->undoChangeProperty(P_ID::PITCH, nval.pitch);
-                                                linkedNote->undoChangeProperty(P_ID::TPC1,  tpc1);
-                                                linkedNote->undoChangeProperty(P_ID::TPC2,  tpc2);
-                                                linkedNote->undoChangeProperty(P_ID::FRET,  nval.fret);
-                                                linkedNote->undoChangeProperty(P_ID::STRING,nval.string);
-                                                nval.tpc = linkedNote->tpc();
-                                                }
-                                          else if (staff->isPitchedStaff()) {
-                                                // TODO: check tpc2
-                                                int tpc2 = linkedNote->tpc2default(nval.pitch);
-                                                undoChangePitch(linkedNote, nval.pitch, nval.tpc, tpc2);
-                                                }
-                                          }
+                                    // set fret number (original or combined) in all linked notes
+                                    int tpc1 = note->tpc1default(nval.pitch);
+                                    int tpc2 = note->tpc2default(nval.pitch);
+                                    undoChangeFretting(note, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
                                     return;
                                     }
                         }

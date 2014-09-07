@@ -426,6 +426,28 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
       }
 
 //---------------------------------------------------------
+//   undoChangeFretting
+//
+//    To use with tablatures to force a specific note fretting;
+//    Pitch, string and fret must be changed all together; otherwise,
+//    if they are not consistent among themselves, the refretting algorithm may re-assign
+//    fret and string numbers for (potentially) all the notes of all the chords of a segment.
+//---------------------------------------------------------
+
+void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2)
+      {
+            const LinkedElements* l = note->links();
+            if (l) {
+                  for (Element* e : *l) {
+                        Note* n = static_cast<Note*>(e);
+                        undo()->push(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
+                        }
+                  }
+            else
+                  undo()->push(new ChangeFretting(note, pitch, string, fret, tpc1, tpc2));
+      }
+
+//---------------------------------------------------------
 //   undoChangeKeySig
 //---------------------------------------------------------
 
@@ -1772,14 +1794,58 @@ void ChangePitch::flip()
       int f_pitch = note->pitch();
       int f_tpc1  = note->tpc1();
       int f_tpc2  = note->tpc2();
+      // do not change unless necessary
       if (f_pitch == pitch && f_tpc1 == tpc1 && f_tpc2 == tpc2) {
-            // do not change unless necessary: setting note pitch triggers chord re-fretting on TABs
-            // which triggers ChangePitch(), leading to recursion with negative side effects
             return;
             }
 
       note->setPitch(pitch, tpc1, tpc2);
       pitch = f_pitch;
+      tpc1  = f_tpc1;
+      tpc2  = f_tpc2;
+
+      Chord* chord = note->chord();
+      chord->measure()->cmdUpdateNotes(chord->staffIdx());
+      note->score()->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   ChangeFretting
+//
+//    To use with tablatures to force a specific note fretting;
+//    Pitch, string and fret must be changed all together; otherwise,
+//    if they are not consistent among themselves, the refretting algorithm may re-assign
+//    fret and string numbers for (potentially) all the notes of all the chords of a segment.
+//---------------------------------------------------------
+
+ChangeFretting::ChangeFretting(Note* _note, int _pitch, int _string, int _fret, int _tpc1, int _tpc2)
+      {
+      note  = _note;
+      pitch = _pitch;
+      string= _string;
+      fret  = _fret;
+      tpc1  = _tpc1;
+      tpc2  = _tpc2;
+      }
+
+void ChangeFretting::flip()
+      {
+      int f_pitch = note->pitch();
+      int f_string= note->string();
+      int f_fret  = note->fret();
+      int f_tpc1  = note->tpc1();
+      int f_tpc2  = note->tpc2();
+      // do not change unless necessary
+      if (f_pitch == pitch && f_string == string && f_fret == fret && f_tpc1 == tpc1 && f_tpc2 == tpc2) {
+            return;
+            }
+
+      note->setPitch(pitch, tpc1, tpc2);
+      note->setString(string);
+      note->setFret(fret);
+      pitch = f_pitch;
+      string= f_string;
+      fret  = f_fret;
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
 

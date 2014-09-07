@@ -1162,16 +1162,8 @@ void Score::upDown(bool up, UpDownMode mode)
                                           qDebug("upDown tab chromatic: getPitch(%d,%d) returns -1", string, fret);
                                           newPitch = oNote->pitch();
                                           }
-                                    int nTpc = pitch2tpc(newPitch, key, up ? Prefer::SHARPS : Prefer::FLATS);
-                                    if (oNote->concertPitch()) {
-                                          newTpc1 = nTpc;
-                                          newTpc2 = oNote->tpc2default(newPitch);
-                                          }
-                                    else {
-                                          newTpc2 = nTpc;
-                                          newTpc1 = oNote->tpc1default(newPitch);
-                                          }
-
+                                    // TAB's are by definition non-transposing
+                                    newTpc1 = newTpc2 = pitch2tpc(newPitch, key, up ? Prefer::SHARPS : Prefer::FLATS);
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
                                     undoChangeProperty(oNote, P_ID::FRET, fret);
