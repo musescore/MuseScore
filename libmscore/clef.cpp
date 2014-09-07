@@ -21,6 +21,7 @@
 #include "xml.h"
 #include "sym.h"
 #include "symbol.h"
+#include "system.h"
 #include "score.h"
 #include "staff.h"
 #include "segment.h"
@@ -176,24 +177,16 @@ void Clef::layout()
             bool showClef = true;
             // only if there is a clef change
             if (!bHide && tick > 0 && stf->clef(tick) != stf->clef(tick-1)) {
-                  // locate clef at the begining of next measure, if any
-                  Clef*       clefNext    = nullptr;
-                  Segment*    clefSegNext = nullptr;
                   Measure*    meas        = static_cast<Measure*>(clefSeg->parent());
-                  Measure*    measNext    = meas->nextMeasure();
-                  if (measNext) {
-                        clefSegNext = measNext->findSegment(Segment::Type::Clef, tick);
-                        if (clefSegNext)
-                              clefNext = static_cast<Clef*>(clefSegNext->element(track()));
-                        }
-                  // show this clef if: it is not a courtesy clef (no next clef or not at the end of the measure)
-                  showClef = !clefNext || (clefSeg->tick() != meas->tick() + meas->ticks())
+                  showClef =                    // show this clef if:
+                        // it is not a courtesy clef (not at the end of the last measure of the system)
+                        (meas != meas->system()->lastMeasure()) || (clefSeg->tick() != meas->tick() + meas->ticks())
                         // if courtesy clef: show if score has courtesy clefs on
                         || ( score()->styleB(StyleIdx::genCourtesyClef)
-                        // AND measure is not at the end of a repeat or of a section
-                        && !( (meas->repeatFlags() & Repeat::END) || meas->sectionBreak() )
-                        // AND this clef has courtesy clef turned on
-                        && showCourtesy() );
+                              // AND measure is not at the end of a repeat or of a section
+                              && !( (meas->repeatFlags() & Repeat::END) || meas->sectionBreak() )
+                              // AND this clef has courtesy clef turned on
+                              && showCourtesy() );
                   bHide |= !showClef;
                   }
 
