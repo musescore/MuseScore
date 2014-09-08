@@ -1735,7 +1735,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                   case ArticulationType::Upbow:
                   case ArticulationType::Downbow:
                   case ArticulationType::Snappizzicato:
-                  case ArticulationType::Thumb:
+                  case ArticulationType::ThumbPosition:
                         // ignore, handled with technical
                         break;
                   default:
@@ -1911,7 +1911,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                   case ArticulationType::Upbow:
                   case ArticulationType::Downbow:
                   case ArticulationType::Snappizzicato:
-                  case ArticulationType::Thumb:
+                  case ArticulationType::ThumbPosition:
                         // ignore, handled with technical
                         break;
                   default:
@@ -1961,7 +1961,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                         xml.tagE("open-string");
                         }
                         break;
-                  case ArticulationType::Thumb:
+                  case ArticulationType::ThumbPosition:
                         {
                         notations.tag(xml);
                         technical.tag(xml);

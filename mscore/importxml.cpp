@@ -3969,7 +3969,7 @@ static bool readArticulations(ChordRest* cr, QString mxmlName)
       map["snap-pizzicato"]   = ArticulationType::Snappizzicato;
       map["schleifer"]        = ArticulationType::Schleifer;
       map["open-string"]      = ArticulationType::Ouvert;
-      map["thumb-position"]   = ArticulationType::Thumb;
+      map["thumb-position"]   = ArticulationType::ThumbPosition;
 
       if (map.contains(mxmlName)) {
             addArticulationToChord(cr, map.value(mxmlName), "");

@@ -2566,6 +2566,30 @@ QPointF Chord::layoutArticulation(Articulation* a)
             return QPointF(pos);
             }
 
+      // Lute fingering are always in the middle of the space right below the fret mark,
+      else if (staff() && staff()->staffGroup() == StaffGroup::TAB
+                  && st >= ArticulationType::LuteFingThumb && st <= ArticulationType::LuteFingThird) {
+            // lute fing. glyphs are vertically registered in the middle of bottom space;
+            // move down of half a space to have the glyph on the line
+            y = chordBotY + _spatium * 0.5;
+            if (staff()->staffType()->onLines()) {          // if fret marks are on lines
+                  // move down by half the height of fret marks (extending below the line)
+                  // and half of the remaing space below,
+                  // to centre the symbol between the fret mark and the line below
+                  // fretBoxH/2 + (spStaff - fretBoxH/2) / 2 becomes:
+                  y += (staff()->staffType()->fretBoxH()*0.5 + _spStaff) * 0.5;
+                  }
+            else {                                          // if marks are between lines
+                  // move down by half a sp to pace the glyph right below the mark,
+                  // and not too far away (as it would have been, if centred in the line space below)
+                  y += _spatium * 0.5;
+                  }
+            a->layout();
+            a->setPos(x, y);
+            a->adjustReadPos();
+            return QPointF(x, y);
+            }
+
       // other articulations are outside of area occupied by the staff or the chord
       // reserve space for slur
       bool botGap = false;
