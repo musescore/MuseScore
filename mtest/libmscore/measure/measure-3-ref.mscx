@@ -232,11 +232,6 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
-          <lid>9</lid>
-          </BarLine>
         </Measure>
       <Measure number="5">
         <Rest>
@@ -349,11 +344,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          <lid>19</lid>
-          </BarLine>
         </Measure>
       <Measure number="5">
         <Rest>
@@ -566,11 +556,6 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>2</span>
-            <lid>9</lid>
-            </BarLine>
           </Measure>
         <Measure number="5">
           <Rest>

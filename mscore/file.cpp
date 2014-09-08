@@ -573,7 +573,7 @@ void MuseScore::newFile()
                         m->setLen(timesig - Fraction(pickupTimesigZ, pickupTimesigN));
                         }*/
                   }
-            nm->setEndBarLineType(i == (measures - 1) ? BarLineType::END : BarLineType::NORMAL, false);
+            nm->setEndBarLineType(i == (measures - 1) ? BarLineType::END : BarLineType::NORMAL, i != (measures - 1));
             }
       //delete unused measures if any
       if (nm->nextMeasure())

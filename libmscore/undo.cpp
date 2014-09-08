@@ -2023,13 +2023,17 @@ ChangeEndBarLineType::ChangeEndBarLineType(Measure* m, BarLineType st)
       {
       measure = m;
       subtype = st;
+      // the measure endBarLineGenerated flag will depend on the new bar line type:
+      endBarLineGenerated = (st == BarLineType::NORMAL);
       }
 
 void ChangeEndBarLineType::flip()
       {
       BarLineType typ = measure->endBarLineType();
-      measure->setEndBarLineType(subtype, false);
+      bool eblg = measure->endBarLineGenerated();
+      measure->setEndBarLineType(subtype, endBarLineGenerated);
       subtype = typ;
+      endBarLineGenerated = eblg;
       }
 
 //---------------------------------------------------------

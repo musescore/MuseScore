@@ -69,6 +69,8 @@ class BarLine : public Element {
 
       void drawDots(QPainter* painter, qreal x) const;
       void updateCustomSpan();
+      void updateCustomType();
+      void updateGenerated(bool canBeTrue = true);
 
    public:
       BarLine(Score*);
@@ -117,7 +119,7 @@ class BarLine : public Element {
 
       QString barLineTypeName() const;
       void setBarLineType(const QString& s);
-      void setBarLineType(BarLineType i) { _barLineType = i;     }
+      void setBarLineType(BarLineType i) { _barLineType = i;     updateCustomType();      }
       BarLineType barLineType() const    { return _barLineType;  }
 
       virtual QVariant getProperty(P_ID propertyId) const override;
