@@ -227,10 +227,12 @@ void Lyrics::layout1()
       //
       // left align if syllable has a number or is a melisma
       //
+      Chord* c = static_cast<Chord*>(parent());
+      qreal nominalWidth = symWidth(SymId::noteheadBlack);
       if (_ticks == 0 && (textStyle().align() & AlignmentFlags::HCENTER) && !_verseNumber)
-            x += symWidth(SymId::noteheadBlack) * .5;
+            x +=  nominalWidth * .5 - c->x();
       else if (_ticks || ((textStyle().align() & AlignmentFlags::HCENTER) && _verseNumber))
-            x += width() * .5;
+            x += (width() + nominalWidth - c->maxHeadWidth()) * .5 - c->x();
       rxpos() += x;
       rypos() += y;
       if (_verseNumber) {
