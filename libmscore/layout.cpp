@@ -227,7 +227,11 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
 
             Note* bottomUpNote = upStemNotes.first();
             Note* topDownNote = downStemNotes.last();
-            int separation = topDownNote->line() - bottomUpNote->line();
+            int separation;
+            if (bottomUpNote->chord()->staffMove() == topDownNote->chord()->staffMove())
+                  separation = topDownNote->line() - bottomUpNote->line();
+            else
+                  separation = 2;   // no conflict
             QList<Note*> overlapNotes;
 
             if (separation == 1) {
