@@ -40,6 +40,7 @@ class ContinuousPanel {
       qreal _measureWidth;
       qreal _height;
       qreal _heightName;
+      qreal _widthName;
       qreal _widthClef;
       qreal _widthKeySig;
       qreal _widthTimeSig;
