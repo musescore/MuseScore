@@ -224,15 +224,30 @@ void Lyrics::layout1()
       int line = ll->indexOf(this);
       qreal y  = lh * line + point(score()->styleS(StyleIdx::lyricsDistance));
       qreal x  = 0.0;
+
       //
-      // left align if syllable has a number or is a melisma
+      // left align if syllable has a number or is a melisma or is first syllable of hyphenated word
       //
-      Chord* c = static_cast<Chord*>(parent());
+      ChordRest* cr = chordRest();
+      qreal maxWidth;
+      if (cr->type() == Element::Type::CHORD)
+            maxWidth = static_cast<Chord*>(cr)->maxHeadWidth();
+      else
+            maxWidth = cr->width();       // TODO: exclude ledger line for multivoice rest?
       qreal nominalWidth = symWidth(SymId::noteheadBlack);
-      if (_ticks == 0 && (textStyle().align() & AlignmentFlags::HCENTER) && !_verseNumber)
-            x +=  nominalWidth * .5 - c->x();
-      else if (_ticks || ((textStyle().align() & AlignmentFlags::HCENTER) && _verseNumber))
-            x += (width() + nominalWidth - c->maxHeadWidth()) * .5 - c->x();
+      bool hyphenatedMelisma = false;
+      if (_syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
+            // hyphenated syllables representing melismas need to be left aligned
+            // detecting this means finding next CR on same track and checking for existence of lyric in same verse
+            Segment* s = cr->segment()->next1();
+            ChordRest* ncr = s ? s->nextChordRest(cr->track()) : nullptr;
+            if (ncr && !ncr->lyrics(_no))
+                  hyphenatedMelisma = true;
+            }
+      if (_ticks == 0 && !hyphenatedMelisma && (textStyle().align() & AlignmentFlags::HCENTER) && !_verseNumber)
+            x +=  nominalWidth * .5 - cr->x();
+      else if (_ticks || hyphenatedMelisma || ((textStyle().align() & AlignmentFlags::HCENTER) && _verseNumber))
+            x += (width() + nominalWidth - maxWidth) * .5 - cr->x();
       rxpos() += x;
       rypos() += y;
       if (_verseNumber) {
