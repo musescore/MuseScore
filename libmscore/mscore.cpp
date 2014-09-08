@@ -151,13 +151,13 @@ void MScore::init()
       _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
-      selectColor[0].setNamedColor("#2456aa");   //blue
-      selectColor[1].setNamedColor("#147436");   //green
-      selectColor[2].setNamedColor("#9d3800");   //orange
-      selectColor[3].setNamedColor("#65246d");   //purple
+      selectColor[0].setNamedColor("#1259d0");   //blue
+      selectColor[1].setNamedColor("#009234");   //green
+      selectColor[2].setNamedColor("#c04400");   //orange
+      selectColor[3].setNamedColor("#70167a");   //purple
 
       defaultColor        = Qt::black;
-      dropColor           = Qt::red;
+      dropColor           = QColor("#1778db");
       defaultPlayDuration = 300;      // ms
       warnPitchRange      = true;
       playRepeats         = true;
