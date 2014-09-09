@@ -203,8 +203,13 @@ void Harmony::write(Xml& xml) const
                   xml.tag("root", rRootTpc);
             if (_id > 0)
                   xml.tag("extension", _id);
-            if (_textName != "")
-                  xml.tag("name", _textName);
+            // parser uses leading "=" as a hidden specifier for minor
+            QString writeName = _textName;
+            if (_parsedForm && _parsedForm->name().startsWith("="))
+                  writeName = "=" + writeName;
+            if (writeName != "")
+                  xml.tag("name", writeName);
+
             if (rBaseTpc != Tpc::TPC_INVALID)
                   xml.tag("base", rBaseTpc);
             foreach(const HDegree& hd, _degreeList) {
@@ -315,12 +320,18 @@ void Harmony::read(XmlReader& e)
       // or constructed in the Chord Symbol Properties dialog.
 
       if (_rootTpc != Tpc::TPC_INVALID) {
-            if (_id > 0)
+            if (_id > 0) {
+                  // positive id will happen only for scores that were created with explicit chord lists
                   // lookup id in chord list and generate new description if necessary
                   getDescription();
-            else if (_textName != "")
-                  // no id - look up name, in case it is in chord list with no id
+                  }
+            else
+                  {
+                  // default case: look up by name
+                  // description will be found for any chord already read in this score
+                  // and we will generate a new one if necessary
                   getDescription(_textName);
+                  }
             }
       else if (_textName == "") {
             // unrecognized chords prior to 2.0 were stored as text with markup
@@ -838,7 +849,7 @@ const ChordDescription* Harmony::getDescription()
 
 const ChordDescription* Harmony::getDescription(const QString& name, const ParsedChord* pc)
       {
-      const ChordDescription* cd = descr(name,pc);
+      const ChordDescription* cd = descr(name, pc);
       if (cd)
             _id = cd->id;
       else {
