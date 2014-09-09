@@ -835,6 +835,13 @@ void Chord::computeUp()
       if (_stemDirection != MScore::Direction::AUTO) {
             _up = _stemDirection == MScore::Direction::UP;
             }
+      else if (!parent()) {
+            // hack for palette and drumset editor
+            if (upNote()->line() > 4)
+                  _up = true;
+            else
+                  _up = false;
+            }
       else if (_noteType != NoteType::NORMAL) {
             //
             // stem direction for grace notes
