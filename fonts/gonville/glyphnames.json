@@ -1,10 +1,10 @@
 {
     "4stringTabClef": {
-        "codepoint": "U+E06D", 
+        "codepoint": "U+E06E", 
         "description": "4-string tab clef"
     }, 
     "6stringTabClef": {
-        "codepoint": "U+E06C", 
+        "codepoint": "U+E06D", 
         "description": "6-string tab clef"
     }, 
     "accSagittal11LargeDiesisDown": {
@@ -892,7 +892,7 @@
         "description": "Combining right hand, 4 ranks, empty"
     }, 
     "accdnDiatonicClef": {
-        "codepoint": "U+E078", 
+        "codepoint": "U+E079", 
         "description": "Diatonic accordion clef"
     }, 
     "accdnLH2Ranks16Round": {
@@ -1348,7 +1348,7 @@
     }, 
     "accidentalJohnston13": {
         "codepoint": "U+E2B6", 
-        "description": "Thirteen (raise by 65:64~)"
+        "description": "Thirteen (raise by 65:64)"
     }, 
     "accidentalJohnston31": {
         "codepoint": "U+E2B7", 
@@ -1534,7 +1534,7 @@
     "accidentalQuarterToneSharpArrowDown": {
         "alternateCodepoint": "U+1D131", 
         "codepoint": "U+E275", 
-        "description": "Quarter-tone flat"
+        "description": "Quarter-tone sharp"
     }, 
     "accidentalQuarterToneSharpBusotti": {
         "codepoint": "U+E472", 
@@ -2388,19 +2388,19 @@
     }, 
     "brassHarmonMuteClosed": {
         "codepoint": "U+E5E8", 
-        "description": "Harmon mute, closed"
+        "description": "Harmon mute, stem in"
     }, 
     "brassHarmonMuteStemHalfLeft": {
         "codepoint": "U+E5E9", 
-        "description": "Harmon mute, stem-cup half-closed, left"
+        "description": "Harmon mute, stem extended, left"
     }, 
     "brassHarmonMuteStemHalfRight": {
         "codepoint": "U+E5EA", 
-        "description": "Harmon mute, stem-cup half-closed, right"
+        "description": "Harmon mute, stem extended, right"
     }, 
     "brassHarmonMuteStemOpen": {
         "codepoint": "U+E5EB", 
-        "description": "Harmon mute, stem-cup open"
+        "description": "Harmon mute, stem out"
     }, 
     "brassJazzTurn": {
         "codepoint": "U+E5E4", 
@@ -2461,7 +2461,7 @@
         "description": "Breath mark (upbow-like)"
     }, 
     "bridgeClef": {
-        "codepoint": "U+E077", 
+        "codepoint": "U+E078", 
         "description": "Bridge clef"
     }, 
     "buzzRoll": {
@@ -2470,43 +2470,43 @@
     }, 
     "cClef": {
         "alternateCodepoint": "U+1D121", 
-        "codepoint": "U+E05B", 
+        "codepoint": "U+E05C", 
         "description": "C clef"
     }, 
     "cClef8vb": {
-        "codepoint": "U+E05C", 
+        "codepoint": "U+E05D", 
         "description": "C clef ottava bassa"
     }, 
     "cClefArrowDown": {
-        "codepoint": "U+E05E", 
+        "codepoint": "U+E05F", 
         "description": "C clef, arrow down"
     }, 
     "cClefArrowUp": {
-        "codepoint": "U+E05D", 
+        "codepoint": "U+E05E", 
         "description": "C clef, arrow up"
     }, 
     "cClefChange": {
-        "codepoint": "U+E07A", 
+        "codepoint": "U+E07B", 
         "description": "C clef change"
     }, 
     "cClefCombining": {
-        "codepoint": "U+E060", 
+        "codepoint": "U+E061", 
         "description": "Combining C clef"
     }, 
     "cClefReversed": {
-        "codepoint": "U+E074", 
+        "codepoint": "U+E075", 
         "description": "Reversed C clef"
     }, 
     "cClefSquare": {
-        "codepoint": "U+E05F", 
+        "codepoint": "U+E060", 
         "description": "C clef (19th century)"
     }, 
     "cClefTriangular": {
-        "codepoint": "U+E06E", 
+        "codepoint": "U+E06F", 
         "description": "Triangular C clef"
     }, 
     "cClefTriangularToFClef": {
-        "codepoint": "U+E070", 
+        "codepoint": "U+E071", 
         "description": "C clef to F clef change"
     }, 
     "caesura": {
@@ -2711,6 +2711,10 @@
         "codepoint": "U+E998", 
         "description": "Punctum cavum"
     }, 
+    "chantPunctumDeminutum": {
+        "codepoint": "U+E9A1", 
+        "description": "Punctum deminutum"
+    }, 
     "chantPunctumInclinatum": {
         "codepoint": "U+E991", 
         "description": "Punctum inclinatum"
@@ -2792,8 +2796,16 @@
         "codepoint": "U+E8F7", 
         "description": "Virgula"
     }, 
+    "clef15": {
+        "codepoint": "U+E07E", 
+        "description": "15 for clefs"
+    }, 
+    "clef8": {
+        "codepoint": "U+E07D", 
+        "description": "8 for clefs"
+    }, 
     "clefChangeCombining": {
-        "codepoint": "U+E07C", 
+        "codepoint": "U+E07F", 
         "description": "Combining clef change"
     }, 
     "coda": {
@@ -3423,53 +3435,53 @@
     }, 
     "fClef": {
         "alternateCodepoint": "U+1D122", 
-        "codepoint": "U+E061", 
+        "codepoint": "U+E062", 
         "description": "F clef"
     }, 
     "fClef15ma": {
-        "codepoint": "U+E065", 
+        "codepoint": "U+E066", 
         "description": "F clef quindicesima alta"
     }, 
     "fClef15mb": {
-        "codepoint": "U+E062", 
+        "codepoint": "U+E063", 
         "description": "F clef quindicesima bassa"
     }, 
     "fClef8va": {
         "alternateCodepoint": "U+1D123", 
-        "codepoint": "U+E064", 
+        "codepoint": "U+E065", 
         "description": "F clef ottava alta"
     }, 
     "fClef8vb": {
         "alternateCodepoint": "U+1D124", 
-        "codepoint": "U+E063", 
+        "codepoint": "U+E064", 
         "description": "F clef ottava bassa"
     }, 
     "fClefArrowDown": {
-        "codepoint": "U+E067", 
+        "codepoint": "U+E068", 
         "description": "F clef, arrow down"
     }, 
     "fClefArrowUp": {
-        "codepoint": "U+E066", 
+        "codepoint": "U+E067", 
         "description": "F clef, arrow up"
     }, 
     "fClefChange": {
-        "codepoint": "U+E07B", 
+        "codepoint": "U+E07C", 
         "description": "F clef change"
     }, 
     "fClefReversed": {
-        "codepoint": "U+E075", 
+        "codepoint": "U+E076", 
         "description": "Reversed F clef"
     }, 
     "fClefTriangular": {
-        "codepoint": "U+E06F", 
+        "codepoint": "U+E070", 
         "description": "Triangular F clef"
     }, 
     "fClefTriangularToCClef": {
-        "codepoint": "U+E071", 
+        "codepoint": "U+E072", 
         "description": "F clef to C clef change"
     }, 
     "fClefTurned": {
-        "codepoint": "U+E076", 
+        "codepoint": "U+E077", 
         "description": "Turned F clef"
     }, 
     "fermataAbove": {
@@ -3586,1689 +3598,73 @@
         "codepoint": "U+EA5D", 
         "description": "Figured bass 7"
     }, 
-    "figbass7Raised": {
+    "figbass7Raised1": {
         "codepoint": "U+EA5E", 
         "description": "Figured bass 7 raised by half-step"
     }, 
-    "figbass8": {
+    "figbass7Raised2": {
         "codepoint": "U+EA5F", 
+        "description": "Figured bass 7 raised by a half-step 2"
+    }, 
+    "figbass8": {
+        "codepoint": "U+EA60", 
         "description": "Figured bass 8"
     }, 
     "figbass9": {
-        "codepoint": "U+EA60", 
+        "codepoint": "U+EA61", 
         "description": "Figured bass 9"
     }, 
     "figbass9Raised": {
-        "codepoint": "U+EA61", 
+        "codepoint": "U+EA62", 
         "description": "Figured bass 9 raised by half-step"
     }, 
     "figbassBracketLeft": {
-        "codepoint": "U+EA67", 
+        "codepoint": "U+EA68", 
         "description": "Figured bass ["
     }, 
     "figbassBracketRight": {
-        "codepoint": "U+EA68", 
+        "codepoint": "U+EA69", 
         "description": "Figured bass ]"
     }, 
     "figbassCombiningLowering": {
-        "codepoint": "U+EA6D", 
+        "codepoint": "U+EA6E", 
         "description": "Combining lower"
     }, 
     "figbassCombiningRaising": {
-        "codepoint": "U+EA6C", 
+        "codepoint": "U+EA6D", 
         "description": "Combining raise"
     }, 
     "figbassDoubleFlat": {
-        "codepoint": "U+EA62", 
+        "codepoint": "U+EA63", 
         "description": "Figured bass double flat"
     }, 
     "figbassDoubleSharp": {
-        "codepoint": "U+EA66", 
+        "codepoint": "U+EA67", 
         "description": "Figured bass double sharp"
     }, 
     "figbassFlat": {
-        "codepoint": "U+EA63", 
+        "codepoint": "U+EA64", 
         "description": "Figured bass flat"
     }, 
     "figbassNatural": {
-        "codepoint": "U+EA64", 
+        "codepoint": "U+EA65", 
         "description": "Figured bass natural"
     }, 
     "figbassParensLeft": {
-        "codepoint": "U+EA69", 
+        "codepoint": "U+EA6A", 
         "description": "Figured bass ("
     }, 
     "figbassParensRight": {
-        "codepoint": "U+EA6A", 
+        "codepoint": "U+EA6B", 
         "description": "Figured bass )"
     }, 
     "figbassPlus": {
-        "codepoint": "U+EA6B", 
+        "codepoint": "U+EA6C", 
         "description": "Figured bass +"
     }, 
     "figbassSharp": {
-        "codepoint": "U+EA65", 
+        "codepoint": "U+EA66", 
         "description": "Figured bass sharp"
-    }, 
-    "fingeringBsnChart": {
-        "codepoint": "U+ED30", 
-        "description": "Bassoon fingering chart, all open"
-    }, 
-    "fingeringBsnChartThumbsHands": {
-        "codepoint": "U+ED31", 
-        "description": "Bassoon fingering chart, thumb/hand separators"
-    }, 
-    "fingeringBsnLH1stFingerClosed": {
-        "codepoint": "U+ED33", 
-        "description": "Bassoon fingering chart, left-hand 1st finger closed"
-    }, 
-    "fingeringBsnLH1stFingerHalfClosed": {
-        "codepoint": "U+ED50", 
-        "description": "Bassoon fingering chart, left-hand 1st finger half-closed"
-    }, 
-    "fingeringBsnLH1stFingerQuarterClosed": {
-        "codepoint": "U+ED55", 
-        "description": "Bassoon fingering chart, left-hand 1st finger quarter-closed"
-    }, 
-    "fingeringBsnLH1stFingerThreeQuartersClosed": {
-        "codepoint": "U+ED5A", 
-        "description": "Bassoon fingering chart, left-hand 1st finger three-quarters closed"
-    }, 
-    "fingeringBsnLH1stFingerTrill": {
-        "codepoint": "U+ED60", 
-        "description": "Bassoon fingering chart, left-hand 1st finger trill"
-    }, 
-    "fingeringBsnLH2ndFingerClosed": {
-        "codepoint": "U+ED35", 
-        "description": "Bassoon fingering chart, left-hand 2nd finger closed"
-    }, 
-    "fingeringBsnLH2ndFingerHalfClosed": {
-        "codepoint": "U+ED51", 
-        "description": "Bassoon fingering chart, left-hand 2nd finger half-closed"
-    }, 
-    "fingeringBsnLH2ndFingerQuarterClosed": {
-        "codepoint": "U+ED56", 
-        "description": "Bassoon fingering chart, left-hand 2nd finger quarter-closed"
-    }, 
-    "fingeringBsnLH2ndFingerThreeQuartersClosed": {
-        "codepoint": "U+ED5B", 
-        "description": "Bassoon fingering chart, left-hand 2nd finger hole three-quarters closed"
-    }, 
-    "fingeringBsnLH2ndFingerTrill": {
-        "codepoint": "U+ED62", 
-        "description": "Bassoon fingering chart, left-hand 2nd finger trill"
-    }, 
-    "fingeringBsnLH3rdFingerClosed": {
-        "codepoint": "U+ED37", 
-        "description": "Bassoon fingering chart, left-hand 3rd finger closed"
-    }, 
-    "fingeringBsnLH3rdFingerHalfClosed": {
-        "codepoint": "U+ED52", 
-        "description": "Bassoon fingering chart, left-hand 3rd finger half-closed"
-    }, 
-    "fingeringBsnLH3rdFingerQuarterClosed": {
-        "codepoint": "U+ED57", 
-        "description": "Bassoon fingering chart, left-hand 3rd finger quarter-closed"
-    }, 
-    "fingeringBsnLH3rdFingerRingClosed": {
-        "codepoint": "U+ED36", 
-        "description": "Bassoon fingering chart, left-hand 3rd finger ring closed"
-    }, 
-    "fingeringBsnLH3rdFingerRingTrill": {
-        "codepoint": "U+ED63", 
-        "description": "Bassoon fingering chart, left-hand 3rd finger ring trill"
-    }, 
-    "fingeringBsnLH3rdFingerThreeQuartersClosed": {
-        "codepoint": "U+ED5C", 
-        "description": "Bassoon fingering chart, left-hand 3rd finger three-quarters closed"
-    }, 
-    "fingeringBsnLHHighEClosed": {
-        "codepoint": "U+ED32", 
-        "description": "Bassoon fingering chart, left-hand high E closed"
-    }, 
-    "fingeringBsnLHHighEFlatClosed": {
-        "codepoint": "U+ED34", 
-        "description": "Bassoon fingering chart, left-hand high E flat closed"
-    }, 
-    "fingeringBsnLHHighEFlatTrill": {
-        "codepoint": "U+ED61", 
-        "description": "Bassoon fingering chart, left-hand high E flat trill"
-    }, 
-    "fingeringBsnLHHighETrill": {
-        "codepoint": "U+ED5F", 
-        "description": "Bassoon fingering chart, left-hand high E trill"
-    }, 
-    "fingeringBsnLHLowDFlatClosed": {
-        "codepoint": "U+ED39", 
-        "description": "Bassoon fingering chart, left-hand low D flat closed"
-    }, 
-    "fingeringBsnLHLowDFlatTrill": {
-        "codepoint": "U+ED65", 
-        "description": "Bassoon fingering chart, left-hand low D flat trill"
-    }, 
-    "fingeringBsnLHLowEFlatClosed": {
-        "codepoint": "U+ED38", 
-        "description": "Bassoon fingering chart, left-hand low E flat closed"
-    }, 
-    "fingeringBsnLHLowEFlatTrill": {
-        "codepoint": "U+ED64", 
-        "description": "Bassoon fingering chart, left-hand low E flat trill"
-    }, 
-    "fingeringBsnLTCSharpClosed": {
-        "codepoint": "U+ED46", 
-        "description": "Bassoon fingering chart, left thumb C sharp closed"
-    }, 
-    "fingeringBsnLTCSharpTrill": {
-        "codepoint": "U+ED71", 
-        "description": "Bassoon fingering chart, left thumb C sharp trill"
-    }, 
-    "fingeringBsnLTHighAClosed": {
-        "codepoint": "U+ED45", 
-        "description": "Bassoon fingering chart, left thumb high A closed"
-    }, 
-    "fingeringBsnLTHighATrill": {
-        "codepoint": "U+ED70", 
-        "description": "Bassoon fingering chart, left thumb high A trill"
-    }, 
-    "fingeringBsnLTHighBClosed": {
-        "codepoint": "U+ED44", 
-        "description": "Bassoon fingering chart, left thumb high B closed"
-    }, 
-    "fingeringBsnLTHighBTrill": {
-        "codepoint": "U+ED6F", 
-        "description": "Bassoon fingering chart, left thumb high B trill"
-    }, 
-    "fingeringBsnLTHighDClosed": {
-        "codepoint": "U+ED43", 
-        "description": "Bassoon fingering chart, left thumb high D closed"
-    }, 
-    "fingeringBsnLTHighDTrill": {
-        "codepoint": "U+ED6E", 
-        "description": "Bassoon fingering chart, left thumb high D trill"
-    }, 
-    "fingeringBsnLTLowBClosed": {
-        "codepoint": "U+ED49", 
-        "description": "Bassoon fingering chart, left thumb low B closed"
-    }, 
-    "fingeringBsnLTLowBFlatClosed": {
-        "codepoint": "U+ED48", 
-        "description": "Bassoon fingering chart, left thumb low B flat closed"
-    }, 
-    "fingeringBsnLTLowBFlatTrill": {
-        "codepoint": "U+ED73", 
-        "description": "Bassoon fingering chart, left thumb low B flat trill"
-    }, 
-    "fingeringBsnLTLowBTrill": {
-        "codepoint": "U+ED74", 
-        "description": "Bassoon fingering chart, left thumb low B trill"
-    }, 
-    "fingeringBsnLTLowCClosed": {
-        "codepoint": "U+ED4A", 
-        "description": "Bassoon fingering chart, left thumb low C closed"
-    }, 
-    "fingeringBsnLTLowCTrill": {
-        "codepoint": "U+ED75", 
-        "description": "Bassoon fingering chart, left thumb low C trill"
-    }, 
-    "fingeringBsnLTLowDClosed": {
-        "codepoint": "U+ED4B", 
-        "description": "Bassoon fingering chart, left thumb low D closed"
-    }, 
-    "fingeringBsnLTLowDTrill": {
-        "codepoint": "U+ED76", 
-        "description": "Bassoon fingering chart, left thumb low D trill"
-    }, 
-    "fingeringBsnLTWhisperKeyClosed": {
-        "codepoint": "U+ED47", 
-        "description": "Bassoon fingering chart, left thumb whisper key closed"
-    }, 
-    "fingeringBsnLTWhisperKeyTrill": {
-        "codepoint": "U+ED72", 
-        "description": "Bassoon fingering chart, left thumb whisper key trill"
-    }, 
-    "fingeringBsnRH1stFingerClosed": {
-        "codepoint": "U+ED3B", 
-        "description": "Bassoon fingering chart, right-hand 1st finger closed"
-    }, 
-    "fingeringBsnRH1stFingerHalfClosed": {
-        "codepoint": "U+ED53", 
-        "description": "Bassoon fingering chart, right-hand 1st finger half-closed"
-    }, 
-    "fingeringBsnRH1stFingerQuarterClosed": {
-        "codepoint": "U+ED58", 
-        "description": "Bassoon fingering chart, right-hand 1st finger quarter-closed"
-    }, 
-    "fingeringBsnRH1stFingerThreeQuartersClosed": {
-        "codepoint": "U+ED5D", 
-        "description": "Bassoon fingering chart, right-hand 1st finger three-quarters closed"
-    }, 
-    "fingeringBsnRH1stFingerTrill": {
-        "codepoint": "U+ED67", 
-        "description": "Bassoon fingering chart, right-hand 1st finger trill"
-    }, 
-    "fingeringBsnRH2ndFingerClosed": {
-        "codepoint": "U+ED3D", 
-        "description": "Bassoon fingering chart, right-hand 2nd finger closed"
-    }, 
-    "fingeringBsnRH2ndFingerHalfClosed": {
-        "codepoint": "U+ED54", 
-        "description": "Bassoon fingering chart, right-hand 2nd finger half-closed"
-    }, 
-    "fingeringBsnRH2ndFingerQuarterClosed": {
-        "codepoint": "U+ED59", 
-        "description": "Bassoon fingering chart, right-hand 2nd finger quarter-closed"
-    }, 
-    "fingeringBsnRH2ndFingerRingClosed": {
-        "codepoint": "U+ED3C", 
-        "description": "Bassoon fingering chart, right-hand 2nd finger ring closed"
-    }, 
-    "fingeringBsnRH2ndFingerThreeQuartersClosed": {
-        "codepoint": "U+ED5E", 
-        "description": "Bassoon fingering chart, right-hand 2nd finger three-quarters closed"
-    }, 
-    "fingeringBsnRH2ndFingerTrill": {
-        "codepoint": "U+ED68", 
-        "description": "Bassoon fingering chart, right-hand 2nd finger trill"
-    }, 
-    "fingeringBsnRHAFlatClosed": {
-        "codepoint": "U+ED42", 
-        "description": "Bassoon fingering chart, right-hand A flat closed"
-    }, 
-    "fingeringBsnRHAFlatTrill": {
-        "codepoint": "U+ED6D", 
-        "description": "Bassoon fingering chart, right-hand A flat trill"
-    }, 
-    "fingeringBsnRHBFlatTrillClosed": {
-        "codepoint": "U+ED3E", 
-        "description": "Bassoon fingering chart, right-hand B flat trill key closed"
-    }, 
-    "fingeringBsnRHBFlatTrillTrill": {
-        "codepoint": "U+ED69", 
-        "description": "Bassoon fingering chart, right-hand B flat trill key trill"
-    }, 
-    "fingeringBsnRHCSharpTrillClosed": {
-        "codepoint": "U+ED3A", 
-        "description": "Bassoon fingering chart, right-hand C sharp trill key closed"
-    }, 
-    "fingeringBsnRHCSharpTrillTrill": {
-        "codepoint": "U+ED66", 
-        "description": "Bassoon fingering chart, right-hand C sharp trill key trill"
-    }, 
-    "fingeringBsnRHFSharpClosed": {
-        "codepoint": "U+ED41", 
-        "description": "Bassoon fingering chart, right-hand alt. F sharp closed"
-    }, 
-    "fingeringBsnRHFSharpTrill": {
-        "codepoint": "U+ED6C", 
-        "description": "Bassoon fingering chart, right-hand F sharp trill"
-    }, 
-    "fingeringBsnRHLowFClosed": {
-        "codepoint": "U+ED40", 
-        "description": "Bassoon fingering chart, right-hand low F closed"
-    }, 
-    "fingeringBsnRHLowFTrill": {
-        "codepoint": "U+ED6B", 
-        "description": "Bassoon fingering chart, right-hand low F trill"
-    }, 
-    "fingeringBsnRHLowGClosed": {
-        "codepoint": "U+ED3F", 
-        "description": "Bassoon fingering chart, right-hand low G closed"
-    }, 
-    "fingeringBsnRHLowGTrill": {
-        "codepoint": "U+ED6A", 
-        "description": "Bassoon fingering chart, right-hand low G trill"
-    }, 
-    "fingeringBsnRTAFlatClosed": {
-        "codepoint": "U+ED4F", 
-        "description": "Bassoon fingering chart, right thumb A flat closed"
-    }, 
-    "fingeringBsnRTAFlatTrill": {
-        "codepoint": "U+ED7A", 
-        "description": "Bassoon fingering chart, right thumb A flat trill"
-    }, 
-    "fingeringBsnRTBFlatClosed": {
-        "codepoint": "U+ED4C", 
-        "description": "Bassoon fingering chart, right thumb B flat closed"
-    }, 
-    "fingeringBsnRTBFlatTrill": {
-        "codepoint": "U+ED77", 
-        "description": "Bassoon fingering chart, right thumb B flat trill"
-    }, 
-    "fingeringBsnRTLowEClosed": {
-        "codepoint": "U+ED4D", 
-        "description": "Bassoon fingering chart, right thumb low E closed"
-    }, 
-    "fingeringBsnRTLowETrill": {
-        "codepoint": "U+ED78", 
-        "description": "Bassoon fingering chart, right thumb low E trill"
-    }, 
-    "fingeringBsnRTLowFSharpClosed": {
-        "codepoint": "U+ED4E", 
-        "description": "Bassoon fingering chart, right thumb low F sharp closed"
-    }, 
-    "fingeringBsnRTLowFSharpTrill": {
-        "codepoint": "U+ED79", 
-        "description": "Bassoon fingering chart, right thumb low F sharp trill"
-    }, 
-    "fingeringClarBassEFlatClosed": {
-        "codepoint": "U+EC9A", 
-        "description": "Clarinet fingering chart, bass clarinet E flat closed"
-    }, 
-    "fingeringClarBassEFlatOpen": {
-        "codepoint": "U+EC81", 
-        "description": "Clarinet fingering chart, bass clarinet E flat open"
-    }, 
-    "fingeringClarBassEFlatTrill": {
-        "codepoint": "U+ECD1", 
-        "description": "Clarinet fingering chart, bass clarinet E flat trill"
-    }, 
-    "fingeringClarChart": {
-        "codepoint": "U+EC80", 
-        "description": "Clarinet fingering chart, all open"
-    }, 
-    "fingeringClarLH1stFingerClosed": {
-        "codepoint": "U+EC86", 
-        "description": "Clarinet fingering chart, left-hand 1st finger closed"
-    }, 
-    "fingeringClarLH1stFingerHalfClosedLeft": {
-        "codepoint": "U+ECA1", 
-        "description": "Clarinet fingering chart, left-hand 1st finger half-closed left"
-    }, 
-    "fingeringClarLH1stFingerHalfClosedRight": {
-        "codepoint": "U+ECA7", 
-        "description": "Clarinet fingering chart, left-hand 1st finger half-closed right"
-    }, 
-    "fingeringClarLH1stFingerQuarterClosedLeft": {
-        "codepoint": "U+ECAD", 
-        "description": "Clarinet fingering chart, left-hand 1st finger quarter-closed left"
-    }, 
-    "fingeringClarLH1stFingerQuarterClosedRight": {
-        "codepoint": "U+ECB3", 
-        "description": "Clarinet fingering chart, left-hand 1st finger quarter-closed right"
-    }, 
-    "fingeringClarLH1stFingerRingOnly": {
-        "codepoint": "U+EC9B", 
-        "description": "Clarinet fingering chart, left-hand 1st finger ring only"
-    }, 
-    "fingeringClarLH1stFingerTrill": {
-        "codepoint": "U+ECBD", 
-        "description": "Clarinet fingering chart, left-hand 1st finger trill"
-    }, 
-    "fingeringClarLH2ndFingerClosed": {
-        "codepoint": "U+EC87", 
-        "description": "Clarinet fingering chart, left-hand 2nd finger closed"
-    }, 
-    "fingeringClarLH2ndFingerHalfClosedLeft": {
-        "codepoint": "U+ECA2", 
-        "description": "Clarinet fingering chart, left-hand 2nd finger half-closed left"
-    }, 
-    "fingeringClarLH2ndFingerHalfClosedRight": {
-        "codepoint": "U+ECA8", 
-        "description": "Clarinet fingering chart, left-hand 2nd finger half-closed right"
-    }, 
-    "fingeringClarLH2ndFingerQuarterClosedLeft": {
-        "codepoint": "U+ECAE", 
-        "description": "Clarinet fingering chart, left-hand 2nd finger quarter-closed left"
-    }, 
-    "fingeringClarLH2ndFingerQuarterClosedRight": {
-        "codepoint": "U+ECB4", 
-        "description": "Clarinet fingering chart, left-hand 2nd finger quarter-closed right"
-    }, 
-    "fingeringClarLH2ndFingerRingOnly": {
-        "codepoint": "U+EC9C", 
-        "description": "Clarinet fingering chart, left-hand 2nd finger ring only"
-    }, 
-    "fingeringClarLH2ndFingerTrill": {
-        "codepoint": "U+ECBE", 
-        "description": "Clarinet fingering chart, left-hand 2nd finger trill"
-    }, 
-    "fingeringClarLH3rdFingerClosed": {
-        "codepoint": "U+EC89", 
-        "description": "Clarinet fingering chart, left-hand 3rd finger closed"
-    }, 
-    "fingeringClarLH3rdFingerHalfClosedLeft": {
-        "codepoint": "U+ECA3", 
-        "description": "Clarinet fingering chart, left-hand 3rd finger half-closed left"
-    }, 
-    "fingeringClarLH3rdFingerHalfClosedRight": {
-        "codepoint": "U+ECA9", 
-        "description": "Clarinet fingering chart, left-hand 3rd finger half-closed right"
-    }, 
-    "fingeringClarLH3rdFingerQuarterClosedLeft": {
-        "codepoint": "U+ECAF", 
-        "description": "Clarinet fingering chart, left-hand 3rd finger quarter-closed left"
-    }, 
-    "fingeringClarLH3rdFingerQuarterClosedRight": {
-        "codepoint": "U+ECB5", 
-        "description": "Clarinet fingering chart, left-hand 3rd finger quarter-closed right"
-    }, 
-    "fingeringClarLH3rdFingerRingOnly": {
-        "codepoint": "U+EC9D", 
-        "description": "Clarinet fingering chart, left-hand 3rd finger ring only"
-    }, 
-    "fingeringClarLH3rdFingerTrill": {
-        "codepoint": "U+ECC0", 
-        "description": "Clarinet fingering chart, left-hand 3rd finger trill"
-    }, 
-    "fingeringClarLHAClosed": {
-        "codepoint": "U+EC84", 
-        "description": "Clarinet fingering chart, left-hand A closed"
-    }, 
-    "fingeringClarLHATrill": {
-        "codepoint": "U+ECBB", 
-        "description": "Clarinet fingering chart, left-hand A trill"
-    }, 
-    "fingeringClarLHCSharpClosed": {
-        "codepoint": "U+EC8A", 
-        "description": "Clarinet fingering chart, left-hand C sharp closed"
-    }, 
-    "fingeringClarLHCSharpTrill": {
-        "codepoint": "U+ECC1", 
-        "description": "Clarinet fingering chart, left-hand C sharp trill"
-    }, 
-    "fingeringClarLHEClosed": {
-        "codepoint": "U+EC8D", 
-        "description": "Clarinet fingering chart, left-hand E closed"
-    }, 
-    "fingeringClarLHEFlatClosed": {
-        "codepoint": "U+EC88", 
-        "description": "Clarinet fingering chart, left-hand E flat closed"
-    }, 
-    "fingeringClarLHEFlatTrill": {
-        "codepoint": "U+ECBF", 
-        "description": "Clarinet fingering chart, left-hand E flat trill"
-    }, 
-    "fingeringClarLHETrill": {
-        "codepoint": "U+ECC4", 
-        "description": "Clarinet fingering chart, left-hand E trill"
-    }, 
-    "fingeringClarLHFClosed": {
-        "codepoint": "U+EC8B", 
-        "description": "Clarinet fingering chart, left-hand F closed"
-    }, 
-    "fingeringClarLHFTrill": {
-        "codepoint": "U+ECC2", 
-        "description": "Clarinet fingering chart, left-hand F trill"
-    }, 
-    "fingeringClarLHGSharpAltClosed": {
-        "codepoint": "U+EC8C", 
-        "description": "Clarinet fingering chart, left-hand G sharp alt. closed"
-    }, 
-    "fingeringClarLHGSharpAltTrill": {
-        "codepoint": "U+ECC3", 
-        "description": "Clarinet fingering chart, left-hand G sharp alt. trill"
-    }, 
-    "fingeringClarLHGSharpClosed": {
-        "codepoint": "U+EC85", 
-        "description": "Clarinet fingering chart, left-hand G sharp closed"
-    }, 
-    "fingeringClarLHGSharpTrill": {
-        "codepoint": "U+ECBC", 
-        "description": "Clarinet fingering chart, left-hand G sharp trill"
-    }, 
-    "fingeringClarLHThumbClosed": {
-        "codepoint": "U+EC83", 
-        "description": "Clarinet fingering chart, left-hand thumb closed"
-    }, 
-    "fingeringClarLHThumbTrill": {
-        "codepoint": "U+ECBA", 
-        "description": "Clarinet fingering chart, left-hand thumb trill"
-    }, 
-    "fingeringClarRH1stFingerClosed": {
-        "codepoint": "U+EC92", 
-        "description": "Clarinet fingering chart, right-hand 1st finger closed"
-    }, 
-    "fingeringClarRH1stFingerHalfClosedLeft": {
-        "codepoint": "U+ECA4", 
-        "description": "Clarinet fingering chart, right-hand 1st finger half-closed left"
-    }, 
-    "fingeringClarRH1stFingerHalfClosedRight": {
-        "codepoint": "U+ECAA", 
-        "description": "Clarinet fingering chart, right-hand 1st finger half-closed right"
-    }, 
-    "fingeringClarRH1stFingerQuarterClosedLeft": {
-        "codepoint": "U+ECB0", 
-        "description": "Clarinet fingering chart, right-hand 1st finger quarter-closed left"
-    }, 
-    "fingeringClarRH1stFingerQuarterClosedRight": {
-        "codepoint": "U+ECB6", 
-        "description": "Clarinet fingering chart, right-hand 1st finger quarter-closed right"
-    }, 
-    "fingeringClarRH1stFingerRingOnly": {
-        "codepoint": "U+EC9E", 
-        "description": "Clarinet fingering chart, right-hand 1st finger ring only"
-    }, 
-    "fingeringClarRH1stFingerTrill": {
-        "codepoint": "U+ECC9", 
-        "description": "Clarinet fingering chart, right-hand 1st finger trill"
-    }, 
-    "fingeringClarRH1stSideClosed": {
-        "codepoint": "U+EC8E", 
-        "description": "Clarinet fingering chart, right-hand 1st side closed"
-    }, 
-    "fingeringClarRH1stSideTrill": {
-        "codepoint": "U+ECC5", 
-        "description": "Clarinet fingering chart, right-hand 1st side trill"
-    }, 
-    "fingeringClarRH2ndFingerClosed": {
-        "codepoint": "U+EC93", 
-        "description": "Clarinet fingering chart, right-hand 2nd finger closed"
-    }, 
-    "fingeringClarRH2ndFingerHalfClosedLeft": {
-        "codepoint": "U+ECA5", 
-        "description": "Clarinet fingering chart, right-hand 2nd finger half-closed left"
-    }, 
-    "fingeringClarRH2ndFingerHalfClosedRight": {
-        "codepoint": "U+ECAB", 
-        "description": "Clarinet fingering chart, right-hand 2nd finger half-closed right"
-    }, 
-    "fingeringClarRH2ndFingerQuarterClosedLeft": {
-        "codepoint": "U+ECB1", 
-        "description": "Clarinet fingering chart, right-hand 2nd finger quarter-closed left"
-    }, 
-    "fingeringClarRH2ndFingerQuarterClosedRight": {
-        "codepoint": "U+ECB7", 
-        "description": "Clarinet fingering chart, right-hand 2nd finger quarter-closed right"
-    }, 
-    "fingeringClarRH2ndFingerRingOnly": {
-        "codepoint": "U+EC9F", 
-        "description": "Clarinet fingering chart, right-hand 2nd finger ring only"
-    }, 
-    "fingeringClarRH2ndFingerTrill": {
-        "codepoint": "U+ECCA", 
-        "description": "Clarinet fingering chart, right-hand 2nd finger trill"
-    }, 
-    "fingeringClarRH2ndSideClosed": {
-        "codepoint": "U+EC8F", 
-        "description": "Clarinet fingering chart, right-hand 2nd side closed"
-    }, 
-    "fingeringClarRH2ndSideTrill": {
-        "codepoint": "U+ECC6", 
-        "description": "Clarinet fingering chart, right-hand 2nd side trill"
-    }, 
-    "fingeringClarRH3rdFingerClosed": {
-        "codepoint": "U+EC95", 
-        "description": "Clarinet fingering chart, right-hand 3rd finger closed"
-    }, 
-    "fingeringClarRH3rdFingerHalfClosedLeft": {
-        "codepoint": "U+ECA6", 
-        "description": "Clarinet fingering chart, right-hand 3rd finger half-closed left"
-    }, 
-    "fingeringClarRH3rdFingerHalfClosedRight": {
-        "codepoint": "U+ECAC", 
-        "description": "Clarinet fingering chart, right-hand 3rd finger half-closed right"
-    }, 
-    "fingeringClarRH3rdFingerQuarterClosedLeft": {
-        "codepoint": "U+ECB2", 
-        "description": "Clarinet fingering chart, right-hand 3rd finger quarter-closed left"
-    }, 
-    "fingeringClarRH3rdFingerQuarterClosedRight": {
-        "codepoint": "U+ECB8", 
-        "description": "Clarinet fingering chart, right-hand 3rd finger quarter-closed right"
-    }, 
-    "fingeringClarRH3rdFingerRingOnly": {
-        "codepoint": "U+ECA0", 
-        "description": "Clarinet fingering chart, right-hand 3rd finger ring only"
-    }, 
-    "fingeringClarRH3rdFingerTrill": {
-        "codepoint": "U+ECCC", 
-        "description": "Clarinet fingering chart, right-hand 3rd finger trill"
-    }, 
-    "fingeringClarRH3rdSideClosed": {
-        "codepoint": "U+EC90", 
-        "description": "Clarinet fingering chart, right-hand 3rd side closed"
-    }, 
-    "fingeringClarRH3rdSideTrill": {
-        "codepoint": "U+ECC7", 
-        "description": "Clarinet fingering chart, right-hand 3rd side trill"
-    }, 
-    "fingeringClarRH4thSideClosed": {
-        "codepoint": "U+EC91", 
-        "description": "Clarinet fingering chart, right-hand 4th side closed"
-    }, 
-    "fingeringClarRH4thSideTrill": {
-        "codepoint": "U+ECC8", 
-        "description": "Clarinet fingering chart, right-hand 4th side trill"
-    }, 
-    "fingeringClarRHBClosed": {
-        "codepoint": "U+EC94", 
-        "description": "Clarinet fingering chart, right-hand B closed"
-    }, 
-    "fingeringClarRHBTrill": {
-        "codepoint": "U+ECCB", 
-        "description": "Clarinet fingering chart, right-hand B trill"
-    }, 
-    "fingeringClarRHEClosed": {
-        "codepoint": "U+EC98", 
-        "description": "Clarinet fingering chart, right-hand E closed"
-    }, 
-    "fingeringClarRHETrill": {
-        "codepoint": "U+ECCF", 
-        "description": "Clarinet fingering chart, right-hand E trill"
-    }, 
-    "fingeringClarRHFClosed": {
-        "codepoint": "U+EC99", 
-        "description": "Clarinet fingering chart, right-hand F closed"
-    }, 
-    "fingeringClarRHFSharpClosed": {
-        "codepoint": "U+EC96", 
-        "description": "Clarinet fingering chart, right-hand F sharp closed"
-    }, 
-    "fingeringClarRHFSharpTrill": {
-        "codepoint": "U+ECCD", 
-        "description": "Clarinet fingering chart, right-hand F sharp trill"
-    }, 
-    "fingeringClarRHFTrill": {
-        "codepoint": "U+ECD0", 
-        "description": "Clarinet fingering chart, right-hand F trill"
-    }, 
-    "fingeringClarRHGSharpClosed": {
-        "codepoint": "U+EC97", 
-        "description": "Clarinet fingering chart, right-hand G sharp closed"
-    }, 
-    "fingeringClarRHGSharpTrill": {
-        "codepoint": "U+ECCE", 
-        "description": "Clarinet fingering chart, right-hand G sharp trill"
-    }, 
-    "fingeringClarRegisterClosed": {
-        "codepoint": "U+EC82", 
-        "description": "Clarinet fingering chart, register closed"
-    }, 
-    "fingeringClarRegisterTrill": {
-        "codepoint": "U+ECB9", 
-        "description": "Clarinet fingering chart, register trill"
-    }, 
-    "fingeringFluteBFoot": {
-        "codepoint": "U+EC42", 
-        "description": "Flute fingering chart, flute low B foot all open"
-    }, 
-    "fingeringFluteCFoot": {
-        "codepoint": "U+EC41", 
-        "description": "Flute fingering chart, flute low C foot all open"
-    }, 
-    "fingeringFluteChart": {
-        "codepoint": "U+EC40", 
-        "description": "Flute fingering chart, piccolo all open"
-    }, 
-    "fingeringFluteLH1stFingerClosed": {
-        "codepoint": "U+EC45", 
-        "description": "Flute fingering chart, left-hand 1st finger closed"
-    }, 
-    "fingeringFluteLH1stFingerHalfClosedLeft": {
-        "codepoint": "U+EC54", 
-        "description": "Flute fingering chart, left-hand 1st finger half-closed (left)"
-    }, 
-    "fingeringFluteLH1stFingerHalfClosedRight": {
-        "codepoint": "U+EC5A", 
-        "description": "Flute fingering chart, left-hand 1st finger half-closed (right)"
-    }, 
-    "fingeringFluteLH1stFingerQuarterClosedLeft": {
-        "codepoint": "U+EC60", 
-        "description": "Flute fingering chart, left-hand 1st finger quarter-closed (left)"
-    }, 
-    "fingeringFluteLH1stFingerQuarterClosedRight": {
-        "codepoint": "U+EC66", 
-        "description": "Flute fingering chart, left-hand 1st finger quarter-closed (right)"
-    }, 
-    "fingeringFluteLH1stFingerTrill": {
-        "codepoint": "U+EC6E", 
-        "description": "Flute fingering chart, left-hand 1st finger trill"
-    }, 
-    "fingeringFluteLH2ndFingerClosed": {
-        "codepoint": "U+EC46", 
-        "description": "Flute fingering chart, left-hand 2nd finger closed"
-    }, 
-    "fingeringFluteLH2ndFingerHalfClosedLeft": {
-        "codepoint": "U+EC55", 
-        "description": "Flute fingering chart, left-hand 2nd finger half-closed (left)"
-    }, 
-    "fingeringFluteLH2ndFingerHalfClosedRight": {
-        "codepoint": "U+EC5B", 
-        "description": "Flute fingering chart, left-hand 2nd finger half-closed (right)"
-    }, 
-    "fingeringFluteLH2ndFingerQuarterClosedLeft": {
-        "codepoint": "U+EC61", 
-        "description": "Flute fingering chart, left-hand 2nd finger quarter-closed (left)"
-    }, 
-    "fingeringFluteLH2ndFingerQuarterClosedRight": {
-        "codepoint": "U+EC67", 
-        "description": "Flute fingering chart, left-hand 2nd finger quarter-closed (right)"
-    }, 
-    "fingeringFluteLH2ndFingerTrill": {
-        "codepoint": "U+EC6F", 
-        "description": "Flute fingering chart, left-hand 2nd finger trill"
-    }, 
-    "fingeringFluteLH3rdFingerClosed": {
-        "codepoint": "U+EC47", 
-        "description": "Flute fingering chart, left-hand 3rd finger closed"
-    }, 
-    "fingeringFluteLH3rdFingerHalfClosedLeft": {
-        "codepoint": "U+EC56", 
-        "description": "Flute fingering chart, left-hand 3rd finger half-closed (left)"
-    }, 
-    "fingeringFluteLH3rdFingerHalfClosedRight": {
-        "codepoint": "U+EC5C", 
-        "description": "Flute fingering chart, left-hand 3rd finger half-closed (right)"
-    }, 
-    "fingeringFluteLH3rdFingerQuarterClosedLeft": {
-        "codepoint": "U+EC62", 
-        "description": "Flute fingering chart, left-hand 3rd finger quarter-closed (left)"
-    }, 
-    "fingeringFluteLH3rdFingerQuarterClosedRight": {
-        "codepoint": "U+EC68", 
-        "description": "Flute fingering chart, left-hand 3rd finger quarter-closed (right)"
-    }, 
-    "fingeringFluteLH3rdFingerTrill": {
-        "codepoint": "U+EC70", 
-        "description": "Flute fingering chart, left-hand 3rd finger trill"
-    }, 
-    "fingeringFluteLHThumbBClosed": {
-        "codepoint": "U+EC44", 
-        "description": "Flute fingering chart, left-hand thumb B closed"
-    }, 
-    "fingeringFluteLHThumbBFlatClosed": {
-        "codepoint": "U+EC43", 
-        "description": "Flute fingering chart, left-hand thumb B flat closed"
-    }, 
-    "fingeringFluteLHThumbBFlatTrill": {
-        "codepoint": "U+EC6C", 
-        "description": "Flute fingering chart, left-hand thumb B flat trill"
-    }, 
-    "fingeringFluteLHThumbBTrill": {
-        "codepoint": "U+EC6D", 
-        "description": "Flute fingering chart, left-hand thumb B trill"
-    }, 
-    "fingeringFluteRH1stFingerClosed": {
-        "codepoint": "U+EC4A", 
-        "description": "Flute fingering chart, right-hand 1st finger closed"
-    }, 
-    "fingeringFluteRH1stFingerHalfClosedLeft": {
-        "codepoint": "U+EC57", 
-        "description": "Flute fingering chart, right-hand 1st finger half-closed (left)"
-    }, 
-    "fingeringFluteRH1stFingerHalfClosedRight": {
-        "codepoint": "U+EC5D", 
-        "description": "Flute fingering chart, right-hand 1st finger half-closed (right)"
-    }, 
-    "fingeringFluteRH1stFingerQuarterClosedLeft": {
-        "codepoint": "U+EC63", 
-        "description": "Flute fingering chart, right-hand 1st finger quarter-closed (left)"
-    }, 
-    "fingeringFluteRH1stFingerQuarterClosedRight": {
-        "codepoint": "U+EC69", 
-        "description": "Flute fingering chart, right-hand 1st finger quarter-closed (right)"
-    }, 
-    "fingeringFluteRH1stFingerTrill": {
-        "codepoint": "U+EC73", 
-        "description": "Flute fingering chart, right-hand 1st finger trill"
-    }, 
-    "fingeringFluteRH2ndFingerClosed": {
-        "codepoint": "U+EC4C", 
-        "description": "Flute fingering chart, right-hand 2nd finger closed"
-    }, 
-    "fingeringFluteRH2ndFingerHalfClosedLeft": {
-        "codepoint": "U+EC58", 
-        "description": "Flute fingering chart, right-hand 2nd finger half-closed (left)"
-    }, 
-    "fingeringFluteRH2ndFingerHalfClosedRight": {
-        "codepoint": "U+EC5E", 
-        "description": "Flute fingering chart, right-hand 2nd finger half-closed (right)"
-    }, 
-    "fingeringFluteRH2ndFingerQuarterClosedLeft": {
-        "codepoint": "U+EC64", 
-        "description": "Flute fingering chart, right-hand 2nd finger quarter-closed (left)"
-    }, 
-    "fingeringFluteRH2ndFingerQuarterClosedRight": {
-        "codepoint": "U+EC6A", 
-        "description": "Flute fingering chart, right-hand 2nd finger quarter-closed (right)"
-    }, 
-    "fingeringFluteRH2ndFingerTrill": {
-        "codepoint": "U+EC75", 
-        "description": "Flute fingering chart, right-hand 2nd finger trill"
-    }, 
-    "fingeringFluteRH3rdFingerClosed": {
-        "codepoint": "U+EC4E", 
-        "description": "Flute fingering chart, right-hand 3rd finger closed"
-    }, 
-    "fingeringFluteRH3rdFingerHalfClosedLeft": {
-        "codepoint": "U+EC59", 
-        "description": "Flute fingering chart, right-hand 3rd finger half-closed (left)"
-    }, 
-    "fingeringFluteRH3rdFingerHalfClosedRight": {
-        "codepoint": "U+EC5F", 
-        "description": "Flute fingering chart, right-hand 3rd finger half-closed (right)"
-    }, 
-    "fingeringFluteRH3rdFingerQuarterClosedLeft": {
-        "codepoint": "U+EC65", 
-        "description": "Flute fingering chart, right-hand 3rd finger quarter-closed (left)"
-    }, 
-    "fingeringFluteRH3rdFingerQuarterClosedRight": {
-        "codepoint": "U+EC6B", 
-        "description": "Flute fingering chart, right-hand 3rd finger quarter-closed (right)"
-    }, 
-    "fingeringFluteRH3rdFingerTrill": {
-        "codepoint": "U+EC77", 
-        "description": "Flute fingering chart, right-hand 3rd finger trill"
-    }, 
-    "fingeringFluteRHBFlatTrillClosed": {
-        "codepoint": "U+EC49", 
-        "description": "Flute fingering chart, right-hand B flat trill closed"
-    }, 
-    "fingeringFluteRHBFlatTrillTrill": {
-        "codepoint": "U+EC72", 
-        "description": "Flute fingering chart, right-hand B flat trill key trill"
-    }, 
-    "fingeringFluteRHDSharpTrillClosed": {
-        "codepoint": "U+EC4D", 
-        "description": "Flute fingering chart, right-hand D sharp trill closed"
-    }, 
-    "fingeringFluteRHDSharpTrillTrill": {
-        "codepoint": "U+EC76", 
-        "description": "Flute fingering chart, right-hand D sharp trill key trill"
-    }, 
-    "fingeringFluteRHDTrillClosed": {
-        "codepoint": "U+EC4B", 
-        "description": "Flute fingering chart, right-hand D trill closed"
-    }, 
-    "fingeringFluteRHDTrillTrill": {
-        "codepoint": "U+EC74", 
-        "description": "Flute fingering chart, right-hand D trill key trill"
-    }, 
-    "fingeringFluteRHEFlatPaddleClosed": {
-        "codepoint": "U+EC4F", 
-        "description": "Flute fingering chart, right-hand E flat paddle closed"
-    }, 
-    "fingeringFluteRHEFlatPaddleTrill": {
-        "codepoint": "U+EC78", 
-        "description": "Flute fingering chart, right-hand E flat paddle trill"
-    }, 
-    "fingeringFluteRHGizmoClosed": {
-        "codepoint": "U+EC53", 
-        "description": "Flute fingering chart, right-hand gizmo closed"
-    }, 
-    "fingeringFluteRHGizmoTrill": {
-        "codepoint": "U+EC7C", 
-        "description": "Flute fingering chart, right-hand gizmo trill"
-    }, 
-    "fingeringFluteRHLowBClosed": {
-        "codepoint": "U+EC52", 
-        "description": "Flute fingering chart, right-hand low B closed"
-    }, 
-    "fingeringFluteRHLowBTrill": {
-        "codepoint": "U+EC7B", 
-        "description": "Flute fingering chart, right-hand low B trill"
-    }, 
-    "fingeringFluteRHLowCClosed": {
-        "codepoint": "U+EC51", 
-        "description": "Flute fingering chart, right-hand low C closed"
-    }, 
-    "fingeringFluteRHLowCSharpClosed": {
-        "codepoint": "U+EC50", 
-        "description": "Flute fingering chart, right-hand low C sharp closed"
-    }, 
-    "fingeringFluteRHLowCSharpTrill": {
-        "codepoint": "U+EC79", 
-        "description": "Flute fingering chart, right-hand low C sharp trill"
-    }, 
-    "fingeringFluteRHLowCTrill": {
-        "codepoint": "U+EC7A", 
-        "description": "Flute fingering chart, right-hand low C trill"
-    }, 
-    "fingeringOboeChart": {
-        "codepoint": "U+ECE0", 
-        "description": "Oboe fingering chart, all open"
-    }, 
-    "fingeringOboeLH1stFingerClosed": {
-        "codepoint": "U+ECE3", 
-        "description": "Oboe fingering chart, left-hand 1st finger closed"
-    }, 
-    "fingeringOboeLH1stFingerHalfClosed": {
-        "codepoint": "U+ED00", 
-        "description": "Oboe fingering chart, left-hand 1st finger half-closed"
-    }, 
-    "fingeringOboeLH1stFingerRingOnly": {
-        "codepoint": "U+ECFA", 
-        "description": "Oboe fingering chart, left-hand 1st finger ring only"
-    }, 
-    "fingeringOboeLH1stFingerTrill": {
-        "codepoint": "U+ED17", 
-        "description": "Oboe fingering chart, left-hand 1st finger trill"
-    }, 
-    "fingeringOboeLH1stOctaveClosed": {
-        "codepoint": "U+ECE2", 
-        "description": "Oboe fingering chart, left-hand 1st octave closed"
-    }, 
-    "fingeringOboeLH1stOctaveTrill": {
-        "codepoint": "U+ED16", 
-        "description": "Oboe fingering chart, left-hand 1st octave trill"
-    }, 
-    "fingeringOboeLH2ndFingerClosed": {
-        "codepoint": "U+ECE7", 
-        "description": "Oboe fingering chart, left-hand 2nd finger closed"
-    }, 
-    "fingeringOboeLH2ndFingerHalfClosedLeft": {
-        "codepoint": "U+ED01", 
-        "description": "Oboe fingering chart, left-hand 2nd finger half-closed (left)"
-    }, 
-    "fingeringOboeLH2ndFingerHalfClosedRight": {
-        "codepoint": "U+ED06", 
-        "description": "Oboe fingering chart, left-hand 2nd finger half-closed (right)"
-    }, 
-    "fingeringOboeLH2ndFingerQuarterClosedLeft": {
-        "codepoint": "U+ED0B", 
-        "description": "Oboe fingering chart, left-hand 2nd finger quarter-closed (left)"
-    }, 
-    "fingeringOboeLH2ndFingerQuarterClosedRight": {
-        "codepoint": "U+ED10", 
-        "description": "Oboe fingering chart, left-hand 2nd finger quarter-closed (right)"
-    }, 
-    "fingeringOboeLH2ndFingerRingOnly": {
-        "codepoint": "U+ECFB", 
-        "description": "Oboe fingering chart, left-hand 2nd finger ring only"
-    }, 
-    "fingeringOboeLH2ndFingerTrill": {
-        "codepoint": "U+ED1B", 
-        "description": "Oboe fingering chart, left-hand 2nd finger trill"
-    }, 
-    "fingeringOboeLH2ndOctaveClosed": {
-        "codepoint": "U+ECE4", 
-        "description": "Oboe fingering chart, left-hand 2nd octave closed"
-    }, 
-    "fingeringOboeLH2ndOctaveTrill": {
-        "codepoint": "U+ED18", 
-        "description": "Oboe fingering chart, left-hand 2nd octave trill"
-    }, 
-    "fingeringOboeLH3rdFingerClosed": {
-        "codepoint": "U+ECE9", 
-        "description": "Oboe fingering chart, left-hand 3rd finger closed"
-    }, 
-    "fingeringOboeLH3rdFingerHalfClosedLeft": {
-        "codepoint": "U+ED02", 
-        "description": "Oboe fingering chart, left-hand 3rd finger half-closed (left)"
-    }, 
-    "fingeringOboeLH3rdFingerHalfClosedRight": {
-        "codepoint": "U+ED07", 
-        "description": "Oboe fingering chart, left-hand 3rd finger half-closed (right)"
-    }, 
-    "fingeringOboeLH3rdFingerQuarterClosedLeft": {
-        "codepoint": "U+ED0C", 
-        "description": "Oboe fingering chart, left-hand 3rd finger quarter-closed (left)"
-    }, 
-    "fingeringOboeLH3rdFingerQuarterClosedRight": {
-        "codepoint": "U+ED11", 
-        "description": "Oboe fingering chart, left-hand 3rd finger quarter-closed (right)"
-    }, 
-    "fingeringOboeLH3rdFingerRingOnly": {
-        "codepoint": "U+ECFC", 
-        "description": "Oboe fingering chart, left-hand 3rd finger ring only"
-    }, 
-    "fingeringOboeLH3rdFingerTrill": {
-        "codepoint": "U+ED1D", 
-        "description": "Oboe fingering chart, left-hand 3rd finger trill"
-    }, 
-    "fingeringOboeLH3rdOctaveClosed": {
-        "codepoint": "U+ECE1", 
-        "description": "Oboe fingering chart, left-hand 3rd octave closed"
-    }, 
-    "fingeringOboeLH3rdOctaveTrill": {
-        "codepoint": "U+ED15", 
-        "description": "Oboe fingering chart, left-hand 3rd octave trill"
-    }, 
-    "fingeringOboeLHBTrillClosed": {
-        "codepoint": "U+ECE5", 
-        "description": "Oboe fingering chart, left-hand B trill closed"
-    }, 
-    "fingeringOboeLHBTrillTrill": {
-        "codepoint": "U+ED19", 
-        "description": "Oboe fingering chart, left-hand B trill key trill"
-    }, 
-    "fingeringOboeLHCSharpTrillClosed": {
-        "codepoint": "U+ECE8", 
-        "description": "Oboe fingering chart, left-hand C sharp trill closed"
-    }, 
-    "fingeringOboeLHCSharpTrillTrill": {
-        "codepoint": "U+ED1C", 
-        "description": "Oboe fingering chart, left-hand C sharp trill key trill"
-    }, 
-    "fingeringOboeLHDTrillClosed": {
-        "codepoint": "U+ECE6", 
-        "description": "Oboe fingering chart, left-hand D trill closed"
-    }, 
-    "fingeringOboeLHDTrillTrill": {
-        "codepoint": "U+ED1A", 
-        "description": "Oboe fingering chart, left-hand D trill key trill"
-    }, 
-    "fingeringOboeLHEFlatClosed": {
-        "codepoint": "U+ECEC", 
-        "description": "Oboe fingering chart, left-hand E flat closed"
-    }, 
-    "fingeringOboeLHEFlatTrill": {
-        "codepoint": "U+ED20", 
-        "description": "Oboe fingering chart, left-hand E flat trill"
-    }, 
-    "fingeringOboeLHFClosed": {
-        "codepoint": "U+ECED", 
-        "description": "Oboe fingering chart, left-hand F closed"
-    }, 
-    "fingeringOboeLHFTrill": {
-        "codepoint": "U+ED21", 
-        "description": "Oboe fingering chart, left-hand F trill"
-    }, 
-    "fingeringOboeLHGSharpClosed": {
-        "codepoint": "U+ECEA", 
-        "description": "Oboe fingering chart, left-hand G sharp closed"
-    }, 
-    "fingeringOboeLHGSharpTrill": {
-        "codepoint": "U+ED1E", 
-        "description": "Oboe fingering chart, left-hand G sharp trill"
-    }, 
-    "fingeringOboeLHLowBClosed": {
-        "codepoint": "U+ECEB", 
-        "description": "Oboe fingering chart, left-hand low B closed"
-    }, 
-    "fingeringOboeLHLowBFlatClosed": {
-        "codepoint": "U+ECEE", 
-        "description": "Oboe fingering chart, left-hand low B flat closed"
-    }, 
-    "fingeringOboeLHLowBFlatTrill": {
-        "codepoint": "U+ED22", 
-        "description": "Oboe fingering chart, left-hand low B flat trill"
-    }, 
-    "fingeringOboeLHLowBTrill": {
-        "codepoint": "U+ED1F", 
-        "description": "Oboe fingering chart, left-hand low B trill"
-    }, 
-    "fingeringOboeRH1stFingerClosed": {
-        "codepoint": "U+ECF1", 
-        "description": "Oboe fingering chart, right-hand 1st finger closed"
-    }, 
-    "fingeringOboeRH1stFingerHalfClosedLeft": {
-        "codepoint": "U+ED03", 
-        "description": "Oboe fingering chart, right-hand 1st finger half-closed (left)"
-    }, 
-    "fingeringOboeRH1stFingerHalfClosedRight": {
-        "codepoint": "U+ED08", 
-        "description": "Oboe fingering chart, right-hand 1st finger half-closed (right)"
-    }, 
-    "fingeringOboeRH1stFingerQuarterClosedLeft": {
-        "codepoint": "U+ED0D", 
-        "description": "Oboe fingering chart, right-hand 1st finger quarter-closed (left)"
-    }, 
-    "fingeringOboeRH1stFingerQuarterClosedRight": {
-        "codepoint": "U+ED12", 
-        "description": "Oboe fingering chart, right-hand 1st finger quarter-closed (right)"
-    }, 
-    "fingeringOboeRH1stFingerRingOnly": {
-        "codepoint": "U+ECFD", 
-        "description": "Oboe fingering chart, right-hand 1st finger ring only"
-    }, 
-    "fingeringOboeRH1stFingerTrill": {
-        "codepoint": "U+ED25", 
-        "description": "Oboe fingering chart, right-hand 1st finger trill"
-    }, 
-    "fingeringOboeRH2ndFingerClosed": {
-        "codepoint": "U+ECF3", 
-        "description": "Oboe fingering chart, right-hand 2nd finger closed"
-    }, 
-    "fingeringOboeRH2ndFingerHalfClosedLeft": {
-        "codepoint": "U+ED04", 
-        "description": "Oboe fingering chart, right-hand 2nd finger half-closed (left)"
-    }, 
-    "fingeringOboeRH2ndFingerHalfClosedRight": {
-        "codepoint": "U+ED09", 
-        "description": "Oboe fingering chart, right-hand 2nd finger half-closed right"
-    }, 
-    "fingeringOboeRH2ndFingerQuarterClosedLeft": {
-        "codepoint": "U+ED0E", 
-        "description": "Oboe fingering chart, right-hand 2nd finger quarter-closed (left)"
-    }, 
-    "fingeringOboeRH2ndFingerQuarterClosedRight": {
-        "codepoint": "U+ED13", 
-        "description": "Oboe fingering chart, right-hand 2nd finger quarter-closed (right)"
-    }, 
-    "fingeringOboeRH2ndFingerRingOnly": {
-        "codepoint": "U+ECFE", 
-        "description": "Oboe fingering chart, right-hand 2nd finger ring only"
-    }, 
-    "fingeringOboeRH2ndFingerTrill": {
-        "codepoint": "U+ED27", 
-        "description": "Oboe fingering chart, right-hand 2nd finger trill"
-    }, 
-    "fingeringOboeRH3rdFingerClosed": {
-        "codepoint": "U+ECF5", 
-        "description": "Oboe fingering chart, right-hand 3rd finger closed"
-    }, 
-    "fingeringOboeRH3rdFingerHalfClosedLeft": {
-        "codepoint": "U+ED05", 
-        "description": "Oboe fingering chart, right-hand 3rd finger half-closed (left)"
-    }, 
-    "fingeringOboeRH3rdFingerHalfClosedRight": {
-        "codepoint": "U+ED0A", 
-        "description": "Oboe fingering chart, right-hand 3rd finger half-closed (right)"
-    }, 
-    "fingeringOboeRH3rdFingerQuarterClosedLeft": {
-        "codepoint": "U+ED0F", 
-        "description": "Oboe fingering chart, right-hand 3rd finger quarter-closed (left)"
-    }, 
-    "fingeringOboeRH3rdFingerQuarterClosedRight": {
-        "codepoint": "U+ED14", 
-        "description": "Oboe fingering chart, right-hand 3rd finger quarter-closed (right)"
-    }, 
-    "fingeringOboeRH3rdFingerRingOnly": {
-        "codepoint": "U+ECFF", 
-        "description": "Oboe fingering chart, right-hand 3rd finger ring only"
-    }, 
-    "fingeringOboeRH3rdFingerTrill": {
-        "codepoint": "U+ED29", 
-        "description": "Oboe fingering chart, right-hand 3rd finger trill"
-    }, 
-    "fingeringOboeRHAClosed": {
-        "codepoint": "U+ECEF", 
-        "description": "Oboe fingering chart, right-hand A closed"
-    }, 
-    "fingeringOboeRHATrill": {
-        "codepoint": "U+ED23", 
-        "description": "Oboe fingering chart, right-hand A trill"
-    }, 
-    "fingeringOboeRHCBananaClosed": {
-        "codepoint": "U+ECF6", 
-        "description": "Oboe fingering chart, right-hand C banana closed"
-    }, 
-    "fingeringOboeRHCBananaTrill": {
-        "codepoint": "U+ED2A", 
-        "description": "Oboe fingering chart, right-hand C banana trill"
-    }, 
-    "fingeringOboeRHDTrillClosed": {
-        "codepoint": "U+ECF2", 
-        "description": "Oboe fingering chart, right-hand D trill closed"
-    }, 
-    "fingeringOboeRHDTrillTrill": {
-        "codepoint": "U+ED26", 
-        "description": "Oboe fingering chart, right-hand D trill key trill"
-    }, 
-    "fingeringOboeRHFClosed": {
-        "codepoint": "U+ECF4", 
-        "description": "Oboe fingering chart, right-hand F closed"
-    }, 
-    "fingeringOboeRHFTrill": {
-        "codepoint": "U+ED28", 
-        "description": "Oboe fingering chart, right-hand F trill"
-    }, 
-    "fingeringOboeRHGSharpClosed": {
-        "codepoint": "U+ECF0", 
-        "description": "Oboe fingering chart, right-hand G sharp closed"
-    }, 
-    "fingeringOboeRHGSharpTrill": {
-        "codepoint": "U+ED24", 
-        "description": "Oboe fingering chart, right-hand G sharp trill"
-    }, 
-    "fingeringOboeRHLowCClosed": {
-        "codepoint": "U+ECF7", 
-        "description": "Oboe fingering chart, right-hand low C closed"
-    }, 
-    "fingeringOboeRHLowCSharpClosed": {
-        "codepoint": "U+ECF8", 
-        "description": "Oboe fingering chart, right-hand low C sharp closed"
-    }, 
-    "fingeringOboeRHLowCSharpTrill": {
-        "codepoint": "U+ED2C", 
-        "description": "Oboe fingering chart, right-hand low C sharp trill"
-    }, 
-    "fingeringOboeRHLowCTrill": {
-        "codepoint": "U+ED2B", 
-        "description": "Oboe fingering chart, right-hand low C trill"
-    }, 
-    "fingeringOboeRHLowEFlatKeyClosed": {
-        "codepoint": "U+ECF9", 
-        "description": "Oboe fingering chart, right-hand low E flat key closed"
-    }, 
-    "fingeringOboeRHLowEFlatKeyTrill": {
-        "codepoint": "U+ED2D", 
-        "description": "Oboe fingering chart, right-hand low E flat key trill"
-    }, 
-    "fingeringRecChart": {
-        "codepoint": "U+EDC0", 
-        "description": "Recorder fingering chart, all open"
-    }, 
-    "fingeringRecLH1stFingerClosed": {
-        "codepoint": "U+EDC2", 
-        "description": "Recorder fingering chart, left-hand 1st finger closed"
-    }, 
-    "fingeringRecLH1stFingerHalfClosedLeft": {
-        "codepoint": "U+EDCB", 
-        "description": "Recorder fingering chart, left-hand 1st finger half-closed (left)"
-    }, 
-    "fingeringRecLH1stFingerHalfClosedRight": {
-        "codepoint": "U+EDD4", 
-        "description": "Recorder fingering chart, left-hand 1st finger half-closed (right)"
-    }, 
-    "fingeringRecLH1stFingerQuarterClosedLeft": {
-        "codepoint": "U+EDDD", 
-        "description": "Recorder fingering chart, left-hand 1st finger quarter-closed (left)"
-    }, 
-    "fingeringRecLH1stFingerQuarterClosedRight": {
-        "codepoint": "U+EDE6", 
-        "description": "Recorder fingering chart, left-hand 1st finger quarter-closed (right)"
-    }, 
-    "fingeringRecLH1stFingerTrill": {
-        "codepoint": "U+EDEF", 
-        "description": "Recorder fingering chart, left-hand 1st finger trill"
-    }, 
-    "fingeringRecLH2ndFingerClosed": {
-        "codepoint": "U+EDC3", 
-        "description": "Recorder fingering chart, left-hand 2nd finger closed"
-    }, 
-    "fingeringRecLH2ndFingerHalfClosedLeft": {
-        "codepoint": "U+EDCC", 
-        "description": "Recorder fingering chart, left-hand 2nd finger half-closed (left)"
-    }, 
-    "fingeringRecLH2ndFingerHalfClosedRight": {
-        "codepoint": "U+EDD5", 
-        "description": "Recorder fingering chart, left-hand 2nd finger half-closed (right)"
-    }, 
-    "fingeringRecLH2ndFingerQuarterClosedLeft": {
-        "codepoint": "U+EDDE", 
-        "description": "Recorder fingering chart, left-hand 2nd finger quarter-closed (left)"
-    }, 
-    "fingeringRecLH2ndFingerQuarterClosedRight": {
-        "codepoint": "U+EDE7", 
-        "description": "Recorder fingering chart, left-hand 2nd finger quarter-closed (right)"
-    }, 
-    "fingeringRecLH2ndFingerTrill": {
-        "codepoint": "U+EDF0", 
-        "description": "Recorder fingering chart, left-hand 2nd finger trill"
-    }, 
-    "fingeringRecLH3rdFingerClosed": {
-        "codepoint": "U+EDC4", 
-        "description": "Recorder fingering chart, left-hand 3rd finger closed"
-    }, 
-    "fingeringRecLH3rdFingerHalfClosedLeft": {
-        "codepoint": "U+EDCD", 
-        "description": "Recorder fingering chart, left-hand 3rd finger half-closed (left)"
-    }, 
-    "fingeringRecLH3rdFingerHalfClosedRight": {
-        "codepoint": "U+EDD6", 
-        "description": "Recorder fingering chart, left-hand 3rd finger half-closed (right)"
-    }, 
-    "fingeringRecLH3rdFingerQuarterClosedLeft": {
-        "codepoint": "U+EDDF", 
-        "description": "Recorder fingering chart, left-hand 3rd finger quarter-closed (left)"
-    }, 
-    "fingeringRecLH3rdFingerQuarterClosedRight": {
-        "codepoint": "U+EDE8", 
-        "description": "Recorder fingering chart, left-hand 3rd finger quarter-closed (right)"
-    }, 
-    "fingeringRecLH3rdFingerTrill": {
-        "codepoint": "U+EDF1", 
-        "description": "Recorder fingering chart, left-hand 3rd finger trill"
-    }, 
-    "fingeringRecLHThumbClosed": {
-        "codepoint": "U+EDC1", 
-        "description": "Recorder fingering chart, left-hand thumb closed"
-    }, 
-    "fingeringRecLHThumbHalfClosedLeft": {
-        "codepoint": "U+EDCA", 
-        "description": "Recorder fingering chart, left-hand thumb half-closed (left)"
-    }, 
-    "fingeringRecLHThumbHalfClosedRight": {
-        "codepoint": "U+EDD3", 
-        "description": "Recorder fingering chart, left-hand thumb half-closed (right)"
-    }, 
-    "fingeringRecLHThumbQuarterClosedLeft": {
-        "codepoint": "U+EDDC", 
-        "description": "Recorder fingering chart, left-hand thumb quarter-closed (left)"
-    }, 
-    "fingeringRecLHThumbQuarterClosedRight": {
-        "codepoint": "U+EDE5", 
-        "description": "Recorder fingering chart, left-hand thumb quarter-closed (right)"
-    }, 
-    "fingeringRecLHThumbTrill": {
-        "codepoint": "U+EDEE", 
-        "description": "Recorder fingering chart, left-hand thumb trill"
-    }, 
-    "fingeringRecRH1stDoubleHoleLeftClosed": {
-        "codepoint": "U+EDC6", 
-        "description": "Recorder fingering chart, right-hand 1st double hole left closed"
-    }, 
-    "fingeringRecRH1stDoubleHoleLeftHalfClosedLeft": {
-        "codepoint": "U+EDCF", 
-        "description": "Recorder fingering chart, right-hand 1st double hole left half-closed (left)"
-    }, 
-    "fingeringRecRH1stDoubleHoleLeftHalfClosedRight": {
-        "codepoint": "U+EDD8", 
-        "description": "Recorder fingering chart, right-hand 1st double hole left half-closed (right)"
-    }, 
-    "fingeringRecRH1stDoubleHoleLeftQuarterClosedLeft": {
-        "codepoint": "U+EDE1", 
-        "description": "Recorder fingering chart, right-hand 1st double hole left quarter-closed (left)"
-    }, 
-    "fingeringRecRH1stDoubleHoleLeftQuarterClosedRight": {
-        "codepoint": "U+EDEA", 
-        "description": "Recorder fingering chart, right-hand 1st double hole left quarter-closed (right)"
-    }, 
-    "fingeringRecRH1stDoubleHoleLeftTrill": {
-        "codepoint": "U+EDF3", 
-        "description": "Recorder fingering chart, right-hand 1st double hole left trill"
-    }, 
-    "fingeringRecRH1stDoubleHoleRightClosed": {
-        "codepoint": "U+EDC7", 
-        "description": "Recorder fingering chart, right-hand 1st double hole right closed"
-    }, 
-    "fingeringRecRH1stDoubleHoleRightHalfClosedLeft": {
-        "codepoint": "U+EDD0", 
-        "description": "Recorder fingering chart, right-hand 1st double hole right half-closed (left)"
-    }, 
-    "fingeringRecRH1stDoubleHoleRightHalfClosedRight": {
-        "codepoint": "U+EDD9", 
-        "description": "Recorder fingering chart, right-hand 1st double hole right half-closed (right)"
-    }, 
-    "fingeringRecRH1stDoubleHoleRightQuarterClosedLeft": {
-        "codepoint": "U+EDE2", 
-        "description": "Recorder fingering chart, right-hand 1st double hole right quarter-closed (left)"
-    }, 
-    "fingeringRecRH1stDoubleHoleRightQuarterClosedRight": {
-        "codepoint": "U+EDEB", 
-        "description": "Recorder fingering chart, right-hand 1st double hole right quarter-closed (right)"
-    }, 
-    "fingeringRecRH1stDoubleHoleRightTrill": {
-        "codepoint": "U+EDF4", 
-        "description": "Recorder fingering chart, right-hand 1st double hole right trill"
-    }, 
-    "fingeringRecRH1stFingerClosed": {
-        "codepoint": "U+EDC5", 
-        "description": "Recorder fingering chart, right-hand 1st finger closed"
-    }, 
-    "fingeringRecRH1stFingerHalfClosedLeft": {
-        "codepoint": "U+EDCE", 
-        "description": "Recorder fingering chart, right-hand 1st finger half-closed (left)"
-    }, 
-    "fingeringRecRH1stFingerHalfClosedRight": {
-        "codepoint": "U+EDD7", 
-        "description": "Recorder fingering chart, right-hand 1st finger half-closed (right)"
-    }, 
-    "fingeringRecRH1stFingerQuarterClosedLeft": {
-        "codepoint": "U+EDE0", 
-        "description": "Recorder fingering chart, right-hand 1st finger quarter-closed (left)"
-    }, 
-    "fingeringRecRH1stFingerQuarterClosedRight": {
-        "codepoint": "U+EDE9", 
-        "description": "Recorder fingering chart, right-hand 1st finger quarter-closed (right)"
-    }, 
-    "fingeringRecRH1stFingerTrill": {
-        "codepoint": "U+EDF2", 
-        "description": "Recorder fingering chart, right-hand 1st finger trill"
-    }, 
-    "fingeringRecRH2ndDoubleHoleLeftClosed": {
-        "codepoint": "U+EDC8", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole left closed"
-    }, 
-    "fingeringRecRH2ndDoubleHoleLeftHalfClosedLeft": {
-        "codepoint": "U+EDD1", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole left half-closed (left)"
-    }, 
-    "fingeringRecRH2ndDoubleHoleLeftHalfClosedRight": {
-        "codepoint": "U+EDDA", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole left half-closed (right)"
-    }, 
-    "fingeringRecRH2ndDoubleHoleLeftQuarterClosedLeft": {
-        "codepoint": "U+EDE3", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole left quarter-closed (left)"
-    }, 
-    "fingeringRecRH2ndDoubleHoleLeftQuarterClosedRight": {
-        "codepoint": "U+EDEC", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole left quarter-closed (right)"
-    }, 
-    "fingeringRecRH2ndDoubleHoleLeftTrill": {
-        "codepoint": "U+EDF5", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole left trill"
-    }, 
-    "fingeringRecRH2ndDoubleHoleRightClosed": {
-        "codepoint": "U+EDC9", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole right closed"
-    }, 
-    "fingeringRecRH2ndDoubleHoleRightHalfClosedLeft": {
-        "codepoint": "U+EDD2", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole right half-closed (left)"
-    }, 
-    "fingeringRecRH2ndDoubleHoleRightHalfClosedRight": {
-        "codepoint": "U+EDDB", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole right half-closed (right)"
-    }, 
-    "fingeringRecRH2ndDoubleHoleRightQuarterClosedLeft": {
-        "codepoint": "U+EDE4", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole right quarter-closed (left)"
-    }, 
-    "fingeringRecRH2ndDoubleHoleRightQuarterClosedRight": {
-        "codepoint": "U+EDED", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole right quarter-closed (right)"
-    }, 
-    "fingeringRecRH2ndDoubleHoleRightTrill": {
-        "codepoint": "U+EDF6", 
-        "description": "Recorder fingering chart, right-hand 2nd double hole right trill"
-    }, 
-    "fingeringSaxBariLowAClosed": {
-        "codepoint": "U+ED99", 
-        "description": "Saxophone fingering chart, baritone low A closed"
-    }, 
-    "fingeringSaxBariLowAOpen": {
-        "codepoint": "U+ED81", 
-        "description": "Saxophone fingering chart, baritone low A open"
-    }, 
-    "fingeringSaxBariLowATrill": {
-        "codepoint": "U+EDB7", 
-        "description": "Saxophone fingering chart, baritone low A trill"
-    }, 
-    "fingeringSaxChart": {
-        "codepoint": "U+ED80", 
-        "description": "Saxophone fingering chart, all open"
-    }, 
-    "fingeringSaxLH1stFingerClosed": {
-        "codepoint": "U+ED84", 
-        "description": "Saxophone fingering chart, left-hand 1st finger closed"
-    }, 
-    "fingeringSaxLH1stFingerHalfClosed": {
-        "codepoint": "U+ED9A", 
-        "description": "Saxophone fingering chart, left-hand 1st finger half-closed"
-    }, 
-    "fingeringSaxLH1stFingerTrill": {
-        "codepoint": "U+EDA2", 
-        "description": "Saxophone fingering chart, left-hand 1st finger trill"
-    }, 
-    "fingeringSaxLH2ndFingerClosed": {
-        "codepoint": "U+ED86", 
-        "description": "Saxophone fingering chart, left-hand 2nd finger closed"
-    }, 
-    "fingeringSaxLH2ndFingerHalfClosed": {
-        "codepoint": "U+ED9B", 
-        "description": "Saxophone fingering chart, left-hand 2nd finger half-closed"
-    }, 
-    "fingeringSaxLH2ndFingerTrill": {
-        "codepoint": "U+EDA4", 
-        "description": "Saxophone fingering chart, left-hand 2nd finger trill"
-    }, 
-    "fingeringSaxLH3rdFingerClosed": {
-        "codepoint": "U+ED87", 
-        "description": "Saxophone fingering chart, left-hand 3rd finger closed"
-    }, 
-    "fingeringSaxLH3rdFingerHalfClosed": {
-        "codepoint": "U+ED9C", 
-        "description": "Saxophone fingering chart, left-hand 3rd finger half-closed"
-    }, 
-    "fingeringSaxLH3rdFingerTrill": {
-        "codepoint": "U+EDA5", 
-        "description": "Saxophone fingering chart, left-hand 3rd finger trill"
-    }, 
-    "fingeringSaxLHBFlatClosed": {
-        "codepoint": "U+ED85", 
-        "description": "Saxophone fingering chart, left-hand B flat closed"
-    }, 
-    "fingeringSaxLHBFlatTrill": {
-        "codepoint": "U+EDA3", 
-        "description": "Saxophone fingering chart, left-hand B flat trill"
-    }, 
-    "fingeringSaxLHDPalmClosed": {
-        "codepoint": "U+ED89", 
-        "description": "Saxophone fingering chart, left-hand D palm closed"
-    }, 
-    "fingeringSaxLHDPalmTrill": {
-        "codepoint": "U+EDA7", 
-        "description": "Saxophone fingering chart, left-hand D palm trill"
-    }, 
-    "fingeringSaxLHEFlatPalmClosed": {
-        "codepoint": "U+ED88", 
-        "description": "Saxophone fingering chart, left-hand E flat palm closed"
-    }, 
-    "fingeringSaxLHEFlatPalmTrill": {
-        "codepoint": "U+EDA6", 
-        "description": "Saxophone fingering chart, left-hand E flat palm trill"
-    }, 
-    "fingeringSaxLHFPalmClosed": {
-        "codepoint": "U+ED8A", 
-        "description": "Saxophone fingering chart, left-hand F palm closed"
-    }, 
-    "fingeringSaxLHFPalmTrill": {
-        "codepoint": "U+EDA8", 
-        "description": "Saxophone fingering chart, left-hand F palm trill"
-    }, 
-    "fingeringSaxLHFrontFClosed": {
-        "codepoint": "U+ED83", 
-        "description": "Saxophone fingering chart, left-hand front F closed"
-    }, 
-    "fingeringSaxLHFrontFTrill": {
-        "codepoint": "U+EDA1", 
-        "description": "Saxophone fingering chart, left-hand front F trill"
-    }, 
-    "fingeringSaxLHGSharpClosed": {
-        "codepoint": "U+ED8B", 
-        "description": "Saxophone fingering chart, left-hand G sharp closed"
-    }, 
-    "fingeringSaxLHGSharpTrill": {
-        "codepoint": "U+EDA9", 
-        "description": "Saxophone fingering chart, left-hand G sharp trill"
-    }, 
-    "fingeringSaxLHLowBClosed": {
-        "codepoint": "U+ED8D", 
-        "description": "Saxophone fingering chart, left-hand low B closed"
-    }, 
-    "fingeringSaxLHLowBFlatClosed": {
-        "codepoint": "U+ED8E", 
-        "description": "Saxophone fingering chart, left-hand low B flat closed"
-    }, 
-    "fingeringSaxLHLowBFlatTrill": {
-        "codepoint": "U+EDAC", 
-        "description": "Saxophone fingering chart, left-hand low B flat trill"
-    }, 
-    "fingeringSaxLHLowBTrill": {
-        "codepoint": "U+EDAB", 
-        "description": "Saxophone fingering chart, left-hand low B trill"
-    }, 
-    "fingeringSaxLHLowCSharpClosed": {
-        "codepoint": "U+ED8C", 
-        "description": "Saxophone fingering chart, left-hand low C sharp closed"
-    }, 
-    "fingeringSaxLHLowCSharpTrill": {
-        "codepoint": "U+EDAA", 
-        "description": "Saxophone fingering chart, left-hand low C sharp trill"
-    }, 
-    "fingeringSaxLHOctaveClosed": {
-        "codepoint": "U+ED82", 
-        "description": "Saxophone fingering chart, left-hand octave closed"
-    }, 
-    "fingeringSaxLHOctaveTrill": {
-        "codepoint": "U+EDA0", 
-        "description": "Saxophone fingering chart, left-hand octave trill"
-    }, 
-    "fingeringSaxRH1stFingerClosed": {
-        "codepoint": "U+ED93", 
-        "description": "Saxophone fingering chart, right-hand 1st finger closed"
-    }, 
-    "fingeringSaxRH1stFingerHalfClosed": {
-        "codepoint": "U+ED9D", 
-        "description": "Saxophone fingering chart, right-hand 1st finger half-closed"
-    }, 
-    "fingeringSaxRH1stFingerTrill": {
-        "codepoint": "U+EDB1", 
-        "description": "Saxophone fingering chart, right-hand 1st finger trill"
-    }, 
-    "fingeringSaxRH2ndFingerClosed": {
-        "codepoint": "U+ED94", 
-        "description": "Saxophone fingering chart, right-hand 2nd finger closed"
-    }, 
-    "fingeringSaxRH2ndFingerHalfClosed": {
-        "codepoint": "U+ED9E", 
-        "description": "Saxophone fingering chart, right-hand 2nd finger half-closed"
-    }, 
-    "fingeringSaxRH2ndFingerTrill": {
-        "codepoint": "U+EDB2", 
-        "description": "Saxophone fingering chart, right-hand 2nd finger trill"
-    }, 
-    "fingeringSaxRH3rdFingerClosed": {
-        "codepoint": "U+ED96", 
-        "description": "Saxophone fingering chart, right-hand 3rd finger closed"
-    }, 
-    "fingeringSaxRH3rdFingerHalfClosed": {
-        "codepoint": "U+ED9F", 
-        "description": "Saxophone fingering chart, right-hand 3rd finger half-closed"
-    }, 
-    "fingeringSaxRH3rdFingerTrill": {
-        "codepoint": "U+EDB4", 
-        "description": "Saxophone fingering chart, right-hand 3rd finger trill"
-    }, 
-    "fingeringSaxRHBFlatSideClosed": {
-        "codepoint": "U+ED91", 
-        "description": "Saxophone fingering chart, right-hand B flat side closed"
-    }, 
-    "fingeringSaxRHBFlatSideTrill": {
-        "codepoint": "U+EDAF", 
-        "description": "Saxophone fingering chart, right-hand B flat side trill"
-    }, 
-    "fingeringSaxRHCSideClosed": {
-        "codepoint": "U+ED90", 
-        "description": "Saxophone fingering chart, right-hand C side closed"
-    }, 
-    "fingeringSaxRHCSideTrill": {
-        "codepoint": "U+EDAE", 
-        "description": "Saxophone fingering chart, right-hand C side trill"
-    }, 
-    "fingeringSaxRHESideClosed": {
-        "codepoint": "U+ED8F", 
-        "description": "Saxophone fingering chart, right-hand E side closed"
-    }, 
-    "fingeringSaxRHESideTrill": {
-        "codepoint": "U+EDAD", 
-        "description": "Saxophone fingering chart, right-hand E side trill"
-    }, 
-    "fingeringSaxRHFSharpAlternateClosed": {
-        "codepoint": "U+ED95", 
-        "description": "Saxophone fingering chart, right-hand F sharp alternate closed"
-    }, 
-    "fingeringSaxRHFSharpAlternateTrill": {
-        "codepoint": "U+EDB3", 
-        "description": "Saxophone fingering chart, right-hand F sharp alternate trill"
-    }, 
-    "fingeringSaxRHHighFSharpClosed": {
-        "codepoint": "U+ED92", 
-        "description": "Saxophone fingering chart, right-hand high F sharp closed"
-    }, 
-    "fingeringSaxRHHighFSharpTrill": {
-        "codepoint": "U+EDB0", 
-        "description": "Saxophone fingering chart, right-hand high F sharp trill"
-    }, 
-    "fingeringSaxRHLowCClosed": {
-        "codepoint": "U+ED98", 
-        "description": "Saxophone fingering chart, right-hand low C closed"
-    }, 
-    "fingeringSaxRHLowCTrill": {
-        "codepoint": "U+EDB6", 
-        "description": "Saxophone fingering chart, right-hand low C trill"
-    }, 
-    "fingeringSaxRHLowEFlatClosed": {
-        "codepoint": "U+ED97", 
-        "description": "Saxophone fingering chart, right-hand low E flat closed"
-    }, 
-    "fingeringSaxRHLowEFlatTrill": {
-        "codepoint": "U+EDB5", 
-        "description": "Saxophone fingering chart, right-hand low E flat trill"
     }, 
     "flag1024thDown": {
         "codepoint": "U+E24F", 
@@ -5346,14 +3742,6 @@
     "flagInternalUp": {
         "codepoint": "U+E250", 
         "description": "Internal combining flag above"
-    }, 
-    "fluteFingeringLHGSharpClosed": {
-        "codepoint": "U+EC48", 
-        "description": "Flute fingering chart, left-hand G sharp closed"
-    }, 
-    "fluteFingeringLHGSharpTrill": {
-        "codepoint": "U+EC71", 
-        "description": "Flute fingering chart, left-hand G sharp trill"
     }, 
     "fretboard3String": {
         "codepoint": "U+E850", 
@@ -5596,32 +3984,36 @@
         "codepoint": "U+E055", 
         "description": "G clef ottava bassa (old style)"
     }, 
+    "gClef8vbParens": {
+        "codepoint": "U+E057", 
+        "description": "G clef, optionally ottava bassa"
+    }, 
     "gClefArrowDown": {
-        "codepoint": "U+E05A", 
+        "codepoint": "U+E05B", 
         "description": "G clef, arrow down"
     }, 
     "gClefArrowUp": {
-        "codepoint": "U+E059", 
+        "codepoint": "U+E05A", 
         "description": "G clef, arrow up"
     }, 
     "gClefChange": {
-        "codepoint": "U+E079", 
+        "codepoint": "U+E07A", 
         "description": "G clef change"
     }, 
     "gClefLigatedNumberAbove": {
-        "codepoint": "U+E058", 
+        "codepoint": "U+E059", 
         "description": "Combining G clef, number above"
     }, 
     "gClefLigatedNumberBelow": {
-        "codepoint": "U+E057", 
+        "codepoint": "U+E058", 
         "description": "Combining G clef, number below"
     }, 
     "gClefReversed": {
-        "codepoint": "U+E072", 
+        "codepoint": "U+E073", 
         "description": "Reversed G clef"
     }, 
     "gClefTurned": {
-        "codepoint": "U+E073", 
+        "codepoint": "U+E074", 
         "description": "Turned G clef"
     }, 
     "glissandoDown": {
@@ -5735,6 +4127,14 @@
     "guitarString9": {
         "codepoint": "U+E83C", 
         "description": "String number 9"
+    }, 
+    "guitarStrumDown": {
+        "codepoint": "U+E847", 
+        "description": "Strum direction down"
+    }, 
+    "guitarStrumUp": {
+        "codepoint": "U+E846", 
+        "description": "Strum direction up"
     }, 
     "guitarVibratoBarDip": {
         "codepoint": "U+E831", 
@@ -6123,31 +4523,31 @@
         "description": "Kievan final whole note"
     }, 
     "kodalyHandDo": {
-        "codepoint": "U+EE00", 
+        "codepoint": "U+EC40", 
         "description": "Do hand sign"
     }, 
     "kodalyHandFa": {
-        "codepoint": "U+EE03", 
+        "codepoint": "U+EC43", 
         "description": "Fa hand sign"
     }, 
     "kodalyHandLa": {
-        "codepoint": "U+EE05", 
+        "codepoint": "U+EC45", 
         "description": "La hand sign"
     }, 
     "kodalyHandMi": {
-        "codepoint": "U+EE02", 
+        "codepoint": "U+EC42", 
         "description": "Mi hand sign"
     }, 
     "kodalyHandRe": {
-        "codepoint": "U+EE01", 
+        "codepoint": "U+EC41", 
         "description": "Re hand sign"
     }, 
     "kodalyHandSo": {
-        "codepoint": "U+EE04", 
+        "codepoint": "U+EC44", 
         "description": "So hand sign"
     }, 
     "kodalyHandTi": {
-        "codepoint": "U+EE06", 
+        "codepoint": "U+EC46", 
         "description": "Ti hand sign"
     }, 
     "leftRepeatSmall": {
@@ -7230,16 +5630,24 @@
         "codepoint": "U+E960", 
         "description": "White mensural semiminima"
     }, 
+    "metricModulationArrowLeft": {
+        "codepoint": "U+EC63", 
+        "description": "Left-pointing arrow for metric modulation"
+    }, 
+    "metricModulationArrowRight": {
+        "codepoint": "U+EC64", 
+        "description": "Right-pointing arrow for metric modulation"
+    }, 
     "miscDoNotCopy": {
-        "codepoint": "U+EE21", 
+        "codepoint": "U+EC61", 
         "description": "Do not copy"
     }, 
     "miscDoNotPhotocopy": {
-        "codepoint": "U+EE20", 
+        "codepoint": "U+EC60", 
         "description": "Do not photocopy"
     }, 
     "miscEyeglasses": {
-        "codepoint": "U+EE22", 
+        "codepoint": "U+EC62", 
         "description": "Eyeglasses"
     }, 
     "note1024thDown": {
@@ -7845,41 +6253,61 @@
         "description": "Black notehead"
     }, 
     "noteheadCircleSlash": {
-        "codepoint": "U+E0F1", 
+        "codepoint": "U+E0F7", 
         "description": "Circle slash notehead"
     }, 
     "noteheadCircleX": {
         "alternateCodepoint": "U+1D145", 
-        "codepoint": "U+E0B2", 
+        "codepoint": "U+E0B3", 
         "description": "Circle X notehead"
     }, 
     "noteheadCircleXDoubleWhole": {
-        "codepoint": "U+E0AF", 
+        "codepoint": "U+E0B0", 
         "description": "Circle X double whole"
     }, 
     "noteheadCircleXHalf": {
-        "codepoint": "U+E0B1", 
+        "codepoint": "U+E0B2", 
         "description": "Circle X half"
     }, 
     "noteheadCircleXWhole": {
-        "codepoint": "U+E0B0", 
+        "codepoint": "U+E0B1", 
         "description": "Circle X whole"
     }, 
     "noteheadCircledBlack": {
-        "codepoint": "U+E0E3", 
+        "codepoint": "U+E0E4", 
         "description": "Circled black notehead"
     }, 
+    "noteheadCircledBlackLarge": {
+        "codepoint": "U+E0E8", 
+        "description": "Black notehead in large circle"
+    }, 
     "noteheadCircledDoubleWhole": {
-        "codepoint": "U+E0E6", 
+        "codepoint": "U+E0E7", 
         "description": "Circled double whole notehead"
     }, 
+    "noteheadCircledDoubleWholeLarge": {
+        "codepoint": "U+E0EB", 
+        "description": "Double whole notehead in large circle"
+    }, 
     "noteheadCircledHalf": {
-        "codepoint": "U+E0E4", 
+        "codepoint": "U+E0E5", 
         "description": "Circled half notehead"
     }, 
+    "noteheadCircledHalfLarge": {
+        "codepoint": "U+E0E9", 
+        "description": "Half notehead in large circle"
+    }, 
     "noteheadCircledWhole": {
-        "codepoint": "U+E0E5", 
+        "codepoint": "U+E0E6", 
         "description": "Circled whole notehead"
+    }, 
+    "noteheadCircledWholeLarge": {
+        "codepoint": "U+E0EA", 
+        "description": "Whole notehead in large circle"
+    }, 
+    "noteheadCircledXLarge": {
+        "codepoint": "U+E0EC", 
+        "description": "Cross notehead in large circle"
     }, 
     "noteheadClusterDoubleWhole2nd": {
         "codepoint": "U+E124", 
@@ -7980,15 +6408,15 @@
         "description": "Combining whole note cluster, top"
     }, 
     "noteheadDiamondBlack": {
-        "codepoint": "U+E0DA", 
+        "codepoint": "U+E0DB", 
         "description": "Diamond black notehead"
     }, 
     "noteheadDiamondBlackOld": {
-        "codepoint": "U+E0E1", 
+        "codepoint": "U+E0E2", 
         "description": "Diamond black notehead (old)"
     }, 
     "noteheadDiamondBlackWide": {
-        "codepoint": "U+E0DB", 
+        "codepoint": "U+E0DC", 
         "description": "Diamond black notehead (wide)"
     }, 
     "noteheadDiamondClusterBlack2nd": {
@@ -8032,47 +6460,47 @@
         "description": "Combining white diamond cluster, top"
     }, 
     "noteheadDiamondDoubleWhole": {
-        "codepoint": "U+E0D6", 
+        "codepoint": "U+E0D7", 
         "description": "Diamond double whole notehead"
     }, 
     "noteheadDiamondDoubleWholeOld": {
-        "codepoint": "U+E0DE", 
+        "codepoint": "U+E0DF", 
         "description": "Diamond double whole notehead (old)"
     }, 
     "noteheadDiamondHalf": {
-        "codepoint": "U+E0D8", 
+        "codepoint": "U+E0D9", 
         "description": "Diamond half notehead"
     }, 
     "noteheadDiamondHalfFilled": {
-        "codepoint": "U+E0E2", 
+        "codepoint": "U+E0E3", 
         "description": "Half-filled diamond notehead"
     }, 
     "noteheadDiamondHalfOld": {
-        "codepoint": "U+E0E0", 
+        "codepoint": "U+E0E1", 
         "description": "Diamond half notehead (old)"
     }, 
     "noteheadDiamondHalfWide": {
-        "codepoint": "U+E0D9", 
+        "codepoint": "U+E0DA", 
         "description": "Diamond half notehead (wide)"
     }, 
     "noteheadDiamondOpen": {
-        "codepoint": "U+E0F6", 
+        "codepoint": "U+E0FC", 
         "description": "Open diamond notehead"
     }, 
     "noteheadDiamondWhite": {
-        "codepoint": "U+E0DC", 
+        "codepoint": "U+E0DD", 
         "description": "Diamond white notehead"
     }, 
     "noteheadDiamondWhiteWide": {
-        "codepoint": "U+E0DD", 
+        "codepoint": "U+E0DE", 
         "description": "Diamond white notehead (wide)"
     }, 
     "noteheadDiamondWhole": {
-        "codepoint": "U+E0D7", 
+        "codepoint": "U+E0D8", 
         "description": "Diamond whole notehead"
     }, 
     "noteheadDiamondWholeOld": {
-        "codepoint": "U+E0DF", 
+        "codepoint": "U+E0E0", 
         "description": "Diamond whole notehead (old)"
     }, 
     "noteheadDoubleWhole": {
@@ -8084,7 +6512,7 @@
         "description": "Double whole (breve) notehead (square)"
     }, 
     "noteheadDoubleWholeWithX": {
-        "codepoint": "U+E0B3", 
+        "codepoint": "U+E0B4", 
         "description": "Double whole notehead with X"
     }, 
     "noteheadHalf": {
@@ -8093,61 +6521,61 @@
         "description": "Half (minim) notehead"
     }, 
     "noteheadHalfFilled": {
-        "codepoint": "U+E0F5", 
+        "codepoint": "U+E0FB", 
         "description": "Filled half (minim) notehead"
     }, 
     "noteheadHalfWithX": {
-        "codepoint": "U+E0B5", 
+        "codepoint": "U+E0B6", 
         "description": "Half notehead with X"
     }, 
     "noteheadHeavyX": {
-        "codepoint": "U+E0F2", 
+        "codepoint": "U+E0F8", 
         "description": "Heavy X notehead"
     }, 
     "noteheadHeavyXHat": {
-        "codepoint": "U+E0F3", 
+        "codepoint": "U+E0F9", 
         "description": "Heavy X with hat notehead"
     }, 
     "noteheadLargeArrowDownBlack": {
-        "codepoint": "U+E0EE", 
+        "codepoint": "U+E0F4", 
         "description": "Large arrow down (lowest pitch) black notehead"
     }, 
     "noteheadLargeArrowDownDoubleWhole": {
-        "codepoint": "U+E0EB", 
+        "codepoint": "U+E0F1", 
         "description": "Large arrow down (lowest pitch) double whole notehead"
     }, 
     "noteheadLargeArrowDownHalf": {
-        "codepoint": "U+E0ED", 
+        "codepoint": "U+E0F3", 
         "description": "Large arrow down (lowest pitch) half notehead"
     }, 
     "noteheadLargeArrowDownWhole": {
-        "codepoint": "U+E0EC", 
+        "codepoint": "U+E0F2", 
         "description": "Large arrow down (lowest pitch) whole notehead"
     }, 
     "noteheadLargeArrowUpBlack": {
-        "codepoint": "U+E0EA", 
+        "codepoint": "U+E0F0", 
         "description": "Large arrow up (highest pitch) black notehead"
     }, 
     "noteheadLargeArrowUpDoubleWhole": {
-        "codepoint": "U+E0E7", 
+        "codepoint": "U+E0ED", 
         "description": "Large arrow up (highest pitch) double whole notehead"
     }, 
     "noteheadLargeArrowUpHalf": {
-        "codepoint": "U+E0E9", 
+        "codepoint": "U+E0EF", 
         "description": "Large arrow up (highest pitch) half notehead"
     }, 
     "noteheadLargeArrowUpWhole": {
-        "codepoint": "U+E0E8", 
+        "codepoint": "U+E0EE", 
         "description": "Large arrow up (highest pitch) whole notehead"
     }, 
     "noteheadMoonBlack": {
         "alternateCodepoint": "U+1D153", 
-        "codepoint": "U+E0CA", 
+        "codepoint": "U+E0CB", 
         "description": "Moon notehead black"
     }, 
     "noteheadMoonWhite": {
         "alternateCodepoint": "U+1D152", 
-        "codepoint": "U+E0C9", 
+        "codepoint": "U+E0CA", 
         "description": "Moon notehead white"
     }, 
     "noteheadNull": {
@@ -8157,32 +6585,32 @@
     }, 
     "noteheadParenthesis": {
         "alternateCodepoint": "U+1D156", 
-        "codepoint": "U+E0CD", 
+        "codepoint": "U+E0CE", 
         "description": "Parenthesis notehead"
     }, 
     "noteheadParenthesisLeft": {
-        "codepoint": "U+E0EF", 
+        "codepoint": "U+E0F5", 
         "description": "Opening parenthesis"
     }, 
     "noteheadParenthesisRight": {
-        "codepoint": "U+E0F0", 
+        "codepoint": "U+E0F6", 
         "description": "Closing parenthesis"
     }, 
     "noteheadPlusBlack": {
         "alternateCodepoint": "U+1D144", 
-        "codepoint": "U+E0AE", 
+        "codepoint": "U+E0AF", 
         "description": "Plus notehead black"
     }, 
     "noteheadPlusDoubleWhole": {
-        "codepoint": "U+E0AB", 
+        "codepoint": "U+E0AC", 
         "description": "Plus notehead double whole"
     }, 
     "noteheadPlusHalf": {
-        "codepoint": "U+E0AD", 
+        "codepoint": "U+E0AE", 
         "description": "Plus notehead half"
     }, 
     "noteheadPlusWhole": {
-        "codepoint": "U+E0AC", 
+        "codepoint": "U+E0AD", 
         "description": "Plus notehead whole"
     }, 
     "noteheadRectangularClusterBlackBottom": {
@@ -8291,40 +6719,40 @@
         "description": "Large X notehead"
     }, 
     "noteheadSlashedBlack1": {
-        "codepoint": "U+E0CE", 
+        "codepoint": "U+E0CF", 
         "description": "Slashed black notehead (bottom left to top right)"
     }, 
     "noteheadSlashedBlack2": {
-        "codepoint": "U+E0CF", 
+        "codepoint": "U+E0D0", 
         "description": "Slashed black notehead (top left to bottom right)"
     }, 
     "noteheadSlashedDoubleWhole1": {
-        "codepoint": "U+E0D4", 
+        "codepoint": "U+E0D5", 
         "description": "Slashed double whole notehead (bottom left to top right)"
     }, 
     "noteheadSlashedDoubleWhole2": {
-        "codepoint": "U+E0D5", 
+        "codepoint": "U+E0D6", 
         "description": "Slashed double whole notehead (top left to bottom right)"
     }, 
     "noteheadSlashedHalf1": {
-        "codepoint": "U+E0D0", 
+        "codepoint": "U+E0D1", 
         "description": "Slashed half notehead (bottom left to top right)"
     }, 
     "noteheadSlashedHalf2": {
-        "codepoint": "U+E0D1", 
+        "codepoint": "U+E0D2", 
         "description": "Slashed half notehead (top left to bottom right)"
     }, 
     "noteheadSlashedWhole1": {
-        "codepoint": "U+E0D2", 
+        "codepoint": "U+E0D3", 
         "description": "Slashed whole notehead (bottom left to top right)"
     }, 
     "noteheadSlashedWhole2": {
-        "codepoint": "U+E0D3", 
+        "codepoint": "U+E0D4", 
         "description": "Slashed whole notehead (top left to bottom right)"
     }, 
     "noteheadSquareBlack": {
         "alternateCodepoint": "U+1D147", 
-        "codepoint": "U+E0B8", 
+        "codepoint": "U+E0B9", 
         "description": "Square notehead black"
     }, 
     "noteheadSquareBlackLarge": {
@@ -8337,95 +6765,95 @@
     }, 
     "noteheadSquareWhite": {
         "alternateCodepoint": "U+1D146", 
-        "codepoint": "U+E0B7", 
+        "codepoint": "U+E0B8", 
         "description": "Square notehead white"
     }, 
     "noteheadTriangleDownBlack": {
         "alternateCodepoint": "U+1D14F", 
-        "codepoint": "U+E0C6", 
+        "codepoint": "U+E0C7", 
         "description": "Triangle notehead down black"
     }, 
     "noteheadTriangleDownDoubleWhole": {
-        "codepoint": "U+E0C2", 
+        "codepoint": "U+E0C3", 
         "description": "Triangle notehead down double whole"
     }, 
     "noteheadTriangleDownHalf": {
-        "codepoint": "U+E0C4", 
+        "codepoint": "U+E0C5", 
         "description": "Triangle notehead down half"
     }, 
     "noteheadTriangleDownWhite": {
         "alternateCodepoint": "U+1D14E", 
-        "codepoint": "U+E0C5", 
+        "codepoint": "U+E0C6", 
         "description": "Triangle notehead down white"
     }, 
     "noteheadTriangleDownWhole": {
-        "codepoint": "U+E0C3", 
+        "codepoint": "U+E0C4", 
         "description": "Triangle notehead down whole"
     }, 
     "noteheadTriangleLeftBlack": {
         "alternateCodepoint": "U+1D14B", 
-        "codepoint": "U+E0BF", 
+        "codepoint": "U+E0C0", 
         "description": "Triangle notehead left black"
     }, 
     "noteheadTriangleLeftWhite": {
         "alternateCodepoint": "U+1D14A", 
-        "codepoint": "U+E0BE", 
+        "codepoint": "U+E0BF", 
         "description": "Triangle notehead left white"
     }, 
     "noteheadTriangleRightBlack": {
         "alternateCodepoint": "U+1D14D", 
-        "codepoint": "U+E0C1", 
+        "codepoint": "U+E0C2", 
         "description": "Triangle notehead right black"
     }, 
     "noteheadTriangleRightWhite": {
         "alternateCodepoint": "U+1D14C", 
-        "codepoint": "U+E0C0", 
+        "codepoint": "U+E0C1", 
         "description": "Triangle notehead right white"
     }, 
     "noteheadTriangleRoundDownBlack": {
         "alternateCodepoint": "U+1D155", 
-        "codepoint": "U+E0CC", 
+        "codepoint": "U+E0CD", 
         "description": "Triangle-round notehead down black"
     }, 
     "noteheadTriangleRoundDownWhite": {
         "alternateCodepoint": "U+1D154", 
-        "codepoint": "U+E0CB", 
+        "codepoint": "U+E0CC", 
         "description": "Triangle-round notehead down white"
     }, 
     "noteheadTriangleUpBlack": {
         "alternateCodepoint": "U+1D149", 
-        "codepoint": "U+E0BD", 
+        "codepoint": "U+E0BE", 
         "description": "Triangle notehead up black"
     }, 
     "noteheadTriangleUpDoubleWhole": {
-        "codepoint": "U+E0B9", 
+        "codepoint": "U+E0BA", 
         "description": "Triangle notehead up double whole"
     }, 
     "noteheadTriangleUpHalf": {
-        "codepoint": "U+E0BB", 
+        "codepoint": "U+E0BC", 
         "description": "Triangle notehead up half"
     }, 
     "noteheadTriangleUpRightBlack": {
         "alternateCodepoint": "U+1D151", 
-        "codepoint": "U+E0C8", 
+        "codepoint": "U+E0C9", 
         "description": "Triangle notehead up right black"
     }, 
     "noteheadTriangleUpRightWhite": {
         "alternateCodepoint": "U+1D150", 
-        "codepoint": "U+E0C7", 
+        "codepoint": "U+E0C8", 
         "description": "Triangle notehead up right white"
     }, 
     "noteheadTriangleUpWhite": {
         "alternateCodepoint": "U+1D148", 
-        "codepoint": "U+E0BC", 
+        "codepoint": "U+E0BD", 
         "description": "Triangle notehead up white"
     }, 
     "noteheadTriangleUpWhole": {
-        "codepoint": "U+E0BA", 
+        "codepoint": "U+E0BB", 
         "description": "Triangle notehead up whole"
     }, 
     "noteheadVoidWithX": {
-        "codepoint": "U+E0B6", 
+        "codepoint": "U+E0B7", 
         "description": "Void notehead with X"
     }, 
     "noteheadWhole": {
@@ -8433,11 +6861,11 @@
         "description": "Whole (semibreve) notehead"
     }, 
     "noteheadWholeFilled": {
-        "codepoint": "U+E0F4", 
+        "codepoint": "U+E0FA", 
         "description": "Filled whole (semibreve) notehead"
     }, 
     "noteheadWholeWithX": {
-        "codepoint": "U+E0B4", 
+        "codepoint": "U+E0B5", 
         "description": "Whole notehead with X"
     }, 
     "noteheadXBlack": {
@@ -8456,6 +6884,10 @@
     "noteheadXOrnate": {
         "codepoint": "U+E0AA", 
         "description": "Ornate X notehead"
+    }, 
+    "noteheadXOrnateEllipse": {
+        "codepoint": "U+E0AB", 
+        "description": "Ornate X notehead in ellipse"
     }, 
     "noteheadXWhole": {
         "codepoint": "U+E0A7", 
@@ -8611,6 +7043,10 @@
     "ornamentOriscus": {
         "codepoint": "U+EA21", 
         "description": "Oriscus"
+    }, 
+    "ornamentPinceCouperin": {
+        "codepoint": "U+E588", 
+        "description": "Pinc\u00e9 (Couperin)"
     }, 
     "ornamentPortDeVoixV": {
         "codepoint": "U+E570", 
@@ -8774,6 +7210,10 @@
         "codepoint": "U+E56E", 
         "description": "Tremblement"
     }, 
+    "ornamentTremblementCouperin": {
+        "codepoint": "U+E589", 
+        "description": "Tremblement appuy\u00e9 (Couperin)"
+    }, 
     "ornamentTrill": {
         "alternateCodepoint": "U+1D196", 
         "codepoint": "U+E566", 
@@ -8874,6 +7314,10 @@
     "pictBeaterBow": {
         "codepoint": "U+E7DE", 
         "description": "Bow"
+    }, 
+    "pictBeaterBox": {
+        "codepoint": "U+E7EB", 
+        "description": "Box for percussion beater"
     }, 
     "pictBeaterBrassMalletsDown": {
         "codepoint": "U+E7DA", 
@@ -9276,8 +7720,8 @@
         "description": "Bell"
     }, 
     "pictBellOfCymbal": {
-        "codepoint": "U+E729", 
-        "description": "Edge of cymbal"
+        "codepoint": "U+E72A", 
+        "description": "Bell of cymbal"
     }, 
     "pictBellPlate": {
         "codepoint": "U+E713", 
@@ -9424,8 +7868,8 @@
         "description": "Duck call"
     }, 
     "pictEdgeOfCymbal": {
-        "codepoint": "U+E72A", 
-        "description": "Bell of cymbal"
+        "codepoint": "U+E729", 
+        "description": "Edge of cymbal"
     }, 
     "pictEmptyTrap": {
         "codepoint": "U+E6A9", 
@@ -10154,47 +8598,47 @@
         "description": "Segno (serpent with vertical lines)"
     }, 
     "semipitchedPercussionClef1": {
-        "codepoint": "U+E06A", 
+        "codepoint": "U+E06B", 
         "description": "Semi-pitched percussion clef 1"
     }, 
     "semipitchedPercussionClef2": {
-        "codepoint": "U+E06B", 
+        "codepoint": "U+E06C", 
         "description": "Semi-pitched percussion clef 2"
     }, 
     "smnFlat": {
-        "codepoint": "U+EE12", 
+        "codepoint": "U+EC52", 
         "description": "Flat"
     }, 
     "smnFlatWhite": {
-        "codepoint": "U+EE13", 
+        "codepoint": "U+EC53", 
         "description": "Flat (white)"
     }, 
     "smnHistoryDoubleFlat": {
-        "codepoint": "U+EE17", 
+        "codepoint": "U+EC57", 
         "description": "Double flat history sign"
     }, 
     "smnHistoryDoubleSharp": {
-        "codepoint": "U+EE15", 
+        "codepoint": "U+EC55", 
         "description": "Double sharp history sign"
     }, 
     "smnHistoryFlat": {
-        "codepoint": "U+EE16", 
+        "codepoint": "U+EC56", 
         "description": "Flat history sign"
     }, 
     "smnHistorySharp": {
-        "codepoint": "U+EE14", 
+        "codepoint": "U+EC54", 
         "description": "Sharp history sign"
     }, 
     "smnNatural": {
-        "codepoint": "U+EE18", 
+        "codepoint": "U+EC58", 
         "description": "Natural (N)"
     }, 
     "smnSharp": {
-        "codepoint": "U+EE10", 
+        "codepoint": "U+EC50", 
         "description": "Sharp"
     }, 
     "smnSharpWhite": {
-        "codepoint": "U+EE11", 
+        "codepoint": "U+EC51", 
         "description": "Sharp (white)"
     }, 
     "splitBarDivider": {
@@ -10434,7 +8878,7 @@
         "description": "Bow on tailpiece"
     }, 
     "stringsChangeBowDirection": {
-        "codepoint": "U+E625", 
+        "codepoint": "U+E626", 
         "description": "Change bow direction, indeterminate"
     }, 
     "stringsDownBow": {
@@ -10498,6 +8942,10 @@
     "stringsThumbPosition": {
         "codepoint": "U+E624", 
         "description": "Thumb position"
+    }, 
+    "stringsThumbPositionTurned": {
+        "codepoint": "U+E625", 
+        "description": "Turned thumb position"
     }, 
     "stringsUpBow": {
         "alternateCodepoint": "U+1D1AB", 
@@ -10859,12 +9307,12 @@
     }, 
     "unpitchedPercussionClef1": {
         "alternateCodepoint": "U+1D125", 
-        "codepoint": "U+E068", 
+        "codepoint": "U+E069", 
         "description": "Unpitched percussion clef 1"
     }, 
     "unpitchedPercussionClef2": {
         "alternateCodepoint": "U+1D126", 
-        "codepoint": "U+E069", 
+        "codepoint": "U+E06A", 
         "description": "Unpitched percussion clef 2"
     }, 
     "ventiduesima": {
