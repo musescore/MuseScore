@@ -197,6 +197,7 @@ static const PropertyData propertyList[] = {
       { P_ID::USER_STRETCH,        false, "stretch",         P_TYPE::REAL },
       { P_ID::NO_OFFSET,           false, "noOffset",        P_TYPE::INT  },
       { P_ID::IRREGULAR,           true,  "irregular",       P_TYPE::BOOL },
+      { P_ID::SYSINIT_DBLBAR,      true,  "sysInitDblBar",   P_TYPE::BOOL },
 
       { P_ID::ANCHOR,              false,  "anchor",       P_TYPE::INT },
 

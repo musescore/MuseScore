@@ -249,6 +249,7 @@ void System::layout(qreal xo1)
                   bl->setParent(this);
                   bl->setTrack(0);
                   bl->setGenerated(true);
+                  bl->setFlag(ElementFlag::SELECTABLE, false);    // make system bar line un-editable
                   score()->undoAddElement(bl);
                   }
             }
@@ -384,12 +385,15 @@ void System::layout2()
       setHeight(systemHeight);
 
       int n = ml.size();
+      Measure* firstMeasure = nullptr;
       for (int i = 0; i < n; ++i) {
             MeasureBase* m = ml.at(i);
             if (m->type() == Element::Type::MEASURE) {
                   // note that the factor 2 * _spatium must be corrected for when exporting
                   // system distance in MusicXML (issue #24733)
                   m->bbox().setRect(0.0, -_spatium, m->width(), systemHeight + 2 * _spatium);
+                  if (firstMeasure == nullptr)
+                        firstMeasure = static_cast<Measure*>(m);
                   }
             else if (m->type() == Element::Type::HBOX) {
                   m->bbox().setRect(0.0, 0.0, m->width(), systemHeight);
@@ -399,6 +403,8 @@ void System::layout2()
 
       if (_barLine) {
             _barLine->setTrack(firstStaffIdx * VOICES);
+            _barLine->setBarLineType(firstMeasure && firstMeasure->sysInitDblBar()
+                        ? BarLineType::DOUBLE : BarLineType::NORMAL);
             _barLine->setSpan(lastStaffIdx - firstStaffIdx + 1);
             if (score()->staff(0)->lines() == 1)
                   _barLine->setSpanFrom(BARLINE_SPAN_1LINESTAFF_FROM);
@@ -1069,8 +1075,9 @@ qreal System::staffYpage(int staffIdx) const
 void System::write(Xml& xml) const
       {
       xml.stag("System");
-      if (_barLine && !_barLine->generated())
-            _barLine->write(xml);
+// bar line is always generated
+//      if (_barLine && !_barLine->generated())
+//            _barLine->write(xml);
       xml.etag();
       }
 
@@ -1084,10 +1091,14 @@ void System::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "BarLine") {
-                  _barLine = new BarLine(score());
-                  _barLine->read(e);
-                  _barLine->setTrack(0);
-                  _barLine->setParent(this);
+//                  _barLine = new BarLine(score());
+//                  _barLine->read(e);
+//                  _barLine->setTrack(0);
+//                  _barLine->setParent(this);
+                  // read the bar line for backward compatibility, but ignore it
+                  BarLine* bl = new BarLine(score());
+                  bl->read(e);
+                  delete bl;
                   }
             else
                   e.unknown();

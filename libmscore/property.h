@@ -194,6 +194,7 @@ enum class P_ID : unsigned char {
       USER_STRETCH,
       NO_OFFSET,
       IRREGULAR,
+      SYSINIT_DBLBAR,
 
       ANCHOR,
 

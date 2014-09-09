@@ -150,6 +150,7 @@ Measure::Measure(Score* s)
       _irregular             = false;
       _breakMultiMeasureRest = false;
       _breakMMRest           = false;
+      _sysInitDblBar         = false;
       _endBarLineGenerated   = true;
       _endBarLineVisible     = true;
       _endBarLineType        = BarLineType::NORMAL;
@@ -185,6 +186,7 @@ Measure::Measure(const Measure& m)
       _irregular             = m._irregular;
       _breakMultiMeasureRest = m._breakMultiMeasureRest;
       _breakMMRest           = m._breakMMRest;
+      _sysInitDblBar         = m._sysInitDblBar;
       _endBarLineGenerated   = m._endBarLineGenerated;
       _endBarLineVisible     = m._endBarLineVisible;
       _endBarLineType        = m._endBarLineType;
@@ -1702,6 +1704,8 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   xml.tag("stretch", _userStretch);
             if (_noOffset)
                   xml.tag("noOffset", _noOffset);
+            if (_sysInitDblBar)
+                  xml.tag("sysInitDblBar", _sysInitDblBar);
             }
       qreal _spatium = spatium();
       MStaff* mstaff = staves[staff];
@@ -2193,6 +2197,10 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "breakMultiMeasureRest") {
                   _breakMultiMeasureRest = true;
                   e.readNext();
+                  }
+            else if (tag == "sysInitDblBar") {
+                  _sysInitDblBar = e.readInt();
+//                  e.readNext();
                   }
             else if (tag == "Tuplet") {
                   Tuplet* tuplet = new Tuplet(score());
@@ -3915,6 +3923,8 @@ QVariant Measure::getProperty(P_ID propertyId) const
                   return noOffset();
             case P_ID::IRREGULAR:
                   return irregular();
+            case P_ID::SYSINIT_DBLBAR:
+                  return sysInitDblBar();
             default:
                   return MeasureBase::getProperty(propertyId);
             }
@@ -3954,6 +3964,9 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
             case P_ID::IRREGULAR:
                   setIrregular(value.toBool());
                   break;
+            case P_ID::SYSINIT_DBLBAR:
+                  setSysInitDblBar(value.toBool());
+                  break;
             default:
                   return MeasureBase::setProperty(propertyId, value);
             }
@@ -3984,6 +3997,8 @@ QVariant Measure::propertyDefault(P_ID propertyId) const
             case P_ID::NO_OFFSET:
                   return 0;
             case P_ID::IRREGULAR:
+                  return false;
+            case P_ID::SYSINIT_DBLBAR:
                   return false;
             default:
                   break;
