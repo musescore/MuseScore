@@ -190,6 +190,7 @@ void MScore::init()
             ":/fonts/mscoreTab.ttf",
             ":/fonts/mscore-BC.ttf",
             ":/fonts/bravura/BravuraText.otf",
+            ":/fonts/gonville/GonvilleText.otf",
             ":/fonts/mscore/MScoreText.ttf",
             };
 
