@@ -723,6 +723,36 @@ void MusicXml::import(Score* s)
       {
       tupletAssert();
       score  = s;
+
+      // TODO only if multi-measure rests used ???
+      // score->style()->set(StyleIdx::createMultiMeasureRests, true);
+
+      for (QDomElement e = doc->documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
+            if (e.tagName() == "score-partwise")
+                  scorePartwise(e.firstChildElement());
+            else
+                  domError(e);
+            }
+      }
+      
+//---------------------------------------------------------
+//   initPartState
+//---------------------------------------------------------
+
+/**
+ Initialize members as required for reading the MusicXML part element.
+ TODO: factor out part reading into a separate
+ */
+
+void MusicXml::initPartState()
+      {
+      fractionTSig          = Fraction(0, 1);
+      tick                  = 0;
+      maxtick               = 0;
+      prevtick              = 0;
+      lastMeasureLen        = 0;
+      multiMeasureRestCount = -1;
+      startMultiMeasureRest = false;
       tie    = 0;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             slur[i] = 0;
@@ -739,16 +769,6 @@ void MusicXml::import(Score* s)
       hairpin = 0;
       figBass = 0;
       figBassExtend = false;
-
-      // TODO only if multi-measure rests used ???
-      // score->style()->set(StyleIdx::createMultiMeasureRests, true);
-
-      for (QDomElement e = doc->documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "score-partwise")
-                  scorePartwise(e.firstChildElement());
-            else
-                  domError(e);
-            }
       }
 
 //---------------------------------------------------------
@@ -1714,13 +1734,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             qDebug("Import MusicXml:xmlPart: cannot find part %s", id.toLatin1().data());
             return;
             }
-      fractionTSig          = Fraction(0, 1);
-      tick                  = 0;
-      maxtick               = 0;
-      prevtick              = 0;
-      lastMeasureLen        = 0;
-      multiMeasureRestCount = -1;
-      startMultiMeasureRest = false;
+
+      initPartState();
+
       KeySigEvent ev;
       KeySig currKeySig;
       currKeySig.setKeySigEvent(ev);
