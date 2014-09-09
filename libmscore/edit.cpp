@@ -2171,7 +2171,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
       {
       ChordRest* ncr = nextChordRest(cr);
       if ((ncr == 0) && (_is.track() % VOICES)) {
-            Segment* s = tick2segment(cr->tick() + cr->actualTicks());
+            Segment* s = tick2segment(cr->tick() + cr->actualTicks(), false, Segment::Type::ChordRest);
             int track = (cr->track() / VOICES) * VOICES;
             ncr = s ? static_cast<ChordRest*>(s->element(track)) : 0;
             }
