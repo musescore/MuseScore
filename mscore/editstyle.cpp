@@ -721,6 +721,7 @@ void EditStyle::setValues()
             }
       musicalTextFont->clear();
       musicalTextFont->addItem("Emmentaler Text", "MScore Text");
+      musicalTextFont->addItem("Gonville Text", "Gonville Text");
       musicalTextFont->addItem("Bravura Text", "Bravura Text");
       musicalTextFont->addItem("MuseJazz", "MuseJazz");
       QString tfont(lstyle.value(StyleIdx::MusicalTextFont).toString());
