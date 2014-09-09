@@ -177,17 +177,17 @@ int StringData::fret(int pitch, int string) const
 
 void StringData::fretChords(Chord * chord) const
       {
-      int   nFret, nNewFret, nTempFret;
+      int   nFret, minFret, maxFret, nNewFret, nTempFret;
       int   nString, nNewString, nTempString;
 
       if(bFretting)
             return;
       bFretting = true;
 
-      // we need to keep track of each string we allocate ourselves within this algorithm
-      bool bUsed[strings()];                    // initially all strings are available
+      // we need to keep track of string allocation
+      int bUsed[strings()];                    // initially all strings are available
       for(nString=0; nString<strings(); nString++)
-            bUsed[nString] = false;
+            bUsed[nString] = 0;
       // we also need the notes sorted in order of string (from highest to lowest) and then pitch
       QMap<int, Note *> sortedNotes;
       int   count = 0;
@@ -207,6 +207,17 @@ void StringData::fretChords(Chord * chord) const
                         sortChordNotes(sortedNotes, static_cast<Chord*>(ch), &count);
                   }
             }
+      // determine used range of frets
+      minFret = INT32_MAX;
+      maxFret = INT32_MIN;
+      foreach(Note* note, sortedNotes) {
+            if (note->string() != STRING_NONE)
+                  bUsed[note->string()]++;
+            if (note->fret() != FRET_NONE && note->fret() < minFret)
+                  minFret = note->fret();
+            if (note->fret() != FRET_NONE && note->fret() > maxFret)
+                  maxFret = note->fret();
+      }
 
       // scan chord notes from highest, matching with strings from the highest
       foreach(Note * note, sortedNotes) {
@@ -216,7 +227,7 @@ void StringData::fretChords(Chord * chord) const
             // if no fretting (any invalid fretting has been erased by sortChordNotes() )
             if (nString == STRING_NONE /*|| nFret == FRET_NONE || getPitch(nString, nFret) != note->pitch()*/) {
                   // get a new fretting
-                  if(!convertPitch(note->pitch(), &nNewString, &nNewFret) ) {
+                  if (!convertPitch(note->pitch(), &nNewString, &nNewFret) ) {
                         // no way to fit this note in this tab:
                         // mark as fretting conflict
                         note->setFretConflict(true);
@@ -227,51 +238,40 @@ void StringData::fretChords(Chord * chord) const
                               note->score()->undoChangeProperty(note, P_ID::STRING, nNewString);
                         continue;
                         }
+                  // note can be fretted: use string
+                  else {
+                        bUsed[nNewString]++;
+                        }
+                  }
 
-                  // check this note is not using the same string of another note of this chord
-                  foreach(Note * note2, sortedNotes) {
-                        // if same string...
-                        if(note2 != note && note2->string() == nNewString) {
-                              // ...attempt to fret this note on its old string
-                              if( (nTempFret=fret(note->pitch(), nString)) != FRET_NONE) {
-                                    nNewFret   = nTempFret;
-                                    nNewString = nString;
-                                    }
+            // if the note string (either original or newly assigned) is also used by another note
+            if (bUsed[nNewString] > 1) {
+                  // attempt to find a suitable string, from topmost
+                  for (nTempString=0; nTempString < strings(); nTempString++) {
+                        if (bUsed[nTempString] < 1 && (nTempFret=fret(note->pitch(), nTempString)) != FRET_NONE) {
+                              bUsed[nNewString]--;    // free previous string
+                              bUsed[nTempString]++;   // and occupy new string
+                              nNewFret   = nTempFret;
+                              nNewString = nTempString;
                               break;
                               }
                         }
                   }
 
-            // check we are not reusing a string we already used
-            if(bUsed[nNewString]) {
-                  // ...try with each other string, from the highest
-                  for(nTempString=0; nTempString < strings(); nTempString++) {
-                        if(bUsed[nTempString])
-                              continue;
-                        if( (nTempFret=fret(note->pitch(), nTempString)) != FRET_NONE) {
-                              // suitable string found
-                              nNewFret    = nTempFret;
-                              nNewString  = nTempString;
-                              break;
-                              }
-                        }
-                  // if we run out of strings
-                  if(nTempString >= strings()) {
-                        // no way to fit this chord in this tab:
-                        // mark this note as fretting conflict
-                        note->setFretConflict(true);
-//                        continue;
-                        }
-                  }
+            // TODO : try to optimize used fret range, avoiding eccessively open positions
 
             // if fretting did change, store as a fret change
             if (nFret != nNewFret)
                   note->score()->undoChangeProperty(note, P_ID::FRET, nNewFret);
             if (nString != nNewString)
                   note->score()->undoChangeProperty(note, P_ID::STRING, nNewString);
-
-            bUsed[nNewString] = true;           // string is used
             }
+
+      // check for any remaining fret conflict
+      foreach(Note * note, sortedNotes)
+            if (bUsed[note->string()] > 1)
+                  note->setFretConflict(true);
+
       bFretting = false;
       }
 
@@ -298,6 +298,7 @@ void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *cho
             if (string <= STRING_NONE || fret <= FRET_NONE
                         || getPitch(string, fret) != note->pitch()) {
                   note->setString(STRING_NONE);
+                  note->setFret(FRET_NONE);
                   convertPitch(note->pitch(), &string, &fret);
                   }
             key = string * 100000;
