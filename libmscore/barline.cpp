@@ -656,6 +656,18 @@ void BarLine::endEdit()
       {
       shiftDrag = false;
 
+      // if no change, do nothing
+      if (_span == _origSpan &&_spanFrom == _origSpanFrom && _spanTo == _origSpanTo) {
+            ctrlDrag = false;
+            return;
+            }
+      // if bar line has custom span, assume any span edit is local to this bar line
+      if (_customSpan == true)
+            ctrlDrag = true;
+      // if bar line belongs to a system (system-initial bar line), edit is local
+      if (parent() && parent()->type() == Element::Type::SYSTEM)
+            ctrlDrag = true;
+
       if (ctrlDrag) {                      // if single bar line edit
             ctrlDrag = false;
             _customSpan       = true;           // mark bar line as custom spanning
