@@ -555,7 +555,6 @@ StyleData::StyleData()
       _articulationAnchor[int(ArticulationType::Shortfermata)]    = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Longfermata)]     = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Verylongfermata)] = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Thumb)]           = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Sforzatoaccent)]  = ArticulationAnchor::CHORD;
 //      _articulationAnchor[int(ArticulationType::Espressivo)]      = ArticulationAnchor::CHORD;
       _articulationAnchor[int(ArticulationType::Staccato)]        = ArticulationAnchor::CHORD;
@@ -593,6 +592,11 @@ StyleData::StyleData()
 //      _articulationAnchor[int(ArticulationType::Tapping)]         = ArticulationAnchor::TOP_STAFF;
 //      _articulationAnchor[int(ArticulationType::Slapping)]        = ArticulationAnchor::TOP_STAFF;
 //      _articulationAnchor[int(ArticulationType::Popping)]         = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::ThumbPosition)]   = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::LuteFingThumb)]   = ArticulationAnchor::BOTTOM_CHORD;
+      _articulationAnchor[int(ArticulationType::LuteFingFirst)]   = ArticulationAnchor::BOTTOM_CHORD;
+      _articulationAnchor[int(ArticulationType::LuteFingSecond)]  = ArticulationAnchor::BOTTOM_CHORD;
+      _articulationAnchor[int(ArticulationType::LuteFingThird)]   = ArticulationAnchor::BOTTOM_CHORD;
       };
 
 StyleData::StyleData(const StyleData& s)

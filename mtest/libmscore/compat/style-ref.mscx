@@ -103,7 +103,6 @@
       <shortfermataAnchor>2</shortfermataAnchor>
       <longfermataAnchor>2</longfermataAnchor>
       <verylongfermataAnchor>2</verylongfermataAnchor>
-      <thumbAnchor>1</thumbAnchor>
       <sforzatoAnchor>1</sforzatoAnchor>
       <staccatoAnchor>1</staccatoAnchor>
       <staccatissimoAnchor>1</staccatissimoAnchor>
@@ -123,6 +122,7 @@
       <upprallAnchor>1</upprallAnchor>
       <upmordentAnchor>1</upmordentAnchor>
       <downmordentAnchor>1</downmordentAnchor>
+      <thumbAnchor>1</thumbAnchor>
       <page-layout>
         <page-height>1683.78</page-height>
         <page-width>1190.55</page-width>

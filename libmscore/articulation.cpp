@@ -46,10 +46,6 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             "verylongfermata", QT_TRANSLATE_NOOP("articulation", "very long fermata"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
-      { SymId::stringsThumbPosition, SymId::stringsThumbPosition,
-            "thumb", QT_TRANSLATE_NOOP("articulation", "thumb"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
-            },
       { SymId::articAccentAbove,   SymId::articAccentBelow,
             "sforzato", QT_TRANSLATE_NOOP("articulation", "sforzato"),
             1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
@@ -202,6 +198,29 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
             1.0, ArticulationShowIn::TABLATURE
             },
 #endif
+
+      // Fingerings
+
+      { SymId::stringsThumbPosition, SymId::stringsThumbPosition,
+            "thumb", QT_TRANSLATE_NOOP("articulation", "thumb pos."),
+            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            },
+      { SymId::luteFingeringRHThumb, SymId::luteFingeringRHThumb,
+            "lutefingeringthumb", QT_TRANSLATE_NOOP("articulation", "lute thumb fing."),
+            1.0, ArticulationShowIn::TABLATURE
+            },
+      { SymId::luteFingeringRHFirst, SymId::luteFingeringRHFirst,
+            "lutefingering1st", QT_TRANSLATE_NOOP("articulation", "lute 1 fing."),
+            1.0, ArticulationShowIn::TABLATURE
+            },
+      { SymId::luteFingeringRHSecond, SymId::luteFingeringRHSecond,
+            "lutefingering2nd", QT_TRANSLATE_NOOP("articulation", "lute 2 fing."),
+            1.0, ArticulationShowIn::TABLATURE
+            },
+      { SymId::luteFingeringRHThird, SymId::luteFingeringRHThird,
+            "lutefingering3rd", QT_TRANSLATE_NOOP("articulation", "lute 3 fing."),
+            1.0, ArticulationShowIn::TABLATURE
+            },
       };
 
 //---------------------------------------------------------
