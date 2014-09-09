@@ -332,6 +332,24 @@ class ChangePitch : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   ChangeFretting
+//---------------------------------------------------------
+
+class ChangeFretting : public UndoCommand {
+      Note* note;
+      int pitch;
+      int string;
+      int fret;
+      int tpc1;
+      int tpc2;
+      void flip();
+
+   public:
+      ChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
+      UNDO_NAME("ChangeFretting")
+      };
+
+//---------------------------------------------------------
 //   ChangeKeySig
 //---------------------------------------------------------
 
