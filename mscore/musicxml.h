@@ -216,6 +216,7 @@ class MusicXml {
       void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion);
       QList<QDomElement> findSlurElements(QDomElement);
       void addGraceNoteAfter(Chord*, Segment*);
+      void initPartState();
 public:
       MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1);
       void import(Score*);
