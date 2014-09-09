@@ -521,6 +521,7 @@ endif (MINGW)
 if (APPLE)
      install (FILES
       ../fonts/gonville/Gonville.otf
+      ../fonts/gonville/GonvilleText.otf
       ../fonts/mscore/mscore.ttf
       ../fonts/mscore/MScoreText.ttf
       ../fonts/MuseJazz-Mac.ttf

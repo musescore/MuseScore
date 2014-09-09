@@ -96,6 +96,11 @@
               </item>
               <item>
                <property name="text">
+                <string>Gonville Text</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string>Bravura Text</string>
                </property>
               </item>
