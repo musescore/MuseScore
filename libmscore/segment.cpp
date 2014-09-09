@@ -591,7 +591,6 @@ void Segment::remove(Element* el)
                   _elist[track] = 0;
                   if (!el->generated())
                         el->staff()->removeKey(tick());
-                  empty = false;
                   break;
 
             case Element::Type::CLEF:
