@@ -775,11 +775,16 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   aclist.append(acel);
                   ++nAcc;
                   }
-            qreal hw = note->headWidth();
 
+            qreal hw     = note->headWidth();   // actual head width, including note & chord mag
             Chord* chord = note->chord();
             bool _up     = chord->up();
-            qreal stemX  = chord->stemPosX();
+            qreal stemX  = chord->stemPosX();   // stem position for nominal notehead, but allowing for mag
+
+            // for small upstem chords, set stem to minimum of actual and nominal head width
+            // this allows the chord alignment code in layoutChords() to function correctly
+            if (_up && chord->small())
+                  stemX = qMin(noteHeadWidth(), hw);
 
             qreal overlapMirror;
             if (chord->stem()) {
