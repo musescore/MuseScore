@@ -67,7 +67,6 @@ void Score::updateSwing()
                         continue;
                   const StaffText* st = static_cast<const StaffText*>(e);
                   QString an(st->plainText());
-                  qDebug() << an;
                   if (an.isEmpty())
                         continue;
                   Staff* staff = st->staff();
