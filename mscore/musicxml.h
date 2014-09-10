@@ -182,6 +182,7 @@ class MusicXml {
       Ottava* ottava;                            ///< Current ottava
       Trill* trill;                              ///< Current trill
       Pedal* pedal;                              ///< Current pedal
+      Pedal* pedalContinue;                      ///< Current pedal type="change" requiring fixup
       Harmony* harmony;                          ///< Current harmony
       Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
@@ -215,6 +216,7 @@ class MusicXml {
       void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion);
       QList<QDomElement> findSlurElements(QDomElement);
       void addGraceNoteAfter(Chord*, Segment*);
+      void initPartState();
 public:
       MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1);
       void import(Score*);
