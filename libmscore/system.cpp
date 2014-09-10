@@ -1069,8 +1069,9 @@ qreal System::staffYpage(int staffIdx) const
 void System::write(Xml& xml) const
       {
       xml.stag("System");
-      if (_barLine && !_barLine->generated())
-            _barLine->write(xml);
+      // bar line is always generated
+//      if (_barLine && !_barLine->generated())
+//            _barLine->write(xml);
       xml.etag();
       }
 
@@ -1084,10 +1085,14 @@ void System::read(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "BarLine") {
-                  _barLine = new BarLine(score());
-                  _barLine->read(e);
-                  _barLine->setTrack(0);
-                  _barLine->setParent(this);
+//                  _barLine = new BarLine(score());
+//                  _barLine->read(e);
+//                  _barLine->setTrack(0);
+//                  _barLine->setParent(this);
+                  // read the bar line for backward compatibility, but ignore it
+                  BarLine* bl = new BarLine(score());
+                  bl->read(e);
+                  delete bl;
                   }
             else
                   e.unknown();
