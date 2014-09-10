@@ -532,12 +532,13 @@ bool BarLine::acceptDrop(const DropData& data) const
       if (type == Element::Type::BAR_LINE) {
             if (parent() && parent()->type() == Element::Type::SEGMENT)
                   return true;
+/* can't drop to system-initial bar line
             if (parent() && parent()->type() == Element::Type::SYSTEM) {
                   BarLine* b = static_cast<BarLine*>(data.element);
                   return (b->barLineType() == BarLineType::BROKEN || b->barLineType() == BarLineType::DOTTED
                      || b->barLineType() == BarLineType::NORMAL || b->barLineType() == BarLineType::DOUBLE
                      || b->spanFrom() != 0 || b->spanTo() != DEFAULT_BARLINE_TO);
-                  }
+                  } */
             }
       else {
             return (type == Element::Type::ARTICULATION
@@ -1079,6 +1080,11 @@ void BarLine::remove(Element* e)
 
 void BarLine::updateCustomSpan()
       {
+      // system bar line span is internally managed: _customSpan can never be true
+      if (parent() && parent()->type() == Element::Type::SYSTEM) {
+            _customSpan = false;
+            return;
+            }
       // if barline belongs to a staff and any of the staff span params is different from barline's...
       if (staff())
             if (staff()->barLineSpan() != _span || staff()->barLineFrom() != _spanFrom || staff()->barLineTo() != _spanTo) {
@@ -1121,7 +1127,12 @@ void BarLine::updateCustomType()
                               break;
                         }
                   }
-            // if parent is not a segment, it can only be a system and NORMAL can be used as ref. type
+            // if parent is not a segment, it can only be a system and for systems
+            // bar line type is internally managed and _customSubtype can never be true
+            else {
+                  _customSubtype = false;
+                  return;
+                  }
             }
       _customSubtype = (_barLineType != refType);
       updateGenerated(!_customSubtype);         // if _customSubType, _genereated is surely false

@@ -87,6 +87,7 @@ void MeasureProperties::setMeasure(Measure* _m)
 
       irregular->setChecked(m->irregular());
       breakMultiMeasureRest->setChecked(m->getBreakMultiMeasureRest());
+      sysInitDblBar->setChecked(m->sysInitDblBar());
       int n  = m->repeatCount();
       count->setValue(n);
       count->setEnabled(m->repeatFlags() & Repeat::END);
@@ -213,6 +214,7 @@ void MeasureProperties::apply()
       m->undoChangeProperty(P_ID::MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
       m->undoChangeProperty(P_ID::NO_OFFSET, measureNumberOffset->value());
       m->undoChangeProperty(P_ID::IRREGULAR, isIrregular());
+      m->undoChangeProperty(P_ID::SYSINIT_DBLBAR, sysInitDblBar->isChecked());
 
       if (m->len() != len())
             m->adjustToLen(len());

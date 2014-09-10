@@ -152,6 +152,8 @@ class Measure : public MeasureBase {
                               // 0 if this is the start of a mm rest (_mmRest != 0)
                               // < 0 if this measure is covered by a mm rest
 
+      bool _sysInitDblBar;    // if true, and this measure is the first of a system,
+                              // draw system double bar line
       void push_back(Segment* e);
       void push_front(Segment* e);
       void layoutCR0(ChordRest* cr, qreal m);
@@ -267,6 +269,8 @@ class Measure : public MeasureBase {
       void setEndBarLineGenerated(bool v)       { _endBarLineGenerated = v;    }
       bool endBarLineVisible() const            { return _endBarLineVisible;   }
       QColor endBarLineColor() const            { return _endBarLineColor;     }
+      bool sysInitDblBar() const                { return _sysInitDblBar;       }
+      void setSysInitDblBar(bool v)             { _sysInitDblBar = v;          }
 
       RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx);
 
