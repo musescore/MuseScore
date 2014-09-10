@@ -723,21 +723,6 @@ void MusicXml::import(Score* s)
       {
       tupletAssert();
       score  = s;
-      tie    = 0;
-      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
-            slur[i] = 0;
-      for (int i = 0; i < MAX_BRACKETS; ++i)
-            bracket[i] = 0;
-      for (int i = 0; i < MAX_DASHES; ++i)
-            dashes[i] = 0;
-      ottava = 0;
-      trill = 0;
-      pedal = 0;
-      harmony = 0;
-      tremStart = 0;
-      hairpin = 0;
-      figBass = 0;
-      figBassExtend = false;
 
       // TODO only if multi-measure rests used ???
       // score->style()->set(StyleIdx::createMultiMeasureRests, true);
@@ -748,6 +733,42 @@ void MusicXml::import(Score* s)
             else
                   domError(e);
             }
+      }
+      
+//---------------------------------------------------------
+//   initPartState
+//---------------------------------------------------------
+
+/**
+ Initialize members as required for reading the MusicXML part element.
+ TODO: factor out part reading into a separate
+ */
+
+void MusicXml::initPartState()
+      {
+      fractionTSig          = Fraction(0, 1);
+      tick                  = 0;
+      maxtick               = 0;
+      prevtick              = 0;
+      lastMeasureLen        = 0;
+      multiMeasureRestCount = -1;
+      startMultiMeasureRest = false;
+      tie    = 0;
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
+            slur[i] = 0;
+      for (int i = 0; i < MAX_BRACKETS; ++i)
+            bracket[i] = 0;
+      for (int i = 0; i < MAX_DASHES; ++i)
+            dashes[i] = 0;
+      ottava = 0;
+      trill = 0;
+      pedal = 0;
+      pedalContinue = 0;
+      harmony = 0;
+      tremStart = 0;
+      hairpin = 0;
+      figBass = 0;
+      figBassExtend = false;
       }
 
 //---------------------------------------------------------
@@ -1713,13 +1734,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             qDebug("Import MusicXml:xmlPart: cannot find part %s", id.toLatin1().data());
             return;
             }
-      fractionTSig          = Fraction(0, 1);
-      tick                  = 0;
-      maxtick               = 0;
-      prevtick              = 0;
-      lastMeasureLen        = 0;
-      multiMeasureRestCount = -1;
-      startMultiMeasureRest = false;
+
+      initPartState();
+
       KeySigEvent ev;
       KeySig currKeySig;
       currKeySig.setKeySigEvent(ev);
@@ -2930,9 +2947,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else if (type == "change") {
                         // pedal change is implemented as two separate pedals
                         // first stop the first one
-                        // TODO: this is not yet correct, the spanner must be stopped after the NEXT note
                         pedal->setEndHookType(HookType::HOOK_45);
                         handleSpannerStop(pedal, "pedal", tick, spanners);
+                        pedalContinue = pedal; // mark for later fixup
                         pedal = 0;
                         // then start a new one
                         pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
@@ -5234,6 +5251,13 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   fb->setTicks(tick + ticks - fb->segment()->tick());
             }
       figBassExtend = false;
+
+      // fixup pedal type="change" to end at the end of this note
+      // note tick is still at note start
+      if (pedalContinue) {
+            handleSpannerStop(pedalContinue, "pedal", tick + ticks, spanners);
+            pedalContinue = 0;
+            }
 
       if (!chord)
             prevtick = tick;  // remember tick where last chordrest was inserted
