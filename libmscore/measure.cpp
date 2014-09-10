@@ -150,6 +150,7 @@ Measure::Measure(Score* s)
       _irregular             = false;
       _breakMultiMeasureRest = false;
       _breakMMRest           = false;
+      _endBarLineColor       = MScore::defaultColor;
       _endBarLineGenerated   = true;
       _endBarLineVisible     = true;
       _endBarLineType        = BarLineType::NORMAL;
