@@ -36,6 +36,10 @@ namespace Ms {
 
 void ScoreView::startEdit(Element* e)
       {
+      if (!e || !e->isEditable()) {
+            qDebug("The element cannot be edited");
+            return;
+            }
       if (e->type() == Element::Type::TBOX)
             e = static_cast<TBox*>(e)->getText();
       editObject = e;
@@ -49,6 +53,10 @@ void ScoreView::startEdit(Element* e)
 
 void ScoreView::startEdit(Element* element, int startGrip)
       {
+      if (!element || !element->isEditable()) {
+            qDebug("The element cannot be edited");
+            return;
+            }
       editObject = element;
       startEdit();
       if (startGrip == -1)

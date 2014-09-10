@@ -2583,7 +2583,7 @@ void ScoreView::cmd(const QAction* a)
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
-            if (e) {
+            if (e && e->isEditable()) {
                   _score->setLayoutAll(false);
                   startEdit(e);
                   }
