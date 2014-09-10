@@ -2909,7 +2909,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="label_27">
               <property name="text">
-               <string>Line thickness:</string>
+               <string>Line thickness (bracketed arpeggios):</string>
               </property>
               <property name="buddy">
                <cstring>arpeggioLineWidth</cstring>
@@ -2932,7 +2932,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="label_28">
               <property name="text">
-               <string>Hook length:</string>
+               <string>Hook length (bracketed arpeggios):</string>
               </property>
               <property name="buddy">
                <cstring>arpeggioHookLen</cstring>
