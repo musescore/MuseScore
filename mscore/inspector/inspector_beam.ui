@@ -138,6 +138,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>left</string>
+       </property>
        <property name="accessibleName">
         <string>Vertical position offset left</string>
        </property>
@@ -154,7 +157,7 @@
         <double>99.000000000000000</double>
        </property>
        <property name="singleStep">
-        <double>0.250000000000000</double>
+        <double>0.100000000000000</double>
        </property>
       </widget>
      </item>
@@ -205,6 +208,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>right</string>
+       </property>
        <property name="accessibleName">
         <string>Vertical position offset right</string>
        </property>
@@ -218,7 +224,7 @@
         <double>99.000000000000000</double>
        </property>
        <property name="singleStep">
-        <double>0.250000000000000</double>
+        <double>0.100000000000000</double>
        </property>
       </widget>
      </item>
