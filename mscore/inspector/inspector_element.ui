@@ -311,7 +311,7 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/hraster.svg</normaloff>:/data/icons/hraster.svg</iconset>
+         <normaloff>:/data/icons/raster-horizontal.svg</normaloff>:/data/icons/raster-horizontal.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -328,7 +328,7 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/vraster.svg</normaloff>:/data/icons/vraster.svg</iconset>
+         <normaloff>:/data/icons/raster-vertical.svg</normaloff>:/data/icons/raster-vertical.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
