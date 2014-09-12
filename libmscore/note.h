@@ -174,6 +174,8 @@ class Note : public Element {
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
       Q_PROPERTY(Ms::Tie* tieBack                        READ tieBack)
       Q_ENUMS(ValueType)
+      Q_ENUMS(Ms::NoteHead::Group)
+      Q_ENUMS(Ms::NoteHead::Type)
       Q_ENUMS(Ms::MScore::Direction)
       Q_ENUMS(Ms::MScore::DirectionH)
 
