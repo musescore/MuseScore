@@ -659,7 +659,7 @@ ScoreView::ScoreView(QWidget* parent)
       _cursor     = new PositionCursor(this);
       _cursor->setType(CursorType::POS);
       _continuousPanel = new ContinuousPanel(this);
-      _continuousPanel->setVisible(true);
+      _continuousPanel->setActive(true);
 
       shadowNote  = 0;
       grips       = 0;
@@ -3693,19 +3693,46 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
 // printf("adjustCanvasPosition <%s>\n", el->name());
 
       if (score()->layoutMode() == LayoutMode::LINE) {
-            qreal xo;  // new x offset
-            qreal curPosR = _cursor->rect().right();
-            qreal curPosL = _cursor->rect().left();
-            qreal curPosMagR = curPosR * mag() + xoffset();
-            qreal curPosMagL = curPosL * mag() + xoffset();
+            if (!el)
+                  return;
 
-            if (curPosMagR >= width() * 0.90) {   // leaves 10% margin to the right
-                  xo = xoffset() - curPosMagL + width() * 0.05;
+            /* Not used, because impossible to get panel width beforehand
+            const MeasureBase *m = 0;
+            if (el->type() == Element::Type::MEASURE)
+                  m = static_cast<const MeasureBase*>(el);
+            else
+                  m = static_cast<const Measure*>(el->parent()->findMeasure());
+            */
+
+            qreal xo = 0.0;  // new x offset
+            qreal curPosR = _cursor->rect().right();        // Position on the canvas
+            qreal curPosL = _cursor->rect().left();         // Position on the canvas
+            qreal curPosMagR = curPosR * mag() + xoffset(); // Position in the screen
+            qreal curPosMagL = curPosL * mag() + xoffset(); // Position in the screen
+            qreal marginLeft = width() * 0.05;
+            qreal marginRight = width() * 0.05; // leaves 5% margin to the right
+
+            if (_continuousPanel->visible())
+                  marginLeft += _continuousPanel->width();
+
+            if (round(curPosMagR) > round(width() - marginRight)) {
+                  xo = -curPosL * mag() + marginLeft;
+
+                  // Keeps the score up to the right to avoid blank gap on the right.
+                  qreal scoreEnd = score()->pages().front()->width() * mag() + xo;
+                  if (scoreEnd < width())
+                        xo += width() - scoreEnd;
+
                   setOffset(xo, yoffset());
                   update();
                   }
-            else if (curPosMagL < width() * 0.05) {  // leaves 5% margin to the left
-                  xo = -curPosL*mag() + width() * 0.05;
+            else if (round(curPosMagL) < round(marginLeft) ) {
+                  xo = -curPosR * mag() + width() - marginRight;
+
+                  // Bring back the score to the left to avoid blank gap on the left.
+                  if (xo > 0)
+                        xo = 0;
+
                   setOffset(xo, yoffset());
                   update();
                   }

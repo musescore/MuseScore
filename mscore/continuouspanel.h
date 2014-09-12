@@ -25,7 +25,8 @@ class ContinuousPanel {
       ScoreView* _sv;
       Score* _score;
       QRectF _rect;
-      bool _visible;
+      bool _active;            // Used to active or desactive the panel
+      bool _visible;           // False if beginning of the score is visible
       const Measure* _currentMeasure;
       int _currentMeasureTick;
       int _currentMeasureNo;
@@ -40,6 +41,7 @@ class ContinuousPanel {
       qreal _measureWidth;
       qreal _height;
       qreal _heightName;
+      qreal _lineHeightName;
       qreal _widthName;
       qreal _widthClef;
       qreal _widthKeySig;
@@ -58,8 +60,9 @@ class ContinuousPanel {
 
       QRectF rect() const            { return _rect;     }
       void setRect(const QRectF& r)  { _rect = r;        }
-      bool visible() const           { return _visible;  }
-      void setVisible(bool val)      { _visible = val;   }
+      bool active() const            { return _active;   }
+      void setActive(bool val)       { _active = val;    }
+      bool visible()                 { return _active ? _visible : false; }
       void setScore(Score* s)        { _score = s;       }
       qreal width()                  { return _width;    }
 
