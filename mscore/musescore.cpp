@@ -1501,6 +1501,8 @@ void MuseScore::openRecentMenu()
 void MuseScore::setCurrentScoreView(int idx)
       {
       setCurrentView(0, idx);
+      if (tab2)
+            setCurrentView(1, idx);
       }
 
 void MuseScore::setCurrentView(int tabIdx, int idx)
