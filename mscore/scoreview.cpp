@@ -467,9 +467,7 @@ class DeSelectTransition : public QMouseEventTransition
       virtual bool eventTest(QEvent* event) {
             if (!QMouseEventTransition::eventTest(event))
                   return false;
-            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(event);
-            QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-            return canvas->mousePress(me);
+            return canvas->getCurElement() != 0;
             }
       virtual void onTransition(QEvent* e) {
             QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
@@ -598,7 +596,7 @@ bool ScoreViewDragTransition::eventTest(QEvent* event)
             return false;
       QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(event);
       QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-      if (me->modifiers() & Qt::ShiftModifier)
+      if ((me->modifiers() & Qt::ShiftModifier) || (me->modifiers() & Qt::ControlModifier))
             return false;
       return !canvas->mousePress(me);
       }
@@ -610,7 +608,7 @@ ScoreViewDragTransition::ScoreViewDragTransition(ScoreView* c, QState* target)
       }
 
 //---------------------------------------------------------
-//   onTransition
+//   DragTransition
 //---------------------------------------------------------
 
 void DragTransition::onTransition(QEvent* e)
@@ -705,8 +703,8 @@ ScoreView::ScoreView(QWidget* parent)
       s->addTransition(et);
       s->addTransition(new SelectTransition(this));                           // select
       connect(s, SIGNAL(entered()), mscore, SLOT(setNormalState()));
-//      s->addTransition(new DeSelectTransition(this));                         // deselect
-//      connect(s, SIGNAL(entered()), mscore, SLOT(setNormalState()));
+      s->addTransition(new DeSelectTransition(this));                         // deselect
+      connect(s, SIGNAL(entered()), mscore, SLOT(setNormalState()));
       s->addTransition(new ScoreViewDragTransition(this, states[DRAG]));      // ->stateDrag
       s->addTransition(new ScoreViewLassoTransition(this, states[LASSO]));    // ->stateLasso
       s->addTransition(new ElementDragTransition(this, states[DRAG_OBJECT])); // ->stateDragObject
@@ -3260,9 +3258,16 @@ void ScoreView::select(QMouseEvent* ev)
             else if (keyState & Qt::ShiftModifier)
                   st = SelectType::RANGE;
             else if (keyState & Qt::ControlModifier) {
-                  if (curElement->selected() && (ev->type() == QEvent::MouseButtonPress)) {
-                        // do not deselect on ButtonPress, only on ButtonRelease
-                        addSelect = false;
+                  if (curElement->selected()) {
+                        if (ev->type() == QEvent::MouseButtonPress) {
+                              // do not deselect on ButtonPress, only on ButtonRelease
+                              addSelect = false;
+                              }
+                        else if (ev->type() == QEvent::MouseButtonRelease) {
+                              score()->deselect(curElement);
+                              _score->setUpdateAll(true);   //DEBUG
+                              mscore->endCmd();
+                              }
                         return;
                         }
                   addSelect = true;
