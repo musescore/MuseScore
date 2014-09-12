@@ -7,7 +7,7 @@
         <file>data/paper3.png</file>
         <file>data/paper4.png</file>
         <file>data/paper5.png</file>
-        <file>data/icons/edit.svg</file>
+        <file>data/icons/16/edit.svg</file>
 	<file alias="fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
         <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>		
 	<file alias="fonts/gonville/glyphnames.json">../fonts/gonville/glyphnames.json</file>
@@ -22,8 +22,10 @@
         <file>data/tab_sample.mscx</file>
         <file>data/style.qss</file>
         <file>data/mscore.png</file>
-        <file>data/cancel.png</file>
-        <file>data/close.png</file>
+        <file>data/icons/16/window-close.svg</file>
+        <file>data/icons/16/window-close-hover.svg</file>
+        <file>data/icons/8/window-close.png</file>
+        <file>data/icons/8/window-float.png</file>
         <file>revision.h</file>
         <file>data/musescore_logo_full1.png</file>
         <file>data/musescore_logo_full.png</file>
@@ -52,7 +54,7 @@
         <file>data/icons/mscore.png</file>
         <file>data/icons/raster-horizontal.svg</file>
         <file>data/icons/raster-vertical.svg</file>
-        <file>data/icons/resetproperty.png</file>
+        <file>data/icons/16/edit-reset.svg</file>
         <file>data/icons/frame-vertical.svg</file>
         <file>data/icons/frame-horizontal.svg</file>
         <file>data/icons/frame-text.svg</file>

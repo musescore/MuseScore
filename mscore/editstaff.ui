@@ -192,7 +192,7 @@
           </property>
           <property name="icon">
            <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
+            <normaloff>:/data/icons/16/edit.svg</normaloff>:/data/icons/16/edit.svg</iconset>
           </property>
          </widget>
         </item>
@@ -217,7 +217,7 @@
           </property>
           <property name="icon">
            <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
+            <normaloff>:/data/icons/16/edit.svg</normaloff>:/data/icons/16/edit.svg</iconset>
           </property>
          </widget>
         </item>
@@ -261,7 +261,7 @@
           </property>
           <property name="icon">
            <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
+            <normaloff>:/data/icons/16/edit.svg</normaloff>:/data/icons/16/edit.svg</iconset>
           </property>
          </widget>
         </item>
@@ -286,7 +286,7 @@
           </property>
           <property name="icon">
            <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
+            <normaloff>:/data/icons/16/edit.svg</normaloff>:/data/icons/16/edit.svg</iconset>
           </property>
          </widget>
         </item>
