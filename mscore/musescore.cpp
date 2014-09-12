@@ -4527,7 +4527,7 @@ void MuseScore::showSearchDialog()
 
             QToolButton* searchExit = new QToolButton;
             searchExit->setAutoRaise(true);
-            searchExit->setIcon(QIcon(":/data/close.png"));
+            searchExit->setIcon(QIcon(":/data/icons/16/window-close.svg"));
             connect(searchExit, SIGNAL(clicked()), SLOT(endSearch()));
             searchDialogLayout->addWidget(searchExit);
             searchDialogLayout->addSpacing(10);
@@ -4891,15 +4891,18 @@ int main(int argc, char* av[])
                   "}\n"
                   "QGroupBox::title {\n"
                   "   subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;\n"
-                  "}\n");
-                  /*"QDockWidget {\n"
+                  "}\n"
+                  "QDockWidget {\n"
                   "   border: 1px solid lightgray;\n"
-                  "   titlebar-close-icon: url(:/data/close.png);\n"
-                  "   titlebar-normal-icon: url(undock.png);\n"
+                  "   titlebar-close-icon: url(:/data/icons/8/window-close.png);\n"
+                  "   titlebar-normal-icon: url(:/data/icons/8/window-float.png);\n"
                   "   }\n"
                   "QTabBar::close-button {\n"
-                  "   image: url(:/data/close.png);\n"
-                  "   }");*/
+                  "   image: url(:/data/icons/16/window-close.svg);\n"
+		  "   }\n"
+                  "QTabBar::close-button:hover {\n"
+		  "   image: url(:/data/icons/16/window-close-hover.svg);\n"
+		  "   }");
             MgStyleConfigData::animationsEnabled = preferences.animations;
             qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
 

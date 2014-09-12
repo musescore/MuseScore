@@ -212,12 +212,12 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
+         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>14</width>
-         <height>10</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
       </widget>
@@ -493,12 +493,12 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
+         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>14</width>
-         <height>10</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
       </widget>
@@ -806,12 +806,12 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
+         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>14</width>
-         <height>10</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
       </widget>
@@ -848,12 +848,12 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
+         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>14</width>
-         <height>10</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
       </widget>
@@ -917,12 +917,12 @@
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
+         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>14</width>
-         <height>10</height>
+         <width>16</width>
+         <height>16</height>
         </size>
        </property>
       </widget>
