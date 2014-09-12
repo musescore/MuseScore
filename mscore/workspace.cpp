@@ -78,7 +78,7 @@ void MuseScore::showWorkspaceMenu()
             QAction* a = workspaces->addAction(qApp->translate("Ms::Workspace", p->name().toUtf8()));
             a->setCheckable(true);
             a->setData(p->path());
-            a->setChecked(a->text() == preferences.workspace);
+            a->setChecked(p->name() == preferences.workspace);
             menuWorkspaces->addAction(a);
             }
 
