@@ -8783,7 +8783,7 @@
                   <genre>common</genre>
             </Instrument>
             <Instrument id="acoustic-bass">
-                  <!-- Same instrument as the orchestral contrabass, but used dy default plucked, rather than bowed
+                  <!-- Same instrument as the orchestral contrabass, but used by default plucked, rather than bowed
                   can't init from it, as it has not been read yet. -->
                   <longName>Acoustic Bass</longName>
                   <shortName>Bass</shortName>
@@ -8802,6 +8802,12 @@
                   <pPitchRange>23-67</pPitchRange>
                   <Channel>
                         <program value="32"/>
+                  </Channel>
+                  <Channel name="arco">
+                        <program value="43"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
