@@ -1776,6 +1776,7 @@ bool MuseScore::savePdf(const QString& saveName)
 
 bool MuseScore::savePdf(Score* cs, const QString& saveName)
       {
+      cs->setPrinting(true);
       QPrinter printerDev(QPrinter::HighResolution);
       const PageFormat* pf = cs->pageFormat();
       printerDev.setPaperSize(pf->size(), QPrinter::Inch);
@@ -1817,6 +1818,7 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
                   }
             }
       p.end();
+      cs->setPrinting(false);
       return true;
       }
 
