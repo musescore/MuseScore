@@ -256,13 +256,15 @@ void ImportMidiPanel::excludeMidiFile(const QString &fileName)
       if (_importInProgress || _reopenInProgress)
             return;
 
-      resetTableViewState();
-      _model->clear();
-      resetTableViewState();
       auto &opers = preferences.midiImportOperations;
       opers.excludeMidiFile(fileName);
-      if (fileName == _midiFile)
+
+      if (fileName == _midiFile) {
             _midiFile = "";
+            resetTableViewState();
+            _model->clear();
+            resetTableViewState();
+            }
       }
 
 void ImportMidiPanel::setPreferredVisible(bool visible)
