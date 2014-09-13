@@ -3274,7 +3274,7 @@ void ScoreView::select(QMouseEvent* ev)
                   st = SelectType::ADD;
                   }
             _score->select(curElement, st, dragStaffIdx);
-            if (curElement && curElement->type() == Element::Type::NOTE) {
+            if (curElement && curElement->type() == Element::Type::NOTE && ev->type() == QEvent::MouseButtonPress) {
                   Note* note = static_cast<Note*>(curElement);
                   int pitch = note->ppitch();
                   mscore->play(note, pitch);
