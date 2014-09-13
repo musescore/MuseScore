@@ -1498,10 +1498,6 @@ void MuseScore::printFile()
 bool MuseScore::exportFile()
       {
       QStringList fl;
-      fl.append(tr("Uncompressed MuseScore Format (*.mscx)"));
-      fl.append(tr("MusicXML Format (*.xml)"));
-      fl.append(tr("Compressed MusicXML Format (*.mxl)"));
-      fl.append(tr("Standard MIDI File (*.mid)"));
       fl.append(tr("PDF File (*.pdf)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
@@ -1511,6 +1507,10 @@ bool MuseScore::exportFile()
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
       fl.append(tr("MP3 Audio (*.mp3)"));
+      fl.append(tr("Standard MIDI File (*.mid)"));
+      fl.append(tr("MusicXML Format (*.xml)"));
+      fl.append(tr("Compressed MusicXML Format (*.mxl)"));
+      fl.append(tr("Uncompressed MuseScore Format (*.mscx)"));
 
       QString saveDialogTitle = tr("MuseScore: Export");
 
@@ -1525,8 +1525,7 @@ bool MuseScore::exportFile()
             saveDirectory = preferences.myScoresPath;
             }
 
-      QString selectedFilter;
-      QString name   = QString("%1/%2.mscx").arg(saveDirectory).arg(cs->name());
+      QString name   = QString("%1/%2").arg(saveDirectory).arg(cs->name());
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
@@ -1551,10 +1550,6 @@ bool MuseScore::exportFile()
 bool MuseScore::exportParts()
       {
       QStringList fl;
-      fl.append(tr("Uncompressed MuseScore Format (*.mscx)"));
-      fl.append(tr("MusicXML Format (*.xml)"));
-      fl.append(tr("Compressed MusicXML Format (*.mxl)"));
-      fl.append(tr("Standard MIDI File (*.mid)"));
       fl.append(tr("PDF File (*.pdf)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
@@ -1564,6 +1559,11 @@ bool MuseScore::exportParts()
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
       fl.append(tr("MP3 Audio (*.mp3)"));
+      fl.append(tr("Standard MIDI File (*.mid)"));
+      fl.append(tr("MusicXML Format (*.xml)"));
+      fl.append(tr("Compressed MusicXML Format (*.mxl)"));
+      fl.append(tr("MuseScore Format (*.mscz)"));
+      fl.append(tr("Uncompressed MuseScore Format (*.mscx)"));
 
       QString saveDialogTitle = tr("MuseScore: Export Parts");
 
@@ -1578,9 +1578,9 @@ bool MuseScore::exportParts()
           saveDirectory = preferences.myScoresPath;
           }
 
-      QString selectedFilter;
+      QString name   = QString("%1/%2").arg(saveDirectory).arg(cs->name());
       QString filter = fl.join(";;");
-      QString fn = getSaveScoreName(saveDialogTitle, saveDirectory, filter, true);
+      QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
           return false;
 
@@ -1598,6 +1598,10 @@ bool MuseScore::exportParts()
             thisScore = thisScore->parentScore();
       bool overwrite = false;
       bool noToAll = false;
+      QString confirmReplaceTitle = tr("Confirm Replace");
+      QString confirmReplaceMessage = tr("\"%1\" already exists.\nDo you want to replace it?\n");
+      QString replaceMessage = tr("Replace");
+      QString skipMessage = tr("Skip");
       foreach(Excerpt* e, thisScore->excerpts())  {
             Score* pScore = e->score();
             QString partfn = fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + pScore->name() + "." + ext;
@@ -1605,11 +1609,11 @@ bool MuseScore::exportParts()
             if(fip.exists() && !overwrite) {
                   if(noToAll)
                         continue;
-                  QMessageBox msgBox( QMessageBox::Question, tr("Confirm Replace"),
-                        tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(partfn)),
+                  QMessageBox msgBox( QMessageBox::Question, confirmReplaceTitle,
+                        confirmReplaceMessage.arg(QDir::toNativeSeparators(partfn)),
                         QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
-                  msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
-                  msgBox.setButtonText(QMessageBox::No, tr("Skip"));
+                  msgBox.setButtonText(QMessageBox::Yes, replaceMessage);
+                  msgBox.setButtonText(QMessageBox::No, skipMessage);
                   msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
                   msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
                   int sb = msgBox.exec();
@@ -1627,6 +1631,32 @@ bool MuseScore::exportParts()
             if (!saveAs(pScore, true, partfn, ext))
                   return false;
             }
+      // For PDF, also export score and parts together
+      if (ext.toLower() == "pdf") {
+            QList<Score*> scores;
+            scores.append(thisScore);
+            foreach(Excerpt* e, thisScore->excerpts())  {
+                  scores.append(e->score());
+                  }
+            QString partfn(fi.absolutePath() + QDir::separator() + fi.baseName() + "-Score_And_Parts.pdf");
+            QFileInfo fip(partfn);
+            if(fip.exists() && !overwrite) {
+                  if (!noToAll) {
+                        QMessageBox msgBox( QMessageBox::Question, confirmReplaceTitle,
+                              confirmReplaceMessage.arg(QDir::toNativeSeparators(partfn)),
+                              QMessageBox::Yes | QMessageBox::No);
+                        msgBox.setButtonText(QMessageBox::Yes, replaceMessage);
+                        msgBox.setButtonText(QMessageBox::No, skipMessage);
+                        int sb = msgBox.exec();
+                        if(sb == QMessageBox::Yes) {
+                              if (!savePdf(scores, partfn))
+                                    return false;
+                              }
+                        }
+                  }
+            else if (!savePdf(scores, partfn))
+                  return false;
+      }
       if(!noToAll)
             QMessageBox::information(this, tr("MuseScore: Export Parts"), tr("Parts were successfully exported"));
       return true;
@@ -1785,6 +1815,73 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
                   if ((copy + 1) < printerDev.numCopies())
                         printerDev.newPage();
                   }
+            }
+      p.end();
+      return true;
+      }
+
+bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
+      {
+      if (cs.empty())
+            return false;
+      Score* firstScore = cs[0];
+
+      QPrinter printerDev(QPrinter::HighResolution);
+      const PageFormat* pf = firstScore->pageFormat();
+      printerDev.setPaperSize(pf->size(), QPrinter::Inch);
+
+      printerDev.setCreator("MuseScore Version: " VERSION);
+      printerDev.setFullPage(true);
+      printerDev.setColorMode(QPrinter::Color);
+      printerDev.setDocName(firstScore->name());
+      printerDev.setDoubleSidedPrinting(pf->twosided());
+      printerDev.setOutputFormat(QPrinter::PdfFormat);
+
+      printerDev.setOutputFileName(saveName);
+      QPainter p(&printerDev);
+      p.setRenderHint(QPainter::Antialiasing, true);
+      p.setRenderHint(QPainter::TextAntialiasing, true);
+      double mag = printerDev.logicalDpiX() / MScore::DPI;
+      p.scale(mag, mag);
+
+      //
+      // start pageOffset with configured offset of
+      // first score
+      //
+      int pageOffset = 0;
+      if (firstScore)
+            pageOffset = firstScore->pageNumberOffset();
+      bool firstPage = true;
+      for (Score* s : cs) {
+            s->setPrinting(true);
+            //
+            // here we ignore the configured page offset
+            //
+            int oldPageOffset = s->pageNumberOffset();
+            s->setPageNumberOffset(pageOffset);
+            bool oldFirstPageNumber = s->style(StyleIdx::footerFirstPage).toBool();
+            s->style()->set(StyleIdx::footerFirstPage, true);
+            s->doLayout();
+
+            const PageFormat* pf = s->pageFormat();
+            printerDev.setPaperSize(pf->size(), QPrinter::Inch);
+            //printerDev.setDoubleSidedPrinting(pf->twosided());
+
+            const QList<Page*> pl = s->pages();
+            int pages    = pl.size();
+            for (int n = 0; n < pages; ++n) {
+                  if (!firstPage)
+                        printerDev.newPage();
+                  firstPage = false;
+                  s->print(&p, n);
+                  }
+            pageOffset += pages;
+
+            //reset score
+            s->setPrinting(false);
+            s->setPageNumberOffset(oldPageOffset);
+            s->style()->set(StyleIdx::footerFirstPage, oldFirstPageNumber);
+            s->doLayout();
             }
       p.end();
       return true;
