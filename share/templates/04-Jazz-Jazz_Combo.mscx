@@ -11,8 +11,6 @@
       <minSystemDistance>9</minSystemDistance>
       <repeatBarTips>1</repeatBarTips>
       <stemWidth>0.16</stemWidth>
-      <dotMag>1.1</dotMag>
-      <dotNoteDistance>1.25</dotNoteDistance>
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
       <showMeasureNumber>0</showMeasureNumber>
       <chordStyle>jazz</chordStyle>
