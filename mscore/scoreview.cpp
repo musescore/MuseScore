@@ -3258,6 +3258,8 @@ void ScoreView::select(QMouseEvent* ev)
             else if (keyState & Qt::ShiftModifier)
                   st = SelectType::RANGE;
             else if (keyState & Qt::ControlModifier) {
+                  if (type == Element::Type::MEASURE)
+                        return;
                   if (curElement->selected()) {
                         if (ev->type() == QEvent::MouseButtonPress) {
                               // do not deselect on ButtonPress, only on ButtonRelease
