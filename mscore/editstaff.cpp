@@ -258,13 +258,13 @@ void EditStaff::apply()
                   score->transpositionChanged(part);
             }
 
-      if (s != staff->small()
-         || inv != staff->invisible()
-         || userDist != staff->userDist()
-         || col != staff->color()
-         || nhide != staff->neverHide()
-         || ifEmpty != staff->showIfEmpty()
-         || scale != staff->userMag()
+      if (s != orgStaff->small()
+         || inv != orgStaff->invisible()
+         || userDist != orgStaff->userDist()
+         || col != orgStaff->color()
+         || nhide != orgStaff->neverHide()
+         || ifEmpty != orgStaff->showIfEmpty()
+         || scale != orgStaff->userMag()
          ) {
             score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide, ifEmpty, scale));
             }
