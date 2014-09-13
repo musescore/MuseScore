@@ -687,19 +687,12 @@ void Score::addPitch(int step, bool addFlag)
       if (addFlag) {
             Element* el = selection().element();
             if (el && el->type() == Element::Type::NOTE) {
-                  Chord* chord = static_cast<Note*>(el)->chord();
-                  NoteVal val;
-
-                  Segment* s         = chord->segment();
-                  AccidentalVal acci = s->measure()->findAccidental(s, chord->staffIdx(), pos.line);
-                  int step           = absStep(pos.line, clef);
-                  int octave         = step/7;
-                  val.pitch          = step2pitch(step) + octave * 12 + int(acci);
-
-                  if (!chord->concertPitch())
-                        val.pitch += chord->staff()->part()->instr()->transpose().chromatic;
-                  val.tpc = step2tpc(step % 7, acci);
-                  addNote(chord, val);
+                Chord* chord = static_cast<Note*>(el)->chord();
+                  bool error;
+                  NoteVal nval = noteValForPosition(pos, error);
+                  if (error)
+                        return;
+                  addNote(chord, nval);
                   endCmd();
                   return;
                   }
@@ -709,6 +702,79 @@ void Score::addPitch(int step, bool addFlag)
             repitchNote(pos, !addFlag);
       else
             putNote(pos, !addFlag);
+      }
+
+//---------------------------------------------------------
+//   noteValForPosition
+//---------------------------------------------------------
+
+NoteVal Score::noteValForPosition(Position pos, bool &error)
+      {
+      error = false;
+      Segment* s = pos.segment;
+      int line        = pos.line;
+      int tick        = s->tick();
+      int staffIdx    = pos.staffIdx;
+      Staff* st       = staff(staffIdx);
+      ClefType clef   = st->clef(tick);
+      const Instrument* instr = st->part()->instr(s->tick());
+      NoteVal nval;
+      const StringData* stringData = 0;
+      StaffType* tab = 0;
+
+      switch (st->staffType()->group()) {
+            case StaffGroup::PERCUSSION: {
+                  if (_is.rest())
+                        break;
+                  Drumset* ds   = instr->drumset();
+                  nval.pitch    = _is.drumNote();
+                  if (nval.pitch < 0) {
+                        error = true;
+                        return nval;
+                        }
+                  nval.headGroup = ds->noteHead(nval.pitch);
+                  if (nval.headGroup == NoteHead::Group::HEAD_INVALID) {
+                        error = true;
+                        return nval;
+                        }
+                  break;
+                  }
+            case StaffGroup::TAB: {
+                  if (_is.rest()) {
+                        error = true;
+                        return nval;
+                        }
+                  stringData = instr->stringData();
+                  tab = st->staffType();
+                  int string = tab->visualStringToPhys(line);
+                  if (string < 0 || string >= stringData->strings()) {
+                        error = true;
+                        return nval;
+                        }
+                  // build a default NoteVal for that line
+                  nval.string = string;
+                  if (pos.fret != FRET_NONE)       // if a fret is given, use it
+                        nval.fret = pos.fret;
+                  else {                        // if no fret, use 0 as default
+                        _is.setString(line);
+                        nval.fret = 0;
+                        }
+                  nval.pitch = stringData->getPitch(string, nval.fret);
+                  break;
+                  }
+
+            case StaffGroup::STANDARD: {
+                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
+                  int step   = absStep(line, clef);
+                  int octave = step/7;
+                  nval.pitch = step2pitch(step) + octave * 12 + int(acci);
+                  if (!styleB(StyleIdx::concertPitch))
+                        nval.pitch += instr->transpose().chromatic;
+                  nval.tpc = step2tpc(step % 7, acci);
+                  }
+                  break;
+            }
+      return nval;
       }
 
 //---------------------------------------------------------
@@ -877,67 +943,32 @@ void Score::putNote(const QPointF& pos, bool replace)
 
 void Score::putNote(const Position& p, bool replace)
       {
-      Segment* s      = p.segment;
       int staffIdx    = p.staffIdx;
-      int line        = p.line;
-      int tick        = s->tick();
       Staff* st       = staff(staffIdx);
-      ClefType clef   = st->clef(tick);
-
-qDebug("putNote at tick %d staff %d line %d clef %d",
-   tick, staffIdx, line, clef);
+      Segment* s      = p.segment;
 
       _is.setTrack(staffIdx * VOICES + _is.voice());
       _is.setSegment(s);
 
-      const Instrument* instr = st->part()->instr(s->tick());
       MScore::Direction stemDirection = MScore::Direction::AUTO;
-      NoteVal nval;
-      const StringData* stringData = 0;
-      StaffType* tab = 0;
+      bool error;
+      NoteVal nval = noteValForPosition(p, error);
+      if (error)
+            return;
 
+      const StringData* stringData = 0;
+      const Instrument* instr = st->part()->instr(s->tick());
       switch (st->staffType()->group()) {
             case StaffGroup::PERCUSSION: {
-                  if (_is.rest())
-                        break;
-                  Drumset* ds   = instr->drumset();
-                  nval.pitch    = _is.drumNote();
-                  if (nval.pitch < 0)
-                        return;
-                  nval.headGroup = ds->noteHead(nval.pitch);
-                  if (nval.headGroup == NoteHead::Group::HEAD_INVALID)
-                        return;
+                  Drumset* ds = instr->drumset();
                   stemDirection = ds->stemDirection(nval.pitch);
                   break;
                   }
             case StaffGroup::TAB: {
-                  if (_is.rest())
-                        return;
                   stringData = instr->stringData();
-                  tab = st->staffType();
-                  int string = tab->visualStringToPhys(line);
-                  if (string < 0 || string >= stringData->strings())
-                      return;
-                  // build a default NoteVal for that line
-                  nval.string = string;
-                  if (p.fret != FRET_NONE)       // if a fret is given, use it
-                        nval.fret = p.fret;
-                  else {                        // if no fret, use 0 as default
-                        _is.setString(line);
-                        nval.fret = 0;
-                        }
-                  nval.pitch = stringData->getPitch(string, nval.fret);
-                  break;
                   }
-
+                  break;
             case StaffGroup::STANDARD: {
-                  AccidentalVal acci = s->measure()->findAccidental(s, staffIdx, line);
-                  int step   = absStep(line, clef);
-                  int octave = step/7;
-                  nval.pitch = step2pitch(step) + octave * 12 + int(acci);
-                  if (!styleB(StyleIdx::concertPitch))
-                        nval.pitch += instr->transpose().chromatic;
-                  nval.tpc = step2tpc(step % 7, acci);
                   }
                   break;
             }
