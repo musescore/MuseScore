@@ -769,6 +769,8 @@ void MusicXml::initPartState()
       hairpin = 0;
       figBass = 0;
       figBassExtend = false;
+      glissandoText = "";
+      glissandoColor = "";
       }
 
 //---------------------------------------------------------
@@ -4412,11 +4414,20 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
             else if (ee.tagName() == "non-arpeggiate")
                   arpeggioType = "non-arpeggiate";
             // glissando and slide are added to the "stop" chord only
+            // but text and color are read at start
             else if (ee.tagName() == "glissando") {
-                  if (ee.attribute("type") == "stop") glissandoType = "glissando";
+                  if (ee.attribute("type") == "start") {
+                        glissandoText = ee.text();
+                        glissandoColor = ee.attribute("color");
+                        }
+                  else if (ee.attribute("type") == "stop") glissandoType = "glissando";
                   }
             else if (ee.tagName() == "slide") {
-                  if (ee.attribute("type") == "stop") glissandoType = "slide";
+                  if (ee.attribute("type") == "start") {
+                        glissandoText = ee.text();
+                        glissandoColor = ee.attribute("color");
+                        }
+                  else if (ee.attribute("type") == "stop") glissandoType = "slide";
                   }
             else
                   domError(ee);
@@ -4456,6 +4467,21 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                   qDebug("unknown glissando type %s", glissandoType.toLatin1().data());
                   delete g;
                   g = 0;
+                  }
+            if (g) {
+                  if (glissandoText == "")
+                        g->setShowText(false);
+                  else {
+                        g->setShowText(true);
+                        g->setText(glissandoText);
+                        glissandoText = "";
+                        }
+                  if (glissandoColor != "") {
+                        QColor color(glissandoColor);
+                        if (color.isValid())
+                              g->setColor(color);
+                        glissandoColor = "";
+                        }
                   }
             if ((static_cast<Chord*>(cr))->glissando()) {
                   // there can be only one
