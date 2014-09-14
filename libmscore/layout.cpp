@@ -2963,6 +2963,7 @@ void Score::layoutLinear()
       system->setWidth(pos.x());
       page->setWidth(pos.x());
       system->layout2();
+      page->setHeight(system->height() + 12 * spatium());
 
       while (_pages.size() > 1)
             _pages.takeLast();
