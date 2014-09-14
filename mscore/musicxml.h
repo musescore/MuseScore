@@ -189,6 +189,8 @@ class MusicXml {
       FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
       bool figBassExtend;                        ///< Current figured bass extend
       Beam::Mode beamMode;                       ///< Current beam mode
+      QString glissandoText;                     ///< Glissando text at glissando start
+      QString glissandoColor;                    ///< Glissando color at glissando start
 
       int pageWidth;                             ///< Page width read from defaults
       int pageHeight;                            ///< Page height read from defaults
