@@ -481,11 +481,9 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool
              return;
             }
       // search for slur(s) starting at this chord
-      int tick = chord->tick();
-      auto sl = chord->score()->spanner();
-      for (auto it = sl.lower_bound(tick); it != sl.upper_bound(tick); ++it) {
-            Spanner* sp = it->second;
-            if (sp->type() != Element::Type::SLUR || sp->track() != chord->track())
+      for (auto it : chord->score()->spanner()) {
+            Spanner* sp = it.second;
+            if (sp->type() != Element::Type::SLUR || sp->tick() != chord->tick() || sp->track() != chord->track())
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
             // check if on slur list (i.e. stop already seen)
