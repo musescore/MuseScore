@@ -204,7 +204,10 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorSlur(this);
                               break;
                         case Element::Type::BAR_LINE:
-                              ie = new InspectorBarLine(this);
+                              if (_element->isEditable())
+                                    ie = new InspectorBarLine(this);
+                              else
+                                    ie = new InspectorEmpty(this);
                               break;
                         case Element::Type::JUMP:
                               ie = new InspectorJump(this);

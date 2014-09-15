@@ -150,6 +150,7 @@ Measure::Measure(Score* s)
       _irregular             = false;
       _breakMultiMeasureRest = false;
       _breakMMRest           = false;
+      _endBarLineColor       = MScore::defaultColor;
       _endBarLineGenerated   = true;
       _endBarLineVisible     = true;
       _endBarLineType        = BarLineType::NORMAL;
@@ -1826,16 +1827,20 @@ void Measure::read(XmlReader& e, int staffIdx)
                   else if (barLine->barLineType() == BarLineType::START_REPEAT && e.tick() == tick())
                         st = Segment::Type::StartRepeatBarLine;
                   else {
+                        st = Segment::Type::EndBarLine;
+                        }
+                  segment = getSegment(st, e.tick()); // let the bar line know it belongs to a Segment,
+                  segment->add(barLine);              // before setting its flags
+                  if (st == Segment::Type::EndBarLine) {
                         if (!barLine->customSubtype())
                               setEndBarLineType(barLine->barLineType(), false, true);
                         if (!barLine->customSpan()) {
                               Staff* staff = score()->staff(staffIdx);
                               barLine->setSpan(staff->barLineSpan());
+                              barLine->setSpanFrom(staff->barLineFrom());
+                              barLine->setSpanTo(staff->barLineTo());
                               }
-                        st = Segment::Type::EndBarLine;
                         }
-                  segment = getSegment(st, e.tick());
-                  segment->add(barLine);
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score());
