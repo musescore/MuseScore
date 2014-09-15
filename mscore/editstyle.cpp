@@ -54,6 +54,18 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setModal(true);
 
       chordDescriptionFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      editEvenHeaderL->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenHeaderC->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenHeaderR->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddHeaderL->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddHeaderC->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddHeaderR->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenFooterL->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenFooterC->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenFooterR->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddFooterL->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddFooterC->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddFooterR->setIcon(*icons[int(Icons::edit_ICON)]);
 
       pageList->setCurrentRow(0);
 

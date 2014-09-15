@@ -570,6 +570,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
+      mySfzButton->setIcon(*icons[int(Icons::edit_ICON)]);
       myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
