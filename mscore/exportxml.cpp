@@ -481,11 +481,9 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool
              return;
             }
       // search for slur(s) starting at this chord
-      int tick = chord->tick();
-      auto sl = chord->score()->spanner();
-      for (auto it = sl.lower_bound(tick); it != sl.upper_bound(tick); ++it) {
-            Spanner* sp = it->second;
-            if (sp->type() != Element::Type::SLUR || sp->track() != chord->track())
+      for (auto it : chord->score()->spanner()) {
+            Spanner* sp = it.second;
+            if (sp->type() != Element::Type::SLUR || sp->tick() != chord->tick() || sp->track() != chord->track())
                   continue;
             const Slur* s = static_cast<const Slur*>(sp);
             // check if on slur list (i.e. stop already seen)
@@ -594,24 +592,30 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
 //   <glissando line-type="wavy" number="1" type="start"/>
 //   </notations>
 
-static void glissando(Glissando* gli, int number, bool start, Notations& notations, Xml& xml)
+static void glissando(const Glissando* gli, int number, bool start, Notations& notations, Xml& xml)
       {
       Glissando::Type st = gli->glissandoType();
+      QString tagName;
       switch (st) {
             case Glissando::Type::STRAIGHT:
-                  notations.tag(xml);
-                  xml.tagE("slide line-type=\"solid\" number=\"%d\" type=\"%s\"",
-                           number, start ? "start" : "stop");
+                  tagName = "slide line-type=\"solid\"";
                   break;
             case Glissando::Type::WAVY:
-                  notations.tag(xml);
-                  xml.tagE("glissando line-type=\"wavy\" number=\"%d\" type=\"%s\"",
-                           number, start ? "start" : "stop");
+                  tagName = "glissando line-type=\"wavy\"";
                   break;
             default:
                   qDebug("unknown glissando subtype %hhd", st);
+                  return;
                   break;
             }
+      tagName += QString(" number=\"%1\" type=\"%2\"").arg(number).arg(start ? "start" : "stop");
+      if (gli->color() != MScore::defaultColor)
+            tagName += " color=\"" + gli->color().name().toUpper() + "\"";
+      notations.tag(xml);
+      if (start && gli->showText() && gli->text() != "")
+            xml.tag(tagName, gli->text());
+      else
+            xml.tagE(tagName);
       }
 
 //---------------------------------------------------------
