@@ -1765,12 +1765,15 @@ void Score::createMMRests()
                   mmr->setNo(m->no());
                   mmr->setPageBreak(lm->pageBreak());
                   mmr->setLineBreak(lm->lineBreak());
-                  mmr->setRepeatFlags(m->repeatFlags());
 
-                  BarLineType t = lm->endBarLineGenerated() ? BarLineType::NORMAL : lm->endBarLineType();
+                  BarLineType t;
+                  if (lm->endBarLineGenerated() && !(lm->repeatFlags() & Repeat::END))
+                        t = BarLineType::NORMAL;
+                  else
+                        t = lm->endBarLineType();
                   mmr->setEndBarLineType(t, false, lm->endBarLineVisible(), lm->endBarLineColor());
 
-                  mmr->setRepeatFlags(m->repeatFlags());
+                  mmr->setRepeatFlags(m->repeatFlags() | lm->repeatFlags());
 
                   qDeleteAll(*mmr->el());
                   mmr->el()->clear();
