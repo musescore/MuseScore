@@ -2685,6 +2685,8 @@ void MuseScore::changeState(ScoreState val)
             }
       if (paletteBox)
             paletteBox->setDisabled(val == STATE_PLAY || val == STATE_DISABLED);
+      if (selectionWindow)
+            selectionWindow->setDisabled(val == STATE_PLAY || val == STATE_DISABLED);
       QAction* a = getAction("note-input");
       bool noteEntry = val == STATE_NOTE_ENTRY_PITCHED || val == STATE_NOTE_ENTRY_TAB || val == STATE_NOTE_ENTRY_DRUM;
       a->setChecked(noteEntry);
@@ -2726,6 +2728,7 @@ void MuseScore::writeSettings()
       settings.setValue("showPanel", paletteBox && paletteBox->isVisible());
       settings.setValue("showInspector", _inspector && _inspector->isVisible());
       settings.setValue("showPianoKeyboard", _pianoTools && _pianoTools->isVisible());
+      settings.setValue("showSelectionWindow", selectionWindow && selectionWindow->isVisible());
       settings.setValue("state", saveState());
       settings.setValue("splitScreen", _splitScreen);
       settings.setValue("debuggerSplitter", mainWindow->saveState());
@@ -2798,6 +2801,7 @@ void MuseScore::readSettings()
       mscore->showPalette(settings.value("showPanel", "1").toBool());
       mscore->showInspector(settings.value("showInspector", "0").toBool());
       mscore->showPianoKeyboard(settings.value("showPianoKeyboard", "0").toBool());
+      mscore->showSelectionWindow(settings.value("showSelectionWindow", "0").toBool());
 
       restoreState(settings.value("state").toByteArray());
       _horizontalSplit = settings.value("split", true).toBool();
