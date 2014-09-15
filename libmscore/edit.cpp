@@ -1506,6 +1506,13 @@ void Score::deleteItem(Element* el)
                                     undoChangeEndBarLineType(m, BarLineType::NORMAL);
                                     m->setEndBarLineGenerated(true);
                                     }
+                              // if bar line has custom span, reset to staff default
+                              if (bl->customSpan() && bl->staff()) {
+                                    Staff* stf = bl->staff();
+                                    undoChangeProperty(bl, P_ID::BARLINE_SPAN,      stf->barLineSpan());
+                                    undoChangeProperty(bl, P_ID::BARLINE_SPAN_FROM, stf->barLineFrom());
+                                    undoChangeProperty(bl, P_ID::BARLINE_SPAN_TO,   stf->barLineTo());
+                                    }
                               }
                         }
                   }
