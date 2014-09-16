@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="fonts/bravura/Bravura.otf">../fonts/bravura/Bravura.otf</file>
-        <file alias="fonts/bravura/BravuraText.otf">../fonts/bravura/BravuraText.otf</file>
+        <file alias="fonts/bravura/Bravura.ttf">../fonts/bravura/Bravura.ttf</file>
+        <file alias="fonts/bravura/BravuraText.ttf">../fonts/bravura/BravuraText.ttf</file>
 	    </qresource>
 </RCC>
