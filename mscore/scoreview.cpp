@@ -3714,8 +3714,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             qreal marginLeft = width() * 0.05;
             qreal marginRight = width() * 0.05; // leaves 5% margin to the right
 
-            if (_continuousPanel->visible())
-                  marginLeft += _continuousPanel->width();
+            if (_continuousPanel->active())
+                  marginLeft += _continuousPanel->width() * mag();
 
             if (round(curPosMagR) > round(width() - marginRight)) {
                   xo = -curPosL * mag() + marginLeft;
