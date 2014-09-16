@@ -260,6 +260,7 @@ void PageSettings::landscapeToggled(bool flag)
       double f  = mmUnit ? 1.0/INCH : 1.0;
       pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
       preview->score()->setPageFormat(pf);
+      updateValues();
       updatePreview(0);
       }
 
@@ -273,6 +274,7 @@ void PageSettings::twosidedToggled(bool flag)
       pf.copy(*preview->score()->pageFormat());
       pf.setTwosided(flag);
       preview->score()->setPageFormat(pf);
+      updateValues();
       updatePreview(1);
       }
 
@@ -358,6 +360,7 @@ void PageSettings::pageFormatSelected(int size)
       double f  = mmUnit ? 1.0/INCH : 1.0;
       pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
       preview->score()->setPageFormat(pf);
+      updateValues();
       updatePreview(0);
       }
 
