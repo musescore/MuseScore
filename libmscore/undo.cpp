@@ -628,6 +628,15 @@ void Score::undoChangeEndBarLineType(Measure* m, BarLineType subtype)
       }
 
 //---------------------------------------------------------
+//   undoChangeSystemBarLineType
+//---------------------------------------------------------
+
+void Score::undoChangeSystemBarLineType(Measure* m, BarLineType subtype)
+      {
+      undo(new ChangeSystemBarLineType(m, subtype));
+      }
+
+//---------------------------------------------------------
 //   undoChangeBarLineSpan
 //---------------------------------------------------------
 
@@ -2100,6 +2109,25 @@ void ChangeEndBarLineType::flip()
       measure->setEndBarLineType(subtype, endBarLineGenerated);
       subtype = typ;
       endBarLineGenerated = eblg;
+      }
+
+//---------------------------------------------------------
+//   ChangeSystemBarLineType
+//---------------------------------------------------------
+
+ChangeSystemBarLineType::ChangeSystemBarLineType(Measure* m, BarLineType st)
+      {
+      measure = m;
+      subtype = st;
+      }
+
+void ChangeSystemBarLineType::flip()
+      {
+      BarLineType typ = measure->systemInitialBarLineType();
+      measure->setSystemInitialBarLineType(subtype);
+      subtype = typ;
+      // without this, the system bar line is not laid out again
+      measure->score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------

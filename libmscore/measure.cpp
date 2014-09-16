@@ -154,6 +154,7 @@ Measure::Measure(Score* s)
       _endBarLineGenerated   = true;
       _endBarLineVisible     = true;
       _endBarLineType        = BarLineType::NORMAL;
+      _systemInitialBarLineType = BarLineType::NORMAL;
       _mmRest                = 0;
       _mmRestCount           = 0;
       setFlag(ElementFlag::MOVABLE, true);
@@ -189,6 +190,7 @@ Measure::Measure(const Measure& m)
       _endBarLineGenerated   = m._endBarLineGenerated;
       _endBarLineVisible     = m._endBarLineVisible;
       _endBarLineType        = m._endBarLineType;
+      _systemInitialBarLineType = m._systemInitialBarLineType;    // possibly should be reset to NORMAL?
       _mmRest                = m._mmRest;
       _mmRestCount           = m._mmRestCount;
       _playbackCount         = m._playbackCount;
@@ -1703,6 +1705,8 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   xml.tag("stretch", _userStretch);
             if (_noOffset)
                   xml.tag("noOffset", _noOffset);
+            if (_systemInitialBarLineType != BarLineType::NORMAL)
+                  xml.tag("sysInitBarLineType", BarLine::barLineTypeName(_systemInitialBarLineType));
             }
       qreal _spatium = spatium();
       MStaff* mstaff = staves[staff];
@@ -2198,6 +2202,16 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "breakMultiMeasureRest") {
                   _breakMultiMeasureRest = true;
                   e.readNext();
+                  }
+            else if (tag == "sysInitBarLineType") {
+                  const QString& val(e.readElementText());
+                  _systemInitialBarLineType = BarLineType::NORMAL;
+                  for (unsigned i = 0; i < barLineTableSize(); ++i) {
+                        if (BarLine::barLineTypeName(BarLineType(i)) == val) {
+                              _systemInitialBarLineType = BarLineType(i);
+                              break;
+                              }
+                        }
                   }
             else if (tag == "Tuplet") {
                   Tuplet* tuplet = new Tuplet(score());

@@ -118,6 +118,7 @@ class BarLine : public Element {
       static QString userTypeName2(BarLineType);
 
       QString barLineTypeName() const;
+      static QString barLineTypeName(BarLineType t);
       void setBarLineType(const QString& s);
       void setBarLineType(BarLineType i) { _barLineType = i;     updateCustomType();      }
       BarLineType barLineType() const    { return _barLineType;  }

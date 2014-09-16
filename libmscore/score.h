@@ -521,6 +521,7 @@ class Score : public QObject {
       void undoChangeEndBarLineType(Measure*, BarLineType);
       void undoChangeBarLineSpan(Staff*, int span, int spanFrom, int spanTo);
       void undoChangeSingleBarLineSpan(BarLine* barLine, int span, int spanFrom, int spanTo);
+      void undoChangeSystemBarLineType(Measure* m, BarLineType subtype);
       void undoTransposeHarmony(Harmony*, int, int);
       void undoExchangeVoice(Measure* measure, int val1, int val2, int staff1, int staff2);
       void undoRemovePart(Part* part, int idx);

@@ -400,9 +400,8 @@ void System::layout2()
       if (_barLine) {
             _barLine->setTrack(firstStaffIdx * VOICES);
             _barLine->setSpan(lastStaffIdx - firstStaffIdx + 1);
-            if (score()->staff(0)->lines() == 1)
+            if (score()->staff(firstStaffIdx)->lines() == 1)
                   _barLine->setSpanFrom(BARLINE_SPAN_1LINESTAFF_FROM);
-
             int spanTo = (score()->staff(lastStaffIdx)->lines() == 1) ?
                               BARLINE_SPAN_1LINESTAFF_TO :
                               (score()->staff(lastStaffIdx)->lines()-1)*2;

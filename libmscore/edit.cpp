@@ -1477,8 +1477,14 @@ void Score::deleteItem(Element* el)
             case Element::Type::BAR_LINE:
                   {
                   BarLine* bl  = static_cast<BarLine*>(el);
-                  if (bl->parent()->type() != Element::Type::SEGMENT)
+                  // if system initial bar ine, route change to system first measure
+                  if (bl->parent()->type() == Element::Type::SYSTEM) {
+                        Measure* m = static_cast<System*>(bl->parent())->firstMeasure();
+                        if (m && m->systemInitialBarLineType() != BarLineType::NORMAL)
+                              undoChangeSystemBarLineType(m, BarLineType::NORMAL);
                         break;
+                        }
+                  // if regular measure bar line
                   Segment* seg   = static_cast<Segment*>(bl->parent());
                   bool normalBar = seg->measure()->endBarLineType() == BarLineType::NORMAL;
                   int tick       = seg->tick();
