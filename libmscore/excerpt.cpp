@@ -565,6 +565,12 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                     nt->add(ncr);
                                     ncr->setTuplet(nt);
                                     }
+                              // remove lyrics from chord
+                              foreach (Lyrics* l, ncr->lyricsList())
+                                    l->unlink();
+                              qDeleteAll(ncr->lyricsList());
+                              ncr->lyricsList().clear();
+
                               foreach (Element* e, seg->annotations()) {
                                     if (e->generated() || e->systemFlag())
                                           continue;
@@ -577,8 +583,8 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           case Element::Type::FRET_DIAGRAM:
                                           case Element::Type::HARMONY:
                                           case Element::Type::FIGURED_BASS:
-                                          case Element::Type::LYRICS:
                                           case Element::Type::DYNAMIC:
+                                          case Element::Type::LYRICS:   // not normally segment-attached
                                                 continue;
                                           default:
                                                 Element* ne = e->clone();
@@ -691,6 +697,12 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                                     ncr->setTuplet(nt);
                                     nt->add(ncr);
                                     }
+                              // remove lyrics from chord
+                              foreach (Lyrics* l, ncr->lyricsList())
+                                    l->unlink();
+                              qDeleteAll(ncr->lyricsList());
+                              ncr->lyricsList().clear();
+
                               foreach (Element* e, oseg->annotations()) {
                                     if (e->generated() || e->systemFlag())
                                           continue;
@@ -700,10 +712,11 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                                           // exclude certain element types
                                           // this should be same list excluded in Score::undoAddElement()
                                           case Element::Type::STAFF_TEXT:
+                                          case Element::Type::FRET_DIAGRAM:
                                           case Element::Type::HARMONY:
                                           case Element::Type::FIGURED_BASS:
-                                          case Element::Type::LYRICS:
                                           case Element::Type::DYNAMIC:
+                                          case Element::Type::LYRICS:   // not normally segment-attached
                                                 continue;
                                           default:
                                                 Element* ne = e->clone();
