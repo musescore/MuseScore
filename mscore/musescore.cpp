@@ -1222,6 +1222,7 @@ void MuseScore::helpBrowser(QString tag) const
       QUrl url(QUrl::fromLocalFile(path));
       if (!tag.isEmpty())
             url.setFragment(tag);
+      helpBrowser(url);
       }
 
 void MuseScore::helpBrowser(const QUrl& url) const
