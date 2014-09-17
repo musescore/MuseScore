@@ -5603,12 +5603,14 @@ StaffTypes MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
             qDebug("ImportMusicXML: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);
       // note: also generate symbol for tick 0
       // was not necessary before 0.9.6
-      Clef* clefs = new Clef(score);
-      clefs->setClefType(clef);
-      clefs->setTrack((staffIdx + clefno) * VOICES);
-      Segment* s = measure->getSegment(clefs, tick);
-      s->add(clefs);
-//      clefs->staff()->setClef(tick, clefs->clefTypeList());
+      if (clefno < score->staff(staffIdx)->part()->staves()->size()) {
+            Clef* clefs = new Clef(score);
+            clefs->setClefType(clef);
+            clefs->setTrack((staffIdx + clefno) * VOICES);
+            Segment* s = measure->getSegment(clefs, tick);
+            s->add(clefs);
+    //      clefs->staff()->setClef(tick, clefs->clefTypeList());
+            }
       return res;
       }
 
