@@ -904,6 +904,10 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
                         // single segment
                         qreal headWidth = score()->noteHeadWidth();
                         qreal len = seg->pagePos().x() - l->pagePos().x() - x1 + headWidth;
+                        if (len <= 0.0) {
+                              l->clearSeparator();
+                              return;
+                              }
                         line->setLen(Spatium(len / _spatium));
                         Lyrics* nl = searchNextLyrics(seg, staffIdx, l->no());
                         // small correction if next lyrics is moved? not needed if on another system
@@ -943,15 +947,16 @@ qDebug("Lyrics: melisma end segment not implemented");
       Segment* ns = s;
 
       // TODO: the next two values should be style parameters
-      // TODO: as well as the 0.3 factor a few lines below
-      const qreal maxl = 0.5 * _spatium * lmag * staffMag;   // lyrics hyphen length
-      const Spatium hlw(0.14 * lmag * staffMag);              // hyphen line width
+      // TODO: as well as the factor a few lines below
+      const qreal maxl = 0.5 * _spatium * lmag * staffMag;  // lyrics hyphen length
+      const Spatium hlw(0.14 * lmag * staffMag);            // hyphen line width
 
       Lyrics* nl = searchNextLyrics(ns, staffIdx, verse);
       if (!nl) {
             l->clearSeparator();
             return;
             }
+      ns = nl->chordRest()->segment();
       QList<Line*>* sl = l->separatorList();
       Line* line;
       if (sl->isEmpty()) {
@@ -964,16 +969,25 @@ qDebug("Lyrics: melisma end segment not implemented");
       qreal x = l->bbox().right();
       // convert font size to raster units, scaling if spatium-dependent
       qreal size = ts.size();
-      if(ts.sizeIsSpatiumDependent())
-            size *= _spatium / (SPATIUM20 * PPI);    // <= (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * Mscore::DPI))
+      if (ts.sizeIsSpatiumDependent())
+            size *= _spatium / (SPATIUM20 * PPI);     // <= (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * Mscore::DPI))
       else
             size *= MScore::DPI / PPI;
-      qreal y = -size * staffMag * 0.3;                    // a conventional percentage of the whole font height
+      qreal y = -size * staffMag * 0.30;              // TODO: make this a style parameter (for now, a conventional percentage of the whole font height)
 
       qreal x1 = x + l->pagePos().x();
       qreal x2 = nl->bbox().left() + nl->pagePos().x();
       qreal len;
-      if (x2 < x1 || s->measure()->system()->page() != ns->measure()->system()->page()) {
+      if (x2 < x1 && s->measure()->system() == ns->measure()->system()) {
+            // first syllable overlaps second
+            // no separator needed
+            l->clearSeparator();
+            return;
+            }
+      else if (s->measure()->system() != ns->measure()->system()) {
+            // second syllable not on same system as first (perhaps not even same page)
+            // use right edge of first system as substitute for second syllable
+            // so hyphen is centered within the space remaining on system
             System* system = s->measure()->system();
             x2 = system->pagePos().x() + system->bbox().width();
             }

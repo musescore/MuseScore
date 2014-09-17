@@ -3203,11 +3203,9 @@ void Measure::layoutX(qreal stretch)
                                     if (!l || l->isEmpty())
                                           continue;
                                     lyrics = l;
-                                    if (!lyrics->isMelisma()) {
-                                          QRectF b(l->bbox().translated(l->pos()));
-                                          llw = qMax(llw, -(b.left()+lx+cx));
-                                          rrw = qMax(rrw, b.right()+rx+cx);
-                                          }
+                                    QRectF b(l->bbox().translated(l->pos()));
+                                    llw = qMax(llw, -(b.left()+lx+cx));
+                                    rrw = qMax(rrw, b.right()+rx+cx);
                                     }
                               }
                         if (lyrics) {
