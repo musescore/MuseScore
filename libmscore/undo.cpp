@@ -750,7 +750,7 @@ void Score::undoInsertStaff(Staff* staff, int ridx, bool createRests)
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             m->cmdAddStaves(idx, idx+1, createRests);
             if (m->hasMMRest())
-                  m->mmRest()->cmdAddStaves(idx, idx+1, createRests);
+                  m->mmRest()->cmdAddStaves(idx, idx+1, false);
             }
 
       adjustBracketsIns(idx, idx+1);
