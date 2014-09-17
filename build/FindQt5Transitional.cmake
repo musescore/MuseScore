@@ -12,6 +12,8 @@ if (Qt5Core_FOUND)
         ScriptTools
         Network
         Test
+        Qml
+        Quick
         Xml
         XmlPatterns
         Svg
