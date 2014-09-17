@@ -66,6 +66,19 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       editOddFooterL->setIcon(*icons[int(Icons::edit_ICON)]);
       editOddFooterC->setIcon(*icons[int(Icons::edit_ICON)]);
       editOddFooterR->setIcon(*icons[int(Icons::edit_ICON)]);
+      resetHairpinY->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetHairpinLineWidth->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetHairpinHeight->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetHairpinContinueHeight->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetVoltaY->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetVoltaHook->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetVoltaLineWidth->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetVoltaLineStyle->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaY->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaHook->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaLineWidth->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaLineStyle->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaNumbersOnly->setIcon(*icons[int(Icons::reset_ICON)]);
 
       pageList->setCurrentRow(0);
 

@@ -170,16 +170,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="4" column="1">
@@ -221,16 +211,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="3" column="0">
@@ -266,16 +246,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="2" column="3">
@@ -292,26 +262,12 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="3" column="2">
       <widget class="QToolButton" name="hRaster">
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/raster-horizontal.svg</normaloff>:/data/icons/raster-horizontal.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -325,10 +281,6 @@
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/raster-vertical.svg</normaloff>:/data/icons/raster-vertical.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>

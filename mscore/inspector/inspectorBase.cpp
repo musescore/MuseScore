@@ -17,6 +17,7 @@
 #include "musescore.h"
 #include "inspectorBase.h"
 #include "inspector.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -220,6 +221,9 @@ void InspectorBase::setElement()
                   else
                         val = QVariant(f.denominator());
                   }
+
+	    if (ii.r)
+		    ii.r->setIcon(*icons[int(Icons::reset_ICON)]);
 
             blockSignals = true;
             setValue(ii, val);
