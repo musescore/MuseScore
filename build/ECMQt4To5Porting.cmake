@@ -161,11 +161,12 @@ set(_qt_modules
   Test
   Designer
   Concurrent
+  Quick
   Xml
   XmlPatterns
   UiTools
   Qml
-  Quick1
+  Quick
   WebKit
   WebKitWidgets
   Sql
