@@ -161,7 +161,6 @@ set(_qt_modules
   Test
   Designer
   Concurrent
-  Quick
   Xml
   XmlPatterns
   UiTools
