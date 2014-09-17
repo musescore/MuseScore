@@ -118,16 +118,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="1" column="2">
@@ -140,16 +130,6 @@
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -200,16 +180,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="5" column="0">
@@ -230,16 +200,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="5" column="2">
@@ -252,16 +212,6 @@
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -314,16 +264,6 @@
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
        </property>
       </widget>
      </item>
