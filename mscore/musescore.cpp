@@ -1082,7 +1082,8 @@ MuseScore::MuseScore()
       QMenu* menuHelp = mb->addMenu(tr("&Help"));
       menuHelp->setObjectName("Help");
 
-      menuHelp->addAction(getAction("local-help"));
+      if (enableExperimental)
+            menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
 
       menuHelp->addSeparator();
@@ -1222,6 +1223,7 @@ void MuseScore::helpBrowser(QString tag) const
       QUrl url(QUrl::fromLocalFile(path));
       if (!tag.isEmpty())
             url.setFragment(tag);
+      helpBrowser(url);
       }
 
 void MuseScore::helpBrowser(const QUrl& url) const
