@@ -1082,7 +1082,8 @@ MuseScore::MuseScore()
       QMenu* menuHelp = mb->addMenu(tr("&Help"));
       menuHelp->setObjectName("Help");
 
-      menuHelp->addAction(getAction("local-help"));
+      if (enableExperimental)
+            menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
 
       menuHelp->addSeparator();
