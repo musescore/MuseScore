@@ -108,6 +108,9 @@
        <property name="accessibleName">
         <string>Velocity</string>
        </property>
+       <property name="maximum">
+        <number>127</number>
+       </property>
       </widget>
      </item>
      <item row="0" column="1">
