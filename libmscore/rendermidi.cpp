@@ -961,7 +961,7 @@ void Score::renderMidi(EventMap* events)
             //
             int utick1 = rs->utick;
             int utick2 = utick1 + rs->len;
-
+            std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
             for (std::pair<int,Spanner*> sp : _spanner.map()) {
                   Spanner* s = sp.second;
                   if (s->type() != Element::Type::PEDAL)
@@ -969,18 +969,42 @@ void Score::renderMidi(EventMap* events)
 
                   int idx = s->staff()->channel(s->tick(), 0);
                   int channel = s->staff()->part()->instr(s->tick())->channel(idx).channel;
-                  if (s->tick() >= utick1 && s->tick() < utick2) {
-                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
-                        events->insert(std::pair<int,NPlayEvent>(s->tick() + tickOffset, event));
-                        }
+                  channelPedalEvents.emplace(channel, std::vector<std::pair<int, bool>>());
+                  std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
+                  std::pair<int, bool> lastEvent;
 
-                  if (s->tick2() >= utick1 && s->tick2() < utick2) {
-                        NPlayEvent event(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
-                        events->insert(std::pair<int,NPlayEvent>(s->tick2() + tickOffset, event));
+                  if (!pedalEventList.empty())
+                        lastEvent = pedalEventList.back();
+                  else
+                        lastEvent = std::pair<int, bool>(0, true);
+
+                  if (s->tick() >= utick1 && s->tick() < utick2)
+                        {
+                        // Handle "overlapping" pedal segments (usual case for connected pedal line)
+                        if (lastEvent.second == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
+                              channelPedalEvents.at(channel).pop_back();
+                              channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 1, false));
+                              }
+                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 2, true));
+                        }
+                  if (s->tick2() >= utick1 && s->tick2() < utick2)
+                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick2() + tickOffset + 1, false));
+                  }
+
+            for (std::pair<int, std::vector<std::pair<int, bool>>> pedalEvents : channelPedalEvents)
+                  {
+                  int channel = pedalEvents.first;
+                  for (std::pair<int, bool> pe : pedalEvents.second)
+                        {
+                        NPlayEvent event;
+                        if (pe.second == true)
+                              event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
+                        else
+                              event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
+                        events->insert(std::pair<int,NPlayEvent>(pe.first, event));
                         }
                   }
             }
       }
-
 }
 
