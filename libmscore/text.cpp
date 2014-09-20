@@ -856,10 +856,12 @@ void Text::draw(QPainter* p) const
       if (textStyle().hasFrame()) {
             if (textStyle().frameWidth().val() != 0.0) {
                   QColor color(textStyle().frameColor());
-                  if (!visible())
-                        color = Qt::gray;
-                  else if (selected())
-                        color = MScore::selectColor[0];
+                  if (score() && !score()->printing()) {
+                        if (!visible())
+                              color = Qt::gray;
+                        else if (selected())
+                              color = MScore::selectColor[0];
+                        }
                   QPen pen(color, textStyle().frameWidth().val() * spatium());
                   p->setPen(pen);
                   }
@@ -877,13 +879,8 @@ void Text::draw(QPainter* p) const
                   }
             }
       p->setBrush(Qt::NoBrush);
-      QColor color;
-      if (selected())
-            color = MScore::selectColor[0];
-      else if (!visible())
-            color = Qt::gray;
-      else
-            color = textStyle().foregroundColor();
+
+      QColor color = textColor();
       p->setPen(color);
       if (_editMode && _cursor.hasSelection()) {
             int r1 = _cursor.selectLine();
@@ -972,7 +969,7 @@ QRectF Text::cursorRect() const
 
 QColor Text::textColor() const
       {
-      if (!score()->printing()) {
+      if (score() && !score()->printing()) {
             QColor color;
             if (selected())
                   return MScore::selectColor[0];
