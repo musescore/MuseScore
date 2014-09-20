@@ -1767,6 +1767,8 @@ void Score::createMMRests()
                   mmr->setLineBreak(lm->lineBreak());
 
                   BarLineType t;
+                  // End repeats do not set endBarLineGenerated to false because
+                  // they can be generated from the repeatFlags. So we need to test it separately.
                   if (lm->endBarLineGenerated() && !(lm->repeatFlags() & Repeat::END))
                         t = BarLineType::NORMAL;
                   else
