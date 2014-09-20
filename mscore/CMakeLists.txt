@@ -520,8 +520,8 @@ endif (MINGW)
 
 if (APPLE)
      install (FILES
-      ../fonts/gonville/Gonville.otf
-      ../fonts/gonville/GonvilleText.otf
+      ../fonts/gonville/Gonville.ttf
+      ../fonts/gonville/GonvilleText.ttf
       ../fonts/mscore/mscore.ttf
       ../fonts/mscore/MScoreText.ttf
       ../fonts/MuseJazz-Mac.ttf
@@ -530,8 +530,8 @@ if (APPLE)
       ../fonts/FreeSans.ttf
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
-      ../fonts/bravura/Bravura.otf
-      ../fonts/bravura/BravuraText.otf
+      ../fonts/bravura/Bravura.ttf
+      ../fonts/bravura/BravuraText.ttf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
      install(DIRECTORY

@@ -17,3 +17,7 @@ Other files in the main **fonts** directories are for collateral fonts used by M
 1. **Version**: FontForge version of 2014-05-27 is known to have generated .ttf fonts not working under Windows. Until the actual reason of the failure is understood, **please do not use it**. Version of 2012-07-31 is known to work.
 2. **Font names**: In some Fontforge versions and/or under some platforms, Fontforge seems to skip the "FullName" line while saving the font and this makes a .ttf generated from the source unusable under Windows. To ensure that this line is always output, select "Element | Font info...", tab "PS Names" and make sure the string "Name for humans:" is different from the string "Fontname:".
 3. **Kern**: To ensure fonts are properly kerned under all supported platform, **uncheck** the "Old style 'kern'" checkbox in the "Option" subdialog of the "Generate Font" dialog box.
+
+## (Suspected Qt) Bug with OTF fonts in PDF export under Windows
+Under Windows the OTF fonts, namely Gonville and Bravura, render badly when exporting files to PDF. See http://musescore.org/en/node/27759 and also http://musescore.org/en/node/33331.
+Hence these fonts have been converted into TTF and should remain so until the real bug is found and fixed.

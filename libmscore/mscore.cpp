@@ -189,8 +189,8 @@ void MScore::init()
             ":/fonts/FreeSerifBold.ttf",
             ":/fonts/mscoreTab.ttf",
             ":/fonts/mscore-BC.ttf",
-            ":/fonts/bravura/BravuraText.otf",
-            ":/fonts/gonville/GonvilleText.otf",
+            ":/fonts/bravura/BravuraText.ttf",
+            ":/fonts/gonville/GonvilleText.ttf",
             ":/fonts/mscore/MScoreText.ttf",
             };
 
