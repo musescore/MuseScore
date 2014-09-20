@@ -4536,7 +4536,7 @@ void MuseScore::showSearchDialog()
 
             QToolButton* searchExit = new QToolButton;
             searchExit->setAutoRaise(true);
-            searchExit->setIcon(QIcon(":/data/icons/16/window-close.svg"));
+            searchExit->setIcon(*icons[int(Icons::close_ICON)]);
             connect(searchExit, SIGNAL(clicked()), SLOT(endSearch()));
             searchDialogLayout->addWidget(searchExit);
             searchDialogLayout->addSpacing(10);
@@ -4903,14 +4903,14 @@ int main(int argc, char* av[])
                   "}\n"
                   "QDockWidget {\n"
                   "   border: 1px solid lightgray;\n"
-                  "   titlebar-close-icon: url(:/data/icons/8/window-close.png);\n"
-                  "   titlebar-normal-icon: url(:/data/icons/8/window-float.png);\n"
+                  "   titlebar-close-icon: url(:/data/icons/png/window-close.png);\n"
+                  "   titlebar-normal-icon: url(:/data/icons/png/window-float.png);\n"
                   "   }\n"
                   "QTabBar::close-button {\n"
-                  "   image: url(:/data/icons/16/window-close.svg);\n"
+                  "   image: url(:/data/icons/png/window-close.png);\n"
 		  "   }\n"
                   "QTabBar::close-button:hover {\n"
-		  "   image: url(:/data/icons/16/window-close-hover.svg);\n"
+		  "   image: url(:/data/icons/png/window-close-hover.png);\n"
 		  "   }");
             MgStyleConfigData::animationsEnabled = preferences.animations;
             qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);

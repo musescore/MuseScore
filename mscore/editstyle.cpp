@@ -54,6 +54,31 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setModal(true);
 
       chordDescriptionFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      editEvenHeaderL->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenHeaderC->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenHeaderR->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddHeaderL->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddHeaderC->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddHeaderR->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenFooterL->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenFooterC->setIcon(*icons[int(Icons::edit_ICON)]);
+      editEvenFooterR->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddFooterL->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddFooterC->setIcon(*icons[int(Icons::edit_ICON)]);
+      editOddFooterR->setIcon(*icons[int(Icons::edit_ICON)]);
+      resetHairpinY->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetHairpinLineWidth->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetHairpinHeight->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetHairpinContinueHeight->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetVoltaY->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetVoltaHook->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetVoltaLineWidth->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetVoltaLineStyle->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaY->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaHook->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaLineWidth->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaLineStyle->setIcon(*icons[int(Icons::reset_ICON)]);
+      resetOttavaNumbersOnly->setIcon(*icons[int(Icons::reset_ICON)]);
 
       pageList->setCurrentRow(0);
 

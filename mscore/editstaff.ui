@@ -190,10 +190,6 @@
           <property name="text">
            <string>...</string>
           </property>
-          <property name="icon">
-           <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/16/edit.svg</normaloff>:/data/icons/16/edit.svg</iconset>
-          </property>
          </widget>
         </item>
         <item>
@@ -214,10 +210,6 @@
          <widget class="QToolButton" name="maxPitchASelect">
           <property name="text">
            <string>...</string>
-          </property>
-          <property name="icon">
-           <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/16/edit.svg</normaloff>:/data/icons/16/edit.svg</iconset>
           </property>
          </widget>
         </item>
@@ -259,10 +251,6 @@
           <property name="text">
            <string>...</string>
           </property>
-          <property name="icon">
-           <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/16/edit.svg</normaloff>:/data/icons/16/edit.svg</iconset>
-          </property>
          </widget>
         </item>
         <item>
@@ -283,10 +271,6 @@
          <widget class="QToolButton" name="maxPitchPSelect">
           <property name="text">
            <string>...</string>
-          </property>
-          <property name="icon">
-           <iconset resource="musescore.qrc">
-            <normaloff>:/data/icons/16/edit.svg</normaloff>:/data/icons/16/edit.svg</iconset>
           </property>
          </widget>
         </item>
