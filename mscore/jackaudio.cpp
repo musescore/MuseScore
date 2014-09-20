@@ -342,9 +342,9 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                               if (nn && (type == ME_CLOCK || type == ME_SENSE))
                                     continue;
                               Event e;
-                              e.setType(type);
                               e.setChannel(type & 0xf);
                               type &= 0xf0;
+                              e.setType(type);
                               if (type == ME_NOTEON || type == ME_NOTEOFF) {
                                     e.setPitch(event.buffer[1]);
                                     e.setVelo(event.buffer[2]);
