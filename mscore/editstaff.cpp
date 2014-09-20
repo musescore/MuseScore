@@ -52,11 +52,12 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
-
-      minPitchASelect->setIcon(*icons[int(Icons::edit_ICON)]);
-      maxPitchASelect->setIcon(*icons[int(Icons::edit_ICON)]);
-      minPitchPSelect->setIcon(*icons[int(Icons::edit_ICON)]);
-      maxPitchPSelect->setIcon(*icons[int(Icons::edit_ICON)]);
+      
+      const QIcon &editIcon = *icons[int(Icons::edit_ICON)];
+      minPitchASelect->setIcon(editIcon);
+      maxPitchASelect->setIcon(editIcon);
+      minPitchPSelect->setIcon(editIcon);
+      maxPitchPSelect->setIcon(editIcon);
 
       Part* part        = orgStaff->part();
       instrument        = *part->instr();
