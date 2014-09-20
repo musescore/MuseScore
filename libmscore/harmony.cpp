@@ -1027,10 +1027,12 @@ void Harmony::draw(QPainter* painter) const
       if (textStyle().hasFrame()) {
             if (textStyle().frameWidth().val() != 0.0) {
                   QColor color(textStyle().frameColor());
-                  if (!visible())
-                        color = Qt::gray;
-                  else if (selected())
-                        color = MScore::selectColor[0];
+                  if (score() && !score()->printing()) {
+                        if (!visible())
+                              color = Qt::gray;
+                        else if (selected())
+                              color = MScore::selectColor[0];
+                        }
                   QPen pen(color, textStyle().frameWidth().val() * spatium());
                   painter->setPen(pen);
                   }
@@ -1049,10 +1051,12 @@ void Harmony::draw(QPainter* painter) const
             }
       painter->setBrush(Qt::NoBrush);
       QColor color(textStyle().foregroundColor());
-      if (!visible())
-            color = Qt::gray;
-      else if (selected())
-            color = MScore::selectColor[0];
+      if (score() && !score()->printing()) {
+            if (!visible())
+                  color = Qt::gray;
+            else if (selected())
+                  color = MScore::selectColor[0];
+            }
       painter->setPen(color);
       foreach(const TextSegment* ts, textList) {
             painter->setFont(ts->font);
