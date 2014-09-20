@@ -732,9 +732,9 @@
             <property name="accessibleDescription">
              <string>Opens a dialog for configuring the soundfont folders</string>
             </property>
-            <property name="text">
-             <string>...</string>
-            </property>
+	    <property name="text">
+	     <string/>
+	    </property>
            </widget>
           </item>
           <item row="5" column="2">
@@ -749,7 +749,7 @@
              <string>Opens a dialog for configuring the SFZ folders</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string/>
             </property>
            </widget>
           </item>

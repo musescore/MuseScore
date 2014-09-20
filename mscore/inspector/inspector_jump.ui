@@ -119,10 +119,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
       </widget>
      </item>
      <item row="1" column="2">
@@ -133,10 +129,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
-       </property>
       </widget>
      </item>
      <item row="2" column="2">
@@ -146,10 +138,6 @@
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/16/edit-reset.svg</normaloff>:/data/icons/16/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
