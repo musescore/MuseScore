@@ -1171,7 +1171,7 @@ void PreferenceDialog::selectStartWith()
          this,
          tr("Choose Starting Score"),
          sessionScore->text(),
-         tr("MuseScore Files (*.mscz *.mscx *.msc);;All (*)")
+         tr("MuseScore Files (*.mscz *.mscx);;All (*)")
          );
       if (!s.isNull())
             sessionScore->setText(s);

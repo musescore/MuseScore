@@ -130,7 +130,7 @@ void Album::createScore()
       {
       if (_scores.isEmpty())
             return;
-      QString filter = QWidget::tr("Compressed MuseScore File (*.mscz);;");
+      QString filter = QWidget::tr("MuseScore File (*.mscz);;");
       QSettings settings;
       if (mscore->lastSaveDirectory.isEmpty())
             mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.myScoresPath).toString();
