@@ -96,14 +96,6 @@ void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
             _width  = s->x();
 
       //
-      // Don't show panel if staff names are visible
-      //
-      if (_sv->xoffset() / _sv->mag() + _width >= 0) {
-            _visible = false;
-            return;
-            }
-
-      //
       // Set panel height for whole system
       //
       _height = 6 * _spatium;
@@ -161,6 +153,15 @@ void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
       if (_currentMeasure == nullptr)
             return;
       findElementWidths(elementsCurrent);
+
+      //
+      // Don't show panel if staff names are visible
+      if (_sv->xoffset() / _sv->mag() + _xPosMeasure > 0) {
+            _visible = false;
+            return;
+            }
+      //qDebug() << "_sv->xoffset()=" <<_sv->xoffset() << " _sv->mag()="<< _sv->mag() <<" s->x=" << s->x() << " width=" << _width << " currentMeasue=" << _currentMeasure->x() << " _xPosMeasure=" << _xPosMeasure;
+
       draw(p, elementsCurrent);
       _visible = true;
       }
