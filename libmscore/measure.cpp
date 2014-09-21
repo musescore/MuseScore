@@ -2110,7 +2110,9 @@ void Measure::read(XmlReader& e, int staffIdx)
                   element->setTrack(e.track());
                   element->read(e);
                   segment       = getSegment(Segment::Type::ChordRest, e.tick());
-                  ChordRest* cr = static_cast<ChordRest*>(segment->element(e.track()));
+                  ChordRest* cr = static_cast<ChordRest*>(segment->element(element->track()));
+                  if (!cr)
+                        cr = static_cast<ChordRest*>(segment->element(e.track())); // in case lyric itself has bad track info
                   if (!cr)
                         qDebug("Internal error: no chord/rest for lyrics");
                   else
