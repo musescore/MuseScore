@@ -839,17 +839,16 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
       while ((s = s->next1(Segment::Type::ChordRest))) {
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
-            QList<Lyrics*>* nll = 0;
+            // search through all tracks of current staff looking for a lyric in specified verse
             for (int track = strack; track < etrack; ++track) {
                   ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                   if (cr && !cr->lyricsList().isEmpty()) {
-                        nll = &cr->lyricsList();
-                        break;
+                        // cr with lyrics found, but does it have a syllable in specified verse?
+                        l = cr->lyricsList().value(verse);
+                        if (l)
+                              break;
                         }
                   }
-            if (!nll)
-                  continue;
-            l = nll->value(verse);
             if (l)
                   break;
             }
