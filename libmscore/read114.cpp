@@ -703,8 +703,6 @@ Score::FileError Score::read114(XmlReader& e)
       // adjust some styles
       qreal lmbd = styleD(StyleIdx::lyricsMinBottomDistance);
       style()->set(StyleIdx::lyricsMinBottomDistance, lmbd + 4.0);
-      if (style(StyleIdx::voltaY) == MScore::baseStyle()->value(StyleIdx::voltaY))
-            style()->set(StyleIdx::voltaY, -2.0f);
       if (style(StyleIdx::hideEmptyStaves).toBool()) // http://musescore.org/en/node/16228
             style()->set(StyleIdx::dontHideStavesInFirstSystem, false);
       if (style(StyleIdx::showPageNumberOne).toBool()) { // http://musescore.org/en/node/21207
@@ -752,8 +750,9 @@ Score::FileError Score::read114(XmlReader& e)
             if (!excerpt->parts().isEmpty()) {
                   Score* nscore = new Score(this);
                   excerpt->setScore(nscore);
-                  Ms::createExcerpt(nscore, excerpt->parts());
                   nscore->setName(excerpt->title());
+                  nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                  Ms::createExcerpt(nscore, excerpt->parts());
                   nscore->rebuildMidiMapping();
                   nscore->updateChannel();
                   nscore->updateNotes();
@@ -761,6 +760,12 @@ Score::FileError Score::read114(XmlReader& e)
                   nscore->doLayout();
                   }
             }
+
+      // volta offsets in older scores are hardcoded to be relative to a voltaY of -2.0sp
+      // we'll force this and live with it for the score
+      // but we wait until now to do it so parts don't have this issue
+      if (style(StyleIdx::voltaY) == MScore::baseStyle()->value(StyleIdx::voltaY))
+            style()->set(StyleIdx::voltaY, -2.0f);
 
       fixTicks();
       rebuildMidiMapping();
