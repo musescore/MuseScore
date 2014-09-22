@@ -1543,6 +1543,10 @@ void RemoveElement::undo()
                   }
             undoAddTuplet(static_cast<ChordRest*>(element));
             }
+      else if (element->type() == Element::Type::NOTE) {
+            Note* note = static_cast<Note*>(element);
+            note->chord()->measure()->cmdUpdateNotes(note->chord()->staffIdx());
+            }
       }
 
 //---------------------------------------------------------
@@ -1570,6 +1574,10 @@ void RemoveElement::redo()
                         m->cmdUpdateNotes(eChord->staffIdx());
                         }
                   }
+            }
+      else if (element->type() == Element::Type::NOTE) {
+            Note* note = static_cast<Note*>(element);
+            note->chord()->measure()->cmdUpdateNotes(note->chord()->staffIdx());
             }
       }
 
