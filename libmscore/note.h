@@ -99,7 +99,8 @@ class NoteHead : public Symbol {
 
 struct NoteVal {
       int pitch                 { -1 };
-      int tpc                   { Tpc::TPC_INVALID };
+      int tpc1                  { Tpc::TPC_INVALID };
+      int tpc2                  { Tpc::TPC_INVALID };
       int fret                  { FRET_NONE };
       int string                { STRING_NONE };
       NoteHead::Group headGroup { NoteHead::Group::HEAD_NORMAL };
@@ -302,7 +303,7 @@ class Note : public Element {
 
       Accidental* accidental() const    { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }
-      
+
       Accidental::Type accidentalType() const { return _accidental ? _accidental->accidentalType() : Accidental::Type::NONE; }
       void setAccidentalType(Accidental::Type type);
 

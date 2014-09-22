@@ -5195,7 +5195,7 @@ void ScoreView::cmdRepeatSelection()
                         Chord* c = static_cast<Note*>(el)->chord();
                         for (Note* note : c->notes()) {
                               NoteVal nval = note->noteVal();
-                              _score->addPitch(nval, addTo);
+                              Note* n = _score->addPitch(nval, addTo);
                               addTo = true;
                               }
                         _score->endCmd();

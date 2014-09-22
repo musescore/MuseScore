@@ -1660,11 +1660,18 @@ bool Score::processMidiInput()
                         }
                   NoteVal nval(ev.pitch);
                   Staff* st = staff(inputState().track() / VOICES);
-                  Key key = st->key(inputState().tick());
-                  nval.tpc = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
-                  if (!styleB(StyleIdx::concertPitch)) {
-                      nval.pitch += st->part()->instr(inputState().tick())->transpose().chromatic;
-                      }
+                  Key key   = st->key(inputState().tick());
+
+                  if (styleB(StyleIdx::concertPitch)) {
+                        nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+                        nval.tpc2 = nval.tpc1;  // DEBUG
+                        }
+                  else {
+                        nval.pitch += st->part()->instr(inputState().tick())->transpose().chromatic;
+                        nval.tpc2  = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+                        nval.tpc1 = nval.tpc2;  // DEBUG
+                        }
+
                   addPitch(nval, ev.chord);
                   }
             }

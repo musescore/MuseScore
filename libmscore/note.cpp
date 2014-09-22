@@ -2079,6 +2079,7 @@ void Note::updateLine()
 
 //---------------------------------------------------------
 //   setNval
+//    set note properties from NoteVal
 //---------------------------------------------------------
 
 void Note::setNval(const NoteVal& nval)
@@ -2086,9 +2087,15 @@ void Note::setNval(const NoteVal& nval)
       setPitch(nval.pitch);
       _fret   = nval.fret;
       _string = nval.string;
-      if (nval.tpc == Tpc::TPC_INVALID) {
+
+      _tpc[0] = nval.tpc1;
+      _tpc[1] = nval.tpc2;
+
+      if (nval.tpc1 == Tpc::TPC_INVALID) {
             Key key = staff()->key(chord()->tick());
             _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+            }
+      if (nval.tpc2 == Tpc::TPC_INVALID) {
             Interval v = staff()->part()->instr()->transpose();
             if (v.isZero())
                   _tpc[1] = _tpc[0];
@@ -2096,17 +2103,8 @@ void Note::setNval(const NoteVal& nval)
                   v.flip();
                   _tpc[1] = Ms::transposeTpc(_tpc[0], v, false);
                   }
-            return;
             }
 
-      if (concertPitch()) {
-            _tpc[0] = nval.tpc;
-            _tpc[1] = transposeTpc(nval.tpc);
-            }
-      else {
-            _tpc[0] = transposeTpc(nval.tpc);
-            _tpc[1] = nval.tpc;
-            }
       _headGroup = NoteHead::Group(nval.headGroup);
       }
 
@@ -2490,7 +2488,8 @@ NoteVal Note::noteVal() const
       {
       NoteVal nval;
       nval.pitch     = pitch();
-      nval.tpc       = tpc1();
+      nval.tpc1      = tpc1();
+      nval.tpc2      = tpc2();
       nval.fret      = fret();
       nval.string    = string();
       nval.headGroup = headGroup();
