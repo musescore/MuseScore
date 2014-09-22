@@ -987,8 +987,8 @@ void Score::undoAddElement(Element* element)
                               case Element::Type::FRET_DIAGRAM:
                               case Element::Type::HARMONY:
                               case Element::Type::FIGURED_BASS:
-                              case Element::Type::LYRICS:
                               case Element::Type::DYNAMIC:
+                              case Element::Type::LYRICS:   // not normally segment-attached
                                     continue;
                               default:
                                     break;
