@@ -146,6 +146,7 @@ void FluidGui::soundFontDeleteClicked()
             QString s(soundFonts->item(row)->text());
             fluid()->removeSoundFont(s);
             delete soundFonts->takeItem(row);
+            emit valueChanged();
             }
       updateUpDownButtons();
       }
