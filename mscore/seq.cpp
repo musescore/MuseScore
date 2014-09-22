@@ -1519,6 +1519,9 @@ void Seq::setLoopOut()
             tick = cs->pos() + cs->inputState().ticks();   // Otherwise, use the selected note.
       if (tick <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
             cs->setPos(POS::LEFT, 0);
+      else
+          if (tick > cs->lastMeasure()->endTick() - 1)
+              tick = cs->lastMeasure()->endTick() - 1;
       cs->setPos(POS::RIGHT, tick);
       if (state == Transport::PLAY)
             guiToSeq(SeqMsg(SeqMsgId::SEEK, tick));
