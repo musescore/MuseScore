@@ -4343,7 +4343,7 @@ void ExportMusicXml::write(QIODevice* dev)
                         //       currently exported as a two staff part ...
                         for (int i = 0; i < staves; i++) {
                               Staff* st = part->staff(i);
-                              if (st->lines() != 5) {
+                              if (st->lines() != 5 || st->isTabStaff()) {
                                     if (staves > 1)
                                           xml.stag(QString("staff-details number=\"%1\"").arg(i+1));
                                     else
