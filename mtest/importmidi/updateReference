@@ -9,6 +9,21 @@ m2.mscx
 m3.mscx
 m4.mscx
 m5.mscx
+chord_small_error.mscx
+chord_big_error.mscx
+chord_legato.mscx
+split_acid.mscx
+split_2_melodies.mscx
+split_octave.mscx
+simplify_16th_staccato.mscx
+simplify_8th_dont.mscx
+simplify_32nd_staccato.mscx
+simplify_8th_dotted_no_staccato.mscx
+simplify_4th_dotted_tied.mscx
+simplify_triplet_staccato.mscx
+simplify_staccato_9-8.mscx
+voice_acid.mscx
+voice_central.mscx
 clef_prev.mscx
 clef_melody.mscx
 clef_tied.mscx
@@ -16,7 +31,6 @@ timesig_changes.mscx
 tuplet_off_time_other_bar.mscx
 tuplet_off_time_other_bar2.mscx
 min_duration.mscx
-min_duration_no_reduce.mscx
 meter_12-8.mscx
 meter_15-8.mscx
 meter_4-4.mscx
@@ -68,5 +82,7 @@ meter_15-8.mscx
 tuplet_triplets_mixed.mscx"
 
 for i in $FILES; do
+      echo cp $MSCORE/$i .
       cp   $MSCORE/$i .
       done
+

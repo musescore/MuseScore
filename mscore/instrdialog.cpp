@@ -212,7 +212,7 @@ void MuseScore::editInstrList()
                   break;
                   }
             }
-      //normalize the keyevent to concert pitch if necessary
+      // normalize the keyevent to concert pitch if necessary
       if (firstStaff && !rootScore->styleB(StyleIdx::concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
             int interval = firstStaff->part()->instr()->transpose().chromatic;
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
@@ -221,6 +221,10 @@ void MuseScore::editInstrList()
                   tmpKeymap[tick] = transposeKey(oKey, interval);
                   }
             }
+      // create initial keyevent for transposing instrument if necessary
+      auto i = tmpKeymap.begin();
+      if (i == tmpKeymap.end() || i->first != 0)
+            tmpKeymap[0] = Key::C;
 
       //
       // process modified partitur list

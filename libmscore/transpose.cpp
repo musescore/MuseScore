@@ -444,23 +444,23 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
             if (st->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
 
-            bool createKey = tickStart == 0;
+            bool initialKeyFound = false;
             for (Segment* s = firstSegment(Segment::Type::KeySig); s; s = s->next1(Segment::Type::KeySig)) {
                   if (s->tick() < tickStart)
                         continue;
                   if (s->tick() >= tickEnd)
                         break;
-                  if (s->tick() == 0)
-                        createKey = false;
                   KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
                   if (ks) {
+                        if (s->tick() == 0)
+                              initialKeyFound = true;
                         Key key  = st->key(s->tick());
                         Key nKey = transposeKey(key, interval);
                         KeySigEvent ke(nKey);
                         undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
                         }
                   }
-            if (createKey) {
+            if (tickStart == 0 && !initialKeyFound) {
                   Key key  = Key::C;
                   Key nKey = transposeKey(key, interval);
                   KeySigEvent ke(nKey);
