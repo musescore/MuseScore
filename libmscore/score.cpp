@@ -2909,8 +2909,20 @@ void Score::collectMatch(void* data, Element* e)
       ElementPattern* p = static_cast<ElementPattern*>(data);
       if (p->type != int(e->type()))
             return;
-      if (p->subtypeValid && p->subtype != e->subtype())
-            return;
+
+      if (p->subtypeValid) {
+            // HACK: grace note is different from normal note
+            // TODO: this disables the ability to distinguish note heads in subtype
+
+            if (p->type == int(Element::Type::NOTE)) {
+                  if (p->subtype != static_cast<Note*>(e)->chord()->isGrace())
+                        return;
+                  }
+            else {
+                  if (p->subtype != e->subtype())
+                        return;
+                  }
+            }
       if ((p->staffStart != -1)
           && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
@@ -2942,9 +2954,15 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       Score* score = e->score();
 
       ElementPattern pattern;
-      pattern.type    = int(type);
-      pattern.subtype = 0;
-      pattern.subtypeValid = false;
+      pattern.type = int(type);
+      if (type == Element::Type::NOTE) {
+            pattern.subtype = static_cast<Note*>(e)->chord()->isGrace();
+            pattern.subtypeValid = true;
+            }
+      else {
+            pattern.subtype = 0;
+            pattern.subtypeValid = false;
+            }
       pattern.staffStart = sameStaff ? e->staffIdx() : -1;
       pattern.staffEnd = sameStaff ? e->staffIdx()+1 : -1;
       pattern.voice   = -1;

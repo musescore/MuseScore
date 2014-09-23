@@ -130,11 +130,16 @@ void Inspector::setElements(const QList<Element*>& l)
             if (_element == 0)
                   ie = new InspectorEmpty(this);
 
-
             bool sameTypes = true;
             foreach(Element* ee, _el) {
                   if (_element->type() != ee->type())
                         sameTypes = false;
+                  else {
+                        // HACK:
+                        if (ee->type() == Element::Type::NOTE
+                           && static_cast<Note*>(ee)->chord()->isGrace() != static_cast<Note*>(_element)->chord()->isGrace())
+                              sameTypes = false;
+                        }
                   }
             if (!sameTypes)
                   ie = new InspectorGroupElement(this);
