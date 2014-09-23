@@ -3588,15 +3588,16 @@ static bool elementRighter(const Element* e1, const Element* e2)
 //---------------------------------------------------------
 
 // this is done at the first measure of a multi-meaure rest
-// note: the measure count is stored in the last measure
-// see measure.h _multiMeasure
+// note: for a normal measure, mmRest1 is the measure itself,
+// for a multi-meaure rest, it is the replacing measure
 
 static void measureStyle(Xml& xml, Attributes& attr, Measure* m)
       {
-      if (m->isMMRest()) {
+      const Measure* mmR1 = m->mmRest1();
+      if (m != mmR1 && m == mmR1->mmRestFirst()) {
             attr.doAttr(xml, true);
             xml.stag("measure-style");
-            xml.tag("multiple-rest", 3); // TODO MM    m->multiMeasure());
+            xml.tag("multiple-rest", mmR1->mmRestCount());
             xml.etag();
             }
       }
