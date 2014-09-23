@@ -4220,9 +4220,16 @@ void ExportMusicXml::write(QIODevice* dev)
                               // System Layout
                               // Put the system print suggestions only for the first part in a score...
                               if (idx == 0) {
+                                    // For a multi-meaure rest positioning is valid only
+                                    // in the replacing measure
+                                    // note: for a normal measure, mmRest1 is the measure itself,
+                                    // for a multi-meaure rest, it is the replacing measure
+                                    const Measure* mmR1 = m->mmRest1();
+                                    const System* system = mmR1->system();
+
                                     // Find the right margin of the system.
-                                    double systemLM = getTenthsFromDots(m->pagePos().x() - m->system()->page()->pagePos().x()) - lm;
-                                    double systemRM = pageWidth - rm - (getTenthsFromDots(m->system()->bbox().width()) + lm);
+                                    double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
+                                    double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
 
                                     xml.stag("system-layout");
                                     xml.stag("system-margins");
@@ -4231,12 +4238,12 @@ void ExportMusicXml::write(QIODevice* dev)
                                     xml.etag();
 
                                     if (currentSystem == NewPage || currentSystem == TopSystem) {
-                                          const double topSysDist = getTenthsFromDots(m->pagePos().y()) - tm;
+                                          const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
                                           xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
                                           }
                                     if (currentSystem == NewSystem) {
                                           // see System::layout2() for the factor 2 * score()->spatium()
-                                          const double sysDist = getTenthsFromDots(m->pagePos().y()
+                                          const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
                                                                                    - previousMeasure->pagePos().y()
                                                                                    - previousMeasure->bbox().height()
                                                                                    + 2 * score()->spatium()
