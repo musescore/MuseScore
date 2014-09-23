@@ -2313,9 +2313,8 @@ void Score::cmd(const QAction* a)
             deselectAll();
             undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
             }
-      else if (cmd == "add-brackets") {
+      else if (cmd == "add-brackets")
             cmdAddBracket();
-      }
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }
