@@ -449,7 +449,9 @@ void Score::updateHairpin(Hairpin* h)
 
       int endVelo = velo;
       if (incr == 0)
-            endVelo = st->velocities().nextVelo(tick2+1);
+            endVelo = st->velocities().nextVelo(tick2-1);
+      else if (h->hairpinType() == Hairpin::Type::DECRESCENDO)
+            endVelo -= incr;
       else
             endVelo += incr;
 
@@ -562,6 +564,13 @@ void Score::updateVelo()
                                     break;
                               }
                         }
+                  }
+            for (std::pair<int,Spanner*> sp : _spanner.map()) {
+                  Spanner* s = sp.second;
+                  if (s->type() != Element::Type::HAIRPIN || sp.second->staffIdx() != staffIdx)
+                        continue;
+                  Hairpin* h = static_cast<Hairpin*>(s);
+                  updateHairpin(h);
                   }
             }
       }
