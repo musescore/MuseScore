@@ -222,10 +222,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                                     undoAddElement(spanner);
                                     if (spanner->type() == Element::Type::OTTAVA)
                                           spanner->staff()->updateOttava();
-                                    else if (spanner->type() == Element::Type::HAIRPIN) {
-                                          Hairpin* hp = static_cast<Hairpin*>(spanner);
-                                          updateHairpin(hp);
-                                          }
                                     }
                               e.readNext();
                               }
