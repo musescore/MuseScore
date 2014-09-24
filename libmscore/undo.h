@@ -989,24 +989,6 @@ class ChangeImage : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeHairpin
-//---------------------------------------------------------
-
-class ChangeHairpin : public UndoCommand {
-      Hairpin* hairpin;
-      int veloChange;
-      Dynamic::Range dynRange;
-      bool diagonal;
-
-      void flip();
-
-   public:
-      ChangeHairpin(Hairpin* h, int c, Dynamic::Range t, bool dg)
-         : hairpin(h), veloChange(c), dynRange(t), diagonal(dg) {}
-      UNDO_NAME("ChangeHairpin")
-      };
-
-//---------------------------------------------------------
 //   ChangeDuration
 //---------------------------------------------------------
 

@@ -3175,24 +3175,6 @@ void ChangeImage::flip()
 //   flip
 //---------------------------------------------------------
 
-void ChangeHairpin::flip()
-      {
-      int vc           = hairpin->veloChange();
-      Dynamic::Range t = hairpin->dynRange();
-      bool dg          = hairpin->diagonal();
-      hairpin->setVeloChange(veloChange);
-      hairpin->setDynRange(dynRange);
-      hairpin->setDiagonal(diagonal);
-      veloChange = vc;
-      dynRange   = t;
-      diagonal   = dg;
-      hairpin->score()->updateHairpin(hairpin);
-      }
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
 void ChangeDuration::flip()
       {
       Fraction od = cr->duration();
