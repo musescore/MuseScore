@@ -782,9 +782,9 @@ QString TextBlock::text(int col1, int len) const
             for (const QChar& c : f.text) {
                   if (c.isHighSurrogate())
                         continue;
-                  ++col;
-                  if (col >= col1 && (len < 0 || ((col1-col) < len)))
+                  if (col >= col1 && (len < 0 || ((col-col1) < len)))
                         s += c;
+                  ++col;
                   }
             }
       return s;
@@ -1892,7 +1892,7 @@ QString Text::selectedText() const
                   else
                         s += t.text(0, -1);
                   }
-            if (row != rows -1)
+            if (row != rows - 1)
                   s += "\n";
             }
       return s;
