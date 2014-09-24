@@ -95,6 +95,8 @@ void FluidGui::synthesizerChanged()
       QStringList sfonts = fluid()->soundFonts();
       soundFonts->clear();
       soundFonts->addItems(sfonts);
+      updateUpDownButtons();
+      emit sfChanged();
       }
 
 //---------------------------------------------------------
@@ -113,6 +115,7 @@ void FluidGui::soundFontUpClicked()
       soundFonts->clear();
       soundFonts->addItems(sfonts);
       soundFonts->setCurrentRow(row-1);
+      emit sfChanged();
       }
 
 //---------------------------------------------------------
@@ -133,6 +136,7 @@ void FluidGui::soundFontDownClicked()
       soundFonts->clear();
       soundFonts->addItems(sfonts);
       soundFonts->setCurrentRow(row+1);
+      emit sfChanged();
       }
 
 //---------------------------------------------------------
@@ -146,6 +150,8 @@ void FluidGui::soundFontDeleteClicked()
             QString s(soundFonts->item(row)->text());
             fluid()->removeSoundFont(s);
             delete soundFonts->takeItem(row);
+            emit sfChanged();
+            emit valueChanged();
             }
       updateUpDownButtons();
       }
