@@ -153,19 +153,23 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::Type::HBOX) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
-            textMenu->addAction(getAction("frame-text"));
-            textMenu->addAction(getAction("picture"));
+            // borrow translation info from global actions
+            // but create new actions with local handler
+            textMenu->addAction(getAction("frame-text")->text())->setData("frame-text");
+            textMenu->addAction(getAction("picture")->text())->setData("picture");
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
       else if (e->type() == Element::Type::VBOX) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
-            textMenu->addAction(getAction("frame-text"));
-            textMenu->addAction(getAction("title-text"));
-            textMenu->addAction(getAction("subtitle-text"));
-            textMenu->addAction(getAction("composer-text"));
-            textMenu->addAction(getAction("poet-text"));
-            textMenu->addAction(getAction("insert-hbox"));
-            textMenu->addAction(getAction("picture"));
+            // borrow translation info from global actions
+            // but create new actions with local handler
+            textMenu->addAction(getAction("frame-text")->text())->setData("frame-text");
+            textMenu->addAction(getAction("title-text")->text())->setData("title-text");
+            textMenu->addAction(getAction("subtitle-text")->text())->setData("subtitle-text");
+            textMenu->addAction(getAction("composer-text")->text())->setData("composer-text");
+            textMenu->addAction(getAction("poet-text")->text())->setData("poet-text");
+            textMenu->addAction(getAction("insert-hbox")->text())->setData("insert-hbox");
+            textMenu->addAction(getAction("picture")->text())->setData("picture");
             popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
       else if (e->type() == Element::Type::TBOX) {
@@ -333,15 +337,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             MeasureProperties vp(static_cast<Note*>(e)->chord()->segment()->measure());
             vp.exec();
             }
-      else if (cmd == "frame-text") {
-            Text* s = new Text(score());
-            s->setTextStyleType(TextStyleType::FRAME);
-            s->setParent(e);
-            score()->undoAddElement(s);
-            score()->select(s, SelectType::SINGLE, 0);
-            startEdit(s);
-            score()->setLayoutAll(true);
-            }
       else if (cmd == "picture") {
             mscore->addImage(score(), static_cast<HBox*>(e));
             }
@@ -387,15 +382,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "insert-hbox") {
             HBox* s = new HBox(score());
-            double w = width() - s->leftMargin() * MScore::DPMM - s->rightMargin() * MScore::DPMM;
+            double w = e->width() - s->leftMargin() * MScore::DPMM - s->rightMargin() * MScore::DPMM;
             s->setBoxWidth(Spatium(w / s->spatium()));
             s->setParent(e);
             score()->undoAddElement(s);
             score()->select(s, SelectType::SINGLE, 0);
             startEdit(s);
             }
-      else if (cmd == "picture")
-            mscore->addImage(score(), e);
       else if (cmd == "v-props") {
             VoltaSegment* vs = static_cast<VoltaSegment*>(e);
             VoltaProperties vp;
