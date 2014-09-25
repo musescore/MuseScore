@@ -250,7 +250,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
             if (!ns->endElement())
                   qDebug("clone Slur: no end element");
             }
-      score->addSpanner(ns);
+      score->undo(new AddElement(ns));
       }
 
 //---------------------------------------------------------
