@@ -502,6 +502,8 @@ void Page::doRebuildBspTree()
 //    $F          - file path+name
 //    $d          - current date
 //    $D          - creation date
+//    $m          - last modification time
+//    $M          - last modification date
 //    $C          - copyright, on first page only
 //    $c          - copyright, on all pages
 //    $$          - the $ sign itself
@@ -547,9 +549,17 @@ QString Page::replaceTextMacros(const QString& s) const
                         case 'D':
                               {
                               QString creationDate = _score->metaTag("creationDate");
-                              if (!creationDate.isNull())
+                              if (creationDate.isNull())
+                                    d += _score->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
+                              else
                                     d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
                               }
+                              break;
+                        case 'm':
+                              d += _score->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+                              break;
+                        case 'M':
+                              d += _score->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'C': // only on first page
                               if (!_no) // FALLTHROUGH
