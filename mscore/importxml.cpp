@@ -82,6 +82,7 @@
 #include "libmscore/pedal.h"
 #include "libmscore/harmony.h"
 #include "libmscore/tempotext.h"
+#include "libmscore/stafftext.h"
 #include "libmscore/articulation.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/glissando.h"
@@ -2629,12 +2630,16 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       QString type;
       QString niente = "no";
       QString txt;
+      QStringList wordstext;
       QString lang;
       QString fontWeight = "";
       QString fontStyle = "";
       QString fontSize = "";
+      QString underline = "";
+      QString fontFamily = "";
       // int offset = 0; // not supported yet
-      int track = 0;
+      //int track = 0;
+      int track = staff * VOICES;
       QStringList dynamics;
       // int spread;
       // qreal rx = 0.0;
@@ -2679,6 +2684,38 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               fontWeight = ee.attribute(QString("font-weight"));
                               fontSize   = ee.attribute(QString("font-size"));
                               fontStyle  = ee.attribute(QString("font-style"));
+                              underline  = ee.attribute(QString("underline"));
+                              fontFamily = ee.attribute(QString("font-family"));
+                              // TODO: color, enclosure, yoffset in only part of the text, ...
+                              QString importedtext;
+                              if (!fontSize.isEmpty()) {
+                                    bool ok = true;
+                                    float size = fontSize.toFloat(&ok);
+                                    if (ok)
+                                          importedtext += QString("<font size=\"%1\"/>").arg(size);
+                                    }
+                              if (!fontFamily.isEmpty())
+                                    importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
+                              if (fontWeight == "bold")
+                                    importedtext += "<b>";
+                              if (fontStyle == "italic")
+                                    importedtext += "<i>";
+                              if (!underline.isEmpty()) {
+                                    bool ok = true;
+                                    int lines = underline.toInt(&ok);
+                                    if (ok && (lines > 0))  // 1,2, or 3 underlines are imported as single underline
+                                          importedtext += "<u>";
+                                    else
+                                          underline = "";
+                                    }
+                              importedtext += txt.toHtmlEscaped();
+                              if (underline != "")
+                                    importedtext += "</u>";
+                              if (fontStyle == "italic")
+                                    importedtext += "</i>";
+                              if (fontWeight == "bold")
+                                    importedtext += "</b>";
+                              wordstext.append(importedtext);
                               }
                         else if (dirType == "rehearsal") {
                               rehearsal = ee.text();
@@ -2902,10 +2939,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   score->setTempo(tick, tpo);
                   }
             else {
-                  t = new Text(score);
-                  t->setTextStyleType(TextStyleType::TECHNIQUE);
+                  t = new StaffText(score);
                   }
-            if (!fontSize.isEmpty() || !fontStyle.isEmpty() || !fontWeight.isEmpty()) {
+/*            if (!fontSize.isEmpty() || !fontStyle.isEmpty() || !fontWeight.isEmpty()) {
                   if (!fontSize.isEmpty()) {
                         bool ok = true;
                         float size = fontSize.toFloat(&ok);
@@ -2914,8 +2950,19 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         }
                   t->textStyle().setItalic(fontStyle == "italic");
                   t->textStyle().setBold(fontWeight == "bold");
+                  } */
+            // These variables are read only in "words" case and in that case text
+            // style is already taken into account in the html conversion
+            if (!wordstext.isEmpty()) {
+                  QString textstring;
+                  for (QStringList::Iterator it = wordstext.begin(); it != wordstext.end(); ++it ) {
+                        textstring = textstring + *it;
+                        }
+                  t->setText(textstring);
                   }
-            t->setPlainText(txt);
+            else
+                  t->setPlainText(txt);
+
             if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElem(t, track, placement, measure, tick);
