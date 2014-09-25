@@ -448,12 +448,20 @@ void Score::updateHairpin(Hairpin* h)
       //
 
       int endVelo = velo;
-      if (incr == 0)
-            endVelo = st->velocities().nextVelo(tick2-1);
-      else if (h->hairpinType() == Hairpin::Type::DECRESCENDO)
-            endVelo -= incr;
+      if (h->hairpinType() == Hairpin::Type::CRESCENDO)
+            {
+            if (incr == 0 && velo < st->velocities().nextVelo(tick2-1))
+                  endVelo = st->velocities().nextVelo(tick2-1);
+            else
+                  endVelo += incr;
+            }
       else
-            endVelo += incr;
+            {
+            if (incr == 0 && velo > st->velocities().nextVelo(tick2-1))
+                  endVelo = st->velocities().nextVelo(tick2-1);
+            else
+                  endVelo -= incr;
+            }
 
       if (endVelo > 127)
             endVelo = 127;
@@ -463,18 +471,18 @@ void Score::updateHairpin(Hairpin* h)
       switch (h->dynRange()) {
             case Dynamic::Range::STAFF:
                   st->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
-                  st->velocities().setVelo(tick2, VeloEvent(VeloType::FIX, endVelo));
+                  st->velocities().setVelo(tick2-1, VeloEvent(VeloType::FIX, endVelo));
                   break;
             case Dynamic::Range::PART:
                   foreach(Staff* s, *st->part()->staves()) {
                         s->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
-                        s->velocities().setVelo(tick2, VeloEvent(VeloType::FIX, endVelo));
+                        s->velocities().setVelo(tick2-1, VeloEvent(VeloType::FIX, endVelo));
                         }
                   break;
             case Dynamic::Range::SYSTEM:
                   foreach(Staff* s, _staves) {
                         s->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
-                        s->velocities().setVelo(tick2, VeloEvent(VeloType::FIX, endVelo));
+                        s->velocities().setVelo(tick2-1, VeloEvent(VeloType::FIX, endVelo));
                         }
                   break;
             }
