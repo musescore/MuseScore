@@ -289,7 +289,7 @@ Hairpin::Hairpin(Score* s)
       {
       _hairpinType = Type::CRESCENDO;
       _hairpinCircledTip = false;
-      _veloChange  = 10;
+      _veloChange  = 0;
       _dynRange    = Dynamic::Range::PART;
       setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
       lineWidthStyle         = PropertyStyle::STYLED;
@@ -478,7 +478,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
       switch (id) {
             case P_ID::HAIRPIN_CIRCLEDTIP:  return false;
             case P_ID::HAIRPIN_TYPE:        return int(Type::CRESCENDO);
-            case P_ID::VELO_CHANGE:         return 10;
+            case P_ID::VELO_CHANGE:         return 0;
             case P_ID::DYNAMIC_RANGE:       return int(Dynamic::Range::PART);
             case P_ID::LINE_WIDTH:          return score()->styleS(StyleIdx::hairpinLineWidth).val();
             case P_ID::HAIRPIN_HEIGHT:      return score()->styleS(StyleIdx::hairpinHeight).val();
