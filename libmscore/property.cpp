@@ -193,23 +193,25 @@ static const PropertyData propertyList[] = {
       { P_ID::END_TEXT_STYLE,      false, "endTextStyle",      P_TYPE::TEXT_STYLE },
 
       { P_ID::BREAK_MMR,           false, "breakMultiMeasureRest", P_TYPE::BOOL },
-      { P_ID::REPEAT_COUNT,        true,  "endRepeat",       P_TYPE::INT  },
-      { P_ID::USER_STRETCH,        false, "stretch",         P_TYPE::REAL },
-      { P_ID::NO_OFFSET,           false, "noOffset",        P_TYPE::INT  },
-      { P_ID::IRREGULAR,           true,  "irregular",       P_TYPE::BOOL },
+      { P_ID::REPEAT_COUNT,        true,  "endRepeat",             P_TYPE::INT  },
+      { P_ID::USER_STRETCH,        false, "stretch",               P_TYPE::REAL },
+      { P_ID::NO_OFFSET,           false, "noOffset",              P_TYPE::INT  },
+      { P_ID::IRREGULAR,           true,  "irregular",             P_TYPE::BOOL },
 
-      { P_ID::ANCHOR,              false,  "anchor",       P_TYPE::INT },
+      { P_ID::ANCHOR,              false,  "anchor",               P_TYPE::INT },
 
-      { P_ID::SLUR_UOFF1,          false,  "o1",             P_TYPE::POINT  },
-      { P_ID::SLUR_UOFF2,          false,  "o2",             P_TYPE::POINT  },
-      { P_ID::SLUR_UOFF3,          false,  "o3",             P_TYPE::POINT  },
-      { P_ID::SLUR_UOFF4,          false,  "o4",             P_TYPE::POINT  },
+      { P_ID::SLUR_UOFF1,          false,  "o1",                   P_TYPE::POINT  },
+      { P_ID::SLUR_UOFF2,          false,  "o2",                   P_TYPE::POINT  },
+      { P_ID::SLUR_UOFF3,          false,  "o3",                   P_TYPE::POINT  },
+      { P_ID::SLUR_UOFF4,          false,  "o4",                   P_TYPE::POINT  },
 
-      { P_ID::STAFF_MOVE,          true,  "move",          P_TYPE::INT },
-      { P_ID::SYLLABIC,            true,  "syllabic",      P_TYPE::INT },
-      { P_ID::LYRIC_TICKS,         true,  "ticks",         P_TYPE::INT },
+      { P_ID::STAFF_MOVE,          true,  "move",                  P_TYPE::INT },
+      { P_ID::SYLLABIC,            true,  "syllabic",              P_TYPE::INT },
+      { P_ID::LYRIC_TICKS,         true,  "ticks",                 P_TYPE::INT },
 
-      { P_ID::END,                 false, "",              P_TYPE::INT }
+      { P_ID::VOLTA_ENDING,        true,  "endings",               P_TYPE::INT_LIST },
+
+      { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
 
 //---------------------------------------------------------
@@ -245,7 +247,7 @@ const char* propertyName(P_ID id)
 
 QVariant getProperty(P_ID id, XmlReader& e)
       {
-      switch(propertyType(id)) {
+      switch (propertyType(id)) {
             case P_TYPE::BOOL:
                   return QVariant(bool(e.readInt()));
             case P_TYPE::SUBTYPE:
@@ -325,10 +327,11 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   g.read(e);
                   return QVariant::fromValue(g);
                   }
-            case P_TYPE::POINT_MM:
+            case P_TYPE::POINT_MM:              // not supported
             case P_TYPE::SIZE_MM:
             case P_TYPE::SYMID:
             case P_TYPE::TEXT_STYLE:
+            case P_TYPE::INT_LIST:
                   return QVariant();
             }
       return QVariant();

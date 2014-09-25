@@ -394,34 +394,6 @@ class ChangeElement : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeVoltaEnding
-//---------------------------------------------------------
-
-class ChangeVoltaEnding : public UndoCommand {
-      Volta* volta;
-      QList<int> list;
-      void flip();
-
-   public:
-      ChangeVoltaEnding(Volta*, const QList<int>&);
-      UNDO_NAME("ChangeVoltaEnding")
-      };
-
-//---------------------------------------------------------
-//   ChangeVoltaText
-//---------------------------------------------------------
-
-class ChangeVoltaText : public UndoCommand {
-      Volta* volta;
-      QString text;
-      void flip();
-
-   public:
-      ChangeVoltaText(Volta*, const QString&);
-      UNDO_NAME("ChangeVoltaText");
-      };
-
-//---------------------------------------------------------
 //   ChangeChordRestSize
 //---------------------------------------------------------
 

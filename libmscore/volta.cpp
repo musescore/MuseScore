@@ -38,6 +38,7 @@ void VoltaSegment::layout()
 QVariant VoltaSegment::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_ID::VOLTA_ENDING:
             case P_ID::VOLTA_TYPE:
                   return volta()->getProperty(id);
             default:
@@ -52,6 +53,7 @@ QVariant VoltaSegment::getProperty(P_ID id) const
 bool VoltaSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_ID::VOLTA_ENDING:
             case P_ID::LINE_WIDTH:
             case P_ID::VOLTA_TYPE:
                   return volta()->setProperty(id, v);
@@ -75,6 +77,7 @@ QVariant VoltaSegment::propertyDefault(P_ID id) const
             case P_ID::BEGIN_HOOK:
             case P_ID::BEGIN_HOOK_HEIGHT:
             case P_ID::END_HOOK_HEIGHT:
+            case P_ID::VOLTA_ENDING:
                   return volta()->propertyDefault(id);
             default:
                   return TextLineSegment::propertyDefault(id);
@@ -109,6 +112,7 @@ void VoltaSegment::resetProperty(P_ID id)
             case P_ID::VOLTA_TYPE:
                   return;
 
+            case P_ID::VOLTA_ENDING:
             case P_ID::LINE_WIDTH:
                   return volta()->resetProperty(id);
 
@@ -282,6 +286,8 @@ QVariant Volta::getProperty(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::VOLTA_TYPE:
                   return int(voltaType());
+            case P_ID::VOLTA_ENDING:
+                  return QVariant::fromValue(endings());
             default:
                   break;
             }
@@ -298,6 +304,9 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
       switch (propertyId) {
             case P_ID::VOLTA_TYPE:
                   setVoltaType(Type(val.toInt()));
+                  break;
+            case P_ID::VOLTA_ENDING:
+                  setEndings(val.value<QList<int>>());
                   break;
             case P_ID::LINE_WIDTH:
                   lineWidthStyle = PropertyStyle::UNSTYLED;
@@ -320,6 +329,9 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
 QVariant Volta::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
+            case P_ID::VOLTA_ENDING:
+                  return QVariant::fromValue(QList<int>());
+
             case P_ID::VOLTA_TYPE:
                   return 0;
 
@@ -380,6 +392,7 @@ PropertyStyle Volta::propertyStyle(P_ID id) const
 void Volta::resetProperty(P_ID id)
       {
       switch (id) {
+            case P_ID::VOLTA_ENDING:
             case P_ID::VOLTA_TYPE:
                   return;
 

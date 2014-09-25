@@ -757,24 +757,6 @@ void Score::undoInsertStaff(Staff* staff, int ridx, bool createRests)
       }
 
 //---------------------------------------------------------
-//   undoChangeVoltaEnding
-//---------------------------------------------------------
-
-void Score::undoChangeVoltaEnding(Volta* volta, const QList<int>& l)
-      {
-      undo(new ChangeVoltaEnding(volta, l));
-      }
-
-//---------------------------------------------------------
-//   undoChangeVoltaText
-//---------------------------------------------------------
-
-void Score::undoChangeVoltaText(Volta* volta, const QString& s)
-      {
-      undo(new ChangeVoltaText(volta, s));
-      }
-
-//---------------------------------------------------------
 //   undoChangeChordRestSize
 //---------------------------------------------------------
 
@@ -2019,40 +2001,6 @@ void ChangeMeasureLen::flip()
 //      measure->score()->addLayoutFlags(LAYOUT_FIX_TICKS); // we need to fix tick immediately!
       measure->score()->fixTicks();
       len = oLen;
-      }
-
-//---------------------------------------------------------
-//   ChangeVoltaEnding
-//---------------------------------------------------------
-
-ChangeVoltaEnding::ChangeVoltaEnding(Volta* v, const QList<int>& l)
-      {
-      volta = v;
-      list  = l;
-      }
-
-void ChangeVoltaEnding::flip()
-      {
-      QList<int> l = volta->endings();
-      volta->setEndings(list);
-      list = l;
-      }
-
-//---------------------------------------------------------
-//   ChangeVoltaText
-//---------------------------------------------------------
-
-ChangeVoltaText::ChangeVoltaText(Volta* v, const QString& t)
-      {
-      volta = v;
-      text  = t;
-      }
-
-void ChangeVoltaText::flip()
-      {
-      QString s = volta->text();
-      volta->setText(text);
-      text = s;
       }
 
 //---------------------------------------------------------
