@@ -330,7 +330,7 @@ void Hairpin::write(Xml& xml) const
       int id = xml.spannerId(this);
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
       xml.tag("subtype", int(_hairpinType));
-      xml.tag("veloChange", _veloChange);
+      writeProperty(xml, P_ID::VELO_CHANGE);
       writeProperty(xml, P_ID::HAIRPIN_CIRCLEDTIP);
       writeProperty(xml, P_ID::DYNAMIC_RANGE);
       writeProperty(xml, P_ID::PLACEMENT);

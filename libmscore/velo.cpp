@@ -49,7 +49,10 @@ int VeloList::nextVelo(int tick) const
       if (empty())
             return 80;
       VeloList::const_iterator i = upperBound(tick);
-      return i.value().val;
+      if (i != end())
+            return i.value().val;
+      else
+            return 80;
       }
 
 //---------------------------------------------------------
