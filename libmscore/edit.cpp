@@ -2417,8 +2417,14 @@ void Score::checkSpanner(int startTick, int endTick)
       QList<Spanner*> sl;
       auto spanners = _spanner.findOverlapping(startTick, endTick);
 // printf("checkSpanner %d %d\n", startTick, endTick);
-      for (auto i = spanners.begin(); i < spanners.end(); i++) {
-            Spanner* s = i->value;
+//      for (auto i = spanners.begin(); i < spanners.end(); i++) {
+
+      // DEBUG: check all spanner
+      //        there may be spanners outside of score bc. some measures were deleted
+
+      for (auto i : _spanner.map()) {
+//            Spanner* s = i->value;
+            Spanner* s = i.second;
 
 //            printf("   %s %d %d\n", s->name(), s->tick(), s->tick2());
 
