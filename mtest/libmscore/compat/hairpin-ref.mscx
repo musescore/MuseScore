@@ -159,7 +159,6 @@
           </Chord>
         <HairPin id="2">
           <subtype>0</subtype>
-          <veloChange>10</veloChange>
           </HairPin>
         <Chord>
           <durationType>quarter</durationType>

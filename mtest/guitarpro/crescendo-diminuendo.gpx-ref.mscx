@@ -135,7 +135,6 @@
           </Chord>
         <HairPin id="2">
           <subtype>0</subtype>
-          <veloChange>10</veloChange>
           <lid>20</lid>
           </HairPin>
         <Chord>
@@ -176,7 +175,6 @@
           </Chord>
         <HairPin id="3">
           <subtype>1</subtype>
-          <veloChange>10</veloChange>
           <lid>21</lid>
           </HairPin>
         <Chord>
@@ -364,7 +362,6 @@
             </Chord>
           <HairPin id="4">
             <subtype>0</subtype>
-            <veloChange>10</veloChange>
             <lid>20</lid>
             </HairPin>
           <Chord>
@@ -407,7 +404,6 @@
             </Chord>
           <HairPin id="6">
             <subtype>1</subtype>
-            <veloChange>10</veloChange>
             <lid>21</lid>
             </HairPin>
           <Chord>
@@ -460,7 +456,6 @@
             </Chord>
           <HairPin id="5">
             <subtype>0</subtype>
-            <veloChange>10</veloChange>
             <lid>20</lid>
             </HairPin>
           <Chord>
@@ -500,7 +495,6 @@
             </Chord>
           <HairPin id="7">
             <subtype>1</subtype>
-            <veloChange>10</veloChange>
             <lid>21</lid>
             </HairPin>
           <Chord>
