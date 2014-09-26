@@ -8,14 +8,14 @@
         <file>data/paper4.png</file>
         <file>data/paper5.png</file>
         <file>data/icons/edit.svg</file>
-	<file alias="fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
+        <file alias="fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
         <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>		
-	<file alias="fonts/gonville/glyphnames.json">../fonts/gonville/glyphnames.json</file>
+        <file alias="fonts/gonville/glyphnames.json">../fonts/gonville/glyphnames.json</file>
         <file alias="fonts/gonville/metadata.json">../fonts/gonville/metadata.json</file>		
-	<file alias="fonts/bravura/glyphnames.json">../fonts/bravura/glyphnames.json</file>
+        <file alias="fonts/bravura/glyphnames.json">../fonts/bravura/glyphnames.json</file>
         <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>		
-	<file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
-	<file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>		
+        <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
+        <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>		
         <file alias="data/instruments.xml">../share/instruments/instruments.xml</file>
         <file>data/splash.jpg</file>
         <file>data/My_First_Score.mscx</file>
@@ -24,8 +24,11 @@
         <file>data/mscore.png</file>
         <file>data/icons/window-close.svg</file>
         <file>data/icons/png/window-close.png</file>
+        <file>data/icons/png/window-close@2x.png</file>
         <file>data/icons/png/window-close-hover.png</file>
+        <file>data/icons/png/window-close-hover@2x.png</file>
         <file>data/icons/png/window-float.png</file>
+        <file>data/icons/png/window-float@2x.png</file>
         <file>revision.h</file>
         <file>data/musescore_logo_full1.png</file>
         <file>data/musescore_logo_full.png</file>
