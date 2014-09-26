@@ -2451,7 +2451,7 @@ static void addElem(Element* el, int track, QString& placement, Measure* measure
             offsAbove = 0;
             offsBelow = 8 + (stafflines - 1);
             }
-      else if (el->type() == Element::Type::TEXT) {
+      else if (el->type() == Element::Type::TEXT || el->type() == Element::Type::STAFF_TEXT) {
             offsAbove = 0;
             offsBelow = 6 + (stafflines - 1);
             }
@@ -2708,6 +2708,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                                     else
                                           underline = "";
                                     }
+                              txt.replace(QString("\r"), QString("")); // convert Windows line break \r\n -> \n
                               importedtext += txt.toHtmlEscaped();
                               if (underline != "")
                                     importedtext += "</u>";
