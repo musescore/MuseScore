@@ -1005,7 +1005,7 @@
             <item>
              <widget class="QCheckBox" name="headerOddEven">
               <property name="toolTip">
-               <string>Use odd even page header</string>
+               <string>Use odd/even page header</string>
               </property>
               <property name="text">
                <string>Odd/Even</string>
@@ -1295,7 +1295,7 @@
             <item>
              <widget class="QCheckBox" name="footerOddEven">
               <property name="toolTip">
-               <string>Use odd even page footer</string>
+               <string>Use odd/even page footer</string>
               </property>
               <property name="text">
                <string>Odd/Even</string>
@@ -5799,9 +5799,7 @@
   <tabstop>tupletNoteRightDistance</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>pageList</sender>
