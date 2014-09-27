@@ -622,7 +622,7 @@ bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers
 void Harmony::endEdit()
       {
       Text::endEdit();
-      setHarmony(text());
+      setHarmony(plainText(true));
       layout();
       if (links()) {
             foreach(Element* e, *links()) {
