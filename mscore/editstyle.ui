@@ -995,7 +995,7 @@
             <item>
              <widget class="QCheckBox" name="showHeaderFirstPage">
               <property name="toolTip">
-               <string>show header also on first page</string>
+               <string>Show header also on first page</string>
               </property>
               <property name="text">
                <string>Show first</string>
@@ -1005,7 +1005,7 @@
             <item>
              <widget class="QCheckBox" name="headerOddEven">
               <property name="toolTip">
-               <string>use odd even page header</string>
+               <string>Use odd even page header</string>
               </property>
               <property name="text">
                <string>Odd/Even</string>
@@ -1091,7 +1091,7 @@
             <item row="1" column="2">
              <widget class="QToolButton" name="editEvenHeaderL">
               <property name="toolTip">
-               <string>edit even page header</string>
+               <string>Edit even page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1123,7 +1123,7 @@
             <item row="1" column="4">
              <widget class="QToolButton" name="editEvenHeaderC">
               <property name="toolTip">
-               <string>edit even page header</string>
+               <string>Edit even page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1155,7 +1155,7 @@
             <item row="1" column="6">
              <widget class="QToolButton" name="editEvenHeaderR">
               <property name="toolTip">
-               <string>edit even page header</string>
+               <string>Edit even page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1188,7 +1188,7 @@
             <item row="2" column="2">
              <widget class="QToolButton" name="editOddHeaderL">
               <property name="toolTip">
-               <string>add odd page header</string>
+               <string>Edit odd page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1214,7 +1214,7 @@
             <item row="2" column="4">
              <widget class="QToolButton" name="editOddHeaderC">
               <property name="toolTip">
-               <string>add odd page header</string>
+               <string>Edit odd page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1240,7 +1240,7 @@
             <item row="2" column="6">
              <widget class="QToolButton" name="editOddHeaderR">
               <property name="toolTip">
-               <string>add odd page header</string>
+               <string>Edit odd page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1285,7 +1285,7 @@
             <item>
              <widget class="QCheckBox" name="showFooterFirstPage">
               <property name="toolTip">
-               <string>show footer also on first page</string>
+               <string>Show footer also on first page</string>
               </property>
               <property name="text">
                <string>Show first</string>
@@ -1295,7 +1295,7 @@
             <item>
              <widget class="QCheckBox" name="footerOddEven">
               <property name="toolTip">
-               <string>use odd even page footer</string>
+               <string>Use odd even page footer</string>
               </property>
               <property name="text">
                <string>Odd/Even</string>
@@ -1322,7 +1322,7 @@
             <item row="2" column="4">
              <widget class="QToolButton" name="editOddFooterC">
               <property name="toolTip">
-               <string>edit odd page header</string>
+               <string>Edit odd page footer</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1359,7 +1359,7 @@
             <item row="1" column="6">
              <widget class="QToolButton" name="editEvenFooterR">
               <property name="toolTip">
-               <string>edit even page footer</string>
+               <string>Edit even page footer</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1369,7 +1369,7 @@
             <item row="2" column="6">
              <widget class="QToolButton" name="editOddFooterR">
               <property name="toolTip">
-               <string>edit odd page header</string>
+               <string>Edit odd page footer</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1379,7 +1379,7 @@
             <item row="1" column="2">
              <widget class="QToolButton" name="editEvenFooterL">
               <property name="toolTip">
-               <string>edit even page footer</string>
+               <string>Edit even page footer</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1432,7 +1432,7 @@
             <item row="1" column="4">
              <widget class="QToolButton" name="editEvenFooterC">
               <property name="toolTip">
-               <string>edit even page footer</string>
+               <string>Edit even page footer</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1442,7 +1442,7 @@
             <item row="2" column="2">
              <widget class="QToolButton" name="editOddFooterL">
               <property name="toolTip">
-               <string>edit odd page header</string>
+               <string>Edit odd page footer</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -3556,7 +3556,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3572,7 +3572,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3588,7 +3588,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3604,7 +3604,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3757,7 +3757,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3773,7 +3773,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3789,7 +3789,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3805,7 +3805,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3839,7 +3839,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3964,7 +3964,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3980,7 +3980,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -3996,7 +3996,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -4032,7 +4032,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>reset value</string>
+             <string>Reset value</string>
             </property>
             <property name="text">
              <string>...</string>
