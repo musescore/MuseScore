@@ -118,12 +118,18 @@ class InspectorSpacer : public InspectorBase {
 class InspectorRest : public InspectorBase {
       Q_OBJECT
 
-      UiInspectorElement e;
+      UiInspectorElement   e;
       Ui::InspectorSegment s;
       Ui::InspectorRest    r;
 
+      QToolButton* tuplet;
+
+   private slots:
+      void tupletClicked();
+
    public:
       InspectorRest(QWidget* parent);
+      virtual void setElement();
       };
 
 //---------------------------------------------------------

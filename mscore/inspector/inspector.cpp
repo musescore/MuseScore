@@ -47,6 +47,7 @@
 #include "libmscore/barline.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
+#include "libmscore/tuplet.h"
 
 namespace Ms {
 
@@ -415,6 +416,58 @@ InspectorRest::InspectorRest(QWidget* parent)
             { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
             };
       mapSignals();
+
+      //
+      // Select
+      //
+      QLabel* l = new QLabel;
+      l->setText(tr("Select"));
+      QFont font(l->font());
+      font.setBold(true);
+      l->setFont(font);
+      l->setAlignment(Qt::AlignHCenter);
+      _layout->addWidget(l);
+      QFrame* f = new QFrame;
+      f->setFrameStyle(QFrame::HLine | QFrame::Raised);
+      f->setLineWidth(2);
+      _layout->addWidget(f);
+
+      QHBoxLayout* hbox = new QHBoxLayout;
+      tuplet = new QToolButton(this);
+      tuplet->setText(tr("Tuplet"));
+      tuplet->setEnabled(false);
+      hbox->addWidget(tuplet);
+      _layout->addLayout(hbox);
+
+      connect(tuplet,   SIGNAL(clicked()),     SLOT(tupletClicked()));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorRest::setElement()
+      {
+      Rest* rest = static_cast<Rest*>(inspector->element());
+      tuplet->setEnabled(rest->tuplet());
+      InspectorBase::setElement();
+      }
+
+//---------------------------------------------------------
+//   tupletClicked
+//---------------------------------------------------------
+
+void InspectorRest::tupletClicked()
+      {
+      Rest* rest = static_cast<Rest*>(inspector->element());
+      if (rest == 0)
+            return;
+      Tuplet* tuplet = rest->tuplet();
+      if (tuplet) {
+            rest->score()->select(tuplet);
+            inspector->setElement(tuplet);
+            rest->score()->end();
+            }
       }
 
 //---------------------------------------------------------
