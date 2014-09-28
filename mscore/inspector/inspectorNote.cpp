@@ -17,6 +17,7 @@
 #include "libmscore/beam.h"
 #include "libmscore/stem.h"
 #include "libmscore/hook.h"
+#include "libmscore/tuplet.h"
 #include "inspector.h"
 #include "inspectorNote.h"
 
@@ -136,12 +137,20 @@ InspectorNote::InspectorNote(QWidget* parent)
       hbox->addWidget(beam);
       _layout->addLayout(hbox);
 
+      hbox = new QHBoxLayout;
+      tuplet = new QToolButton(this);
+      tuplet->setText(tr("Tuplet"));
+      tuplet->setEnabled(false);
+      hbox->addWidget(tuplet);
+      _layout->addLayout(hbox);
+
       connect(dot1,     SIGNAL(clicked()),     SLOT(dot1Clicked()));
       connect(dot2,     SIGNAL(clicked()),     SLOT(dot2Clicked()));
       connect(dot3,     SIGNAL(clicked()),     SLOT(dot3Clicked()));
       connect(hook,     SIGNAL(clicked()),     SLOT(hookClicked()));
       connect(stem,     SIGNAL(clicked()),     SLOT(stemClicked()));
       connect(beam,     SIGNAL(clicked()),     SLOT(beamClicked()));
+      connect(tuplet,   SIGNAL(clicked()),     SLOT(tupletClicked()));
       }
 
 //---------------------------------------------------------
@@ -157,6 +166,7 @@ void InspectorNote::setElement()
       stem->setEnabled(note->chord()->stem());
       hook->setEnabled(note->chord()->hook());
       beam->setEnabled(note->chord()->beam());
+      tuplet->setEnabled(note->chord()->tuplet());
       InspectorBase::setElement();
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);
@@ -263,6 +273,23 @@ void InspectorNote::beamClicked()
       if (beam) {
             note->score()->select(beam);
             inspector->setElement(beam);
+            note->score()->end();
+            }
+      }
+
+//---------------------------------------------------------
+//   tupletClicked
+//---------------------------------------------------------
+
+void InspectorNote::tupletClicked()
+      {
+      Note* note = static_cast<Note*>(inspector->element());
+      if (note == 0)
+            return;
+      Tuplet* tuplet = note->chord()->tuplet();
+      if (tuplet) {
+            note->score()->select(tuplet);
+            inspector->setElement(tuplet);
             note->score()->end();
             }
       }

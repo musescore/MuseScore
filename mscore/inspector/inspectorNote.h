@@ -39,6 +39,7 @@ class InspectorNote : public InspectorBase {
       QToolButton* hook;
       QToolButton* stem;
       QToolButton* beam;
+      QToolButton* tuplet;
 
       void block(bool);
 
@@ -49,6 +50,7 @@ class InspectorNote : public InspectorBase {
       void hookClicked();
       void stemClicked();
       void beamClicked();
+      void tupletClicked();
 
    public:
       InspectorNote(QWidget* parent);
