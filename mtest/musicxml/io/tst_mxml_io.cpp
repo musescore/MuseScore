@@ -97,7 +97,6 @@ private slots:
       void manualBreaks() { mxmlIoTest("testManualBreaks"); }
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
-      void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); }
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
       void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }

@@ -725,8 +725,9 @@ void MusicXml::import(Score* s)
       tupletAssert();
       score  = s;
 
-      // TODO only if multi-measure rests used ???
-      // score->style()->set(StyleIdx::createMultiMeasureRests, true);
+      // assume no multi-measure rests, will be set to true when encountering a multi-measure rest
+      // required as multi-measure rest is a meaure attribute in MusicXML instead of a style setting
+      score->style()->set(StyleIdx::createMultiMeasureRests, false);
 
       for (QDomElement e = doc->documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "score-partwise")
@@ -2362,11 +2363,14 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
             }
 
       // multi-measure rest handling:
+      // if any multi-measure rest is found, the "create multi-measure rest" style setting
+      // is enabled
       // the first measure in a multi-measure rest gets setBreakMultiMeasureRest(true)
       // and count down the remaining number of measures
       // the first measure after a multi-measure rest gets setBreakMultiMeasureRest(true)
       // for all other measures breakMultiMeasureRest is unchanged (stays default (false))
       if (startMultiMeasureRest) {
+            score->style()->set(StyleIdx::createMultiMeasureRests, true);
             measure->setBreakMultiMeasureRest(true);
             startMultiMeasureRest = false;
             }
