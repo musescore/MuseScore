@@ -1610,6 +1610,7 @@ TupletView::TupletView()
       tb.direction->addItem("Down", 2);
 
       connect(tb.number, SIGNAL(clicked()), SLOT(numberClicked()));
+      connect(tb.tuplet, SIGNAL(clicked()), SLOT(tupletClicked()));
       connect(tb.elements, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(elementClicked(QTreeWidgetItem*)));
       }
 
@@ -1620,6 +1621,15 @@ TupletView::TupletView()
 void TupletView::numberClicked()
       {
       emit elementChanged(((Tuplet*)element())->number());
+      }
+
+//---------------------------------------------------------
+//   tupletClicked
+//---------------------------------------------------------
+
+void TupletView::tupletClicked()
+      {
+      emit elementChanged(((Tuplet*)element())->tuplet());
       }
 
 //---------------------------------------------------------
@@ -1644,6 +1654,7 @@ void TupletView::setElement(Element* e)
       tb.ratioZ->setValue(tuplet->ratio().numerator());
       tb.ratioN->setValue(tuplet->ratio().denominator());
       tb.number->setEnabled(tuplet->number());
+      tb.tuplet->setEnabled(tuplet->tuplet());
       tb.elements->clear();
       foreach(DurationElement* e, tuplet->elements()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;

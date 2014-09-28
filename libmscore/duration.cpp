@@ -36,7 +36,7 @@ DurationElement::DurationElement(Score* s)
 DurationElement::DurationElement(const DurationElement& e)
    : Element(e)
       {
-      _tuplet   = e._tuplet;
+      _tuplet   = 0;    // e._tuplet;
       _duration = e._duration;
       }
 
@@ -87,25 +87,20 @@ Fraction DurationElement::actualFraction() const
 bool DurationElement::readProperties(XmlReader& e)
       {
       if (e.name() == "Tuplet") {
-            // setTuplet(0);
             int i = e.readInt();
             Tuplet* t = e.findTuplet(i);
-            if (t) {
-                  setTuplet(t);
-                  if (!score()->undo()->active()) {  // HACK, also added in Undo::AddElement()
-                        t->add(this);
-                        }
-                  }
-            else {
+            if (!t) {
                   qDebug("DurationElement:read(): Tuplet id %d not found", i);
-                  Tuplet* t = score()->searchTuplet(e, i);
+                  t = score()->searchTuplet(e, i);
                   if (t) {
                         qDebug("   ...found outside measure, input file corrupted?");
-                        setTuplet(t);
-                        if (!score()->undo()->active())     // HACK
-                              t->add(this);
                         e.addTuplet(t);
                         }
+                  }
+            if (t) {
+                  setTuplet(t);
+                  if (!score()->undo()->active())     // HACK, also added in Undo::AddElement()
+                        t->add(this);
                   }
             return true;
             }

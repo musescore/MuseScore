@@ -254,6 +254,39 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
       }
 
 //---------------------------------------------------------
+//   cloneTuplets
+//---------------------------------------------------------
+
+static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* m, int track)
+      {
+      ot->setTrack(ocr->track());
+      Tuplet* nt = tupletMap.findNew(ot);
+      if (nt == 0) {
+            nt = static_cast<Tuplet*>(ot->linkedClone());
+            nt->setTrack(track);
+            nt->setParent(m);
+            tupletMap.add(ot, nt);
+
+            Tuplet* nt1 = nt;
+            while (ot->tuplet()) {
+                  Tuplet* nt = tupletMap.findNew(ot->tuplet());
+                  if (nt == 0) {
+                        nt = static_cast<Tuplet*>(ot->tuplet()->linkedClone());
+                        nt->setTrack(track);
+                        nt->setParent(m);
+                        tupletMap.add(ot->tuplet(), nt);
+                        }
+                  nt->add(nt1);
+                  nt1->setTuplet(nt);
+                  ot = ot->tuplet();
+                  nt1 = nt;
+                  }
+            }
+      nt->add(ncr);
+      ncr->setTuplet(nt);
+      }
+
+//---------------------------------------------------------
 //   cloneStaves
 //---------------------------------------------------------
 
@@ -357,19 +390,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                           }
 
                                     Tuplet* ot = ocr->tuplet();
-                                    if (ot) {
-                                          Tuplet* nt = tupletMap.findNew(ot);
-                                          if (nt == 0) {
-                                                // nt = new Tuplet(*ot);
-                                                nt = static_cast<Tuplet*>(ot->linkedClone());
-                                                nt->clear();
-                                                nt->setTrack(track);
-                                                nt->setScore(score);
-                                                tupletMap.add(ot, nt);
-                                                }
-                                          nt->add(ncr);
-                                          ncr->setTuplet(nt);
-                                          }
+
+                                    if (ot)
+                                          cloneTuplets(ocr, ncr, ot, tupletMap, m, track);
 
                                     if (oe->type() == Element::Type::CHORD) {
                                           Chord* och = static_cast<Chord*>(ocr);
@@ -551,20 +574,9 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               ChordRest* ocr = static_cast<ChordRest*>(oe);
                               ChordRest* ncr = static_cast<ChordRest*>(ne);
                               Tuplet* ot     = ocr->tuplet();
-                              if (ot) {
-                                    ot->setTrack(ocr->track());
-                                    Tuplet* nt = tupletMap.findNew(ot);
-                                    if (nt == 0) {
-                                          // nt = new Tuplet(*ot);
-                                          nt = static_cast<Tuplet*>(ot->linkedClone());
-                                          nt->clear();
-                                          nt->setTrack(dstTrack);
-                                          nt->setParent(m);
-                                          tupletMap.add(ot, nt);
-                                          }
-                                    nt->add(ncr);
-                                    ncr->setTuplet(nt);
-                                    }
+                              if (ot)
+                                    cloneTuplets(ocr, ncr, ot, tupletMap, m, dstTrack);
+
                               // remove lyrics from chord
                               foreach (Lyrics* l, ncr->lyricsList())
                                     l->unlink();
