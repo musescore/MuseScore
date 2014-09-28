@@ -424,6 +424,7 @@ class TupletView : public ShowElementBase {
 
    private slots:
       void numberClicked();
+      void tupletClicked();
       void elementClicked(QTreeWidgetItem*);
 
    public:

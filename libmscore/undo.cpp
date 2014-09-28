@@ -1252,21 +1252,49 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                   }
 #endif
             if (t) {
-                  Tuplet* nt = 0;
-                  if (staff == ostaff)
-                        nt = t;
-                  else {
+                  if (staff != ostaff) {
+                        Tuplet* nt = 0;
                         if (t->elements().empty() || t->elements().front() == cr) {
                               nt = static_cast<Tuplet*>(t->linkedClone());
                               nt->setScore(score);
+                              nt->setTrack(newcr->track());
+                              nt->setTuplet(0);
+
+                              Tuplet* t2  = t;
+                              Tuplet* nt2 = nt;
+                              while (t2->tuplet()) {
+                                    Tuplet* t = t2->tuplet();
+                                    Tuplet* nt3 = 0;
+
+                                    for (auto i : t->linkList()) {
+                                          Tuplet* tt = static_cast<Tuplet*>(i);
+                                          if (tt != t && tt->score() == score && tt->track() == t2->track()) {
+                                                nt3 = tt;
+                                                break;
+                                                }
+                                          }
+                                    if (nt3 == 0) {
+                                          nt3 = static_cast<Tuplet*>(t->linkedClone());
+                                          nt3->setScore(score);
+                                          nt3->setTrack(nt2->track());
+                                          }
+                                    nt3->add(nt2);
+                                    nt2->setTuplet(nt3);
+
+                                    t2 = t;
+                                    nt2 = nt3;
+                                    }
+
                               }
                         else {
                               const LinkedElements* le = t->links();
                               // search the linked tuplet
-                              foreach(Element* e, *le) {
-                                    if (e->score() == score && e->track() == ntrack) {
-                                          nt = static_cast<Tuplet*>(e);
-                                          break;
+                              if (le) {
+                                    for (Element* e : *le) {
+                                          if (e->score() == score && e->track() == ntrack) {
+                                                nt = static_cast<Tuplet*>(e);
+                                                break;
+                                                }
                                           }
                                     }
                               if (nt == 0)

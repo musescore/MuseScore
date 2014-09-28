@@ -676,9 +676,10 @@ void Tuplet::read(XmlReader& e)
 void Tuplet::add(Element* e)
       {
 #ifndef NDEBUG
-      foreach(DurationElement* el, _elements) {
+      for(DurationElement* el : _elements) {
             if (el == e) {
-                  qFatal("Tuplet::add: %p %s already there", e, e->name());
+                  qDebug("%p Tuplet::add: %p %s already there", this, e, e->name());
+                  return;
                   }
             }
 #endif
