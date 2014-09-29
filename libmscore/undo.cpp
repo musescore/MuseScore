@@ -1255,10 +1255,21 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                   if (staff != ostaff) {
                         Tuplet* nt = 0;
                         if (t->elements().empty() || t->elements().front() == cr) {
-                              nt = static_cast<Tuplet*>(t->linkedClone());
-                              nt->setScore(score);
-                              nt->setTrack(newcr->track());
-                              nt->setTuplet(0);
+                              for (Element* e : t->linkList()) {
+                                    Tuplet* nt1 = static_cast<Tuplet*>(e);
+                                    if (nt1 == t)
+                                          continue;
+                                    if (nt1->score() == score && nt1->track() == newcr->track()) {
+                                          nt = nt1;
+                                          break;
+                                          }
+                                    }
+                              if (!nt) {
+                                    nt = static_cast<Tuplet*>(t->linkedClone());
+                                    nt->setTuplet(0);
+                                    nt->setScore(score);
+                                    nt->setTrack(newcr->track());
+                                    }
 
                               Tuplet* t2  = t;
                               Tuplet* nt2 = nt;
@@ -1440,7 +1451,8 @@ void AddElement::undo()
 //      qDebug("AddElement::undo: %s %p parent %s %p", element->name(), element,
 //         element->parent() ? element->parent()->name() : "nil", element->parent());
 
-      element->score()->removeElement(element);
+      if (element->type() != Element::Type::TUPLET)
+            element->score()->removeElement(element);
       endUndoRedo(true);
       }
 
@@ -1453,7 +1465,8 @@ void AddElement::redo()
 //      qDebug("AddElement::redo: %s %p parent %s %p, score %p", element->name(), element,
 //         element->parent() ? element->parent()->name() : "nil", element->parent(), element->score());
 
-      element->score()->addElement(element);
+      if (element->type() != Element::Type::TUPLET)
+            element->score()->addElement(element);
       endUndoRedo(false);
       }
 
@@ -1514,7 +1527,7 @@ RemoveElement::RemoveElement(Element* e)
                   score->undo(new RemoveElement(s));
 #endif
             ChordRest* cr = static_cast<ChordRest*>(element);
-            if (cr->tuplet() && cr->tuplet()->elements().empty())
+            if (cr->tuplet() && cr->tuplet()->elements().size() <= 1)
                   score->undo(new RemoveElement(cr->tuplet()));
             if (e->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(e);
@@ -1540,7 +1553,8 @@ RemoveElement::RemoveElement(Element* e)
 
 void RemoveElement::undo()
       {
-      element->score()->addElement(element);
+      if (element->type() != Element::Type::TUPLET)
+            element->score()->addElement(element);
       if (element->isChordRest()) {
             if (element->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(element);
@@ -1565,7 +1579,8 @@ void RemoveElement::undo()
 
 void RemoveElement::redo()
       {
-      element->score()->removeElement(element);
+      if (element->type() != Element::Type::TUPLET)
+            element->score()->removeElement(element);
       if (element->isChordRest()) {
             undoRemoveTuplet(static_cast<ChordRest*>(element));
             if (element->type() == Element::Type::CHORD) {
