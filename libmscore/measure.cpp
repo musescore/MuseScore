@@ -1605,7 +1605,9 @@ void Measure::adjustToLen(Fraction nf)
                         QList<TDuration> durList = toDurationList(nf, false, 0);
 
                         // set the existing rest to the first value of the duration list
-                        s->undo(new ChangeChordRestLen(rest, durList[0]));
+                        for (Element* e : rest->linkList()) {
+                              s->undo(new ChangeChordRestLen(static_cast<Rest*>(e), durList[0]));
+                              }
 
                         // add rests for any other duration list value
                         int tickOffset = tick() + durList[0].ticks();
