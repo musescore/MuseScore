@@ -545,9 +545,8 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                               Measure* m = sm;
                               if (sm->hasMMRest())
                                     m = sm->mmRest();
-                              while (m->endTick() < tick2()) {
+                              while (m->nextMeasureMM() && (m->endTick() < tick2()))
                                     m = m->nextMeasureMM();
-                              }
                               x = m->pos().x() + m->bbox().right();
                               }
                         Segment* seg = m->last();

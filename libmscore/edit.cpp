@@ -2410,11 +2410,10 @@ void Score::checkSpanner(int startTick, int endTick)
       // DEBUG: check all spanner
       //        there may be spanners outside of score bc. some measures were deleted
 
-      for (auto i : _spanner.map()) {
-//            Spanner* s = i->value;
-            Spanner* s = i.second;
+      int lastTick = lastMeasure()->endTick();
 
-//            printf("   %s %d %d\n", s->name(), s->tick(), s->tick2());
+      for (auto i : _spanner.map()) {
+            Spanner* s = i.second;
 
             if (s->type() == Element::Type::SLUR) {
                   Segment* seg = tick2segmentMM(s->tick(), false, Segment::Type::ChordRest);
@@ -2429,6 +2428,8 @@ void Score::checkSpanner(int startTick, int endTick)
                   s->computeStartElement();
                   if (!s->startElement())
                         sl.append(s);
+                  if (s->tick2() > lastTick)
+                        s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());
                   }
             }
       for (auto s : sl)       // actually remove scheduled spanners
