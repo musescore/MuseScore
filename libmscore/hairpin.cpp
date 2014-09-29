@@ -289,7 +289,7 @@ Hairpin::Hairpin(Score* s)
       {
       _hairpinType = Type::CRESCENDO;
       _hairpinCircledTip = false;
-      _veloChange  = 10;
+      _veloChange  = 0;
       _dynRange    = Dynamic::Range::PART;
       setLineWidth(score()->styleS(StyleIdx::hairpinLineWidth));
       lineWidthStyle         = PropertyStyle::STYLED;
@@ -330,7 +330,7 @@ void Hairpin::write(Xml& xml) const
       int id = xml.spannerId(this);
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
       xml.tag("subtype", int(_hairpinType));
-      xml.tag("veloChange", _veloChange);
+      writeProperty(xml, P_ID::VELO_CHANGE);
       writeProperty(xml, P_ID::HAIRPIN_CIRCLEDTIP);
       writeProperty(xml, P_ID::DYNAMIC_RANGE);
       writeProperty(xml, P_ID::PLACEMENT);
@@ -478,7 +478,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
       switch (id) {
             case P_ID::HAIRPIN_CIRCLEDTIP:  return false;
             case P_ID::HAIRPIN_TYPE:        return int(Type::CRESCENDO);
-            case P_ID::VELO_CHANGE:         return 10;
+            case P_ID::VELO_CHANGE:         return 0;
             case P_ID::DYNAMIC_RANGE:       return int(Dynamic::Range::PART);
             case P_ID::LINE_WIDTH:          return score()->styleS(StyleIdx::hairpinLineWidth).val();
             case P_ID::HAIRPIN_HEIGHT:      return score()->styleS(StyleIdx::hairpinHeight).val();
