@@ -137,6 +137,7 @@ private slots:
       void wedge1() { mxmlIoTest("testWedge1"); }
       void wedge2() { mxmlIoTest("testWedge2"); }
       void words1() { mxmlIoTest("testWords1"); }
+      void words2() { mxmlIoTest("testWords2"); }
       };
 
 //---------------------------------------------------------
