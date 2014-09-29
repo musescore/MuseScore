@@ -134,8 +134,6 @@ void MeasureBase::add(Element* e)
                         break;
                   }
             }
-      else
-            qDebug("MeasureBase::add %s", e->name());
       _el.push_back(e);
       }
 
@@ -165,8 +163,6 @@ void MeasureBase::remove(Element* el)
                         break;
                   }
             }
-      else
-            qDebug("MeasureBase::remove %s", el->name());
       if (!_el.remove(el))
             qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->name(), el);
       }

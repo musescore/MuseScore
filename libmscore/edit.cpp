@@ -319,10 +319,6 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                   if (dList.isEmpty())
                         return 0;
 
-                  foreach(TDuration d, dList) {
-                        qDebug("    duration %d/%d", d.fraction().numerator(), d.fraction().denominator());
-                        }
-
                   Rest* rest = 0;
                   if (((tick - measure->tick()) % dList[0].ticks()) == 0) {
                         foreach(TDuration d, dList) {
@@ -2171,11 +2167,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
 
 void Score::cmdDeleteTuplet(Tuplet* tuplet, bool replaceWithRest)
       {
-      qDebug("Score::cmdDeleteTuplet elements %d  replace %d",
-         tuplet->elements().size(), replaceWithRest);
-
       foreach(DurationElement* de, tuplet->elements()) {
-            qDebug("   element %s", de->name());
             if (de->isChordRest())
                   removeChordRest(static_cast<ChordRest*>(de), true);
             else {
