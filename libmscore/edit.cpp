@@ -304,6 +304,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
             if ((measure->timesig() == measure->len())   // not in pickup measure
                && (measure->tick() == tick)
                && (measure->stretchedLen(staff) == f)
+               && !tuplet
                && (useFullMeasureRest)) {
                   Rest* rest = addRest(tick, track, TDuration(TDuration::DurationType::V_MEASURE), tuplet);
                   tick += rest->actualTicks();
@@ -317,6 +318,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                   QList<TDuration> dList = toDurationList(f, useDots);
                   if (dList.isEmpty())
                         return 0;
+
                   foreach(TDuration d, dList) {
                         qDebug("    duration %d/%d", d.fraction().numerator(), d.fraction().denominator());
                         }
@@ -2181,14 +2183,8 @@ void Score::cmdDeleteTuplet(Tuplet* tuplet, bool replaceWithRest)
                   cmdDeleteTuplet(static_cast<Tuplet*>(de), false);
                   }
             }
-//      undoRemoveElement(tuplet);
-      if (replaceWithRest) {
-            Rest* rest = setRest(tuplet->tick(), tuplet->track(), tuplet->duration(), true, 0);
-            if (tuplet->tuplet()) {
-                  rest->setTuplet(tuplet->tuplet());
-                  tuplet->tuplet()->add(rest);
-                  }
-            }
+      if (replaceWithRest)
+            setRest(tuplet->tick(), tuplet->track(), tuplet->duration(), true, tuplet->tuplet());
       }
 
 //---------------------------------------------------------

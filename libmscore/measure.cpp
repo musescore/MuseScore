@@ -809,10 +809,6 @@ void Measure::add(Element* el)
                   }
                   break;
 
-            case Element::Type::TUPLET:
-                  qDebug("Measure::add(Tuplet) ??");
-                  break;
-
             case Element::Type::SPACER:
                   {
                   Spacer* sp = static_cast<Spacer*>(el);
