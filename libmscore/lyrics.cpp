@@ -207,6 +207,26 @@ void Lyrics::layout()
             }
       }
 
+bool Lyrics::isMelisma() const
+      {
+      // entered as melisma using underscore?
+      if (_ticks > 0)
+            return true;
+
+      // hyphenated?
+      if (_syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
+            // find next CR on same track and check for existence of lyric in same verse
+            ChordRest* cr = chordRest();
+            Segment* s = cr->segment()->next1();
+            ChordRest* ncr = s ? s->nextChordRest(cr->track()) : nullptr;
+            if (ncr && !ncr->lyrics(_no))
+                  return true;
+            }
+
+      // default - not a melisma
+      return false;
+      }
+
 //---------------------------------------------------------
 //   layout1
 //---------------------------------------------------------
@@ -235,18 +255,10 @@ void Lyrics::layout1()
       else
             maxWidth = cr->width();       // TODO: exclude ledger line for multivoice rest?
       qreal nominalWidth = symWidth(SymId::noteheadBlack);
-      bool hyphenatedMelisma = false;
-      if (_syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
-            // hyphenated syllables representing melismas need to be left aligned
-            // detecting this means finding next CR on same track and checking for existence of lyric in same verse
-            Segment* s = cr->segment()->next1();
-            ChordRest* ncr = s ? s->nextChordRest(cr->track()) : nullptr;
-            if (ncr && !ncr->lyrics(_no))
-                  hyphenatedMelisma = true;
-            }
-      if (_ticks == 0 && !hyphenatedMelisma && (textStyle().align() & AlignmentFlags::HCENTER) && !_verseNumber)
+
+      if (!isMelisma() && (textStyle().align() & AlignmentFlags::HCENTER) && !_verseNumber)
             x +=  nominalWidth * .5 - cr->x();
-      else if (_ticks || hyphenatedMelisma || ((textStyle().align() & AlignmentFlags::HCENTER) && _verseNumber))
+      else if (isMelisma() || ((textStyle().align() & AlignmentFlags::HCENTER) && _verseNumber))
             x += (width() + nominalWidth - maxWidth) * .5 - cr->x();
       rxpos() += x;
       rypos() += y;
