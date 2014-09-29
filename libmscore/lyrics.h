@@ -77,7 +77,7 @@ class Lyrics : public Text {
       int ticks() const                { return _ticks;    }
       void setTicks(int tick)          { _ticks = tick;    }
       int endTick() const;
-      bool isMelisma() const           { return _ticks > 0; }
+      bool isMelisma() const;
 
       void clearSeparator()            { _separator.clear(); } // TODO: memory leak
       QList<Line*>* separatorList()    { return &_separator; }
