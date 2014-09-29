@@ -1060,14 +1060,14 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="labelEvenHeader">
+             <widget class="QLabel" name="labelOddHeader">
               <property name="text">
-               <string>Even</string>
+               <string>Odd</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QTextEdit" name="evenHeaderL">
+             <widget class="QTextEdit" name="oddHeaderL">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -1089,9 +1089,9 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QToolButton" name="editEvenHeaderL">
+             <widget class="QToolButton" name="editOddHeaderL">
               <property name="toolTip">
-               <string>Edit even page header</string>
+               <string>Edit odd page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1099,7 +1099,7 @@
              </widget>
             </item>
             <item row="1" column="3">
-             <widget class="QTextEdit" name="evenHeaderC">
+             <widget class="QTextEdit" name="oddHeaderC">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -1121,9 +1121,9 @@
              </widget>
             </item>
             <item row="1" column="4">
-             <widget class="QToolButton" name="editEvenHeaderC">
+             <widget class="QToolButton" name="editOddHeaderC">
               <property name="toolTip">
-               <string>Edit even page header</string>
+               <string>Edit odd page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1131,7 +1131,7 @@
              </widget>
             </item>
             <item row="1" column="5">
-             <widget class="QTextEdit" name="evenHeaderR">
+             <widget class="QTextEdit" name="oddHeaderR">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -1153,9 +1153,9 @@
              </widget>
             </item>
             <item row="1" column="6">
-             <widget class="QToolButton" name="editEvenHeaderR">
+             <widget class="QToolButton" name="editOddHeaderR">
               <property name="toolTip">
-               <string>Edit even page header</string>
+               <string>Edit odd page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1163,14 +1163,14 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="labelOddHeader">
+             <widget class="QLabel" name="labelEvenHeader">
               <property name="text">
-               <string>Odd</string>
+               <string>Even</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QTextEdit" name="oddHeaderL">
+             <widget class="QTextEdit" name="evenHeaderL">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1186,9 +1186,9 @@
              </widget>
             </item>
             <item row="2" column="2">
-             <widget class="QToolButton" name="editOddHeaderL">
+             <widget class="QToolButton" name="editEvenHeaderL">
               <property name="toolTip">
-               <string>Edit odd page header</string>
+               <string>Edit even page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1196,7 +1196,7 @@
              </widget>
             </item>
             <item row="2" column="3">
-             <widget class="QTextEdit" name="oddHeaderC">
+             <widget class="QTextEdit" name="evenHeaderC">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1212,9 +1212,9 @@
              </widget>
             </item>
             <item row="2" column="4">
-             <widget class="QToolButton" name="editOddHeaderC">
+             <widget class="QToolButton" name="editEvenHeaderC">
               <property name="toolTip">
-               <string>Edit odd page header</string>
+               <string>Edit even page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1222,7 +1222,7 @@
              </widget>
             </item>
             <item row="2" column="5">
-             <widget class="QTextEdit" name="oddHeaderR">
+             <widget class="QTextEdit" name="evenHeaderR">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1238,9 +1238,9 @@
              </widget>
             </item>
             <item row="2" column="6">
-             <widget class="QToolButton" name="editOddHeaderR">
+             <widget class="QToolButton" name="editEvenHeaderR">
               <property name="toolTip">
-               <string>Edit odd page header</string>
+               <string>Edit even page header</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1320,9 +1320,9 @@
           <item>
            <layout class="QGridLayout" name="gridLayout_6">
             <item row="2" column="4">
-             <widget class="QToolButton" name="editOddFooterC">
+             <widget class="QToolButton" name="editEvenFooterC">
               <property name="toolTip">
-               <string>Edit odd page footer</string>
+               <string>Edit even page footer</string>
               </property>
               <property name="text">
                <string>...</string>
@@ -1330,14 +1330,14 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="labelEvenFooter">
+             <widget class="QLabel" name="labelOddFooter">
               <property name="text">
-               <string>Even</string>
+               <string>Odd</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QTextEdit" name="evenFooterL">
+             <widget class="QTextEdit" name="oddFooterL">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1357,16 +1357,6 @@
              </widget>
             </item>
             <item row="1" column="6">
-             <widget class="QToolButton" name="editEvenFooterR">
-              <property name="toolTip">
-               <string>Edit even page footer</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="6">
              <widget class="QToolButton" name="editOddFooterR">
               <property name="toolTip">
                <string>Edit odd page footer</string>
@@ -1376,8 +1366,8 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="2">
-             <widget class="QToolButton" name="editEvenFooterL">
+            <item row="2" column="6">
+             <widget class="QToolButton" name="editEvenFooterR">
               <property name="toolTip">
                <string>Edit even page footer</string>
               </property>
@@ -1386,8 +1376,18 @@
               </property>
              </widget>
             </item>
+            <item row="1" column="2">
+             <widget class="QToolButton" name="editOddFooterL">
+              <property name="toolTip">
+               <string>Edit odd page footer</string>
+              </property>
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="3">
-             <widget class="QTextEdit" name="evenFooterC">
+             <widget class="QTextEdit" name="oddFooterC">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1397,14 +1397,14 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="labelOddFooter">
+             <widget class="QLabel" name="labelEvenFooter">
               <property name="text">
-               <string>Odd</string>
+               <string>Even</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QTextEdit" name="oddFooterL">
+             <widget class="QTextEdit" name="evenFooterL">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1430,17 +1430,7 @@
              </widget>
             </item>
             <item row="1" column="4">
-             <widget class="QToolButton" name="editEvenFooterC">
-              <property name="toolTip">
-               <string>Edit even page footer</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QToolButton" name="editOddFooterL">
+             <widget class="QToolButton" name="editOddFooterC">
               <property name="toolTip">
                <string>Edit odd page footer</string>
               </property>
@@ -1449,8 +1439,18 @@
               </property>
              </widget>
             </item>
+            <item row="2" column="2">
+             <widget class="QToolButton" name="editEvenFooterL">
+              <property name="toolTip">
+               <string>Edit even page footer</string>
+              </property>
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
             <item row="2" column="3">
-             <widget class="QTextEdit" name="oddFooterC">
+             <widget class="QTextEdit" name="evenFooterC">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1460,7 +1460,7 @@
              </widget>
             </item>
             <item row="1" column="5">
-             <widget class="QTextEdit" name="evenFooterR">
+             <widget class="QTextEdit" name="oddFooterR">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1470,7 +1470,7 @@
              </widget>
             </item>
             <item row="2" column="5">
-             <widget class="QTextEdit" name="oddFooterR">
+             <widget class="QTextEdit" name="evenFooterR">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -5635,33 +5635,33 @@
   <tabstop>showHeader</tabstop>
   <tabstop>showHeaderFirstPage</tabstop>
   <tabstop>headerOddEven</tabstop>
-  <tabstop>evenHeaderL</tabstop>
-  <tabstop>editEvenHeaderL</tabstop>
-  <tabstop>evenHeaderC</tabstop>
-  <tabstop>editEvenHeaderC</tabstop>
-  <tabstop>evenHeaderR</tabstop>
-  <tabstop>editEvenHeaderR</tabstop>
   <tabstop>oddHeaderL</tabstop>
   <tabstop>editOddHeaderL</tabstop>
   <tabstop>oddHeaderC</tabstop>
   <tabstop>editOddHeaderC</tabstop>
   <tabstop>oddHeaderR</tabstop>
   <tabstop>editOddHeaderR</tabstop>
+  <tabstop>evenHeaderL</tabstop>
+  <tabstop>editEvenHeaderL</tabstop>
+  <tabstop>evenHeaderC</tabstop>
+  <tabstop>editEvenHeaderC</tabstop>
+  <tabstop>evenHeaderR</tabstop>
+  <tabstop>editEvenHeaderR</tabstop>
   <tabstop>showFooter</tabstop>
   <tabstop>showFooterFirstPage</tabstop>
   <tabstop>footerOddEven</tabstop>
-  <tabstop>evenFooterL</tabstop>
-  <tabstop>editEvenFooterL</tabstop>
-  <tabstop>evenFooterC</tabstop>
-  <tabstop>editEvenFooterC</tabstop>
-  <tabstop>evenFooterR</tabstop>
-  <tabstop>editEvenFooterR</tabstop>
   <tabstop>oddFooterL</tabstop>
   <tabstop>editOddFooterL</tabstop>
   <tabstop>oddFooterC</tabstop>
   <tabstop>editOddFooterC</tabstop>
   <tabstop>oddFooterR</tabstop>
   <tabstop>editOddFooterR</tabstop>
+  <tabstop>evenFooterL</tabstop>
+  <tabstop>editEvenFooterL</tabstop>
+  <tabstop>evenFooterC</tabstop>
+  <tabstop>editEvenFooterC</tabstop>
+  <tabstop>evenFooterR</tabstop>
+  <tabstop>editEvenFooterR</tabstop>
   <tabstop>showMeasureNumber</tabstop>
   <tabstop>showFirstMeasureNumber</tabstop>
   <tabstop>showAllStaffsMeasureNumber</tabstop>

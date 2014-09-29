@@ -901,7 +901,7 @@ void EditStyle::toggleHeaderOddEven(bool checked)
       if (checked)
             labelOddHeader->setText(odd); // restore
       else
-            labelOddHeader->setText(even + "\n" + odd); // replace
+            labelOddHeader->setText(odd + "\n" + even); // replace
       return;
       }
 
@@ -925,7 +925,7 @@ void EditStyle::toggleFooterOddEven(bool checked)
       if (checked)
             labelOddFooter->setText(odd); // restore
       else
-            labelOddFooter->setText(even + "\n" + odd); // replace
+            labelOddFooter->setText(odd + "\n" + even); // replace
       return;
       }
 
