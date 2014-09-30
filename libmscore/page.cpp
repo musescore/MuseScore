@@ -556,10 +556,16 @@ QString Page::replaceTextMacros(const QString& s) const
                               }
                               break;
                         case 'm':
-                              d += _score->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+                              if ( _score->dirty() )
+                                    d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
+                              else
+                                    d += _score->rootScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'M':
-                              d += _score->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
+                              if ( _score->dirty() )
+                                    QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+                              else
+                                    d += _score->rootScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'C': // only on first page
                               if (!_no) // FALLTHROUGH
