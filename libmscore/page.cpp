@@ -497,6 +497,7 @@ void Page::doRebuildBspTree()
 //   (keep in sync with toolTipHeaderFooter in EditStyle::EditStyle())
 //    $p          - page number, except on first page
 //    $P          - page number, on all pages
+//    $N          - page number, if there is more than one
 //    $n          - number of pages
 //    $f          - file name
 //    $F          - file path+name
@@ -531,6 +532,8 @@ QString Page::replaceTextMacros(const QString& s) const
                   switch(c.toLatin1()) {
                         case 'p': // not on first page 1
                               if (_no) // FALLTHROUGH
+                        case 'N': // on page 1 only if there are multiple pages
+                              if ( (_score->npages() + _score->pageNumberOffset()) > 1 ) // FALLTHROUGH
                         case 'P': // on all pages
                               d += QString("%1").arg(_no + 1 + _score->pageNumberOffset());
                               break;
