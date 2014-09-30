@@ -509,6 +509,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
       Fraction loc_maxtick;
       int timeSigLen = -1;  // length in ticks of last timesig read
       int timeSigType = -1; // type = beat-type = denominator of last timesig read
+      int staves = 1;
 
       // count number of chordrests on each MusicXML staff
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
@@ -528,6 +529,15 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
 #ifdef DEBUG_TICK
                                           qDebug("measurelength loc_divisions %d", loc_divisions);
 #endif
+                                          }
+                                    else if (eee.tagName() == "staves") {
+                                          bool ok;
+                                          staves = MxmlSupport::stringToInt(eee.text(), &ok);
+                                          if (!ok || staves <= 0) {
+                                                qDebug("MusicXml-Import: bad staves value: <%s>",
+                                                       qPrintable(eee.text()));
+                                                staves = 1;
+                                                }
                                           }
                                     else if (eee.tagName() == "time") {
                                           QString beats = "";
@@ -592,13 +602,18 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                     if (rest)
                                           pitch = "rest";
                                     if (!chord) {
+                                          // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
+                                          // Same fix is required in MusicXml::xmlNote
+                                          // make sure staff is valid
+                                          int corrStaff = (staff >= 0 && staff < staves) ? staff : 0;
+                                          
                                           // count the chords (only the first note in a chord is counted)
-                                          if (0 <= staff && staff < MAX_STAVES) {
+                                          if (corrStaff < MAX_STAVES) {
                                                 if (!parts[partNr].voicelist.contains(voice)) {
                                                       VoiceDesc vs;
                                                       parts[partNr].voicelist.insert(voice, vs);
                                                       }
-                                                parts[partNr].voicelist[voice].incrChordRests(staff);
+                                                parts[partNr].voicelist[voice].incrChordRests(corrStaff);
                                                 }
                                           // determine note length for voice overlap detection
                                           if (!grace) {
@@ -609,7 +624,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                                 aaamoveTick(loc_tick, loc_maxtick, loc_divisions, ee,
                                                             duration, noteDurDesc, errorStr);
                                                 // TODO: migrate voice overlap detector to Fraction
-                                                vod.addNote(startTick.ticks(), loc_tick.ticks(), voice, staff);
+                                                vod.addNote(startTick.ticks(), loc_tick.ticks(), voice, corrStaff);
                                                 }
                                           }
                                     }
