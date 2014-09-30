@@ -538,10 +538,10 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += QString("%1").arg(_score->npages() + _score->pageNumberOffset());
                               break;
                         case 'f':
-                              d += _score->name();
+                              d += _score->rootScore()->name();
                               break;
                         case 'F':
-                              d += _score->absoluteFilePath();
+                              d += _score->rootScore()->absoluteFilePath();
                               break;
                         case 'd':
                               d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
