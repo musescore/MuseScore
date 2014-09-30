@@ -566,7 +566,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               break;
                         case 'M':
                               if ( _score->dirty() )
-                                    QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+                                    d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
                               else
                                     d += _score->rootScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
                               break;
