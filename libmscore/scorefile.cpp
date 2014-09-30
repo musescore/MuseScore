@@ -338,6 +338,8 @@ bool Score::saveFile()
                   }
             undo()->setClean();
             setDirty(false);
+            info.refresh();
+            update();
             return true;
             }
       //
@@ -416,6 +418,8 @@ bool Score::saveFile()
       undo()->setClean();
       setDirty(false);
       setSaved(true);
+      info.refresh();
+      update();
       return true;
       }
 
