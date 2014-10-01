@@ -1425,15 +1425,26 @@ void Score::deleteItem(Element* el)
 
                         rest->setTrack(el->track());
                         rest->setParent(chord->parent());
+
                         Segment* segment = chord->segment();
                         undoAddCR(rest, segment->measure(), segment->tick());
 
                         Tuplet* tuplet = chord->tuplet();
                         if (tuplet) {
-                              tuplet->add(rest);
-                              rest->setTuplet(tuplet);
-                              rest->setDurationType(chord->durationType());
+                              QList<Element*> tl = tuplet->linkList();
+                              for (Element* e : rest->linkList()) {
+                                    DurationElement* de = static_cast<DurationElement*>(e);
+                                    for (Element* ee : tl) {
+                                          Tuplet* t = static_cast<Tuplet*>(ee);
+                                          if (t->score() == de->score() && t->track() == de->track()) {
+                                                de->setTuplet(t);
+                                                t->add(de);
+                                                break;
+                                                }
+                                          }
+                                    }
                               }
+
                         select(rest, SelectType::SINGLE, 0);
                         }
                   else  {
