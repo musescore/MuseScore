@@ -108,7 +108,7 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
 //    { SymId(s0reHeadSym),         SymId(d1reHeadSym),           SymId(d2reHeadSym),           SymId::noSym            },
       { SymId::noteShapeMoonWhite,              SymId::noteShapeMoonWhite,          SymId::noteShapeMoonBlack,          SymId::noSym            },
 //    { SymId(d0faHeadSym),         SymId(d1faHeadSym),           SymId(d2faHeadSym),           SymId::noSym            },
-      { SymId::noteShapeTriangleRightWhite,     SymId::noteShapeTriangleRightWhite, SymId::noteShapeTriangleRightBlack, SymId::noSym            },
+      { SymId::noteShapeTriangleLeftWhite,     SymId::noteShapeTriangleLeftWhite, SymId::noteShapeTriangleLeftBlack, SymId::noSym            },
 //    { SymId(s0laHeadSym),         SymId(s1laHeadSym),           SymId(s2laHeadSym),           SymId::noSym            },
       { SymId::noteShapeSquareWhite,            SymId::noteShapeSquareWhite,        SymId::noteShapeSquareBlack,        SymId::noSym            },
 //    { SymId(s0tiHeadSym),         SymId(d1tiHeadSym),           SymId(d2tiHeadSym),           SymId::noSym            },
