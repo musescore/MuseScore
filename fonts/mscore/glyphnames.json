@@ -399,6 +399,12 @@
     "noteShapeTriangleRightWhite": {
         "codepoint": "U+e14d"
     },
+    "noteShapeTriangleLeftBlack": {
+        "codepoint": "U+e14e"
+    },
+    "noteShapeTriangleLeftWhite": {
+        "codepoint": "U+e14c"
+    },
     "noteheadBlack": {
         "codepoint": "U+e12d"
     },
