@@ -1547,7 +1547,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   _generated = v.toBool();
                   break;
             case P_ID::COLOR:
-                  _color = v.value<QColor>();
+                  setColor(v.value<QColor>());
                   break;
             case P_ID::VISIBLE:
                   setVisible(v.toBool());
