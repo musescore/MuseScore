@@ -179,6 +179,7 @@ class Element : public QObject {
   protected:
       bool _selected;             ///< set if element is selected
       bool _visible;              ///< visibility attribute
+      QColor _color;              ///< element color attribute
 
   public:
       //-------------------------------------------------------------------
@@ -292,7 +293,6 @@ class Element : public QObject {
       mutable ElementFlags _flags;
 
       int _track;                 ///< staffIdx * VOICES + voice
-      QColor _color;
       qreal _mag;                 ///< standard magnification (derived value)
 
       QPointF _pos;               ///< Reference position, relative to _parent.
@@ -454,7 +454,7 @@ class Element : public QObject {
       QColor color() const             { return _color; }
       QColor curColor() const;
       QColor curColor(const Element* proxy) const;
-      void setColor(const QColor& c)     { _color = c;    }
+      virtual void setColor(const QColor& c)     { _color = c;    }
       void undoSetColor(const QColor& c);
 
       static Element::Type readType(XmlReader& node, QPointF*, Fraction*);
