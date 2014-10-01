@@ -350,6 +350,7 @@ void RepeatList::unwind()
                               }
                         else {
                               m = jumpToStartRepeat(m);
+                              continue;
                               }
                         }
                   else if (endRepeat == 0) {
