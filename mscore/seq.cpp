@@ -1461,14 +1461,18 @@ void Seq::heartBeatTimeout()
 //   updateSynthesizerState
 //    collect all controller events between tick1 and tick2
 //    and send them to the synthesizer
+//    Called from RT thread
 //---------------------------------------------------------
 
 void Seq::updateSynthesizerState(int tick1, int tick2)
       {
       if (tick1 > tick2)
             tick1 = 0;
-      EventMap::const_iterator i1 = events.lower_bound(tick1);
-      EventMap::const_iterator i2 = events.upper_bound(tick2);
+      // Making a local copy of events to avoid touching it
+      // from different threads at the same time
+      EventMap ev = events;
+      EventMap::const_iterator i1 = ev.lower_bound(tick1);
+      EventMap::const_iterator i2 = ev.upper_bound(tick2);
 
       for (; i1 != i2; ++i1) {
             if (i1->second.type() == ME_CONTROLLER)

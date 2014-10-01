@@ -625,7 +625,7 @@ void JackAudio::handleTimeSigTempoChanged()
 
 void JackAudio::checkTransportSeek(int cur_frame, int nframes, bool inCountIn)
       {
-      if (!seq || !seq->score() || !seq->canStart() || inCountIn)
+      if (!seq || !seq->score() || inCountIn)
             return;
 
       // Obtaining the current JACK Transport position
