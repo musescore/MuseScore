@@ -792,8 +792,15 @@ bool SLine::readProperties(XmlReader& e)
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
             ls->read(e);
-            ls->setVisible(visible());
             add(ls);
+            // in v1.x "visible" is a property of the segment only;
+            // we must ensure that it propagates also to the parent element.
+            // That's why the visibility is set after adding the segment
+            // to the corresponding spanner
+            if (score()->mscVersion() <= 114)
+                  ls->setVisible(ls->visible());
+            else
+                  ls->setVisible(visible());
             }
       else if (tag == "length")
             setLen(e.readDouble());
