@@ -1024,6 +1024,12 @@ bool SlurTie::readProperties(XmlReader& e)
             SlurSegment* segment = new SlurSegment(score());
             segment->read(e);
             add(segment);
+            // in v1.x "visible" is a property of the segment only;
+            // we must ensure that it propagates also to the parent element
+            // That's why the visibility is set after adding the segment
+            // to the corresponding spanner
+            if (score()->mscVersion() <= 114)
+                  segment->SpannerSegment::setVisible(segment->visible());
             }
       else if (tag == "up")
             _slurDirection = MScore::Direction(e.readInt());
