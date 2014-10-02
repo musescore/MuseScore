@@ -725,8 +725,9 @@ void MusicXml::import(Score* s)
       tupletAssert();
       score  = s;
 
-      // TODO only if multi-measure rests used ???
-      // score->style()->set(StyleIdx::createMultiMeasureRests, true);
+      // assume no multi-measure rests, will be set to true when encountering a multi-measure rest
+      // required as multi-measure rest is a meaure attribute in MusicXML instead of a style setting
+      score->style()->set(StyleIdx::createMultiMeasureRests, false);
 
       for (QDomElement e = doc->documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "score-partwise")
@@ -1523,8 +1524,20 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               domNotImplemented(e);
                         else if (ee.tagName() == "midi-channel")
                               part->setMidiChannel(ee.text().toInt() - 1);
-                        else if (ee.tagName() == "midi-program")
-                              part->setMidiProgram(ee.text().toInt() - 1);
+                        else if (ee.tagName() == "midi-program") {
+                              int program = ee.text().toInt();
+                              // Bug fix for Cubase 6.5.5 which generates <midi-program>2</midi-program>
+                              // Check program number range
+                              if (program < 1) {
+                                    qDebug("MusicXml::xmlScorePart: incorrect midi-program: %d", program);
+                                    program = 1;
+                                    }
+                              else if (program > 128) {
+                                    qDebug("MusicXml::xmlScorePart: incorrect midi-program: %d", program);
+                                    program = 128;
+                              }
+                              part->setMidiProgram(program - 1);
+                              }
                         else if (ee.tagName() == "midi-unpitched") {
                               qDebug("MusicXml::xmlScorePart: instrument id %s midi-unpitched %s",
                                      qPrintable(instrId), qPrintable(ee.text()));
@@ -2362,11 +2375,14 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
             }
 
       // multi-measure rest handling:
+      // if any multi-measure rest is found, the "create multi-measure rest" style setting
+      // is enabled
       // the first measure in a multi-measure rest gets setBreakMultiMeasureRest(true)
       // and count down the remaining number of measures
       // the first measure after a multi-measure rest gets setBreakMultiMeasureRest(true)
       // for all other measures breakMultiMeasureRest is unchanged (stays default (false))
       if (startMultiMeasureRest) {
+            score->style()->set(StyleIdx::createMultiMeasureRests, true);
             measure->setBreakMultiMeasureRest(true);
             startMultiMeasureRest = false;
             }
@@ -4823,6 +4839,15 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   chord = true;
                   }
             // silently ignore others (will be handled later)
+            }
+
+      // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
+      // Same fix is required in MxmlReaderFirstPass::initVoiceMapperAndMapVoices
+      int nStavesInPart = score->staff(staff)->part()->nstaves();
+      if (relStaff < 0 || relStaff >= nStavesInPart) {
+            qDebug("ImportMusicXml: invalid staff %d (staves is %d) at line %d col %d",
+                   relStaff + 1, nStavesInPart, e.lineNumber(), e.columnNumber());
+            relStaff = 0;
             }
 
       // Bug fix for Sibelius 7.1.3 which does not write <voice> for notes with <chord>
