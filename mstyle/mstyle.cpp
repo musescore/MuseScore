@@ -29,6 +29,7 @@
 #include "transitions.h"
 #include "mconfig.h"
 #include "../mscore/paletteBoxButton.h"
+#include "../mscore/miconengine.h"
 
 #define MgStyleConfigData_toolTipTransparent            true
 #define MgStyleConfigData_toolBarDrawItemSeparator      true
@@ -8589,7 +8590,7 @@ void MgStyle::configurationChanged()
 //   standardIconImplementation
 //---------------------------------------------------------
 
-QIcon MgStyle::standardIconImplementation(StandardPixmap standardIcon,
+QIcon MgStyle::standardIcon(StandardPixmap standardIcon,
             const QStyleOption* option, const QWidget* widget) const {
       // MDI windows buttons
       // get button color ( unfortunately option and widget might not be set )
@@ -8801,9 +8802,34 @@ QIcon MgStyle::standardIconImplementation(StandardPixmap standardIcon,
 
                   return QIcon( realpm );
                   }
-
+            case SP_MessageBoxCritical:
+                  return getCachedIcon(":/data/icons/dialog-error.svg");
+            case SP_MessageBoxWarning:
+                  return getCachedIcon(":/data/icons/dialog-warning.svg");
+            case SP_MessageBoxInformation:
+                  return getCachedIcon(":/data/icons/dialog-information.svg");
+            case SP_MessageBoxQuestion:
+                  return getCachedIcon(":/data/icons/dialog-question.svg");
             default:
                   return QIcon();
                   // return QCommonStyle::standardIconImplementation( standardIcon, option, widget );
+            }
+      }
+
+//---------------------------------------------------------
+//   getCachedIcon
+//---------------------------------------------------------
+
+QIcon MgStyle::getCachedIcon(QString key) const
+      {
+      QPixmap * pixmap = nullptr;
+      QPixmapCache::find(key, pixmap);
+      if (pixmap)
+            return QIcon(*pixmap);
+      else {
+            QIcon* icon = new QIcon(new MIconEngine);
+            icon->addFile(key);
+            QPixmapCache::insert(key, icon->pixmap(48));
+            return *icon;
             }
       }

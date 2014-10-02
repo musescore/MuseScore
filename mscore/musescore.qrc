@@ -147,5 +147,9 @@
         <file>data/icons/timesig_prolatio08.svg</file>
         <file>data/icons/timesig_prolatio10.svg</file>
         <file>data/icons/timesig_prolatio11.svg</file>
+        <file>data/icons/dialog-error.svg</file>
+        <file>data/icons/dialog-information.svg</file>
+        <file>data/icons/dialog-question.svg</file>
+        <file>data/icons/dialog-warning.svg</file>
     </qresource>
 </RCC>
