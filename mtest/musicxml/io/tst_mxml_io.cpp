@@ -88,6 +88,7 @@ private slots:
       void helloReadCompr() { mxmlReadTestCompr("testHello"); }
       void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
+      void incorrectStaffNumber() { mxmlIoTestRef("testIncorrectStaffNumber"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
       void lines1() { mxmlIoTest("testLines1"); }
@@ -97,7 +98,6 @@ private slots:
       void manualBreaks() { mxmlIoTest("testManualBreaks"); }
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
-      void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); }
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
       void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }

@@ -42,6 +42,9 @@
           <sign>G</sign>
           <line>2</line>
           </clef>
+        <measure-style>
+          <multiple-rest>3</multiple-rest>
+          </measure-style>
         </attributes>
       <note>
         <rest/>
@@ -71,6 +74,11 @@
         </note>
       </measure>
     <measure number="5">
+      <attributes>
+        <measure-style>
+          <multiple-rest>2</multiple-rest>
+          </measure-style>
+        </attributes>
       <note>
         <rest/>
         <duration>4</duration>
