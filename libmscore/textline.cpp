@@ -126,7 +126,9 @@ void TextLineSegment::draw(QPainter* painter) const
             endHookWidth = 0;
 
       // don't draw backwards lines (or hooks) if text is longer than nominal line length
-      if (pp1.x() < pp2.x())
+      bool backwards = _text && pp1.x() > pp2.x() && !tl->diagonal();
+
+      if (!backwards)
             painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
       if (tl->beginHook()
@@ -137,7 +139,7 @@ void TextLineSegment::draw(QPainter* painter) const
             painter->drawLine(QLineF(pp1.x(), pp1.y(), pp1.x() - beginHookWidth, pp1.y() + hh));
             }
 
-      if (tl->endHook() && pp1.x() < pp2.x()
+      if (tl->endHook() && !backwards
          && (spannerSegmentType() == SpannerSegmentType::SINGLE
              || spannerSegmentType() == SpannerSegmentType::END)
          ) {
@@ -229,26 +231,33 @@ void TextLineSegment::layout1()
       QPointF pp1;
       QPointF pp2(pos2());
 
+      // diagonal line with no text - just use the basic rectangle for line (ignore hooks)
       if (!_text && !_endText && pp2.y() != 0) {
             setbbox(QRectF(pp1, pp2).normalized());
             return;
             }
-      qreal y1 = point(-textLine()->lineWidth());
-      qreal y2 = -y1;
+
+      // line has text or is not diagonal - calculate reasonable bbox
+      qreal x1 = qMin(0.0, pp2.x());
+      qreal x2 = qMax(0.0, pp2.x());
+      qreal y0 = point(-textLine()->lineWidth());
+      qreal y1 = qMin(0.0, pp2.y()) + y0;
+      qreal y2 = qMax(0.0, pp2.y()) - y0;
 
       if (_text) {
             qreal h = _text->height();
             if (textLine()->beginTextPlace() == PlaceText::ABOVE)
-                  y1 = -h;
+                  y1 = qMin(y1, -h);
             else if (textLine()->beginTextPlace() == PlaceText::BELOW)
-                  y2 = h;
+                  y2 = qMax(y2, h);
             else {
-                  y1 = -h * .5;
-                  y2 = h * .5;
+                  y1 = qMin(y1, -h * .5);
+                  y2 = qMax(y2, h * .5);
                   }
+            x2 = qMax(x2, _text->width());
             }
       if (textLine()->endHook()) {
-            qreal h = point(textLine()->endHookHeight());
+            qreal h = pp2.y() + point(textLine()->endHookHeight());
             if (h > y2)
                   y2 = h;
             else if (h < y1)
@@ -261,7 +270,8 @@ void TextLineSegment::layout1()
             else if (h < y1)
                   y1 = h;
             }
-      bbox().setRect(.0, y1, pp2.x(), y2 - y1);
+      bbox().setRect(x1, y1, x2 - x1, y2 - y1);
+      // set end text position and extend bbox
       if (_endText) {
             _endText->setPos(bbox().right(), 0);
             bbox() |= _endText->bbox().translated(_endText->pos());
@@ -706,7 +716,8 @@ bool TextLine::readProperties(XmlReader& e)
             _beginHook = e.readBool();
       else if (tag == "beginHookHeight") {
             _beginHookHeight = Spatium(e.readDouble());
-            _beginHook = true;
+            if (score()->mscVersion() <= 114)
+                  _beginHook = true;
             }
       else if (tag == "beginHookType")
             _beginHookType = HookType(e.readInt());
@@ -714,7 +725,8 @@ bool TextLine::readProperties(XmlReader& e)
             _endHook = e.readBool();
       else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
             _endHookHeight = Spatium(e.readDouble());
-            _endHook = true;
+            if (score()->mscVersion() <= 114)
+                  _endHook = true;
             }
       else if (tag == "endHookType")
             _endHookType = HookType(e.readInt());
