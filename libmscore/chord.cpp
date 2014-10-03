@@ -1583,8 +1583,13 @@ void Chord::layout2()
 
 void Chord::updateNotes(AccidentalState* as)
       {
-      for (Chord* c : _graceNotes)
-            c->updateNotes(as);
+      
+      QList<Chord*> graceNotesBefore;
+      int gnb = getGraceNotesBefore(&graceNotesBefore);
+      if (gnb) {
+            for (Chord* c : graceNotesBefore)
+                  c->updateNotes(as);
+            }
 
       Drumset* drumset = 0;
       if (staff()->part()->instr()->useDrumset() != DrumsetKind::NONE)
@@ -1603,6 +1608,12 @@ void Chord::updateNotes(AccidentalState* as)
       else {
             for (Note* note : nl)
                   note->layout10(as);
+            }
+      QList<Chord*> graceNotesAfter;
+      int gna = getGraceNotesAfter(&graceNotesAfter);
+      if (gna) {
+            for (Chord* c : graceNotesAfter)
+                  c->updateNotes(as);
             }
       sortNotes();
       }
@@ -1627,11 +1638,15 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 
       // PITCHED_ and PERCUSSION_STAFF can go note by note
 
-      for (Chord* ch : graceNotes()) {
-            QList<Note*> notes(ch->notes());  // we need a copy!
-            for (Note* note : notes)
-                  note->updateAccidental(as);
-            ch->sortNotes();
+      QList<Chord*> graceNotesBefore;
+      int gnb = getGraceNotesBefore(&graceNotesBefore);
+      if (gnb) {
+            for (Chord* ch : graceNotesBefore) {
+                  QList<Note*> notes(ch->notes());  // we need a copy!
+                  for (Note* note : notes)
+                        note->updateAccidental(as);
+                  ch->sortNotes();
+                  }
             }
 
       QList<Note*> lnotes(notes());  // we need a copy!
@@ -1660,6 +1675,16 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                               continue;
                               }
                         }
+                  }
+            }
+      QList<Chord*> graceNotesAfter;
+      int gna = getGraceNotesAfter(&graceNotesAfter);
+      if (gna) {
+            for (Chord* ch : graceNotesAfter) {
+                  QList<Note*> notes(ch->notes());  // we need a copy!
+                  for (Note* note : notes)
+                        note->updateAccidental(as);
+                  ch->sortNotes();
                   }
             }
       sortNotes();
