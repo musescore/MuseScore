@@ -1146,7 +1146,9 @@ void ExportMusicXml::credits(Xml& xml)
             }
 
       if (!rights.isEmpty()) {
-            creditWords(xml, _score, w / 2, bm, "center", "bottom", rights, _score->textStyle(TextStyleType::FOOTER));
+            // put copyright at the bottom center of the page
+            // note: as the copyright metatag contains plan text, special XML characters must be escaped
+            creditWords(xml, _score, w / 2, bm, "center", "bottom", Xml::xmlString(rights), _score->textStyle(TextStyleType::FOOTER));
             }
       }
 
@@ -1163,7 +1165,7 @@ static void midipitch2xml(int pitch, char& c, int& alter, int& octave)
       c      = noteTab[pitch % 12];
       alter  = alterTab[pitch % 12];
       octave = pitch / 12 - 1;
-      qDebug("midipitch2xml(pitch %d) step %c, alter %d, octave %d", pitch, c, alter, octave);
+      //qDebug("midipitch2xml(pitch %d) step %c, alter %d, octave %d", pitch, c, alter, octave);
       }
 
 //---------------------------------------------------------
@@ -1178,9 +1180,11 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
       if (alter < -2 || 2 < alter)
             qDebug("tabpitch2xml(pitch %d, tpc %d) problem:  step %s, alter %d, octave %d",
                    pitch, tpc, qPrintable(s), alter, octave);
+      /*
       else
             qDebug("tabpitch2xml(pitch %d, tpc %d) step %s, alter %d, octave %d",
                    pitch, tpc, qPrintable(s), alter, octave);
+       */
       }
 
 //---------------------------------------------------------
