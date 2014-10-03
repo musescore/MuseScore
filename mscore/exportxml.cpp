@@ -4218,14 +4218,16 @@ void ExportMusicXml::write(QIODevice* dev)
                               const double tm = getTenthsFromInches(pf->oddTopMargin());
 
                               // System Layout
+
+                              // For a multi-meaure rest positioning is valid only
+                              // in the replacing measure
+                              // note: for a normal measure, mmRest1 is the measure itself,
+                              // for a multi-meaure rest, it is the replacing measure
+                              const Measure* mmR1 = m->mmRest1();
+                              const System* system = mmR1->system();
+
                               // Put the system print suggestions only for the first part in a score...
                               if (idx == 0) {
-                                    // For a multi-meaure rest positioning is valid only
-                                    // in the replacing measure
-                                    // note: for a normal measure, mmRest1 is the measure itself,
-                                    // for a multi-meaure rest, it is the replacing measure
-                                    const Measure* mmR1 = m->mmRest1();
-                                    const System* system = mmR1->system();
 
                                     // Find the right margin of the system.
                                     double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
@@ -4259,7 +4261,7 @@ void ExportMusicXml::write(QIODevice* dev)
                               for (int staffIdx = (staffCount == 0) ? 1 : 0; staffIdx < staves; staffIdx++) {
                                     xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
                                     const double staffDist =
-                                          getTenthsFromDots(mb->system()->staff(staffCount + staffIdx - 1)->distanceDown());
+                                          getTenthsFromDots(system->staff(staffCount + staffIdx - 1)->distanceDown());
                                     xml.tag("staff-distance", QString("%1").arg(QString::number(staffDist,'f',2)));
                                     xml.etag();
                                     }
