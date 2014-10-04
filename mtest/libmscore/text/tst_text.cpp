@@ -54,7 +54,7 @@ void TestText::testText()
       Text* text = new Text(score);
       text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->layout();
 
       text->moveCursorToEnd();
@@ -62,32 +62,32 @@ void TestText::testText()
       text->endEdit();
       QCOMPARE(text->text(), QString("a"));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToEnd();
       text->insertText("bc");
       text->endEdit();
       QCOMPARE(text->text(), QString("abc"));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToEnd();
       text->insertText("d");
       text->insertText("e");
       text->endEdit();
       QCOMPARE(text->text(), QString("abcde"));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->insertText("1");
       text->endEdit();
       QCOMPARE(text->text(), QString("1abcde"));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->insertText("0");
       text->endEdit();
       QCOMPARE(text->text(), QString("01abcde"));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right);
       text->movePosition(QTextCursor::Right);
@@ -95,7 +95,7 @@ void TestText::testText()
       text->endEdit();
       QCOMPARE(text->text(), QString("012abcde"));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToEnd();
       text->movePosition(QTextCursor::Left);
       text->movePosition(QTextCursor::Left);
@@ -106,13 +106,14 @@ void TestText::testText()
       text->endEdit();
       QCOMPARE(text->text(), QString("0123abcde"));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToEnd();
       text->insertSym(SymId::segno);
       text->endEdit();
       QCOMPARE(text->text(), QString("0123abcde<sym>segno</sym>"));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
+      text->moveCursorToEnd();
       text->movePosition(QTextCursor::Left);
       text->insertText("#");
       text->endEdit();
@@ -128,7 +129,7 @@ void TestText::testSpecialSymbols()
       Text* text = new Text(score);
       text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->layout();
 
       text->moveCursorToEnd();
@@ -170,7 +171,7 @@ void TestText::testTextProperties()
       Text* text = new Text(score);
       text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
 
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->layout();
 
       text->moveCursorToEnd();
@@ -179,7 +180,7 @@ void TestText::testTextProperties()
       QCOMPARE(text->text(), QString("ILoveMuseScore"));
 
       //select Love and make it bold
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
@@ -189,7 +190,7 @@ void TestText::testTextProperties()
       QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
 
       //select Love and unbold it
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
@@ -199,7 +200,7 @@ void TestText::testTextProperties()
       QCOMPARE(text->text(), QString("ILoveMuseScore"));
 
       //select Love and make it bold again
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
@@ -209,7 +210,7 @@ void TestText::testTextProperties()
       QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
 
       //select veMu and make it bold
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 3);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 4);
@@ -219,7 +220,7 @@ void TestText::testTextProperties()
       QCOMPARE(text->text(), QString("I<b>LoveMu</b>seScore"));
 
       //select Mu and make it nonbold
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 5);
       text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 2);
@@ -229,7 +230,7 @@ void TestText::testTextProperties()
       QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
 
       //make veMuse italic
-      text->setEditMode(true);
+      text->startEdit(0, QPoint());
       text->moveCursorToStart();
       QVERIFY(text->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 3));
       QVERIFY(text->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 6));
