@@ -1241,7 +1241,9 @@ bool Measure::acceptDrop(const DropData& data) const
 
       int staffIdx;
       Segment* seg;
-      _score->pos2measure(pos, &staffIdx, 0, &seg, 0);
+      if (_score->pos2measure(pos, &staffIdx, 0, &seg, 0) == nullptr)
+            return false;
+
       QRectF staffR = system()->staff(staffIdx)->bbox().translated(system()->canvasPos());
       staffR &= canvasBoundingRect();
 
