@@ -38,6 +38,8 @@ class Palette;
 //---------------------------------------------------------
 
 struct PaletteCell {
+      ~PaletteCell();
+
       Element* element { 0 };
       QString name;           // used for tool tip
       QString tag;

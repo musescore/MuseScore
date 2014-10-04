@@ -526,9 +526,9 @@ MuseScore::MuseScore()
       mainWindow->setChildrenCollapsible(false);
       mainWindow->setOrientation(Qt::Vertical);
 
-      QLayout* mlayout = new QVBoxLayout;
-      mlayout->setMargin(0);
-      mlayout->setSpacing(0);
+//      QLayout* mlayout = new QVBoxLayout;
+//      mlayout->setMargin(0);
+//      mlayout->setSpacing(0);
 //      mainWindow->setLayout(mlayout);
 
       QWidget* mainScore = new QWidget;
@@ -2082,7 +2082,7 @@ void loadTranslation(QString filename, QString localeName)
                   defaultFi = shortDefaultFi;
                   defaultlp = shortDefaultlp;
                   }
-      	}
+            }
 
       //      qDebug() << userFi.exists();
       //      qDebug() << userFi.lastModified() << defaultFi.lastModified();
@@ -2588,17 +2588,17 @@ void MuseScore::changeState(ScoreState val)
             QAction* a = s->action();
             if (!a)
                   continue;
-            if (enable && strcmp(s->key(), "undo") == 0)
+            if (enable && s->key() == "undo")
                   a->setEnabled((s->state() & val) && (cs ? cs->undo()->canUndo() : false));
-            else if (enable && strcmp(s->key(), "redo") == 0)
+            else if (enable && s->key() == "redo")
                   a->setEnabled((s->state() & val) && (cs ? cs->undo()->canRedo() : false));
-            else if (enable && strcmp(s->key(), "cut") == 0)
+            else if (enable && s->key() == "cut")
                   a->setEnabled(cs && cs->selection().state() != SelState::NONE);
-            else if (enable && strcmp(s->key(), "copy") == 0)
+            else if (enable && s->key() == "copy")
                   a->setEnabled(cs && cs->selection().state() != SelState::NONE);
-            else if (enable && strcmp(s->key(), "select-similar-range") == 0)
+            else if (enable && s->key() == "select-similar-range")
                   a->setEnabled(cs && cs->selection().state() == SelState::RANGE);
-            else if (enable && strcmp(s->key(), "synth-control") == 0) {
+            else if (enable && s->key() == "synth-control") {
                   Driver* driver = seq ? seq->driver() : 0;
                   // a->setEnabled(driver && driver->getSynth());
                   if (MScore::debugMode)
