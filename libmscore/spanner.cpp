@@ -173,6 +173,21 @@ void SpannerSegment::setVisible(bool f)
       }
 
 //---------------------------------------------------------
+//   setColor
+//---------------------------------------------------------
+
+void SpannerSegment::setColor(const QColor& col)
+      {
+      if (_spanner) {
+            for (SpannerSegment* ss : _spanner->spannerSegments())
+                  ss->_color = col;
+            _spanner->_color = col;
+            }
+      else
+            _color = col;
+      }
+
+//---------------------------------------------------------
 //   nextElement
 //---------------------------------------------------------
 
@@ -543,6 +558,17 @@ void Spanner::setVisible(bool f)
       for (SpannerSegment* ss : spannerSegments())
             ss->setVisible(f);
       _visible = f;
+      }
+
+//---------------------------------------------------------
+//   setColor
+//---------------------------------------------------------
+
+void Spanner::setColor(const QColor& col)
+      {
+      for (SpannerSegment* ss : spannerSegments())
+            ss->setColor(col);
+      _color = col;
       }
 
 //---------------------------------------------------------
