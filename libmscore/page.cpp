@@ -497,6 +497,7 @@ void Page::doRebuildBspTree()
 //   (keep in sync with toolTipHeaderFooter in EditStyle::EditStyle())
 //    $p          - page number, except on first page
 //    $P          - page number, on all pages
+//    $N          - page number, if there is more than one
 //    $n          - number of pages
 //    $f          - file name
 //    $F          - file path+name
@@ -531,6 +532,8 @@ QString Page::replaceTextMacros(const QString& s) const
                   switch(c.toLatin1()) {
                         case 'p': // not on first page 1
                               if (_no) // FALLTHROUGH
+                        case 'N': // on page 1 only if there are multiple pages
+                              if ( (_score->npages() + _score->pageNumberOffset()) > 1 ) // FALLTHROUGH
                         case 'P': // on all pages
                               d += QString("%1").arg(_no + 1 + _score->pageNumberOffset());
                               break;
@@ -538,10 +541,10 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += QString("%1").arg(_score->npages() + _score->pageNumberOffset());
                               break;
                         case 'f':
-                              d += _score->name();
+                              d += _score->rootScore()->name();
                               break;
                         case 'F':
-                              d += _score->absoluteFilePath();
+                              d += _score->rootScore()->absoluteFilePath();
                               break;
                         case 'd':
                               d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
@@ -556,10 +559,16 @@ QString Page::replaceTextMacros(const QString& s) const
                               }
                               break;
                         case 'm':
-                              d += _score->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+                              if ( _score->dirty() )
+                                    d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
+                              else
+                                    d += _score->rootScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'M':
-                              d += _score->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
+                              if ( _score->dirty() )
+                                    d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+                              else
+                                    d += _score->rootScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'C': // only on first page
                               if (!_no) // FALLTHROUGH
