@@ -279,15 +279,22 @@ QPointF Pedal::linePos(GripLine grip, System** sys) const
             ChordRest* c = static_cast<ChordRest*>(startElement());
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+            if (c->type() == Element::Type::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
+                  x -= c->x();
             if (beginHook() && beginHookType() == HookType::HOOK_45)
                   x += nhw * .5;
             }
       else {
-            ChordRest* c = nullptr;
             Element* e = endElement();
-            if (!e || e == startElement()) {
-                  // pedal marking on single note - extend to next note or end of measure
-                  Segment* seg = startSegment();
+            ChordRest* c = static_cast<ChordRest*>(endElement());
+            if (!e || e == startElement() || (endHook() && endHookType() == HookType::HOOK_90)) {
+                  // pedal marking on single note or ends with non-angled hook:
+                  // extend to next note or end of measure
+                  Segment* seg = nullptr;
+                  if (!e)
+                        seg = startSegment();
+                  else
+                        seg = c->segment();
                   if (seg) {
                         seg = seg->next();
                         for ( ; seg; seg = seg->next()) {
@@ -305,14 +312,11 @@ QPointF Pedal::linePos(GripLine grip, System** sys) const
                         x = seg->pos().x() + seg->measure()->pos().x() - nhw * 2;
                         }
                   }
-            else {
-                  c = static_cast<ChordRest*>(endElement());
-                  if (c) {
-                        s = c->segment()->system();
-                        x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-                        if (c && c->durationType() == TDuration::DurationType::V_MEASURE)
-                              x -= c->x();
-                        }
+            else if (c) {
+                  s = c->segment()->system();
+                  x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+                  if (c->type() == Element::Type::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
+                        x -= c->x();
                   }
             if (!s) {
                   int t = tick2();
@@ -325,6 +329,7 @@ QPointF Pedal::linePos(GripLine grip, System** sys) const
             else
                   x += nhw;
             }
+
       *sys = s;
       return QPointF(x, 0);
       }
