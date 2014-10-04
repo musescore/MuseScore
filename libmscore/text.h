@@ -220,9 +220,6 @@ class Text : public Element {
 
       virtual void draw(QPainter*) const override;
 
-      bool editMode() const                   { return _editMode; }
-      void setEditMode(bool val)              { _editMode = val;  }
-
       virtual void setTextStyle(const TextStyle& st);
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
@@ -235,6 +232,9 @@ class Text : public Element {
       QString text() const                    { return _text; }
       QString plainText(bool noSym = false) const;
       void insertText(const QString&);
+
+      void setEditMode(bool val)              { _editMode = val;  }
+      bool editMode() const                   { return _editMode; }
 
       virtual void layout() override;
       virtual void layout1();
