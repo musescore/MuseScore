@@ -82,13 +82,13 @@ static const int KEYSEQ_SIZE = 4;
 //---------------------------------------------------------
 
 class Shortcut {
-      const char* _key   { 0 };    //! xml tag name for configuration file
-      const char* _descr { 0 };    //! descriptor, shown in editor
-      const char* _text  { 0 };    //! text as shown on buttons or menus
-      const char* _help  { 0 };    //! ballon help
-      int _state         { 0 };    //! shortcut is valid in this Mscore state
-                                   //! (or'd list of states)
-      int _flags         { 0 };
+      QString _key;           //! xml tag name for configuration file
+      QString _descr;         //! descriptor, shown in editor
+      QString _text;          //! text as shown on buttons or menus
+      QString _help;          //! ballon help
+      int _state = 0;         //! shortcut is valid in this Mscore state
+                              //! (or'd list of states)
+      int _flags = 0;
 
       QList<QKeySequence> _keys;     //! shortcut list
 
@@ -155,7 +155,7 @@ class Shortcut {
 
       QAction* action() const;
 
-      const char* key() const { return _key; }
+      QString key() const { return _key; }
       QString descr() const;
       QString text() const;
       QString help() const;
@@ -183,7 +183,7 @@ class Shortcut {
       static void save();
       static void resetToDefault();
       static bool dirty;
-      static Shortcut* getShortcut(const char* key);
+      static Shortcut* getShortcut(const QString& key);
       static const QMap<QString, Shortcut*>& shortcuts() { return _shortcuts; }
       static QActionGroup* getActionGroupForWidget(MsWidget w);
       static QActionGroup* getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext);
