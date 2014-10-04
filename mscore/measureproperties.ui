@@ -279,7 +279,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout1">
           <property name="horizontalSpacing">
-           <number>-1</number>
+           <number>6</number>
           </property>
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="irregular">
@@ -362,10 +362,13 @@
              </sizepolicy>
             </property>
             <property name="minimum">
-             <double>0.900000000000000</double>
+             <double>0.000000000000000</double>
             </property>
             <property name="singleStep">
-             <double>0.200000000000000</double>
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>1.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -486,9 +489,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
