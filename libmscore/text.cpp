@@ -993,7 +993,7 @@ void Text::insert(TextCursor* cursor, QChar c)
             _layout[cursor->line()].setEol(true);
             cursor->setLine(cursor->line() + 1);
             cursor->setColumn(0);
-            if (_layout.size() < cursor->line())
+            if (_layout.size() <= cursor->line())
                   _layout.append(TextBlock());
             }
       else {
@@ -1545,11 +1545,13 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                   {
                   if (_cursor.hasSelection())
                         deleteSelectedText();
+                  int line = _cursor.line();
 
                   CharFormat* charFmt = _cursor.format();         // take current format
-                  _layout.insert(_cursor.line() + 1, curLine().split(_cursor.column()));
-                  _layout[_cursor.line()].setEol(true);
-                  _cursor.setLine(_cursor.line() + 1);
+                  _layout.insert(line + 1, curLine().split(_cursor.column()));
+                  _layout[line].setEol(true);
+
+                  _cursor.setLine(line+1);
                   _cursor.setColumn(0);
                   _cursor.setFormat(*charFmt);                    // restore orig. format at new line
                   s.clear();
