@@ -1146,7 +1146,9 @@ void ExportMusicXml::credits(Xml& xml)
             }
 
       if (!rights.isEmpty()) {
-            creditWords(xml, _score, w / 2, bm, "center", "bottom", rights, _score->textStyle(TextStyleType::FOOTER));
+            // put copyright at the bottom center of the page
+            // note: as the copyright metatag contains plan text, special XML characters must be escaped
+            creditWords(xml, _score, w / 2, bm, "center", "bottom", Xml::xmlString(rights), _score->textStyle(TextStyleType::FOOTER));
             }
       }
 
@@ -1163,7 +1165,7 @@ static void midipitch2xml(int pitch, char& c, int& alter, int& octave)
       c      = noteTab[pitch % 12];
       alter  = alterTab[pitch % 12];
       octave = pitch / 12 - 1;
-      qDebug("midipitch2xml(pitch %d) step %c, alter %d, octave %d", pitch, c, alter, octave);
+      //qDebug("midipitch2xml(pitch %d) step %c, alter %d, octave %d", pitch, c, alter, octave);
       }
 
 //---------------------------------------------------------
@@ -1178,9 +1180,11 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
       if (alter < -2 || 2 < alter)
             qDebug("tabpitch2xml(pitch %d, tpc %d) problem:  step %s, alter %d, octave %d",
                    pitch, tpc, qPrintable(s), alter, octave);
+      /*
       else
             qDebug("tabpitch2xml(pitch %d, tpc %d) step %s, alter %d, octave %d",
                    pitch, tpc, qPrintable(s), alter, octave);
+       */
       }
 
 //---------------------------------------------------------
@@ -4218,14 +4222,16 @@ void ExportMusicXml::write(QIODevice* dev)
                               const double tm = getTenthsFromInches(pf->oddTopMargin());
 
                               // System Layout
+
+                              // For a multi-meaure rest positioning is valid only
+                              // in the replacing measure
+                              // note: for a normal measure, mmRest1 is the measure itself,
+                              // for a multi-meaure rest, it is the replacing measure
+                              const Measure* mmR1 = m->mmRest1();
+                              const System* system = mmR1->system();
+
                               // Put the system print suggestions only for the first part in a score...
                               if (idx == 0) {
-                                    // For a multi-meaure rest positioning is valid only
-                                    // in the replacing measure
-                                    // note: for a normal measure, mmRest1 is the measure itself,
-                                    // for a multi-meaure rest, it is the replacing measure
-                                    const Measure* mmR1 = m->mmRest1();
-                                    const System* system = mmR1->system();
 
                                     // Find the right margin of the system.
                                     double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
@@ -4259,7 +4265,7 @@ void ExportMusicXml::write(QIODevice* dev)
                               for (int staffIdx = (staffCount == 0) ? 1 : 0; staffIdx < staves; staffIdx++) {
                                     xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
                                     const double staffDist =
-                                          getTenthsFromDots(mb->system()->staff(staffCount + staffIdx - 1)->distanceDown());
+                                          getTenthsFromDots(system->staff(staffCount + staffIdx - 1)->distanceDown());
                                     xml.tag("staff-distance", QString("%1").arg(QString::number(staffDist,'f',2)));
                                     xml.etag();
                                     }
