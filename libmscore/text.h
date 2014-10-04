@@ -199,6 +199,7 @@ class Text : public Element {
       void updateCursorFormat(TextCursor*);
       void genText();
       void changeSelectionFormat(FormatId id, QVariant val);
+      void setEditMode(bool val)              { _editMode = val;  }
 
    protected:
       QColor textColor() const;
@@ -233,7 +234,6 @@ class Text : public Element {
       QString plainText(bool noSym = false) const;
       void insertText(const QString&);
 
-      void setEditMode(bool val)              { _editMode = val;  }
       bool editMode() const                   { return _editMode; }
 
       virtual void layout() override;
