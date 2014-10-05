@@ -340,7 +340,7 @@ bool Lyrics::acceptDrop(const DropData& data) const
 Element* Lyrics::drop(const DropData& data)
       {
       Text* e = static_cast<Text*>(data.element);
-      if (!(e->type() == Element::Type::TEXT && e->textStyle().name() == "Lyrics Verse")) {
+      if (!(e->type() == Element::Type::TEXT && e->textStyle().name() == "Lyrics Verse Number")) {
             delete e;
             return 0;
             }
