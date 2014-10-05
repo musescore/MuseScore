@@ -137,7 +137,7 @@ void HairpinSegment::updateGrips(AlignGrip& aGrip) const
 // End calc position grip aperture
       aGrip.aLines = 0;
 
-      if( aGrip.curGrip == GRIP_LINE_START ){
+      if( aGrip.curGrip == int(GripLine::START) ){
             aGrip.vert[aGrip.aLines] = true;
             aGrip.aLine[aGrip.aLines] += pp;
             aGrip.aLines++;
@@ -147,7 +147,7 @@ void HairpinSegment::updateGrips(AlignGrip& aGrip) const
                   aGrip.aLines++;
                   }
             }
-      if( aGrip.curGrip == GRIP_LINE_MIDDLE ){
+      if( aGrip.curGrip == int(GripLine::MIDDLE) ){
             aGrip.vert[aGrip.aLines] = true;
             aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + p * .5 + pp;
             aGrip.aLines++;
@@ -155,7 +155,7 @@ void HairpinSegment::updateGrips(AlignGrip& aGrip) const
             aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + p * .5 + pp;
             aGrip.aLines++;
             }
-      if( aGrip.curGrip == GRIP_LINE_END ){
+      if( aGrip.curGrip == int(GripLine::END) ){
             aGrip.vert[aGrip.aLines] = true;
             aGrip.aLine[aGrip.aLines] = aGrip.aLine[0] + p + pp;
             aGrip.aLines++;
@@ -165,10 +165,10 @@ void HairpinSegment::updateGrips(AlignGrip& aGrip) const
                   aGrip.aLines++;
                   }
             }
-      aGrip.grip[GRIP_LINE_START].translate( pp );
-      aGrip.grip[GRIP_LINE_END].translate( p + pp );
-      aGrip.grip[GRIP_LINE_MIDDLE].translate( p * .5 + pp );
-      aGrip.grip[GRIP_LINE_APERTURE].translate( gripLineAperturePoint + pp );
+      aGrip.grip[int(GripLine::START)].translate( pp );
+      aGrip.grip[int(GripLine::END)].translate( p + pp );
+      aGrip.grip[int(GripLine::MIDDLE)].translate( p * .5 + pp );
+      aGrip.grip[int(GripLine::APERTURE)].translate( gripLineAperturePoint + pp );
       }
 //---------------------------------------------------------
 //   editDrag

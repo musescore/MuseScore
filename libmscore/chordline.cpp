@@ -379,22 +379,22 @@ void ChordLine::updateGrips(AlignGrip& aGrip) const
             int yOffsetAterNote = -sp;
             int yOffsetBeforeNote = sp + 4;
             if (_chordLineType == ChordLineType::DOIT)
-                  grip[0].translate(QPointF(xOffsetAfterNote, yOffsetAterNote));
+                  aGrip.grip[0].translate(QPointF(xOffsetAfterNote, yOffsetAterNote));
             else if (_chordLineType == ChordLineType::FALL)
-                  grip[0].translate(QPointF(xOffsetAfterNote, -yOffsetAterNote));
+                  aGrip.grip[0].translate(QPointF(xOffsetAfterNote, -yOffsetAterNote));
             else if (_chordLineType == ChordLineType::SCOOP)
-                  grip[0].translate(QPointF(-xOffsetBeforeNote, -yOffsetBeforeNote));
+                  aGrip.grip[0].translate(QPointF(-xOffsetBeforeNote, -yOffsetBeforeNote));
             else if (_chordLineType == ChordLineType::PLOP)
-                  grip[0].translate(QPointF(-xOffsetBeforeNote, yOffsetBeforeNote));
+                  aGrip.grip[0].translate(QPointF(-xOffsetBeforeNote, yOffsetBeforeNote));
 
             // limit the number of grips to one
-            *grips = 1;
+            aGrip.grips = 1;
             // translate on the length and height - stops the grips from goint past boundries of slide
-            grip[0].translate(cp + QPointF(_lengthX, _lengthY));
+            aGrip.grip[0].translate(cp + QPointF(_lengthX, _lengthY));
             }
       else  {
-            *grips = n;
-            *defaultGrip = n - 1;
+            aGrip.grips = n;
+            aGrip.defaultGrip = n - 1;
             for (int i = 0; i < n; ++i)
             aGrip.grip[i].translate(cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp));
 

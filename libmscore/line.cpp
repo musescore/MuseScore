@@ -87,12 +87,12 @@ void LineSegment::updateGrips(AlignGrip& aGrip) const
 
       aGrip.aLines = 0;
 
-      if( aGrip.curGrip == GRIP_LINE_START ){
+      if( aGrip.curGrip == int(GripLine::START) ){
             aGrip.vert[aGrip.aLines] = true;
             aGrip.aLine[aGrip.aLines] += pp;
             aGrip.aLines++;
             }
-      if( aGrip.curGrip == GRIP_LINE_MIDDLE ){
+      if( aGrip.curGrip == int(GripLine::MIDDLE) ){
             aGrip.vert[aGrip.aLines] = true;
             aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + pos2() * .5 + pp;
             aGrip.aLines++;
@@ -100,15 +100,15 @@ void LineSegment::updateGrips(AlignGrip& aGrip) const
             aGrip.aLine[aGrip.aLines] = aGrip.aLine[aGrip.aLines] + pos2() * .5 + pp;
             aGrip.aLines++;
             }
-      if( aGrip.curGrip == GRIP_LINE_END ){
+      if( aGrip.curGrip == int(GripLine::END) ){
             aGrip.vert[aGrip.aLines] = true;
             aGrip.aLine[aGrip.aLines] = aGrip.aLine[0] + pos2() + pp;
             aGrip.aLines++;
             }
 
-      aGrip.grip[GRIP_LINE_START].translate(pp);
-      aGrip.grip[GRIP_LINE_END].translate(pos2() + pp);
-      aGrip.grip[GRIP_LINE_MIDDLE].translate(pos2() * .5 + pp);
+      aGrip.grip[int(GripLine::START)].translate(pp);
+      aGrip.grip[int(GripLine::END)].translate(pos2() + pp);
+      aGrip.grip[int(GripLine::MIDDLE)].translate(pos2() * .5 + pp);
       }
 
 //---------------------------------------------------------

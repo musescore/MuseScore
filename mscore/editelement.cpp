@@ -156,17 +156,19 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
             return true;
             }
       int i;
-      qreal a = grip[0].width() * 1.0;
-      for (i = 0; i < grips; ++i) {
-            if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
-                  curGrip = i;
+
+      qreal a = aGrip.grip[0].width() * 1.0;
+      for (i = 0; i < aGrip.grips; ++i) {
+            if (aGrip.grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
+                  aGrip.curGrip = i;
                   data.curGrip = i;
+                  drawAlignLines = true;
                   updateGrips();
                   score()->end();
                   break;
                   }
             }
-      return i != grips;
+      return i != aGrip.grips;
       }
 
 //---------------------------------------------------------
@@ -203,14 +205,12 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
       else {
             data.hRaster = false;
             data.vRaster = false;
-            ed.curGrip = aGrip.curGrip;
-            ed.delta   = delta;
-            ed.pos     = p;
-            ed.hRaster = false;
-            ed.vRaster = false;
-            editObject->editDrag(ed);
+            data.curGrip = aGrip.curGrip;
+//            ed.delta   = delta;
+//            ed.pos     = p;
+            editObject->editDrag(data);
             updateGrips();
-            data.startMove = p;
+            data.startMove = data.pos;
             }
       QRectF r(editObject->canvasBoundingRect());
       _score->addRefresh(r);

@@ -1726,7 +1726,8 @@ void ScoreView::paintEvent(QPaintEvent* ev)
                   if (i == aGrip.curGrip && hasFocus()){
                         vp.setBrush(MScore::selectColor[0]);
                         vp.setPen(QPen(Qt::red, 0.0));
-                        if( drawAlignLines){
+
+                        if( drawAlignLines ){
                               for (int j = 0; j < aGrip.aLines; ++j) {
                                     if( aGrip.vert[j] ){
                                           QLineF vline(aGrip.aLine[j].x() + pageOffset.x(),0,aGrip.aLine[j].x() + pageOffset.x(),page->height() );
@@ -3384,12 +3385,7 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* event)
       }
 
 //---------------------------------------------------------
-      qreal a = aGrip.grip[0].width() * 1.0;
-      for (i = 0; i < aGrip.grips; ++i) {
-            if (aGrip.grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
-                  drawAlignLines = true;
-                  aGrip.curGrip = i;
-      return i != aGrip.grips;
+
 //   onEditPasteTransition
 //---------------------------------------------------------
 
@@ -3420,8 +3416,19 @@ bool ScoreView::editScoreViewDragTransition(QMouseEvent* ev)
 //TODOxxx            dragElement = e;
             return true;
             }
-      return false;
-      }
+      int i;
+      qreal a = aGrip.grip[0].width() * 1.0;
+      for (i = 0; i < aGrip.grips; ++i) {
+         if (aGrip.grip[i].adjusted(-a, -a, a, a).contains(data.startMove) ) {
+           drawAlignLines = true;
+             aGrip.curGrip = i;
+            updateGrips();
+            score()->end();
+            break;
+            }
+         }
+     return i != aGrip.grips;
+    }
 
 //---------------------------------------------------------
 //   editSelectTransition
