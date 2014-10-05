@@ -78,6 +78,9 @@
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
                </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
                <property name="maximum">
                 <number>1000000</number>
                </property>
@@ -106,6 +109,9 @@
                </property>
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="minimum">
+                <number>1</number>
                </property>
                <property name="maximum">
                 <number>1000000</number>
@@ -153,6 +159,9 @@
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
                <property name="maximum">
                 <number>100000</number>
                </property>
@@ -175,6 +184,9 @@
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="minimum">
+                <number>1</number>
                </property>
                <property name="maximum">
                 <number>100000</number>
