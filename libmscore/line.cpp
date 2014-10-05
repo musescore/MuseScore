@@ -791,6 +791,7 @@ bool SLine::readProperties(XmlReader& e)
             setTicks(e.readInt());
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
+            ls->setTrack(track()); // needed in read to get the right staff mag
             ls->read(e);
             add(ls);
             // in v1.x "visible" is a property of the segment only;
