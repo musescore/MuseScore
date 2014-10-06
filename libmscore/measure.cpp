@@ -2115,7 +2115,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         cr->add(element);
                   }
             else if (tag == "Text") {
-                  Text* t = new Text(score());
+                  Text* t = new StaffText(score());
                   t->setTrack(e.track());
                   t->read(e);
                   // previous versions stored measure number, delete it
