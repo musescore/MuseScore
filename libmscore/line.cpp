@@ -527,8 +527,20 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                   if (grip == GripLine::START) {
                         Q_ASSERT(startElement()->type() == Element::Type::MEASURE);
                         m = static_cast<Measure*>(startElement());
-                        x = m->pos().x();
-                        if(score()->styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest()) {
+                        // start after clef/key
+                        qreal offset = 0.0;
+                        Segment* s = m->first(Segment::Type::ChordRest);
+                        if (s) {
+                              s = s->prev();
+                              if (s) {
+                                    offset = s->x();
+                                    Element* e = s->element(staffIdx() * VOICES);
+                                    if (e)
+                                          offset += e->width();
+                                    }
+                              }
+                        x = m->pos().x() + offset;
+                        if (score()->styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest()) {
                               x = m->mmRest()->pos().x();
                               }
                         }
@@ -673,7 +685,7 @@ void SLine::layout()
                   // single segment
                   seg->setSpannerSegmentType(SpannerSegmentType::SINGLE);
                   qreal len = p2.x() - p1.x();
-                  if (anchor() == Anchor::SEGMENT)
+                  if (anchor() == Anchor::SEGMENT && type() != Element::Type::PEDAL)
                         len = qMax(3 * spatium(), len);
                   seg->setPos(p1);
                   seg->setPos2(QPointF(len, p2.y() - p1.y()));
@@ -695,10 +707,19 @@ void SLine::layout()
                   }
             else if (i == sysIdx2) {
                   // end segment
-                  qreal x1 = (mseg ? mseg->pos().x() : 0) + m->pos().x();
-                  qreal len = p2.x() - x1;
-                  if (anchor() == Anchor::SEGMENT)
-                        len = qMax(3 * spatium(), len);
+                  qreal offset = 0.0;
+                  qreal minLen = 0.0;
+                  if (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE) {
+                        // start line just after previous element (eg, key signature)
+                        mseg = mseg->prev();
+                        Element* e = mseg ? mseg->element(staffIdx() * VOICES) : nullptr;
+                        if (e)
+                              offset = e->width();
+                        if (type() != Element::Type::PEDAL)
+                              minLen = 3.0 * spatium();
+                        }
+                  qreal x1 = (mseg ? mseg->pos().x() : 0) + m->pos().x() + offset;
+                  qreal len = qMax(minLen, p2.x() - x1);
                   seg->setSpannerSegmentType(SpannerSegmentType::END);
                   seg->setPos(QPointF(x1, p1.y()));
                   seg->setPos2(QPointF(len, 0.0));    // p2 is relative to p1
