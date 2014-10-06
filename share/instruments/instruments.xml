@@ -5381,6 +5381,7 @@
                         <controller ctrl="10" value="60"/>
                   </Channel>
                   <genre>common</genre>
+                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="ride-cymbal">
                   <longName>Ride Cymbal</longName>
