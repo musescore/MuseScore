@@ -81,8 +81,8 @@ ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
 
 ScoreTab::~ScoreTab()
       {
-      for (int i = 0; i != tab->count(); ++i)
-            tab->removeTab(i);
+      while (tab->count() > 0)
+            tab->removeTab(0);
       }
 
 //---------------------------------------------------------
