@@ -279,6 +279,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "Attribute" || tag == "Articulation") {     // obsolete: "Attribute"
             Articulation* atr = new Articulation(score());
+            atr->setTrack(track());
             atr->read(e);
             add(atr);
             }
