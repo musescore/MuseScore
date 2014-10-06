@@ -181,7 +181,8 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       if (action == clearAction) {
             PaletteCell* cell = cells[i];
             if (cell) {
-                  delete cell->element;
+                  delete cell->element; // delete element
+                  cell->element = 0;    // reset pointer to 0
                   delete cell;
                   }
             cells[i] = 0;
