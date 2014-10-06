@@ -308,9 +308,7 @@ void MuseScore::editInstrList()
                               sli->setStaff(staff);
                               staff->setDefaultClefType(sli->defaultClefType());
 
-                              // rootScore->undoInsertStaff(staff, rstaff);
-
-                              Key nKey = part->staff(0)->key(0);
+                              Key nKey = part->staves()->empty() ? Key::C : part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
                               rootScore->undoInsertStaff(staff, rstaff, !sli->linked());
