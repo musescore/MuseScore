@@ -69,12 +69,16 @@ qreal TimeSig::mag() const
 
 void TimeSig::setSig(const Fraction& f, TimeSigType st)
       {
-      if (_sig != f)
+      if (_sig != f) {
             _sig = f;
+            _needLayout = true;
+            }
+      if (_timeSigType != st) {
+            _timeSigType = st;
+            _needLayout = true;
+            }
       if (st == TimeSigType::FOUR_FOUR || st == TimeSigType::ALLA_BREVE)
             customText = false;
-      _timeSigType = st;
-      _needLayout = true;
       _largeParentheses = false;
       }
 

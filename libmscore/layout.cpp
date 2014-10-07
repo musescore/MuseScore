@@ -1835,13 +1835,15 @@ void Score::createMMRests()
                               int track = staffIdx * VOICES;
                               TimeSig* ts = static_cast<TimeSig*>(cs->element(track));
                               if (ts) {
-                                    if (ns->element(track) == 0) {
-                                          TimeSig* nts = ts->clone();
+                                    TimeSig* nts = static_cast<TimeSig*>(ns->element(track));
+                                    if (!nts) {
+                                          nts = ts->clone();
                                           nts->setParent(ns);
                                           undo(new AddElement(nts));
                                           }
                                     else {
-                                          //TODO: check if same time signature
+                                          nts->setSig(ts->sig(), ts->timeSigType());
+                                          nts->layout();
                                           }
                                     }
                               }

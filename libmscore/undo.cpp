@@ -357,7 +357,6 @@ void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st, PropertyS
                         }
                   }
             else if (e->type() == Element::Type::MEASURE) {
-                  qDebug("change property for measure");
                   if (e->getProperty(t) != st)
                         undo(new ChangeProperty(e, t, st, ps));
                   }
