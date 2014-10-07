@@ -568,7 +568,7 @@ MuseScore::MuseScore()
       hl->setMargin(0);
       hl->setSpacing(0);
       importmidiShowPanel->setLayout(hl);
-      QPushButton *b = new QPushButton("Show MIDI import panel");
+      QPushButton *b = new QPushButton(tr("Show MIDI import panel"));
       b->setFocusPolicy(Qt::ClickFocus);
       importmidiShowPanel->setVisible(false);
       connect(b, SIGNAL(clicked()), SLOT(showMidiImportPanel()));
@@ -4908,10 +4908,10 @@ int main(int argc, char* av[])
                   "   }\n"
                   "QTabBar::close-button {\n"
                   "   image: url(:/data/icons/png/window-close.png);\n"
-		  "   }\n"
+              "   }\n"
                   "QTabBar::close-button:hover {\n"
-		  "   image: url(:/data/icons/png/window-close-hover.png);\n"
-		  "   }");
+              "   image: url(:/data/icons/png/window-close-hover.png);\n"
+              "   }");
             MgStyleConfigData::animationsEnabled = preferences.animations;
             qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
 
