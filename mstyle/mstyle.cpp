@@ -8587,7 +8587,7 @@ void MgStyle::configurationChanged()
       }
 
 //---------------------------------------------------------
-//   standardIconImplementation
+//   standardIcon
 //---------------------------------------------------------
 
 QIcon MgStyle::standardIcon(StandardPixmap standardIcon,
@@ -8811,8 +8811,8 @@ QIcon MgStyle::standardIcon(StandardPixmap standardIcon,
             case SP_MessageBoxQuestion:
                   return getCachedIcon(":/data/icons/dialog-question.svg");
             default:
-                  return QIcon();
-                  // return QCommonStyle::standardIconImplementation( standardIcon, option, widget );
+                  // return QIcon();
+                  return QCommonStyle::standardIcon( standardIcon, option, widget );
             }
       }
 
