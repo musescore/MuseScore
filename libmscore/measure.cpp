@@ -2065,10 +2065,9 @@ void Measure::read(XmlReader& e, int staffIdx)
                         // if 'real' time sig., do full process
                         segment = getSegment(Segment::Type::TimeSig, currTick);
                         segment->add(ts);
-                        timeStretch = ts->stretch().reduced();
 
-                        if (_timesig != ts->sig() / timeStretch)
-                              _timesig = ts->sig() / timeStretch;
+                        timeStretch = ts->stretch().reduced();
+                        _timesig    = ts->sig() / timeStretch;
 
                         if (score()->mscVersion() > 114) {
                               if (irregular) {
