@@ -132,20 +132,12 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
@@ -191,20 +183,12 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>

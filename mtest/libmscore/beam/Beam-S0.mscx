@@ -223,10 +223,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <LayoutBreak>
@@ -377,10 +373,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Beam id="8">
@@ -444,10 +436,6 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
@@ -527,10 +515,6 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="7">
         <Beam id="12">
@@ -605,10 +589,6 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="8">
         <Beam id="14">
@@ -683,10 +663,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="9">
         <Beam id="16">
@@ -761,10 +737,6 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="10">
         <LayoutBreak>
@@ -843,10 +815,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="11">
         <Beam id="20">
@@ -921,10 +889,6 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="12">
         <Beam id="22">
@@ -999,10 +963,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="13">
         <Beam id="24">
@@ -1077,10 +1037,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="14">
         <LayoutBreak>
@@ -1126,10 +1082,6 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="15">
         <Beam id="27">
@@ -1188,10 +1140,6 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="16">
         <Beam id="28">
@@ -1250,10 +1198,6 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="17">
         <Beam id="29">
@@ -1312,10 +1256,6 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="18">
         <LayoutBreak>
@@ -1378,10 +1318,6 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="19">
         <Beam id="31">
@@ -1440,10 +1376,6 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="20">
         <Beam id="32">
@@ -1502,10 +1434,6 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="21">
         <Beam id="33">
@@ -1594,10 +1522,6 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="22">
         <LayoutBreak>
@@ -1643,120 +1567,72 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="23">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="24">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="25">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="26">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="27">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="28">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="29">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="30">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="31">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="32">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="33">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="34">
         <Rest>

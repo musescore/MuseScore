@@ -1832,8 +1832,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment = getSegment(st, e.tick()); // let the bar line know it belongs to a Segment,
                   segment->add(barLine);              // before setting its flags
                   if (st == Segment::Type::EndBarLine) {
-                        if (!barLine->customSubtype())
-                              setEndBarLineType(barLine->barLineType(), false, true);
+                        if (!barLine->customSubtype()) {
+                              BarLineType blt = barLine->barLineType();
+                              // Measure::_endBarLineGenerated is true if the bar line is of a type which can
+                              // be reconstructed from measure flags
+                              bool endBarLineGenerated = (blt == BarLineType::NORMAL || blt == BarLineType::END_REPEAT
+                                    || blt == BarLineType::END_START_REPEAT || blt == BarLineType::START_REPEAT);
+                              setEndBarLineType(blt, endBarLineGenerated, true);
+                              }
                         if (!barLine->customSpan()) {
                               Staff* staff = score()->staff(staffIdx);
                               barLine->setSpan(staff->barLineSpan());
