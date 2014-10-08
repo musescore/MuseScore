@@ -132,10 +132,6 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <TimeSig>
@@ -173,10 +169,6 @@
             <tpc>19</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Chord>
@@ -210,10 +202,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Chord>
@@ -237,10 +225,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="5">
         <Chord>
@@ -265,10 +249,6 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>start-repeat</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <Dynamic>
@@ -291,10 +271,6 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="7">
         <Chord>
@@ -312,10 +288,6 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="8">
         <Chord>
@@ -337,10 +309,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="9">
         <Chord>
@@ -359,11 +327,6 @@
           <root>15</root>
           <name>7</name>
           </Harmony>
-        <tick>13440</tick>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="10">
         <Chord>
@@ -377,22 +340,12 @@
         <Rest>
           <durationType>half</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="11">
         <Rest>
-          <durationType>quarter</durationType>
+          <durationType>measure</durationType>
+          <duration z="3" n="4"/>
           </Rest>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="12">
         <Rest>
@@ -404,30 +357,18 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="13">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="14">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="15">
         <Rest>
@@ -447,10 +388,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="16">
         <Chord>
@@ -470,30 +407,18 @@
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="17">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="18">
         <Rest>
           <durationType>measure</durationType>
           <duration z="3" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="19">
         <Rest>
