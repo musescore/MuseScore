@@ -202,6 +202,13 @@ bool LineSegment::edit(MuseScoreView* sv, int curGrip, int key, Qt::KeyboardModi
       if (l->anchor() == Spanner::Anchor::SEGMENT) {
             Segment* s1 = spanner()->startSegment();
             Segment* s2 = spanner()->endSegment();
+            // check for line going to end of score
+            if (spanner()->tick2() >= score()->lastSegment()->tick()) {
+                  // endSegment calculated above will be the last chord/rest of score
+                  // but that is not correct - it should be an imaginary note *after* the end of the score
+                  // best we can do is set s2 to lastSegment (probably the end barline)
+                  s2 = score()->lastSegment();
+                  }
             if (!s1 && !s2) {
                   qDebug("LineSegment::edit: no start/end segment");
                   return true;
