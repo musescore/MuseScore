@@ -525,7 +525,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //  with same values
             //
             if ((ots->timeSigType() == ts->timeSigType())
-               && (ots->sig().identical(ts->sig()))
+               && (ots->sig().identical(ns))
                && (ots->stretch() == ts->stretch())
                && ots->groups() == ts->groups()) {
                   delete ts;
@@ -543,7 +543,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             return;
             }
 
-      if (ots && ots->sig() == ts->sig() && ots->stretch() == ts->stretch()) {
+      if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
+            ots->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ns));
+            ots->undoChangeProperty(P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
             foreach (Score* score, scoreList()) {
                   Measure* fm = score->tick2measure(tick);
                   for (Measure* m = fm; m; m = m->nextMeasure()) {
@@ -553,7 +555,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         undoChangeProperty(m, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                         if (changeActual)
                               undoChangeProperty(m, P_ID::TIMESIG_ACTUAL,  QVariant::fromValue(ns));
-                        undoChangeProperty(ots, P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
+                        // undoChangeProperty(ots, P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
                         }
                   }
             int n = nstaves();
@@ -576,7 +578,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   fm = s ? 0 : fm->nextMeasure();
                   }
             else {
-                  if (sigmap()->timesig(seg->tick()).timesig() == ts->sig())
+                  if (sigmap()->timesig(seg->tick()).timesig().identical(ns))
                         fm = 0;
                   }
             if (fm) {
@@ -596,12 +598,12 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               nsig = new TimeSig(score);
                               nsig->setTrack(staffIdx * VOICES);
                               nsig->setParent(seg);
-                              nsig->setSig(ts->sig(), ts->timeSigType());
+                              nsig->setSig(ns, ts->timeSigType());
                               nsig->setGroups(ts->groups());
                               undoAddElement(nsig);
                               }
                         else {
-                              undo(new ChangeTimesig(nsig, false, ts->sig(), ts->stretch(),
+                              undo(new ChangeTimesig(nsig, false, ns, ts->stretch(),
                                     ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
                               nsig->setSelected(false);
                               nsig->setDropTarget(0);       // DEBUG
