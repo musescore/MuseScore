@@ -242,6 +242,9 @@ void TimeSig::read(XmlReader& e)
             _sig.set(z1+z2+z3+z4, n);
             customText = false;
             }
+      // sanity check:
+      if (_timeSigType == TimeSigType::ALLA_BREVE)
+            _sig.set(2,2);
       _stretch.reduce();
       _needLayout = true;
       }
