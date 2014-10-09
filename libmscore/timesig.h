@@ -63,7 +63,7 @@ class TimeSig : public Element {
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
       bool _showCourtesySig;
-      bool customText;        // if false, sz and sn are calculated from actualSig()
+      bool customText;        // if false, sz and sn are calculated from _sig
       bool _needLayout;
       bool _largeParentheses;
       Groups _groups;

@@ -39,7 +39,6 @@ TimeSig::TimeSig(Score* s)
       _sig.set(0, 1);               // initialize to invalid
       _timeSigType   = TimeSigType::NORMAL;
       _largeParentheses = false;
-      customText = false;
       _needLayout = true;
       }
 
@@ -65,11 +64,12 @@ qreal TimeSig::mag() const
 
 //---------------------------------------------------------
 //   setSig
+//    custom text has to be set after setSig()
 //---------------------------------------------------------
 
 void TimeSig::setSig(const Fraction& f, TimeSigType st)
       {
-      if (_sig != f) {
+      if (!_sig.identical(f)) {
             _sig = f;
             _needLayout = true;
             }
@@ -77,8 +77,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
             _timeSigType = st;
             _needLayout = true;
             }
-      if (st == TimeSigType::FOUR_FOUR || st == TimeSigType::ALLA_BREVE)
-            customText = false;
+      customText = false;
       _largeParentheses = false;
       }
 
@@ -111,30 +110,32 @@ Element* TimeSig::drop(const DropData& data)
 
 //---------------------------------------------------------
 //   setNumeratorString
+//    setSig() has to be called first
 //---------------------------------------------------------
 
 void TimeSig::setNumeratorString(const QString& a)
       {
-      _numeratorString = a;
-      // text is custom if only one string is present or if either string is not the default string
-      customText = _numeratorString.isEmpty() != _denominatorString.isEmpty()
-            || ( !_numeratorString.isEmpty() && _numeratorString != QString::number(_sig.numerator()) )
-            || ( !_denominatorString.isEmpty() && _denominatorString != QString::number(_sig.denominator()) );
-      _needLayout = true;
+      if (_timeSigType ==  TimeSigType::NORMAL) {
+            _numeratorString = a;
+            customText = (_denominatorString != QString::number(_sig.denominator()))
+               || (_numeratorString != QString::number(_sig.numerator()));
+            _needLayout = true;
+            }
       }
 
 //---------------------------------------------------------
 //   setDenominatorString
+//    setSig() has to be called first
 //---------------------------------------------------------
 
 void TimeSig::setDenominatorString(const QString& a)
       {
-      _denominatorString = a;
-      // text is custom if only one string is present or if either string is not the default string
-      customText = _numeratorString.isEmpty() != _denominatorString.isEmpty()
-            || ( !_numeratorString.isEmpty() && _numeratorString != QString::number(_sig.numerator()) )
-            || ( !_denominatorString.isEmpty() && _denominatorString != QString::number(_sig.denominator()) );
-      _needLayout = true;
+      if (_timeSigType ==  TimeSigType::NORMAL) {
+            _denominatorString = a;
+            customText = (_denominatorString != QString::number(_sig.denominator()))
+               || (_numeratorString != QString::number(_sig.numerator()));
+            _needLayout = true;
+            }
       }
 
 //---------------------------------------------------------
@@ -352,7 +353,6 @@ void TimeSig::layout1()
             }
 
       _needLayout = false;
-      // adjustReadPos();
       }
 
 //---------------------------------------------------------
