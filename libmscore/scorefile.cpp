@@ -260,6 +260,16 @@ void Score::readStaff(XmlReader& e)
                               e.setLastMeasure(measure);
                               e.initTick(measure->tick() + measure->ticks());
                               }
+                        else {
+                              // this is a multi measure rest
+                              // always preceded by the first measure it replaces
+                              Measure* m = e.lastMeasure();
+
+                              if (m) {
+                                    m->setMMRest(measure);
+                                    measure->setTick(m->tick());
+                                    }
+                              }
                         }
                   else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                         MeasureBase* mb = static_cast<MeasureBase*>(Element::name2Element(tag, this));

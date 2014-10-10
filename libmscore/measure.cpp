@@ -1805,19 +1805,23 @@ void Measure::read(XmlReader& e, int staffIdx)
                   barLine->read(e);
                   Segment::Type st;
 
+                  if (isMMRest()) {
+                        // to find out the right segment type
+                        setTick(e.lastMeasure()->tick());
+                        e.initTick(e.lastMeasure()->tick());
+                        }
+
                   //
                   //  SegStartRepeatBarLine: always at the beginning tick of a measure
                   //  SegBarLine:            in the middle of a measure, has no semantic
                   //  SegEndBarLine:         at the end tick of a measure
 
-                  if ((e.tick() != tick()) && (e.tick() != endTick())) {
+                  if ((e.tick() != tick()) && (e.tick() != endTick()))
                         st = Segment::Type::BarLine;
-                        }
                   else if (barLine->barLineType() == BarLineType::START_REPEAT && e.tick() == tick())
                         st = Segment::Type::StartRepeatBarLine;
-                  else {
+                  else
                         st = Segment::Type::EndBarLine;
-                        }
                   segment = getSegment(st, e.tick()); // let the bar line know it belongs to a Segment,
                   segment->add(barLine);              // before setting its flags
                   if (st == Segment::Type::EndBarLine) {
@@ -1828,16 +1832,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                               barLine->setSpan(staff->barLineSpan());
                               barLine->setSpanFrom(staff->barLineFrom());
                               barLine->setSpanTo(staff->barLineTo());
-                              }
-                        if (isMMRest()) {
-                              // this is a multi measure rest
-                              // always preceded by the first measure it replaces
-                              Measure* m = e.lastMeasure();
-                              Q_ASSERT(m);      // debug
-                              if (m) {
-                                    m->setMMRest(this);
-                                    setTick(m->tick());
-                                    }
                               }
                         }
                   }

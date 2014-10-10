@@ -200,6 +200,7 @@ void ChordRest::writeProperties(Xml& xml) const
       if (!duration().isZero() && (!actualDurationType().fraction().isValid()
          || (actualDurationType().fraction() != duration())))
             xml.fTag("duration", duration());
+
       foreach(const Articulation* a, _articulations)
             a->write(xml);
 #ifndef NDEBUG
