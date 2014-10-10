@@ -1354,53 +1354,52 @@ void Text::genText()
                   if (f.text.isEmpty())                     // skip empty fragments, not to
                         continue;                           // insert extra HTML formatting
                   const CharFormat& format = f.format;
-                  if (format.type() == CharFormatType::TEXT) {
-                        if (cursor.format()->bold() != format.bold()) {
-                              if (format.bold())
-                                    xmlNesting.pushB();
-                              else
-                                    xmlNesting.popB();
-                              }
-                        if (cursor.format()->italic() != format.italic()) {
-                              if (format.italic())
-                                    xmlNesting.pushI();
-                              else
-                                    xmlNesting.popI();
-                              }
-                        if (cursor.format()->underline() != format.underline()) {
-                              if (format.underline())
-                                    xmlNesting.pushU();
-                              else
-                                    xmlNesting.popU();
-                              }
-
-                        if (format.fontSize() != cursor.format()->fontSize())
-                              _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
-                        if (format.fontFamily() != cursor.format()->fontFamily())
-                              _text += QString("<font face=\"%1\"/>").arg(format.fontFamily());
-
-                        VerticalAlignment va = format.valign();
-                        VerticalAlignment cva = cursor.format()->valign();
-                        if (cva != va) {
-                              switch (va) {
-                                    case VerticalAlignment::AlignNormal:
-                                          xmlNesting.popToken(cva == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
-                                          break;
-                                    case VerticalAlignment::AlignSuperScript:
-                                          xmlNesting.pushToken("sup");
-                                          break;
-                                    case VerticalAlignment::AlignSubScript:
-                                          xmlNesting.pushToken("sub");
-                                          break;
-                                    }
-                              }
-                        _text += Xml::xmlString(f.text);
-                        cursor.setFormat(format);
+                  if (cursor.format()->bold() != format.bold()) {
+                        if (format.bold())
+                              xmlNesting.pushB();
+                        else
+                              xmlNesting.popB();
                         }
+                  if (cursor.format()->italic() != format.italic()) {
+                        if (format.italic())
+                              xmlNesting.pushI();
+                        else
+                              xmlNesting.popI();
+                        }
+                  if (cursor.format()->underline() != format.underline()) {
+                        if (format.underline())
+                              xmlNesting.pushU();
+                        else
+                              xmlNesting.popU();
+                        }
+
+                  if (format.fontSize() != cursor.format()->fontSize())
+                        _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
+                  if (format.fontFamily() != cursor.format()->fontFamily())
+                        _text += QString("<font face=\"%1\"/>").arg(format.fontFamily());
+
+                  VerticalAlignment va = format.valign();
+                  VerticalAlignment cva = cursor.format()->valign();
+                  if (cva != va) {
+                        switch (va) {
+                              case VerticalAlignment::AlignNormal:
+                                    xmlNesting.popToken(cva == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
+                                    break;
+                              case VerticalAlignment::AlignSuperScript:
+                                    xmlNesting.pushToken("sup");
+                                    break;
+                              case VerticalAlignment::AlignSubScript:
+                                    xmlNesting.pushToken("sub");
+                                    break;
+                              }
+                        }
+                  if (format.type() == CharFormatType::TEXT)
+                        _text += Xml::xmlString(f.text);
                   else {
                         for (SymId id : f.ids)
                               _text += QString("<sym>%1</sym>").arg(Sym::id2name(id));
                         }
+                  cursor.setFormat(format);
                   }
             if (block.eol())
                   _text += QChar::LineFeed;
@@ -1493,11 +1492,15 @@ void Text::endEdit()
                   // when we called it for the linked elements
                   // by also checking for empty old text, we avoid creating an unnecessary element on undo stack
                   // that returns us to the initial empty text created upon startEdit()
+
                   if (!oldText.isEmpty())
                         score()->undo()->push1(new ChangeProperty(e, P_ID::TEXT, oldText));
+
                   // because we are pushing each individual linked element's old text to the undo stack,
                   // we don't actually need to call the undo version of change property here
+
                   e->setProperty(P_ID::TEXT, _text);
+
                   // the change mentioned above eliminated the following line, which is where the linked elements actually got their text set
                   // one would think this line alone would be enough to make undo work
                   // but it is not, because by the time we get here, we've already overwritten _text for the current item
