@@ -469,25 +469,69 @@ SLine::SLine(const SLine& s)
 QPointF SLine::linePos(GripLine grip, System** sys) const
       {
       qreal x = 0.0;
+      qreal sp = staff()->spatium();
       switch (anchor()) {
             case Spanner::Anchor::SEGMENT:
                   {
                   ChordRest* cr;
                   if (grip == GripLine::START) {
                         cr = static_cast<ChordRest*>(startElement());
+                        if (cr) {
+                              // some sources say to center the text over the note head
+                              // some say to start the text just to left of notehead
+                              // our simple compromise - left align
+                              if (cr->durationType() == TDuration::DurationType::V_MEASURE && type() == Element::Type::OTTAVA)
+                                    x = cr->x();                  // center for measure rests
+                              else if (cr->space().lw() > 0.0)
+                                    x = -cr->space().lw();        // account for accidentals, etc
+                              }
                         }
                   else {
                         cr = static_cast<ChordRest*>(endElement());
                         if (type() == Element::Type::OTTAVA) {
-                              // lay out to right edge of note (including dots)
-                              if (cr)
-                                    x += cr->segment()->width();
+                              if (cr && cr->durationType() == TDuration::DurationType::V_MEASURE) {
+                                    x = cr->x() + cr->width();
+                                    }
+                              else if (cr) {
+                                    // lay out just past right edge of all notes for this segment on this staff
+                                    // note: the cheap solution is to simply use segment width,
+                                    // but that would account for notes in other staves unnecessarily
+                                    // and in any event, segment bboxes seem unreliable
+                                    qreal width = 0;
+                                    Segment* s = cr->segment();
+                                    int n = staffIdx() * VOICES;
+                                    for (int i = 0; i < VOICES; ++i) {
+                                          ChordRest* vcr = static_cast<ChordRest*>(s->element(n + i));
+                                          if (vcr)
+                                                width = qMax(width, vcr->space().rw());
+                                          }
+                                    // extend past chord/rest
+                                    x = width + sp;
+                                    // but don't overlap next chord/rest
+                                    Segment* ns = s->next();
+                                    bool crFound = false;
+                                    while (ns) {
+                                          for (int i = 0; i < VOICES; ++i) {
+                                                if (ns->element(n + i)) {
+                                                      crFound = true;
+                                                      break;
+                                                      }
+                                                }
+                                          if (crFound)
+                                                break;
+                                          ns = ns->next();
+                                          }
+                                    if (crFound) {
+                                          qreal nextNoteDistance = ns->x() - s->x();
+                                          if (x > nextNoteDistance)
+                                                x = qMax(width, nextNoteDistance);
+                                          }
+                                    }
                               }
                         else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL || type() == Element::Type::TEXTLINE) {
-                              // lay out all the way to next CR or (almost to) barline
+                              // lay out to just before next CR or barline
                               if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
-                                    qreal x2 = 0.0;
-                                    qreal sp = endElement()->staff()->spatium();
+                                    qreal x2 = cr->x() + cr->space().rw();
                                     int t = track2();
                                     Segment* seg = static_cast<Segment*>(endElement()->parent())->next();
                                     for ( ; seg; seg = seg->next()) {
@@ -495,11 +539,11 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                                                 if (t != -1 && !seg->element(t)) {
                                                       continue;
                                                       }
-                                                x2 = seg->x() - sp;     // 1sp shy of next chord
+                                                x2 = qMax(x2, seg->x() - sp);
                                                 break;
                                                 }
                                           else if (seg->segmentType() == Segment::Type::EndBarLine) {
-                                                x2 = seg->x() - sp;
+                                                x2 = qMax(x2, seg->x() - sp);
                                                 break;
                                                 }
                                           }
@@ -507,19 +551,16 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                                           // no end segment found, use measure width
                                           x2 = endElement()->parent()->parent()->width() - sp;
                                           }
-                                    x += x2 - endElement()->parent()->x();
+                                    x = x2 - endElement()->parent()->x();
                                     }
                               }
                         }
-
-                  if (cr && cr->durationType() == TDuration::DurationType::V_MEASURE)
-                        x -= cr->x();
 
                   int t = grip == GripLine::START ? tick() : tick2();
                   Measure* m = cr ? cr->measure() : score()->tick2measure(t);
 
                   if (m) {
-                        x += cr ? cr->pos().x() + cr->segment()->pos().x() + m->pos().x() : m->tick2pos(t);
+                        x += cr ? cr->segment()->pos().x() + m->pos().x() : m->tick2pos(t);
                         *sys = m->system();
                         }
                   else
