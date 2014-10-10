@@ -1810,17 +1810,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   //  SegBarLine:            in the middle of a measure, has no semantic
                   //  SegEndBarLine:         at the end tick of a measure
 
-                  if (isMMRest()) {
-                        // this is a multi measure rest
-                        // always preceded by the first measure it replaces
-                        Measure* m = e.lastMeasure();
-                        Q_ASSERT(m);      // debug
-                        if (m) {
-                              m->setMMRest(this);
-                              setTick(m->tick());
-                              }
-                        }
-
                   if ((e.tick() != tick()) && (e.tick() != endTick())) {
                         st = Segment::Type::BarLine;
                         }
@@ -1839,6 +1828,16 @@ void Measure::read(XmlReader& e, int staffIdx)
                               barLine->setSpan(staff->barLineSpan());
                               barLine->setSpanFrom(staff->barLineFrom());
                               barLine->setSpanTo(staff->barLineTo());
+                              }
+                        if (isMMRest()) {
+                              // this is a multi measure rest
+                              // always preceded by the first measure it replaces
+                              Measure* m = e.lastMeasure();
+                              Q_ASSERT(m);      // debug
+                              if (m) {
+                                    m->setMMRest(this);
+                                    setTick(m->tick());
+                                    }
                               }
                         }
                   }
@@ -3279,8 +3278,8 @@ void Measure::layoutX(qreal stretch)
                               }
                         }
                   space += Space(elsp, etsp);
-                  if (isMMRest())
-                        minDistance = 0;
+                  // if (isMMRest())            //?? minDistance needed for clef-repeatbarline distance
+                        // minDistance = 0;
 
                   if (found || eFound) {
                         space.rLw() += clefWidth[staffIdx];
