@@ -3603,6 +3603,20 @@ qreal Score::computeMinWidth(Segment* fs)
                   else {
                         // current segment (s) is not a ChordRest
                         Element* e = s->element(track);
+                        if (segType == Segment::Type::StartRepeatBarLine && !e) {
+                              for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                                    Element* ee = s->element(staffIdx * VOICES);
+                                    if (ee) {
+                                          BarLine* bl = static_cast<BarLine*>(ee);
+                                          int strack = staffIdx * VOICES;
+                                          int etrack = (staffIdx + bl->span()) * VOICES;
+                                          if (track >= strack && track < etrack) {
+                                                e = ee;
+                                                break;
+                                                }
+                                          }
+                                    }
+                              }
                         if ((segType == Segment::Type::Clef) && (pt != Segment::Type::ChordRest))
                               minDistance = styleP(StyleIdx::clefLeftMargin);
                         else if (segType == Segment::Type::StartRepeatBarLine)
