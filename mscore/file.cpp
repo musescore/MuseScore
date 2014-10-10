@@ -1458,6 +1458,13 @@ void MuseScore::printFile()
       QPrintDialog pd(&printerDev, 0);
       if (!pd.exec())
             return;
+
+      LayoutMode layoutMode = cs->layoutMode();
+      if (layoutMode != LayoutMode::PAGE) {
+            cs->setLayoutMode(LayoutMode::PAGE);
+            cs->doLayout();
+            }
+
       QPainter p(&printerDev);
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
@@ -1488,6 +1495,10 @@ void MuseScore::printFile()
                   }
             }
       p.end();
+      if (layoutMode != cs->layoutMode()) {
+            cs->setLayoutMode(layoutMode);
+            cs->doLayout();
+            }
       }
 
 //---------------------------------------------------------
