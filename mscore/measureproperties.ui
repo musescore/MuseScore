@@ -412,17 +412,17 @@
            <widget class="QComboBox" name="measureNumberMode">
             <item>
              <property name="text">
-              <string>AUTO</string>
+              <string>Automatic</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>always show</string>
+              <string>Always show</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>always hide</string>
+              <string>Always hide</string>
              </property>
             </item>
            </widget>
