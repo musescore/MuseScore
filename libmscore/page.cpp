@@ -36,6 +36,7 @@ namespace Ms {
 #define MM(x) ((x)/INCH)
 
 const PaperSize paperSizes[] = {
+      PaperSize("Custom",    MM(1),    MM(1)),
       PaperSize("A4",        MM(210),  MM(297)),
       PaperSize("B5",        MM(176),  MM(250)),
       PaperSize("Letter",    8.5,      11),
@@ -66,7 +67,6 @@ const PaperSize paperSizes[] = {
       PaperSize("Folio",     MM(210),  MM(330)),
       PaperSize("Ledger",    MM(432),  MM(279)),
       PaperSize("Tabloid",   MM(279),  MM(432)),
-      PaperSize("Custom",    MM(1),    MM(1)),
       PaperSize(0,           MM(1),    MM(1))   // mark end of list
       };
 
