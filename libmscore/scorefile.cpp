@@ -153,7 +153,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       while (i.hasNext()) {
             i.next();
             if (!MScore::testMode  || (i.key() != "platform" && i.key() != "creationDate"))
-                  xml.tag(QString("metaTag name=\"%1\"").arg(i.key()), i.value());
+                  xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
             }
 
       foreach(KeySig* ks, customKeysigs)
