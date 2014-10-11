@@ -43,6 +43,7 @@
 #include "pathlistdialog.h"
 #include "mstyle/mconfig.h"
 #include "resourceManager.h"
+#include "synthesizer/msynthesizer.h"
 
 namespace Ms {
 
@@ -1319,7 +1320,14 @@ void PreferenceDialog::apply()
             preferences = prefs;
             Driver* driver = driverFactory(seq, "");
             if (seq) {
-                  seq->setDriver(driver);
+                  if (driver) {
+                        // Updating synthesizer's sample rate
+                        if (seq->synti()) {
+                              seq->synti()->setSampleRate(driver->sampleRate());
+                              seq->synti()->init();
+                              }
+                        seq->setDriver(driver);
+                        }
                   if (!seq->init())
                         qDebug("sequencer init failed");
                   }

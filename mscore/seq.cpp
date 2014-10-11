@@ -228,6 +228,7 @@ bool Seq::init(bool hotPlug)
       {
       if (!_driver || !_driver->start(hotPlug)) {
             qDebug("Cannot start I/O");
+            running = false;
             return false;
             }
       running = true;
