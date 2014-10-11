@@ -88,6 +88,8 @@ class SlurSegment : public SpannerSegment {
       SlurSegment(const SlurSegment&);
       virtual SlurSegment* clone() const { return new SlurSegment(*this); }
       virtual Element::Type type() const { return Element::Type::SLUR_SEGMENT; }
+      virtual int subtype() const         { return static_cast<int>(spanner()->type()); }
+      virtual QString subtypeName() const { return name(spanner()->type()); }
 
       void layout(const QPointF& p1, const QPointF& p2);
       virtual QPainterPath shape() const { return shapePath; }
