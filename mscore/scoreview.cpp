@@ -3113,6 +3113,7 @@ void ScoreView::startNoteEntry()
       // set cursor after setting the stafftype-dependent state
       moveCursor();
       mscore->updateInputState(_score);
+      shadowNote->setVisible(false);
       setCursorOn(true);
       }
 
