@@ -39,11 +39,6 @@
         <tpc>13</tpc>
         </Note>
       </Chord>
-    <BarLine>
-      <subtype>normal</subtype>
-      <span>1</span>
-      <track>0</track>
-      </BarLine>
     <Chord>
       <track>0</track>
       <durationType>quarter</durationType>
