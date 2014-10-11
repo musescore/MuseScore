@@ -1240,7 +1240,7 @@ void MuseScore::addTempo()
 
       TempoText* tt = new TempoText(cs);
       tt->setParent(cr->segment());
-      tt->setTrack(cr->track());
+      tt->setTrack(0);
       tt->setText(text);
       tt->setFollowText(true);
       //tt->setTempo(bps);
