@@ -3703,27 +3703,27 @@
            <widget class="QComboBox" name="voltaLineStyle">
             <item>
              <property name="text">
-              <string>Solid</string>
+              <string>Continuous</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Dash</string>
+              <string>Dashed</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Dot</string>
+              <string>Dotted</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>DashDot</string>
+              <string>Dash-dotted</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>DashDotDot</string>
+              <string>Dash-dot-dotted</string>
              </property>
             </item>
            </widget>
@@ -3897,27 +3897,27 @@
            <widget class="QComboBox" name="ottavaLineStyle">
             <item>
              <property name="text">
-              <string>Solid</string>
+              <string>Continuous</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Dash</string>
+              <string>Dashed</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Dot</string>
+              <string>Dotted</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>DashDot</string>
+              <string>Dash-dotted</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>DashDotDot</string>
+              <string>Dash-dot-dotted</string>
              </property>
             </item>
            </widget>
@@ -4089,27 +4089,27 @@
            <widget class="QComboBox" name="pedalLineStyle">
             <item>
              <property name="text">
-              <string>Solid</string>
+              <string>Continuous</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Dash</string>
+              <string>Dashed</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Dot</string>
+              <string>Dotted</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>DashDot</string>
+              <string>Dash-dotted</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>DashDotDot</string>
+              <string>Dash-dot-dotted</string>
              </property>
             </item>
            </widget>

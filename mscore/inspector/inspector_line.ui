@@ -168,27 +168,27 @@
        </property>
        <item>
         <property name="text">
-         <string>Solid</string>
+         <string>Continuous</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Dash</string>
+         <string>Dashed</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Dot</string>
+         <string>Dotted</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>DashDot</string>
+         <string>Dash-dotted</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>DashDotDot</string>
+         <string>Dash-dot-dotted</string>
         </property>
        </item>
       </widget>
@@ -240,8 +240,6 @@
   <tabstop>lineStyle</tabstop>
   <tabstop>resetLineStyle</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
