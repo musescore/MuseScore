@@ -2959,6 +2959,10 @@ void Score::selectSimilar(Element* e, bool sameStaff)
             pattern.subtype = static_cast<Note*>(e)->chord()->isGrace();
             pattern.subtypeValid = true;
             }
+      else if (type == Element::Type::SLUR_SEGMENT) {
+            pattern.subtype = static_cast<int>(static_cast<SlurSegment*>(e)->spanner()->type());
+            pattern.subtypeValid = true;
+            }
       else {
             pattern.subtype = 0;
             pattern.subtypeValid = false;
