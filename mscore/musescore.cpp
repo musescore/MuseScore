@@ -354,8 +354,8 @@ void MuseScore::preferencesChanged()
                   }
             }
 
-      transportTools->setEnabled(!noSeq);
-      playId->setEnabled(!noSeq);
+      transportTools->setEnabled(!noSeq && seq && seq->isRunning());
+      playId->setEnabled(!noSeq && seq && seq->isRunning());
 
       getAction("midi-on")->setEnabled(preferences.enableMidiInput);
       _statusBar->setVisible(preferences.showStatusBar);
@@ -1778,7 +1778,7 @@ void MuseScore::showElementContext(Element* el)
 
 void MuseScore::showPlayPanel(bool visible)
       {
-      if (noSeq)
+      if (noSeq || !(seq && seq->isRunning()))
             return;
       if (playPanel == 0) {
             if (!visible)
@@ -2627,7 +2627,7 @@ void MuseScore::changeState(ScoreState val)
 
       menuWorkspaces->setEnabled(enable);
 
-      transportTools->setEnabled(enable && !noSeq);
+      transportTools->setEnabled(enable && !noSeq && seq && seq->isRunning());
       cpitchTools->setEnabled(enable);
       mag->setEnabled(enable);
       entryTools->setEnabled(enable);
@@ -2830,7 +2830,7 @@ void MuseScore::readSettings()
 
 void MuseScore::play(Element* e) const
       {
-      if (noSeq || !mscore->playEnabled())
+      if (noSeq || !(seq && seq->isRunning()) || !mscore->playEnabled())
             return;
 
       if (e->type() == Element::Type::NOTE) {
@@ -2854,7 +2854,7 @@ void MuseScore::play(Element* e) const
 
 void MuseScore::play(Element* e, int pitch) const
       {
-      if (noSeq)
+      if (noSeq || !(seq && seq->isRunning()))
             return;
       if (mscore->playEnabled() && e->type() == Element::Type::NOTE) {
             Note* note = static_cast<Note*>(e);
@@ -4002,7 +4002,7 @@ void MuseScore::endCmd()
                   excerptsChanged(cs->rootScore());
                   cs->rootScore()->setExcerptsChanged(false);
                   }
-            if (!noSeq && cs->instrumentsChanged()) {
+            if (!noSeq && !(seq && seq->isRunning()) && cs->instrumentsChanged()) {
                   seq->initInstruments();
                   cs->setInstrumentsChanged(false);
                   }
@@ -4918,21 +4918,22 @@ int main(int argc, char* av[])
             seq            = new Seq();
             MScore::seq    = seq;
             Driver* driver = driverFactory(seq, audioDriver);
+            synti              = synthesizerFactory();
             if (driver) {
-                  synti              = synthesizerFactory();
                   MScore::sampleRate = driver->sampleRate();
                   synti->setSampleRate(MScore::sampleRate);
                   synti->init();
 
                   seq->setDriver(driver);
-                  seq->setMasterSynthesizer(synti);
                   }
             else {
-                  delete seq;
-                  MScore::seq = 0;
-                  seq         = 0;
-                  noSeq       = true;
+                  // Do not delete the sequencer If we can't load driver.
+                  // Allow user to select the working driver later.
+                  MScore::sampleRate = 44100;  // Would be changed when user changes driver
+                  synti->setSampleRate(MScore::sampleRate);
+                  synti->init();
                   }
+            seq->setMasterSynthesizer(synti);
             }
       else
             noSeq = true;
@@ -4974,10 +4975,8 @@ int main(int argc, char* av[])
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / (MScore::DPI * SPATIUM20));
 
       if (!noSeq) {
-            if (!seq->init()) {
+            if (!seq->init())
                   qDebug("sequencer init failed");
-                  noSeq = true;
-                  }
             }
 
       //read languages list
