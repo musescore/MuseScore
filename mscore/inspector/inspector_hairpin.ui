@@ -83,12 +83,12 @@
        </property>
        <item>
         <property name="text">
-         <string>crescendo</string>
+         <string>Crescendo</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>decrescendo</string>
+         <string>Decrescendo</string>
         </property>
        </item>
       </widget>
@@ -288,8 +288,6 @@
   <tabstop>hairpinContHeight</tabstop>
   <tabstop>resetHairpinContHeight</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

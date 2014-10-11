@@ -137,12 +137,12 @@
        </property>
        <item>
         <property name="text">
-         <string>above</string>
+         <string>Above</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>below</string>
+         <string>Below</string>
         </property>
        </item>
       </widget>
@@ -198,8 +198,6 @@
   <tabstop>numbersOnly</tabstop>
   <tabstop>resetNumbersOnly</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
