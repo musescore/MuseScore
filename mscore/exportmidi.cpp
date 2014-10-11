@@ -262,14 +262,15 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
             for (auto i = events.begin(); i != events.end(); ++i) {
                   NPlayEvent event(i->second);
-                  if (event.channel() != channel)
+                  int eventChannel = cs->midiChannel(event.channel());
+                  if (channel != eventChannel)
                         continue;
                   if (event.type() == ME_NOTEON) {
-                        track.insert(i->first, MidiEvent(ME_NOTEON, event.channel(),
+                        track.insert(i->first, MidiEvent(ME_NOTEON, channel,
                            event.pitch(), event.velo()));
                         }
                   else if (event.type() == ME_CONTROLLER) {
-                        track.insert(i->first, MidiEvent(ME_CONTROLLER, event.channel(),
+                        track.insert(i->first, MidiEvent(ME_CONTROLLER, channel,
                            event.controller(), event.value()));
                         }
                   else {
