@@ -941,12 +941,6 @@ Palette* MuseScore::newTextPalette()
       is->setText(tr("Instrument"));
       sp->append(is, tr("Instrument Change"));
 
-      Text* text = new Text(gscore);
-      text->setTrack(0);
-      text->setTextStyleType(TextStyleType::LYRICS_VERSE_NUMBER);
-      text->setText(tr("1."));
-      sp->append(text, tr("Lyrics Verse Number"));
-
       return sp;
       }
 
