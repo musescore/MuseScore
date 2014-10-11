@@ -1007,8 +1007,10 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
 
       createElementPropertyMenu(obj, popup);
 
-      popup->addSeparator();
-      a = popup->addAction(tr("Help"));
+      if (enableExperimental) {
+            popup->addSeparator();
+            a = popup->addAction(tr("Help"));
+      }
       popup->addSeparator();
       a->setData("help");
       a = popup->addAction(tr("Debugger"));
