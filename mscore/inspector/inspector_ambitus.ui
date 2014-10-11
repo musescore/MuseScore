@@ -107,72 +107,72 @@
        </property>
        <item>
         <property name="text">
-         <string>normal</string>
+         <string>Normal</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>cross</string>
+         <string>Cross</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>diamond</string>
+         <string>Diamond</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>triangle</string>
+         <string>Triangle</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>slash</string>
+         <string>Slash</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>xcircle</string>
+         <string>Xcircle</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>do</string>
+         <string>Do</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>re</string>
+         <string>Re</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>mi</string>
+         <string>Mi</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>fa</string>
+         <string>Fa</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>sol</string>
+         <string>Sol</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>la</string>
+         <string>La</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>ti</string>
+         <string>Ti</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>alt. brevis</string>
+         <string>Alt. Brevis</string>
         </property>
        </item>
       </widget>
@@ -246,7 +246,7 @@
          </property>
          <item>
           <property name="text">
-           <string>[undefined]</string>
+           <string>[Undefined]</string>
           </property>
          </item>
          <item>
@@ -524,7 +524,7 @@
          </property>
          <item>
           <property name="text">
-           <string>[undefined]</string>
+           <string>[Undefined]</string>
           </property>
          </item>
          <item>
@@ -941,8 +941,6 @@
   <tabstop>bottomTpc</tabstop>
   <tabstop>bottomOctave</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

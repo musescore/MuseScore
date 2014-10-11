@@ -86,27 +86,27 @@
        </property>
        <item>
         <property name="text">
-         <string>trill line</string>
+         <string>Trill Line</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>up prall</string>
+         <string>Up Prall</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>down prall</string>
+         <string>Down Prall</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>prall prall</string>
+         <string>Prall Prall</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>wavy line</string>
+         <string>Wavy Line</string>
         </property>
        </item>
       </widget>
@@ -128,8 +128,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

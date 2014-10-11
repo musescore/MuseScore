@@ -142,7 +142,7 @@
        </item>
        <item>
         <property name="text">
-         <string>User defined</string>
+         <string>User Defined</string>
         </property>
        </item>
       </widget>
@@ -164,8 +164,6 @@
   <tabstop>jumpLabel</tabstop>
   <tabstop>resetJumpLabel</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
