@@ -74,6 +74,7 @@ QVariant OttavaSegment::getProperty(P_ID id) const
       switch (id) {
             case P_ID::OTTAVA_TYPE:
             case P_ID::PLACEMENT:
+            case P_ID::NUMBERS_ONLY:
                   return ottava()->getProperty(id);
             default:
                   return TextLineSegment::getProperty(id);
@@ -126,6 +127,7 @@ PropertyStyle OttavaSegment::propertyStyle(P_ID id) const
             case P_ID::OTTAVA_TYPE:
             case P_ID::LINE_WIDTH:
             case P_ID::LINE_STYLE:
+            case P_ID::PLACEMENT:
             case P_ID::NUMBERS_ONLY:
                   return ottava()->propertyStyle(id);
 
@@ -465,6 +467,7 @@ PropertyStyle Ottava::propertyStyle(P_ID id) const
       {
       switch (id) {
             case P_ID::OTTAVA_TYPE:
+            case P_ID::PLACEMENT:
                   return PropertyStyle::NOSTYLE;
 
             case P_ID::LINE_WIDTH:
