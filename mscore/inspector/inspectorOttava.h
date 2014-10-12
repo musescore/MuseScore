@@ -31,7 +31,7 @@ class InspectorOttava : public InspectorBase {
 
       UiInspectorElement    e;
       Ui::InspectorLine     l;
-      Ui::InspectorTextLine tl;
+      //Ui::InspectorTextLine tl;
       Ui::InspectorOttava   o;
 
    public:

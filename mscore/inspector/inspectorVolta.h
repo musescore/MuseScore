@@ -31,7 +31,7 @@ class InspectorVolta : public InspectorBase {
 
       Ui::InspectorElement e;
       Ui::InspectorLine l;
-      Ui::InspectorTextLine tl;
+      //Ui::InspectorTextLine tl;
       Ui::InspectorVolta v;
 
    public:
