@@ -4069,6 +4069,8 @@ void ExportMusicXml::write(QIODevice* dev)
                               xml.etag();
                               }
                         }
+                  xml.tag(QString("midi-device port=\"%1\"").arg(part->midiPort() + 1), "");
+
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
                         if (di.notehead != NoteHead::Group::HEAD_INVALID) {
@@ -4088,6 +4090,8 @@ void ExportMusicXml::write(QIODevice* dev)
                   xml.stag(QString("score-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
                   xml.tag("instrument-name", MScoreTextToMXML::toPlainText(part->longName()));
                   xml.etag();
+
+                  xml.tag(QString("midi-device id=\"P%1-I%2\" port=\"%3\"").arg(idx+1).arg(3).arg(part->midiPort() + 1), "");
 
                   xml.stag(QString("midi-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
                   if (part->midiChannel() >= 0) // <0 is not valid
