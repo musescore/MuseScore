@@ -22,6 +22,7 @@
       <score-instrument id="P1-I3">
         <instrument-name>Piccolo</instrument-name>
         </score-instrument>
+      <midi-device id="P1-I3" port="1"></midi-device>
       <midi-instrument id="P1-I3">
         <midi-channel>1</midi-channel>
         <midi-program>73</midi-program>
@@ -35,6 +36,7 @@
       <score-instrument id="P2-I3">
         <instrument-name>Flute</instrument-name>
         </score-instrument>
+      <midi-device id="P2-I3" port="1"></midi-device>
       <midi-instrument id="P2-I3">
         <midi-channel>2</midi-channel>
         <midi-program>74</midi-program>
@@ -52,6 +54,7 @@
       <score-instrument id="P3-I3">
         <instrument-name>Treble Flute</instrument-name>
         </score-instrument>
+      <midi-device id="P3-I3" port="1"></midi-device>
       <midi-instrument id="P3-I3">
         <midi-channel>3</midi-channel>
         <midi-program>73</midi-program>
@@ -65,6 +68,7 @@
       <score-instrument id="P4-I3">
         <instrument-name>Recorder</instrument-name>
         </score-instrument>
+      <midi-device id="P4-I3" port="1"></midi-device>
       <midi-instrument id="P4-I3">
         <midi-channel>4</midi-channel>
         <midi-program>75</midi-program>
@@ -82,6 +86,7 @@
       <score-instrument id="P5-I3">
         <instrument-name>Oboe</instrument-name>
         </score-instrument>
+      <midi-device id="P5-I3" port="1"></midi-device>
       <midi-instrument id="P5-I3">
         <midi-channel>5</midi-channel>
         <midi-program>69</midi-program>
@@ -95,6 +100,7 @@
       <score-instrument id="P6-I3">
         <instrument-name>English Horn</instrument-name>
         </score-instrument>
+      <midi-device id="P6-I3" port="1"></midi-device>
       <midi-instrument id="P6-I3">
         <midi-channel>6</midi-channel>
         <midi-program>70</midi-program>
@@ -112,6 +118,7 @@
       <score-instrument id="P7-I3">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
+      <midi-device id="P7-I3" port="1"></midi-device>
       <midi-instrument id="P7-I3">
         <midi-channel>7</midi-channel>
         <midi-program>1</midi-program>
@@ -129,6 +136,7 @@
       <score-instrument id="P8-I3">
         <instrument-name>Violin</instrument-name>
         </score-instrument>
+      <midi-device id="P8-I3" port="1"></midi-device>
       <midi-instrument id="P8-I3">
         <midi-channel>8</midi-channel>
         <midi-program>41</midi-program>
@@ -142,6 +150,7 @@
       <score-instrument id="P9-I3">
         <instrument-name>Viola</instrument-name>
         </score-instrument>
+      <midi-device id="P9-I3" port="1"></midi-device>
       <midi-instrument id="P9-I3">
         <midi-channel>9</midi-channel>
         <midi-program>42</midi-program>
