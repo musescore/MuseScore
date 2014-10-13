@@ -28,7 +28,7 @@ InspectorVolta::InspectorVolta(QWidget* parent)
       e.setupUi(addWidget());
       l.setupUi(addWidget());
       setupLineStyle(l.lineStyle);
-      tl.setupUi(addWidget());
+      //tl.setupUi(addWidget());
       v.setupUi(addWidget());
 
       iList = {

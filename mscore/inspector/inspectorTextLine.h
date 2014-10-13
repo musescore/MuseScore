@@ -29,7 +29,7 @@ class InspectorTextLine : public InspectorBase {
 
       UiInspectorElement e;
       Ui::InspectorLine l;
-      Ui::InspectorTextLine tl;
+      //Ui::InspectorTextLine tl;
 
    public:
       InspectorTextLine(QWidget* parent);
