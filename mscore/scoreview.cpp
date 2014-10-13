@@ -3622,8 +3622,6 @@ void ScoreView::pageEnd()
 
 void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       {
-printf("adjustCanvasPosition <%s> playback %d\n", el->name(), playBack);
-
       if (score()->layoutMode() == LayoutMode::LINE) {
             if (!el)
                   return;
@@ -3644,7 +3642,6 @@ printf("adjustCanvasPosition <%s> playback %d\n", el->name(), playBack);
             qreal marginLeft = width() * 0.05;
             qreal marginRight = width() * 0.05; // leaves 5% margin to the right
 
-printf("continuousPanel active %d\n", _continuousPanel->active());
             if (_continuousPanel->active())
                   marginLeft += _continuousPanel->width() * mag();
 
