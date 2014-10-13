@@ -549,17 +549,18 @@ void Segment::remove(Element* el)
                   break;
 
             case Element::Type::DYNAMIC:
-            case Element::Type::HARMONY:
-            case Element::Type::SYMBOL:
-            case Element::Type::FRET_DIAGRAM:
-            case Element::Type::TEMPO_TEXT:
-            case Element::Type::STAFF_TEXT:
-            case Element::Type::REHEARSAL_MARK:
-            case Element::Type::MARKER:
-            case Element::Type::IMAGE:
-            case Element::Type::TEXT:
-            case Element::Type::TAB_DURATION_SYMBOL:
             case Element::Type::FIGURED_BASS:
+            case Element::Type::FRET_DIAGRAM:
+            case Element::Type::HARMONY:
+            case Element::Type::IMAGE:
+            case Element::Type::MARKER:
+            case Element::Type::REHEARSAL_MARK:
+            case Element::Type::STAFF_TEXT:
+            case Element::Type::SYMBOL:
+            case Element::Type::TAB_DURATION_SYMBOL:
+            case Element::Type::TEMPO_TEXT:
+            case Element::Type::TEXT:
+            case Element::Type::TREMOLOBAR:
                   removeAnnotation(el);
                   break;
 
