@@ -103,11 +103,6 @@
           <root>16</root>
           <name>7</name>
           </Harmony>
-        <tick>1920</tick>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Harmony>
@@ -123,11 +118,6 @@
           <root>13</root>
           <name>7</name>
           </Harmony>
-        <tick>3840</tick>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Harmony>
@@ -143,11 +133,6 @@
           <root>16</root>
           <name>7</name>
           </Harmony>
-        <tick>5760</tick>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Harmony>
@@ -163,11 +148,6 @@
           <root>13</root>
           <name>7</name>
           </Harmony>
-        <tick>7680</tick>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="5">
         <Harmony>
@@ -183,11 +163,6 @@
           <root>16</root>
           <name>7</name>
           </Harmony>
-        <tick>9600</tick>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <Harmony>
@@ -203,11 +178,6 @@
           <root>13</root>
           <name>7</name>
           </Harmony>
-        <tick>11520</tick>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="7">
         <Harmony>
@@ -223,11 +193,6 @@
           <root>16</root>
           <name>7</name>
           </Harmony>
-        <tick>13440</tick>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="8">
         <Harmony>
