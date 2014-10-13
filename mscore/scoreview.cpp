@@ -3251,10 +3251,12 @@ void ScoreView::select(QMouseEvent* ev)
             }
       if ((ev->type() == QEvent::MouseButtonRelease) && ((!curElement->selected() || addSelect)))
             return;
+
       // As findSelectableElement may return a measure
       // when clicked "a little bit" above or below it, getStaff
       // may not find the staff and return -1, which would cause
       // select() to crash
+
       if (dragStaffIdx >= 0) {
             SelectType st = SelectType::SINGLE;
             if (keyState == Qt::NoModifier)
@@ -3279,7 +3281,23 @@ void ScoreView::select(QMouseEvent* ev)
                   addSelect = true;
                   st = SelectType::ADD;
                   }
-            _score->select(curElement, st, dragStaffIdx);
+            if (curElement && curElement->type() == Element::Type::KEYSIG
+               && (keyState != Qt::ControlModifier)
+               && st == SelectType::SINGLE) {
+                  // special case: select for all staves
+                  Segment* s = static_cast<Segment*>(curElement->parent());
+                  bool first = true;
+                  for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
+                        Element* e = s->element(staffIdx * VOICES);
+                        if (e) {
+                              _score->select(e, first ? SelectType::SINGLE : SelectType::ADD, dragStaffIdx);
+                              first = false;
+                              }
+                        }
+
+                  }
+            else
+                  _score->select(curElement, st, dragStaffIdx);
             if (curElement && curElement->type() == Element::Type::NOTE && ev->type() == QEvent::MouseButtonPress) {
                   Note* note = static_cast<Note*>(curElement);
                   int pitch = note->ppitch();
