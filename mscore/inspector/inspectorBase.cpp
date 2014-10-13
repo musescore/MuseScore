@@ -278,7 +278,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   }
             ii.w->setStyleSheet( valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
             }
-      
+
       //deal with reset if only one element, or if values are the same
       if (!valuesAreDifferent){
             PropertyStyle styledValue = inspector->el().front()->propertyStyle(ii.t);

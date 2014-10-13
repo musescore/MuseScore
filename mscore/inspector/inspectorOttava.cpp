@@ -28,7 +28,7 @@ InspectorOttava::InspectorOttava(QWidget* parent)
       e.setupUi(addWidget());
       l.setupUi(addWidget());
       setupLineStyle(l.lineStyle);
-      tl.setupUi(addWidget());
+      //tl.setupUi(addWidget());
       o.setupUi(addWidget());
 
       iList = {
