@@ -299,7 +299,16 @@ QPointF Pedal::linePos(GripLine grip, System** sys) const
                         seg = seg->next();
                         for ( ; seg; seg = seg->next()) {
                               if (seg->segmentType() == Segment::Type::ChordRest) {
-                                    if (seg->element(track()))
+                                    // look for a chord/rest in any voice on this staff
+                                    bool crFound = false;
+                                    int track = staffIdx() * VOICES;
+                                    for (int i = 0; i < VOICES; ++i) {
+                                          if (seg->element(track + i)) {
+                                                crFound = true;
+                                                break;
+                                                }
+                                          }
+                                    if (crFound)
                                           break;
                                     }
                               else if (seg->segmentType() == Segment::Type::EndBarLine) {
