@@ -1256,6 +1256,7 @@ bool Measure::acceptDrop(const DropData& data) const
                   viewer->setDropRectangle(canvasBoundingRect());
                   return true;
 
+            case Element::Type::KEYSIG:
             case Element::Type::TIMESIG:
                   if (data.modifiers & Qt::ControlModifier)
                         viewer->setDropRectangle(staffR);
@@ -1271,7 +1272,6 @@ bool Measure::acceptDrop(const DropData& data) const
             case Element::Type::BAR_LINE:
             case Element::Type::SYMBOL:
             case Element::Type::CLEF:
-            case Element::Type::KEYSIG:
                   viewer->setDropRectangle(staffR);
                   return true;
 
