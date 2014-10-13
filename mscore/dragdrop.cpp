@@ -44,6 +44,98 @@ static void moveElement(void* data, Element* e)
       }
 
 //---------------------------------------------------------
+//   setDropTarget
+//---------------------------------------------------------
+
+void ScoreView::setDropTarget(const Element* el)
+      {
+      if (dropTarget != el) {
+            if (dropTarget) {
+                  dropTarget->setDropTarget(false);
+                  _score->addRefresh(dropTarget->canvasBoundingRect());
+                  dropTarget = 0;
+                  }
+            dropTarget = el;
+            if (dropTarget) {
+                  dropTarget->setDropTarget(true);
+                  _score->addRefresh(dropTarget->canvasBoundingRect());
+                  }
+            }
+      if (!dropAnchor.isNull()) {
+            QRectF r;
+            r.setTopLeft(dropAnchor.p1());
+            r.setBottomRight(dropAnchor.p2());
+            _score->addRefresh(r.normalized());
+            dropAnchor = QLineF();
+            }
+      if (dropRectangle.isValid()) {
+            _score->addRefresh(dropRectangle);
+            dropRectangle = QRectF();
+            }
+      }
+
+//---------------------------------------------------------
+//   setDropRectangle
+//---------------------------------------------------------
+
+void ScoreView::setDropRectangle(const QRectF& r)
+      {
+      if (dropRectangle.isValid())
+            _score->addRefresh(dropRectangle);
+      dropRectangle = r;
+      if (dropTarget) {
+            dropTarget->setDropTarget(false);
+            _score->addRefresh(dropTarget->canvasBoundingRect());
+            dropTarget = 0;
+            }
+      else if (!dropAnchor.isNull()) {
+            QRectF r;
+            r.setTopLeft(dropAnchor.p1());
+            r.setBottomRight(dropAnchor.p2());
+            _score->addRefresh(r.normalized());
+            dropAnchor = QLineF();
+            }
+      _score->addRefresh(r);
+      }
+
+//---------------------------------------------------------
+//   setDropAnchor
+//---------------------------------------------------------
+
+void ScoreView::setDropAnchor(const QLineF& l)
+      {
+      if (!dropAnchor.isNull()) {
+            qreal w = 2 / _matrix.m11();
+            QRectF r;
+            r.setTopLeft(dropAnchor.p1());
+            r.setBottomRight(dropAnchor.p2());
+            r = r.normalized();
+            r.adjust(-w, -w, 2*w, 2*w);
+            _score->addRefresh(r);
+            }
+/*      if (dropTarget) {
+            dropTarget->setDropTarget(false);
+            _score->addRefresh(dropTarget->canvasBoundingRect());
+            dropTarget = 0;
+            }
+      */
+      if (dropRectangle.isValid()) {
+            _score->addRefresh(dropRectangle);
+            dropRectangle = QRectF();
+            }
+      dropAnchor = l;
+      if (!dropAnchor.isNull()) {
+            qreal w = 2 / _matrix.m11();
+            QRectF r;
+            r.setTopLeft(dropAnchor.p1());
+            r.setBottomRight(dropAnchor.p2());
+            r = r.normalized();
+            r.adjust(-w, -w, 2*w, 2*w);
+            _score->addRefresh(r);
+            }
+      }
+
+//---------------------------------------------------------
 //   setViewRect
 //---------------------------------------------------------
 

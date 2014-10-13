@@ -3462,98 +3462,6 @@ void ScoreView::editInputTransition(QInputMethodEvent* ie)
       }
 
 //---------------------------------------------------------
-//   setDropTarget
-//---------------------------------------------------------
-
-void ScoreView::setDropTarget(const Element* el)
-      {
-      if (dropTarget != el) {
-            if (dropTarget) {
-                  dropTarget->setDropTarget(false);
-                  _score->addRefresh(dropTarget->canvasBoundingRect());
-                  dropTarget = 0;
-                  }
-            dropTarget = el;
-            if (dropTarget) {
-                  dropTarget->setDropTarget(true);
-                  _score->addRefresh(dropTarget->canvasBoundingRect());
-                  }
-            }
-      if (!dropAnchor.isNull()) {
-            QRectF r;
-            r.setTopLeft(dropAnchor.p1());
-            r.setBottomRight(dropAnchor.p2());
-            _score->addRefresh(r.normalized());
-            dropAnchor = QLineF();
-            }
-      if (dropRectangle.isValid()) {
-            _score->addRefresh(dropRectangle);
-            dropRectangle = QRectF();
-            }
-      }
-
-//---------------------------------------------------------
-//   setDropRectangle
-//---------------------------------------------------------
-
-void ScoreView::setDropRectangle(const QRectF& r)
-      {
-      if (dropRectangle.isValid())
-            _score->addRefresh(dropRectangle);
-      dropRectangle = r;
-      if (dropTarget) {
-            dropTarget->setDropTarget(false);
-            _score->addRefresh(dropTarget->canvasBoundingRect());
-            dropTarget = 0;
-            }
-      else if (!dropAnchor.isNull()) {
-            QRectF r;
-            r.setTopLeft(dropAnchor.p1());
-            r.setBottomRight(dropAnchor.p2());
-            _score->addRefresh(r.normalized());
-            dropAnchor = QLineF();
-            }
-      _score->addRefresh(r);
-      }
-
-//---------------------------------------------------------
-//   setDropAnchor
-//---------------------------------------------------------
-
-void ScoreView::setDropAnchor(const QLineF& l)
-      {
-      if (!dropAnchor.isNull()) {
-            qreal w = 2 / _matrix.m11();
-            QRectF r;
-            r.setTopLeft(dropAnchor.p1());
-            r.setBottomRight(dropAnchor.p2());
-            r = r.normalized();
-            r.adjust(-w, -w, 2*w, 2*w);
-            _score->addRefresh(r);
-            }
-/*      if (dropTarget) {
-            dropTarget->setDropTarget(false);
-            _score->addRefresh(dropTarget->canvasBoundingRect());
-            dropTarget = 0;
-            }
-      */
-      if (dropRectangle.isValid()) {
-            _score->addRefresh(dropRectangle);
-            dropRectangle = QRectF();
-            }
-      dropAnchor = l;
-      if (!dropAnchor.isNull()) {
-            qreal w = 2 / _matrix.m11();
-            QRectF r;
-            r.setTopLeft(dropAnchor.p1());
-            r.setBottomRight(dropAnchor.p2());
-            r = r.normalized();
-            r.adjust(-w, -w, 2*w, 2*w);
-            _score->addRefresh(r);
-            }
-      }
-
-//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
@@ -3696,14 +3604,14 @@ void ScoreView::pageEnd()
 
 void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       {
-// printf("adjustCanvasPosition <%s>\n", el->name());
+printf("adjustCanvasPosition <%s> playback %d\n", el->name(), playBack);
 
       if (score()->layoutMode() == LayoutMode::LINE) {
             if (!el)
                   return;
 
             /* Not used, because impossible to get panel width beforehand
-            const MeasureBase *m = 0;
+            const MeasureBase* m = 0;
             if (el->type() == Element::Type::MEASURE)
                   m = static_cast<const MeasureBase*>(el);
             else
@@ -3718,6 +3626,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             qreal marginLeft = width() * 0.05;
             qreal marginRight = width() * 0.05; // leaves 5% margin to the right
 
+printf("continuousPanel active %d\n", _continuousPanel->active());
             if (_continuousPanel->active())
                   marginLeft += _continuousPanel->width() * mag();
 
