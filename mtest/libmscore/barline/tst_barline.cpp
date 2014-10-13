@@ -156,8 +156,11 @@ void TestBarline::barline02()
             sprintf(msg, "No bar line in measure %d.", msrNo);
             QVERIFY2(bar != nullptr, msg);
 
-            sprintf(msg, "Bar line  in measure %d changed into 'generated'.", msrNo);
-            QVERIFY2(!bar->generated(), msg);
+            // bar line should be generated if NORMAL, except the END one at the end
+            sprintf(msg, "Bar line in measure %d changed into 'non-generated'.", msrNo);
+            bool test = (bar->barLineType() == BarLineType::NORMAL)
+                        ? bar->generated() : !bar->generated();
+            QVERIFY2(test, msg);
       }
 //      QVERIFY(saveCompareScore(score, "barline02.mscx", DIR + "barline02-ref.mscx"));
       delete score;
@@ -263,13 +266,13 @@ void TestBarline::barline05()
       score->undoAddElement(lb);
       score->doLayout();
 
-      // check an end-repeat bar line has been created at the end of this measure and it is not generated
+      // check an end-repeat bar line has been created at the end of this measure and it is generated
       Segment* seg = msr->findSegment(Segment::Type::EndBarLine, msr->tick()+msr->ticks());
       QVERIFY2(seg != nullptr, "No SegEndBarLine segment in measure 4.");
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
       QVERIFY2(bar != nullptr, "No end-repeat bar line in measure 4.");
       QVERIFY2(bar->barLineType() == BarLineType::END_REPEAT, "Bar line at measure 4 is not END-REPEAT");
-      QVERIFY2(!bar->generated(), "End-reapeat bar line in measure 4 is generated.");
+      QVERIFY2(bar->generated(), "End-repeat bar line in measure 4 is non-generated.");
 
       // check an end-repeat bar line has been created at the beginning of the next measure and it is not generated
       msr = msr->nextMeasure();
