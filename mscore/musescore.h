@@ -589,7 +589,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePdf(const QString& saveName);
       bool savePdf(Score* cs, const QString& saveName);
       bool savePdf(QList<Score*> cs, const QString& saveName);
-      
+
 
       Score* readScore(const QString& name);
 
@@ -639,11 +639,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newFingeringPalette();
       static Palette* newTremoloPalette();
       static Palette* newNoteHeadsPalette();
-      static Palette* newArticulationsPalette();
+      static Palette* newArticulationsPalette(bool basic);
       static Palette* newBracketsPalette();
       static Palette* newBreathPalette();
       static Palette* newArpeggioPalette();
-      static Palette* newClefsPalette();
+      static Palette* newClefsPalette(bool basic);
       static Palette* newGraceNotePalette();
       static Palette* newBagpipeEmbellishmentPalette();
       static Palette* newKeySigPalette();

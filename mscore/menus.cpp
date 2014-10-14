@@ -475,30 +475,46 @@ Palette* MuseScore::newNoteHeadsPalette()
 //   newArticulationsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newArticulationsPalette()
+Palette* MuseScore::newArticulationsPalette(bool basic)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Articulations && Ornaments"));
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
-            Articulation* s = new Articulation(gscore);
-            s->setArticulationType(ArticulationType(i));
-            sp->append(s, qApp->translate("articulation", s->subtypeUserName().toUtf8().constData()));
+      if (basic) {
+            static std::vector<ArticulationType> art {
+                  ArticulationType::Fermata,
+                  ArticulationType::Staccato,
+                  ArticulationType::Tenuto,
+                  ArticulationType::Portato,
+                  ArticulationType::Marcato,
+                  ArticulationType::Trill
+                  };
+            for (auto i : art) {
+                  Articulation* s = new Articulation(gscore);
+                  s->setArticulationType(i);
+                  sp->append(s, qApp->translate("articulation", s->subtypeUserName().toUtf8().constData()));
+                  }
             }
-      Bend* bend = new Bend(gscore);
-      bend->points().append(PitchValue(0,    0, false));
-      bend->points().append(PitchValue(15, 100, false));
-      bend->points().append(PitchValue(60, 100, false));
-      sp->append(bend, qApp->translate("articulation", "Bend"));
+      else {
+            for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
+                  Articulation* s = new Articulation(gscore);
+                  s->setArticulationType(ArticulationType(i));
+                  sp->append(s, qApp->translate("articulation", s->subtypeUserName().toUtf8().constData()));
+                  }
+            Bend* bend = new Bend(gscore);
+            bend->points().append(PitchValue(0,    0, false));
+            bend->points().append(PitchValue(15, 100, false));
+            bend->points().append(PitchValue(60, 100, false));
+            sp->append(bend, qApp->translate("articulation", "Bend"));
 
-      TremoloBar* tb = new TremoloBar(gscore);
-      tb->points().append(PitchValue(0,     0, false));     // "Dip"
-      tb->points().append(PitchValue(30, -100, false));
-      tb->points().append(PitchValue(60,    0, false));
-      sp->append(tb, qApp->translate("articulation", "Tremolo Bar"));
-
+            TremoloBar* tb = new TremoloBar(gscore);
+            tb->points().append(PitchValue(0,     0, false));     // "Dip"
+            tb->points().append(PitchValue(30, -100, false));
+            tb->points().append(PitchValue(60,    0, false));
+            sp->append(tb, qApp->translate("articulation", "Tremolo Bar"));
+            }
       return sp;
       }
 
@@ -624,7 +640,7 @@ Palette* MuseScore::newArpeggioPalette()
 //   newClefsPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newClefsPalette()
+Palette* MuseScore::newClefsPalette(bool basic)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Clefs"));
@@ -632,14 +648,16 @@ Palette* MuseScore::newClefsPalette()
       sp->setGrid(33, 60);
       sp->setYOffset(1.0);
       // Up to ClefType::MAX-1, because ClefType::PERC2 is no longer supported
-      static const ClefType clefs[int(ClefType::MAX)-1] = {
-            ClefType::G, ClefType::G1, ClefType::G2, ClefType::G3, ClefType::G4,
-            ClefType::C1, ClefType::C2, ClefType::C3, ClefType::C4, ClefType::C5,
-            ClefType::F, ClefType::F_8VA, ClefType::F_15MA, ClefType::F8, ClefType::F15, ClefType::F_B, ClefType::F_C,
-            ClefType::PERC, ClefType::TAB, ClefType::TAB2
+      static std::vector<ClefType> clefs1  {
+            ClefType::G,   ClefType::F
             };
-      for (int i = 0; i < int(ClefType::MAX)-1; ++i) {
-            ClefType j = clefs[i];
+      static std::vector<ClefType> clefs2  {
+            ClefType::G,   ClefType::G1,    ClefType::G2,     ClefType::G3,  ClefType::G4,
+            ClefType::C1,  ClefType::C2,    ClefType::C3,     ClefType::C4,  ClefType::C5,
+            ClefType::F,   ClefType::F_8VA, ClefType::F_15MA, ClefType::F8,  ClefType::F15,
+            ClefType::F_B, ClefType::F_C,   ClefType::PERC,   ClefType::TAB, ClefType::TAB2
+            };
+      for (ClefType j : basic ? clefs1 : clefs2) {
             Clef* k = new Ms::Clef(gscore);
             k->setClefType(ClefTypeList(j, j));
             sp->append(k, qApp->translate("clefTable", ClefInfo::name(j)));
@@ -995,7 +1013,7 @@ void MuseScore::setAdvancedPalette()
       mscore->getPaletteBox();
       paletteBox->clear();
       paletteBox->addPalette(newGraceNotePalette());
-      paletteBox->addPalette(newClefsPalette());
+      paletteBox->addPalette(newClefsPalette(false));
       paletteBox->addPalette(newKeySigPalette());
       paletteBox->addPalette(newTimePalette());
       paletteBox->addPalette(newBarLinePalette());
@@ -1003,7 +1021,7 @@ void MuseScore::setAdvancedPalette()
       paletteBox->addPalette(newArpeggioPalette());
       paletteBox->addPalette(newBreathPalette());
       paletteBox->addPalette(newBracketsPalette());
-      paletteBox->addPalette(newArticulationsPalette());
+      paletteBox->addPalette(newArticulationsPalette(false));
       paletteBox->addPalette(newAccidentalsPalette());
       paletteBox->addPalette(newDynamicsPalette());
       paletteBox->addPalette(newFingeringPalette());
@@ -1088,25 +1106,24 @@ void MuseScore::setBasicPalette()
       mscore->getPaletteBox();
       paletteBox->clear();
       paletteBox->addPalette(newGraceNotePalette());
-      paletteBox->addPalette(newClefsPalette());
+      paletteBox->addPalette(newClefsPalette(true));
       paletteBox->addPalette(newKeySigPalette());
       paletteBox->addPalette(newTimePalette());
       paletteBox->addPalette(newBarLinePalette());
       paletteBox->addPalette(newLinesPalette());
       paletteBox->addPalette(newArpeggioPalette());
-      paletteBox->addPalette(newBreathPalette());
+//      paletteBox->addPalette(newBreathPalette());
       paletteBox->addPalette(newBracketsPalette());
-      paletteBox->addPalette(newArticulationsPalette());
+      paletteBox->addPalette(newArticulationsPalette(true));
       paletteBox->addPalette(newAccidentalsPalette(true));
       paletteBox->addPalette(newDynamicsPalette());
       paletteBox->addPalette(newFingeringPalette());
-      paletteBox->addPalette(newNoteHeadsPalette());
+//      paletteBox->addPalette(newNoteHeadsPalette());
       paletteBox->addPalette(newTremoloPalette());
       paletteBox->addPalette(newRepeatsPalette());
       paletteBox->addPalette(newTempoPalette());
       paletteBox->addPalette(newTextPalette());
       paletteBox->addPalette(newBreaksPalette());
-//      paletteBox->addPalette(newBagpipeEmbellishmentPalette());
       paletteBox->addPalette(newBeamPalette());
       paletteBox->addPalette(newFramePalette());
 
