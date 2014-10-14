@@ -30,11 +30,15 @@ class PaletteBox : public QDockWidget {
 
       QVBoxLayout* vbox;
       Palette* newPalette(const QString& name, int slot);
+      QComboBox* workspaceList;
+      void updateWorkspaces();
 
    private slots:
       void paletteCmd(PaletteCommand, int);
       void closeAll();
       void displayMore(const QString& paletteName);
+      void workspaceSelected(int idx);
+      void newWorkspaceClicked();
 
    signals:
       void changed();
