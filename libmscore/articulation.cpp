@@ -234,7 +234,7 @@ Articulation::Articulation(Score* s)
       _up = true;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setArticulationType(ArticulationType::Fermata);
-       }
+      }
 
 //---------------------------------------------------------
 //   setArticulationType
