@@ -444,17 +444,15 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void oscColorNote(QVariantList list);
       void oscAction();
 #endif
-      void createNewWorkspace();
       void deleteWorkspace();
       void undoWorkspace();
       void showWorkspaceMenu();
-      void changeWorkspace(QAction*);
-      void changeWorkspace(Workspace* p);
       void switchLayer(const QString&);
       void switchPlayMode(int);
       void networkFinished(QNetworkReply*);
       void switchLayoutMode(int);
       void showMidiImportPanel();
+      void changeWorkspace(QAction*);
 
    public slots:
       virtual void cmd(QAction* a);
@@ -474,6 +472,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void instrumentChanged();
       void showMasterPalette(const QString& = 0);
       void selectionChanged(SelState);
+      void createNewWorkspace();
+      void changeWorkspace(Workspace* p);
 
    public:
       MuseScore();
