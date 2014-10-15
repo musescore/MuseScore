@@ -3635,8 +3635,11 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             */
 
             qreal xo = 0.0;  // new x offset
-            qreal curPosR = _cursor->rect().right();        // Position on the canvas
-            qreal curPosL = _cursor->rect().left();         // Position on the canvas
+            // at one point, the code used _cursor->rect(), but this only works during note entry or playback
+            // see issue #33391
+            QRectF curPos = el->canvasBoundingRect();
+            qreal curPosR = curPos.right();                    // Position on the canvas
+            qreal curPosL = curPos.left();                     // Position on the canvas
             qreal curPosMagR = curPosR * mag() + xoffset(); // Position in the screen
             qreal curPosMagL = curPosL * mag() + xoffset(); // Position in the screen
             qreal marginLeft = width() * 0.05;
