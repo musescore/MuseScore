@@ -66,7 +66,7 @@
      <item>
       <widget class="QToolButton" name="selectButton">
        <property name="toolTip">
-        <string notr="true">Select Element</string>
+        <string notr="true">Select element</string>
        </property>
        <property name="text">
         <string notr="true">Select</string>
@@ -76,7 +76,7 @@
      <item>
       <widget class="QToolButton" name="resetButton">
        <property name="toolTip">
-        <string notr="true">Reset Element Properties</string>
+        <string notr="true">Reset element Ppoperties</string>
        </property>
        <property name="text">
         <string notr="true">Reset</string>

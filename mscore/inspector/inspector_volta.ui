@@ -93,7 +93,7 @@
      <item row="0" column="3">
       <widget class="QToolButton" name="resetVoltaType">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Type value</string>
@@ -107,8 +107,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

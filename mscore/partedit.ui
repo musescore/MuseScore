@@ -49,7 +49,7 @@
       <item row="0" column="0" >
        <widget class="QLineEdit" name="partName" >
         <property name="toolTip" >
-         <string>Part Name</string>
+         <string>Part name</string>
         </property>
         <property name="readOnly" >
          <bool>true</bool>
@@ -132,7 +132,7 @@
            </size>
           </property>
           <property name="toolTip" >
-           <string>Panorama Position</string>
+           <string>Panorama position</string>
           </property>
           <property name="scaleWidth" >
            <number>5</number>

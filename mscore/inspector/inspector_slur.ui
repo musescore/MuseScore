@@ -75,7 +75,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Line type value</string>

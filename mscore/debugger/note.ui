@@ -89,7 +89,7 @@
       <item row="0" column="3">
        <widget class="QSpinBox" name="head">
         <property name="toolTip">
-         <string notr="true">head index</string>
+         <string notr="true">Head index</string>
         </property>
         <property name="readOnly">
          <bool>true</bool>
@@ -119,7 +119,7 @@
       <item row="3" column="3">
        <widget class="QSpinBox" name="headGroup">
         <property name="toolTip">
-         <string notr="true">note head group</string>
+         <string notr="true">Note head group</string>
         </property>
         <property name="readOnly">
          <bool>true</bool>
