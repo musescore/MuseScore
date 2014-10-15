@@ -717,10 +717,6 @@
     <seq>Ctrl+Shift+I</seq>
     </SC>
   <SC>
-    <key>stack-down</key>
-    <seq>Shift+Z</seq>
-    </SC>
-  <SC>
     <key>toogle-piano</key>
     <seq>P</seq>
     </SC>

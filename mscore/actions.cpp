@@ -2278,13 +2278,6 @@ Shortcut Shortcut::sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
-         "stack-down",
-         QT_TRANSLATE_NOOP("action","Stack down")
-         ),
-      Shortcut(
-         MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
          "toogle-piano",
          QT_TRANSLATE_NOOP("action","Piano Keyboard")
          ),
