@@ -21,7 +21,7 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  accidental-6,accidental-7,accidental-8,accidental-9, ^
  tie-1,tie-2,grace-1,grace-2,grace-3,harmony-1,harmony-2,harmony-3,harmony-4,beams-1,beams-2, ^
  user-offset-1,user-offset-2,chord-space-1,tablature-1,image-1, ^
- lyrics-1,lyrics-2
+ lyrics-1,lyrics-2,voice-1
 
 set MSCORE=..\win32install\bin\mscore.exe
 set DPI=130
