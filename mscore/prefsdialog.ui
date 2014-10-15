@@ -732,9 +732,9 @@
             <property name="accessibleDescription">
              <string>Opens a dialog for configuring the soundfont folders</string>
             </property>
-      <property name="text">
-       <string/>
-      </property>
+            <property name="text">
+             <string/>
+            </property>
            </widget>
           </item>
           <item row="5" column="2">
@@ -769,12 +769,12 @@
             </property>
             <item>
              <property name="text">
-              <string>dark</string>
+              <string>Dark</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>light</string>
+              <string>Light</string>
              </property>
             </item>
            </widget>

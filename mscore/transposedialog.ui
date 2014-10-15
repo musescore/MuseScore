@@ -464,12 +464,12 @@
            </property>
            <item>
             <property name="text">
-             <string>Single sharps and flats only</string>
+             <string>Single Sharps and Flats Only</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Use double sharps and flats</string>
+             <string>Use Double Sharps and Flats</string>
             </property>
            </item>
           </widget>
@@ -513,9 +513,7 @@
   <tabstop>accidentalOptions</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

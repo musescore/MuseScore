@@ -417,12 +417,12 @@
             </item>
             <item>
              <property name="text">
-              <string>Always show</string>
+              <string>Always Show</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Always hide</string>
+              <string>Always Hide</string>
              </property>
             </item>
            </widget>
