@@ -27,6 +27,7 @@ namespace Ms {
 TremoloBar::TremoloBar(Score* s)
    : Element(s)
       {
+      setFlag(ElementFlag::ON_STAFF, true);
       }
 
 //---------------------------------------------------------
