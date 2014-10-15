@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <languages>
   <language code="af" name="Afrikaans" />
-  <language code="ar" name="العربية" handbook="http://musescore.org/ar/الكتيّب"/>
+  <language code="ar" name="العربية" />
   <language code="ast" name="Asturianu" />
   <language code="be" name="Беларуская мова" />  
   <language code="bg" name="български" />
-  <language code="ca" name="Català" handbook="http://musescore.org/ca/manual" />
-  <language code="ca@valencia" name="Valencià" handbook="http://musescore.org/ca/manual" />
+  <language code="ca" name="Català" />
+  <language code="ca@valencia" name="Valencià" />
   <language code="cs" name="Čeština" />
-  <language code="da" name="Dansk" handbook="http://musescore.org/da/håndbog" />
-  <language code="de" name="Deutsch" handbook="http://www.musescore.org/de/handbuch" />
-  <language code="el" name="ελληνικά" handbook="http://musescore.org/el/εγχειρίδιο" />
+  <language code="da" name="Dansk" />
+  <language code="de" name="Deutsch" />
+  <language code="el" name="ελληνικά" />
   <language code="en_GB" name="English (GB)" />
   <language code="en_US" name="English (US)" />
   <language code="eo" name="Esperanto" />
-  <language code="es" name="Español" handbook="http://www.musescore.org/es/manual" />
+  <language code="es" name="Español" />
   <language code="et" name="Eesti" />
   <language code="eu" name="Euskara" />
   <language code="fa" name="فارسی" />
-  <language code="fi" name="Finnish" handbook="http://www.musescore.org/fi/käsikirja" />
+  <language code="fi" name="Finnish" />
   <language code="fo" name="Faeroese" />
-  <language code="fr" name="Français" handbook="http://www.musescore.org/fr/manuel" />
-  <language code="gl" name="Galego" handbook="http://www.musescore.org/gl/manual" />
+  <language code="fr" name="Français"  />
+  <language code="gl" name="Galego" />
   <language code="he" name="עברית" />
   <language code="hi_IN" name="Hindi" />
   <language code="hr" name="Hrvatski" />
-  <language code="hu" name="Magyar" handbook="http://musescore.org/hu/kézikönyv" />
-  <language code="id" name="Bahasa Indonesia" handbook="http://musescore.org/id/buku-panduan" />
-  <language code="it" name="Italiano" handbook="http://www.musescore.org/it/manuale" />
-  <language code="ja" name="Japanese" handbook="http://www.musescore.org/ja/ハンドブック"/>
+  <language code="hu" name="Magyar" />
+  <language code="id" name="Bahasa Indonesia" />
+  <language code="it" name="Italiano" />
+  <language code="ja" name="Japanese" />
   <language code="ka" name="ქართული" />
-  <language code="ko" name="한국어" handbook="http://musescore.org/ko/핸드북"/>
+  <language code="ko" name="한국어" />
   <language code="lt" name="Lietuvių" />
   <language code="mn_MN" name="Монгол хэл" />
-  <language code="nl" name="Nederlands" handbook="http://www.musescore.org/nl/handboek" />
-  <language code="nb" name="Norsk (Bokmål)" handbook="http://www.musescore.org/nb/håndbok" />
-  <language code="nn" name="Norsk (Nynorsk)" handbook="http://www.musescore.org/nb/håndbok" />
-  <language code="pl" name="Polski" handbook="http://www.musescore.org/pl/podręcznik" />
-  <language code="pt" name="Português" handbook="http://www.musescore.org/pt-br/manual" />
-  <language code="pt_BR" name="Português brasileiro" handbook="http://www.musescore.org/pt-br/manual" />
-  <language code="ro" name="Română" handbook="http://musescore.org/ro/manual" />
-  <language code="ru" name="Русский" handbook="http://www.musescore.org/ru/cправочник" />
+  <language code="nl" name="Nederlands" />
+  <language code="nb" name="Norsk (Bokmål)" />
+  <language code="nn" name="Norsk (Nynorsk)" />
+  <language code="pl" name="Polski" />
+  <language code="pt" name="Português" />
+  <language code="pt_BR" name="Português brasileiro" />
+  <language code="ro" name="Română" />
+  <language code="ru" name="Русский" />
   <language code="sr" name="Српски" />
   <language code="sk" name="Slovenčina" />
   <language code="sl" name="Slovenščina" />
   <language code="sv" name="Svenska" /> 
   <language code="th" name="ภาษาไทย" />
-  <language code="tr" name="Türkçe" handbook="http://www.musescore.org/tr/kullanım"/>
-  <language code="uk" name="Ukrajina" handbook="http://musescore.org/uk/підручник"/>
+  <language code="tr" name="Türkçe" />
+  <language code="uk" name="Українська" />
   <language code="uz@Latn" name="Ozbek tili" />
   <language code="vi" name="Tiếng Việt" />
-  <language code="zh_CN" name="简体中文" handbook="http://musescore.org/zh-hans/用户手册"/>
-  <language code="zh_TW" name="繁體中文 (台灣)" handbook="http://musescore.org/zh-hans/用户手册"/>
+  <language code="zh_CN" name="简体中文" />
+  <language code="zh_TW" name="繁體中文 (台灣)" />
 </languages>

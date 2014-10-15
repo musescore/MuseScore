@@ -1243,7 +1243,7 @@ void MuseScore::helpBrowser1() const
 
       if (MScore::debugMode)
             qDebug("open online handbook for language <%s>", qPrintable(lang));
-      QString help("http://www.musescore.org/en/handbook");
+      QString help("http://musescore.org/en/handbook-2.0");
       //try to find an exact match
       bool found = false;
       foreach (LanguageItem item, _languages) {
