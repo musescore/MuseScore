@@ -105,7 +105,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             ArticulationInfo* ai = &Articulation::articulationList[i];
 
-            QPixmap ct = cs->scoreFont()->sym2pixmap(ai->upSym, 3.0);
+            QPixmap ct = cs->scoreFont()->sym2pixmap(ai->upSym, 0.9);
             QIcon icon(ct);
             QTableWidgetItem* item = new QTableWidgetItem(icon, qApp->translate("articulation", ai->description.toUtf8().constData()));
 
