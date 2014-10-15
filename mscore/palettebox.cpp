@@ -37,12 +37,12 @@ PaletteBox::PaletteBox(QWidget* parent)
       vl->addLayout(hl);
 
       workspaceList = new QComboBox;
-      workspaceList->setToolTip(tr("select workspace"));
+      workspaceList->setToolTip(tr("Select workspace"));
       updateWorkspaces();
       hl->addWidget(workspaceList);
       QToolButton* nb = new QToolButton;
       nb->setText(tr("+"));
-      nb->setToolTip(tr("add new workspace"));
+      nb->setToolTip(tr("Add new workspace"));
       hl->addWidget(nb);
 
       setWidget(w);

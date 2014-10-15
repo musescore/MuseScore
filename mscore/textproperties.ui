@@ -89,7 +89,7 @@
            <item>
             <widget class="QFontComboBox" name="fontSelect">
              <property name="toolTip">
-              <string>font face</string>
+              <string>Font face</string>
              </property>
             </widget>
            </item>
@@ -121,7 +121,7 @@
               </sizepolicy>
              </property>
              <property name="toolTip">
-              <string>font point size</string>
+              <string>Font point size</string>
              </property>
              <property name="minimum">
               <number>1</number>
@@ -189,7 +189,7 @@
               </font>
              </property>
              <property name="toolTip">
-              <string>bold</string>
+              <string>Bold</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -229,7 +229,7 @@
               </font>
              </property>
              <property name="toolTip">
-              <string>italic</string>
+              <string>Italic</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -263,7 +263,7 @@
               </font>
              </property>
              <property name="toolTip">
-              <string>underline</string>
+              <string>Underline</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -335,7 +335,7 @@
               </size>
              </property>
              <property name="toolTip">
-              <string>text color</string>
+              <string>Text color</string>
              </property>
              <property name="frameShape">
               <enum>QFrame::Box</enum>
@@ -425,7 +425,7 @@
               </sizepolicy>
              </property>
              <property name="toolTip">
-              <string>horizontal offset to reference point</string>
+              <string>Horizontal offset to reference point</string>
              </property>
              <property name="suffix">
               <string/>
@@ -476,7 +476,7 @@
               </sizepolicy>
              </property>
              <property name="toolTip">
-              <string>vertical offset to reference point</string>
+              <string>Vertical offset to reference point</string>
              </property>
              <property name="minimum">
               <double>-1000.000000000000000</double>
@@ -513,7 +513,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>offset is absolute</string>
+            <string>Offset is absolute</string>
            </property>
            <property name="text">
             <string>mm</string>
@@ -529,7 +529,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>offset in Space units</string>
+            <string>Offset in space units</string>
            </property>
            <property name="text">
             <string extracomment="spatium unit">Space</string>
@@ -573,7 +573,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>align left edge of text to reference point</string>
+            <string>Align left edge of text to reference point</string>
            </property>
            <property name="text">
             <string notr="true">...</string>
@@ -596,7 +596,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>center text on reference point</string>
+            <string>Center text on reference point</string>
            </property>
            <property name="text">
             <string notr="true">...</string>
@@ -619,7 +619,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>align top edge of text to reference point</string>
+            <string>Align top edge of text to reference point</string>
            </property>
            <property name="text">
             <string notr="true">...</string>
@@ -642,7 +642,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>align right edge of text to reference point</string>
+            <string>Align right edge of text to reference point</string>
            </property>
            <property name="text">
             <string notr="true">...</string>
@@ -675,7 +675,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>center text vertical to text baseline</string>
+            <string>Center text vertical to text baseline</string>
            </property>
            <property name="text">
             <string notr="true">...</string>
@@ -698,7 +698,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>center text vertical to reference point</string>
+            <string>Center text vertical to reference point</string>
            </property>
            <property name="text">
             <string notr="true">...</string>
@@ -721,7 +721,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>align bottom edge of text to reference point</string>
+            <string>Align bottom edge of text to reference point</string>
            </property>
            <property name="text">
             <string notr="true">...</string>
@@ -767,7 +767,7 @@
       <item>
        <widget class="QGroupBox" name="frame">
         <property name="toolTip">
-         <string>enable text frame</string>
+         <string>Enable text frame</string>
         </property>
         <property name="title">
          <string>Frame</string>
@@ -790,7 +790,7 @@
            <item>
             <widget class="QRadioButton" name="circleButton">
              <property name="toolTip">
-              <string>draw circled frame</string>
+              <string>Draw circled frame</string>
              </property>
              <property name="text">
               <string>Circle</string>
@@ -800,7 +800,7 @@
            <item>
             <widget class="QRadioButton" name="boxButton">
              <property name="toolTip">
-              <string>draw boxed frame</string>
+              <string>Draw boxed frame</string>
              </property>
              <property name="text">
               <string>Box</string>
@@ -884,7 +884,7 @@
            <item row="0" column="3">
             <widget class="QDoubleSpinBox" name="paddingWidth">
              <property name="toolTip">
-              <string>frame inner margin</string>
+              <string>Frame inner margin</string>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -922,7 +922,7 @@
            <item row="1" column="1">
             <widget class="QSpinBox" name="frameRound">
              <property name="toolTip">
-              <string>corner round</string>
+              <string>Corner round</string>
              </property>
             </widget>
            </item>
@@ -948,7 +948,7 @@
            <item row="2" column="3">
             <widget class="Awl::ColorLabel" name="bgColor">
              <property name="toolTip">
-              <string>text background color</string>
+              <string>Text background color</string>
              </property>
              <property name="frameShape">
               <enum>QFrame::Box</enum>
@@ -958,7 +958,7 @@
            <item row="2" column="1">
             <widget class="Awl::ColorLabel" name="frameColor">
              <property name="toolTip">
-              <string>frame color</string>
+              <string>Frame color</string>
              </property>
              <property name="frameShape">
               <enum>QFrame::Box</enum>

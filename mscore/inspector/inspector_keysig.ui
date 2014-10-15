@@ -82,7 +82,7 @@
      <item row="0" column="1">
       <widget class="QToolButton" name="resetShowCourtesy">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Show courtesy value</string>
@@ -100,8 +100,6 @@
   <tabstop>showCourtesy</tabstop>
   <tabstop>resetShowCourtesy</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

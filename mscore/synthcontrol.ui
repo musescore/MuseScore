@@ -26,7 +26,7 @@
      <item row="0" column="0">
       <widget class="QPushButton" name="saveButton">
        <property name="toolTip">
-        <string>Save to Score</string>
+        <string>Save to score</string>
        </property>
        <property name="text">
         <string>Save to Score</string>
@@ -49,7 +49,7 @@
      <item row="0" column="1">
       <widget class="QPushButton" name="loadButton">
        <property name="toolTip">
-        <string>Load from Score</string>
+        <string>Load from score</string>
        </property>
        <property name="text">
         <string>Load from Score</string>

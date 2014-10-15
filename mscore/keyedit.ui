@@ -125,7 +125,7 @@
          <item>
           <widget class="QPushButton" name="addButton">
            <property name="toolTip">
-            <string>add time signature to palette</string>
+            <string>Add time signature to palette</string>
            </property>
            <property name="text">
             <string>Add</string>

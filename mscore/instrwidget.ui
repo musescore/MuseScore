@@ -338,7 +338,7 @@
         <string>Linked</string>
        </property>
        <property name="toolTip">
-        <string>Staff Linked to Previous</string>
+        <string>Staff linked to previous</string>
        </property>
       </column>
       <column>

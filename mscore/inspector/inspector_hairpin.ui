@@ -110,7 +110,7 @@
      <item row="3" column="2">
       <widget class="QToolButton" name="resetVeloChange">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Velocity change value</string>
@@ -123,7 +123,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetHairpinType">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Type value</string>
@@ -175,7 +175,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetDynRange">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Dynamic range value</string>
@@ -195,7 +195,7 @@
      <item row="4" column="2">
       <widget class="QToolButton" name="resetHairpinHeight">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Height value</string>
@@ -208,7 +208,7 @@
      <item row="5" column="2">
       <widget class="QToolButton" name="resetHairpinContHeight">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset continue Height value</string>
@@ -260,7 +260,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetHairpinCircledTip">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Circled tip value</string>

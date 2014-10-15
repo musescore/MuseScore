@@ -82,7 +82,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetLineColor">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Line color value</string>
@@ -122,7 +122,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetDiagonal">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Allow diagonal value</string>
@@ -196,7 +196,7 @@
      <item row="3" column="2">
       <widget class="QToolButton" name="resetLineWidth">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Line width value</string>
@@ -209,7 +209,7 @@
      <item row="4" column="2">
       <widget class="QToolButton" name="resetLineStyle">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Line style value</string>

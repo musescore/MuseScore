@@ -112,7 +112,7 @@
        </item>
        <item>
         <property name="text">
-         <string>Segno Variation</string>
+         <string>Segno variation</string>
         </property>
        </item>
        <item>
@@ -122,7 +122,7 @@
        </item>
        <item>
         <property name="text">
-         <string>Coda Variation</string>
+         <string>Varied coda</string>
         </property>
        </item>
        <item>
@@ -142,7 +142,7 @@
        </item>
        <item>
         <property name="text">
-         <string>User Defined</string>
+         <string>Custom</string>
         </property>
        </item>
       </widget>

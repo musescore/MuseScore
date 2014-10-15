@@ -114,7 +114,7 @@
      <item row="0" column="3">
       <widget class="QToolButton" name="resetTrillType">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Trill type</string>

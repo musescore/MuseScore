@@ -21,7 +21,7 @@ namespace Ms {
 //must be in sync with Marker::Type enum
 const MarkerTypeItem markerTypeTable[] = {
       { Marker::Type::SEGNO   , QT_TRANSLATE_NOOP("markerType", "Segno")          },
-      { Marker::Type::VARSEGNO, QT_TRANSLATE_NOOP("markerType", "Segno Variation")},
+      { Marker::Type::VARSEGNO, QT_TRANSLATE_NOOP("markerType", "Segno variation")},
       { Marker::Type::CODA    , QT_TRANSLATE_NOOP("markerType", "Coda")           },
       { Marker::Type::VARCODA , QT_TRANSLATE_NOOP("markerType", "Varied coda")    },
       { Marker::Type::CODETTA , QT_TRANSLATE_NOOP("markerType", "Codetta")        },
