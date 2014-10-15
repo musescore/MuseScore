@@ -67,6 +67,7 @@ class TextLine : public SLine {
 
       PlaceText _beginTextPlace, _continueTextPlace, _endTextPlace;
 
+      bool _lineVisible;
       bool _beginHook, _endHook;
       HookType _beginHookType, _endHookType;
       Spatium _beginHookHeight, _endHookHeight;
@@ -91,6 +92,8 @@ class TextLine : public SLine {
       virtual void writeProperties(Xml& xml) const override;
       virtual bool readProperties(XmlReader& node) override;
 
+      bool lineVisible() const                { return _lineVisible;          }
+      void setLineVisible(bool v)             { _lineVisible = v;             }
       bool beginHook() const                  { return _beginHook;            }
       bool endHook() const                    { return _endHook;              }
       void setBeginHook(bool v)               { _beginHook = v;               }

@@ -210,6 +210,7 @@ static const PropertyData propertyList[] = {
       { P_ID::LYRIC_TICKS,         true,  "ticks",                 P_TYPE::INT },
 
       { P_ID::VOLTA_ENDING,        true,  "endings",               P_TYPE::INT_LIST },
+      { P_ID::LINE_VISIBLE,        true,  "lineVisible",           P_TYPE::BOOL },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
