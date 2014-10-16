@@ -42,7 +42,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label">
           <property name="text">
-           <string notr="true">line width:</string>
+           <string notr="true">Line thickness:</string>
           </property>
          </widget>
         </item>
@@ -56,7 +56,7 @@
         <item row="1" column="2">
          <widget class="QPushButton" name="endText">
           <property name="text">
-           <string notr="true">endText</string>
+           <string notr="true">EndText</string>
           </property>
          </widget>
         </item>

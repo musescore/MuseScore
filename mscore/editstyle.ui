@@ -1636,7 +1636,7 @@
             <item row="4" column="0">
              <widget class="QLabel" name="label_29">
               <property name="text">
-               <string>Fix number of measures/system:</string>
+               <string>Fixed number of measures/system:</string>
               </property>
               <property name="buddy">
                <cstring>fixNumberMeasures</cstring>
@@ -1649,7 +1649,7 @@
             <item row="5" column="0">
              <widget class="QCheckBox" name="fixMeasureWidth">
               <property name="text">
-               <string>Fix measure width</string>
+               <string>Fixed measure width</string>
               </property>
              </widget>
             </item>
@@ -1675,7 +1675,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_91">
               <property name="text">
-               <string>System bracket width:</string>
+               <string>System bracket thickness:</string>
               </property>
               <property name="buddy">
                <cstring>bracketWidth</cstring>
@@ -1685,7 +1685,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="label_92">
               <property name="text">
-               <string>Brace width:</string>
+               <string>Brace thickness:</string>
               </property>
               <property name="buddy">
                <cstring>akkoladeWidth</cstring>
@@ -3491,7 +3491,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>Line break height:</string>
+             <string>Continue height:</string>
             </property>
             <property name="buddy">
              <cstring>hairpinContinueHeight</cstring>
@@ -4006,7 +4006,7 @@
           <item row="0" column="4">
            <widget class="QCheckBox" name="ottavaNumbersOnly">
             <property name="text">
-             <string>numbers only</string>
+             <string>Numbers only</string>
             </property>
            </widget>
           </item>

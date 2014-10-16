@@ -362,7 +362,7 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
 
       instrumentList->setSelectionMode(QAbstractItemView::ExtendedSelection);
       partiturList->setSelectionMode(QAbstractItemView::SingleSelection);
-      QStringList header = (QStringList() << tr("Staves") << tr("Visib.") << tr("Clef") << tr("Link.") << tr("Staff type"));
+      QStringList header = (QStringList() << tr("Staves") << tr("Visible") << tr("Clef") << tr("Linked") << tr("Staff type"));
       partiturList->setHeaderLabels(header);
       partiturList->resizeColumnToContents(1);  // shrink "visible "and "linked" columns as much as possible
       partiturList->resizeColumnToContents(3);

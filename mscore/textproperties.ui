@@ -833,7 +833,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Border width:</string>
+              <string>Border thickness:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -846,7 +846,7 @@
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="frameWidth">
              <property name="toolTip">
-              <string>frame line width</string>
+              <string>Frame line thickness</string>
              </property>
              <property name="suffix">
               <string>sp</string>
