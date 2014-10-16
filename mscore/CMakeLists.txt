@@ -38,7 +38,7 @@ QT4_WRAP_UI (ui_headers
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui measureproperties.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
-      editstaff.ui voltaproperties.ui timesigproperties.ui boxproperties.ui
+      editstaff.ui voltaproperties.ui timesigproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
       transposedialog.ui lineproperties.ui excerptsdialog.ui  stafftext.ui tupletdialog.ui
       glissandoprop.ui articulation.ui metaedit.ui palette.ui select.ui
@@ -128,7 +128,7 @@ QT4_WRAP_CPP (mocs
       measureproperties.h seq.h textpalette.h textstyle.h selectionwindow.h
       timedialog.h symboldialog.h shortcutcapturedialog.h simplebutton.h
       greendotbutton.h recordbutton.h editdrumset.h editstaff.h selinstrument.h
-      voltaproperties.h timesigproperties.h boxproperties.h newwizard.h
+      voltaproperties.h timesigproperties.h newwizard.h
       transposedialog.h lineproperties.h
       excerptsdialog.h stafftextproperties.h glissandoproperties.h
       articulationprop.h metaedit.h magbox.h
@@ -233,7 +233,7 @@ add_executable ( ${ExecutableName}
       debugger/debugger.cpp menus.cpp importmidi.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
-      seq.cpp boxproperties.cpp textpalette.cpp
+      seq.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
       simplebutton.cpp musedata.cpp
       # exportly.cpp
