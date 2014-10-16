@@ -2577,8 +2577,6 @@ QPointF Chord::layoutArticulation(Articulation* a)
                               line = ((line-add) & ~1) + 3 + add*2;
                         else                                            // if note on or below staff bottom line,
                               line += 2 + add;                                // move 1 whole space below
-                        if (!staff()->isTabStaff())                     // on pitched staves, note is at left of stem:
-                              pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
                         pos.ry() = -a->height() / 2;                    // symbol is below baseline, shift if a bit up
                         }
                   else {                        // if above chord
@@ -2588,11 +2586,15 @@ QPointF Chord::layoutArticulation(Articulation* a)
                               line = ((line+1+add) & ~1) - 3 - add*2;
                         else                                            // if note or or above staff top line
                               line -= 2 + add;                                // move 1 whole space above
-                        if (!staff()->isTabStaff())                     // on pitched staves, note is at right of stem:
-                              pos.rx() += upNote()->headWidth() * .5;   // move half-a-note-head to right
                         pos.ry() = a->height() / 2;                     // symbol is on baseline, shift it a bit down
                         }
-                  pos.ry() += line * _spStaff2;                          // convert staff position to sp distance
+                  pos.ry() += line * _spStaff2;                         // convert staff position to sp distance
+                  }
+            if (!staff()->isTabStaff()) {
+                  if (up())
+                        pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
+                  else
+                        pos.rx() += upNote()->headWidth() * .5;   // move half-a-note-head to right
                   }
             a->setPos(pos);
             a->adjustReadPos();
