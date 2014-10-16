@@ -136,12 +136,12 @@ Palette* MuseScore::newFramePalette()
       sp->setGrid(27, 40);
       sp->setDrawGrid(true);
 
-      if(enableExperimental) {
+      if (enableExperimental) {
             static const IconAction bpa[] = {
                   { IconType::VFRAME,   "insert-vbox" },
                   { IconType::HFRAME,   "insert-hbox" },
                   { IconType::TFRAME,   "insert-textframe" },
-                  { IconType::FFRAME,   "insert-fretframe" },
+                  { IconType::FFRAME,   "insert-fretframe" },    // experimental
                   { IconType::MEASURE,  "insert-measure" },
                   { IconType::NONE,     ""}
                   };

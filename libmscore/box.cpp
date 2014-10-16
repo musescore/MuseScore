@@ -172,6 +172,16 @@ void Box::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 void Box::write(Xml& xml) const
       {
       xml.stag(name());
+      writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   writeProperties
+//---------------------------------------------------------
+
+void Box::writeProperties(Xml& xml) const
+      {
       writeProperty(xml, P_ID::BOX_HEIGHT);
       writeProperty(xml, P_ID::BOX_WIDTH);
       writeProperty(xml, P_ID::TOP_GAP);
@@ -184,7 +194,6 @@ void Box::write(Xml& xml) const
       Element::writeProperties(xml);
       foreach (const Element* el, _el)
             el->write(xml);
-      xml.etag();
       }
 
 //---------------------------------------------------------
@@ -217,7 +226,7 @@ void Box::read(XmlReader& e)
             else if (tag == "Text") {
                   Text* t;
                   if (type() == Element::Type::TBOX) {
-                        t = static_cast<TBox*>(this)->getText();
+                        t = static_cast<TBox*>(this)->text();
                         t->read(e);
                         }
                   else {
@@ -282,6 +291,90 @@ void Box::read(XmlReader& e)
       if (score()->mscVersion() < 117 && (type() == Element::Type::HBOX || type() == Element::Type::VBOX) && !keepMargins)  {
             _leftMargin = _rightMargin = _topMargin = _bottomMargin = 0.0;
             }
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Box::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "height")
+            _boxHeight = Spatium(e.readDouble());
+      else if (tag == "width")
+            _boxWidth = Spatium(e.readDouble());
+      else if (tag == "topGap")
+            _topGap = e.readDouble();
+      else if (tag == "bottomGap")
+            _bottomGap = e.readDouble();
+      else if (tag == "leftMargin")
+            _leftMargin = e.readDouble();
+      else if (tag == "rightMargin")
+            _rightMargin = e.readDouble();
+      else if (tag == "topMargin")
+            _topMargin = e.readDouble();
+      else if (tag == "bottomMargin")
+            _bottomMargin = e.readDouble();
+      else if (tag == "Text") {
+            Text* t;
+            if (type() == Element::Type::TBOX) {
+                  t = static_cast<TBox*>(this)->text();
+                  t->read(e);
+                  }
+            else {
+                  t = new Text(score());
+                  t->read(e);
+                  if (t->isEmpty()) {
+                        qDebug("read empty text");
+                        }
+                  else {
+                        add(t);
+                        if (score()->mscVersion() <= 114)
+                              t->setLayoutToParentWidth(true);
+                        }
+                  }
+            }
+      else if (tag == "Symbol") {
+            Symbol* s = new Symbol(score());
+            s->read(e);
+            add(s);
+            }
+      else if (tag == "Image") {
+            if (MScore::noImages)
+                  e.skipCurrentElement();
+            else {
+                  Image* image = new Image(score());
+                  image->setTrack(e.track());
+                  image->read(e);
+                  add(image);
+                  }
+            }
+      else if (tag == "FretDiagram") {
+            FretDiagram* f = new FretDiagram(score());
+            f->read(e);
+            add(f);
+            }
+      else if (tag == "LayoutBreak") {
+            LayoutBreak* lb = new LayoutBreak(score());
+            lb->read(e);
+            add(lb);
+            }
+      else if (tag == "HBox") {
+            HBox* hb = new HBox(score());
+            hb->read(e);
+            add(hb);
+            }
+      else if (tag == "VBox") {
+            VBox* vb = new VBox(score());
+            vb->read(e);
+            add(vb);
+            }
+      else if (Element::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------

@@ -54,6 +54,7 @@
 #include "repeat.h"
 #include "bracket.h"
 #include "ottava.h"
+#include "textframe.h"
 
 namespace Ms {
 
@@ -2374,8 +2375,11 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   // a frame, not a measure
                   if (score == rootScore())
                         rmb = mb;
-                  else if (rmb && mb != rmb)
+                  else if (rmb && mb != rmb) {
                         mb->linkTo(rmb);
+                        if (rmb->type() == Element::Type::TBOX)
+                              static_cast<TBox*>(mb)->text()->linkTo(static_cast<TBox*>(rmb)->text());
+                        }
                   undo(new InsertMeasure(mb, im));
                   }
             }

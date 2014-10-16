@@ -1000,6 +1000,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       selMenu->addAction(getAction("select-similar-range"));
       a = selMenu->addAction(tr("More..."));
       a->setData("select-dialog");
+
       popup->addSeparator();
       a = getAction("edit-element");
       popup->addAction(a);
@@ -1010,11 +1011,12 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       if (enableExperimental) {
             popup->addSeparator();
             a = popup->addAction(tr("Help"));
-      }
+            a->setData("help");
+            }
       popup->addSeparator();
-      a->setData("help");
       a = popup->addAction(tr("Debugger"));
       a->setData("list");
+
       a = popup->exec(pos);
       if (a == 0)
             return;
@@ -1027,7 +1029,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             mscore->showElementContext(obj);
       else if (cmd == "help")
             mscore->helpBrowser(obj->name());
-      else if (cmd == "edit") {
+      else if (cmd == "edit-element") {
             if (obj->isEditable()) {
                   startEdit(obj);
                   return;
@@ -5098,7 +5100,7 @@ void ScoreView::cmdInsertMeasure(Element::Type type)
       mb = _score->insertMeasure(type, mb);
       if (mb->type() == Element::Type::TBOX) {
             TBox* tbox = static_cast<TBox*>(mb);
-            Text* s = tbox->getText();
+            Text* s = tbox->text();
             _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
             startEdit(s);

@@ -41,7 +41,7 @@ void ScoreView::startEdit(Element* e)
             return;
             }
       if (e->type() == Element::Type::TBOX)
-            e = static_cast<TBox*>(e)->getText();
+            e = static_cast<TBox*>(e)->text();
       editObject = e;
       sm->postEvent(new CommandEvent("edit"));
       _score->end();
@@ -71,6 +71,8 @@ void ScoreView::startEdit(Element* element, int startGrip)
 
 void ScoreView::startEdit()
       {
+      if (editObject->type() == Element::Type::TBOX)
+            editObject = static_cast<TBox*>(editObject)->text();
       _score->setLayoutAll(false);
       curElement  = 0;
       setFocus();

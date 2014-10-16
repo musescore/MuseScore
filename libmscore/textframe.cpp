@@ -22,6 +22,7 @@
 #include "fret.h"
 #include "mscore.h"
 #include "textframe.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -32,10 +33,15 @@ namespace Ms {
 TBox::TBox(Score* score)
    : VBox(score)
       {
-      setBoxHeight(Spatium(0));
-      Text* s = new Text(score);
-      s->setTextStyle(score->textStyle(TextStyleType::FRAME));
-      add(s);
+      setBoxHeight(Spatium(1));
+      _text  = new Text(score);
+      _text->setParent(this);
+      _text->setTextStyleType(TextStyleType::FRAME);
+      }
+
+TBox::~TBox()
+      {
+      delete _text;
       }
 
 //---------------------------------------------------------
@@ -48,48 +54,50 @@ void TBox::layout()
       {
       setPos(QPointF());      // !?
       bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
-      foreach(Element* e, _el) {
-            if (e->isText()) {
-                  Text* text = static_cast<Text*>(e);
-                  text->layout();
-                  qreal h;
-                  if (text->isEmpty())
-                        h = text->lineSpacing();
-                  else
-                        h = text->height();
-                  text->setPos(leftMargin() * MScore::DPMM, topMargin() * MScore::DPMM);
-                  bbox().setRect(0.0, 0.0, system()->width(), h);
-                  }
-            }
+      _text->layout();
+      _text->setPos(leftMargin() * MScore::DPMM, topMargin() * MScore::DPMM);
+      qreal h = _text->isEmpty() ? _text->lineSpacing() : _text->height();
+      bbox().setRect(0.0, 0.0, system()->width(), h);
       MeasureBase::layout();  // layout LayoutBreak's
       }
 
 //---------------------------------------------------------
-//   add
-///   Add new Element \a e to text box
+//   write
 //---------------------------------------------------------
 
-void TBox::add(Element* e)
+void TBox::write(Xml& xml) const
       {
-      if (e->type() == Element::Type::TEXT) {
-            Text* text = static_cast<Text*>(e);
-            text->setLayoutToParentWidth(true);
-            text->setFlag(ElementFlag::MOVABLE, false);
-            }
-      Box::add(e);
+      xml.stag(name());
+      Box::writeProperties(xml);
+      _text->write(xml);
+      xml.etag();
       }
 
 //---------------------------------------------------------
-//   getText
+//   read
 //---------------------------------------------------------
 
-Text* TBox::getText()
+void TBox::read(XmlReader& e)
       {
-      if (_el.empty())
-            return 0;
-      if ((*_el.begin())->type() == Element::Type::TEXT)
-            return static_cast<Text*>(*_el.begin());
-      return 0;
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Text")
+                  _text->read(e);
+            else if (Box::readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void TBox::scanElements(void* data, void (*func)(void*, Element*), bool all)
+      {
+      _text->scanElements(data, func, all);
+      Box::scanElements(data, func, all);
       }
 
 }
