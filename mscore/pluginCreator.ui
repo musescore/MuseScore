@@ -154,7 +154,7 @@
     <string>R</string>
    </property>
    <property name="toolTip">
-    <string>reload current plugin source</string>
+    <string>Reload current plugin source</string>
    </property>
   </action>
  </widget>

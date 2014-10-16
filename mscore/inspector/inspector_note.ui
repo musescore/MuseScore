@@ -201,7 +201,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Dot Position Value</string>
@@ -239,7 +239,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Mirror head value</string>
@@ -258,7 +258,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Velocity type value</string>
@@ -277,7 +277,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Head type value</string>
@@ -443,7 +443,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Velocity value</string>
@@ -506,7 +506,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Head group value</string>
@@ -522,7 +522,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Small value</string>
@@ -541,7 +541,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Tuning value</string>
@@ -560,7 +560,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Play value</string>

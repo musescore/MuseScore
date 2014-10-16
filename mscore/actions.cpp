@@ -994,6 +994,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "insert-measure",
          QT_TRANSLATE_NOOP("action","Insert One Measure"),
+         QT_TRANSLATE_NOOP("action","Insert One Measure"),
+         QT_TRANSLATE_NOOP("action","Insert one measure"),
          Icons::measure_ICON
          ),
       Shortcut(
@@ -1010,6 +1012,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "insert-hbox",
          QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
+         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
+         QT_TRANSLATE_NOOP("action","Insert horizontal frame"),
          Icons::hframe_ICON
          ),
       Shortcut(
@@ -1018,6 +1022,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "insert-textframe",
          QT_TRANSLATE_NOOP("action","Insert Text Frame"),
+         QT_TRANSLATE_NOOP("action","Insert Text Frame"),
+         QT_TRANSLATE_NOOP("action","Insert text frame"),
          Icons::tframe_ICON
          ),
       Shortcut(
@@ -1041,6 +1047,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "insert-vbox",
          QT_TRANSLATE_NOOP("action","Insert Vertical Frame"),
+         QT_TRANSLATE_NOOP("action","Insert Vertical Frame"),
+         QT_TRANSLATE_NOOP("action","Insert vertical frame"),
          Icons::vframe_ICON
          ),
       Shortcut(

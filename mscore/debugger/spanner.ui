@@ -165,22 +165,22 @@
           </property>
           <item>
            <property name="text">
-            <string notr="true">SEGMENT</string>
+            <string notr="true">Segment</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string notr="true">MEASURE</string>
+            <string notr="true">Measure</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string notr="true">CHORD</string>
+            <string notr="true">Chord</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string notr="true">NOTE</string>
+            <string notr="true">Note</string>
            </property>
           </item>
          </widget>

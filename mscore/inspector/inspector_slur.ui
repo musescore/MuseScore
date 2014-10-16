@@ -75,7 +75,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Line type value</string>
@@ -111,17 +111,17 @@
        </property>
        <item>
         <property name="text">
-         <string>solid</string>
+         <string>Continuous</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>dotted</string>
+         <string>Dotted</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>dashed</string>
+         <string>Dashed</string>
         </property>
        </item>
       </widget>
@@ -134,8 +134,6 @@
   <tabstop>lineType</tabstop>
   <tabstop>resetLineType</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

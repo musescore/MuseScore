@@ -458,7 +458,7 @@ MuseScore::MuseScore()
 
       _positionLabel = new QLabel;
       _positionLabel->setObjectName("decoration widget");  // this prevents animations
-      _positionLabel->setToolTip(tr("measure:beat:tick"));
+      _positionLabel->setToolTip(tr("Measure:Beat:Tick"));
 
       _modeText = new QLabel;
       _modeText->setAutoFillBackground(false);
@@ -497,12 +497,12 @@ MuseScore::MuseScore()
 
       if (enableExperimental) {
             layerSwitch = new QComboBox(this);
-            layerSwitch->setToolTip(tr("switch layer"));
+            layerSwitch->setToolTip(tr("Switch layer"));
             connect(layerSwitch, SIGNAL(activated(const QString&)), SLOT(switchLayer(const QString&)));
             playMode = new QComboBox(this);
             playMode->addItem(tr("synthesizer"));
             playMode->addItem(tr("audio track"));
-            playMode->setToolTip(tr("switch play mode"));
+            playMode->setToolTip(tr("Switch play mode"));
             connect(playMode, SIGNAL(activated(int)), SLOT(switchPlayMode(int)));
 
             _statusBar->addPermanentWidget(playMode);
@@ -3847,7 +3847,7 @@ RecordButton::RecordButton(QWidget* parent)
       {
       setCheckable(true);
       defaultAction()->setCheckable(true);
-      setToolTip(qApp->translate("RecordButton", "record"));
+      setToolTip(qApp->translate("RecordButton", "Record"));
       }
 
 //---------------------------------------------------------
@@ -3858,7 +3858,7 @@ GreendotButton::GreendotButton(QWidget* parent)
    : SimpleButton(":/data/greendot.svg", ":/data/darkgreendot.svg", parent)
       {
       setCheckable(true);
-      setToolTip(qApp->translate("GreendotButton", "record"));
+      setToolTip(qApp->translate("GreendotButton", "Record"));
       }
 
 //---------------------------------------------------------

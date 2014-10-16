@@ -116,12 +116,12 @@
        </property>
        <item>
         <property name="text">
-         <string>straight</string>
+         <string>Straight</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>wavy</string>
+         <string>Wavy</string>
         </property>
        </item>
       </widget>
@@ -168,8 +168,6 @@
   <tabstop>showText</tabstop>
   <tabstop>resetShowText</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -732,9 +732,9 @@
             <property name="accessibleDescription">
              <string>Opens a dialog for configuring the soundfont folders</string>
             </property>
-      <property name="text">
-       <string/>
-      </property>
+            <property name="text">
+             <string/>
+            </property>
            </widget>
           </item>
           <item row="5" column="2">
@@ -769,12 +769,12 @@
             </property>
             <item>
              <property name="text">
-              <string>dark</string>
+              <string>Dark</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>light</string>
+              <string>Light</string>
              </property>
             </item>
            </widget>
@@ -1308,7 +1308,7 @@
        <item>
         <widget class="QGroupBox" name="rcGroup">
          <property name="toolTip">
-          <string>enable MIDI remote control</string>
+          <string>Enable MIDI remote control</string>
          </property>
          <property name="accessibleName">
           <string>MIDI remote control</string>
@@ -1354,7 +1354,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>is active</string>
+             <string>Is active</string>
             </property>
             <property name="accessibleName">
              <string>Rewind is active</string>
@@ -1370,7 +1370,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>record</string>
+             <string>Record</string>
             </property>
             <property name="accessibleName">
              <string>Rewind record</string>
@@ -1396,7 +1396,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>is active</string>
+             <string>Is active</string>
             </property>
             <property name="text">
              <string>...</string>
@@ -1409,7 +1409,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>record</string>
+             <string>Record</string>
             </property>
             <property name="accessibleName">
              <string>Toggle play record</string>
@@ -1782,7 +1782,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>is active</string>
+             <string>Is active</string>
             </property>
             <property name="accessibleName">
              <string>Play is active</string>
@@ -1798,7 +1798,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>is active</string>
+             <string>Is active</string>
             </property>
             <property name="accessibleName">
              <string>Stop is active</string>
@@ -1814,7 +1814,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>record</string>
+             <string>Record</string>
             </property>
             <property name="accessibleName">
              <string>Play record</string>
@@ -1830,7 +1830,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>record</string>
+             <string>Record</string>
             </property>
             <property name="accessibleName">
              <string>Stop record</string>
@@ -1856,7 +1856,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>is active</string>
+             <string>Is active</string>
             </property>
             <property name="accessibleName">
              <string>Note entry is active</string>
@@ -1872,7 +1872,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="toolTip">
-             <string>record</string>
+             <string>Record</string>
             </property>
             <property name="accessibleName">
              <string>Note entry record</string>
@@ -2025,7 +2025,7 @@
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="scale">
             <property name="toolTip">
-             <string>default scale for new score views</string>
+             <string>Default scale for new score views</string>
             </property>
             <property name="accessibleName">
              <string>Default zoom</string>

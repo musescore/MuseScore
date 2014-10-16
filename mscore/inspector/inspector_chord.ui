@@ -168,7 +168,7 @@
      <item row="5" column="2">
       <widget class="QToolButton" name="resetStemDirection">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Stem direction value</string>
@@ -219,7 +219,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetSmall">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Small Value</string>
@@ -232,7 +232,7 @@
      <item row="3" column="2">
       <widget class="QToolButton" name="resetStemless">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Stemless value</string>

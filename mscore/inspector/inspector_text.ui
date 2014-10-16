@@ -83,7 +83,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetStyle">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Style value</string>
@@ -97,8 +97,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -165,7 +165,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetLeftGap">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Left Gap value</string>
@@ -178,7 +178,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetRightGap">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Right Gap value</string>

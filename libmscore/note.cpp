@@ -121,20 +121,20 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
 
 // same order as NoteHead::Group
 static const char* noteHeadNames[] = {
-    QT_TRANSLATE_NOOP("noteheadnames", "normal"),
-    QT_TRANSLATE_NOOP("noteheadnames", "cross"),
-    QT_TRANSLATE_NOOP("noteheadnames", "diamond"),
-    QT_TRANSLATE_NOOP("noteheadnames", "triangle"),
-    QT_TRANSLATE_NOOP("noteheadnames", "mi"),
-    QT_TRANSLATE_NOOP("noteheadnames", "slash"),
-    QT_TRANSLATE_NOOP("noteheadnames", "xcircle"),
-    QT_TRANSLATE_NOOP("noteheadnames", "do"),
-    QT_TRANSLATE_NOOP("noteheadnames", "re"),
-    QT_TRANSLATE_NOOP("noteheadnames", "fa"),
-    QT_TRANSLATE_NOOP("noteheadnames", "la"),
-    QT_TRANSLATE_NOOP("noteheadnames", "ti"),
-    QT_TRANSLATE_NOOP("noteheadnames", "sol"),
-    QT_TRANSLATE_NOOP("noteheadnames", "alt. brevis")
+    QT_TRANSLATE_NOOP("noteheadnames", "Normal"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Cross"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Diamond"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Triangle"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Mi"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Slash"),
+    QT_TRANSLATE_NOOP("noteheadnames", "XCircle"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Do"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Re"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Fa"),
+    QT_TRANSLATE_NOOP("noteheadnames", "La"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Ti"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Sol"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Alt. Brevis")
 };
 
 //---------------------------------------------------------

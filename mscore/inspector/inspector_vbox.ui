@@ -76,7 +76,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetTopGap">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="whatsThis">
         <string/>
@@ -92,7 +92,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetBottomGap">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Bottom Gap value</string>
@@ -310,7 +310,7 @@
      <item row="4" column="2">
       <widget class="QToolButton" name="resetLeftMargin">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Left Margin value</string>
@@ -323,7 +323,7 @@
      <item row="5" column="2">
       <widget class="QToolButton" name="resetRightMargin">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Right Margin value</string>
@@ -336,7 +336,7 @@
      <item row="6" column="2">
       <widget class="QToolButton" name="resetTopMargin">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Top Margin value</string>
@@ -349,7 +349,7 @@
      <item row="7" column="2">
       <widget class="QToolButton" name="resetBottomMargin">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Bottom Margin value</string>

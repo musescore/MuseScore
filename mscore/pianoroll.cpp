@@ -71,7 +71,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addAction(getAction("metronome"));
 
       showWave = new QAction(tr("Wave"), tb);
-      showWave->setToolTip(tr("show wave display"));
+      showWave->setToolTip(tr("Show wave display"));
       showWave->setCheckable(true);
       showWave->setChecked(false);
       connect(showWave, SIGNAL(toggled(bool)), SLOT(showWaveView(bool)));
