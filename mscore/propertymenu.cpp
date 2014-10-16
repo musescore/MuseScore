@@ -22,7 +22,6 @@
 
 #include "articulationprop.h"
 #include "bendproperties.h"
-#include "boxproperties.h"
 #include "voltaproperties.h"
 #include "lineproperties.h"
 #include "tremolobarprop.h"
@@ -157,7 +156,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             // but create new actions with local handler
             textMenu->addAction(getAction("frame-text")->text())->setData("frame-text");
             textMenu->addAction(getAction("picture")->text())->setData("picture");
-            popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
       else if (e->type() == Element::Type::VBOX) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
@@ -170,10 +168,6 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             textMenu->addAction(getAction("poet-text")->text())->setData("poet-text");
             textMenu->addAction(getAction("insert-hbox")->text())->setData("insert-hbox");
             textMenu->addAction(getAction("picture")->text())->setData("picture");
-            popup->addAction(tr("Frame Properties..."))->setData("f-props");
-            }
-      else if (e->type() == Element::Type::TBOX) {
-            popup->addAction(tr("Frame Properties..."))->setData("f-props");
             }
       else if (e->type() == Element::Type::VOLTA_SEGMENT) {
             genPropertyMenu1(e, popup);
@@ -328,10 +322,6 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   for (Element* b : bend->linkList())
                         b->score()->undo(new ChangeBend(static_cast<Bend*>(b), bp.points()));
                   }
-            }
-      else if (cmd == "f-props") {
-            BoxProperties vp(static_cast<Box*>(e), 0);
-            vp.exec();
             }
       else if (cmd == "measure-props") {
             MeasureProperties vp(static_cast<Note*>(e)->chord()->segment()->measure());

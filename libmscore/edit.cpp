@@ -2436,17 +2436,21 @@ void Score::checkSpanner(int startTick, int endTick)
                   Segment* seg = tick2segmentMM(s->tick(), false, Segment::Type::ChordRest);
                   if (!seg || !seg->element(s->track()))
                         sl.append(s);
-                  seg = tick2segmentMM(s->tick2(), false, Segment::Type::ChordRest);
-                  if (!seg || !seg->element(s->track2()))
-                        sl.append(s);
+                  else {
+                        seg = tick2segmentMM(s->tick2(), false, Segment::Type::ChordRest);
+                        if (!seg || !seg->element(s->track2()))
+                              sl.append(s);
+                        }
                   }
             else {
                   // remove spanner if there is no start element
                   s->computeStartElement();
                   if (!s->startElement())
                         sl.append(s);
-                  if (s->tick2() > lastTick)
-                        s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());
+                  else {
+                        if (s->tick2() > lastTick)
+                              s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());
+                        }
                   }
             }
       for (auto s : sl)       // actually remove scheduled spanners

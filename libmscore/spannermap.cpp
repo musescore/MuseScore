@@ -74,7 +74,7 @@ void SpannerMap::addSpanner(Spanner* s)
       // check if spanner already in list
       for (auto i = begin(); i != end(); ++i) {
             if (i->second == s) {
-                  qFatal("SpannerMap::addSpanner: already in list %p", s);
+                  qFatal("SpannerMap::addSpanner: %s already in list %p", s->name(), s);
                   }
             }
 #endif
