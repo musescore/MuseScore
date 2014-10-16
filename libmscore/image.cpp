@@ -462,6 +462,27 @@ bool Image::load(const QString& ss)
       }
 
 //---------------------------------------------------------
+//   loadFromData
+//    load image from data and put into ImageStore
+//    return true on success
+//---------------------------------------------------------
+
+bool Image::loadFromData(const QString& ss, const QByteArray& ba)
+      {
+      qDebug("Image::loadFromData <%s>", qPrintable(ss));
+
+      _linkIsValid = false;
+      _linkPath = "";
+      _storeItem = imageStore.add(ss, ba);
+      _storeItem->reference(this);
+      if (ss.endsWith(".svg"))
+            setImageType(ImageType::SVG);
+      else
+            setImageType(ImageType::RASTER);
+      return true;
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 

@@ -253,7 +253,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             foreach(const QUrl& u, ul) {
                   if (MScore::debugMode)
                         qDebug("drag Url: %s", qPrintable(u.toString()));
-                  if (u.scheme() == "file") {
+                  if (u.scheme() == "file" || u.scheme() == "http") {
                         QFileInfo fi(u.path());
                         QString suffix = fi.suffix().toLower();
                         if (suffix == "svg"
@@ -400,18 +400,20 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             return;
             }
 
-      if (event->mimeData()->hasUrls()) {
-            QList<QUrl>ul = event->mimeData()->urls();
+      const QMimeData* md = event->mimeData();
+      if (md->hasUrls()) {
+            QList<QUrl>ul = md->urls();
             QUrl u = ul.front();
-            if (u.scheme() == "file") {
+            if (u.scheme() == "file" || u.scheme() == "http") {
                   QFileInfo fi(u.path());
                   QString suffix(fi.suffix().toLower());
                   if (suffix != "svg"
                      && suffix != "jpg"
                      && suffix != "jpeg"
                      && suffix != "png"
-                     )
+                     ) {
                         return;
+                        }
                   //
                   // special drop target Note
                   //
@@ -424,7 +426,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             _score->end();
             return;
             }
-      const QMimeData* md = event->mimeData();
       QByteArray data;
       Element::Type etype;
       if (md->hasFormat(mimeSymbolListFormat)) {
@@ -613,6 +614,44 @@ void ScoreView::dropEvent(QDropEvent* event)
                   QString str(u.toLocalFile());
                   s->load(str);
                   qDebug("drop image <%s> <%s>", qPrintable(str), qPrintable(str));
+
+                  Element* el = elementAt(pos);
+                  if (el) {
+                        dropData.element = s;
+                        if (el->acceptDrop(dropData)) {
+                              dropData.element = s;
+                              el->drop(dropData);
+                              }
+                        }
+                  event->acceptProposedAction();
+                  score()->endCmd();
+                  mscore->endCmd();
+                  setDropTarget(0); // this also resets dropRectangle and dropAnchor
+                  return;
+                  }
+            else if (u.scheme() == "http") {
+                  QNetworkAccessManager manager;
+                  QNetworkReply* reply = manager.get(QNetworkRequest(u));
+
+                  // TODO:
+                  //    feed progress bar in loop
+                  //    implement timeout/abort
+
+                  QMutex mutex;
+                  QWaitCondition wc;
+                  while (!reply->isFinished()) {
+                        mutex.lock();
+                        wc.wait(&mutex, 100);
+                        qApp->processEvents();
+                        mutex.unlock();
+                        }
+                  QByteArray ba = reply->readAll();
+
+                  Image* s = new Image(score());
+                  s->loadFromData(u.path(), ba);
+                  delete reply;
+
+                  _score->startCmd();
 
                   Element* el = elementAt(pos);
                   if (el) {

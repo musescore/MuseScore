@@ -1690,9 +1690,9 @@ void MuseScore::dragEnterEvent(QDragEnterEvent* event)
             QList<QUrl>ul = event->mimeData()->urls();
             foreach(const QUrl& u, ul) {
                   if (MScore::debugMode)
-                        qDebug("drag Url: %s", qPrintable(u.toString()));
+                        qDebug("drag Url: %s scheme <%s>", qPrintable(u.toString()), qPrintable(u.scheme()));
                   if (u.scheme() == "file") {
-                        QFileInfo fi(u.toLocalFile());
+                        // QFileInfo fi(u.toLocalFile());
                         event->acceptProposedAction();
                         break;
                         }
@@ -1719,7 +1719,7 @@ void MuseScore::dropEvent(QDropEvent* event)
                               }
                         }
                   }
-            if(view != -1) {
+            if (view != -1) {
                   setCurrentScoreView(view);
                   writeSessionFile(false);
                   }

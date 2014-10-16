@@ -59,6 +59,7 @@ class Image : public BSymbol {
       virtual void write(Xml& xml) const;
       virtual void read(XmlReader&);
       bool load(const QString& s);
+      bool loadFromData(const QString&, const QByteArray&);
       virtual void layout();
       virtual void draw(QPainter*) const;
 
