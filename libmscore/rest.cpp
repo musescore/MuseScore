@@ -667,7 +667,7 @@ void Rest::add(Element* e)
                   _el.push_back(e);
                   break;
             default:
-                  qDebug("Rest::add() not impl. %s", e->name());
+                  ChordRest::add(e);
                   break;
             }
       }
@@ -685,7 +685,7 @@ void Rest::remove(Element* e)
                         qDebug("Rest::remove(): cannot find %s", e->name());
                   break;
             default:
-                  qDebug("Rest::remove() not impl. %s", e->name());
+                  ChordRest::remove(e);
                   break;
             }
       }
@@ -696,7 +696,7 @@ void Rest::remove(Element* e)
 
 void Rest::write(Xml& xml) const
       {
-      xml.stag("Rest");
+      xml.stag(name());
       ChordRest::writeProperties(xml);
       _el.write(xml);
       xml.etag();
