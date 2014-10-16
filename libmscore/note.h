@@ -340,8 +340,8 @@ class Note : public Element {
       void setChord(Chord* a)         { setParent((Element*)a);  }
       void draw(QPainter*) const;
 
-      void read(XmlReader&);
-      void write(Xml& xml) const;
+      virtual void read(XmlReader&) override;
+      virtual void write(Xml& xml) const override;
 
       bool acceptDrop(const DropData&) const override;
       Element* drop(const DropData&);

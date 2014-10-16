@@ -28,6 +28,8 @@ enum class SymId;
 class Rest : public ChordRest {
       Q_OBJECT
 
+      ElementList _el;              ///< symbols or images
+
       // values calculated by layout:
       SymId _sym;
       int dotline    { -1  };       // depends on rest symbol
@@ -43,6 +45,7 @@ class Rest : public ChordRest {
       Rest(Score* s = 0);
       Rest(Score*, const TDuration&);
       Rest(const Rest&, bool link = false);
+      ~Rest();
 
       virtual Element::Type type() const override { return Element::Type::REST; }
       Rest &operator=(const Rest&) = delete;
@@ -60,6 +63,12 @@ class Rest : public ChordRest {
 
       virtual void reset() override;
 
+      virtual void add(Element*);
+      virtual void remove(Element*);
+
+      virtual void read(XmlReader&) override;
+      virtual void write(Xml& xml) const override;
+
       void setMMWidth(qreal val);
       qreal mmWidth() const        { return _mmWidth; }
       SymId getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);
@@ -74,6 +83,9 @@ class Rest : public ChordRest {
       virtual QPointF stemPos() const;
       virtual qreal stemPosX() const;
       virtual QPointF stemPosBeam() const;
+
+      ElementList el()                            { return _el; }
+      const ElementList el() const                { return _el; }
 
       virtual QString accessibleInfo() override;
       };
