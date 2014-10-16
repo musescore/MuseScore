@@ -154,7 +154,7 @@ int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const Q
             case PM_LargeIconSize:
                   return 32;              //??
             case PM_MessageBoxIconSize:
-                  return 22;              //??
+                  return 48;              //??
 
             case PM_DefaultFrameWidth: {
                   if ( qobject_cast<const QLineEdit*>(widget) )
