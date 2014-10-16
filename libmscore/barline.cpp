@@ -55,11 +55,11 @@ const barLineTableItem barLineTable[] = {
         { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal") },
         { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed style") },
         { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted style") },
-        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "End Bar style") },
-        { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double Bar style") },
-        { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start Repeat") },
-        { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End Repeat") },
-        { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-Start Repeat") },
+        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "End bar style") },
+        { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double bar style") },
+        { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat") },
+        { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat") },
+        { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-start repeat") },
       };
 
 unsigned int barLineTableSize()

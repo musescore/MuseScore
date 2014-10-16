@@ -284,7 +284,7 @@
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="irregular">
             <property name="toolTip">
-             <string>do not count</string>
+             <string>Do not count</string>
             </property>
             <property name="text">
              <string>Exclude from measure count</string>
@@ -412,17 +412,17 @@
            <widget class="QComboBox" name="measureNumberMode">
             <item>
              <property name="text">
-              <string>AUTO</string>
+              <string>Automatic</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>always show</string>
+              <string>Always Show</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>always hide</string>
+              <string>Always Hide</string>
              </property>
             </item>
            </widget>
@@ -454,7 +454,7 @@
          <item>
           <widget class="QPushButton" name="previousButton">
            <property name="toolTip">
-            <string>goto previous measure</string>
+            <string>Go to previous measure</string>
            </property>
            <property name="text">
             <string notr="true" extracomment="&amp;larr;">←</string>
@@ -464,7 +464,7 @@
          <item>
           <widget class="QPushButton" name="nextButton">
            <property name="toolTip">
-            <string>goto next measure</string>
+            <string>Go to next measure</string>
            </property>
            <property name="text">
             <string notr="true" extracomment="&amp;rarr;">→</string>

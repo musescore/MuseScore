@@ -668,9 +668,6 @@
         </item>
         <item row="1" column="1">
          <widget class="QCheckBox" name="showClef">
-          <property name="toolTip">
-           <string/>
-          </property>
           <property name="text">
            <string>Show clef</string>
           </property>

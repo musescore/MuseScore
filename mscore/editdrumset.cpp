@@ -33,23 +33,23 @@ enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 
 //---------------------------------------------------------
 //   noteHeadNames (see also libmscore/note.{h,cpp})
-//   same order as NoteHead::Group, sol and altbrevis omitted,
+//   same order as NoteHead::Group, "Sol" and "Alt. Brevis" omitted,
 //   as not being useful for drums
 //---------------------------------------------------------
 
 const char* noteHeadNames[int(NoteHead::Group::HEAD_GROUPS)] = {
-      QT_TRANSLATE_NOOP("EditDrumset", "normal"),
-      QT_TRANSLATE_NOOP("EditDrumset", "cross"),
-      QT_TRANSLATE_NOOP("EditDrumset", "diamond"),
-      QT_TRANSLATE_NOOP("EditDrumset", "triangle"),
-      QT_TRANSLATE_NOOP("EditDrumset", "mi"),
-      QT_TRANSLATE_NOOP("EditDrumset", "slash"),
-      QT_TRANSLATE_NOOP("EditDrumset", "xcircle"),
-      QT_TRANSLATE_NOOP("EditDrumset", "do"),
-      QT_TRANSLATE_NOOP("EditDrumset", "re"),
-      QT_TRANSLATE_NOOP("EditDrumset", "fa"),
-      QT_TRANSLATE_NOOP("EditDrumset", "la"),
-      QT_TRANSLATE_NOOP("EditDrumset", "ti"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Normal"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Cross"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Diamond"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Triangle"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Mi"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Slash"),
+      QT_TRANSLATE_NOOP("EditDrumset", "XCircle"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Do"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Re"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Fa"),
+      QT_TRANSLATE_NOOP("EditDrumset", "La"),
+      QT_TRANSLATE_NOOP("EditDrumset", "Ti"),
       };
 
 //---------------------------------------------------------

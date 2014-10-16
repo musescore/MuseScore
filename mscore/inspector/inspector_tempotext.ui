@@ -69,7 +69,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetFollowText">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset follow text value</string>
@@ -89,7 +89,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetTempo">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Tempo value</string>

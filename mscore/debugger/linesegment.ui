@@ -45,22 +45,22 @@
           </property>
           <item>
            <property name="text">
-            <string notr="true">SINGLE</string>
+            <string notr="true">Single</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string notr="true">BEGIN</string>
+            <string notr="true">Begin</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string notr="true">MIDDLE</string>
+            <string notr="true">Middle</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string notr="true">END</string>
+            <string notr="true">End</string>
            </property>
           </item>
          </widget>

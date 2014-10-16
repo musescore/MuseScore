@@ -513,7 +513,7 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
             tb->points().append(PitchValue(0,     0, false));     // "Dip"
             tb->points().append(PitchValue(30, -100, false));
             tb->points().append(PitchValue(60,    0, false));
-            sp->append(tb, qApp->translate("articulation", "Tremolo Bar"));
+            sp->append(tb, qApp->translate("articulation", "Tremolo bar"));
             }
       return sp;
       }
@@ -917,7 +917,7 @@ Palette* MuseScore::newTempoPalette()
             tt->setTrack(0);
             tt->setTempo(tp[i].f);
             tt->setText(tp[i].pattern);
-            sp->append(tt, tr("Tempo Text"), QString(), 1.5);
+            sp->append(tt, tr("Tempo text"), QString(), 1.5);
             }
       return sp;
       }
@@ -937,12 +937,12 @@ Palette* MuseScore::newTextPalette()
       StaffText* st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::STAFF);
       st->setText(tr("Staff Text"));
-      sp->append(st, tr("Staff Text"));
+      sp->append(st, tr("Staff text"));
 
       st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::SYSTEM);
       st->setText(tr("System Text"));
-      sp->append(st, tr("System Text"));
+      sp->append(st, tr("System text"));
 
       st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::TEMPO);
@@ -953,11 +953,11 @@ Palette* MuseScore::newTextPalette()
       RehearsalMark* rhm = new RehearsalMark(gscore);
       rhm->setTrack(0);
       rhm->setText("B1");
-      sp->append(rhm, tr("Rehearsal Mark"));
+      sp->append(rhm, tr("Rehearsal mark"));
 
       InstrumentChange* is = new InstrumentChange(gscore);
       is->setText(tr("Instrument"));
-      sp->append(is, tr("Instrument Change"));
+      sp->append(is, tr("Instrument change"));
 
       return sp;
       }
@@ -1033,11 +1033,11 @@ void MuseScore::setAdvancedPalette()
       paletteBox->addPalette(newBreaksPalette());
       paletteBox->addPalette(newBagpipeEmbellishmentPalette());
 
+#if 0
       //-----------------------------------
       //    staff state changes
       //-----------------------------------
 
-#if 0
       sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Staff Changes"));
       sp->setMag(.7);
@@ -1046,19 +1046,19 @@ void MuseScore::setAdvancedPalette()
 
       StaffState* st = new StaffState(gscore);
       st->setSubtype(StaffStateType::VISIBLE);
-      sp->append(st, tr("set visible"));
+      sp->append(st, tr("Set visible"));
 
       st = new StaffState(gscore);
       st->setSubtype(StaffStateType::INVISIBLE);
-      sp->append(st, tr("set invisible"));
+      sp->append(st, tr("Set invisible"));
 
       st = new StaffState(gscore);
       st->setSubtype(StaffStateType::TYPE);
-      sp->append(st, tr("change staff type"));
+      sp->append(st, tr("Change staff type"));
 
       st = new StaffState(gscore);
       st->setSubtype(StaffStateType::INSTRUMENT);
-      sp->append(st, tr("change instrument"));
+      sp->append(st, tr("Change instrument"));
 
       paletteBox->addPalette(sp);
 #endif
@@ -1092,7 +1092,7 @@ void MuseScore::setAdvancedPalette()
       fret->setMarker(0, 'X');
       fret->setMarker(3, 'O');
       fret->setMarker(5, 'O');
-      sp->append(fret, tr("Fretboard Diagram"));
+      sp->append(fret, tr("Fretboard diagram"));
 
       paletteBox->addPalette(sp);
       }
@@ -1143,7 +1143,7 @@ void MuseScore::setBasicPalette()
       fret->setMarker(0, 'X');
       fret->setMarker(3, 'O');
       fret->setMarker(5, 'O');
-      sp->append(fret, tr("Fretboard Diagram"));
+      sp->append(fret, tr("Fretboard diagram"));
 
       paletteBox->addPalette(sp);
       }

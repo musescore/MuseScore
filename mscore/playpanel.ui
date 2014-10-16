@@ -73,7 +73,7 @@
              </font>
             </property>
             <property name="toolTip">
-             <string>measure.beat</string>
+             <string>Measure.Beat</string>
             </property>
             <property name="autoFillBackground">
              <bool>false</bool>

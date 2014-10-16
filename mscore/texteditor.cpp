@@ -40,42 +40,42 @@ TextEditor::TextEditor(QWidget* parent)
 
       typefaceBold = new QToolButton;
       typefaceBold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      typefaceBold->setToolTip(tr("bold"));
+      typefaceBold->setToolTip(tr("Bold"));
       typefaceBold->setCheckable(true);
 
       typefaceItalic = new QToolButton;
       typefaceItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
-      typefaceItalic->setToolTip(tr("italic"));
+      typefaceItalic->setToolTip(tr("Italic"));
       typefaceItalic->setCheckable(true);
 
       typefaceUnderline = new QToolButton;
       typefaceUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      typefaceUnderline->setToolTip(tr("underline"));
+      typefaceUnderline->setToolTip(tr("Underline"));
       typefaceUnderline->setCheckable(true);
 
       leftAlign   = new QToolButton;
       leftAlign->setIcon(*icons[int(Icons::textLeft_ICON)]);
-      leftAlign->setToolTip(tr("align left"));
+      leftAlign->setToolTip(tr("Align left"));
       leftAlign->setCheckable(true);
 
       centerAlign = new QToolButton;
       centerAlign->setIcon(*icons[int(Icons::textCenter_ICON)]);
-      centerAlign->setToolTip(tr("align center"));
+      centerAlign->setToolTip(tr("Align center"));
       centerAlign->setCheckable(true);
 
       rightAlign  = new QToolButton;
       rightAlign->setIcon(*icons[int(Icons::textRight_ICON)]);
-      rightAlign->setToolTip(tr("align right"));
+      rightAlign->setToolTip(tr("Align right"));
       rightAlign->setCheckable(true);
 
       typefaceSubscript = new QToolButton;
       typefaceSubscript->setIcon(*icons[int(Icons::textSub_ICON)]);
-      typefaceSubscript->setToolTip(tr("subscript"));
+      typefaceSubscript->setToolTip(tr("Subscript"));
       typefaceSubscript->setCheckable(true);
 
       typefaceSuperscript = new QToolButton;
       typefaceSuperscript->setIcon(*icons[int(Icons::textSuper_ICON)]);
-      typefaceSuperscript->setToolTip(tr("superscript"));
+      typefaceSuperscript->setToolTip(tr("Superscript"));
       typefaceSuperscript->setCheckable(true);
 
       typefaceSize = new QDoubleSpinBox(this);

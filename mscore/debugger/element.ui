@@ -424,12 +424,12 @@
           </property>
           <item>
            <property name="text">
-            <string notr="true">above</string>
+            <string notr="true">Above</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string notr="true">below</string>
+            <string notr="true">Below</string>
            </property>
           </item>
          </widget>
@@ -478,7 +478,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string notr="true">relative x position</string>
+           <string notr="true">Relative x position</string>
           </property>
           <property name="accessibleDescription">
            <string notr="true"/>
@@ -506,7 +506,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string notr="true">relative y position</string>
+           <string notr="true">Relative y position</string>
           </property>
           <property name="accessibleDescription">
            <string notr="true"/>
@@ -674,7 +674,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string notr="true">canvas x position</string>
+           <string notr="true">Canvas x position</string>
           </property>
           <property name="accessibleDescription">
            <string notr="true"/>
@@ -699,7 +699,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string notr="true">canvas y position</string>
+           <string notr="true">Canvas y position</string>
           </property>
           <property name="accessibleDescription">
            <string notr="true"/>
@@ -724,7 +724,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string notr="true">read x position</string>
+           <string notr="true">Read x position</string>
           </property>
           <property name="accessibleDescription">
            <string notr="true"/>
@@ -749,7 +749,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string notr="true">read y position</string>
+           <string notr="true">Read y position</string>
           </property>
           <property name="accessibleDescription">
            <string notr="true"/>
@@ -833,7 +833,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string notr="true">user x offset</string>
+           <string notr="true">User x offset</string>
           </property>
           <property name="accessibleDescription">
            <string notr="true"/>

@@ -148,7 +148,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetLeadingSpace">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Leading space value</string>
@@ -161,7 +161,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetTrailingSpace">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Trailing space value</string>
