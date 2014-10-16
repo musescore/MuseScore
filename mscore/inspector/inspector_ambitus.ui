@@ -180,7 +180,7 @@
      <item row="4" column="1">
       <widget class="QDoubleSpinBox" name="lineWidth">
        <property name="accessibleName">
-        <string>Line width</string>
+        <string>Line thickness</string>
        </property>
        <property name="suffix">
         <string>sp</string>
@@ -205,7 +205,7 @@
         <string>reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line width value</string>
+        <string>Reset Line thickness value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -486,7 +486,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>Line width</string>
+        <string>Line thickness</string>
        </property>
       </widget>
      </item>
@@ -941,8 +941,6 @@
   <tabstop>bottomTpc</tabstop>
   <tabstop>bottomOctave</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
