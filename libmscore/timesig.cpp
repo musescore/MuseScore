@@ -242,18 +242,6 @@ void TimeSig::read(XmlReader& e)
             _sig.set(z1+z2+z3+z4, n);
             customText = false;
             }
-/* This was added in commit https://github.com/musescore/musescore/commit/7ab8acd
-   to fix some scores with irregular "alla breve" time sigs (alla breve symbol but 4/4 values)
-   while reading them back from files (see tracker issue http://musescore.org/en/node/14548 ).
-   However, it breaks other cases (see tracker issue http://musescore.org/en/node/36541 )
-   Some tests showed the fix is not really (or no longer) needed.
-   Code kept for future reference, in case the issue pops up again.
-   Added checks on sig num. and denomin. to at least restrict its application range to the specific
-   case, if the code is needed again in the future.
-      // sanity check:
-      if (_timeSigType == TimeSigType::ALLA_BREVE && _sig.numerator() == 4 && _sig.denominator() == 4)
-            _sig.set(2,2);
-*/
       _stretch.reduce();
       _needLayout = true;
       }
