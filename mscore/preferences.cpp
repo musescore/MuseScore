@@ -597,6 +597,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       pulseaudioDriver->setVisible(false);
 #endif
 
+      tabIO->setEnabled(!noSeq);
+
       QButtonGroup* fgButtons = new QButtonGroup(this);
       fgButtons->setExclusive(true);
       fgButtons->addButton(fgColorButton);
@@ -1318,8 +1320,8 @@ void PreferenceDialog::apply()
             prefs.alsaPeriodSize     = alsaPeriodSize->currentText().toInt();
             prefs.alsaFragments      = alsaFragments->value();
             preferences = prefs;
-            Driver* driver = driverFactory(seq, "");
             if (seq) {
+                  Driver* driver = driverFactory(seq, "");
                   if (driver) {
                         // Updating synthesizer's sample rate
                         if (seq->synti()) {
@@ -1334,7 +1336,7 @@ void PreferenceDialog::apply()
             }
 
 #ifdef USE_PORTAUDIO
-      if (usePortaudio) {
+      if (usePortaudio && !noSeq) {
             Portaudio* audio = static_cast<Portaudio*>(seq->driver());
             prefs.portaudioDevice = audio->deviceIndex(portaudioApi->currentIndex(),
                portaudioDevice->currentIndex());
