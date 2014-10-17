@@ -2510,12 +2510,18 @@ void Score::layoutFingering(Fingering* f)
       {
       if (f == 0)
             return;
+      TextStyleType tst = f->textStyleType();
+      if (tst != TextStyleType::FINGERING && tst != TextStyleType::RH_GUITAR_FINGERING && tst != TextStyleType::STRING_NUMBER)
+            return;
+
       Note* note   = f->note();
       Chord* chord = note->chord();
       Staff* staff = chord->staff();
       Part* part   = staff->part();
       int n        = part->nstaves();
-      bool below   = (n > 1) && (staff->rstaff() == n-1);
+      bool voices  = chord->measure()->hasVoices(staff->idx());
+      bool below   = voices ? !chord->up() : (n > 1) && (staff->rstaff() == n-1);
+      bool tight   = voices && !chord->beam();
 
       f->layout();
       qreal x = 0.0;
@@ -2529,7 +2535,12 @@ void Score::layoutFingering(Fingering* f)
             if (below) {
                   // place fingering below note
                   y = fh + spatium() * .4;
-                  if (chord->stem() && !chord->up()) {
+                  if (tight) {
+                        y += 0.5 * spatium();
+                        if (chord->stem())
+                              x += 0.5 * spatium();
+                        }
+                  else if (chord->stem() && !chord->up()) {
                         // on stem side
                         y += chord->stem()->height();
                         x -= spatium() * .4;
@@ -2538,12 +2549,20 @@ void Score::layoutFingering(Fingering* f)
             else {
                   // place fingering above note
                   y = -headHeight - spatium() * .4;
-                  if (chord->stem() && chord->up()) {
+                  if (tight) {
+                        y -= 0.5 * spatium();
+                        if (chord->stem())
+                              x -= 0.5 * spatium();
+                        }
+                  else if (chord->stem() && chord->up()) {
                         // on stem side
                         y -= chord->stem()->height();
                         x += spatium() * .4;
                         }
                   }
+            }
+      else {
+            x -= spatium();
             }
       f->setUserOff(QPointF(x, y));
       }

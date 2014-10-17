@@ -266,7 +266,15 @@ void initStyle(MStyle* s)
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Even Lines"),         ff, 11, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Fingering"),                 ff,  8, false, false, false,
-         AlignmentFlags::CENTER, QPointF(), OffsetType::ABS, true));
+         AlignmentFlags::CENTER, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "LH Guitar Fingering"),       ff,  8, false, false, false,
+         AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(-0.5, 0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "RH Guitar Fingering"),       ff,  8, false, false, false,
+         AlignmentFlags::CENTER, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "String Number"),             ff,  8, false, false, false,
+         AlignmentFlags::CENTER, QPointF(0, -2.0), OffsetType::SPATIUM, true,
+         true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
+
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Long)"),    ff, 12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OffsetType::ABS, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Short)"),   ff, 12, false, false, false,
@@ -328,10 +336,6 @@ void initStyle(MStyle* s)
          AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Glissando"), ff, 8, false, true, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
-
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "String Number"), ff,  8, false, false, false,
-         AlignmentFlags::CENTER, QPointF(0, -5.0), OffsetType::SPATIUM, true,
-         true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Ottava"),            ff, 12, false, true, false,
          AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
