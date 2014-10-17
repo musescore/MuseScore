@@ -40,28 +40,28 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Element Type:</string>
+           <string>Element type:</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
          <widget class="QCheckBox" name="sameStaff">
           <property name="text">
-           <string>same staff</string>
+           <string>Same staff</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
          <widget class="QCheckBox" name="sameVoice">
           <property name="text">
-           <string>same voice</string>
+           <string>Same voice</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QCheckBox" name="sameSubtype">
           <property name="text">
-           <string>same subtype:</string>
+           <string>Same subtype:</string>
           </property>
          </widget>
         </item>
@@ -82,14 +82,14 @@
         <item row="3" column="1" colspan="2">
          <widget class="QCheckBox" name="sameSystem">
           <property name="text">
-           <string>same system</string>
+           <string>Same system</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
          <widget class="QCheckBox" name="inSelection">
           <property name="text">
-           <string>in selection</string>
+           <string>Iin selection</string>
           </property>
          </widget>
         </item>
@@ -108,7 +108,7 @@
         <item row="0" column="0">
          <widget class="QRadioButton" name="replace">
           <property name="text">
-           <string>replace selection</string>
+           <string>Replace selection</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -118,7 +118,7 @@
         <item row="0" column="1">
          <widget class="QRadioButton" name="add">
           <property name="text">
-           <string>add to selection</string>
+           <string>Add to selection</string>
           </property>
          </widget>
         </item>
@@ -128,14 +128,14 @@
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>search in selection</string>
+           <string>Search in selection</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
          <widget class="QRadioButton" name="subtract">
           <property name="text">
-           <string>subtract from selection</string>
+           <string>Subtract from selection</string>
           </property>
          </widget>
         </item>

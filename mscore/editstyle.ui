@@ -978,7 +978,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Header text</string>
+          <string>Header Text</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1268,7 +1268,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Footer text</string>
+          <string>Footer Text</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1504,7 +1504,7 @@
        <item row="3" column="0">
         <widget class="QGroupBox" name="showMeasureNumber">
          <property name="title">
-          <string>Measure numbers</string>
+          <string>Measure Numbers</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -2829,7 +2829,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_18">
             <property name="title">
-             <string>Default TAB clef</string>
+             <string>Default TAB Clef</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_29">
              <item>
@@ -4328,7 +4328,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_23">
             <property name="title">
-             <string>Root / bass spelling</string>
+             <string>Root / Bass Spelling</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_37">
              <item>
@@ -5151,7 +5151,7 @@
        <item>
         <widget class="QGroupBox" name="keySigNaturalsGroup">
          <property name="title">
-          <string>Naturals in key signatures</string>
+          <string>Naturals in Key Signatures</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_35">
           <item>
@@ -5207,7 +5207,7 @@
           <item>
            <widget class="QGroupBox" name="verticalDistance">
             <property name="title">
-             <string>Vertical distance from the notes</string>
+             <string>Vertical Distance from the  Notes</string>
             </property>
             <layout class="QFormLayout" name="formLayout_5">
              <item row="0" column="0">
@@ -5310,7 +5310,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_26">
             <property name="title">
-             <string>Horizontal distance from the notes</string>
+             <string>Horizontal Distance from the notes</string>
             </property>
             <layout class="QFormLayout" name="formLayout_8">
              <item row="0" column="0">

@@ -179,7 +179,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset numbers only value</string>
+        <string>Reset Numbers only value</string>
        </property>
        <property name="text">
         <string>...</string>

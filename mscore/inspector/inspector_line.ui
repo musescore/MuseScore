@@ -141,7 +141,7 @@
         <string>Line thickness</string>
        </property>
        <property name="suffix">
-        <string extracomment="Spatium unit">sp</string>
+        <string extracomment="Staff space unit">sp</string>
        </property>
        <property name="singleStep">
         <double>0.100000000000000</double>
@@ -215,7 +215,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Reset Visible value</string>
+        <string>Reset Line visible value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -225,7 +225,7 @@
      <item row="0" column="0" colspan="2">
       <widget class="QCheckBox" name="lineVisible">
        <property name="text">
-        <string>Line Visible</string>
+        <string>Line visible</string>
        </property>
       </widget>
      </item>

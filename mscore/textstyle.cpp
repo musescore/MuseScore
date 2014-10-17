@@ -197,7 +197,7 @@ void TextStyleDialog::applyToAllParts()
 void TextStyleDialog::newClicked()
       {
       QString s = QInputDialog::getText(this, tr("MuseScore: Read Style Name"),
-         tr("Text Style Name:"));
+         tr("Text style name:"));
       if (s.isEmpty())
             return;
       for (;;) {

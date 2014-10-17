@@ -50,7 +50,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       staff    = 0;
 
       QWidget* mainWidget = new QWidget;
-      QToolBar* tb = addToolBar(tr("toolbar 1"));
+      QToolBar* tb = addToolBar(tr("Toolbar 1"));
       tb->addAction(getAction("undo"));
       tb->addAction(getAction("redo"));
       tb->addSeparator();
@@ -78,7 +78,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addAction(showWave);
 
       //-------------
-      tb = addToolBar(tr("toolbar 2"));
+      tb = addToolBar(tr("Toolbar 2"));
       for (int i = 0; i < VOICES; ++i) {
             QToolButton* b = new QToolButton(this);
             b->setToolButtonStyle(Qt::ToolButtonTextOnly);
@@ -103,8 +103,8 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addSeparator();
       tb->addWidget(new QLabel(tr("Velocity:")));
       veloType = new QComboBox;
-      veloType->addItem(tr("offset"), int(Note::ValueType::OFFSET_VAL));
-      veloType->addItem(tr("user"),   int (Note::ValueType::USER_VAL));
+      veloType->addItem(tr("Offset"), int(Note::ValueType::OFFSET_VAL));
+      veloType->addItem(tr("User"),   int (Note::ValueType::USER_VAL));
       tb->addWidget(veloType);
 
       velocity = new QSpinBox;

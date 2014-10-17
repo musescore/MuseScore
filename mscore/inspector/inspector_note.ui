@@ -167,7 +167,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Dot Position</string>
+        <string>Dot position</string>
        </property>
        <property name="sizeAdjustPolicy">
         <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
@@ -204,7 +204,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Dot Position Value</string>
+        <string>Reset Dot position Value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -219,11 +219,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="maxVisibleItems">
-        <number>14</number>
-       </property>
        <property name="accessibleName">
         <string>Head group</string>
+       </property>
+       <property name="maxVisibleItems">
+        <number>14</number>
        </property>
        <property name="frame">
         <bool>true</bool>
@@ -594,8 +594,6 @@
   <tabstop>velocity</tabstop>
   <tabstop>resetVelocity</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

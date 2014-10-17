@@ -78,7 +78,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Right Gap</string>
+        <string>Right gap</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -132,7 +132,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Left Gap</string>
+        <string>Left gap</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -151,14 +151,14 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Left Gap</string>
+        <string>Left gap</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Right Gap</string>
+        <string>Right gap</string>
        </property>
       </widget>
      </item>
@@ -168,7 +168,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Left Gap value</string>
+        <string>Reset Left gap value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -181,7 +181,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Right Gap value</string>
+        <string>Reset Right gap value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -199,8 +199,6 @@
   <tabstop>resetRightGap</tabstop>
   <tabstop>width</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

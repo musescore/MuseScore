@@ -100,7 +100,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Grow Right</string>
+        <string>Grow right</string>
        </property>
       </widget>
      </item>
@@ -113,7 +113,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Grow Left</string>
+        <string>Grow left</string>
        </property>
       </widget>
      </item>
@@ -227,7 +227,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Grow Left</string>
+        <string>Grow left</string>
        </property>
        <property name="singleStep">
         <double>0.250000000000000</double>
@@ -246,7 +246,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Reset Grow Right value</string>
+        <string>Reset Grow right value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -262,7 +262,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Reset Grow Left value</string>
+        <string>Reset Grow left value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -278,7 +278,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Grow Right</string>
+        <string>Grow right</string>
        </property>
        <property name="singleStep">
         <double>0.250000000000000</double>
@@ -310,10 +310,10 @@
         <enum>Qt::TabFocus</enum>
        </property>
        <property name="accessibleName">
-        <string>Local Relayout</string>
+        <string>Local relayout</string>
        </property>
        <property name="text">
-        <string>Local Relayout</string>
+        <string>Local relayout</string>
        </property>
       </widget>
      </item>
@@ -339,10 +339,10 @@
         <enum>Qt::TabFocus</enum>
        </property>
        <property name="accessibleName">
-        <string>User Position</string>
+        <string>User position</string>
        </property>
        <property name="text">
-        <string>User Position</string>
+        <string>User position</string>
        </property>
       </widget>
      </item>
@@ -395,8 +395,6 @@
   <tabstop>y1</tabstop>
   <tabstop>y2</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
