@@ -69,7 +69,7 @@
      <item row="5" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Right Margin</string>
+        <string>Right margin</string>
        </property>
       </widget>
      </item>
@@ -82,7 +82,7 @@
         <string/>
        </property>
        <property name="accessibleName">
-        <string>Reset Top Gap value</string>
+        <string>Reset Top gap value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -95,7 +95,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Bottom Gap value</string>
+        <string>Reset Bottom gap value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -105,7 +105,7 @@
      <item row="7" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>Bottom Margin</string>
+        <string>Bottom margin</string>
        </property>
       </widget>
      </item>
@@ -118,7 +118,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Left Margin</string>
+        <string>Left margin</string>
        </property>
        <property name="suffix">
         <string>mm</string>
@@ -143,7 +143,7 @@
         <string/>
        </property>
        <property name="accessibleName">
-        <string>Top Gap</string>
+        <string>Top gap</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -162,7 +162,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Top Gap</string>
+        <string>Top gap</string>
        </property>
       </widget>
      </item>
@@ -204,7 +204,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Bottom Gap</string>
+        <string>Bottom gap</string>
        </property>
        <property name="suffix">
         <string extracomment="spatium unit">sp</string>
@@ -223,21 +223,21 @@
      <item row="6" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Top Margin</string>
+        <string>Top margin</string>
        </property>
       </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Left Margin</string>
+        <string>Left margin</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Bottom Gap</string>
+        <string>Bottom gap</string>
        </property>
       </widget>
      </item>
@@ -250,7 +250,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Top Margin</string>
+        <string>Top margin</string>
        </property>
        <property name="suffix">
         <string>mm</string>
@@ -272,7 +272,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Right Margin</string>
+        <string>Right margin</string>
        </property>
        <property name="suffix">
         <string>mm</string>
@@ -294,7 +294,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Bottom Margin</string>
+        <string>Bottom margin</string>
        </property>
        <property name="suffix">
         <string>mm</string>
@@ -313,7 +313,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Left Margin value</string>
+        <string>Reset Left margin value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -326,7 +326,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Right Margin value</string>
+        <string>Reset Right margin value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -339,7 +339,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Top Margin value</string>
+        <string>Reset Top margin value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -352,7 +352,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Bottom Margin value</string>
+        <string>Reset Bottom margin value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -385,8 +385,6 @@
   <tabstop>bottomMargin</tabstop>
   <tabstop>resetBottomMargin</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

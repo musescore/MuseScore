@@ -69,7 +69,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Dynamic Range</string>
+        <string>Dynamic range</string>
        </property>
       </widget>
      </item>
@@ -148,8 +148,6 @@
   <tabstop>velocity</tabstop>
   <tabstop>resetVelocity</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

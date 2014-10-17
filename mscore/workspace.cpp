@@ -105,7 +105,7 @@ void MuseScore::showWorkspaceMenu()
 void MuseScore::createNewWorkspace()
       {
       QString s = QInputDialog::getText(this, tr("MuseScore: Read Workspace Name"),
-         tr("Workspace Name:"));
+         tr("Workspace name:"));
       if (s.isEmpty())
             return;
       for (;;) {

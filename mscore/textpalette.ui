@@ -19,7 +19,7 @@
      <item>
       <widget class="QRadioButton" name="commonButton">
        <property name="text">
-        <string>common</string>
+        <string>Common</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -29,7 +29,7 @@
      <item>
       <widget class="QRadioButton" name="allButton">
        <property name="text">
-        <string>all</string>
+        <string>All</string>
        </property>
       </widget>
      </item>
@@ -84,8 +84,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

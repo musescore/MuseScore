@@ -136,7 +136,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetShowText">
        <property name="accessibleName">
-        <string>Reset Show Text value</string>
+        <string>Reset Show text value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -149,10 +149,10 @@
         <enum>Qt::TabFocus</enum>
        </property>
        <property name="accessibleName">
-        <string>Show Text</string>
+        <string>Show text</string>
        </property>
        <property name="text">
-        <string>Show Text</string>
+        <string>Show text</string>
        </property>
       </widget>
      </item>

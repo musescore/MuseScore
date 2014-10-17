@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>269</width>
+    <width>283</width>
     <height>174</height>
    </rect>
   </property>
@@ -46,7 +46,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Cell Size:</string>
+        <string>Cell size:</string>
        </property>
       </widget>
      </item>
@@ -87,7 +87,7 @@
      <item row="1" column="0" colspan="2">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Element Offset:</string>
+        <string>Element offset:</string>
        </property>
       </widget>
      </item>
@@ -131,14 +131,14 @@
      <item>
       <widget class="QCheckBox" name="showGrid">
        <property name="text">
-        <string>Show Grid</string>
+        <string>Show grid</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="moreElements">
        <property name="text">
-        <string>Show 'more Elements'</string>
+        <string>Show 'More Elements...'</string>
        </property>
       </widget>
      </item>

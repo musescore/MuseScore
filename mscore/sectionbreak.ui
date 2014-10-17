@@ -17,7 +17,7 @@
    <item row="2" column="0">
     <widget class="QCheckBox" name="_startWithLongNames">
      <property name="text">
-      <string>start new section with long instrument names</string>
+      <string>Start new section with long instrument names</string>
      </property>
     </widget>
    </item>
@@ -106,15 +106,13 @@
    <item row="3" column="0">
     <widget class="QCheckBox" name="_startWithMeasureOne">
      <property name="text">
-      <string>start new section with measure number one</string>
+      <string>Start new section with measure number one</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

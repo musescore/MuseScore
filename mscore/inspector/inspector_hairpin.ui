@@ -211,7 +211,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset continue Height value</string>
+        <string>Reset Continue height value</string>
        </property>
        <property name="text">
         <string>...</string>

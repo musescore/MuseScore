@@ -62,7 +62,7 @@ void MetaEditDialog::newClicked()
       {
       QString s = QInputDialog::getText(this,
          tr("MuseScore: Input Tag Name"),
-         tr("New Tag Name:")
+         tr("New tag name:")
          );
       if (!s.isEmpty()) {
             int idx = grid->rowCount();

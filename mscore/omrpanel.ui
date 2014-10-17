@@ -29,8 +29,14 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Distance between two lines on a standard 5-line staff</string>
+     </property>
+     <property name="whatsThis">
+      <string>Distance between two lines on a standard 5-line staff</string>
+     </property>
      <property name="text">
-      <string>Spatium:</string>
+      <string>Staff space:</string>
      </property>
     </widget>
    </item>

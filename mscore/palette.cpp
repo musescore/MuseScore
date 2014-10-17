@@ -157,7 +157,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       if (i == -1) {
             // palette context menu
             QMenu menu;
-            QAction* moreAction = menu.addAction(tr("Show More..."));
+            QAction* moreAction = menu.addAction(tr("More Elements..."));
             moreAction->setEnabled(_moreElements);
             QAction* action = menu.exec(mapToGlobal(event->pos()));
             if (action == moreAction)
@@ -170,7 +170,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       QAction* contextAction = menu.addAction(tr("Properties..."));
       clearAction->setEnabled(!_readOnly);
       contextAction->setEnabled(!_readOnly);
-      QAction* moreAction    = menu.addAction(tr("Show More..."));
+      QAction* moreAction    = menu.addAction(tr("More Elements..."));
       moreAction->setEnabled(_moreElements);
 
       if (cells[i] && cells[i]->readOnly)
