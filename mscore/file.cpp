@@ -747,6 +747,7 @@ void MuseScore::newFile()
             tempo /= 60;      // bpm -> bps
 
             tt->setTempo(tempo);
+            tt->setFollowText(true);
             tt->setTrack(0);
             Segment* seg = score->firstMeasure()->first(Segment::Type::ChordRest);
             seg->add(tt);
