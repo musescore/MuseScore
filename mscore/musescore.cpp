@@ -4914,11 +4914,16 @@ int main(int argc, char* av[])
               "   }");
             MgStyleConfigData::animationsEnabled = preferences.animations;
             qApp->setAttribute(Qt::AA_UseHighDpiPixmaps);
+            }
+      else
+            noSeq = true;
 
+      // Do not create sequencer and audio drivers if run with '-s'
+      if (!noSeq) {
             seq            = new Seq();
             MScore::seq    = seq;
             Driver* driver = driverFactory(seq, audioDriver);
-            synti              = synthesizerFactory();
+            synti          = synthesizerFactory();
             if (driver) {
                   MScore::sampleRate = driver->sampleRate();
                   synti->setSampleRate(MScore::sampleRate);
@@ -4935,8 +4940,10 @@ int main(int argc, char* av[])
                   }
             seq->setMasterSynthesizer(synti);
             }
-      else
-            noSeq = true;
+      else {
+            seq         = 0;
+            MScore::seq = 0;
+            }
 
       //
       // avoid font problems by overriding the environment
