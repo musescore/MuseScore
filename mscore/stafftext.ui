@@ -4737,7 +4737,7 @@ VI</string>
               <bool>true</bool>
              </property>
              <property name="text">
-              <string>Eighth Note</string>
+              <string>Eighth note</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -4750,7 +4750,7 @@ VI</string>
               <bool>true</bool>
              </property>
              <property name="text">
-              <string>Sixteenth Note</string>
+              <string>Sixteenth note</string>
              </property>
             </widget>
            </item>

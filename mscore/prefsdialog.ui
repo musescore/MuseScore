@@ -363,20 +363,20 @@
           <item row="1" column="0">
            <widget class="QCheckBox" name="playPanelShow">
             <property name="accessibleName">
-             <string>Show Play Panel</string>
+             <string>Show play panel</string>
             </property>
             <property name="text">
-             <string>Show Play Panel</string>
+             <string>Show play panel</string>
             </property>
            </widget>
           </item>
           <item row="3" column="0">
            <widget class="QCheckBox" name="navigatorShow">
             <property name="accessibleName">
-             <string>Show Navigator</string>
+             <string>Show navigator</string>
             </property>
             <property name="text">
-             <string>Show Navigator</string>
+             <string>Show navigator</string>
             </property>
            </widget>
           </item>
@@ -399,7 +399,7 @@
           <string>OSC remote control</string>
          </property>
          <property name="title">
-          <string>OSC remote control</string>
+          <string>OSC Remote Control</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -1314,7 +1314,7 @@
           <string>MIDI remote control</string>
          </property>
          <property name="title">
-          <string>MIDI remote control</string>
+          <string>MIDI Remote Control</string>
          </property>
          <property name="flat">
           <bool>false</bool>

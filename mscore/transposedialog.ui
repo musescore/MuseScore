@@ -20,7 +20,7 @@
       <item>
        <widget class="QGroupBox" name="chromaticBox">
         <property name="title">
-         <string>Transpose chromatically</string>
+         <string>Transpose Chromatically</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -29,7 +29,7 @@
          <item>
           <widget class="QGroupBox" name="transposeByKey">
            <property name="title">
-            <string>By key</string>
+            <string>By Key</string>
            </property>
            <property name="flat">
             <bool>false</bool>
@@ -159,7 +159,7 @@
          <item>
           <widget class="QGroupBox" name="transposeByInterval">
            <property name="title">
-            <string>By interval</string>
+            <string>By Interval</string>
            </property>
            <property name="flat">
             <bool>false</bool>
@@ -350,7 +350,7 @@
       <item>
        <widget class="QGroupBox" name="diatonicBox">
         <property name="title">
-         <string>Transpose diatonically</string>
+         <string>Transpose Diatonically</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
