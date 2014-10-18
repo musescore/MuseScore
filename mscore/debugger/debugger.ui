@@ -76,7 +76,7 @@
      <item>
       <widget class="QToolButton" name="resetButton">
        <property name="toolTip">
-        <string notr="true">Reset element Ppoperties</string>
+        <string notr="true">Reset element Properties</string>
        </property>
        <property name="text">
         <string notr="true">Reset</string>
