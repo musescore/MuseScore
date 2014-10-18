@@ -72,7 +72,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset follow text value</string>
+        <string>Reset Follow text value</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -144,8 +144,6 @@
   <tabstop>tempo</tabstop>
   <tabstop>resetTempo</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

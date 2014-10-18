@@ -292,8 +292,14 @@
            </item>
            <item>
             <widget class="QCheckBox" name="sizeIsSpatiumDependent">
+             <property name="toolTip">
+              <string>Distance between two lines on a standard 5-line staff</string>
+             </property>
+             <property name="whatsThis">
+              <string>Distance between two lines on a standard 5-line staff</string>
+             </property>
              <property name="text">
-              <string>Size follows Space unit</string>
+              <string>Size follows staff space unit</string>
              </property>
             </widget>
            </item>
@@ -529,10 +535,10 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>Offset in space units</string>
+            <string>Offset in staff space units</string>
            </property>
            <property name="text">
-            <string extracomment="spatium unit">Space</string>
+            <string extracomment="spatium unit">Staff space</string>
            </property>
           </widget>
          </item>
