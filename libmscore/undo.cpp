@@ -2205,6 +2205,7 @@ ExchangeVoice::ExchangeVoice(Measure* m, int _val1, int _val2, int _staff)
 void ExchangeVoice::undo()
       {
       measure->exchangeVoice(val2, val1, staff);
+      measure->checkMultiVoices(staff);
       }
 
 void ExchangeVoice::redo()
