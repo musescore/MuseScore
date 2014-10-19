@@ -229,7 +229,7 @@
      <item row="5" column="3">
       <widget class="QToolButton" name="resetSizeIsSpatium">
        <property name="accessibleName">
-        <string>Reset Size in space units value</string>
+        <string>Reset Size in staff space units value</string>
        </property>
        <property name="text">
         <string>...</string>
