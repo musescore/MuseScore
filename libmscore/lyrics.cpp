@@ -330,7 +330,7 @@ int Lyrics::endTick() const
 
 bool Lyrics::acceptDrop(const DropData& data) const
       {
-      return data.element->type() == Element::Type::TEXT;
+      return data.element->type() == Element::Type::TEXT || Text::acceptDrop(data);
       }
 
 //---------------------------------------------------------
@@ -339,8 +339,13 @@ bool Lyrics::acceptDrop(const DropData& data) const
 
 Element* Lyrics::drop(const DropData& data)
       {
+      Element::Type type = data.element->type();
+      if (type == Element::Type::SYMBOL || type == Element::Type::FSYMBOL) {
+            Text::drop(data);
+            return 0;
+            }
       Text* e = static_cast<Text*>(data.element);
-      if (!(e->type() == Element::Type::TEXT && e->textStyle().name() == "Lyrics Verse Number")) {
+      if (!(type == Element::Type::TEXT && e->textStyle().name() == "Lyrics Verse Number")) {
             delete e;
             return 0;
             }
