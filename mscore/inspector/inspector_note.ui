@@ -204,7 +204,7 @@
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Dot position Value</string>
+        <string>Reset Dot position value</string>
        </property>
        <property name="text">
         <string>...</string>
