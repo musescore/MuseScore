@@ -255,12 +255,13 @@ void Lyrics::layout1()
       // find:
       // 1) string of numbers and non-word characters at start of syllable
       // 2) at least one other character (indicating start of actual lyric)
-      QRegExp leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
-      if (s.contains(leadingPattern)) {
+      QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
+      QRegularExpressionMatch leadingMatch = leadingPattern.match(s);
+      if (leadingMatch.hasMatch()) {
             // leading string
-            QString s1 = leadingPattern.cap(1);
-            // actual lyric:
-            //QString s2 = leadingPattern.cap(2);
+            QString s1 = leadingMatch.captured(1);
+            // actual lyric
+            //QString s2 = leadingMatch.captured(2);
             Text leading(*this);
             leading.setPlainText(s1);
             leading.layout1();
