@@ -1537,7 +1537,7 @@ bool MuseScore::exportFile()
             saveDirectory = preferences.myScoresPath;
             }
 
-      QString name   = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+      QString name   = QString("%1/%2.pdf").arg(saveDirectory).arg(cs->name());
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
@@ -1590,7 +1590,7 @@ bool MuseScore::exportParts()
           saveDirectory = preferences.myScoresPath;
           }
 
-      QString name   = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+      QString name   = QString("%1/%2.pdf").arg(saveDirectory).arg(cs->name());
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
