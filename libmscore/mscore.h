@@ -169,7 +169,7 @@ enum class AlignmentFlags : char {
 
 enum class OffsetType : char {
       ABS,       ///< offset in point units
-      SPATIUM    ///< offset in space units
+      SPATIUM    ///< offset in staff space units
       };
 
 //---------------------------------------------------------

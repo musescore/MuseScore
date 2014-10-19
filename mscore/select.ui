@@ -89,7 +89,7 @@
         <item row="2" column="1">
          <widget class="QCheckBox" name="inSelection">
           <property name="text">
-           <string>Iin selection</string>
+           <string>In selection</string>
           </property>
          </widget>
         </item>

@@ -5207,7 +5207,7 @@
           <item>
            <widget class="QGroupBox" name="verticalDistance">
             <property name="title">
-             <string>Vertical Distance from the  Notes</string>
+             <string>Vertical Distance from the Notes</string>
             </property>
             <layout class="QFormLayout" name="formLayout_5">
              <item row="0" column="0">
@@ -5310,7 +5310,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_26">
             <property name="title">
-             <string>Horizontal Distance from the notes</string>
+             <string>Horizontal Distance from the Notes</string>
             </property>
             <layout class="QFormLayout" name="formLayout_8">
              <item row="0" column="0">
