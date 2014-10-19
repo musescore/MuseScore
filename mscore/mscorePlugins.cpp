@@ -458,25 +458,46 @@ void MuseScore::pluginTriggered(int idx)
 //   collectPluginMetaInformation
 //---------------------------------------------------------
 
-void collectPluginMetaInformation(PluginDescription* d)
+bool collectPluginMetaInformation(PluginDescription* d)
       {
-      qDebug("Collect meta for <%s>", qPrintable(d->path));
+      bool result(false);
+      qreal cProgress;
+      QObject* obj;
 
-      QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(d->path));
-      QObject* obj = component.create();
-      if (obj == 0) {
+      QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(d->path), QQmlComponent::Asynchronous);
+      qDebug("Collect meta for <%s>", qPrintable(d->path));
+      QThread::yieldCurrentThread();
+//      sleep(1);
+
+      int loadDelay = 20;
+      while( !component.isReady() && loadDelay--) {
+            cProgress = component.progress();
+            qDebug("Component loading progress %f%%", cProgress);
+            if(cProgress == 1.0 || component.isError())
+                  break;
+            sleep(1);
+            }
+
+      if(component.isReady()) {
+            obj = component.create();
+            if(obj){
+                  result = true;
+                  QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+                  if (item) {
+                        d->version      = item->version();
+                        d->description  = item->description();
+                        }
+                  delete obj;
+                  }
+            }
+
+      if (obj == 0 || !result) {
             qDebug("creating component <%s> failed", qPrintable(d->path));
             foreach(QQmlError e, component.errors()) {
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
-            return;
             }
-      QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
-      if (item) {
-            d->version      = item->version();
-            d->description  = item->description();
-            }
-      delete obj;
+
+      return result;
       }
 }
-

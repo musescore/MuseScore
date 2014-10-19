@@ -682,7 +682,7 @@ extern bool saveMxl(Score*, const QString& name);
 extern bool saveXml(Score*, const QString& name);
 
 struct PluginDescription;
-extern void collectPluginMetaInformation(PluginDescription*);
+extern bool collectPluginMetaInformation(PluginDescription*);
 } // namespace Ms
 #endif
 
