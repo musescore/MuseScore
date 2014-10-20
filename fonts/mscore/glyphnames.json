@@ -338,12 +338,6 @@
     "keyboardPedalUp": {
         "codepoint": "U+e1a6"
     },
-    "mensuralProlation1": {
-        "codepoint": "U+E9D0"
-    },
-    "mensuralProlation2": {
-        "codepoint": "U+E9D1"
-    },
     "luteFingeringRHFirst": {
         "codepoint": "U+EBAE",
         "description": "Right-hand fingering, first finger"
@@ -360,32 +354,38 @@
         "codepoint": "U+EBAD",
         "description": "Right-hand fingering, thumb"
     },
+    "mensuralProlation1": {
+        "codepoint": "U+E910"
+    },
+    "mensuralProlation2": {
+        "codepoint": "U+E911"
+    },
     "mensuralProlation3": {
-        "codepoint": "U+E9D2"
+        "codepoint": "U+E912"
     },
     "mensuralProlation4": {
-        "codepoint": "U+E9D3"
+        "codepoint": "U+E913"
     },
     "mensuralProlation5": {
-        "codepoint": "U+E9D4"
+        "codepoint": "U+E914"
     },
     "mensuralProlation6": {
-        "codepoint": "U+E9D5"
+        "codepoint": "U+E915"
     },
     "mensuralProlation7": {
-        "codepoint": "U+E9D6"
+        "codepoint": "U+E916"
     },
     "mensuralProlation8": {
-        "codepoint": "U+E9D7"
+        "codepoint": "U+E917"
     },
     "mensuralProlation9": {
-        "codepoint": "U+E9D8"
+        "codepoint": "U+E918"
     },
     "mensuralProlation10": {
-        "codepoint": "U+E9D9"
+        "codepoint": "U+E919"
     },
     "mensuralProlation11": {
-        "codepoint": "U+E9DA"
+        "codepoint": "U+E91A"
     },
     "noteShapeTriangleUpBlack": {
         "codepoint": "U+e140"
