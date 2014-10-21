@@ -51,7 +51,7 @@
           </StaffType>
         <bracket type="0" span="2"/>
         </Staff>
-      <trackName>Soprano/Alto</trackName>
+      <trackName>Soprano+Alto</trackName>
       <Instrument>
         <longName pos="0">S A</longName>
         <trackName>Soprano/Alto</trackName>
@@ -88,7 +88,7 @@
         <defaultClef>F</defaultClef>
         <bracket type="-1" span="0"/>
         </Staff>
-      <trackName>Tenor/Bass</trackName>
+      <trackName>Tenor+Bass</trackName>
       <Instrument>
         <longName pos="0">T B</longName>
         <trackName>Tenor/Bass</trackName>
