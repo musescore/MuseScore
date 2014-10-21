@@ -436,7 +436,7 @@ class Score : public QObject {
       void pasteChordRest(ChordRest* cr, int tick, const Interval&);
       void init();
       void removeGeneratedElements(Measure* mb, Measure* end);
-      qreal cautionaryWidth(Measure* m);
+      qreal cautionaryWidth(Measure* m, bool& hasCourtesy);
       void createPlayEvents();
 
       void selectSingle(Element* e, int staffIdx);

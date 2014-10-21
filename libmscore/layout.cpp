@@ -1940,67 +1940,78 @@ on first pass in updateNotes() and break occur */
 
 //---------------------------------------------------------
 //   cautionaryWidth
-//    Compute the width difference of actual measure m
-//    and the width of m if it were the last measure in a
-//    staff. The reason for any difference are courtesy
-//    time signatures and key signatures.
+//    Compute the width of required courtesy of time signature
+//    and key signature elements if m were the last measure
+//    in a staff.
+//    Return hasCourtesy == true if courtesy elements are
+//    already present. The value is undefined if no
+//    courtesy elements are required.
 //---------------------------------------------------------
 
-qreal Score::cautionaryWidth(Measure* m)
+qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
       {
-      qreal w = 0.0;
+      hasCourtesy = false;    // for debugging
       if (m == 0)
-            return w;
-      Measure* nm = m ? m->nextMeasure() : 0;
+            return 0.0;
+      Measure* nm = m->nextMeasure();
       if (nm == 0 || (m->sectionBreak() && _layoutMode != LayoutMode::FLOAT))
-            return w;
+            return 0.0;
 
-      int tick = m->tick() + m->ticks();
+      int tick = m->endTick();
 
       // locate a time sig. in the next measure and, if found,
       // check if it has caut. sig. turned off
 
       Segment* ns       = nm->findSegment(Segment::Type::TimeSig, tick);
-      TimeSig* ts       = 0;
-      bool showCourtesy = styleB(StyleIdx::genCourtesyTimesig) && ns;
-      if (showCourtesy) {
-            ts = static_cast<TimeSig*>(ns->element(0));
-            if (ts && !ts->showCourtesySig())
-                  showCourtesy = false;     // this key change has court. sig turned off
-            }
-      Segment* s = m->findSegment(Segment::Type::TimeSigAnnounce, tick);
+      bool showCourtesy = styleB(StyleIdx::genCourtesyTimesig);
 
-      if (showCourtesy && !s)
-            w += ts->space().width();
-      else if (!showCourtesy && s && s->element(0))
-            w -= static_cast<TimeSig*>(s->element(0))->space().width();
+      qreal w;
+      if (showCourtesy && ns) {
+            TimeSig* ts = static_cast<TimeSig*>(ns->element(0));
+            if (ts && ts->showCourtesySig()) {
+                  Segment* s = m->findSegment(Segment::Type::TimeSigAnnounce, tick);
+                  if (s && s->element(0)) {
+                        w = static_cast<TimeSig*>(s->element(0))->width();
+                        hasCourtesy = true;
+                        }
+                  else {
+                        ts->layout();
+                        w = ts->width();
+                        hasCourtesy = false;
+                        }
+                  }
+            }
+      else
+            w = 0.0;
 
       // courtesy key signatures
-      qreal wwMin = 0.0;
-      qreal wwMax = 0.0;
-      int n = _staves.size();
-      for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-            int track        = staffIdx * VOICES;
-            ns               = nm->findSegment(Segment::Type::KeySig, tick);
-            KeySig* ks       = 0;
 
-            showCourtesy = styleB(StyleIdx::genCourtesyKeysig) && ns;
-            if (showCourtesy) {
-                  ks = static_cast<KeySig*>(ns->element(track));
-                  if (ks && !ks->showCourtesy())
-                        showCourtesy = false;
+      showCourtesy = styleB(StyleIdx::genCourtesyKeysig);
+      ns           = nm->findSegment(Segment::Type::KeySig, tick);
+
+      qreal wwMax  = 0.0;
+      if (showCourtesy && ns) {
+            for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                  int track = staffIdx * VOICES;
+
+                  KeySig* nks = static_cast<KeySig*>(ns->element(track));
+
+                  if (nks && nks->showCourtesy() && !nks->generated()) {
+                        Segment* s  = m->findSegment(Segment::Type::KeySigAnnounce, tick);
+
+                        if (s && s->element(track)) {
+                              wwMax = qMax(wwMax, s->element(track)->width());
+                              hasCourtesy = true;
+                              }
+                        else {
+                              nks->layout();
+                              wwMax = qMax(wwMax, nks->width());
+                              hasCourtesy = false;
+                              }
+                        }
                   }
-            Segment* s = m->findSegment(Segment::Type::KeySigAnnounce, tick);
-
-            if (showCourtesy && !s && ks)
-                  wwMax = qMax(wwMax, ks->space().width());
-            else if (!showCourtesy && s && s->element(track))
-                  wwMin = qMin(wwMin, -static_cast<KeySig*>(s->element(track))->space().width());
             }
-      if (wwMax > 0.0)
-            w += wwMax;
-      else
-            w += wwMin;
+      w += wwMax;
       return w;
       }
 
@@ -2009,7 +2020,7 @@ qreal Score::cautionaryWidth(Measure* m)
 //    return true if line continues
 //---------------------------------------------------------
 
-bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool longName)
+bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem, bool longName)
       {
       if (undoRedo())   // no change possible in this state
             return layoutSystem1(minWidth, isFirstSystem, longName);
@@ -2024,7 +2035,6 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
       qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
       minWidth              = system->leftMargin();
-      qreal systemWidth     = w;
       bool continueFlag     = false;
       bool isFirstMeasure   = true;
       Measure* firstMeasure = 0;
@@ -2043,9 +2053,10 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
             System* oldSystem = curMeasure->system();
             curMeasure->setSystem(system);
-            qreal ww = 0.0;
 
+            bool hasCourtesy;
             qreal cautionaryW = 0.0;
+            qreal ww          = 0.0;
 
             if (curMeasure->type() == Element::Type::HBOX) {
                   ww = point(static_cast<Box*>(curMeasure)->boxWidth());
@@ -2094,8 +2105,10 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                               }
                         }
                   qreal stretch = m->userStretch() * measureSpacing;
-                  cautionaryW   = 0.0; // TODO: cautionaryWidth(m) * stretch;
-                  ww           *= stretch;
+                  cautionaryW   = cautionaryWidth(m, hasCourtesy); // * stretch;
+                  ww            *= stretch;
+                  if (!hasCourtesy)
+                        ww += cautionaryW;
 
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
@@ -2104,7 +2117,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
 
             // collect at least one measure
             bool empty = system->measures().isEmpty();
-            if (!empty && (minWidth + ww + cautionaryW  > systemWidth)) {
+            if (!empty && (minWidth + ww > systemWidth)) {
                   curMeasure->setSystem(oldSystem);
                   break;
                   }
@@ -2118,6 +2131,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   nt = curMeasure->nextMM() ? curMeasure->nextMM()->type() : Element::Type::INVALID;
             else
                   nt = curMeasure->nextMeasureMM() ? curMeasure->nextMeasureMM()->type() : Element::Type::INVALID;
+
             int n = styleI(StyleIdx::FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
@@ -2141,10 +2155,11 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
                   break;
                   }
             curMeasure = nextMeasure;
-            if (minWidth + minMeasureWidth > systemWidth)
+            if (minWidth + minMeasureWidth > systemWidth)   // small optimization
                   break;      // next measure will not fit
 
             minWidth += ww;
+            minWidth -= cautionaryW;
             }
 
       //
@@ -2157,7 +2172,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal w, bool isFirstSystem, bool long
             undoChangeProperty(system->measures().last(), P_ID::BREAK_HINT, true);
             }
 
-      if (!undoRedo() && firstMeasure && lastMeasure && firstMeasure != lastMeasure)
+      if (firstMeasure && lastMeasure && firstMeasure != lastMeasure)
             removeGeneratedElements(firstMeasure, lastMeasure);
 
       hideEmptyStaves(system, isFirstSystem);
