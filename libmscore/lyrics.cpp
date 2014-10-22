@@ -246,22 +246,57 @@ void Lyrics::layout1()
       qreal x  = 0.0;
 
       //
-      // left align if syllable has a number or is a melisma or is first syllable of hyphenated word
+      // parse leading verse number and/or punctuation, so we can factor it into layout separately
+      // TODO: provide a way to disable this
       //
-      ChordRest* cr = chordRest();
-      qreal maxWidth;
-      if (cr->type() == Element::Type::CHORD)
-            maxWidth = static_cast<Chord*>(cr)->maxHeadWidth();
-      else
-            maxWidth = cr->width();       // TODO: exclude ledger line for multivoice rest?
-      qreal nominalWidth = symWidth(SymId::noteheadBlack);
+      bool hasNumber = _verseNumber;
+      qreal adjust = 0.0;
+      QString s = plainText();
+      // find:
+      // 1) string of numbers and non-word characters at start of syllable
+      // 2) at least one other character (indicating start of actual lyric)
+      QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
+      QRegularExpressionMatch leadingMatch = leadingPattern.match(s);
+      if (leadingMatch.hasMatch()) {
+            // leading string
+            QString s1 = leadingMatch.captured(1);
+            // actual lyric
+            //QString s2 = leadingMatch.captured(2);
+            Text leading(*this);
+            leading.setPlainText(s1);
+            leading.layout1();
+            adjust = leading.width();
+            if (!s1.isEmpty() && s1[0].isDigit())
+                  hasNumber = true;
+            }
 
-      if (!isMelisma() && (textStyle().align() & AlignmentFlags::HCENTER) && !_verseNumber)
-            x +=  nominalWidth * .5 - cr->x();
-      else if (isMelisma() || ((textStyle().align() & AlignmentFlags::HCENTER) && _verseNumber))
-            x += (width() + nominalWidth - maxWidth) * .5 - cr->x();
+      if (textStyle().align() & AlignmentFlags::HCENTER) {
+            //
+            // center under notehead, not origin
+            // however, lyrics that are melismas or have verse numbers will be forced to left alignment
+            // TODO: provide a way to disable the automatic left alignment
+            //
+            ChordRest* cr = chordRest();
+            qreal maxWidth;
+            if (cr->type() == Element::Type::CHORD)
+                  maxWidth = static_cast<Chord*>(cr)->maxHeadWidth();
+            else
+                  maxWidth = cr->width();       // TODO: exclude ledger line for multivoice rest?
+            qreal nominalWidth = symWidth(SymId::noteheadBlack);
+            if (!isMelisma() && !hasNumber)     // center under notehead
+                  x +=  nominalWidth * .5 - cr->x() - adjust * 0.5;
+            else                                // force left alignment
+                  x += (width() + nominalWidth - maxWidth) * .5 - cr->x() - adjust;
+            }
+      else {
+            // even for left aligned syllables, ignore leading verse numbers and/or punctuation
+            x -= adjust;
+            }
+
       rxpos() += x;
       rypos() += y;
+
+      // for compatibility
       if (_verseNumber) {
             _verseNumber->layout();
             _verseNumber->setPos(-x, 0.0);
