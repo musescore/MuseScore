@@ -108,6 +108,7 @@ void Stem::layout()
       QRectF r(line.p1(), line.p2());
       qreal lw5  = lineWidth() * .5;
       setbbox(r.normalized().adjusted(-lw5, -lw5, lw5, lw5));
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
