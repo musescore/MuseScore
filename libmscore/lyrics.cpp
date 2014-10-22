@@ -31,31 +31,16 @@ Lyrics::Lyrics(Score* s)
       _no          = 0;
       _ticks       = 0;
       _syllabic    = Syllabic::SINGLE;
-      _verseNumber = 0;
       }
 
 Lyrics::Lyrics(const Lyrics& l)
    : Text(l)
       {
-      _no  = l._no;
-      _ticks = l._ticks;
+      _no       = l._no;
+      _ticks    = l._ticks;
       _syllabic = l._syllabic;
-      if (l._verseNumber)
-            _verseNumber = new Text(*l._verseNumber);
-      else
-            _verseNumber = 0;
-      QList<Line*> _separator;
-      foreach(Line* l, l._separator)
-            _separator.append(new Line(*l));
-      }
-
-//---------------------------------------------------------
-//   Lyrics
-//---------------------------------------------------------
-
-Lyrics::~Lyrics()
-      {
-      delete _verseNumber;
+      for (const Line* line : l._separator)
+            _separator.append(new Line(*line));
       }
 
 //---------------------------------------------------------
@@ -64,8 +49,6 @@ Lyrics::~Lyrics()
 
 void Lyrics::scanElements(void* data, void (*func)(void*, Element*), bool)
       {
-      if (_verseNumber)
-            func(data, _verseNumber);
       func(data, this);
       }
 
@@ -89,11 +72,6 @@ void Lyrics::write(Xml& xml) const
       writeProperty(xml, P_ID::LYRIC_TICKS);
 
       Text::writeProperties(xml);
-      if (_verseNumber) {
-            xml.stag("Number");
-            _verseNumber->writeProperties(xml);
-            xml.etag();
-            }
       xml.etag();
       }
 
@@ -104,6 +82,7 @@ void Lyrics::write(Xml& xml) const
 void Lyrics::read(XmlReader& e)
       {
       int   iEndTick = 0;           // used for backward compatibility
+      Text* _verseNumber = 0;
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -129,8 +108,8 @@ void Lyrics::read(XmlReader& e)
                   }
             else if (tag == "ticks")
                   _ticks = e.readInt();
-            else if (tag == "Number") {
-                  _verseNumber = new Text(score());
+            else if (tag == "Number") {                           // obsolete
+                  Text* _verseNumber = new Text(score());
                   _verseNumber->read(e);
                   _verseNumber->setParent(this);
                   }
@@ -142,6 +121,11 @@ void Lyrics::read(XmlReader& e)
             _ticks = iEndTick - e.tick();
             // qDebug("Lyrics::endTick: %d  ticks %d", iEndTick, _ticks);
             }
+      if (_verseNumber) {
+            // TODO: add text to main text
+            }
+
+      delete _verseNumber;
       }
 
 //---------------------------------------------------------
@@ -153,8 +137,6 @@ void Lyrics::add(Element* el)
       el->setParent(this);
       if (el->type() == Element::Type::LINE)
             _separator.append((Line*)el);
-      else if (el->type() == Element::Type::TEXT)
-            _verseNumber = static_cast<Text*>(el);
       else
             qDebug("Lyrics::add: unknown element %s", el->name());
       }
@@ -167,8 +149,6 @@ void Lyrics::remove(Element* el)
       {
       if (el->type() == Element::Type::LINE)
             _separator.removeAll((Line*)el);
-      else if (el == _verseNumber)
-            _verseNumber = 0;
       else
             qDebug("Lyrics::remove: unknown element %s", el->name());
       }
@@ -249,7 +229,7 @@ void Lyrics::layout1()
       // parse leading verse number and/or punctuation, so we can factor it into layout separately
       // TODO: provide a way to disable this
       //
-      bool hasNumber = _verseNumber;
+      bool hasNumber = false; // _verseNumber;
       qreal adjust = 0.0;
       QString s = plainText();
       // find:
@@ -295,12 +275,6 @@ void Lyrics::layout1()
 
       rxpos() += x;
       rypos() += y;
-
-      // for compatibility
-      if (_verseNumber) {
-            _verseNumber->layout();
-            _verseNumber->setPos(-x, 0.0);
-            }
       }
 
 //---------------------------------------------------------

@@ -41,7 +41,6 @@ class Lyrics : public Text {
                               ///< (melisma)
       Syllabic _syllabic;
       QList<Line*> _separator;
-      Text* _verseNumber;
 
    protected:
       int _no;                ///< row index
@@ -49,7 +48,7 @@ class Lyrics : public Text {
    public:
       Lyrics(Score* = 0);
       Lyrics(const Lyrics&);
-      ~Lyrics();
+      ~Lyrics() {}
       virtual Lyrics* clone() const override      { return new Lyrics(*this); }
       virtual Element::Type type() const override { return Element::Type::LYRICS; }
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
@@ -84,9 +83,6 @@ class Lyrics : public Text {
 
       using Text::paste;
       void paste(MuseScoreView * scoreview);
-
-      Text* verseNumber() const        { return _verseNumber; }
-      void setVerseNumber(Text* t)     { _verseNumber = t;    }
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
