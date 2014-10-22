@@ -2856,6 +2856,7 @@ void Score::layoutSystems()
             Element::Type t = curMeasure->type();
             if (t == Element::Type::VBOX || t == Element::Type::TBOX || t == Element::Type::FBOX) {
                   System* system = getNextSystem(false, true);
+                  system->setSameLine(false);
                   foreach(SysStaff* ss, *system->staves())
                         delete ss;
                   system->staves()->clear();
@@ -3154,7 +3155,7 @@ void Score::layoutPages()
                   bmargin = pC.bm();
                   }
 
-            tmargin     = qMax(tmargin, pC.prevDist);
+            tmargin = qMax(tmargin, pC.prevDist);
 
 
             qreal h = pC.sr.height();
