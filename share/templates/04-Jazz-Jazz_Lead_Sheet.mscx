@@ -104,7 +104,7 @@
         </TextStyle>
       <TextStyle>
         <halign>left</halign>
-        <valign>bottom</valign>
+        <valign>top</valign>
         <offsetType>absolute</offsetType>
         <name>Instrument Name (Part)</name>
         <family>MuseJazz</family>
@@ -369,15 +369,6 @@
         <family>MuseJazz</family>
         <size>12</size>
         <bold>1</bold>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>top</valign>
-        <offsetType>spatium</offsetType>
-        <name>Lyrics Verse</name>
-        <family>MuseJazz</family>
-        <size>11</size>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </TextStyle>
       <page-layout>
