@@ -297,7 +297,7 @@ enum class TextStyleType : char {
       HEADER,
       FOOTER,
       INSTRUMENT_CHANGE,
-      LYRICS_VERSE_NUMBER,
+//      LYRICS_VERSE_NUMBER,
       FIGURED_BASS,
       TEXT_STYLES
       };
