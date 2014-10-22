@@ -219,12 +219,12 @@ void System::layout(qreal xo1)
       // xoff2 += xo1;
       _leftMargin = xoff2;
 
+
       qreal bd = point(score()->styleS(StyleIdx::bracketDistance));
       if ( _brackets.size() > 0) {
             for (int i = 0; i < bracketLevels; ++i)
                   _leftMargin += bracketWidth[i] + bd;
             }
-
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             SysStaff* s  = _staves[staffIdx];

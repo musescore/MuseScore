@@ -211,6 +211,7 @@ QFont TextFragment::font(const Text* t) const
             }
       if (format.valign() != VerticalAlignment::AlignNormal)
             m *= subScriptSize;
+
       font.setPixelSize(lrint(m));
       return font;
       }
@@ -287,15 +288,19 @@ void TextBlock::layout(Text* t)
                         }
                   else
                         f.pos.setY(0.0);
-                  qreal w;
+                  qreal w = fm.width(f.text);
                   QRectF r;
-                  if (f.format.type() == CharFormatType::SYMBOL) {
-                        r = fm.tightBoundingRect(f.text).translated(f.pos);
-                        }
+                  if (f.format.type() == CharFormatType::SYMBOL)
+                        r = fm.tightBoundingRect(f.text);
                   else
-                        r = fm.boundingRect(f.text).translated(f.pos);
-                  w = fm.width(f.text);
-                  _bbox |= r;
+                        r = fm.boundingRect(f.text);
+
+                  // for whatever reason the boundingRect() is different
+                  // on second doLayout() (paint() ?)
+                  r.setX(0);        //HACK
+                  r.setWidth(w);
+
+                  _bbox |= r.translated(f.pos);
                   x += w;
                   _lineSpacing = _lineSpacing == 0 || fm.lineSpacing() == 0 ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
                   }
@@ -1176,6 +1181,7 @@ void Text::layout1()
             TextBlock* t = &_layout[i];
             t->layout(this);
             const QRectF* r = &t->boundingRect();
+
             if (r->height() == 0)
                   r = &_layout[i-i].boundingRect();
             y += t->lineSpacing();

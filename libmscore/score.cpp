@@ -71,8 +71,6 @@
 namespace Ms {
 
 Score* gscore;                 ///< system score, used for palettes etc.
-QPoint scorePos(0,0);
-QSize  scoreSize(950, 500);
 
 bool scriptDebug     = false;
 bool noSeq           = false;
