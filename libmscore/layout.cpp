@@ -2012,7 +2012,8 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
                   }
             }
       w += wwMax;
-      return w;
+
+      return w * 1.5;
       }
 
 //---------------------------------------------------------
@@ -2105,8 +2106,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                               }
                         }
                   qreal stretch = m->userStretch() * measureSpacing;
-                  cautionaryW   = cautionaryWidth(m, hasCourtesy); // * stretch;
                   ww            *= stretch;
+                  cautionaryW   = cautionaryWidth(m, hasCourtesy) * stretch;
+
                   if (!hasCourtesy)
                         ww += cautionaryW;
 
