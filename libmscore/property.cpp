@@ -112,9 +112,9 @@ static const PropertyData propertyList[] = {
       { P_ID::BEAM_NO_SLOPE,       true, "noSlope",        P_TYPE::BOOL   },
       { P_ID::USER_LEN,            false, "userLen",       P_TYPE::REAL   },
       { P_ID::SPACE,               false, "space",         P_TYPE::SP_REAL},
-      { P_ID::TEMPO,               false, "tempo",         P_TYPE::TEMPO  },
+      { P_ID::TEMPO,               true,  "tempo",         P_TYPE::TEMPO  },
 
-      { P_ID::TEMPO_FOLLOW_TEXT,   false, "followText",    P_TYPE::BOOL   },
+      { P_ID::TEMPO_FOLLOW_TEXT,   true,  "followText",    P_TYPE::BOOL   },
       { P_ID::ACCIDENTAL_BRACKET,  false, "bracket",       P_TYPE::BOOL   },
       { P_ID::NUMERATOR_STRING,    false, "textN",         P_TYPE::STRING },
       { P_ID::DENOMINATOR_STRING,  false, "textD",         P_TYPE::STRING },
