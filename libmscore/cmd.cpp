@@ -1509,12 +1509,12 @@ void Score::resetUserStretch()
 //   moveUp
 //---------------------------------------------------------
 
-void Score::moveUp(Chord* chord)
+void Score::moveUp(ChordRest* cr)
       {
-      Staff* staff  = chord->staff();
+      Staff* staff  = cr->staff();
       Part* part    = staff->part();
       int rstaff    = staff->rstaff();
-      int staffMove = chord->staffMove();
+      int staffMove = cr->staffMove();
 
       if ((staffMove == -1) || (rstaff + staffMove <= 0))
             return;
@@ -1527,19 +1527,19 @@ void Score::moveUp(Chord* chord)
             }
       else  {
             // move the chord up a staff
-            undo(new ChangeChordStaffMove(chord, staffMove - 1));
+            undo(new ChangeChordStaffMove(cr, staffMove - 1));
             }
       }
 //---------------------------------------------------------
 //   moveDown
 //---------------------------------------------------------
 
-void Score::moveDown(Chord* chord)
+void Score::moveDown(ChordRest* cr)
       {
-      Staff* staff  = chord->staff();
+      Staff* staff  = cr->staff();
       Part* part    = staff->part();
       int rstaff    = staff->rstaff();
-      int staffMove = chord->staffMove();
+      int staffMove = cr->staffMove();
       // calculate the number of staves available so that we know whether there is another staff to move down to
       int rstaves   = part->nstaves();
 
@@ -1556,7 +1556,7 @@ void Score::moveDown(Chord* chord)
             }
       else  {
             // move the chord down a staff
-            undo(new ChangeChordStaffMove(chord, staffMove + 1));
+            undo(new ChangeChordStaffMove(cr, staffMove + 1));
             }
       }
 

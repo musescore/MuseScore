@@ -2655,17 +2655,27 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "pitch-down-diatonic")
             score()->upDown(false, UpDownMode::DIATONIC);
       else if (cmd == "move-up") {
-            Element* el = score()->selection().element();
-            if (el && el->type() == Element::Type::NOTE) {
-                  Note* note = static_cast<Note*>(el);
-                  score()->moveUp(note->chord());
+            QList<Element*> el = score()->selection().uniqueElements();
+            foreach (Element* e, el) {
+                  ChordRest* cr = nullptr;
+                  if (e->type() == Element::Type::NOTE)
+                        cr = static_cast<Note*>(e)->chord();
+                  else if (e->type() == Element::Type::REST)
+                        cr = static_cast<Rest*>(e);
+                  if (cr)
+                        score()->moveUp(cr);
                   }
             }
       else if (cmd == "move-down") {
-            Element* el = score()->selection().element();
-            if (el && el->type() == Element::Type::NOTE) {
-                  Note* note = static_cast<Note*>(el);
-                  score()->moveDown(note->chord());
+            QList<Element*> el = score()->selection().uniqueElements();
+            foreach (Element* e, el) {
+                  ChordRest* cr = nullptr;
+                  if (e->type() == Element::Type::NOTE)
+                        cr = static_cast<Note*>(e)->chord();
+                  else if (e->type() == Element::Type::REST)
+                        cr = static_cast<Rest*>(e);
+                  if (cr)
+                        score()->moveDown(cr);
                   }
             }
       else if (cmd == "up-chord") {

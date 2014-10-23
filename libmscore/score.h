@@ -987,8 +987,8 @@ class Score : public QObject {
       QList<int> uniqueStaves() const;
       void transpositionChanged(Part*);
 
-      void moveUp(Chord*);
-      void moveDown(Chord*);
+      void moveUp(ChordRest*);
+      void moveDown(ChordRest*);
       Element* upAlt(Element*);
       Note* upAltCtrl(Note*) const;
       Element* downAlt(Element*);
