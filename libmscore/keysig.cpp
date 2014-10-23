@@ -246,7 +246,6 @@ void KeySig::layout()
             }
 
       // compute bbox
-      setbbox(QRectF());
       for (KeySym& ks : keySymbols) {
             ks.pos = ks.spos * _spatium;
             addbbox(symBbox(ks.sym).translated(ks.pos));
@@ -334,7 +333,7 @@ void KeySig::write(Xml& xml) const
             xml.tag("custom", _sig.customType());
             for (const KeySym& ks: keySymbols) {
                   xml.stag("KeySym");
-                  xml.tag("sym", int(ks.sym));
+                  xml.tag("sym", Sym::id2name(ks.sym));
                   xml.tag("pos", ks.spos);
                   xml.etag();
                   }
@@ -362,8 +361,14 @@ void KeySig::read(XmlReader& e)
                   KeySym ks;
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
-                        if (tag == "sym")
-                              ks.sym = SymId(e.readInt());
+                        if (tag == "sym") {
+                              QString val(e.readElementText());
+                              bool valid;
+                              SymId id = SymId(val.toInt(&valid));
+                              if (!valid)
+                                    id = Sym::name2id(val);
+                              ks.sym = id;
+                              }
                         else if (tag == "pos")
                               ks.spos = e.readPoint();
                         else

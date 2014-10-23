@@ -1525,7 +1525,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   switch (el->type()) {
                         case Element::Type::KEYSIG:
                               keysig = static_cast<KeySig*>(el);
-                              keysig->changeKeySigEvent(keyIdx);
+                              if (!keysig->isCustom())
+                                    keysig->changeKeySigEvent(keyIdx);
                               break;
                         case Element::Type::CLEF:
                               clef = static_cast<Clef*>(el);
@@ -1554,7 +1555,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   }
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
-            else if (keysig && keysig->keySigEvent() != keyIdx)
+            else if (keysig && !keysig->isCustom() && keysig->keySigEvent() != keyIdx)
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
 
             bool needClef = isFirstSystem || styleB(StyleIdx::genClef);
