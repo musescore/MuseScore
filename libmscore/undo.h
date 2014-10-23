@@ -850,12 +850,12 @@ class ChangeStyleVal : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeChordStaffMove : public UndoCommand {
-      Chord* chord;
+      ChordRest* chordRest;
       int staffMove;
       void flip();
 
    public:
-      ChangeChordStaffMove(Chord*, int);
+      ChangeChordStaffMove(ChordRest* cr, int);
       UNDO_NAME("ChangeChordStaffMove")
       };
 

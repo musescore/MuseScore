@@ -2725,27 +2725,27 @@ void ChangeStyleVal::flip()
 //   ChangeChordStaffMove
 //---------------------------------------------------------
 
-ChangeChordStaffMove::ChangeChordStaffMove(Chord* c, int v)
-   : chord(c), staffMove(v)
+ChangeChordStaffMove::ChangeChordStaffMove(ChordRest* cr, int v)
+   : chordRest(cr), staffMove(v)
       {
       }
 
 void ChangeChordStaffMove::flip()
       {
-      const LinkedElements* l = chord->links();
-      int v = chord->staffMove();
+      const LinkedElements* l = chordRest->links();
+      int v = chordRest->staffMove();
       if (l) {
             for (Element* e : *l) {
-                  Chord* c = static_cast<Chord*>(e);
-                  c->setStaffMove(staffMove);
-                  c->measure()->cmdUpdateNotes(c->staffIdx());
-                  c->score()->setLayoutAll(true);
+                  ChordRest* cr = static_cast<ChordRest*>(e);
+                  cr->setStaffMove(staffMove);
+                  cr->measure()->cmdUpdateNotes(cr->staffIdx());
+                  cr->score()->setLayoutAll(true);
                   }
             }
       else {
-            chord->setStaffMove(staffMove);
-            chord->measure()->cmdUpdateNotes(chord->staffIdx());
-            chord->score()->setLayoutAll(true);
+            chordRest->setStaffMove(staffMove);
+            chordRest->measure()->cmdUpdateNotes(chordRest->staffIdx());
+            chordRest->score()->setLayoutAll(true);
             }
       staffMove = v;
       }
