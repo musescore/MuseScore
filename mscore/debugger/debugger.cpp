@@ -2467,11 +2467,12 @@ void KeySigView::setElement(Element* e)
       KeySig* ks = static_cast<KeySig*>(e);
       ShowElementBase::setElement(e);
 
+      KeySigEvent ev = ks->keySigEvent();
       keysig.showCourtesySig->setChecked(ks->showCourtesy());
-      keysig.accidentalType->setValue(int(ks->keySigEvent().key()));
-      keysig.customType->setValue(ks->keySigEvent().customType());
-      keysig.custom->setChecked(ks->keySigEvent().custom());
-      keysig.invalid->setChecked(ks->keySigEvent().invalid());
+      keysig.accidentalType->setValue(int(ev.key()));
+      keysig.customType->setValue(ev.customType());
+      keysig.custom->setChecked(ev.custom());
+      keysig.invalid->setChecked(ev.invalid());
       }
 
 //---------------------------------------------------------
