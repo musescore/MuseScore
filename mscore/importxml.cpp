@@ -757,7 +757,7 @@ void MusicXml::initPartState()
       startMultiMeasureRest = false;
       tie    = 0;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
-            slur[i] = 0;
+            slur[i] = SlurDesc();
       for (int i = 0; i < MAX_BRACKETS; ++i)
             bracket[i] = 0;
       for (int i = 0; i < MAX_DASHES; ++i)
@@ -4257,7 +4257,6 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
       qreal yoffset = 0.0; // actually this is default-y
       // qreal xoffset = 0.0; // not used
       bool hasYoffset = false;
-      QSet<QString> slurIds;             // combination start/stop and number must be unique within a note
       QString chordLineType;
 
       for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
@@ -4265,73 +4264,78 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                   int slurNo   = ee.attribute(QString("number"), "1").toInt() - 1;
                   QString slurType = ee.attribute(QString("type"));
                   QString lineType  = ee.attribute(QString("line-type"), "solid");
+
                   // PriMus Music-Notation by Columbussoft (build 10093) generates overlapping
                   // slurs that do not have a number attribute to distinguish them.
                   // The duplicates must be ignored, to prevent memory allocation issues,
                   // which caused a MuseScore crash
+                  // Similar issues happen with Sibelius 7.1.3 (direct export)
 
-                  QString slurId = QString("slur %1").arg(slurType) + QString(" %1").arg(slurNo);
-                  bool unique = !slurIds.contains(slurId);
-
-                  if (unique) {
-                        slurIds.insert(slurId);
-                        if (slurType == "start") {
-                              bool endSlur = false;
-                              if (slur[slurNo] == 0) {
-                                    slur[slurNo] = new Slur(score);
-                                    if(cr->isGrace())
-                                          slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
-                                    if (lineType == "dotted")
-                                          slur[slurNo]->setLineType(1);
-                                    else if (lineType == "dashed")
-                                          slur[slurNo]->setLineType(2);
-                                    slur[slurNo]->setTick(tick);
-                                    slur[slurNo]->setStartElement(cr);
-                                    }
-                              else
-                                    endSlur = true;
+                  if (slurType == "start") {
+                        if (slur[slurNo].isStart())
+                              // slur start when slur already started: report error
+                              qDebug("ignoring duplicate slur start at line %d", e.lineNumber());
+                        else if (slur[slurNo].isStop()) {
+                              // slur start when slur already stopped: wrap up
+                              Slur* newSlur = slur[slurNo].slur();
+                              newSlur->setTick(tick);
+                              newSlur->setStartElement(cr);
+                              slur[slurNo] = SlurDesc();
+                              }
+                        else {
+                              // slur start for new slur: init
+                              Slur* newSlur = new Slur(score);
+                              if(cr->isGrace())
+                                    newSlur->setAnchor(Spanner::Anchor::CHORD);
+                              if (lineType == "dotted")
+                                    newSlur->setLineType(1);
+                              else if (lineType == "dashed")
+                                    newSlur->setLineType(2);
+                              newSlur->setTick(tick);
+                              newSlur->setStartElement(cr);
                               QString pl = ee.attribute(QString("placement"));
                               if (pl == "above")
-                                    slur[slurNo]->setSlurDirection(MScore::Direction::UP);
+                                    newSlur->setSlurDirection(MScore::Direction::UP);
                               else if (pl == "below")
-                                    slur[slurNo]->setSlurDirection(MScore::Direction::DOWN);
-                              slur[slurNo]->setTrack(track);
-                              slur[slurNo]->setTrack2(track);
-                              score->addElement(slur[slurNo]);
-                              if (endSlur) {
-                                    slur[slurNo]->setTick(tick);
-                                    slur[slurNo]->setStartElement(cr);
-                                    slur[slurNo] = 0;
-                                    }
+                                    newSlur->setSlurDirection(MScore::Direction::DOWN);
+                              newSlur->setTrack(track);
+                              newSlur->setTrack2(track);
+                              slur[slurNo].start(newSlur);
+                              score->addElement(newSlur);
                               }
-                        else if (slurType == "stop") {
-                              if (slur[slurNo] == 0) {
-                                    slur[slurNo] = new Slur(score);
-                                    slur[slurNo]->setTick2(tick);
-                                    slur[slurNo]->setTrack2(track);
-                                    slur[slurNo]->setEndElement(cr);
+                        }
+                  else if (slurType == "stop") {
+                        if (slur[slurNo].isStart()) {
+                              // slur stop when slur already started: wrap up
+                              Slur* newSlur = slur[slurNo].slur();
+                              if(cr->isGrace()){
+                                    newSlur->setAnchor(Spanner::Anchor::CHORD);
+                                    newSlur->setEndElement(newSlur->startElement());
+                                    newSlur->setStartElement(cr);
                                     }
                               else {
-                                    if(cr->isGrace()){
-                                          slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
-                                          slur[slurNo]->setEndElement(slur[slurNo]->startElement());
-                                          slur[slurNo]->setStartElement(cr);
-                                          }
-                                    else {
-                                          slur[slurNo]->setTick2(tick);
-                                          slur[slurNo]->setTrack2(track);
-                                          slur[slurNo]->setEndElement(cr);
-                                          }
-                                    slur[slurNo] = 0;
+                                    newSlur->setTick2(tick);
+                                    newSlur->setTrack2(track);
+                                    newSlur->setEndElement(cr);
                                     }
+                              slur[slurNo] = SlurDesc();
                               }
-                        else if (slurType == "continue")
-                              ; // ignore
-                        else
-                              qDebug("unknown slur type %s", qPrintable(slurType));
+                        else if (slur[slurNo].isStop())
+                              // slur stop when slur already stopped: report error
+                              qDebug("ignoring duplicate slur stop at line %d", e.lineNumber());
+                        else {
+                              // slur stop for new slur: init
+                              Slur* newSlur = new Slur(score);
+                              newSlur->setTick2(tick);
+                              newSlur->setTrack2(track);
+                              newSlur->setEndElement(cr);
+                              slur[slurNo].stop(newSlur);
+                              }
                         }
+                  else if (slurType == "continue")
+                        ; // ignore
                   else
-                        qDebug("ignoring duplicate slur '%s'", qPrintable(slurId));
+                        qDebug("unknown slur type %s", qPrintable(slurType));
                   }
 
             else if (ee.tagName() == "tied") {
