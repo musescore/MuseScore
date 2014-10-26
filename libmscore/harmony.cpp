@@ -341,8 +341,12 @@ void Harmony::read(XmlReader& e)
             // with any luck, the resulting text will be parseable now, so give it a shot
             createLayout();
             QString s = plainText(true);
-            setHarmony(s);
-            return;
+            if (!s.isEmpty()) {
+                  setHarmony(s);
+                  return;
+                  }
+            // empty text could also indicate a root-less slash chord ("/E")
+            // we'll fall through and render it normally
             }
 
       // render chord from description (or _textName)
