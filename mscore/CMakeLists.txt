@@ -165,6 +165,7 @@ else (APPLE)
             musescorefonts-Gonville.qrc
             musescorefonts-Bravura.qrc
             musescorefonts-MuseJazz.qrc
+            musescorefonts-FreeSerif.qrc
             musescorefonts-Free.qrc)
 endif (APPLE)
 

@@ -29,6 +29,7 @@ QT4_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Bravura.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MuseJazz.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Free.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-FreeSerif.qrc
       )
 
 add_library (testResources STATIC
