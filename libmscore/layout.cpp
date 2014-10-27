@@ -1951,7 +1951,7 @@ on first pass in updateNotes() and break occur */
 
 qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
       {
-      hasCourtesy = false;    // for debugging
+      hasCourtesy = false;
       if (m == 0)
             return 0.0;
       Measure* nm = m->nextMeasure();
@@ -1970,14 +1970,15 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
       if (showCourtesy && ns) {
             TimeSig* ts = static_cast<TimeSig*>(ns->element(0));
             if (ts && ts->showCourtesySig()) {
+                  qreal leftMargin  = point(styleS(StyleIdx::timesigLeftMargin));
                   Segment* s = m->findSegment(Segment::Type::TimeSigAnnounce, tick);
                   if (s && s->element(0)) {
-                        w = static_cast<TimeSig*>(s->element(0))->width();
+                        w = static_cast<TimeSig*>(s->element(0))->width() + leftMargin;
                         hasCourtesy = true;
                         }
                   else {
                         ts->layout();
-                        w = ts->width();
+                        w = ts->width() + leftMargin;
                         hasCourtesy = false;
                         }
                   }
@@ -1992,6 +1993,7 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
 
       qreal wwMax  = 0.0;
       if (showCourtesy && ns) {
+            qreal leftMargin = point(styleS(StyleIdx::keysigLeftMargin));
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
 
@@ -2001,20 +2003,20 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
                         Segment* s  = m->findSegment(Segment::Type::KeySigAnnounce, tick);
 
                         if (s && s->element(track)) {
-                              wwMax = qMax(wwMax, s->element(track)->width());
+                              wwMax = qMax(wwMax, s->element(track)->width()) + leftMargin;
                               hasCourtesy = true;
                               }
                         else {
                               nks->layout();
-                              wwMax = qMax(wwMax, nks->width());
-                              hasCourtesy = false;
+                              wwMax = qMax(wwMax, nks->width()) + leftMargin;
+                              //hasCourtesy = false;
                               }
                         }
                   }
             }
       w += wwMax;
 
-      return w * 1.5;
+      return w;   //* 1.5
       }
 
 //---------------------------------------------------------
@@ -2110,6 +2112,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                   ww            *= stretch;
                   cautionaryW   = cautionaryWidth(m, hasCourtesy) * stretch;
 
+                  // if measure does not already have courtesy elements,
+                  // add in the amount of space that courtesy elements would take if needed
+                  // (if measure *does* already have courtesy elements, these are included in width already)
                   if (!hasCourtesy)
                         ww += cautionaryW;
 
@@ -2162,6 +2167,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                   break;      // next measure will not fit
 
             minWidth += ww;
+            // whether the measure actually has courtesy elements or whether we added space for hypothetical ones,
+            // we should remove the width of courtesy elements for this measure from the accumulated total
+            // since at this point we are assuming we may be able to fit another measure
             minWidth -= cautionaryW;
             }
 
