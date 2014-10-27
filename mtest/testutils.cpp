@@ -33,6 +33,7 @@ inline void initMyResources() {
       Q_INIT_RESOURCE(musescorefonts_Gonville);
       Q_INIT_RESOURCE(musescorefonts_Bravura);
       Q_INIT_RESOURCE(musescorefonts_MuseJazz);
+      Q_INIT_RESOURCE(musescorefonts_FreeSerif);
       Q_INIT_RESOURCE(musescorefonts_Free);
 }
 
