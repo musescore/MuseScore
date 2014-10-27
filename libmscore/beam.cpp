@@ -332,7 +332,9 @@ void Beam::layout1()
                   _up = _direction == MScore::Direction::UP;
                   }
             else {
-                  if (c1) {
+                  if (maxMove > 0)            // cross staff beaming down
+                        _up = false;
+                  else if (c1) {
                         Measure* m = c1->measure();
                         if (c1->stemDirection() != MScore::Direction::AUTO)
                               _up = c1->stemDirection() == MScore::Direction::UP;
@@ -349,6 +351,7 @@ void Beam::layout1()
                   else
                         _up = true;
                   }
+
 
             cross   = minMove < maxMove;
             // int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
@@ -1404,10 +1407,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       const ChordRest* c2 = crl.back();        // last chord/rest in beam
 
       int beamLevels = 1;
-      foreach(ChordRest* c, crl) {
-            int bl     = c->durationType().hooks();
-            beamLevels = qMax(beamLevels, bl);
-            }
+      for (const ChordRest* c : crl)
+            beamLevels = qMax(beamLevels, c->durationType().hooks());
 
       BeamFragment* f = fragments[frag];
       int dIdx        = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
@@ -1502,8 +1503,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   // set stem direction for every chord
                   //
-                  for (int i = 0; i < n; ++i) {
-                        Chord* c = static_cast<Chord*>(crl.at(i));
+                  for (ChordRest* cr : crl) {
+                        Chord* c = static_cast<Chord*>(cr);
                         if (c->type() != Element::Type::CHORD)
                               continue;
                         qreal y  = c->upNote()->pagePos().y();
@@ -1512,14 +1513,16 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               c->setUp(nup);
                               // guess was wrong, have to relayout
                               score()->layoutChords1(c->segment(), c->staffIdx());
+                              if (c->stem())
+                                    c->stem()->rypos() = (c->up() ? c->downNote() : c->upNote())->rypos();
                               }
                         }
 
                   qreal yDownMax = -300000;
                   qreal yUpMin   = 300000;
 
-                  for (int i = 0; i < n; ++i) {
-                        Chord* c = static_cast<Chord*>(crl.at(i));
+                  for (ChordRest* cr : crl) {
+                        Chord* c = static_cast<Chord*>(cr);
                         if (c->type() != Element::Type::CHORD)
                               continue;
                         bool _up = c->up();
@@ -1691,10 +1694,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             }
 
       //
-      //  create stems
+      //  calculate stem length
       //
-      for (int i = 0; i < n; ++i) {
-            Chord* c = static_cast<Chord*>(crl[i]);
+      for (ChordRest* cr : crl) {
+            Chord* c = static_cast<Chord*>(cr);
             if (c->type() != Element::Type::CHORD)
                   continue;
             Stem* stem = c->stem();
@@ -1703,6 +1706,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   qDebug("create stem in layout beam");
                   stem = new Stem(score());
                   c->setStem(stem);
+                  stem->rypos() = (c->up() ? c->downNote() : c->upNote())->rypos();
                   }
             if (c->hook())
                   score()->undoRemoveElement(c->hook());
@@ -1750,7 +1754,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             //
             // layout stem slash for acciacatura
             //
-            if ((i == 0) && c->noteType() == NoteType::ACCIACCATURA) {
+            if ((c == crl.front()) && c->noteType() == NoteType::ACCIACCATURA) {
                   StemSlash* stemSlash = c->stemSlash();
                   if (!stemSlash) {
                         stemSlash = new StemSlash(score());
