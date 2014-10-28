@@ -3172,6 +3172,18 @@ void Measure::layoutX(qreal stretch)
                                     if ((pt & Segment::Type::KeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
+                              // special case:
+                              // make extra space for ties continued from previous system
+                              if (cr->type() == Element::Type::CHORD) {
+                                    Chord* c = static_cast<Chord*>(cr);
+                                    if (system()->firstMeasure() == this && c->tick() == tick()) {
+                                          for (Note* note : c->notes()) {
+                                                if (note->tieBack()) {
+                                                      minDistance = qMax(minDistance, _spatium * 2);
+                                                      }
+                                                }
+                                          }
+                                    }
 
                               // calculate space needed for segment
                               // take cr position into account
