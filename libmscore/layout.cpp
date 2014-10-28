@@ -2125,6 +2125,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
 
             // collect at least one measure
             bool empty = system->measures().isEmpty();
+
             if (!empty && (minWidth + ww > systemWidth)) {
                   curMeasure->setSystem(oldSystem);
                   break;
@@ -3475,8 +3476,7 @@ qreal Score::computeMinWidth(Segment* fs)
                   for (int staffIdx = 0; staffIdx < _nstaves; ++staffIdx) {
                         if (!staff(staffIdx)->show())
                               continue;
-                        int track  = staffIdx * VOICES;
-                        Element* e = s->element(track);
+                        Element* e = s->element(staffIdx * VOICES);
                         if (e) {
                               e->layout();
                               clefWidth[staffIdx] = e->width() + _spatium + elsp;
@@ -3677,8 +3677,8 @@ qreal Score::computeMinWidth(Segment* fs)
                   space += Space(elsp, etsp);
 
                   if (found || eFound) {
-                        space.rLw() += clefWidth[staffIdx];
-                        qreal sp     = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
+                        space.rLw()    += clefWidth[staffIdx];
+                        qreal sp        = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
                         rest[staffIdx]  = space.rw();
                         rest2[staffIdx] = false;
                         segmentWidth    = qMax(segmentWidth, sp);
