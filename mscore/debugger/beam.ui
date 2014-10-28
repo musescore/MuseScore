@@ -120,14 +120,14 @@
       <item row="3" column="0">
        <widget class="QCheckBox" name="isGrace">
         <property name="text">
-         <string>isGrace</string>
+         <string notr="true">isGrace</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QCheckBox" name="cross">
         <property name="text">
-         <string>cross</string>
+         <string notr="true">cross</string>
         </property>
        </widget>
       </item>
