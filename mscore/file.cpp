@@ -1590,7 +1590,7 @@ bool MuseScore::exportParts()
           saveDirectory = preferences.myScoresPath;
           }
 
-      QString name   = QString("%1/%2.pdf").arg(saveDirectory).arg(cs->name());
+      QString name   = QString("%1/%2.pdf").arg(saveDirectory).arg((cs->parentScore())?(cs->parentScore()->name()):(cs->name()));
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
@@ -1616,7 +1616,7 @@ bool MuseScore::exportParts()
       QString skipMessage = tr("Skip");
       foreach(Excerpt* e, thisScore->excerpts())  {
             Score* pScore = e->score();
-            QString partfn = fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + pScore->name() + "." + ext;
+            QString partfn = fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(pScore->name()) + "." + ext;
             QFileInfo fip(partfn);
             if(fip.exists() && !overwrite) {
                   if(noToAll)
@@ -1650,7 +1650,7 @@ bool MuseScore::exportParts()
             foreach(Excerpt* e, thisScore->excerpts())  {
                   scores.append(e->score());
                   }
-            QString partfn(fi.absolutePath() + QDir::separator() + fi.baseName() + "-Score_And_Parts.pdf");
+            QString partfn(fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(tr("Score_and_Parts")) + ".pdf");
             QFileInfo fip(partfn);
             if(fip.exists() && !overwrite) {
                   if (!noToAll) {
