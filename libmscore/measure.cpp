@@ -2046,6 +2046,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                               segment = getSegment(Segment::Type::Clef, e.tick());
                               }
                         }
+                  if (e.tick() != tick())
+                        clef->setSmall(true);
                   segment->add(clef);
                   }
             else if (tag == "TimeSig") {
