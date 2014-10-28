@@ -960,7 +960,7 @@ class Score : public QObject {
       Q_INVOKABLE void appendMeasures(int);
       Q_INVOKABLE void addText(const QString&, const QString&);
       Q_INVOKABLE Ms::Cursor* newCursor();
-      qreal computeMinWidth(Segment* fs);
+      qreal computeMinWidth(Segment* fs, bool firstMeasureInSystem);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
 
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }

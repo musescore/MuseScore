@@ -3440,7 +3440,7 @@ void Score::respace(QList<ChordRest*>* elements)
 ///    segment list fs
 //---------------------------------------------------------
 
-qreal Score::computeMinWidth(Segment* fs)
+qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
       {
       int _nstaves = nstaves();
       if (_nstaves == 0)
@@ -3565,6 +3565,17 @@ qreal Score::computeMinWidth(Segment* fs)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
                               cr->layout();
+
+                              // special case:
+                              // make extra space for ties continued from previous system
+
+                              if (firstMeasureInSystem && cr->type() == Element::Type::CHORD && cr->tick() == cr->measure()->tick()) {
+                                    Chord* c = static_cast<Chord*>(cr);
+                                    for (Note* note : c->notes()) {
+                                          if (note->tieBack())
+                                                minDistance = qMax(minDistance, _spatium * 2);
+                                          }
+                                    }
 
                               // calculate space needed for segment
                               // take cr position into account
