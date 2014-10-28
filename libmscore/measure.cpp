@@ -2935,20 +2935,21 @@ qreal Measure::minWidth1() const
                ) {
                   s = s->next();
                   }
-            _minWidth1 = score()->computeMinWidth(s);
+            _minWidth1 = score()->computeMinWidth(s, false);
             }
       return _minWidth1;
       }
 
 //---------------------------------------------------------
 //   minWidth2
-///   return minimum width of measure
+///   return minimum width of measure including system
+///  header if present
 //---------------------------------------------------------
 
 qreal Measure::minWidth2() const
       {
       if (_minWidth2 == 0.0)
-            _minWidth2 = score()->computeMinWidth(first());
+            _minWidth2 = score()->computeMinWidth(first(), system()->firstMeasure() == this);
       return _minWidth2;
       }
 
@@ -3172,8 +3173,10 @@ void Measure::layoutX(qreal stretch)
                                     if ((pt & Segment::Type::KeySig) || firstClef)
                                           minDistance = qMax(minDistance, clefKeyRightMargin);
                                     }
+
                               // special case:
                               // make extra space for ties continued from previous system
+
                               if (cr->type() == Element::Type::CHORD) {
                                     Chord* c = static_cast<Chord*>(cr);
                                     if (system()->firstMeasure() == this && c->tick() == tick()) {
