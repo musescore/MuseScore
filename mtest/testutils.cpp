@@ -129,9 +129,10 @@ Score* MTest::readScore(const QString& name)
 Score* MTest::readCreatedScore(const QString& name)
       {
       Score* score = new Score(mscore->baseStyle());
-      score->setName(name);
+      QFileInfo fi(name);
+      score->setName(fi.completeBaseName());
 //      MScore::testMode = true;
-      QString csl  = score->fileInfo()->suffix().toLower();
+      QString csl  = fi.suffix().toLower();
 
       Score::FileError rv;
       if (csl == "cap")

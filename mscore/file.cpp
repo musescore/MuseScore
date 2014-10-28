@@ -1908,23 +1908,23 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
 
 Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
       {
-      score->setName(name);
+      QFileInfo info(name);
+      QString suffix  = info.suffix().toLower();
+      score->setName(info.completeBaseName());
 
-      QString cs  = score->fileInfo()->suffix();
-      QString csl = cs.toLower();
-
-      if (csl == "mscz" || csl == "mscx") {
+      if (suffix == "mscz" || suffix == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
             if (rv != Score::FileError::FILE_NO_ERROR)
                   return rv;
             }
       else {
-            typedef Score::FileError (*ImportFunction)(Score*, const QString&);
+            // typedef Score::FileError (*ImportFunction)(Score*, const QString&);
             struct ImportDef {
                   const char* extension;
-                  ImportFunction importF;
+                  // ImportFunction importF;
+                  Score::FileError (*importF)(Score*, const QString&);
                   };
-            ImportDef imports[] = {
+            static const ImportDef imports[] = {
                   { "xml",  &importMusicXml           },
                   { "mxl",  &importCompressedMusicXml },
                   { "mid",  &importMidi               },
@@ -1960,18 +1960,18 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                         score->style()->chordList()->read("chords.xml");
                   score->style()->chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
                   }
-            uint n = sizeof(imports)/sizeof(*imports);
-            uint i;
-            for (i = 0; i < n; ++i) {
-                  if (imports[i].extension == csl) {
-                        Score::FileError rv = (*imports[i].importF)(score, name);
+            bool found = false;
+            for (auto i : imports) {
+                  if (i.extension == suffix) {
+                        Score::FileError rv = (*i.importF)(score, name);
                         if (rv != Score::FileError::FILE_NO_ERROR)
                               return rv;
+                        found = true;
                         break;
                         }
                   }
-            if (i == n) {
-                  qDebug("unknown file suffix <%s>, name <%s>", qPrintable(cs), qPrintable(name));
+            if (!found) {
+                  qDebug("unknown file suffix <%s>, name <%s>", qPrintable(suffix), qPrintable(name));
                   return Score::FileError::FILE_UNKNOWN_TYPE;
                   }
             score->connectTies();
