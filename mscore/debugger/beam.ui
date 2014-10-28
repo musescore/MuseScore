@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>143</height>
+    <width>586</width>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>6</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
+   <property name="rightMargin">
+    <number>8</number>
+   </property>
+   <property name="bottomMargin">
     <number>8</number>
    </property>
    <item>
@@ -61,7 +70,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2" rowspan="4" colspan="2">
+      <item row="0" column="2" rowspan="6" colspan="2">
        <widget class="QTreeWidget" name="elements">
         <column>
          <property name="text">
@@ -105,6 +114,20 @@
        <widget class="QDoubleSpinBox" name="grow2">
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="isGrace">
+        <property name="text">
+         <string>isGrace</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QCheckBox" name="cross">
+        <property name="text">
+         <string>cross</string>
         </property>
        </widget>
       </item>

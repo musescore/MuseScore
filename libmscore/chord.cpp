@@ -1583,7 +1583,7 @@ void Chord::layout2()
 
 void Chord::updateNotes(AccidentalState* as)
       {
-      
+
       QList<Chord*> graceNotesBefore;
       int gnb = getGraceNotesBefore(&graceNotesBefore);
       if (gnb) {
@@ -1849,8 +1849,8 @@ void Chord::layoutPitched()
       //-----------------------------------------
 
       // Y: only needed if there is an actual stem
-      if (stem())
-            stem()->rypos() = (_up ? downNote() : upNote())->rypos();
+//      if (stem())
+//            stem()->rypos() = (_up ? downNote() : upNote())->rypos();
 
       //-----------------------------------------
       //  create ledger lines

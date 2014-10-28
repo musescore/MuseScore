@@ -45,8 +45,8 @@ class Beam : public Element {
       PropertyStyle noSlopeStyle;
 
       bool _userModified[2];              // 0: auto/down  1: up
-      bool isGrace;
-      bool cross;
+      bool _isGrace;
+      bool _cross;
 
       qreal _grow1;                       // define "feather" beams
       qreal _grow2;
@@ -144,6 +144,8 @@ class Beam : public Element {
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
+      bool isGrace() const { return _isGrace; }  // for debugger
+      bool cross() const   { return _cross; }
       };
 
 
