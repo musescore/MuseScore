@@ -62,8 +62,8 @@ Beam::Beam(Score* s)
       _grow1           = 1.0;
       _grow2           = 1.0;
       editFragment     = 0;
-      isGrace          = false;
-      cross            = false;
+      _isGrace          = false;
+      _cross            = false;
       _noSlope         = score()->styleB(StyleIdx::beamNoSlope);
       noSlopeStyle     = PropertyStyle::STYLED;
       }
@@ -90,8 +90,8 @@ Beam::Beam(const Beam& b)
             fragments.append(new BeamFragment(*f));
       minMove          = b.minMove;
       maxMove          = b.maxMove;
-      isGrace          = b.isGrace;
-      cross            = b.cross;
+      _isGrace         = b._isGrace;
+      _cross           = b._cross;
       maxDuration      = b.maxDuration;
       slope            = b.slope;
       _noSlope         = b._noSlope;
@@ -266,7 +266,7 @@ void Beam::layout1()
             //    slope 0
             _up   = !staff()->staffType()->stemsDown();
             slope = 0.0;
-            cross = false;
+            _cross = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
             foreach(ChordRest* cr, _elements) {
                   if (cr->type() == Element::Type::CHORD) {
@@ -299,7 +299,7 @@ void Beam::layout1()
             //PITCHED STAVES (and TAB's with stems through staves)
             minMove = 1000;
             maxMove = -1000;
-            isGrace = false;
+            _isGrace = false;
 
             int mUp     = 0;
             int mDown   = 0;
@@ -353,7 +353,7 @@ void Beam::layout1()
                   }
 
 
-            cross   = minMove < maxMove;
+            _cross   = minMove < maxMove;
             // int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
             slope   = 0.0;
 
@@ -380,7 +380,7 @@ void Beam::layoutGraceNotes()
       //PITCHED STAVES (and TAB's with stems through staves)
       minMove = 1000;
       maxMove = -1000;
-      isGrace = true;
+      _isGrace = true;
 
       foreach (ChordRest* cr, _elements) {
             c2 = static_cast<Chord*>(cr);
@@ -1425,7 +1425,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       else
             _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance));
 
-      if (isGrace) {
+      if (_isGrace) {
             _beamDist *= graceMag;
             setMag(graceMag);
             beamMinLen *= graceMag;
@@ -1480,7 +1480,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
                   _up = crl.front()->up();
                   }
-            else if (cross) {
+            else if (_cross) {
                   qreal beamY   = 0.0;  // y position of main beam start
                   qreal y1   = -200000;
                   qreal y2   = 200000;
@@ -1513,8 +1513,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               c->setUp(nup);
                               // guess was wrong, have to relayout
                               score()->layoutChords1(c->segment(), c->staffIdx());
-                              if (c->stem())
-                                    c->stem()->rypos() = (c->up() ? c->downNote() : c->upNote())->rypos();
                               }
                         }
 
@@ -1556,7 +1554,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
       int baseLevel = 0;
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
-            bool growDown = _up || cross;
+            bool growDown = _up || _cross;
             for (int i = 0; i < n;) {
                   ChordRest* cr1 = crl[i];
                   int l = cr1->durationType().hooks() - 1;
@@ -1706,7 +1704,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   qDebug("create stem in layout beam");
                   stem = new Stem(score());
                   c->setStem(stem);
-                  stem->rypos() = (c->up() ? c->downNote() : c->upNote())->rypos();
+//                  stem->rypos() = (c->up() ? c->downNote() : c->upNote())->rypos();
                   }
             if (c->hook())
                   score()->undoRemoveElement(c->hook());

@@ -2246,6 +2246,8 @@ void BeamView::setElement(Element* e)
             }
       bb.grow1->setValue(b->growLeft());
       bb.grow2->setValue(b->growRight());
+      bb.cross->setChecked(b->cross());
+      bb.isGrace->setChecked(b->isGrace());
       }
 
 //---------------------------------------------------------

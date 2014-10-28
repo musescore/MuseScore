@@ -104,6 +104,8 @@ void Stem::layout()
 
       line.setLine(0.0, y1, 0.0, l);
 
+      rypos() = (chord()->up() ? chord()->downNote() : chord()->upNote())->rypos();
+
       // compute bounding rectangle
       QRectF r(line.p1(), line.p2());
       qreal lw5  = lineWidth() * .5;
