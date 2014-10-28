@@ -50,7 +50,7 @@ PartItem::PartItem(Part* p, QListWidget* parent)
       setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable));
       setCheckState(Qt::Unchecked);
       _part = p;
-      setText(p->partName());
+      setText(p->partName().replace("/", "_"));
       }
 
 //---------------------------------------------------------
