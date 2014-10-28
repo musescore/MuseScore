@@ -3541,5 +3541,17 @@ void Score::setSoloMute()
             }
       }
 
+//---------------------------------------------------------
+//   setName
+//---------------------------------------------------------
+
+void Score::setName(QString s)
+      {
+      s.replace('/', '_');    // for sanity
+      if (!(s.endsWith(".mscz") || s.endsWith(".mscx")))
+            s += ".mscz";
+      info.setFile(s);
+      }
+
 }
 

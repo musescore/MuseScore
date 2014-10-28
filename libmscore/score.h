@@ -669,7 +669,7 @@ class Score : public QObject {
       QFileInfo* fileInfo()          { return &info; }
 
       QString name() const           { return info.completeBaseName(); }
-      void setName(const QString& s) { info.setFile(s); }
+      void setName(QString s);
 
       bool isSavable() const;
       bool dirty() const;
