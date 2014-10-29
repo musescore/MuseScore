@@ -109,6 +109,15 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
 
       xml.stag("Score");
+      switch(_layoutMode) {
+            case LayoutMode::PAGE:
+            case LayoutMode::FLOAT:
+            case LayoutMode::SYSTEM:
+                  break;
+            case LayoutMode::LINE:
+                  xml.tag("layoutMode", "line");
+                  break;
+            }
 
 #ifdef OMR
       if (_omr && xml.writeOmr)
@@ -1097,6 +1106,13 @@ bool Score::read(XmlReader& e)
                   }
             else if (tag == "cursorTrack")
                   e.skipCurrentElement();
+            else if (tag == "layoutMode") {
+                  QString s = e.readElementText();
+                  if (s == "line")
+                        _layoutMode = LayoutMode::LINE;
+                  else
+                        qDebug("layoutMode: %s", qPrintable(s));
+                  }
             else
                   e.unknown();
             }
