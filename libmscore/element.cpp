@@ -1689,6 +1689,19 @@ void Element::undoSetColor(const QColor& c)
       }
 
 //---------------------------------------------------------
+//   bbox() function for scripts
+//
+//    use spatium units rather than raster units
+//---------------------------------------------------------
+
+QRectF Element::scriptBbox() const
+      {
+      qreal  _sp = spatium();
+      QRectF _bbox = bbox();
+      return QRectF(_bbox.x() / _sp, _bbox.y() / _sp, _bbox.width() / _sp, _bbox.height() / _sp);
+      }
+
+//---------------------------------------------------------
 //   positioning functions for scripts
 //
 //    use spatium units rather than raster units

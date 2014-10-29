@@ -169,7 +169,7 @@ class Element : public QObject {
       Q_PROPERTY(QPointF pos                       READ scriptPos  WRITE scriptSetPos)
       Q_PROPERTY(QPointF pagePos                   READ pagePos)
       Q_PROPERTY(QPointF userOff                   READ scriptUserOff WRITE scriptSetUserOff)
-      Q_PROPERTY(QRectF  bbox                      READ bbox )
+      Q_PROPERTY(QRectF  bbox                      READ scriptBbox )
 
       LinkedElements* _links = 0;
       Element* _parent       = 0;
@@ -368,6 +368,7 @@ class Element : public QObject {
 
       // function versions for scripts: use coords in spatium units rather than raster
       // and route pos changes to userOff
+      QRectF scriptBbox() const;
       virtual QPointF scriptPos() const;
       void scriptSetPos(const QPointF& p);
       QPointF scriptUserOff() const;
