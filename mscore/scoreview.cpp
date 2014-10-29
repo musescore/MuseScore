@@ -3753,8 +3753,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
                   showRect.setY(p.y());
                   showRect.setHeight(el->height());
                   }
-            else {
-                  // otherwise, just keep current vertical position
+            else if (sys->page()->systems()->size() == 1) {
+                  // otherwise, just keep current vertical position if possible
                   // see issue #7724
                   showRect.setY(r.y());
                   showRect.setHeight(r.height());
