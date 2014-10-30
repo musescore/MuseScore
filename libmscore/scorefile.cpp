@@ -91,21 +91,24 @@ void Score::write(Xml& xml, bool selectionOnly)
       // then some layout information is missing:
       // relayout with all parts set visible
 
+      QList<Part*> hiddenParts;
       bool unhide = false;
-      QList<bool> partsVisible;
       if (styleB(StyleIdx::createMultiMeasureRests)) {
             for (Part* part : _parts) {
-                  partsVisible.append(part->show());
                   if (!part->show()) {
-                        unhide = true;
-                        part->setShow(true);
+                        if (!unhide) {
+                              startCmd();
+                              unhide = true;
+                              }
+                        undo(new ChangePartProperty(part, 0, true));
+                        hiddenParts.append(part);
                         }
                   }
             }
       if (unhide) {
             doLayout();
-            for (int i = 0; i < partsVisible.size(); ++i)
-                  _parts[i]->setShow(partsVisible[i]);
+            for (Part* p : hiddenParts)
+                  p->setShow(false);
             }
 
       xml.stag("Score");
@@ -227,8 +230,11 @@ void Score::write(Xml& xml, bool selectionOnly)
             xml.tag("name", name());
       xml.etag();
 
-      if (unhide)
-            doLayout();
+      if (unhide) {
+            endCmd();
+            undo()->undo();
+            endUndoRedo();
+            }
       }
 
 //---------------------------------------------------------
