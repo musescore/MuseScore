@@ -853,8 +853,10 @@ MuseScore::MuseScore()
       menuVoices->addAction(getAction("voice-x34"));
       menuEdit->addMenu(menuVoices);
 
-      menuEdit->addSeparator();
-      menuEdit->addAction(getAction("debugger"));
+      if (enableExperimental) {
+            menuEdit->addSeparator();
+            menuEdit->addAction(getAction("debugger"));
+            }
 
       menuEdit->addSeparator();
       menuWorkspaces = new QMenu(tr("W&orkspaces"));
