@@ -35,6 +35,7 @@
 #include "ui_inspector_dynamic.h"
 #include "ui_inspector_slur.h"
 #include "ui_inspector_text.h"
+#include "ui_inspector_empty.h"
 
 namespace Ms {
 
@@ -332,6 +333,8 @@ class InspectorSlur : public InspectorBase {
 
 class InspectorEmpty : public InspectorBase {
       Q_OBJECT
+
+      Ui::InspectorEmpty e;
 
    public:
       InspectorEmpty(QWidget* parent);

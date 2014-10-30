@@ -794,7 +794,7 @@ InspectorSlur::InspectorSlur(QWidget* parent)
 InspectorEmpty::InspectorEmpty(QWidget* parent)
       :InspectorBase(parent)
       {
-      setToolTip(tr("Select an element to display its properties"));
+      e.setupUi(addWidget());
       }
 
 //---------------------------------------------------------
