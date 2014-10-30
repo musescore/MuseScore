@@ -38,6 +38,7 @@ extern double converterDpi;
 // used to assign actions (shortcuts) to the apropriate
 // widget (actions.cpp, shortcuts.cpp)
 //---------------------------------------------------------
+
 enum MsWidget {
       MAIN_WINDOW = 0,
       SCORE_TAB   = 1 << 0

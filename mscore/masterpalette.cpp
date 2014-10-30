@@ -62,7 +62,6 @@ void MuseScore::showMasterPalette(const QString& s)
       masterPalette->setVisible(a->isChecked());
       if (!s.isEmpty())
             masterPalette->selectItem(s);
-      masterPalette->show();
       }
 
 //---------------------------------------------------------
