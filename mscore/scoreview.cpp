@@ -1012,10 +1012,10 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             popup->addSeparator();
             a = popup->addAction(tr("Help"));
             a->setData("help");
+            popup->addSeparator();
+            a = popup->addAction(tr("Debugger"));
+            a->setData("list");
             }
-      popup->addSeparator();
-      a = popup->addAction(tr("Debugger"));
-      a->setData("list");
 
       a = popup->exec(pos);
       if (a == 0)
