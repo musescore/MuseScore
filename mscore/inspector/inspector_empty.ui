@@ -14,7 +14,7 @@
    <string/>
   </property>
   <property name="accessibleName">
-   <string>Image Inspector</string>
+   <string>Empty Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -41,7 +41,7 @@
       </font>
      </property>
      <property name="text">
-      <string>nothing selected</string>
+      <string>Nothing selected</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
