@@ -490,7 +490,7 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                         cr = static_cast<ChordRest*>(endElement());
                         if (type() == Element::Type::OTTAVA) {
                               if (cr && cr->durationType() == TDuration::DurationType::V_MEASURE) {
-                                    x = cr->x() + cr->width();
+                                    x = cr->x() + cr->width() + sp;
                                     }
                               else if (cr) {
                                     // lay out just past right edge of all notes for this segment on this staff
@@ -522,7 +522,7 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                                           ns = ns->next();
                                           }
                                     if (crFound) {
-                                          qreal nextNoteDistance = ns->x() - s->x();
+                                          qreal nextNoteDistance = ns->x() - s->x() + lineWidth().val() * sp;
                                           if (x > nextNoteDistance)
                                                 x = qMax(width, nextNoteDistance);
                                           }
@@ -733,8 +733,10 @@ void SLine::layout()
                   // single segment
                   seg->setSpannerSegmentType(SpannerSegmentType::SINGLE);
                   qreal len = p2.x() - p1.x();
-                  if (anchor() == Anchor::SEGMENT && type() != Element::Type::PEDAL)
-                        len = qMax(3 * spatium(), len);
+                  // enforcing a minimum length would be possible but inadvisable
+                  // the line length calculations are tuned well enough that this should not be needed
+                  //if (anchor() == Anchor::SEGMENT && type() != Element::Type::PEDAL)
+                  //      len = qMax(1.0 * spatium(), len);
                   seg->setPos(p1);
                   seg->setPos2(QPointF(len, p2.y() - p1.y()));
                   }
@@ -763,8 +765,10 @@ void SLine::layout()
                         Element* e = mseg ? mseg->element(staffIdx() * VOICES) : nullptr;
                         if (e)
                               offset = e->width();
-                        if (type() != Element::Type::PEDAL)
-                              minLen = 3.0 * spatium();
+                        // enforcing a minimum length would be possible but inadvisable
+                        // the line length calculations are tuned well enough that this should not be needed
+                        //if (type() != Element::Type::PEDAL)
+                        //      minLen = 1.0 * spatium();
                         }
                   qreal x1 = (mseg ? mseg->pos().x() : 0) + m->pos().x() + offset;
                   qreal len = qMax(minLen, p2.x() - x1);
