@@ -52,6 +52,7 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/ottava.h"
+#include "libmscore/notedot.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -1627,6 +1628,17 @@ void GuitarPro1::readNote(int string, Note* note)
       if (fretNumber > 99 || fretNumber == -1)
             fretNumber = 0;
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
+
+      /* it's possible to specifiy extraordinarily high pitches by
+      specifying fret numbers that don't exist. This is an issue that
+      comes from tuxguitar. Just set to maximum pitch. GP6 actually
+      sets the fret number to 0 also, so that's what I've opted to do
+      here. */
+      if (pitch > MAX_PITCH) {
+            fretNumber = 0;
+            pitch = MAX_PITCH;
+            }
+
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);
@@ -2042,6 +2054,15 @@ void GuitarPro3::read(QFile* fp)
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
+                                    if (dotted) {
+                                          NoteDot* dot = new NoteDot(score);
+                                          // there is at most one dotted note in this guitar pro version - set 0 index
+                                          dot->setIdx(0);
+                                          dot->setParent(note);
+                                          dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
+                                          dot->setVisible(true);
+                                          note->add(dot);
+                                          }
                                     static_cast<Chord*>(cr)->add(note);
                                     readNote(6-i, note);
                                     note->setTpcFromPitch();
