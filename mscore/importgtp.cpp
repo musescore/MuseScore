@@ -1628,6 +1628,17 @@ void GuitarPro1::readNote(int string, Note* note)
       if (fretNumber > 99 || fretNumber == -1)
             fretNumber = 0;
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
+
+      /* it's possible to specifiy extraordinarily high pitches by
+      specifying fret numbers that don't exist. This is an issue that
+      comes from tuxguitar. Just set to maximum pitch. GP6 actually
+      sets the fret number to 0 also, so that's what I've opted to do
+      here. */
+      if (pitch > MAX_PITCH) {
+            fretNumber = 0;
+            pitch = MAX_PITCH;
+            }
+
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);
