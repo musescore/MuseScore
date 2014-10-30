@@ -169,6 +169,7 @@ class GuitarPro {
       static const int SLIDE_IN_BELOW = 16;
       static const int SLIDE_IN_ABOVE = 32;
 
+      static const int MAX_PITCH = 127;
       static const char* errmsg[];
       int version;
       int key;
