@@ -851,7 +851,7 @@ void Score::undoAddElement(Element* element)
                         Segment* segment  = static_cast<Segment*>(element->parent());
                         int tick          = segment->tick();
                         Measure* m        = score->tick2measure(tick);
-                        Segment* seg      = m->findSegment(Segment::Type::ChordRest, tick);
+                        Segment* seg      = m->undoGetSegment(Segment::Type::ChordRest, tick);
                         int ntrack        = staffIdx * VOICES + element->voice();
                         ne->setTrack(ntrack);
                         ne->setParent(seg);
