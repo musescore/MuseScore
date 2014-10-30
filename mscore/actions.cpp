@@ -1129,7 +1129,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Other..."),
          QT_TRANSLATE_NOOP("action","Other tuplets")
          ),
-      Shortcut(    
+      Shortcut(
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          ShortcutFlags::A_CMD,
@@ -2481,6 +2481,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "masterpalette",
+         Qt::ApplicationShortcut,
          QT_TRANSLATE_NOOP("action","Master Palette..."),
          QT_TRANSLATE_NOOP("action","Show master palette")
          ),
