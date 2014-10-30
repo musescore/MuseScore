@@ -99,12 +99,11 @@ void Stem::layout()
                   if (n->mirror())
                         _up *= -1;
                   y1 -= n->attach().y() * _up;
+                  rypos() = n->rypos();
                   }
             }
 
       line.setLine(0.0, y1, 0.0, l);
-
-      rypos() = (chord()->up() ? chord()->downNote() : chord()->upNote())->rypos();
 
       // compute bounding rectangle
       QRectF r(line.p1(), line.p2());
