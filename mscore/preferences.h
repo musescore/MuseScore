@@ -74,6 +74,8 @@ struct PluginDescription {
       bool load;
       Shortcut shortcut;
       QString menuPath;
+      QQmlComponent *component;
+      bool error;
       };
 
 //---------------------------------------------------------
@@ -174,6 +176,7 @@ struct Preferences {
       bool dirty;
 
       QList<PluginDescription> pluginList;
+      QList<PluginDescription> pluginLoadingList;
 
       bool readPluginList();
       void writePluginList();
@@ -199,6 +202,7 @@ class ShortcutItem : public QTreeWidgetItem {
       };
 
 extern Preferences preferences;
+// extern PluginDescription plugindescription;
 extern bool useALSA, useJACK, usePortaudio, usePulseAudio;
 
 } // namespace Ms

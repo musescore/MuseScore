@@ -51,6 +51,7 @@ void PluginManager::init()
       preferences.updatePluginList();
       int n = preferences.pluginList.size();
       pluginList->clear();
+      int xn = pluginList->count();
       for (int i = 0; i < n; ++i) {
             const PluginDescription& d = preferences.pluginList[i];
             QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).baseName(),  pluginList);

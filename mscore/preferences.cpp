@@ -1833,8 +1833,7 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
                               PluginDescription p;
                               p.path = path;
                               p.load = false;
-                              if( collectPluginMetaInformation(&p) )
-                                    pluginList.append(p);
+                              collectPluginMetaInformation(&p);
                               }
                         }
                   }
