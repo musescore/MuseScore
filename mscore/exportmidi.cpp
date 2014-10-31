@@ -235,18 +235,18 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
             if (staff->isTop()) {
                   // set pitch bend sensitivity to 12 semitones:
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 12));
+                  //track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
+                  //track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
+                  //track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 12));
 
                   // reset fine tuning
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 1));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 64));
+                  //track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 1));
+                  //track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
+                  //track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 64));
 
                   // deactivate rpn
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 127));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 127));
+                  //track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 127));
+                  //track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 127));
 
                   if (part->midiProgram() != -1)
                         track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PROGRAM, part->midiProgram()));
