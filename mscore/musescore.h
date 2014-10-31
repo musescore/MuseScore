@@ -497,6 +497,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void play(Element* e) const;
       void play(Element* e, int pitch) const;
       bool loadPlugin(const QString& filename);
+      void continueLoadingPlugin();
       QString createDefaultName() const;
       void startAutoSave();
       double getMag(ScoreView*) const;
@@ -682,7 +683,8 @@ extern bool saveMxl(Score*, const QString& name);
 extern bool saveXml(Score*, const QString& name);
 
 struct PluginDescription;
-extern bool collectPluginMetaInformation(PluginDescription*);
+extern void collectPluginMetaInformation(PluginDescription*);
+extern void continueLoadingPlugin();
 } // namespace Ms
 #endif
 

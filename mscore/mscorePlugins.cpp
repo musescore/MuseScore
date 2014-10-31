@@ -454,20 +454,56 @@ void MuseScore::pluginTriggered(int idx)
       endCmd();
       }
 
+void MuseScore::continueLoadingPlugin()
+      {
+      const QList<PluginDescription> pl = preferences.pluginLoadingList;
+
+      foreach(PluginDescription pd, pl) {
+            if (pd.component->isError()) {
+                  qDebug("creating component <%s> failed", qPrintable(pd.path));
+                  foreach(QQmlError e, pd.component->errors()) {
+                        qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
+                        }
+                  }
+            else {
+                  QObject *obj = pd.component->create();
+                  if(obj){
+                        QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+                        if (item) {
+                              pd.version      = item->version();
+                              pd.description  = item->description();
+                              pd.error        = false;
+                              }
+                        delete obj;
+                        preferences.pluginList.append(pd);
+                        }
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 //   collectPluginMetaInformation
 //---------------------------------------------------------
 
-bool collectPluginMetaInformation(PluginDescription* d)
+void collectPluginMetaInformation(PluginDescription* d)
       {
-      bool result(false);
+      QQmlComponent *component = new QQmlComponent(Ms::MScore::qml(), QUrl::fromLocalFile(d->path));
+      QList<PluginDescription> pl = preferences.pluginLoadingList;
+
+      d->component = component;
+      pl.append(*d);
+      if (component->isLoading())
+            QObject::connect(component, SIGNAL(statusChanged(QQmlComponent::Status)),
+                           mscore, SLOT(continueLoadingPlugin()));
+      else
+           mscore->continueLoadingPlugin();
+      }
+/*      bool result(false);
       qreal cProgress;
       QObject* obj;
 
       QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(d->path), QQmlComponent::Asynchronous);
       qDebug("Collect meta for <%s>", qPrintable(d->path));
-      QThread::yieldCurrentThread();
-//      sleep(1);
 
       int loadDelay = 20;
       while( !component.isReady() && loadDelay--) {
@@ -499,5 +535,6 @@ bool collectPluginMetaInformation(PluginDescription* d)
             }
 
       return result;
-      }
+      } */
+
 }
