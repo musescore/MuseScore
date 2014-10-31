@@ -1225,4 +1225,18 @@ QString Segment::accessibleExtraInfo()
       return rez + " " + startSpanners + " " + endSpanners;
       }
 
+ //--------------------------------------------------------
+ //   qmlAnnotations
+ //--------------------------------------------------------
+
+QQmlListProperty<Ms::Element> Segment::qmlAnnotations()
+      {
+      _qmlAnnotations.clear();
+      for (std::vector<Element*>::iterator it = _annotations.begin();
+           it != _annotations.end(); ++it) {
+            _qmlAnnotations.append(*it);
+            }
+      return QQmlListProperty<Ms::Element>(this, _qmlAnnotations);
+      }
+
 }           // namespace Ms
