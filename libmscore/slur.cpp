@@ -1434,7 +1434,7 @@ void Slur::layout()
             // case 3: middle segment
             else if (i != 0 && system != sPos.system2) {
                   segment->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
-                  qreal x1 = firstNoteRestSegmentX(system) - _spatium;
+                  qreal x1 = firstNoteRestSegmentX(system);
                   qreal x2 = system->bbox().width();
                   qreal y  = system->staff(staffIdx())->y();
                   segment->layout(QPointF(x1, y), QPointF(x2, y));
@@ -1442,7 +1442,7 @@ void Slur::layout()
             // case 4: end segment
             else {
                   segment->setSpannerSegmentType(SpannerSegmentType::END);
-                  qreal x = firstNoteRestSegmentX(system) - _spatium;
+                  qreal x = firstNoteRestSegmentX(system);
                   segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
                   }
             if (system == sPos.system2)
@@ -1454,6 +1454,7 @@ void Slur::layout()
 //---------------------------------------------------------
 //   firstNoteRestSegmentX
 //    in System() coordinates
+//    returns the position just after the last non-chordrest segment
 //---------------------------------------------------------
 
 qreal SlurTie::firstNoteRestSegmentX(System* system)
@@ -1463,7 +1464,23 @@ qreal SlurTie::firstNoteRestSegmentX(System* system)
                   const Measure* measure = static_cast<const Measure*>(mb);
                   for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
                         if (seg->segmentType() == Segment::Type::ChordRest) {
-                              return seg->pos().x() + seg->measure()->pos().x();
+                              // first CR found; back up to previous segment
+                              seg = seg->prev();
+                              if (seg) {
+                                    // find maximum width
+                                    qreal width = 0.0;
+                                    int n = score()->nstaves();
+                                    for (int i = 0; i < n; ++i) {
+                                          if (!system->staff(i)->show())
+                                                continue;
+                                          Element* e = seg->element(i * VOICES);
+                                          if (e)
+                                                width = qMax(width, e->width());
+                                          }
+                                    return seg->measure()->pos().x() + seg->pos().x() + width;
+                                    }
+                              else
+                                    return 0.0;
                               }
                         }
                   }
