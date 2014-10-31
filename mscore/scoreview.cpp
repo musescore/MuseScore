@@ -1012,10 +1012,17 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             popup->addSeparator();
             a = popup->addAction(tr("Help"));
             a->setData("help");
+            }
+
+#ifdef NDEBUG
+      if (enableExperimental) {
+#endif
             popup->addSeparator();
             a = popup->addAction(tr("Debugger"));
             a->setData("list");
+#ifdef NDEBUG
             }
+#endif
 
       a = popup->exec(pos);
       if (a == 0)

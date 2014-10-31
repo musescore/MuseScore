@@ -391,7 +391,6 @@ MuseScore::MuseScore()
       mixer                 = 0;
       synthControl          = 0;
       selectionWindow       = 0;
-      debugger              = 0;
       measureListEdit       = 0;
       symbolDialog          = 0;
       clefPalette           = 0;
@@ -853,10 +852,14 @@ MuseScore::MuseScore()
       menuVoices->addAction(getAction("voice-x34"));
       menuEdit->addMenu(menuVoices);
 
+#ifdef NDEBUG
       if (enableExperimental) {
+#endif
             menuEdit->addSeparator();
             menuEdit->addAction(getAction("debugger"));
+#ifdef NDEBUG
             }
+#endif
 
       menuEdit->addSeparator();
       menuWorkspaces = new QMenu(tr("W&orkspaces"));
