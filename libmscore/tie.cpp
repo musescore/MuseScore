@@ -314,8 +314,6 @@ void Tie::calculateDirection()
 
 void Tie::layout()
       {
-      qreal _spatium = spatium();
-
       //
       //    show short bow
       //
@@ -405,7 +403,7 @@ void Tie::layout()
                   }
             // case 4: end segment
             else {
-                  qreal x = firstNoteRestSegmentX(system) - 2 * _spatium;
+                  qreal x = firstNoteRestSegmentX(system);
 
                   segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
                   segment->setSpannerSegmentType(SpannerSegmentType::END);
