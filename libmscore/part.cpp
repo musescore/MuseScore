@@ -238,6 +238,15 @@ int Part::midiChannel() const
       }
 
 //---------------------------------------------------------
+//   midiPort
+//---------------------------------------------------------
+
+int Part::midiPort() const
+      {
+      return score()->midiPort(instr(0)->channel(0).channel);
+      }
+
+//---------------------------------------------------------
 //   setMidiChannel
 //    called from importmusicxml
 //---------------------------------------------------------
