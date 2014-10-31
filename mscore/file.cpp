@@ -1296,6 +1296,8 @@ QString MuseScore::getPluginFilename(bool open)
             myPlugins.setFile(QDir::home(), preferences.myPluginsPath);
       QString defaultPath = myPlugins.absoluteFilePath();
 
+      QString name  = createDefaultFileName("Plugin");
+      QString fname = QString("%1/%2.qml").arg(defaultPath).arg(name);
       if (preferences.nativeDialogs) {
             QString fn;
             if (open)
@@ -1329,15 +1331,16 @@ QString MuseScore::getPluginFilename(bool open)
       else {
             if (savePluginDialog == 0) {
                   savePluginDialog = new QFileDialog(this);
+                  QSettings settings;
+                  savePluginDialog->restoreState(settings.value("savePluginDialog").toByteArray());
                   savePluginDialog->setAcceptMode(QFileDialog::AcceptSave);
                   savePluginDialog->setFileMode(QFileDialog::AnyFile);
                   savePluginDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
                   savePluginDialog->setOption(QFileDialog::DontUseNativeDialog, true);
+                  savePluginDialog->setWindowTitle(tr("MuseScore: Save Plugin"));
+                  savePluginDialog->setNameFilter(filter);
                   savePluginDialog->setDirectory(defaultPath);
-
-                  QSettings settings;
-                  savePluginDialog->restoreState(settings.value("savePluginDialog").toByteArray());
-                  savePluginDialog->setAcceptMode(QFileDialog::AcceptSave);
+                  savePluginDialog->selectFile(fname);
                   }
             dialog = savePluginDialog;
             }
