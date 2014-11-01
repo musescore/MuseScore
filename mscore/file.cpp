@@ -583,7 +583,7 @@ void MuseScore::newFile()
             }
       //delete unused measures if any
       if (nm->nextMeasure())
-      	score->undoRemoveMeasures(nm->nextMeasure(), score->lastMeasure());
+            score->undoRemoveMeasures(nm->nextMeasure(), score->lastMeasure());
 
       int tick = 0;
       for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
@@ -1933,6 +1933,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
       QFileInfo info(name);
       QString suffix  = info.suffix().toLower();
       score->setName(info.completeBaseName());
+      score->setImportedFilePath(name);
 
       if (suffix == "mscz" || suffix == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);

@@ -1544,7 +1544,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             cs = 0;
 
                   // set midi import panel
-      QString fileName = cs ? cs->fileInfo()->filePath() : "";
+      QString fileName = cs ? cs->importedFilePath() : "";
       midiPanelOnSwitchToFile(fileName);
 
       if (enableExperimental) {
@@ -1675,7 +1675,7 @@ void MuseScore::setMidiReopenInProgress(const QString &file)
 void MuseScore::showMidiImportPanel()
       {
       importmidiPanel->setPreferredVisible(true);
-      QString fileName = cs ? cs->fileInfo()->filePath() : "";
+      QString fileName = cs ? cs->importedFilePath() : "";
       if (ImportMidiPanel::isMidiFile(fileName))
             importmidiPanel->setVisible(true);
       importmidiShowPanel->hide();
@@ -2026,7 +2026,7 @@ void MuseScore::removeTab(int i)
       int idx1      = tab1->currentIndex();
       bool firstTab = tab1->view(idx1) == cv;
 
-      midiPanelOnCloseFile(score->fileInfo()->filePath());
+      midiPanelOnCloseFile(score->importedFilePath());
       scoreList.removeAt(i);
 
       tab1->blockSignals(true);
