@@ -230,7 +230,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
             Staff* staff = cs->staff(staffIdx);
             Part* part   = staff->part();
             int channel  = part->midiChannel();
-            track.setOutPort(0);
+            track.setOutPort(part->midiPort());
             track.setOutChannel(channel);
 
             if (staff->isTop()) {
@@ -259,6 +259,16 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
             EventMap events;
             cs->renderStaff(&events, staff);
+
+            // Export port to MIDI META event
+            MidiEvent ev;
+            ev.setType(ME_META);
+            ev.setMetaType(META_PORT_CHANGE);
+            ev.setLen(1);
+            unsigned char* data = new unsigned char[1];
+            data[0] = int(track.outPort());
+            ev.setEData(data);
+            track.insert(0, ev);
 
             for (auto i = events.begin(); i != events.end(); ++i) {
                   NPlayEvent event(i->second);

@@ -412,8 +412,7 @@ void AlbumManager::addClicked()
       QString home = preferences.myScoresPath;
       QStringList files = mscore->getOpenScoreNames(
          home,
-         tr("MuseScore Files (*.mscz *.mscx);;")+
-         tr("All Files (*)"),
+         tr("MuseScore Files (*.mscz *.mscx)"),
          tr("MuseScore: Add Score")
          );
       if (files.isEmpty())
@@ -443,8 +442,7 @@ void AlbumManager::loadClicked()
       QString home = preferences.myScoresPath;
       QStringList files = mscore->getOpenScoreNames(
          home,
-         tr("MuseScore Album Files (*.album);;")+
-         tr("All Files (*)"),
+         tr("MuseScore Album Files (*.album)"),
          tr("MuseScore: Load Album")
          );
       if (files.isEmpty())

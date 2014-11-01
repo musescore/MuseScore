@@ -1376,7 +1376,7 @@ void ScoreView::moveCursor(int tick)
 
       _cursor->setRect(QRectF(x, y, w, h));
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
-      if (mscore->panDuringPlayback())
+      if (mscore->state() == ScoreState::STATE_PLAY && mscore->panDuringPlayback())
             adjustCanvasPosition(measure, true);
       }
 
@@ -3641,6 +3641,9 @@ void ScoreView::pageEnd()
 
 void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       {
+      if (this != mscore->currentScoreView())
+            return;
+
       if (score()->layoutMode() == LayoutMode::LINE) {
             if (!el)
                   return;
@@ -3757,10 +3760,11 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
                   showRect.setY(p.y());
                   showRect.setHeight(el->height());
                   }
-            else {
-                  // let user control height
-//                   showRect.setY(r.y());
-//                   showRect.setHeight(1);
+            else if (sys->page()->systems()->size() == 1) {
+                  // otherwise, just keep current vertical position if possible
+                  // see issue #7724
+                  showRect.setY(r.y());
+                  showRect.setHeight(r.height());
                   }
             }
 
@@ -5578,6 +5582,8 @@ Element* ScoreView::elementNear(QPointF p)
 
 void ScoreView::posChanged(POS pos, unsigned tick)
       {
+      if (this != mscore->currentScoreView())
+            return;
       switch (pos) {
             case POS::CURRENT:
                   if (noteEntryMode())
