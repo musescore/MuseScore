@@ -529,6 +529,7 @@ void setTempoToScore(Score *score, int tick, double beatsPerSecond)
 
 void setTempo(const std::multimap<int, MTrack> &tracks, Score *score)
       {
+      score->tempomap()->clear();
       auto *midiData = preferences.midiImportOperations.data();
       std::set<ReducedFraction> beats = midiData->humanBeatData.beatSet;    // copy
 
@@ -578,6 +579,9 @@ void setTempo(const std::multimap<int, MTrack> &tracks, Score *score)
             score->tempomap()->clear();         // use only one tempo marking for all score
             setTempoToScore(score, 0, tempo);
             }
+
+      if (score->tempomap()->empty())
+            score->tempomap()->setTempo(0, 2.0);      // default tempo
       }
 
 } // namespace MidiTempo
