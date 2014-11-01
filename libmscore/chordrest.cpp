@@ -220,6 +220,20 @@ void ChordRest::writeProperties(Xml& xml) const
                   t *= staff()->timeStretch(xml.curTick);
             xml.curTick += t.ticks();
             }
+      for (auto i : score()->spanner()) {     // TODO: dont search whole list
+            Spanner* s = i.second;
+            if (s->generated() || s->type() != Element::Type::SLUR || !xml.canWrite(s))
+                  continue;
+
+            if (s->startElement() == this) {
+                  int id = xml.spannerId(s);
+                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(id));
+                  }
+            else if (s->endElement() == this) {
+                  int id = xml.spannerId(s);
+                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(id));
+                  }
+            }
       }
 
 //---------------------------------------------------------
