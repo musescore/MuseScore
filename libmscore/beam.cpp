@@ -1425,6 +1425,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
       else
             _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance));
 
+      _beamDist *= c1->staff()->mag();
       if (_isGrace) {
             _beamDist *= graceMag;
             setMag(graceMag);
