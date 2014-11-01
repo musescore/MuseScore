@@ -267,9 +267,12 @@ enum class TextStyleType : char {
       LYRIC1,
       LYRIC2,
       FINGERING,
+      LH_GUITAR_FINGERING,
+      RH_GUITAR_FINGERING,
+
+      STRING_NUMBER,
       INSTRUMENT_LONG,
       INSTRUMENT_SHORT,
-
       INSTRUMENT_EXCERPT,
       DYNAMICS,
       TECHNIQUE,
@@ -277,9 +280,9 @@ enum class TextStyleType : char {
       METRONOME,
       MEASURE_NUMBER,
       TRANSLATOR,
+
       TUPLET,
       SYSTEM,
-
       STAFF,
       HARMONY,
       REHEARSAL_MARK,
@@ -288,10 +291,9 @@ enum class TextStyleType : char {
       REPEAT,            // obsolete
       VOLTA,
       FRAME,
+
       TEXTLINE,
       GLISSANDO,
-
-      STRING_NUMBER,
       OTTAVA,
       BENCH,
       HEADER,

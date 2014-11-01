@@ -61,7 +61,10 @@ void Fingering::reset()
       {
       QPointF o(userOff());
       score()->layoutFingering(this);
-      QPointF no(userOff());
+      QPointF no;
+      TextStyleType tst = textStyleType();
+      if (tst == TextStyleType::FINGERING || tst == TextStyleType::RH_GUITAR_FINGERING || tst == TextStyleType::STRING_NUMBER)
+            no = userOff();
       setUserOff(o);
       score()->undoChangeProperty(this, P_ID::USER_OFF, no);
       }
