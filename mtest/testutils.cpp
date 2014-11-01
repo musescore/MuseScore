@@ -37,6 +37,10 @@ inline void initMyResources() {
       Q_INIT_RESOURCE(musescorefonts_Free);
 }
 
+inline void initMyResourcesNoFonts() {
+      Q_INIT_RESOURCE(mtest);
+}
+
 namespace Ms {
 
 #ifdef OMR
@@ -314,7 +318,12 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 
 void MTest::initMTest()
       {
+#ifdef EXTERNAL_FONTS
+      initMyResourcesNoFonts();
+#else
       initMyResources();
+
+#endif
       MScore::DPI  = 120;
       MScore::PDPI = 120;
       MScore::DPMM = MScore::DPI / INCH;

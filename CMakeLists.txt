@@ -62,6 +62,8 @@ option(SOUNDFONT3    "ogg vorbis compressed fonts" ON)         # enable ogg vorb
 option(HAS_AUDIOFILE "enable audio export" ON)               # requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 
+option(EXTERNAL_FONTS OFF)
+
 SET(JACK_LONGNAME "jack (jack audio connection kit)")
 SET(JACK_MIN_VERSION "0.98.0")
 option(BUILD_JACK    "Build with support for ${JACK_LONGNAME}. jack >= ${JACK_MIN_VERSION} will be needed." ON)

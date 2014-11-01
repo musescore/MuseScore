@@ -5323,9 +5323,13 @@ void ScoreFont::load()
       {
       //qDebug() << "load" << _filename;
 #if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
-      if (-1 == QFontDatabase::addApplicationFont(_fontPath + _filename)) {
-            qDebug("ScoreFont: fatal error: cannot load internal font <%s>", qPrintable(_fontPath + _filename));
-            if (!QFile(_fontPath + _filename).exists())
+     QString fontPath = _fontPath;
+#ifdef EXTERNAL_FONTS
+      fontPath = MScore::globalShare() + "fonts/";
+#endif
+      if (-1 == QFontDatabase::addApplicationFont(fontPath + _filename)) {
+            qDebug("ScoreFont: fatal error: cannot load font <%s>", qPrintable(fontPath + _filename));
+            if (!QFile(fontPath + _filename).exists())
                   qDebug("   file not found");
             if (!MScore::debugMode)
                   exit(-1);

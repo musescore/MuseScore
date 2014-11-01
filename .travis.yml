@@ -27,8 +27,8 @@ before_script:
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
   - "export PATH=$PATH:$HOME/bin"
   - "make revision"
-  - "make debug CPUS=4"
-  - "sudo make installdebug CPUS=4"
+  - "make debug CPUS=4 EXTERNAL_FONTS=ON"
+  - "sudo make installdebug CPUS=4 EXTERNAL_FONTS=ON"
   - "cd build.debug/mtest"
   - "make -j2"
 script:
