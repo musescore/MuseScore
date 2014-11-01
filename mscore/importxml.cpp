@@ -1558,6 +1558,10 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               domError(ee);
                         }
                   }
+            else if (e.tagName() == "midi-device") {
+                  // TODO
+                  domNotImplemented(e);
+                  }
             else
                   domError(e);
             }

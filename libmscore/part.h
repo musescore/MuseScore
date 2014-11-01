@@ -103,6 +103,7 @@ class Part : public QObject {
       void setMidiProgram(int, int bank = 0);
 
       int midiChannel() const;
+      int midiPort() const;
       void setMidiChannel(int) const;
 
       void insertStaff(Staff*, int idx);
