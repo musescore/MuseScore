@@ -2131,7 +2131,7 @@ void MuseScore::addImage(Score* score, Element* e)
          tr("MuseScore: Insert Image"),
          "",            // lastOpenPath,
          tr("All Supported Files (*.svg *.jpg *.jpeg *.png);;"
-            "Scalable vector graphics (*.svg);;"
+            "Scalable Vector Graphics (*.svg);;"
             "JPEG (*.jpg *.jpeg);;"
             "PNG (*.png)"
             )
