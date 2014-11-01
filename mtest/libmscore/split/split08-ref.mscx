@@ -162,19 +162,19 @@
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="2"/>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
-          <Slur type="start" id="2"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="2"/>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
             </Note>
-          <Slur type="stop" id="2"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>

@@ -128,21 +128,21 @@
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="2"/>
           <Note>
             <pitch>65</pitch>
             <tpc>13</tpc>
             </Note>
-          <Slur type="start" id="2"/>
           </Chord>
         </Measure>
       <Measure number="2">
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="2"/>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
-          <Slur type="stop" id="2"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>

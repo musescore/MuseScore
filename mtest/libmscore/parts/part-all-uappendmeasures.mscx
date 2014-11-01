@@ -301,12 +301,12 @@
         <Chord>
           <lid>36</lid>
           <durationType>quarter</durationType>
+          <Slur type="start" id="3"/>
           <Note>
             <lid>37</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
-          <Slur type="start" id="3"/>
           </Chord>
         <Chord>
           <lid>38</lid>
@@ -329,12 +329,12 @@
         <Chord>
           <lid>42</lid>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="3"/>
           <Note>
             <lid>43</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
-          <Slur type="stop" id="3"/>
           </Chord>
         </Measure>
       <Measure number="5">
@@ -1179,12 +1179,12 @@
           <Chord>
             <lid>36</lid>
             <durationType>quarter</durationType>
+            <Slur type="start" id="6"/>
             <Note>
               <lid>37</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
-            <Slur type="start" id="6"/>
             </Chord>
           <Chord>
             <lid>38</lid>
@@ -1207,12 +1207,12 @@
           <Chord>
             <lid>42</lid>
             <durationType>quarter</durationType>
+            <Slur type="stop" id="6"/>
             <Note>
               <lid>43</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
-            <Slur type="stop" id="6"/>
             </Chord>
           </Measure>
         <Measure number="5">
