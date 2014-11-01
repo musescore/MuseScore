@@ -141,6 +141,7 @@
         <Chord>
           <lid>6</lid>
           <durationType>quarter</durationType>
+          <Slur type="start" id="2"/>
           <Note>
             <lid>7</lid>
             <pitch>62</pitch>
@@ -148,7 +149,6 @@
             <fret>3</fret>
             <string>1</string>
             </Note>
-          <Slur type="start" id="2"/>
           </Chord>
         <Chord>
           <lid>8</lid>
@@ -169,6 +169,7 @@
         <Chord>
           <lid>11</lid>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="2"/>
           <Note>
             <lid>12</lid>
             <pitch>60</pitch>
@@ -176,7 +177,6 @@
             <fret>1</fret>
             <string>1</string>
             </Note>
-          <Slur type="stop" id="2"/>
           </Chord>
         <Chord>
           <lid>13</lid>
@@ -357,6 +357,7 @@
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
+            <Slur type="start" id="3"/>
             <Note>
               <lid>7</lid>
               <pitch>62</pitch>
@@ -364,7 +365,6 @@
               <fret>3</fret>
               <string>1</string>
               </Note>
-            <Slur type="start" id="3"/>
             </Chord>
           <Chord>
             <lid>8</lid>
@@ -385,6 +385,7 @@
           <Chord>
             <lid>11</lid>
             <durationType>quarter</durationType>
+            <Slur type="stop" id="3"/>
             <Note>
               <lid>12</lid>
               <pitch>60</pitch>
@@ -392,7 +393,6 @@
               <fret>1</fret>
               <string>1</string>
               </Note>
-            <Slur type="stop" id="3"/>
             </Chord>
           <Chord>
             <lid>13</lid>
@@ -424,6 +424,7 @@
           <Chord>
             <lid>6</lid>
             <durationType>quarter</durationType>
+            <Slur type="start" id="4"/>
             <Note>
               <lid>7</lid>
               <pitch>62</pitch>
@@ -431,7 +432,6 @@
               <fret>3</fret>
               <string>1</string>
               </Note>
-            <Slur type="start" id="4"/>
             </Chord>
           <Chord>
             <lid>8</lid>
@@ -447,6 +447,7 @@
           <Chord>
             <lid>11</lid>
             <durationType>quarter</durationType>
+            <Slur type="stop" id="4"/>
             <Note>
               <lid>12</lid>
               <pitch>60</pitch>
@@ -454,7 +455,6 @@
               <fret>1</fret>
               <string>1</string>
               </Note>
-            <Slur type="stop" id="4"/>
             </Chord>
           <Chord>
             <lid>13</lid>

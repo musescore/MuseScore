@@ -9,22 +9,22 @@
     <Chord>
       <track>0</track>
       <durationType>quarter</durationType>
+      <Slur type="start" id="2"/>
       <Note>
         <track>0</track>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
-      <Slur type="start" id="2"/>
       </Chord>
     <Chord>
       <track>0</track>
       <durationType>quarter</durationType>
+      <Slur type="stop" id="2"/>
       <Note>
         <track>0</track>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
-      <Slur type="stop" id="2"/>
       </Chord>
     <Slur id="3">
       <track>0</track>
@@ -32,22 +32,22 @@
     <Chord>
       <track>0</track>
       <durationType>quarter</durationType>
+      <Slur type="start" id="3"/>
       <Note>
         <track>0</track>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
-      <Slur type="start" id="3"/>
       </Chord>
     <Chord>
       <track>0</track>
       <durationType>quarter</durationType>
+      <Slur type="stop" id="3"/>
       <Note>
         <track>0</track>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>
-      <Slur type="stop" id="3"/>
       </Chord>
     </Staff>
   </StaffList>

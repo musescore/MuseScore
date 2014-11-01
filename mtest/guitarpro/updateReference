@@ -10,7 +10,7 @@ cp   $MSCORE/heavy-accent.gp5.mscx heavy-accent.gp5-ref.mscx
 cp   $MSCORE/tremolos.gp5.mscx tremolos.gp5-ref.mscx
 cp   $MSCORE/trill.gp4.mscx trill.gp4-ref.mscx
 cp   $MSCORE/dynamic.gp5.mscx dynamic.gp5-ref.mscx
-cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
+#cp   $MSCORE/arpeggio_up_down.gp4.mscx arpeggio_up_down.gp4-ref.mscx
 cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx
 #cp   $MSCORE/grace.gp5.mscx grace.gp5-ref.mscx
 cp   $MSCORE/volta.gp5.mscx volta.gp5-ref.mscx
