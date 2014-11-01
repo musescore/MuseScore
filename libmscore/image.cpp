@@ -532,6 +532,7 @@ void Image::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 
 void Image::layout()
       {
+      setPos(0.0, 0.0);
       if (imageType == ImageType::SVG && !svgDoc) {
             if (_storeItem) {
                   svgDoc = new QSvgRenderer(_storeItem->buffer());
