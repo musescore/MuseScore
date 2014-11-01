@@ -696,7 +696,7 @@ void Element::writeProperties(Xml& xml) const
             if (type() == Element::Type::VOLTA_SEGMENT || isChordRest())
                   xml.tag("offset", userOff() / spatium());
             else
-                  xml.tag("pos", pos() / spatium());
+                  xml.tag("pos", pos() / score()->spatium());
             }
       if (((track() != xml.curTrack) || (type() == Element::Type::SLUR)) && (track() != -1)) {
             int t;
@@ -783,7 +783,7 @@ bool Element::readProperties(XmlReader& e)
       else if (tag == "pos") {
             QPointF pt = e.readPoint();
             if (score()->mscVersion() > 114)
-                  _readPos = pt * spatium();
+                  _readPos = pt * score()->spatium();
             }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
