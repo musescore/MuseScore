@@ -229,62 +229,76 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
       for (auto &track: tracks) {
             Staff* staff = cs->staff(staffIdx);
             Part* part   = staff->part();
-            int channel  = part->midiChannel();
+
             track.setOutPort(part->midiPort());
-            track.setOutChannel(channel);
+            track.setOutChannel(part->midiChannel());
 
-            if (staff->isTop()) {
-                  // set pitch bend sensitivity to 12 semitones:
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 12));
-
-                  // reset fine tuning
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 1));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 64));
-
-                  // deactivate rpn
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 127));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 127));
-
-                  if (part->midiProgram() != -1)
-                        track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PROGRAM, part->midiProgram()));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_VOLUME, part->volume()));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PANPOT, part->pan()));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_REVERB_SEND, part->reverb()));
-                  track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_CHORUS_SEND, part->chorus()));
-                  }
-
-
+            // Render each staff only once
             EventMap events;
             cs->renderStaff(&events, staff);
 
-            // Export port to MIDI META event
-            MidiEvent ev;
-            ev.setType(ME_META);
-            ev.setMetaType(META_PORT_CHANGE);
-            ev.setLen(1);
-            unsigned char* data = new unsigned char[1];
-            data[0] = int(track.outPort());
-            ev.setEData(data);
-            track.insert(0, ev);
+            // Pass throught the all instruments in the part
+            const InstrumentList* il = part->instrList();
+            for(auto j = il->begin(); j!= il->end(); j++) {
+                  // Pass throught the all channels of the instrument
+                  // "normal", "pizzicato", "tremolo" for Strings,
+                  // "normal", "mute" for Trumpet
+                  foreach(const Channel& ch, j->second.channel()) {
+                        char port    = part->score()->midiPort(ch.channel);
+                        char channel = part->score()->midiChannel(ch.channel);
 
-            for (auto i = events.begin(); i != events.end(); ++i) {
-                  NPlayEvent event(i->second);
-                  int eventChannel = cs->midiChannel(event.channel());
-                  if (channel != eventChannel)
-                        continue;
-                  if (event.type() == ME_NOTEON) {
-                        track.insert(i->first, MidiEvent(ME_NOTEON, channel,
-                           event.pitch(), event.velo()));
-                        }
-                  else if (event.type() == ME_CONTROLLER) {
-                        track.insert(i->first, MidiEvent(ME_CONTROLLER, channel,
-                           event.controller(), event.value()));
-                        }
-                  else {
-                        qDebug("writeMidi: unknown midi event 0x%02x", event.type());
+                        if (staff->isTop()) {
+                              // set pitch bend sensitivity to 12 semitones:
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 12));
+
+                              // reset fine tuning
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 1));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 64));
+
+                              // deactivate rpn
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 127));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 127));
+
+                              if (ch.program != -1)
+                                    track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PROGRAM, ch.program));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_VOLUME, ch.volume));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PANPOT, ch.pan));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_REVERB_SEND, ch.reverb));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_CHORUS_SEND, ch.chorus));
+                              }
+
+                        // Export port to MIDI META event
+                        MidiEvent ev;
+                        ev.setType(ME_META);
+                        ev.setMetaType(META_PORT_CHANGE);
+                        ev.setLen(1);
+                        unsigned char* data = new unsigned char[1];
+                        data[0] = int(track.outPort());
+                        ev.setEData(data);
+                        track.insert(0, ev);
+	    
+                        for (auto i = events.begin(); i != events.end(); ++i) {
+                              NPlayEvent event(i->second);
+                              char eventPort    = cs->midiPort(event.channel());
+                              char eventChannel = cs->midiChannel(event.channel());
+                              if (port != eventPort || channel != eventChannel)
+                                    continue;
+
+                              if (event.type() == ME_NOTEON) {
+                                    track.insert(i->first, MidiEvent(ME_NOTEON, channel,
+                                                                     event.pitch(), event.velo()));
+                                    }
+                              else if (event.type() == ME_CONTROLLER) {
+                                    track.insert(i->first, MidiEvent(ME_CONTROLLER, channel,
+                                                                     event.controller(), event.value()));
+                                    }
+                              else {
+                                    qDebug("writeMidi: unknown midi event 0x%02x", event.type());
+                                    }
+                              }
                         }
                   }
             ++staffIdx;
