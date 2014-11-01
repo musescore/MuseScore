@@ -986,7 +986,7 @@ void Score::renderMidi(EventMap* events)
 
                   int idx = s->staff()->channel(s->tick(), 0);
                   int channel = s->staff()->part()->instr(s->tick())->channel(idx).channel;
-                  channelPedalEvents.emplace(channel, std::vector<std::pair<int, bool>>());
+                  channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
                   std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
                   std::pair<int, bool> lastEvent;
 
