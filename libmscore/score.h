@@ -313,6 +313,7 @@ class Score : public QObject {
       QFileInfo info;
       bool _created;          ///< file is never saved, has generated name
       QString _tmpName;       ///< auto saved with this name if not empty
+      QString _importedFilePath;    // file from which the score was imported, or empty
 
       // the following variables are reset on startCmd()
       //   modified during cmd processing and used in endCmd() to
@@ -670,6 +671,9 @@ class Score : public QObject {
 
       QString name() const           { return info.completeBaseName(); }
       void setName(QString s);
+
+      QString importedFilePath() const           { return _importedFilePath; }
+      void setImportedFilePath(const QString& filePath);
 
       bool isSavable() const;
       bool dirty() const;

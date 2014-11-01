@@ -3553,5 +3553,14 @@ void Score::setName(QString s)
       info.setFile(s);
       }
 
+//---------------------------------------------------------
+//   setImportedFilePath
+//---------------------------------------------------------
+
+void Score::setImportedFilePath(const QString& filePath)
+      {
+      _importedFilePath = filePath;
+      }
+
 }
 
