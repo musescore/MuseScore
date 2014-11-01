@@ -405,13 +405,27 @@ Palette* MuseScore::newFingeringPalette()
       sp->setGrid(28, 30);
       sp->setDrawGrid(true);
 
-      const char finger[] = "012345pimac";
+      const char* finger = "012345";
       for (unsigned i = 0; i < strlen(finger); ++i) {
             Fingering* f = new Fingering(gscore);
             f->setText(QString(finger[i]));
             sp->append(f, tr("Fingering %1").arg(finger[i]));
             }
-      const char stringnumber[] = "0123456";
+      finger = "pimac";
+      for (unsigned i = 0; i < strlen(finger); ++i) {
+            Fingering* f = new Fingering(gscore);
+            f->setTextStyleType(TextStyleType::RH_GUITAR_FINGERING);
+            f->setText(QString(finger[i]));
+            sp->append(f, tr("RH Guitar Fingering %1").arg(finger[i]));
+            }
+      finger = "012345";
+      for (unsigned i = 0; i < strlen(finger); ++i) {
+            Fingering* f = new Fingering(gscore);
+            f->setTextStyleType(TextStyleType::LH_GUITAR_FINGERING);
+            f->setText(QString(finger[i]));
+            sp->append(f, tr("LH Guitar Fingering %1").arg(finger[i]));
+            }
+      const char* stringnumber = "0123456";
       for (unsigned i = 0; i < strlen(stringnumber); ++i) {
             Fingering* f = new Fingering(gscore);
             f->setTextStyleType(TextStyleType::STRING_NUMBER);
