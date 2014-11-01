@@ -501,6 +501,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                               if (el && el->type() == Element::Type::MEASURE) {
                                     dragElement->setTrack(staffIdx * VOICES);
                                     dragElement->setParent(seg);
+                                    dragElement->setUserOff(pos - seg->canvasPos());
                                     score()->undoAddElement(dragElement);
                                     }
                               else {
