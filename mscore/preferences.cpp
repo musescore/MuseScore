@@ -1746,6 +1746,7 @@ bool Preferences::readPluginList()
                         const QStringRef& tag(e.name());
                         if (tag == "Plugin") {
                               PluginDescription d;
+                              d.error = true;
                               while (e.readNextStartElement()) {
                                     const QStringRef& tag(e.name());
                                     if (tag == "path")

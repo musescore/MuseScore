@@ -92,7 +92,11 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
             foreach(QQmlError e, component.errors()) {
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
+            plugin->error = true;
             return;
+            }
+      else {
+            plugin->error = false;
             }
       //
       // load translation
@@ -385,6 +389,7 @@ bool MuseScore::loadPlugin(const QString& filename)
                   PluginDescription* p = new PluginDescription;
                   p->path = path;
                   p->load = false;
+                  p->error= false;
                   collectPluginMetaInformation(p);
                   registerPlugin(p);
                   result = true;
@@ -464,6 +469,7 @@ void MuseScore::continueLoadingPlugin()
                   foreach(QQmlError e, pd.component->errors()) {
                         qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                         }
+                  pd.error = true;
                   }
             else {
                   QObject *obj = pd.component->create();
@@ -498,43 +504,4 @@ void collectPluginMetaInformation(PluginDescription* d)
       else
            mscore->continueLoadingPlugin();
       }
-/*      bool result(false);
-      qreal cProgress;
-      QObject* obj;
-
-      QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(d->path), QQmlComponent::Asynchronous);
-      qDebug("Collect meta for <%s>", qPrintable(d->path));
-
-      int loadDelay = 20;
-      while( !component.isReady() && loadDelay--) {
-            cProgress = component.progress();
-            qDebug("Component loading progress %f%%", cProgress);
-            if(cProgress == 1.0 || component.isError())
-                  break;
-            sleep(1);
-            }
-
-      if(component.isReady()) {
-            obj = component.create();
-            if(obj){
-                  result = true;
-                  QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
-                  if (item) {
-                        d->version      = item->version();
-                        d->description  = item->description();
-                        }
-                  delete obj;
-                  }
-            }
-
-      if (obj == 0 || !result) {
-            qDebug("creating component <%s> failed", qPrintable(d->path));
-            foreach(QQmlError e, component.errors()) {
-                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
-                  }
-            }
-
-      return result;
-      } */
-
 }

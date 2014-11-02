@@ -43,10 +43,13 @@ void PluginManager::init()
       //    changes on "Abort"
       //
       qDeleteAll(localShortcuts);
+      disconnect(pluginList, 0, 0, 0);
       localShortcuts.clear();
       foreach(const Shortcut* s, Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       shortcutsChanged = false;
+      QBrush ebr = QBrush(Qt::red);
+      QBrush nbr = QBrush(Qt::black);
 
       preferences.updatePluginList();
       int n = preferences.pluginList.size();
@@ -56,7 +59,8 @@ void PluginManager::init()
             const PluginDescription& d = preferences.pluginList[i];
             QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).baseName(),  pluginList);
             item->setFlags(item->flags() | Qt::ItemIsEnabled);
-            item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
+            item->setCheckState(d.load && !d.error ? Qt::Checked : Qt::Unchecked);
+            item->setForeground(d.error ? ebr : nbr);
             item->setData(Qt::UserRole, i);
             }
       prefs = preferences;
@@ -137,7 +141,9 @@ void PluginManager::pluginLoadToggled(QListWidgetItem* item)
       {
       int idx = item->data(Qt::UserRole).toInt();
       PluginDescription* d = &prefs.pluginList[idx];
-      d->load = (item->checkState() == Qt::Checked);
+      if(d->error)
+                  item->setCheckState(Qt::Unchecked);
+      d->load = (item->checkState() == Qt::Checked) && !d->error;
       prefs.dirty = true;
       }
 
