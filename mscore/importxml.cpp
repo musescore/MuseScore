@@ -4460,13 +4460,15 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                         if (readArticulations(cr, eee.tagName()))
                               continue;
                         else if (eee.tagName() == "fingering")
+                              // TODO: distinguish between keyboards (style TextStyleType::FINGERING)
+                              // and (plucked) strings (style TextStyleType::LH_GUITAR_FINGERING)
                               addTextToNote(eee.text(), TextStyleType::FINGERING, score, note);
                         else if (eee.tagName() == "fret") {
                               if (note->staff()->isTabStaff())
                                     note->setFret(eee.text().toInt());
                               }
                         else if (eee.tagName() == "pluck")
-                              addTextToNote(eee.text(), TextStyleType::FINGERING, score, note);
+                              addTextToNote(eee.text(), TextStyleType::RH_GUITAR_FINGERING, score, note);
                         else if (eee.tagName() == "string") {
                               if (note->staff()->isTabStaff())
                                     note->setString(eee.text().toInt() - 1);

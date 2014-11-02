@@ -2443,7 +2443,13 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
                         notations.tag(xml);
                         technical.tag(xml);
                         QString t = MScoreTextToMXML::toPlainText(f->text());
-                        if (f->textStyleType() == TextStyleType::FINGERING) {
+                        if (f->textStyleType() == TextStyleType::RH_GUITAR_FINGERING)
+                              xml.tag("pluck", t);
+                        else if (f->textStyleType() == TextStyleType::LH_GUITAR_FINGERING)
+                              xml.tag("fingering", t);
+                        else if (f->textStyleType() == TextStyleType::FINGERING) {
+                              // for generic fingering, try to detect plucking
+                              // (backwards compatibility with MuseScore 1.x)
                               // p, i, m, a, c represent the plucking finger
                               if (t == "p" || t == "i" || t == "m" || t == "a" || t == "c")
                                     xml.tag("pluck", t);
