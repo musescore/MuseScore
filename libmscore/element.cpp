@@ -1709,6 +1709,11 @@ QRectF Element::scriptBbox() const
 //    route pos changes to usefOff
 //---------------------------------------------------------
 
+QPointF Element::scriptPagePos() const
+      {
+      return pagePos() / spatium();
+      }
+
 QPointF Element::scriptPos() const
       {
       return (_pos + _userOff) / spatium();

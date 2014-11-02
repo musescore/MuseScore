@@ -158,18 +158,19 @@ class Element : public QObject {
       Q_ENUMS(Type)
       Q_ENUMS(Placement)
 
-      Q_PROPERTY(Ms::Element::Type type            READ type)
-      Q_PROPERTY(Ms::Element* parent               READ parent     WRITE setParent)
-      Q_PROPERTY(int track                         READ track      WRITE setTrack)
-      Q_PROPERTY(QColor color                      READ color      WRITE undoSetColor)
-      Q_PROPERTY(bool selected                     READ selected   WRITE setSelected)
-      Q_PROPERTY(bool generated                    READ generated  WRITE setGenerated)
-      Q_PROPERTY(bool visible                      READ visible    WRITE setVisible)
-      Q_PROPERTY(Ms::Element::Placement placement  READ placement  WRITE undoSetPlacement)
-      Q_PROPERTY(QPointF pos                       READ scriptPos  WRITE scriptSetPos)
-      Q_PROPERTY(QPointF pagePos                   READ pagePos)
-      Q_PROPERTY(QPointF userOff                   READ scriptUserOff WRITE scriptSetUserOff)
-      Q_PROPERTY(QRectF  bbox                      READ scriptBbox )
+      Q_PROPERTY(QRectF                   bbox        READ scriptBbox )
+      Q_PROPERTY(QColor                   color       READ color        WRITE undoSetColor)
+      Q_PROPERTY(bool                     generated   READ generated    WRITE setGenerated)
+      Q_PROPERTY(QPointF                  pagePos     READ scriptPagePos)
+      Q_PROPERTY(Ms::Element*             parent      READ parent       WRITE setParent)
+      Q_PROPERTY(Ms::Element::Placement   placement   READ placement    WRITE undoSetPlacement)
+      Q_PROPERTY(QPointF                  pos         READ scriptPos    WRITE scriptSetPos)
+      Q_PROPERTY(bool                     selected    READ selected     WRITE setSelected)
+      Q_PROPERTY(qreal                    spatium     READ spatium)
+      Q_PROPERTY(int                      track       READ track        WRITE setTrack)
+      Q_PROPERTY(Ms::Element::Type        type        READ type)
+      Q_PROPERTY(QPointF                  userOff     READ scriptUserOff WRITE scriptSetUserOff)
+      Q_PROPERTY(bool                     visible     READ visible      WRITE setVisible)
 
       LinkedElements* _links = 0;
       Element* _parent       = 0;
@@ -369,6 +370,7 @@ class Element : public QObject {
       // function versions for scripts: use coords in spatium units rather than raster
       // and route pos changes to userOff
       QRectF scriptBbox() const;
+      virtual QPointF scriptPagePos() const;
       virtual QPointF scriptPos() const;
       void scriptSetPos(const QPointF& p);
       QPointF scriptUserOff() const;
