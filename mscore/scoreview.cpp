@@ -2583,6 +2583,8 @@ void ScoreView::cmd(const QAction* a)
             cmdAddText(TEXT::COMPOSER);
       else if (cmd == "poet-text")
             cmdAddText(TEXT::POET);
+      else if (cmd == "part-text")
+            cmdAddText(TEXT::PART);
       else if (cmd == "system-text")
             cmdAddText(TEXT::SYSTEM);
       else if (cmd == "staff-text")
@@ -4961,6 +4963,7 @@ void ScoreView::cmdAddText(TEXT type)
             case TEXT::SUBTITLE:
             case TEXT::COMPOSER:
             case TEXT::POET:
+            case TEXT::PART:
                   {
                   MeasureBase* measure = _score->first();
                   if (measure->type() != Element::Type::VBOX)
@@ -4971,6 +4974,7 @@ void ScoreView::cmdAddText(TEXT type)
                         case TEXT::SUBTITLE: s->setTextStyleType(TextStyleType::SUBTITLE); break;
                         case TEXT::COMPOSER: s->setTextStyleType(TextStyleType::COMPOSER); break;
                         case TEXT::POET:     s->setTextStyleType(TextStyleType::POET);     break;
+                        case TEXT::PART:     s->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT); break;
                         default: /* can't happen, but need to keep compiler happy */ break;
                         }
                   s->setParent(measure);
