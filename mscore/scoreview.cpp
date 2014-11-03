@@ -2311,6 +2311,7 @@ void ScoreView::setMag(MagIdx idx, double mag)
       {
       _magIdx = idx;
       setMag(mag);
+      emit viewRectChanged();
       update();
       }
 
