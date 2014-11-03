@@ -70,10 +70,13 @@
       <enum>QLayout::SetDefaultConstraint</enum>
      </property>
      <property name="leftMargin">
-      <number>0</number>
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
      </property>
      <property name="horizontalSpacing">
-      <number>2</number>
+      <number>3</number>
      </property>
      <property name="verticalSpacing">
       <number>0</number>
