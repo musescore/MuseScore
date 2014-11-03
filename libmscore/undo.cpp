@@ -872,6 +872,12 @@ void Score::undoAddElement(Element* element)
             ) {
             Element* parent       = element->parent();
             const LinkedElements* links = parent->links();
+            // don't link part name
+            if (et == Element::Type::TEXT) {
+                  Text* t = static_cast<Text*>(element);
+                  if (t->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT)
+                        links = 0;
+                  }
             if (links == 0) {
                   undo(new AddElement(element));
                   if (element->type() == Element::Type::FINGERING && element->userOff().isNull())
