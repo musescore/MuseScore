@@ -58,7 +58,7 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       mainWidget->setLayout(layout);
       layout->setSpacing(0);
 
-      QToolBar* tb = addToolBar(tr("Toolbar 1"));
+      QToolBar* tb = addToolBar(QCoreApplication::translate("Ms::DrumrollEditor","Toolbar 1"));
       tb->addAction(getAction("undo"));
       tb->addAction(getAction("redo"));
       tb->addSeparator();
@@ -77,7 +77,7 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       tb->addSeparator();
 
       //-------------
-      tb = addToolBar(tr("Toolbar 3"));
+      tb = addToolBar(QCoreApplication::translate("Ms::DrumrollEditor","Toolbar 3"));
       layout->addWidget(tb, 1, 0, 1, 2);
 
       for (int i = 0; i < VOICES; ++i) {
@@ -92,17 +92,17 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
             }
 
       tb->addSeparator();
-      tb->addWidget(new QLabel(tr("Cursor:")));
+      tb->addWidget(new QLabel(QCoreApplication::translate("Ms::DrumrollEditor","Cursor:")));
       pos = new Awl::PosLabel;
       tb->addWidget(pos);
       Awl::PitchLabel* pl = new Awl::PitchLabel();
       tb->addWidget(pl);
 
       tb->addSeparator();
-      tb->addWidget(new QLabel(tr("Velocity:")));
+      tb->addWidget(new QLabel(QCoreApplication::translate("Ms::DrumrollEditor","Velocity:")));
       veloType = new QComboBox;
-      veloType->addItem(tr("offset"), int(Note::ValueType::OFFSET_VAL));
-      veloType->addItem(tr("user"),   int(Note::ValueType::USER_VAL));
+      veloType->addItem(QCoreApplication::translate("Ms::DrumrollEditor","offset"), int(Note::ValueType::OFFSET_VAL));
+      veloType->addItem(QCoreApplication::translate("Ms::DrumrollEditor","user"),   int(Note::ValueType::USER_VAL));
       tb->addWidget(veloType);
 
       velocity = new QSpinBox;
@@ -111,7 +111,7 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       velocity->setReadOnly(true);
       tb->addWidget(velocity);
 
-      tb->addWidget(new QLabel(tr("Pitch:")));
+      tb->addWidget(new QLabel(QCoreApplication::translate("Ms::DrumrollEditor","Pitch:")));
       pitch = new Awl::PitchEdit;
       pitch->setReadOnly(true);
       tb->addWidget(pitch);
@@ -192,7 +192,7 @@ void DrumrollEditor::setStaff(Staff* st)
       {
       staff = st;
       _score = staff->score();
-      setWindowTitle(QString(tr("MuseScore: <%1> Staff: %2")).arg(_score->name()).arg(st->idx()));
+      setWindowTitle(QString(QCoreApplication::translate("Ms::DrumrollEditor","MuseScore: <%1> Staff: %2")).arg(_score->name()).arg(st->idx()));
       TempoMap* tl = _score->tempomap();
       TimeSigMap*  sl = _score->sigmap();
       for (int i = 0; i < 3; ++i)
