@@ -752,12 +752,7 @@ Score::FileError Score::read114(XmlReader& e)
                   excerpt->setScore(nscore);
                   nscore->setName(excerpt->title());
                   nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-                  Ms::createExcerpt(nscore, excerpt->parts());
-                  nscore->rebuildMidiMapping();
-                  nscore->updateChannel();
-                  nscore->updateNotes();
-                  nscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
-                  nscore->doLayout();
+                  Ms::createExcerpt(nscore, excerpt);
                   }
             }
 

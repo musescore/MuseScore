@@ -97,8 +97,9 @@ static void localSetScore(void* score, Element* element)
 //   createExcerpt
 //---------------------------------------------------------
 
-void createExcerpt(Score* score, const QList<Part*>& parts)
+void createExcerpt(Score* score, Excerpt* excerpt)
       {
+      QList<Part*>& parts = excerpt->parts();
       QList<int> srcStaves;
 
       Score* oscore = parts.front()->score();
@@ -149,7 +150,7 @@ void createExcerpt(Score* score, const QList<Part*>& parts)
 
       VBox* titleFramePart = static_cast<VBox*>(measure);
       titleFramePart->copyValues(titleFrameScore);
-      QString partLabel = parts.front()->longName();
+      QString partLabel = excerpt->title();     // parts.front()->longName();
       if (!partLabel.isEmpty()) {
             Text* txt = new Text(score);
             txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
