@@ -166,6 +166,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             textMenu->addAction(getAction("subtitle-text")->text())->setData("subtitle-text");
             textMenu->addAction(getAction("composer-text")->text())->setData("composer-text");
             textMenu->addAction(getAction("poet-text")->text())->setData("poet-text");
+            textMenu->addAction(getAction("part-text")->text())->setData("part-text");
             textMenu->addAction(getAction("insert-hbox")->text())->setData("insert-hbox");
             textMenu->addAction(getAction("picture")->text())->setData("picture");
             }
@@ -365,6 +366,14 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "poet-text") {
             Text* t = new Text(score());
             t->setTextStyleType(TextStyleType::POET);
+            t->setParent(e);
+            score()->undoAddElement(t);
+            score()->select(t, SelectType::SINGLE, 0);
+            startEdit(t);
+            }
+      else if (cmd == "part-text") {
+            Text* t = new Text(score());
+            t->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);

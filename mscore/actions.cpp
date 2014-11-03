@@ -1702,6 +1702,14 @@ Shortcut Shortcut::sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
+         "part-text",
+         QT_TRANSLATE_NOOP("action","Part Name"),
+         QT_TRANSLATE_NOOP("action","Add part name")
+         ),
+      Shortcut(
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
          "chord-text",
          QT_TRANSLATE_NOOP("action","Chord Symbol"),
          QT_TRANSLATE_NOOP("action","Add chord symbol")
