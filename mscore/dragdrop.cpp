@@ -470,6 +470,7 @@ void ScoreView::dropEvent(QDropEvent* event)
       dropData.modifiers  = event->keyboardModifiers();
 
       if (dragElement) {
+            bool applyUserOffset = false;
             _score->startCmd();
             dragElement->setScore(_score);      // CHECK: should already be ok
             _score->addRefresh(dragElement->canvasBoundingRect());
@@ -489,6 +490,8 @@ void ScoreView::dropEvent(QDropEvent* event)
                         break;
                   case Element::Type::SYMBOL:
                   case Element::Type::IMAGE:
+                        applyUserOffset = true;
+                        // fall-thru
                   case Element::Type::DYNAMIC:
                   case Element::Type::FRET_DIAGRAM:
                   case Element::Type::HARMONY:
@@ -501,7 +504,8 @@ void ScoreView::dropEvent(QDropEvent* event)
                               if (el && el->type() == Element::Type::MEASURE) {
                                     dragElement->setTrack(staffIdx * VOICES);
                                     dragElement->setParent(seg);
-                                    dragElement->setUserOff(pos - seg->canvasPos());
+                                    if (applyUserOffset)
+                                          dragElement->setUserOff(pos - seg->canvasPos());
                                     score()->undoAddElement(dragElement);
                                     }
                               else {
