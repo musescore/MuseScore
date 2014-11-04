@@ -31,16 +31,18 @@ class Excerpt {
       QList<Part*> _parts;
 
    public:
-      Excerpt(Score* s)               { _score = s; }
+      Excerpt(Score* s)               { _score = s;    }
+
       QList<Part*>& parts()           { return _parts; }
-      Score* score() const            { return _score;  }
-      void setScore(Score* s)         { _score = s; }
+      void setParts(const QList<Part*>& p) { _parts = p;    }
+      Score* score() const            { return _score; }
+      void setScore(Score* s)         { _score = s;    }
 
       void read(XmlReader&);
 
       bool operator!=(const Excerpt&) const;
       QString title() const           { return _title; }
-      void setTitle(const QString& s) { _title = s; }
+      void setTitle(const QString& s) { _title = s;    }
       };
 
 extern void createExcerpt(Score*, Excerpt*);
