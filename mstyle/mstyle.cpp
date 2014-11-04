@@ -8118,6 +8118,8 @@ int MgStyle::styleHint(StyleHint hint, const QStyleOption* option, const QWidget
                   return true;
             case SH_Menu_MouseTracking:
                   return true;
+            case SH_MenuBar_AltKeyNavigation:
+                  return true;
 
             case SH_Menu_SubMenuPopupDelay:
                   return 150;
