@@ -20,10 +20,10 @@
 namespace Ms {
 
 const char* scorelineNames[] = {
-      QT_TR_NOOP("Fall"),
-      QT_TR_NOOP("Doit"),
-      QT_TR_NOOP("Plop"),
-      QT_TR_NOOP("Scoop"),
+      QT_TRANSLATE_NOOP("Ms", "Fall"),
+      QT_TRANSLATE_NOOP("Ms", "Doit"),
+      QT_TRANSLATE_NOOP("Ms", "Plop"),
+      QT_TRANSLATE_NOOP("Ms", "Scoop"),
       };
 
 
