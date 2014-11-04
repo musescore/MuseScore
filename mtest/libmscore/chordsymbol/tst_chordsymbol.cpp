@@ -139,8 +139,13 @@ void TestChordSymbol::testNoSystem()
       Score* nscore = new Score(score);
       score->undo(new AddExcerpt(nscore));
 
-      ::createExcerpt(nscore, parts);
+      {
+      Excerpt ex(nscore);
+      ex.setTitle(parts.front()->longName());
+      ex.setParts(parts);
+      ::createExcerpt(nscore, &ex);
       QVERIFY(nscore);
+      }
 
       nscore->setName(parts.front()->partName());
       nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
@@ -152,8 +157,13 @@ void TestChordSymbol::testNoSystem()
       parts.append(score->parts().at(1));
       nscore = new Score(score);
       score->undo(new AddExcerpt(nscore));
-      ::createExcerpt(nscore, parts);
+      {
+      Excerpt ex(nscore);
+      ex.setTitle(parts.front()->longName());
+      ex.setParts(parts);
+      ::createExcerpt(nscore, &ex);
       QVERIFY(nscore);
+      }
 
       nscore->setName(parts.front()->partName());
       nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
