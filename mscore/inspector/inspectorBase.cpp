@@ -36,7 +36,7 @@ InspectorBase::InspectorBase(QWidget* parent)
       inspector = static_cast<Inspector*>(parent);
       _layout    = new QVBoxLayout;
       _layout->setSpacing(0);
-      _layout->setContentsMargins(0, 0, 0, 0);
+      _layout->setContentsMargins(0, 10, 0, 0);
       _layout->addStretch(100);
       setLayout(_layout);
       }

@@ -1131,6 +1131,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
                   }
             }
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
+      _score->setSelectionChanged(true);
       }
 
 //---------------------------------------------------------
