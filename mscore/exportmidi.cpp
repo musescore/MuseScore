@@ -222,6 +222,8 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
       for (int i = 0; i < cs->nstaves(); ++i)
             tracks.append(MidiTrack());
 
+      cs->updateSwing();
+      cs->createPlayEvents();
       cs->updateRepeatList(midiExpandRepeats);
       writeHeader();
 
@@ -236,6 +238,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
             // Render each staff only once
             EventMap events;
             cs->renderStaff(&events, staff);
+            cs->renderSpanners(&events, staffIdx);
 
             // Pass throught the all instruments in the part
             const InstrumentList* il = part->instrList();
