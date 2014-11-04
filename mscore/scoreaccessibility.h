@@ -1,13 +1,14 @@
 #ifndef __SCORE_ACCESSIBILITY__
 #define __SCORE_ACCESSIBILITY__
 
-#include<QStatusBar>
-#include<QAccessible>
-#include<QAccessibleWidget>
+#include <QStatusBar>
+#include <QAccessible>
+#include <QAccessibleWidget>
 #include "scoreview.h"
 
 namespace  Ms {
-class AccessibleScoreView : public QAccessibleWidget {
+class AccessibleScoreView : public QObject, QAccessibleWidget {
+      Q_OBJECT
 public:
       AccessibleScoreView(ScoreView* c);
       int childCount() const Q_DECL_OVERRIDE;

@@ -104,6 +104,3 @@ void initDsp()
 #endif
       dsp = new Dsp();
       }
-
-}
-

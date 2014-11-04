@@ -20,7 +20,7 @@
 
 #ifndef __SCORETAB_H__
 #define __SCORETAB_H__
-#include"musescore.h"
+#include "musescore.h"
 namespace Ms {
 
 class ScoreView;
