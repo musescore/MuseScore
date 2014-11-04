@@ -299,7 +299,7 @@
               <string>Distance between two lines on a standard 5-line staff</string>
              </property>
              <property name="text">
-              <string>Size follows staff space setting</string>
+              <string>Size follows 'Staff space' setting</string>
              </property>
             </widget>
            </item>
