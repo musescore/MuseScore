@@ -26,6 +26,7 @@ before_script:
   - "export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY"
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
   - "export PATH=$PATH:$HOME/bin"
+  - "sudo ln -sf ld.gold /usr/bin/ld"
   - "make revision"
   - "make debug CPUS=4 EXTERNAL_FONTS=ON"
   - "sudo make installdebug CPUS=4 EXTERNAL_FONTS=ON"
