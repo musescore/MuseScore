@@ -69,6 +69,18 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>0</number>
+     </property>
      <item row="0" column="1">
       <widget class="QLineEdit" name="jumpTo">
        <property name="accessibleName">
