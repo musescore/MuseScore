@@ -111,7 +111,8 @@ void MuseScore::createNewWorkspace()
       for (;;) {
             bool notFound = true;
             foreach(Workspace* p, Workspace::workspaces()) {
-                  if (p->name() == s) {
+                  if ((qApp->translate("Ms::Workspace", p->name().toUtf8()).toLower() == s.toLower()) ||
+                     (s.toLower() == QString("basic")) || (s.toLower() == QString("advanced"))) {
                         notFound = false;
                         break;
                         }
@@ -132,6 +133,8 @@ void MuseScore::createNewWorkspace()
       Workspace::currentWorkspace = Workspace::createNewWorkspace(s);
       preferences.workspace = Workspace::currentWorkspace->name();
       preferences.dirty     = true;
+      PaletteBox* paletteBox = mscore->getPaletteBox();
+      paletteBox->updateWorkspaces();
       }
 
 //---------------------------------------------------------
@@ -148,7 +151,7 @@ void MuseScore::deleteWorkspace()
       preferences.dirty = true;
       Workspace* workspace = 0;
       foreach(Workspace* p, Workspace::workspaces()) {
-            if (p->name() == a->text()) {
+            if (p->name() == a->text()) { // no need for qApp->translate since "Basic" and "Advanced" are not deletable
                   workspace = p;
                   break;
                   }
@@ -159,8 +162,13 @@ void MuseScore::deleteWorkspace()
       QFile f(workspace->path());
       f.remove();
       delete workspace;
+      PaletteBox* paletteBox = mscore->getPaletteBox();
+      paletteBox->clear();
       Workspace::currentWorkspace = Workspace::workspaces().first();
       preferences.workspace = Workspace::currentWorkspace->name();
+      changeWorkspace(Workspace::currentWorkspace);
+      paletteBox = mscore->getPaletteBox();
+      paletteBox->updateWorkspaces();
       }
 
 //---------------------------------------------------------
@@ -169,11 +177,13 @@ void MuseScore::deleteWorkspace()
 
 void MuseScore::changeWorkspace(QAction* a)
       {
-      preferences.workspace = a->text();
-      preferences.dirty = true;
       foreach(Workspace* p, Workspace::workspaces()) {
             if (qApp->translate("Ms::Workspace", p->name().toUtf8()) == a->text()) {
                   changeWorkspace(p);
+                  preferences.workspace = Workspace::currentWorkspace->name();
+                  preferences.dirty = true;
+                  PaletteBox* paletteBox = mscore->getPaletteBox();
+                  paletteBox->updateWorkspaces();
                   return;
                   }
             }

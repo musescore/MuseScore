@@ -31,7 +31,6 @@ class PaletteBox : public QDockWidget {
       QVBoxLayout* vbox;
       Palette* newPalette(const QString& name, int slot);
       QComboBox* workspaceList;
-      void updateWorkspaces();
 
    private slots:
       void paletteCmd(PaletteCommand, int);
@@ -50,6 +49,7 @@ class PaletteBox : public QDockWidget {
       bool read(XmlReader&);
       void clear();
       QList<Palette*> palettes() const;
+      void updateWorkspaces();
       };
 
 class PaletteBoxScrollArea : public QScrollArea {
