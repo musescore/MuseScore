@@ -504,7 +504,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void play(Element* e) const;
       void play(Element* e, int pitch) const;
       bool loadPlugin(const QString& filename);
-      void continueLoadingPlugin();
+      void continueLoadingPlugin(QQmlComponent *component);
       QString createDefaultName() const;
       void startAutoSave();
       double getMag(ScoreView*) const;

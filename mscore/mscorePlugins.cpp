@@ -459,29 +459,31 @@ void MuseScore::pluginTriggered(int idx)
       endCmd();
       }
 
-void MuseScore::continueLoadingPlugin()
+void MuseScore::continueLoadingPlugin(QQmlComponent *targetComponent)
       {
       const QList<PluginDescription> pl = preferences.pluginLoadingList;
 
       foreach(PluginDescription pd, pl) {
-            if (pd.component->isError()) {
-                  qDebug("creating component <%s> failed", qPrintable(pd.path));
-                  foreach(QQmlError e, pd.component->errors()) {
-                        qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
-                        }
-                  pd.error = true;
-                  }
-            else {
-                  QObject *obj = pd.component->create();
-                  if(obj){
-                        QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
-                        if (item) {
-                              pd.version      = item->version();
-                              pd.description  = item->description();
-                              pd.error        = false;
+            if(pd.component == targetComponent) {
+                  if (pd.component->isError()) {
+                        qDebug("creating component <%s> failed", qPrintable(pd.path));
+                        foreach(QQmlError e, pd.component->errors()) {
+                              qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                               }
-                        delete obj;
-                        preferences.pluginList.append(pd);
+                        pd.error = true;
+                        }
+                  else {
+                        QObject *obj = pd.component->create();
+                        if(obj){
+                              QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+                              if (item) {
+                                    pd.version      = item->version();
+                                    pd.description  = item->description();
+                                    pd.error        = false;
+                                    }
+                              delete obj;
+                              preferences.pluginList.append(pd);
+                              }
                         }
                   }
             }
@@ -500,8 +502,8 @@ void collectPluginMetaInformation(PluginDescription* d)
       pl.append(*d);
       if (component->isLoading())
             QObject::connect(component, SIGNAL(statusChanged(QQmlComponent::Status)),
-                           mscore, SLOT(continueLoadingPlugin()));
+                           mscore, SLOT(continueLoadingPlugin(component)));
       else
-           mscore->continueLoadingPlugin();
+           mscore->continueLoadingPlugin(component);
       }
 }
