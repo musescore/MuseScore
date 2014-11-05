@@ -2146,8 +2146,6 @@ void LineSegmentView::setElement(Element* e)
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
       lb.offset2y->setValue(vs->userOff2().y());
-
-      emit elementChanged(((Chord*)element())->hook());
       }
 
 //---------------------------------------------------------

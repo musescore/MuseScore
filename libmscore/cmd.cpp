@@ -263,9 +263,9 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             if (e && e->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(e);
                   Fraction l = chord->duration();
-                  if (chord->notes().size() > 1) {
+                  // if (chord->notes().size() > 1) {
                         // trill do not work for chords
-                        }
+                  //      }
                   Note* note = chord->upNote();
                   while (note->tieFor()) {
                         note = note->tieFor()->endNote();
@@ -279,8 +279,10 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
                               break;
                         s = s->next1(Segment::Type::ChordRest);
                         }
-                  if (s)
-                        spanner->setTick2(s->tick());
+                  if (s) {
+                        for (Element* e : spanner->linkList())
+                              static_cast<Spanner*>(e)->setTick2(s->tick());
+                        }
                   Fraction d(1,32);
                   Fraction e = l / d;
                   int n = e.numerator() / e.denominator();
