@@ -138,6 +138,13 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       ss->ups[int(GripSlurSegment::END)].p      = t.map(p2) - ss->ups[int(GripSlurSegment::END)].off * _spatium;
       ss->ups[int(GripSlurSegment::DRAG)].p     = t.map(p5);
       ss->ups[int(GripSlurSegment::SHOULDER)].p = t.map(p6);
+
+      QPointF staffOffset;
+      if (ss->system() && ss->track() >= 0)
+            staffOffset = QPointF(0.0, -ss->system()->staff(ss->staffIdx())->y());
+
+      ss->path.translate(staffOffset);
+      ss->shapePath.translate(staffOffset);
       }
 
 //---------------------------------------------------------

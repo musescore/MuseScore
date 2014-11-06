@@ -43,6 +43,7 @@ QList<SlurOffsets> SlurTie::editUps;
 SlurSegment::SlurSegment(Score* score)
    : SpannerSegment(score)
       {
+      setFlag(ElementFlag::ON_STAFF, true);
       autoAdjustOffset = QPointF();
       }
 
@@ -113,6 +114,7 @@ void SlurSegment::updateGrips(int* n, int* defaultGrip, QRectF* r) const
       *n = int(GripSlurSegment::GRIPS);
       *defaultGrip = int(GripSlurSegment::END);
       QPointF p(pagePos());
+      p -= QPointF(0.0, system()->staff(staffIdx())->y());   // ??
       for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i)
             r[i].translate(ups[i].p + ups[i].off * spatium() + p);
       }
@@ -453,10 +455,6 @@ void SlurSegment::read(XmlReader& e)
             else if (!Element::readProperties(e))
                   e.unknown();
             }
-      if ((staffIdx() > 0) && score()->mscVersion() < 201) {
-            //discard any user tweaking for older scores
-            setReadPos(QPointF());
-            }
       }
 
 //---------------------------------------------------------
@@ -564,10 +562,6 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       ss->shapePath.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
       ss->shapePath.cubicTo(p4 +p4o + th, p3 + p3o + th, QPointF());
 
-      QPointF staffOffset;
-      if (ss->system() && ss->track() >= 0)
-            staffOffset = QPointF(0.0, -ss->system()->staff(ss->staffIdx())->y());
-
       // translate back
       t.reset();
       t.translate(pp1.x(), pp1.y());
@@ -579,6 +573,10 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       ss->ups[int(GripSlurSegment::END)].p      = t.map(p2) - ss->ups[int(GripSlurSegment::END)].off * _spatium;
       ss->ups[int(GripSlurSegment::DRAG)].p     = t.map(p5);
       ss->ups[int(GripSlurSegment::SHOULDER)].p = t.map(p6);
+
+      QPointF staffOffset;
+      if (ss->system() && ss->track() >= 0)
+            staffOffset = QPointF(0.0, -ss->system()->staff(ss->staffIdx())->y());
 
       ss->path.translate(staffOffset);
       ss->shapePath.translate(staffOffset);
@@ -644,6 +642,12 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
                   }
             }
       setbbox(path.boundingRect());
+      if ((staffIdx() > 0) && score()->mscVersion() < 201 && !readPos().isNull()) {
+            QPointF staffOffset;
+            if (system() && track() >= 0)
+                  staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
+            setReadPos(readPos() + staffOffset);
+            }
       adjustReadPos();
       }
 
@@ -1431,7 +1435,6 @@ void Slur::layout()
                   }
             SlurSegment* segment = segmentAt(i);
             segment->setSystem(system);
-            segment->setFlag(ElementFlag::ON_STAFF, true);
 
             // case 1: one segment
             if (sPos.system1 == sPos.system2) {
