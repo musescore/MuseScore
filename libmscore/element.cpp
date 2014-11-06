@@ -778,8 +778,9 @@ bool Element::readProperties(XmlReader& e)
                         e.initTick(score()->fileDivision(val));
                   }
             }
-      else if (tag == "offset")
+      else if (tag == "offset") {
             setUserOff(e.readPoint() * spatium());
+            }
       else if (tag == "pos") {
             QPointF pt = e.readPoint();
             if (score()->mscVersion() > 114)
