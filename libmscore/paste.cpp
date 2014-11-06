@@ -69,11 +69,10 @@ static void transposeChord(Chord* c, Interval srcTranspose)
 //    return false if paste fails
 //---------------------------------------------------------
 
-bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
+bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
       {
       Q_ASSERT(dst->segmentType() == Segment::Type::ChordRest);
       QList<Chord*> graceNotes;
-      int dstStaffStart = staffIdx;
       int dstTick = dst->tick();
       bool done = false;
       bool pasted = false;
@@ -86,11 +85,15 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                   break;
                   }
             QString version = e.attribute("version", "NONE");
-            if (version != MSC_VERSION)
-                  break;
+            if (!MScore::testMode) {
+                  if (version != MSC_VERSION) {
+                        qDebug("pasteStaff: bad version");
+                        break;
+                        }
+                  }
             int tickStart     = e.intAttribute("tick", 0);
                 tickLen       = e.intAttribute("len", 0);
-            int srcStaffStart = e.intAttribute("staff", 0);
+            int staffStart    = e.intAttribute("staff", 0);
                 staves        = e.intAttribute("staves", 0);
             int voiceOffset[VOICES];
             std::fill(voiceOffset,voiceOffset+VOICES,-1);
@@ -109,10 +112,12 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                   e.setTransposeDiatonic(0);
 
                   int srcStaffIdx = e.attribute("id", "0").toInt();
-                  int dstStaffIdx = srcStaffIdx - srcStaffStart + dstStaffStart;
-
-                  if (dstStaffIdx >= nstaves()) {
-                        done = true; // break main loop, nothing more to paste
+                  e.setTrack(srcStaffIdx * VOICES);
+                  e.setTrackOffset((dstStaff - staffStart) * VOICES);
+                  int dstStaffIdx = e.track() / VOICES;
+                  if (dstStaffIdx >= dst->score()->nstaves()) {
+                        qDebug("paste beyond staves");
+                        done = true;
                         break;
                         }
 
@@ -164,9 +169,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               cr->setTrack(e.track());
                               cr->read(e);
                               cr->setSelected(false);
-                              int voice = cr->voice();
-                              int track = dstStaffIdx * VOICES + voice;
-                              cr->setTrack(track);
                               int tick = e.tick();
                               if (cr->isGrace())
                                     graceNotes.push_back(static_cast<Chord*>(cr));
@@ -200,15 +202,15 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->setAnchor(Spanner::Anchor::SEGMENT);
                               sp->read(e);
-                              sp->setTrack(dstStaffIdx * VOICES);
-                              sp->setTrack2(dstStaffIdx * VOICES);
+                              sp->setTrack(e.track());
+                              sp->setTrack2(e.track());
                               sp->setTick(e.tick());
                               addSpanner(sp);
                               }
                         else if (tag == "Slur") {
                               Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, this));
                               sp->read(e);
-                              sp->setTrack(dstStaffIdx * VOICES);
+                              sp->setTrack(e.track());
                               sp->setTick(e.tick());
                               undoAddElement(sp);
                               }
@@ -231,7 +233,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               Lyrics* lyrics = new Lyrics(this);
                               lyrics->setTrack(e.track());
                               lyrics->read(e);
-                              lyrics->setTrack(dstStaffIdx * VOICES);
+                              lyrics->setTrack(e.track());
                               int tick = e.tick();
                               Segment* segment = tick2segment(tick);
                               if (segment) {
@@ -248,9 +250,9 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               Harmony* harmony = new Harmony(this);
                               harmony->setTrack(e.track());
                               harmony->read(e);
-                              harmony->setTrack(dstStaffIdx * VOICES);
+                              harmony->setTrack(e.track());
                               // transpose
-                              Part* partDest = staff(dstStaffIdx)->part();
+                              Part* partDest = staff(e.track() / VOICES)->part();
                               Interval interval = partDest->instr()->transpose();
                               if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
@@ -262,11 +264,11 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
-                              if (seg->findAnnotationOrElement(Element::Type::HARMONY, dstStaffIdx * VOICES, dstStaffIdx * VOICES)) {
+                              if (seg->findAnnotationOrElement(Element::Type::HARMONY, e.track(), e.track())) {
                                     QList<Element*> elements;
                                     foreach (Element* el, seg->annotations()) {
                                           if (el->type() == Element::Type::HARMONY
-                                              && el->track() == dstStaffIdx * VOICES) {
+                                              && el->track() == e.track()) {
                                                 elements.append(el);
                                                 }
                                           }
@@ -290,7 +292,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                            || tag == "FiguredBass"
                            ) {
                               Element* el = Element::name2Element(tag, this);
-                              el->setTrack(dstStaffIdx * VOICES);             // a valid track might be necessary for el->read() to work
+                              el->setTrack(e.track());             // a valid track might be necessary for el->read() to work
 
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
@@ -300,13 +302,13 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
 
                               // be sure to paste the element in the destination track;
                               // setting track needs to be repeated, as it might have been overwritten by el->read()
-                              el->setTrack(dstStaffIdx * VOICES);
+                              el->setTrack(e.track());
                               undoAddElement(el);
                               }
                         else if (tag == "Clef") {
                               Clef* clef = new Clef(this);
                               clef->read(e);
-                              clef->setTrack(dstStaffIdx * VOICES);
+                              clef->setTrack(e.track());
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               if (m->tick() && m->tick() == tick)
@@ -318,7 +320,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
                         else if (tag == "Breath") {
                               Breath* breath = new Breath(this);
                               breath->read(e);
-                              breath->setTrack(dstStaffIdx * VOICES);
+                              breath->setTrack(e.track());
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* segment = m->undoGetSegment(Segment::Type::Breath, tick);
@@ -365,10 +367,10 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
       if (pasted) {                       //select only if we pasted something
             Segment* s1 = tick2segment(dstTick);
             Segment* s2 = tick2segment(dstTick + tickLen);
-            int endStaff = dstStaffStart + staves;
+            int endStaff = dstStaff + staves;
             if (endStaff > nstaves())
                   endStaff = nstaves();
-            _selection.setRange(s1, s2, dstStaffStart, endStaff);
+            _selection.setRange(s1, s2, dstStaff, endStaff);
             _selection.updateSelectedElements();
 
             //finding the first element that has a track
@@ -379,7 +381,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int staffIdx)
             if (s2)
                   s2 = s2->next1MM();
             while (!found && s != s2) {
-                  for (int i = dstStaffStart * VOICES; i < (endStaff + 1) * VOICES; i++) {
+                  for (int i = dstStaff * VOICES; i < (endStaff + 1) * VOICES; i++) {
                         e = s->element(i);
                         if (e) {
                               found = true;
@@ -793,6 +795,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   XmlReader e(data);
                   e.setPasteMode(true);
                   if (!pasteStaff(e, cr->segment(),cr->staffIdx())) {
+                        qDebug("paste failed");
                         return PasteStatus::TUPLET_CROSSES_BAR;
                         }
                   }

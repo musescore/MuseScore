@@ -15,8 +15,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "2.00"
-static const int MSCVERSION = 200;
+#define MSC_VERSION     "2.01"
+static const int MSCVERSION = 201;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -46,6 +46,8 @@ static const int MSCVERSION = 200;
 //      -   symbol numbers in TextLine() replaced by symbol names
 //          TextStyle: frameWidth, paddingWidth are now in Spatium units (instead of mm)
 //    2.00  (Version 2.0)
+//    2.01  save SlurSegment position relative to staff
+
 
 
 class MStyle;
