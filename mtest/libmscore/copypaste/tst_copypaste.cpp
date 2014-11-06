@@ -97,15 +97,16 @@ void TestCopyPaste::copypaste(const char* idx)
       QString mimeType = score->selection().mimeType();
       QVERIFY(!mimeType.isEmpty());
       QMimeData* mimeData = new QMimeData;
-      mimeData->setData(mimeType, score->selection().mimeData());
+      QByteArray ba = score->selection().mimeData();
+      mimeData->setData(mimeType, ba);
       QApplication::clipboard()->setMimeData(mimeData);
+      QVERIFY(m4->first()->element(0) != 0);
       score->select(m4->first()->element(0));
 
       score->startCmd();
       score->cmdPaste(mimeData,0);
-      score->endCmd();
-
       score->doLayout();
+      score->endCmd();
 
       QVERIFY(saveCompareScore(score, QString("copypaste%1.mscx").arg(idx),
          DIR + QString("copypaste%1-ref.mscx").arg(idx)));
@@ -150,7 +151,8 @@ void TestCopyPaste::copypastestaff(const char* idx)
       delete score;
       }
 
-void TestCopyPaste::copyPastePartial() {
+void TestCopyPaste::copyPastePartial()
+      {
       Score* score = readScore(DIR + QString("copypaste_partial_01.mscx"));
       score->doLayout();
 
@@ -180,7 +182,7 @@ void TestCopyPaste::copyPastePartial() {
       QVERIFY(saveCompareScore(score, QString("copypaste_partial_01.mscx"),
          DIR + QString("copypaste_partial_01-ref.mscx")));
       delete score;
-}
+      }
 
 void TestCopyPaste::copyPaste2Voice()
       {

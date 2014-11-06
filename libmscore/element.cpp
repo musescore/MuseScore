@@ -584,7 +584,7 @@ QPointF Element::canvasPos() const
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = nullptr;
             if (parent()->type() == Element::Type::SEGMENT)
-                  system = static_cast<Segment*>(parent())->measure()->system();
+                  system = static_cast<Segment*>(parent())->system();
             else if (parent()->type() == Element::Type::MEASURE)     // used in measure number
                   system = static_cast<Measure*>(parent())->system();
             else if (parent()->type() == Element::Type::SYSTEM)
@@ -727,7 +727,7 @@ bool Element::readProperties(XmlReader& e)
       const QStringRef& tag(e.name());
 
       if (tag == "track")
-            setTrack(e.readInt());
+            setTrack(e.readInt() + e.trackOffset());
       else if (tag == "color")
             setColor(e.readColor());
       else if (tag == "visible")

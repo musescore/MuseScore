@@ -244,7 +244,6 @@
           </Chord>
         <Slur id="3">
           <track>4</track>
-          <track2>0</track2>
           </Slur>
         <Chord>
           <durationType>quarter</durationType>

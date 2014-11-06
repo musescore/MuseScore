@@ -2434,19 +2434,26 @@ void Score::checkSpanner(int startTick, int endTick)
 
             if (s->type() == Element::Type::SLUR) {
                   Segment* seg = tick2segmentMM(s->tick(), false, Segment::Type::ChordRest);
-                  if (!seg || !seg->element(s->track()))
+                  if (!seg || !seg->element(s->track())) {
+                        qDebug("checkSpanner::remove (1)");
                         sl.append(s);
+                        }
                   else {
                         seg = tick2segmentMM(s->tick2(), false, Segment::Type::ChordRest);
-                        if (!seg || !seg->element(s->track2()))
+                        if (!seg || !seg->element(s->track2())) {
+                              qDebug("checkSpanner::remove (2) %d - tick %d track %d",
+                                 s->tick(), s->tick2(), s->track2());
                               sl.append(s);
+                              }
                         }
                   }
             else {
                   // remove spanner if there is no start element
                   s->computeStartElement();
-                  if (!s->startElement())
+                  if (!s->startElement()) {
                         sl.append(s);
+                        qDebug("checkSpanner::remove (3)");
+                        }
                   else {
                         if (s->tick2() > lastTick)
                               s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());

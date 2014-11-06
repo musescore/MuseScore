@@ -637,7 +637,12 @@ QByteArray Selection::staffMimeData() const
 
       int ticks  = tickEnd() - tickStart();
       int staves = staffEnd() - staffStart();
-      xml.stag(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart()).arg(ticks).arg(staffStart()).arg(staves));
+      if (!MScore::testMode) {
+            xml.stag(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart()).arg(ticks).arg(staffStart()).arg(staves));
+            }
+      else {
+            xml.stag(QString("StaffList version=\"2.00\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart()).arg(ticks).arg(staffStart()).arg(staves));
+            }
       Segment* seg1 = _startSegment;
       Segment* seg2 = _endSegment;
 

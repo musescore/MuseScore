@@ -620,10 +620,13 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       Xml xml(f);
       xml.writeOmr = msczFormat;
       xml.header();
-      xml.stag("museScore version=\"" MSC_VERSION "\"");
       if (!MScore::testMode) {
+            xml.stag("museScore version=\"" MSC_VERSION "\"");
             xml.tag("programVersion", VERSION);
             xml.tag("programRevision", revision);
+            }
+      else {
+            xml.stag("museScore version=\"2.00\"");
             }
       write(xml, onlySelection);
       xml.etag();
