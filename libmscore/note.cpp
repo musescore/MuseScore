@@ -1727,7 +1727,8 @@ void Note::layout10(AccidentalState* as)
                   if (_accidental) {
                         if (_accidental->selected())
                               score()->deselect(_accidental);
-                        delete _accidental;
+                        // delete should be done in undo/redo mechanism
+                        // delete _accidental;
                         _accidental = 0;
                         }
                   }
