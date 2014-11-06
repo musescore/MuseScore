@@ -116,8 +116,18 @@ void updateNoteLines(Segment* segment, int track)
 
 UndoCommand::~UndoCommand()
       {
-      foreach(UndoCommand* c, childList)
+      for (auto c : childList)
             delete c;
+      }
+
+//---------------------------------------------------------
+//   UndoCommand::cleanup
+//---------------------------------------------------------
+
+void UndoCommand::cleanup(bool undo)
+      {
+      for (auto c : childList)
+            c->cleanup(undo);
       }
 
 //---------------------------------------------------------
@@ -182,6 +192,12 @@ UndoStack::UndoStack()
 
 UndoStack::~UndoStack()
       {
+      int idx;
+      for (auto c : list) {
+            printf("cleanup %d <= %d\n", idx, curIdx);
+            c->cleanup(idx++ < curIdx);
+            }
+      qDeleteAll(list);
       }
 
 //---------------------------------------------------------
@@ -214,8 +230,10 @@ void UndoStack::endMacro(bool rollback)
       if (rollback)
             delete curCmd;
       else {
+            // remove redo stack
             while (list.size() > curIdx) {
                   UndoCommand* cmd = list.takeLast();
+                  cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
                   delete cmd;
                   }
             list.append(curCmd);
@@ -1388,6 +1406,19 @@ AddElement::AddElement(Element* e)
       }
 
 //---------------------------------------------------------
+//   AddElement::cleanup
+//---------------------------------------------------------
+
+void AddElement::cleanup(bool undo)
+      {
+      if (!undo) {
+            qDebug("delete %d %s", undo, element->name());
+            delete element;
+            element = 0;
+            }
+      }
+
+//---------------------------------------------------------
 //   undoRemoveTuplet
 //---------------------------------------------------------
 
@@ -1549,6 +1580,19 @@ RemoveElement::RemoveElement(Element* e)
                               score->undo(new RemoveElement(note->tieBack()));
                         }
                   }
+            }
+      }
+
+//---------------------------------------------------------
+//   AddElement::cleanup
+//---------------------------------------------------------
+
+void RemoveElement::cleanup(bool undo)
+      {
+      if (undo) {
+            qDebug("delete %d %s", undo, element->name());
+            delete element;
+            element = 0;
             }
       }
 

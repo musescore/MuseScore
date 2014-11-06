@@ -105,6 +105,7 @@ class UndoCommand {
       UndoCommand* removeChild()         { return childList.takeLast(); }
       int childCount() const             { return childList.size();     }
       void unwind();
+      virtual void cleanup(bool undo);
 #ifdef DEBUG_UNDO
       virtual const char* name() const  { return "UndoCommand"; }
 #endif
@@ -612,6 +613,7 @@ class AddElement : public UndoCommand {
       AddElement(Element*);
       virtual void undo();
       virtual void redo();
+      virtual void cleanup(bool);
 #ifdef DEBUG_UNDO
       virtual const char* name() const;
 #endif
@@ -628,6 +630,7 @@ class RemoveElement : public UndoCommand {
       RemoveElement(Element*);
       virtual void undo();
       virtual void redo();
+      virtual void cleanup(bool);
 #ifdef DEBUG_UNDO
       virtual const char* name() const;
 #endif
