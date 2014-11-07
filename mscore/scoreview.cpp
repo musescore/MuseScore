@@ -2600,6 +2600,18 @@ void ScoreView::cmd(const QAction* a)
                   startEdit(e);
                   }
             }
+      else if (cmd == "select-similar") {
+            Element* e = _score->selection().element();
+            mscore->selectSimilar(e, false);
+            }
+      else if (cmd == "select-similar-staff") {
+            Element* e = _score->selection().element();
+            mscore->selectSimilar(e, true);
+            }
+      else if (cmd == "select-dialog") {
+            Element* e = _score->selection().element();
+            mscore->selectElementDialog(e);
+            }
       else if (cmd == "play") {
             if (seq && seq->canStart()) {
                   if (noteEntryMode())          // force out of entry mode
