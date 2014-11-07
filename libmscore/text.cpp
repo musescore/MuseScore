@@ -2567,24 +2567,15 @@ QString Text::convertToHtml(const QString& s, const TextStyle& st)
 QString Text::accessibleInfo()
       {
       QString rez;
+      const QList<TextStyle>& ts = score()->style()->textStyles();
       switch (textStyleType()) {
             case TextStyleType::TITLE:
-                  rez = tr ("Title");
-                  break;
             case TextStyleType::SUBTITLE:
-                  rez = tr ("Subtitle");
-                  break;
             case TextStyleType::COMPOSER:
-                  rez = tr("Composer");
-                  break;
             case TextStyleType::POET:
-                  rez = tr ("Lyricist");
-                  break;
             case TextStyleType::TRANSLATOR:
-                  rez = tr ("Translator");
-                  break;
             case TextStyleType::MEASURE_NUMBER:
-                  rez = tr ("Measure number");
+                  rez = qApp->translate("TextStyle",ts.at(int(textStyleType())).name().toUtf8());
                   break;
             default:
                   rez = Element::accessibleInfo();
@@ -2598,5 +2589,36 @@ QString Text::accessibleInfo()
       return  QString("%1: %2").arg(rez).arg(s);
       }
 
+int Text::subtype() const
+      {
+      switch (textStyleType()) {
+            case TextStyleType::TITLE:
+            case TextStyleType::SUBTITLE:
+            case TextStyleType::COMPOSER:
+            case TextStyleType::POET:
+            case TextStyleType::FRAME:
+            case TextStyleType::INSTRUMENT_EXCERPT:
+                  return int(textStyleType());
+            default: return -1;
+            }
+      }
+
+QString Text::subtypeName() const
+      {
+      QString rez;
+      const QList<TextStyle>& ts = score()->style()->textStyles();
+      switch (textStyleType()) {
+            case TextStyleType::TITLE:
+            case TextStyleType::SUBTITLE:
+            case TextStyleType::COMPOSER:
+            case TextStyleType::POET:
+            case TextStyleType::FRAME:
+            case TextStyleType::INSTRUMENT_EXCERPT:
+                  rez = qApp->translate("TextStyle",ts.at(int(textStyleType())).name().toUtf8());
+                  break;
+            default: rez = "";
+            }
+      return rez;
+      }
 }
 
