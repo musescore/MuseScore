@@ -573,7 +573,7 @@ void Score::updateVelo()
                               }
                         }
                   }
-            for (std::pair<int,Spanner*> sp : _spanner.map()) {
+            for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
                   if (s->type() != Element::Type::HAIRPIN || sp.second->staffIdx() != staffIdx)
                         continue;
@@ -620,7 +620,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
             int utick1 = rs->utick;
             int utick2 = utick1 + rs->len;
             std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
-            for (std::pair<int,Spanner*> sp : _spanner.map()) {
+            for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
                   if (s->type() != Element::Type::PEDAL || (staffIdx != -1 && s->staffIdx() != staffIdx))
                         continue;
@@ -636,8 +636,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                   else
                         lastEvent = std::pair<int, bool>(0, true);
 
-                  if (s->tick() >= utick1 && s->tick() < utick2)
-                        {
+                  if (s->tick() >= utick1 && s->tick() < utick2) {
                         // Handle "overlapping" pedal segments (usual case for connected pedal line)
                         if (lastEvent.second == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
                               channelPedalEvents.at(channel).pop_back();
@@ -649,11 +648,9 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                         channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick2() + tickOffset + 1, false));
                   }
 
-            for (std::pair<int, std::vector<std::pair<int, bool>>> pedalEvents : channelPedalEvents)
-                  {
+            for (const auto& pedalEvents : channelPedalEvents) {
                   int channel = pedalEvents.first;
-                  for (std::pair<int, bool> pe : pedalEvents.second)
-                        {
+                  for (const auto& pe : pedalEvents.second) {
                         NPlayEvent event;
                         if (pe.second == true)
                               event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
