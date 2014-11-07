@@ -431,6 +431,8 @@ class Score : public QObject {
       bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&);
       bool rewriteMeasures(Measure* fm, const Fraction& ns);
       void updateVelo();
+      void swingAdjustParams(Chord*, int&, int&, int, int);
+      bool isSubdivided(ChordRest*, int);
       void addAudioTrack();
       void parseVersion(const QString&);
       QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
@@ -438,7 +440,6 @@ class Score : public QObject {
       void init();
       void removeGeneratedElements(Measure* mb, Measure* end);
       qreal cautionaryWidth(Measure* m, bool& hasCourtesy);
-      void createPlayEvents();
 
       void selectSingle(Element* e, int staffIdx);
       void selectAdd(Element* e);
@@ -737,9 +738,7 @@ class Score : public QObject {
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
-
-      void swingAdjustParams(Chord*, int&, int&, int, int);
-      bool isSubdivided(ChordRest*, int);
+      void renderSpanners(EventMap* events, int staffIdx);
 
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
@@ -756,6 +755,7 @@ class Score : public QObject {
       void rebuildMidiMapping();
       void updateChannel();
       void updateSwing();
+      void createPlayEvents();
 
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 
