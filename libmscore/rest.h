@@ -88,6 +88,7 @@ class Rest : public ChordRest {
       const ElementList el() const                { return _el; }
 
       virtual QString accessibleInfo() override;
+      virtual QString screenReaderInfo() override;
       };
 
 }     // namespace Ms

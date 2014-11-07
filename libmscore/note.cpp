@@ -419,7 +419,7 @@ int Note::tpc() const
 
 QString Note::tpcUserName(bool explicitAccidental)
       {
-      QString pitchName = tr("Pitch: %1").arg(tpc2name(tpc(), NoteSpellingType::STANDARD, false, explicitAccidental));
+      QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, false, explicitAccidental);
       QString octaveName = QString::number((pitch() / 12) - 1);
       return pitchName + (explicitAccidental ? " " : "") + octaveName;
       }
@@ -2429,8 +2429,7 @@ QString Note::accessibleInfo()
       {
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      //return noteTypeUserName() + " " + tpcUserName(false) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
-      return QString("%1; %2; %3%4").arg(noteTypeUserName()).arg(tpcUserName(false)).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+      return tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(tpcUserName(false)).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -2441,7 +2440,6 @@ QString Note::screenReaderInfo()
       {
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      //return noteTypeUserName() + " " + tpcUserName(true) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
       return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(tpcUserName(true)).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
