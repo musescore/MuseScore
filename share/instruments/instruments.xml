@@ -2915,6 +2915,23 @@
                         <program value="60"/>
                   </Channel>
             </Instrument>
+            <Instrument id="baritone-horn-treble">
+                  <trackName>Baritone Horn (Treble Clef)</trackName>
+                  <longName>Baritone Horn</longName>
+                  <shortName>Bar. Hn.</shortName>
+                  <description>Baritone Horn</description>
+                  <musicXMLid>brass.baritone-horn</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-67</aPitchRange>
+                  <pPitchRange>40-70</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
+                  <Channel>
+                        <program value="60"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="posthorn">
                   <longName>Posthorn</longName>
                   <shortName>Psthn.</shortName>
@@ -3662,6 +3679,23 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="trombone-treble">
+                  <trackName>Trombone (Treble Clef)</trackName>
+                  <longName>Trombone</longName>
+                  <shortName>Trb.</shortName>
+                  <description>Trombone</description>
+                  <musicXMLid>brass.trombone</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>35-70</aPitchRange>
+                  <pPitchRange>35-74</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
+                  <Channel>
+                        <program value="57"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="soprano-trombone">
                   <longName>Soprano Trombone</longName>
                   <shortName>S. Trb.</shortName>
@@ -3674,7 +3708,6 @@
                   <Channel>
                         <program value="57"/>
                   </Channel>
-                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="alto-trombone">
                   <longName>Alto Trombone</longName>
@@ -3688,7 +3721,6 @@
                   <Channel>
                         <program value="57"/>
                   </Channel>
-                  <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="tenor-trombone">
@@ -3704,7 +3736,6 @@
                         <program value="57"/>
                   </Channel>
                   <genre>common</genre>
-                  <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bass-trombone">
@@ -3735,7 +3766,6 @@
                   <Channel>
                         <program value="57"/>
                   </Channel>
-                  <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="cimbasso">
@@ -3767,15 +3797,32 @@
                   <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="euphonium-treble">
+                  <trackName>Euphonium (Treble Clef)</trackName>
+                  <longName>Euphonium</longName>
+                  <shortName>Eu.</shortName>
+                  <description>Euphonium</description>
+                  <musicXMLid>brass.euphonium</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-70</aPitchRange>
+                  <pPitchRange>40-74</pPitchRange>
+                  <transposeDiatonic>-8</transposeDiatonic>
+                  <transposeChromatic>-14</transposeChromatic>
+                  <Channel>
+                        <program value="58"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="tuba">
                   <longName>Tuba</longName>
                   <shortName>Tu.</shortName>
-                  <description>E♭ Tuba (generic)</description>
+                  <description>Tuba (generic)</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>26-64</aPitchRange>
-                  <pPitchRange>24-72</pPitchRange>
+                  <aPitchRange>28-58</aPitchRange>
+                  <pPitchRange>22-72</pPitchRange>
                   <Channel>
                         <program value="58"/>
                   </Channel>
@@ -3795,10 +3842,9 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
-                  <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="E♭-tuba">
+            <Instrument id="eb-tuba">
                   <longName>E♭ Tuba</longName>
                   <shortName>E♭ Tu.</shortName>
                   <description>E♭ Tuba</description>
@@ -3807,6 +3853,23 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>26-64</aPitchRange>
                   <pPitchRange>24-72</pPitchRange>
+                  <Channel>
+                        <program value="58"/>
+                  </Channel>
+            </Instrument>
+            <Instrument id="eb-tuba-treble">
+                  <trackName>E♭ Tuba (Treble Clef)</trackName>
+                  <longName>E♭ Tuba</longName>
+                  <shortName>E♭ Tu.</shortName>
+                  <description>E♭ Tuba</description>
+                  <musicXMLid>brass.tuba</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>26-64</aPitchRange>
+                  <pPitchRange>24-72</pPitchRange>
+                  <transposeDiatonic>-12</transposeDiatonic>
+                  <transposeChromatic>-21</transposeChromatic>
                   <Channel>
                         <program value="58"/>
                   </Channel>
@@ -3833,6 +3896,25 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-58</aPitchRange>
                   <pPitchRange>22-72</pPitchRange>
+                  <Channel>
+                        <program value="58"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="bb-tuba-treble">
+                  <trackName>B♭ Tuba (Treble Clef)</trackName>
+                  <longName>B♭ Tuba</longName>
+                  <shortName>B♭ Tu.</shortName>
+                  <description>B♭ Tuba</description>
+                  <musicXMLid>brass.tuba</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>28-58</aPitchRange>
+                  <pPitchRange>22-72</pPitchRange>
+                  <transposeDiatonic>-16</transposeDiatonic>
+                  <transposeChromatic>-26</transposeChromatic>
                   <Channel>
                         <program value="58"/>
                   </Channel>
@@ -4837,6 +4919,7 @@
                         <program value="0"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="congas">
                   <longName>Congas</longName>
@@ -4876,6 +4959,7 @@
                         <program value="0"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="timbales">
                   <longName>Timbales</longName>
@@ -4906,6 +4990,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="frame-drum">
                   <longName>Frame Drum</longName>
@@ -5554,6 +5639,7 @@
                         <program value="0"/>
                   </Channel>
                   <genre>common</genre>
+                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="castanets">
                   <longName>Castanets</longName>
@@ -5600,6 +5686,7 @@
                         <program value="0"/>
                   </Channel>
                   <genre>ethnic</genre>
+                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="maracas">
                   <longName>Maracas</longName>
@@ -5622,7 +5709,6 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>jazz</genre>
                   <genre>ethnic</genre>
                   <genre>orchestra</genre>
             </Instrument>
