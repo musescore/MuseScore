@@ -573,7 +573,7 @@ void Score::updateVelo()
                               }
                         }
                   }
-            for (std::pair<int,Spanner*> sp : _spanner.map()) {
+            for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
                   if (s->type() != Element::Type::HAIRPIN || sp.second->staffIdx() != staffIdx)
                         continue;
@@ -979,7 +979,7 @@ void Score::renderMidi(EventMap* events)
             int utick1 = rs->utick;
             int utick2 = utick1 + rs->len;
             std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
-            for (std::pair<int,Spanner*> sp : _spanner.map()) {
+            for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
                   if (s->type() != Element::Type::PEDAL)
                         continue;
@@ -1008,10 +1008,10 @@ void Score::renderMidi(EventMap* events)
                         channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick2() + tickOffset + 1, false));
                   }
 
-            for (std::pair<int, std::vector<std::pair<int, bool>>> pedalEvents : channelPedalEvents)
+            for (const auto& pedalEvents : channelPedalEvents)
                   {
                   int channel = pedalEvents.first;
-                  for (std::pair<int, bool> pe : pedalEvents.second)
+                  for (const auto& pe : pedalEvents.second)
                         {
                         NPlayEvent event;
                         if (pe.second == true)
