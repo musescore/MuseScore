@@ -41,9 +41,25 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       e = _e;
-      type->setText(e->name());
+      type->setText(qApp->translate("elementName", e->userName().toUtf8()));
 
-      subtype->setText(e->subtypeName());
+      switch (e->type()) {
+            case Element::Type::ACCIDENTAL:
+                  subtype->setText(qApp->translate("accidental", e->subtypeName().toUtf8()));
+                  break;
+            case Element::Type::SLUR_SEGMENT:
+                  subtype->setText(qApp->translate("elementName", e->subtypeName().toUtf8()));
+                  break;
+            case Element::Type::FINGERING:
+            case Element::Type::STAFF_TEXT:
+                  subtype->setText(qApp->translate("TextStyle", e->subtypeName().toUtf8()));
+                  break;
+            case Element::Type::ARTICULATION: // comes translated, but from a different method
+                  subtype->setText(static_cast<const Articulation*>(e)->subtypeUserName());
+                  break;
+            // other come translated or don't need any or are too difficult to implement
+            default: subtype->setText(e->subtypeName());
+            }
       sameSubtype->setEnabled(e->subtype() != -1);
       subtype->setEnabled(e->subtype() != -1);
       inSelection->setEnabled(e->score()->selection().isRange());    
