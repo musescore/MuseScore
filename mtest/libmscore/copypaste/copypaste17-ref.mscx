@@ -196,8 +196,11 @@
           </Rest>
         <Rest>
           <track>1</track>
-          <dots>1</dots>
           <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <track>1</track>
+          <durationType>eighth</durationType>
           </Rest>
         </Measure>
       <Measure number="2">
