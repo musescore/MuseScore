@@ -64,8 +64,8 @@ class Lyrics : public Text {
 
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
-      virtual int subtype() const         { return _no; }
-      virtual QString subtypeName() const { return tr("Verse %1").arg(_no + 1); }
+      virtual int subtype() const override        { return _no; }
+      virtual QString subtypeName() const override { return tr("Verse %1").arg(_no + 1); }
       void setNo(int n);
       int no() const                { return _no; }
       void setSyllabic(Syllabic s)  { _syllabic = s; }
