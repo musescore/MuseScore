@@ -3586,13 +3586,20 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                               cr->layout();
 
                               // special case:
-                              // make extra space for ties continued from previous system
+                              // make extra space for ties or glissandi continued from previous system
 
                               if (firstMeasureInSystem && cr->type() == Element::Type::CHORD && cr->tick() == cr->measure()->tick()) {
                                     Chord* c = static_cast<Chord*>(cr);
-                                    for (Note* note : c->notes()) {
-                                          if (note->tieBack())
-                                                minDistance = qMax(minDistance, _spatium * 2);
+                                    if (c->glissando()) {
+                                          minDistance = qMax(minDistance, _spatium * 2);
+                                          }
+                                    else {
+                                          for (Note* note : c->notes()) {
+                                                if (note->tieBack()) {
+                                                      minDistance = qMax(minDistance, _spatium * 2);
+                                                      break;
+                                                      }
+                                                }
                                           }
                                     }
 
