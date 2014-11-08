@@ -146,6 +146,7 @@ class Accidental : public Element {
       static Type name2subtype(const QString&);
 
       QString accessibleInfo() override;
+      QString screenReaderInfo() override;
       };
 
 }     // namespace Ms

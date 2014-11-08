@@ -484,5 +484,10 @@ QString Accidental::accessibleInfo()
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("accidental", Accidental::subtype2name(accidentalType())));
       }
 
+QString Accidental::screenReaderInfo()
+      {
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("accidental plain text", Accidental::subtype2name(accidentalType())));
+      }
+
 }
 

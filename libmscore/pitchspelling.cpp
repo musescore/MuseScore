@@ -245,13 +245,13 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QS
             case -2: acc = explicitAccidental ? QObject::tr("double flat") : "bb" ; break;
             case -1:
                   if (spelling != NoteSpellingType::GERMAN)
-                        acc = explicitAccidental ? QObject::tr("flat") : "b";
+                        acc = explicitAccidental ? qApp->translate("accidental plain text", "flat") : "b";
                   else
                         // render flats as "es" except for A and E, which get "s"
                         acc = (tpc == 10 || tpc == 11) ? "s" : "es";
                   break;
             case  0: acc = ""; break;
-            case  1: acc = (spelling != NoteSpellingType::GERMAN) ? (explicitAccidental ? QObject::tr("sharp") : "#") : "is"; break;
+            case  1: acc = (spelling != NoteSpellingType::GERMAN) ? (explicitAccidental ? qApp->translate("accidental plain text", "sharp") : "#") : "is"; break;
             case  2: acc = explicitAccidental ? QObject::tr("double sharp") : "##"; break;
             default:
                   qDebug("tpc2name(%d): acc %d", tpc, n);
