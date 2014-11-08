@@ -2970,14 +2970,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
             }
 
       directionTag(xml, attr, text);
-      if (text->type() == Element::Type::REHEARSAL_MARK) {
-            // TODO: check if dead code (see rehearsal below)
-            xml.stag("direction-type");
-            xml.tag("rehearsal", text->text());
-            xml.etag();
-            }
-      else
-            wordsMetrome(xml, _score, text);
+      wordsMetrome(xml, _score, text);
       directionETag(xml, staff);
       }
 
@@ -2987,9 +2980,20 @@ void ExportMusicXml::words(Text const* const text, int staff)
 
 void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       {
+      if (rmk->text() == "") {
+            // sometimes empty Texts are present, exporting would result
+            // in invalid MusicXML (as an empty direction-type would be created)
+            return;
+            }
+
       directionTag(xml, attr, rmk);
       xml.stag("direction-type");
-      xml.tag("rehearsal", rmk->text());
+      QString attr;
+      if (!rmk->textStyle().hasFrame()) attr = " enclosure=\"none\"";
+      MScoreTextToMXML mttm("rehearsal", attr, rmk->text(),
+                            _score->textStyle(TextStyleType::STAFF),
+                            _score->textStyle(TextStyleType::REHEARSAL_MARK));
+      mttm.write(xml);
       xml.etag();
       directionETag(xml, staff);
       }

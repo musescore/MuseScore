@@ -218,7 +218,7 @@
     <measure number="4">
       <direction placement="above">
         <direction-type>
-          <rehearsal>A</rehearsal>
+          <rehearsal font-weight="bold" font-size="14">A</rehearsal>
           </direction-type>
         </direction>
       <note>
