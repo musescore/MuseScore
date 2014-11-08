@@ -2812,7 +2812,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       QString type;
       QString niente = "no";
       QString txt;
-      QString wordstext;
+      QString formattedText;
       // int offset = 0; // not supported yet
       //int track = 0;
       int track = staff * VOICES;
@@ -2825,7 +2825,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       bool hasYoffset = false;
       QString dynaVelocity = "";
       QString tempo = "";
-      QString rehearsal = "";
       QString sndCapo = "";
       QString sndCoda = "";
       QString sndDacapo = "";
@@ -2842,6 +2841,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       // qreal endLength;
       QString lineType;
       QDomElement metrEl;
+      QString enclosure = "none";
 
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "direction-type") {
@@ -2855,11 +2855,13 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               // xoffset = ee.attribute("default-x", "0.0").toDouble() * 0.1;
                               }
                         if (dirType == "words") {
-                              txt = ee.text(); // support legacy code
-                              wordstext += nextPartOfFormattedString(ee);
+                              enclosure      = ee.attribute(QString("enclosure"), "none");
+                              txt            = ee.text(); // support legacy code
+                              formattedText += nextPartOfFormattedString(ee);
                               }
                         else if (dirType == "rehearsal") {
-                              rehearsal = ee.text();
+                              enclosure      = ee.attribute(QString("enclosure"), "square");
+                              formattedText += nextPartOfFormattedString(ee);
                               }
                         else if (dirType == "pedal") {
                               type = ee.attribute(QString("type"));
@@ -3012,8 +3014,17 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   t = new StaffText(score);
                   }
 
-            qDebug("formatted words '%s'", qPrintable(wordstext));
-            t->setText(wordstext);
+            qDebug("formatted words '%s'", qPrintable(formattedText));
+            t->setText(formattedText);
+
+            if (enclosure == "circle") {
+                  t->textStyle().setHasFrame(true);
+                  t->textStyle().setCircle(true);
+                  }
+            else if (enclosure == "rectangle") {
+                  t->textStyle().setHasFrame(true);
+                  t->textStyle().setFrameRound(0);
+            }
 
             if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
@@ -3021,10 +3032,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             }
       else if (dirType == "rehearsal") {
             Text* t = new RehearsalMark(score);
-            t->setPlainText(rehearsal);
+            if (!formattedText.contains("<b>"))
+                  formattedText = "<b></b>" + formattedText; // explicitly turn bold off
+            t->setText(formattedText);
+            t->textStyle().setHasFrame(enclosure != "none");
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             else t->setPlacement(placement == "above" ? Element::Placement::ABOVE : Element::Placement::BELOW);
-            if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElem(t, track, placement, measure, tick);
             }
       else if (dirType == "pedal") {
@@ -3596,6 +3609,7 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
                   unNumbrdLyrics.append(l);
             }
 
+      QString formattedText;
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "syllabic") {
                   if (e.text() == "single")
@@ -3610,13 +3624,13 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
                         qDebug("unknown syllabic %s", qPrintable(e.text()));
                   }
             else if (e.tagName() == "text")
-                  l->setPlainText(l->text()+e.text());
+                  formattedText += nextPartOfFormattedString(e);
             else if (e.tagName() == "elision")
                   if (e.text().isEmpty()) {
-                        l->setPlainText(l->text()+" ");
+                        formattedText += " ";
                         }
                   else {
-                        l->setPlainText(l->text()+e.text());
+                        formattedText += nextPartOfFormattedString(e);
                         }
             else if (e.tagName() == "extend")
                   ;
@@ -3627,6 +3641,8 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
             else
                   domError(e);
             }
+            qDebug("formatted lyric '%s'", qPrintable(formattedText));
+            l->setText(formattedText);
       }
 
 #if 0

@@ -2926,7 +2926,13 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
             }
       else {
             xml.stag("direction-type");
-            QString attr; // TODO TBD
+            QString attr;
+            if (text->textStyle().hasFrame()) {
+                  if (text->textStyle().circle())
+                        attr = " enclosure=\"circle\"";
+                  else
+                        attr = " enclosure=\"rectangle\"";
+                  }
             MScoreTextToMXML mttm("words", attr, text->text(), s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF));
             mttm.write(xml);
             xml.etag();
