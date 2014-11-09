@@ -2615,6 +2615,168 @@ static void handleSpannerStop(SLine* cur_sp, QString type, int tick, MusicXmlSpa
       spanners[cur_sp].second = tick;
       //qDebug("pedal %p second tick %d", cur_sp, tick);
       }
+      
+//---------------------------------------------------------
+//   nextPartOfFormattedString
+//---------------------------------------------------------
+      
+/**
+ Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
+ */
+
+static QString nextPartOfFormattedString(QDomElement e)
+      {
+            QString txt        = e.text();
+            QString lang       = e.attribute(QString("xml:lang"), "it");
+            QString fontWeight = e.attribute(QString("font-weight"));
+            QString fontSize   = e.attribute(QString("font-size"));
+            QString fontStyle  = e.attribute(QString("font-style"));
+            QString underline  = e.attribute(QString("underline"));
+            QString fontFamily = e.attribute(QString("font-family"));
+            // TODO: color, enclosure, yoffset in only part of the text, ...
+            QString importedtext;
+            if (!fontSize.isEmpty()) {
+                  bool ok = true;
+                  float size = fontSize.toFloat(&ok);
+                  if (ok)
+                        importedtext += QString("<font size=\"%1\"/>").arg(size);
+            }
+            if (!fontFamily.isEmpty())
+                  importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
+            if (fontWeight == "bold")
+                  importedtext += "<b>";
+            if (fontStyle == "italic")
+                  importedtext += "<i>";
+            if (!underline.isEmpty()) {
+                  bool ok = true;
+                  int lines = underline.toInt(&ok);
+                  if (ok && (lines > 0))  // 1,2, or 3 underlines are imported as single underline
+                        importedtext += "<u>";
+                  else
+                        underline = "";
+            }
+            txt.replace(QString("\r"), QString("")); // convert Windows line break \r\n -> \n
+            importedtext += txt.toHtmlEscaped();
+            if (underline != "")
+                  importedtext += "</u>";
+            if (fontStyle == "italic")
+                  importedtext += "</i>";
+            if (fontWeight == "bold")
+                  importedtext += "</b>";
+            qDebug("importedtext '%s'", qPrintable(importedtext));
+            return importedtext;
+      }
+      
+//---------------------------------------------------------
+//   matchRepeat
+//---------------------------------------------------------
+
+/**
+ Do a wild-card match with known repeat texts.
+ */
+
+static QString matchRepeat(const QString& lowerTxt)
+      {
+      QString repeat;
+      QRegExp daCapo("d\\.? *c\\.?|da *capo");
+      QRegExp daCapoAlFine("d\\.? *c\\.? *al *fine|da *capo *al *fine");
+      QRegExp daCapoAlCoda("d\\.? *c\\.? *al *coda|da *capo *al *coda");
+      QRegExp dalSegno("d\\.? *s\\.?|d[ae]l *segno");
+      QRegExp dalSegnoAlFine("d\\.? *s\\.? *al *fine|d[ae]l *segno *al *fine");
+      QRegExp dalSegnoAlCoda("d\\.? *s\\.? *al *coda|d[ae]l *segno *al *coda");
+      QRegExp fine("fine");
+      QRegExp toCoda("to *coda");
+      if (daCapo.exactMatch(lowerTxt)) repeat = "daCapo";
+      if (daCapoAlFine.exactMatch(lowerTxt)) repeat = "daCapoAlFine";
+      if (daCapoAlCoda.exactMatch(lowerTxt)) repeat = "daCapoAlCoda";
+      if (dalSegno.exactMatch(lowerTxt)) repeat = "dalSegno";
+      if (dalSegnoAlFine.exactMatch(lowerTxt)) repeat = "dalSegnoAlFine";
+      if (dalSegnoAlCoda.exactMatch(lowerTxt)) repeat = "dalSegnoAlCoda";
+      if (fine.exactMatch(lowerTxt)) repeat = "fine";
+      if (toCoda.exactMatch(lowerTxt)) repeat = "toCoda";
+      return repeat;
+      }
+      
+//---------------------------------------------------------
+//   findJump
+//---------------------------------------------------------
+
+/**
+ Try to find a Jump in \a repeat.
+ */
+
+static Jump* findJump(const QString& repeat, Score* score)
+      {
+      Jump* jp = 0;
+      if (repeat == "daCapo") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DC);
+            }
+      else if (repeat == "daCapoAlCoda") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DC_AL_CODA);
+            }
+      else if (repeat == "daCapoAlFine") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DC_AL_FINE);
+            }
+      else if (repeat == "dalSegno") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DS);
+            }
+      else if (repeat == "dalSegnoAlCoda") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DS_AL_CODA);
+            }
+      else if (repeat == "dalSegnoAlFine") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DS_AL_FINE);
+            }
+      return jp;
+      }
+
+//---------------------------------------------------------
+//   findMarker
+//---------------------------------------------------------
+
+/**
+ Try to find a Marker in \a repeat.
+ */
+
+static Marker* findMarker(const QString& repeat, Score* score)
+      {
+      Marker* m = 0;
+      if (repeat == "segno") {
+            m = new Marker(score);
+            // note: Marker::read() also contains code to set text style based on type
+            // avoid duplicated code
+            m->setTextStyleType(TextStyleType::REPEAT_LEFT);
+            // apparently this MUST be after setTextStyle
+            m->setMarkerType(Marker::Type::SEGNO);
+            }
+      else if (repeat == "coda") {
+            m = new Marker(score);
+            m->setTextStyleType(TextStyleType::REPEAT_LEFT);
+            m->setMarkerType(Marker::Type::CODA);
+            }
+      else if (repeat == "fine") {
+            m = new Marker(score);
+            m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            m->setMarkerType(Marker::Type::FINE);
+            }
+      else if (repeat == "toCoda") {
+            m = new Marker(score);
+            m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            m->setMarkerType(Marker::Type::TOCODA);
+            }
+      return m;
+      }
 
 //---------------------------------------------------------
 //   direction
@@ -2650,13 +2812,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       QString type;
       QString niente = "no";
       QString txt;
-      QStringList wordstext;
-      QString lang;
-      QString fontWeight = "";
-      QString fontStyle = "";
-      QString fontSize = "";
-      QString underline = "";
-      QString fontFamily = "";
+      QString formattedText;
       // int offset = 0; // not supported yet
       //int track = 0;
       int track = staff * VOICES;
@@ -2669,7 +2825,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       bool hasYoffset = false;
       QString dynaVelocity = "";
       QString tempo = "";
-      QString rehearsal = "";
       QString sndCapo = "";
       QString sndCoda = "";
       QString sndDacapo = "";
@@ -2686,6 +2841,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       // qreal endLength;
       QString lineType;
       QDomElement metrEl;
+      QString enclosure = "none";
 
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "direction-type") {
@@ -2699,47 +2855,13 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               // xoffset = ee.attribute("default-x", "0.0").toDouble() * 0.1;
                               }
                         if (dirType == "words") {
-                              txt        = ee.text();
-                              lang       = ee.attribute(QString("xml:lang"), "it");
-                              fontWeight = ee.attribute(QString("font-weight"));
-                              fontSize   = ee.attribute(QString("font-size"));
-                              fontStyle  = ee.attribute(QString("font-style"));
-                              underline  = ee.attribute(QString("underline"));
-                              fontFamily = ee.attribute(QString("font-family"));
-                              // TODO: color, enclosure, yoffset in only part of the text, ...
-                              QString importedtext;
-                              if (!fontSize.isEmpty()) {
-                                    bool ok = true;
-                                    float size = fontSize.toFloat(&ok);
-                                    if (ok)
-                                          importedtext += QString("<font size=\"%1\"/>").arg(size);
-                                    }
-                              if (!fontFamily.isEmpty())
-                                    importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
-                              if (fontWeight == "bold")
-                                    importedtext += "<b>";
-                              if (fontStyle == "italic")
-                                    importedtext += "<i>";
-                              if (!underline.isEmpty()) {
-                                    bool ok = true;
-                                    int lines = underline.toInt(&ok);
-                                    if (ok && (lines > 0))  // 1,2, or 3 underlines are imported as single underline
-                                          importedtext += "<u>";
-                                    else
-                                          underline = "";
-                                    }
-                              txt.replace(QString("\r"), QString("")); // convert Windows line break \r\n -> \n
-                              importedtext += txt.toHtmlEscaped();
-                              if (underline != "")
-                                    importedtext += "</u>";
-                              if (fontStyle == "italic")
-                                    importedtext += "</i>";
-                              if (fontWeight == "bold")
-                                    importedtext += "</b>";
-                              wordstext.append(importedtext);
+                              enclosure      = ee.attribute(QString("enclosure"), "none");
+                              txt            = ee.text(); // support legacy code
+                              formattedText += nextPartOfFormattedString(ee);
                               }
                         else if (dirType == "rehearsal") {
-                              rehearsal = ee.text();
+                              enclosure      = ee.attribute(QString("enclosure"), "square");
+                              formattedText += nextPartOfFormattedString(ee);
                               }
                         else if (dirType == "pedal") {
                               type = ee.attribute(QString("type"));
@@ -2837,23 +2959,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       if (coda) repeat = "coda";
       if (segno) repeat = "segno";
       // As sound may be missing, next do a wild-card match with known repeat texts
-      QString lowerTxt = txt.toLower();
-      QRegExp daCapo("d\\.? *c\\.?|da *capo");
-      QRegExp daCapoAlFine("d\\.? *c\\.? *al *fine|da *capo *al *fine");
-      QRegExp daCapoAlCoda("d\\.? *c\\.? *al *coda|da *capo *al *coda");
-      QRegExp dalSegno("d\\.? *s\\.?|d[ae]l *segno");
-      QRegExp dalSegnoAlFine("d\\.? *s\\.? *al *fine|d[ae]l *segno *al *fine");
-      QRegExp dalSegnoAlCoda("d\\.? *s\\.? *al *coda|d[ae]l *segno *al *coda");
-      QRegExp fine("fine");
-      QRegExp toCoda("to *coda");
-      if (daCapo.exactMatch(lowerTxt)) repeat = "daCapo";
-      if (daCapoAlFine.exactMatch(lowerTxt)) repeat = "daCapoAlFine";
-      if (daCapoAlCoda.exactMatch(lowerTxt)) repeat = "daCapoAlCoda";
-      if (dalSegno.exactMatch(lowerTxt)) repeat = "dalSegno";
-      if (dalSegnoAlFine.exactMatch(lowerTxt)) repeat = "dalSegnoAlFine";
-      if (dalSegnoAlCoda.exactMatch(lowerTxt)) repeat = "dalSegnoAlCoda";
-      if (fine.exactMatch(lowerTxt)) repeat = "fine";
-      if (toCoda.exactMatch(lowerTxt)) repeat = "toCoda";
+      if (repeat == "") repeat = matchRepeat(txt.toLower());
       // If that did not work, try to recognize a sound attribute
       if (repeat == "" && sndCoda != "") repeat = "coda";
       if (repeat == "" && sndDacapo != "") repeat = "daCapo";
@@ -2871,67 +2977,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       */
 
       if (repeat != "") {
-            Jump* jp = 0;
-            Marker* m = 0;
-            if (repeat == "segno") {
-                  m = new Marker(score);
-                  // note: Marker::read() also contains code to set text style based on type
-                  // avoid duplicated code
-                  m->setTextStyleType(TextStyleType::REPEAT_LEFT);
-                  // apparently this MUST be after setTextStyle
-                  m->setMarkerType(Marker::Type::SEGNO);
-                  }
-            else if (repeat == "coda") {
-                  m = new Marker(score);
-                  m->setTextStyleType(TextStyleType::REPEAT_LEFT);
-                  m->setMarkerType(Marker::Type::CODA);
-                  }
-            else if (repeat == "fine") {
-                  m = new Marker(score);
-                  m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  m->setMarkerType(Marker::Type::FINE);
-                  }
-            else if (repeat == "toCoda") {
-                  m = new Marker(score);
-                  m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  m->setMarkerType(Marker::Type::TOCODA);
-                  }
-            else if (repeat == "daCapo") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DC);
-                  }
-            else if (repeat == "daCapoAlCoda") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DC_AL_CODA);
-                  }
-            else if (repeat == "daCapoAlFine") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DC_AL_FINE);
-                  }
-            else if (repeat == "dalSegno") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DS);
-                  }
-            else if (repeat == "dalSegnoAlCoda") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DS_AL_CODA);
-                  }
-            else if (repeat == "dalSegnoAlFine") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DS_AL_FINE);
-                  }
-            if (jp) {
+            if (Jump* jp = findJump(repeat, score)) {
                   jp->setTrack(track);
                   qDebug("jumpsMarkers adding jm %p meas %p",jp, measure);
                   jumpsMarkers.append(JumpMarkerDesc(jp, measure));
                   }
-            if (m) {
+            if (Marker* m = findMarker(repeat, score)) {
                   m->setTrack(track);
                   qDebug("jumpsMarkers adding jm %p meas %p",m, measure);
                   jumpsMarkers.append(JumpMarkerDesc(m, measure));
@@ -2962,27 +3013,18 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             else {
                   t = new StaffText(score);
                   }
-/*            if (!fontSize.isEmpty() || !fontStyle.isEmpty() || !fontWeight.isEmpty()) {
-                  if (!fontSize.isEmpty()) {
-                        bool ok = true;
-                        float size = fontSize.toFloat(&ok);
-                        if (ok)
-                              t->textStyle().setSize(size);
-                        }
-                  t->textStyle().setItalic(fontStyle == "italic");
-                  t->textStyle().setBold(fontWeight == "bold");
-                  } */
-            // These variables are read only in "words" case and in that case text
-            // style is already taken into account in the html conversion
-            if (!wordstext.isEmpty()) {
-                  QString textstring;
-                  for (QStringList::Iterator it = wordstext.begin(); it != wordstext.end(); ++it ) {
-                        textstring = textstring + *it;
-                        }
-                  t->setText(textstring);
+
+            qDebug("formatted words '%s'", qPrintable(formattedText));
+            t->setText(formattedText);
+
+            if (enclosure == "circle") {
+                  t->textStyle().setHasFrame(true);
+                  t->textStyle().setCircle(true);
                   }
-            else
-                  t->setPlainText(txt);
+            else if (enclosure == "rectangle") {
+                  t->textStyle().setHasFrame(true);
+                  t->textStyle().setFrameRound(0);
+            }
 
             if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
@@ -2990,10 +3032,12 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             }
       else if (dirType == "rehearsal") {
             Text* t = new RehearsalMark(score);
-            t->setPlainText(rehearsal);
+            if (!formattedText.contains("<b>"))
+                  formattedText = "<b></b>" + formattedText; // explicitly turn bold off
+            t->setText(formattedText);
+            t->textStyle().setHasFrame(enclosure != "none");
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             else t->setPlacement(placement == "above" ? Element::Placement::ABOVE : Element::Placement::BELOW);
-            if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElem(t, track, placement, measure, tick);
             }
       else if (dirType == "pedal") {
@@ -3565,6 +3609,7 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
                   unNumbrdLyrics.append(l);
             }
 
+      QString formattedText;
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "syllabic") {
                   if (e.text() == "single")
@@ -3579,13 +3624,13 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
                         qDebug("unknown syllabic %s", qPrintable(e.text()));
                   }
             else if (e.tagName() == "text")
-                  l->setPlainText(l->text()+e.text());
+                  formattedText += nextPartOfFormattedString(e);
             else if (e.tagName() == "elision")
                   if (e.text().isEmpty()) {
-                        l->setPlainText(l->text()+" ");
+                        formattedText += " ";
                         }
                   else {
-                        l->setPlainText(l->text()+e.text());
+                        formattedText += nextPartOfFormattedString(e);
                         }
             else if (e.tagName() == "extend")
                   ;
@@ -3596,6 +3641,8 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
             else
                   domError(e);
             }
+            qDebug("formatted lyric '%s'", qPrintable(formattedText));
+            l->setText(formattedText);
       }
 
 #if 0
