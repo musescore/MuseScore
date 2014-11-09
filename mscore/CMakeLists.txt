@@ -196,6 +196,20 @@ if (USE_JACK)
       set (AUDIO ${AUDIO} jackaudio.cpp jackweakapi.cpp)
 endif (USE_JACK)
 
+if (${CMAKE_SYSTEM} MATCHES "GNU-0.3")
+      # include some cmake support file
+      INCLUDE (Platform/GNU)
+      set ( USE_ALSA 0 )
+      set ( USE_PORTMIDI 0 )
+endif (${CMAKE_SYSTEM} MATCHES "GNU-0.3")
+
+if (${CMAKE_SYSTEM} MATCHES "kFreeBSD")
+      # include some cmake support file
+      INCLUDE (Platform/kFreeBSD) 
+      set ( USE_ALSA 0 )
+      set ( USE_PORTMIDI 0 )
+endif (${CMAKE_SYSTEM} MATCHES "kFreeBSD")
+
 if (APPLE)
       set (ExecutableName mscore MACOSX_BUNDLE)
       set (MACOSX_BUNDLE_ICON_FILE      mscore.icns)
