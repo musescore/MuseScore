@@ -63,6 +63,12 @@ MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, cons
       newFormat.setFontFamily(actTs.family());
       oldFormat.setFontSize(defTs.size());
       newFormat.setFontSize(actTs.size());
+      oldFormat.setBold(false);
+      newFormat.setBold(actTs.bold());
+      oldFormat.setItalic(false);
+      newFormat.setItalic(actTs.italic());
+      oldFormat.setUnderline(false);
+      newFormat.setUnderline(actTs.underline());
       // convert text into valid xml by adding dummy start and end tags
       text = "<dummy>" + t + "</dummy>";
       }

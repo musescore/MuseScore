@@ -2926,7 +2926,13 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
             }
       else {
             xml.stag("direction-type");
-            QString attr; // TODO TBD
+            QString attr;
+            if (text->textStyle().hasFrame()) {
+                  if (text->textStyle().circle())
+                        attr = " enclosure=\"circle\"";
+                  else
+                        attr = " enclosure=\"rectangle\"";
+                  }
             MScoreTextToMXML mttm("words", attr, text->text(), s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF));
             mttm.write(xml);
             xml.etag();
@@ -2970,14 +2976,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
             }
 
       directionTag(xml, attr, text);
-      if (text->type() == Element::Type::REHEARSAL_MARK) {
-            // TODO: check if dead code (see rehearsal below)
-            xml.stag("direction-type");
-            xml.tag("rehearsal", text->text());
-            xml.etag();
-            }
-      else
-            wordsMetrome(xml, _score, text);
+      wordsMetrome(xml, _score, text);
       directionETag(xml, staff);
       }
 
@@ -2987,9 +2986,20 @@ void ExportMusicXml::words(Text const* const text, int staff)
 
 void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       {
+      if (rmk->text() == "") {
+            // sometimes empty Texts are present, exporting would result
+            // in invalid MusicXML (as an empty direction-type would be created)
+            return;
+            }
+
       directionTag(xml, attr, rmk);
       xml.stag("direction-type");
-      xml.tag("rehearsal", rmk->text());
+      QString attr;
+      if (!rmk->textStyle().hasFrame()) attr = " enclosure=\"none\"";
+      MScoreTextToMXML mttm("rehearsal", attr, rmk->text(),
+                            _score->textStyle(TextStyleType::STAFF),
+                            _score->textStyle(TextStyleType::REHEARSAL_MARK));
+      mttm.write(xml);
       xml.etag();
       directionETag(xml, staff);
       }
