@@ -582,6 +582,16 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                         }
                   clef->setGenerated(false);
                   score->undo(new ChangeClefType(clef, cp, tp));
+                  // change the clef in the mmRest if any
+                  if (measure->hasMMRest()) {
+                        Measure* mmMeasure = measure->mmRest();
+                        Segment* mmDestSeg = mmMeasure->findSegment(Segment::Type::Clef, tick);
+                        if (mmDestSeg) {
+                              Clef* mmClef = static_cast<Clef*>(mmDestSeg->element(clef->track()));
+                              if (mmClef)
+                                    score->undo(new ChangeClefType(mmClef, cp, tp));
+                              }
+                        }
                   }
             else {
                   if (gclef) {
@@ -3464,6 +3474,8 @@ void ChangeClefType::flip()
 
       concertClef     = ocl;
       transposingClef = otc;
+      // layout the clef to align the currentClefType with the actual one immediately
+      clef->layout();
       }
 
 //---------------------------------------------------------
