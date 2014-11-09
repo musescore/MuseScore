@@ -2317,6 +2317,8 @@ void Score::cmd(const QAction* a)
             }
       else if (cmd == "add-brackets")
             cmdAddBracket();
+      else if (cmd == "explode")
+            cmdExplode();
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }
@@ -2370,6 +2372,83 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
             score->undo(new AddElement(c));
             }
       delete clef;
+      }
+
+//---------------------------------------------------------
+//   cmdExplode
+///   explodes contents of top selected staff into subsequent staves
+//---------------------------------------------------------
+
+void Score::cmdExplode()
+      {
+      if (!selection().isRange())
+            return;
+
+      int srcStaff = selection().staffStart();
+      int lastStaff = selection().staffEnd();
+      int srcTrack = srcStaff * VOICES;
+
+      // reset selection to top staff only
+      // force complete measures
+      Segment* startSegment = selection().startSegment();
+      Segment* endSegment = selection().endSegment();
+      Measure* startMeasure = startSegment->measure();
+      Measure* endMeasure = endSegment ? endSegment->measure() : lastMeasure();
+      deselectAll();
+      select(startMeasure, SelectType::RANGE, srcStaff);
+      select(endMeasure, SelectType::RANGE, srcStaff);
+      startSegment = selection().startSegment();
+      endSegment = selection().endSegment();
+
+      if (srcStaff == lastStaff - 1) {
+            // only one staff was selected up front - determine number of staves
+            // loop through all chords looking for maximum number of notes
+            int n = 0;
+            for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+                  Element* e = s->element(srcTrack);
+                  if (e->type() == Element::Type::CHORD) {
+                        Chord* c = static_cast<Chord*>(e);
+                        n = qMax(n, c->notes().size());
+                        }
+                  }
+            lastStaff = qMin(nstaves(), srcStaff + n);
+            }
+
+      // copy to all destination staves
+      for (int i = 1; srcStaff + i < lastStaff; ++i) {
+            int track = (srcStaff + i) * VOICES;
+            ChordRest* cr = startMeasure->findChordRest(0, track);
+            if (cr) {
+                  XmlReader e(selection().mimeData());
+                  e.setPasteMode(true);
+                  if (!pasteStaff(e, cr->segment(), cr->staffIdx()))
+                        qDebug("explode: paste failed");
+                  }
+            }
+
+      // loop through each staff removing all but one note from each chord
+      for (int i = 0; srcStaff + i < lastStaff; ++i) {
+            int track = (srcStaff + i) * VOICES;
+            for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+                  Element* e = s->element(track);
+                  if (e && e->type() == Element::Type::CHORD) {
+                        Chord* c = static_cast<Chord*>(e);
+                        QList<Note*> notes = c->notes();
+                        int nnotes = notes.size();
+                        // keep note "i" (counting backwards from nnotes - 1)
+                        // but wrap around, so if there are more instruments th
+                        // each note potentially gets used multiple times
+                        int keepIndex = nnotes - (i % nnotes) - 1;
+                        Note* keepNote = c->notes()[keepIndex];
+                        foreach (Note* n, notes) {
+                              if (n != keepNote)
+                                    undoRemoveElement(n);
+                              }
+                        }
+                  }
+            }
+
+      setLayoutAll(true);
       }
 
 }
