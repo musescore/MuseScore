@@ -336,8 +336,10 @@ bool ReducedFraction::operator!=(const ReducedFraction& val) const
 
 //-------------------------------------------------------------------------
 
-ReducedFraction toMuseScoreTicks(int tick, int oldDivision)
+ReducedFraction toMuseScoreTicks(int tick, int oldDivision, bool isDivisionInTps)
       {
+      if (isDivisionInTps)
+            return ReducedFraction::fromTicks(tick);
 
       Q_ASSERT_X(!isMultiplicationOverflow(tick, MScore::division),
                  "ReducedFraction::toMuseScoreTicks", "Multiplication overflow");

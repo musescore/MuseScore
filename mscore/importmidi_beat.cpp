@@ -537,14 +537,23 @@ void setTempo(const std::multimap<int, MTrack> &tracks, Score *score)
                         // it's most likely not a human performance;
                         // we find all tempo events and set tempo changes to score
             for (const auto &track: tracks) {
-                  for (const auto &ie : track.second.mtrack->events()) {
-                        const MidiEvent &e = ie.second;
-                        if (e.type() == ME_META && e.metaType() == META_TEMPO) {
-                              const auto tick = toMuseScoreTicks(ie.first, track.second.division);
-                              const uchar* data = (uchar*)e.edata();
-                              const unsigned tempo = data[2] + (data[1] << 8) + (data[0] << 16);
-                              const double beatsPerSecond = 1000000.0 / tempo;
-                              setTempoToScore(score, tick.ticks(), beatsPerSecond);
+                  if (track.second.isDivisionInTps) {     // ticks per second
+                        const double ticksPerBeat = MScore::division;
+                        const double beatsPerSecond = track.second.division / ticksPerBeat;
+                        setTempoToScore(score, 0, beatsPerSecond);
+                        }
+                  else {      // beats per second
+                        for (const auto &ie : track.second.mtrack->events()) {
+                              const MidiEvent &e = ie.second;
+                              if (e.type() == ME_META && e.metaType() == META_TEMPO) {
+                                    const auto tick = toMuseScoreTicks(
+                                                      ie.first, track.second.division, false);
+                                    const uchar* data = (uchar*)e.edata();
+                                    const unsigned tempo = data[2] + (data[1] << 8)
+                                                                   + (data[0] << 16);
+                                    const double beatsPerSecond = 1000000.0 / tempo;
+                                    setTempoToScore(score, tick.ticks(), beatsPerSecond);
+                                    }
                               }
                         }
                   }

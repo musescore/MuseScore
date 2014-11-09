@@ -75,6 +75,7 @@ class MTrack {
       bool hasKey = false;
       int indexOfOperation = 0;
       int division = 0;
+      bool isDivisionInTps = false;       // ticks per second
 
       std::multimap<ReducedFraction, MidiChord> chords;
       std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
