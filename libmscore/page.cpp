@@ -480,6 +480,8 @@ void Page::doRebuildBspTree()
       int n = el.size();
       if (score()->layoutMode() == LayoutMode::LINE) {
             qreal h = _systems.front()->height();
+            if (_systems.front()->measures().isEmpty())
+                  return;
             MeasureBase* mb = _systems.front()->measures().back();
             qreal w = mb->x() + mb->width();
             bspTree.initialize(QRectF(0.0, 0.0, w, h), n);
