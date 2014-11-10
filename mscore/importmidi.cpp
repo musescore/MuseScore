@@ -625,13 +625,15 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
             MTrack track;
             track.mtrack = &t;
             track.division = mf->division();
+            track.isDivisionInTps = mf->isDivisionInTps();
             int events = 0;
                         //  - create time signature list from meta events
                         //  - create MidiChord list
                         //  - extract some information from track: program, min/max pitch
             for (const auto &i: t.events()) {
                   const MidiEvent& e = i.second;
-                  const auto tick = toMuseScoreTicks(i.first, track.division);
+                  const auto tick = toMuseScoreTicks(i.first, track.division,
+                                                     track.isDivisionInTps);
                               // remove time signature events
                   if ((e.type() == ME_META) && (e.metaType() == META_TIME_SIGNATURE)) {
                                     // because file can have incorrect data
@@ -644,7 +646,8 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   else if (e.type() == ME_NOTE) {
                         ++events;
                         const int pitch = e.pitch();
-                        const auto len = toMuseScoreTicks(e.len(), track.division);
+                        const auto len = toMuseScoreTicks(e.len(), track.division,
+                                                          track.isDivisionInTps);
                         if (tick + len > lastTick)
                               lastTick = tick + len;
 
@@ -874,7 +877,7 @@ void processMeta(MTrack &mt, bool isLyric)
       {
       for (const auto &ie : mt.mtrack->events()) {
             const MidiEvent &e = ie.second;
-            const auto tick = toMuseScoreTicks(ie.first, mt.division);
+            const auto tick = toMuseScoreTicks(ie.first, mt.division, mt.isDivisionInTps);
             if ((e.type() == ME_META) && ((e.metaType() == META_LYRIC) == isLyric))
                   mt.processMeta(tick.ticks(), e);
             }

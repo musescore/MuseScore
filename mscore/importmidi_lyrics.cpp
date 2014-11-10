@@ -42,7 +42,7 @@ bool isLyricEvent(const MidiEvent &e)
       }
 
 std::multimap<ReducedFraction, std::string>
-extractLyricsFromTrack(const MidiTrack &track, int division)
+extractLyricsFromTrack(const MidiTrack &track, int division, bool isDivisionInTps)
       {
       std::multimap<ReducedFraction, std::string> lyrics;
 
@@ -52,7 +52,7 @@ extractLyricsFromTrack(const MidiTrack &track, int division)
                   const uchar* data = (uchar*)e.edata();
                   std::string text = MidiCharset::fromUchar(data);
                   if (isLyricText(text)) {
-                        const auto tick = toMuseScoreTicks(i.first, division);
+                        const auto tick = toMuseScoreTicks(i.first, division, isDivisionInTps);
                                     // no charset handling here
                         lyrics.insert({tick, text});
                         }
@@ -208,7 +208,7 @@ void addLyricsToScore(
 void extractLyricsToMidiData(const MidiFile *mf)
       {
       for (const auto &t: mf->tracks()) {
-            const auto lyrics = extractLyricsFromTrack(t, mf->division());
+            const auto lyrics = extractLyricsFromTrack(t, mf->division(), mf->isDivisionInTps());
             if (!lyrics.empty())
                   preferences.midiImportOperations.data()->lyricTracks.push_back(lyrics);
             }
