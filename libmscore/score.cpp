@@ -2411,6 +2411,8 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
             for (auto i = km.begin(); i != km.end(); ++i) {
                   int tick = i->first;
                   Measure* measure = tick2measure(tick);
+                  if (!measure)
+                        continue;
                   Key oKey = i->second;
                   Key nKey = oKey;
                   int diff = -staff->part()->instr()->transpose().chromatic;
