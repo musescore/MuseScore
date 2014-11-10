@@ -20,6 +20,7 @@
 
 REVISION  = `cat mscore/revision.h`
 CPUS      = `grep -c processor /proc/cpuinfo`
+EXTERNAL_FONTS = OFF
 
 PREFIX    = "/usr/local"
 VERSION   = "2.0b-${REVISION}"
@@ -45,7 +46,7 @@ debug:
       cd build.debug;                                       \
       export PATH=${BINPATH};                               \
       cmake -DCMAKE_BUILD_TYPE=DEBUG	                  \
-  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" ..;              \
+  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DEXTERNAL_FONTS=${EXTERNAL_FONTS} ..;              \
       make lrelease;                                        \
       make -j ${CPUS};                                      \
 

@@ -160,17 +160,17 @@ QT4_WRAP_CPP (mocs
       ${SCRIPT_MOCS}
       )
 
-if (APPLE)
-      QT4_ADD_RESOURCES (qrc_files musescore.qrc)
-else (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc
+
+QT5_ADD_RESOURCES (qrc_files musescore.qrc)
+if (NOT APPLE AND NOT EXTERNAL_FONTS)
+      QT5_ADD_RESOURCES (qrc_files
             musescorefonts-MScore.qrc
             musescorefonts-Gonville.qrc
             musescorefonts-Bravura.qrc
             musescorefonts-MuseJazz.qrc
             musescorefonts-FreeSerif.qrc
             musescorefonts-Free.qrc)
-endif (APPLE)
+endif (NOT APPLE AND NOT EXTERNAL_FONTS)
 
 
 set (AUDIO "")
@@ -536,13 +536,12 @@ else (MINGW)
    endif (APPLE)
 endif (MINGW)
 
-if (APPLE)
+if (APPLE OR EXTERNAL_FONTS)
      install (FILES
       ../fonts/gonville/Gonville.otf
       ../fonts/gonville/GonvilleText.otf
       ../fonts/mscore/mscore.ttf
       ../fonts/mscore/MScoreText.ttf
-      ../fonts/MuseJazz-Mac.ttf
       ../fonts/FreeSerif.ttf
       ../fonts/FreeSerifBold.ttf
       ../fonts/FreeSans.ttf
@@ -552,6 +551,15 @@ if (APPLE)
       ../fonts/bravura/BravuraText.otf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
+     # special MuseJazz font for Mac OSX
+     if (APPLE)
+         install(FILES ../fonts/MuseJazz-Mac.ttf DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts)
+     else (APPLE)
+         install(FILES ../fonts/MuseJazz.ttf DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts)
+     endif (APPLE)
+endif (APPLE OR EXTERNAL_FONTS)
+
+if (APPLE)
      install(DIRECTORY
       ${QT_INSTALL_PREFIX}/qml
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}

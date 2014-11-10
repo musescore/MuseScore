@@ -193,9 +193,11 @@ void MScore::init()
             ":/fonts/gonville/GonvilleText.otf",
             ":/fonts/mscore/MScoreText.ttf",
             };
-
       for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {
             QString s(fonts[i]);
+#ifdef EXTERNAL_FONTS
+            s = mscoreGlobalShare + "fonts/" + s.section('/', -1);
+#endif
             if (-1 == QFontDatabase::addApplicationFont(s)) {
                   if (!MScore::testMode)
                         qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));

@@ -21,14 +21,20 @@ before_install:
   - "export PATH=`pwd`/qt5/bin:$PATH"
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
 before_script:
+  # get some memory back
+  - "ps aux"
+  - "sudo service mysql stop"
+  - "sudo /etc/init.d/postgresql stop"
+  - "ps aux"
   #compatibility between ruby travis artefact and GO one
   - "export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID"
   - "export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY"
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
   - "export PATH=$PATH:$HOME/bin"
+  - "sudo ln -sf ld.gold /usr/bin/ld"
   - "make revision"
-  - "make debug CPUS=4"
-  - "sudo make installdebug CPUS=4"
+  - "make debug CPUS=4 EXTERNAL_FONTS=ON"
+  - "sudo make installdebug CPUS=4 EXTERNAL_FONTS=ON"
   - "cd build.debug/mtest"
   - "make -j2"
 script:

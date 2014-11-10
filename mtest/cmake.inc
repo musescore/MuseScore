@@ -30,6 +30,7 @@ target_link_libraries(
       qzip
       z
       ${QT_LIBRARIES}
+      -Wl,--no-keep-memory
       )
 
 if (NOT MINGW AND NOT APPLE)
