@@ -4,7 +4,6 @@ import QtWebKit 3.0
 Rectangle {
     width:  600
     height: 400
-    color: "red"
 
     WebView {
         anchors.fill: parent
