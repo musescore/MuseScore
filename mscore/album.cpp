@@ -130,7 +130,7 @@ void Album::createScore()
       {
       if (_scores.isEmpty())
             return;
-      QString filter = QWidget::tr("MuseScore File (*.mscz);;");
+      QString filter = QWidget::tr("MuseScore File (*.mscz)");
       QSettings settings;
       if (mscore->lastSaveDirectory.isEmpty())
             mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.myScoresPath).toString();
@@ -290,7 +290,7 @@ void Album::write()
             QString fn = mscore->getSaveScoreName(
                QWidget::tr("MuseScore: Save Album"),
                _name,
-               QWidget::tr("MuseScore Files (*.album);;")
+               QWidget::tr("MuseScore Files (*.album)")
                );
             if (fn.isEmpty()) {
                   _dirty = false;
