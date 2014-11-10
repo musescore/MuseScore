@@ -22,22 +22,16 @@ namespace Ms {
 
 void MuseScore::showStartcenter(bool val)
       {
-      printf("show %d\n", val);
-
       QAction* a = getAction("startcenter");
       if (val && startcenter == nullptr) {
-            QQuickView* view = new Startcenter("qrc:/startcenter.qml");
-            startcenter = QWidget::createWindowContainer(view, this,
-               Qt::WindowStaysOnTopHint | Qt::Popup);
-            startcenter->setWindowModality(Qt::ApplicationModal);
+            startcenter = new Startcenter;
             int w = 600;
             int h = 400;
             int x = pos().x() + width() / 2 - w/2;
             int y = pos().y() + height() / 2 - h/2;
             startcenter->setGeometry(x, y, w, h);
-
             startcenter->addAction(a);
-            connect(view, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
+            connect(startcenter, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
       startcenter->setVisible(val);
       }
@@ -46,23 +40,24 @@ void MuseScore::showStartcenter(bool val)
 //   Startcenter
 //---------------------------------------------------------
 
-Startcenter::Startcenter(QString s)
- : QQuickView(QUrl(s))
+Startcenter::Startcenter()
+ : QDialog(0)
       {
-      connect(this, SIGNAL(closing(QQuickCloseEvent*)), SLOT(closeEvent()));
-      connect(this, SIGNAL(sceneGraphAboutToStop()), SLOT(closeEvent()));
+      setupUi(this);
+      setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
+      setWindowModality(Qt::ApplicationModal);
+      webView->setUrl(QUrl("http://www.musescore.org"));
+      connect(createNewScore, SIGNAL(clicked()), getAction("file-new"), SLOT(trigger()));
       }
 
 //---------------------------------------------------------
 //   closeEvent
 //---------------------------------------------------------
 
-void Startcenter::closeEvent()
+void Startcenter::closeEvent(QCloseEvent*)
       {
-      printf("close event\n");
       emit closed(false);
       }
-
 
 }
 

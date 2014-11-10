@@ -1,7 +1,6 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/">
-        <file alias="/startcenter.qml">data/startcenter.qml</file>
         <file>data/shortcuts.xml</file>
         <file>data/paper1.png</file>
         <file>data/paper2.png</file>
