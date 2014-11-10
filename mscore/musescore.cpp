@@ -807,16 +807,15 @@ MuseScore::MuseScore()
       menuEdit->addSeparator();
       QMenu* menuTools = new QMenu(tr("&Tools"));
       menuTools->addAction(getAction("explode"));
+      menuTools->addAction(getAction("implode"));
       menuEdit->addMenu(menuTools);
 
-      menuEdit->addSeparator();
       QMenu* menuMeasure = new QMenu(tr("&Measure"));
       menuMeasure->addAction(getAction("delete-measures"));
       menuMeasure->addAction(getAction("split-measure"));
       menuMeasure->addAction(getAction("join-measure"));
       menuEdit->addMenu(menuMeasure);
 
-      menuEdit->addSeparator();
       QMenu* menuVoices = new QMenu(tr("&Voices"));
       menuVoices->addAction(getAction("voice-x12"));
       menuVoices->addAction(getAction("voice-x13"));

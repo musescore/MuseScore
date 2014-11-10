@@ -2319,6 +2319,8 @@ void Score::cmd(const QAction* a)
             cmdAddBracket();
       else if (cmd == "explode")
             cmdExplode();
+      else if (cmd == "implode")
+            cmdImplode();
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }
@@ -2443,6 +2445,79 @@ void Score::cmdExplode()
                         foreach (Note* n, notes) {
                               if (n != keepNote)
                                     undoRemoveElement(n);
+                              }
+                        }
+                  }
+            }
+
+      setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   cmdImplode
+///   implodes contents of selected staves into top staff
+//---------------------------------------------------------
+
+void Score::cmdImplode()
+      {
+      if (!selection().isRange())
+            return;
+
+      int dstStaff = selection().staffStart();
+      int lastStaff = selection().staffEnd();
+      if (dstStaff == lastStaff - 1)
+            return;
+
+      Segment* startSegment = selection().startSegment();
+      Segment* endSegment = selection().endSegment();
+
+      // loop through segments adding notes to chord on top staff
+      int dstTrack = dstStaff * VOICES;
+      for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+            if (s->segmentType() != Segment::Type::ChordRest)
+                  continue;
+            Element* dst = s->element(dstTrack);
+            if (dst && dst->type() == Element::Type::CHORD) {
+                  Chord* dstChord = static_cast<Chord*>(dst);
+                  // see if we are tying in to this chord
+                  Chord* tied = 0;
+                  foreach (Note* n, dstChord->notes()) {
+                        if (n->tieBack()) {
+                              tied = n->tieBack()->startNote()->chord();
+                              break;
+                              }
+                        }
+                  // loop through each subsequent staff looking for notes to add
+                  for (int i = 1; dstStaff + i < lastStaff; ++i) {
+                        int srcTrack = (dstStaff + i) * VOICES;
+                        Element* src = s->element(srcTrack);
+                        if (src && src->type() == Element::Type::CHORD) {
+                              Chord* srcChord = static_cast<Chord*>(src);
+                              // add notes
+                              Note* lastNote = dstChord->downNote();
+                              foreach (Note* n, srcChord->notes()) {
+                                    NoteVal nv(n->pitch());
+                                    nv.tpc1 = n->tpc1();
+                                    // skip duplicates
+                                    if (nv.pitch == lastNote->pitch())
+                                          continue;
+                                    Note* nn = addNote(dstChord, nv);
+                                    lastNote = nn;
+                                    // add tie to this note if original chord was tied
+                                    if (tied) {
+                                          // find note to tie to
+                                          foreach (Note *tn, tied->notes()) {
+                                                if (nn->pitch() == tn->pitch() && nn->tpc() == tn->tpc() && !tn->tieFor()) {
+                                                      // found note to tie
+                                                      Tie* tie = new Tie(this);
+                                                      tie->setStartNote(tn);
+                                                      tie->setEndNote(nn);
+                                                      tie->setTrack(tn->track());
+                                                      undoAddElement(tie);
+                                                      }
+                                                }
+                                          }
+                                    }
                               }
                         }
                   }
