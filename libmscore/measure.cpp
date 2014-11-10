@@ -2329,6 +2329,10 @@ bool Measure::visible(int staffIdx) const
       {
       if (system() && (system()->staves()->isEmpty() || !system()->staff(staffIdx)->show()))
             return false;
+      if (staffIdx >= score()->staves().size()) {
+            qDebug("Measure::visible: bad staffIdx: %d", staffIdx);
+            return false;
+            }
       return score()->staff(staffIdx)->show() && staves[staffIdx]->_visible;
       }
 

@@ -46,11 +46,8 @@ DurationElement::DurationElement(const DurationElement& e)
 
 DurationElement::~DurationElement()
       {
-      qDebug("~DurationElement: tuplet %p", tuplet());
-      if (tuplet() && !tuplet()->elements().isEmpty() && tuplet()->elements().front() == this) {
-            qDebug("  delete tuplet");
+      if (tuplet() && !tuplet()->elements().isEmpty() && tuplet()->elements().front() == this)
             delete tuplet();
-            }
       }
 
 //---------------------------------------------------------
