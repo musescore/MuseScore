@@ -87,6 +87,7 @@ class MasterSynthesizer;
 class Driver;
 class Seq;
 class ImportMidiPanel;
+class Startcenter;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -216,7 +217,7 @@ class MuseScoreApplication : public QtSingleApplication {
 class MuseScore : public QMainWindow, public MuseScoreCore {
       Q_OBJECT
 
-      ScoreView* cv;
+      ScoreView* cv            { 0 };
       ScoreState _sstate;
       UpdateChecker* ucheck;
 
@@ -237,24 +238,24 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* playId;
 
       QProgressBar* _progressBar;
-      PreferenceDialog* preferenceDialog;
+      PreferenceDialog* preferenceDialog   { 0 };
       QToolBar* cpitchTools;
       QToolBar* fileTools;
       QToolBar* transportTools;
       QToolBar* entryTools;
-      TextTools* _textTools;
-      PianoTools* _pianoTools;
-      WebPageDockWidget* _webPage;
+      TextTools* _textTools                { 0 };
+      PianoTools* _pianoTools              { 0 };
+      WebPageDockWidget* _webPage          { 0 };
       MediaDialog* _mediaDialog;
       DrumTools* _drumTools;
       QToolBar* voiceTools;
-      InstrumentsDialog* instrList;
-      MeasuresDialog* measuresDialog;
-      InsertMeasuresDialog* insertMeasuresDialog;
-      MasterPalette* masterPalette;
-      PluginCreator* _pluginCreator;
-      PluginManager* pluginManager;
-      SelectionWindow* selectionWindow;
+      InstrumentsDialog* instrList         { 0 };
+      MeasuresDialog* measuresDialog       { 0 };
+      InsertMeasuresDialog* insertMeasuresDialog { 0 };
+      MasterPalette* masterPalette         { 0 };
+      PluginCreator* _pluginCreator        { 0 };
+      PluginManager* pluginManager         { 0 };
+      SelectionWindow* selectionWindow { 0 };
 
       QMenu* _fileMenu;
       QMenu* menuEdit;
@@ -266,32 +267,32 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QWidget* _searchDialog;
       QComboBox* searchCombo;
 
-      PlayPanel* playPanel;
-      Mixer* mixer;
-      SynthControl* synthControl;
-      Debugger* debugger;
-      MeasureListEditor* measureListEdit;
-      PageSettings* pageSettings;
+      PlayPanel* playPanel         { 0 };
+      Mixer* mixer                 { 0 };
+      SynthControl* synthControl   { 0 };
+      Debugger* debugger           { 0 };
+      MeasureListEditor* measureListEdit { 0 };
+      PageSettings* pageSettings     { 0 };
 
-      QWidget* symbolDialog;
+      QWidget* symbolDialog          { 0 };
 
-      PaletteScrollArea* clefPalette;
-      PaletteScrollArea* keyPalette;
-      KeyEditor* keyEditor;
+      PaletteScrollArea* clefPalette { 0 };
+      PaletteScrollArea* keyPalette  { 0 };
+      KeyEditor* keyEditor           { 0 };
       ChordStyleEditor* chordStyleEditor;
       QStatusBar* _statusBar;
       QLabel* _modeText;
       QLabel* _positionLabel;
-      NewWizard* newWizard;
+      NewWizard* newWizard           { 0 };
 
-      PaletteBox* paletteBox;
-      Inspector* _inspector;
-      OmrPanel* omrPanel;
+      PaletteBox* paletteBox         { 0 };
+      Inspector* _inspector          { 0 };
+      OmrPanel* omrPanel             { 0 };
 
-      bool _midiinEnabled;
+      bool _midiinEnabled            { true };
       QString lastOpenPath;
       QList<QString> plugins;
-      ScriptEngine* se;
+      ScriptEngine* se               { 0 };
       QString pluginPath;
 
       void createMenuEntry(PluginDescription*);
@@ -300,7 +301,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QTimer* autoSaveTimer;
       QList<QAction*> qmlPluginActions;
       QList<QAction*> pluginActions;
-      QSignalMapper* pluginMapper;
+      QSignalMapper* pluginMapper    { 0 };
 
       PianorollEditor* pianorollEditor;
       DrumrollEditor* drumrollEditor;
@@ -314,6 +315,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool _fullscreen;
       QList<LanguageItem> _languages;
 
+      QWidget* startcenter { 0 };
       QFileDialog* loadScoreDialog;
       QFileDialog* saveScoreDialog;
       QFileDialog* loadStyleDialog;
@@ -659,6 +661,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);
+
+      void showStartcenter(bool);
       };
 
 extern MuseScore* mscore;
