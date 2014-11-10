@@ -4861,7 +4861,7 @@ int main(int argc, char* av[])
                         QApplication::setPalette(p);
 
                         QPalette palette(p); //  = QToolTip::palette();
-                        palette.setBrush(QPalette::ToolTipBase, QBrush(QColor(s.value("ToolTipBaseColor", "#fff1d9").toString())));
+                        palette.setBrush(QPalette::ToolTipBase, QBrush(QColor(s.value("ToolTipBaseColor", "#FEFAC2").toString())));
                         palette.setColor(QPalette::ToolTipText, QColor(s.value("ToolTipTextColor",   "#000000").toString()));
                         QToolTip::setPalette(palette);
 
