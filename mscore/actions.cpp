@@ -2983,6 +2983,14 @@ Shortcut Shortcut::sc[] = {
          "text-u",
          QT_TRANSLATE_NOOP("action","underline")
          ),
+      Shortcut(
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL,
+         0,
+         "startcenter",
+         Qt::ApplicationShortcut,
+         QT_TRANSLATE_NOOP("action","Toggle Startcenter")
+         ),
       // xml==0  marks end of list
       Shortcut(MsWidget::MAIN_WINDOW,0, 0, 0, 0)
       };

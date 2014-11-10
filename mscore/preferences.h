@@ -116,6 +116,7 @@ struct Preferences {
       QString startScore;
       QString defaultStyleFile;
       bool showSplashScreen;
+      bool showStartcenter;
 
       bool useMidiRemote;
       MidiRemote midiRemote[MIDI_REMOTES];

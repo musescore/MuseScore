@@ -154,6 +154,7 @@ QT4_WRAP_CPP (mocs
       importmidi_panel.h importmidi_delegate.h importmidi_view.h
       debugger/debugger.h
       resourceManager.h downloadUtils.h accessibletoolbutton.h scoreaccessibility.h
+      startcenter.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -292,8 +293,8 @@ add_executable ( ${ExecutableName}
       importmidi_tuplet_detect.cpp  importmidi_tuplet_filter.cpp importmidi_tuplet_tonotes.cpp
       importmidi_simplify.cpp importmidi_voice.cpp importmidi_view.cpp importmidi_key.cpp
       resourceManager.cpp downloadUtils.cpp
-      textcursor.cpp
-      continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
+      textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
+      startcenter.cpp
 
       ${OMR_FILES}
       ${AUDIO}

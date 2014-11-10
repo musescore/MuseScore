@@ -376,36 +376,8 @@ MuseScore::MuseScore()
 
       setAcceptDrops(true);
       cs                    = 0;
-      cv                    = 0;
-      se                    = 0;    // script engine
-      _pluginCreator         = 0;
-      pluginManager         = 0;
-      pluginMapper          = 0;
-      debugger              = 0;
-      instrList             = 0;
-      playPanel             = 0;
-      preferenceDialog      = 0;
-      measuresDialog        = 0;
-      insertMeasuresDialog  = 0;
-      masterPalette         = 0;
-      mixer                 = 0;
-      synthControl          = 0;
-      selectionWindow       = 0;
-      measureListEdit       = 0;
-      symbolDialog          = 0;
-      clefPalette           = 0;
-      keyPalette            = 0;
-      keyEditor             = 0;
-      pageSettings          = 0;
-      paletteBox            = 0;
-      _inspector             = 0;
-      omrPanel              = 0;
-      _midiinEnabled        = true;
-      newWizard             = 0;
       lastOpenPath          = preferences.myScoresPath;
-      _textTools            = 0;
-      _pianoTools           = 0;
-      _webPage              = 0;
+
       _mediaDialog          = 0;
       _drumTools            = 0;
       pianorollEditor       = 0;
@@ -524,11 +496,6 @@ MuseScore::MuseScore()
       mainWindow = new QSplitter;
       mainWindow->setChildrenCollapsible(false);
       mainWindow->setOrientation(Qt::Vertical);
-
-//      QLayout* mlayout = new QVBoxLayout;
-//      mlayout->setMargin(0);
-//      mlayout->setSpacing(0);
-//      mainWindow->setLayout(mlayout);
 
       QWidget* mainScore = new QWidget;
       mainScore->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -875,6 +842,10 @@ MuseScore::MuseScore()
 
       menuView = mb->addMenu(tr("&View"));
       menuView->setObjectName("View");
+
+      a = getAction("startcenter");
+      a->setCheckable(true);
+      menuView->addAction(a);
 
       a = getAction("toggle-palette");
       a->setCheckable(true);
@@ -4141,6 +4112,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "toggle-palette")
             showPalette(a->isChecked());
+      else if (cmd == "startcenter")
+            showStartcenter(a->isChecked());
       else if (cmd == "inspector")
             showInspector(a->isChecked());
 #ifdef OMR
@@ -4580,13 +4553,7 @@ QQmlEngine* MuseScore::qml() { return 0; }
 }
 
 
-namespace Ms {
-      extern void tlineTest();
-      }
-
 using namespace Ms;
-
-
 
 //---------------------------------------------------------
 //   main
@@ -4838,6 +4805,7 @@ int main(int argc, char* av[])
             converterDpi = preferences.pngResolution;
 
       QSplashScreen* sc = 0;
+      QTimer* stimer = 0;
       if (!MScore::noGui && preferences.showSplashScreen) {
             QPixmap pm(":/data/splash.jpg");
             sc = new QSplashScreen(pm);
@@ -4846,6 +4814,9 @@ int main(int argc, char* av[])
             sc->setWindowFlags(Qt::FramelessWindowHint);
 #endif
 
+            stimer = new QTimer(0);
+            qApp->connect(stimer, SIGNAL(timeout()), sc, SLOT(close()));
+            stimer->start(5000);
             sc->show();
             qApp->processEvents();
             }
@@ -5050,8 +5021,8 @@ int main(int argc, char* av[])
       mscore->changeState(mscore->noScore() ? STATE_DISABLED : STATE_NORMAL);
       mscore->show();
 
-      if (sc)
-            sc->finish(mscore);
+//      if (sc)
+//            sc->finish(mscore);
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 #if 0
@@ -5067,6 +5038,8 @@ int main(int argc, char* av[])
                   }
             }
 #endif
+      if (preferences.showStartcenter)
+            mscore->showStartcenter(true);
       return qApp->exec();
       }
 
