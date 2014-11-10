@@ -762,7 +762,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
       cr = static_cast<ChordRest*>(seg->element(track));
       if (!cr) {
             // check if we are in the middle of a chord/rest
-            Segment* seg1 = seg->prev(Segment::Type::ChordRest);;
+            Segment* seg1 = seg->prev(Segment::Type::ChordRest);
             for (;;) {
                   if (seg1 == 0) {
                         qDebug("1:makeGapVoice: no segment before tick %d", tick);

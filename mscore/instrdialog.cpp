@@ -79,7 +79,7 @@ void InstrumentsDialog::on_saveButton_clicked()
          this,
          tr("MuseScore: Save Instrument List"),
          ".",
-         tr("MuseScore Instruments (*.xml);;")
+         tr("MuseScore Instruments (*.xml)")
          );
       if (name.isEmpty())
             return;

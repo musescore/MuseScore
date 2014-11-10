@@ -375,7 +375,7 @@ void TestImportMidi::mf(const char* name) const
       Score* score = new Score(mscore->baseStyle());
       score->setName(name);
       const QString mscorename = QString(name) + ".mscx";
-      QCOMPARE(importMidi(score,  midiFilePath(name)), Score::FileError::FILE_NO_ERROR);;
+      QCOMPARE(importMidi(score,  midiFilePath(name)), Score::FileError::FILE_NO_ERROR);
       QVERIFY(saveCompareScore(score, mscorename, DIR + mscorename));
       delete score;
       }

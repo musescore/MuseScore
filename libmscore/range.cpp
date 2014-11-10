@@ -171,7 +171,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                         tick += gap;
                         }
                   append(de);
-                  tick += de->duration().ticks();;
+                  tick += de->duration().ticks();
                   }
             else if (e->type() == Element::Type::BAR_LINE) {
                   BarLine* bl = static_cast<BarLine*>(e);
