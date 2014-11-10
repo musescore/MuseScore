@@ -41,6 +41,11 @@
 
 namespace Ms {
 
+PaletteCell::~PaletteCell()
+      {
+      delete element;
+      }
+
 //---------------------------------------------------------
 //   needsStaff
 //    should a staff been drawn if e is used as icon in
@@ -152,7 +157,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       if (i == -1) {
             // palette context menu
             QMenu menu;
-            QAction* moreAction = menu.addAction(tr("Show More..."));
+            QAction* moreAction = menu.addAction(tr("More Elements..."));
             moreAction->setEnabled(_moreElements);
             QAction* action = menu.exec(mapToGlobal(event->pos()));
             if (action == moreAction)
@@ -165,7 +170,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       QAction* contextAction = menu.addAction(tr("Properties..."));
       clearAction->setEnabled(!_readOnly);
       contextAction->setEnabled(!_readOnly);
-      QAction* moreAction    = menu.addAction(tr("Show More..."));
+      QAction* moreAction    = menu.addAction(tr("More Elements..."));
       moreAction->setEnabled(_moreElements);
 
       if (cells[i] && cells[i]->readOnly)
@@ -175,10 +180,8 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
 
       if (action == clearAction) {
             PaletteCell* cell = cells[i];
-            if (cell) {
-                  delete cell->element;
+            if (cell)
                   delete cell;
-                  }
             cells[i] = 0;
             emit changed();
             }

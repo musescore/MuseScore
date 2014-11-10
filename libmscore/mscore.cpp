@@ -151,13 +151,13 @@ void MScore::init()
       _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
-      selectColor[0].setNamedColor("#2456aa");   //blue
-      selectColor[1].setNamedColor("#1a8239");   //green
-      selectColor[2].setNamedColor("#d79112");   //yellow
-      selectColor[3].setNamedColor("#75112b");   //purple
+      selectColor[0].setNamedColor("#1259d0");   //blue
+      selectColor[1].setNamedColor("#009234");   //green
+      selectColor[2].setNamedColor("#c04400");   //orange
+      selectColor[3].setNamedColor("#70167a");   //purple
 
       defaultColor        = Qt::black;
-      dropColor           = Qt::red;
+      dropColor           = QColor("#1778db");
       defaultPlayDuration = 300;      // ms
       warnPitchRange      = true;
       playRepeats         = true;
@@ -165,8 +165,8 @@ void MScore::init()
 
       lastError           = "";
 
-      layoutBreakColor    = QColor("#6abed3");
-      frameMarginColor    = QColor("#6abed3");
+      layoutBreakColor    = QColor("#5999db");
+      frameMarginColor    = QColor("#5999db");
       bgColor.setNamedColor("#dddddd");
 
       _defaultStyle         = new MStyle();
@@ -190,6 +190,7 @@ void MScore::init()
             ":/fonts/mscoreTab.ttf",
             ":/fonts/mscore-BC.ttf",
             ":/fonts/bravura/BravuraText.otf",
+            ":/fonts/gonville/GonvilleText.otf",
             ":/fonts/mscore/MScoreText.ttf",
             };
 

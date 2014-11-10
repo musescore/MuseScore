@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -86,11 +86,11 @@
           </Slur>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="start" id="2"/>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
             </Note>
-          <Slur type="start" id="2"/>
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
@@ -111,11 +111,11 @@
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
+          <Slur type="stop" id="2"/>
           <Note>
             <pitch>64</pitch>
             <tpc>18</tpc>
             </Note>
-          <Slur type="stop" id="2"/>
           </Chord>
         </Measure>
       </Staff>

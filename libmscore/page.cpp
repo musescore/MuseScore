@@ -36,6 +36,7 @@ namespace Ms {
 #define MM(x) ((x)/INCH)
 
 const PaperSize paperSizes[] = {
+      PaperSize("Custom",    MM(1),    MM(1)),
       PaperSize("A4",        MM(210),  MM(297)),
       PaperSize("B5",        MM(176),  MM(250)),
       PaperSize("Letter",    8.5,      11),
@@ -66,7 +67,6 @@ const PaperSize paperSizes[] = {
       PaperSize("Folio",     MM(210),  MM(330)),
       PaperSize("Ledger",    MM(432),  MM(279)),
       PaperSize("Tabloid",   MM(279),  MM(432)),
-      PaperSize("Custom",    MM(1),    MM(1)),
       PaperSize(0,           MM(1),    MM(1))   // mark end of list
       };
 
@@ -479,6 +479,10 @@ void Page::doRebuildBspTree()
 
       int n = el.size();
       if (score()->layoutMode() == LayoutMode::LINE) {
+            if (_systems.isEmpty())
+                  return;
+            if (_systems.front()->measures().isEmpty())
+                  return;
             qreal h = _systems.front()->height();
             MeasureBase* mb = _systems.front()->measures().back();
             qreal w = mb->x() + mb->width();
@@ -497,11 +501,14 @@ void Page::doRebuildBspTree()
 //   (keep in sync with toolTipHeaderFooter in EditStyle::EditStyle())
 //    $p          - page number, except on first page
 //    $P          - page number, on all pages
+//    $N          - page number, if there is more than one
 //    $n          - number of pages
 //    $f          - file name
 //    $F          - file path+name
 //    $d          - current date
 //    $D          - creation date
+//    $m          - last modification time
+//    $M          - last modification date
 //    $C          - copyright, on first page only
 //    $c          - copyright, on all pages
 //    $$          - the $ sign itself
@@ -529,6 +536,8 @@ QString Page::replaceTextMacros(const QString& s) const
                   switch(c.toLatin1()) {
                         case 'p': // not on first page 1
                               if (_no) // FALLTHROUGH
+                        case 'N': // on page 1 only if there are multiple pages
+                              if ( (_score->npages() + _score->pageNumberOffset()) > 1 ) // FALLTHROUGH
                         case 'P': // on all pages
                               d += QString("%1").arg(_no + 1 + _score->pageNumberOffset());
                               break;
@@ -536,10 +545,10 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += QString("%1").arg(_score->npages() + _score->pageNumberOffset());
                               break;
                         case 'f':
-                              d += _score->name();
+                              d += _score->rootScore()->name();
                               break;
                         case 'F':
-                              d += _score->absoluteFilePath();
+                              d += _score->rootScore()->absoluteFilePath();
                               break;
                         case 'd':
                               d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
@@ -547,9 +556,23 @@ QString Page::replaceTextMacros(const QString& s) const
                         case 'D':
                               {
                               QString creationDate = _score->metaTag("creationDate");
-                              if (!creationDate.isNull())
+                              if (creationDate.isNull())
+                                    d += _score->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
+                              else
                                     d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
                               }
+                              break;
+                        case 'm':
+                              if ( _score->dirty() )
+                                    d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
+                              else
+                                    d += _score->rootScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+                              break;
+                        case 'M':
+                              if ( _score->dirty() )
+                                    d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+                              else
+                                    d += _score->rootScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
                               break;
                         case 'C': // only on first page
                               if (!_no) // FALLTHROUGH

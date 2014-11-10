@@ -118,8 +118,6 @@ bool ImportMidiPanel::isMidiFile(const QString &fileName)
 
 void ImportMidiPanel::setupUi()
       {
-      _ui->pushButtonApply->setIcon(*icons[int(Icons::checkmark_ICON)]);
-
       connect(_updateUiTimer, SIGNAL(timeout()), this, SLOT(updateUi()));
       connect(_ui->pushButtonApply, SIGNAL(clicked()), SLOT(applyMidiImport()));
       connect(_ui->pushButtonUp, SIGNAL(clicked()), SLOT(moveTrackUp()));
@@ -256,13 +254,15 @@ void ImportMidiPanel::excludeMidiFile(const QString &fileName)
       if (_importInProgress || _reopenInProgress)
             return;
 
-      resetTableViewState();
-      _model->clear();
-      resetTableViewState();
       auto &opers = preferences.midiImportOperations;
       opers.excludeMidiFile(fileName);
-      if (fileName == _midiFile)
+
+      if (fileName == _midiFile) {
             _midiFile = "";
+            resetTableViewState();
+            _model->clear();
+            resetTableViewState();
+            }
       }
 
 void ImportMidiPanel::setPreferredVisible(bool visible)

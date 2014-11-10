@@ -65,6 +65,8 @@ SelectionWindow::~SelectionWindow()
 
 void SelectionWindow::updateFilteredElements()
       {
+      if (!_score)
+            return;
       int filter = _score->selectionFilter().filtered();
       for(int row = 0; row < _listWidget->count(); row++) {
             QListWidgetItem *item = _listWidget->item(row);

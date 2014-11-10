@@ -431,6 +431,10 @@ void Selection::updateSelectedElements()
                   Element* e = s->element(st);
                   if (!e)
                         continue;
+                  if (e->generated())
+                        continue;
+                  if (e->type() == Element::Type::TIMESIG)
+                        continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         for (Element* e : cr->lyricsList()) {
@@ -471,7 +475,7 @@ void Selection::updateSelectedElements()
                       if (canSelect(sp->startChord()) && canSelect(sp->endChord()))
                         appendFiltered(sp); // slur with start or end in range selection
             }
-            else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() < etick))
+            else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick))
                   appendFiltered(sp); // spanner with start and end in range selection
             }
       update();
@@ -633,7 +637,12 @@ QByteArray Selection::staffMimeData() const
 
       int ticks  = tickEnd() - tickStart();
       int staves = staffEnd() - staffStart();
-      xml.stag(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart()).arg(ticks).arg(staffStart()).arg(staves));
+      if (!MScore::testMode) {
+            xml.stag(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart()).arg(ticks).arg(staffStart()).arg(staves));
+            }
+      else {
+            xml.stag(QString("StaffList version=\"2.00\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(tickStart()).arg(ticks).arg(staffStart()).arg(staves));
+            }
       Segment* seg1 = _startSegment;
       Segment* seg2 = _endSegment;
 
@@ -1127,6 +1136,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
                   }
             }
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
+      _score->setSelectionChanged(true);
       }
 
 //---------------------------------------------------------

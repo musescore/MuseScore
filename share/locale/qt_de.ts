@@ -935,7 +935,7 @@ nach
     </message>
 </context>
 <context>
-    <name>QDialogButtonBox</name>
+    <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
         <translation>OK</translation>
@@ -3391,19 +3391,19 @@ Bitte wählen Sie einen anderen Dateinamen.</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation>Tab</translation>
+        <translation>Tab →|</translation>
     </message>
     <message>
         <source>Backtab</source>
-        <translation>Rück-Tab</translation>
+        <translation>Rück-Tab |←</translation>
     </message>
     <message>
-        <source>Backspace</source>
-        <translation>Rücktaste</translation>
+        <source>Backspace </source>
+        <translation>Rücktaste ←</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation>Return</translation>
+        <translation>Return ↵</translation>
     </message>
     <message>
         <source>Enter</source>
@@ -3427,7 +3427,7 @@ Bitte wählen Sie einen anderen Dateinamen.</translation>
     </message>
     <message>
         <source>SysReq</source>
-        <translation>SysReq</translation>
+        <translation>S-Abf</translation>
     </message>
     <message>
         <source>Home</source>
@@ -3439,39 +3439,39 @@ Bitte wählen Sie einen anderen Dateinamen.</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Links</translation>
+        <translation>←</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Hoch</translation>
+        <translation>↑</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Rechts</translation>
+        <translation>→</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Runter</translation>
+        <translation>↓</translation>
     </message>
     <message>
         <source>PgUp</source>
-        <translation>Bild aufwärts</translation>
+        <translation>Bild ↑</translation>
     </message>
     <message>
         <source>PgDown</source>
-        <translation>Bild abwärts</translation>
+        <translation>Bild ↓</translation>
     </message>
     <message>
         <source>CapsLock</source>
-        <translation>Feststelltaste</translation>
+        <translation>Feststelltaste ⇓</translation>
     </message>
     <message>
         <source>NumLock</source>
-        <translation>Zahlen-Feststelltaste</translation>
+        <translation>Num ⇓</translation>
     </message>
     <message>
         <source>ScrollLock</source>
-        <translation>Rollen-Feststelltaste</translation>
+        <translation>Rollen ⇓</translation>
     </message>
     <message>
         <source>Menu</source>
@@ -3643,27 +3643,27 @@ Bitte wählen Sie einen anderen Dateinamen.</translation>
     </message>
     <message>
         <source>Page Up</source>
-        <translation>Bild aufwärts</translation>
+        <translation>Bild ↑</translation>
     </message>
     <message>
         <source>Page Down</source>
-        <translation>Bild abwärts</translation>
+        <translation>Bild ↓</translation>
     </message>
     <message>
         <source>Caps Lock</source>
-        <translation>Feststelltaste</translation>
+        <translation>Feststelltaste ⇓</translation>
     </message>
     <message>
         <source>Num Lock</source>
-        <translation>Zahlen-Feststelltaste</translation>
+        <translation>Num ⇓</translation>
     </message>
     <message>
         <source>Number Lock</source>
-        <translation>Zahlen-Feststelltaste</translation>
+        <translation>Zahlen-Feststelltaste ⇓</translation>
     </message>
     <message>
         <source>Scroll Lock</source>
-        <translation>Rollen-Feststelltaste</translation>
+        <translation>Rollen ⇓</translation>
     </message>
     <message>
         <source>Insert</source>
@@ -3679,7 +3679,7 @@ Bitte wählen Sie einen anderen Dateinamen.</translation>
     </message>
     <message>
         <source>System Request</source>
-        <translation>System Request</translation>
+        <translation>System Abfrage</translation>
     </message>
     <message>
         <source>Select</source>
@@ -3727,7 +3727,7 @@ Bitte wählen Sie einen anderen Dateinamen.</translation>
     </message>
     <message>
         <source>Shift</source>
-        <translation>Umschalt</translation>
+        <translation>Umschalt ⇑</translation>
     </message>
     <message>
         <source>Alt</source>
@@ -3735,7 +3735,7 @@ Bitte wählen Sie einen anderen Dateinamen.</translation>
     </message>
     <message>
         <source>Meta</source>
-        <translation>Meta</translation>
+        <translation>Alt Gr</translation>
     </message>
     <message>
         <source>+</source>

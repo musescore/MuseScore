@@ -58,6 +58,8 @@ class Box : public MeasureBase {
       virtual void layout() override;
       virtual void write(Xml&) const override;
       virtual void write(Xml& xml, int, bool) const override { write(xml); }
+      virtual void writeProperties(Xml&) const override;
+      virtual bool readProperties(XmlReader&) override;
       virtual void read(XmlReader&) override;
       virtual bool acceptDrop(const DropData&) const override;
       virtual Element* drop(const DropData&) override;
@@ -79,6 +81,7 @@ class Box : public MeasureBase {
       void setTopGap(qreal val)       { _topGap = val;        }
       qreal bottomGap() const         { return _bottomGap;    }
       void setBottomGap(qreal val)    { _bottomGap = val;     }
+      void copyValues(Box* origin);
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

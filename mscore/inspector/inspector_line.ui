@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>284</width>
-    <height>124</height>
+    <height>154</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,24 +49,20 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QLabel" name="label_4">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -79,10 +75,10 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item row="2" column="2">
       <widget class="QToolButton" name="resetLineColor">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Line color value</string>
@@ -90,33 +86,23 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Line width</string>
-       </property>
       </widget>
      </item>
      <item row="4" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Line thickness</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Line style</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="2">
+     <item row="1" column="0" colspan="2">
       <widget class="QCheckBox" name="diagonal">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
@@ -129,10 +115,10 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
+     <item row="1" column="2">
       <widget class="QToolButton" name="resetDiagonal">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Allow diagonal value</string>
@@ -140,19 +126,9 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
-       </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="2" column="1">
       <widget class="Awl::ColorLabel" name="lineColor">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
@@ -168,78 +144,68 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QDoubleSpinBox" name="lineWidth">
        <property name="accessibleName">
-        <string>Line width</string>
+        <string>Line thickness</string>
        </property>
        <property name="suffix">
-        <string extracomment="Spatium unit">sp</string>
+        <string extracomment="Staff space unit">sp</string>
        </property>
        <property name="singleStep">
         <double>0.100000000000000</double>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <widget class="QComboBox" name="lineStyle">
        <property name="accessibleName">
         <string>Line style</string>
        </property>
        <item>
         <property name="text">
-         <string>Solid</string>
+         <string>Continuous</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Dash</string>
+         <string>Dashed</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Dot</string>
+         <string>Dotted</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>DashDot</string>
+         <string>Dash-dotted</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>DashDotDot</string>
+         <string>Dash-dot-dotted</string>
         </property>
        </item>
       </widget>
      </item>
-     <item row="3" column="2">
+     <item row="4" column="2">
       <widget class="QToolButton" name="resetLineWidth">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line width value</string>
+        <string>Reset Line thickness value</string>
        </property>
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
-       </property>
       </widget>
      </item>
-     <item row="4" column="2">
+     <item row="5" column="2">
       <widget class="QToolButton" name="resetLineStyle">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Line style value</string>
@@ -247,15 +213,28 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QToolButton" name="resetLineVisible">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
+       <property name="accessibleName">
+        <string>Reset Line visible value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QCheckBox" name="lineVisible">
+       <property name="text">
+        <string>Line visible</string>
        </property>
       </widget>
      </item>
@@ -280,8 +259,6 @@
   <tabstop>lineStyle</tabstop>
   <tabstop>resetLineStyle</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

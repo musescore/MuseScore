@@ -24,16 +24,19 @@ namespace Ms {
 
 class TBox : public VBox {
       Q_OBJECT
+      Text* _text;
 
    public:
       TBox(Score* score);
-      ~TBox() {}
+      ~TBox();
       virtual TBox* clone() const        { return new TBox(*this); }
       virtual Element::Type type() const { return Element::Type::TBOX;       }
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
 
       virtual void layout();
-      virtual void add(Element*);
-      Text* getText();
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      Text* text()                        { return _text; }
       };
 
 

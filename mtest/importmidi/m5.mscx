@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -45,6 +45,7 @@
         <StaffType group="pitched">
           </StaffType>
         <bracket type="1" span="2"/>
+        <barLineSpan>2</barLineSpan>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">

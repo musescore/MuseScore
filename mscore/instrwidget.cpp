@@ -362,7 +362,7 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
 
       instrumentList->setSelectionMode(QAbstractItemView::ExtendedSelection);
       partiturList->setSelectionMode(QAbstractItemView::SingleSelection);
-      QStringList header = (QStringList() << tr("Staves") << tr("Visib.") << tr("Clef") << tr("Link.") << tr("Staff type"));
+      QStringList header = (QStringList() << tr("Staves") << tr("Visible") << tr("Clef") << tr("Linked") << tr("Staff type"));
       partiturList->setHeaderLabels(header);
       partiturList->resizeColumnToContents(1);  // shrink "visible "and "linked" columns as much as possible
       partiturList->resizeColumnToContents(3);
@@ -833,6 +833,9 @@ void InstrumentsWidget::on_linkedButton_clicked()
 
 void InstrumentsWidget::on_search_textChanged(const QString &searchPhrase)
       {
+      if (searchPhrase.isEmpty())
+            return;
+
       filterInstruments(instrumentList, searchPhrase);
       instrumentGenreFilter->blockSignals(true);
       instrumentGenreFilter->setCurrentIndex(0);
@@ -846,7 +849,8 @@ void InstrumentsWidget::on_search_textChanged(const QString &searchPhrase)
 void InstrumentsWidget::on_clearSearch_clicked()
       {
       search->clear();
-      filterInstruments (instrumentList);
+      QString genre = instrumentGenreFilter->currentData().toString();
+      filterInstrumentsByGenre(instrumentList, genre);
       }
 
 //---------------------------------------------------------

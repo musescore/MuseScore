@@ -173,6 +173,21 @@ void SpannerSegment::setVisible(bool f)
       }
 
 //---------------------------------------------------------
+//   setColor
+//---------------------------------------------------------
+
+void SpannerSegment::setColor(const QColor& col)
+      {
+      if (_spanner) {
+            for (SpannerSegment* ss : _spanner->spannerSegments())
+                  ss->_color = col;
+            _spanner->_color = col;
+            }
+      else
+            _color = col;
+      }
+
+//---------------------------------------------------------
 //   nextElement
 //---------------------------------------------------------
 
@@ -397,11 +412,20 @@ QVariant Spanner::propertyDefault(P_ID propertyId) const
 void Spanner::computeStartElement()
       {
       switch (_anchor) {
-            case Anchor::SEGMENT:
-                  if (type() == Element::Type::SLUR)
-                        _startElement = score()->findCR(tick(), track());
-                  else
-                        _startElement = score()->findCRinStaff(tick(), track());
+            case Anchor::SEGMENT: {
+                  Segment* seg = score()->tick2segmentMM(tick(), false, Segment::Type::ChordRest);
+                  int strack = (track() / VOICES) * VOICES;
+                  int etrack = strack + VOICES;
+                  _startElement = 0;
+                  if (seg) {
+                        for (int t = strack; t < etrack; ++t) {
+                              if (seg->element(t)) {
+                                    _startElement = seg->element(t);
+                                    break;
+                                    }
+                              }
+                        }
+                  }
                   break;
 
             case Anchor::MEASURE:
@@ -422,12 +446,7 @@ void Spanner::computeEndElement()
       {
       switch (_anchor) {
             case Anchor::SEGMENT:
-                  if (type() == Element::Type::SLUR) {
-                        Segment* s = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
-                        _endElement = s ? static_cast<ChordRest*>(s->element(track2())) : nullptr;
-                        }
-                  else
-                        _endElement = score()->findCRinStaff(tick2() - 1, track2());
+                  _endElement = score()->findCRinStaff(tick2() - 1, track2());
                   break;
 
             case Anchor::MEASURE:
@@ -445,16 +464,6 @@ void Spanner::computeEndElement()
       }
 
 //---------------------------------------------------------
-//   setStartChord
-//---------------------------------------------------------
-
-void Spanner::setStartChord(Chord* c)
-      {
-      _anchor = Anchor::CHORD;
-      _startElement = c;
-      }
-
-//---------------------------------------------------------
 //   startChord
 //---------------------------------------------------------
 
@@ -465,15 +474,6 @@ Chord* Spanner::startChord()
             _startElement = score()->findCR(tick(), track());
       Q_ASSERT(_startElement->type() == Element::Type::CHORD);
       return static_cast<Chord*>(_startElement);
-      }
-
-//---------------------------------------------------------
-//   setEndChord
-//---------------------------------------------------------
-
-void Spanner::setEndChord(Chord* c)
-      {
-      _endElement = c;
       }
 
 //---------------------------------------------------------
@@ -558,6 +558,17 @@ void Spanner::setVisible(bool f)
       for (SpannerSegment* ss : spannerSegments())
             ss->setVisible(f);
       _visible = f;
+      }
+
+//---------------------------------------------------------
+//   setColor
+//---------------------------------------------------------
+
+void Spanner::setColor(const QColor& col)
+      {
+      for (SpannerSegment* ss : spannerSegments())
+            ss->setColor(col);
+      _color = col;
       }
 
 //---------------------------------------------------------

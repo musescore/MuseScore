@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -74,13 +74,25 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
           <gateTime>50</gateTime>
           </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
           <velocity>120</velocity>
@@ -168,12 +180,8 @@
           </Chord>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>15</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <RepeatMeasure>
-          <lid>16</lid>
+          <lid>15</lid>
           <duration z="4" n="4"/>
           </RepeatMeasure>
         <tick>3840</tick>
@@ -274,13 +282,25 @@
             <velocity>100</velocity>
             <gateTime>100</gateTime>
             </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
           <Articulation name="staccato">
             <velocity>100</velocity>
             <gateTime>50</gateTime>
             </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
           <Articulation name="tenuto">
             <velocity>100</velocity>
             <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
             </Articulation>
           <Articulation name="sforzato">
             <velocity>120</velocity>
@@ -372,12 +392,8 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>15</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <RepeatMeasure>
-            <lid>16</lid>
+            <lid>15</lid>
             <duration z="4" n="4"/>
             </RepeatMeasure>
           <tick>3840</tick>
@@ -439,12 +455,8 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>15</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <RepeatMeasure>
-            <lid>16</lid>
+            <lid>15</lid>
             <duration z="4" n="4"/>
             </RepeatMeasure>
           <tick>3840</tick>

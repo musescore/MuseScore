@@ -1089,7 +1089,7 @@ NoLen:
 
       // get length of printed lines from horiz. page position of lastCR
       // (enter a bit 'into' the ChordRest for clarity)
-      _printedLineLength = lastCR->pageX() - pageX() + 1.5*spatium();
+      _printedLineLength = lastCR ? lastCR->pageX() - pageX() + 1.5*spatium() : 3 * spatium();
 
       // get duration indicator line(s) from page position of nextSegm
       QList<System*>* systems = score()->systems();
@@ -1712,7 +1712,7 @@ FiguredBass* Score::addFiguredBass()
                   QMessageBox::information(0,
                      QMessageBox::tr("MuseScore"),
                      QMessageBox::tr("No note or figured bass selected:\n"
-                        "please select a single note or figured bass and retry.\n"),
+                        "Please select a single note or figured bass and retry.\n"),
                      QMessageBox::Ok, QMessageBox::NoButton);
             return 0;
             }

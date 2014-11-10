@@ -110,8 +110,6 @@
     <sym name="aug"/>
     <sym name="dim"/>
     <sym name="alt"/>
-    <sym name="no"/>
-    <sym name="omit"/>
 
     </font>
 
@@ -141,6 +139,9 @@
     <sym value=")" name="s)"/>
     <sym value="," name="s,"/>
     <sym value="/" name="s/"/>
+
+    <sym name="no"/>
+    <sym name="omit"/>
 
     <sym code="0xe18a" name="striangle"/>
 
@@ -225,17 +226,17 @@
 
   <token class="modifier">
     <name>alt</name>
-    <render>m:-1:0 a l t</render>
+    <render>m:-1:0 alt</render>
     </token>
 
   <token class="modifier">
     <name>no</name>
-    <render>m:0:-&mod; n o m:0:&mod;</render>
+    <render>m:0:-&mod; no m:0:&mod;</render>
     </token>
 
   <token class="modifier">
     <name>omit</name>
-    <render>m:0:-&mod; o m i t m:0:&mod;</render>
+    <render>m:0:-&mod; omit m:0:&mod;</render>
     </token>
 
   <token class="extension">

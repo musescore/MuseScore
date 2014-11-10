@@ -27,11 +27,10 @@
 #include "libmscore/score.h"
 #include "libmscore/repeatlist.h"
 #include "mscore/playpanel.h"
-
 #include <jack/midiport.h>
 
 // Prevent killing sequencer with wrong data
-#define less128(__less) ((__less >=0 && __less <=127) ? __less : 0)
+#define less128(__less) ((__less >=0 && __less <= 127) ? __less : 0)
 
 namespace Ms {
 
@@ -343,9 +342,9 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                               if (nn && (type == ME_CLOCK || type == ME_SENSE))
                                     continue;
                               Event e;
-                              e.setType(type);
                               e.setChannel(type & 0xf);
                               type &= 0xf0;
+                              e.setType(type);
                               if (type == ME_NOTEON || type == ME_NOTEOFF) {
                                     e.setPitch(event.buffer[1]);
                                     e.setVelo(event.buffer[2]);
@@ -502,8 +501,8 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
       if (!preferences.useJackMidi)
             return;
 
-      int portIdx = e.channel() / 16;
-      int chan    = e.channel() % 16;
+      int portIdx = seq->score()->midiPort(e.channel());
+      int chan    = seq->score()->midiChannel(e.channel());
 
 // qDebug("JackAudio::putEvent %d:%d  pos %d(%d)", portIdx, chan, framePos, _segmentSize);
 
@@ -536,7 +535,9 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
             case ME_NOTEOFF:
             case ME_POLYAFTER:
             case ME_CONTROLLER:
+                  // Catch CTRL_PROGRAM and let other ME_CONTROLLER events to go
                   if (e.dataA() == CTRL_PROGRAM) {
+                        // Convert CTRL_PROGRAM event to ME_PROGRAM
                         unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
                         if (p == 0) {
                               qDebug("JackMidi: buffer overflow, event lost");
@@ -624,7 +625,7 @@ void JackAudio::handleTimeSigTempoChanged()
 
 void JackAudio::checkTransportSeek(int cur_frame, int nframes, bool inCountIn)
       {
-      if (!seq || !seq->score() || !seq->canStart() || inCountIn)
+      if (!seq || !seq->score() || inCountIn)
             return;
 
       // Obtaining the current JACK Transport position

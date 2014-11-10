@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -166,7 +166,7 @@
             </Note>
           <ChordLine>
             <subtype>1</subtype>
-            <lid>119</lid>
+            <lid>118</lid>
             </ChordLine>
           </Chord>
         <Chord>
@@ -802,7 +802,7 @@
               </Note>
             <ChordLine>
               <subtype>1</subtype>
-              <lid>119</lid>
+              <lid>118</lid>
               </ChordLine>
             </Chord>
           <Chord>

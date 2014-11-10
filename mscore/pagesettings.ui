@@ -172,13 +172,13 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="toolTip">
-           <string>Distance between two lines on a normal staff</string>
+           <string>Distance between two lines on a standard 5-line staff</string>
           </property>
           <property name="whatsThis">
-           <string>Distance between two lines on a normal staff</string>
+           <string>Distance between two lines on a standard 5-line staff</string>
           </property>
           <property name="text">
-           <string>Space:</string>
+           <string>Staff space:</string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>

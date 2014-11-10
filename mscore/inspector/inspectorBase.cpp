@@ -17,6 +17,7 @@
 #include "musescore.h"
 #include "inspectorBase.h"
 #include "inspector.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -35,7 +36,7 @@ InspectorBase::InspectorBase(QWidget* parent)
       inspector = static_cast<Inspector*>(parent);
       _layout    = new QVBoxLayout;
       _layout->setSpacing(0);
-      _layout->setContentsMargins(0, 0, 0, 0);
+      _layout->setContentsMargins(0, 10, 0, 0);
       _layout->addStretch(100);
       setLayout(_layout);
       }
@@ -221,6 +222,9 @@ void InspectorBase::setElement()
                         val = QVariant(f.denominator());
                   }
 
+	    if (ii.r)
+		    ii.r->setIcon(*icons[int(Icons::reset_ICON)]);
+
             blockSignals = true;
             setValue(ii, val);
             blockSignals = false;
@@ -274,7 +278,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   }
             ii.w->setStyleSheet( valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
             }
-      
+
       //deal with reset if only one element, or if values are the same
       if (!valuesAreDifferent){
             PropertyStyle styledValue = inspector->el().front()->propertyStyle(ii.t);

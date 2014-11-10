@@ -67,10 +67,13 @@
       <enum>QLayout::SetDefaultConstraint</enum>
      </property>
      <property name="leftMargin">
-      <number>0</number>
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
      </property>
      <property name="horizontalSpacing">
-      <number>2</number>
+      <number>3</number>
      </property>
      <property name="verticalSpacing">
       <number>0</number>
@@ -167,7 +170,7 @@
         </sizepolicy>
        </property>
        <property name="accessibleName">
-        <string>Dot Position</string>
+        <string>Dot position</string>
        </property>
        <property name="sizeAdjustPolicy">
         <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
@@ -201,23 +204,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Dot Position Value</string>
+        <string>Reset Dot position value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -229,11 +222,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="maxVisibleItems">
-        <number>14</number>
-       </property>
        <property name="accessibleName">
         <string>Head group</string>
+       </property>
+       <property name="maxVisibleItems">
+        <number>14</number>
        </property>
        <property name="frame">
         <bool>true</bool>
@@ -249,23 +242,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Mirror head value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -278,23 +261,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Velocity type value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -307,23 +280,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Head type value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -483,23 +446,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Velocity value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -556,20 +509,10 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Head group value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -582,23 +525,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Small value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -611,23 +544,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Tuning value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -640,23 +563,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Play value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -684,8 +597,6 @@
   <tabstop>velocity</tabstop>
   <tabstop>resetVelocity</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

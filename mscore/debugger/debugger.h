@@ -424,6 +424,7 @@ class TupletView : public ShowElementBase {
 
    private slots:
       void numberClicked();
+      void tupletClicked();
       void elementClicked(QTreeWidgetItem*);
 
    public:
@@ -564,6 +565,9 @@ class LineSegmentView : public ShowElementBase {
       Q_OBJECT;
 
       Ui::LineSegmentBase lb;
+
+   private slots:
+      void lineClicked();
 
    public:
       LineSegmentView();

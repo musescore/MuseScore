@@ -43,6 +43,7 @@
 #include "pathlistdialog.h"
 #include "mstyle/mconfig.h"
 #include "resourceManager.h"
+#include "synthesizer/msynthesizer.h"
 
 namespace Ms {
 
@@ -67,12 +68,12 @@ struct PeriodItem {
        };
 
 static PeriodItem updatePeriods[] = {
-      PeriodItem(24,      QT_TRANSLATE_NOOP("preferences","Every day")),
-      PeriodItem(72,      QT_TRANSLATE_NOOP("preferences","Every 3 days")),
-      PeriodItem(7*24,    QT_TRANSLATE_NOOP("preferences","Every week")),
-      PeriodItem(2*7*24,  QT_TRANSLATE_NOOP("preferences","Every 2 weeks")),
-      PeriodItem(30*24,   QT_TRANSLATE_NOOP("preferences","Every month")),
-      PeriodItem(2*30*24, QT_TRANSLATE_NOOP("preferences","Every 2 months")),
+      PeriodItem(24,      QT_TRANSLATE_NOOP("preferences","Every Day")),
+      PeriodItem(72,      QT_TRANSLATE_NOOP("preferences","Every 3 Days")),
+      PeriodItem(7*24,    QT_TRANSLATE_NOOP("preferences","Every Week")),
+      PeriodItem(2*7*24,  QT_TRANSLATE_NOOP("preferences","Every 2 Weeks")),
+      PeriodItem(30*24,   QT_TRANSLATE_NOOP("preferences","Every Month")),
+      PeriodItem(2*30*24, QT_TRANSLATE_NOOP("preferences","Every 2 Months")),
       PeriodItem(-1,      QT_TRANSLATE_NOOP("preferences","Never")),
       };
 
@@ -144,6 +145,7 @@ void Preferences::init()
       startScore               = ":/data/My_First_Score.mscx";
       defaultStyleFile         = "";
       showSplashScreen         = true;
+      showStartcenter          = false;
 
       useMidiRemote      = false;
       for (int i = 0; i < MIDI_REMOTES; ++i)
@@ -216,9 +218,7 @@ void Preferences::init()
 
       exportAudioSampleRate   = exportAudioSampleRates[0];
 
-      workspace               = "default";
-
-      firstStartWeb = true;
+      workspace               = "Basic";
       };
 
 //---------------------------------------------------------
@@ -282,6 +282,7 @@ void Preferences::write()
       s.setValue("startScore",         startScore);
       s.setValue("defaultStyle",       defaultStyleFile);
       s.setValue("showSplashScreen",   showSplashScreen);
+      s.setValue("showStartcenter",    showStartcenter);
 
       s.setValue("midiExpandRepeats",  midiExpandRepeats);
       s.setValue("playRepeats",        MScore::playRepeats);
@@ -342,8 +343,6 @@ void Preferences::write()
       s.setValue("exportAudioSampleRate", exportAudioSampleRate);
 
       s.setValue("workspace", workspace);
-
-      s.setValue("firstStartWeb", firstStartWeb);
 
       //update
       s.setValue("checkUpdateStartup", checkUpdateStartup);
@@ -425,6 +424,7 @@ void Preferences::read()
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
 
       showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
+      showStartcenter          = s.value("showStartcenter", showStartcenter).toBool();
       midiExpandRepeats        = s.value("midiExpandRepeats", midiExpandRepeats).toBool();
       MScore::playRepeats      = s.value("playRepeats", MScore::playRepeats).toBool();
       MScore::panPlayback      = s.value("panPlayback", MScore::panPlayback).toBool();
@@ -498,8 +498,6 @@ void Preferences::read()
       exportAudioSampleRate = s.value("exportAudioSampleRate", exportAudioSampleRate).toInt();
 
       workspace          = s.value("workspace", workspace).toString();
-
-      firstStartWeb = s.value("firstStartWeb", true).toBool();
 
       checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toInt();
       if (checkUpdateStartup == 0)
@@ -576,6 +574,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
+      mySfzButton->setIcon(*icons[int(Icons::edit_ICON)]);
       myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
@@ -599,6 +599,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 #ifndef USE_PULSEAUDIO
       pulseaudioDriver->setVisible(false);
 #endif
+
+      tabIO->setEnabled(!noSeq);
 
       QButtonGroup* fgButtons = new QButtonGroup(this);
       fgButtons->setExclusive(true);
@@ -841,6 +843,7 @@ void PreferenceDialog::updateValues()
             }
       sessionScore->setText(prefs.startScore);
       showSplashScreen->setChecked(prefs.showSplashScreen);
+      showStartcenter->setChecked(prefs.showStartcenter);
       expandRepeats->setChecked(prefs.midiExpandRepeats);
       instrumentList1->setText(prefs.instrumentList1);
       instrumentList2->setText(prefs.instrumentList2);
@@ -1043,8 +1046,17 @@ void PreferenceDialog::updateSCListView()
                   newItem->setIcon(0, *icons[int(s->icon())]);
             newItem->setText(1, s->keysToString());
             newItem->setData(0, Qt::UserRole, s->key());
-            if (enableExperimental || (strncmp(s->key(), "media", 5) != 0 && strncmp(s->key(), "layer", 5) != 0 && strncmp(s->key(), "insert-fretframe", 16) != 0))
-                shortcutList->addTopLevelItem(newItem);
+            QString accessibleInfo = tr("Action: %1; Shortcut: %2")
+                        .arg(newItem->text(0)).arg(newItem->text(1).isEmpty()
+                                          ? tr("No shortcut defined") : newItem->text(1));
+            newItem->setData(0, Qt::AccessibleTextRole, accessibleInfo);
+            newItem->setData(1, Qt::AccessibleTextRole, accessibleInfo);
+            if (enableExperimental
+                        || (!s->key().startsWith("media")
+                            && !s->key().startsWith("layer")
+                            && !s->key().startsWith("insert-fretframe"))) {
+                  shortcutList->addTopLevelItem(newItem);
+                  }
             }
       shortcutList->resizeColumnToContents(0);
       }
@@ -1174,7 +1186,7 @@ void PreferenceDialog::selectStartWith()
          this,
          tr("Choose Starting Score"),
          sessionScore->text(),
-         tr("MuseScore Files (*.mscz *.mscx *.msc);;All (*)")
+         tr("MuseScore Files (*.mscz *.mscx);;All (*)")
          );
       if (!s.isNull())
             sessionScore->setText(s);
@@ -1312,16 +1324,23 @@ void PreferenceDialog::apply()
             prefs.alsaPeriodSize     = alsaPeriodSize->currentText().toInt();
             prefs.alsaFragments      = alsaFragments->value();
             preferences = prefs;
-            Driver* driver = driverFactory(seq, "");
             if (seq) {
-                  seq->setDriver(driver);
+                  Driver* driver = driverFactory(seq, "");
+                  if (driver) {
+                        // Updating synthesizer's sample rate
+                        if (seq->synti()) {
+                              seq->synti()->setSampleRate(driver->sampleRate());
+                              seq->synti()->init();
+                              }
+                        seq->setDriver(driver);
+                        }
                   if (!seq->init())
                         qDebug("sequencer init failed");
                   }
             }
 
 #ifdef USE_PORTAUDIO
-      if (usePortaudio) {
+      if (usePortaudio && !noSeq) {
             Portaudio* audio = static_cast<Portaudio*>(seq->driver());
             prefs.portaudioDevice = audio->deviceIndex(portaudioApi->currentIndex(),
                portaudioDevice->currentIndex());
@@ -1353,6 +1372,7 @@ void PreferenceDialog::apply()
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
 
       prefs.showSplashScreen   = showSplashScreen->isChecked();
+      prefs.showStartcenter    = showStartcenter->isChecked();
       prefs.midiExpandRepeats  = expandRepeats->isChecked();
       prefs.instrumentList1    = instrumentList1->text();
       prefs.instrumentList2    = instrumentList2->text();
@@ -1834,6 +1854,16 @@ void Preferences::updatePluginList()
 
       foreach(QString pluginPath, pluginPathList) {
             Ms::updatePluginList(pluginPathList, pluginPath, pluginList);
+            }
+      //remove non existing files
+      auto i = pluginList.begin();
+      while (i != pluginList.end()) {
+            PluginDescription d = *i;
+            QFileInfo fi(d.path);
+            if (!fi.exists())
+                  i = pluginList.erase(i);
+            else
+                  ++i;
             }
       }
 

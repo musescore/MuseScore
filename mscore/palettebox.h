@@ -11,8 +11,8 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __PALETTE_BOX__
-#define __PALETTE_BOX__
+#ifndef __PALETTE_BOX_H__
+#define __PALETTE_BOX_H__
 
 namespace Ms {
 
@@ -30,11 +30,14 @@ class PaletteBox : public QDockWidget {
 
       QVBoxLayout* vbox;
       Palette* newPalette(const QString& name, int slot);
+      QComboBox* workspaceList;
 
    private slots:
       void paletteCmd(PaletteCommand, int);
       void closeAll();
       void displayMore(const QString& paletteName);
+      void workspaceSelected(int idx);
+      void newWorkspaceClicked();
 
    signals:
       void changed();
@@ -46,6 +49,7 @@ class PaletteBox : public QDockWidget {
       bool read(XmlReader&);
       void clear();
       QList<Palette*> palettes() const;
+      void updateWorkspaces();
       };
 
 class PaletteBoxScrollArea : public QScrollArea {

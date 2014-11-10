@@ -424,6 +424,8 @@ void Segment::add(Element* el)
 
       int track = el->track();
       Q_ASSERT(track != -1);
+      Q_ASSERT(el->score() == score());
+      Q_ASSERT(score()->nstaves() * VOICES == _elist.size());
 
       switch (el->type()) {
             case Element::Type::REPEAT_MEASURE:
@@ -502,8 +504,10 @@ void Segment::add(Element* el)
 
             case Element::Type::BAR_LINE:
             case Element::Type::BREATH:
-                  checkElement(el, track);
-                  _elist[track] = el;
+                  if (track < score()->nstaves() * VOICES) {
+                        checkElement(el, track);
+                        _elist[track] = el;
+                        }
                   empty = false;
                   break;
 
@@ -545,17 +549,18 @@ void Segment::remove(Element* el)
                   break;
 
             case Element::Type::DYNAMIC:
-            case Element::Type::HARMONY:
-            case Element::Type::SYMBOL:
-            case Element::Type::FRET_DIAGRAM:
-            case Element::Type::TEMPO_TEXT:
-            case Element::Type::STAFF_TEXT:
-            case Element::Type::REHEARSAL_MARK:
-            case Element::Type::MARKER:
-            case Element::Type::IMAGE:
-            case Element::Type::TEXT:
-            case Element::Type::TAB_DURATION_SYMBOL:
             case Element::Type::FIGURED_BASS:
+            case Element::Type::FRET_DIAGRAM:
+            case Element::Type::HARMONY:
+            case Element::Type::IMAGE:
+            case Element::Type::MARKER:
+            case Element::Type::REHEARSAL_MARK:
+            case Element::Type::STAFF_TEXT:
+            case Element::Type::SYMBOL:
+            case Element::Type::TAB_DURATION_SYMBOL:
+            case Element::Type::TEMPO_TEXT:
+            case Element::Type::TEXT:
+            case Element::Type::TREMOLOBAR:
                   removeAnnotation(el);
                   break;
 
@@ -587,7 +592,6 @@ void Segment::remove(Element* el)
                   _elist[track] = 0;
                   if (!el->generated())
                         el->staff()->removeKey(tick());
-                  empty = false;
                   break;
 
             case Element::Type::CLEF:
@@ -1184,8 +1188,8 @@ QString Segment::accessibleExtraInfo()
 
       QString startSpanners = "";
       QString endSpanners = "";
-      SpannerMap smap = score()->spannerMap();
-      std::vector< ::Interval<Spanner*> > spanners = smap.findOverlapping(this->tick(), this->tick());
+
+      std::vector< ::Interval<Spanner*> > spanners = score()->spannerMap().findOverlapping(this->tick(), this->tick());
       for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
             ::Interval<Spanner*> interval = *i;
             Spanner* s = interval.value;
@@ -1219,6 +1223,20 @@ QString Segment::accessibleExtraInfo()
                   endSpanners += tr("End of ") + s->accessibleInfo();
             }
       return rez + " " + startSpanners + " " + endSpanners;
+      }
+
+ //--------------------------------------------------------
+ //   qmlAnnotations
+ //--------------------------------------------------------
+
+QQmlListProperty<Ms::Element> Segment::qmlAnnotations()
+      {
+      _qmlAnnotations.clear();
+      for (std::vector<Element*>::iterator it = _annotations.begin();
+           it != _annotations.end(); ++it) {
+            _qmlAnnotations.append(*it);
+            }
+      return QQmlListProperty<Ms::Element>(this, _qmlAnnotations);
       }
 
 }           // namespace Ms

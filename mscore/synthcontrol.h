@@ -37,7 +37,6 @@ class SynthControl : public QWidget, Ui::SynthControl {
       Score* _score;
       virtual void closeEvent(QCloseEvent*);
       void updateGui();
-      void updateUpDownButtons();
 
    private slots:
       void gainChanged(double, int);

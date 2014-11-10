@@ -558,6 +558,7 @@ void Debugger::updateElement(Element* el)
       {
       if (el == 0 || !isVisible())
             return;
+
       if (cs != el->score())
             updateList(el->score());
       for (int i = 0;; ++i) {
@@ -1556,6 +1557,8 @@ void BarLineView::setElement(Element* e)
       bl.span->setValue(barline->span());
       bl.spanFrom->setValue(barline->spanFrom());
       bl.spanTo->setValue(barline->spanTo());
+      bl.customSubtype->setChecked(barline->customSubtype());
+      bl.customSpan->setChecked(barline->customSpan());
       }
 
 //---------------------------------------------------------
@@ -1607,6 +1610,7 @@ TupletView::TupletView()
       tb.direction->addItem("Down", 2);
 
       connect(tb.number, SIGNAL(clicked()), SLOT(numberClicked()));
+      connect(tb.tuplet, SIGNAL(clicked()), SLOT(tupletClicked()));
       connect(tb.elements, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(elementClicked(QTreeWidgetItem*)));
       }
 
@@ -1617,6 +1621,15 @@ TupletView::TupletView()
 void TupletView::numberClicked()
       {
       emit elementChanged(((Tuplet*)element())->number());
+      }
+
+//---------------------------------------------------------
+//   tupletClicked
+//---------------------------------------------------------
+
+void TupletView::tupletClicked()
+      {
+      emit elementChanged(((Tuplet*)element())->tuplet());
       }
 
 //---------------------------------------------------------
@@ -1641,6 +1654,7 @@ void TupletView::setElement(Element* e)
       tb.ratioZ->setValue(tuplet->ratio().numerator());
       tb.ratioN->setValue(tuplet->ratio().denominator());
       tb.number->setEnabled(tuplet->number());
+      tb.tuplet->setEnabled(tuplet->tuplet());
       tb.elements->clear();
       foreach(DurationElement* e, tuplet->elements()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
@@ -2106,6 +2120,16 @@ LineSegmentView::LineSegmentView()
    : ShowElementBase()
       {
       lb.setupUi(addWidget());
+      connect(lb.lineButton, SIGNAL(clicked()), SLOT(lineClicked()));
+      }
+
+//---------------------------------------------------------
+//   lineClicked
+//---------------------------------------------------------
+
+void LineSegmentView::lineClicked()
+      {
+      emit elementChanged(((LineSegment*)element())->spanner());
       }
 
 //---------------------------------------------------------
@@ -2220,6 +2244,8 @@ void BeamView::setElement(Element* e)
             }
       bb.grow1->setValue(b->growLeft());
       bb.grow2->setValue(b->growRight());
+      bb.cross->setChecked(b->cross());
+      bb.isGrace->setChecked(b->isGrace());
       }
 
 //---------------------------------------------------------
@@ -2441,11 +2467,12 @@ void KeySigView::setElement(Element* e)
       KeySig* ks = static_cast<KeySig*>(e);
       ShowElementBase::setElement(e);
 
+      KeySigEvent ev = ks->keySigEvent();
       keysig.showCourtesySig->setChecked(ks->showCourtesy());
-      keysig.accidentalType->setValue(int(ks->keySigEvent().key()));
-      keysig.customType->setValue(ks->keySigEvent().customType());
-      keysig.custom->setChecked(ks->keySigEvent().custom());
-      keysig.invalid->setChecked(ks->keySigEvent().invalid());
+      keysig.accidentalType->setValue(int(ev.key()));
+      keysig.customType->setValue(ev.customType());
+      keysig.custom->setChecked(ev.custom());
+      keysig.invalid->setChecked(ev.invalid());
       }
 
 //---------------------------------------------------------
@@ -2589,7 +2616,7 @@ void TextLineSegmentView::setElement(Element* e)
       lb.pos2y->setValue(vs->pos2().y());
       lb.offset2x->setValue(vs->userOff2().x());
       lb.offset2y->setValue(vs->userOff2().y());
-      connect(lb.line, SIGNAL(clicked()), SLOT(lineClicked()));
+      connect(lb.lineButton, SIGNAL(clicked()), SLOT(lineClicked()));
       }
 
 //---------------------------------------------------------

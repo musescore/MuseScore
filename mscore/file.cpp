@@ -281,8 +281,7 @@ void MuseScore::loadFiles()
 #endif
          tr("Overture / Score Writer Files <experimental> (*.ove *.scw);;")+
          tr("Bagpipe Music Writer Files <experimental> (*.bww);;")+
-         tr("Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX);;")+
-         tr("All Files (*)"),
+         tr("Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)"),
          tr("MuseScore: Load Score")
          );
       QStringList list = files;
@@ -338,7 +337,6 @@ Score* MuseScore::readScore(const QString& name)
             score = 0;
             }
       allowShowMidiPanel(name);
-
       return score;
       }
 
@@ -372,8 +370,8 @@ bool MuseScore::saveFile(Score* score)
             if (t)
                   fn = t->plainText(true);
             QString name = createDefaultFileName(fn);
-            QString f1 = tr("Compressed MuseScore File (*.mscz)");
-            QString f2 = tr("MuseScore File (*.mscx)");
+            QString f1 = tr("MuseScore File (*.mscz)");
+            QString f2 = tr("Uncompressed MuseScore File (*.mscx)");
 
             QSettings settings;
             if (mscore->lastSaveDirectory.isEmpty())
@@ -383,7 +381,14 @@ bool MuseScore::saveFile(Score* score)
             if (saveDirectory.isEmpty())
                   saveDirectory = preferences.myScoresPath;
 
-            QString fname   = QString("%1/%2.mscz").arg(saveDirectory).arg(name);
+            QString fname;
+#ifdef Q_OS_WIN
+            if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
+                  fname = QString("%1/%2").arg(saveDirectory).arg(name);
+            else
+#endif
+            fname = QString("%1/%2.mscz").arg(saveDirectory).arg(name);
+
             QString filter = f1 + ";;" + f2;
             fn = mscore->getSaveScoreName(
                tr("MuseScore: Save Score"),
@@ -556,30 +561,34 @@ void MuseScore::newFile()
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
       Measure* pm = score->firstMeasure();
+
+      Measure* nm;
       for (int i = 0; i < measures; ++i) {
-            Measure* m;
             if (pm) {
-                  m  = pm;
+                  nm  = pm;
                   pm = pm->nextMeasure();
                   }
             else {
-                  m = new Measure(score);
-                  score->measures()->add(m);
+                  nm = new Measure(score);
+                  score->measures()->add(nm);
                   }
-            m->setTimesig(timesig);
-            m->setLen(timesig);
+            nm->setTimesig(timesig);
+            nm->setLen(timesig);
             if (pickupMeasure) {
                   if (i == 0) {
-                        m->setIrregular(true);        // dont count pickup measure
-                        m->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
+                        nm->setIrregular(true);        // dont count pickup measure
+                        nm->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
                         }
                   /*else if (i == (measures - 1)) {
                         // last measure is shorter
                         m->setLen(timesig - Fraction(pickupTimesigZ, pickupTimesigN));
                         }*/
                   }
-            m->setEndBarLineType(i == (measures - 1) ? BarLineType::END : BarLineType::NORMAL, false);
+            nm->setEndBarLineType(i == (measures - 1) ? BarLineType::END : BarLineType::NORMAL, i != (measures - 1));
             }
+      //delete unused measures if any
+      if (nm->nextMeasure())
+            score->undoRemoveMeasures(nm->nextMeasure(), score->lastMeasure());
 
       int tick = 0;
       for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
@@ -749,6 +758,7 @@ void MuseScore::newFile()
             tempo /= 60;      // bpm -> bps
 
             tt->setTempo(tempo);
+            tt->setFollowText(true);
             tt->setTrack(0);
             Segment* seg = score->firstMeasure()->first(Segment::Type::ChordRest);
             seg->add(tt);
@@ -891,7 +901,7 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
                   fn = QFileDialog::getOpenFileName(
                      this, tr("MuseScore: Load Style"),
                      defaultPath,
-                     tr("MuseScore Styles (*.mss);;" "All Files (*)")
+                     tr("MuseScore Styles (*.mss)")
                      );
                   }
             else {
@@ -961,8 +971,6 @@ QString MuseScore::getStyleFilename(bool open, const QString& title)
 QString MuseScore::getChordStyleFilename(bool open)
       {
       QString filter = tr("Chord Symbols Style File (*.xml)");
-      if (open)
-            filter.append(tr(";;All Files (*)"));
 
       QFileInfo myStyles(preferences.myStylesPath);
       if (myStyles.isRelative())
@@ -1198,7 +1206,7 @@ QString MuseScore::getPaletteFilename(bool open)
       QString filter;
       if (open) {
             title  = tr("MuseScore: Load Palette");
-            filter = tr("MuseScore Palette (*.mpal);;All Files (*)");
+            filter = tr("MuseScore Palette (*.mpal)");
             }
       else {
             title  = tr("MuseScore: Save Palette");
@@ -1281,7 +1289,7 @@ QString MuseScore::getPluginFilename(bool open)
       QString filter;
       if (open) {
             title  = tr("MuseScore: Load Plugin");
-            filter = tr("MuseScore Plugin (*.qml);;All Files (*)");
+            filter = tr("MuseScore Plugin (*.qml)");
             }
       else {
             title  = tr("MuseScore: Save Plugin");
@@ -1293,6 +1301,8 @@ QString MuseScore::getPluginFilename(bool open)
             myPlugins.setFile(QDir::home(), preferences.myPluginsPath);
       QString defaultPath = myPlugins.absoluteFilePath();
 
+      QString name  = createDefaultFileName("Plugin");
+      QString fname = QString("%1/%2.qml").arg(defaultPath).arg(name);
       if (preferences.nativeDialogs) {
             QString fn;
             if (open)
@@ -1326,15 +1336,16 @@ QString MuseScore::getPluginFilename(bool open)
       else {
             if (savePluginDialog == 0) {
                   savePluginDialog = new QFileDialog(this);
+                  QSettings settings;
+                  savePluginDialog->restoreState(settings.value("savePluginDialog").toByteArray());
                   savePluginDialog->setAcceptMode(QFileDialog::AcceptSave);
                   savePluginDialog->setFileMode(QFileDialog::AnyFile);
                   savePluginDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
                   savePluginDialog->setOption(QFileDialog::DontUseNativeDialog, true);
+                  savePluginDialog->setWindowTitle(tr("MuseScore: Save Plugin"));
+                  savePluginDialog->setNameFilter(filter);
                   savePluginDialog->setDirectory(defaultPath);
-
-                  QSettings settings;
-                  savePluginDialog->restoreState(settings.value("savePluginDialog").toByteArray());
-                  savePluginDialog->setAcceptMode(QFileDialog::AcceptSave);
+                  savePluginDialog->selectFile(fname);
                   }
             dialog = savePluginDialog;
             }
@@ -1361,7 +1372,7 @@ QString MuseScore::getDrumsetFilename(bool open)
       QString filter;
       if (open) {
             title  = tr("MuseScore: Load Drumset");
-            filter = tr("MuseScore Drumset (*.drm);;All Files (*)");
+            filter = tr("MuseScore Drumset (*.drm)");
             }
       else {
             title  = tr("MuseScore: Save Drumset");
@@ -1460,6 +1471,13 @@ void MuseScore::printFile()
       QPrintDialog pd(&printerDev, 0);
       if (!pd.exec())
             return;
+
+      LayoutMode layoutMode = cs->layoutMode();
+      if (layoutMode != LayoutMode::PAGE) {
+            cs->setLayoutMode(LayoutMode::PAGE);
+            cs->doLayout();
+            }
+
       QPainter p(&printerDev);
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
@@ -1490,6 +1508,10 @@ void MuseScore::printFile()
                   }
             }
       p.end();
+      if (layoutMode != cs->layoutMode()) {
+            cs->setLayoutMode(layoutMode);
+            cs->doLayout();
+            }
       }
 
 //---------------------------------------------------------
@@ -1501,10 +1523,6 @@ bool MuseScore::exportFile()
       {
       QStringList fl;
       fl.append(tr("SVG Collection (*.svg-c)"));
-      fl.append(tr("Uncompressed MuseScore Format (*.mscx)"));
-      fl.append(tr("MusicXML Format (*.xml)"));
-      fl.append(tr("Compressed MusicXML Format (*.mxl)"));
-      fl.append(tr("Standard MIDI File (*.mid)"));
       fl.append(tr("PDF File (*.pdf)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
@@ -1514,6 +1532,10 @@ bool MuseScore::exportFile()
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
       fl.append(tr("MP3 Audio (*.mp3)"));
+      fl.append(tr("Standard MIDI File (*.mid)"));
+      fl.append(tr("MusicXML File (*.xml)"));
+      fl.append(tr("Compressed MusicXML File (*.mxl)"));
+      fl.append(tr("Uncompressed MuseScore File (*.mscx)"));
 
       QString saveDialogTitle = tr("MuseScore: Export");
 
@@ -1528,8 +1550,14 @@ bool MuseScore::exportFile()
             saveDirectory = preferences.myScoresPath;
             }
 
-      QString selectedFilter;
-      QString name   = QString("%1/%2.svg-c").arg(saveDirectory).arg(cs->name());
+      QString name;
+#ifdef Q_OS_WIN
+      if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
+            name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+      else
+#endif
+      name = QString("%1/%2.pdf").arg(saveDirectory).arg(cs->name());
+
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
@@ -1555,10 +1583,6 @@ bool MuseScore::exportParts()
       {
       QStringList fl;
       fl.append(tr("SVG Collection (*.svg-c)"));
-      fl.append(tr("Uncompressed MuseScore Format (*.mscx)"));
-      fl.append(tr("MusicXML Format (*.xml)"));
-      fl.append(tr("Compressed MusicXML Format (*.mxl)"));
-      fl.append(tr("Standard MIDI File (*.mid)"));
       fl.append(tr("PDF File (*.pdf)"));
       fl.append(tr("PNG Bitmap Graphic (*.png)"));
       fl.append(tr("Scalable Vector Graphic (*.svg)"));
@@ -1568,6 +1592,11 @@ bool MuseScore::exportParts()
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
       fl.append(tr("MP3 Audio (*.mp3)"));
+      fl.append(tr("Standard MIDI File (*.mid)"));
+      fl.append(tr("MusicXML File (*.xml)"));
+      fl.append(tr("Compressed MusicXML File (*.mxl)"));
+      fl.append(tr("MuseScore File (*.mscz)"));
+      fl.append(tr("Uncompressed MuseScore File (*.mscx)"));
 
       QString saveDialogTitle = tr("MuseScore: Export Parts");
 
@@ -1582,9 +1611,17 @@ bool MuseScore::exportParts()
           saveDirectory = preferences.myScoresPath;
           }
 
-      QString selectedFilter;
+      QString scoreName = cs->parentScore() ? cs->parentScore()->name() : cs->name();
+      QString name;
+#ifdef Q_OS_WIN
+      if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
+            name = QString("%1/%2").arg(saveDirectory).arg(scoreName);
+      else
+#endif
+      name = QString("%1/%2.pdf").arg(saveDirectory).arg(scoreName);
+
       QString filter = fl.join(";;");
-      QString fn = getSaveScoreName(saveDialogTitle, saveDirectory, filter, true);
+      QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
           return false;
 
@@ -1602,18 +1639,22 @@ bool MuseScore::exportParts()
             thisScore = thisScore->parentScore();
       bool overwrite = false;
       bool noToAll = false;
+      QString confirmReplaceTitle = tr("Confirm Replace");
+      QString confirmReplaceMessage = tr("\"%1\" already exists.\nDo you want to replace it?\n");
+      QString replaceMessage = tr("Replace");
+      QString skipMessage = tr("Skip");
       foreach(Excerpt* e, thisScore->excerpts())  {
             Score* pScore = e->score();
-            QString partfn = fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + pScore->name() + "." + ext;
+            QString partfn = fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(pScore->name()) + "." + ext;
             QFileInfo fip(partfn);
             if(fip.exists() && !overwrite) {
                   if(noToAll)
                         continue;
-                  QMessageBox msgBox( QMessageBox::Question, tr("Confirm Replace"),
-                        tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(partfn)),
+                  QMessageBox msgBox( QMessageBox::Question, confirmReplaceTitle,
+                        confirmReplaceMessage.arg(QDir::toNativeSeparators(partfn)),
                         QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
-                  msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
-                  msgBox.setButtonText(QMessageBox::No, tr("Skip"));
+                  msgBox.setButtonText(QMessageBox::Yes, replaceMessage);
+                  msgBox.setButtonText(QMessageBox::No, skipMessage);
                   msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
                   msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
                   int sb = msgBox.exec();
@@ -1631,6 +1672,32 @@ bool MuseScore::exportParts()
             if (!saveAs(pScore, true, partfn, ext))
                   return false;
             }
+      // For PDF, also export score and parts together
+      if (ext.toLower() == "pdf") {
+            QList<Score*> scores;
+            scores.append(thisScore);
+            foreach(Excerpt* e, thisScore->excerpts())  {
+                  scores.append(e->score());
+                  }
+            QString partfn(fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(tr("Score_and_Parts")) + ".pdf");
+            QFileInfo fip(partfn);
+            if(fip.exists() && !overwrite) {
+                  if (!noToAll) {
+                        QMessageBox msgBox( QMessageBox::Question, confirmReplaceTitle,
+                              confirmReplaceMessage.arg(QDir::toNativeSeparators(partfn)),
+                              QMessageBox::Yes | QMessageBox::No);
+                        msgBox.setButtonText(QMessageBox::Yes, replaceMessage);
+                        msgBox.setButtonText(QMessageBox::No, skipMessage);
+                        int sb = msgBox.exec();
+                        if(sb == QMessageBox::Yes) {
+                              if (!savePdf(scores, partfn))
+                                    return false;
+                              }
+                        }
+                  }
+            else if (!savePdf(scores, partfn))
+                  return false;
+      }
       if(!noToAll)
             QMessageBox::information(this, tr("MuseScore: Export Parts"), tr("Parts were successfully exported"));
       return true;
@@ -1754,6 +1821,7 @@ bool MuseScore::savePdf(const QString& saveName)
 
 bool MuseScore::savePdf(Score* cs, const QString& saveName)
       {
+      cs->setPrinting(true);
       QPrinter printerDev(QPrinter::HighResolution);
       const PageFormat* pf = cs->pageFormat();
       printerDev.setPaperSize(pf->size(), QPrinter::Inch);
@@ -1795,6 +1863,74 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
                   }
             }
       p.end();
+      cs->setPrinting(false);
+      return true;
+      }
+
+bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
+      {
+      if (cs.empty())
+            return false;
+      Score* firstScore = cs[0];
+
+      QPrinter printerDev(QPrinter::HighResolution);
+      const PageFormat* pf = firstScore->pageFormat();
+      printerDev.setPaperSize(pf->size(), QPrinter::Inch);
+
+      printerDev.setCreator("MuseScore Version: " VERSION);
+      printerDev.setFullPage(true);
+      printerDev.setColorMode(QPrinter::Color);
+      printerDev.setDocName(firstScore->name());
+      printerDev.setDoubleSidedPrinting(pf->twosided());
+      printerDev.setOutputFormat(QPrinter::PdfFormat);
+
+      printerDev.setOutputFileName(saveName);
+      QPainter p(&printerDev);
+      p.setRenderHint(QPainter::Antialiasing, true);
+      p.setRenderHint(QPainter::TextAntialiasing, true);
+      double mag = printerDev.logicalDpiX() / MScore::DPI;
+      p.scale(mag, mag);
+
+      //
+      // start pageOffset with configured offset of
+      // first score
+      //
+      int pageOffset = 0;
+      if (firstScore)
+            pageOffset = firstScore->pageNumberOffset();
+      bool firstPage = true;
+      for (Score* s : cs) {
+            s->setPrinting(true);
+            //
+            // here we ignore the configured page offset
+            //
+            int oldPageOffset = s->pageNumberOffset();
+            s->setPageNumberOffset(pageOffset);
+            bool oldFirstPageNumber = s->style(StyleIdx::footerFirstPage).toBool();
+            s->style()->set(StyleIdx::footerFirstPage, true);
+            s->doLayout();
+
+            const PageFormat* pf = s->pageFormat();
+            printerDev.setPaperSize(pf->size(), QPrinter::Inch);
+            //printerDev.setDoubleSidedPrinting(pf->twosided());
+
+            const QList<Page*> pl = s->pages();
+            int pages    = pl.size();
+            for (int n = 0; n < pages; ++n) {
+                  if (!firstPage)
+                        printerDev.newPage();
+                  firstPage = false;
+                  s->print(&p, n);
+                  }
+            pageOffset += pages;
+
+            //reset score
+            s->setPrinting(false);
+            s->setPageNumberOffset(oldPageOffset);
+            s->style()->set(StyleIdx::footerFirstPage, oldFirstPageNumber);
+            s->doLayout();
+            }
+      p.end();
       return true;
       }
 
@@ -1805,23 +1941,24 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
 
 Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
       {
-      score->setName(name);
+      QFileInfo info(name);
+      QString suffix  = info.suffix().toLower();
+      score->setName(info.completeBaseName());
+      score->setImportedFilePath(name);
 
-      QString cs  = score->fileInfo()->suffix();
-      QString csl = cs.toLower();
-
-      if (csl == "mscz" || csl == "mscx") {
+      if (suffix == "mscz" || suffix == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
             if (rv != Score::FileError::FILE_NO_ERROR)
                   return rv;
             }
       else {
-            typedef Score::FileError (*ImportFunction)(Score*, const QString&);
+            // typedef Score::FileError (*ImportFunction)(Score*, const QString&);
             struct ImportDef {
                   const char* extension;
-                  ImportFunction importF;
+                  // ImportFunction importF;
+                  Score::FileError (*importF)(Score*, const QString&);
                   };
-            ImportDef imports[] = {
+            static const ImportDef imports[] = {
                   { "xml",  &importMusicXml           },
                   { "mxl",  &importCompressedMusicXml },
                   { "mid",  &importMidi               },
@@ -1857,26 +1994,35 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                         score->style()->chordList()->read("chords.xml");
                   score->style()->chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
                   }
-            uint n = sizeof(imports)/sizeof(*imports);
-            uint i;
-            for (i = 0; i < n; ++i) {
-                  if (imports[i].extension == csl) {
-                        Score::FileError rv = (*imports[i].importF)(score, name);
+            bool found = false;
+            for (auto i : imports) {
+                  if (i.extension == suffix) {
+                        Score::FileError rv = (*i.importF)(score, name);
                         if (rv != Score::FileError::FILE_NO_ERROR)
                               return rv;
+                        found = true;
                         break;
                         }
                   }
-            if (i == n) {
-                  qDebug("unknown file suffix <%s>, name <%s>", qPrintable(cs), qPrintable(name));
+            if (!found) {
+                  qDebug("unknown file suffix <%s>, name <%s>", qPrintable(suffix), qPrintable(name));
                   return Score::FileError::FILE_UNKNOWN_TYPE;
                   }
             score->connectTies();
             score->setCreated(true); // force save as for imported files
             }
-      score->rebuildMidiMapping();
+
+      score->setLayoutAll(true);
+      for (Score* s : score->scoreList()) {
+            s->setPlaylistDirty(true);
+            s->rebuildMidiMapping();
+            s->updateChannel();
+            s->updateNotes();
+            s->setSoloMute();
+            s->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
+            }
       score->setSaved(false);
-      score->updateNotes();
+      score->update();
       return Score::FileError::FILE_NO_ERROR;
       }
 
@@ -1895,9 +2041,8 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
 bool MuseScore::saveAs(Score* cs, bool saveCopy)
       {
       QStringList fl;
-      fl.append(tr("MuseScore Format (*.mscz)"));
-      fl.append(tr("MuseScore Format (*.mscx)"));     // for debugging purposes
-      fl.append(tr("All Files (*)"));
+      fl.append(tr("MuseScore File (*.mscz)"));
+      fl.append(tr("Uncompressed MuseScore File (*.mscx)"));     // for debugging purposes
       QString saveDialogTitle = saveCopy ? tr("MuseScore: Save a Copy") :
                                            tr("MuseScore: Save As");
 
@@ -1911,7 +2056,14 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
       if (saveDirectory.isEmpty())
             saveDirectory = preferences.myScoresPath;
 
-      QString name   = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->name());
+      QString name;
+#ifdef Q_OS_WIN
+      if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
+            name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+      else
+#endif
+      name = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->name());
+
       QString filter = fl.join(";;");
       QString fn     = mscore->getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
@@ -1943,8 +2095,7 @@ bool MuseScore::saveSelection(Score* cs)
             return false;
             }
       QStringList fl;
-      fl.append(tr("MuseScore Format (*.mscz)"));
-      fl.append(tr("All Files (*)"));
+      fl.append(tr("MuseScore File (*.mscz)"));
       QString saveDialogTitle = tr("MuseScore: Save Selection");
 
       QSettings settings;
@@ -1991,10 +2142,9 @@ void MuseScore::addImage(Score* score, Element* e)
          tr("MuseScore: Insert Image"),
          "",            // lastOpenPath,
          tr("All Supported Files (*.svg *.jpg *.jpeg *.png);;"
-            "Scalable vector graphics (*.svg);;"
+            "Scalable Vector Graphics (*.svg);;"
             "JPEG (*.jpg *.jpeg);;"
-            "PNG (*.png);;"
-            "All Files (*)"
+            "PNG (*.png)"
             )
          );
       if (fn.isEmpty())

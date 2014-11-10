@@ -20,7 +20,7 @@
 
 #ifndef __SCORETAB_H__
 #define __SCORETAB_H__
-#include"musescore.h"
+#include "musescore.h"
 namespace Ms {
 
 class ScoreView;
@@ -65,6 +65,8 @@ class ScoreTab : public QWidget {
 
    public:
       ScoreTab(QList<Score*>*, QWidget* parent = 0);
+      ~ScoreTab();
+
       void insertTab(Score*);
       void setTabText(int, const QString&);
       int currentIndex() const;

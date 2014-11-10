@@ -59,6 +59,7 @@ enum class TEXT : char {
       SUBTITLE,
       COMPOSER,
       POET,
+      PART,
       SYSTEM,
       STAFF,
       REHEARSAL_MARK

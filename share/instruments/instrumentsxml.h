@@ -1,7 +1,7 @@
 QT_TRANSLATE_NOOP("InstrumentsXML", "Common instruments"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Jazz instruments"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Orchestral instruments"),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Early Music"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Early music"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Ethnic instruments"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Woodwind"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Piccolo"),

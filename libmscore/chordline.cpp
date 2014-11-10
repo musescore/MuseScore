@@ -20,10 +20,10 @@
 namespace Ms {
 
 const char* scorelineNames[] = {
-      QT_TR_NOOP("fall"),
-      QT_TR_NOOP("doit"),
-      QT_TR_NOOP("plop"),
-      QT_TR_NOOP("scoop"),
+      QT_TRANSLATE_NOOP("Ms", "Fall"),
+      QT_TRANSLATE_NOOP("Ms", "Doit"),
+      QT_TRANSLATE_NOOP("Ms", "Plop"),
+      QT_TRANSLATE_NOOP("Ms", "Scoop"),
       };
 
 
@@ -407,7 +407,7 @@ QString ChordLine::accessibleInfo()
       {
       QString rez = Element::accessibleInfo();
       if(chordLineType() != ChordLineType::NOTYPE)
-            rez = rez + " " + scorelineNames[static_cast<int>(chordLineType()) - 1];
+            rez = QString("%1: %2").arg(rez).arg(scorelineNames[static_cast<int>(chordLineType()) - 1]);
       return rez;
       }
 

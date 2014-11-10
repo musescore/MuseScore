@@ -99,6 +99,7 @@ void Stem::layout()
                   if (n->mirror())
                         _up *= -1;
                   y1 -= n->attach().y() * _up;
+                  rypos() = n->rypos();
                   }
             }
 
@@ -108,6 +109,7 @@ void Stem::layout()
       QRectF r(line.p1(), line.p2());
       qreal lw5  = lineWidth() * .5;
       setbbox(r.normalized().adjusted(-lw5, -lw5, lw5, lw5));
+      adjustReadPos();
       }
 
 //---------------------------------------------------------

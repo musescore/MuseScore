@@ -325,7 +325,7 @@ KeyEditor::KeyEditor(QWidget* parent)
 
 void KeyEditor::addClicked()
       {
-      QList<KeySym*> symbols;
+      QList<KeySym> symbols;
 
       double extraMag = 2.0;
       const QList<Accidental*> al = canvas->getAccidentals();
@@ -337,11 +337,11 @@ void KeyEditor::addClicked()
                   xoff = pos.x();
             }
       foreach(Accidental* a, al) {
-            KeySym* s = new KeySym;
-            s->sym = a->symbol();
+            KeySym s;
+            s.sym = a->symbol();
             QPointF pos = a->ipos();
             pos.rx() -= xoff;
-            s->spos = pos / spatium;
+            s.spos = pos / spatium;
             symbols.append(s);
             }
 

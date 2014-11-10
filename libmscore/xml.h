@@ -49,6 +49,7 @@ class XmlReader : public XmlStreamReader {
       int _tick             { 0       };
       int _tickOffset       { 0       };
       int _track            { 0       };
+      int _trackOffset      { 0       };
       bool _pasteMode       { false   };        // modifies read behaviour on paste operation
       Measure* _lastMeasure { nullptr };
       QList<Beam*>    _beams;
@@ -92,17 +93,19 @@ class XmlReader : public XmlStreamReader {
       void setDocName(const QString& s) { docName = s; }
       QString getDocName() const        { return docName; }
 
-      int tick()  const           { return _tick + _tickOffset;  }
-      void initTick(int val)      { _tick = val;       }
-      void incTick(int val)       { _tick += val;      }
-      void setTickOffset(int val) { _tickOffset = val; }
-      int track() const           { return _track;     }
-      void setTrack(int val)      { _track = val;      }
-      bool pasteMode() const      { return _pasteMode; }
-      void setPasteMode(bool v)   { _pasteMode = v;    }
+      int tick()  const            { return _tick + _tickOffset;  }
+      void initTick(int val)       { _tick = val;       }
+      void incTick(int val)        { _tick += val;      }
+      void setTickOffset(int val)  { _tickOffset = val; }
+      int track() const            { return _track + _trackOffset;     }
+      void setTrackOffset(int val) { _trackOffset = val;   }
+      int trackOffset() const      { return _trackOffset;   }
+      void setTrack(int val)       { _track = val;      }
+      bool pasteMode() const       { return _pasteMode; }
+      void setPasteMode(bool v)    { _pasteMode = v;    }
 
       void addTuplet(Tuplet* s);
-      void addBeam(Beam* s)       { _beams.append(s); }
+      void addBeam(Beam* s)        { _beams.append(s); }
 
       void setLastMeasure(Measure* m) { _lastMeasure = m;    }
       Measure* lastMeasure() const    { return _lastMeasure; }

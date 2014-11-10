@@ -71,8 +71,6 @@
 namespace Ms {
 
 Score* gscore;                 ///< system score, used for palettes etc.
-QPoint scorePos(0,0);
-QSize  scoreSize(950, 500);
 
 bool scriptDebug     = false;
 bool noSeq           = false;
@@ -2413,6 +2411,8 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
             for (auto i = km.begin(); i != km.end(); ++i) {
                   int tick = i->first;
                   Measure* measure = tick2measure(tick);
+                  if (!measure)
+                        continue;
                   Key oKey = i->second;
                   Key nKey = oKey;
                   int diff = -staff->part()->instr()->transpose().chromatic;
@@ -2459,17 +2459,11 @@ void Score::cmdRemoveStaff(int staffIdx)
                         s2 = staff;
                  Score* lscore = staff->score();
                  if (lscore != this) {
-                       int lstaffIdx = lscore->staffIdx(staff);
-                       int pIndex = lscore->staffIdx(staff->part());
-                       //adjustBracketsDel(lstaffIdx, lstaffIdx+1);
-                       for (Measure* m = lscore->firstMeasure(); m; m = m->nextMeasure()) {
-                              m->cmdRemoveStaves(lstaffIdx, lstaffIdx + 1);
-                              if (m->hasMMRest())
-                                    m->mmRest()->cmdRemoveStaves(lstaffIdx, lstaffIdx + 1);
-                              }
                         undoRemoveStaff(staff);
-                        if (staff->part()->nstaves() == 0)
+                        if (staff->part()->nstaves() == 0) {
+                              int pIndex    = lscore->staffIdx(staff->part());
                               undoRemovePart(staff->part(), pIndex);
+                              }
                         }
                   }
             s->score()->undo(new UnlinkStaff(s2, s));
@@ -2915,8 +2909,20 @@ void Score::collectMatch(void* data, Element* e)
       ElementPattern* p = static_cast<ElementPattern*>(data);
       if (p->type != int(e->type()))
             return;
-      if (p->subtypeValid && p->subtype != e->subtype())
-            return;
+
+      if (p->subtypeValid) {
+            // HACK: grace note is different from normal note
+            // TODO: this disables the ability to distinguish note heads in subtype
+
+            if (p->type == int(Element::Type::NOTE)) {
+                  if (p->subtype != static_cast<Note*>(e)->chord()->isGrace())
+                        return;
+                  }
+            else {
+                  if (p->subtype != e->subtype())
+                        return;
+                  }
+            }
       if ((p->staffStart != -1)
           && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
@@ -2948,9 +2954,19 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       Score* score = e->score();
 
       ElementPattern pattern;
-      pattern.type    = int(type);
-      pattern.subtype = 0;
-      pattern.subtypeValid = false;
+      pattern.type = int(type);
+      if (type == Element::Type::NOTE) {
+            pattern.subtype = static_cast<Note*>(e)->chord()->isGrace();
+            pattern.subtypeValid = true;
+            }
+      else if (type == Element::Type::SLUR_SEGMENT) {
+            pattern.subtype = static_cast<int>(static_cast<SlurSegment*>(e)->spanner()->type());
+            pattern.subtypeValid = true;
+            }
+      else {
+            pattern.subtype = 0;
+            pattern.subtypeValid = false;
+            }
       pattern.staffStart = sameStaff ? e->staffIdx() : -1;
       pattern.staffEnd = sameStaff ? e->staffIdx()+1 : -1;
       pattern.voice   = -1;
@@ -3168,11 +3184,9 @@ void Score::cmdSelectAll()
       {
       if (_measures.size() == 0)
             return;
-      _selection.setState(SelState::RANGE);
-      Segment* s1 = firstMeasureMM()->first();
-      Segment* s2 = lastMeasureMM()->last();
-      _selection.setRange(s1, s2, 0, nstaves());
-      _selection.updateSelectedElements();
+      deselectAll();
+      selectRange(firstMeasureMM(), 0);
+      selectRange(lastMeasureMM(), nstaves() - 1);
       setUpdateAll(true);
       end();
       }
@@ -3482,7 +3496,7 @@ ChordRest* Score::findCRinStaff(int tick, int track) const
       {
       Measure* m = tick2measureMM(tick);
       if (!m) {
-            qDebug("findCR: no measure for tick %d", tick);
+            qDebug("findCRinStaff: no measure for tick %d", tick);
             return nullptr;
             }
       // attach to first rest all spanner when mmRest
@@ -3507,6 +3521,47 @@ ChordRest* Score::findCRinStaff(int tick, int track) const
       if (s)
             return static_cast<ChordRest*>(s->element(actualTrack));
       return nullptr;
+      }
+
+//---------------------------------------------------------
+//   setSoloMute
+//   called once at opening file, adds soloMute marks
+//---------------------------------------------------------
+
+void Score::setSoloMute()
+      {
+      for (int i = 0; i < _midiMapping.size(); i++) {
+            Channel* b = _midiMapping[i].articulation;
+            if (b->solo) {
+                  b->soloMute = false;
+                  for (int j = 0; j < _midiMapping.size(); j++) {
+                        Channel* a = _midiMapping[j].articulation;
+                        a->soloMute = (i != j && !a->solo);
+                        a->solo     = (i == j || a->solo);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   setName
+//---------------------------------------------------------
+
+void Score::setName(QString s)
+      {
+      s.replace('/', '_');    // for sanity
+      if (!(s.endsWith(".mscz") || s.endsWith(".mscx")))
+            s += ".mscz";
+      info.setFile(s);
+      }
+
+//---------------------------------------------------------
+//   setImportedFilePath
+//---------------------------------------------------------
+
+void Score::setImportedFilePath(const QString& filePath)
+      {
+      _importedFilePath = filePath;
       }
 
 }

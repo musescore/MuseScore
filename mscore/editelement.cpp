@@ -36,8 +36,12 @@ namespace Ms {
 
 void ScoreView::startEdit(Element* e)
       {
+      if (!e || !e->isEditable()) {
+            qDebug("The element cannot be edited");
+            return;
+            }
       if (e->type() == Element::Type::TBOX)
-            e = static_cast<TBox*>(e)->getText();
+            e = static_cast<TBox*>(e)->text();
       editObject = e;
       sm->postEvent(new CommandEvent("edit"));
       _score->end();
@@ -49,6 +53,10 @@ void ScoreView::startEdit(Element* e)
 
 void ScoreView::startEdit(Element* element, int startGrip)
       {
+      if (!element || !element->isEditable()) {
+            qDebug("The element cannot be edited");
+            return;
+            }
       editObject = element;
       startEdit();
       if (startGrip == -1)
@@ -63,6 +71,8 @@ void ScoreView::startEdit(Element* element, int startGrip)
 
 void ScoreView::startEdit()
       {
+      if (editObject->type() == Element::Type::TBOX)
+            editObject = static_cast<TBox*>(editObject)->text();
       _score->setLayoutAll(false);
       curElement  = 0;
       setFocus();
@@ -89,8 +99,8 @@ void ScoreView::endEdit()
             score()->addRefresh(grip[i]);
 
       editObject->endEdit();
-      if (mscore->getInspector())
-            mscore->getInspector()->setElement(0);
+      if (mscore->inspector())
+            mscore->inspector()->setElement(0);
 
       _score->addRefresh(editObject->canvasBoundingRect());
 
@@ -101,6 +111,13 @@ void ScoreView::endEdit()
             harmonyEndEdit();
       else if (tp == Element::Type::FIGURED_BASS)
             figuredBassEndEdit();
+      else if (editObject->isText()) {
+            Text* text = static_cast<Text*>(editObject);
+            if (text->isEmpty())
+                  _score->undoRemoveElement(text);
+            editObject = nullptr;
+            }
+
       _score->endCmd();
       mscore->endCmd();
 
@@ -109,7 +126,7 @@ void ScoreView::endEdit()
             _score->select(curElement);
             _score->end();
             }
-      editObject     = 0;
+      editObject     = nullptr;
       grips          = 0;
       }
 

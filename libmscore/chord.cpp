@@ -835,6 +835,13 @@ void Chord::computeUp()
       if (_stemDirection != MScore::Direction::AUTO) {
             _up = _stemDirection == MScore::Direction::UP;
             }
+      else if (!parent()) {
+            // hack for palette and drumset editor
+            if (upNote()->line() > 4)
+                  _up = true;
+            else
+                  _up = false;
+            }
       else if (_noteType != NoteType::NORMAL) {
             //
             // stem direction for grace notes
@@ -968,20 +975,6 @@ void Chord::write(Xml& xml) const
             _tremolo->write(xml);
       for (Element* e : _el)
             e->write(xml);
-      for (auto i : score()->spanner()) {     // TODO: dont search whole list
-            Spanner* s = i.second;
-            if (s->generated() || s->type() != Element::Type::SLUR || !xml.canWrite(s))
-                  continue;
-
-            if (s->startElement() == this) {
-                  int id = xml.spannerId(s);
-                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(id));
-                  }
-            else if (s->endElement() == this) {
-                  int id = xml.spannerId(s);
-                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(id));
-                  }
-            }
       xml.etag();
       }
 
@@ -1576,8 +1569,13 @@ void Chord::layout2()
 
 void Chord::updateNotes(AccidentalState* as)
       {
-      for (Chord* c : _graceNotes)
-            c->updateNotes(as);
+
+      QList<Chord*> graceNotesBefore;
+      int gnb = getGraceNotesBefore(&graceNotesBefore);
+      if (gnb) {
+            for (Chord* c : graceNotesBefore)
+                  c->updateNotes(as);
+            }
 
       Drumset* drumset = 0;
       if (staff()->part()->instr()->useDrumset() != DrumsetKind::NONE)
@@ -1596,6 +1594,12 @@ void Chord::updateNotes(AccidentalState* as)
       else {
             for (Note* note : nl)
                   note->layout10(as);
+            }
+      QList<Chord*> graceNotesAfter;
+      int gna = getGraceNotesAfter(&graceNotesAfter);
+      if (gna) {
+            for (Chord* c : graceNotesAfter)
+                  c->updateNotes(as);
             }
       sortNotes();
       }
@@ -1620,11 +1624,15 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 
       // PITCHED_ and PERCUSSION_STAFF can go note by note
 
-      for (Chord* ch : graceNotes()) {
-            QList<Note*> notes(ch->notes());  // we need a copy!
-            for (Note* note : notes)
-                  note->updateAccidental(as);
-            ch->sortNotes();
+      QList<Chord*> graceNotesBefore;
+      int gnb = getGraceNotesBefore(&graceNotesBefore);
+      if (gnb) {
+            for (Chord* ch : graceNotesBefore) {
+                  QList<Note*> notes(ch->notes());  // we need a copy!
+                  for (Note* note : notes)
+                        note->updateAccidental(as);
+                  ch->sortNotes();
+                  }
             }
 
       QList<Note*> lnotes(notes());  // we need a copy!
@@ -1653,6 +1661,16 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                               continue;
                               }
                         }
+                  }
+            }
+      QList<Chord*> graceNotesAfter;
+      int gna = getGraceNotesAfter(&graceNotesAfter);
+      if (gna) {
+            for (Chord* ch : graceNotesAfter) {
+                  QList<Note*> notes(ch->notes());  // we need a copy!
+                  for (Note* note : notes)
+                        note->updateAccidental(as);
+                  ch->sortNotes();
                   }
             }
       sortNotes();
@@ -1817,8 +1835,8 @@ void Chord::layoutPitched()
       //-----------------------------------------
 
       // Y: only needed if there is an actual stem
-      if (stem())
-            stem()->rypos() = (_up ? downNote() : upNote())->rypos();
+//      if (stem())
+//            stem()->rypos() = (_up ? downNote() : upNote())->rypos();
 
       //-----------------------------------------
       //  create ledger lines
@@ -1829,8 +1847,9 @@ void Chord::layoutPitched()
             ll->layout();
 
       if (_arpeggio) {
+            qreal arpeggioDistance = score()->styleS(StyleIdx::ArpeggioNoteDistance).val() * score()->spatium() * mag();
             _arpeggio->layout();    // only for width() !
-            lll        += _arpeggio->width() + _spatium * .5 + chordX;
+            lll        += _arpeggio->width() + arpeggioDistance + chordX;
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
             _arpeggio->setPos(-lll, y1);
             _arpeggio->adjustReadPos();
@@ -2451,7 +2470,7 @@ QVariant Chord::propertyDefault(P_ID propertyId) const
             case P_ID::SMALL:          return false;
             case P_ID::STEM_DIRECTION: return int(MScore::Direction::AUTO);
             default:
-                  return ChordRest::getProperty(propertyId);
+                  return ChordRest::propertyDefault(propertyId);
             }
       }
 
@@ -2544,8 +2563,6 @@ QPointF Chord::layoutArticulation(Articulation* a)
                               line = ((line-add) & ~1) + 3 + add*2;
                         else                                            // if note on or below staff bottom line,
                               line += 2 + add;                                // move 1 whole space below
-                        if (!staff()->isTabStaff())                     // on pitched staves, note is at left of stem:
-                              pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
                         pos.ry() = -a->height() / 2;                    // symbol is below baseline, shift if a bit up
                         }
                   else {                        // if above chord
@@ -2555,15 +2572,43 @@ QPointF Chord::layoutArticulation(Articulation* a)
                               line = ((line+1+add) & ~1) - 3 - add*2;
                         else                                            // if note or or above staff top line
                               line -= 2 + add;                                // move 1 whole space above
-                        if (!staff()->isTabStaff())                     // on pitched staves, note is at right of stem:
-                              pos.rx() += upNote()->headWidth() * .5;   // move half-a-note-head to right
                         pos.ry() = a->height() / 2;                     // symbol is on baseline, shift it a bit down
                         }
-                  pos.ry() += line * _spStaff2;                          // convert staff position to sp distance
+                  pos.ry() += line * _spStaff2;                         // convert staff position to sp distance
+                  }
+            if (!staff()->isTabStaff()) {
+                  if (up())
+                        pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
+                  else
+                        pos.rx() += upNote()->headWidth() * .5;   // move half-a-note-head to right
                   }
             a->setPos(pos);
             a->adjustReadPos();
             return QPointF(pos);
+            }
+
+      // Lute fingering are always in the middle of the space right below the fret mark,
+      else if (staff() && staff()->staffGroup() == StaffGroup::TAB
+                  && st >= ArticulationType::LuteFingThumb && st <= ArticulationType::LuteFingThird) {
+            // lute fing. glyphs are vertically registered in the middle of bottom space;
+            // move down of half a space to have the glyph on the line
+            y = chordBotY + _spatium * 0.5;
+            if (staff()->staffType()->onLines()) {          // if fret marks are on lines
+                  // move down by half the height of fret marks (extending below the line)
+                  // and half of the remaing space below,
+                  // to centre the symbol between the fret mark and the line below
+                  // fretBoxH/2 + (spStaff - fretBoxH/2) / 2 becomes:
+                  y += (staff()->staffType()->fretBoxH()*0.5 + _spStaff) * 0.5;
+                  }
+            else {                                          // if marks are between lines
+                  // move down by half a sp to pace the glyph right below the mark,
+                  // and not too far away (as it would have been, if centred in the line space below)
+                  y += _spatium * 0.5;
+                  }
+            a->layout();
+            a->setPos(x, y);
+            a->adjustReadPos();
+            return QPointF(x, y);
             }
 
       // other articulations are outside of area occupied by the staff or the chord
@@ -2862,24 +2907,24 @@ QString Chord::accessibleExtraInfo()
       if (!isGrace()) {
             foreach (Chord* c, graceNotes()) {
                   foreach (Note* n, c->notes()) {
-                        rez = " " + n->screenReaderInfo();
+                        rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
                         }
                   }
             }
 
       if (arpeggio())
-            rez = rez + " " + arpeggio()->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(arpeggio()->screenReaderInfo());
 
       if (tremolo())
-            rez = rez + " " + tremolo()->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(tremolo()->screenReaderInfo());
 
       if (glissando())
-            rez = rez + " " + glissando()->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(glissando()->screenReaderInfo());
 
       foreach (Element* e, el())
-            rez = rez + " " + e->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
 
-      return rez + " " + ChordRest::accessibleExtraInfo();
+      return QString("%1 %2").arg(rez).arg(ChordRest::accessibleExtraInfo());
       }
 }
 

@@ -43,14 +43,17 @@ QList<SlurOffsets> SlurTie::editUps;
 SlurSegment::SlurSegment(Score* score)
    : SpannerSegment(score)
       {
+      setFlag(ElementFlag::ON_STAFF, true);
       autoAdjustOffset = QPointF();
       }
 
 SlurSegment::SlurSegment(const SlurSegment& b)
    : SpannerSegment(b)
       {
-      for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i)
+      for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i) {
             ups[i] = b.ups[i];
+            ups[i].p = QPointF();
+            }
       path = b.path;
       autoAdjustOffset = QPointF();
       }
@@ -111,6 +114,7 @@ void SlurSegment::updateGrips(int* n, int* defaultGrip, QRectF* r) const
       *n = int(GripSlurSegment::GRIPS);
       *defaultGrip = int(GripSlurSegment::END);
       QPointF p(pagePos());
+      p -= QPointF(0.0, system()->staff(staffIdx())->y());   // ??
       for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i)
             r[i].translate(ups[i].p + ups[i].off * spatium() + p);
       }
@@ -211,7 +215,8 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                         }
                   case Spanner::Anchor::CHORD:
                         spanner()->setTick(static_cast<Chord*>(element)->tick());
-                        spanner()->setStartChord(static_cast<Chord*>(element));
+                        spanner()->setTrack(element->track());
+                        spanner()->setStartElement(element);
                         break;
                   case Spanner::Anchor::SEGMENT:
                   case Spanner::Anchor::MEASURE:
@@ -232,7 +237,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   case Spanner::Anchor::CHORD:
                         spanner()->setTick2(static_cast<Chord*>(element)->tick());
                         spanner()->setTrack2(element->track());
-                        spanner()->setEndChord(static_cast<Chord*>(element));
+                        spanner()->setEndElement(element);
                         break;
 
                   case Spanner::Anchor::SEGMENT:
@@ -517,7 +522,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p4(c2, -shoulderH);
 
       qreal w = (score()->styleS(StyleIdx::SlurMidWidth).val() - score()->styleS(StyleIdx::SlurEndWidth).val()) * _spatium;
-      if (((c2 - c1) / _spatium) <= _spatium)
+      if ((c2 - c1) <= _spatium)
             w *= .5;
       QPointF th(0.0, w);    // thickness of slur
 
@@ -544,6 +549,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       p6 = t.map(p6) + pp3 - p6o;
       //-----------------------------------
 
+
       ss->path = QPainterPath();
       ss->path.moveTo(QPointF());
       ss->path.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
@@ -567,6 +573,13 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       ss->ups[int(GripSlurSegment::END)].p      = t.map(p2) - ss->ups[int(GripSlurSegment::END)].off * _spatium;
       ss->ups[int(GripSlurSegment::DRAG)].p     = t.map(p5);
       ss->ups[int(GripSlurSegment::SHOULDER)].p = t.map(p6);
+
+      QPointF staffOffset;
+      if (ss->system() && ss->track() >= 0)
+            staffOffset = QPointF(0.0, -ss->system()->staff(ss->staffIdx())->y());
+
+      ss->path.translate(staffOffset);
+      ss->shapePath.translate(staffOffset);
       }
 
 //---------------------------------------------------------
@@ -628,9 +641,13 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
                         }
                   }
             }
-      if (system() && staffIdx() != -1)
-            setPos(QPointF(0.0, -system()->staff(staffIdx())->y()));
       setbbox(path.boundingRect());
+      if ((staffIdx() > 0) && score()->mscVersion() < 201 && !readPos().isNull()) {
+            QPointF staffOffset;
+            if (system() && track() >= 0)
+                  staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
+            setReadPos(readPos() + staffOffset);
+            }
       adjustReadPos();
       }
 
@@ -781,10 +798,6 @@ void Slur::slurPosChord(SlurPos* sp)
 
 void Slur::slurPos(SlurPos* sp)
       {
-//      if (anchor() == Anchor::CHORD) {
-//            slurPosChord(sp);
-//            return;
-//            }
       qreal _spatium = spatium();
 
       if (endCR() == 0) {
@@ -1027,6 +1040,12 @@ bool SlurTie::readProperties(XmlReader& e)
             SlurSegment* segment = new SlurSegment(score());
             segment->read(e);
             add(segment);
+            // in v1.x "visible" is a property of the segment only;
+            // we must ensure that it propagates also to the parent element
+            // That's why the visibility is set after adding the segment
+            // to the corresponding spanner
+            if (score()->mscVersion() <= 114)
+                  segment->SpannerSegment::setVisible(segment->visible());
             }
       else if (tag == "up")
             _slurDirection = MScore::Direction(e.readInt());
@@ -1431,7 +1450,7 @@ void Slur::layout()
             // case 3: middle segment
             else if (i != 0 && system != sPos.system2) {
                   segment->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
-                  qreal x1 = firstNoteRestSegmentX(system) - _spatium;
+                  qreal x1 = firstNoteRestSegmentX(system);
                   qreal x2 = system->bbox().width();
                   qreal y  = system->staff(staffIdx())->y();
                   segment->layout(QPointF(x1, y), QPointF(x2, y));
@@ -1439,7 +1458,7 @@ void Slur::layout()
             // case 4: end segment
             else {
                   segment->setSpannerSegmentType(SpannerSegmentType::END);
-                  qreal x = firstNoteRestSegmentX(system) - _spatium;
+                  qreal x = firstNoteRestSegmentX(system);
                   segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
                   }
             if (system == sPos.system2)
@@ -1451,6 +1470,7 @@ void Slur::layout()
 //---------------------------------------------------------
 //   firstNoteRestSegmentX
 //    in System() coordinates
+//    returns the position just after the last non-chordrest segment
 //---------------------------------------------------------
 
 qreal SlurTie::firstNoteRestSegmentX(System* system)
@@ -1460,7 +1480,23 @@ qreal SlurTie::firstNoteRestSegmentX(System* system)
                   const Measure* measure = static_cast<const Measure*>(mb);
                   for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
                         if (seg->segmentType() == Segment::Type::ChordRest) {
-                              return seg->pos().x() + seg->measure()->pos().x();
+                              // first CR found; back up to previous segment
+                              seg = seg->prev();
+                              if (seg) {
+                                    // find maximum width
+                                    qreal width = 0.0;
+                                    int n = score()->nstaves();
+                                    for (int i = 0; i < n; ++i) {
+                                          if (!system->staff(i)->show())
+                                                continue;
+                                          Element* e = seg->element(i * VOICES);
+                                          if (e)
+                                                width = qMax(width, e->width());
+                                          }
+                                    return seg->measure()->pos().x() + seg->pos().x() + width;
+                                    }
+                              else
+                                    return 0.0;
                               }
                         }
                   }

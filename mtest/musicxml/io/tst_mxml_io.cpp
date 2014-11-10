@@ -57,6 +57,7 @@ private slots:
       void accidentals3() { mxmlIoTest("testAccidentals3"); }
       void arpGliss1() { mxmlIoTest("testArpGliss1"); }
       void arpGliss2() { mxmlIoTest("testArpGliss2"); }
+      void arpGliss3() { mxmlIoTest("testArpGliss3"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
       void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
       void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
@@ -76,6 +77,7 @@ private slots:
       void emptyVoice1() { mxmlIoTestRef("testEmptyVoice1"); }
       void figuredBass1() { mxmlIoTest("testFiguredBass1"); }
       void figuredBass2() { mxmlIoTest("testFiguredBass2"); }
+      void formattedThings() { mxmlIoTest("testFormattedThings"); }
       void grace1() { mxmlIoTest("testGrace1"); }
       void grace2() { mxmlIoTest("testGrace2"); }
       void harmony1() { mxmlIoTest("testHarmony1"); }
@@ -87,6 +89,7 @@ private slots:
       void helloReadCompr() { mxmlReadTestCompr("testHello"); }
       void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
+      void incorrectStaffNumber() { mxmlIoTestRef("testIncorrectStaffNumber"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
       void lines1() { mxmlIoTest("testLines1"); }
@@ -96,7 +99,6 @@ private slots:
       void manualBreaks() { mxmlIoTest("testManualBreaks"); }
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
-      void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); }
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
       void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }
@@ -108,6 +110,7 @@ private slots:
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
+      void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
@@ -135,6 +138,7 @@ private slots:
       void wedge1() { mxmlIoTest("testWedge1"); }
       void wedge2() { mxmlIoTest("testWedge2"); }
       void words1() { mxmlIoTest("testWords1"); }
+      void words2() { mxmlIoTest("testWords2"); }
       };
 
 //---------------------------------------------------------

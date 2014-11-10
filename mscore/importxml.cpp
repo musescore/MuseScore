@@ -82,6 +82,7 @@
 #include "libmscore/pedal.h"
 #include "libmscore/harmony.h"
 #include "libmscore/tempotext.h"
+#include "libmscore/stafftext.h"
 #include "libmscore/articulation.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/glissando.h"
@@ -434,7 +435,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
       QFile schemaFile(":/schema/musicxml.xsd");
       if (!schemaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qDebug("initMusicXmlSchema() could not open resource musicxml.xsd");
-            MScore::lastError = QObject::tr("Internal error: could not open resource musicxml.xsd\n");
+            MScore::lastError = QObject::tr("Internal error: Could not open resource musicxml.xsd\n");
             return false;
             }
 
@@ -723,24 +724,10 @@ void MusicXml::import(Score* s)
       {
       tupletAssert();
       score  = s;
-      tie    = 0;
-      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
-            slur[i] = 0;
-      for (int i = 0; i < MAX_BRACKETS; ++i)
-            bracket[i] = 0;
-      for (int i = 0; i < MAX_DASHES; ++i)
-            dashes[i] = 0;
-      ottava = 0;
-      trill = 0;
-      pedal = 0;
-      harmony = 0;
-      tremStart = 0;
-      hairpin = 0;
-      figBass = 0;
-      figBassExtend = false;
 
-      // TODO only if multi-measure rests used ???
-      // score->style()->set(StyleIdx::createMultiMeasureRests, true);
+      // assume no multi-measure rests, will be set to true when encountering a multi-measure rest
+      // required as multi-measure rest is a meaure attribute in MusicXML instead of a style setting
+      score->style()->set(StyleIdx::createMultiMeasureRests, false);
 
       for (QDomElement e = doc->documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "score-partwise")
@@ -748,6 +735,44 @@ void MusicXml::import(Score* s)
             else
                   domError(e);
             }
+      }
+      
+//---------------------------------------------------------
+//   initPartState
+//---------------------------------------------------------
+
+/**
+ Initialize members as required for reading the MusicXML part element.
+ TODO: factor out part reading into a separate
+ */
+
+void MusicXml::initPartState()
+      {
+      fractionTSig          = Fraction(0, 1);
+      tick                  = 0;
+      maxtick               = 0;
+      prevtick              = 0;
+      lastMeasureLen        = 0;
+      multiMeasureRestCount = -1;
+      startMultiMeasureRest = false;
+      tie    = 0;
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
+            slur[i] = SlurDesc();
+      for (int i = 0; i < MAX_BRACKETS; ++i)
+            bracket[i] = 0;
+      for (int i = 0; i < MAX_DASHES; ++i)
+            dashes[i] = 0;
+      ottava = 0;
+      trill = 0;
+      pedal = 0;
+      pedalContinue = 0;
+      harmony = 0;
+      tremStart = 0;
+      hairpin = 0;
+      figBass = 0;
+      figBassExtend = false;
+      glissandoText = "";
+      glissandoColor = "";
       }
 
 //---------------------------------------------------------
@@ -1499,8 +1524,20 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               domNotImplemented(e);
                         else if (ee.tagName() == "midi-channel")
                               part->setMidiChannel(ee.text().toInt() - 1);
-                        else if (ee.tagName() == "midi-program")
-                              part->setMidiProgram(ee.text().toInt() - 1);
+                        else if (ee.tagName() == "midi-program") {
+                              int program = ee.text().toInt();
+                              // Bug fix for Cubase 6.5.5 which generates <midi-program>2</midi-program>
+                              // Check program number range
+                              if (program < 1) {
+                                    qDebug("MusicXml::xmlScorePart: incorrect midi-program: %d", program);
+                                    program = 1;
+                                    }
+                              else if (program > 128) {
+                                    qDebug("MusicXml::xmlScorePart: incorrect midi-program: %d", program);
+                                    program = 128;
+                              }
+                              part->setMidiProgram(program - 1);
+                              }
                         else if (ee.tagName() == "midi-unpitched") {
                               qDebug("MusicXml::xmlScorePart: instrument id %s midi-unpitched %s",
                                      qPrintable(instrId), qPrintable(ee.text()));
@@ -1520,6 +1557,10 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                         else
                               domError(ee);
                         }
+                  }
+            else if (e.tagName() == "midi-device") {
+                  // TODO
+                  domNotImplemented(e);
                   }
             else
                   domError(e);
@@ -1713,13 +1754,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             qDebug("Import MusicXml:xmlPart: cannot find part %s", id.toLatin1().data());
             return;
             }
-      fractionTSig          = Fraction(0, 1);
-      tick                  = 0;
-      maxtick               = 0;
-      prevtick              = 0;
-      lastMeasureLen        = 0;
-      multiMeasureRestCount = -1;
-      startMultiMeasureRest = false;
+
+      initPartState();
+
       KeySigEvent ev;
       KeySig currKeySig;
       currKeySig.setKeySigEvent(ev);
@@ -1757,7 +1794,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             Spanner* sp = i.key();
             int tick1 = i.value().first;
             int tick2 = i.value().second;
-            //qDebug("spanner %p tp %d tick1 %d tick2 %d", sp, sp->type(), tick1, tick2);
+            //qDebug("spanner %p tp %hhd tick1 %d tick2 %d", sp, sp->type(), tick1, tick2);
             sp->setTick(tick1);
             sp->setTick2(tick2);
             sp->score()->addElement(sp);
@@ -2073,13 +2110,21 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                   // IMPORT_LAYOUT
                   QString newSystem = e.attribute("new-system", "no");
                   QString newPage   = e.attribute("new-page", "no");
+                  int blankPage = e.attribute("blank-page", "0").toInt();
                   //
                   // in MScore the break happens _after_ the marked measure:
                   //
-                  Measure* pm = (Measure*)(measure->prev());      // TODO: MeasureBase
-                  if (pm == 0)
+                  MeasureBase* pm = measure->prevMeasure();  // We insert VBox only for title, no HBox for the moment
+                  if (pm == 0) {
                         qDebug("ImportXml: warning: break on first measure");
-                  else {
+                        if (blankPage == 1) { // blank title page, insert a VBOX if needed
+                              pm = measure->prev();
+                              if (pm == 0) {
+                                    pm = score->insertMeasure(Element::Type::VBOX, measure);
+                                    }
+                              }
+                        }
+                  if (pm) {
                         if (preferences.musicxmlImportBreaks
                             && (newSystem == "yes" || newPage == "yes")) {
                               LayoutBreak* lb = new LayoutBreak(score);
@@ -2113,6 +2158,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                   QString endingType;
                   QString endingText;
                   QString repeat;
+                  QString count;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "bar-style")
                               barStyle = ee.text();
@@ -2122,7 +2168,14 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                               endingText = ee.text();
                               }
                         else if (ee.tagName() == "repeat")
+                        {
                               repeat = ee.attribute("direction");
+                              count = ee.attribute("times");
+                            if (count.isEmpty()) {
+                                count = "2";
+                            }
+                              measure->setRepeatCount(count.toInt());
+                        }
                         else
                               domError(ee);
                         }
@@ -2312,6 +2365,11 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                      || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::Type::SHARP   && !accTmp.value(ln))) {
                                      nt->accidental()->setRole(Accidental::Role::USER);
                                      }
+                               else if  ((nt->accidental()->accidentalType() > Accidental::Type::NATURAL) && (nt->accidental()->accidentalType() < Accidental::Type::END)) { // microtonal accidental
+                                     alter = 0;
+                                     nt->accidental()->setRole(Accidental::Role::USER);
+                                     accTmp.replace(ln, false);
+                                     }
                                else {
                                      accTmp.replace(ln, true);
                                      }
@@ -2321,11 +2379,14 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
             }
 
       // multi-measure rest handling:
+      // if any multi-measure rest is found, the "create multi-measure rest" style setting
+      // is enabled
       // the first measure in a multi-measure rest gets setBreakMultiMeasureRest(true)
       // and count down the remaining number of measures
       // the first measure after a multi-measure rest gets setBreakMultiMeasureRest(true)
       // for all other measures breakMultiMeasureRest is unchanged (stays default (false))
       if (startMultiMeasureRest) {
+            score->style()->set(StyleIdx::createMultiMeasureRests, true);
             measure->setBreakMultiMeasureRest(true);
             startMultiMeasureRest = false;
             }
@@ -2351,11 +2412,11 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
 // SLine placement is modified by changing the first segments user offset
 // As the SLine has just been created, it does not have any segment yet
 
-static void setSLinePlacement(SLine* sli, float spatium, const QString placement, bool /*hasYoff*/, qreal /*yoff*/)
+static void setSLinePlacement(SLine* sli, const QString placement)
       {
       /*
-      qDebug("setSLinePlacement sli %p type %d s=%g pl='%s' hasy=%d yoff=%g",
-             sli, sli->type(), spatium, qPrintable(placement), hasYoff, yoff);
+      qDebug("setSLinePlacement sli %p type %d s=%g pl='%s'",
+             sli, sli->type(), sli->score()->spatium(), qPrintable(placement));
        */
 
       // calc y offset assuming five line staff and default style
@@ -2385,7 +2446,7 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
       // add linesegment containing the user offset
       LineSegment* tls= sli->createLineSegment();
       //qDebug("   y = %g", y);
-      y *= spatium;
+      y *= sli->score()->spatium();
       tls->setUserOff(QPointF(0, y));
       sli->add(tls);
       }
@@ -2394,12 +2455,11 @@ static void setSLinePlacement(SLine* sli, float spatium, const QString placement
 //   addElem
 //---------------------------------------------------------
 
-static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Score* score, QString& placement,
-                    qreal /*rx*/, qreal /*ry*/, int /* offset */, Measure* measure, int tick)
+static void addElem(Element* el, int track, QString& placement, Measure* measure, int tick)
       {
       /*
-      qDebug("addElem el %p hasYoff %d staff %d rstaff %d placement %s rx %g ry %g tick %d",
-             el, hasYoffset, staff, rstaff, qPrintable(placement), rx, ry, tick);
+      qDebug("addElem el %p track %d placement %s tick %d",
+             el, track, qPrintable(placement), tick);
        */
 
       // calc y offset assuming five line staff and default style
@@ -2411,7 +2471,7 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
             offsAbove = 0;
             offsBelow = 8 + (stafflines - 1);
             }
-      else if (el->type() == Element::Type::TEXT) {
+      else if (el->type() == Element::Type::TEXT || el->type() == Element::Type::STAFF_TEXT) {
             offsAbove = 0;
             offsBelow = 6 + (stafflines - 1);
             }
@@ -2433,9 +2493,9 @@ static void addElem(Element* el, bool /*hasYoffset*/, int staff, int rstaff, Sco
       if (placement == "above") y += offsAbove;
       if (placement == "below") y += offsBelow;
       //qDebug("   y = %g", y);
-      y *= score->spatium();
+      y *= el->score()->spatium();
       el->setUserOff(QPoint(0, y));
-      el->setTrack((staff + rstaff) * VOICES);
+      el->setTrack(track);
       Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
       s->add(el);
       }
@@ -2507,6 +2567,218 @@ static void metronome(QDomElement e, Text* t)
       }
 
 //---------------------------------------------------------
+//   checkSpannerOverlap
+//---------------------------------------------------------
+
+// check for overlapping spanners
+// if necessary, delete the (incorrectly allocated) new one
+// return the right one to use
+
+static SLine* checkSpannerOverlap(SLine* cur_sp, SLine* new_sp, QString type)
+      {
+      //qDebug("checkSpannerOverlap(cur_sp %p, new_sp %p, type %s)", cur_sp, new_sp, qPrintable(type));
+      if (cur_sp) {
+            qDebug("overlapping %s not supported", qPrintable(type));
+            delete new_sp;
+            return cur_sp;
+            }
+      else
+            return new_sp;
+      }
+      
+//---------------------------------------------------------
+//   handleSpannerStart
+//---------------------------------------------------------
+
+// note that in case of overlapping spanners, handleSpannerStart is called for every spanner
+// as spanners QMap allows only one value per key, this does not hurt at all
+
+static void handleSpannerStart(SLine* new_sp, QString /* type */, int track, QString& placement, int tick, MusicXmlSpannerMap& spanners)
+      {
+      new_sp->setTrack(track);
+      setSLinePlacement(new_sp, placement);
+      spanners[new_sp] = QPair<int, int>(tick, -1);
+      //qDebug("%s %p inserted at first tick %d", qPrintable(type), new_sp, tick);
+      }
+      
+//---------------------------------------------------------
+//   handleSpannerStop
+//---------------------------------------------------------
+
+static void handleSpannerStop(SLine* cur_sp, QString type, int tick, MusicXmlSpannerMap& spanners)
+      {
+      if (!cur_sp) {
+            qDebug("%s stop without start", qPrintable(type));
+            return;
+            }
+
+      spanners[cur_sp].second = tick;
+      //qDebug("pedal %p second tick %d", cur_sp, tick);
+      }
+      
+//---------------------------------------------------------
+//   nextPartOfFormattedString
+//---------------------------------------------------------
+      
+/**
+ Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
+ */
+
+static QString nextPartOfFormattedString(QDomElement e)
+      {
+            QString txt        = e.text();
+            QString lang       = e.attribute(QString("xml:lang"), "it");
+            QString fontWeight = e.attribute(QString("font-weight"));
+            QString fontSize   = e.attribute(QString("font-size"));
+            QString fontStyle  = e.attribute(QString("font-style"));
+            QString underline  = e.attribute(QString("underline"));
+            QString fontFamily = e.attribute(QString("font-family"));
+            // TODO: color, enclosure, yoffset in only part of the text, ...
+            QString importedtext;
+            if (!fontSize.isEmpty()) {
+                  bool ok = true;
+                  float size = fontSize.toFloat(&ok);
+                  if (ok)
+                        importedtext += QString("<font size=\"%1\"/>").arg(size);
+            }
+            if (!fontFamily.isEmpty())
+                  importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
+            if (fontWeight == "bold")
+                  importedtext += "<b>";
+            if (fontStyle == "italic")
+                  importedtext += "<i>";
+            if (!underline.isEmpty()) {
+                  bool ok = true;
+                  int lines = underline.toInt(&ok);
+                  if (ok && (lines > 0))  // 1,2, or 3 underlines are imported as single underline
+                        importedtext += "<u>";
+                  else
+                        underline = "";
+            }
+            txt.replace(QString("\r"), QString("")); // convert Windows line break \r\n -> \n
+            importedtext += txt.toHtmlEscaped();
+            if (underline != "")
+                  importedtext += "</u>";
+            if (fontStyle == "italic")
+                  importedtext += "</i>";
+            if (fontWeight == "bold")
+                  importedtext += "</b>";
+            qDebug("importedtext '%s'", qPrintable(importedtext));
+            return importedtext;
+      }
+      
+//---------------------------------------------------------
+//   matchRepeat
+//---------------------------------------------------------
+
+/**
+ Do a wild-card match with known repeat texts.
+ */
+
+static QString matchRepeat(const QString& lowerTxt)
+      {
+      QString repeat;
+      QRegExp daCapo("d\\.? *c\\.?|da *capo");
+      QRegExp daCapoAlFine("d\\.? *c\\.? *al *fine|da *capo *al *fine");
+      QRegExp daCapoAlCoda("d\\.? *c\\.? *al *coda|da *capo *al *coda");
+      QRegExp dalSegno("d\\.? *s\\.?|d[ae]l *segno");
+      QRegExp dalSegnoAlFine("d\\.? *s\\.? *al *fine|d[ae]l *segno *al *fine");
+      QRegExp dalSegnoAlCoda("d\\.? *s\\.? *al *coda|d[ae]l *segno *al *coda");
+      QRegExp fine("fine");
+      QRegExp toCoda("to *coda");
+      if (daCapo.exactMatch(lowerTxt)) repeat = "daCapo";
+      if (daCapoAlFine.exactMatch(lowerTxt)) repeat = "daCapoAlFine";
+      if (daCapoAlCoda.exactMatch(lowerTxt)) repeat = "daCapoAlCoda";
+      if (dalSegno.exactMatch(lowerTxt)) repeat = "dalSegno";
+      if (dalSegnoAlFine.exactMatch(lowerTxt)) repeat = "dalSegnoAlFine";
+      if (dalSegnoAlCoda.exactMatch(lowerTxt)) repeat = "dalSegnoAlCoda";
+      if (fine.exactMatch(lowerTxt)) repeat = "fine";
+      if (toCoda.exactMatch(lowerTxt)) repeat = "toCoda";
+      return repeat;
+      }
+      
+//---------------------------------------------------------
+//   findJump
+//---------------------------------------------------------
+
+/**
+ Try to find a Jump in \a repeat.
+ */
+
+static Jump* findJump(const QString& repeat, Score* score)
+      {
+      Jump* jp = 0;
+      if (repeat == "daCapo") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DC);
+            }
+      else if (repeat == "daCapoAlCoda") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DC_AL_CODA);
+            }
+      else if (repeat == "daCapoAlFine") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DC_AL_FINE);
+            }
+      else if (repeat == "dalSegno") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DS);
+            }
+      else if (repeat == "dalSegnoAlCoda") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DS_AL_CODA);
+            }
+      else if (repeat == "dalSegnoAlFine") {
+            jp = new Jump(score);
+            jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            jp->setJumpType(Jump::Type::DS_AL_FINE);
+            }
+      return jp;
+      }
+
+//---------------------------------------------------------
+//   findMarker
+//---------------------------------------------------------
+
+/**
+ Try to find a Marker in \a repeat.
+ */
+
+static Marker* findMarker(const QString& repeat, Score* score)
+      {
+      Marker* m = 0;
+      if (repeat == "segno") {
+            m = new Marker(score);
+            // note: Marker::read() also contains code to set text style based on type
+            // avoid duplicated code
+            m->setTextStyleType(TextStyleType::REPEAT_LEFT);
+            // apparently this MUST be after setTextStyle
+            m->setMarkerType(Marker::Type::SEGNO);
+            }
+      else if (repeat == "coda") {
+            m = new Marker(score);
+            m->setTextStyleType(TextStyleType::REPEAT_LEFT);
+            m->setMarkerType(Marker::Type::CODA);
+            }
+      else if (repeat == "fine") {
+            m = new Marker(score);
+            m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            m->setMarkerType(Marker::Type::FINE);
+            }
+      else if (repeat == "toCoda") {
+            m = new Marker(score);
+            m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
+            m->setMarkerType(Marker::Type::TOCODA);
+            }
+      return m;
+      }
+
+//---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
 
@@ -2540,22 +2812,19 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       QString type;
       QString niente = "no";
       QString txt;
-      QString lang;
-      QString fontWeight = "";
-      QString fontStyle = "";
-      QString fontSize = "";
-      int offset = 0; // not supported yet
-      int rstaff = 0;
+      QString formattedText;
+      // int offset = 0; // not supported yet
+      //int track = 0;
+      int track = staff * VOICES;
       QStringList dynamics;
       // int spread;
-      qreal rx = 0.0;
-      qreal ry = 0.0;
+      // qreal rx = 0.0;
+      // qreal ry = 0.0;
       qreal yoffset = 0.0; // actually this is default-y
       // qreal xoffset;
       bool hasYoffset = false;
       QString dynaVelocity = "";
       QString tempo = "";
-      QString rehearsal = "";
       QString sndCapo = "";
       QString sndCoda = "";
       QString sndDacapo = "";
@@ -2565,12 +2834,14 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       bool coda = false;
       bool segno = false;
       int ottavasize = 0;
-      bool pedalLine = false;
+      QString pedalLine;
+      QString pedalSign;
       int number = 1;
       QString lineEnd;
       // qreal endLength;
       QString lineType;
       QDomElement metrEl;
+      QString enclosure = "none";
 
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "direction-type") {
@@ -2578,24 +2849,24 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         // IMPORT_LAYOUT
                         dirType = ee.tagName();
                         if (preferences.musicxmlImportLayout) {
-                              ry      = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
-                              rx      = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
+                              // ry      = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
+                              // rx      = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
                               yoffset = ee.attribute("default-y").toDouble(&hasYoffset) * -0.1;
                               // xoffset = ee.attribute("default-x", "0.0").toDouble() * 0.1;
                               }
                         if (dirType == "words") {
-                              txt        = ee.text();
-                              lang       = ee.attribute(QString("xml:lang"), "it");
-                              fontWeight = ee.attribute(QString("font-weight"));
-                              fontSize   = ee.attribute(QString("font-size"));
-                              fontStyle  = ee.attribute(QString("font-style"));
+                              enclosure      = ee.attribute(QString("enclosure"), "none");
+                              txt            = ee.text(); // support legacy code
+                              formattedText += nextPartOfFormattedString(ee);
                               }
                         else if (dirType == "rehearsal") {
-                              rehearsal = ee.text();
+                              enclosure      = ee.attribute(QString("enclosure"), "square");
+                              formattedText += nextPartOfFormattedString(ee);
                               }
                         else if (dirType == "pedal") {
                               type = ee.attribute(QString("type"));
-                              pedalLine = ee.attribute(QString("line")) == "yes";
+                              pedalLine = ee.attribute(QString("line"));
+                              pedalSign = ee.attribute(QString("sign"));
                               }
                         else if (dirType == "dynamics") {
                               QDomElement eee = ee.firstChildElement();
@@ -2650,13 +2921,14 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   tempo = e.attribute("tempo");
                   dynaVelocity = e.attribute("dynamics");
                   }
-            else if (e.tagName() == "offset")
-                  offset = (e.text().toInt() * MScore::division)/divisions;
+            //else if (e.tagName() == "offset")
+                  //offset = (e.text().toInt() * MScore::division)/divisions;
             else if (e.tagName() == "staff") {
                   // DEBUG: <staff>0</staff>
-                  rstaff = e.text().toInt() - 1;
+                  int rstaff = e.text().toInt() - 1;
                   if (rstaff < 0)         // ???
                         rstaff = 0;
+                  track = (staff + rstaff) * VOICES;
                   }
             else if (e.tagName() == "voice")
                   domNotImplemented(e);
@@ -2687,23 +2959,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       if (coda) repeat = "coda";
       if (segno) repeat = "segno";
       // As sound may be missing, next do a wild-card match with known repeat texts
-      QString lowerTxt = txt.toLower();
-      QRegExp daCapo("d\\.? *c\\.?|da *capo");
-      QRegExp daCapoAlFine("d\\.? *c\\.? *al *fine|da *capo *al *fine");
-      QRegExp daCapoAlCoda("d\\.? *c\\.? *al *coda|da *capo *al *coda");
-      QRegExp dalSegno("d\\.? *s\\.?|d[ae]l *segno");
-      QRegExp dalSegnoAlFine("d\\.? *s\\.? *al *fine|d[ae]l *segno *al *fine");
-      QRegExp dalSegnoAlCoda("d\\.? *s\\.? *al *coda|d[ae]l *segno *al *coda");
-      QRegExp fine("fine");
-      QRegExp toCoda("to *coda");
-      if (daCapo.exactMatch(lowerTxt)) repeat = "daCapo";
-      if (daCapoAlFine.exactMatch(lowerTxt)) repeat = "daCapoAlFine";
-      if (daCapoAlCoda.exactMatch(lowerTxt)) repeat = "daCapoAlCoda";
-      if (dalSegno.exactMatch(lowerTxt)) repeat = "dalSegno";
-      if (dalSegnoAlFine.exactMatch(lowerTxt)) repeat = "dalSegnoAlFine";
-      if (dalSegnoAlCoda.exactMatch(lowerTxt)) repeat = "dalSegnoAlCoda";
-      if (fine.exactMatch(lowerTxt)) repeat = "fine";
-      if (toCoda.exactMatch(lowerTxt)) repeat = "toCoda";
+      if (repeat == "") repeat = matchRepeat(txt.toLower());
       // If that did not work, try to recognize a sound attribute
       if (repeat == "" && sndCoda != "") repeat = "coda";
       if (repeat == "" && sndDacapo != "") repeat = "daCapo";
@@ -2721,68 +2977,13 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
       */
 
       if (repeat != "") {
-            Jump* jp = 0;
-            Marker* m = 0;
-            if (repeat == "segno") {
-                  m = new Marker(score);
-                  // note: Marker::read() also contains code to set text style based on type
-                  // avoid duplicated code
-                  m->setTextStyleType(TextStyleType::REPEAT_LEFT);
-                  // apparently this MUST be after setTextStyle
-                  m->setMarkerType(Marker::Type::SEGNO);
-                  }
-            else if (repeat == "coda") {
-                  m = new Marker(score);
-                  m->setTextStyleType(TextStyleType::REPEAT_LEFT);
-                  m->setMarkerType(Marker::Type::CODA);
-                  }
-            else if (repeat == "fine") {
-                  m = new Marker(score);
-                  m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  m->setMarkerType(Marker::Type::FINE);
-                  }
-            else if (repeat == "toCoda") {
-                  m = new Marker(score);
-                  m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  m->setMarkerType(Marker::Type::TOCODA);
-                  }
-            else if (repeat == "daCapo") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DC);
-                  }
-            else if (repeat == "daCapoAlCoda") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DC_AL_CODA);
-                  }
-            else if (repeat == "daCapoAlFine") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DC_AL_FINE);
-                  }
-            else if (repeat == "dalSegno") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DS);
-                  }
-            else if (repeat == "dalSegnoAlCoda") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DS_AL_CODA);
-                  }
-            else if (repeat == "dalSegnoAlFine") {
-                  jp = new Jump(score);
-                  jp->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-                  jp->setJumpType(Jump::Type::DS_AL_FINE);
-                  }
-            if (jp) {
-                  jp->setTrack((staff + rstaff) * VOICES);
+            if (Jump* jp = findJump(repeat, score)) {
+                  jp->setTrack(track);
                   qDebug("jumpsMarkers adding jm %p meas %p",jp, measure);
                   jumpsMarkers.append(JumpMarkerDesc(jp, measure));
                   }
-            if (m) {
-                  m->setTrack((staff + rstaff) * VOICES);
+            if (Marker* m = findMarker(repeat, score)) {
+                  m->setTrack(track);
                   qDebug("jumpsMarkers adding jm %p meas %p",m, measure);
                   jumpsMarkers.append(JumpMarkerDesc(m, measure));
                   }
@@ -2810,63 +3011,73 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   score->setTempo(tick, tpo);
                   }
             else {
-                  t = new Text(score);
-                  t->setTextStyleType(TextStyleType::TECHNIQUE);
+                  t = new StaffText(score);
                   }
-            if (!fontSize.isEmpty() || !fontStyle.isEmpty() || !fontWeight.isEmpty()) {
-                  if (!fontSize.isEmpty()) {
-                        bool ok = true;
-                        float size = fontSize.toFloat(&ok);
-                        if (ok)
-                              t->textStyle().setSize(size);
-                        }
-                  t->textStyle().setItalic(fontStyle == "italic");
-                  t->textStyle().setBold(fontWeight == "bold");
+
+            qDebug("formatted words '%s'", qPrintable(formattedText));
+            t->setText(formattedText);
+
+            if (enclosure == "circle") {
+                  t->textStyle().setHasFrame(true);
+                  t->textStyle().setCircle(true);
                   }
-            t->setPlainText(txt);
+            else if (enclosure == "rectangle") {
+                  t->textStyle().setHasFrame(true);
+                  t->textStyle().setFrameRound(0);
+            }
+
             if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
-            addElem(t, hasYoffset, staff, rstaff, score, placement,
-                       rx, ry, offset, measure, tick);
+            addElem(t, track, placement, measure, tick);
             }
       else if (dirType == "rehearsal") {
             Text* t = new RehearsalMark(score);
-            t->setPlainText(rehearsal);
+            if (!formattedText.contains("<b>"))
+                  formattedText = "<b></b>" + formattedText; // explicitly turn bold off
+            t->setText(formattedText);
+            t->textStyle().setHasFrame(enclosure != "none");
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             else t->setPlacement(placement == "above" ? Element::Placement::ABOVE : Element::Placement::BELOW);
-            if (hasYoffset) t->textStyle().setYoff(yoffset);
-            addElem(t, hasYoffset, staff, rstaff, score, placement,
-                       rx, ry, offset, measure, tick);
+            addElem(t, track, placement, measure, tick);
             }
       else if (dirType == "pedal") {
-            if (pedalLine) {
+            if (pedalLine != "yes" && pedalSign == "") pedalSign = "yes"; // MusicXML 2.0 compatibility
+            if (pedalLine == "yes" && pedalSign == "") pedalSign = "no";  // MusicXML 2.0 compatibility
+            if (pedalLine == "yes") {
                   if (type == "start") {
-                        if (pedal) {
-                              qDebug("overlapping pedal lines not supported");
-                              }
-                        else {
-                              pedal = new Pedal(score);
-                              pedal->setTrack((staff + rstaff) * VOICES);
-                              if (placement == "") placement = "below";
-                              setSLinePlacement(pedal,
-                                                score->spatium(), placement,
-                                                hasYoffset, yoffset);
-                              spanners[pedal] = QPair<int, int>(tick, -1);
-                              // qDebug("pedal=%p inserted at first tick %d", pedal, tick);
-                              }
+                        pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
+                        if (pedalSign == "yes")
+                              pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+                        else
+                              pedal->setBeginHook(true);
+                        pedal->setEndHook(true);
+                        if (placement == "") placement = "below";
+                        handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
                         }
                   else if (type == "stop") {
-                        if (!pedal) {
-                              qDebug("pedal line stop without start");
-                              }
-                        else {
-                              spanners[pedal].second = tick;
-                              // qDebug("pedal=%p second tick %d", pedal, tick);
-                              pedal = 0;
-                              }
+                        handleSpannerStop(pedal, "pedal", tick, spanners);
+                        pedal = 0;
+                        }
+                  else if (type == "change") {
+                        // pedal change is implemented as two separate pedals
+                        // first stop the first one
+                        pedal->setEndHookType(HookType::HOOK_45);
+                        handleSpannerStop(pedal, "pedal", tick, spanners);
+                        pedalContinue = pedal; // mark for later fixup
+                        pedal = 0;
+                        // then start a new one
+                        pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
+                        pedal->setBeginHook(true);
+                        pedal->setBeginHookType(HookType::HOOK_45);
+                        pedal->setEndHook(true);
+                        if (placement == "") placement = "below";
+                        handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
+                        }
+                  else if (type == "continue") {
+                        // ignore
                         }
                   else
-                        qDebug("unknown pedal %s", qPrintable(type));
+                        qDebug("unknown pedal type %s", qPrintable(type));
                   }
             else {
                   Symbol* s = new Symbol(score);
@@ -2877,10 +3088,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else if (type == "stop")
                         s->setSym(SymId::keyboardPedalUp);
                   else
-                        qDebug("unknown pedal %s", type.toLatin1().data());
+                        qDebug("unknown pedal type %s", qPrintable(type));
                   if (hasYoffset) s->setYoff(yoffset);
-                  addElem(s, hasYoffset, staff, rstaff, score, placement,
-                          rx, ry, offset, measure, tick);
+                  addElem(s, track, placement, measure, tick);
                   }
             }
       else if (dirType == "dynamics") {
@@ -2898,173 +3108,118 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         dyn->setVelocity( dynaValue );
                         }
                   if (hasYoffset) dyn->textStyle().setYoff(yoffset);
-                  addElem(dyn, hasYoffset, staff, rstaff, score, placement,
-                             rx, ry, offset, measure, tick);
+                  addElem(dyn, track, placement, measure, tick);
                   }
             }
       else if (dirType == "wedge") {
             // qDebug("wedge type='%s' hairpin=%p", qPrintable(type), hairpin);
-            // bool above = (placement == "above");
             if (type == "crescendo" || type == "diminuendo") {
-                  if (hairpin) {
-                        qDebug("overlapping wedge not supported");
-                        }
-                  else {
-                        hairpin = new Hairpin(score);
-                        hairpin->setHairpinType(type == "crescendo"
-                                                ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
-                        setSLinePlacement(hairpin,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
-                        hairpin->setTrack((staff + rstaff) * VOICES);
-                        if( niente == "yes")
-                            hairpin->setHairpinCircledTip( true );
-                        spanners[hairpin] = QPair<int, int>(tick, -1);
-                        // qDebug("hairpin=%p inserted at first tick %d", hairpin, tick);
-                        }
+                  hairpin = static_cast<Hairpin*>(checkSpannerOverlap(hairpin, new Hairpin(score), "hairpin"));
+                  hairpin->setHairpinType(type == "crescendo"
+                                          ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
+                  if (niente == "yes")
+                      hairpin->setHairpinCircledTip(true);
+                  handleSpannerStart(hairpin, "hairpin", track, placement, tick, spanners);
                   }
             else if (type == "stop") {
-                  if (!hairpin) {
-                        qDebug("wedge stop without start");
-                        }
-                  else {
-                        if( niente == "yes")
-                            hairpin->setHairpinCircledTip( true );
-                        spanners[hairpin].second = tick;
-                        // qDebug("hairpin=%p second tick %d", hairpin, tick);
-                        hairpin = 0;
-                        }
+                  if (hairpin && niente == "yes")
+                      hairpin->setHairpinCircledTip(true);
+                  handleSpannerStop(hairpin, "wedge", tick, spanners);
+                  hairpin = 0;
                   }
             else
                   qDebug("unknown wedge type: %s", qPrintable(type));
             }
       else if (dirType == "bracket") {
-            int n = number-1;
-            TextLine* b = bracket[n];
+            int n = number - 1;
+            TextLine*& b = bracket[n];
             if (type == "start") {
-                  if (b) {
-                        qDebug("overlapping bracket number %d", number);
+                  b = static_cast<TextLine*>(checkSpannerOverlap(b, new TextLine(score), "bracket"));
+
+                  if (placement == "") placement = "above";  // set default
+
+                  b->setBeginHook(lineEnd != "none");
+                  if (lineEnd == "up")
+                        b->setBeginHookHeight(-1 * b->beginHookHeight());
+
+                  // hack: assume there was a words element before the bracket
+                  if (!txt.isEmpty()) {
+                        b->setBeginText(txt, TextStyleType::TEXTLINE);
                         }
-                  else {
-                        b = new TextLine(score);
 
-                        if (placement == "") placement = "above";  // set default
-                        setSLinePlacement(b,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
+                  if (lineType == "solid")
+                        b->setLineStyle(Qt::SolidLine);
+                  else if (lineType == "dashed")
+                        b->setLineStyle(Qt::DashLine);
+                  else if (lineType == "dotted")
+                        b->setLineStyle(Qt::DotLine);
+                  else
+                        qDebug("unsupported line-type: %s", lineType.toLatin1().data());
 
-                        b->setBeginHook(lineEnd != "none");
-                        if (lineEnd == "up")
-                              b->setBeginHookHeight(-1 * b->beginHookHeight());
-
-                        // hack: assume there was a words element before the bracket
-                        if (!txt.isEmpty()) {
-                              b->setBeginText(txt, TextStyleType::TEXTLINE);
-                              }
-
-                        if (lineType == "solid")
-                              b->setLineStyle(Qt::SolidLine);
-                        else if (lineType == "dashed")
-                              b->setLineStyle(Qt::DashLine);
-                        else if (lineType == "dotted")
-                              b->setLineStyle(Qt::DotLine);
-                        else
-                              qDebug("unsupported line-type: %s", lineType.toLatin1().data());
-
-                        b->setTrack((staff + rstaff) * VOICES);
-                        spanners[b] = QPair<int, int>(tick, -1);
-                        bracket[n] = b;
-                        //qDebug("bracket=%p inserted at first tick %d", b, tick);
-                        }
+                  handleSpannerStart(b, QString("bracket %1").arg(number), track, placement, tick, spanners);
+                  //qDebug("bracket=%p inserted at first tick %d", b, tick);
                   }
             else if (type == "stop") {
-                  if (!b)
-                        qDebug("bracket stop without start, number %d", number);
-                  else {
+                  if (b) {
                         b->setEndHook(lineEnd != "none");
                         if (lineEnd == "up")
                               b->setEndHookHeight(-1 * b->endHookHeight());
-                        spanners[b].second = tick;
-                        bracket[n] = 0;
-                        //qDebug("bracket=%p second tick %d", b, tick);
                         }
+                  handleSpannerStop(b, QString("bracket %1").arg(number), tick, spanners);
+                  //qDebug("bracket=%p second tick %d", b, tick);
+                  b = 0;
                   }
             }
       else if (dirType == "dashes") {
-            int n = number-1;
-            TextLine* b = dashes[n];
+            int n = number - 1;
+            TextLine*& b = dashes[n];
             if (type == "start") {
-                  if (b) {
-                        qDebug("overlapping dashes, number %d", number);
+                  b = static_cast<TextLine*>(checkSpannerOverlap(b, new TextLine(score), "dashes"));
+
+                  if (placement == "") placement = "above";  // set default
+
+                  // hack: assume there was a words element before the dashes
+                  if (!txt.isEmpty()) {
+                        b->setBeginText(txt, TextStyleType::TEXTLINE);
                         }
-                  else {
-                        b = new TextLine(score);
 
-                        if (placement == "") placement = "above";  // set default
-                        setSLinePlacement(b,
-                                          score->spatium(), placement,
-                                          hasYoffset, yoffset);
+                  b->setBeginHook(false);
+                  b->setEndHook(false);
+                  b->setLineStyle(Qt::DashLine);
 
-                        // hack: assume there was a words element before the dashes
-                        if (!txt.isEmpty()) {
-                              b->setBeginText(txt, TextStyleType::TEXTLINE);
-                              }
-
-                        b->setBeginHook(false);
-                        b->setLineStyle(Qt::DashLine);
-                        b->setTrack((staff + rstaff) * VOICES);
-                        spanners[b] = QPair<int, int>(tick, -1);
-                        dashes[n] = b;
-                        //qDebug("dashes=%p inserted at first tick %d", b, tick);
-                        }
+                  handleSpannerStart(b, QString("dashes %1").arg(number), track, placement, tick, spanners);
+                  //qDebug("dashes=%p inserted at first tick %d", b, tick);
                   }
             else if (type == "stop") {
-                  if (!b) {
-                        qDebug("dashes stop without start, number %d", number);
-                        }
-                  else {
-                        // TODO: MuseScore doesn't support lines which start and end on different staves
-                        b->setEndHook(false);
-                        spanners[b].second = tick;
-                        dashes[n] = 0;
-                        //qDebug("dashes=%p second tick %d", b, tick);
-                        }
+                  // TODO: MuseScore doesn't support lines which start and end on different staves
+                  handleSpannerStop(b, QString("dashes %1").arg(number), tick, spanners);
+                  //qDebug("dashes=%p second tick %d", b, tick);
+                  b = 0;
                   }
             }
       else if (dirType == "octave-shift") {
             if (type == "up" || type == "down") {
-                  if (ottava) {
-                        qDebug("overlapping octave-shift not supported");
+                  if (!(ottavasize == 8 || ottavasize == 15)) {
+                        qDebug("unknown octave-shift size %d", ottavasize);
                         }
                   else {
-                        if (!(ottavasize == 8 || ottavasize == 15)) {
-                              qDebug("unknown octave-shift size %d", ottavasize);
-                              }
-                        else {
-                              ottava = new Ottava(score);
-                              ottava->setTrack((staff + rstaff) * VOICES);
-                              if (type == "down" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VA);
-                              if (type == "down" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
-                              if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
-                              if (type ==   "up" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MB);
-                              if (placement == "") placement = "above";  // set default
-                              setSLinePlacement(ottava,
-                                                score->spatium(), placement,
-                                                hasYoffset, yoffset);
-                              spanners[ottava] = QPair<int, int>(tick, -1);
-                              //qDebug("ottava=%p inserted at first tick %d", ottava, tick);
-                              }
+                        ottava = static_cast<Ottava*>(checkSpannerOverlap(ottava, new Ottava(score), "octave-shift"));
+
+                        if (placement == "") placement = "above";  // set default
+
+                        if (type == "down" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VA);
+                        if (type == "down" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
+                        if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
+                        if (type ==   "up" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MB);
+
+                        handleSpannerStart(ottava, "octave-shift", track, placement, tick, spanners);
+                        //qDebug("ottava=%p inserted at first tick %d", ottava, tick);
                         }
                   }
             else if (type == "stop") {
-                  if (!ottava) {
-                        qDebug("octave-shift stop without start");
-                        }
-                  else {
-                        spanners[ottava].second = tick;
-                        //qDebug("ottava=%p second tick %d", ottava, tick);
-                        ottava = 0;
-                        }
+                  handleSpannerStop(ottava, "octave-shift", tick, spanners);
+                  //qDebug("ottava=%p second tick %d", ottava, tick);
+                  ottava = 0;
                   }
             }
       }
@@ -3454,6 +3609,7 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
                   unNumbrdLyrics.append(l);
             }
 
+      QString formattedText;
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "syllabic") {
                   if (e.text() == "single")
@@ -3468,13 +3624,13 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
                         qDebug("unknown syllabic %s", qPrintable(e.text()));
                   }
             else if (e.tagName() == "text")
-                  l->setPlainText(l->text()+e.text());
+                  formattedText += nextPartOfFormattedString(e);
             else if (e.tagName() == "elision")
                   if (e.text().isEmpty()) {
-                        l->setPlainText(l->text()+" ");
+                        formattedText += " ";
                         }
                   else {
-                        l->setPlainText(l->text()+e.text());
+                        formattedText += nextPartOfFormattedString(e);
                         }
             else if (e.tagName() == "extend")
                   ;
@@ -3485,6 +3641,8 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
             else
                   domError(e);
             }
+            qDebug("formatted lyric '%s'", qPrintable(formattedText));
+            l->setText(formattedText);
       }
 
 #if 0
@@ -3945,7 +4103,7 @@ static bool readArticulations(ChordRest* cr, QString mxmlName)
       map["snap-pizzicato"]   = ArticulationType::Snappizzicato;
       map["schleifer"]        = ArticulationType::Schleifer;
       map["open-string"]      = ArticulationType::Ouvert;
-      map["thumb-position"]   = ArticulationType::Thumb;
+      map["thumb-position"]   = ArticulationType::ThumbPosition;
 
       if (map.contains(mxmlName)) {
             addArticulationToChord(cr, map.value(mxmlName), "");
@@ -3973,7 +4131,7 @@ static Accidental::Type convertAccidental(QString mxmlName)
       map["sharp-sharp"] = Accidental::Type::SHARP2;
       map["flat-flat"] = Accidental::Type::FLAT2;
       map["double-flat"] = Accidental::Type::FLAT2;
-      map["natural-flat"] = Accidental::Type::NONE;
+      map["natural-flat"] = Accidental::Type::FLAT;
 
       map["quarter-flat"] = Accidental::Type::MIRRORED_FLAT;
       map["quarter-sharp"] = Accidental::Type::SHARP_SLASH;
@@ -3987,20 +4145,45 @@ static Accidental::Type convertAccidental(QString mxmlName)
       map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
       map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
 
-      map["slash-quarter-sharp"] = Accidental::Type::MIRRORED_FLAT_SLASH;
-      map["slash-sharp"] = Accidental::Type::SHARP_SLASH;
+      map["slash-quarter-sharp"] = Accidental::Type::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
+      map["slash-sharp"] = Accidental::Type::SHARP_SLASH2; // SHARP_SLASH; ?
       map["slash-flat"] = Accidental::Type::FLAT_SLASH;
       map["double-slash-flat"] = Accidental::Type::FLAT_SLASH2;
 
       map["sori"] = Accidental::Type::SORI;
       map["koron"] = Accidental::Type::KORON;
 
-      map["natural-sharp"] = Accidental::Type::NONE;
+      map["natural-sharp"] = Accidental::Type::SHARP;
 
       if (map.contains(mxmlName))
             return map.value(mxmlName);
       else
             qDebug("unknown accidental %s", qPrintable(mxmlName));
+      // default: return Accidental::Type::NONE
+      return Accidental::Type::NONE;
+      }
+
+//---------------------------------------------------------
+//   microtonalGuess
+//---------------------------------------------------------
+
+/**
+ Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum Accidental::Type.
+ Works only for quarter tone and three-quarters tone accidentals.
+ */
+
+static Accidental::Type microtonalGuess(double val)
+      {
+      if (val == 0.5)
+            return Accidental::Type::SHARP_SLASH;
+      else if (val == -0.5)
+            return Accidental::Type::MIRRORED_FLAT;
+      else if (val == 1.5)
+            return Accidental::Type::SHARP_SLASH4;
+      else if (val == -1.5)
+            return Accidental::Type::MIRRORED_FLAT2;
+      else
+            qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);
       // default: return Accidental::Type::NONE
       return Accidental::Type::NONE;
       }
@@ -4107,7 +4290,7 @@ static void xmlFermata(ChordRest* cr, QDomElement e)
  Read MusicXML notations.
  */
 
-void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement e)
+void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ticks, QDomElement e)
       {
       Measure* measure = cr->measure();
       int track = cr->track();
@@ -4120,12 +4303,11 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
       QString tremoloType;
       QString placement;
       QStringList dynamics;
-      qreal rx = 0.0;
-      qreal ry = 0.0;
+      // qreal rx = 0.0;
+      // qreal ry = 0.0;
       qreal yoffset = 0.0; // actually this is default-y
       // qreal xoffset = 0.0; // not used
       bool hasYoffset = false;
-      QSet<QString> slurIds;             // combination start/stop and number must be unique within a note
       QString chordLineType;
 
       for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
@@ -4133,75 +4315,78 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                   int slurNo   = ee.attribute(QString("number"), "1").toInt() - 1;
                   QString slurType = ee.attribute(QString("type"));
                   QString lineType  = ee.attribute(QString("line-type"), "solid");
+
                   // PriMus Music-Notation by Columbussoft (build 10093) generates overlapping
                   // slurs that do not have a number attribute to distinguish them.
                   // The duplicates must be ignored, to prevent memory allocation issues,
                   // which caused a MuseScore crash
+                  // Similar issues happen with Sibelius 7.1.3 (direct export)
 
-                  QString slurId = QString("slur %1").arg(slurType) + QString(" %1").arg(slurNo);
-                  bool unique = !slurIds.contains(slurId);
-
-                  if (unique) {
-                        slurIds.insert(slurId);
-                        if (slurType == "start") {
-                              bool endSlur = false;
-                              if (slur[slurNo] == 0) {
-                                    slur[slurNo] = new Slur(score);
-                                    if(cr->isGrace()){
-                                          slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
-                                          slur[slurNo]->setParent(cr);
-                                          }
-                                    if (lineType == "dotted")
-                                          slur[slurNo]->setLineType(1);
-                                    else if (lineType == "dashed")
-                                          slur[slurNo]->setLineType(2);
-                                    slur[slurNo]->setTick(cr->tick());
-                                    slur[slurNo]->setStartElement(cr);
-                                    }
-                              else
-                                    endSlur = true;
+                  if (slurType == "start") {
+                        if (slur[slurNo].isStart())
+                              // slur start when slur already started: report error
+                              qDebug("ignoring duplicate slur start at line %d", e.lineNumber());
+                        else if (slur[slurNo].isStop()) {
+                              // slur start when slur already stopped: wrap up
+                              Slur* newSlur = slur[slurNo].slur();
+                              newSlur->setTick(tick);
+                              newSlur->setStartElement(cr);
+                              slur[slurNo] = SlurDesc();
+                              }
+                        else {
+                              // slur start for new slur: init
+                              Slur* newSlur = new Slur(score);
+                              if(cr->isGrace())
+                                    newSlur->setAnchor(Spanner::Anchor::CHORD);
+                              if (lineType == "dotted")
+                                    newSlur->setLineType(1);
+                              else if (lineType == "dashed")
+                                    newSlur->setLineType(2);
+                              newSlur->setTick(tick);
+                              newSlur->setStartElement(cr);
                               QString pl = ee.attribute(QString("placement"));
                               if (pl == "above")
-                                    slur[slurNo]->setSlurDirection(MScore::Direction::UP);
+                                    newSlur->setSlurDirection(MScore::Direction::UP);
                               else if (pl == "below")
-                                    slur[slurNo]->setSlurDirection(MScore::Direction::DOWN);
-                              //slur[slurNo]->setStart(tick, trk + voice);
-                              //slur[slurNo]->setTrack((staff + relStaff) * VOICES);
-                              slur[slurNo]->setTrack(track);
-                              slur[slurNo]->setTrack2(track);
-                              score->addElement(slur[slurNo]);
-                              if (endSlur) {
-                                    slur[slurNo]->setTick(cr->tick());
-                                    slur[slurNo]->setStartElement(cr);
-                                    slur[slurNo] = 0;
-                                    }
+                                    newSlur->setSlurDirection(MScore::Direction::DOWN);
+                              newSlur->setTrack(track);
+                              newSlur->setTrack2(track);
+                              slur[slurNo].start(newSlur);
+                              score->addElement(newSlur);
                               }
-                        else if (slurType == "stop") {
-                              if (slur[slurNo] == 0) {
-                                    slur[slurNo] = new Slur(score);
-                                    slur[slurNo]->setTick2(cr->tick());
-                                    slur[slurNo]->setTrack2(track);
-                                    slur[slurNo]->setEndElement(cr);
+                        }
+                  else if (slurType == "stop") {
+                        if (slur[slurNo].isStart()) {
+                              // slur stop when slur already started: wrap up
+                              Slur* newSlur = slur[slurNo].slur();
+                              if(cr->isGrace()){
+                                    newSlur->setAnchor(Spanner::Anchor::CHORD);
+                                    newSlur->setEndElement(newSlur->startElement());
+                                    newSlur->setStartElement(cr);
                                     }
                               else {
-                                    if(cr->isGrace()){
-                                          slur[slurNo]->setAnchor(Spanner::Anchor::CHORD);
-                                          slur[slurNo]->setEndElement(slur[slurNo]->startElement());
-                                          slur[slurNo]->setStartElement(cr);
-                                          }
-                                    else {
-                                          slur[slurNo]->setTick2(cr->tick());
-                                          slur[slurNo]->setTrack2(track);
-                                          slur[slurNo]->setEndElement(cr);
-                                          }
-                                    slur[slurNo] = 0;
+                                    newSlur->setTick2(tick);
+                                    newSlur->setTrack2(track);
+                                    newSlur->setEndElement(cr);
                                     }
+                              slur[slurNo] = SlurDesc();
                               }
-                        else
-                              qDebug("unknown slur type %s", qPrintable(slurType));
+                        else if (slur[slurNo].isStop())
+                              // slur stop when slur already stopped: report error
+                              qDebug("ignoring duplicate slur stop at line %d", e.lineNumber());
+                        else {
+                              // slur stop for new slur: init
+                              Slur* newSlur = new Slur(score);
+                              newSlur->setTick2(tick);
+                              newSlur->setTrack2(track);
+                              newSlur->setEndElement(cr);
+                              slur[slurNo].stop(newSlur);
+                              }
                         }
+                  else if (slurType == "continue")
+                        ; // ignore
                   else
-                        qDebug("ignoring duplicate slur '%s'", qPrintable(slurId));
+                        qDebug("unknown slur type %s", qPrintable(slurType));
                   }
 
             else if (ee.tagName() == "tied") {
@@ -4246,8 +4431,8 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                   // IMPORT_LAYOUT
                   placement = ee.attribute("placement");
                   if (preferences.musicxmlImportLayout) {
-                        ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
-                        rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
+                        // ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
+                        // rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
                         yoffset   = ee.attribute("default-y").toDouble(&hasYoffset) * -0.1;
                         // xoffset   = ee.attribute("default-x", "0.0").toDouble() * 0.1;
                         }
@@ -4322,13 +4507,15 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                         if (readArticulations(cr, eee.tagName()))
                               continue;
                         else if (eee.tagName() == "fingering")
+                              // TODO: distinguish between keyboards (style TextStyleType::FINGERING)
+                              // and (plucked) strings (style TextStyleType::LH_GUITAR_FINGERING)
                               addTextToNote(eee.text(), TextStyleType::FINGERING, score, note);
                         else if (eee.tagName() == "fret") {
                               if (note->staff()->isTabStaff())
                                     note->setFret(eee.text().toInt());
                               }
                         else if (eee.tagName() == "pluck")
-                              addTextToNote(eee.text(), TextStyleType::FINGERING, score, note);
+                              addTextToNote(eee.text(), TextStyleType::RH_GUITAR_FINGERING, score, note);
                         else if (eee.tagName() == "string") {
                               if (note->staff()->isTabStaff())
                                     note->setString(eee.text().toInt() - 1);
@@ -4348,11 +4535,20 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             else if (ee.tagName() == "non-arpeggiate")
                   arpeggioType = "non-arpeggiate";
             // glissando and slide are added to the "stop" chord only
+            // but text and color are read at start
             else if (ee.tagName() == "glissando") {
-                  if (ee.attribute("type") == "stop") glissandoType = "glissando";
+                  if (ee.attribute("type") == "start") {
+                        glissandoText = ee.text();
+                        glissandoColor = ee.attribute("color");
+                        }
+                  else if (ee.attribute("type") == "stop") glissandoType = "glissando";
                   }
             else if (ee.tagName() == "slide") {
-                  if (ee.attribute("type") == "stop") glissandoType = "slide";
+                  if (ee.attribute("type") == "start") {
+                        glissandoText = ee.text();
+                        glissandoColor = ee.attribute("color");
+                        }
+                  else if (ee.attribute("type") == "stop") glissandoType = "slide";
                   }
             else
                   domError(ee);
@@ -4392,6 +4588,21 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
                   qDebug("unknown glissando type %s", glissandoType.toLatin1().data());
                   delete g;
                   g = 0;
+                  }
+            if (g) {
+                  if (glissandoText == "")
+                        g->setShowText(false);
+                  else {
+                        g->setShowText(true);
+                        g->setText(glissandoText);
+                        glissandoText = "";
+                        }
+                  if (glissandoColor != "") {
+                        QColor color(glissandoColor);
+                        if (color.isValid())
+                              g->setColor(color);
+                        glissandoColor = "";
+                        }
                   }
             if ((static_cast<Chord*>(cr))->glissando()) {
                   // there can be only one
@@ -4501,8 +4712,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomE
             Dynamic* dyn = new Dynamic(score);
             dyn->setDynamicType(*it);
             if (hasYoffset) dyn->textStyle().setYoff(yoffset);
-            addElem(dyn, hasYoffset, track / VOICES /* staff */, 0 /* rstaff */, score, placement,
-                       rx, ry, 0 /*offset */, measure, tick);
+            addElem(dyn, track, placement, measure, tick);
             }
 
       }
@@ -4688,6 +4898,15 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             // silently ignore others (will be handled later)
             }
 
+      // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
+      // Same fix is required in MxmlReaderFirstPass::initVoiceMapperAndMapVoices
+      int nStavesInPart = score->staff(staff)->part()->nstaves();
+      if (relStaff < 0 || relStaff >= nStavesInPart) {
+            qDebug("ImportMusicXml: invalid staff %d (staves is %d) at line %d col %d",
+                   relStaff + 1, nStavesInPart, e.lineNumber(), e.columnNumber());
+            relStaff = 0;
+            }
+
       // Bug fix for Sibelius 7.1.3 which does not write <voice> for notes with <chord>
       if (!chord)
             // remember voice
@@ -4774,10 +4993,17 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                               step = ee.text();
                         else if (ee.tagName() == "alter") {    // -1=flat 1=sharp (0.5=quarter sharp)
                               bool ok;
-                              alter = MxmlSupport::stringToInt(ee.text(), &ok); // fractions not supported by mscore
+                              QString altertext = ee.text();
+                              alter = MxmlSupport::stringToInt(altertext, &ok); // fractions not supported by mscore
                               if (!ok || alter < -2 || alter > 2) {
                                     qDebug("ImportXml: bad 'alter' value: %s at line %d col %d",
-                                           qPrintable(ee.text()), ee.lineNumber(), ee.columnNumber());
+                                           qPrintable(altertext), ee.lineNumber(), ee.columnNumber());
+                                    bool ok2;
+                                    double altervalue = altertext.toDouble(&ok2);
+                                    if (ok2 && (qAbs(altervalue) < 2.0) && (accidental == Accidental::Type::NONE)) {
+                                          // try to see if a microtonal accidental is needed
+                                          accidental = microtonalGuess(altervalue);
+                                          }
                                     alter = 0;
                                     }
                               }
@@ -5156,7 +5382,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             }
 
       foreach(QDomElement de, notations) {
-            xmlNotations(note, cr, trk, ticks, de);
+            xmlNotations(note, cr, trk, loc_tick, ticks, de);
             }
 
       // add lyrics found by xmlLyric
@@ -5181,6 +5407,13 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   fb->setTicks(tick + ticks - fb->segment()->tick());
             }
       figBassExtend = false;
+
+      // fixup pedal type="change" to end at the end of this note
+      // note tick is still at note start
+      if (pedalContinue) {
+            handleSpannerStop(pedalContinue, "pedal", tick + ticks, spanners);
+            pedalContinue = 0;
+            }
 
       if (!chord)
             prevtick = tick;  // remember tick where last chordrest was inserted
@@ -5515,12 +5748,14 @@ StaffTypes MusicXml::xmlClef(QDomElement e, int staffIdx, Measure* measure)
             qDebug("ImportMusicXML: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);
       // note: also generate symbol for tick 0
       // was not necessary before 0.9.6
-      Clef* clefs = new Clef(score);
-      clefs->setClefType(clef);
-      clefs->setTrack((staffIdx + clefno) * VOICES);
-      Segment* s = measure->getSegment(clefs, tick);
-      s->add(clefs);
-//      clefs->staff()->setClef(tick, clefs->clefTypeList());
+      if (clefno < score->staff(staffIdx)->part()->staves()->size()) {
+            Clef* clefs = new Clef(score);
+            clefs->setClefType(clef);
+            clefs->setTrack((staffIdx + clefno) * VOICES);
+            Segment* s = measure->getSegment(clefs, tick);
+            s->add(clefs);
+    //      clefs->staff()->setClef(tick, clefs->clefTypeList());
+            }
       return res;
       }
 

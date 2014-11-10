@@ -50,7 +50,7 @@
         <item>
          <widget class="QSpinBox" name="timesigZ">
           <property name="accessibleName">
-           <string>Beats in a bar</string>
+           <string>Beats in a measure</string>
           </property>
           <property name="minimum">
            <number>1</number>
@@ -204,7 +204,7 @@
       <item>
        <widget class="QSpinBox" name="pickupTimesigZ">
         <property name="accessibleName">
-         <string>Beats in a bar</string>
+         <string>Beats in a measure</string>
         </property>
         <property name="minimum">
          <number>1</number>
@@ -328,7 +328,7 @@
          <string>Measures</string>
         </property>
         <property name="accessibleDescription">
-         <string>Hint: you can also add or remove measures after creation of the score.</string>
+         <string>Hint: You can also add or remove measures after creation of the score.</string>
         </property>
         <property name="minimum">
          <number>1</number>
@@ -363,7 +363,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Hint: you can also add or remove measures after creation of the score.</string>
+         <string>Hint: You can also add or remove measures after creation of the score.</string>
         </property>
         <property name="textFormat">
          <enum>Qt::AutoText</enum>

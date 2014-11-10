@@ -44,9 +44,6 @@ static inline bool operator!= (Key a, Key b) { return int(a) != int(b); }
 static inline Key  operator+= (Key& a, const Key& b) { return a = Key(int(a) + int(b)); }
 static inline Key  operator-= (Key& a, const Key& b) { return a = Key(int(a) - int(b)); }
 
-// the delta in key value to reach the next (or prev) enharmonically equivalent key:
-static const int KEY_DELTA_ENHARMONIC = 12;
-
 //---------------------------------------------------------
 //   KeySigEvent
 //---------------------------------------------------------

@@ -203,8 +203,13 @@ void Harmony::write(Xml& xml) const
                   xml.tag("root", rRootTpc);
             if (_id > 0)
                   xml.tag("extension", _id);
-            if (_textName != "")
-                  xml.tag("name", _textName);
+            // parser uses leading "=" as a hidden specifier for minor
+            QString writeName = _textName;
+            if (_parsedForm && _parsedForm->name().startsWith("="))
+                  writeName = "=" + writeName;
+            if (writeName != "")
+                  xml.tag("name", writeName);
+
             if (rBaseTpc != Tpc::TPC_INVALID)
                   xml.tag("base", rBaseTpc);
             foreach(const HDegree& hd, _degreeList) {
@@ -315,12 +320,18 @@ void Harmony::read(XmlReader& e)
       // or constructed in the Chord Symbol Properties dialog.
 
       if (_rootTpc != Tpc::TPC_INVALID) {
-            if (_id > 0)
+            if (_id > 0) {
+                  // positive id will happen only for scores that were created with explicit chord lists
                   // lookup id in chord list and generate new description if necessary
                   getDescription();
-            else if (_textName != "")
-                  // no id - look up name, in case it is in chord list with no id
+                  }
+            else
+                  {
+                  // default case: look up by name
+                  // description will be found for any chord already read in this score
+                  // and we will generate a new one if necessary
                   getDescription(_textName);
+                  }
             }
       else if (_textName == "") {
             // unrecognized chords prior to 2.0 were stored as text with markup
@@ -330,8 +341,12 @@ void Harmony::read(XmlReader& e)
             // with any luck, the resulting text will be parseable now, so give it a shot
             createLayout();
             QString s = plainText(true);
-            setHarmony(s);
-            return;
+            if (!s.isEmpty()) {
+                  setHarmony(s);
+                  return;
+                  }
+            // empty text could also indicate a root-less slash chord ("/E")
+            // we'll fall through and render it normally
             }
 
       // render chord from description (or _textName)
@@ -611,7 +626,7 @@ bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers
 void Harmony::endEdit()
       {
       Text::endEdit();
-      setHarmony(text());
+      setHarmony(plainText(true));
       layout();
       if (links()) {
             foreach(Element* e, *links()) {
@@ -838,7 +853,7 @@ const ChordDescription* Harmony::getDescription()
 
 const ChordDescription* Harmony::getDescription(const QString& name, const ParsedChord* pc)
       {
-      const ChordDescription* cd = descr(name,pc);
+      const ChordDescription* cd = descr(name, pc);
       if (cd)
             _id = cd->id;
       else {
@@ -1016,10 +1031,12 @@ void Harmony::draw(QPainter* painter) const
       if (textStyle().hasFrame()) {
             if (textStyle().frameWidth().val() != 0.0) {
                   QColor color(textStyle().frameColor());
-                  if (!visible())
-                        color = Qt::gray;
-                  else if (selected())
-                        color = MScore::selectColor[0];
+                  if (score() && !score()->printing()) {
+                        if (!visible())
+                              color = Qt::gray;
+                        else if (selected())
+                              color = MScore::selectColor[0];
+                        }
                   QPen pen(color, textStyle().frameWidth().val() * spatium());
                   painter->setPen(pen);
                   }
@@ -1038,10 +1055,12 @@ void Harmony::draw(QPainter* painter) const
             }
       painter->setBrush(Qt::NoBrush);
       QColor color(textStyle().foregroundColor());
-      if (!visible())
-            color = Qt::gray;
-      else if (selected())
-            color = MScore::selectColor[0];
+      if (score() && !score()->printing()) {
+            if (!visible())
+                  color = Qt::gray;
+            else if (selected())
+                  color = MScore::selectColor[0];
+            }
       painter->setPen(color);
       foreach(const TextSegment* ts, textList) {
             painter->setFont(ts->font);
@@ -1458,7 +1477,7 @@ const ParsedChord* Harmony::parsedForm()
 
 QString Harmony::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + harmonyName();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(harmonyName());
       }
 
 //---------------------------------------------------------
@@ -1469,7 +1488,7 @@ QString Harmony::screenReaderInfo()
       {
       QString rez = Element::accessibleInfo();
       if (_rootTpc != Tpc::TPC_INVALID)
-            rez += " " + tpc2name(_rootTpc, NoteSpellingType::STANDARD, false, true);
+            rez = QString("%1 %2").arg(rez).arg(tpc2name(_rootTpc, NoteSpellingType::STANDARD, false, true));
 
       if (parsedForm() && !hTextName().isEmpty()) {
             QString aux = parsedForm()->handle();
@@ -1481,14 +1500,14 @@ QString Harmony::screenReaderInfo()
                         s.replace("b", tr("flat"));
                   extension += s + " ";
                   }
-            rez += " " + extension;
+            rez = QString("%1 %2").arg(rez).arg(extension);
             }
       else {
-            rez += " " + hTextName();
+            rez = QString("%1 %2").arg(rez).arg(hTextName());
             }
 
       if (_baseTpc != Tpc::TPC_INVALID)
-            rez += + " / " + tpc2name(_baseTpc, NoteSpellingType::STANDARD, false, true);
+            rez = QString("%1 / %2").arg(rez).arg(tpc2name(_baseTpc, NoteSpellingType::STANDARD, false, true));
 
       return rez;
       }

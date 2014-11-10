@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>208</width>
-    <height>143</height>
+    <width>303</width>
+    <height>133</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -43,12 +43,6 @@
    </property>
    <item>
     <widget class="QLabel" name="elementName">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="font">
       <font>
        <weight>75</weight>
@@ -65,20 +59,14 @@
    </item>
    <item>
     <widget class="QFrame" name="frame">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="frameShape">
       <enum>QFrame::HLine</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Sunken</enum>
      </property>
      <property name="lineWidth">
-      <number>2</number>
+      <number>1</number>
      </property>
     </widget>
    </item>
@@ -170,16 +158,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="4" column="1">
@@ -221,16 +199,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="3" column="0">
@@ -252,32 +220,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
-      <widget class="QToolButton" name="resetVisible">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="accessibleName">
-        <string>Reset Visible value</string>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="3">
       <widget class="QToolButton" name="resetColor">
        <property name="sizePolicy">
@@ -292,26 +234,12 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="3" column="2">
-      <widget class="QToolButton" name="vRaster">
+      <widget class="QToolButton" name="hRaster">
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/vraster.svg</normaloff>:/data/icons/vraster.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -319,16 +247,12 @@
       </widget>
      </item>
      <item row="4" column="2">
-      <widget class="QToolButton" name="hRaster">
+      <widget class="QToolButton" name="vRaster">
        <property name="accessibleName">
         <string/>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/hraster.svg</normaloff>:/data/icons/hraster.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -382,6 +306,22 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="3">
+      <widget class="QToolButton" name="resetVisible">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Visible value</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -399,10 +339,10 @@
   <tabstop>resetVisible</tabstop>
   <tabstop>resetColor</tabstop>
   <tabstop>offsetX</tabstop>
-  <tabstop>vRaster</tabstop>
+  <tabstop>hRaster</tabstop>
   <tabstop>resetX</tabstop>
   <tabstop>offsetY</tabstop>
-  <tabstop>hRaster</tabstop>
+  <tabstop>vRaster</tabstop>
   <tabstop>resetY</tabstop>
  </tabstops>
  <resources>

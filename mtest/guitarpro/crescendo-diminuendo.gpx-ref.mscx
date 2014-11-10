@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -74,13 +74,25 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
           <gateTime>50</gateTime>
           </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
           <velocity>120</velocity>
@@ -133,6 +145,10 @@
             <string>2</string>
             </Note>
           </Chord>
+        <HairPin id="2">
+          <subtype>0</subtype>
+          <lid>20</lid>
+          </HairPin>
         <Chord>
           <lid>8</lid>
           <durationType>half</durationType>
@@ -144,6 +160,7 @@
             <string>3</string>
             </Note>
           </Chord>
+        <endSpanner id="2"/>
         <Chord>
           <lid>10</lid>
           <durationType>quarter</durationType>
@@ -157,43 +174,38 @@
           </Chord>
         </Measure>
       <Measure number="2">
-        <KeySig>
-          <lid>13</lid>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
-          <lid>14</lid>
+          <lid>13</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>15</lid>
+            <lid>14</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>5</fret>
             <string>2</string>
             </Note>
           </Chord>
-        <HairPin id="2">
+        <HairPin id="3">
           <subtype>1</subtype>
-          <veloChange>10</veloChange>
-          <lid>22</lid>
+          <lid>21</lid>
           </HairPin>
         <Chord>
-          <lid>16</lid>
+          <lid>15</lid>
           <durationType>half</durationType>
           <Note>
-            <lid>17</lid>
+            <lid>16</lid>
             <pitch>52</pitch>
             <tpc>18</tpc>
             <fret>2</fret>
             <string>3</string>
             </Note>
           </Chord>
-        <endSpanner id="2"/>
+        <endSpanner id="3"/>
         <Chord>
-          <lid>18</lid>
+          <lid>17</lid>
           <durationType>quarter</durationType>
           <Note>
-            <lid>19</lid>
+            <lid>18</lid>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <fret>15</fret>
@@ -204,10 +216,6 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
-        <tick>3360</tick>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
         </Measure>
       </Staff>
     <Score>
@@ -301,13 +309,25 @@
             <velocity>100</velocity>
             <gateTime>100</gateTime>
             </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
           <Articulation name="staccato">
             <velocity>100</velocity>
             <gateTime>50</gateTime>
             </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
           <Articulation name="tenuto">
             <velocity>100</velocity>
             <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
             </Articulation>
           <Articulation name="sforzato">
             <velocity>120</velocity>
@@ -364,6 +384,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <HairPin id="4">
+            <subtype>0</subtype>
+            <lid>20</lid>
+            </HairPin>
           <Chord>
             <lid>8</lid>
             <durationType>half</durationType>
@@ -375,6 +399,7 @@
               <string>3</string>
               </Note>
             </Chord>
+          <endSpanner id="4"/>
           <Chord>
             <lid>10</lid>
             <durationType>quarter</durationType>
@@ -386,45 +411,42 @@
               <string>4</string>
               </Note>
             </Chord>
+          <tick>1440</tick>
+          <endSpanner id="5"/>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>13</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <HairPin id="3">
+          <HairPin id="6">
             <subtype>1</subtype>
-            <veloChange>10</veloChange>
-            <lid>22</lid>
+            <lid>21</lid>
             </HairPin>
           <Chord>
-            <lid>16</lid>
+            <lid>15</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>16</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
               <string>3</string>
               </Note>
             </Chord>
-          <endSpanner id="3"/>
+          <endSpanner id="6"/>
           <Chord>
-            <lid>18</lid>
+            <lid>17</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>18</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -436,10 +458,7 @@
             <span>1</span>
             </BarLine>
           <tick>3360</tick>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
-          <endSpanner id="4"/>
+          <endSpanner id="7"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -459,6 +478,10 @@
               <string>2</string>
               </Note>
             </Chord>
+          <HairPin id="5">
+            <subtype>0</subtype>
+            <lid>20</lid>
+            </HairPin>
           <Chord>
             <lid>8</lid>
             <durationType>half</durationType>
@@ -483,43 +506,37 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>13</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <HairPin id="4">
+          <HairPin id="7">
             <subtype>1</subtype>
-            <veloChange>10</veloChange>
-            <lid>22</lid>
+            <lid>21</lid>
             </HairPin>
           <Chord>
-            <lid>16</lid>
+            <lid>15</lid>
             <durationType>half</durationType>
             <Note>
-              <lid>17</lid>
+              <lid>16</lid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
               <string>3</string>
               </Note>
             </Chord>
-          <endSpanner id="3"/>
           <Chord>
-            <lid>18</lid>
+            <lid>17</lid>
             <durationType>quarter</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>18</lid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>15</fret>
@@ -530,10 +547,6 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
-          <tick>3360</tick>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
           </Measure>
         </Staff>
       <name>S-Gt</name>

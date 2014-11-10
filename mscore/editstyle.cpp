@@ -53,7 +53,22 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       lstyle = *s->style();
       setModal(true);
 
-      chordDescriptionFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      const QIcon &editIcon = *icons[int(Icons::edit_ICON)];
+      chordDescriptionFileButton->setIcon(editIcon);
+      const QIcon &resetIcon = *icons[int(Icons::reset_ICON)];
+      resetHairpinY->setIcon(resetIcon);
+      resetHairpinLineWidth->setIcon(resetIcon);
+      resetHairpinHeight->setIcon(resetIcon);
+      resetHairpinContinueHeight->setIcon(resetIcon);
+      resetVoltaY->setIcon(resetIcon);
+      resetVoltaHook->setIcon(resetIcon);
+      resetVoltaLineWidth->setIcon(resetIcon);
+      resetVoltaLineStyle->setIcon(resetIcon);
+      resetOttavaY->setIcon(resetIcon);
+      resetOttavaHook->setIcon(resetIcon);
+      resetOttavaLineWidth->setIcon(resetIcon);
+      resetOttavaLineStyle->setIcon(resetIcon);
+      resetOttavaNumbersOnly->setIcon(resetIcon);
 
       pageList->setCurrentRow(0);
 
@@ -78,9 +93,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
             ArticulationInfo* ai = &Articulation::articulationList[i];
 
-            QPixmap ct = cs->scoreFont()->sym2pixmap(ai->upSym, 3.0);
+            QPixmap ct = cs->scoreFont()->sym2pixmap(ai->upSym, 0.9);
             QIcon icon(ct);
-            QTableWidgetItem* item = new QTableWidgetItem(icon, qApp->translate("articulation", qPrintable(ai->description)));
+            QTableWidgetItem* item = new QTableWidgetItem(icon, qApp->translate("articulation", ai->description.toUtf8().constData()));
 
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
             articulationTable->setItem(i, 0, item);
@@ -93,20 +108,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             cb->addItem(tr("Below Chord"), int(ArticulationAnchor::BOTTOM_CHORD));
             articulationTable->setCellWidget(i, 1, cb);
             }
-      QButtonGroup* bg = new QButtonGroup(this);
-      bg->addButton(editEvenHeaderL, 0);
-      bg->addButton(editEvenHeaderC, 1);
-      bg->addButton(editEvenHeaderR, 2);
-      bg->addButton(editOddHeaderL,  3);
-      bg->addButton(editOddHeaderC,  4);
-      bg->addButton(editOddHeaderR,  5);
-
-      bg->addButton(editEvenFooterL, 6);
-      bg->addButton(editEvenFooterC, 7);
-      bg->addButton(editEvenFooterR, 8);
-      bg->addButton(editOddFooterL,  9);
-      bg->addButton(editOddFooterC, 10);
-      bg->addButton(editOddFooterR, 11);
 
       // figured bass init
       QList<QString> fbFontNames = FiguredBass::fontNames();
@@ -125,6 +126,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             + QString("</b></p>")
             + QString("<table><tr><td>$p</td><td>-</td><td><i>")
             + tr("page number, except on first page")
+            + QString("</i></td></tr><tr><td>$N</td><td>-</td><td><i>")
+            + tr("page number, if there is more than one page")
             + QString("</i></td></tr><tr><td>$P</td><td>-</td><td><i>")
             + tr("page number, on all pages")
             + QString("</i></td></tr><tr><td>$n</td><td>-</td><td><i>")
@@ -137,6 +140,10 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             + tr("current date")
             + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
             + tr("creation date")
+            + QString("</i></td></tr><tr><td>$m</td><td>-</td><td><i>")
+            + tr("last modification time")
+            + QString("</i></td></tr><tr><td>$M</td><td>-</td><td><i>")
+            + tr("last modification date")
             + QString("</i></td></tr><tr><td>$C</td><td>-</td><td><i>")
             + tr("copyright, on first page only")
             + QString("</i></td></tr><tr><td>$c</td><td>-</td><td><i>")
@@ -168,8 +175,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
       connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
       connect(hideEmptyStaves, SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
-
-      connect(bg, SIGNAL(buttonClicked(int)), SLOT(editTextClicked(int)));
 
       QSignalMapper* mapper = new QSignalMapper(this);
 
@@ -515,8 +520,9 @@ void EditStyle::getValues()
 void EditStyle::setHeaderText(StyleIdx idx, QTextEdit* te)
       {
       QString s = lstyle.value(idx).toString();
-      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::HEADER));
-      te->setHtml(s);
+//      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::HEADER));
+//      te->setHtml(s);
+      te->setPlainText(s);
       }
 
 //---------------------------------------------------------
@@ -526,8 +532,9 @@ void EditStyle::setHeaderText(StyleIdx idx, QTextEdit* te)
 void EditStyle::setFooterText(StyleIdx idx, QTextEdit* te)
       {
       QString s = lstyle.value(idx).toString();
-      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::FOOTER));
-      te->setHtml(s);
+//      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::FOOTER));
+//      te->setHtml(s);
+      te->setPlainText(s);
       }
 
 //---------------------------------------------------------
@@ -692,12 +699,13 @@ void EditStyle::setValues()
                   continue;
             ArticulationAnchor st  = lstyle.articulationAnchor(i);
             int idx = 0;
-            if (st == ArticulationAnchor::TOP_STAFF)
-                  idx = 0;
-            else if (st == ArticulationAnchor::BOTTOM_STAFF)
-                  idx = 1;
-            else if (st == ArticulationAnchor::CHORD)
-                  idx = 2;
+            switch (st) {
+                  case ArticulationAnchor::TOP_STAFF:       idx = 0;    break;
+                  case ArticulationAnchor::BOTTOM_STAFF:    idx = 1;    break;
+                  case ArticulationAnchor::CHORD:           idx = 2;    break;
+                  case ArticulationAnchor::TOP_CHORD:       idx = 3;    break;
+                  case ArticulationAnchor::BOTTOM_CHORD:    idx = 4;    break;
+                  }
             cb->setCurrentIndex(idx);
             }
 
@@ -720,6 +728,7 @@ void EditStyle::setValues()
             }
       musicalTextFont->clear();
       musicalTextFont->addItem("Emmentaler Text", "MScore Text");
+      musicalTextFont->addItem("Gonville Text", "Gonville Text");
       musicalTextFont->addItem("Bravura Text", "Bravura Text");
       musicalTextFont->addItem("MuseJazz", "MuseJazz");
       QString tfont(lstyle.value(StyleIdx::MusicalTextFont).toString());
@@ -862,17 +871,14 @@ void EditStyle::toggleHeaderOddEven(bool checked)
             return;
       labelEvenHeader->setEnabled(checked);
       evenHeaderL->setEnabled(checked);
-      editEvenHeaderL->setEnabled(checked);
       evenHeaderC->setEnabled(checked);
-      editEvenHeaderC->setEnabled(checked);
       evenHeaderR->setEnabled(checked);
-      editEvenHeaderR->setEnabled(checked);
       static QString odd  = labelOddHeader->text();  // save on 1st round
       static QString even = labelEvenHeader->text(); // save on 1st round
       if (checked)
             labelOddHeader->setText(odd); // restore
       else
-            labelOddHeader->setText(even + "\n" + odd); // replace
+            labelOddHeader->setText(odd + "\n" + even); // replace
       return;
       }
 
@@ -886,46 +892,15 @@ void EditStyle::toggleFooterOddEven(bool checked)
             return;
       labelEvenFooter->setEnabled(checked);
       evenFooterL->setEnabled(checked);
-      editEvenFooterL->setEnabled(checked);
       evenFooterC->setEnabled(checked);
-      editEvenFooterC->setEnabled(checked);
       evenFooterR->setEnabled(checked);
-      editEvenFooterR->setEnabled(checked);
       static QString odd  = labelOddFooter->text();  // save on 1st round
       static QString even = labelEvenFooter->text(); // save on 1st round
       if (checked)
             labelOddFooter->setText(odd); // restore
       else
-            labelOddFooter->setText(even + "\n" + odd); // replace
+            labelOddFooter->setText(odd + "\n" + even); // replace
       return;
-      }
-
-//---------------------------------------------------------
-//   editTextClicked
-//---------------------------------------------------------
-
-void EditStyle::editTextClicked(int id)
-      {
-      QTextEdit* e = 0;
-      switch (id) {
-            case  0:  e = evenHeaderL; break;
-            case  1:  e = evenHeaderC; break;
-            case  2:  e = evenHeaderR; break;
-            case  3:  e = oddHeaderL;  break;
-            case  4:  e = oddHeaderC;  break;
-            case  5:  e = oddHeaderR;  break;
-
-            case  6:  e = evenFooterL; break;
-            case  7:  e = evenFooterC; break;
-            case  8:  e = evenFooterR; break;
-            case  9:  e = oddFooterL;  break;
-            case 10:  e = oddFooterC;  break;
-            case 11:  e = oddFooterR;  break;
-            }
-      if (e == 0)
-            return;
-
-      e->setHtml(editHtml(e->toHtml(), tr("Edit HTML Text")));
       }
 
 //---------------------------------------------------------

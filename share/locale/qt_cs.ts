@@ -1355,7 +1355,7 @@ na
     </message>
 </context>
 <context>
-    <name>QDialogButtonBox</name>
+    <name>QPlatformTheme</name>
     <message>
         <location filename="../src/gui/dialogs/qmessagebox.cpp" line="+1872"/>
         <location line="+464"/>

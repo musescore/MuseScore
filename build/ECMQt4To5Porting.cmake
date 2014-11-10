@@ -165,7 +165,7 @@ set(_qt_modules
   XmlPatterns
   UiTools
   Qml
-  Quick1
+  Quick
   WebKit
   WebKitWidgets
   Sql

@@ -53,7 +53,7 @@ void RepeatMeasure::layout()
       qreal lw  = sp * .50;  // line width
       qreal r   = sp * .20;  // dot radius
 
-      path       = QPainterPath();
+      path      = QPainterPath();
 
       path.moveTo(w - lw, y);
       path.lineTo(w,  y);

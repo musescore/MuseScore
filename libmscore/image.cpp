@@ -462,6 +462,27 @@ bool Image::load(const QString& ss)
       }
 
 //---------------------------------------------------------
+//   loadFromData
+//    load image from data and put into ImageStore
+//    return true on success
+//---------------------------------------------------------
+
+bool Image::loadFromData(const QString& ss, const QByteArray& ba)
+      {
+      qDebug("Image::loadFromData <%s>", qPrintable(ss));
+
+      _linkIsValid = false;
+      _linkPath = "";
+      _storeItem = imageStore.add(ss, ba);
+      _storeItem->reference(this);
+      if (ss.endsWith(".svg"))
+            setImageType(ImageType::SVG);
+      else
+            setImageType(ImageType::RASTER);
+      return true;
+      }
+
+//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
@@ -511,6 +532,7 @@ void Image::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 
 void Image::layout()
       {
+      setPos(0.0, 0.0);
       if (imageType == ImageType::SVG && !svgDoc) {
             if (_storeItem) {
                   svgDoc = new QSvgRenderer(_storeItem->buffer());

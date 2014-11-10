@@ -55,7 +55,7 @@ Measure* Score::tick2measure(int tick) const
       // check last measure
       if (lm && (tick >= lm->tick()) && (tick <= lm->endTick()))
             return lm;
-      qDebug("-tick2measure %d (max %d) not found", tick, lm ? lm->tick() : -1);
+      qDebug("tick2measure %d (max %d) not found", tick, lm ? lm->tick() : -1);
       return 0;
       }
 
@@ -77,7 +77,7 @@ Measure* Score::tick2measureMM(int tick) const
       // check last measure
       if (lm && (tick >= lm->tick()) && (tick <= lm->endTick()))
             return lm;
-      qDebug("-tick2measure %d (max %d) not found", tick, lm ? lm->tick() : -1);
+      qDebug("tick2measureMM %d (max %d) not found", tick, lm ? lm->tick() : -1);
       return 0;
       }
 
@@ -112,7 +112,7 @@ Segment* Score::tick2segment(int tick, bool first, Segment::Type st, bool useMMr
       if (useMMrest) {
             m = tick2measureMM(tick);
             // When mmRest force tick to the first segment of mmRest.
-            if (m->isMMRest())
+            if (m && m->isMMRest())
                   tick = m->tick();
             }
       else
@@ -376,7 +376,7 @@ void selectNoteMessage()
             QMessageBox::information(0,
                QMessageBox::tr("MuseScore"),
                QMessageBox::tr("No note selected:\n"
-                               "please select a single note and retry operation\n"),
+                               "Please select a single note and retry operation\n"),
                QMessageBox::Ok, QMessageBox::NoButton);
       }
 
@@ -386,7 +386,7 @@ void selectNoteRestMessage()
             QMessageBox::information(0,
                QMessageBox::tr("MuseScore"),
                QMessageBox::tr("No note or rest selected:\n"
-                               "please select a single note or rest and retry operation\n"),
+                               "Please select a single note or rest and retry operation\n"),
                QMessageBox::Ok, QMessageBox::NoButton);
       }
 

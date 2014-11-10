@@ -82,6 +82,7 @@ extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 
 
+
 }     // namespace Ms
 #endif
 

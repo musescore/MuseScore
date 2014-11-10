@@ -40,7 +40,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
    private slots:
       void definePluginShortcutClicked();
       void pluginListItemChanged(QListWidgetItem*, QListWidgetItem*);
-      void pluginLoadToggled(bool);
+      void pluginLoadToggled(QListWidgetItem*);
 
    signals:
       void closed(bool);
@@ -48,6 +48,7 @@ class PluginManager : public QDialog, public Ui::PluginManager {
    public:
       PluginManager(QWidget* parent = 0);
       void writeSettings();
+      void init();
       };
 
 

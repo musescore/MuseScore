@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -124,9 +124,6 @@
           <concertClefType>G8va</concertClefType>
           <transposingClefType>G8va</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>
@@ -158,10 +155,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Chord>
@@ -202,9 +195,6 @@
       </Staff>
     <Staff id="2">
       <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>3</sigN>
           <sigD>4</sigD>

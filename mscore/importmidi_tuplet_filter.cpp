@@ -664,7 +664,7 @@ std::vector<int> findBestTuplets(
 
 void removeExtraTuplets(std::vector<TupletInfo> &tuplets)
       {
-      const size_t MAX_TUPLETS = 23;         // found empirically
+      const size_t MAX_TUPLETS = 17;         // found empirically
 
       if (tuplets.size() <= MAX_TUPLETS)
             return;

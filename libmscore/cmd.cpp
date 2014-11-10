@@ -263,9 +263,9 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             if (e && e->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(e);
                   Fraction l = chord->duration();
-                  if (chord->notes().size() > 1) {
+                  // if (chord->notes().size() > 1) {
                         // trill do not work for chords
-                        }
+                  //      }
                   Note* note = chord->upNote();
                   while (note->tieFor()) {
                         note = note->tieFor()->endNote();
@@ -279,8 +279,10 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
                               break;
                         s = s->next1(Segment::Type::ChordRest);
                         }
-                  if (s)
-                        spanner->setTick2(s->tick());
+                  if (s) {
+                        for (Element* e : spanner->linkList())
+                              static_cast<Spanner*>(e)->setTick2(s->tick());
+                        }
                   Fraction d(1,32);
                   Fraction e = l / d;
                   int n = e.numerator() / e.denominator();
@@ -815,10 +817,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
                         }
                   }
             // first segment in measure was removed, have to recreate it
-            if(m->tick() != m->segments()->first()->tick()) {
-                  m->undoGetSegment(Segment::Type::ChordRest,m->tick());
-                  }
-            Segment* s = m->first(Segment::Type::ChordRest);
+            Segment* s = m->undoGetSegment(Segment::Type::ChordRest, m->tick());
             int track  = cr->track();
             cr = static_cast<ChordRest*>(s->element(track));
             if (cr == 0) {
@@ -1030,6 +1029,7 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
             expandVoice(s, track);
             cr1 = static_cast<ChordRest*>(s->element(track));
             }
+//      checkSpanner(cr->tick(), cr->tick() + d.ticks());
       connectTies();
       }
 
@@ -1161,16 +1161,8 @@ void Score::upDown(bool up, UpDownMode mode)
                                           qDebug("upDown tab chromatic: getPitch(%d,%d) returns -1", string, fret);
                                           newPitch = oNote->pitch();
                                           }
-                                    int nTpc = pitch2tpc(newPitch, key, up ? Prefer::SHARPS : Prefer::FLATS);
-                                    if (oNote->concertPitch()) {
-                                          newTpc1 = nTpc;
-                                          newTpc2 = oNote->tpc2default(newPitch);
-                                          }
-                                    else {
-                                          newTpc2 = nTpc;
-                                          newTpc1 = oNote->tpc1default(newPitch);
-                                          }
-
+                                    // TAB's are by definition non-transposing
+                                    newTpc1 = newTpc2 = pitch2tpc(newPitch, key, up ? Prefer::SHARPS : Prefer::FLATS);
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
                                     undoChangeProperty(oNote, P_ID::FRET, fret);
@@ -1375,10 +1367,18 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
 void Score::changeAccidental(Note* note, Accidental::Type accidental)
       {
       Chord* chord     = note->chord();
+      if (!chord)
+            return;
       Segment* segment = chord->segment();
+      if (!segment)
+            return;
       Measure* measure = segment->measure();
+      if (!measure)
+            return;
       int tick         = segment->tick();
       Staff* estaff    = staff(chord->staffIdx() + chord->staffMove());
+      if (!estaff)
+            return;
       ClefType clef    = estaff->clef(tick);
       int step         = ClefInfo::pitchOffset(clef) - note->line();
       while (step < 0)
@@ -1511,12 +1511,12 @@ void Score::resetUserStretch()
 //   moveUp
 //---------------------------------------------------------
 
-void Score::moveUp(Chord* chord)
+void Score::moveUp(ChordRest* cr)
       {
-      Staff* staff  = chord->staff();
+      Staff* staff  = cr->staff();
       Part* part    = staff->part();
       int rstaff    = staff->rstaff();
-      int staffMove = chord->staffMove();
+      int staffMove = cr->staffMove();
 
       if ((staffMove == -1) || (rstaff + staffMove <= 0))
             return;
@@ -1529,19 +1529,19 @@ void Score::moveUp(Chord* chord)
             }
       else  {
             // move the chord up a staff
-            undo(new ChangeChordStaffMove(chord, staffMove - 1));
+            undo(new ChangeChordStaffMove(cr, staffMove - 1));
             }
       }
 //---------------------------------------------------------
 //   moveDown
 //---------------------------------------------------------
 
-void Score::moveDown(Chord* chord)
+void Score::moveDown(ChordRest* cr)
       {
-      Staff* staff  = chord->staff();
+      Staff* staff  = cr->staff();
       Part* part    = staff->part();
       int rstaff    = staff->rstaff();
-      int staffMove = chord->staffMove();
+      int staffMove = cr->staffMove();
       // calculate the number of staves available so that we know whether there is another staff to move down to
       int rstaves   = part->nstaves();
 
@@ -1558,7 +1558,7 @@ void Score::moveDown(Chord* chord)
             }
       else  {
             // move the chord down a staff
-            undo(new ChangeChordStaffMove(chord, staffMove + 1));
+            undo(new ChangeChordStaffMove(cr, staffMove + 1));
             }
       }
 
@@ -1662,11 +1662,18 @@ bool Score::processMidiInput()
                         }
                   NoteVal nval(ev.pitch);
                   Staff* st = staff(inputState().track() / VOICES);
-                  Key key = st->key(inputState().tick());
-                  nval.tpc = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
-                  if (!styleB(StyleIdx::concertPitch)) {
-                      nval.pitch += st->part()->instr(inputState().tick())->transpose().chromatic;
-                      }
+                  Key key   = st->key(inputState().tick());
+
+                  if (styleB(StyleIdx::concertPitch)) {
+                        nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+                        nval.tpc2 = nval.tpc1;  // DEBUG
+                        }
+                  else {
+                        nval.pitch += st->part()->instr(inputState().tick())->transpose().chromatic;
+                        nval.tpc2  = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+                        nval.tpc1 = nval.tpc2;  // DEBUG
+                        }
+
                   addPitch(nval, ev.chord);
                   }
             }
@@ -2308,9 +2315,8 @@ void Score::cmd(const QAction* a)
             deselectAll();
             undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
             }
-      else if (cmd == "add-brackets") {
+      else if (cmd == "add-brackets")
             cmdAddBracket();
-      }
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -74,13 +74,25 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
           <gateTime>50</gateTime>
           </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
           <velocity>120</velocity>
@@ -150,29 +162,33 @@
         </Measure>
       <Measure number="2">
         <endRepeat>3</endRepeat>
-        <KeySig>
-          <lid>11</lid>
-          <accidental>0</accidental>
-          </KeySig>
+        <Volta id="2">
+          <lid>24</lid>
+          <beginText>
+            <style>Volta</style>
+            <text>1,2</text>
+            </beginText>
+          <endings></endings>
+          </Volta>
         <Chord>
-          <lid>12</lid>
+          <lid>11</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>14</lid>
+            <lid>13</lid>
             <pitch>50</pitch>
             <tpc>16</tpc>
             <fret>0</fret>
             <string>3</string>
             </Note>
           <Note>
-            <lid>13</lid>
+            <lid>12</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>8</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>15</lid>
+            <lid>14</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -181,29 +197,34 @@
           </Chord>
         </Measure>
       <Measure number="3">
-        <KeySig>
-          <lid>17</lid>
-          <accidental>0</accidental>
-          </KeySig>
+        <endSpanner id="2"/>
+        <Volta id="3">
+          <lid>25</lid>
+          <beginText>
+            <style>Volta</style>
+            <text>3</text>
+            </beginText>
+          <endings></endings>
+          </Volta>
         <Chord>
-          <lid>18</lid>
+          <lid>16</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>19</lid>
+            <lid>17</lid>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <fret>3</fret>
             <string>4</string>
             </Note>
           <Note>
-            <lid>20</lid>
+            <lid>18</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>3</fret>
             <string>3</string>
             </Note>
           <Note>
-            <lid>21</lid>
+            <lid>19</lid>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <fret>2</fret>
@@ -212,16 +233,12 @@
           </Chord>
         </Measure>
       <Measure number="4">
-        <KeySig>
-          <lid>23</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <endSpanner id="2"/>
+        <endSpanner id="3"/>
         <Chord>
-          <lid>24</lid>
+          <lid>21</lid>
           <durationType>whole</durationType>
           <Note>
-            <lid>25</lid>
+            <lid>22</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>5</fret>
@@ -232,10 +249,6 @@
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
-        <tick>5760</tick>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
-        <endSpanner id="2"/>
         </Measure>
       </Staff>
     <Score>
@@ -329,13 +342,25 @@
             <velocity>100</velocity>
             <gateTime>100</gateTime>
             </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
           <Articulation name="staccato">
             <velocity>100</velocity>
             <gateTime>50</gateTime>
             </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
           <Articulation name="tenuto">
             <velocity>100</velocity>
             <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
             </Articulation>
           <Articulation name="sforzato">
             <velocity>120</velocity>
@@ -409,29 +434,33 @@
           </Measure>
         <Measure number="2">
           <endRepeat>3</endRepeat>
-          <KeySig>
-            <lid>11</lid>
-            <accidental>0</accidental>
-            </KeySig>
+          <Volta id="4">
+            <lid>24</lid>
+            <beginText>
+              <style>Volta</style>
+              <text>1,2</text>
+              </beginText>
+            <endings></endings>
+            </Volta>
           <Chord>
-            <lid>12</lid>
+            <lid>11</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>13</lid>
+              <lid>12</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -440,29 +469,34 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>17</lid>
-            <accidental>0</accidental>
-            </KeySig>
+          <endSpanner id="4"/>
+          <Volta id="5">
+            <lid>25</lid>
+            <beginText>
+              <style>Volta</style>
+              <text>3</text>
+              </beginText>
+            <endings></endings>
+            </Volta>
           <Chord>
-            <lid>18</lid>
+            <lid>16</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>17</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>20</lid>
+              <lid>18</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>21</lid>
+              <lid>19</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -471,16 +505,12 @@
             </Chord>
           </Measure>
         <Measure number="4">
-          <KeySig>
-            <lid>23</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <endSpanner id="3"/>
+          <endSpanner id="5"/>
           <Chord>
-            <lid>24</lid>
+            <lid>21</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>25</lid>
+              <lid>22</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -491,10 +521,6 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
-          <tick>5760</tick>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
           </Measure>
         </Staff>
       <Staff id="2">
@@ -530,29 +556,25 @@
             </Chord>
           </Measure>
         <Measure number="2">
-          <KeySig>
-            <lid>11</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>12</lid>
+            <lid>11</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>14</lid>
+              <lid>13</lid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>13</lid>
+              <lid>12</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>8</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -561,29 +583,25 @@
             </Chord>
           </Measure>
         <Measure number="3">
-          <KeySig>
-            <lid>17</lid>
-            <accidental>0</accidental>
-            </KeySig>
           <Chord>
-            <lid>18</lid>
+            <lid>16</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>19</lid>
+              <lid>17</lid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <lid>20</lid>
+              <lid>18</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <lid>21</lid>
+              <lid>19</lid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -592,16 +610,11 @@
             </Chord>
           </Measure>
         <Measure number="4">
-          <KeySig>
-            <lid>23</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <endSpanner id="3"/>
           <Chord>
-            <lid>24</lid>
+            <lid>21</lid>
             <durationType>whole</durationType>
             <Note>
-              <lid>25</lid>
+              <lid>22</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -612,10 +625,6 @@
             <subtype>end</subtype>
             <span>1</span>
             </BarLine>
-          <tick>5760</tick>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
-          <endSpanner id="3"/>
           </Measure>
         </Staff>
       <name>S-Gt</name>

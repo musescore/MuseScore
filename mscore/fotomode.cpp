@@ -401,7 +401,7 @@ void ScoreView::doDragFoto(QMouseEvent* ev)
 
       QRectF rr(_foto->rect());
       r = _matrix.mapRect(rr);
-      QSize sz(r.size().toSize());
+      //QSize sz(r.size().toSize());
       //mscore->statusBar()->showMessage(QString("%1 x %2").arg(sz.width()).arg(sz.height()), 3000);
 
       update();
@@ -443,8 +443,8 @@ void ScoreView::doFotoDragEdit(QMouseEvent* ev)
       updateGrips();
       data.startMove = p;
       _score->end();
-      if (mscore->getInspector())
-            mscore->getInspector()->setElement(_foto);
+      if (mscore->inspector())
+            mscore->inspector()->setElement(_foto);
       }
 
 //---------------------------------------------------------
@@ -541,8 +541,8 @@ void ScoreView::doDragFotoRect(QMouseEvent* ev)
       data.startMove = p;
       updateGrips();
       _score->end();
-      if (mscore->getInspector())
-            mscore->getInspector()->setElement(_foto);
+      if (mscore->inspector())
+            mscore->inspector()->setElement(_foto);
       }
 
 //---------------------------------------------------------

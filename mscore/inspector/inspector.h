@@ -35,6 +35,7 @@
 #include "ui_inspector_dynamic.h"
 #include "ui_inspector_slur.h"
 #include "ui_inspector_text.h"
+#include "ui_inspector_empty.h"
 
 namespace Ms {
 
@@ -118,12 +119,18 @@ class InspectorSpacer : public InspectorBase {
 class InspectorRest : public InspectorBase {
       Q_OBJECT
 
-      UiInspectorElement e;
+      UiInspectorElement   e;
       Ui::InspectorSegment s;
       Ui::InspectorRest    r;
 
+      QToolButton* tuplet;
+
+   private slots:
+      void tupletClicked();
+
    public:
       InspectorRest(QWidget* parent);
+      virtual void setElement();
       };
 
 //---------------------------------------------------------
@@ -326,6 +333,8 @@ class InspectorSlur : public InspectorBase {
 
 class InspectorEmpty : public InspectorBase {
       Q_OBJECT
+
+      Ui::InspectorEmpty e;
 
    public:
       InspectorEmpty(QWidget* parent);

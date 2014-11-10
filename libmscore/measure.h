@@ -113,7 +113,7 @@ enum class MeasureNumberMode : char {
 class Measure : public MeasureBase {
       Q_OBJECT
 
-      Q_PROPERTY(Ms::Segment* fistSegment       READ last)
+      Q_PROPERTY(Ms::Segment* firstSegment      READ last)
       Q_PROPERTY(Ms::Segment* lastSegment       READ first)
 
       SegmentList _segments;
@@ -132,8 +132,8 @@ class Measure : public MeasureBase {
 
       qreal _userStretch;
 
-      mutable qreal _minWidth1;     ///< minimal measure width without system header
-      mutable qreal _minWidth2;     ///< minimal measure width with system header
+      mutable qreal _minWidth1;     ///< minimal measure width, cached value
+      mutable qreal _minWidth2;     ///< minimal measure width, cached value
 
       bool _irregular;              ///< Irregular measure, do not count
       bool _breakMultiMeasureRest;  ///< set by user
@@ -196,8 +196,7 @@ class Measure : public MeasureBase {
 
       qreal minWidth1() const;
       qreal minWidth2() const;
-      void setMinWidth1(qreal w)           { _minWidth1 = w;      }
-      void setMinWidth2(qreal w)           { _minWidth2 = w;      }
+
       bool systemHeader() const;
       void setDirty();
 
@@ -281,7 +280,7 @@ class Measure : public MeasureBase {
 
       AccidentalVal findAccidental(Note*) const;
       AccidentalVal findAccidental(Segment* s, int staffIdx, int line) const;
-      void exchangeVoice(int, int, int, int);
+      void exchangeVoice(int voice1, int voice2, int staffIdx);
       void checkMultiVoices(int staffIdx);
       bool hasVoice(int track) const;
       bool isMeasureRest(int staffIdx);

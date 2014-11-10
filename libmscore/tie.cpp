@@ -138,6 +138,13 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       ss->ups[int(GripSlurSegment::END)].p      = t.map(p2) - ss->ups[int(GripSlurSegment::END)].off * _spatium;
       ss->ups[int(GripSlurSegment::DRAG)].p     = t.map(p5);
       ss->ups[int(GripSlurSegment::SHOULDER)].p = t.map(p6);
+
+      QPointF staffOffset;
+      if (ss->system() && ss->track() >= 0)
+            staffOffset = QPointF(0.0, -ss->system()->staff(ss->staffIdx())->y());
+
+      ss->path.translate(staffOffset);
+      ss->shapePath.translate(staffOffset);
       }
 
 //---------------------------------------------------------
@@ -190,6 +197,10 @@ void Tie::slurPos(SlurPos* sp)
             }
       Chord* ec   = endNote()->chord();
       sp->system2 = ec->measure()->system();
+      if (!sp->system2) {
+            qDebug("Tie::slurPos no system2");
+            sp->system2 = sp->system1;
+            }
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
             xo = endNote()->x() - hw * 0.12;
       else if (shortStart)
@@ -310,8 +321,6 @@ void Tie::calculateDirection()
 
 void Tie::layout()
       {
-      qreal _spatium = spatium();
-
       //
       //    show short bow
       //
@@ -401,7 +410,7 @@ void Tie::layout()
                   }
             // case 4: end segment
             else {
-                  qreal x = firstNoteRestSegmentX(system) - 2 * _spatium;
+                  qreal x = firstNoteRestSegmentX(system);
 
                   segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
                   segment->setSpannerSegmentType(SpannerSegmentType::END);

@@ -56,13 +56,12 @@ void MuseScore::showMasterPalette(const QString& s)
       QAction* a = getAction("masterpalette");
 
       if (masterPalette == 0) {
-            masterPalette = new MasterPalette(0);
+            masterPalette = new MasterPalette(this);
             connect(masterPalette, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
       masterPalette->setVisible(a->isChecked());
       if (!s.isEmpty())
             masterPalette->selectItem(s);
-      masterPalette->show();
       }
 
 //---------------------------------------------------------
@@ -113,12 +112,13 @@ void MasterPalette::addPalette(Palette* sp)
 //---------------------------------------------------------
 
 MasterPalette::MasterPalette(QWidget* parent)
-   : QWidget(parent)
+   : QWidget(parent, Qt::Dialog)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       addPalette(MuseScore::newGraceNotePalette());
-      addPalette(MuseScore::newClefsPalette());
+      addPalette(MuseScore::newClefsPalette(false));
       stack->addWidget(new KeyEditor);
 
       timeDialog = new TimeDialog;
@@ -129,9 +129,9 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newArpeggioPalette());
       addPalette(MuseScore::newBreathPalette());
       addPalette(MuseScore::newBracketsPalette());
-      addPalette(MuseScore::newArticulationsPalette());
+      addPalette(MuseScore::newArticulationsPalette(false));
 
-      addPalette(MuseScore::newAccidentalsPalette());
+      addPalette(MuseScore::newAccidentalsPalette(false));
 
       addPalette(MuseScore::newDynamicsPalette(true));
       addPalette(MuseScore::newFingeringPalette());

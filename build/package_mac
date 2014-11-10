@@ -1,9 +1,11 @@
 VERSION=2.0
 APPNAME=mscore
 LONG_NAME=MuseScore
+LONGER_NAME="MuseScore 2"
+
 
 WORKING_DIRECTORY=applebuild
-BACKGROUND=build/musescore-dmg-background.png
+BACKGROUND=build/packaging/musescore-dmg-background.png
 APP_PATH=applebuild/${APPNAME}.app
  
 VOLNAME=${LONG_NAME}-${VERSION}
@@ -22,19 +24,19 @@ function set_bundle_display_options() {
                 set statusbar visible to false
                 set current view to icon view
                 delay 1 -- sync
-                set the bounds to {0, 0, 380, 540}
+                set the bounds to {0, 0, 540, 300}
             end tell
             delay 1 -- sync
             set icon size of the icon view options of container window to 128
             set arrangement of the icon view options of container window to not arranged
-            set position of item "MuseScore.app" to {190,122}
+            set position of item "${LONGER_NAME}.app" to {400,125}
             close
             open
-            set position of item "Applications" to {190, 387}
+            set position of item "Applications" to {150,125}
             close
             open
             set background picture of the icon view options of container window to file "background.png" of folder "Pictures"
-            set the bounds of the container window to {0, 0, 380, 540}
+            set the bounds of the container window to {0, 0, 540, 300}
             update without registering applications
             delay 5 -- sync
             close
@@ -79,16 +81,34 @@ do
         done
     fi 
 done
+
 #homebrew libs may not be writable force it?
 chmod -R +w /usr/local/Cellar/
 macdeployqt ${VOLUME}/${APPNAME}.app
 
-mv ${VOLUME}/${APPNAME}.app  ${VOLUME}/${LONG_NAME}.app 
+for f in $(find "${VOLUME}/${APPNAME}.app/Contents" -iname "*");
+do
+  lipo -remove ppc7400 "$f" -output "$f" > /dev/null 2>&1
+  lipo -remove x86 "$f" -output "$f" > /dev/null 2>&1
+  lipo -remove ppc "$f" -output "$f" > /dev/null 2>&1
+done
+
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/PlugIns/mediaservice
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/PlugIns/audio
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/PlugIns/sqldrivers
+
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/Enginio.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtBluetooth.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebSockets.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtNfc.*
+
+mv ${VOLUME}/${APPNAME}.app  "${VOLUME}/${LONGER_NAME}.app"
 
 # copy in background image
 mkdir -p ${VOLUME}/Pictures
 # fixme: path
 cp  ${BACKGROUND} ${VOLUME}/Pictures/background.png
+
 # symlink applications
 ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}

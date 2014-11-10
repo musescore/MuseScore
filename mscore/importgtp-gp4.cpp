@@ -47,6 +47,7 @@
 #include "libmscore/volta.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/fingering.h"
+#include "libmscore/notedot.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -280,7 +281,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                         gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                         gn->setGhost(true);
                         }
-                  gn->setFret((fret != 255)?fret:0);
+                  if (fret == 255)
+                        fret = 0;
+                  gn->setFret(fret);
                   gn->setString(string);
                   int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret);
                   gn->setPitch(grace_pitch);
@@ -330,13 +333,13 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
                          Slur* slur = new Slur(score);
                          slur->setAnchor(Spanner::Anchor::CHORD);
-                         slur->setStartChord(static_cast<Chord*>(cr1));
-                         slur->setEndChord(static_cast<Chord*>(cr2));
+                         slur->setStartElement(cr1);
+                         slur->setEndElement(cr2);
                          slur->setTick(cr1->tick());
                          slur->setTick2(cr2->tick());
                          slur->setTrack(cr1->track());
                          slur->setTrack2(cr2->track());
-                         slur->setParent(cr1);
+                         // this case specifies only two-note slurs, don't set a parent
                          score->undoAddElement(slur);
                          }
                   }
@@ -400,6 +403,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
+      // dead note represented as high numbers - fix to zero
+      if (fretNumber > 99 || fretNumber == -1)
+            fretNumber = 0;
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
       note->setFret(fretNumber);
       note->setString(string);
@@ -469,19 +475,19 @@ int GuitarPro4::convertGP4SlideNum(int slide)
       switch (slide) {
             // slide out downwards
             case 3:
-                  return 4;
+                  return SLIDE_OUT_DOWN;
                   break;
             // slide out upwards
             case 4:
-                  return 8;
+                  return SLIDE_OUT_UP;
                   break;
             // slide in from above
             case 254:
-                  return 32;
+                  return SLIDE_IN_ABOVE;
                   break;
             // slide in from below
             case 255:
-                  return 16;
+                  return SLIDE_IN_BELOW;
                   break;
             }
       return slide;
@@ -706,6 +712,14 @@ void GuitarPro4::read(QFile* fp)
                               lyrics = new Lyrics(score);
                               lyrics->setText(readDelphiString());
                               }
+                        gpLyrics.beatCounter++;
+                        if (gpLyrics.beatCounter >= gpLyrics.fromBeat && gpLyrics.lyricTrack == staffIdx + 1) {
+                              int index = gpLyrics.beatCounter - gpLyrics.fromBeat;
+                              if (index < gpLyrics.lyrics.size()) {
+                                    lyrics = new Lyrics(score);
+                                    lyrics->setText(gpLyrics.lyrics[index]);
+                                    }
+                              }
                         int beatEffects = 0;
                         if (beatBits & BEAT_EFFECTS)
                               beatEffects = readBeatEffects(track, segment);
@@ -734,11 +748,8 @@ void GuitarPro4::read(QFile* fp)
                               cr = new Rest(score);
                               }
                         else {
-                              if(!segment->cr(track)) {
+                              if(!segment->cr(track))
                                     cr = new Chord(score);
-                                    Chord* chord = static_cast<Chord*>(cr);
-                                    applyBeatEffects(chord, beatEffects);
-                                    }
                               }
 
                         cr->setTrack(track);
@@ -762,6 +773,7 @@ void GuitarPro4::read(QFile* fp)
                                     }
                               tuplet->setTrack(track);
                               tuplet->setBaseLen(l);
+                              tuplet->setDuration(l * tuplet->ratio().denominator());
                               cr->setTuplet(tuplet);
                               tuplet->add(cr);
                               }
@@ -780,12 +792,24 @@ void GuitarPro4::read(QFile* fp)
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
+                                    // apply dotted notes to the note
+                                    if (dotted) {
+                                          // there is at most one dotted note in this guitar pro version
+                                          NoteDot* dot = new NoteDot(score);
+                                          dot->setIdx(0);
+                                          dot->setParent(note);
+                                          dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
+                                          dot->setVisible(true);
+                                          note->add(dot);
+                                          }
                                     static_cast<Chord*>(cr)->add(note);
 
                                     hasSlur = readNote(6-i, staffIdx, note);
                                     note->setTpcFromPitch();
                                     }
                               }
+                        if (cr && (cr->type() == Element::Type::CHORD))
+                              applyBeatEffects(static_cast<Chord*>(cr), beatEffects);
 
                         // if we see that a tied note has been constructed do not create the tie
                         if (slides[track] == -2) {

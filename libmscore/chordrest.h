@@ -67,8 +67,8 @@ class ChordRest : public DurationElement {
       bool _small;
 
       // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
-      CrossMeasure _crossMeasure;            ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
-      TDuration _crossMeasureTDur;  ///< the total Duration type of the combined notes
+      CrossMeasure _crossMeasure;         ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
+      TDuration _crossMeasureTDur;        ///< the total Duration type of the combined notes
 
       Space _space;                       // cached value from layout
 

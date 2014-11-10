@@ -266,13 +266,21 @@ void initStyle(MStyle* s)
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Even Lines"),         ff, 11, false, false, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(0, 6), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Fingering"),                 ff,  8, false, false, false,
-         AlignmentFlags::CENTER, QPointF(), OffsetType::ABS, true));
+         AlignmentFlags::CENTER, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "LH Guitar Fingering"),       ff,  8, false, false, false,
+         AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(-0.5, 0), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "RH Guitar Fingering"),       ff,  8, false, false, false,
+         AlignmentFlags::CENTER, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "String Number"),             ff,  8, false, false, false,
+         AlignmentFlags::CENTER, QPointF(0, -2.0), OffsetType::SPATIUM, true,
+         true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
+
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Long)"),    ff, 12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OffsetType::ABS, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Short)"),   ff, 12, false, false, false,
          AlignmentFlags::RIGHT | AlignmentFlags::VCENTER, QPointF(), OffsetType::ABS, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Name (Part)"),    ff, 18, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BOTTOM, QPointF(), OffsetType::ABS));
+         AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(), OffsetType::ABS));
 
       // dynamics size is 12pt for bravura-text
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Dynamics"),  ff, 12, false, false,false,
@@ -280,7 +288,7 @@ void initStyle(MStyle* s)
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Technique"), ff, 12, false, true, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, -2.0), OffsetType::SPATIUM));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tempo"), ff, 12, false, false, false,
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Tempo"), ff, 12, true, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -4.0), OffsetType::SPATIUM,
          true, false, Spatium(.2), Spatium(.5), 0, Qt::black, false, true));
 
@@ -329,10 +337,6 @@ void initStyle(MStyle* s)
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Glissando"), ff, 8, false, true, false,
          AlignmentFlags::HCENTER | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
 
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "String Number"), ff,  8, false, false, false,
-         AlignmentFlags::CENTER, QPointF(0, -5.0), OffsetType::SPATIUM, true,
-         true, Spatium(.1), Spatium(.2), 0, Qt::black, true, false));
-
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Ottava"),            ff, 12, false, true, false,
          AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Bend"),              ff, 8, false, false, false,
@@ -343,9 +347,10 @@ void initStyle(MStyle* s)
          AlignmentFlags::HCENTER | AlignmentFlags::BOTTOM, QPointF(0.0, MM(5)), OffsetType::ABS));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Instrument Change"), ff,  12, true, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::BOTTOM, QPointF(0, -3.0), OffsetType::SPATIUM, true));
-      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Verse"),      ff, 11, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::TOP, QPointF(), OffsetType::SPATIUM, true));
 
+/*      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Lyrics Verse Number"),ff, 11, false, false, false,
+         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(), OffsetType::SPATIUM, true));
+*/
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Figured Bass"), "MScoreBC", 8, false, false, false,
          AlignmentFlags::LEFT | AlignmentFlags::TOP, QPointF(0, 6), OffsetType::SPATIUM, true,
          false, Spatium(0.0), Spatium(0.0), 25, QColor(Qt::black), false,      // default params
@@ -555,7 +560,6 @@ StyleData::StyleData()
       _articulationAnchor[int(ArticulationType::Shortfermata)]    = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Longfermata)]     = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Verylongfermata)] = ArticulationAnchor::TOP_STAFF;
-      _articulationAnchor[int(ArticulationType::Thumb)]           = ArticulationAnchor::TOP_STAFF;
       _articulationAnchor[int(ArticulationType::Sforzatoaccent)]  = ArticulationAnchor::CHORD;
 //      _articulationAnchor[int(ArticulationType::Espressivo)]      = ArticulationAnchor::CHORD;
       _articulationAnchor[int(ArticulationType::Staccato)]        = ArticulationAnchor::CHORD;
@@ -593,6 +597,11 @@ StyleData::StyleData()
 //      _articulationAnchor[int(ArticulationType::Tapping)]         = ArticulationAnchor::TOP_STAFF;
 //      _articulationAnchor[int(ArticulationType::Slapping)]        = ArticulationAnchor::TOP_STAFF;
 //      _articulationAnchor[int(ArticulationType::Popping)]         = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::ThumbPosition)]   = ArticulationAnchor::TOP_STAFF;
+      _articulationAnchor[int(ArticulationType::LuteFingThumb)]   = ArticulationAnchor::BOTTOM_CHORD;
+      _articulationAnchor[int(ArticulationType::LuteFingFirst)]   = ArticulationAnchor::BOTTOM_CHORD;
+      _articulationAnchor[int(ArticulationType::LuteFingSecond)]  = ArticulationAnchor::BOTTOM_CHORD;
+      _articulationAnchor[int(ArticulationType::LuteFingThird)]   = ArticulationAnchor::BOTTOM_CHORD;
       };
 
 StyleData::StyleData(const StyleData& s)

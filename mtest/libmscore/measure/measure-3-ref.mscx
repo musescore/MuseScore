@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="1.24">
+<museScore version="2.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -171,10 +171,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Chord>
@@ -195,11 +191,6 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
-          <lid>4</lid>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
@@ -207,11 +198,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
-          <lid>7</lid>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Chord>
@@ -232,11 +218,6 @@
             <tpc>13</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>2</span>
-          <lid>9</lid>
-          </BarLine>
         </Measure>
       <Measure number="5">
         <Rest>
@@ -314,10 +295,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Rest>
@@ -325,11 +302,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          <lid>15</lid>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Rest>
@@ -337,11 +309,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          <lid>17</lid>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Rest>
@@ -349,11 +316,6 @@
           <durationType>measure</durationType>
           <duration z="2" n="4"/>
           </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          <lid>19</lid>
-          </BarLine>
         </Measure>
       <Measure number="5">
         <Rest>
@@ -505,10 +467,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>2</span>
-            </BarLine>
           </Measure>
         <Measure number="2">
           <Chord>
@@ -529,11 +487,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>2</span>
-            <lid>4</lid>
-            </BarLine>
           </Measure>
         <Measure number="3">
           <Rest>
@@ -541,11 +494,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>2</span>
-            <lid>7</lid>
-            </BarLine>
           </Measure>
         <Measure number="4">
           <Chord>
@@ -566,11 +514,6 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>2</span>
-            <lid>9</lid>
-            </BarLine>
           </Measure>
         <Measure number="5">
           <Rest>
@@ -750,10 +693,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            </BarLine>
           </Measure>
         <Measure number="1" len="10/4">
           <multiMeasureRest>5</multiMeasureRest>
@@ -783,11 +722,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>15</lid>
-            </BarLine>
           </Measure>
         <Measure number="3">
           <Rest>
@@ -795,11 +729,6 @@
             <durationType>measure</durationType>
             <duration z="2" n="4"/>
             </Rest>
-          <BarLine>
-            <subtype>normal</subtype>
-            <span>1</span>
-            <lid>17</lid>
-            </BarLine>
           </Measure>
         <Measure number="4">
           <Rest>

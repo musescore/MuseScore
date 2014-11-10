@@ -620,9 +620,10 @@ class MgStyle : public QCommonStyle {
             bool emptyPrimitive( const QStyleOption*, QPainter*, const QWidget* ) const {
                   return true;
                   }
+            QIcon getCachedIcon(QString key) const;
 
       protected slots:
-            virtual QIcon standardIconImplementation(StandardPixmap standardIcon,
+            virtual QIcon standardIcon(StandardPixmap standardIcon,
                         const QStyleOption* option, const QWidget* widget) const;
 
       public slots:

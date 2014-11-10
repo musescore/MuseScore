@@ -36,6 +36,7 @@ class Measure;
 //   @P measure   Ms::Measure*  current measure, read only
 //   @P tick      int           midi tick position, read only
 //   @P time      double        time at tick position, read only
+//   @P keySignature int        key signature of current staff at tick pos. (read only) 
 //   @P score     Ms::Score*    associated score
 //---------------------------------------------------------
 
@@ -51,6 +52,7 @@ class Cursor : public QObject {
 
       Q_PROPERTY(int tick         READ tick)
       Q_PROPERTY(double time      READ time)
+      Q_PROPERTY(int keySignature READ qmlKeySignature)
       Q_PROPERTY(Ms::Score* score READ score    WRITE setScore)
 
       Score* _score;
@@ -86,6 +88,8 @@ class Cursor : public QObject {
       int tick();
       double time();
 
+      int qmlKeySignature();
+
       //@ rewind cursor
       //@   type=0      rewind to start of score
       //@   type=1      rewind to start of selection
@@ -104,7 +108,6 @@ class Cursor : public QObject {
       //@   Quarter, if n == 0
       Q_INVOKABLE void setDuration(int z, int n);
       };
-
 
 }     // namespace Ms
 #endif

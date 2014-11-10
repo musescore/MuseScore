@@ -63,7 +63,16 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing">
       <number>0</number>
      </property>
      <item row="0" column="1">
@@ -95,23 +104,13 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetType">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Type value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -143,24 +142,24 @@
      </item>
      <item row="2" column="1">
       <widget class="QSpinBox" name="spanFrom">
+       <property name="accessibleName">
+        <string>Span from</string>
+       </property>
        <property name="minimum">
         <number>-2</number>
        </property>
        <property name="value">
         <number>0</number>
        </property>
-       <property name="accessibleName">
-        <string>Span from</string>
-       </property>
       </widget>
      </item>
      <item row="1" column="1">
       <widget class="QSpinBox" name="span">
-       <property name="minimum">
-        <number>1</number>
-       </property>
        <property name="accessibleName">
         <string>Span</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
        </property>
       </widget>
      </item>
@@ -187,7 +186,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetSpan">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Span value</string>
@@ -195,22 +194,12 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="2" column="2">
       <widget class="QToolButton" name="resetSpanFrom">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Span from value</string>
@@ -218,38 +207,18 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="3" column="2">
       <widget class="QToolButton" name="resetSpanTo">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Span to value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -276,23 +245,13 @@
      <item row="4" column="2">
       <widget class="QToolButton" name="resetSpanType">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Span type value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -312,8 +271,6 @@
   <tabstop>spanType</tabstop>
   <tabstop>resetSpanType</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -85,14 +85,13 @@ class MyWebView: public QWebView
 
    public slots:
       void link(const QUrl& url);
-      void stopBusyAndClose(bool);
-      void stopBusyAndFirst(bool);
-      void stopBusyStatic(bool);
       void setBusy();
+      void stopBusy(bool val);
 
-   private:
-      void stopBusy(bool val, bool close);
-
+#ifndef QT_NO_OPENSSL
+      void ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors);
+#endif
+     
    public:
       MyWebView(QWidget *parent = 0);
       ~MyWebView();

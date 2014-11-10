@@ -121,9 +121,7 @@ void InstrumentsDialog::on_loadButton_clicked()
       QString fn = QFileDialog::getOpenFileName(
          this, tr("MuseScore: Load Instrument List"),
           mscoreGlobalShare + "/templates",
-         tr("MuseScore Instruments (*.xml);;"
-            "All files (*)"
-            )
+         tr("MuseScore Instruments (*.xml)")
          );
       if (fn.isEmpty())
             return;
@@ -221,6 +219,10 @@ void MuseScore::editInstrList()
                   tmpKeymap[tick] = transposeKey(oKey, interval);
                   }
             }
+      // create initial keyevent for transposing instrument if necessary
+      auto i = tmpKeymap.begin();
+      if (i == tmpKeymap.end() || i->first != 0)
+            tmpKeymap[0] = Key::C;
 
       //
       // process modified partitur list
@@ -308,11 +310,10 @@ void MuseScore::editInstrList()
                               sli->setStaff(staff);
                               staff->setDefaultClefType(sli->defaultClefType());
 
-                              rootScore->undoInsertStaff(staff, rstaff);
-
-                              Key nKey = part->staff(0)->key(0);
+                              Key nKey = part->staves()->empty() ? Key::C : part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
+                              rootScore->undoInsertStaff(staff, rstaff, !sli->linked());
                               Staff* linkedStaff = 0;
                               if (sli->linked()) {
                                     if (rstaff > 0)

@@ -192,14 +192,15 @@ void ChordRest::writeProperties(Xml& xml) const
       writeProperty(xml, P_ID::SMALL);
       if (actualDurationType().dots())
             xml.tag("dots", actualDurationType().dots());
-      if (_staffMove)
-            xml.tag("move", _staffMove);
+      writeProperty(xml, P_ID::STAFF_MOVE);
+
       if (actualDurationType().isValid())
             xml.tag("durationType", actualDurationType().name());
 
       if (!duration().isZero() && (!actualDurationType().fraction().isValid()
          || (actualDurationType().fraction() != duration())))
             xml.fTag("duration", duration());
+
       foreach(const Articulation* a, _articulations)
             a->write(xml);
 #ifndef NDEBUG
@@ -218,6 +219,20 @@ void ChordRest::writeProperties(Xml& xml) const
             if (staff())
                   t *= staff()->timeStretch(xml.curTick);
             xml.curTick += t.ticks();
+            }
+      for (auto i : score()->spanner()) {     // TODO: dont search whole list
+            Spanner* s = i.second;
+            if (s->generated() || s->type() != Element::Type::SLUR || !xml.canWrite(s))
+                  continue;
+
+            if (s->startElement() == this) {
+                  int id = xml.spannerId(s);
+                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(id));
+                  }
+            else if (s->endElement() == this) {
+                  int id = xml.spannerId(s);
+                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(id));
+                  }
             }
       }
 
@@ -279,6 +294,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "Attribute" || tag == "Articulation") {     // obsolete: "Attribute"
             Articulation* atr = new Articulation(score());
+            atr->setTrack(track());
             atr->read(e);
             add(atr);
             }
@@ -332,6 +348,8 @@ bool ChordRest::readProperties(XmlReader& e)
                   QString atype(e.attribute("type"));
                   if (atype == "start") {
                         spanner->setTick(e.tick());
+                        if (spanner->ticks() > 0) // stop has been read first, ticks is tick2 - (-1)
+                        	spanner->setTick2(spanner->ticks() - 1);
                         spanner->setTrack(track());
                         if (spanner->type() == Element::Type::SLUR)
                               spanner->setStartElement(this);
@@ -796,6 +814,7 @@ Element* ChordRest::drop(const DropData& data)
                   }
                   return e;
             case Element::Type::FRET_DIAGRAM:
+            case Element::Type::TREMOLOBAR:
             case Element::Type::SYMBOL:
                   e->setTrack(track());
                   e->setParent(segment());
@@ -808,6 +827,8 @@ Element* ChordRest::drop(const DropData& data)
                   NoteVal nval;
                   nval.pitch = note->pitch();
                   nval.headGroup = note->headGroup();
+                  nval.fret = note->fret();
+                  nval.string = note->string();
                   score()->setNoteRest(segment(), track(), nval, data.duration, MScore::Direction::AUTO);
                   delete e;
                   }
@@ -927,36 +948,35 @@ void ChordRest::setDurationType(const TDuration& v)
 
 QString ChordRest::durationUserName()
       {
-      QString duration = tr("Duration:");
       QString tupletType = "";
       if(tuplet()) {
               switch (tuplet()->ratio().numerator()) {
                   case 2:
-                        tupletType += " " + tr("Duplet");
+                        tupletType = tr("Duplet");
                         break;
                   case 3:
-                        tupletType += " " + tr("Triplet");
+                        tupletType = tr("Triplet");
                         break;
                   case 4:
-                        tupletType += " " + tr("Quadruplet");
+                        tupletType = tr("Quadruplet");
                         break;
                   case 5:
-                        tupletType += " " + tr("Quinplet");
+                        tupletType = tr("Quintuplet");
                         break;
                   case 6:
-                        tupletType += " " + tr("Sextuplet");
+                        tupletType = tr("Sextuplet");
                         break;
                   case 7:
-                        tupletType += " " + tr("Septuplet");
+                        tupletType = tr("Septuplet");
                         break;
                   case 8:
-                        tupletType += " " + tr("Octuplet");
+                        tupletType = tr("Octuplet");
                         break;
                   case 9:
-                        tupletType += " " + tr("Nontuplet");
+                        tupletType = tr("Nonuplet");
                         break;
                   default:
-                        tupletType += " " + tr("Custom Tuplet");
+                        tupletType = tr("Custom Tuplet");
                   }
             }
       QString dotString = "";
@@ -972,7 +992,7 @@ QString ChordRest::durationUserName()
                   dotString += " " + tr("Triple dotted");
                   break;
             }
-      return duration + tupletType + dotString + " " + durationType().durationTypeUserName() + " " + tr("note");
+      return QString("%2%3 %4").arg(tupletType).arg(dotString).arg(durationType().durationTypeUserName()).trimmed();
       }
 
 //---------------------------------------------------------
@@ -1119,9 +1139,10 @@ void ChordRest::undoSetBeamMode(Beam::Mode mode)
 QVariant ChordRest::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ID::SMALL:     return QVariant(small());
-            case P_ID::BEAM_MODE: return int(beamMode());
-            default:          return DurationElement::getProperty(propertyId);
+            case P_ID::SMALL:      return QVariant(small());
+            case P_ID::BEAM_MODE:  return int(beamMode());
+            case P_ID::STAFF_MOVE: return staffMove();
+            default:               return DurationElement::getProperty(propertyId);
             }
       }
 
@@ -1132,9 +1153,10 @@ QVariant ChordRest::getProperty(P_ID propertyId) const
 bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_ID::SMALL:     setSmall(v.toBool()); break;
-            case P_ID::BEAM_MODE: setBeamMode(Beam::Mode(v.toInt())); break;
-            default:          return DurationElement::setProperty(propertyId, v);
+            case P_ID::SMALL:      setSmall(v.toBool()); break;
+            case P_ID::BEAM_MODE:  setBeamMode(Beam::Mode(v.toInt())); break;
+            case P_ID::STAFF_MOVE: setStaffMove(v.toInt()); break;
+            default:               return DurationElement::setProperty(propertyId, v);
             }
       score()->setLayoutAll(true);
       return true;
@@ -1147,8 +1169,9 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
 QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
       switch(propertyId) {
-            case P_ID::SMALL:     return false;
-            case P_ID::BEAM_MODE: return int(Beam::Mode::AUTO);
+            case P_ID::SMALL:      return false;
+            case P_ID::BEAM_MODE:  return int(Beam::Mode::AUTO);
+            case P_ID::STAFF_MOVE: return 0;
             default:          return DurationElement::propertyDefault(propertyId);
             }
       score()->setLayoutAll(true);
@@ -1246,21 +1269,24 @@ QString ChordRest::accessibleExtraInfo()
       {
       QString rez = "";
       foreach (Articulation* a, articulations())
-            rez = rez + " " + a->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
 
-      foreach (Element* l, lyricsList())
-            rez = rez + " " + l->screenReaderInfo();
+      foreach (Element* l, lyricsList()) {
+            if (!l)
+                  continue;
+            rez = QString("%1 %2").arg(rez).arg(l->screenReaderInfo());
+            }
 
-      if(segment()) {
+      if (segment()) {
             foreach (Element* e, segment()->annotations()) {
                   if (e->staffIdx() == staffIdx() )
-                        rez = rez + " " + e->screenReaderInfo();
+                        rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
 
-            SpannerMap smap = score()->spannerMap();
-            std::vector< ::Interval<Spanner*> > spanners = smap.findOverlapping(tick(), tick());
-            for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
-                  ::Interval<Spanner*> interval = *i;
+            SpannerMap& smap = score()->spannerMap();
+            auto spanners = smap.findOverlapping(tick(), tick());
+            for (auto i = spanners.begin(); i < spanners.end(); i++) {
+                  const ::Interval<Spanner*> interval = *i;
                   Spanner* s = interval.value;
                   if (s->type() == Element::Type::VOLTA || //voltas are added for barlines
                       s->type() == Element::Type::TIE    ) //ties are added in notes
@@ -1268,19 +1294,19 @@ QString ChordRest::accessibleExtraInfo()
 
                   Segment* seg = 0;
                   if (s->type() == Element::Type::SLUR) {
-                        if(s->tick() == tick() && s->track() == track())
-                              rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
-                        if(s->tick2() == tick() && s->track2() == track())
-                              rez += " " + tr("End of %1").arg(s->screenReaderInfo());
+                        if (s->tick() == tick() && s->track() == track())
+                              rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                        if (s->tick2() == tick() && s->track2() == track())
+                              rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                         }
                   else  {
-                        if(s->tick() == tick() && s->staffIdx() == staffIdx())
-                              rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                        if (s->tick() == tick() && s->staffIdx() == staffIdx())
+                              rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                         seg = segment()->next1MM(Segment::Type::ChordRest);
                         if (!seg)
                               continue;
-                        if(s->tick2() == seg->tick() && s->staffIdx() == staffIdx())
-                              rez += " " + tr("End of %1").arg(s->screenReaderInfo());
+                        if (s->tick2() == seg->tick() && s->staffIdx() == staffIdx())
+                              rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                         }
                   }
             }

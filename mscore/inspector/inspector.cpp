@@ -47,6 +47,7 @@
 #include "libmscore/barline.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
+#include "libmscore/tuplet.h"
 
 namespace Ms {
 
@@ -57,16 +58,16 @@ namespace Ms {
 void MuseScore::showInspector(bool visible)
       {
       QAction* a = getAction("inspector");
-      if (!inspector) {
-            inspector = new Inspector();
-            connect(inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
-            addDockWidget(Qt::RightDockWidgetArea, inspector);
+      if (!_inspector) {
+            _inspector = new Inspector();
+            connect(_inspector, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+            addDockWidget(Qt::RightDockWidgetArea, _inspector);
             }
       if (visible) {
             updateInspector();
             }
-      if (inspector)
-            inspector->setVisible(visible);
+      if (_inspector)
+            _inspector->setVisible(visible);
       }
 
 //---------------------------------------------------------
@@ -130,11 +131,16 @@ void Inspector::setElements(const QList<Element*>& l)
             if (_element == 0)
                   ie = new InspectorEmpty(this);
 
-
             bool sameTypes = true;
             foreach(Element* ee, _el) {
                   if (_element->type() != ee->type())
                         sameTypes = false;
+                  else {
+                        // HACK:
+                        if (ee->type() == Element::Type::NOTE
+                           && static_cast<Note*>(ee)->chord()->isGrace() != static_cast<Note*>(_element)->chord()->isGrace())
+                              sameTypes = false;
+                        }
                   }
             if (!sameTypes)
                   ie = new InspectorGroupElement(this);
@@ -204,7 +210,10 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorSlur(this);
                               break;
                         case Element::Type::BAR_LINE:
-                              ie = new InspectorBarLine(this);
+                              if (_element->isEditable())
+                                    ie = new InspectorBarLine(this);
+                              else
+                                    ie = new InspectorEmpty(this);
                               break;
                         case Element::Type::JUMP:
                               ie = new InspectorJump(this);
@@ -407,6 +416,58 @@ InspectorRest::InspectorRest(QWidget* parent)
             { P_ID::TRAILING_SPACE, 0, 1, s.trailingSpace, s.resetTrailingSpace }
             };
       mapSignals();
+
+      //
+      // Select
+      //
+      QLabel* l = new QLabel;
+      l->setText(tr("Select"));
+      QFont font(l->font());
+      font.setBold(true);
+      l->setFont(font);
+      l->setAlignment(Qt::AlignHCenter);
+      _layout->addWidget(l);
+      QFrame* f = new QFrame;
+      f->setFrameStyle(QFrame::HLine | QFrame::Raised);
+      f->setLineWidth(2);
+      _layout->addWidget(f);
+
+      QHBoxLayout* hbox = new QHBoxLayout;
+      tuplet = new QToolButton(this);
+      tuplet->setText(tr("Tuplet"));
+      tuplet->setEnabled(false);
+      hbox->addWidget(tuplet);
+      _layout->addLayout(hbox);
+
+      connect(tuplet,   SIGNAL(clicked()),     SLOT(tupletClicked()));
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorRest::setElement()
+      {
+      Rest* rest = static_cast<Rest*>(inspector->element());
+      tuplet->setEnabled(rest->tuplet());
+      InspectorBase::setElement();
+      }
+
+//---------------------------------------------------------
+//   tupletClicked
+//---------------------------------------------------------
+
+void InspectorRest::tupletClicked()
+      {
+      Rest* rest = static_cast<Rest*>(inspector->element());
+      if (rest == 0)
+            return;
+      Tuplet* tuplet = rest->tuplet();
+      if (tuplet) {
+            rest->score()->select(tuplet);
+            inspector->setElement(tuplet);
+            rest->score()->end();
+            }
       }
 
 //---------------------------------------------------------
@@ -733,7 +794,7 @@ InspectorSlur::InspectorSlur(QWidget* parent)
 InspectorEmpty::InspectorEmpty(QWidget* parent)
       :InspectorBase(parent)
       {
-      setToolTip(tr("Select an element to display its properties"));
+      e.setupUi(addWidget());
       }
 
 //---------------------------------------------------------
@@ -769,7 +830,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       for (const char* name : builtinSpanNames)
             b.spanType->addItem(qApp->translate("inspector", name));
       for (BarLineType t : types)
-            b.type->addItem(BarLine::userTypeName(t), int(t));
+            b.type->addItem(BarLine::userTypeName2(t), int(t));
 
       iList = {
             { P_ID::COLOR,             0, 0, e.color,    e.resetColor    },

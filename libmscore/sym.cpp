@@ -5294,6 +5294,7 @@ void initScoreFonts()
       for (oldName i : oldNames)
             Sym::lonhash.insert(i.name, SymId(i.symId));
       QFont::insertSubstitution("MScore Text", "Bravura Text");
+      QFont::insertSubstitution("Gonville Text", "Bravura Text");
       QFont::insertSubstitution("ScoreFont", "Bravura Text");
       QFont::insertSubstitution("MuseJazz", "Bravura Text");
       }
@@ -5560,7 +5561,7 @@ void ScoreFont::load()
              { SymId::unicodeNoteDoubleWhole, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5c)) },
              { SymId::unicodeNoteWhole, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5d)) },
              { SymId::unicodeNoteHalfUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5e)) },
-      	 { SymId::unicodeNoteQuarterUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5f)) },
+             { SymId::unicodeNoteQuarterUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd5f)) },
              { SymId::unicodeNote8thUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd60)) },
              { SymId::unicodeNote16thUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd61)) },
              { SymId::unicodeNote32ndUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd62)) },
@@ -5568,19 +5569,19 @@ void ScoreFont::load()
              { SymId::unicodeNote128thUp, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd64)) },
              { SymId::unicodeAugmentationDot, QString("%1%2").arg(QChar(0xd834)).arg(QChar(0xdd6D)) }
              };
-      
+
       for (const UnicodeAlternate& unicode : unicodes) {
             Sym* sym = &_symbols[int(unicode.id)];
             sym->setString(unicode.string);
             sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
             }
-      
-      
+
+
       // add space symbol
       Sym* sym = &_symbols[int(SymId::space)];
       sym->setString("\u0020");
       sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
-      
+
       /*for (int i = 1; i < int(SymId::lastSym); ++i) {
             Sym sym = _symbols[i];
             if (!sym.isValid())
@@ -5646,5 +5647,12 @@ const QRectF ScoreFont::bbox(const QString& s, qreal mag) const
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }
 
-}
+//---------------------------------------------------------
+//   ~ScoreFont
+//---------------------------------------------------------
 
+ScoreFont::~ScoreFont()
+      {
+
+      }
+}

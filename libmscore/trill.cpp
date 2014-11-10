@@ -26,11 +26,11 @@ namespace Ms {
 
 // must be in sync with Trill::Type
 const TrillTableItem trillTable[] = {
-      { Trill::Type::TRILL_LINE,      "trill",      QObject::tr("Trill line")          },
-      { Trill::Type::UPPRALL_LINE,    "upprall",    QObject::tr("Upprall line")        },
-      { Trill::Type::DOWNPRALL_LINE,  "downprall",  QObject::tr("Downprall line")      },
-      { Trill::Type::PRALLPRALL_LINE, "prallprall", QObject::tr("Prallprall line")     },
-      { Trill::Type::PURE_LINE      , "pure",       QObject::tr("Wavy line")           }
+      { Trill::Type::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("trillType", "Trill line")          },
+      { Trill::Type::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("trillType", "Upprall line")        },
+      { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line")      },
+      { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     },
+      { Trill::Type::PURE_LINE      , "pure",       QT_TRANSLATE_NOOP("trillType", "Wavy line")           }
 };
 
 int trillTableSize() {
@@ -300,17 +300,20 @@ void Trill::remove(Element* e)
 
 void Trill::layout()
       {
-      qreal _spatium = spatium();
-
       SLine::layout();
       if (score() == gscore)
             return;
+      if (spannerSegments().empty())
+            return;
       TrillSegment* ls = static_cast<TrillSegment*>(frontSegment());
+#if 0
+// this is now handled differently, in SLine::linePos
       //
       // special case:
       // if end segment is first chord/rest segment in measure,
       // shorten trill line so it ends at end of previous measure
       //
+      qreal _spatium = spatium();
       Segment* seg1  = startSegment();
       Segment* seg2  = endSegment();
       if (seg1
@@ -329,6 +332,9 @@ void Trill::layout()
                   ls->layout();
                   }
             }
+#endif
+      if (spannerSegments().empty())
+            qDebug("Trill: no segments");
       if (_accidental)
             _accidental->setParent(ls);
       }
@@ -434,7 +440,7 @@ QString Trill::trillTypeName() const
 
 QString Trill::trillTypeUserName()
       {
-      return trillTable[static_cast<int>(trillType())].userName;
+      return qApp->translate("trillType", trillTable[static_cast<int>(trillType())].userName.toUtf8().constData());
       }
 
 //---------------------------------------------------------
@@ -522,7 +528,7 @@ void Trill::setYoff(qreal val)
 
 QString Trill::accessibleInfo()
       {
-      return Element::accessibleInfo() + " " + trillTypeUserName();
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(trillTypeUserName());
       }
 }
 

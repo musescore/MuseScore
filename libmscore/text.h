@@ -179,6 +179,7 @@ class Text : public Element {
       Q_PROPERTY(QString text READ text WRITE undoSetText)
 
       QString _text;
+      static QString oldText;      // used to remember original text in edit mode
       QList<TextBlock> _layout;
       TextStyleType _styleIndex;
 
@@ -198,6 +199,7 @@ class Text : public Element {
       void updateCursorFormat(TextCursor*);
       void genText();
       void changeSelectionFormat(FormatId id, QVariant val);
+      void setEditMode(bool val)              { _editMode = val;  }
 
    protected:
       QColor textColor() const;
@@ -219,9 +221,6 @@ class Text : public Element {
 
       virtual void draw(QPainter*) const override;
 
-      bool editMode() const                   { return _editMode; }
-      void setEditMode(bool val)              { _editMode = val;  }
-
       virtual void setTextStyle(const TextStyle& st);
       const TextStyle& textStyle() const      { return _textStyle; }
       TextStyle& textStyle()                  { return _textStyle; }
@@ -234,6 +233,8 @@ class Text : public Element {
       QString text() const                    { return _text; }
       QString plainText(bool noSym = false) const;
       void insertText(const QString&);
+
+      bool editMode() const                   { return _editMode; }
 
       virtual void layout() override;
       virtual void layout1();
@@ -304,6 +305,9 @@ class Text : public Element {
 
       void undoSetText(const QString& s) { undoChangeProperty(P_ID::TEXT, s); }
       virtual QString accessibleInfo() override;
+
+      virtual int subtype() const;
+      virtual QString subtypeName() const;
       };
 
 

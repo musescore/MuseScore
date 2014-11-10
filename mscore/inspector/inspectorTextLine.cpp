@@ -27,7 +27,7 @@ InspectorTextLine::InspectorTextLine(QWidget* parent)
       e.setupUi(addWidget());
       l.setupUi(addWidget());
       setupLineStyle(l.lineStyle);
-      tl.setupUi(addWidget());
+      //tl.setupUi(addWidget());
 
       iList = {
             { P_ID::COLOR,         0, 0, e.color,       e.resetColor       },
@@ -35,6 +35,7 @@ InspectorTextLine::InspectorTextLine(QWidget* parent)
             { P_ID::USER_OFF,      0, 0, e.offsetX,     e.resetX           },
             { P_ID::USER_OFF,      1, 0, e.offsetY,     e.resetY           },
             { P_ID::DIAGONAL,      0, 0, l.diagonal,    l.resetDiagonal    },
+            { P_ID::LINE_VISIBLE,  0, 0, l.lineVisible, l.resetLineVisible },
             { P_ID::LINE_COLOR,    0, 0, l.lineColor,   l.resetLineColor   },
             { P_ID::LINE_WIDTH,    0, 0, l.lineWidth,   l.resetLineWidth   },
             { P_ID::LINE_STYLE,    0, 0, l.lineStyle,   l.resetLineStyle   },

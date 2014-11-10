@@ -15,8 +15,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "1.24"
-static const int MSCVERSION = 124;
+#define MSC_VERSION     "2.01"
+static const int MSCVERSION = 201;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -45,6 +45,9 @@ static const int MSCVERSION = 124;
 //    1.24  default image size is spatium dependent
 //      -   symbol numbers in TextLine() replaced by symbol names
 //          TextStyle: frameWidth, paddingWidth are now in Spatium units (instead of mm)
+//    2.00  (Version 2.0)
+//    2.01  save SlurSegment position relative to staff
+
 
 
 class MStyle;
@@ -64,9 +67,9 @@ static const qreal SPATIUM20 = 5.0 / PPI; // size of Spatium for 20pt font in in
 static const int MAX_STAVES = 4;
 #define MMSP(x)  Spatium((x) * .1)
 
-static const char mimeSymbolFormat[]      = "application/mscore/symbol";
-static const char mimeSymbolListFormat[]  = "application/mscore/symbollist";
-static const char mimeStaffListFormat[]   = "application/mscore/stafflist";
+static const char mimeSymbolFormat[]      = "application/musescore/symbol";
+static const char mimeSymbolListFormat[]  = "application/musescore/symbollist";
+static const char mimeStaffListFormat[]   = "application/musescore/stafflist";
 
 static const int  VISUAL_STRING_NONE      = -2;       // no ordinal for the visual repres. of string (0 = topmost in TAB)
 static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
@@ -81,7 +84,6 @@ enum class ArticulationType : char {
       Shortfermata,
       Longfermata,
       Verylongfermata,
-      Thumb,
       Sforzatoaccent,
 //      Espressivo,
       Staccato,
@@ -119,6 +121,12 @@ enum class ArticulationType : char {
 //      Tapping,
 //      Slapping,
 //      Popping,
+      // Fingerings
+      ThumbPosition,
+      LuteFingThumb,
+      LuteFingFirst,
+      LuteFingSecond,
+      LuteFingThird,
       ARTICULATIONS
       };
 
@@ -163,7 +171,7 @@ enum class AlignmentFlags : char {
 
 enum class OffsetType : char {
       ABS,       ///< offset in point units
-      SPATIUM    ///< offset in space units
+      SPATIUM    ///< offset in staff space units
       };
 
 //---------------------------------------------------------
@@ -261,9 +269,12 @@ enum class TextStyleType : char {
       LYRIC1,
       LYRIC2,
       FINGERING,
+      LH_GUITAR_FINGERING,
+      RH_GUITAR_FINGERING,
+
+      STRING_NUMBER,
       INSTRUMENT_LONG,
       INSTRUMENT_SHORT,
-
       INSTRUMENT_EXCERPT,
       DYNAMICS,
       TECHNIQUE,
@@ -271,9 +282,9 @@ enum class TextStyleType : char {
       METRONOME,
       MEASURE_NUMBER,
       TRANSLATOR,
+
       TUPLET,
       SYSTEM,
-
       STAFF,
       HARMONY,
       REHEARSAL_MARK,
@@ -282,17 +293,16 @@ enum class TextStyleType : char {
       REPEAT,            // obsolete
       VOLTA,
       FRAME,
+
       TEXTLINE,
       GLISSANDO,
-
-      STRING_NUMBER,
       OTTAVA,
       BENCH,
       HEADER,
       FOOTER,
       INSTRUMENT_CHANGE,
-      LYRICS_VERSE_NUMBER,
       FIGURED_BASS,
+
       TEXT_STYLES
       };
 

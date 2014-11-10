@@ -135,12 +135,35 @@ public:
       };
 
 typedef QList<JumpMarkerDesc> JumpMarkerDescList;
+      
+//---------------------------------------------------------
+//   SlurDesc
+//---------------------------------------------------------
+
+/**
+ The description of Slurs being handled
+ */
+
+class SlurDesc {
+public:
+      enum class State : char { NONE, START, STOP };
+      SlurDesc() : _slur(0), _state(State::NONE) {}
+      Slur* slur() const { return _slur; }
+      void start(Slur* slur) { _slur = slur; _state = State::START; }
+      void stop(Slur* slur) { _slur = slur; _state = State::STOP; }
+      bool isStart() const { return _state == State::START; }
+      bool isStop() const { return _state == State::STOP; }
+private:
+      Slur* _slur;
+      State _state;
+};
 
 //---------------------------------------------------------
 //   MusicXml
 //---------------------------------------------------------
 
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
+typedef QMap<SLine*, QPair<int, int> > MusicXmlSpannerMap;
 
 /**
  The MusicXML importer.
@@ -153,8 +176,7 @@ class MusicXml {
       QVector<int> measureStart;                ///< Start tick of each measure
       Fraction fractionTSig;                    ///< Current timesig as fraction
 
-      Slur* slur[MAX_NUMBER_LEVEL];
-
+      SlurDesc slur[MAX_NUMBER_LEVEL];
       TextLine* bracket[MAX_BRACKETS];
       TextLine* dashes[MAX_DASHES];
 
@@ -177,17 +199,20 @@ class MusicXml {
       JumpMarkerDescList jumpsMarkers;
 
       MusicXmlPartGroupList partGroupList;
-      QMap<Spanner*, QPair<int, int> > spanners;
+      MusicXmlSpannerMap spanners;
 
       Ottava* ottava;                            ///< Current ottava
       Trill* trill;                              ///< Current trill
       Pedal* pedal;                              ///< Current pedal
+      Pedal* pedalContinue;                      ///< Current pedal type="change" requiring fixup
       Harmony* harmony;                          ///< Current harmony
       Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
       bool figBassExtend;                        ///< Current figured bass extend
       Beam::Mode beamMode;                       ///< Current beam mode
+      QString glissandoText;                     ///< Glissando text at glissando start
+      QString glissandoColor;                    ///< Glissando color at glissando start
 
       int pageWidth;                             ///< Page width read from defaults
       int pageHeight;                            ///< Page height read from defaults
@@ -208,13 +233,14 @@ class MusicXml {
                     QMap<int, Lyrics*>& numbrdLyrics,
                     QMap<int, Lyrics*>& defyLyrics,
                     QList<Lyrics*>& unNumbrdLyrics);
-      void xmlNotations(Note* note, ChordRest* cr, int trk, int ticks, QDomElement node);
+      void xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ticks, QDomElement node);
       Note* xmlNote(Measure*, int stave, const QString& partId, Beam*& beam, QString& currentVoice, QDomElement node, QList<Chord*>& graceNotes, int& alt);
       void xmlHarmony(QDomElement node, int tick, Measure* m, int staff);
       StaffTypes xmlClef(QDomElement, int staffIdx, Measure*);
       void readPageFormat(PageFormat* pf, QDomElement de, qreal conversion);
       QList<QDomElement> findSlurElements(QDomElement);
       void addGraceNoteAfter(Chord*, Segment*);
+      void initPartState();
 public:
       MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1);
       void import(Score*);

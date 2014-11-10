@@ -77,6 +77,7 @@ class SpannerSegment : public Element {
       virtual void reset() override;
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
+      virtual void setColor(const QColor& col) override;
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
@@ -106,9 +107,10 @@ class Spanner : public Element {
       Q_PROPERTY(int                 tick2   READ tick2   WRITE setTick2)
       Q_PROPERTY(Ms::Spanner::Anchor anchor  READ anchor  WRITE setAnchor)
 
-      Anchor _anchor         { Anchor::SEGMENT };
       Element* _startElement { 0  };
       Element* _endElement   { 0  };
+
+      Anchor _anchor         { Anchor::SEGMENT };
       int _tick              { -1 };
       int _ticks             {  0 };
       int _track2            { -1 };
@@ -164,20 +166,18 @@ class Spanner : public Element {
       void setStartElement(Element* e);
       void setEndElement(Element* e);
 
-      void setStartChord(Chord*);
-      void setEndChord(Chord*);
+      ChordRest* startCR();
+      ChordRest* endCR();
 
       Chord* startChord();
       Chord* endChord();
-
-      ChordRest* startCR();
-      ChordRest* endCR();
 
       Segment* startSegment() const;
       Segment* endSegment() const;
 
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
+      virtual void setColor(const QColor& col) override;
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
 

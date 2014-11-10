@@ -63,13 +63,22 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing">
       <number>0</number>
      </property>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Scale to Frame Size</string>
+        <string>Scale to frame size</string>
        </property>
       </widget>
      </item>
@@ -86,20 +95,10 @@
      <item row="1" column="3">
       <widget class="QToolButton" name="resetAutoscale">
        <property name="accessibleName">
-        <string>Reset Scale to Frame Size value</string>
+        <string>Reset Scale to frame size value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -116,6 +115,9 @@
        </property>
        <property name="decimals">
         <number>1</number>
+       </property>
+       <property name="minimum">
+        <double>0.100000000000000</double>
        </property>
        <property name="maximum">
         <double>99999.000000000000000</double>
@@ -136,11 +138,14 @@
        <property name="decimals">
         <number>1</number>
        </property>
+       <property name="minimum">
+        <double>0.100000000000000</double>
+       </property>
        <property name="maximum">
         <double>99999.000000000000000</double>
        </property>
        <property name="value">
-        <double>0.000000000000000</double>
+        <double>0.100000000000000</double>
        </property>
       </widget>
      </item>
@@ -223,40 +228,20 @@
      <item row="4" column="3">
       <widget class="QToolButton" name="resetLockAspectRatio">
        <property name="accessibleName">
-        <string>Reset Lock Aspect Ratio value</string>
+        <string>Reset Lock aspect ratio value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
      <item row="5" column="3">
       <widget class="QToolButton" name="resetSizeIsSpatium">
        <property name="accessibleName">
-        <string>Reset Size in Spatium Units value</string>
+        <string>Reset Size in staff space units value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -266,10 +251,10 @@
         <enum>Qt::TabFocus</enum>
        </property>
        <property name="accessibleName">
-        <string>Lock Aspect Ratio</string>
+        <string>Lock aspect ratio</string>
        </property>
        <property name="text">
-        <string>Lock Aspect Ratio</string>
+        <string>Lock aspect ratio</string>
        </property>
       </widget>
      </item>
@@ -278,11 +263,17 @@
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
+       <property name="toolTip">
+        <string>Distance between two lines on a standard 5-line staff</string>
+       </property>
+       <property name="whatsThis">
+        <string>Distance between two lines on a standard 5-line staff</string>
+       </property>
        <property name="accessibleName">
-        <string>Size in Spatium Units</string>
+        <string>Size in staff space units</string>
        </property>
        <property name="text">
-        <string>Size in Spatium Units</string>
+        <string>Size in staff space units</string>
        </property>
       </widget>
      </item>
@@ -302,8 +293,6 @@
   <tabstop>sizeIsSpatium</tabstop>
   <tabstop>resetSizeIsSpatium</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

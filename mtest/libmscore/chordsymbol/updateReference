@@ -4,5 +4,6 @@ cp ../../../build.debug/mtest/libmscore/chordsymbol/add-part.mscx add-part-ref.m
 cp ../../../build.debug/mtest/libmscore/chordsymbol/add-link.mscx add-link-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/clear.mscx    clear-ref.mscx
 cp ../../../build.debug/mtest/libmscore/chordsymbol/extend.mscx   extend-ref.mscx
+cp ../../../build.debug/mtest/libmscore/chordsymbol/no-system.mscx   no-system-ref.mscx
 
 

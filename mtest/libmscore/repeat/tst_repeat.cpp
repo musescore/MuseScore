@@ -47,6 +47,7 @@ class TestRepeat : public QObject, public MTest
       void repeat12() { repeat("repeat12.mscx", "1;2;3;4;3;5;6;2;3;5;6;7"); }
       void repeat13() { repeat("repeat13.mscx", "1;2;3;4;5"); }
       void repeat14() { repeat("repeat14.mscx", "1;2;3;4;5;6;7;8;9;10; 2;3;4;5;6;7;8;11;12; 2;3;4;5;6;7;8;13;14;15; 16;17;18; 16;17;18; 19;20;21;22;23; 5;6;7; 24;25;26"); }
+      void repeat15() { repeat("repeat15.mscx", "1;2;2;2;2;2;2;2;2;3"); }
       };
 
 

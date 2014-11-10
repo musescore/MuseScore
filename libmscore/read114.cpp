@@ -37,6 +37,7 @@
 #include "tempo.h"
 #include "tempotext.h"
 #include "clef.h"
+#include "barline.h"
 
 namespace Ms {
 
@@ -168,8 +169,14 @@ void Staff::read114(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "lines")
-                  setLines(e.readInt());
+            if (tag == "lines") {
+                  int lines = e.readInt();
+                  setLines(lines);
+                  if (lines != 5) {
+                        _barLineFrom = (lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
+                        _barLineTo   = (lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (lines - 1) * 2);
+                        }
+                  }
             else if (tag == "small")
                   setSmall(e.readInt());
             else if (tag == "invisible")
@@ -277,8 +284,18 @@ void Part::read114(XmlReader& e)
       if (instr(0)->useDrumset() != DrumsetKind::NONE) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
+                  int bf    = staff->barLineFrom();
+                  int bt    = staff->barLineTo();
                   staff->setStaffType(StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
-                  staff->setLines(lines);
+
+                  // this allows 2/3-line percussion staves to keep the double spacing they had in 1.3
+
+                  if (lines == 2 || lines == 3)
+                        staff->staffType()->setLineDistance(Spatium(2.0));
+
+                  staff->setLines(lines);       // this also sets stepOffset
+                  staff->setBarLineFrom(bf);
+                  staff->setBarLineTo(bt);
                   }
             }
       //set default articulations
@@ -548,6 +565,8 @@ Score::FileError Score::read114(XmlReader& e)
                         qDebug("read114: Key tick %d", tick);
                         continue;
                         }
+                  if (tick == 0 && i->second == Key::C)
+                        continue;
                   Measure* m = tick2measure(tick);
                   if (!m)           //empty score
                         break;
@@ -684,8 +703,6 @@ Score::FileError Score::read114(XmlReader& e)
       // adjust some styles
       qreal lmbd = styleD(StyleIdx::lyricsMinBottomDistance);
       style()->set(StyleIdx::lyricsMinBottomDistance, lmbd + 4.0);
-      if (style(StyleIdx::voltaY) == MScore::baseStyle()->value(StyleIdx::voltaY))
-            style()->set(StyleIdx::voltaY, -2.0f);
       if (style(StyleIdx::hideEmptyStaves).toBool()) // http://musescore.org/en/node/16228
             style()->set(StyleIdx::dontHideStavesInFirstSystem, false);
       if (style(StyleIdx::showPageNumberOne).toBool()) { // http://musescore.org/en/node/21207
@@ -730,17 +747,20 @@ Score::FileError Score::read114(XmlReader& e)
                   _excerpts.removeOne(excerpt);
                   continue;
                   }
-            Score* nscore = Ms::createExcerpt(excerpt->parts());
-            if (nscore) {
-                  nscore->setName(excerpt->title());
-                  nscore->rebuildMidiMapping();
-                  nscore->updateChannel();
-                  nscore->updateNotes();
-                  nscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
-                  nscore->doLayout();
+            if (!excerpt->parts().isEmpty()) {
+                  Score* nscore = new Score(this);
                   excerpt->setScore(nscore);
+                  nscore->setName(excerpt->title());
+                  nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                  Ms::createExcerpt(nscore, excerpt);
                   }
             }
+
+      // volta offsets in older scores are hardcoded to be relative to a voltaY of -2.0sp
+      // we'll force this and live with it for the score
+      // but we wait until now to do it so parts don't have this issue
+      if (style(StyleIdx::voltaY) == MScore::baseStyle()->value(StyleIdx::voltaY))
+            style()->set(StyleIdx::voltaY, -2.0f);
 
       fixTicks();
       rebuildMidiMapping();

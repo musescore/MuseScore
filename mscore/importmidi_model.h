@@ -41,6 +41,7 @@ class TracksModel : public QAbstractTableModel
 
   private:
       bool isTrackIndexValid(int trackIndex) const;
+      bool isRowValid(int row) const;
       bool isColumnValid(int column) const;
       void forceRowDataChanged(int row);
       void forceColumnDataChanged(int col);

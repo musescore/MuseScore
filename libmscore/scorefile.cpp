@@ -91,24 +91,36 @@ void Score::write(Xml& xml, bool selectionOnly)
       // then some layout information is missing:
       // relayout with all parts set visible
 
+      QList<Part*> hiddenParts;
       bool unhide = false;
-      QList<bool> partsVisible;
       if (styleB(StyleIdx::createMultiMeasureRests)) {
             for (Part* part : _parts) {
-                  partsVisible.append(part->show());
                   if (!part->show()) {
-                        unhide = true;
-                        part->setShow(true);
+                        if (!unhide) {
+                              startCmd();
+                              unhide = true;
+                              }
+                        undo(new ChangePartProperty(part, 0, true));
+                        hiddenParts.append(part);
                         }
                   }
             }
       if (unhide) {
             doLayout();
-            for (int i = 0; i < partsVisible.size(); ++i)
-                  _parts[i]->setShow(partsVisible[i]);
+            for (Part* p : hiddenParts)
+                  p->setShow(false);
             }
 
       xml.stag("Score");
+      switch(_layoutMode) {
+            case LayoutMode::PAGE:
+            case LayoutMode::FLOAT:
+            case LayoutMode::SYSTEM:
+                  break;
+            case LayoutMode::LINE:
+                  xml.tag("layoutMode", "line");
+                  break;
+            }
 
 #ifdef OMR
       if (_omr && xml.writeOmr)
@@ -153,7 +165,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       while (i.hasNext()) {
             i.next();
             if (!MScore::testMode  || (i.key() != "platform" && i.key() != "creationDate"))
-                  xml.tag(QString("metaTag name=\"%1\"").arg(i.key()), i.value());
+                  xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
             }
 
       foreach(KeySig* ks, customKeysigs)
@@ -218,8 +230,11 @@ void Score::write(Xml& xml, bool selectionOnly)
             xml.tag("name", name());
       xml.etag();
 
-      if (unhide)
-            doLayout();
+      if (unhide) {
+            endCmd();
+            undo()->undo();
+            endUndoRedo();
+            }
       }
 
 //---------------------------------------------------------
@@ -259,6 +274,16 @@ void Score::readStaff(XmlReader& e)
                               measures()->add(measure);
                               e.setLastMeasure(measure);
                               e.initTick(measure->tick() + measure->ticks());
+                              }
+                        else {
+                              // this is a multi measure rest
+                              // always preceded by the first measure it replaces
+                              Measure* m = e.lastMeasure();
+
+                              if (m) {
+                                    m->setMMRest(measure);
+                                    measure->setTick(m->tick());
+                                    }
                               }
                         }
                   else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
@@ -338,6 +363,8 @@ bool Score::saveFile()
                   }
             undo()->setClean();
             setDirty(false);
+            info.refresh();
+            update();
             return true;
             }
       //
@@ -416,6 +443,8 @@ bool Score::saveFile()
       undo()->setClean();
       setDirty(false);
       setSaved(true);
+      info.refresh();
+      update();
       return true;
       }
 
@@ -591,10 +620,13 @@ void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       Xml xml(f);
       xml.writeOmr = msczFormat;
       xml.header();
-      xml.stag("museScore version=\"" MSC_VERSION "\"");
       if (!MScore::testMode) {
+            xml.stag("museScore version=\"" MSC_VERSION "\"");
             xml.tag("programVersion", VERSION);
             xml.tag("programRevision", revision);
+            }
+      else {
+            xml.stag("museScore version=\"2.00\"");
             }
       write(xml, onlySelection);
       xml.etag();
@@ -1066,8 +1098,11 @@ bool Score::read(XmlReader& e)
                               e.unknown();
                         }
                   }
-            else if (tag == "name")
-                  setName(e.readElementText());
+            else if (tag == "name") {
+                  QString n = e.readElementText();
+                  if (parentScore()) //ignore the name if it's not a child score
+                        setName(n);
+                  }
             else if (tag == "page-layout") {    // obsolete
                   if (_layoutMode != LayoutMode::FLOAT && _layoutMode != LayoutMode::SYSTEM) {
                         PageFormat pf;
@@ -1080,6 +1115,13 @@ bool Score::read(XmlReader& e)
                   }
             else if (tag == "cursorTrack")
                   e.skipCurrentElement();
+            else if (tag == "layoutMode") {
+                  QString s = e.readElementText();
+                  if (s == "line")
+                        _layoutMode = LayoutMode::LINE;
+                  else
+                        qDebug("layoutMode: %s", qPrintable(s));
+                  }
             else
                   e.unknown();
             }
@@ -1250,6 +1292,7 @@ qDebug("createRevision");
 void Score::writeSegments(Xml& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
+      int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
       for (int track = strack; track < etrack; ++track) {
             if (!xml.canWriteVoice(track))
                   continue;
@@ -1292,7 +1335,6 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                   Measure* m = segment->measure();
                   // don't write spanners for multi measure rests
                   if ((!(m && m->isMMRest())) && (segment->segmentType() & Segment::Type::ChordRest)) {
-                        int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
                         auto endIt = spanner().upper_bound(endTick);
                         for (auto i = spanner().begin(); i != endIt; ++i) {
                               Spanner* s = i->second;
@@ -1300,7 +1342,12 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                     continue;
 
                               if (s->track() == track) {
-                                    if (s->tick() == segment->tick() && (!clip || s->tick2() < endTick)) {
+                                    bool end = false;
+                                    if (s->anchor() == Spanner::Anchor::CHORD || s->anchor() == Spanner::Anchor::NOTE)
+                                          end = s->tick2() < endTick;
+                                    else
+                                          end = s->tick2() <= endTick;
+                                    if (s->tick() == segment->tick() && (!clip || end)) {
                                           if (needTick) {
                                                 xml.tag("tick", segment->tick() - xml.tickDiff);
                                                 xml.curTick = segment->tick();
@@ -1311,7 +1358,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                     }
                               if ((s->tick2() == segment->tick())
                                  && s->type() != Element::Type::SLUR
-                                 && (s->track2() == track || s->track2() == -1)
+                                 && (s->track2() == track || (s->track2() == -1 && s->track() == track))
                                  && (!clip || s->tick() >= fs->tick())
                                  ) {
                                     if (needTick) {
@@ -1359,6 +1406,22 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         }
                   e->write(xml);
                   segment->write(xml);    // write only once
+                  }
+            //write spanner ending after the last segment, on the last tick
+            if (clip || ls == 0) {
+                  auto endIt = spanner().upper_bound(endTick);
+                  for (auto i = spanner().begin(); i != endIt; ++i) {
+                        Spanner* s = i->second;
+                        if (s->generated() || !xml.canWrite(s))
+                              continue;
+                        if ((s->tick2() == endTick)
+                          && s->type() != Element::Type::SLUR
+                          && (s->track2() == track || (s->track2() == -1 && s->track() == track))
+                          && (!clip || s->tick() >= fs->tick())
+                          ) {
+                              xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+                              }
+                        }
                   }
             }
       }

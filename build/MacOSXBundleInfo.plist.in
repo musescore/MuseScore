@@ -281,6 +281,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Guitar Pro 6 File</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>gpx</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
     
     <key>ATSApplicationFontsPath</key>

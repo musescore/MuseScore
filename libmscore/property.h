@@ -202,6 +202,13 @@ enum class P_ID : unsigned char {
       SLUR_UOFF3,
       SLUR_UOFF4,
 
+      STAFF_MOVE,
+      SYLLABIC,
+      LYRIC_TICKS,
+
+      VOLTA_ENDING,
+      LINE_VISIBLE,
+
       END
       };
 
@@ -230,6 +237,7 @@ enum class P_TYPE : char {
       GROUPS,
       SYMID,
       TEXT_STYLE,
+      INT_LIST
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);

@@ -22,6 +22,7 @@
 #include "textframe.h"
 #include "sym.h"
 #include "xml.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -32,6 +33,7 @@ static const qreal superScriptOffset = -0.5;       // of x-height
 static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
 TextCursor Text::_cursor;
+QString Text::oldText;
 
 //---------------------------------------------------------
 //   operator==
@@ -209,6 +211,7 @@ QFont TextFragment::font(const Text* t) const
             }
       if (format.valign() != VerticalAlignment::AlignNormal)
             m *= subScriptSize;
+
       font.setPixelSize(lrint(m));
       return font;
       }
@@ -285,15 +288,19 @@ void TextBlock::layout(Text* t)
                         }
                   else
                         f.pos.setY(0.0);
-                  qreal w;
+                  qreal w = fm.width(f.text);
                   QRectF r;
-                  if (f.format.type() == CharFormatType::SYMBOL) {
-                        r = fm.tightBoundingRect(f.text).translated(f.pos);
-                        }
+                  if (f.format.type() == CharFormatType::SYMBOL)
+                        r = fm.tightBoundingRect(f.text);
                   else
-                        r = fm.boundingRect(f.text).translated(f.pos);
-                  w = fm.width(f.text);
-                  _bbox |= r;
+                        r = fm.boundingRect(f.text);
+
+                  // for whatever reason the boundingRect() is different
+                  // on second doLayout() (paint() ?)
+                  r.setX(0);        //HACK
+                  r.setWidth(w);
+
+                  _bbox |= r.translated(f.pos);
                   x += w;
                   _lineSpacing = _lineSpacing == 0 || fm.lineSpacing() == 0 ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
                   }
@@ -780,9 +787,9 @@ QString TextBlock::text(int col1, int len) const
             for (const QChar& c : f.text) {
                   if (c.isHighSurrogate())
                         continue;
-                  ++col;
-                  if (col >= col1 && (len < 0 || ((col1-col) < len)))
+                  if (col >= col1 && (len < 0 || ((col-col1) < len)))
                         s += c;
+                  ++col;
                   }
             }
       return s;
@@ -854,10 +861,12 @@ void Text::draw(QPainter* p) const
       if (textStyle().hasFrame()) {
             if (textStyle().frameWidth().val() != 0.0) {
                   QColor color(textStyle().frameColor());
-                  if (!visible())
-                        color = Qt::gray;
-                  else if (selected())
-                        color = MScore::selectColor[0];
+                  if (score() && !score()->printing()) {
+                        if (!visible())
+                              color = Qt::gray;
+                        else if (selected())
+                              color = MScore::selectColor[0];
+                        }
                   QPen pen(color, textStyle().frameWidth().val() * spatium());
                   p->setPen(pen);
                   }
@@ -875,13 +884,8 @@ void Text::draw(QPainter* p) const
                   }
             }
       p->setBrush(Qt::NoBrush);
-      QColor color;
-      if (selected())
-            color = MScore::selectColor[0];
-      else if (!visible())
-            color = Qt::gray;
-      else
-            color = textStyle().foregroundColor();
+
+      QColor color = textColor();
       p->setPen(color);
       if (_editMode && _cursor.hasSelection()) {
             int r1 = _cursor.selectLine();
@@ -970,7 +974,7 @@ QRectF Text::cursorRect() const
 
 QColor Text::textColor() const
       {
-      if (!score()->printing()) {
+      if (score() && !score()->printing()) {
             QColor color;
             if (selected())
                   return MScore::selectColor[0];
@@ -994,7 +998,7 @@ void Text::insert(TextCursor* cursor, QChar c)
             _layout[cursor->line()].setEol(true);
             cursor->setLine(cursor->line() + 1);
             cursor->setColumn(0);
-            if (_layout.size() < cursor->line())
+            if (_layout.size() <= cursor->line())
                   _layout.append(TextBlock());
             }
       else {
@@ -1177,6 +1181,7 @@ void Text::layout1()
             TextBlock* t = &_layout[i];
             t->layout(this);
             const QRectF* r = &t->boundingRect();
+
             if (r->height() == 0)
                   r = &_layout[i-i].boundingRect();
             y += t->lineSpacing();
@@ -1278,25 +1283,6 @@ qreal Text::baseLine() const
       }
 
 //---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Text::startEdit(MuseScoreView*, const QPointF& pt)
-      {
-      setEditMode(true);
-      _cursor.setLine(0);
-      _cursor.setColumn(0);
-      _cursor.clearSelection();
-      if (_layout.isEmpty())
-            layout();
-      if (setCursor(pt))
-            updateCursorFormat(&_cursor);
-      else
-            _cursor.initFromStyle(textStyle());
-      undoPushProperty(P_ID::TEXT);
-      }
-
-//---------------------------------------------------------
 //   XmlNesting
 //---------------------------------------------------------
 
@@ -1374,53 +1360,52 @@ void Text::genText()
                   if (f.text.isEmpty())                     // skip empty fragments, not to
                         continue;                           // insert extra HTML formatting
                   const CharFormat& format = f.format;
-                  if (format.type() == CharFormatType::TEXT) {
-                        if (cursor.format()->bold() != format.bold()) {
-                              if (format.bold())
-                                    xmlNesting.pushB();
-                              else
-                                    xmlNesting.popB();
-                              }
-                        if (cursor.format()->italic() != format.italic()) {
-                              if (format.italic())
-                                    xmlNesting.pushI();
-                              else
-                                    xmlNesting.popI();
-                              }
-                        if (cursor.format()->underline() != format.underline()) {
-                              if (format.underline())
-                                    xmlNesting.pushU();
-                              else
-                                    xmlNesting.popU();
-                              }
-
-                        if (format.fontSize() != cursor.format()->fontSize())
-                              _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
-                        if (format.fontFamily() != cursor.format()->fontFamily())
-                              _text += QString("<font face=\"%1\"/>").arg(format.fontFamily());
-
-                        VerticalAlignment va = format.valign();
-                        VerticalAlignment cva = cursor.format()->valign();
-                        if (cva != va) {
-                              switch (va) {
-                                    case VerticalAlignment::AlignNormal:
-                                          xmlNesting.popToken(cva == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
-                                          break;
-                                    case VerticalAlignment::AlignSuperScript:
-                                          xmlNesting.pushToken("sup");
-                                          break;
-                                    case VerticalAlignment::AlignSubScript:
-                                          xmlNesting.pushToken("sub");
-                                          break;
-                                    }
-                              }
-                        _text += Xml::xmlString(f.text);
-                        cursor.setFormat(format);
+                  if (cursor.format()->bold() != format.bold()) {
+                        if (format.bold())
+                              xmlNesting.pushB();
+                        else
+                              xmlNesting.popB();
                         }
+                  if (cursor.format()->italic() != format.italic()) {
+                        if (format.italic())
+                              xmlNesting.pushI();
+                        else
+                              xmlNesting.popI();
+                        }
+                  if (cursor.format()->underline() != format.underline()) {
+                        if (format.underline())
+                              xmlNesting.pushU();
+                        else
+                              xmlNesting.popU();
+                        }
+
+                  if (format.fontSize() != cursor.format()->fontSize())
+                        _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
+                  if (format.fontFamily() != cursor.format()->fontFamily())
+                        _text += QString("<font face=\"%1\"/>").arg(format.fontFamily());
+
+                  VerticalAlignment va = format.valign();
+                  VerticalAlignment cva = cursor.format()->valign();
+                  if (cva != va) {
+                        switch (va) {
+                              case VerticalAlignment::AlignNormal:
+                                    xmlNesting.popToken(cva == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
+                                    break;
+                              case VerticalAlignment::AlignSuperScript:
+                                    xmlNesting.pushToken("sup");
+                                    break;
+                              case VerticalAlignment::AlignSubScript:
+                                    xmlNesting.pushToken("sub");
+                                    break;
+                              }
+                        }
+                  if (format.type() == CharFormatType::TEXT)
+                        _text += Xml::xmlString(f.text);
                   else {
                         for (SymId id : f.ids)
                               _text += QString("<sym>%1</sym>").arg(Sym::id2name(id));
                         }
+                  cursor.setFormat(format);
                   }
             if (block.eol())
                   _text += QChar::LineFeed;
@@ -1471,6 +1456,27 @@ QString Text::plainText(bool noSym) const
       }
 
 //---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Text::startEdit(MuseScoreView*, const QPointF& pt)
+      {
+      setEditMode(true);
+      _cursor.setLine(0);
+      _cursor.setColumn(0);
+      _cursor.clearSelection();
+      if (_layout.isEmpty())
+            layout();
+      if (setCursor(pt))
+            updateCursorFormat(&_cursor);
+      else
+            _cursor.initFromStyle(textStyle());
+      oldText = _text;
+      // instead of dong this here, wait until we find out if text is actually changed
+      //undoPushProperty(P_ID::TEXT);
+      }
+
+//---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
@@ -1481,14 +1487,38 @@ void Text::endEdit()
       score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
 
       genText();
-      if (links()) {
-            foreach (Element* e, *links()) {
-                  if (e != this)
-                        e->undoChangeProperty(P_ID::TEXT, _text);
+
+      if (_text != oldText) {
+            for (Element* e : linkList()) {
+                  // this line was added in https://github.com/musescore/MuseScore/commit/dcf963b3d6140fa550c08af18d9fb6f6e59733a3
+                  // it replaced the commented-out call to undoPushProperty in startEdit() above
+                  // the two calls do the same thing, but by doing it here, we can avoid the need if the text hasn't changed
+                  // note we are also doing it for each linked element now whereas before we did it only for the edited element itself
+                  // that is because the old text was already being pushed by undoChangeProperty
+                  // when we called it for the linked elements
+                  // by also checking for empty old text, we avoid creating an unnecessary element on undo stack
+                  // that returns us to the initial empty text created upon startEdit()
+
+                  if (!oldText.isEmpty())
+                        score()->undo()->push1(new ChangeProperty(e, P_ID::TEXT, oldText));
+
+                  // because we are pushing each individual linked element's old text to the undo stack,
+                  // we don't actually need to call the undo version of change property here
+
+                  e->setProperty(P_ID::TEXT, _text);
+
+                  // the change mentioned above eliminated the following line, which is where the linked elements actually got their text set
+                  // one would think this line alone would be enough to make undo work
+                  // but it is not, because by the time we get here, we've already overwritten _text for the current item
+                  // that is why formerly we skipped this call for "this"
+                  // and this was safe because we formerly pushed the old text for "this" back in startEdit()
+                  //if (e != this) e->undoChangeProperty(P_ID::TEXT, _text);
                   }
             }
       textChanged();
-      score()->setLayoutAll(true);
+      // formerly we needed to setLayoutAll here to force the text to be laid out after editing
+      // but now that we are calling setProperty for all elements - including "this"
+      // it is no longer necessary
       }
 
 //---------------------------------------------------------
@@ -1524,11 +1554,13 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                   {
                   if (_cursor.hasSelection())
                         deleteSelectedText();
+                  int line = _cursor.line();
 
                   CharFormat* charFmt = _cursor.format();         // take current format
-                  _layout.insert(_cursor.line() + 1, curLine().split(_cursor.column()));
-                  _layout[_cursor.line()].setEol(true);
-                  _cursor.setLine(_cursor.line() + 1);
+                  _layout.insert(line + 1, curLine().split(_cursor.column()));
+                  _layout[line].setEol(true);
+
+                  _cursor.setLine(line+1);
                   _cursor.setColumn(0);
                   _cursor.setFormat(*charFmt);                    // restore orig. format at new line
                   s.clear();
@@ -1608,13 +1640,33 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
             default:
                   break;
             }
-      if (modifiers & Qt::ControlModifier) {
+      if ((modifiers & Qt::ControlModifier) && (modifiers & Qt::ShiftModifier)) {
             switch (key) {
+                  case Qt::Key_B:
+                        insertSym(SymId::accidentalFlat);
+                        s.clear();
+                        break;
+                  case Qt::Key_NumberSign:
+                        insertSym(SymId::accidentalSharp);
+                        s.clear();
+                        break;
+                  case Qt::Key_H:
+                        insertSym(SymId::accidentalNatural);
+                        s.clear();
+                        break;
+                  case Qt::Key_Space:
+                        insertSym(SymId::space);
+                        s.clear();
+                        break;
                   case Qt::Key_F:
                         insertSym(SymId::dynamicForte);
                         s.clear();
                         break;
                   case Qt::Key_M:
+                        insertSym(SymId::dynamicMezzo);
+                        s.clear();
+                        break;
+                  case Qt::Key_N:
                         insertSym(SymId::dynamicNiente);
                         s.clear();
                         break;
@@ -1622,17 +1674,20 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
                         insertSym(SymId::dynamicPiano);
                         s.clear();
                         break;
-                  case Qt::Key_Z:
-                        insertSym(SymId::dynamicZ);
-                        s.clear();
-                        break;
                   case Qt::Key_S:
                         insertSym(SymId::dynamicSforzando);
                         s.clear();
                         break;
                   case Qt::Key_R:
-                        s.clear();
                         insertSym(SymId::dynamicRinforzando);
+                        s.clear();
+                        break;
+                  case Qt::Key_Z:
+                        // Ctrl+Z is normally "undo"
+                        // but this code gets hit even if you are also holding Shift
+                        // so Shift+Ctrl+Z works
+                        insertSym(SymId::dynamicZ);
+                        s.clear();
                         break;
                   }
             }
@@ -1848,7 +1903,7 @@ QString Text::selectedText() const
                   else
                         s += t.text(0, -1);
                   }
-            if (row != rows -1)
+            if (row != rows - 1)
                   s += "\n";
             }
       return s;
@@ -2474,7 +2529,7 @@ QString Text::convertFromHtml(const QString& ss) const
                   }
             }
 
-      if (score()->mscVersion() <= 114) {
+      if (score() && score()->mscVersion() <= 114) {
             s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));    //natural
             s.replace(QChar(0xe10c), QString("<sym>accidentalSharp</sym>"));    // sharp
             s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));    // flat
@@ -2512,30 +2567,58 @@ QString Text::convertToHtml(const QString& s, const TextStyle& st)
 QString Text::accessibleInfo()
       {
       QString rez;
+      const QList<TextStyle>& ts = score()->style()->textStyles();
       switch (textStyleType()) {
             case TextStyleType::TITLE:
-                  rez = tr ("Title");
-                  break;
             case TextStyleType::SUBTITLE:
-                  rez = tr ("Subtitle");
-                  break;
             case TextStyleType::COMPOSER:
-                  rez = tr("Composer");
-                  break;
             case TextStyleType::POET:
-                  rez = tr ("Poet");
-                  break;
             case TextStyleType::TRANSLATOR:
-                  rez = tr ("Translator");
-                  break;
             case TextStyleType::MEASURE_NUMBER:
-                  rez = tr ("Measure number");
+                  rez = qApp->translate("TextStyle",ts.at(int(textStyleType())).name().toUtf8());
                   break;
             default:
                   rez = Element::accessibleInfo();
                   break;
             }
-      return  rez + " " + text();
+      QString s = plainText(true).simplified();
+      if (s.length() > 20) {
+            s.truncate(20);
+            s += "...";
+            }
+      return  QString("%1: %2").arg(rez).arg(s);
+      }
+
+int Text::subtype() const
+      {
+      switch (textStyleType()) {
+            case TextStyleType::TITLE:
+            case TextStyleType::SUBTITLE:
+            case TextStyleType::COMPOSER:
+            case TextStyleType::POET:
+            case TextStyleType::FRAME:
+            case TextStyleType::INSTRUMENT_EXCERPT:
+                  return int(textStyleType());
+            default: return -1;
+            }
+      }
+
+QString Text::subtypeName() const
+      {
+      QString rez;
+      const QList<TextStyle>& ts = score()->style()->textStyles();
+      switch (textStyleType()) {
+            case TextStyleType::TITLE:
+            case TextStyleType::SUBTITLE:
+            case TextStyleType::COMPOSER:
+            case TextStyleType::POET:
+            case TextStyleType::FRAME:
+            case TextStyleType::INSTRUMENT_EXCERPT:
+                  rez = qApp->translate("TextStyle",ts.at(int(textStyleType())).name().toUtf8());
+                  break;
+            default: rez = "";
+            }
+      return rez;
       }
 }
 

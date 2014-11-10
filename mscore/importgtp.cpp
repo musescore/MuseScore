@@ -52,6 +52,7 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/ottava.h"
+#include "libmscore/notedot.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -251,7 +252,7 @@ void GuitarPro::initGuitarProDrumset()
       gpDrumset->drum(29) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Scratch Push"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(30) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Scratch Pull"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(31) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Sticks"), NoteHead::Group::HEAD_CROSS, 3, MScore::Direction::UP);
-      gpDrumset->drum(32) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Snare Click"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
+      gpDrumset->drum(32) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Square Click"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(33) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Metronome Click"), NoteHead::Group::HEAD_CROSS, 3, MScore::Direction::UP);
       gpDrumset->drum(34) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Metronome Bell"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(35) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Acoustic Bass Drum"), NoteHead::Group::HEAD_NORMAL, 7, MScore::Direction::UP);
@@ -279,7 +280,7 @@ void GuitarPro::initGuitarProDrumset()
       gpDrumset->drum(57) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Crash Cymbal 2"), NoteHead::Group::HEAD_DIAMOND, -1, MScore::Direction::UP);
       gpDrumset->drum(58) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Vibraslap"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(59) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Cymbal 2"), NoteHead::Group::HEAD_DIAMOND, -1, MScore::Direction::UP);
-      gpDrumset->drum(60) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Bongo"), NoteHead::Group::HEAD_NORMAL, 8, MScore::Direction::UP);
+      gpDrumset->drum(60) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi Bongo"), NoteHead::Group::HEAD_NORMAL, 8, MScore::Direction::UP);
       gpDrumset->drum(61) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Bongo"), NoteHead::Group::HEAD_NORMAL, 9, MScore::Direction::UP);
       gpDrumset->drum(62) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Hi Conga"), NoteHead::Group::HEAD_CROSS, 5, MScore::Direction::UP);
       gpDrumset->drum(63) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Hi Conga"), NoteHead::Group::HEAD_CROSS, 4, MScore::Direction::UP);
@@ -302,7 +303,7 @@ void GuitarPro::initGuitarProDrumset()
       gpDrumset->drum(80) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Triangle"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(81) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Triangle"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(82) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Shaker"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
-      gpDrumset->drum(83) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Jingle Bell"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
+      gpDrumset->drum(83) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Sleigh Bell"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(84) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Bell Tree"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(85) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Castanets"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
       gpDrumset->drum(86) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Surdo"), NoteHead::Group::HEAD_NORMAL, 3, MScore::Direction::UP);
@@ -528,8 +529,16 @@ void GuitarPro::readBend(Note* note)
 
 void GuitarPro::readLyrics()
       {
-      readInt();        // lyric track
-      for (int i = 0; i < 5; ++i) {
+      gpLyrics.lyricTrack = readInt();        // lyric track
+      gpLyrics.fromBeat = readInt();
+      gpLyrics.beatCounter = 0;
+
+      QString lyrics = readWordPascalString();
+      lyrics.replace(QRegExp("\n"), " ");
+      lyrics.replace(QRegExp("\r"), " ");
+      gpLyrics.lyrics = lyrics.split(" ", QString::KeepEmptyParts);
+
+      for (int i = 0; i < 4; ++i) {
             readInt();
             readWordPascalString();
             }
@@ -542,14 +551,14 @@ void GuitarPro::readLyrics()
 void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
       {
       // shift slide
-      if (slide == 1) {
+      if (slide == SHIFT_SLIDE) {
             Glissando* s = new Glissando(score);
             s->setText("");
             s->setGlissandoType(Glissando::Type::STRAIGHT);
             cr->add(s);
             }
       // legato slide
-      else if (slide == 2) {
+      else if (slide == LEGATO_SLIDE) {
             Segment* prevSeg = cr->segment()->prev1(Segment::Type::ChordRest);
                   Element* e = prevSeg->element(staffIdx);
                   if (e) {
@@ -565,28 +574,28 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
             cr->add(s);
             }
       // slide out downwards (fall)
-      else if (slide == 4) {
+      else if (slide == SLIDE_OUT_DOWN) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::FALL);
             cl->setStraight(true);
             cr->add(cl);
             }
       // slide out upwards (doit)
-      else if (slide == 8) {
+      else if (slide == SLIDE_OUT_UP) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::DOIT);
             cl->setStraight(true);
             cr->add(cl);
             }
       // slide in from below (plop)
-      else if (slide == 16) {
+      else if (slide == SLIDE_IN_BELOW) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::PLOP);
             cl->setStraight(true);
             cr->add(cl);
             }
       // slide in from above (scoop)
-      else if (slide == 32) {
+      else if (slide == SLIDE_IN_ABOVE) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::SCOOP);
             cl->setStraight(true);
@@ -639,8 +648,9 @@ Fraction GuitarPro::len2fraction(int len)
             case  3: l.set(1, 32);   break;
             case  4: l.set(1, 64);   break;
             case  5: l.set(1, 128);  break;
+            // set to len - in some cases we get whacky numbers for this (40, 28...)
             default:
-                  qFatal("unknown beat len: %d", len);
+                  l.set(1,len);
             }
       return l;
       }
@@ -712,12 +722,14 @@ void GuitarPro::createMeasures()
                   }
             if (i == 0 || (bars[i].keysig != GP_INVALID_KEYSIG)) {
                   for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                        KeySig* t = new KeySig(score);
                         int keysig = bars[i].keysig != GP_INVALID_KEYSIG ? bars[i].keysig : key;
-                        t->setKey(Key(keysig));
-                        t->setTrack(staffIdx * VOICES);
-                        Segment* s = m->getSegment(Segment::Type::KeySig, tick);
-                        s->add(t);
+                        if (tick == 0 || score->staff(staffIdx)->key(tick) != Key(keysig)) {
+                              KeySig* t = new KeySig(score);
+                              t->setKey(Key(keysig));
+                              t->setTrack(staffIdx * VOICES);
+                              Segment* s = m->getSegment(Segment::Type::KeySig, tick);
+                              s->add(t);
+                              }
                         }
                   }
             readVolta(&bars[i].volta, m);
@@ -950,6 +962,7 @@ void GuitarPro1::read(QFile* fp)
                                     }
                               tuplet->setTrack(track);
                               tuplet->setBaseLen(l);
+                              tuplet->setDuration(l * tuplet->ratio().denominator());
                               cr->setTuplet(tuplet);
                               tuplet->add(cr);  //TODOxxx
                               }
@@ -1398,6 +1411,7 @@ void GuitarPro2::read(QFile* fp)
                                     }
                               tuplet->setTrack(track);
                               tuplet->setBaseLen(l);
+                              tuplet->setDuration(l * tuplet->ratio().denominator());
                               cr->setTuplet(tuplet);
                               tuplet->add(cr);
                               }
@@ -1449,7 +1463,6 @@ void GuitarPro1::readNote(int string, Note* note)
             else if (variant == 3) {                 // dead notes
                   note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                   note->setGhost(true);
-                  qDebug("DeathNote tick %d pitch %d", note->chord()->segment()->tick(), note->pitch());
                   }
             else
                   qDebug("unknown note variant: %d", variant);
@@ -1520,7 +1533,9 @@ void GuitarPro1::readNote(int string, Note* note)
                         gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
                         gn->setGhost(true);
                         }
-                  gn->setFret((fret != 255)?fret:0);
+                  if (fret == 255)
+                        fret = 0;
+                  gn->setFret(fret);
                   gn->setString(string);
                   int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret);
                   gn->setPitch(grace_pitch);
@@ -1569,8 +1584,8 @@ void GuitarPro1::readNote(int string, Note* note)
                          ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
                          Slur* slur = new Slur(score);
-                         slur->setStartChord(static_cast<Chord*>(cr1));
-                         slur->setEndChord(static_cast<Chord*>(cr2));
+                         slur->setStartElement(cr1);
+                         slur->setEndElement(cr2);
                          slur->setTick(cr1->tick());
                          slur->setTick2(cr2->tick());
                          slur->setTrack(cr1->track());
@@ -1582,6 +1597,8 @@ void GuitarPro1::readNote(int string, Note* note)
                   }
             if (modMask1 & EFFECT_LET_RING) {         // let ring
                   }
+            if (modMask1 & EFFECT_SLIDE_OLD)
+                  slides[note->chord()->track()] = SHIFT_SLIDE;
 
             if (version >= 400) {
                   if (modMask2 & EFFECT_STACATTO) {
@@ -1589,8 +1606,6 @@ void GuitarPro1::readNote(int string, Note* note)
                   if (modMask2 & EFFECT_PALM_MUTE) {
                         }
                   if (modMask2 & EFFECT_TREMOLO)
-                        readUChar();
-                  if (modMask2 & EFFECT_SLIDE)
                         readUChar();
                   if (modMask2 & EFFECT_ARTIFICIAL_HARMONIC)
                         readUChar();
@@ -1609,7 +1624,21 @@ void GuitarPro1::readNote(int string, Note* note)
             note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
+      // dead note represented as high numbers - fix to zero
+      if (fretNumber > 99 || fretNumber == -1)
+            fretNumber = 0;
       int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
+
+      /* it's possible to specifiy extraordinarily high pitches by
+      specifying fret numbers that don't exist. This is an issue that
+      comes from tuxguitar. Just set to maximum pitch. GP6 actually
+      sets the fret number to 0 also, so that's what I've opted to do
+      here. */
+      if (pitch > MAX_PITCH) {
+            fretNumber = 0;
+            pitch = MAX_PITCH;
+            }
+
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);
@@ -1924,6 +1953,10 @@ void GuitarPro3::read(QFile* fp)
                         if (beatBits & BEAT_PAUSE)
                               /*pause =*/ readUChar();
 
+                        slide = -1;
+                        if (slides.contains(track))
+                              slide = slides.take(track);
+
                         int len = readChar();
                         int tuple = 0;
                         if (beatBits & BEAT_TUPLET)
@@ -1941,7 +1974,7 @@ void GuitarPro3::read(QFile* fp)
                               else  {
                                     skip(25);
                                     name = readPascalString(34);
-                                    readChord(segment, track, numStrings, name, true);
+                                    readChord(segment, track, numStrings, name, false);
                                     skip(36);
                                     }
                               }
@@ -1951,8 +1984,9 @@ void GuitarPro3::read(QFile* fp)
                               lyrics = new Lyrics(score);
                               lyrics->setText(txt);
                               }
+                        int beatEffects = 0;
                         if (beatBits & BEAT_EFFECTS)
-                              readBeatEffects(track, segment);
+                              beatEffects = readBeatEffects(track, segment);
 
                         if (beatBits & BEAT_MIX_CHANGE) {
                               readMixChange(measure);
@@ -2000,6 +2034,7 @@ void GuitarPro3::read(QFile* fp)
                                     }
                               tuplet->setTrack(track);
                               tuplet->setBaseLen(l);
+                              tuplet->setDuration(l * tuplet->ratio().denominator());
                               cr->setTuplet(tuplet);
                               tuplet->add(cr);
                               }
@@ -2019,11 +2054,26 @@ void GuitarPro3::read(QFile* fp)
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
+                                    if (dotted) {
+                                          NoteDot* dot = new NoteDot(score);
+                                          // there is at most one dotted note in this guitar pro version - set 0 index
+                                          dot->setIdx(0);
+                                          dot->setParent(note);
+                                          dot->setTrack(track);  // needed to know the staff it belongs to (and detect tablature)
+                                          dot->setVisible(true);
+                                          note->add(dot);
+                                          }
                                     static_cast<Chord*>(cr)->add(note);
                                     readNote(6-i, note);
                                     note->setTpcFromPitch();
                                     }
                               }
+                        if (cr && (cr->type() == Element::Type::CHORD)) {
+                              applyBeatEffects(static_cast<Chord*>(cr), beatEffects);
+                              if (slide > 0)
+                                    createSlide(slide, cr, staffIdx);
+                              }
+
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         tick += cr->actualTicks();
                         }
@@ -2040,6 +2090,7 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
 
       if (fxBits & BEAT_EFFECT) {
             effects = readUChar();      // effect 1-tapping, 2-slapping, 3-popping
+            readInt(); // we don't need this integer
             }
 
       if (fxBits & BEAT_ARPEGGIO) {
@@ -2116,6 +2167,7 @@ void GuitarPro::createCrecDim(int staffIdx, int track, int tick, bool crec)
             hairpins[staffIdx]->setHairpinType(Hairpin::Type::DECRESCENDO);
       hairpins[staffIdx]->setTick(tick);
       hairpins[staffIdx]->setTick2(tick);
+      hairpins[staffIdx]->setTrack(track);
       hairpins[staffIdx]->setTrack(track);
       score->undoAddElement(hairpins[staffIdx]);
       }
@@ -2330,18 +2382,9 @@ Score::FileError importGTP(Score* score, const QString& name)
 //      album
 //      copyright
 
-      score->setSaved(false);
       score->setCreated(true);
       delete gp;
 
-      score->setPlaylistDirty(true);
-      score->rebuildMidiMapping();
-      score->updateChannel();
-      score->updateNotes();
-
-      score->setLayoutAll(true);
-      score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
-      score->doLayout();
       return Score::FileError::FILE_NO_ERROR;
       }
 }

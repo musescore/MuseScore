@@ -158,18 +158,19 @@ class Element : public QObject {
       Q_ENUMS(Type)
       Q_ENUMS(Placement)
 
-      Q_PROPERTY(Ms::Element::Type type            READ type)
-      Q_PROPERTY(Ms::Element* parent               READ parent     WRITE setParent)
-      Q_PROPERTY(int track                         READ track      WRITE setTrack)
-      Q_PROPERTY(QColor color                      READ color      WRITE undoSetColor)
-      Q_PROPERTY(bool selected                     READ selected   WRITE setSelected)
-      Q_PROPERTY(bool generated                    READ generated  WRITE setGenerated)
-      Q_PROPERTY(bool visible                      READ visible    WRITE setVisible)
-      Q_PROPERTY(Ms::Element::Placement placement  READ placement  WRITE undoSetPlacement)
-      Q_PROPERTY(QPointF pos                       READ scriptPos  WRITE scriptSetPos)
-      Q_PROPERTY(QPointF pagePos                   READ pagePos)
-      Q_PROPERTY(QPointF userOff                   READ scriptUserOff WRITE scriptSetUserOff)
-      Q_PROPERTY(QRectF  bbox                      READ bbox )
+      Q_PROPERTY(QRectF                   bbox        READ scriptBbox )
+      Q_PROPERTY(QColor                   color       READ color        WRITE undoSetColor)
+      Q_PROPERTY(bool                     generated   READ generated    WRITE setGenerated)
+      Q_PROPERTY(QPointF                  pagePos     READ scriptPagePos)
+      Q_PROPERTY(Ms::Element*             parent      READ parent       WRITE setParent)
+      Q_PROPERTY(Ms::Element::Placement   placement   READ placement    WRITE undoSetPlacement)
+      Q_PROPERTY(QPointF                  pos         READ scriptPos    WRITE scriptSetPos)
+      Q_PROPERTY(bool                     selected    READ selected     WRITE setSelected)
+      Q_PROPERTY(qreal                    spatium     READ spatium)
+      Q_PROPERTY(int                      track       READ track        WRITE setTrack)
+      Q_PROPERTY(Ms::Element::Type        type        READ type)
+      Q_PROPERTY(QPointF                  userOff     READ scriptUserOff WRITE scriptSetUserOff)
+      Q_PROPERTY(bool                     visible     READ visible      WRITE setVisible)
 
       LinkedElements* _links = 0;
       Element* _parent       = 0;
@@ -179,6 +180,7 @@ class Element : public QObject {
   protected:
       bool _selected;             ///< set if element is selected
       bool _visible;              ///< visibility attribute
+      QColor _color;              ///< element color attribute
 
   public:
       //-------------------------------------------------------------------
@@ -292,7 +294,6 @@ class Element : public QObject {
       mutable ElementFlags _flags;
 
       int _track;                 ///< staffIdx * VOICES + voice
-      QColor _color;
       qreal _mag;                 ///< standard magnification (derived value)
 
       QPointF _pos;               ///< Reference position, relative to _parent.
@@ -368,6 +369,8 @@ class Element : public QObject {
 
       // function versions for scripts: use coords in spatium units rather than raster
       // and route pos changes to userOff
+      QRectF scriptBbox() const;
+      virtual QPointF scriptPagePos() const;
       virtual QPointF scriptPos() const;
       void scriptSetPos(const QPointF& p);
       QPointF scriptUserOff() const;
@@ -454,7 +457,7 @@ class Element : public QObject {
       QColor color() const             { return _color; }
       QColor curColor() const;
       QColor curColor(const Element* proxy) const;
-      void setColor(const QColor& c)     { _color = c;    }
+      virtual void setColor(const QColor& c)     { _color = c;    }
       void undoSetColor(const QColor& c);
 
       static Element::Type readType(XmlReader& node, QPointF*, Fraction*);

@@ -576,7 +576,7 @@ Shortcut Shortcut::sc[] = {
          "stretch+",
          QT_TRANSLATE_NOOP("action","Add More Stretch"),
          QT_TRANSLATE_NOOP("action","Add more stretch"),
-         QT_TRANSLATE_NOOP("action","Add more stretch to selected measure")
+         QT_TRANSLATE_NOOP("action","Add more stretch to selected measures")
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
@@ -585,7 +585,7 @@ Shortcut Shortcut::sc[] = {
          "stretch-",
          QT_TRANSLATE_NOOP("action","Add Less Stretch"),
          QT_TRANSLATE_NOOP("action","Add less stretch"),
-         QT_TRANSLATE_NOOP("action","Add less stretch to selected measure")
+         QT_TRANSLATE_NOOP("action","Add less stretch to selected measures")
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
@@ -692,8 +692,8 @@ Shortcut Shortcut::sc[] = {
          ShortcutFlags::A_CMD,
          "next-element",
          QT_TRANSLATE_NOOP("action","Next element"),
-         QT_TRANSLATE_NOOP("action","Go to next element"),
-         QT_TRANSLATE_NOOP("action","Go to next element")
+         QT_TRANSLATE_NOOP("action","Accessibility: next element"),
+         QT_TRANSLATE_NOOP("action","Accessibility: next element")
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
@@ -701,8 +701,8 @@ Shortcut Shortcut::sc[] = {
          ShortcutFlags::A_CMD,
          "prev-element",
          QT_TRANSLATE_NOOP("action","Previous element"),
-         QT_TRANSLATE_NOOP("action","Go to previous element"),
-         QT_TRANSLATE_NOOP("action","Go to previous element")
+         QT_TRANSLATE_NOOP("action","Accessibility: previous element"),
+         QT_TRANSLATE_NOOP("action","Accessibility: previous element")
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
@@ -1006,6 +1006,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "insert-measure",
          QT_TRANSLATE_NOOP("action","Insert One Measure"),
+         QT_TRANSLATE_NOOP("action","Insert One Measure"),
+         QT_TRANSLATE_NOOP("action","Insert one measure"),
          Icons::measure_ICON
          ),
       Shortcut(
@@ -1022,6 +1024,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "insert-hbox",
          QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
+         QT_TRANSLATE_NOOP("action","Insert Horizontal Frame"),
+         QT_TRANSLATE_NOOP("action","Insert horizontal frame"),
          Icons::hframe_ICON
          ),
       Shortcut(
@@ -1030,6 +1034,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "insert-textframe",
          QT_TRANSLATE_NOOP("action","Insert Text Frame"),
+         QT_TRANSLATE_NOOP("action","Insert Text Frame"),
+         QT_TRANSLATE_NOOP("action","Insert text frame"),
          Icons::tframe_ICON
          ),
       Shortcut(
@@ -1053,6 +1059,8 @@ Shortcut Shortcut::sc[] = {
          0,
          "insert-vbox",
          QT_TRANSLATE_NOOP("action","Insert Vertical Frame"),
+         QT_TRANSLATE_NOOP("action","Insert Vertical Frame"),
+         QT_TRANSLATE_NOOP("action","Insert vertical frame"),
          Icons::vframe_ICON
          ),
       Shortcut(
@@ -1133,7 +1141,7 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Other..."),
          QT_TRANSLATE_NOOP("action","Other tuplets")
          ),
-      Shortcut(    
+      Shortcut(
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM | STATE_NOTE_ENTRY_TAB,
          ShortcutFlags::A_CMD,
@@ -1189,7 +1197,7 @@ Shortcut Shortcut::sc[] = {
          ShortcutFlags::A_CMD,
          "pad-note-8",
          QT_TRANSLATE_NOOP("action","Eighth note"),
-         QT_TRANSLATE_NOOP("action","Note duration: Eighth"),
+         QT_TRANSLATE_NOOP("action","Note duration: eighth"),
          QT_TRANSLATE_NOOP("action","Eighth note"),
          Icons::note8_ICON
          ),
@@ -1398,9 +1406,9 @@ Shortcut Shortcut::sc[] = {
           0,
         /* no stroke: Eighth*/
          "grace8after",
-         QT_TRANSLATE_NOOP("action","Grace: Eighth after"),
+         QT_TRANSLATE_NOOP("action","Grace: eighth after"),
          QT_TRANSLATE_NOOP("action","Add Eighth grace note after"),
-         QT_TRANSLATE_NOOP("action","Grace: Eighth after"),
+         QT_TRANSLATE_NOOP("action","Grace: eighth after"),
          Icons::grace8after_ICON
          ),
       Shortcut(
@@ -1701,6 +1709,14 @@ Shortcut Shortcut::sc[] = {
          "poet-text",
          QT_TRANSLATE_NOOP("action","Lyricist"),
          QT_TRANSLATE_NOOP("action","Add lyricist text")
+         ),
+      Shortcut(
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "part-text",
+         QT_TRANSLATE_NOOP("action","Part Name"),
+         QT_TRANSLATE_NOOP("action","Add part name")
          ),
       Shortcut(
          MsWidget::SCORE_TAB,
@@ -2055,7 +2071,7 @@ Shortcut Shortcut::sc[] = {
          0,
          "rest-8",
          QT_TRANSLATE_NOOP("action","Eighth rest"),
-         QT_TRANSLATE_NOOP("action","Note entry: Eighth rest")
+         QT_TRANSLATE_NOOP("action","Note entry: eighth rest")
          ),
       Shortcut(                     // mapped to undo in note entry mode
          MsWidget::SCORE_TAB,
@@ -2258,7 +2274,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "hraster",
-         QT_TRANSLATE_NOOP("action","Enable horizontal raster"),
+         QT_TRANSLATE_NOOP("action","Enable snap to horizontal grid"),
          Icons::hraster_ICON
          ),
       Shortcut(
@@ -2266,7 +2282,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "vraster",
-         QT_TRANSLATE_NOOP("action","Enable vertical raster"),
+         QT_TRANSLATE_NOOP("action","Enable snap to vertical grid"),
          Icons::vraster_ICON
          ),
       Shortcut(
@@ -2274,7 +2290,7 @@ Shortcut Shortcut::sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
          0,
          "config-raster",
-         QT_TRANSLATE_NOOP("action","Configure raster")
+         QT_TRANSLATE_NOOP("action","Configure grid")
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
@@ -2285,13 +2301,6 @@ Shortcut Shortcut::sc[] = {
          QT_TRANSLATE_NOOP("action","Re-Pitch Mode"),
          QT_TRANSLATE_NOOP("action","Replace pitches without changing rhythms"),
          Icons::repitch_ICON
-         ),
-      Shortcut(
-         MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY,
-         0,
-         "stack-down",
-         QT_TRANSLATE_NOOP("action","Stack down")
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
@@ -2375,7 +2384,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "plugin-creator",
          Qt::ApplicationShortcut,
@@ -2383,7 +2392,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "plugin-manager",
          Qt::ApplicationShortcut,
@@ -2399,7 +2408,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          0,
          "resource-manager",
          Qt::ApplicationShortcut,
@@ -2489,11 +2498,36 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_TEXT_EDIT,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          0,
          "masterpalette",
+         Qt::ApplicationShortcut,
          QT_TRANSLATE_NOOP("action","Master Palette..."),
          QT_TRANSLATE_NOOP("action","Show master palette")
+         ),
+      Shortcut(
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "key-signatures",
+         QT_TRANSLATE_NOOP("action","Key Signatures..."),
+         QT_TRANSLATE_NOOP("action","Show key signature palette")
+         ),
+      Shortcut(
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "time-signatures",
+         QT_TRANSLATE_NOOP("action","Time Signatures..."),
+         QT_TRANSLATE_NOOP("action","Show time signature palette")
+         ),
+      Shortcut(
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         0,
+         "symbols",
+         QT_TRANSLATE_NOOP("action","Symbols..."),
+         QT_TRANSLATE_NOOP("action","Show symbol palette")
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
@@ -2609,7 +2643,7 @@ Shortcut Shortcut::sc[] = {
          ShortcutFlags::A_CMD,
          "pad-note-8-TAB",
          QT_TRANSLATE_NOOP("action","Eighth note (TAB)"),
-         QT_TRANSLATE_NOOP("action","Note duration: Eighth (TAB)"),
+         QT_TRANSLATE_NOOP("action","Note duration: eighth (TAB)"),
          QT_TRANSLATE_NOOP("action","Eighth note"),
          Icons::note8_ICON
          ),
@@ -2960,6 +2994,14 @@ Shortcut Shortcut::sc[] = {
          0,
          "text-u",
          QT_TRANSLATE_NOOP("action","underline")
+         ),
+      Shortcut(
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL,
+         0,
+         "startcenter",
+         Qt::ApplicationShortcut,
+         QT_TRANSLATE_NOOP("action","Toggle Startcenter")
          ),
       // xml==0  marks end of list
       Shortcut(MsWidget::MAIN_WINDOW,0, 0, 0, 0)

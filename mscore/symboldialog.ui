@@ -35,7 +35,7 @@
      <item>
       <widget class="QCheckBox" name="systemFlag">
        <property name="text">
-        <string>System Flag</string>
+        <string>System flag</string>
        </property>
       </widget>
      </item>

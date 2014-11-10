@@ -72,7 +72,16 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing">
       <number>0</number>
      </property>
      <item row="1" column="0">
@@ -97,16 +106,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="0" column="2">
@@ -117,16 +116,6 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="0" column="1">
@@ -136,12 +125,12 @@
        </property>
        <item>
         <property name="text">
-         <string>straight</string>
+         <string>Straight</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>wavy</string>
+         <string>Wavy</string>
         </property>
        </item>
       </widget>
@@ -156,20 +145,10 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetShowText">
        <property name="accessibleName">
-        <string>Reset Show Text value</string>
+        <string>Reset Show text value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -179,10 +158,10 @@
         <enum>Qt::TabFocus</enum>
        </property>
        <property name="accessibleName">
-        <string>Show Text</string>
+        <string>Show text</string>
        </property>
        <property name="text">
-        <string>Show Text</string>
+        <string>Show text</string>
        </property>
       </widget>
      </item>
@@ -198,8 +177,6 @@
   <tabstop>showText</tabstop>
   <tabstop>resetShowText</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

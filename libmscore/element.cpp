@@ -372,7 +372,8 @@ void Element::unlink()
 
             // if link list is empty, remove list
             if (_links->size() <= 1) {
-                  _links->front()->_links = 0;
+                  if (!_links->empty())         // abnormal case: only "this" is in list
+                        _links->front()->_links = 0;
                   delete _links;
                   }
             _links = 0;
@@ -583,7 +584,7 @@ QPointF Element::canvasPos() const
       if (_flags & ElementFlag::ON_STAFF) {
             System* system = nullptr;
             if (parent()->type() == Element::Type::SEGMENT)
-                  system = static_cast<Segment*>(parent())->measure()->system();
+                  system = static_cast<Segment*>(parent())->system();
             else if (parent()->type() == Element::Type::MEASURE)     // used in measure number
                   system = static_cast<Measure*>(parent())->system();
             else if (parent()->type() == Element::Type::SYSTEM)
@@ -695,7 +696,7 @@ void Element::writeProperties(Xml& xml) const
             if (type() == Element::Type::VOLTA_SEGMENT || isChordRest())
                   xml.tag("offset", userOff() / spatium());
             else
-                  xml.tag("pos", pos() / spatium());
+                  xml.tag("pos", pos() / score()->spatium());
             }
       if (((track() != xml.curTrack) || (type() == Element::Type::SLUR)) && (track() != -1)) {
             int t;
@@ -726,7 +727,7 @@ bool Element::readProperties(XmlReader& e)
       const QStringRef& tag(e.name());
 
       if (tag == "track")
-            setTrack(e.readInt());
+            setTrack(e.readInt() + e.trackOffset());
       else if (tag == "color")
             setColor(e.readColor());
       else if (tag == "visible")
@@ -777,12 +778,13 @@ bool Element::readProperties(XmlReader& e)
                         e.initTick(score()->fileDivision(val));
                   }
             }
-      else if (tag == "offset")
+      else if (tag == "offset") {
             setUserOff(e.readPoint() * spatium());
+            }
       else if (tag == "pos") {
             QPointF pt = e.readPoint();
             if (score()->mscVersion() > 114)
-                  _readPos = pt * spatium();
+                  _readPos = pt * score()->spatium();
             }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
@@ -1546,7 +1548,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   _generated = v.toBool();
                   break;
             case P_ID::COLOR:
-                  _color = v.value<QColor>();
+                  setColor(v.value<QColor>());
                   break;
             case P_ID::VISIBLE:
                   setVisible(v.toBool());
@@ -1659,7 +1661,9 @@ bool Element::isText() const
          || type() == Element::Type::REHEARSAL_MARK
          || type() == Element::Type::INSTRUMENT_CHANGE
          || type() == Element::Type::FIGURED_BASS
-         || type() == Element::Type::TEMPO_TEXT;
+         || type() == Element::Type::TEMPO_TEXT
+         || type() == Element::Type::INSTRUMENT_NAME
+         ;
       }
 
 //---------------------------------------------------------
@@ -1686,12 +1690,30 @@ void Element::undoSetColor(const QColor& c)
       }
 
 //---------------------------------------------------------
+//   bbox() function for scripts
+//
+//    use spatium units rather than raster units
+//---------------------------------------------------------
+
+QRectF Element::scriptBbox() const
+      {
+      qreal  _sp = spatium();
+      QRectF _bbox = bbox();
+      return QRectF(_bbox.x() / _sp, _bbox.y() / _sp, _bbox.width() / _sp, _bbox.height() / _sp);
+      }
+
+//---------------------------------------------------------
 //   positioning functions for scripts
 //
 //    use spatium units rather than raster units
 //    are undoable
 //    route pos changes to usefOff
 //---------------------------------------------------------
+
+QPointF Element::scriptPagePos() const
+      {
+      return pagePos() / spatium();
+      }
 
 QPointF Element::scriptPos() const
       {

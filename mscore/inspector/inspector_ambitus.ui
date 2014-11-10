@@ -70,10 +70,13 @@
       <enum>QLayout::SetDefaultConstraint</enum>
      </property>
      <property name="leftMargin">
-      <number>0</number>
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
      </property>
      <property name="horizontalSpacing">
-      <number>2</number>
+      <number>3</number>
      </property>
      <property name="verticalSpacing">
       <number>0</number>
@@ -107,72 +110,72 @@
        </property>
        <item>
         <property name="text">
-         <string>normal</string>
+         <string>Normal</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>cross</string>
+         <string>Cross</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>diamond</string>
+         <string>Diamond</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>triangle</string>
+         <string>Triangle</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>slash</string>
+         <string>Slash</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>xcircle</string>
+         <string>XCircle</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>do</string>
+         <string>Do</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>re</string>
+         <string>Re</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>mi</string>
+         <string>Mi</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>fa</string>
+         <string>Fa</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>sol</string>
+         <string>Sol</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>la</string>
+         <string>La</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>ti</string>
+         <string>Ti</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>alt. brevis</string>
+         <string>Alt. Brevis</string>
         </property>
        </item>
       </widget>
@@ -180,7 +183,7 @@
      <item row="4" column="1">
       <widget class="QDoubleSpinBox" name="lineWidth">
        <property name="accessibleName">
-        <string>Line width</string>
+        <string>Line thickness</string>
        </property>
        <property name="suffix">
         <string>sp</string>
@@ -202,23 +205,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset Line width value</string>
+        <string>Reset Line thickness value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -256,7 +249,7 @@
          </property>
          <item>
           <property name="text">
-           <string>[undefined]</string>
+           <string>[Undefined]</string>
           </property>
          </item>
          <item>
@@ -483,7 +476,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Has line value</string>
@@ -491,22 +484,12 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>Line width</string>
+        <string>Line thickness</string>
        </property>
       </widget>
      </item>
@@ -544,7 +527,7 @@
          </property>
          <item>
           <property name="text">
-           <string>[undefined]</string>
+           <string>[Undefined]</string>
           </property>
          </item>
          <item>
@@ -799,20 +782,10 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Head group value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -838,23 +811,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Direction value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -907,23 +870,13 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Head type value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>10</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -991,8 +944,6 @@
   <tabstop>bottomTpc</tabstop>
   <tabstop>bottomOctave</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -2436,7 +2436,7 @@ enum class SymId {
       unicodeNote64thUp,
       unicodeNote128thUp,
       unicodeAugmentationDot,
-      
+
 //    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
       ornamentPrallMordent,
@@ -2515,7 +2515,7 @@ class Sym {
 //---------------------------------------------------------
 
 class ScoreFont {
-      QFont* _font;
+      QFont* _font = 0;
       QFontMetricsF* _fm = 0;
       QVector<Sym> _symbols;
       QString _name;
@@ -2535,6 +2535,7 @@ class ScoreFont {
          : _name(n), _family(f), _fontPath(p), _filename(fn) {
             _symbols = QVector<Sym>(int(SymId::lastSym) + 1);
             }
+      ~ScoreFont();
 
       const QString& name() const           { return _name;           }
 

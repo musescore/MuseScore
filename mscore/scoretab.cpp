@@ -79,6 +79,12 @@ ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
       connect(tab, SIGNAL(tabCloseRequested(int)), this, SIGNAL(tabCloseRequested(int)));
       }
 
+ScoreTab::~ScoreTab()
+      {
+      while (tab->count() > 0)
+            tab->removeTab(0);
+      }
+
 //---------------------------------------------------------
 //   view
 //---------------------------------------------------------

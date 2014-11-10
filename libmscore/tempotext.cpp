@@ -244,36 +244,55 @@ QVariant TempoText::propertyDefault(P_ID id) const
 
 void TempoText::layout()
       {
-      Text::layout();
+      setPos(textStyle().offset(spatium()));
+      Text::layout1();
+      Segment* s = segment();
+      if (s && !s->rtick()) {
+            // tempo text on first chordrest of measure should align over time sig if present
+            Segment* p = segment()->prev(Segment::Type::TimeSig);
+            if (p) {
+                  rxpos() -= s->x() - p->x();
+                  Element* e = p->element(staffIdx() * VOICES);
+                  if (e)
+                        rxpos() += e->x();
+                  // correct user offset in older scores
+                  if (score()->mscVersion() <= 114 && !userOff().isNull())
+                        rUserXoffset() += s->x() - p->x();
+                  }
+            }
       if (placement() == Element::Placement::BELOW) {
             rypos() = -rypos() + 4 * spatium();
             // rUserYoffset() *= -1;
             // text height ?
             }
+      adjustReadPos();
       }
 
 QString TempoText::accessibleInfo()
       {
       TDuration t;
       int len;
-      int x = findTempoDuration(text(), len, t);
-      QString dots;
+      int x = findTempoDuration(plainText(), len, t);
+      if (x != -1) {
+            QString dots;
 
-      switch (t.dots()) {
-            case 1: dots = tr("Dotted");
-                  break;
-            case 2: dots = tr("Double dotted");
-                  break;
-            case 3: dots = tr("Triple dotted");
-                  break;
-            default:
-                  dots = "";
-                  break;
+            switch (t.dots()) {
+                  case 1: dots = tr("Dotted");
+                        break;
+                  case 2: dots = tr("Double dotted");
+                        break;
+                  case 3: dots = tr("Triple dotted");
+                        break;
+                  default:
+                        dots = "";
+                        break;
+                  }
+
+            QString bpm = plainText().split(" = ").back();
+
+            //return Element::accessibleInfo() + dots + " " + t.durationTypeUserName() + " " + tr("note = %1").arg(bpm);
+            return QString("%1: %2 %3 %4").arg(Element::accessibleInfo()).arg(dots).arg(t.durationTypeUserName()).arg(tr("note = %1").arg(bpm));
             }
-
-      QString bpm = text().split(" = ").back();
-      if(x != -1)
-            return Element::accessibleInfo() + dots + " " + t.durationTypeUserName() + " " + tr("note = %1").arg(bpm);
       else
             return Text::accessibleInfo();
       }

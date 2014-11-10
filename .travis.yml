@@ -28,9 +28,9 @@ before_script:
   - "export PATH=$PATH:$HOME/bin"
   - "make revision"
   - "make debug CPUS=4"
-  - "sudo make installdebug"
+  - "sudo make installdebug CPUS=4"
   - "cd build.debug/mtest"
-  - "make -j 2"
+  - "make -j2"
 script:
   - "../../build/run_tests.sh"
 after_script:

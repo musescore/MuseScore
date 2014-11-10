@@ -66,7 +66,16 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing">
       <number>0</number>
      </property>
      <item row="4" column="0">
@@ -79,16 +88,16 @@
      <item row="1" column="1">
       <widget class="QComboBox" name="hairpinType">
        <property name="accessibleName">
-        <string>Tyoe</string>
+        <string>Type</string>
        </property>
        <item>
         <property name="text">
-         <string>crescendo</string>
+         <string>Crescendo</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>decrescendo</string>
+         <string>Decrescendo</string>
         </property>
        </item>
       </widget>
@@ -110,7 +119,7 @@
      <item row="3" column="2">
       <widget class="QToolButton" name="resetVeloChange">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Velocity change value</string>
@@ -118,38 +127,18 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="1" column="2">
       <widget class="QToolButton" name="resetHairpinType">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Type value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -180,6 +169,9 @@
        <property name="accessibleName">
         <string>Velocity change</string>
        </property>
+       <property name="maximum">
+        <number>127</number>
+       </property>
       </widget>
      </item>
      <item row="3" column="0">
@@ -192,23 +184,13 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetDynRange">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Dynamic range value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -222,7 +204,7 @@
      <item row="4" column="2">
       <widget class="QToolButton" name="resetHairpinHeight">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Height value</string>
@@ -230,38 +212,18 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="5" column="2">
       <widget class="QToolButton" name="resetHairpinContHeight">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
-        <string>Reset continue Height value</string>
+        <string>Reset Continue height value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -307,23 +269,13 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetHairpinCircledTip">
        <property name="toolTip">
-        <string>reset value</string>
+        <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Circled tip value</string>
        </property>
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/resetproperty.png</normaloff>:/data/icons/resetproperty.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>14</width>
-         <height>14</height>
-        </size>
        </property>
       </widget>
      </item>
@@ -345,8 +297,6 @@
   <tabstop>hairpinContHeight</tabstop>
   <tabstop>resetHairpinContHeight</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

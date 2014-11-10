@@ -108,7 +108,7 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
 //    { SymId(s0reHeadSym),         SymId(d1reHeadSym),           SymId(d2reHeadSym),           SymId::noSym            },
       { SymId::noteShapeMoonWhite,              SymId::noteShapeMoonWhite,          SymId::noteShapeMoonBlack,          SymId::noSym            },
 //    { SymId(d0faHeadSym),         SymId(d1faHeadSym),           SymId(d2faHeadSym),           SymId::noSym            },
-      { SymId::noteShapeTriangleRightWhite,     SymId::noteShapeTriangleRightWhite, SymId::noteShapeTriangleRightBlack, SymId::noSym            },
+      { SymId::noteShapeTriangleLeftWhite,     SymId::noteShapeTriangleLeftWhite, SymId::noteShapeTriangleLeftBlack, SymId::noSym            },
 //    { SymId(s0laHeadSym),         SymId(s1laHeadSym),           SymId(s2laHeadSym),           SymId::noSym            },
       { SymId::noteShapeSquareWhite,            SymId::noteShapeSquareWhite,        SymId::noteShapeSquareBlack,        SymId::noSym            },
 //    { SymId(s0tiHeadSym),         SymId(d1tiHeadSym),           SymId(d2tiHeadSym),           SymId::noSym            },
@@ -121,20 +121,20 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead:
 
 // same order as NoteHead::Group
 static const char* noteHeadNames[] = {
-    QT_TRANSLATE_NOOP("noteheadnames", "normal"),
-    QT_TRANSLATE_NOOP("noteheadnames", "cross"),
-    QT_TRANSLATE_NOOP("noteheadnames", "diamond"),
-    QT_TRANSLATE_NOOP("noteheadnames", "triangle"),
-    QT_TRANSLATE_NOOP("noteheadnames", "mi"),
-    QT_TRANSLATE_NOOP("noteheadnames", "slash"),
-    QT_TRANSLATE_NOOP("noteheadnames", "xcircle"),
-    QT_TRANSLATE_NOOP("noteheadnames", "do"),
-    QT_TRANSLATE_NOOP("noteheadnames", "re"),
-    QT_TRANSLATE_NOOP("noteheadnames", "fa"),
-    QT_TRANSLATE_NOOP("noteheadnames", "la"),
-    QT_TRANSLATE_NOOP("noteheadnames", "ti"),
-    QT_TRANSLATE_NOOP("noteheadnames", "sol"),
-    QT_TRANSLATE_NOOP("noteheadnames", "alt. brevis")
+    QT_TRANSLATE_NOOP("noteheadnames", "Normal"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Cross"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Diamond"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Triangle"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Mi"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Slash"),
+    QT_TRANSLATE_NOOP("noteheadnames", "XCircle"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Do"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Re"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Fa"),
+    QT_TRANSLATE_NOOP("noteheadnames", "La"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Ti"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Sol"),
+    QT_TRANSLATE_NOOP("noteheadnames", "Alt. Brevis")
 };
 
 //---------------------------------------------------------
@@ -419,9 +419,9 @@ int Note::tpc() const
 
 QString Note::tpcUserName(bool explicitAccidental)
       {
-      QString pitch = tr("Pitch: %1").arg(tpc2name(tpc(), NoteSpellingType::STANDARD, false, explicitAccidental));
-      QString octave = QString::number((this->pitch() / 12) - 2);
-      return pitch + (explicitAccidental ? " " : "") + octave;
+      QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, false, explicitAccidental);
+      QString octaveName = QString::number((pitch() / 12) - 1);
+      return pitchName + (explicitAccidental ? " " : "") + octaveName;
       }
 
 //---------------------------------------------------------
@@ -1254,6 +1254,7 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == Element::Type::STAFF_TEXT)
          || (type == Element::Type::TEMPO_TEXT)
          || (type == Element::Type::BEND && (staff()->isTabStaff()))
+         || (type == Element::Type::TREMOLOBAR)
          || (type == Element::Type::FRET_DIAGRAM));
       }
 
@@ -1726,7 +1727,8 @@ void Note::layout10(AccidentalState* as)
                   if (_accidental) {
                         if (_accidental->selected())
                               score()->deselect(_accidental);
-                        delete _accidental;
+                        // delete should be done in undo/redo mechanism
+                        // delete _accidental;
                         _accidental = 0;
                         }
                   }
@@ -1751,7 +1753,7 @@ QString Note::noteTypeUserName()
       {
       switch (noteType()) {
             case NoteType::ACCIACCATURA:
-                  return tr("Accaciatura");
+                  return tr("Acciaccatura");
             case NoteType::APPOGGIATURA:
                   return tr("Appoggiatura");
             case NoteType::GRACE8_AFTER:
@@ -1760,7 +1762,7 @@ QString Note::noteTypeUserName()
                   return tr("Grace note after");
             case NoteType::GRACE4:
             case NoteType::GRACE16:
-            case NoteType::GRACE32:            
+            case NoteType::GRACE32:
                   return tr("Grace note before");
             case NoteType::INVALID:
                   return tr("Invalid note");
@@ -1879,10 +1881,23 @@ void Note::setSmall(bool val)
 //   setLine
 //---------------------------------------------------------
 
+void Note::setAccidentalType(Accidental::Type type)
+      {
+      if (_score)
+      	_score->changeAccidental(this, type);
+      }
+
+//---------------------------------------------------------
+//   setLine
+//---------------------------------------------------------
+
 void Note::setLine(int n)
       {
       _line = n;
-      rypos() = _line * spatium() * .5;
+      int off = 0;
+      if (staff())
+            off = staff()->staffType()->stepOffset();
+      rypos() = (_line + off) * spatium() * .5;
       }
 
 //---------------------------------------------------------
@@ -2038,6 +2053,10 @@ void Note::updateAccidental(AccidentalState* as)
 
 void Note::updateRelLine(int relLine, bool undoable)
       {
+      int idx = staffIdx() + chord()->staffMove();
+      if (idx < 0 && chord()->staffMove())                    // can happen if a staff is removed
+            chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
+
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
       int line = relStep(relLine, clef);
@@ -2061,6 +2080,7 @@ void Note::updateLine()
 
 //---------------------------------------------------------
 //   setNval
+//    set note properties from NoteVal
 //---------------------------------------------------------
 
 void Note::setNval(const NoteVal& nval)
@@ -2068,9 +2088,15 @@ void Note::setNval(const NoteVal& nval)
       setPitch(nval.pitch);
       _fret   = nval.fret;
       _string = nval.string;
-      if (nval.tpc == Tpc::TPC_INVALID) {
+
+      _tpc[0] = nval.tpc1;
+      _tpc[1] = nval.tpc2;
+
+      if (nval.tpc1 == Tpc::TPC_INVALID) {
             Key key = staff()->key(chord()->tick());
             _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
+            }
+      if (nval.tpc2 == Tpc::TPC_INVALID) {
             Interval v = staff()->part()->instr()->transpose();
             if (v.isZero())
                   _tpc[1] = _tpc[0];
@@ -2078,17 +2104,8 @@ void Note::setNval(const NoteVal& nval)
                   v.flip();
                   _tpc[1] = Ms::transposeTpc(_tpc[0], v, false);
                   }
-            return;
             }
 
-      if (concertPitch()) {
-            _tpc[0] = nval.tpc;
-            _tpc[1] = transposeTpc(nval.tpc);
-            }
-      else {
-            _tpc[0] = transposeTpc(nval.tpc);
-            _tpc[1] = nval.tpc;
-            }
       _headGroup = NoteHead::Group(nval.headGroup);
       }
 
@@ -2412,7 +2429,7 @@ QString Note::accessibleInfo()
       {
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      return noteTypeUserName() + " " + tpcUserName(false) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      return tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(tpcUserName(false)).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -2423,7 +2440,7 @@ QString Note::screenReaderInfo()
       {
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      return noteTypeUserName() + " " + tpcUserName(true) +" " + duration + " " + (chord()->isGrace() ? "" : voice);
+      return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(tpcUserName(true)).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -2434,31 +2451,31 @@ QString Note::accessibleExtraInfo()
       {
       QString rez = "";
       if (accidental()) {
-            rez += " " + accidental()->screenReaderInfo();
+            rez = QString("%1 %2").arg(rez).arg(accidental()->screenReaderInfo());
             }
       if (!el().isEmpty()) {
             foreach (Element* e, el()) {
-                  rez = rez + " " + e->screenReaderInfo();
+                  rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
             }
       if (tieFor())
-            rez += " " + tr("Start of %1").arg(tieFor()->screenReaderInfo());
+            rez = tr("%1 Start of %2").arg(rez).arg(tieFor()->screenReaderInfo());
 
       if (tieBack())
-            rez += " " + tr("End of %1").arg(tieBack()->screenReaderInfo());
+            rez = tr("%1 End of %2").arg(rez).arg(tieBack()->screenReaderInfo());
 
       if (!spannerFor().isEmpty()) {
             foreach (Spanner* s, spannerFor()) {
-                  rez += " " + tr("Start of %1").arg(s->screenReaderInfo());
+                  rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
       if (!spannerBack().isEmpty()) {
             foreach (Spanner* s, spannerBack()) {
-                  rez += " " + tr("End of %2").arg(s->screenReaderInfo());
+                  rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
 
-      rez = rez + " " + chord()->accessibleExtraInfo();
+      rez = QString("%1 %2").arg(rez).arg(chord()->accessibleExtraInfo());
       return rez;
       }
 
@@ -2470,7 +2487,8 @@ NoteVal Note::noteVal() const
       {
       NoteVal nval;
       nval.pitch     = pitch();
-      nval.tpc       = tpc1();
+      nval.tpc1      = tpc1();
+      nval.tpc2      = tpc2();
       nval.fret      = fret();
       nval.string    = string();
       nval.headGroup = headGroup();
@@ -2498,7 +2516,7 @@ const char* NoteHead::groupToGroupName(NoteHead::Group group)
 
 QString Note::subtypeName() const
       {
-      return NoteHead::groupToGroupName(_headGroup);
+      return qApp->translate("noteheadnames", NoteHead::groupToGroupName(_headGroup));
       }
 
 //---------------------------------------------------------

@@ -27,6 +27,16 @@
 #include "libmscore/xml.h"
 #include "libmscore/excerpt.h"
 
+inline void initMyResources() {
+      Q_INIT_RESOURCE(mtest);
+      Q_INIT_RESOURCE(musescorefonts_MScore);
+      Q_INIT_RESOURCE(musescorefonts_Gonville);
+      Q_INIT_RESOURCE(musescorefonts_Bravura);
+      Q_INIT_RESOURCE(musescorefonts_MuseJazz);
+      Q_INIT_RESOURCE(musescorefonts_FreeSerif);
+      Q_INIT_RESOURCE(musescorefonts_Free);
+}
+
 namespace Ms {
 
 #ifdef OMR
@@ -119,9 +129,10 @@ Score* MTest::readScore(const QString& name)
 Score* MTest::readCreatedScore(const QString& name)
       {
       Score* score = new Score(mscore->baseStyle());
-      score->setName(name);
+      QFileInfo fi(name);
+      score->setName(fi.completeBaseName());
 //      MScore::testMode = true;
-      QString csl  = score->fileInfo()->suffix().toLower();
+      QString csl  = fi.suffix().toLower();
 
       Score::FileError rv;
       if (csl == "cap")
@@ -303,10 +314,12 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 
 void MTest::initMTest()
       {
+      initMyResources();
       MScore::DPI  = 120;
       MScore::PDPI = 120;
       MScore::DPMM = MScore::DPI / INCH;
       MScore::noGui = true;
+
 
       synti  = new MasterSynthesizer();
       mscore = new MScore;

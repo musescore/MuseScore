@@ -44,6 +44,98 @@ static void moveElement(void* data, Element* e)
       }
 
 //---------------------------------------------------------
+//   setDropTarget
+//---------------------------------------------------------
+
+void ScoreView::setDropTarget(const Element* el)
+      {
+      if (dropTarget != el) {
+            if (dropTarget) {
+                  dropTarget->setDropTarget(false);
+                  _score->addRefresh(dropTarget->canvasBoundingRect());
+                  dropTarget = 0;
+                  }
+            dropTarget = el;
+            if (dropTarget) {
+                  dropTarget->setDropTarget(true);
+                  _score->addRefresh(dropTarget->canvasBoundingRect());
+                  }
+            }
+      if (!dropAnchor.isNull()) {
+            QRectF r;
+            r.setTopLeft(dropAnchor.p1());
+            r.setBottomRight(dropAnchor.p2());
+            _score->addRefresh(r.normalized());
+            dropAnchor = QLineF();
+            }
+      if (dropRectangle.isValid()) {
+            _score->addRefresh(dropRectangle);
+            dropRectangle = QRectF();
+            }
+      }
+
+//---------------------------------------------------------
+//   setDropRectangle
+//---------------------------------------------------------
+
+void ScoreView::setDropRectangle(const QRectF& r)
+      {
+      if (dropRectangle.isValid())
+            _score->addRefresh(dropRectangle);
+      dropRectangle = r;
+      if (dropTarget) {
+            dropTarget->setDropTarget(false);
+            _score->addRefresh(dropTarget->canvasBoundingRect());
+            dropTarget = 0;
+            }
+      else if (!dropAnchor.isNull()) {
+            QRectF r;
+            r.setTopLeft(dropAnchor.p1());
+            r.setBottomRight(dropAnchor.p2());
+            _score->addRefresh(r.normalized());
+            dropAnchor = QLineF();
+            }
+      _score->addRefresh(r);
+      }
+
+//---------------------------------------------------------
+//   setDropAnchor
+//---------------------------------------------------------
+
+void ScoreView::setDropAnchor(const QLineF& l)
+      {
+      if (!dropAnchor.isNull()) {
+            qreal w = 2 / _matrix.m11();
+            QRectF r;
+            r.setTopLeft(dropAnchor.p1());
+            r.setBottomRight(dropAnchor.p2());
+            r = r.normalized();
+            r.adjust(-w, -w, 2*w, 2*w);
+            _score->addRefresh(r);
+            }
+/*      if (dropTarget) {
+            dropTarget->setDropTarget(false);
+            _score->addRefresh(dropTarget->canvasBoundingRect());
+            dropTarget = 0;
+            }
+      */
+      if (dropRectangle.isValid()) {
+            _score->addRefresh(dropRectangle);
+            dropRectangle = QRectF();
+            }
+      dropAnchor = l;
+      if (!dropAnchor.isNull()) {
+            qreal w = 2 / _matrix.m11();
+            QRectF r;
+            r.setTopLeft(dropAnchor.p1());
+            r.setBottomRight(dropAnchor.p2());
+            r = r.normalized();
+            r.adjust(-w, -w, 2*w, 2*w);
+            _score->addRefresh(r);
+            }
+      }
+
+//---------------------------------------------------------
 //   setViewRect
 //---------------------------------------------------------
 
@@ -161,7 +253,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             foreach(const QUrl& u, ul) {
                   if (MScore::debugMode)
                         qDebug("drag Url: %s", qPrintable(u.toString()));
-                  if (u.scheme() == "file") {
+                  if (u.scheme() == "file" || u.scheme() == "http") {
                         QFileInfo fi(u.path());
                         QString suffix = fi.suffix().toLower();
                         if (suffix == "svg"
@@ -308,18 +400,20 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             return;
             }
 
-      if (event->mimeData()->hasUrls()) {
-            QList<QUrl>ul = event->mimeData()->urls();
+      const QMimeData* md = event->mimeData();
+      if (md->hasUrls()) {
+            QList<QUrl>ul = md->urls();
             QUrl u = ul.front();
-            if (u.scheme() == "file") {
+            if (u.scheme() == "file" || u.scheme() == "http") {
                   QFileInfo fi(u.path());
                   QString suffix(fi.suffix().toLower());
                   if (suffix != "svg"
                      && suffix != "jpg"
                      && suffix != "jpeg"
                      && suffix != "png"
-                     )
+                     ) {
                         return;
+                        }
                   //
                   // special drop target Note
                   //
@@ -332,7 +426,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             _score->end();
             return;
             }
-      const QMimeData* md = event->mimeData();
       QByteArray data;
       Element::Type etype;
       if (md->hasFormat(mimeSymbolListFormat)) {
@@ -377,6 +470,7 @@ void ScoreView::dropEvent(QDropEvent* event)
       dropData.modifiers  = event->keyboardModifiers();
 
       if (dragElement) {
+            bool applyUserOffset = false;
             _score->startCmd();
             dragElement->setScore(_score);      // CHECK: should already be ok
             _score->addRefresh(dragElement->canvasBoundingRect());
@@ -396,6 +490,8 @@ void ScoreView::dropEvent(QDropEvent* event)
                         break;
                   case Element::Type::SYMBOL:
                   case Element::Type::IMAGE:
+                        applyUserOffset = true;
+                        // fall-thru
                   case Element::Type::DYNAMIC:
                   case Element::Type::FRET_DIAGRAM:
                   case Element::Type::HARMONY:
@@ -408,6 +504,8 @@ void ScoreView::dropEvent(QDropEvent* event)
                               if (el && el->type() == Element::Type::MEASURE) {
                                     dragElement->setTrack(staffIdx * VOICES);
                                     dragElement->setParent(seg);
+                                    if (applyUserOffset)
+                                          dragElement->setUserOff(pos - seg->canvasPos());
                                     score()->undoAddElement(dragElement);
                                     }
                               else {
@@ -521,6 +619,44 @@ void ScoreView::dropEvent(QDropEvent* event)
                   QString str(u.toLocalFile());
                   s->load(str);
                   qDebug("drop image <%s> <%s>", qPrintable(str), qPrintable(str));
+
+                  Element* el = elementAt(pos);
+                  if (el) {
+                        dropData.element = s;
+                        if (el->acceptDrop(dropData)) {
+                              dropData.element = s;
+                              el->drop(dropData);
+                              }
+                        }
+                  event->acceptProposedAction();
+                  score()->endCmd();
+                  mscore->endCmd();
+                  setDropTarget(0); // this also resets dropRectangle and dropAnchor
+                  return;
+                  }
+            else if (u.scheme() == "http") {
+                  QNetworkAccessManager manager;
+                  QNetworkReply* reply = manager.get(QNetworkRequest(u));
+
+                  // TODO:
+                  //    feed progress bar in loop
+                  //    implement timeout/abort
+
+                  QMutex mutex;
+                  QWaitCondition wc;
+                  while (!reply->isFinished()) {
+                        mutex.lock();
+                        wc.wait(&mutex, 100);
+                        qApp->processEvents();
+                        mutex.unlock();
+                        }
+                  QByteArray ba = reply->readAll();
+
+                  Image* s = new Image(score());
+                  s->loadFromData(u.path(), ba);
+                  delete reply;
+
+                  _score->startCmd();
 
                   Element* el = elementAt(pos);
                   if (el) {

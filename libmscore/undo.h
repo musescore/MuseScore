@@ -68,14 +68,12 @@ class KeySig;
 class TimeSig;
 class Clef;
 class Image;
-class Hairpin;
 class Bend;
 class TremoloBar;
 class NoteEvent;
 class SlurSegment;
 class InstrumentChange;
 class Box;
-class Accidental;
 class Spanner;
 class BarLine;
 enum class ClefType : signed char;
@@ -107,6 +105,7 @@ class UndoCommand {
       UndoCommand* removeChild()         { return childList.takeLast(); }
       int childCount() const             { return childList.size();     }
       void unwind();
+      virtual void cleanup(bool undo);
 #ifdef DEBUG_UNDO
       virtual const char* name() const  { return "UndoCommand"; }
 #endif
@@ -136,6 +135,7 @@ class UndoStack {
       bool canUndo() const          { return curIdx > 0;           }
       bool canRedo() const          { return curIdx < list.size(); }
       bool isClean() const          { return cleanIdx == curIdx;   }
+      bool isEmpty() const          { return !canUndo() && !canRedo();  }
       UndoCommand* current() const  { return curCmd;               }
       void undo();
       void redo();
@@ -331,6 +331,24 @@ class ChangePitch : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   ChangeFretting
+//---------------------------------------------------------
+
+class ChangeFretting : public UndoCommand {
+      Note* note;
+      int pitch;
+      int string;
+      int fret;
+      int tpc1;
+      int tpc2;
+      void flip();
+
+   public:
+      ChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
+      UNDO_NAME("ChangeFretting")
+      };
+
+//---------------------------------------------------------
 //   ChangeKeySig
 //---------------------------------------------------------
 
@@ -375,34 +393,6 @@ class ChangeElement : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeVoltaEnding
-//---------------------------------------------------------
-
-class ChangeVoltaEnding : public UndoCommand {
-      Volta* volta;
-      QList<int> list;
-      void flip();
-
-   public:
-      ChangeVoltaEnding(Volta*, const QList<int>&);
-      UNDO_NAME("ChangeVoltaEnding")
-      };
-
-//---------------------------------------------------------
-//   ChangeVoltaText
-//---------------------------------------------------------
-
-class ChangeVoltaText : public UndoCommand {
-      Volta* volta;
-      QString text;
-      void flip();
-
-   public:
-      ChangeVoltaText(Volta*, const QString&);
-      UNDO_NAME("ChangeVoltaText");
-      };
-
-//---------------------------------------------------------
 //   ChangeChordRestSize
 //---------------------------------------------------------
 
@@ -437,6 +427,7 @@ class ChangeChordNoStem : public UndoCommand {
 class ChangeEndBarLineType : public UndoCommand {
       Measure* measure;
       BarLineType subtype;
+      bool endBarLineGenerated;
       void flip();
 
    public:
@@ -512,10 +503,10 @@ class TransposeHarmony : public UndoCommand {
 class ExchangeVoice : public UndoCommand {
       Measure* measure;
       int val1, val2;
-      int staff1, staff2;
+      int staff;
 
    public:
-      ExchangeVoice(Measure*, int val1, int val2, int staff1, int staff2);
+      ExchangeVoice(Measure*, int val1, int val2, int staff);
       virtual void undo();
       virtual void redo();
       UNDO_NAME("ExchangeVoice")
@@ -622,6 +613,7 @@ class AddElement : public UndoCommand {
       AddElement(Element*);
       virtual void undo();
       virtual void redo();
+      virtual void cleanup(bool);
 #ifdef DEBUG_UNDO
       virtual const char* name() const;
 #endif
@@ -638,6 +630,7 @@ class RemoveElement : public UndoCommand {
       RemoveElement(Element*);
       virtual void undo();
       virtual void redo();
+      virtual void cleanup(bool);
 #ifdef DEBUG_UNDO
       virtual const char* name() const;
 #endif
@@ -860,12 +853,12 @@ class ChangeStyleVal : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeChordStaffMove : public UndoCommand {
-      Chord* chord;
+      ChordRest* chordRest;
       int staffMove;
       void flip();
 
    public:
-      ChangeChordStaffMove(Chord*, int);
+      ChangeChordStaffMove(ChordRest* cr, int);
       UNDO_NAME("ChangeChordStaffMove")
       };
 
@@ -966,24 +959,6 @@ class ChangeImage : public UndoCommand {
       ChangeImage(Image* i, bool l, bool a, int _z)
          : image(i), lockAspectRatio(l), autoScale(a), z(_z) {}
       UNDO_NAME("ChangeImage")
-      };
-
-//---------------------------------------------------------
-//   ChangeHairpin
-//---------------------------------------------------------
-
-class ChangeHairpin : public UndoCommand {
-      Hairpin* hairpin;
-      int veloChange;
-      Dynamic::Range dynRange;
-      bool diagonal;
-
-      void flip();
-
-   public:
-      ChangeHairpin(Hairpin* h, int c, Dynamic::Range t, bool dg)
-         : hairpin(h), veloChange(c), dynRange(t), diagonal(dg) {}
-      UNDO_NAME("ChangeHairpin")
       };
 
 //---------------------------------------------------------

@@ -52,12 +52,12 @@ class MeasureBase : public Element {
       MeasureBase* _next;
       MeasureBase* _prev;
       int _tick;
+      bool _breakHint;
 
    protected:
       ElementList _el;        ///< Measure(/tick) relative -elements: with defined start time
                               ///< but outside the staff
 
-      bool _breakHint;
       bool _lineBreak;        ///< Forced line break
       bool _pageBreak;        ///< Forced page break
       LayoutBreak* _sectionBreak;
@@ -93,7 +93,6 @@ class MeasureBase : public Element {
       void setSystem(System* s)              { setParent((Element*)s);   }
 
       bool breakHint() const                 { return _breakHint;   }
-      void setBreakHint(bool val)            { _breakHint = val;  }
 
       bool lineBreak() const                 { return _lineBreak; }
       bool pageBreak() const                 { return _pageBreak; }

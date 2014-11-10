@@ -106,6 +106,7 @@ void PageSettings::setScore(Score* s)
 
       pageGroup->setCurrentIndex(index);
       buttonApplyToAllParts->setEnabled(s->parentScore() != nullptr);
+      updateValues();
       updatePreview(0);
       }
 
@@ -259,6 +260,7 @@ void PageSettings::landscapeToggled(bool flag)
       double f  = mmUnit ? 1.0/INCH : 1.0;
       pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
       preview->score()->setPageFormat(pf);
+      updateValues();
       updatePreview(0);
       }
 
@@ -272,6 +274,7 @@ void PageSettings::twosidedToggled(bool flag)
       pf.copy(*preview->score()->pageFormat());
       pf.setTwosided(flag);
       preview->score()->setPageFormat(pf);
+      updateValues();
       updatePreview(1);
       }
 
@@ -351,13 +354,16 @@ void PageSettings::done(int val)
 
 void PageSettings::pageFormatSelected(int size)
       {
-      PageFormat pf;
-      pf.copy(*preview->score()->pageFormat());
-      pf.setSize(&paperSizes[size]);
-      double f  = mmUnit ? 1.0/INCH : 1.0;
-      pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
-      preview->score()->setPageFormat(pf);
-      updatePreview(0);
+      if (size > 0) {
+            PageFormat pf;
+            pf.copy(*preview->score()->pageFormat());
+            pf.setSize(&paperSizes[size]);
+            double f  = mmUnit ? 1.0/INCH : 1.0;
+            pf.setPrintableWidth(pf.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
+            preview->score()->setPageFormat(pf);
+            updateValues();
+            updatePreview(0);
+            }
       }
 
 //---------------------------------------------------------
@@ -561,7 +567,6 @@ void PageSettings::pageHeightChanged(double val)
             val2 /= INCH;
             }
       pageGroup->setCurrentIndex(0);      // custom
-
       PageFormat f;
       f.copy(*preview->score()->pageFormat());
       f.setSize(QSizeF(val2, val));
@@ -577,11 +582,17 @@ void PageSettings::pageHeightChanged(double val)
 void PageSettings::pageWidthChanged(double val)
       {
       double val2 = pageHeight->value();
+
+      oddPageLeftMargin->setMaximum(val);
+      oddPageRightMargin->setMaximum(val);
+      evenPageLeftMargin->setMaximum(val);
+      evenPageRightMargin->setMaximum(val);
+
       if (mmUnit) {
             val /= INCH;
             val2 /= INCH;
             }
-      pageGroup->setCurrentIndex(0);
+      pageGroup->setCurrentIndex(0);      // custom
       PageFormat f;
       f.copy(*preview->score()->pageFormat());
       f.setSize(QSizeF(val, val2));
@@ -596,7 +607,7 @@ void PageSettings::pageWidthChanged(double val)
 
 void PageSettings::updatePreview(int val)
       {
-      updateValues();
+//      updateValues();
       switch(val) {
             case 0:
                   preview->score()->doLayout();
