@@ -22,6 +22,9 @@ before_install:
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
 before_script:
   #compatibility between ruby travis artefact and GO one
+  - "ps aux"
+  - "sudo /etc/init.d/mysql stop"
+  - "sudo /etc/init.d/postgresql stop"
   - "export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID"
   - "export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY"
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
