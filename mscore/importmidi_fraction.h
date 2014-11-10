@@ -54,7 +54,7 @@ class ReducedFraction
       int denominator_;
       };
 
-ReducedFraction toMuseScoreTicks(int tick, int oldDivision);
+ReducedFraction toMuseScoreTicks(int tick, int oldDivision, bool isDivisionInTps);
 
 } // namespace Ms
 
