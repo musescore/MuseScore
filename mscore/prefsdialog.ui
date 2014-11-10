@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>880</width>
-    <height>576</height>
+    <height>592</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -170,8 +170,8 @@
          <property name="flat">
           <bool>false</bool>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
            <widget class="QRadioButton" name="emptySession">
             <property name="accessibleName">
              <string>Start empty</string>
@@ -181,7 +181,17 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="showSplashScreen">
+            <property name="accessibleName">
+             <string>Show splash screen</string>
+            </property>
+            <property name="text">
+             <string>Show splash screen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
            <widget class="QRadioButton" name="lastSession">
             <property name="accessibleName">
              <string>Continue last session</string>
@@ -194,7 +204,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="2" column="0">
            <widget class="QRadioButton" name="newSession">
             <property name="accessibleName">
              <string>Start with new score</string>
@@ -204,7 +214,14 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="showStartcenter">
+            <property name="text">
+             <string>Show startcenter</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="spacing">
              <number>0</number>
@@ -249,16 +266,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="showSplashScreen">
-            <property name="accessibleName">
-             <string>Show splash screen</string>
-            </property>
-            <property name="text">
-             <string>Show splash screen</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>

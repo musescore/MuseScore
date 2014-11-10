@@ -995,5 +995,9 @@
     <key>text-u</key>
     <seq>Ctrl+u</seq>
     </SC>
+  <SC>
+    <key>startcenter</key>
+    <seq>F4</seq>
+    </SC>
   </Shortcuts>
 
