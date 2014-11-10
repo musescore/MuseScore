@@ -86,6 +86,8 @@ void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool a
       if (type() == Element::Type::MEASURE) {
             foreach(Element* e, _el) {
                   if (score()->tagIsValid(e->tag())) {
+                        if (e->staffIdx() >= score()->staves().size())
+                              qDebug("MeasureBase::scanElements: bad staffIdx %d in element %s", e->staffIdx(), e->name());
                         if ((e->track() == -1) || ((Measure*)this)->visible(e->staffIdx()))
                               e->scanElements(data, func, all);
                         }

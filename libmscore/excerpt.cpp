@@ -288,6 +288,26 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
       }
 
 //---------------------------------------------------------
+//   mapTrack
+//---------------------------------------------------------
+
+static int mapTrack(int srcTrack, const QList<int>& map)
+      {
+      if (srcTrack == -1)
+            return -1;
+      int track = -1;
+      int st = 0;
+      foreach(int staff, map) {
+            if (staff == srcTrack / VOICES) {
+                  track = (st * VOICES) + srcTrack % VOICES;
+                  break;
+                  }
+            ++st;
+            }
+      return track;
+      }
+
+//---------------------------------------------------------
 //   cloneStaves
 //---------------------------------------------------------
 
@@ -327,15 +347,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   int tracks = oscore->nstaves() * VOICES;
                   for (int srcTrack = 0; srcTrack < tracks; ++srcTrack) {
                         TupletMap tupletMap;    // tuplets cannot cross measure boundaries
-                        int track = -1;
-                        int st = 0;
-                        foreach(int staff, map) {
-                              if (staff == srcTrack/VOICES) {
-                                    track = (st * VOICES) + srcTrack % VOICES;
-                                    break;
-                                    }
-                              ++st;
-                              }
+
+                        int track = mapTrack(srcTrack, map);
+
                         Tremolo* tremolo = 0;
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns = nullptr; //create segment later, on demand
@@ -461,12 +475,20 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE)
                               continue;
                         }
+                  int track = -1;
+                  if (e->track() != -1) {
+                        track = mapTrack(e->track(), map);
+                        if (track == -1)
+                              continue;
+                        }
+
                   Element* ne;
                   if (e->type() == Element::Type::TEXT || e->type() == Element::Type::LAYOUT_BREAK) // link the title, subtitle etc...
                         ne = e->linkedClone();
                   else
                         ne = e->clone();
                   ne->setScore(score);
+                  ne->setTrack(track);
                   nmb->add(ne);
                   }
             nmbl->add(nmb);
@@ -500,9 +522,10 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             int dstTrack  = -1;
             int dstTrack2 = -1;
             int           st = 0;
-            //always export voltas to first staff in part
-            if (s->type() == Element::Type::VOLTA)
+            if (s->type() == Element::Type::VOLTA) {
+                  //always export voltas to first staff in part
                   dstTrack = s->voice();
+                  }
             else {            //export other spanner if staffidx matches
                   for (int index : map) {
                         if (index == staffIdx) {
