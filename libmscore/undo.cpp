@@ -192,11 +192,9 @@ UndoStack::UndoStack()
 
 UndoStack::~UndoStack()
       {
-      int idx;
-      for (auto c : list) {
-            printf("cleanup %d <= %d\n", idx, curIdx);
+      int idx = 0;
+      for (auto c : list)
             c->cleanup(idx++ < curIdx);
-            }
       qDeleteAll(list);
       }
 
@@ -1422,7 +1420,7 @@ AddElement::AddElement(Element* e)
 void AddElement::cleanup(bool undo)
       {
       if (!undo) {
-            qDebug("delete %d %s", undo, element->name());
+            qDebug("AddElement::cleanup: delete %d %s", undo, element->name());
             delete element;
             element = 0;
             }
@@ -1600,7 +1598,7 @@ RemoveElement::RemoveElement(Element* e)
 void RemoveElement::cleanup(bool undo)
       {
       if (undo) {
-            qDebug("delete %d %s", undo, element->name());
+            qDebug("RemoveElement::cleanup: delete %d %s", undo, element->name());
             delete element;
             element = 0;
             }
