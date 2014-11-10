@@ -1903,8 +1903,11 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   }
             SysStaff* ss2 = system2->staff(lastStaff);
 
-            double y1 = ss1->y() - 2 * _spatium + y;
-            double y2 = ss2->y() + ss2->bbox().height() + 2 * _spatium + y;
+            qreal top_margin = _score->styleS(StyleIdx::systemFrameDistance).val();
+            qreal bot_margin = _score->styleS(StyleIdx::frameSystemDistance).val();
+
+            double y1 = ss1->y() - top_margin * _spatium + y;
+            double y2 = ss2->y() + ss2->bbox().height() + bot_margin * _spatium + y;
 
             // drag vertical start line
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
@@ -1932,8 +1935,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   y   = pt.y();
                   ss1 = system2->staff(staffStart);
                   ss2 = system2->staff(lastStaff);
-                  y1  = ss1->y() - 2 * _spatium + y;
-                  y2  = ss2->y() + ss2->bbox().height() + 2 * _spatium + y;
+                  y1 = ss1->y() - top_margin * _spatium + y;
+                  y2 = ss2->y() + ss2->bbox().height() + bot_margin * _spatium + y;
                   p.drawLine(QLineF(x1, y1, x2, y1).translated(system2->page()->pos()));
                   p.drawLine(QLineF(x1, y2, x2, y2).translated(system2->page()->pos()));
                   s = ns;

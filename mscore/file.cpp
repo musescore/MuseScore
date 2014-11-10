@@ -2341,6 +2341,9 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                m->scanElements(&elems, collectElements, false);
             sys->scanElements(&elems, collectElements, false);
 
+
+            qreal end_pos = -1.0;
+
             foreach(const Element * e, elems) {
 
             //qDebug("%s", qPrintable(e->userName()) );
@@ -2365,10 +2368,11 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                p->translate(pos);
                e->draw(p);
 
+               QTransform world = p->worldTransform(); // Get global translation i.e. page+element
+
                if (e->type() == Element::Type::NOTE || 
                    e->type() == Element::Type::REST) {
 
-                  QTransform world = p->worldTransform();
                   ChordRest * cr = (e->type()==Element::Type::NOTE?
                                  (ChordRest*)( ((Note*)e)->chord()):(ChordRest*)e);
 
@@ -2378,12 +2382,19 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                      last_cr = cr;
                   }
                }
+               else if (e->type() == Element::Type::MEASURE) {
+                  qts << "B " << world.m31()/(w*mag) << endl;
+                  end_pos = (world.m31() + mag*e->bbox().width())/(w*mag);
+               }
 
                p->translate(-pos);
 
             //};
             //sys->scanElements(NULL, drawElementOnP,true);
             }
+
+            if (end_pos>0)
+               qts << 'B' << end_pos << endl;
 
 
             p->end();
