@@ -248,7 +248,10 @@ bool MidiFile::read(QIODevice* in)
             _isDivisionInTps = true;
             const int framesPerSecond = -firstByte;
             const int ticksPerFrame = secondByte;
-            _division = framesPerSecond * ticksPerFrame;
+            if (framesPerSecond == 29)
+                  _division = qRound(29.97 * ticksPerFrame);
+            else
+                  _division = framesPerSecond * ticksPerFrame;
             }
 
       // =====================================================
