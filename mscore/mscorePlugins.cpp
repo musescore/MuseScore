@@ -92,7 +92,11 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
             foreach(QQmlError e, component.errors()) {
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
+            plugin->error = true;
             return;
+            }
+      else {
+            plugin->error = false;
             }
       //
       // load translation
@@ -385,6 +389,7 @@ bool MuseScore::loadPlugin(const QString& filename)
                   PluginDescription* p = new PluginDescription;
                   p->path = path;
                   p->load = false;
+                  p->error= false;
                   collectPluginMetaInformation(p);
                   registerPlugin(p);
                   result = true;
@@ -454,29 +459,51 @@ void MuseScore::pluginTriggered(int idx)
       endCmd();
       }
 
+void MuseScore::continueLoadingPlugin(QQmlComponent *targetComponent)
+      {
+      const QList<PluginDescription> pl = preferences.pluginLoadingList;
+
+      foreach(PluginDescription pd, pl) {
+            if(pd.component == targetComponent) {
+                  if (pd.component->isError()) {
+                        qDebug("creating component <%s> failed", qPrintable(pd.path));
+                        foreach(QQmlError e, pd.component->errors()) {
+                              qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
+                              }
+                        pd.error = true;
+                        }
+                  else {
+                        QObject *obj = pd.component->create();
+                        if(obj){
+                              QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
+                              if (item) {
+                                    pd.version      = item->version();
+                                    pd.description  = item->description();
+                                    pd.error        = false;
+                                    }
+                              delete obj;
+                              preferences.pluginList.append(pd);
+                              }
+                        }
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 //   collectPluginMetaInformation
 //---------------------------------------------------------
 
 void collectPluginMetaInformation(PluginDescription* d)
       {
-      qDebug("Collect meta for <%s>", qPrintable(d->path));
+      QQmlComponent *component = new QQmlComponent(Ms::MScore::qml(), QUrl::fromLocalFile(d->path));
+      QList<PluginDescription> pl = preferences.pluginLoadingList;
 
-      QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(d->path));
-      QObject* obj = component.create();
-      if (obj == 0) {
-            qDebug("creating component <%s> failed", qPrintable(d->path));
-            foreach(QQmlError e, component.errors()) {
-                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
-                  }
-            return;
-            }
-      QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
-      if (item) {
-            d->version      = item->version();
-            d->description  = item->description();
-            }
-      delete obj;
+      d->component = component;
+      pl.append(*d);
+      if (component->isLoading())
+            QObject::connect(component, SIGNAL(statusChanged(QQmlComponent::Status)),
+                           mscore, SLOT(continueLoadingPlugin(component)));
+      else
+           mscore->continueLoadingPlugin(component);
       }
 }
-
