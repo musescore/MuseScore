@@ -5038,8 +5038,10 @@ int main(int argc, char* av[])
                   }
             }
 #endif
-      if (preferences.showStartcenter)
+      if (preferences.showStartcenter) {
+            getAction("startcenter")->setChecked(true);
             mscore->showStartcenter(true);
+            }
       return qApp->exec();
       }
 

@@ -13,24 +13,25 @@
 #ifndef __STARTCENTER_H__
 #define __STARTCENTER_H__
 
+#include "ui_startcenter.h"
+
 namespace Ms {
 
 //---------------------------------------------------------
 //   Startcenter
 //---------------------------------------------------------
 
-class Startcenter : public QQuickView
+class Startcenter : public QDialog, public Ui::Startcenter
       {
       Q_OBJECT
 
-   private slots:
-      void closeEvent();
+      virtual void closeEvent(QCloseEvent*);
 
    signals:
       void closed(bool);
 
    public:
-      Startcenter(QString s);
+      Startcenter();
       };
 }
 

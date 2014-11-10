@@ -47,6 +47,7 @@ QT4_WRAP_UI (ui_headers
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui layer.ui
       omrpanel.ui startdialog.ui masterpalette.ui pluginManager.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui importmidi_panel.ui resourceManager.ui stafftypetemplates.ui
+      startcenter.ui
 
       debugger/barline.ui
       debugger/harmony.ui
@@ -206,7 +207,7 @@ endif (${CMAKE_SYSTEM} MATCHES "GNU-0.3")
 
 if (${CMAKE_SYSTEM} MATCHES "kFreeBSD")
       # include some cmake support file
-      INCLUDE (Platform/kFreeBSD) 
+      INCLUDE (Platform/kFreeBSD)
       set ( USE_ALSA 0 )
       set ( USE_PORTMIDI 0 )
 endif (${CMAKE_SYSTEM} MATCHES "kFreeBSD")
