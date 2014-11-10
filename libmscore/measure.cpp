@@ -3824,6 +3824,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                         Element* ne = e->clone();
                         ne->setTrack(track);
                         ne->setUserOff(e->userOff());
+                        ne->setScore(sc);
                         s->add(ne);
                         }
                   if (!oe)
@@ -3872,7 +3873,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                               }
                         }
                   ne->setUserOff(oe->userOff());
-                  ne->setScore(m->score());
+                  ne->setScore(sc);
                   s->add(ne);
                   }
             }
