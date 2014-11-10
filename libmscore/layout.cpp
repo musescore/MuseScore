@@ -1164,6 +1164,7 @@ void Score::layoutStage2()
 
             Beam::Mode bm = Beam::Mode::AUTO;
             Segment::Type st = Segment::Type::ChordRest;
+            ChordRest* prev = 0;
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
@@ -1179,6 +1180,17 @@ void Score::layoutStage2()
                         }
 
                   bm = Groups::endBeam(cr);
+
+                  // end beam at new tuplet or end tuplet, if the next/prev duration type is different
+                  if (cr->tuplet()
+                         && !cr->tuplet()->elements().isEmpty()
+                         && cr->tuplet()->elements().front() == cr
+                         && prev && prev->durationType() == cr->durationType())
+                              bm =  Beam::Mode::BEGIN;
+                  else if (prev && prev->tuplet() && !prev->tuplet()->elements().isEmpty()
+                          && prev->tuplet()->elements().last() == prev && prev->durationType() == cr->durationType())
+                              bm =  Beam::Mode::BEGIN;
+                  prev = cr;
 
                   // if chord has hooks and is 2nd element of a cross-measure value
                   // set beam mode to NONE (do not combine with following chord beam/hook, if any)
@@ -1216,7 +1228,7 @@ void Score::layoutStage2()
                         }
 
                   if (beam) {
-                        bool beamEnd = bm == Beam::Mode::BEGIN;
+                        bool beamEnd = (bm == Beam::Mode::BEGIN);
                         if (!beamEnd) {
                               cr->removeDeleteBeam(true);
                               beam->add(cr);

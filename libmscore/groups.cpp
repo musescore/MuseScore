@@ -72,14 +72,6 @@ Beam::Mode Groups::endBeam(ChordRest* cr)
             return cr->beamMode();
       Q_ASSERT(cr->staff());
 
-      if (cr->tuplet() && !cr->tuplet()->elements().isEmpty()) {
-            if (cr->tuplet()->elements().front() == cr)     // end beam at new tuplet
-                  return Beam::Mode::BEGIN;
-            if (cr->tuplet()->elements().back() == cr)      // end beam at tuplet end
-                  return Beam::Mode::END;
-            return Beam::Mode::AUTO;
-            }
-
       TDuration d = cr->durationType();
       const Groups& g = cr->staff()->group(cr->tick());
       Fraction stretch = cr->staff()->timeStretch(cr->tick());
