@@ -489,6 +489,11 @@ void MuseScore::continueLoadingPlugin(QQmlComponent *targetComponent)
             }
       }
 
+void MuseScore::continueLoadingPluginSlot(int slotStatus) {
+      QQmlComponent* qSource = qobject_cast<QQmlComponent *>(QObject::sender());
+      continueLoadingPlugin(qSource);
+      }
+
 //---------------------------------------------------------
 //   collectPluginMetaInformation
 //---------------------------------------------------------
@@ -502,7 +507,7 @@ void collectPluginMetaInformation(PluginDescription* d)
       pl.append(*d);
       if (component->isLoading())
             QObject::connect(component, SIGNAL(statusChanged(QQmlComponent::Status)),
-                           mscore, SLOT(continueLoadingPlugin(component)));
+                           mscore, SLOT(continueLoadingPluginSlot(QQmlComponent::Status)));
       else
            mscore->continueLoadingPlugin(component);
       }
