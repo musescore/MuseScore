@@ -54,7 +54,7 @@
 #include "keyedit.h"
 #include "harmonyedit.h"
 #include "navigator.h"
-#include "importmidi_panel.h"
+#include "importmidi/importmidi_panel.h"
 #include "libmscore/chord.h"
 #include "mstyle/mstyle.h"
 #include "mstyle/mconfig.h"

@@ -26,7 +26,7 @@
 #include "importmidi_meter.h"
 #include "importmidi_fraction.h"
 #include "importmidi_operations.h"
-#include "preferences.h"
+#include "mscore/preferences.h"
 
 #include <set>
 
