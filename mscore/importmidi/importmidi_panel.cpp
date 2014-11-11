@@ -5,7 +5,7 @@
 #include "importmidi_operations.h"
 #include "importmidi_delegate.h"
 #include "importmidi_inner.h"
-#include "preferences.h"
+#include "mscore/preferences.h"
 #include "musescore.h"
 
 

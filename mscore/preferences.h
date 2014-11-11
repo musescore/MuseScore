@@ -23,7 +23,7 @@
 
 #include "globals.h"
 #include "shortcut.h"
-#include "mscore/importmidi_operations.h"
+#include "mscore/importmidi/importmidi_operations.h"
 
 namespace Ms {
 

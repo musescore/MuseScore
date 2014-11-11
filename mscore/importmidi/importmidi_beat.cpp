@@ -7,7 +7,7 @@
 #include "importmidi_meter.h"
 #include "importmidi_operations.h"
 #include "thirdparty/beatroot/BeatTracker.h"
-#include "preferences.h"
+#include "mscore/preferences.h"
 #include "libmscore/mscore.h"
 #include "libmscore/sig.h"
 #include "libmscore/tempotext.h"

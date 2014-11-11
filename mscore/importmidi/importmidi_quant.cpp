@@ -2,7 +2,7 @@
 #include "libmscore/sig.h"
 #include "importmidi_fraction.h"
 #include "libmscore/mscore.h"
-#include "preferences.h"
+#include "mscore/preferences.h"
 #include "importmidi_chord.h"
 #include "importmidi_meter.h"
 #include "importmidi_tuplet.h"
