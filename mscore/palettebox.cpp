@@ -34,13 +34,15 @@ PaletteBox::PaletteBox(QWidget* parent)
       QWidget* w = new QWidget(this);
       QVBoxLayout* vl = new QVBoxLayout(w);
       QHBoxLayout* hl = new QHBoxLayout;
-      vl->addLayout(hl);
+      hl->setContentsMargins(5,5,5,0);
 
       workspaceList = new QComboBox;
       workspaceList->setToolTip(tr("Select workspace"));
       updateWorkspaces();
       hl->addWidget(workspaceList);
       QToolButton* nb = new QToolButton;
+      
+      nb->setMinimumHeight(27);
       nb->setText(tr("+"));
       nb->setToolTip(tr("Add new workspace"));
       hl->addWidget(nb);
@@ -56,6 +58,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       sa->setWidgetResizable(true);
       sa->setFrameShape(QFrame::NoFrame);
       vl->addWidget(sa);
+      vl->addLayout(hl);
       // setWidget(sa);
 
       QWidget* paletteList = new QWidget;
