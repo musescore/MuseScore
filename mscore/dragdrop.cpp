@@ -605,6 +605,19 @@ void ScoreView::dropEvent(QDropEvent* event)
             dragElement = 0;
             setDropTarget(0); // this also resets dropRectangle and dropAnchor
             score()->endCmd();
+            // update input cursor position (must be done after layout)
+            if (noteEntryMode()) {
+                  // set input cursor to possibly re-written segment
+                  int icTick = cursorTick();
+                  Segment* icSegment = _score->tick2segment(icTick, false, Segment::Type::ChordRest);
+                  if (!icSegment) {
+                        Measure* icMeasure = _score->tick2measure(icTick);
+                        icSegment = icMeasure->first(Segment::Type::ChordRest);
+                        }
+                  _score->inputState().setSegment(icSegment);
+                  // even if segment wasn't rewritten, it may have changed position
+                  moveCursor();
+                  }
             mscore->endCmd();
             return;
             }
