@@ -117,7 +117,7 @@ void Glissando::layout()
       LedgerLine * ledLin = static_cast<Chord*>(cr)->ledgerLines();
       // if dots, from right of last dot (assume a standard dot with of 1/4 sp)
       // if no dots, from right of ledger line, if any; from right of note head, if no ledger line
-      qreal x1 = (dots ? anchor1->dot(dots-1)->pos().x() + anchor1->dot(dots-1)->width()
+      qreal x1 = (dots && anchor1->dot(dots-1) ? anchor1->dot(dots-1)->pos().x() + anchor1->dot(dots-1)->width()
                   : (ledLin ? ledLin->pos().x() + ledLin->width() : anchor1->headWidth()) )
             - x1off;                            // make relative to end note
       qreal y1 = anchor2->y() - y1off;
