@@ -23,7 +23,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "mscore/musescoreCore.h"
 #include "mscore/shortcut.h"
-#include "mscore/importmidi_operations.h"
+#include "mscore/importmidi/importmidi_operations.h"
 #include "libmscore/xml.h"
 #include "libmscore/excerpt.h"
 

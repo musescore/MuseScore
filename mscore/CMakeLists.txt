@@ -46,8 +46,10 @@ QT4_WRAP_UI (ui_headers
       fretdprops.ui editstafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui layer.ui
       omrpanel.ui startdialog.ui masterpalette.ui pluginManager.ui harmonyedit.ui pathlistdialog.ui
-      note_groups.ui importmidi_panel.ui resourceManager.ui stafftypetemplates.ui
+      note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui
+
+      importmidi/importmidi_panel.ui
 
       debugger/barline.ui
       debugger/harmony.ui
@@ -152,7 +154,7 @@ QT4_WRAP_CPP (mocs
       inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
       inspector/inspectorNote.h inspector/inspectorAmbitus.h
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
-      importmidi_panel.h importmidi_delegate.h importmidi_view.h
+      importmidi/importmidi_panel.h importmidi/importmidi_delegate.h importmidi/importmidi_view.h
       debugger/debugger.h
       resourceManager.h downloadUtils.h accessibletoolbutton.h scoreaccessibility.h
       startcenter.h
@@ -248,7 +250,7 @@ add_executable ( ${ExecutableName}
 
       actions.cpp scoreview.cpp editinstrument.cpp editstyle.cpp
       icons.cpp importbww.cpp instrdialog.cpp instrwidget.cpp
-      debugger/debugger.cpp menus.cpp importmidi.cpp
+      debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
       seq.cpp textpalette.cpp
@@ -284,15 +286,20 @@ add_executable ( ${ExecutableName}
       savePositions.cpp pluginManager.cpp inspector/inspectorJump.cpp inspector/inspectorMarker.cpp
       inspector/inspectorGlissando.cpp inspector/inspectorNote.cpp inspector/inspectorAmbitus.cpp
       paletteBoxButton.cpp driver.cpp exportmidi.cpp noteGroups.cpp
-      pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp
-      importmidi_panel.cpp importmidi_operations.cpp miconengine.cpp
-      importmidi_model.cpp importmidi_delegate.cpp
-      importmidi_meter.cpp importmidi_quant.cpp importmidi_tuplet.cpp importmidi_chord.cpp
-      importmidi_swing.cpp importmidi_fraction.cpp importmidi_drum.cpp
-      importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp
-      importmidi_inner.cpp importmidi_tie.cpp importmidi_tuplet_voice.cpp importmidi_beat.cpp
-      importmidi_tuplet_detect.cpp  importmidi_tuplet_filter.cpp importmidi_tuplet_tonotes.cpp
-      importmidi_simplify.cpp importmidi_voice.cpp importmidi_view.cpp importmidi_key.cpp
+      pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp miconengine.cpp
+      importmidi/importmidi.cpp
+      importmidi/importmidi_panel.cpp importmidi/importmidi_operations.cpp
+      importmidi/importmidi_model.cpp importmidi/importmidi_delegate.cpp
+      importmidi/importmidi_meter.cpp importmidi/importmidi_quant.cpp
+      importmidi/importmidi_tuplet.cpp importmidi/importmidi_chord.cpp
+      importmidi/importmidi_swing.cpp importmidi/importmidi_fraction.cpp
+      importmidi/importmidi_drum.cpp importmidi/importmidi_clef.cpp
+      importmidi/importmidi_lrhand.cpp importmidi/importmidi_lyrics.cpp
+      importmidi/importmidi_inner.cpp importmidi/importmidi_tie.cpp
+      importmidi/importmidi_tuplet_voice.cpp importmidi/importmidi_beat.cpp
+      importmidi/importmidi_tuplet_detect.cpp importmidi/importmidi_tuplet_filter.cpp
+      importmidi/importmidi_tuplet_tonotes.cpp importmidi/importmidi_simplify.cpp
+      importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
       startcenter.cpp

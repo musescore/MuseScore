@@ -50,32 +50,32 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/capella.cpp
       ${PROJECT_SOURCE_DIR}/mscore/capxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportxml.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp4.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp5.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp6.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_operations.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_meter.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_quant.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_detect.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_filter.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_voice.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tuplet_tonotes.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_chord.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_fraction.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_swing.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_drum.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_clef.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_lrhand.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_lyrics.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_tie.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_inner.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_beat.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_simplify.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_voice.cpp
-      ${PROJECT_SOURCE_DIR}/mscore/importmidi_key.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_operations.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_meter.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_quant.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet_detect.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet_filter.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet_voice.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tuplet_tonotes.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_chord.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_fraction.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_swing.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_drum.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_clef.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_lrhand.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_lyrics.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tie.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_inner.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_beat.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_simplify.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_voice.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_key.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp

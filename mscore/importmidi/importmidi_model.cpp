@@ -1,6 +1,6 @@
 #include "importmidi_model.h"
 #include "importmidi_inner.h"
-#include "preferences.h"
+#include "mscore/preferences.h"
 
 
 namespace Ms {
