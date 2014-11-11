@@ -55,6 +55,7 @@
 #include "spanner.h"
 #include "glissando.h"
 #include "bagpembell.h"
+#include "navigate.h"
 
 namespace Ms {
 
@@ -1416,19 +1417,7 @@ Element* Note::drop(const DropData& data)
 
             case Element::Type::GLISSANDO:
                   {
-                  Segment* s = ch->segment();
-                  s = s->next1();
-                  while (s) {
-                        if ((s->segmentType() == Segment::Type::ChordRest) && s->element(track()))
-                              break;
-                        s = s->next1();
-                        }
-                  if (s == 0) {
-                        qDebug("no segment for second note of glissando found");
-                        delete e;
-                        return 0;
-                        }
-                  ChordRest* cr1 = static_cast<ChordRest*>(s->element(track()));
+                  ChordRest* cr1 = nextChordRest(ch);
                   if (cr1 == 0 || cr1->type() != Element::Type::CHORD) {
                         qDebug("no second note for glissando found, track %d", track());
                         delete e;
