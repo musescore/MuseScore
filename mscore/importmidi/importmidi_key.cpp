@@ -4,7 +4,7 @@
 #include "importmidi_inner.h"
 #include "libmscore/key.h"
 #include "libmscore/staff.h"
-#include "preferences.h"
+#include "mscore/preferences.h"
 
 
 // This simple key detection algorithm is from thesis

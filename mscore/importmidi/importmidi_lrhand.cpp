@@ -3,7 +3,7 @@
 #include "importmidi_fraction.h"
 #include "importmidi_chord.h"
 #include "importmidi_operations.h"
-#include "preferences.h"
+#include "mscore/preferences.h"
 
 
 namespace Ms {
