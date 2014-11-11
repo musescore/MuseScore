@@ -10,10 +10,10 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  emmentaler-6,bravura-6,gonville-6,emmentaler-7,bravura-7,gonville-7, ^
  emmentaler-8,bravura-8,gonville-8,emmentaler-9,bravura-9,gonville-9,i ^
  emmentaler-10,bravura-10,gonville-10,emmentaler-11,bravura-11,gonville-11, ^
- emmentaler-text-1,bravura-test-1,gonville-test-1,musejazz-text-1 ^
- emmentaler-text-2,bravura-test-2,gonville-test-2,musejazz-text-2 ^
- emmentaler-text-3,bravura-test-3,gonville-test-3,musejazz-text-3 ^
- frametext,ottava,slurs-1,slurs-2,hairpins-1,pedal-1,line-1,line-2,line-3,line-4, ^
+ emmentaler-text-1,bravura-test-1,gonville-test-1,musejazz-text-1, ^
+ emmentaler-text-2,bravura-test-2,gonville-test-2,musejazz-text-2, ^
+ emmentaler-text-3,bravura-test-3,gonville-test-3,musejazz-text-3, ^
+ frametext,ottava,slurs-1,slurs-2,hairpins-1,pedal-1,line-1,line-2,line-3,line-4,gliss-1,gliss-2, ^
  chord-layout-1,chord-layout-2,chord-layout-3,chord-layout-4,chord-layout-5, ^
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
  chord-layout-11,chord-layout-12,chord-layout-13,chord-layout-14,cross-1, ^

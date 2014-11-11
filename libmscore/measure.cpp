@@ -3175,14 +3175,20 @@ void Measure::layoutX(qreal stretch)
                                     }
 
                               // special case:
-                              // make extra space for ties continued from previous system
+                              // make extra space for ties or glissandi continued from previous system
 
                               if (cr->type() == Element::Type::CHORD) {
                                     Chord* c = static_cast<Chord*>(cr);
                                     if (system()->firstMeasure() == this && c->tick() == tick()) {
-                                          for (Note* note : c->notes()) {
-                                                if (note->tieBack()) {
-                                                      minDistance = qMax(minDistance, _spatium * 2);
+                                          if (c->glissando()) {
+                                                minDistance = qMax(minDistance, _spatium * 2);
+                                                }
+                                          else {
+                                                for (Note* note : c->notes()) {
+                                                      if (note->tieBack()) {
+                                                            minDistance = qMax(minDistance, _spatium * 2);
+                                                            break;
+                                                            }
                                                       }
                                                 }
                                           }
