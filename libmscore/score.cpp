@@ -3185,8 +3185,12 @@ void Score::cmdSelectAll()
       if (_measures.size() == 0)
             return;
       deselectAll();
-      selectRange(firstMeasureMM(), 0);
-      selectRange(lastMeasureMM(), nstaves() - 1);
+      Measure* first = firstMeasureMM();
+      if (!first)
+            return;
+      Measure* last = lastMeasureMM();
+      selectRange(first, 0);
+      selectRange(last, nstaves() - 1);
       setUpdateAll(true);
       end();
       }
