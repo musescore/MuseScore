@@ -375,52 +375,10 @@ MuseScore::MuseScore()
       setWindowTitle(QString("MuseScore"));
       setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
 
-      ucheck                = new UpdateChecker();
+      ucheck = new UpdateChecker();
 
       setAcceptDrops(true);
-      cs                    = 0;
-//      lastOpenPath          = preferences.myScoresPath;
-
-      _mediaDialog          = 0;
-      _drumTools            = 0;
-      pianorollEditor       = 0;
-      drumrollEditor        = 0;
-      _splitScreen          = false;
-      _horizontalSplit      = true;
-      chordStyleEditor      = 0;
-      albumManager          = 0;
-
-      loadScoreDialog       = 0;
-      saveScoreDialog       = 0;
-      loadStyleDialog       = 0;
-      saveStyleDialog       = 0;
-      saveImageDialog       = 0;
-      loadSoundFontDialog   = 0;
-      loadSfzFileDialog     = 0;
-      loadBackgroundDialog  = 0;
-      loadScanDialog        = 0;
-      loadAudioDialog       = 0;
-      loadChordStyleDialog  = 0;
-      saveChordStyleDialog  = 0;
-      loadDrumsetDialog     = 0;
-      loadPluginDialog      = 0;
-      loadPaletteDialog     = 0;
-      savePaletteDialog     = 0;
-      saveDrumsetDialog     = 0;
-      savePluginDialog      = 0;
-
-      editRasterDialog      = 0;
-      inChordEditor         = false;
-      networkManager        = 0;
-
-      workspaces              = 0;
-
-      _midiRecordId         = -1;
-      _fullscreen           = false;
-      lastCmd               = 0;
-      lastShortcut          = 0;
-      importmidiPanel      = 0;
-      this->setFocusPolicy(Qt::NoFocus);
+      setFocusPolicy(Qt::NoFocus);
 
       if (!preferences.styleName.isEmpty()) {
             QFile f(preferences.styleName);
@@ -487,8 +445,6 @@ MuseScore::MuseScore()
       setStatusBar(_statusBar);
       ScoreAccessibility::createInstance(this);
 
-      _progressBar = 0;
-
       // otherwise unused actions:
       //   must be added somewere to work
       QActionGroup* ag = Shortcut::getActionGroupForWidget(MsWidget::MAIN_WINDOW);
@@ -516,11 +472,7 @@ MuseScore::MuseScore()
 
       mainWindow->setStretchFactor(0, 1);
       mainWindow->setStretchFactor(1, 0);
-      {
-      QList<int> sizes;
-      sizes << 500 << 50;     // initial size of score canvas relative to navigator
-      mainWindow->setSizes(sizes);
-      }
+      mainWindow->setSizes(QList<int>({500, 50}));
 
       QSplitter* envelope = new QSplitter;
       envelope->setChildrenCollapsible(false);
@@ -548,11 +500,7 @@ MuseScore::MuseScore()
       envelope->addWidget(importmidiShowPanel);
       }
 
-      {
-      QList<int> sizes;
-      sizes << 550 << 180;     // initial size of score canvas relative to midi panel
-      envelope->setSizes(sizes);
-      }
+      envelope->setSizes(QList<int>({550, 180}));
 
       splitter = new QSplitter;
       tab1 = new ScoreTab(&scoreList, this);
@@ -575,7 +523,6 @@ MuseScore::MuseScore()
             tab2 = 0;
       layout->addWidget(splitter);
 
-      _searchDialog = 0;
 
       //---------------------------------------------------
       //    Transport Action

@@ -24,11 +24,11 @@ class Score;
 class MuseScoreCore
       {
    protected:
-      Score* cs;              // current score
+      Score* cs  { 0 };              // current score
       QList<Score*> scoreList;
 
    public:
-      MuseScoreCore() { cs = 0; }
+      MuseScoreCore()                    {}
       Score* currentScore() const        { return cs; }
       void setCurrentScore(Score* score) { cs = score; }
 

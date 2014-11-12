@@ -53,6 +53,12 @@
    </item>
    <item>
     <widget class="QLabel" name="name">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -62,9 +68,34 @@
     </widget>
    </item>
    <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>8</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="0">
       <widget class="QLabel" name="label_4">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="font">
+        <font>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
        <property name="text">
         <string>Size:</string>
        </property>
@@ -72,46 +103,43 @@
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_3">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Creation Date:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QSpinBox" name="fileSize">
+     <item row="0" column="1">
+      <widget class="QLabel" name="creationDate">
        <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="readOnly">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="readOnly" stdset="0">
         <bool>true</bool>
-       </property>
-       <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::NoButtons</enum>
-       </property>
-       <property name="specialValueText">
-        <string>empty</string>
-       </property>
-       <property name="suffix">
-        <string>k</string>
-       </property>
-       <property name="maximum">
-        <number>999999</number>
-       </property>
-       <property name="value">
-        <number>10</number>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDateTimeEdit" name="creationDate">
+     <item row="1" column="1">
+      <widget class="QLabel" name="fileSize">
        <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="readOnly">
-        <bool>true</bool>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
-       <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::NoButtons</enum>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </item>

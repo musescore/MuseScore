@@ -24,18 +24,15 @@
 namespace Ms {
 
 UpdateChecker::UpdateChecker()
-{
-    manager = new QNetworkAccessManager(this);
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onRequestFinished(QNetworkReply*)));
-    os = QString();
-    release = QString();
-    revision = QString();
-}
+      {
+      manager = new QNetworkAccessManager(this);
+      connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onRequestFinished(QNetworkReply*)));
+      }
 
 UpdateChecker::~UpdateChecker()
-{
-
-}
+      {
+      delete manager;
+      }
 
 void UpdateChecker::onRequestFinished(QNetworkReply* reply)
 {

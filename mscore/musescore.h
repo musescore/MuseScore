@@ -217,7 +217,7 @@ class MuseScoreApplication : public QtSingleApplication {
 class MuseScore : public QMainWindow, public MuseScoreCore {
       Q_OBJECT
 
-      ScoreView* cv            { 0 };
+      ScoreView* cv                        { 0 };
       ScoreState _sstate;
       UpdateChecker* ucheck;
 
@@ -226,7 +226,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* tab1;
       ScoreTab* tab2;
       NScrollArea* _navigator;
-      ImportMidiPanel* importmidiPanel;
+      ImportMidiPanel* importmidiPanel     { 0 };
       QFrame* importmidiShowPanel;
       QSplitter* mainWindow;
 
@@ -237,7 +237,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QComboBox* viewModeCombo;
       QAction* playId;
 
-      QProgressBar* _progressBar;
+      QProgressBar* _progressBar           { 0 };
       PreferenceDialog* preferenceDialog   { 0 };
       QToolBar* cpitchTools;
       QToolBar* fileTools;
@@ -246,8 +246,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       TextTools* _textTools                { 0 };
       PianoTools* _pianoTools              { 0 };
       WebPageDockWidget* _webPage          { 0 };
-      MediaDialog* _mediaDialog;
-      DrumTools* _drumTools;
+      MediaDialog* _mediaDialog            { 0 };
+      DrumTools* _drumTools                { 0 };
       QToolBar* voiceTools;
       InstrumentsDialog* instrList         { 0 };
       MeasuresDialog* measuresDialog       { 0 };
@@ -255,31 +255,31 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       MasterPalette* masterPalette         { 0 };
       PluginCreator* _pluginCreator        { 0 };
       PluginManager* pluginManager         { 0 };
-      SelectionWindow* selectionWindow { 0 };
+      SelectionWindow* selectionWindow     { 0 };
 
       QMenu* _fileMenu;
       QMenu* menuEdit;
       QMenu* menuNotes;
       QMenu* menuLayout;
       QMenu* menuStyle;
-      AlbumManager* albumManager;
+      AlbumManager* albumManager           { 0 };
 
-      QWidget* _searchDialog;
+      QWidget* _searchDialog               { 0 };
       QComboBox* searchCombo;
 
-      PlayPanel* playPanel         { 0 };
-      Mixer* mixer                 { 0 };
-      SynthControl* synthControl   { 0 };
-      Debugger* debugger           { 0 };
-      MeasureListEditor* measureListEdit { 0 };
-      PageSettings* pageSettings     { 0 };
+      PlayPanel* playPanel                 { 0 };
+      Mixer* mixer                         { 0 };
+      SynthControl* synthControl           { 0 };
+      Debugger* debugger                   { 0 };
+      MeasureListEditor* measureListEdit   { 0 };
+      PageSettings* pageSettings           { 0 };
 
-      QWidget* symbolDialog          { 0 };
+      QWidget* symbolDialog                { 0 };
 
-      PaletteScrollArea* clefPalette { 0 };
-      PaletteScrollArea* keyPalette  { 0 };
-      KeyEditor* keyEditor           { 0 };
-      ChordStyleEditor* chordStyleEditor;
+      PaletteScrollArea* clefPalette       { 0 };
+      PaletteScrollArea* keyPalette        { 0 };
+      KeyEditor* keyEditor                 { 0 };
+      ChordStyleEditor* chordStyleEditor   { 0 };
       QStatusBar* _statusBar;
       QLabel* _modeText;
       QLabel* _positionLabel;
@@ -300,54 +300,54 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QTimer* autoSaveTimer;
       QList<QAction*> qmlPluginActions;
       QList<QAction*> pluginActions;
-      QSignalMapper* pluginMapper    { 0 };
+      QSignalMapper* pluginMapper        { 0 };
 
-      PianorollEditor* pianorollEditor;
-      DrumrollEditor* drumrollEditor;
-      bool _splitScreen;
-      bool _horizontalSplit;
+      PianorollEditor* pianorollEditor   { 0 };
+      DrumrollEditor* drumrollEditor     { 0 };
+      bool _splitScreen                  { false };
+      bool _horizontalSplit              { true  };
 
       QString rev;
 
-      int _midiRecordId;
+      int _midiRecordId                  { -1 };
 
-      bool _fullscreen;
+      bool _fullscreen                   { false };
       QList<LanguageItem> _languages;
 
-      Startcenter* startcenter { 0 };
-      QFileDialog* loadScoreDialog;
-      QFileDialog* saveScoreDialog;
-      QFileDialog* loadStyleDialog;
-      QFileDialog* saveStyleDialog;
-      QFileDialog* saveImageDialog;
-      QFileDialog* loadChordStyleDialog;
-      QFileDialog* saveChordStyleDialog;
-      QFileDialog* loadSoundFontDialog;
-      QFileDialog* loadSfzFileDialog;
-      QFileDialog* loadBackgroundDialog;
-      QFileDialog* loadScanDialog;
-      QFileDialog* loadAudioDialog;
-      QFileDialog* loadDrumsetDialog;
-      QFileDialog* loadPluginDialog;
-      QFileDialog* loadPaletteDialog;
-      QFileDialog* savePaletteDialog;
-      QFileDialog* saveDrumsetDialog;
-      QFileDialog* savePluginDialog;
+      Startcenter* startcenter           { 0 };
+      QFileDialog* loadScoreDialog       { 0 };
+      QFileDialog* saveScoreDialog       { 0 };
+      QFileDialog* loadStyleDialog       { 0 };
+      QFileDialog* saveStyleDialog       { 0 };
+      QFileDialog* saveImageDialog       { 0 };
+      QFileDialog* loadChordStyleDialog  { 0 };
+      QFileDialog* saveChordStyleDialog  { 0 };
+      QFileDialog* loadSoundFontDialog   { 0 };
+      QFileDialog* loadSfzFileDialog     { 0 };
+      QFileDialog* loadBackgroundDialog  { 0 };
+      QFileDialog* loadScanDialog        { 0 };
+      QFileDialog* loadAudioDialog       { 0 };
+      QFileDialog* loadDrumsetDialog     { 0 };
+      QFileDialog* loadPluginDialog      { 0 };
+      QFileDialog* loadPaletteDialog     { 0 };
+      QFileDialog* savePaletteDialog     { 0 };
+      QFileDialog* saveDrumsetDialog     { 0 };
+      QFileDialog* savePluginDialog      { 0 };
 
-      QDialog* editRasterDialog;
+      QDialog* editRasterDialog          { 0 };
       QAction* hRasterAction;
       QAction* vRasterAction;
 
       QMenu* menuWorkspaces;
-      QActionGroup* workspaces;
+      QActionGroup* workspaces           { 0 };
 
-      bool inChordEditor;
+      bool inChordEditor                 { false };
 
       QComboBox* layerSwitch;
       QComboBox* playMode;
-      QNetworkAccessManager* networkManager;
-      QAction* lastCmd;
-      Shortcut* lastShortcut;
+      QNetworkAccessManager* networkManager { 0 };
+      QAction* lastCmd                      { 0 };
+      Shortcut* lastShortcut                { 0 };
 
       QAction* countInAction;
       QAction* metronomeAction;
