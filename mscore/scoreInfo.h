@@ -10,39 +10,26 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __STARTCENTER_H__
-#define __STARTCENTER_H__
-
-#include "ui_startcenter.h"
+#ifndef __SCOREINFO_H__
+#define __SCOREINFO_H__
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   Startcenter
+//   ScoreInfo
 //---------------------------------------------------------
 
-class Startcenter : public QDialog, public Ui::Startcenter
-      {
-      Q_OBJECT
-
-      bool webPageInitialized { false };
-      bool recentPageInitialized { false };
-      virtual void closeEvent(QCloseEvent*);
-
-   private slots:
-      void recentScoresToggled(bool);
-      void templatesToggled(bool);
-      void demosToggled(bool);
-      void connectWebToggled(bool);
-
-   signals:
-      void closed(bool);
+class ScoreInfo : public QFileInfo {
+      QPixmap _pixmap;
 
    public:
-      Startcenter();
+      ScoreInfo() {}
+      ScoreInfo(const QFileInfo& fi) : QFileInfo(fi) {}
+      QPixmap pixmap() const;
+      void setPixmap(const QPixmap& pm) { _pixmap = pm; }
       };
-}
 
+}
 
 #endif
 

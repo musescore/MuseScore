@@ -10,39 +10,31 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __STARTCENTER_H__
-#define __STARTCENTER_H__
+#ifndef __SCOREPREVIEW_H__
+#define __SCOREPREVIEW_H__
 
-#include "ui_startcenter.h"
+#include "ui_scorePreview.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   Startcenter
+//   ScorePreview
 //---------------------------------------------------------
 
-class Startcenter : public QDialog, public Ui::Startcenter
+
+class ScorePreview : public QWidget, public Ui::ScorePreview
       {
       Q_OBJECT
 
-      bool webPageInitialized { false };
-      bool recentPageInitialized { false };
-      virtual void closeEvent(QCloseEvent*);
-
-   private slots:
-      void recentScoresToggled(bool);
-      void templatesToggled(bool);
-      void demosToggled(bool);
-      void connectWebToggled(bool);
-
-   signals:
-      void closed(bool);
+   public slots:
+      void setScore(const QString&);
 
    public:
-      Startcenter();
+      ScorePreview(QWidget* parent = 0);
       };
 }
 
 
 #endif
+
 

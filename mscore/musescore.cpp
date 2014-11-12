@@ -126,7 +126,8 @@ static bool startWithNewScore = false;
 double converterDpi = 0;
 
 QString mscoreGlobalShare;
-static QStringList recentScores;
+QStringList recentScores;
+
 static QString outFileName;
 static QString audioDriver;
 static QString pluginName;
@@ -376,7 +377,7 @@ MuseScore::MuseScore()
 
       setAcceptDrops(true);
       cs                    = 0;
-      lastOpenPath          = preferences.myScoresPath;
+//      lastOpenPath          = preferences.myScoresPath;
 
       _mediaDialog          = 0;
       _drumTools            = 0;
@@ -2721,8 +2722,13 @@ void MuseScore::writeSettings()
             keyEditor->save();
       if (chordStyleEditor)
             chordStyleEditor->save();
-      if (loadScoreDialog)
+
+      if (loadScoreDialog) {
+            settings.setValue("loadScoreDialogSize", loadScoreDialog->size());
+            settings.setValue("loadScoreDialogPos", loadScoreDialog->pos());
             settings.setValue("loadScoreDialog", loadScoreDialog->saveState());
+            }
+
       if (saveScoreDialog)
             settings.setValue("saveScoreDialog", saveScoreDialog->saveState());
       if (loadStyleDialog)
