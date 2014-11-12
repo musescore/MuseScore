@@ -431,9 +431,9 @@
         <Chord>
           <durationType>half</durationType>
           <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            <tpc2>17</tpc2>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <tpc2>21</tpc2>
             </Note>
           </Chord>
         </Measure>
@@ -579,9 +579,9 @@
         <Chord>
           <durationType>half</durationType>
           <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <tpc2>21</tpc2>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <tpc2>17</tpc2>
             </Note>
           </Chord>
         </Measure>

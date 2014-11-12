@@ -2386,9 +2386,9 @@ void Score::cmdExplode()
       if (!selection().isRange())
             return;
 
-      int srcStaff = selection().staffStart();
+      int srcStaff  = selection().staffStart();
       int lastStaff = selection().staffEnd();
-      int srcTrack = srcStaff * VOICES;
+      int srcTrack  = srcStaff * VOICES;
 
       // reset selection to top staff only
       // force complete measures
@@ -2437,10 +2437,10 @@ void Score::cmdExplode()
                         Chord* c = static_cast<Chord*>(e);
                         QList<Note*> notes = c->notes();
                         int nnotes = notes.size();
-                        // keep note "i" (counting backwards from nnotes - 1)
-                        // but wrap around, so if there are more instruments th
-                        // each note potentially gets used multiple times
-                        int keepIndex = nnotes - (i % nnotes) - 1;
+                        // keep note "i" from top, which is backwards from nnotes - 1
+                        // reuse notes if there are more instruments than notes
+                        int stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, 1);
+                        int keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), 0);
                         Note* keepNote = c->notes()[keepIndex];
                         foreach (Note* n, notes) {
                               if (n != keepNote)
@@ -2494,15 +2494,13 @@ void Score::cmdImplode()
                         if (src && src->type() == Element::Type::CHORD) {
                               Chord* srcChord = static_cast<Chord*>(src);
                               // add notes
-                              Note* lastNote = dstChord->downNote();
                               foreach (Note* n, srcChord->notes()) {
                                     NoteVal nv(n->pitch());
                                     nv.tpc1 = n->tpc1();
                                     // skip duplicates
-                                    if (nv.pitch == lastNote->pitch())
+                                    if (dstChord->findNote(nv.pitch))
                                           continue;
                                     Note* nn = addNote(dstChord, nv);
-                                    lastNote = nn;
                                     // add tie to this note if original chord was tied
                                     if (tied) {
                                           // find note to tie to
