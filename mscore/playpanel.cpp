@@ -95,6 +95,8 @@ void PlayPanel::relTempoChanged(double d, int)
 
       setTempo(seq->curTempo() * relTempo);
       setRelTempo(relTempo);
+      cs->updateRepeatList(MScore::playRepeats);
+      emit cs->playlistChanged();
       }
 
 //---------------------------------------------------------
@@ -106,6 +108,8 @@ void PlayPanel::relTempoChanged()
       double v = relTempoBox->value();
       tempoSlider->setValue(v);
       emit relTempoChanged(v * .01);
+      cs->updateRepeatList(MScore::playRepeats);
+      emit cs->playlistChanged();
       }
 
 //---------------------------------------------------------
