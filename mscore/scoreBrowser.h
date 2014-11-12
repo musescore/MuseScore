@@ -10,39 +10,32 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __STARTCENTER_H__
-#define __STARTCENTER_H__
+#ifndef __SCOREBROWSER_H__
+#define __SCOREBROWSER_H__
 
-#include "ui_startcenter.h"
+#include "ui_scoreBrowser.h"
+#include "scoreInfo.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   Startcenter
+//   ScoreBrowser
 //---------------------------------------------------------
 
-class Startcenter : public QDialog, public Ui::Startcenter
+class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       {
       Q_OBJECT
 
-      bool webPageInitialized { false };
-      bool recentPageInitialized { false };
-      virtual void closeEvent(QCloseEvent*);
-
    private slots:
-      void recentScoresToggled(bool);
-      void templatesToggled(bool);
-      void demosToggled(bool);
-      void connectWebToggled(bool);
-
-   signals:
-      void closed(bool);
+      void scoreChanged(QListWidgetItem*, QListWidgetItem*);
+      void scoreClicked(QListWidgetItem*);
+      void scoreActivated(QListWidgetItem*);
 
    public:
-      Startcenter();
+      ScoreBrowser(QWidget* parent = 0);
+      void setScores(QFileInfoList&);
       };
 }
-
 
 #endif
 

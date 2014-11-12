@@ -290,7 +290,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       OmrPanel* omrPanel             { 0 };
 
       bool _midiinEnabled            { true };
-      QString lastOpenPath;
       QList<QString> plugins;
       ScriptEngine* se               { 0 };
       QString pluginPath;
@@ -556,7 +555,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* getTab2() const { return tab2; }
       QList<LanguageItem>& languages() { return _languages; }
 
-      QStringList getOpenScoreNames(QString& dir, const QString& filter, const QString& title);
+      QStringList getOpenScoreNames(const QString& filter, const QString& title);
       QString getSaveScoreName(const QString& title, QString& name, const QString& filter, bool folder = false);
       QString getStyleFilename(bool open, const QString& title = QString());
       QString getFotoFilename(QString& filter, QString *selectedFilter);
@@ -667,6 +666,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
 extern MuseScore* mscore;
 extern MuseScoreCore* mscoreCore;
+extern QStringList recentScores;
 extern QString dataPath;
 extern MasterSynthesizer* synti;
 MasterSynthesizer* synthesizerFactory();

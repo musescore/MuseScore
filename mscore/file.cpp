@@ -80,6 +80,7 @@
 #include "libmscore/image.h"
 #include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
+#include "scorePreview.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -259,7 +260,6 @@ bool MuseScore::checkDirty(Score* s)
 void MuseScore::loadFiles()
       {
       QStringList files = getOpenScoreNames(
-         lastOpenPath,
 #ifdef OMR
          tr("All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;")+
 #else
@@ -296,7 +296,6 @@ Score* MuseScore::openScore(const QString& fn)
       Score* score = readScore(fn);
       if (score) {
             setCurrentScoreView(appendScore(score));
-            lastOpenPath = score->fileInfo()->path();
             updateRecentScores(score);
             writeSessionFile(false);
             }
@@ -771,8 +770,10 @@ void MuseScore::newFile()
 //   getOpenScoreNames
 //---------------------------------------------------------
 
-QStringList MuseScore::getOpenScoreNames(QString& dir, const QString& filter, const QString& title)
+QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& title)
       {
+      QSettings settings;
+      QString dir = settings.value("lastOpenPath", preferences.myScoresPath).toString();
       if (preferences.nativeDialogs) {
             return QFileDialog::getOpenFileNames(this,
                title, dir, filter);
@@ -780,34 +781,45 @@ QStringList MuseScore::getOpenScoreNames(QString& dir, const QString& filter, co
       QFileInfo myScores(preferences.myScoresPath);
       if (myScores.isRelative())
             myScores.setFile(QDir::home(), preferences.myScoresPath);
+
       if (loadScoreDialog == 0) {
             loadScoreDialog = new QFileDialog(this);
             loadScoreDialog->setFileMode(QFileDialog::ExistingFiles);
             loadScoreDialog->setOption(QFileDialog::DontUseNativeDialog, true);
             loadScoreDialog->setWindowTitle(title);
 
-            QSettings settings;
-            loadScoreDialog->restoreState(settings.value("loadScoreDialog").toByteArray());
-            loadScoreDialog->setAcceptMode(QFileDialog::AcceptOpen);
-            }
-      // setup side bar urls
-      QList<QUrl> urls;
-      QString home = QDir::homePath();
-      urls.append(QUrl::fromLocalFile(home));
-      urls.append(QUrl::fromLocalFile(myScores.absoluteFilePath()));
-      urls.append(QUrl::fromLocalFile(QDir::currentPath()));
-      urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/demos"));
-      loadScoreDialog->setSidebarUrls(urls);
+            QSplitter* splitter = loadScoreDialog->findChild<QSplitter*>("splitter");
+            if (splitter) {
+                  qDebug("splitter found");
+                  ScorePreview* preview = new ScorePreview;
+                  splitter->addWidget(preview);
+                  connect(loadScoreDialog, SIGNAL(currentChanged(const QString&)),
+                     preview, SLOT(setScore(const QString&)));
+                  }
 
-      loadScoreDialog->setNameFilter(filter);
-      loadScoreDialog->setDirectory(dir);
+            // setup side bar urls
+            QList<QUrl> urls;
+            QString home = QDir::homePath();
+            urls.append(QUrl::fromLocalFile(home));
+            urls.append(QUrl::fromLocalFile(myScores.absoluteFilePath()));
+            urls.append(QUrl::fromLocalFile(QDir::currentPath()));
+            urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/demos"));
+            loadScoreDialog->setSidebarUrls(urls);
+
+            loadScoreDialog->setNameFilter(filter);
+
+            loadScoreDialog->resize(settings.value("loadScoreDialogSize", QSize(600,400)).toSize());
+            loadScoreDialog->restoreState(settings.value("loadScoreDialog").toByteArray());
+            loadScoreDialog->move(settings.value("loadScoreDialogPos", QPoint(30,30)).toPoint());
+            loadScoreDialog->setAcceptMode(QFileDialog::AcceptOpen);
+            loadScoreDialog->setDirectory(dir);
+            }
 
       QStringList result;
-      if (loadScoreDialog->exec()) {
+      if (loadScoreDialog->exec())
             result = loadScoreDialog->selectedFiles();
-            return result;
-            }
-      return QStringList();
+      settings.setValue("lastOpenPath", loadScoreDialog->directory().absolutePath());
+      return result;
       }
 
 //---------------------------------------------------------

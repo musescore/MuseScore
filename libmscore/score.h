@@ -1012,6 +1012,8 @@ class Score : public QObject {
 extern Score* gscore;
 extern void fixTicks();
 
+QPixmap extractThumbnail(const QString&);
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 
 }     // namespace Ms

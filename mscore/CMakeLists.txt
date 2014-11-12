@@ -47,7 +47,7 @@ QT4_WRAP_UI (ui_headers
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui layer.ui
       omrpanel.ui startdialog.ui masterpalette.ui pluginManager.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
-      startcenter.ui
+      startcenter.ui scorePreview.ui scoreBrowser.ui
 
       importmidi/importmidi_panel.ui
 
@@ -157,7 +157,7 @@ QT4_WRAP_CPP (mocs
       importmidi/importmidi_panel.h importmidi/importmidi_delegate.h importmidi/importmidi_view.h
       debugger/debugger.h
       resourceManager.h downloadUtils.h accessibletoolbutton.h scoreaccessibility.h
-      startcenter.h
+      startcenter.h scoreBrowser.h scorePreview.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -302,7 +302,7 @@ add_executable ( ${ExecutableName}
       importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
-      startcenter.cpp
+      startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
 
       ${OMR_FILES}
       ${AUDIO}
