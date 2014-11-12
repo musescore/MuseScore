@@ -52,6 +52,9 @@ Startcenter::Startcenter()
       connect(demos,          SIGNAL(toggled(bool)),  SLOT(demosToggled(bool)));
       connect(connectWeb,     SIGNAL(toggled(bool)),  SLOT(connectWebToggled(bool)));
 
+      connect(demosPage,      &ScoreBrowser::leave, this, &Startcenter::close);
+      connect(templatesPage,  &ScoreBrowser::leave, this, &Startcenter::close);
+      connect(recentPage,     &ScoreBrowser::leave, this, &Startcenter::close);
       recentScoresToggled(true);
       }
 
@@ -72,9 +75,8 @@ void Startcenter::recentScoresToggled(bool val)
       {
       if (!val)
             return;
-      printf("recent scores\n");
-      QFileInfoList fil;
       if (!recentPageInitialized) {
+            QFileInfoList fil;
             for (const QString& s : ::Ms::recentScores) {
                   if (s.isEmpty())
                         break;
@@ -90,6 +92,17 @@ void Startcenter::recentScoresToggled(bool val)
       }
 
 //---------------------------------------------------------
+//   updateRecentScores
+//---------------------------------------------------------
+
+void Startcenter::updateRecentScores()
+      {
+      recentPageInitialized = false;
+      if (recentScores->isChecked())
+            recentScoresToggled(true);
+      }
+
+//---------------------------------------------------------
 //   templatesToggled
 //---------------------------------------------------------
 
@@ -97,6 +110,17 @@ void Startcenter::templatesToggled(bool val)
       {
       if (!val)
             return;
+      if (!templatesPageInitialized) {
+            QDir dir(mscoreGlobalShare + "/templates");
+            QStringList filter = { "*.mscz" };
+            QFileInfoList fil;
+            for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files)) {
+                  if (fi.exists())
+                        fil.append(fi);
+                  }
+            templatesPage->setScores(fil);
+            templatesPageInitialized = true;
+            }
       stack->setCurrentWidget(templatesPage);
       }
 
@@ -108,6 +132,17 @@ void Startcenter::demosToggled(bool val)
       {
       if (!val)
             return;
+      if (!demosPageInitialized) {
+            QDir dir(mscoreGlobalShare + "/demos");
+            QStringList filter = { "*.mscz" };
+            QFileInfoList fil;
+            for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files)) {
+                  if (fi.exists())
+                        fil.append(fi);
+                  }
+            demosPage->setScores(fil);
+            demosPageInitialized = true;
+            }
       stack->setCurrentWidget(demosPage);
       }
 

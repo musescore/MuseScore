@@ -314,7 +314,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool _fullscreen;
       QList<LanguageItem> _languages;
 
-      QWidget* startcenter { 0 };
+      Startcenter* startcenter { 0 };
       QFileDialog* loadScoreDialog;
       QFileDialog* saveScoreDialog;
       QFileDialog* loadStyleDialog;

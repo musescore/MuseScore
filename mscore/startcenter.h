@@ -25,8 +25,10 @@ class Startcenter : public QDialog, public Ui::Startcenter
       {
       Q_OBJECT
 
-      bool webPageInitialized { false };
-      bool recentPageInitialized { false };
+      bool webPageInitialized       { false  };
+      bool recentPageInitialized    { false  };
+      bool templatesPageInitialized { false  };
+      bool demosPageInitialized     { false  };
       virtual void closeEvent(QCloseEvent*);
 
    private slots:
@@ -40,6 +42,7 @@ class Startcenter : public QDialog, public Ui::Startcenter
 
    public:
       Startcenter();
+      void updateRecentScores();
       };
 }
 

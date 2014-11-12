@@ -392,6 +392,7 @@ endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 add_subdirectory(miditools EXCLUDE_FROM_ALL)
 add_subdirectory(fonttools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
+add_subdirectory(demos)
 
 if (USE_PORTMIDI)
       subdirs (thirdparty/portmidi)
