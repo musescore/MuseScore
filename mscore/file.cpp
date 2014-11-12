@@ -126,7 +126,6 @@ static void paintElements(QPainter& p, const QList<const Element*>& el)
             e->draw(&p);
             p.translate(-pos);
             }
-
       }
 
 //---------------------------------------------------------
@@ -279,12 +278,8 @@ void MuseScore::loadFiles()
          tr("Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)"),
          tr("MuseScore: Load Score")
          );
-      QStringList list = files;
-      QStringList::Iterator it = list.begin();
-      while(it != list.end()) {
-            openScore(*it);
-            ++it;
-            }
+      for (const QString& s : files)
+            openScore(s);
       }
 
 //---------------------------------------------------------
@@ -293,6 +288,16 @@ void MuseScore::loadFiles()
 
 Score* MuseScore::openScore(const QString& fn)
       {
+      //
+      // make sure we load a file only once
+      //
+      QFileInfo fi(fn);
+      QString path = fi.canonicalFilePath();
+      for (Score* s : scoreList) {
+            if (s->fileInfo()->canonicalFilePath() == path)
+                  return 0;
+            }
+
       Score* score = readScore(fn);
       if (score) {
             setCurrentScoreView(appendScore(score));

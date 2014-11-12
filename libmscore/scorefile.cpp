@@ -722,6 +722,8 @@ QString readRootFile(MQZipReader* uz, QList<QString>& images)
 QPixmap extractThumbnail(const QString& name)
       {
       QPixmap pm;
+      if (!name.endsWith(".mscz"))
+            return pm;
       MQZipReader uz(name);
       if (!uz.exists()) {
             qDebug("extractThumbnail: <%s> not found", qPrintable(name));
@@ -1263,6 +1265,10 @@ void Score::print(QPainter* painter, int pageNo)
 QByteArray Score::readCompressedToBuffer()
       {
       MQZipReader uz(filePath());
+      if (!uz.exists()) {
+            qDebug("Score::readCompressedToBuffer: cannot read zip file");
+            return QByteArray();
+            }
       QList<QString> images;
       QString rootfile = readRootFile(&uz, images);
 
