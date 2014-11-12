@@ -19,27 +19,9 @@
 #=============================================================================
 
 install(FILES
-      drumset_fr.drm
-      01-General-Bass_Clef.mscz
-      01-General-Treble_Clef.mscz
-      02-Choral-Liturgical_Unmetrical.mscz
-      02-Choral-Liturgical_Unmetrical_with_Organ.mscz
-      02-Choral-SATB.mscz
-      02-Choral-SATB_Closed_Score.mscz
-      02-Choral-SATB_Closed_Score_with_Organ.mscz
-      02-Choral-SATB_Closed_Score_with_Piano.mscz
-      02-Choral-SATB_with_Organ.mscz
-      02-Choral-SATB_with_Piano.mscz
-      02-Choral-Voice_Piano.mscz
-      03-Solo-Guitar.mscz
-      03-Solo-Guitar_Standard_Tablature.mscz
-      03-Solo-Guitar_Tablature.mscz
-      03-Solo-Piano.mscz
-      04-Jazz-Jazz_Big_Band.mscz
-      04-Jazz-Jazz_Combo.mscz
-      04-Jazz-Jazz_Lead_Sheet.mscz
-      05-Orchestral-Classical_Orchestra.mscz
-      06-Band-Rock_Band.mscz
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
+      All_Dudes.mscz
+      Reunion.mscz
+      Triumph.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}demos
       )
 

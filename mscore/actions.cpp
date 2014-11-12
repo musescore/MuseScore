@@ -2985,7 +2985,7 @@ Shortcut Shortcut::sc[] = {
          ),
       Shortcut(
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL,
+         STATE_DISABLED | STATE_NORMAL,
          0,
          "startcenter",
          Qt::ApplicationShortcut,

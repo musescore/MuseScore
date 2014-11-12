@@ -28,8 +28,10 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
 
    private slots:
       void scoreChanged(QListWidgetItem*, QListWidgetItem*);
-      void scoreClicked(QListWidgetItem*);
       void scoreActivated(QListWidgetItem*);
+
+   signals:
+      void leave();
 
    public:
       ScoreBrowser(QWidget* parent = 0);

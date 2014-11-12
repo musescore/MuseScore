@@ -100,6 +100,8 @@
 #include "qmlplugin.h"
 #include "accessibletoolbutton.h"
 
+#include "startcenter.h"
+
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
 #endif
@@ -1369,9 +1371,11 @@ void MuseScore::updateRecentScores(Score* score)
       QString path = score->fileInfo()->absoluteFilePath();
       recentScores.removeAll(path);
       recentScores.prepend(path);
-      if(recentScores.size() > RECENT_LIST_SIZE) {
+      if (recentScores.size() > RECENT_LIST_SIZE) {
             recentScores.removeLast();
             }
+      if (startcenter)
+            startcenter->updateRecentScores();
       }
 
 //---------------------------------------------------------

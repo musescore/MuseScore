@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "scoreBrowser.h"
+#include "musescore.h"
 #include "libmscore/score.h"
 
 namespace Ms {
@@ -45,8 +46,6 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
 
       connect(scoreList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
          SLOT(scoreChanged(QListWidgetItem*,QListWidgetItem*)));
-      connect(scoreList, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
-         SLOT(scoreClicked(QListWidgetItem*)));
       connect(scoreList, SIGNAL(itemActivated(QListWidgetItem*)),
          SLOT(scoreActivated(QListWidgetItem*)));
       }
@@ -57,9 +56,9 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
 
 void ScoreBrowser::setScores(QFileInfoList& s)
       {
+      scoreList->clear();
       for (const QFileInfo& fi : s) {
             QPixmap pm = extractThumbnail(fi.filePath());
-            printf("<%s>\n", qPrintable(fi.filePath()));
             ScoreInfo si(fi);
             if (fi.suffix() == "mscz")
                   si.setPixmap(extractThumbnail(fi.filePath()));
@@ -83,14 +82,15 @@ void ScoreBrowser::scoreChanged(QListWidgetItem* current, QListWidgetItem*)
       preview->setScore(item->info().filePath());
       }
 
-void ScoreBrowser::scoreClicked(QListWidgetItem*)
-      {
-      printf("double click\n");
-      }
+//---------------------------------------------------------
+//   scoreActivated
+//---------------------------------------------------------
 
-void ScoreBrowser::scoreActivated(QListWidgetItem*)
+void ScoreBrowser::scoreActivated(QListWidgetItem* val)
       {
-      printf("activated\n");
+      ScoreItem* item = static_cast<ScoreItem*>(val);
+      mscore->openScore(item->info().filePath());
+      emit leave();
       }
 
 }
