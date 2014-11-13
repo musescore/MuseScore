@@ -813,9 +813,9 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
 
             loadScoreDialog->setNameFilter(filter);
 
-            loadScoreDialog->resize(settings.value("loadScoreDialogSize", QSize(600,400)).toSize());
+            loadScoreDialog->resize(settings.value("loadScoreDialogSize", QSize(860,489)).toSize());
             loadScoreDialog->restoreState(settings.value("loadScoreDialog").toByteArray());
-            loadScoreDialog->move(settings.value("loadScoreDialogPos", QPoint(30,30)).toPoint());
+            loadScoreDialog->move(settings.value("loadScoreDialogPos", QPoint(200,200)).toPoint());
             loadScoreDialog->setAcceptMode(QFileDialog::AcceptOpen);
             loadScoreDialog->setDirectory(dir);
             }
