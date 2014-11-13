@@ -259,48 +259,7 @@ void MuseScore::closeEvent(QCloseEvent* ev)
                   }
             }
 
-      // save score list
-      QSettings settings;
-      for (int i = 0; i < RECENT_LIST_SIZE; ++i)
-            settings.setValue(QString("recent-%1").arg(i), _recentScores.value(i));
-
-      settings.setValue("scores", scoreList.size());
-      int curScore = scoreList.indexOf(cs);
-      if (curScore == -1)  // cs removed if new created and not modified
-            curScore = 0;
-      settings.setValue("currentScore", curScore);
-
-      for (int idx = 0; idx < scoreList.size(); ++idx)
-            settings.setValue(QString("score-%1").arg(idx), scoreList[idx]->fileInfo()->absoluteFilePath());
-
-      settings.setValue("lastSaveCopyDirectory", lastSaveCopyDirectory);
-      settings.setValue("lastSaveDirectory", lastSaveDirectory);
-
-//      if (playPanel)
-//            preferences.playPanelPos = playPanel->pos();
-
       writeSettings();
-      if (debugger)
-            debugger->writeSettings();
-
-#ifdef SCRIPT_INTERFACE
-      if (_pluginCreator)
-            _pluginCreator->writeSettings();
-#endif
-      if (synthControl)
-            synthControl->writeSettings();
-      if (mixer)
-            mixer->writeSettings();
-      if (seq) {
-            seq->stopWait();
-            seq->exit();
-            }
-      if (instrList)
-            instrList->writeSettings();
-      if (pianorollEditor)
-            pianorollEditor->writeSettings();
-      if (drumrollEditor)
-            drumrollEditor->writeSettings();
 
       ev->accept();
       if (preferences.dirty)
@@ -2640,12 +2599,55 @@ void MuseScore::changeState(ScoreState val)
       }
 
 //---------------------------------------------------------
+//   saveDialogState
+//---------------------------------------------------------
+
+void MuseScore::saveDialogState(const char* name, QFileDialog* d)
+      {
+      if (d) {
+            settings.beginGroup(name);
+            settings.setValue("size",  d->size());
+            settings.setValue("pos",   d->pos());
+            settings.setValue("state", d->saveState());
+            settings.endGroup();
+            }
+      }
+
+//---------------------------------------------------------
+//   restoreDialogState
+//---------------------------------------------------------
+
+void MuseScore::restoreDialogState(const char* name, QFileDialog* d)
+      {
+      settings.beginGroup(name);
+      d->resize(settings.value("size", QSize(860,489)).toSize());
+      d->restoreState(settings.value("state").toByteArray());
+      d->move(settings.value("pos", QPoint(200,200)).toPoint());
+      settings.endGroup();
+      }
+
+//---------------------------------------------------------
 //   writeSettings
 //---------------------------------------------------------
 
 void MuseScore::writeSettings()
       {
-      QSettings settings;
+      // save score list
+      for (int i = 0; i < RECENT_LIST_SIZE; ++i)
+            settings.setValue(QString("recent-%1").arg(i), _recentScores.value(i));
+
+      settings.setValue("scores", scoreList.size());
+      int curScore = scoreList.indexOf(cs);
+      if (curScore == -1)  // cs removed if new created and not modified
+            curScore = 0;
+      settings.setValue("currentScore", curScore);
+
+      for (int idx = 0; idx < scoreList.size(); ++idx)
+            settings.setValue(QString("score-%1").arg(idx), scoreList[idx]->fileInfo()->absoluteFilePath());
+
+      settings.setValue("lastSaveCopyDirectory", lastSaveCopyDirectory);
+      settings.setValue("lastSaveDirectory", lastSaveDirectory);
+
       settings.beginGroup("MainWindow");
       settings.setValue("size", size());
       settings.setValue("pos", pos());
@@ -2657,49 +2659,52 @@ void MuseScore::writeSettings()
       settings.setValue("state", saveState());
       settings.setValue("splitScreen", _splitScreen);
       settings.setValue("debuggerSplitter", mainWindow->saveState());
-//      if (_splitScreen) {
-            settings.setValue("split", _horizontalSplit);
-            settings.setValue("splitter", splitter->saveState());
-//            }
+      settings.setValue("split", _horizontalSplit);
+      settings.setValue("splitter", splitter->saveState());
       settings.endGroup();
+
       Workspace::currentWorkspace->save();
       if (keyEditor && keyEditor->dirty())
             keyEditor->save();
       if (chordStyleEditor)
             chordStyleEditor->save();
 
-      if (loadScoreDialog) {
-            settings.setValue("loadScoreDialogSize", loadScoreDialog->size());
-            settings.setValue("loadScoreDialogPos", loadScoreDialog->pos());
-            settings.setValue("loadScoreDialog", loadScoreDialog->saveState());
-            }
+      saveDialogState("loadScoreDialog",      loadScoreDialog);
+      saveDialogState("saveScoreDialog",      saveScoreDialog);
+      saveDialogState("loadStyleDialog",      loadStyleDialog);
+      saveDialogState("saveStyleDialog",      saveStyleDialog);
+      saveDialogState("saveImageDialog",      saveImageDialog);
+      saveDialogState("loadChordStyleDialog", loadChordStyleDialog);
+      saveDialogState("saveChordStyleDialog", saveChordStyleDialog);
+//      saveDialogState("loadSoundFontDialog",  loadSoundFontDialog);
+      saveDialogState("loadScanDialog",       loadScanDialog);
+      saveDialogState("loadAudioDialog",      loadAudioDialog);
+      saveDialogState("loadDrumsetDialog",    loadDrumsetDialog);
+      saveDialogState("saveDrumsetDialog",    saveDrumsetDialog);
+      saveDialogState("loadPaletteDialog",    loadPaletteDialog);
+      saveDialogState("savePaletteDialog",    savePaletteDialog);
 
-      if (saveScoreDialog)
-            settings.setValue("saveScoreDialog", saveScoreDialog->saveState());
-      if (loadStyleDialog)
-            settings.setValue("loadStyleDialog", loadStyleDialog->saveState());
-      if (saveStyleDialog)
-            settings.setValue("saveStyleDialog", saveStyleDialog->saveState());
-      if (saveImageDialog)
-            settings.setValue("saveImageDialog", saveImageDialog->saveState());
-      if (loadChordStyleDialog)
-            settings.setValue("loadChordStyleDialog", loadChordStyleDialog->saveState());
-      if (saveChordStyleDialog)
-            settings.setValue("saveChordStyleDialog", saveChordStyleDialog->saveState());
-      if (loadSoundFontDialog)
-            settings.setValue("loadSoundFontDialog", loadSoundFontDialog->saveState());
-      if (loadScanDialog)
-            settings.setValue("loadScanDialog", loadScanDialog->saveState());
-      if (loadAudioDialog)
-            settings.setValue("loadAudioDialog", loadAudioDialog->saveState());
-      if (loadDrumsetDialog)
-            settings.setValue("loadDrumsetDialog", loadDrumsetDialog->saveState());
-      if (loadPaletteDialog)
-            settings.setValue("loadPaletteDialog", loadPaletteDialog->saveState());
-      if (saveDrumsetDialog)
-            settings.setValue("saveDrumsetDialog", saveDrumsetDialog->saveState());
-      if (savePaletteDialog)
-            settings.setValue("savePaletteDialog", savePaletteDialog->saveState());
+      if (debugger)
+            debugger->writeSettings();
+
+#ifdef SCRIPT_INTERFACE
+      if (_pluginCreator)
+            _pluginCreator->writeSettings();
+#endif
+      if (synthControl)
+            synthControl->writeSettings();
+      if (mixer)
+            mixer->writeSettings();
+      if (seq) {
+            seq->stopWait();
+            seq->exit();
+            }
+      if (instrList)
+            instrList->writeSettings();
+      if (pianorollEditor)
+            pianorollEditor->writeSettings();
+      if (drumrollEditor)
+            drumrollEditor->writeSettings();
       }
 
 //---------------------------------------------------------
@@ -2716,7 +2721,6 @@ void MuseScore::readSettings()
             mscore->showPalette(true);
             return;
             }
-      QSettings settings;
 
       settings.beginGroup("MainWindow");
       resize(settings.value("size", QSize(1024, 768)).toSize());
