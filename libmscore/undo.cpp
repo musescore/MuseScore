@@ -1479,6 +1479,10 @@ void AddElement::endUndoRedo(bool isUndo) const
                   undoRemoveTuplet(static_cast<ChordRest*>(element));
             else
                   undoAddTuplet(static_cast<ChordRest*>(element));
+            if (element->type() == Element::Type::CHORD) {
+                  Measure* m = static_cast<Chord*>(element)->measure();
+                  m->cmdUpdateNotes(element->staffIdx());
+                  }
             }
       else if (element->type() == Element::Type::NOTE) {
             Measure* m = static_cast<Note*>(element)->chord()->measure();
