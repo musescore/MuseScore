@@ -35,7 +35,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
 
    public:
       ScoreBrowser(QWidget* parent = 0);
-      void setScores(QFileInfoList&);
+      void setScores(QFileInfoList);
       };
 }
 

@@ -44,7 +44,7 @@ Startcenter::Startcenter()
  : QDialog(0)
       {
       setupUi(this);
-      setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
+//      setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
       setWindowModality(Qt::ApplicationModal);
       connect(createNewScore, SIGNAL(clicked()), getAction("file-new"), SLOT(trigger()));
       connect(recentScores,   SIGNAL(toggled(bool)),  SLOT(recentScoresToggled(bool)));
@@ -76,16 +76,7 @@ void Startcenter::recentScoresToggled(bool val)
       if (!val)
             return;
       if (!recentPageInitialized) {
-            QFileInfoList fil;
-            for (const QString& s : ::Ms::recentScores) {
-                  if (s.isEmpty())
-                        break;
-                  QString data(s);
-                  QFileInfo fi(s);
-                  if (fi.exists())
-                        fil.append(fi);
-                  }
-            recentPage->setScores(fil);
+            recentPage->setScores(mscore->recentScores());
             recentPageInitialized = true;
             }
       stack->setCurrentWidget(recentPage);

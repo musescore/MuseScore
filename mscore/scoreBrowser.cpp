@@ -54,7 +54,7 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
 //   setScores
 //---------------------------------------------------------
 
-void ScoreBrowser::setScores(QFileInfoList& s)
+void ScoreBrowser::setScores(QFileInfoList s)
       {
       scoreList->clear();
       for (const QFileInfo& fi : s) {
