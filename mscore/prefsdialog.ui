@@ -2019,7 +2019,7 @@
       <attribute name="title">
        <string>Score</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout6">
+      <layout class="QGridLayout" name="gridLayout61">
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_19">
          <property name="title">
