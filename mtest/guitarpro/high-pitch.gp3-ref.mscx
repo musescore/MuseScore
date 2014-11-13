@@ -614,7 +614,7 @@
               <lid>11</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
-              <fret>0</fret>
+              <fret>8</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -653,7 +653,7 @@
               <lid>17</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
-              <fret>0</fret>
+              <fret>8</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -692,7 +692,7 @@
               <lid>23</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
-              <fret>0</fret>
+              <fret>8</fret>
               <string>0</string>
               </Note>
             </Chord>
@@ -731,7 +731,7 @@
               <lid>29</lid>
               <pitch>127</pitch>
               <tpc>15</tpc>
-              <fret>0</fret>
+              <fret>8</fret>
               <string>0</string>
               </Note>
             </Chord>
