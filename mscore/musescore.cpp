@@ -220,7 +220,7 @@ static void printVersion(const char* prog)
 #endif
       }
 
-static const int RECENT_LIST_SIZE = 10;
+static const int RECENT_LIST_SIZE = 20;
 
 //---------------------------------------------------------
 //   closeEvent
