@@ -2494,6 +2494,10 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
 
             qreal end_pos = -1.0;
 
+            bool rest = true;
+            last_cr = NULL;
+            float last_pos = 0.0;
+
             foreach(const Element * e, elems) {
 
             //qDebug("%s", qPrintable(e->userName()) );
@@ -2527,14 +2531,32 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                                  (ChordRest*)( ((Note*)e)->chord()):(ChordRest*)e);
 
                   if (cr != last_cr) {
+
+                     if (last_cr!=NULL) 
+                        qts << (rest?"R ":"N ") << last_cr->segment()->tick() << ',' << last_pos << endl;
+
+                     rest = true;
+
                      //qDebug("%i (%i) - %f",cr->segment()->tick(),ticksFromBeg,world.m31());
-                     qts << cr->segment()->tick() << ',' << world.m31()/(w*mag) << endl;
-                     last_cr = cr;
+                     last_cr = cr; 
+                     last_pos = world.m31()/(w*mag);
                   }
+
+                  rest = rest && (e->type() == Element::Type::REST);
+
                }
                else if (e->type() == Element::Type::MEASURE) {
+                  
+                  if (last_cr!=NULL) {
+                     qts << (rest?"R ":"N ") << last_cr->segment()->tick() << ',' << last_pos << endl;
+                     last_cr = NULL;
+                  }
+
                   qts << "B " << world.m31()/(w*mag) << endl;
                   end_pos = (world.m31() + mag*e->bbox().width())/(w*mag);
+               }
+               else if (e->type() == Element::Type::TIMESIG) {
+                  qts << "TS" << ((TimeSig*)e)->numerator() << ',' << ((TimeSig*)e)->denominator() << endl;
                }
 
                p->translate(-pos);
@@ -2543,8 +2565,12 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
             //sys->scanElements(NULL, drawElementOnP,true);
             }
 
-            if (end_pos>0)
+            if (end_pos>0) {
+               if (last_cr!=NULL) 
+                  qts << (rest?"R ":"N ") << last_cr->segment()->tick() << ',' << last_pos << endl;
+                     
                qts << 'B' << end_pos << endl;
+            }
 
 
             p->end();

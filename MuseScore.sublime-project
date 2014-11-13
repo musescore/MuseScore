@@ -1,0 +1,9 @@
+{
+	"folders":
+	[
+		{
+			"path": "/home/velochy/MuseScore",
+      "file_exclude_patterns": ["*.sublime-*"]
+		}
+	]
+}
