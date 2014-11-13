@@ -2476,7 +2476,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
  
 
             svgname = fi.baseName()+QString::number(count++)+".svg";
-            qts << "# " << svgname << endl;
+            qts << "F " << svgname << endl;
             //qts << ticksFromBeg << ',' << 0.0 << '\n';
 
             svgbuf = new QBuffer();
@@ -2532,7 +2532,8 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
 
                   int tick = cr->segment()->tick();
 
-                  if (tick != last_tick) {
+                  if (tick > last_tick && world.m31()/(w*mag) > last_pos) {
+                     //tick != last_tick
 
                      if (last_tick>=0) 
                         qts << (rest?"R ":"N ") << last_tick << ',' << last_pos << endl;
@@ -2542,6 +2543,9 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                      //qDebug("%i (%i) - %f",cr->segment()->tick(),ticksFromBeg,world.m31());
                      last_tick = tick;
                      last_pos = world.m31()/(w*mag);
+                  }
+                  else if (tick!=last_tick) {
+                     qts << "# Omitted " << tick << ',' << world.m31()/(w*mag) << endl; 
                   }
 
                   rest = rest && (e->type() == Element::Type::REST);
@@ -2594,7 +2598,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
 
          if (measure!=NULL) ticksFromBeg+=measure->ticks();
          qDebug("Total ticks: %i",ticksFromBeg);
-         qts << "## " << ticksFromBeg << endl;
+         qts << "TT " << ticksFromBeg << endl;
 
          uz.addFile(fi.baseName()+".meta",metabuf.data());
 
