@@ -217,6 +217,7 @@ class MuseScoreApplication : public QtSingleApplication {
 class MuseScore : public QMainWindow, public MuseScoreCore {
       Q_OBJECT
 
+      QSettings settings;
       ScoreView* cv                        { 0 };
       ScoreState _sstate;
       UpdateChecker* ucheck;
@@ -322,7 +323,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileDialog* saveImageDialog       { 0 };
       QFileDialog* loadChordStyleDialog  { 0 };
       QFileDialog* saveChordStyleDialog  { 0 };
-      QFileDialog* loadSoundFontDialog   { 0 };
+//      QFileDialog* loadSoundFontDialog   { 0 };
       QFileDialog* loadSfzFileDialog     { 0 };
       QFileDialog* loadBackgroundDialog  { 0 };
       QFileDialog* loadScanDialog        { 0 };
@@ -664,6 +665,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void showStartcenter(bool);
       QFileInfoList recentScores() const;
+      void saveDialogState(const char* name, QFileDialog* d);
+      void restoreDialogState(const char* name, QFileDialog* d);
       };
 
 extern MuseScore* mscore;
