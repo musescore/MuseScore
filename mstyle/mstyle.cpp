@@ -8146,7 +8146,7 @@ int MgStyle::styleHint(StyleHint hint, const QStyleOption* option, const QWidget
             case SH_FormLayoutWrapPolicy:
                   return QFormLayout::DontWrapRows;
             case SH_MessageBox_TextInteractionFlags:
-                  return true;
+                  return Qt::LinksAccessibleByMouse | Qt::TextSelectableByMouse;
             case SH_WindowFrame_Mask:
                   return false;
 
