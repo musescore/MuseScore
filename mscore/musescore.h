@@ -357,6 +357,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* panAction;
 
       QLabel* cornerLabel;
+      QStringList _recentScores;
 
       //---------------------
 
@@ -662,6 +663,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void unregisterPlugin(PluginDescription*);
 
       void showStartcenter(bool);
+      QFileInfoList recentScores() const;
       };
 
 extern MuseScore* mscore;

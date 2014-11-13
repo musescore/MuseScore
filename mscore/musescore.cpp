@@ -128,7 +128,6 @@ static bool startWithNewScore = false;
 double converterDpi = 0;
 
 QString mscoreGlobalShare;
-QStringList recentScores;
 
 static QString outFileName;
 static QString audioDriver;
@@ -263,7 +262,7 @@ void MuseScore::closeEvent(QCloseEvent* ev)
       // save score list
       QSettings settings;
       for (int i = 0; i < RECENT_LIST_SIZE; ++i)
-            settings.setValue(QString("recent-%1").arg(i), recentScores.value(i));
+            settings.setValue(QString("recent-%1").arg(i), _recentScores.value(i));
 
       settings.setValue("scores", scoreList.size());
       int curScore = scoreList.indexOf(cs);
@@ -1230,7 +1229,7 @@ void MuseScore::selectScore(QAction* action)
       QString a = action->data().toString();
       if (!a.isEmpty()) {
             if (a == "clear-recent") {
-                  recentScores.clear();
+                  _recentScores.clear();
                   }
             else {
             Score* score = readScore(a);
@@ -1316,10 +1315,10 @@ int MuseScore::appendScore(Score* score)
 void MuseScore::updateRecentScores(Score* score)
       {
       QString path = score->fileInfo()->absoluteFilePath();
-      recentScores.removeAll(path);
-      recentScores.prepend(path);
-      if (recentScores.size() > RECENT_LIST_SIZE) {
-            recentScores.removeLast();
+      _recentScores.removeAll(path);
+      _recentScores.prepend(path);
+      if (_recentScores.size() > RECENT_LIST_SIZE) {
+            _recentScores.removeLast();
             }
       if (startcenter)
             startcenter->updateRecentScores();
@@ -1392,8 +1391,8 @@ void MuseScore::loadScoreList()
       for (int i = RECENT_LIST_SIZE-1; i >= 0; --i) {
             QString path = s.value(QString("recent-%1").arg(i),"").toString();
             if (!path.isEmpty() && QFileInfo(path).exists()) {
-                  recentScores.removeAll(path);
-                  recentScores.prepend(path);
+                  _recentScores.removeAll(path);
+                  _recentScores.prepend(path);
                   }
             }
       }
@@ -1406,17 +1405,12 @@ void MuseScore::openRecentMenu()
       {
       openRecent->clear();
       bool one = false;
-      foreach(QString s, recentScores) {
-            if (s.isEmpty())
-                  break;
-            QString data(s);
-            QFileInfo fi(s);
-            if(fi.exists()) {
-                  QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
-                  action->setData(data);
-                  action->setToolTip(s);
-                  one = true;
-                  }
+      for (const QFileInfo& fi : recentScores()) {
+            QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
+            QString data(fi.canonicalFilePath());
+            action->setData(data);
+            action->setToolTip(data);
+            one = true;
             }
       if (one) {
             openRecent->addSeparator();
@@ -4507,6 +4501,33 @@ bool MuseScore::loadPlugin(const QString&) { return false;}
 void MuseScore::unloadPlugins() {}
 QQmlEngine* MuseScore::qml() { return 0; }
 #endif
+
+//---------------------------------------------------------
+//   recentScores
+//---------------------------------------------------------
+
+QFileInfoList MuseScore::recentScores() const
+      {
+      QFileInfoList fil;
+      for (const QString& s : _recentScores) {
+            if (s.isEmpty())
+                  continue;
+            QString data(s);
+            QFileInfo fi(s);
+            bool alreadyLoaded = false;
+            QString fp = fi.canonicalFilePath();
+            for (Score* s : mscore->scores()) {
+                  if (s->fileInfo()->canonicalFilePath() == fp) {
+                        alreadyLoaded = true;
+                        break;
+                        }
+                  }
+            if (!alreadyLoaded && fi.exists())
+                  fil.append(fi);
+            }
+      return fil;
+      }
+
 }
 
 
@@ -5001,5 +5022,4 @@ int main(int argc, char* av[])
             }
       return qApp->exec();
       }
-
 
