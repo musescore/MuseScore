@@ -2991,6 +2991,20 @@ Shortcut Shortcut::sc[] = {
          Qt::ApplicationShortcut,
          QT_TRANSLATE_NOOP("action","Toggle Startcenter")
          ),
+   Shortcut(
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "explode",
+         QT_TRANSLATE_NOOP("action","Explode")
+         ),
+      Shortcut(
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         ShortcutFlags::A_CMD,
+         "implode",
+         QT_TRANSLATE_NOOP("action","Implode")
+         ),
       // xml==0  marks end of list
       Shortcut(MsWidget::MAIN_WINDOW,0, 0, 0, 0)
       };
