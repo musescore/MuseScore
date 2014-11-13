@@ -2441,9 +2441,9 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
       MQZipWriter uz(saveName);
       QFileInfo fi(saveName);
 
-      ChordRest* last_cr=NULL;
       Measure * measure = NULL;
       QPainter * p = NULL;
+      TimeSig * timesig = NULL;
 
       qreal w=1.0, h=1.0;
       uint count = 1;
@@ -2495,7 +2495,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
             qreal end_pos = -1.0;
 
             bool rest = true;
-            last_cr = NULL;
+            int last_tick = -1;
             float last_pos = 0.0;
 
             foreach(const Element * e, elems) {
@@ -2530,15 +2530,17 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                   ChordRest * cr = (e->type()==Element::Type::NOTE?
                                  (ChordRest*)( ((Note*)e)->chord()):(ChordRest*)e);
 
-                  if (cr != last_cr) {
+                  int tick = cr->segment()->tick();
 
-                     if (last_cr!=NULL) 
-                        qts << (rest?"R ":"N ") << last_cr->segment()->tick() << ',' << last_pos << endl;
+                  if (tick != last_tick) {
+
+                     if (last_tick>=0) 
+                        qts << (rest?"R ":"N ") << last_tick << ',' << last_pos << endl;
 
                      rest = true;
 
                      //qDebug("%i (%i) - %f",cr->segment()->tick(),ticksFromBeg,world.m31());
-                     last_cr = cr; 
+                     last_tick = tick;
                      last_pos = world.m31()/(w*mag);
                   }
 
@@ -2547,16 +2549,24 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                }
                else if (e->type() == Element::Type::MEASURE) {
                   
-                  if (last_cr!=NULL) {
-                     qts << (rest?"R ":"N ") << last_cr->segment()->tick() << ',' << last_pos << endl;
-                     last_cr = NULL;
+                  if (last_tick>=0) {
+                     qts << (rest?"R ":"N ") << last_tick << ',' << last_pos << endl;
+                     last_tick = -1;
                   }
 
                   qts << "B " << world.m31()/(w*mag) << endl;
                   end_pos = (world.m31() + mag*e->bbox().width())/(w*mag);
                }
                else if (e->type() == Element::Type::TIMESIG) {
-                  qts << "TS" << ((TimeSig*)e)->numerator() << ',' << ((TimeSig*)e)->denominator() << endl;
+
+                  TimeSig * cur_ts =  ((TimeSig*)e);
+
+                  if (timesig==NULL || 
+                      timesig->numerator()!=cur_ts->numerator() || 
+                      timesig->denominator()!=cur_ts->denominator()) {
+                     qts << "TS " << cur_ts->numerator() << ',' << cur_ts->denominator() << endl;
+                     timesig = cur_ts;
+                  }
                }
 
                p->translate(-pos);
@@ -2566,8 +2576,8 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
             }
 
             if (end_pos>0) {
-               if (last_cr!=NULL) 
-                  qts << (rest?"R ":"N ") << last_cr->segment()->tick() << ',' << last_pos << endl;
+               if (last_tick>=0) 
+                  qts << (rest?"R ":"N ") << last_tick << ',' << last_pos << endl;
                      
                qts << 'B' << end_pos << endl;
             }
