@@ -107,7 +107,7 @@ void MuseScore::initOsc()
       QObject::connect(oo, SIGNAL(data(QVariantList)), SLOT(oscColorNote(QVariantList)));
 
       for (const Shortcut* s : Shortcut::shortcuts()) {
-            oo = new PathObject( QString("/actions/%1").arg(s->key()), QVariant::Invalid, osc);
+            oo = new PathObject( QString("/actions/%1").arg(s->key().data()), QVariant::Invalid, osc);
             QObject::connect(oo, SIGNAL(data()), SLOT(oscAction()));
             }
       }

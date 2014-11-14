@@ -122,7 +122,7 @@ Score* QmlPlugin::newScore(const QString& name, const QString& part, int measure
 
 void QmlPlugin::cmd(const QString& s)
       {
-      Shortcut* sc = Shortcut::getShortcut(s);
+      Shortcut* sc = Shortcut::getShortcut(qPrintable(s));
       if (sc)
             msc->cmd(sc->action());
       else

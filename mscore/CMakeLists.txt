@@ -248,7 +248,7 @@ add_executable ( ${ExecutableName}
       ${resource_file}
       ${INCS}
 
-      actions.cpp scoreview.cpp editinstrument.cpp editstyle.cpp
+      scoreview.cpp editinstrument.cpp editstyle.cpp
       icons.cpp importbww.cpp instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp

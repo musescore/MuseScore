@@ -104,7 +104,7 @@ extern const char* voiceActions[];
 
 struct IconAction {
       IconType subtype;
-      const QString action;
+      const char* action;
       };
 
 //---------------------------------------------------------
@@ -678,7 +678,7 @@ extern MasterSynthesizer* synti;
 MasterSynthesizer* synthesizerFactory();
 Driver* driverFactory(Seq*, QString driver);
 
-extern QAction* getAction(const QString&);
+extern QAction* getAction(const char*);
 extern Shortcut* midiActionMap[128];
 extern void loadTranslation(QString fileName, QString localeName);
 extern void setMscoreLocale(QString localeName);

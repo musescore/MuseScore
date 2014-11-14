@@ -2382,17 +2382,17 @@ void MuseScore::changeState(ScoreState val)
             QAction* a = s->action();
             if (!a)
                   continue;
-            if (enable && s->key() == "undo")
+            if (enable && (s->key() == "undo"))
                   a->setEnabled((s->state() & val) && (cs ? cs->undo()->canUndo() : false));
-            else if (enable && s->key() == "redo")
+            else if (enable && (s->key() == "redo"))
                   a->setEnabled((s->state() & val) && (cs ? cs->undo()->canRedo() : false));
-            else if (enable && s->key() == "cut")
+            else if (enable && (s->key() == "cut"))
                   a->setEnabled(cs && cs->selection().state() != SelState::NONE);
-            else if (enable && s->key() == "copy")
+            else if (enable && (s->key() == "copy"))
                   a->setEnabled(cs && cs->selection().state() != SelState::NONE);
-            else if (enable && s->key() == "select-similar-range")
+            else if (enable && (s->key() == "select-similar-range"))
                   a->setEnabled(cs && cs->selection().state() == SelState::RANGE);
-            else if (enable && s->key() == "synth-control") {
+            else if (enable && (s->key() == "synth-control")) {
                   Driver* driver = seq ? seq->driver() : 0;
                   // a->setEnabled(driver && driver->getSynth());
                   if (MScore::debugMode)
@@ -2403,7 +2403,6 @@ void MuseScore::changeState(ScoreState val)
                   a->setEnabled(s->state() & val);
                   }
             }
-
 
       // disabling top level menu entries does not
       // work for MAC

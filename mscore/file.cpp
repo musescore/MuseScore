@@ -2408,7 +2408,7 @@ static QPixmap createThumbnail(const QString& name)
       score->doLayout();
       QImage pm = score->createThumbnail();
       delete score;
-      return QPixmap::fromImage(std::move(pm));
+      return QPixmap::fromImage(pm);
       }
 
 //---------------------------------------------------------
