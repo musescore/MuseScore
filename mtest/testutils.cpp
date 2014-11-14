@@ -59,7 +59,7 @@ MuseScoreCore* mscoreCore;
 MasterSynthesizer* synti;
 QString dataPath;
 QIcon* icons[0];
-Shortcut Shortcut::sc[1] = { Shortcut() };
+Shortcut Shortcut::_sc[1] = { Shortcut() };
 QString mscoreGlobalShare;
 
 //---------------------------------------------------------
