@@ -43,7 +43,7 @@ Startcenter::Startcenter()
 //      setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
       setWindowFlags(Qt::WindowStaysOnTopHint);
       setWindowModality(Qt::ApplicationModal);
-      connect(createNewScore, SIGNAL(clicked()), getAction("file-new"), SLOT(trigger()));
+      connect(createNewScore, SIGNAL(clicked()),      getAction("file-new"), SLOT(trigger()));
       connect(recentScores,   SIGNAL(toggled(bool)),  SLOT(recentScoresToggled(bool)));
       connect(templates,      SIGNAL(toggled(bool)),  SLOT(templatesToggled(bool)));
       connect(demos,          SIGNAL(toggled(bool)),  SLOT(demosToggled(bool)));

@@ -17,6 +17,8 @@
 
 namespace Ms {
 
+class ScoreInfo;
+
 //---------------------------------------------------------
 //   ScorePreview
 //---------------------------------------------------------
@@ -28,6 +30,7 @@ class ScorePreview : public QWidget, public Ui::ScorePreview
 
    public slots:
       void setScore(const QString&);
+      void setScore(const ScoreInfo&);
 
    public:
       ScorePreview(QWidget* parent = 0);

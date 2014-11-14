@@ -91,6 +91,7 @@
 #include "diff/diff_match_patch.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/mscore.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 
 extern Ms::Score::FileError importOve(Ms::Score*, const QString& name);
 
@@ -2392,6 +2393,43 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       score->setPrinting(false);
       p.end();
       return true;
+      }
+
+//---------------------------------------------------------
+//   createThumbnail
+//---------------------------------------------------------
+
+static QPixmap createThumbnail(const QString& name)
+      {
+      Score* score = new Score;
+      Score::FileError error = readScore(score, name, true);
+      if (error != Score::FileError::FILE_NO_ERROR)
+            return QPixmap();
+      score->doLayout();
+      QImage pm = score->createThumbnail();
+      delete score;
+      return QPixmap::fromImage(std::move(pm));
+      }
+
+//---------------------------------------------------------
+//   extractThumbnail
+//---------------------------------------------------------
+
+QPixmap MuseScore::extractThumbnail(const QString& name)
+      {
+      QPixmap pm; //  = icons[File_ICON].pixmap(QSize(100,140));
+      if (!name.endsWith(".mscz"))
+            return createThumbnail(name);
+      MQZipReader uz(name);
+      if (!uz.exists()) {
+            qDebug("extractThumbnail: <%s> not found", qPrintable(name));
+            return pm;
+            }
+      QByteArray ba = uz.fileData("Thumbnails/thumbnail.png");
+      if (ba.isEmpty())
+            return createThumbnail(name);
+      pm.loadFromData(ba, "PNG");
+      return pm;
       }
 
 }
