@@ -23,8 +23,8 @@ void Icon::write(Xml& xml) const
       {
       xml.stag(name());
       xml.tag("subtype", int(_iconType));
-      if (!_action.isEmpty())
-            xml.tag("action", _action);
+      if (!*_action)
+            xml.tag("action", _action.data());
       xml.etag();
       }
 
@@ -37,7 +37,7 @@ void Icon::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "action")
-                  _action = e.readElementText();
+                  _action = e.readElementText().toLocal8Bit();
             else if (tag == "subtype")
                   _iconType = IconType(e.readInt());
             else

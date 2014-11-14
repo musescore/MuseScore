@@ -255,7 +255,7 @@ void UndoStack::push(UndoCommand* cmd)
             return;
             }
 #ifdef DEBUG_UNDO
-      if (strcmp(cmd->name(), "ChangeProperty") == 0) {
+      if (!strcmp(cmd->name(), "ChangeProperty")) {
             ChangeProperty* cp = static_cast<ChangeProperty*>(cmd);
             qDebug("UndoStack::push <%s> %p id %d", cmd->name(), cmd, int(cp->getId()));
             }
