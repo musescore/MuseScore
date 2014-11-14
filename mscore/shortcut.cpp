@@ -27,99 +27,18 @@ extern QString dataPath;
 //   Shortcut
 //---------------------------------------------------------
 
-Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, Qt::ShortcutContext cont,
-   const char* txt, const char* d, const char* h, Icons i)
+Shortcut::Shortcut(MsWidget assignedWidget, int s, const char* name,
+   const char* txt, const char* d, const char* h, Icons i, Qt::ShortcutContext cont, ShortcutFlags f)
       {
+      _assignedWidget = assignedWidget;
+      _state       = s;
+      _flags       = f;
       _key         = name;
+      _context     = cont;
       _text        = txt;
       _descr       = d ? d : _text;
       _help        = h ? h : _descr;
-      _state       = s;
-      _flags       = f;
-      _context     = cont;
       _icon        = i;
-      _assignedWidget = assignedWidget;
-      }
-
-Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name,
-   const char* txt, const char* d, const char* h, Icons i)
-      {
-      _key         = name;
-      _text        = txt;
-      _descr       = d ? d : _text;
-      _help        = h ? h : _descr;
-      _state       = s;
-      _flags       = f;
-      _icon        = i;
-      _assignedWidget = assignedWidget;
-      }
-
-Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, const char* txt,
-   const char* d, Icons i)
-      {
-      _key         = name;
-      _text        = txt;
-      _descr       = d;
-      _help        = _descr;
-      _state       = s;
-      _flags       = f;
-      _icon        = i;
-      _assignedWidget = assignedWidget;
-      }
-
-Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, Qt::ShortcutContext cont,
-   const char* txt, const char* d, Icons i)
-      {
-      _key         = name;
-      _text        = txt;
-      _descr       = d;
-      _help        = _descr;
-      _state       = s;
-      _flags       = f;
-      _context     = cont;
-      _icon        = i;
-      _assignedWidget = assignedWidget;
-      }
-
-Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, const char* txt, Icons i)
-      {
-      _key         = name;
-      _text        = txt;
-      _descr       = _text;
-      _help        = _descr;
-      _state       = s;
-      _flags       = f;
-      _icon        = i;
-      _assignedWidget = assignedWidget;
-      }
-
-Shortcut::Shortcut(MsWidget assignedWidget, int s, int f, const char* name, Qt::ShortcutContext cont,
-   const char* txt, Icons i)
-      {
-      _key         = name;
-      _text        = txt;
-      _descr       = _text;
-      _help        = _descr;
-      _state       = s;
-      _flags       = f;
-      _context     = cont;
-      _icon        = i;
-      _assignedWidget = assignedWidget;
-      }
-
-Shortcut::Shortcut(const Shortcut& sc)
-      {
-      _key         = sc._key;
-      _descr       = sc._descr;
-      _text        = sc._text;
-      _help        = sc._help;
-      _state       = sc._state;
-      _flags       = sc._flags;
-      _standardKey = sc._standardKey;
-      _keys        = sc._keys;
-      _context     = sc._context;
-      _icon        = sc._icon;
-      _assignedWidget = sc._assignedWidget;
       }
 
 //---------------------------------------------------------
@@ -215,6 +134,10 @@ QAction* Shortcut::action() const
       _action = new QAction(text(), 0);
       _action->setData(_key);
       _action->setIconVisibleInMenu (false);
+      if (isCheckable()) {
+            _action->setCheckable(isCheckable());
+            _action->setChecked(isChecked());
+            }
 
       if (_keys.isEmpty())
             _action->setShortcuts(_standardKey);

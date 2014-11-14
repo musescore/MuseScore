@@ -1766,15 +1766,9 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save as svg file *.svg
             rv = saveSvg(cs, fn);
             }
-#if 0
-      else if (ext == "ly") {
-            // save as lilypond file *.ly
-            rv = saveLilypond(cs, fn);
-            }
-#endif
 #ifdef HAS_AUDIOFILE
       else if (ext == "wav" || ext == "flac" || ext == "ogg")
-            rv = saveAudio(cs, fn, ext);
+            rv = saveAudio(cs, fn);
 #endif
       else if (ext == "mp3")
             rv = saveMp3(cs, fn);

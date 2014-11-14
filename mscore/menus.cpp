@@ -89,7 +89,7 @@ void populateIconPalette(Palette* p, const IconAction* a)
       while (a->subtype != IconType::NONE) {
             Icon* ik = new Icon(gscore);
             ik->setIconType(a->subtype);
-            Shortcut* s = Shortcut::getShortcut(a->action);
+            const Shortcut* s = Shortcut::getShortcut(a->action);
             QAction* action = s->action();
             QIcon icon(action->icon());
             ik->setAction(a->action, icon);
@@ -272,7 +272,7 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
             }
       Icon* ik = new Icon(gscore);
       ik->setIconType(IconType::BRACKETS);
-      Shortcut* s = Shortcut::getShortcut("add-brackets");
+      const Shortcut* s = Shortcut::getShortcut("add-brackets");
       QAction* action = s->action();
       QIcon icon(action->icon());
       ik->setAction("add-brackets", icon);
@@ -477,7 +477,7 @@ Palette* MuseScore::newNoteHeadsPalette()
             }
       Icon* ik = new Icon(gscore);
       ik->setIconType(IconType::BRACKETS);
-      Shortcut* s = Shortcut::getShortcut("add-brackets");
+      const Shortcut* s = Shortcut::getShortcut("add-brackets");
       QAction* action = s->action();
       QIcon icon(action->icon());
       ik->setAction("add-brackets", icon);

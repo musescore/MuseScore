@@ -25,12 +25,8 @@ void MuseScore::showStartcenter(bool val)
       QAction* a = getAction("startcenter");
       if (val && startcenter == nullptr) {
             startcenter = new Startcenter;
-            int w = 1000;
-            int h = 600;
-            int x = pos().x() + width() / 2 - w/2;
-            int y = pos().y() + height() / 2 - h/2;
-            startcenter->setGeometry(x, y, w, h);
             startcenter->addAction(a);
+            startcenter->readSettings(settings);
             connect(startcenter, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
       startcenter->setVisible(val);
@@ -45,6 +41,7 @@ Startcenter::Startcenter()
       {
       setupUi(this);
 //      setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
+      setWindowFlags(Qt::WindowStaysOnTopHint);
       setWindowModality(Qt::ApplicationModal);
       connect(createNewScore, SIGNAL(clicked()), getAction("file-new"), SLOT(trigger()));
       connect(recentScores,   SIGNAL(toggled(bool)),  SLOT(recentScoresToggled(bool)));
@@ -151,5 +148,30 @@ void Startcenter::connectWebToggled(bool val)
             }
       stack->setCurrentWidget(webPage);
       }
+
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void Startcenter::writeSettings(QSettings& settings)
+      {
+      settings.beginGroup("Startcenter");
+      settings.setValue("size", size());
+      settings.setValue("pos", pos());
+      settings.endGroup();
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void Startcenter::readSettings(QSettings& settings)
+      {
+      settings.beginGroup("Startcenter");
+      resize(settings.value("size", QSize(1161, 694)).toSize());
+      move(settings.value("pos", QPoint(200, 100)).toPoint());
+      settings.endGroup();
+      }
+
 }
 

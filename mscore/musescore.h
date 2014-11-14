@@ -348,7 +348,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QComboBox* playMode;
       QNetworkAccessManager* networkManager { 0 };
       QAction* lastCmd                      { 0 };
-      Shortcut* lastShortcut                { 0 };
+      const Shortcut* lastShortcut                { 0 };
 
       QAction* countInAction;
       QAction* metronomeAction;
@@ -480,7 +480,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
    public:
       MuseScore();
-      ~MuseScore();
+      ~MuseScore() {}
       bool checkDirty(Score*);
       PlayPanel* getPlayPanel() const { return playPanel; }
       QMenu* genCreateMenu(QWidget* parent = 0);
@@ -601,7 +601,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void addImage(Score*, Element*);
 
       bool savePng(Score*, const QString& name, bool screenshot, bool transparent, double convDpi, QImage::Format format);
-      bool saveAudio(Score*, const QString& name, const QString& type);
+      bool saveAudio(Score*, const QString& name);
       bool saveMp3(Score*, const QString& name);
       bool saveSvg(Score*, const QString& name);
       bool savePng(Score*, const QString& name);
