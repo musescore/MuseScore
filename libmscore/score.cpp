@@ -3568,5 +3568,24 @@ void Score::setImportedFilePath(const QString& filePath)
       _importedFilePath = filePath;
       }
 
+//---------------------------------------------------------
+//   title
+//---------------------------------------------------------
+
+QString Score::title()
+      {
+      QString fn = metaTag("workTitle");
+      if (fn.isEmpty())
+            fn = fileInfo()->baseName();
+      else
+            return fn;
+      Text* t = getText(TextStyleType::TITLE);
+      if (t)
+            fn = QTextDocumentFragment::fromHtml(t->text()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+      if (fn.isEmpty())
+            fn = "Untitled";
+      return fn.simplified();
+      }
+
 }
 
