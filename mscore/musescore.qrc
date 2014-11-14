@@ -70,6 +70,7 @@
         <file>schema/xml.xsd</file>
         <file>data/icons/align-vertical-bottom.svg</file>
         <file>data/icons/align-vertical-top.svg</file>
+        <file>data/icons/document.svg</file>
         <file>data/icons/document-new.svg</file>
         <file>data/icons/document-open.svg</file>
         <file>data/icons/document-print.svg</file>

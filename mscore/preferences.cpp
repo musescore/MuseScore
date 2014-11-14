@@ -1047,8 +1047,8 @@ void PreferenceDialog::updateSCListView()
             newItem->setText(1, s->keysToString());
             newItem->setData(0, Qt::UserRole, s->key());
             QString accessibleInfo = tr("Action: %1; Shortcut: %2")
-                        .arg(newItem->text(0)).arg(newItem->text(1).isEmpty()
-                                          ? tr("No shortcut defined") : newItem->text(1));
+               .arg(newItem->text(0)).arg(newItem->text(1).isEmpty()
+                  ? tr("No shortcut defined") : newItem->text(1));
             newItem->setData(0, Qt::AccessibleTextRole, accessibleInfo);
             newItem->setData(1, Qt::AccessibleTextRole, accessibleInfo);
             if (enableExperimental

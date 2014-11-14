@@ -12,6 +12,7 @@
 
 #include "scoreBrowser.h"
 #include "musescore.h"
+#include "icons.h"
 #include "libmscore/score.h"
 
 namespace Ms {
@@ -25,7 +26,9 @@ class ScoreItem : public QListWidgetItem
       ScoreInfo _info;
 
    public:
-      ScoreItem(const ScoreInfo& i) : QListWidgetItem(), _info(i) {}
+      ScoreItem(const ScoreInfo& i) : QListWidgetItem(), _info(i) {
+            setSizeHint(QSize(100,120));
+            }
       const ScoreInfo& info() const { return _info; }
       };
 
@@ -43,6 +46,9 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
       scoreList->setGridSize(QSize(110, 130));
       scoreList->setIconSize(QSize(80, 100));
       scoreList->setSpacing(10);
+      scoreList->setWrapping(true);
+      scoreList->setResizeMode(QListView::Adjust);
+      scoreList->setFlow(QListView::LeftToRight);
 
       connect(scoreList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
          SLOT(scoreChanged(QListWidgetItem*,QListWidgetItem*)));
@@ -59,9 +65,10 @@ void ScoreBrowser::setScores(QFileInfoList s)
       scoreList->clear();
       for (const QFileInfo& fi : s) {
             QPixmap pm = extractThumbnail(fi.filePath());
+            if (pm.isNull())
+                  pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
             ScoreInfo si(fi);
-            if (fi.suffix() == "mscz")
-                  si.setPixmap(extractThumbnail(fi.filePath()));
+            si.setPixmap(pm);
             ScoreItem* item = new ScoreItem(si);
             item->setTextAlignment(Qt::AlignHCenter | Qt::AlignBottom);
             item->setText(si.completeBaseName());

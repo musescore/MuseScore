@@ -721,7 +721,7 @@ QString readRootFile(MQZipReader* uz, QList<QString>& images)
 
 QPixmap extractThumbnail(const QString& name)
       {
-      QPixmap pm;
+      QPixmap pm; //  = icons[File_ICON].pixmap(QSize(100,140));
       if (!name.endsWith(".mscz"))
             return pm;
       MQZipReader uz(name);

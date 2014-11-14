@@ -78,6 +78,7 @@ static const char* iconNames[] = {
       "default.svg",
       "fbeam1.svg",
       "fbeam2.svg",
+      "document.svg",
       "document-open.svg",
       "document-new.svg",
       "document-save.svg",
