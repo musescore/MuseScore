@@ -30,6 +30,8 @@
 #include "ui_startdialog.h"
 #include "singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
+#include "loginmanager.h"
+#include "uploadscoredialog.h"
 #include "musescoreCore.h"
 
 namespace Ms {
@@ -315,7 +317,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool _fullscreen                   { false };
       QList<LanguageItem> _languages;
 
-      Startcenter* startcenter           { 0 };
+      Startcenter* startcenter             { 0 };
+      QWidget* loginDialog                 { 0 };
+      UploadScoreDialog* uploadScoreDialog { 0 };
+      LoginManager* _loginManager        { 0 };
       QFileDialog* loadScoreDialog       { 0 };
       QFileDialog* saveScoreDialog       { 0 };
       QFileDialog* loadStyleDialog       { 0 };
@@ -336,6 +341,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileDialog* savePluginDialog      { 0 };
 
       QDialog* editRasterDialog          { 0 };
+
       QAction* hRasterAction;
       QAction* vRasterAction;
 
@@ -667,7 +673,12 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileInfoList recentScores() const;
       void saveDialogState(const char* name, QFileDialog* d);
       void restoreDialogState(const char* name, QFileDialog* d);
+
       QPixmap extractThumbnail(const QString& name);
+      
+      void showLoginDialog();
+      void showUploadScoreDialog();
+      LoginManager* loginManager() { return _loginManager; }
       };
 
 extern MuseScore* mscore;

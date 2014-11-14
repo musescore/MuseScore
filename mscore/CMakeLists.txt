@@ -48,6 +48,7 @@ QT4_WRAP_UI (ui_headers
       omrpanel.ui startdialog.ui masterpalette.ui pluginManager.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui
+      logindialog.ui uploadscoredialog.ui
 
       importmidi/importmidi_panel.ui
 
@@ -158,6 +159,7 @@ QT4_WRAP_CPP (mocs
       debugger/debugger.h
       resourceManager.h downloadUtils.h accessibletoolbutton.h scoreaccessibility.h
       startcenter.h scoreBrowser.h scorePreview.h
+      logindialog.h loginmanager.h uploadscoredialog.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -303,6 +305,7 @@ add_executable ( ${ExecutableName}
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
       startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
+      logindialog.cpp loginmanager.cpp uploadscoredialog.cpp
 
       ${OMR_FILES}
       ${AUDIO}
@@ -329,6 +332,7 @@ target_link_libraries(mscore
       xmlstream
       qzip
       beatroot
+      kqoauth
       )
 
 #if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
