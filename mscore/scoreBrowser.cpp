@@ -64,7 +64,7 @@ void ScoreBrowser::setScores(QFileInfoList s)
       {
       scoreList->clear();
       for (const QFileInfo& fi : s) {
-            QPixmap pm = extractThumbnail(fi.filePath());
+            QPixmap pm = mscore->extractThumbnail(fi.filePath());
             if (pm.isNull())
                   pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
             ScoreInfo si(fi);

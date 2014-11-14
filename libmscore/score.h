@@ -1005,14 +1005,14 @@ class Score : public QObject {
       void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
       QString accessibleInfo()          { return accInfo;          }
 
+      QImage createThumbnail();
+
       friend class ChangeSynthesizerState;
       friend class Chord;
       };
 
 extern Score* gscore;
 extern void fixTicks();
-
-QPixmap extractThumbnail(const QString&);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 

@@ -465,6 +465,31 @@ void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
       }
 
 //---------------------------------------------------------
+//   createThumbnail
+//---------------------------------------------------------
+
+QImage Score::createThumbnail()
+      {
+      Page* page = pages().at(0);
+      QRectF fr  = page->abbox();
+      qreal mag  = 256.0 / qMax(fr.width(), fr.height());
+      int w      = int(fr.width() * mag);
+      int h      = int(fr.height() * mag);
+
+      QImage pm(w, h, QImage::Format_ARGB32_Premultiplied);
+      pm.setDotsPerMeterX(lrint((mag * 1000) / INCH));
+      pm.setDotsPerMeterY(lrint((mag * 1000) / INCH));
+      pm.fill(0xffffffff);
+      QPainter p(&pm);
+      p.setRenderHint(QPainter::Antialiasing, true);
+      p.setRenderHint(QPainter::TextAntialiasing, true);
+      p.scale(mag, mag);
+      print(&p, 0);
+      p.end();
+      return pm;
+      }
+
+//---------------------------------------------------------
 //   saveCompressedFile
 //    file is already opened
 //---------------------------------------------------------
@@ -505,23 +530,7 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
             }
 
       // create thumbnail
-      {
-      Page* page = pages().at(0);
-      QRectF fr  = page->abbox();
-      qreal mag  = 256.0 / qMax(fr.width(), fr.height());
-      int w      = int(fr.width() * mag);
-      int h      = int(fr.height() * mag);
-
-      QImage pm(w, h, QImage::Format_ARGB32_Premultiplied);
-      pm.setDotsPerMeterX(lrint((mag * 1000) / INCH));
-      pm.setDotsPerMeterY(lrint((mag * 1000) / INCH));
-      pm.fill(0xffffffff);
-      QPainter p(&pm);
-      p.setRenderHint(QPainter::Antialiasing, true);
-      p.setRenderHint(QPainter::TextAntialiasing, true);
-      p.scale(mag, mag);
-      print(&p, 0);
-      p.end();
+      QImage pm = createThumbnail();
 
       QByteArray ba;
       QBuffer b(&ba);
@@ -530,8 +539,6 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       if (!pm.save(&b, "PNG"))
             qDebug("save failed");
       uz.addFile("Thumbnails/thumbnail.png", ba);
-      printf("thumbnail %dx%d  size %d mag %f\n", w, h, ba.size(), mag);
-      }
 
 #ifdef OMR
       //
@@ -713,27 +720,6 @@ QString readRootFile(MQZipReader* uz, QList<QString>& images)
                   }
             }
       return rootfile;
-      }
-
-//---------------------------------------------------------
-//   extractThumbnail
-//---------------------------------------------------------
-
-QPixmap extractThumbnail(const QString& name)
-      {
-      QPixmap pm; //  = icons[File_ICON].pixmap(QSize(100,140));
-      if (!name.endsWith(".mscz"))
-            return pm;
-      MQZipReader uz(name);
-      if (!uz.exists()) {
-            qDebug("extractThumbnail: <%s> not found", qPrintable(name));
-            return pm;
-            }
-      QByteArray ba = uz.fileData("Thumbnails/thumbnail.png");
-      if (ba.isEmpty())
-            return pm;
-      pm.loadFromData(ba, "PNG");
-      return pm;
       }
 
 //---------------------------------------------------------

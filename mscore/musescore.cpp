@@ -4428,6 +4428,7 @@ QFileInfoList MuseScore::recentScores() const
             }
       return fil;
       }
+
 }
 
 using namespace Ms;

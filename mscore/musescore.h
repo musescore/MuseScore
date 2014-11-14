@@ -667,6 +667,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileInfoList recentScores() const;
       void saveDialogState(const char* name, QFileDialog* d);
       void restoreDialogState(const char* name, QFileDialog* d);
+      QPixmap extractThumbnail(const QString& name);
       };
 
 extern MuseScore* mscore;
