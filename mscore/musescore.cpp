@@ -1177,12 +1177,11 @@ int MuseScore::appendScore(Score* score)
 
 void MuseScore::updateRecentScores(Score* score)
       {
-      QString path = score->fileInfo()->absoluteFilePath();
+      QString path = score->fileInfo()->canonicalFilePath();
       _recentScores.removeAll(path);
       _recentScores.prepend(path);
-      if (_recentScores.size() > RECENT_LIST_SIZE) {
+      if (_recentScores.size() > RECENT_LIST_SIZE)
             _recentScores.removeLast();
-            }
       if (startcenter)
             startcenter->updateRecentScores();
       }
@@ -1993,7 +1992,7 @@ static void loadScores(const QStringList& argv)
                               if (preferences.startScore.startsWith(":/"))
                                     score->setCreated(true);
                               if (score == 0) {
-                                    score = mscore->readScore(":/data/My_First_Score.mscx");
+                                    score = mscore->readScore(":/data/My_First_Score.mscz");
                                     score->setCreated(true);
                                     }
                               if (score)
