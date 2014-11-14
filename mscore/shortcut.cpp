@@ -58,6 +58,17 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Save score to file"),
          Icons::fileSave_ICON
          },
+      { 
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         "file-save-online",
+         QT_TRANSLATE_NOOP("action","Save Online..."),
+         QT_TRANSLATE_NOOP("action","File save online"),
+         QT_TRANSLATE_NOOP("action","Save score on MuseScore.com"),
+         Icons::fileSaveAs_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE
+         },
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,

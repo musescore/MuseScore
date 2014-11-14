@@ -260,6 +260,8 @@ void MuseScore::closeEvent(QCloseEvent* ev)
             }
 
       writeSettings();
+      
+      _loginManager->save();
 
       ev->accept();
       if (preferences.dirty)
@@ -599,12 +601,12 @@ MuseScore::MuseScore()
       connect(openRecent, SIGNAL(triggered(QAction*)), SLOT(selectScore(QAction*)));
 
       for (auto i : {
-            "", "file-save", "file-save-as", "file-save-a-copy",
+            "", "file-save", "file-save-online", "file-save-as", "file-save-a-copy",
             "file-save-selection", "file-export", "file-part-export",
             "", "file-close", "", "parts", "album" }) {
             if (!*i)
                   _fileMenu->addSeparator();
-            else
+            else if (i != QString("file-save-online") || enableExperimental)
                   _fileMenu->addAction(getAction(i));
             }
       if (enableExperimental)
@@ -948,6 +950,7 @@ MuseScore::MuseScore()
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
             }
+      _loginManager = new LoginManager(this);
       }
 
 //---------------------------------------------------------
@@ -1387,6 +1390,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       view->setFocus(Qt::OtherFocusReason);
 
       getAction("file-save")->setEnabled(cs->isSavable());
+      getAction("file-part-export")->setEnabled(cs->rootScore()->excerpts().size() > 0);
       getAction("show-invisible")->setChecked(cs->showInvisible());
       getAction("show-unprintable")->setChecked(cs->showUnprintable());
       getAction("show-frames")->setChecked(cs->showFrames());
@@ -2403,6 +2407,10 @@ void MuseScore::changeState(ScoreState val)
                   a->setEnabled(s->state() & val);
                   }
             }
+            
+      if (getAction("file-part-export")->isEnabled())
+            getAction("file-part-export")->setEnabled(cs->rootScore()->excerpts().size() > 0);
+
 
       // disabling top level menu entries does not
       // work for MAC
@@ -3915,6 +3923,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             loadFiles();
       else if (cmd == "file-save")
             saveFile();
+      else if (cmd == "file-save-online")
+            showUploadScoreDialog();
       else if (cmd == "file-export")
             exportFile();
       else if (cmd == "file-part-export")
@@ -4745,10 +4755,11 @@ int main(int argc, char* av[])
                               { QPalette::BrightText,    "BrightTextColor",    "#000000"  },
                               { QPalette::ToolTipBase,   "ToolTipBaseColor",   "#fefac2"  },
                               { QPalette::ToolTipText,   "ToolTipTextColor",   "#000000"  },
+                              { QPalette::Link,          "LinkColor",          "#3a80c6"  },
+                              { QPalette::LinkVisited,   "LinkVisitedColor",          "#3a80c6"  },
                               };
                         for (auto i : pi)
                               p.setColor(i.role, s.value(i.name, i.color).value<QColor>());
-
                         break;
                   }
             QApplication::setPalette(p);
