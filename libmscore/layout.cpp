@@ -1162,34 +1162,76 @@ void Score::layoutStage2()
             Beam* beam       = 0;      // current beam
             Measure* measure = 0;
 
-            Beam::Mode bm = Beam::Mode::AUTO;
+            Beam::Mode bm    = Beam::Mode::AUTO;
             Segment::Type st = Segment::Type::ChordRest;
-            ChordRest* prev = 0;
+            ChordRest* prev  = 0;
+            bool checkBeats  = false;
+            Fraction stretch = 1;
+            QHash<int, TDuration> beatSubdivision;
+
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
                         continue;
+
+                  // handle grace notes and cross-measure beaming
                   if (cr->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(cr);
-                  beamGraceNotes(chord, false); // grace before
-                  beamGraceNotes(chord, true);  // grace after
+                        beamGraceNotes(chord, false); // grace before
+                        beamGraceNotes(chord, true);  // grace after
                         // set up for cross-measure values as soon as possible
                         // to have all computations (stems, hooks, ...) consistent with it
                         if (!chord->isGrace())
                               chord->crossMeasureSetup(crossMeasure);
                         }
 
-                  bm = Groups::endBeam(cr);
+                  // if this is a new measure, and it's simple meter (actually X/4),
+                  // then perform a prepass to determine the subdivision of each beat
+                  if (segment->measure() != measure) {
+                        Measure* m = segment->measure();
+                        TimeSig* ts = cr->staff()->timeSig(m->tick());
+                        beatSubdivision.clear();
+                        checkBeats = false;
+                        stretch = ts ? ts->stretch() : 1;
+                        if (ts && ts->denominator() == 4) {
+                              checkBeats = true;
+                              for (Segment* s = m->first(st); s; s = s->next(st)) {
+                                    ChordRest* mcr = static_cast<ChordRest*>(s->element(track));
+                                    if (mcr == 0)
+                                          continue;
+                                    int beat = ((mcr->rtick() * stretch.numerator()) / stretch.denominator()) / MScore::division;
+                                    if (beatSubdivision.contains(beat))
+                                          beatSubdivision[beat] = qMin(beatSubdivision[beat], mcr->durationType());
+                                    else
+                                          beatSubdivision[beat] = mcr->durationType();
+                                    }
+                              }
+                        }
 
-                  // end beam at new tuplet or end tuplet, if the next/prev duration type is different
-                  if (cr->tuplet()
-                         && !cr->tuplet()->elements().isEmpty()
-                         && cr->tuplet()->elements().front() == cr
-                         && prev && prev->durationType() == cr->durationType())
-                              bm =  Beam::Mode::BEGIN;
-                  else if (prev && prev->tuplet() && !prev->tuplet()->elements().isEmpty()
-                          && prev->tuplet()->elements().last() == prev && prev->durationType() == cr->durationType())
-                              bm =  Beam::Mode::BEGIN;
+                  // get defaults from time signature properties
+                  bm = Groups::endBeam(cr, prev);
+
+                  // perform additional context-dependent checks
+                  if (bm == Beam::Mode::AUTO) {
+
+                        // check if we need to break beams according to minimum duration in current / previous beat
+                        if (checkBeats && cr->rtick()) {
+                              int tick = (cr->rtick() * stretch.numerator()) / stretch.denominator();
+                              // check if on the beat
+                              if (tick % MScore::division == 0) {
+                                    int beat = tick / MScore::division;
+                                    // get minimum duration for this & previous beat
+                                    TDuration minDuration = qMin(beatSubdivision[beat], beatSubdivision[beat - 1]);
+                                    // re-calculate beam as if this were the duration of current chordrest
+                                    TDuration saveDuration = cr->durationType();
+                                    cr->setDurationType(minDuration);
+                                    bm = Groups::endBeam(cr, prev);
+                                    cr->setDurationType(saveDuration);
+                                    }
+                              }
+
+                        }
+
                   prev = cr;
 
                   // if chord has hooks and is 2nd element of a cross-measure value
