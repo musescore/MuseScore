@@ -23,7 +23,7 @@
 #include "kqoauthglobals.h"
 
 class KQOAuthRequest;
-class KQOAUTH_EXPORT KQOAuthRequest_XAuthPrivate
+class KQOAuthRequest_XAuthPrivate
 {
 public:
     KQOAuthRequest_XAuthPrivate();

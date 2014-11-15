@@ -30,7 +30,7 @@
 #include <QTimer>
 #include <QHttpMultiPart>
 
-class KQOAUTH_EXPORT KQOAuthRequestPrivate {
+class KQOAuthRequestPrivate {
 
 public:
     KQOAuthRequestPrivate();

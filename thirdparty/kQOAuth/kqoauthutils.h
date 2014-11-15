@@ -23,7 +23,7 @@
 #include "kqoauthglobals.h"
 
 class QString;
-class KQOAUTH_EXPORT KQOAuthUtils
+class KQOAuthUtils
 {
 public:
     static QString hmac_sha1(const QString &message, const QString &key);
