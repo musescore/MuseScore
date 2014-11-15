@@ -2897,6 +2897,9 @@ void Score::selectRange(Element* e, int staffIdx)
 
       _selection.setActiveTrack(activeTrack);
 
+      if (_selection.startSegment())
+            setPlayPos(_selection.startSegment()->tick());
+
       _selection.updateSelectedElements();
       }
 
