@@ -345,7 +345,7 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
                         if (!drumset->isValid(pitch)) {
                               // qDebug("unmapped drum note %d", pitch);
                               }
-                        else {
+                        else if (!note->fixed()) {
                               note->setHeadGroup(drumset->noteHead(pitch));
                               note->setLine(drumset->line(pitch));
                               continue;
@@ -3131,7 +3131,7 @@ void Measure::layoutX(qreal stretch)
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
-                                                      if (note->accidental()) {
+                                                      if (note->accidental() && !note->fixed()) {
                                                             accidental = true;
                                                             accidentalX = qMin(accidentalX, note->accidental()->x() + note->x() + c->x());
                                                             }

@@ -207,6 +207,8 @@ Note::Note(Score* s)
       _tpc[1]            = Tpc::TPC_INVALID;
       _headGroup         = NoteHead::Group::HEAD_NORMAL;
       _headType          = NoteHead::Type::HEAD_AUTO;
+      _fixed             = false;
+      _fixedLine         = 0;
 
       _subchannel        = 0;
 
@@ -257,6 +259,8 @@ Note::Note(const Note& n, bool link)
       _userMirror        = n._userMirror;
       _small             = n._small;
       _userDotPosition   = n._userDotPosition;
+      _fixed             = n._fixed;
+      _fixedLine         = n._fixedLine;
       _accidental        = 0;
 
       if (n._accidental)
@@ -492,7 +496,11 @@ qreal Note::tabHeadWidth(StaffType* tab) const
             int size = lrint(tab->fretFontSize() * MScore::DPI / PPI);
             f.setPixelSize(size);
             QFontMetricsF fm(f);
-            QString s = tab->fretString(_fret, _ghost);
+            QString s;
+            if (fixed())
+                s = "/";
+            else
+                s = tab->fretString(_fret, _ghost);
             val  = fm.width(s) * mags;
             }
       else
@@ -705,7 +713,11 @@ void Note::draw(QPainter* painter) const
             StaffType* tab = staff()->staffType();
             if (tieBack() && tab->slashStyle())
                   return;
-            QString s = tab->fretString(_fret, _ghost);
+            QString s;
+            if (fixed())
+                  s = "/";
+            else
+                  s = tab->fretString(_fret, _ghost);
 
             // draw background, if required
             if (!tab->linesThrough() || fretConflict()) {
@@ -812,6 +824,8 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_ID::GHOST);
       writeProperty(xml, P_ID::HEAD_TYPE);
       writeProperty(xml, P_ID::VELO_TYPE);
+      writeProperty(xml, P_ID::FIXED);
+      writeProperty(xml, P_ID::FIXED_LINE);
 
       foreach (Spanner* e, _spannerFor)
             e->write(xml);
@@ -853,6 +867,10 @@ void Note::read(XmlReader& e)
                   setProperty(P_ID::MIRROR_HEAD, Ms::getProperty(P_ID::MIRROR_HEAD, e));
             else if (tag == "dotPosition")
                   setProperty(P_ID::DOT_POSITION, Ms::getProperty(P_ID::DOT_POSITION, e));
+            else if (tag == "fixed")
+                  setFixed(e.readBool());
+            else if (tag == "fixedLine")
+                  setFixedLine(e.readInt());
             else if (tag == "onTimeType") { //obsolete
                   if (e.readElementText() == "offset")
                         _onTimeType = 2;
@@ -1877,6 +1895,14 @@ void Note::setSmall(bool val)
       _small = val;
       }
 
+int Note::line() const
+      {
+      if (_fixed)
+            return _fixedLine;
+      else
+            return _line + _lineOffset;
+      }
+
 //---------------------------------------------------------
 //   setLine
 //---------------------------------------------------------
@@ -2148,6 +2174,10 @@ QVariant Note::getProperty(P_ID propertyId) const
                   return play();
             case P_ID::LINE:
                   return _line;
+            case P_ID::FIXED:
+                  return fixed();
+            case P_ID::FIXED_LINE:
+                  return fixedLine();
             default:
                   break;
             }
@@ -2228,6 +2258,12 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::PLAY:
                   setPlay(v.toBool());
                   score()->setPlaylistDirty(true);
+                  break;
+            case P_ID::FIXED:
+                  setFixed(v.toBool());
+                  break;
+            case P_ID::FIXED_LINE:
+                  setFixedLine(v.toInt());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -2384,6 +2420,10 @@ QVariant Note::propertyDefault(P_ID propertyId) const
                   return int (ValueType::OFFSET_VAL);
             case P_ID::PLAY:
                   return true;
+            case P_ID::FIXED:
+                  return false;
+            case P_ID::FIXED_LINE:
+                  return 0;
             default:
                   break;
             }
