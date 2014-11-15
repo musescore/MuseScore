@@ -2144,7 +2144,7 @@ Shortcut Shortcut::_sc[] = {
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
-         ShortcutFlags::A_SCORE
+         ShortcutFlags::A_SCORE | ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::MAIN_WINDOW,
