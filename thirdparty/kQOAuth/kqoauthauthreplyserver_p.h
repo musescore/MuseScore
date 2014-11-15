@@ -26,7 +26,7 @@
 #include <QMultiMap>
 #include <QString>
 
-class KQOAUTH_EXPORT KQOAuthAuthReplyServerPrivate: public QObject
+class KQOAuthAuthReplyServerPrivate: public QObject
 {
     Q_OBJECT
 public:

@@ -30,7 +30,7 @@
 typedef QMultiMap<QString, QString> KQOAuthParameters;
 
 class KQOAuthRequestPrivate;
-class KQOAUTH_EXPORT KQOAuthRequest : public QObject
+class KQOAuthRequest : public QObject
 {
     Q_OBJECT
 public:
@@ -47,7 +47,7 @@ public:
         PLAINTEXT = 0,
         HMAC_SHA1
     };
-
+#undef DELETE
     enum RequestHttpMethod {
         GET = 0,
         POST,

@@ -25,7 +25,7 @@
 #include "kqoauthglobals.h"
 
 class KQOAuthAuthReplyServerPrivate;
-class KQOAUTH_EXPORT KQOAuthAuthReplyServer : public QTcpServer
+class KQOAuthAuthReplyServer : public QTcpServer
 {
     Q_OBJECT
 public:
