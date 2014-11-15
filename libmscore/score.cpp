@@ -67,6 +67,7 @@
 #include "instrtemplate.h"
 #include "cursor.h"
 #include "sym.h"
+#include "rehearsalmark.h"
 
 namespace Ms {
 
@@ -3585,6 +3586,46 @@ QString Score::title()
       if (fn.isEmpty())
             fn = "Untitled";
       return fn.simplified();
+      }
+
+//---------------------------------------------------------
+//   createRehearsalmarkText
+//---------------------------------------------------------
+
+QString Score::createRehearsalmarkText(int tick) const
+      {
+      RehearsalMark* before = 0;
+      RehearsalMark* after = 0;
+      for (Segment* s = firstSegment(); s; s = s->next1()) {
+            for (Element* e : s->annotations()) {
+                  if (e && e->type() == Element::Type::REHEARSAL_MARK) {
+                        if (s->tick() < tick)
+                              before = static_cast<RehearsalMark*>(e);
+                        else if (s->tick() > tick) {
+                              after = static_cast<RehearsalMark*>(e);
+                              break;
+                              }
+                        }
+                  }
+            if (after)
+                  break;
+            }
+      QString s = "A";
+      QString s1 = before ? before->text() : "";
+      QString s2 = after ? after->text()  : "";
+//      qDebug("createRehearsalMark <%s> xx <%s>", qPrintable(s1), qPrintable(s2));
+      if (s1.isEmpty())
+            return s;
+      if (!s2.isEmpty()) {
+            s = s1[0];
+            if (s1.size() > 1)
+                  s += QChar::fromLatin1(s1[1].toLatin1() + 1);
+            else
+                  s += QChar::fromLatin1('1');
+            }
+      else
+            s = QChar::fromLatin1(s1[0].toLatin1() + 1);
+      return s;
       }
 
 }

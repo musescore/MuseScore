@@ -5261,17 +5261,22 @@ void ScoreView::search(const QString& s)
                   }
             else {
                   //search rehearsal marks
+                  QString ss = s.toLower();
+                  bool found = false;
                   for (Segment* seg = score()->firstSegment(); seg; seg = seg->next1(Segment::Type::ChordRest)) {
                         for (Element* e : seg->annotations()){
                               if (e->type() == Element::Type::REHEARSAL_MARK) {
                                     RehearsalMark* rm = static_cast<RehearsalMark*>(e);
-                                    QString rms = rm->text();
-                                    if (rms.contains(s)) {
+                                    QString rms = rm->text().toLower();
+                                    if (rms.startsWith(ss)) {
                                           gotoMeasure(seg->measure());
+                                          found = true;
                                           break;
                                           }
                                     }
                               }
+                        if (found)
+                              break;
                         }
                   }
             }

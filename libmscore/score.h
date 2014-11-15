@@ -1008,6 +1008,7 @@ class Score : public QObject {
       QString accessibleInfo()          { return accInfo;          }
 
       QImage createThumbnail();
+      QString createRehearsalmarkText(int tick) const;
 
       friend class ChangeSynthesizerState;
       friend class Chord;

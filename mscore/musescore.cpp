@@ -2981,28 +2981,6 @@ void MuseScore::hideProgressBar()
       }
 
 //---------------------------------------------------------
-//   searchTextChanged
-//---------------------------------------------------------
-
-void MuseScore::searchTextChanged(const QString& s)
-      {
-      if (cv == 0)
-            return;
-      cv->search(s);
-      }
-
-//---------------------------------------------------------
-//   endSearch
-//---------------------------------------------------------
-
-void MuseScore::endSearch()
-      {
-      _searchDialog->hide();
-      if (cv)
-            cv->setFocus();
-      }
-
-//---------------------------------------------------------
 //   handleMessage
 //---------------------------------------------------------
 
@@ -4358,6 +4336,28 @@ void MuseScore::updateDrumTools()
       {
       if (_drumTools)
             _drumTools->updateDrumset();
+      }
+
+//---------------------------------------------------------
+//   searchTextChanged
+//---------------------------------------------------------
+
+void MuseScore::searchTextChanged(const QString& s)
+      {
+      if (cv == 0)
+            return;
+      cv->search(s);
+      }
+
+//---------------------------------------------------------
+//   endSearch
+//---------------------------------------------------------
+
+void MuseScore::endSearch()
+      {
+      _searchDialog->hide();
+      if (cv)
+            cv->setFocus();
       }
 
 //---------------------------------------------------------
