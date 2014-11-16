@@ -3435,10 +3435,10 @@ void Score::setPos(POS pos, int tick)
       {
       if (tick < 0)
             tick = 0;
-      if (tick != _pos[int(pos)]) {
+      if (tick != _pos[int(pos)])
             _pos[int(pos)] = tick;
-            emit posChanged(pos, unsigned(tick));
-            }
+      // even though tick position might not have changed, layout might have
+      emit posChanged(pos, unsigned(tick));
       }
 
 //---------------------------------------------------------
