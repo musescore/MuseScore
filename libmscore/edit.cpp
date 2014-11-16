@@ -431,6 +431,21 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
             qFatal("Cannot write measures");
       connectTies(true);
 
+      if (noteEntryMode()) {
+            // set input cursor to possibly re-written segment
+            int icTick = inputPos();
+            Segment* icSegment = tick2segment(icTick, false, Segment::Type::ChordRest);
+            if (!icSegment) {
+                  // this can happen if cursor was on a rest
+                  // and in the rewriting it got subsumed into a full measure rest
+                  Measure* icMeasure = tick2measure(icTick);
+                  if (!icMeasure)                     // shouldn't happen, but just in case
+                        icMeasure = firstMeasure();
+                  icSegment = icMeasure->first(Segment::Type::ChordRest);
+                  }
+            inputState().setSegment(icSegment);
+            }
+
       return true;
       }
 
