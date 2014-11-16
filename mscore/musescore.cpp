@@ -826,7 +826,7 @@ MuseScore::MuseScore()
 
       QMenu* menuNtole = new QMenu(tr("T&uplets"));
       for (auto i : { "duplet", "triplet", "quadruplet", "quintuplet", "sextuplet",
-         "septuplet", "octuplet", "nonuplet" })
+         "septuplet", "octuplet", "nonuplet", "tuplet-dialog" })
             menuNtole->addAction(getAction(i));
       menuNotes->addMenu(menuNtole);
 
