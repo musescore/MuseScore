@@ -3117,6 +3117,28 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","underline")
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "explode",
+         QT_TRANSLATE_NOOP("action","Explode"),
+         QT_TRANSLATE_NOOP("action","Explode"),
+         QT_TRANSLATE_NOOP("action","Explode contents of top selected staff into staves below"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "implode",
+         QT_TRANSLATE_NOOP("action","Implode"),
+         QT_TRANSLATE_NOOP("action","Implode"),
+         QT_TRANSLATE_NOOP("action","Implode contents of selected staves into top selected staff"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL,
          "startcenter",
