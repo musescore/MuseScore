@@ -23,7 +23,7 @@ void Icon::write(Xml& xml) const
       {
       xml.stag(name());
       xml.tag("subtype", int(_iconType));
-      if (!*_action)
+      if (!_action.isEmpty())
             xml.tag("action", _action.data());
       xml.etag();
       }
