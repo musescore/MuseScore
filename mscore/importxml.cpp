@@ -866,7 +866,7 @@ void MusicXml::doCredits()
 
       // determine credits height and create vbox to contain them
       qreal vboxHeight = 10;            // default height in spatium
-      double miny = ph;
+      double miny = pageHeight;
       double maxy = 0;
       if (pageWidth > 1 && pageHeight > 1) {
             for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
@@ -891,6 +891,7 @@ void MusicXml::doCredits()
       VBox* vbox = new VBox(score);
       vbox->setBoxHeight(Spatium(vboxHeight));
 
+      QString remainingFooterText;
       QMap<int, CreditWords*> creditMap;  // store credit-words sorted on y pos
       bool creditWordsUsed = false;
 
@@ -919,6 +920,11 @@ void MusicXml::doCredits()
                   else {
                         creditMap.insert(defy, w);
                         }
+                  }
+            // keep remaining footer text for possible use as copyright
+            else if (useHeader && defy < ph2) {
+                  qDebug("add to copyright: '%s'", qPrintable(w->words));
+                  remainingFooterText += w->words;
                   }
             } // end for (ciCreditWords ...
 
@@ -998,6 +1004,16 @@ void MusicXml::doCredits()
             vbox->setTick(0);
             score->measures()->add(vbox);
             }
+            
+      // if no <rights> element was read and some text was found in the footer
+      // set the rights metadata to the value found
+      // TODO: remove formatting
+      // note that MusicXML files can contain at least two different copyright statements:
+      // - in the <rights> element (metadata)
+      // - in the <credit-words> (the printed version)
+      // while MuseScore supports only the first one
+      if (score->metaTag("copyright") == "" && remainingFooterText != "")
+            score->setMetaTag("copyright", remainingFooterText);
       }
 
 
