@@ -1571,7 +1571,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Auto beam"),
          0,
          0,
-         Icons::Invalid_ICON,
+         Icons::abeam_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CMD | ShortcutFlags::A_CHECKABLE
          },
