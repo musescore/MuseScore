@@ -308,6 +308,37 @@ void Part::read114(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   convertOldTextStyleNames
+//---------------------------------------------------------
+
+QString convertOldTextStyleNames(const QString& s)
+      {
+      QString rs(s);
+      // convert 1.2 text styles
+      if (s == "Chordname")
+            rs = "Chord Symbol";
+      else if (s == "Lyrics odd lines")
+            rs = "Lyrics Odd Lines";
+      else if (s == "Lyrics even lines")
+            rs = "Lyrics Even Lines";
+      else if (s == "InstrumentsLong")
+            rs = "Instrument Name (Long)";
+      else if (s == "InstrumentsShort")
+            rs = "Instrument Name (Short)";
+      else if (s == "InstrumentsExcerpt")
+            rs = "Instrument Name (Part)";
+      else if (s == "Poet")
+            rs = "Lyricist";
+      else if (s == "Technik")
+            rs = "Technique";
+      else if (s == "TextLine")
+            rs = "Text Line";
+      else if (s == "Tuplets")
+            rs = "Tuplet";
+      return rs;
+      }
+
+//---------------------------------------------------------
 //   read114
 //    import old version <= 1.3 files
 //---------------------------------------------------------
@@ -408,26 +439,7 @@ Score::FileError Score::read114(XmlReader& e)
                         s.setPaddingWidth(Spatium(s.paddingWidthMM() / spMM));
 \
                   // convert 1.2 text styles
-                  if (s.name() == "Chordname")
-                        s.setName("Chord Symbol");
-                  else if (s.name() == "Lyrics odd lines")
-                        s.setName("Lyrics Odd Lines");
-                  else if (s.name() == "Lyrics even lines")
-                        s.setName("Lyrics Even Lines");
-                  else if (s.name() == "InstrumentsLong")
-                        s.setName("Instrument Name (Long)");
-                  else if (s.name() == "InstrumentsShort")
-                        s.setName("Instrument Name (Short)");
-                  else if (s.name() == "InstrumentsExcerpt")
-                        s.setName("Instrument Name (Part)");
-                  else if (s.name() == "Poet")
-                        s.setName("Lyricist");
-                  else if (s.name() == "Technik")
-                        s.setName("Technique");
-                  else if (s.name() == "TextLine")
-                        s.setName("Text Line");
-                  else if (s.name() == "Tuplets")
-                        s.setName("Tuplet");
+                  s.setName(convertOldTextStyleNames(s.name()));
 
                   if (s.name() == "Lyrics Odd Lines" || s.name() == "Lyrics Even Lines")
                         s.setAlign((s.align() & ~ Align(AlignmentFlags::VMASK)) | AlignmentFlags::BASELINE);
