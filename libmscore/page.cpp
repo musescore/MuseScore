@@ -479,13 +479,15 @@ void Page::doRebuildBspTree()
 
       int n = el.size();
       if (score()->layoutMode() == LayoutMode::LINE) {
-            if (_systems.isEmpty())
-                  return;
-            if (_systems.front()->measures().isEmpty())
-                  return;
-            qreal h = _systems.front()->height();
-            MeasureBase* mb = _systems.front()->measures().back();
-            qreal w = mb->x() + mb->width();
+            qreal w = 0.0;
+            qreal h = 0.0;
+            if (!_systems.isEmpty()) {
+                  h = _systems.front()->height();
+                  if (!_systems.front()->measures().isEmpty()) {
+                        MeasureBase* mb = _systems.front()->measures().back();
+                        w = mb->x() + mb->width();
+                        }
+                  }
             bspTree.initialize(QRectF(0.0, 0.0, w, h), n);
             }
       else
