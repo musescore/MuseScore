@@ -99,7 +99,7 @@ static const int KEYSEQ_SIZE = 4;
 
 class Shortcut {
       MsWidget _assignedWidget;   //! the widget where the action will be assigned
-      int _state;                 //! shortcut is valid in this Mscore state
+      int _state { 0 };           //! shortcut is valid in this Mscore state
       QByteArray _key;            //! xml tag name for configuration file
       QByteArray _descr;          //! descriptor, shown in editor
       QByteArray _text;           //! text as shown on buttons or menus
