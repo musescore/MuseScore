@@ -1386,7 +1386,7 @@ void Score::doLayout()
 
       if (_staves.isEmpty() || first() == 0) {
             // score is empty
-            qDeleteAll(_pages);
+            // qDeleteAll(_pages);
             _pages.clear();
 
             Page* page = addPage();
