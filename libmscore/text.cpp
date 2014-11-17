@@ -2005,6 +2005,8 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
 //   readProperties
 //---------------------------------------------------------
 
+extern QString convertOldTextStyleNames(const QString&);
+
 bool Text::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
@@ -2062,8 +2064,11 @@ bool Text::readProperties(XmlReader& e)
                         }
                   //st = TextStyleType(i);
                   }
-            else
+            else {
+                  if (score()->mscVersion() <= 124)
+                        val = convertOldTextStyleNames(val);
                   st = score()->style()->textStyleType(val);
+                  }
             setTextStyleType(st);
             }
       else if (tag == "styleName")          // obsolete, unstyled text
