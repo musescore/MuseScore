@@ -68,7 +68,7 @@ class Groups : public std::vector<GroupNode> {
       void dump(const char*) const;
 
       static const Groups& endings(const Fraction& f);
-      static Beam::Mode endBeam(ChordRest* cr);
+      static Beam::Mode endBeam(ChordRest* cr, ChordRest* prev = 0);
       };
 
 
