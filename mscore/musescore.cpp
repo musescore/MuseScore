@@ -260,7 +260,7 @@ void MuseScore::closeEvent(QCloseEvent* ev)
             }
 
       writeSettings();
-      
+
       _loginManager->save();
 
       ev->accept();
@@ -2412,7 +2412,7 @@ void MuseScore::changeState(ScoreState val)
                   a->setEnabled(s->state() & val);
                   }
             }
-            
+
       if (getAction("file-part-export")->isEnabled())
             getAction("file-part-export")->setEnabled(cs->rootScore()->excerpts().size() > 0);
 
@@ -3850,6 +3850,11 @@ void MuseScore::endCmd()
 
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
+            if (cs->layoutMode() == LayoutMode::PAGE)
+                  viewModeCombo->setCurrentIndex(0);
+            else
+                  viewModeCombo->setCurrentIndex(1);
+
             cs->end();
             ScoreAccessibility::instance()->updateAccessibilityInfo();
             }
@@ -4120,20 +4125,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             ;
       else if (cmd == "countin")    // no action
             ;
-      else if (cmd == "viewmode") {
-            if (cs) {
-                  if (cs->layoutMode() == LayoutMode::PAGE) {
-                        cs->setLayoutMode(LayoutMode::LINE);
-                        viewModeCombo->setCurrentIndex(1);
-                        }
-                  else {
-                        cs->setLayoutMode(LayoutMode::PAGE);
-                        viewModeCombo->setCurrentIndex(0);
-                        }
-                  cs->doLayout();
-                  cs->setUpdateAll(true);
-                  }
-            }
       else if (cmd == "lock") {
             if (_sstate == STATE_LOCK)
                   changeState(STATE_NORMAL);
@@ -4154,7 +4145,14 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (_textTools)
                   _textTools->toggleUnderline();
             }
-
+      else if (cmd == "viewmode") {
+            if (cs) {
+                  if (cs->layoutMode() == LayoutMode::PAGE)
+                        switchLayoutMode(1);
+                  else
+                        switchLayoutMode(0);
+                  }
+            }
       else {
             if (cv) {
                   //isAncestorOf is called to see if a widget from inspector has focus
@@ -4302,14 +4300,16 @@ void MuseScore::changeScore(int step)
 void MuseScore::switchLayoutMode(int val)
       {
       if (cs) {
+            cs->startCmd();
+            LayoutMode mode;
             if (val == 0)
-                  cs->setLayoutMode(LayoutMode::PAGE);
+                  mode = LayoutMode::PAGE;
             else
-                  cs->setLayoutMode(LayoutMode::LINE);
-            cs->doLayout();
-            cs->setUpdateAll(true);
-            cv->update();
+                  mode = LayoutMode::LINE;
+            cs->undo(new ChangeLayoutMode(cs, mode));
             cv->loopUpdate(getAction("loop")->isChecked());
+            cs->endCmd();
+            endCmd();
             }
       }
 
