@@ -79,7 +79,7 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       data.delta   = pt;
       data.pos     = toLogical(ev->pos());
 
-      if (dragElement->type() == Element::Type::MEASURE) {
+      if (dragElement->type() == Element::Type::MEASURE && qApp->keyboardModifiers() == Qt::ShiftModifier) {
             qreal dist      = dragStaff->userDist() + delta.y();
             int partStaves  = dragStaff->part()->nstaves();
             StyleIdx i      = (partStaves > 1) ? StyleIdx::akkoladeDistance : StyleIdx::staffDistance;
