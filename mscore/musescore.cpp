@@ -643,12 +643,17 @@ MuseScore::MuseScore()
       menuEdit->addAction(getAction("find"));
 
       menuEdit->addSeparator();
+
       QMenu* menuMeasure = new QMenu(tr("&Measure"));
       for (auto i : { "delete-measures", "split-measure", "join-measure" })
             menuMeasure->addAction(getAction(i));
       menuEdit->addMenu(menuMeasure);
 
-      menuEdit->addSeparator();
+      QMenu* menuTools = new QMenu(tr("&Tools"));
+      for (auto i : { "explode", "implode" })
+            menuTools->addAction(getAction(i));
+      menuEdit->addMenu(menuTools);
+
       QMenu* menuVoices = new QMenu(tr("&Voices"));
       for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
             menuVoices->addAction(getAction(i));
@@ -821,7 +826,7 @@ MuseScore::MuseScore()
 
       QMenu* menuNtole = new QMenu(tr("T&uplets"));
       for (auto i : { "duplet", "triplet", "quadruplet", "quintuplet", "sextuplet",
-         "septuplet", "octuplet", "nonuplet" })
+         "septuplet", "octuplet", "nonuplet", "tuplet-dialog" })
             menuNtole->addAction(getAction(i));
       menuNotes->addMenu(menuNtole);
 

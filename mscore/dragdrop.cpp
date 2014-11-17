@@ -605,6 +605,9 @@ void ScoreView::dropEvent(QDropEvent* event)
             dragElement = 0;
             setDropTarget(0); // this also resets dropRectangle and dropAnchor
             score()->endCmd();
+            // update input cursor position (must be done after layout)
+            if (noteEntryMode())
+                  moveCursor();
             mscore->endCmd();
             return;
             }

@@ -1051,14 +1051,12 @@ void PreferenceDialog::updateSCListView()
                   ? tr("No shortcut defined") : newItem->text(1));
             newItem->setData(0, Qt::AccessibleTextRole, accessibleInfo);
             newItem->setData(1, Qt::AccessibleTextRole, accessibleInfo);
-#if 0  // this is too fragile!
             if (enableExperimental
                         || (!s->key().startsWith("media")
                             && !s->key().startsWith("layer")
                             && !s->key().startsWith("insert-fretframe"))) {
                   shortcutList->addTopLevelItem(newItem);
                   }
-#endif
             }
       shortcutList->resizeColumnToContents(0);
       }

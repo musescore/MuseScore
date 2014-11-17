@@ -848,7 +848,7 @@ void SegmentView::setElement(Element* e)
             if (ll) {
                   foreach(Lyrics* l, *ll) {
                         QString s;
-                        s.setNum(long(l), 16);
+                        s.setNum(qptrdiff(l), 16);
                         QListWidgetItem* item = new QListWidgetItem(s, 0, long(l));
                         sb.lyrics->addItem(item);
                         }
@@ -860,7 +860,7 @@ void SegmentView::setElement(Element* e)
       sb.annotations->clear();
       foreach(Element* sp, s->annotations()) {
             QString s;
-            s.setNum(long(sp), 16);
+            s.setNum(qptrdiff(sp), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)sp));
             sb.annotations->addItem(item);
@@ -947,7 +947,7 @@ void ChordDebug::setElement(Element* e)
       crb.attributes->clear();
       foreach(Articulation* a, chord->articulations()) {
             QString s;
-            s.setNum(long(a), 16);
+            s.setNum(qptrdiff(a), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)a));
             crb.attributes->addItem(item);
@@ -955,7 +955,7 @@ void ChordDebug::setElement(Element* e)
       crb.lyrics->clear();
       foreach(Lyrics* lyrics, chord->lyricsList()) {
             QString s;
-            s.setNum(long(lyrics), 16);
+            s.setNum(qptrdiff(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)lyrics));
             crb.lyrics->addItem(item);
@@ -963,7 +963,7 @@ void ChordDebug::setElement(Element* e)
       cb.helplineList->clear();
       for (LedgerLine* h = chord->ledgerLines(); h; h = h->next()) {
             QString s;
-            s.setNum(long(h), 16);
+            s.setNum(qptrdiff(h), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)h));
             cb.helplineList->addItem(item);
@@ -971,7 +971,7 @@ void ChordDebug::setElement(Element* e)
       cb.notes->clear();
       foreach(Element* n, chord->notes()) {
             QString s;
-            s.setNum(long(n), 16);
+            s.setNum(qptrdiff(n), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)n));
             cb.notes->addItem(item);
@@ -979,7 +979,7 @@ void ChordDebug::setElement(Element* e)
       cb.graceChords1->clear();
       for (Element* c : chord->graceNotes()) {
             QString s;
-            s.setNum(long(c), 16);
+            s.setNum(qptrdiff(c), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)c));
             cb.graceChords1->addItem(item);
@@ -987,7 +987,7 @@ void ChordDebug::setElement(Element* e)
       cb.elements->clear();
       for (Element* c : chord->el()) {
             QString s;
-            s.setNum(long(c), 16);
+            s.setNum(qptrdiff(c), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)c));
             cb.elements->addItem(item);
@@ -1129,7 +1129,7 @@ void ShowNoteWidget::setElement(Element* e)
       nb.fingering->clear();
       for (Element* text : note->el()) {
             QString s;
-            s.setNum(long(text), 16);
+            s.setNum(qptrdiff(text), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)text));
             nb.fingering->addItem(item);
@@ -1246,7 +1246,7 @@ void RestView::setElement(Element* e)
       crb.attributes->clear();
       foreach(Articulation* a, rest->articulations()) {
             QString s;
-            s.setNum(long(a), 16);
+            s.setNum(qptrdiff(a), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)a));
             crb.attributes->addItem(item);
@@ -1254,7 +1254,7 @@ void RestView::setElement(Element* e)
       crb.lyrics->clear();
       foreach(Lyrics* lyrics, rest->lyricsList()) {
             QString s;
-            s.setNum(long(lyrics), 16);
+            s.setNum(qptrdiff(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)lyrics));
             crb.lyrics->addItem(item);
@@ -1765,8 +1765,8 @@ void ShowElementBase::setElement(Element* e)
       {
       el = e;
 
-      eb.address->setText(QString("%1").arg((unsigned long)e, 0, 16));
-      eb.score->setText(QString("%1").arg((unsigned long)(e->score()), 0, 16));
+      eb.address->setText(QString("%1").arg((quintptr)e, 0, 16));
+      eb.score->setText(QString("%1").arg((quintptr)(e->score()), 0, 16));
 
       eb.selected->setChecked(e->selected());
       eb.selectable->setChecked(e->selectable());
@@ -2032,7 +2032,7 @@ void VoltaView::setElement(Element* e)
       const QList<SpannerSegment*>& el = volta->spannerSegments();
       foreach(const SpannerSegment* e, el) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, QString("%1").arg((unsigned long)e, 8, 16));
+            item->setText(0, QString("%1").arg((quintptr)e, 8, 16));
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)e));
             sp.segments->addTopLevelItem(item);
             }
@@ -2236,7 +2236,7 @@ void BeamView::setElement(Element* e)
       bb.elements->clear();
       foreach (ChordRest* cr, b->elements()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, QString("%1").arg((unsigned long)cr, 8, 16));
+            item->setText(0, QString("%1").arg((quintptr)cr, 8, 16));
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)cr));
             item->setText(1, cr->name());
             item->setText(2, QString("%1").arg(cr->segment()->tick()));

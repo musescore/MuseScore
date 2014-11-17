@@ -2144,7 +2144,7 @@ Shortcut Shortcut::_sc[] = {
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
-         ShortcutFlags::A_SCORE
+         ShortcutFlags::A_SCORE | ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::MAIN_WINDOW,
@@ -3115,6 +3115,28 @@ Shortcut Shortcut::_sc[] = {
          STATE_TEXT_EDIT,
          "text-u",
          QT_TRANSLATE_NOOP("action","underline")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "explode",
+         QT_TRANSLATE_NOOP("action","Explode"),
+         QT_TRANSLATE_NOOP("action","Explode"),
+         QT_TRANSLATE_NOOP("action","Explode contents of top selected staff into staves below"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "implode",
+         QT_TRANSLATE_NOOP("action","Implode"),
+         QT_TRANSLATE_NOOP("action","Implode"),
+         QT_TRANSLATE_NOOP("action","Implode contents of selected staves into top selected staff"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
          },
       {
          MsWidget::MAIN_WINDOW,
