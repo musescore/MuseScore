@@ -2674,7 +2674,9 @@ void Score::select(Element* e, SelectType type, int staffIdx)
             Element* ee = e;
             if (ee->type() == Element::Type::NOTE)
                   ee = ee->parent();
-            setPlayPos(static_cast<ChordRest*>(ee)->segment()->tick());
+            int tick = static_cast<ChordRest*>(ee)->segment()->tick();
+            if (playPos() != tick)
+                  setPlayPos(tick);
             }
       if (MScore::debugMode)
             qDebug("select element <%s> type %hhd(state %hhd) staff %d",
@@ -3439,6 +3441,8 @@ void Score::setPos(POS pos, int tick)
       if (tick != _pos[int(pos)])
             _pos[int(pos)] = tick;
       // even though tick position might not have changed, layout might have
+      // so we should update cursor here
+      // however, we must be careful not to call setPos() again while handling posChanged, or recursion results
       emit posChanged(pos, unsigned(tick));
       }
 
