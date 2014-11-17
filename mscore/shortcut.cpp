@@ -58,7 +58,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Save score to file"),
          Icons::fileSave_ICON
          },
-      { 
+      {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
          "file-save-online",
@@ -2681,7 +2681,12 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL,
          "viewmode",
-         QT_TRANSLATE_NOOP("action","Toggle View Mode")
+         QT_TRANSLATE_NOOP("action","Toggle View Mode"),
+         0,
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE
          },
       {
          MsWidget::SCORE_TAB,

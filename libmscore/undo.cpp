@@ -3841,4 +3841,16 @@ void ChangeStartEndSpanner::flip()
       end   = e;
       }
 
+//---------------------------------------------------------
+//   ChangeLayoutMode::flip
+//---------------------------------------------------------
+
+void ChangeLayoutMode::flip()
+      {
+      LayoutMode lm = score->layoutMode();
+      score->setLayoutMode(layoutMode);
+      layoutMode = lm;
+      score->setLayoutAll(true);
+      }
+
 }

@@ -87,6 +87,8 @@ enum class PlayEventType : char;
 #define UNDO_NAME(a)
 #endif
 
+enum class LayoutMode : char;
+
 //---------------------------------------------------------
 //   UndoCommand
 //---------------------------------------------------------
@@ -1423,6 +1425,21 @@ class ChangeStartEndSpanner : public UndoCommand {
    public:
       ChangeStartEndSpanner(Spanner* sp, Element*s, Element*e) : spanner(sp), start(s), end(e) {}
       UNDO_NAME("ChangeStartEndSpanner")
+      };
+
+//---------------------------------------------------------
+//   ChangeLayoutMode
+//---------------------------------------------------------
+
+class ChangeLayoutMode : public UndoCommand {
+      Score* score;
+      LayoutMode layoutMode;
+
+      void flip();
+
+   public:
+      ChangeLayoutMode(Score* s, LayoutMode m) : score(s), layoutMode(m) {}
+      UNDO_NAME("ChangeLayoutMode")
       };
 
 
