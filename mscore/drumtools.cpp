@@ -168,7 +168,7 @@ void DrumTools::editDrumset()
 void DrumTools::drumNoteSelected(int val)
       {
       Element* element = drumPalette->element(val);
-      if(element && element->type() == Element::Type::CHORD) {
+      if (element && element->type() == Element::Type::CHORD) {
             Chord* ch        = static_cast<Chord*>(element);
             Note* note       = ch->downNote();
             int ticks        = MScore::defaultPlayDuration;
@@ -185,5 +185,22 @@ void DrumTools::drumNoteSelected(int val)
             getAction("voice-4")->setChecked(element->voice() == 3);
             }
       }
+
+int DrumTools::selectedDrumNote()
+      {
+      int idx = drumPalette->getSelectedIdx();
+      if (idx < 0)
+            return -1;
+      Element* element = drumPalette->element(idx);
+      if (element && element->type() == Element::Type::CHORD) {
+            Chord* ch  = static_cast<Chord*>(element);
+            Note* note = ch->downNote();
+            return note->pitch();
+            }
+      else {
+            return -1;
+            }
+      }
+
 }
 
