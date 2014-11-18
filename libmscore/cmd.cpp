@@ -777,7 +777,37 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             ChordRest* cr1 = static_cast<ChordRest*>(seg1->element(track));
             Fraction srcF = cr1->duration();
             Fraction dstF = Fraction::fromTicks(tick - cr1->tick());
-            undoChangeChordRestLen(cr1, TDuration(dstF));
+            QList<TDuration> dList = toDurationList(dstF, true);
+            int n = dList.size();
+            undoChangeChordRestLen(cr1, TDuration(dList[0]));
+            if (n > 1) {
+                  int crtick = cr1->tick() + cr1->actualTicks();
+                  Measure* measure = tick2measure(crtick);
+                  if (cr1->type() == Element::Type::CHORD) {
+                        // split Chord
+                        Chord* c = static_cast<Chord*>(cr1);
+                        for (int i = 1; i < n; ++i) {
+                              TDuration d = dList[i];
+                              Chord* c2 = addChord(crtick, d, c, true, c->tuplet());
+                              c = c2;
+                              seg1 = c->segment();
+                              crtick += c->actualTicks();
+                              }
+                        }
+                  else {
+                        // split Rest
+                        Rest* r       = static_cast<Rest*>(cr1);
+                        for (int i = 1; i < n; ++i) {
+                              TDuration d = dList[i];
+                              Rest* r2      = static_cast<Rest*>(r->clone());
+                              r2->setDuration(d.fraction());
+                              r2->setDurationType(d);
+                              undoAddCR(r2, measure, crtick);
+                              seg1 = r2->segment();
+                              crtick += r2->actualTicks();
+                              }
+                        }
+                  }
             setRest(tick, track, srcF - dstF, true, 0);
             for (;;) {
                   seg1 = seg1->next1(Segment::Type::ChordRest);
