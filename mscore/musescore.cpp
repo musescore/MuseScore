@@ -4845,9 +4845,11 @@ int main(int argc, char* av[])
 
       genIcons();
 
-      if (!converterMode)
+      if (!MScore::noGui) {
             qApp->setWindowIcon(*icons[int(Icons::window_ICON)]);
-      Workspace::initWorkspace();
+            Workspace::initWorkspace();
+            }
+
       mscore = new MuseScore();
       mscoreCore = mscore;
 
