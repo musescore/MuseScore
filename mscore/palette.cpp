@@ -296,7 +296,6 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       if (score == 0)
             return;
       const Selection& sel = score->selection();
-
       if (sel.isNone())
             return;
 
@@ -305,8 +304,8 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             element = cells[i]->element;
       if (element == 0)
             return;
-      ScoreView* viewer = mscore->currentScoreView();
 
+      ScoreView* viewer = mscore->currentScoreView();
       if (viewer->mscoreState() != STATE_EDIT
          && viewer->mscoreState() != STATE_LYRICS_EDIT
          && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
@@ -314,8 +313,28 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             score->startCmd();
             }
       if (sel.isList()) {
-            foreach(Element* e, sel.elements())
-                  applyDrop(score, viewer, e, element);
+            if (viewer->mscoreState() == STATE_NOTE_ENTRY_DRUM && element->type() == Element::Type::CHORD) {
+                  // use input position rather than selection if possible
+                  Element* e = score->inputState().cr();
+                  if (!e)
+                        e = sel.elements().first();
+                  if (e) {
+                        // get note if selection was full chord
+                        if (e->type() == Element::Type::CHORD)
+                              e = static_cast<Chord*>(e)->upNote();
+                        // use voice of element being added to (otherwise we can might corrupt the measure)
+                        element->setTrack(e->voice());
+                        applyDrop(score, viewer, e, element);
+                        // continue in same track
+                        score->inputState().setTrack(e->track());
+                        }
+                  else
+                        qDebug("nowhere to place drum note");
+                  }
+            else {
+                  foreach(Element* e, sel.elements())
+                        applyDrop(score, viewer, e, element);
+                  }
             }
       else if (sel.isRange()) {
             // TODO: check for other element types:
