@@ -79,7 +79,7 @@ void LoginDialog::login()
 
 void LoginDialog::onLoginError(const QString& error)
       {
-      QMessageBox::critical(mscore, tr("Login error"), error);
+      QMessageBox::critical(this, tr("Login error"), error);
       }
 
 //---------------------------------------------------------

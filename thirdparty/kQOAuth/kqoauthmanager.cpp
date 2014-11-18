@@ -730,7 +730,9 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
         emit authorizedRequestDone();
     }
     else {
-        emit requestReady(emptyResponse);
+         if( error != QNetworkReply::ContentAccessDenied &&
+             error!= QNetworkReply::AuthenticationRequiredError)
+             emit requestReady(emptyResponse);
         }
 }
 
