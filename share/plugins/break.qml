@@ -46,18 +46,32 @@ MuseScore {
                     var value = nbMeasures.value
                     console.log(value)
                     var cursor = curScore.newCursor()
-                    cursor.track = 0
-                    cursor.rewind(2) // go to end
-                    var endTick = cursor.tick // if no selection, go to end of score
-                    cursor.rewind(1) // go to start
-                    console.log(endTick)
+                    cursor.rewind(1) // go to start of selection (if any)
+                    var endTick
                     console.log(cursor.tick)
                     var i = 1
                     var fullScore = false
-                    if (endTick == 0) {
-                        cursor.rewind(0)
+                    if (!cursor.segment) { // no selection
                         fullScore = true
+                    } else {
+                        cursor.rewind(2) // go to end
+                        if (cursor.tick == 0) {
+                            // this happens when the selection includes
+                            // the last measure of the score.
+                            // rewind(2) goes behind the last segment (where
+                            // there's none) and sets tick=0
+                            endTick = curScore.lastSegment.tick + 1
+                        } else {
+                            endTick = cursor.tick // if no selection, go to end of score
+                        }
                     }
+                    console.log(endTick)
+
+                    if (fullScore)
+                        cursor.rewind(0) // if no selection, beginning of score
+                    else
+                        cursor.rewind(1) // go to start of selection
+
                     curScore.startCmd()
                     var m = cursor.measure
                     while (m && (fullScore || cursor.tick < endTick)) {
