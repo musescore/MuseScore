@@ -779,17 +779,27 @@ void MusicXml::initPartState()
 //   addText
 //---------------------------------------------------------
 
-static void addText(VBox*& vbx, Score* s, QString strTxt, TextStyleType stl)
+static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
       {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setPlainText(strTxt);
-            if (vbx == 0)
-                  vbx = new VBox(s);
+            text->setText(strTxt);
             vbx->add(text);
             }
       }
+      
+static void addText2(VBox* vbx, Score* s, QString strTxt, TextStyleType stl, Align v, double yoffs)
+{
+      if (!strTxt.isEmpty()) {
+            Text* text = new Text(s);
+            text->setTextStyleType(stl);
+            text->setText(strTxt);
+            text->textStyle().setAlign(v);
+            text->textStyle().setYoff(yoffs);
+            vbx->add(text);
+      }
+}
 
 //---------------------------------------------------------
 //   doCredits
@@ -804,72 +814,121 @@ static void addText(VBox*& vbx, Score* s, QString strTxt, TextStyleType stl)
 void MusicXml::doCredits()
       {
       // IMPORT_LAYOUT
-      // qDebug("MusicXml::doCredits()");
-      /*
+      qDebug("MusicXml::doCredits()");
+      /**/
       const PageFormat* pf = score->pageFormat();
-      qDebug("page format w=%g h=%g spatium=%g DPMM=%g DPI=%g",
-             pf->width(), pf->height(), score->spatium(), MScore::DPMM, DPI);
-      // page width and height in tenths
-      const double pw  = pf->width() * 10 * DPI / score->spatium();
-      const double ph  = pf->height() * 10 * DPI / score->spatium();
-      */
+      qDebug("page format set (inch) w=%g h=%g tm=%g spatium=%g DPMM=%g DPI=%g",
+             pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), MScore::DPMM, MScore::DPI);
+      // page width, height and odd top margin in tenths
+      const double pw  = pf->width() * 10 * MScore::DPI / score->spatium();
+      const double ph  = pf->height() * 10 * MScore::DPI / score->spatium();
+      const double tm  = pf->oddTopMargin() * 10 * MScore::DPI / score->spatium();
+      const double tov = ph - tm;
+      /**/
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
-      // qDebug("page format w=%g h=%g", pw, ph);
-      // qDebug("page format w=%d h=%d", pageWidth, pageHeight);
-      // qDebug("page format pw1=%d pw2=%d ph2=%d", pw1, pw2, ph2);
+      qDebug("page format set (tenths) w=%g h=%g tm=%g tov=%g", pw, ph, tm, tov);
+      qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
+      qDebug("page format pw1=%d pw2=%d ph2=%d", pw1, pw2, ph2);
       // dump the credits
-      /*
+      /**/
       for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
             CreditWords* w = *ci;
-            qDebug("credit-words defx=%g defy=%g just=%s hal=%s val=%s words=%s",
+            qDebug("credit-words defx=%g defy=%g just=%s hal=%s val=%s words='%s'",
                    w->defaultX,
                    w->defaultY,
-                   w->justify.toUtf8().data(),
-                   w->hAlign.toUtf8().data(),
-                   w->vAlign.toUtf8().data(),
-                   w->words.toUtf8().data());
+                   qPrintable(w->justify),
+                   qPrintable(w->hAlign),
+                   qPrintable(w->vAlign),
+                   qPrintable(w->words));
             }
-       */
+       /**/
 
-      CreditWords* crwTitle = 0;
-      CreditWords* crwSubTitle = 0;
-      CreditWords* crwComposer = 0;
-      CreditWords* crwPoet = 0;
-      CreditWords* crwCopyRight = 0;
-
-      QMap<int, CreditWords*> creditMap;  // store credit-words sorted on y pos
       int nWordsHeader = 0;               // number of credit-words in the header
       int nWordsFooter = 0;               // number of credit-words in the footer
-
       for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
             CreditWords* w = *ci;
-            double defx = w->defaultX;
             double defy = w->defaultY;
-            // composer is in the right column
-            if (pw2 < defx) {
-                  // found composer
-                  if (!crwComposer) crwComposer = w;
-                  }
-            // poet is in the left column
-            else if (defx < pw1) {
-                  // found poet
-                  if (!crwPoet) crwPoet = w;
-                  }
-            // save others (in the middle column) to be handled later
-            else {
-                  creditMap.insert(defy, w);
                   // and count #words in header and footer
                   if (defy > ph2)
                         nWordsHeader++;
                   else
                         nWordsFooter++;
+            } // end for (ciCreditWords ...
+
+      // if there are any credit words in the header, use these
+      // else use the credit words in the footer (if any)
+      bool useHeader = nWordsHeader > 0;
+      bool useFooter = nWordsHeader == 0 && nWordsFooter > 0;
+      qDebug("header %d footer %d useHeader %d useFooter %d",
+             nWordsHeader, nWordsFooter, useHeader, useFooter);
+
+      // determine credits height and create vbox to contain them
+      qreal vboxHeight = 10;            // default height in spatium
+      double miny = pageHeight;
+      double maxy = 0;
+      if (pageWidth > 1 && pageHeight > 1) {
+            for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
+                  CreditWords* w = *ci;
+                  double defy = w->defaultY;
+                  if ((useHeader && defy > ph2) || (useFooter && defy < ph2)) {
+                        if (defy > maxy) maxy = defy;
+                        if (defy < miny) miny = defy;
+                        }
+                  }
+            qDebug("miny=%g maxy=%g", miny, maxy);
+            if (miny < (ph - 1) && maxy > 1) {  // if both miny and maxy set
+                  double diff = maxy - miny;    // calculate height in tenths
+                  if (diff > 1 && diff < ph2) { // and size is reasonable
+                        vboxHeight = diff;
+                        vboxHeight /= 10;       // height in spatium
+                        vboxHeight += 2.5;      // guesstimated correction for last line
+                        }
+                  }
+            }
+      qDebug("vbox height %g sp", vboxHeight);
+      VBox* vbox = new VBox(score);
+      vbox->setBoxHeight(Spatium(vboxHeight));
+
+      QString remainingFooterText;
+      QMap<int, CreditWords*> creditMap;  // store credit-words sorted on y pos
+      bool creditWordsUsed = false;
+
+      for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
+            CreditWords* w = *ci;
+            double defx = w->defaultX;
+            double defy = w->defaultY;
+            // handle all credit words in the box
+            if ((useHeader && defy > ph2) || (useFooter && defy < ph2)) {
+                  creditWordsUsed = true;
+                  // composer is in the right column
+                  if (pw2 < defx) {
+                        // found composer
+                        addText2(vbox, score, w->words,
+                                 TextStyleType::COMPOSER, AlignmentFlags::RIGHT | AlignmentFlags::BOTTOM,
+                                 (miny - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                        }
+                  // poet is in the left column
+                  else if (defx < pw1) {
+                        // found poet
+                        addText2(vbox, score, w->words,
+                                 TextStyleType::POET, AlignmentFlags::LEFT | AlignmentFlags::BOTTOM,
+                                 (miny - w->defaultY) * score->spatium() / (10 * MScore::DPI));
+                        }
+                  // save others (in the middle column) to be handled later
+                  else {
+                        creditMap.insert(defy, w);
+                        }
+                  }
+            // keep remaining footer text for possible use as copyright
+            else if (useHeader && defy < ph2) {
+                  qDebug("add to copyright: '%s'", qPrintable(w->words));
+                  remainingFooterText += w->words;
                   }
             } // end for (ciCreditWords ...
 
-      /*
-      qDebug("header %d footer %d", nWordsHeader, nWordsFooter);
+      /**/
       QMap<int, CreditWords*>::const_iterator ci = creditMap.constBegin();
       while (ci != creditMap.constEnd()) {
             CreditWords* w = ci.value();
@@ -877,13 +936,13 @@ void MusicXml::doCredits()
                    ci.key(),
                    w->defaultX,
                    w->defaultY,
-                   w->justify.toUtf8().data(),
-                   w->hAlign.toUtf8().data(),
-                   w->vAlign.toUtf8().data(),
-                   w->words.toUtf8().data());
+                   qPrintable(w->justify),
+                   qPrintable(w->hAlign),
+                   qPrintable(w->vAlign),
+                   qPrintable(w->words));
             ++ci;
             }
-       */
+       /**/
 
       // assign title, subtitle and copyright
       QList<int> keys = creditMap.uniqueKeys(); // note: ignoring credit-words at the same y pos
@@ -891,49 +950,32 @@ void MusicXml::doCredits()
       // if any credit-words present, the highest is the title
       // note that the keys are sorted in ascending order
       // -> use the last key
-      if (keys.size() >= 1)
-            crwTitle = creditMap.value(keys.at(keys.size() - 1));
-
-      // if two credit-words present and both are in the header or the footer,
-      // the lowest one is the subtitle, else it is the copyright
-      if (keys.size() == 2) {
-            if (nWordsHeader == 2 || nWordsFooter == 2)
-                  crwSubTitle = creditMap.value(keys.at(0));
-            else
-                  crwCopyRight = creditMap.value(keys.at(0));
+      if (keys.size() >= 1) {
+            CreditWords* w = creditMap.value(keys.at(keys.size() - 1));
+            qDebug("title='%s'", qPrintable(w->words));
+            addText2(vbox, score, w->words,
+                     TextStyleType::TITLE, AlignmentFlags::HCENTER | AlignmentFlags::TOP,
+                     (maxy - w->defaultY) * score->spatium() / (10 * MScore::DPI));
             }
 
-      // if three or more credit-words present
-      // the second-highest is the subtitle
-      // the lowest one is the copyright
-      if (keys.size() >= 3) {
-            crwSubTitle = creditMap.value(keys.at(keys.size() - 2));
-            crwCopyRight = creditMap.value(keys.at(0));
+      // add remaining credit-words as subtitles
+      for (int i = 0; i < (keys.size() - 1); i++) {
+            CreditWords* w = creditMap.value(keys.at(i));
+            qDebug("subtitle='%s'", qPrintable(w->words));
+            addText2(vbox, score, w->words,
+                     TextStyleType::SUBTITLE, AlignmentFlags::HCENTER | AlignmentFlags::TOP,
+                     (maxy - w->defaultY) * score->spatium() / (10 * MScore::DPI));
             }
 
-      /*
-      if (crwTitle) qDebug("title='%s'", crwTitle->words.toUtf8().data());
-      if (crwSubTitle) qDebug("subtitle='%s'", crwSubTitle->words.toUtf8().data());
-      if (crwComposer) qDebug("composer='%s'", crwComposer->words.toUtf8().data());
-      if (crwPoet) qDebug("poet='%s'", crwPoet->words.toUtf8().data());
-      if (crwCopyRight) qDebug("copyright='%s'", crwCopyRight->words.toUtf8().data());
-       */
+      // use metadata if no workable credit-words found
+      if (!creditWordsUsed) {
+            
+            QString strTitle;
+            QString strSubTitle;
+            QString strComposer;
+            QString strPoet;
+            QString strTranslator;
 
-      QString strTitle;
-      QString strSubTitle;
-      QString strComposer;
-      QString strPoet;
-      QString strTranslator;
-
-      if (crwTitle || crwSubTitle || crwComposer || crwPoet || crwCopyRight) {
-            // use credits
-            if (crwTitle) strTitle = crwTitle->words;
-            if (crwSubTitle) strSubTitle = crwSubTitle->words;
-            if (crwComposer) strComposer = crwComposer->words;
-            if (crwPoet) strPoet = crwPoet->words;
-            }
-      else {
-            // use metadata
             if (!(score->metaTag("movementTitle").isEmpty() && score->metaTag("workTitle").isEmpty())) {
                   strTitle = score->metaTag("movementTitle");
                   if (strTitle.isEmpty())
@@ -950,27 +992,28 @@ void MusicXml::doCredits()
             if (!metaComposer.isEmpty()) strComposer = metaComposer;
             if (!metaPoet.isEmpty()) strPoet = metaPoet;
             if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
+            
+            addText(vbox, score, strTitle,      TextStyleType::TITLE);
+            addText(vbox, score, strSubTitle,   TextStyleType::SUBTITLE);
+            addText(vbox, score, strComposer,   TextStyleType::COMPOSER);
+            addText(vbox, score, strPoet,       TextStyleType::POET);
+            addText(vbox, score, strTranslator, TextStyleType::TRANSLATOR);
             }
 
-      VBox* vbox  = 0;
-      addText(vbox, score, strTitle,      TextStyleType::TITLE);
-      addText(vbox, score, strSubTitle,   TextStyleType::SUBTITLE);
-      addText(vbox, score, strComposer,   TextStyleType::COMPOSER);
-      addText(vbox, score, strPoet,       TextStyleType::POET);
-      addText(vbox, score, strTranslator, TextStyleType::TRANSLATOR);
       if (vbox) {
             vbox->setTick(0);
             score->measures()->add(vbox);
             }
-
-      // if no <rights> element was read and a copyright was found in the credit-words
+            
+      // if no <rights> element was read and some text was found in the footer
       // set the rights metadata to the value found
+      // TODO: remove formatting
       // note that MusicXML files can contain at least two different copyright statements:
       // - in the <rights> element (metadata)
       // - in the <credit-words> (the printed version)
       // while MuseScore supports only the first one
-      if (score->metaTag("copyright") == "" && crwCopyRight)
-            score->setMetaTag("copyright", crwCopyRight->words);
+      if (score->metaTag("copyright") == "" && remainingFooterText != "")
+            score->setMetaTag("copyright", remainingFooterText);
       }
 
 
@@ -1081,6 +1124,57 @@ void MusicXml::readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
       qreal w1 = size.width() - pf->oddLeftMargin() - _oddRightMargin;
       qreal w2 = size.width() - pf->evenLeftMargin() - _evenRightMargin;
       pf->setPrintableWidth(qMax(w1, w2));     // silently adjust right margins
+      }
+      
+      //---------------------------------------------------------
+      //   nextPartOfFormattedString
+      //---------------------------------------------------------
+      
+      /**
+       Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
+       */
+      
+      static QString nextPartOfFormattedString(QDomElement e)
+      {
+            QString txt        = e.text();
+            QString lang       = e.attribute(QString("xml:lang"), "it");
+            QString fontWeight = e.attribute(QString("font-weight"));
+            QString fontSize   = e.attribute(QString("font-size"));
+            QString fontStyle  = e.attribute(QString("font-style"));
+            QString underline  = e.attribute(QString("underline"));
+            QString fontFamily = e.attribute(QString("font-family"));
+            // TODO: color, enclosure, yoffset in only part of the text, ...
+            QString importedtext;
+            if (!fontSize.isEmpty()) {
+                  bool ok = true;
+                  float size = fontSize.toFloat(&ok);
+                  if (ok)
+                        importedtext += QString("<font size=\"%1\"/>").arg(size);
+            }
+            if (!fontFamily.isEmpty())
+                  importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
+            if (fontWeight == "bold")
+                  importedtext += "<b>";
+            if (fontStyle == "italic")
+                  importedtext += "<i>";
+            if (!underline.isEmpty()) {
+                  bool ok = true;
+                  int lines = underline.toInt(&ok);
+                  if (ok && (lines > 0))  // 1,2, or 3 underlines are imported as single underline
+                        importedtext += "<u>";
+                  else
+                        underline = "";
+            }
+            txt.replace(QString("\r"), QString("")); // convert Windows line break \r\n -> \n
+            importedtext += txt.toHtmlEscaped();
+            if (underline != "")
+                  importedtext += "</u>";
+            if (fontStyle == "italic")
+                  importedtext += "</i>";
+            if (fontWeight == "bold")
+                  importedtext += "</b>";
+            //qDebug("importedtext '%s'", qPrintable(importedtext));
+            return importedtext;
       }
 
 //---------------------------------------------------------
@@ -1255,7 +1349,7 @@ void MusicXml::scorePartwise(QDomElement ee)
                                           valign   = ee.attribute(QString("valign"));
                                           creditWordsRead = true;
                                           }
-                                    crwords += ee.text();
+                                    crwords += nextPartOfFormattedString(ee);
                                     }
                               else
                                     domError(ee);
@@ -1738,7 +1832,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
 
 void MusicXml::xmlPart(QDomElement e, QString id)
       {
-      // qDebug("xmlPart(id='%s')", qPrintable(id));
+      //qDebug("xmlPart(id='%s')", qPrintable(id));
       if (id == "") {
             qDebug("MusicXML import: part without id");
             return;
@@ -2617,57 +2711,6 @@ static void handleSpannerStop(SLine* cur_sp, QString type, int tick, MusicXmlSpa
       }
       
 //---------------------------------------------------------
-//   nextPartOfFormattedString
-//---------------------------------------------------------
-      
-/**
- Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
- */
-
-static QString nextPartOfFormattedString(QDomElement e)
-      {
-            QString txt        = e.text();
-            QString lang       = e.attribute(QString("xml:lang"), "it");
-            QString fontWeight = e.attribute(QString("font-weight"));
-            QString fontSize   = e.attribute(QString("font-size"));
-            QString fontStyle  = e.attribute(QString("font-style"));
-            QString underline  = e.attribute(QString("underline"));
-            QString fontFamily = e.attribute(QString("font-family"));
-            // TODO: color, enclosure, yoffset in only part of the text, ...
-            QString importedtext;
-            if (!fontSize.isEmpty()) {
-                  bool ok = true;
-                  float size = fontSize.toFloat(&ok);
-                  if (ok)
-                        importedtext += QString("<font size=\"%1\"/>").arg(size);
-            }
-            if (!fontFamily.isEmpty())
-                  importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
-            if (fontWeight == "bold")
-                  importedtext += "<b>";
-            if (fontStyle == "italic")
-                  importedtext += "<i>";
-            if (!underline.isEmpty()) {
-                  bool ok = true;
-                  int lines = underline.toInt(&ok);
-                  if (ok && (lines > 0))  // 1,2, or 3 underlines are imported as single underline
-                        importedtext += "<u>";
-                  else
-                        underline = "";
-            }
-            txt.replace(QString("\r"), QString("")); // convert Windows line break \r\n -> \n
-            importedtext += txt.toHtmlEscaped();
-            if (underline != "")
-                  importedtext += "</u>";
-            if (fontStyle == "italic")
-                  importedtext += "</i>";
-            if (fontWeight == "bold")
-                  importedtext += "</b>";
-            qDebug("importedtext '%s'", qPrintable(importedtext));
-            return importedtext;
-      }
-      
-//---------------------------------------------------------
 //   matchRepeat
 //---------------------------------------------------------
 
@@ -3014,7 +3057,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   t = new StaffText(score);
                   }
 
-            qDebug("formatted words '%s'", qPrintable(formattedText));
+            //qDebug("formatted words '%s'", qPrintable(formattedText));
             t->setText(formattedText);
 
             if (enclosure == "circle") {
@@ -3641,7 +3684,7 @@ void MusicXml::xmlLyric(int trk, QDomElement e,
             else
                   domError(e);
             }
-            qDebug("formatted lyric '%s'", qPrintable(formattedText));
+            //qDebug("formatted lyric '%s'", qPrintable(formattedText));
             l->setText(formattedText);
       }
 
