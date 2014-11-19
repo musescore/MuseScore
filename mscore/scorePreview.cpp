@@ -40,8 +40,10 @@ void ScorePreview::setScore(const QString& s)
 
 void ScorePreview::setScore(const ScoreInfo& si)
       {
+      name->setText(si.completeBaseName());
       creationDate->setText(si.created().toString());
       fileSize->setText(QString("%1 KiB").arg(si.size() / 1024));
+      name->setEnabled(true);
       creationDate->setEnabled(true);
       fileSize->setEnabled(true);
       icon->setPixmap(si.pixmap());

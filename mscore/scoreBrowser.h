@@ -44,6 +44,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
 
       QListWidget* createScoreList();
       QList<ScoreListWidget*> scoreLists;
+      bool _stripNumbers  { false };
 
       ScoreItem* genScoreItem(const QFileInfo& fi);
 
@@ -59,6 +60,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
    public:
       ScoreBrowser(QWidget* parent = 0);
       void setScores(QFileInfoList);
+      void setStripNumbers(bool val) { _stripNumbers = val; }
       };
 }
 
