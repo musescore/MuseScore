@@ -642,8 +642,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newTimePalette();
       static Palette* newRepeatsPalette();
       static Palette* newBreaksPalette();
-      static Palette* newBeamPalette();
-      static Palette* newDynamicsPalette(bool master = false);
+      static Palette* newBeamPalette(bool basic);
+      static Palette* newDynamicsPalette(bool basic, bool master = false);
       static Palette* newFramePalette();
       static Palette* newFingeringPalette();
       static Palette* newTremoloPalette();
@@ -653,12 +653,12 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static Palette* newBreathPalette();
       static Palette* newArpeggioPalette();
       static Palette* newClefsPalette(bool basic);
-      static Palette* newGraceNotePalette();
+      static Palette* newGraceNotePalette(bool basic);
       static Palette* newBagpipeEmbellishmentPalette();
       static Palette* newKeySigPalette();
       static Palette* newAccidentalsPalette(bool basic = false);
-      static Palette* newBarLinePalette();
-      static Palette* newLinesPalette();
+      static Palette* newBarLinePalette(bool basic);
+      static Palette* newLinesPalette(bool basic);
 
       Inspector* inspector()           { return _inspector; }
       PluginCreator* pluginCreator()   { return _pluginCreator; }
