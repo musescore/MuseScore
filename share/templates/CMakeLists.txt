@@ -20,26 +20,49 @@
 
 install(FILES
       drumset_fr.drm
-      01-General-Bass_Clef.mscz
-      01-General-Treble_Clef.mscz
-      02-Choral-Liturgical_Unmetrical.mscz
-      02-Choral-Liturgical_Unmetrical_with_Organ.mscz
-      02-Choral-SATB.mscz
-      02-Choral-SATB_Closed_Score.mscz
-      02-Choral-SATB_Closed_Score_with_Organ.mscz
-      02-Choral-SATB_Closed_Score_with_Piano.mscz
-      02-Choral-SATB_with_Organ.mscz
-      02-Choral-SATB_with_Piano.mscz
-      02-Choral-Voice_Piano.mscz
-      03-Solo-Guitar.mscz
-      03-Solo-Guitar_Standard_Tablature.mscz
-      03-Solo-Guitar_Tablature.mscz
-      03-Solo-Piano.mscz
-      04-Jazz-Jazz_Big_Band.mscz
-      04-Jazz-Jazz_Combo.mscz
-      04-Jazz-Jazz_Lead_Sheet.mscz
-      05-Orchestral-Classical_Orchestra.mscz
-      06-Band-Rock_Band.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
+      )
+install(FILES
+      General/01-Bass_Clef.mscz
+      General/01-Treble_Clef.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/General
+      )
+
+install(FILES
+      Choral/02-Liturgical_Unmetrical.mscz
+      Choral/02-Liturgical_Unmetrical_with_Organ.mscz
+      Choral/02-SATB.mscz
+      Choral/02-SATB_Closed_Score.mscz
+      Choral/02-SATB_Closed_Score_with_Organ.mscz
+      Choral/02-SATB_Closed_Score_with_Piano.mscz
+      Choral/02-SATB_with_Organ.mscz
+      Choral/02-SATB_with_Piano.mscz
+      Choral/02-Voice_Piano.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/Choral
+      )
+
+install(FILES
+      Solo/03-Guitar.mscz
+      Solo/03-Guitar_Standard_Tablature.mscz
+      Solo/03-Guitar_Tablature.mscz
+      Solo/03-Piano.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/Solo
+      )
+
+install(FILES
+      Jazz/04-Jazz_Big_Band.mscz
+      Jazz/04-Jazz_Combo.mscz
+      Jazz/04-Jazz_Lead_Sheet.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/Jazz
+      )
+
+install(FILES
+      Orchestral/05-Classical_Orchestra.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/Orchestral
+      )
+
+install(FILES
+      Band/06-Rock_Band.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/Band
       )
 

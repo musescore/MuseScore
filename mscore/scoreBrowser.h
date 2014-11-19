@@ -18,6 +18,22 @@
 
 namespace Ms {
 
+class ScoreItem;
+
+//---------------------------------------------------------
+//   ScoreListWidget
+//---------------------------------------------------------
+
+class ScoreListWidget : public QListWidget
+      {
+      Q_OBJECT
+
+      virtual QSize sizeHint() const override;
+
+   public:
+      ScoreListWidget(QWidget* parent = 0) : QListWidget(parent) {}
+      };
+
 //---------------------------------------------------------
 //   ScoreBrowser
 //---------------------------------------------------------
@@ -26,12 +42,19 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       {
       Q_OBJECT
 
+      QListWidget* createScoreList();
+      QList<ScoreListWidget*> scoreLists;
+
+      ScoreItem* genScoreItem(const QFileInfo& fi);
+
    private slots:
       void scoreChanged(QListWidgetItem*, QListWidgetItem*);
-      void scoreActivated(QListWidgetItem*);
+      void setScoreActivated(QListWidgetItem*);
 
    signals:
       void leave();
+      void scoreSelected(QString);
+      void scoreActivated(QString);
 
    public:
       ScoreBrowser(QWidget* parent = 0);
