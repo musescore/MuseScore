@@ -121,7 +121,8 @@ void Startcenter::templatesToggled(bool val)
             return;
       if (!templatesPageInitialized) {
             QDir dir(mscoreGlobalShare + "/templates");
-            templatesPage->setScores(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files));
+            templatesPage->setStripNumbers(true);
+            templatesPage->setScores(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
             templatesPageInitialized = true;
             }
       stack->setCurrentWidget(templatesPage);
@@ -139,7 +140,7 @@ void Startcenter::demosToggled(bool val)
             QDir dir(mscoreGlobalShare + "/demos");
             QFileInfoList fil;
             QStringList filter = { "*.mscz" };
-            for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files)) {
+            for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)) {
                   if (fi.exists())
                         fil.append(fi);
                   }

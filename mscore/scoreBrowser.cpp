@@ -107,7 +107,11 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi)
       si.setPixmap(pm);
       ScoreItem* item = new ScoreItem(si);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-      item->setText(si.completeBaseName());
+
+      QString s(si.completeBaseName());
+      if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
+            s = s.mid(3);
+      item->setText(s);
       item->setIcon(QIcon(si.pixmap()));
       return item;
       }
@@ -129,22 +133,24 @@ void ScoreBrowser::setScores(QFileInfoList s)
 
       QStringList filter = { "*.mscz" };
       for (const QFileInfo& fi : s) {
+            if (fi.isFile()) {
+                  QString s = fi.filePath();
+                  if (s.endsWith(".mscz") || s.endsWith(".mscx")) {
+                        if (!sl)
+                              sl = createScoreList();
+                        sl->addItem(genScoreItem(fi));
+                        }
+                  }
+            }
+      for (const QFileInfo& fi : s) {
             if (fi.isDir()) {
                   QLabel* l = new QLabel(fi.fileName());
                   static_cast<QVBoxLayout*>(scoreList->layout())->addWidget(l);
                   QDir dir(fi.filePath());
                   sl = createScoreList();
-                  for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files))
+                  for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name))
                         sl->addItem(genScoreItem(fi));
                   sl = 0;
-                  }
-            else {
-                  QString s = fi.filePath();
-                  if (s.endsWith(".mscz")) {
-                        if (!sl)
-                              sl = createScoreList();
-                        sl->addItem(genScoreItem(fi));
-                       }
                   }
             }
       }
