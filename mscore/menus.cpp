@@ -499,6 +499,7 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
       if (basic) {
             static std::vector<ArticulationType> art {
                   ArticulationType::Fermata,
+                  ArticulationType::Sforzatoaccent,
                   ArticulationType::Staccato,
                   ArticulationType::Tenuto,
                   ArticulationType::Portato,
