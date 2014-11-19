@@ -36,6 +36,8 @@ class Startcenter : public QDialog, public Ui::Startcenter
       void templatesToggled(bool);
       void demosToggled(bool);
       void connectWebToggled(bool);
+      void loadScore(QString);
+      void newScore();
 
    signals:
       void closed(bool);

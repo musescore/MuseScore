@@ -23,6 +23,7 @@
 #include "preferences.h"
 #include "palette.h"
 #include "instrdialog.h"
+#include "scoreBrowser.h"
 
 #include "libmscore/instrtemplate.h"
 #include "libmscore/score.h"
@@ -265,36 +266,22 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
-      templateFileDialog = new QFileDialog;
-      templateFileDialog->setParent(this);
-      templateFileDialog->setModal(false);
-      templateFileDialog->setSizeGripEnabled(false);
-      templateFileDialog->setFileMode(QFileDialog::ExistingFile);
-      templateFileDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-      templateFileDialog->setWindowTitle(tr("MuseScore: Select Template"));
-      QString filter = tr("MuseScore Template Files (*.mscz *.mscx)");
-      templateFileDialog->setNameFilter(filter);
-      templateFileDialog->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
+      templateFileBrowser = new ScoreBrowser;
+      QDir dir(mscoreGlobalShare + "/templates");
+      templateFileBrowser->setScores(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files));
+//      templateFileBrowser->setModal(false);
+      templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 
       QFileInfo myTemplates(preferences.myTemplatesPath);
       if (myTemplates.isRelative())
             myTemplates.setFile(QDir::home(), preferences.myTemplatesPath);
-      QList<QUrl> urls;
-      urls.append(QUrl::fromLocalFile(mscoreGlobalShare + "templates"));
-      urls.append(QUrl::fromLocalFile(myTemplates.absoluteFilePath()));
-      templateFileDialog->setSidebarUrls(urls);
-
-      QSettings settings;
-      templateFileDialog->restoreState(settings.value("templateFileDialog").toByteArray());
-      templateFileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-      templateFileDialog->setDirectory(mscoreGlobalShare + "templates");
 
       QLayout* layout = new QVBoxLayout;
-      layout->addWidget(templateFileDialog);
+      layout->addWidget(templateFileBrowser);
       setLayout(layout);
 
-      connect(templateFileDialog, SIGNAL(currentChanged(const QString&)), SLOT(templateChanged(const QString&)));
-      connect(templateFileDialog, SIGNAL(accepted()), SLOT(fileAccepted()));
+      connect(templateFileBrowser, SIGNAL(scoreSelected(const QString&)), SLOT(templateChanged(const QString&)));
+      connect(templateFileBrowser, SIGNAL(scoreActivated(const QString&)), SLOT(fileAccepted(const QString&)));
       }
 
 //---------------------------------------------------------
@@ -303,21 +290,20 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
 
 void NewWizardPage4::initializePage()
       {
-      // modify dialog
-      // possibly this is not portable as we make some assumptions on the
-      // implementation of QFileDialog
+      templateFileBrowser->show();
 
-      templateFileDialog->show();
-      QList<QPushButton*>widgets = templateFileDialog->findChildren<QPushButton*>();
+/*      QList<QPushButton*>widgets = templateFileBrowser->findChildren<QPushButton*>();
       foreach(QPushButton* w, widgets) {
             w->setEnabled(false);
             w->setVisible(false);
             }
+*/
       path.clear();
-      if (templateFileDialog->selectedFiles().size() > 0) {
-            path = templateFileDialog->selectedFiles()[0];
+/*      if (templateFileBrowser->selectedFiles().size() > 0) {
+            path = templateFileBrowser->selectedFiles()[0];
             emit completeChanged();
             }
+ */
       }
 
 //---------------------------------------------------------
@@ -333,9 +319,10 @@ bool NewWizardPage4::isComplete() const
 //   fileAccepted
 //---------------------------------------------------------
 
-void NewWizardPage4::fileAccepted()
+void NewWizardPage4::fileAccepted(const QString& s)
       {
-      templateFileDialog->show();
+      path = s;
+      templateFileBrowser->show();
       wizard()->next();
       }
 

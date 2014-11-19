@@ -17,6 +17,25 @@
 
 namespace Ms {
 
+static const int CELLW = 110;
+static const int CELLH = 130;
+static const int SPACE = 10;
+
+//---------------------------------------------------------
+//   sizeHint
+//---------------------------------------------------------
+
+QSize ScoreListWidget::sizeHint() const
+      {
+      int cols = (width()-SPACE) / (CELLW + SPACE);
+      int n    = count();
+      int rows = (n+cols-1) / cols;
+      if (rows <= 0)
+            rows = 1;
+//      printf("ScoreListWidget count %d width %d  %d %d\n", count(), width(), cols, rows);
+      return QSize(cols * CELLW, rows * (CELLH + SPACE) + SPACE);
+      }
+
 //---------------------------------------------------------
 //   ScoreItem
 //---------------------------------------------------------
@@ -27,7 +46,7 @@ class ScoreItem : public QListWidgetItem
 
    public:
       ScoreItem(const ScoreInfo& i) : QListWidgetItem(), _info(i) {
-            setSizeHint(QSize(100,120));
+            setSizeHint(QSize(CELLW, CELLH));
             }
       const ScoreInfo& info() const { return _info; }
       };
@@ -40,20 +59,57 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
   : QWidget(parent)
       {
       setupUi(this);
-      scoreList->setWrapping(true);
+      scoreList->setLayout(new QVBoxLayout);
+      scoreList->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+      }
 
-      scoreList->setViewMode(QListView::IconMode);
-      scoreList->setGridSize(QSize(110, 130));
-      scoreList->setIconSize(QSize(80, 100));
-      scoreList->setSpacing(10);
-      scoreList->setWrapping(true);
-      scoreList->setResizeMode(QListView::Adjust);
-      scoreList->setFlow(QListView::LeftToRight);
+//---------------------------------------------------------
+//   createScoreList
+//---------------------------------------------------------
 
-      connect(scoreList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
-         SLOT(scoreChanged(QListWidgetItem*,QListWidgetItem*)));
-      connect(scoreList, SIGNAL(itemActivated(QListWidgetItem*)),
-         SLOT(scoreActivated(QListWidgetItem*)));
+QListWidget* ScoreBrowser::createScoreList()
+      {
+      ScoreListWidget* sl = new ScoreListWidget;
+      static_cast<QVBoxLayout*>(scoreList->layout())->addWidget(sl);
+      sl->setWrapping(true);
+      sl->setViewMode(QListView::IconMode);
+      sl->setIconSize(QSize(CELLW, CELLH-20));
+      sl->setSpacing(10);
+      sl->setResizeMode(QListView::Adjust);
+      sl->setFlow(QListView::LeftToRight);
+      sl->setMovement(QListView::Static);
+      sl->setTextElideMode(Qt::ElideRight);
+      sl->setUniformItemSizes(true);
+      sl->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+      sl->setLineWidth(0);
+      sl->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
+      sl->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+      sl->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+      sl->setLayoutMode(QListView::SinglePass);
+      sl->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+
+      connect(sl, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),SLOT(scoreChanged(QListWidgetItem*,QListWidgetItem*)));
+      connect(sl, SIGNAL(itemActivated(QListWidgetItem*)), SLOT(setScoreActivated(QListWidgetItem*)));
+      scoreLists.append(sl);
+      return sl;
+      }
+
+//---------------------------------------------------------
+//   genScoreItem
+//---------------------------------------------------------
+
+ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi)
+      {
+      ScoreInfo si(fi);
+      QPixmap pm = mscore->extractThumbnail(fi.filePath());
+      if (pm.isNull())
+            pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
+      si.setPixmap(pm);
+      ScoreItem* item = new ScoreItem(si);
+      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+      item->setText(si.completeBaseName());
+      item->setIcon(QIcon(si.pixmap()));
+      return item;
       }
 
 //---------------------------------------------------------
@@ -62,18 +118,34 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
 
 void ScoreBrowser::setScores(QFileInfoList s)
       {
-      scoreList->clear();
+      qDeleteAll(scoreLists);
+      scoreLists.clear();
+
+      QLayout* l = scoreList->layout();
+      while (l->count())
+            l->removeItem(l->itemAt(0));
+
+      QListWidget* sl = 0;
+
+      QStringList filter = { "*.mscz" };
       for (const QFileInfo& fi : s) {
-            QPixmap pm = mscore->extractThumbnail(fi.filePath());
-            if (pm.isNull())
-                  pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
-            ScoreInfo si(fi);
-            si.setPixmap(pm);
-            ScoreItem* item = new ScoreItem(si);
-            item->setTextAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-            item->setText(si.completeBaseName());
-            item->setIcon(QIcon(si.pixmap()));
-            scoreList->addItem(item);
+            if (fi.isDir()) {
+                  QLabel* l = new QLabel(fi.fileName());
+                  static_cast<QVBoxLayout*>(scoreList->layout())->addWidget(l);
+                  QDir dir(fi.filePath());
+                  sl = createScoreList();
+                  for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files))
+                        sl->addItem(genScoreItem(fi));
+                  sl = 0;
+                  }
+            else {
+                  QString s = fi.filePath();
+                  if (s.endsWith(".mscz")) {
+                        if (!sl)
+                              sl = createScoreList();
+                        sl->addItem(genScoreItem(fi));
+                       }
+                  }
             }
       }
 
@@ -86,18 +158,18 @@ void ScoreBrowser::scoreChanged(QListWidgetItem* current, QListWidgetItem*)
       if (!current)
             return;
       ScoreItem* item = static_cast<ScoreItem*>(current);
-      preview->setScore(item->info().filePath());
+      preview->setScore(item->info());
+      emit scoreSelected(item->info().filePath());
       }
 
 //---------------------------------------------------------
-//   scoreActivated
+//   setScoreActivated
 //---------------------------------------------------------
 
-void ScoreBrowser::scoreActivated(QListWidgetItem* val)
+void ScoreBrowser::setScoreActivated(QListWidgetItem* val)
       {
       ScoreItem* item = static_cast<ScoreItem*>(val);
-      mscore->openScore(item->info().filePath());
-      emit leave();
+      emit scoreActivated(item->info().filePath());
       }
 
 }

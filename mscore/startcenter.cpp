@@ -13,6 +13,7 @@
 
 #include "musescore.h"
 #include "startcenter.h"
+#include "scoreBrowser.h"
 
 namespace Ms {
 
@@ -41,18 +42,38 @@ Startcenter::Startcenter()
       {
       setupUi(this);
 //      setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
-      setWindowFlags(Qt::WindowStaysOnTopHint);
+//      setWindowFlags(Qt::WindowStaysOnTopHint);
       setWindowModality(Qt::ApplicationModal);
-      connect(createNewScore, SIGNAL(clicked()),      getAction("file-new"), SLOT(trigger()));
+      connect(createNewScore, SIGNAL(clicked()),      SLOT(newScore()));
       connect(recentScores,   SIGNAL(toggled(bool)),  SLOT(recentScoresToggled(bool)));
       connect(templates,      SIGNAL(toggled(bool)),  SLOT(templatesToggled(bool)));
       connect(demos,          SIGNAL(toggled(bool)),  SLOT(demosToggled(bool)));
       connect(connectWeb,     SIGNAL(toggled(bool)),  SLOT(connectWebToggled(bool)));
 
-      connect(demosPage,      &ScoreBrowser::leave, this, &Startcenter::close);
-      connect(templatesPage,  &ScoreBrowser::leave, this, &Startcenter::close);
-      connect(recentPage,     &ScoreBrowser::leave, this, &Startcenter::close);
+      connect(demosPage,      &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
+      connect(templatesPage,  &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
+      connect(recentPage,     &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
       recentScoresToggled(true);
+      }
+
+//---------------------------------------------------------
+//   loadScore
+//---------------------------------------------------------
+
+void Startcenter::loadScore(QString s)
+      {
+      mscore->openScore(s);
+      close();
+      }
+
+//---------------------------------------------------------
+//   newScore
+//---------------------------------------------------------
+
+void Startcenter::newScore()
+      {
+      close();
+      getAction("file-new")->trigger();
       }
 
 //---------------------------------------------------------
@@ -100,13 +121,7 @@ void Startcenter::templatesToggled(bool val)
             return;
       if (!templatesPageInitialized) {
             QDir dir(mscoreGlobalShare + "/templates");
-            QStringList filter = { "*.mscz" };
-            QFileInfoList fil;
-            for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files)) {
-                  if (fi.exists())
-                        fil.append(fi);
-                  }
-            templatesPage->setScores(fil);
+            templatesPage->setScores(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files));
             templatesPageInitialized = true;
             }
       stack->setCurrentWidget(templatesPage);
@@ -122,8 +137,8 @@ void Startcenter::demosToggled(bool val)
             return;
       if (!demosPageInitialized) {
             QDir dir(mscoreGlobalShare + "/demos");
-            QStringList filter = { "*.mscz" };
             QFileInfoList fil;
+            QStringList filter = { "*.mscz" };
             for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files)) {
                   if (fi.exists())
                         fil.append(fi);
