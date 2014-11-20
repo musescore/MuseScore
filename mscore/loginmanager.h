@@ -31,12 +31,15 @@ class LoginManager : public QObject
       QString _accessToken = 0;
       QString _accessTokenSecret = 0;
       QString _userName = 0;
+      int _uid = -1;
 
    signals:
       void loginError(const QString& error);
       void loginSuccess();
       void getUserError(const QString& error);
       void getUserSuccess();
+      void getScoreError(const QString& error);
+      void getScoreSuccess(const QString &title, const QString &description, bool priv, const QString& license, const QString& tags);
       void uploadError(const QString& error);
       void uploadSuccess(const QString& url);
       void tryLoginSuccess();
@@ -45,6 +48,7 @@ class LoginManager : public QObject
       void onAccessTokenRequestReady(QByteArray ba);
       void onAccessTokenReceived(QString token, QString tokenSecret);
       void onGetUserRequestReady(QByteArray ba);
+      void onGetScoreRequestReady(QByteArray ba);
       void onAuthorizedRequestDone();
       void onUploadRequestReady(QByteArray ba);
 
@@ -57,15 +61,18 @@ class LoginManager : public QObject
    public:
       LoginManager(QObject* parent = 0);
       void login(QString login, QString password);
-      void upload(const QString& path, const QString& title, const QString& description, const QString& priv, const QString& license, const QString& tags);
+      void upload(const QString& path, int nid, const QString& title, const QString& description, const QString& priv, const QString& license, const QString& tags);
       bool hasAccessToken();
       void getUser();
+      void getScore(int nid);
+
       bool save();
       bool load();
+
       bool logout();
 
-      void setUserName(const QString& username) { _userName = username; }
       QString userName() { return _userName; }
+      int uid()          { return _uid; }
       };
 }
 

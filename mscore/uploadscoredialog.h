@@ -27,16 +27,20 @@ class UploadScoreDialog : public QDialog, public Ui::UploadScoreDialog
       Q_OBJECT
 
       LoginManager* _loginManager;
+      int _nid;
 
    private slots:
       void buttonBoxClicked(QAbstractButton* button);
       void uploadSuccess(const QString& url);
       void uploadError(const QString& error);
+      void onGetScoreSuccess(const QString &title, const QString &description, bool priv, const QString& license, const QString& tags);
+      void onGetScoreError(const QString& error);
       void logout();
       void display();
 
    private:
-      void upload();
+      void upload(int nid);
+      void clear();
 
    public:
       UploadScoreDialog(LoginManager*);
