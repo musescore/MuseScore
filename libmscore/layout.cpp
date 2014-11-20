@@ -1494,10 +1494,8 @@ void Score::doLayout()
 
       rebuildBspTree();
 
-      for (MuseScoreView* v : viewer) {
+      for (MuseScoreView* v : viewer)
             v->layoutChanged();
-            v->updateLoopCursors();
-            }
 
       _layoutAll = false;
 

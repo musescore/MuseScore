@@ -944,10 +944,6 @@ void ScoreView::setScore(Score* s)
 
             connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
             connect(this, SIGNAL(viewRectChanged()), this, SLOT(updateContinuousPanel()));
-
-//            s->setLayoutMode(LayoutMode::PAGE);
-//            s->setLayoutAll(true);
-//            s->update();
             }
       }
 
@@ -1286,15 +1282,6 @@ void ScoreView::setForeground(const QColor& color)
 void ScoreView::dataChanged(const QRectF& r)
       {
       update(_matrix.mapRect(r).toRect());  // generate paint event
-      }
-
-//---------------------------------------------------------
-//   updateAll
-//---------------------------------------------------------
-
-void ScoreView::updateAll()
-      {
-      update();
       }
 
 //---------------------------------------------------------
@@ -5366,6 +5353,8 @@ void ScoreView::layoutChanged()
       {
       if (mscore->navigator())
             mscore->navigator()->layoutChanged();
+      _curLoopIn->move(_score->pos(POS::LEFT));
+      _curLoopOut->move(_score->pos(POS::RIGHT));
       }
 
 //---------------------------------------------------------

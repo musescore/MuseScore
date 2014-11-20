@@ -41,7 +41,6 @@ class MuseScoreView {
       virtual void updateAll() = 0;
 
       virtual void moveCursor()          {}
-      virtual void updateLoopCursors()   {}
       virtual void showLoopCursors(bool) {}
 
       virtual void adjustCanvasPosition(const Element* el, bool playBack) = 0;
@@ -60,7 +59,7 @@ class MuseScoreView {
       virtual void startEdit(Element*, int startGrip) = 0;
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
       virtual void setDropTarget(const Element*) {}
-      
+
       virtual void lyricsTab(bool /*back*/, bool /*end*/, bool /*moveOnly*/) {}
       virtual void lyricsReturn() {}
       virtual void lyricsEndEdit() {}
