@@ -148,6 +148,15 @@ void Palette::setReadOnly(bool val)
       }
 
 //---------------------------------------------------------
+//   setMag
+//---------------------------------------------------------
+
+void Palette::setMag(qreal val)
+      {
+      extraMag = val * guiScaling;
+      }
+
+//---------------------------------------------------------
 //   contextMenuEvent
 //---------------------------------------------------------
 
@@ -215,8 +224,8 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
 
 void Palette::setGrid(int hh, int vv)
       {
-      hgrid = hh;
-      vgrid = vv;
+      hgrid = hh * guiScaling;
+      vgrid = vv * guiScaling;
       QSize s(hgrid, vgrid);
       setSizeIncrement(s);
       setBaseSize(s);
@@ -1316,12 +1325,12 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       name->setText(palette->name());
-      cellWidth->setValue(palette->gridWidth());
-      cellHeight->setValue(palette->gridHeight());
+      cellWidth->setValue(palette->gridWidth() / guiScaling);
+      cellHeight->setValue(palette->gridHeight() / guiScaling);
       showGrid->setChecked(palette->drawGrid());
       moreElements->setChecked(palette->moreElements());
       elementOffset->setValue(palette->yOffset());
-      mag->setValue(palette->mag());
+      mag->setValue(palette->mag() / guiScaling);
       }
 
 //---------------------------------------------------------

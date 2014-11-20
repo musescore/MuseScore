@@ -126,6 +126,7 @@ bool externalIcons = false;
 static bool pluginMode = false;
 static bool startWithNewScore = false;
 double converterDpi = 0;
+double guiScaling = 1.0;
 
 QString mscoreGlobalShare;
 
@@ -335,7 +336,7 @@ MuseScore::MuseScore()
       {
       _sstate = STATE_INIT;
       setWindowTitle(QString("MuseScore"));
-      setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
+      setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
 
       ucheck = new UpdateChecker();
 
@@ -1235,6 +1236,7 @@ static void usage()
         "   -O        dump midi output\n"
         "   -o file   export to 'file'; format depends on file extension\n"
         "   -r dpi    set output resolution for image export\n"
+        "   -x factor set scaling factor for GUI elements\n"
         "   -S style  load style file\n"
         "   -p name   execute named plugin\n"
         "   -F        use factory settings\n"
@@ -4552,6 +4554,11 @@ int main(int argc, char* av[])
                               usage();
                         converterDpi = argv.takeAt(i + 1).toDouble();
                         break;
+                  case 'x':
+                        if (argv.size() - i < 2)
+                              usage();
+                        guiScaling = argv.takeAt(i + 1).toDouble();
+                        break;
                   case 'S':
                         if (argv.size() - i < 2)
                               usage();
@@ -4654,6 +4661,8 @@ int main(int argc, char* av[])
       MScore::PDPI = screen->physicalDotsPerInch();        // physical resolution
       //MScore::DPI  = MScore::PDPI;                       // logical drawing resolution
       MScore::DPI  = screen->logicalDotsPerInch();         // logical drawing resolution
+      MScore::DPI *= guiScaling;
+
       MScore::init();                                      // initialize libmscore
       if (!MScore::testMode) {
             QSizeF psf = QPrinter().paperSize(QPrinter::Inch);
