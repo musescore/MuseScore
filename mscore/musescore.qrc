@@ -18,7 +18,7 @@
         <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
         <file alias="data/instruments.xml">../share/instruments/instruments.xml</file>
         <file>data/splash.jpg</file>
-        <file>data/My_First_Score.mscz</file>
+        <file alias="data/My_First_Score.mscz">../share/templates/01-General/01-My_First_Score.mscz</file>
         <file>data/tab_sample.mscx</file>
         <file>data/style.qss</file>
         <file>data/mscore.png</file>
