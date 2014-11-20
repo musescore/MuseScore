@@ -70,9 +70,9 @@ static const PropertyData propertyList[] = {
       { P_ID::BARLINE_SPAN_TO,     false, 0,               P_TYPE::INT   },
 
       { P_ID::USER_OFF,            false, "userOff",       P_TYPE::POINT },
-      { P_ID::FRET,                false, "fret",          P_TYPE::INT   },
-      { P_ID::STRING,              false, "string",        P_TYPE::INT   },
-      { P_ID::GHOST,               false, "ghost",         P_TYPE::BOOL  },
+      { P_ID::FRET,                true,  "fret",          P_TYPE::INT   },
+      { P_ID::STRING,              true,  "string",        P_TYPE::INT   },
+      { P_ID::GHOST,               true,  "ghost",         P_TYPE::BOOL  },
       { P_ID::PLAY,                false, "play",          P_TYPE::BOOL  },
       { P_ID::TIMESIG_NOMINAL,     false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_ACTUAL,      true,  0,               P_TYPE::FRACTION },
