@@ -549,6 +549,7 @@ void KQOAuthManager::onRequestReplyReceived() {
 
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::AuthenticationRequiredError:
+    case QNetworkReply::UnknownContentError:
         d->error = KQOAuthManager::RequestUnauthorized;
         break;
 
@@ -635,6 +636,7 @@ void KQOAuthManager::onAuthorizedRequestReplyReceived() {
 
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::AuthenticationRequiredError:
+    case QNetworkReply::UnknownContentError:
         d->error = KQOAuthManager::RequestUnauthorized;
         break;
 
@@ -714,7 +716,21 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
     //qDebug() << error;
     Q_D(KQOAuthManager);
 
-    d->error = KQOAuthManager::NetworkError;
+    switch (error) {
+    case QNetworkReply::NoError:
+        d->error = KQOAuthManager::NoError;
+        break;
+
+    case QNetworkReply::ContentAccessDenied:
+    case QNetworkReply::AuthenticationRequiredError:
+    case QNetworkReply::UnknownContentError:
+        d->error = KQOAuthManager::RequestUnauthorized;
+        break;
+
+    default:
+        d->error = KQOAuthManager::NetworkError;
+        break;
+    }
     QByteArray emptyResponse;
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
     d->r = d->requestMap.key(reply);
@@ -727,10 +743,13 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
     else if ( d->currentRequestType == KQOAuthRequest::AuthorizedRequest) {
         // does this signal always have to be emitted if there is an error
         // or can is it only valid for KQOAuthRequest::AuthorizedRequest?
+        if (error != QNetworkReply::ContentAccessDenied &&
+            error != QNetworkReply::AuthenticationRequiredError)
+             emit requestReady(emptyResponse);
         emit authorizedRequestDone();
     }
     else {
-         if( error != QNetworkReply::ContentAccessDenied &&
+         if (error != QNetworkReply::ContentAccessDenied &&
              error!= QNetworkReply::AuthenticationRequiredError)
              emit requestReady(emptyResponse);
         }

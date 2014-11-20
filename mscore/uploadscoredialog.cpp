@@ -55,6 +55,8 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
       _loginManager = loginManager;
       connect(_loginManager, SIGNAL(uploadSuccess(QString)), this, SLOT(uploadSuccess(QString)));
       connect(_loginManager, SIGNAL(uploadError(QString)), this, SLOT(uploadError(QString)));
+      connect(_loginManager, SIGNAL(getScoreSuccess(QString, QString, bool, QString, QString)), this, SLOT(onGetScoreSuccess(QString, QString, bool, QString, QString)));
+      connect(_loginManager, SIGNAL(getScoreError(QString)), this, SLOT(onGetScoreError(QString)));
       connect(_loginManager, SIGNAL(tryLoginSuccess()), this, SLOT(display()));
       connect(btnSignout, SIGNAL(pressed()), this, SLOT(logout()));
       }
@@ -66,8 +68,8 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
 void UploadScoreDialog::buttonBoxClicked(QAbstractButton* button)
       {
       QDialogButtonBox::StandardButton sb = buttonBox->standardButton(button);
-      if (sb == QDialogButtonBox::Ok)
-            upload();
+      if (sb == QDialogButtonBox::Save)
+            upload(updateExistingCb->isChecked() ? _nid : -1);
       else
            setVisible(false);
       }
@@ -76,18 +78,18 @@ void UploadScoreDialog::buttonBoxClicked(QAbstractButton* button)
 //   upload
 //---------------------------------------------------------
 
-void UploadScoreDialog::upload()
+void UploadScoreDialog::upload(int nid)
      {
      if (title->text().trimmed().isEmpty()) {
            QMessageBox::critical(this, tr("Missing title"), tr("Please provide a title"));
            return;
            }
-     Score* score = mscore->currentScore();
+     Score* score = mscore->currentScore()->rootScore();
      QString path = QDir::tempPath() + "/temp.mscz";
      if(mscore->saveAs(score, true, path, "mscz")) {
            QString licenseString = license->currentData().toString();
            QString privateString = rbPrivate->isChecked() ? "1" : "0";
-            _loginManager->upload(path, title->text(), description->toPlainText(), privateString, licenseString, tags->text());
+            _loginManager->upload(path, nid, title->text(), description->toPlainText(), privateString, licenseString, tags->text());
            }
      }
 
@@ -98,6 +100,8 @@ void UploadScoreDialog::upload()
 void UploadScoreDialog::uploadSuccess(const QString& url)
       {
       setVisible(false);
+      mscore->currentScore()->rootScore()->setMetaTag("source", url);
+      mscore->currentScore()->rootScore()->setDirty(true);
       QMessageBox::information(this,
                tr("Success"),
                tr("Finished! <a href=\"%1\">Go to my score</a>.").arg(url),
@@ -124,13 +128,71 @@ void UploadScoreDialog::uploadError(const QString& error)
 void UploadScoreDialog::display()
       {
       lblUsername->setText(_loginManager->userName());
-      // clear the content
+      QString source = mscore->currentScore()->rootScore()->metaTag("source");
+      if (!source.isEmpty()) {
+            QStringList sl = source.split("/");
+            qDebug() << sl;
+            if (sl.length() > 0) {
+                  QString nidString = sl.last();
+                  qDebug() << sl;
+                  bool ok;
+			int nid = nidString.toInt(&ok);
+                  if (ok) {
+                         qDebug() << nid;
+                         _nid = nid;
+                         _loginManager->getScore(nid);
+                         return;
+                         }
+                  }
+            }
+      clear();
+      setVisible(true);
+      }
+
+//---------------------------------------------------------
+//   onGetScoreSuccess
+//---------------------------------------------------------
+
+void UploadScoreDialog::onGetScoreSuccess(const QString &t, const QString &desc, bool priv, const QString& lic, const QString& tag)
+      {
+      // file with score info
+      title->setText(t);
+      description->setPlainText(desc);
+      rbPrivate->setChecked(priv);
+      rbPublic->setChecked(!priv);
+      int lIndex = license->findData(lic);
+      if (lIndex < 0) lIndex = 0;
+      license->setCurrentIndex(lIndex);
+      tags->setText(tag);
+      updateExistingCb->setChecked(true);
+      updateExistingCb->setVisible(true);
+      setVisible(true);
+      }
+
+//---------------------------------------------------------
+//   onGetScoreError
+//---------------------------------------------------------
+
+void UploadScoreDialog::onGetScoreError(const QString& error)
+      {
+      clear();
+      setVisible(true);
+      }
+
+//---------------------------------------------------------
+//   onGetScoreError
+//---------------------------------------------------------
+
+void UploadScoreDialog::clear()
+      {
       description->clear();
       rbPrivate->setChecked(false);
       rbPublic->setChecked(true);
       license->setCurrentIndex(0);
       tags->clear();
-      setVisible(true);
+      updateExistingCb->setChecked(false);
+      updateExistingCb->setVisible(false);
+      _nid = -1;
       }
 
 //---------------------------------------------------------

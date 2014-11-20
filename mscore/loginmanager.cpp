@@ -28,8 +28,8 @@ LoginManager::LoginManager(QObject* parent)
  : QObject(parent)
       {
       _oauthManager = new KQOAuthManager(this);
-      connect(_oauthManager, SIGNAL(accessTokenReceived(QString,QString)),
-            this, SLOT(onAccessTokenReceived(QString,QString)));
+      connect(_oauthManager, SIGNAL(accessTokenReceived(QString, QString)),
+            this, SLOT(onAccessTokenReceived(QString, QString)));
       connect(_oauthManager, SIGNAL(authorizedRequestDone()),
             this, SLOT(onAuthorizedRequestDone()));
       QByteArray ba;
@@ -250,14 +250,82 @@ void LoginManager::onGetUserRequestReady(QByteArray ba)
             QJsonObject user = jsonResponse.object();
             if (user.value("name") != QJsonValue::Undefined) {
             	_userName = user.value("name").toString();
+                  _uid = user.value("id").toString().toInt();
                   emit getUserSuccess();
                   }
             else {
                   emit getUserError(tr("Error while getting user info. Please try again"));
                   }
             }
-      else {
+      else if (_oauthManager->lastError() != KQOAuthManager::NetworkError) {
             emit getUserError(tr("Error while getting user info: %1").arg(_oauthManager->lastError()));
+            }
+
+      }
+
+//---------------------------------------------------------
+//   getScore
+//---------------------------------------------------------
+
+void LoginManager::getScore(int nid)
+      {
+      //qDebug() << "getScore";
+      if (_accessToken.isEmpty() || _accessTokenSecret.isEmpty()) {
+            emit getScoreError("getScore - No token");
+            return;
+            }
+      KQOAuthRequest * oauthRequest = new KQOAuthRequest();
+      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl(QString("https://api.musescore.com/services/rest/score/%1.json").arg(nid)));
+      oauthRequest->setHttpMethod(KQOAuthRequest::GET);
+      oauthRequest->setConsumerKey(_consumerKey);
+      oauthRequest->setConsumerSecretKey(_consumerSecret);
+      oauthRequest->setToken(_accessToken);
+      oauthRequest->setTokenSecret(_accessTokenSecret);
+
+      connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
+            this, SLOT(onGetScoreRequestReady(QByteArray)));
+
+      _oauthManager->executeRequest(oauthRequest);
+      }
+
+//---------------------------------------------------------
+//   onGetUserRequestReady
+//---------------------------------------------------------
+
+void LoginManager::onGetScoreRequestReady(QByteArray ba)
+      {
+      qDebug() << "onGetScoreRequestReady" << ba;
+      qDebug() << _oauthManager->lastError();
+      disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
+            this, SLOT(onGetScoreRequestReady(QByteArray)));
+      if (_oauthManager->lastError() == KQOAuthManager::NoError) {
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
+            QJsonObject score = jsonResponse.object();
+            if (score.value("user") != QJsonValue::Undefined) {
+                  QJsonObject user = score.value("user").toObject();
+                  QString title = score.value("title").toString();
+                  QString description = score.value("description").toString();
+                  QString sharing = score.value("sharing").toString();
+                  QString license = score.value("license").toString();
+                  QString tags = score.value("tags").toString();
+                  if (user.value("uid") != QJsonValue::Undefined) {
+                        int uid = user.value("uid").toString().toInt();
+                        qDebug() << "uid"  <<  uid << _uid;
+                        emit getScoreSuccess(title, description, (sharing == "private"), license, tags);
+                        }
+                  else {
+                       emit getScoreError("");
+                       qDebug() << "SCORE NOT FOUND";
+                       }
+                  }
+            else {
+                  emit getScoreError("");
+                  qDebug() << "SCORE NOT FOUND";
+                  }
+            }
+      else {
+            emit getScoreError("");
+            qDebug() << "SCORE NOT FOUND";
             }
 
       }
@@ -266,11 +334,14 @@ void LoginManager::onGetUserRequestReady(QByteArray ba)
 //   upload
 //---------------------------------------------------------
 
-void LoginManager::upload(const QString &path, const QString &title, const QString &description, const QString& priv, const QString& license, const QString& tags)
+void LoginManager::upload(const QString &path, int nid, const QString &title, const QString &description, const QString& priv, const QString& license, const QString& tags)
       {
       //qDebug() << "file upload";
       KQOAuthRequest *oauthRequest = new KQOAuthRequest(this);
-      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl("https://api.musescore.com/services/rest/score.json"));
+      QUrl url("https://api.musescore.com/services/rest/score.json");
+      if (nid > 0)
+            url = QUrl(QString("https://api.musescore.com/services/rest/score/%1/update.json").arg(nid));
+      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, url);
       oauthRequest->setConsumerKey(_consumerKey);
       oauthRequest->setConsumerSecretKey(_consumerSecret);
       oauthRequest->setToken(_accessToken);
