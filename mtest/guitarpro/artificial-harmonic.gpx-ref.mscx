@@ -158,8 +158,8 @@
             <pitch>62</pitch>
             <tpc>16</tpc>
             <head>2</head>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>3</fret>
+            <string>1</string>
             </Note>
           </Chord>
         <Chord>
@@ -187,7 +187,7 @@
             <tpc>17</tpc>
             <head>2</head>
             <fret>5</fret>
-            <string>4</string>
+            <string>0</string>
             </Note>
           </Chord>
         <Chord>
@@ -214,8 +214,8 @@
             <pitch>74</pitch>
             <tpc>16</tpc>
             <head>2</head>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>10</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <Chord>
@@ -245,8 +245,8 @@
             <pitch>92</pitch>
             <tpc>22</tpc>
             <head>2</head>
-            <fret>5</fret>
-            <string>1</string>
+            <fret>0</fret>
+            <string>0</string>
             </Note>
           </Chord>
         </Measure>
@@ -275,8 +275,8 @@
             <pitch>81</pitch>
             <tpc>17</tpc>
             <head>2</head>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>17</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <Chord>
@@ -303,8 +303,8 @@
             <pitch>89</pitch>
             <tpc>13</tpc>
             <head>2</head>
-            <fret>10</fret>
-            <string>4</string>
+            <fret>0</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <Chord>
@@ -331,8 +331,8 @@
             <pitch>86</pitch>
             <tpc>16</tpc>
             <head>2</head>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>0</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <Chord>
@@ -359,8 +359,8 @@
             <pitch>86</pitch>
             <tpc>16</tpc>
             <head>2</head>
-            <fret>5</fret>
-            <string>4</string>
+            <fret>0</fret>
+            <string>0</string>
             </Note>
           </Chord>
         <BarLine>
@@ -548,8 +548,8 @@
               <pitch>62</pitch>
               <tpc>16</tpc>
               <head>2</head>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             </Chord>
           <Chord>
@@ -577,7 +577,7 @@
               <tpc>17</tpc>
               <head>2</head>
               <fret>5</fret>
-              <string>4</string>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -604,8 +604,8 @@
               <pitch>74</pitch>
               <tpc>16</tpc>
               <head>2</head>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>10</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -635,8 +635,8 @@
               <pitch>92</pitch>
               <tpc>22</tpc>
               <head>2</head>
-              <fret>5</fret>
-              <string>1</string>
+              <fret>0</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </Measure>
@@ -665,8 +665,8 @@
               <pitch>81</pitch>
               <tpc>17</tpc>
               <head>2</head>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>17</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -693,8 +693,8 @@
               <pitch>89</pitch>
               <tpc>13</tpc>
               <head>2</head>
-              <fret>10</fret>
-              <string>4</string>
+              <fret>0</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -721,8 +721,8 @@
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>2</head>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>0</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -749,8 +749,8 @@
               <pitch>86</pitch>
               <tpc>16</tpc>
               <head>2</head>
-              <fret>5</fret>
-              <string>4</string>
+              <fret>0</fret>
+              <string>0</string>
               </Note>
             </Chord>
           <BarLine>
