@@ -1,21 +1,13 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
-//  $Id: file.cpp 5645 2012-05-18 13:34:03Z wschweer $
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-2013 Werner Schweer et al.
+//  Copyright (C) 2002-2014 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
 //=============================================================================
 
 /**
@@ -773,6 +765,36 @@ void MuseScore::newFile()
       }
 
 //---------------------------------------------------------
+//   addScorePreview
+//    add a score preview to the file dialog
+//---------------------------------------------------------
+
+static void addScorePreview(QFileDialog* dialog)
+      {
+      QSplitter* splitter = dialog->findChild<QSplitter*>("splitter");
+      if (splitter) {
+            ScorePreview* preview = new ScorePreview;
+            splitter->addWidget(preview);
+            dialog->connect(dialog, SIGNAL(currentChanged(const QString&)), preview, SLOT(setScore(const QString&)));
+            }
+      }
+
+//---------------------------------------------------------
+//   sidebarUrls
+//    return a list of standard file dialog sidebar urls
+//---------------------------------------------------------
+
+static QList<QUrl> sidebarUrls()
+      {
+      QList<QUrl> urls;
+      urls.append(QUrl::fromLocalFile(QDir::homePath()));
+      QFileInfo myScores(preferences.myScoresPath);
+      urls.append(QUrl::fromLocalFile(myScores.absoluteFilePath()));
+      urls.append(QUrl::fromLocalFile(QDir::currentPath()));
+      return urls;
+      }
+
+//---------------------------------------------------------
 //   getOpenScoreNames
 //---------------------------------------------------------
 
@@ -793,28 +815,15 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
             loadScoreDialog->setFileMode(QFileDialog::ExistingFiles);
             loadScoreDialog->setOption(QFileDialog::DontUseNativeDialog, true);
             loadScoreDialog->setWindowTitle(title);
-
-            QSplitter* splitter = loadScoreDialog->findChild<QSplitter*>("splitter");
-            if (splitter) {
-                  ScorePreview* preview = new ScorePreview;
-                  splitter->addWidget(preview);
-                  connect(loadScoreDialog, SIGNAL(currentChanged(const QString&)),
-                     preview, SLOT(setScore(const QString&)));
-                  }
+            addScorePreview(loadScoreDialog);
 
             // setup side bar urls
-            QList<QUrl> urls;
-            QString home = QDir::homePath();
-            urls.append(QUrl::fromLocalFile(home));
-            urls.append(QUrl::fromLocalFile(myScores.absoluteFilePath()));
-            urls.append(QUrl::fromLocalFile(QDir::currentPath()));
+            QList<QUrl> urls = sidebarUrls();
             urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/demos"));
             loadScoreDialog->setSidebarUrls(urls);
 
             loadScoreDialog->setNameFilter(filter);
-
             restoreDialogState("loadScoreDialog", loadScoreDialog);
-
             loadScoreDialog->setAcceptMode(QFileDialog::AcceptOpen);
             loadScoreDialog->setDirectory(dir);
             }
@@ -853,16 +862,15 @@ QString MuseScore::getSaveScoreName(const QString& title,
             saveScoreDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
             saveScoreDialog->setOption(QFileDialog::DontUseNativeDialog, true);
             saveScoreDialog->setAcceptMode(QFileDialog::AcceptSave);
+            addScorePreview(saveScoreDialog);
+
+            // setup side bar urls
+            saveScoreDialog->setSidebarUrls(sidebarUrls());
+
             restoreDialogState("saveScoreDialog", saveScoreDialog);
             }
       if (selectFolder)
             saveScoreDialog->setFileMode(QFileDialog::Directory);
-      QList<QUrl> urls;
-      QString home = QDir::homePath();
-      urls.append(QUrl::fromLocalFile(home));
-      urls.append(QUrl::fromLocalFile(myScores.absoluteFilePath()));
-      urls.append(QUrl::fromLocalFile(QDir::currentPath()));
-      saveScoreDialog->setSidebarUrls(urls);
 
       saveScoreDialog->setWindowTitle(title);
       saveScoreDialog->setNameFilter(filter);
