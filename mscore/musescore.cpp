@@ -638,7 +638,6 @@ MuseScore::MuseScore()
       menuEdit->addAction(getAction("copy"));
       menuEdit->addAction(getAction("paste"));
 
-
       menuEdit->addSeparator();
       menuEdit->addAction(getAction("select-all"));
       menuEdit->addAction(getAction("select-section"));
@@ -652,7 +651,7 @@ MuseScore::MuseScore()
       menuEdit->addMenu(menuMeasure);
 
       QMenu* menuTools = new QMenu(tr("&Tools"));
-      for (auto i : { "explode", "implode" })
+      for (auto i : { "explode", "implode", "slash-fill", "slash-rhythm" })
             menuTools->addAction(getAction(i));
       menuEdit->addMenu(menuTools);
 

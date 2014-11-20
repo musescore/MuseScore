@@ -296,8 +296,10 @@ void Accidental::layout()
       el.clear();
 
       QRectF r;
-      if (staff() && staff()->isTabStaff()) {      //in TAB, accidentals are not shown
-            setbbox(QRectF());
+      // don't show accidentals for tab or slash notation
+      if ((staff() && staff()->isTabStaff())
+          || (note() && note()->fixed())) {
+            setbbox(r);
             return;
             }
 
@@ -385,8 +387,11 @@ Accidental::Type Accidental::name2subtype(const QString& tag)
 
 void Accidental::draw(QPainter* painter) const
       {
-      if (staff() && staff()->isTabStaff())        //in TAB, accidentals are not shown
+      // don't show accidentals for tab or slash notation
+      if ((staff() && staff()->isTabStaff())
+          || (note() && note()->fixed())) {
             return;
+            }
       painter->setPen(curColor());
       foreach(const SymElement& e, el)
             score()->scoreFont()->draw(e.sym, painter, magS(), QPointF(e.x, 0.0));

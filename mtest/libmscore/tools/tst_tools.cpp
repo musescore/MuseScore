@@ -32,6 +32,8 @@ class TestTools : public QObject, public MTest
       void initTestCase();
       void undoExplode();
       void undoImplode();
+      void undoSlashFill();
+      void undoSlashRhythm();
       };
 
 //---------------------------------------------------------
@@ -56,10 +58,14 @@ void TestTools::undoExplode()
       QString reference2(DIR  + "undoExplode02-ref.mscx");
 
       Score* score = readScore(readFile);
+      score->doLayout();
 
       // select all
+      score->startCmd();
       score->cmdSelectAll();
+      score->endCmd();
 
+      // do
       score->startCmd();
       score->cmdExplode();
       score->endCmd();
@@ -81,12 +87,74 @@ void TestTools::undoImplode()
       QString reference2(DIR  + "undoImplode02-ref.mscx");
 
       Score* score = readScore(readFile);
+      score->doLayout();
 
       // select all
+      score->startCmd();
       score->cmdSelectAll();
+      score->endCmd();
 
+      // do
       score->startCmd();
       score->cmdImplode();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+void TestTools::undoSlashFill()
+      {
+      QString readFile(DIR + "undoSlashFill.mscx");
+      QString writeFile1("undoSlashFill01-test.mscx");
+      QString reference1(DIR  + "undoSlashFill01-ref.mscx");
+      QString writeFile2("undoSlashFill02-test.mscx");
+      QString reference2(DIR  + "undoSlashFill02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // select all
+      score->startCmd();
+      score->cmdSelectAll();
+      score->endCmd();
+
+      // do
+      score->startCmd();
+      score->cmdSlashFill();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+void TestTools::undoSlashRhythm()
+      {
+      QString readFile(DIR + "undoSlashRhythm.mscx");
+      QString writeFile1("undoSlashRhythm01-test.mscx");
+      QString reference1(DIR  + "undoSlashRhythm01-ref.mscx");
+      QString writeFile2("undoSlashRhythm02-test.mscx");
+      QString reference2(DIR  + "undoSlashRhythm02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // select all
+      score->startCmd();
+      score->cmdSelectAll();
+      score->endCmd();
+
+      // do
+      score->startCmd();
+      score->cmdSlashRhythm();
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 

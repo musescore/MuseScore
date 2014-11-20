@@ -150,6 +150,8 @@ class Chord : public ChordRest {
       Glissando* glissando() const           { return _glissando; }
       StemSlash* stemSlash() const           { return _stemSlash; }
       void setStemSlash(StemSlash* s);
+      bool slash();
+      void setSlash(bool flag, bool stemless);
 
       const QList<Chord*>& graceNotes() const { return _graceNotes; }
       QList<Chord*>& graceNotes()             { return _graceNotes; }
