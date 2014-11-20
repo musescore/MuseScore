@@ -421,24 +421,24 @@ void EditStyle::getValues()
       Text t(cs);
       t.setTextStyleType(TextStyleType::HEADER);
 
-      lstyle.set(StyleIdx::evenHeaderL, t.convertFromHtml(evenHeaderL->toHtml()));
-      lstyle.set(StyleIdx::evenHeaderC, t.convertFromHtml(evenHeaderC->toHtml()));
-      lstyle.set(StyleIdx::evenHeaderR, t.convertFromHtml(evenHeaderR->toHtml()));
-      lstyle.set(StyleIdx::oddHeaderL,  t.convertFromHtml(oddHeaderL->toHtml()));
-      lstyle.set(StyleIdx::oddHeaderC,  t.convertFromHtml(oddHeaderC->toHtml()));
-      lstyle.set(StyleIdx::oddHeaderR,  t.convertFromHtml(oddHeaderR->toHtml()));
+      lstyle.set(StyleIdx::evenHeaderL, evenHeaderL->toPlainText());
+      lstyle.set(StyleIdx::evenHeaderC, evenHeaderC->toPlainText());
+      lstyle.set(StyleIdx::evenHeaderR, evenHeaderR->toPlainText());
+      lstyle.set(StyleIdx::oddHeaderL,  oddHeaderL->toPlainText());
+      lstyle.set(StyleIdx::oddHeaderC,  oddHeaderC->toPlainText());
+      lstyle.set(StyleIdx::oddHeaderR,  oddHeaderR->toPlainText());
 
       lstyle.set(StyleIdx::showFooter,      showFooter->isChecked());
       lstyle.set(StyleIdx::footerFirstPage, showFooterFirstPage->isChecked());
       lstyle.set(StyleIdx::footerOddEven,   footerOddEven->isChecked());
 
       t.setTextStyleType(TextStyleType::FOOTER);
-      lstyle.set(StyleIdx::evenFooterL, t.convertFromHtml(evenFooterL->toHtml()));
-      lstyle.set(StyleIdx::evenFooterC, t.convertFromHtml(evenFooterC->toHtml()));
-      lstyle.set(StyleIdx::evenFooterR, t.convertFromHtml(evenFooterR->toHtml()));
-      lstyle.set(StyleIdx::oddFooterL,  t.convertFromHtml(oddFooterL->toHtml()));
-      lstyle.set(StyleIdx::oddFooterC,  t.convertFromHtml(oddFooterC->toHtml()));
-      lstyle.set(StyleIdx::oddFooterR,  t.convertFromHtml(oddFooterR->toHtml()));
+      lstyle.set(StyleIdx::evenFooterL, evenFooterL->toPlainText());
+      lstyle.set(StyleIdx::evenFooterC, evenFooterC->toPlainText());
+      lstyle.set(StyleIdx::evenFooterR, evenFooterR->toPlainText());
+      lstyle.set(StyleIdx::oddFooterL,  oddFooterL->toPlainText());
+      lstyle.set(StyleIdx::oddFooterC,  oddFooterC->toPlainText());
+      lstyle.set(StyleIdx::oddFooterR,  oddFooterR->toPlainText());
 
       // figured bass
       int         idx = comboFBFont->currentIndex();
