@@ -145,7 +145,7 @@ void Preferences::init()
       startScore               = ":/data/My_First_Score.mscz";
       defaultStyleFile         = "";
       showSplashScreen         = true;
-      showStartcenter          = false;
+      showStartcenter          = true;
 
       useMidiRemote      = false;
       for (int i = 0; i < MIDI_REMOTES; ++i)
@@ -282,7 +282,7 @@ void Preferences::write()
       s.setValue("startScore",         startScore);
       s.setValue("defaultStyle",       defaultStyleFile);
       s.setValue("showSplashScreen",   showSplashScreen);
-      s.setValue("showStartcenter",    showStartcenter);
+      s.setValue("showStartcenter1",    showStartcenter);
 
       s.setValue("midiExpandRepeats",  midiExpandRepeats);
       s.setValue("playRepeats",        MScore::playRepeats);
@@ -424,7 +424,7 @@ void Preferences::read()
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
 
       showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
-      showStartcenter          = s.value("showStartcenter", showStartcenter).toBool();
+      showStartcenter          = s.value("showStartcenter1", showStartcenter).toBool();
       midiExpandRepeats        = s.value("midiExpandRepeats", midiExpandRepeats).toBool();
       MScore::playRepeats      = s.value("playRepeats", MScore::playRepeats).toBool();
       MScore::panPlayback      = s.value("panPlayback", MScore::panPlayback).toBool();
