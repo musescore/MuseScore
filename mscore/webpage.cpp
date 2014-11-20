@@ -117,6 +117,7 @@ MyWebView::MyWebView(QWidget *parent):
 #endif
       m_page.setNetworkAccessManager(networkManager);
       setPage(&m_page);
+      setZoomFactor(guiScaling);
 
       //set cookie jar for persistent cookies
       CookieJar* jar = new CookieJar(QString(dataPath + "/cookies.txt"));
