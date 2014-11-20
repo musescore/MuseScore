@@ -23,9 +23,9 @@ install(FILES
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )
 install(FILES
-      General/01-Bass_Clef.mscz
-      General/01-Treble_Clef.mscz
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/General
+      01-General/01-Bass_Clef.mscz
+      01-General/01-Treble_Clef.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/01-General
       )
 
 install(FILES
