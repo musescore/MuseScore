@@ -153,6 +153,8 @@
             <lid>11</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
+            <fret>3</fret>
+            <string>3</string>
             </Note>
           </Chord>
         <Chord>
@@ -380,6 +382,8 @@
               <lid>11</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
+              <fret>3</fret>
+              <string>3</string>
               </Note>
             </Chord>
           <Chord>
