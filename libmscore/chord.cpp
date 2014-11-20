@@ -1585,7 +1585,7 @@ void Chord::updateNotes(AccidentalState* as)
       if (drumset) {
             for (Note* note : nl) {
                   int pitch = note->pitch();
-                  if (drumset->isValid(pitch)) {
+                  if (drumset->isValid(pitch) && !note->fixed()) {
                         note->setHeadGroup(drumset->noteHead(pitch));
                         note->setLine(drumset->line(pitch));
                         }
@@ -1655,7 +1655,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         if (!drumset->isValid(pitch)) {
                               // qDebug("unmapped drum note %d", pitch);
                               }
-                        else {
+                        else if (!note->fixed()) {
                               note->setHeadGroup(drumset->noteHead(pitch));
                               note->setLine(drumset->line(pitch));
                               continue;
@@ -1770,7 +1770,7 @@ void Chord::layoutPitched()
             lhead = qMax(lhead, -x1);
 
             Accidental* accidental = note->accidental();
-            if (accidental) {
+            if (accidental && !note->fixed()) {
                   // convert x position of accidental to segment coordinate system
                   qreal x = accidental->pos().x() + note->pos().x() + chordX;
                   // distance from accidental to note already taken into account
@@ -2070,7 +2070,10 @@ void Chord::layoutTablature()
                   headWidth = fretWidth;
             // centre fret string on stem
             qreal x = stemX - fretWidth*0.5;
-            note->setPos(x, tab->physStringToVisual(note->string()) * lineDist);
+            if (note->fixed())
+                  note->setPos(x, note->line() * lineDist / 2);
+            else
+                  note->setPos(x, tab->physStringToVisual(note->string()) * lineDist);
             }
       // horiz. spacing: leave half width at each side of the (potential) stem
       qreal halfHeadWidth = headWidth * 0.5;
@@ -2733,6 +2736,79 @@ void Chord::setStemSlash(StemSlash* s)
       {
       delete _stemSlash;
       _stemSlash = s;
+      }
+
+//---------------------------------------------------------
+//   slash
+//---------------------------------------------------------
+
+bool Chord::slash()
+      {
+      Note* n = upNote();
+      return n->fixed() && n->headGroup() == NoteHead::Group::HEAD_SLASH && !n->play();
+      }
+
+//---------------------------------------------------------
+//   setSlash
+//---------------------------------------------------------
+
+void Chord::setSlash(bool flag, bool stemless)
+      {
+      int line = 0;
+
+      if (!flag) {
+            // restore to normal
+            undoChangeProperty(P_ID::NO_STEM, false);
+            undoChangeProperty(P_ID::SMALL, false);
+            undoChangeProperty(P_ID::USER_OFF, QPointF());
+            for (Note* n : _notes) {
+                  n->undoChangeProperty(P_ID::HEAD_GROUP, int(NoteHead::Group::HEAD_NORMAL));
+                  n->undoChangeProperty(P_ID::FIXED, false);
+                  n->undoChangeProperty(P_ID::FIXED_LINE, 0);
+                  n->undoChangeProperty(P_ID::PLAY, true);
+                  n->undoChangeProperty(P_ID::VISIBLE, true);
+                  }
+            return;
+            }
+
+      // set stem to auto (mostly important for rhythmic notation on drum staves)
+      undoChangeProperty(P_ID::STEM_DIRECTION, int(MScore::Direction::AUTO));
+
+      // make stemless if asked
+      if (stemless)
+            undoChangeProperty(P_ID::NO_STEM, true);
+
+      if (track() % VOICES < 2) {
+            // use middle line
+            line = staff()->lines() - 1;
+            }
+      else {
+            // set outside the staff
+            qreal y = 0.0;
+            if (track() % 2) {
+                  line = staff()->lines() * 2 - 1;
+                  y = 0.5 * spatium();
+                  }
+            else {
+                  line = -1;
+                  y = -0.5 * spatium();
+                  }
+            // set small,  and add a little vertical offset to separate from staff
+            undoChangeProperty(P_ID::SMALL, true);
+            undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, y));
+            }
+
+      int ns = _notes.size();
+      for (int i = 0; i < ns; ++i) {
+            Note* n = _notes[i];
+            n->undoChangeProperty(P_ID::HEAD_GROUP, static_cast<int>(NoteHead::Group::HEAD_SLASH));
+            n->undoChangeProperty(P_ID::FIXED, true);
+            n->undoChangeProperty(P_ID::FIXED_LINE, line);
+            n->undoChangeProperty(P_ID::PLAY, false);
+            // hide all but first notehead
+            if (i)
+                  n->undoChangeProperty(P_ID::VISIBLE, false);
+            }
       }
 
 //---------------------------------------------------------

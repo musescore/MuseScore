@@ -739,7 +739,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       for (int i = nNotes-1; i >= 0; --i) {
             Note* note     = notes[i];
             Accidental* ac = note->accidental();
-            if (ac) {
+            if (ac && !note->fixed()) {
                   ac->layout();
                   AcEl acel;
                   acel.note   = note;
@@ -3598,7 +3598,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
-                                                      if (note->accidental()) {
+                                                      if (note->accidental() && !note->fixed()) {
                                                             accidental = true;
                                                             // segment-relative
                                                             accidentalX = qMin(accidentalX, note->accidental()->x() + note->x() + c->x());

@@ -202,6 +202,9 @@ class Note : public Element {
       bool _small;
       bool _play;             // note is not played if false
       mutable bool _mark;     // for use in sequencer
+      bool _fixed;            // for slash notation
+      int _fixedLine;         // fixed line number if _fixed == true
+
 
       MScore::DirectionH _userMirror;     ///< user override of mirror
       MScore::Direction _userDotPosition; ///< user override of dot position
@@ -213,7 +216,6 @@ class Note : public Element {
       short int _veloOffset; ///< velocity user offset in percent, or absolute velocity for this note
 
       qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
-
 
       Accidental* _accidental;
 
@@ -285,6 +287,10 @@ class Note : public Element {
       void setTuning(qreal v)             { _tuning = v;      }
       void undoSetTpc(int v);
       int transposition() const;
+      bool fixed() const                  { return _fixed;     }
+      void setFixed(bool v)               { _fixed = v;        }
+      int fixedLine() const               { return _fixedLine; }
+      void setFixedLine(int v)            { _fixedLine = v;    }
 
       int tpc() const;
       int tpc1() const            { return _tpc[0]; }     // non transposed tpc
@@ -307,7 +313,7 @@ class Note : public Element {
       Accidental::Type accidentalType() const { return _accidental ? _accidental->accidentalType() : Accidental::Type::NONE; }
       void setAccidentalType(Accidental::Type type);
 
-      int line() const                { return _line + _lineOffset;   }
+      int line() const;
       void setLine(int n);
 
       int fret() const                { return _fret;   }

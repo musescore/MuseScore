@@ -1004,8 +1004,11 @@ class Score : public QObject {
       QString title();
 
       void cmdInsertClef(Clef* clef, ChordRest* cr);
+
       void cmdExplode();
       void cmdImplode();
+      void cmdSlashFill();
+      void cmdSlashRhythm();
 
       void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
       QString accessibleInfo()          { return accInfo;          }

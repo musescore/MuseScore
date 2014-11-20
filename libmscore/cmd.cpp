@@ -2321,6 +2321,10 @@ void Score::cmd(const QAction* a)
             cmdExplode();
       else if (cmd == "implode")
             cmdImplode();
+      else if (cmd == "slash-fill")
+            cmdSlashFill();
+      else if (cmd == "slash-rhythm")
+            cmdSlashRhythm();
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }
@@ -2536,5 +2540,108 @@ void Score::cmdImplode()
       setLayoutAll(true);
       }
 
-}
+//---------------------------------------------------------
+//   cmdSlashFill
+///   fills selected region with slashes
+//---------------------------------------------------------
 
+void Score::cmdSlashFill()
+      {
+      int startStaff = selection().staffStart();
+      int endStaff = selection().staffEnd();
+      Segment* startSegment = selection().startSegment();
+      Segment* endSegment = selection().endSegment();
+      int endTick = endSegment ? endSegment->tick() : lastSegment()->tick() + 1;
+      Chord* firstSlash = 0;
+      Chord* lastSlash = 0;
+
+      // loop through staves in selection
+      for (int staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
+            // loop through segments adding slashes on each beat
+            for (Segment* s = startSegment; s && s->tick() < endTick; s = s->next1()) {
+                  if (s->segmentType() != Segment::Type::ChordRest)
+                        continue;
+                  // determine beat type based on time signature
+                  int d = s->measure()->timesig().denominator();
+                  int n = (d > 4 && s->measure()->timesig().numerator() % 3 == 0) ? 3 : 1;
+                  Fraction f(n, d);
+                  // skip over any leading segments before next (first) beat
+                  if (s->tick() % f.ticks())
+                        continue;
+                  //expandVoice(s, staffIdx * VOICES);
+                  // construct note
+                  int line = 0;
+                  bool error = false;
+                  NoteVal nv;
+                  if (staff(staffIdx)->staffType()->group() == StaffGroup::TAB)
+                        line = staff(staffIdx)->lines() / 2;
+                  else
+                        line = staff(staffIdx)->lines() - 1;
+                  if (staff(staffIdx)->staffType()->group() == StaffGroup::PERCUSSION) {
+                        nv.pitch = 0;
+                        nv.headGroup = NoteHead::Group::HEAD_SLASH;
+                        }
+                  else {
+                        Position p;
+                        p.segment = s;
+                        p.staffIdx = staffIdx;
+                        p.line = line;
+                        p.fret = FRET_NONE;
+                        _is.setRest(false);     // needed for tab
+                        nv = noteValForPosition(p, error);
+                        }
+                  if (error)
+                        continue;
+                  // insert & turn into slash
+                  s = setNoteRest(s, staffIdx * VOICES, nv, f);
+                  Chord* c = static_cast<Chord*>(s->element(staffIdx * VOICES));
+                  if (c->links()) {
+                        foreach (Element* e, *c->links()) {
+                              Chord* lc = static_cast<Chord*>(e);
+                              lc->setSlash(true, true);
+                              }
+                        }
+                  else
+                        c->setSlash(true, true);
+                  lastSlash = c;
+                  if (!firstSlash)
+                        firstSlash = c;
+                  }
+            }
+
+      // re-select the slashes
+      deselectAll();
+      if (firstSlash && lastSlash) {
+            select(firstSlash, SelectType::RANGE);
+            select(lastSlash, SelectType::RANGE);
+            }
+      setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   cmdSlashRhythm
+///   converts rhythms in selected region to slashes
+//---------------------------------------------------------
+
+void Score::cmdSlashRhythm()
+      {
+      QList<Chord*> chords;
+      // loop through all notes in selection
+      foreach (Element* e, selection().elements()) {
+            if (e->type() != Element::Type::NOTE)
+                  continue;
+            Note* n = static_cast<Note*>(e);
+            if (n->noteType() != NoteType::NORMAL)
+                  continue;
+            Chord* c = n->chord();
+            // check for duplicates (chords with multiple notes)
+            if (chords.contains(c))
+                  continue;
+            chords.append(c);
+            // toggle slash setting
+            c->setSlash(!c->slash(), false);
+            }
+      setLayoutAll(true);
+      }
+
+}
