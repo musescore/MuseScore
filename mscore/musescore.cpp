@@ -133,6 +133,8 @@ static QString outFileName;
 static QString audioDriver;
 static QString pluginName;
 static QString styleFile;
+static bool scoresOnCommandline { false };
+
 QString localeName;
 bool useFactorySettings = false;
 bool deletePreferences = false;
@@ -2018,6 +2020,7 @@ static void loadScores(const QStringList& argv)
                   Score* score = mscore->readScore(name);
                   if (score) {
                         mscore->appendScore(score);
+                        scoresOnCommandline = true;
                         if(!MScore::noGui) {
                               mscore->updateRecentScores(score);
                               mscore->writeSessionFile(false);
@@ -4927,7 +4930,7 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 
-      if (preferences.showStartcenter) {
+      if (!scoresOnCommandline && preferences.showStartcenter) {
             getAction("startcenter")->setChecked(true);
             mscore->showStartcenter(true);
             }

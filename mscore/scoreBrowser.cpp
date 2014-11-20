@@ -111,6 +111,7 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi)
       QString s(si.completeBaseName());
       if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
             s = s.mid(3);
+      s = s.replace('_', ' ');
       item->setText(s);
       item->setIcon(QIcon(si.pixmap()));
       return item;
@@ -144,7 +145,11 @@ void ScoreBrowser::setScores(QFileInfoList s)
             }
       for (const QFileInfo& fi : s) {
             if (fi.isDir()) {
-                  QLabel* l = new QLabel(fi.fileName());
+                  QString s(fi.fileName());
+                  if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
+                        s = s.mid(3);
+                  s = s.replace('_', ' ');
+                  QLabel* l = new QLabel(s);
                   static_cast<QVBoxLayout*>(scoreList->layout())->addWidget(l);
                   QDir dir(fi.filePath());
                   sl = createScoreList();
