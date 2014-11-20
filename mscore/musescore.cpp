@@ -2464,6 +2464,8 @@ void MuseScore::changeState(ScoreState val)
                   showModeText(tr("DRUM entry mode"));
                   InputState& is = cs->inputState();
                   showDrumTools(is.drumset(), cs->staff(is.track() / VOICES));
+                  if (_drumTools)
+                        is.setDrumNote(_drumTools->selectedDrumNote());
                   }
                   break;
             case STATE_NOTE_ENTRY_TAB:

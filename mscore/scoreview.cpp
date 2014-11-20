@@ -4828,6 +4828,18 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             is.setDrumNote(pitch);
             is.setTrack((is.track() / VOICES) * VOICES + voice);
             octave = pitch / 12;
+            if (is.segment()) {
+                  Segment* seg = is.segment();
+                  while (seg) {
+                        if (seg->element(is.track()))
+                              break;
+                        seg = seg->prev(Segment::Type::ChordRest);
+                        }
+                  if (seg)
+                        is.setSegment(seg);
+                  else
+                        is.setSegment(is.segment()->measure()->first(Segment::Type::ChordRest));
+                  }
             }
       else {
             // if adding notes, add above the upNote of the current chord
