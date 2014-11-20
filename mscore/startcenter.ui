@@ -130,7 +130,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>MuseScore.com</string>
+        <string>Find Scores</string>
        </property>
        <property name="checkable">
         <bool>true</bool>

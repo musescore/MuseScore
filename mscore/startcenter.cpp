@@ -159,7 +159,7 @@ void Startcenter::connectWebToggled(bool val)
       if (!val)
             return;
       if (!webPageInitialized) {
-            webView->setUrl(QUrl("https://connect.musescore.com"));
+            webView->setUrl(QUrl("https://musescore.com/sheetmusic"));
             webPageInitialized = true;
             }
       stack->setCurrentWidget(webPage);
