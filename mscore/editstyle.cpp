@@ -420,12 +420,20 @@ void EditStyle::getValues()
 
       Text t(cs);
       t.setTextStyleType(TextStyleType::HEADER);
+      QFont font = QFont(t.textStyle().family());
+      font.setPointSizeF(t.textStyle().size());
 
+      evenHeaderL->setCurrentFont(font);
       lstyle.set(StyleIdx::evenHeaderL, t.convertFromHtml(evenHeaderL->toHtml()));
+      evenHeaderC->setCurrentFont(font);
       lstyle.set(StyleIdx::evenHeaderC, t.convertFromHtml(evenHeaderC->toHtml()));
+      evenHeaderR->setCurrentFont(font);
       lstyle.set(StyleIdx::evenHeaderR, t.convertFromHtml(evenHeaderR->toHtml()));
+      oddHeaderL->setCurrentFont(font);
       lstyle.set(StyleIdx::oddHeaderL,  t.convertFromHtml(oddHeaderL->toHtml()));
+      oddHeaderC->setCurrentFont(font);
       lstyle.set(StyleIdx::oddHeaderC,  t.convertFromHtml(oddHeaderC->toHtml()));
+      oddHeaderR->setCurrentFont(font);
       lstyle.set(StyleIdx::oddHeaderR,  t.convertFromHtml(oddHeaderR->toHtml()));
 
       lstyle.set(StyleIdx::showFooter,      showFooter->isChecked());
@@ -433,11 +441,19 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::footerOddEven,   footerOddEven->isChecked());
 
       t.setTextStyleType(TextStyleType::FOOTER);
+      font = QFont(t.textStyle().family());
+      font.setPointSizeF(t.textStyle().size());
+      evenFooterL->setCurrentFont(font);
       lstyle.set(StyleIdx::evenFooterL, t.convertFromHtml(evenFooterL->toHtml()));
+      evenFooterC->setCurrentFont(font);
       lstyle.set(StyleIdx::evenFooterC, t.convertFromHtml(evenFooterC->toHtml()));
+      evenFooterR->setCurrentFont(font);
       lstyle.set(StyleIdx::evenFooterR, t.convertFromHtml(evenFooterR->toHtml()));
+      oddFooterL->setCurrentFont(font);
       lstyle.set(StyleIdx::oddFooterL,  t.convertFromHtml(oddFooterL->toHtml()));
+      oddFooterC->setCurrentFont(font);
       lstyle.set(StyleIdx::oddFooterC,  t.convertFromHtml(oddFooterC->toHtml()));
+      oddFooterR->setCurrentFont(font);
       lstyle.set(StyleIdx::oddFooterR,  t.convertFromHtml(oddFooterR->toHtml()));
 
       // figured bass
@@ -514,27 +530,30 @@ void EditStyle::getValues()
       }
 
 //---------------------------------------------------------
-//   setHeaderText
+//   setHeaderFooterText
 //---------------------------------------------------------
 
-void EditStyle::setHeaderText(StyleIdx idx, QTextEdit* te)
+void EditStyle::setHeaderFooterText(StyleIdx idx, QTextEdit* te, const TextStyle& style)
       {
       QString s = lstyle.value(idx).toString();
-//      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::HEADER));
-//      te->setHtml(s);
-      te->setPlainText(s);
-      }
-
-//---------------------------------------------------------
-//   setFooterText
-//---------------------------------------------------------
-
-void EditStyle::setFooterText(StyleIdx idx, QTextEdit* te)
-      {
-      QString s = lstyle.value(idx).toString();
-//      s = Text::convertToHtml(s, cs->textStyle(TextStyleType::FOOTER));
-//      te->setHtml(s);
-      te->setPlainText(s);
+      qreal size     = style.size();
+      QString family = style.family();
+      QString s2 = QString("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n");
+      s2 += QString("<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n");
+      s2 += QString("p, li { white-space: pre-wrap; }\n");
+      s2 += QString("</style></head><body style=\"font-family:'%1'; font-size:%2pt;\">").arg(family).arg(size);
+      QStringList sl = s.split(QString("\n"));
+      foreach(const QString& l, sl) {
+            if (!l.isEmpty())
+                  s2 += QString("<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">%1</p>").arg(l);
+            else
+                  s2 += QString("<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>");
+            }
+      s2 += QString("</body></html>");
+      QFont font = QFont(family);
+      font.setPointSizeF(size);
+      te->setCurrentFont(font);
+      te->setHtml(s2);
       }
 
 //---------------------------------------------------------
@@ -740,24 +759,24 @@ void EditStyle::setValues()
       headerOddEven->setChecked(lstyle.value(StyleIdx::headerOddEven).toBool());
       toggleHeaderOddEven(lstyle.value(StyleIdx::headerOddEven).toBool());
 
-      setHeaderText(StyleIdx::evenHeaderL, evenHeaderL);
-      setHeaderText(StyleIdx::evenHeaderC, evenHeaderC);
-      setHeaderText(StyleIdx::evenHeaderR, evenHeaderR);
-      setHeaderText(StyleIdx::oddHeaderL, oddHeaderL);
-      setHeaderText(StyleIdx::oddHeaderC, oddHeaderC);
-      setHeaderText(StyleIdx::oddHeaderR, oddHeaderR);
+      setHeaderFooterText(StyleIdx::evenHeaderL, evenHeaderL, cs->textStyle(TextStyleType::HEADER));
+      setHeaderFooterText(StyleIdx::evenHeaderC, evenHeaderC, cs->textStyle(TextStyleType::HEADER));
+      setHeaderFooterText(StyleIdx::evenHeaderR, evenHeaderR, cs->textStyle(TextStyleType::HEADER));
+      setHeaderFooterText(StyleIdx::oddHeaderL, oddHeaderL, cs->textStyle(TextStyleType::HEADER));
+      setHeaderFooterText(StyleIdx::oddHeaderC, oddHeaderC, cs->textStyle(TextStyleType::HEADER));
+      setHeaderFooterText(StyleIdx::oddHeaderR, oddHeaderR, cs->textStyle(TextStyleType::HEADER));
 
       showFooter->setChecked(lstyle.value(StyleIdx::showFooter).toBool());
       showFooterFirstPage->setChecked(lstyle.value(StyleIdx::footerFirstPage).toBool());
       footerOddEven->setChecked(lstyle.value(StyleIdx::footerOddEven).toBool());
       toggleFooterOddEven(lstyle.value(StyleIdx::footerOddEven).toBool());
 
-      setFooterText(StyleIdx::evenFooterL, evenFooterL);
-      setFooterText(StyleIdx::evenFooterC, evenFooterC);
-      setFooterText(StyleIdx::evenFooterR, evenFooterR);
-      setFooterText(StyleIdx::oddFooterL, oddFooterL);
-      setFooterText(StyleIdx::oddFooterC, oddFooterC);
-      setFooterText(StyleIdx::oddFooterR, oddFooterR);
+      setHeaderFooterText(StyleIdx::evenFooterL, evenFooterL, cs->textStyle(TextStyleType::FOOTER));
+      setHeaderFooterText(StyleIdx::evenFooterC, evenFooterC, cs->textStyle(TextStyleType::FOOTER));
+      setHeaderFooterText(StyleIdx::evenFooterR, evenFooterR, cs->textStyle(TextStyleType::FOOTER));
+      setHeaderFooterText(StyleIdx::oddFooterL, oddFooterL, cs->textStyle(TextStyleType::FOOTER));
+      setHeaderFooterText(StyleIdx::oddFooterC, oddFooterC, cs->textStyle(TextStyleType::FOOTER));
+      setHeaderFooterText(StyleIdx::oddFooterR, oddFooterR, cs->textStyle(TextStyleType::FOOTER));
 
       voltaY->setValue(lstyle.value(StyleIdx::voltaY).toDouble());
       voltaHook->setValue(lstyle.value(StyleIdx::voltaHook).toDouble());
