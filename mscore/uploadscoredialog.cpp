@@ -173,7 +173,7 @@ void UploadScoreDialog::onGetScoreSuccess(const QString &t, const QString &desc,
 //   onGetScoreError
 //---------------------------------------------------------
 
-void UploadScoreDialog::onGetScoreError(const QString& error)
+void UploadScoreDialog::onGetScoreError(const QString& /*error*/)
       {
       clear();
       setVisible(true);
