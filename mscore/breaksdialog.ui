@@ -21,7 +21,7 @@
        <item>
         <widget class="QRadioButton" name="intervalButton">
          <property name="accessibleName">
-          <string>Break lines every X measure</string>
+          <string>Break lines every X measures</string>
          </property>
          <property name="text">
           <string>Break lines every</string>
