@@ -651,7 +651,7 @@ MuseScore::MuseScore()
       menuEdit->addMenu(menuMeasure);
 
       QMenu* menuTools = new QMenu(tr("&Tools"));
-      for (auto i : { "explode", "implode", "slash-fill", "slash-rhythm" })
+      for (auto i : { "add-remove-breaks", "explode", "implode", "slash-fill", "slash-rhythm" })
             menuTools->addAction(getAction(i));
       menuEdit->addMenu(menuTools);
 
