@@ -3166,6 +3166,17 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CMD
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "add-remove-breaks",
+         QT_TRANSLATE_NOOP("action","Add/Remove Line Breaks"),
+         0,
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL,
          "startcenter",

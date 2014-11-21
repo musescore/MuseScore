@@ -408,6 +408,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdAppendMeasures(int, Element::Type);
       void cmdInsertMeasures(int, Element::Type);
 
+      void cmdAddRemoveBreaks();
+
       ScoreState mscoreState() const;
       void setCursorVisible(bool v);
       void showOmr(bool flag);
