@@ -79,22 +79,24 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       data.delta   = pt;
       data.pos     = toLogical(ev->pos());
 
-      if (dragElement->type() == Element::Type::MEASURE && qApp->keyboardModifiers() == Qt::ShiftModifier) {
-            qreal dist      = dragStaff->userDist() + delta.y();
-            int partStaves  = dragStaff->part()->nstaves();
-            StyleIdx i      = (partStaves > 1) ? StyleIdx::akkoladeDistance : StyleIdx::staffDistance;
-            qreal _spatium  = _score->spatium();
-            qreal styleDist = _score->styleS(i).val() * _spatium;
+      if (dragElement->type() == Element::Type::MEASURE) {
+            if (qApp->keyboardModifiers() == Qt::ShiftModifier) {
+                  qreal dist      = dragStaff->userDist() + delta.y();
+                  int partStaves  = dragStaff->part()->nstaves();
+                  StyleIdx i      = (partStaves > 1) ? StyleIdx::akkoladeDistance : StyleIdx::staffDistance;
+                  qreal _spatium  = _score->spatium();
+                  qreal styleDist = _score->styleS(i).val() * _spatium;
 
-            if ((dist + styleDist) < _spatium)  // limit minimum distance to spatium
-                  dist = -styleDist + _spatium;
+                  if ((dist + styleDist) < _spatium)  // limit minimum distance to spatium
+                        dist = -styleDist + _spatium;
 
-            dragStaff->setUserDist(dist);
-            data.startMove += delta;
-            _score->doLayoutSystems();
-            _score->layoutSpanner();
-            update();
-            loopUpdate(getAction("loop")->isChecked());
+                  dragStaff->setUserDist(dist);
+                  data.startMove += delta;
+                  _score->doLayoutSystems();
+                  _score->layoutSpanner();
+                  update();
+                  loopUpdate(getAction("loop")->isChecked());
+                  }
             return;
             }
 
