@@ -96,6 +96,7 @@ void Startcenter::recentScoresToggled(bool val)
       if (!recentPageInitialized) {
             recentPage->setScores(mscore->recentScores());
             recentPageInitialized = true;
+            recentPage->selectLast();
             }
       stack->setCurrentWidget(recentPage);
       }
@@ -123,6 +124,7 @@ void Startcenter::templatesToggled(bool val)
             QDir dir(mscoreGlobalShare + "/templates");
             templatesPage->setStripNumbers(true);
             templatesPage->setScores(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
+            templatesPage->selectFirst();
             templatesPageInitialized = true;
             }
       stack->setCurrentWidget(templatesPage);
@@ -146,6 +148,7 @@ void Startcenter::demosToggled(bool val)
                   }
             demosPage->setScores(fil);
             demosPageInitialized = true;
+            demosPage->selectFirst();
             }
       stack->setCurrentWidget(demosPage);
       }
