@@ -445,6 +445,8 @@ add_custom_target(lupdate
    COMMAND ${QT_LUPDATE_EXECUTABLE} -noobsolete ${PROJECT_BINARY_DIR}/mscore.pro
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-instruments-projectfile ${PROJECT_SOURCE_DIR}/share/instruments > instruments.pro
    COMMAND ${QT_LUPDATE_EXECUTABLE} -noobsolete ${PROJECT_BINARY_DIR}/instruments.pro
+   COMMAND ${PROJECT_SOURCE_DIR}/build/gen-plugins-projectfile ${PROJECT_SOURCE_DIR}/share/plugins/helloqml > helloqml.pro
+   COMMAND ${QT_LUPDATE_EXECUTABLE} -noobsolete ${PROJECT_BINARY_DIR}/helloqml.pro
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-plugins-projectfile ${PROJECT_SOURCE_DIR}/share/plugins/notenames > notenames.pro
    COMMAND ${QT_LUPDATE_EXECUTABLE} -noobsolete ${PROJECT_BINARY_DIR}/notenames.pro
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
@@ -455,6 +457,7 @@ add_custom_target(lrelease
    COMMAND ${QT_LRELEASE_EXECUTABLE} ${PROJECT_SOURCE_DIR}/share/locale/*.ts
    # every plugin has a translation directory on its own, so needs an entry on its own
    # and an '*' instead of the plugins' directory named doesn't work (on Windows)
+   COMMAND ${QT_LRELEASE_EXECUTABLE} ${PROJECT_SOURCE_DIR}/share/plugins/helloqml/translations/*.ts
    COMMAND ${QT_LRELEASE_EXECUTABLE} ${PROJECT_SOURCE_DIR}/share/plugins/notenames/translations/*.ts
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
