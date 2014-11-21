@@ -252,7 +252,7 @@ void ScoreView::setupFotoMode()
       s->addTransition(new CommandTransition("fotomode", states[NORMAL]));  // ->normal
       s->addTransition(new ScoreViewDragTransition(this, states[DRAG]));    // ->stateDrag
       CommandTransition* ct = new CommandTransition("copy", 0);             // copy
-      connect(ct, SIGNAL(triggered()), SLOT(fotoCopy()));
+      connect(ct, SIGNAL(triggered()), SLOT(fotoModeCopy()));
       s->addTransition(ct);
 
       QState* f1 = new QState(s);
