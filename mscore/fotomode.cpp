@@ -660,10 +660,10 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       }
 
 //---------------------------------------------------------
-//   fotoCopy
+//   fotoModeCopy
 //---------------------------------------------------------
 
-void ScoreView::fotoCopy()
+void ScoreView::fotoModeCopy()
       {
       // oowriter wants transparent==false
       bool transparent = false; // preferences.pngTransparent;
