@@ -40,6 +40,7 @@ void ScorePreview::setScore(const QString& s)
 
 void ScorePreview::setScore(const ScoreInfo& si)
       {
+      scoreInfo = si;
       name->setText(si.completeBaseName());
       creationDate->setText(si.created().toString());
       fileSize->setText(QString("%1 KiB").arg(si.size() / 1024));

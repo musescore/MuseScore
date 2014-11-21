@@ -61,6 +61,7 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
       setupUi(this);
       scoreList->setLayout(new QVBoxLayout);
       scoreList->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+      connect(preview, SIGNAL(doubleClicked(QString)), SIGNAL(scoreActivated(QString)));
       }
 
 //---------------------------------------------------------

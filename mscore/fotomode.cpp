@@ -251,8 +251,8 @@ void ScoreView::setupFotoMode()
       s->addTransition(new CommandTransition("escape", states[NORMAL]));    // ->normal
       s->addTransition(new CommandTransition("fotomode", states[NORMAL]));  // ->normal
       s->addTransition(new ScoreViewDragTransition(this, states[DRAG]));    // ->stateDrag
-      CommandTransition* ct = new CommandTransition("copy", 0);              // copy
-      connect(ct, SIGNAL(triggered()), SLOT(fotoModeCopy()));
+      CommandTransition* ct = new CommandTransition("copy", 0);             // copy
+      connect(ct, SIGNAL(triggered()), SLOT(fotoCopy()));
       s->addTransition(ct);
 
       QState* f1 = new QState(s);
@@ -584,7 +584,6 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       a->setText(tr("Screenshot Mode"));
 
       a = getAction("copy");
-      a->setEnabled(true);
       popup->addAction(a);
 
       popup->addSeparator();
@@ -625,9 +624,8 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             saveFotoAs(true, _foto->rect());
       else if (cmd == "screenshot")
             saveFotoAs(false, _foto->rect());
-      else if (cmd == "copy") {
-            fotoModeCopy();
-            }
+      else if (cmd == "copy")
+            ;
       else if (cmd == "set-res") {
             bool ok;
             double resolution = QInputDialog::getDouble(this,
@@ -662,13 +660,11 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       }
 
 //---------------------------------------------------------
-//   fotoModeCopy
+//   fotoCopy
 //---------------------------------------------------------
 
-void ScoreView::fotoModeCopy()
+void ScoreView::fotoCopy()
       {
-      QMimeData* mimeData = new QMimeData;
-
       // oowriter wants transparent==false
       bool transparent = false; // preferences.pngTransparent;
       double convDpi   = preferences.pngResolution;
@@ -687,9 +683,7 @@ void ScoreView::fotoModeCopy()
       printer.fill(transparent ? 0 : 0xffffffff);
       QPainter p(&printer);
       paintRect(true, p, r, mag);
-      p.end();
-      mimeData->setImageData(printer);
-      QApplication::clipboard()->setMimeData(mimeData);
+      QApplication::clipboard()->setImage(printer);
       }
 
 //---------------------------------------------------------

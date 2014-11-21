@@ -27,6 +27,7 @@
 #include "tuplet.h"
 #include "utils.h"
 #include "xml.h"
+#include "image.h"
 
 namespace Ms {
 
@@ -807,6 +808,36 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   XmlReader e(data);
                   pasteSymbols(e, cr);
                   }
+            }
+      else if (ms->hasImage()) {
+            QImage im = qvariant_cast<QImage>(ms->imageData());
+            QByteArray ba;
+            QBuffer buffer(&ba);
+            buffer.open(QIODevice::WriteOnly);
+            im.save(&buffer, "PNG");
+
+            Image* image = new Image(this);
+            image->setImageType(ImageType::RASTER);
+            image->loadFromData("dragdrop", ba);
+
+            QList<Element*> els;
+            if (_selection.isSingle())
+                  els.append(_selection.element());
+            else
+                  els.append(_selection.elements());
+
+            for (Element* target : els) {
+                  Element* nel = image->clone();
+                  addRefresh(target->abbox());   // layout() ?!
+                  DropData ddata;
+                  ddata.view       = view;
+                  ddata.element    = nel;
+                  // ddata.duration   = duration;
+                  target->drop(ddata);
+                  if (_selection.element())
+                        addRefresh(_selection.element()->abbox());
+                  }
+            delete image;
             }
       else {
             qDebug("cannot paste selState %d staffList %hhd",
