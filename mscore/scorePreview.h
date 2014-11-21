@@ -14,23 +14,28 @@
 #define __SCOREPREVIEW_H__
 
 #include "ui_scorePreview.h"
+#include "scoreInfo.h"
 
 namespace Ms {
-
-class ScoreInfo;
 
 //---------------------------------------------------------
 //   ScorePreview
 //---------------------------------------------------------
 
-
 class ScorePreview : public QWidget, public Ui::ScorePreview
       {
       Q_OBJECT
 
+      ScoreInfo scoreInfo;
+
+      virtual void mouseDoubleClickEvent(QMouseEvent*) override { emit doubleClicked(scoreInfo.filePath()); }
+
    public slots:
       void setScore(const QString&);
       void setScore(const ScoreInfo&);
+
+   signals:
+      void doubleClicked(QString);
 
    public:
       ScorePreview(QWidget* parent = 0);
