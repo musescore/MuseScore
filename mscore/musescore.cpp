@@ -2400,7 +2400,7 @@ void MuseScore::changeState(ScoreState val)
             else if (enable && (s->key() == "cut"))
                   a->setEnabled(cs && cs->selection().state() != SelState::NONE);
             else if (enable && (s->key() == "copy"))
-                  a->setEnabled(cs && cs->selection().state() != SelState::NONE);
+                  a->setEnabled(cs && (cs->selection().state() != SelState::NONE || val == STATE_FOTO));
             else if (enable && (s->key() == "select-similar-range"))
                   a->setEnabled(cs && cs->selection().state() == SelState::RANGE);
             else if (enable && (s->key() == "synth-control")) {
