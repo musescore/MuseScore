@@ -61,6 +61,8 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       ScoreBrowser(QWidget* parent = 0);
       void setScores(QFileInfoList);
       void setStripNumbers(bool val) { _stripNumbers = val; }
+      void selectFirst();
+      void selectLast();
       };
 }
 

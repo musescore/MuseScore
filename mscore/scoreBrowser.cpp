@@ -161,6 +161,34 @@ void ScoreBrowser::setScores(QFileInfoList s)
       }
 
 //---------------------------------------------------------
+//   selectFirst
+//---------------------------------------------------------
+
+void ScoreBrowser::selectFirst()
+      {
+      if (scoreLists.isEmpty())
+            return;
+      ScoreListWidget* w = scoreLists.front();
+      if (w->count() == 0)
+            return;
+      w->setCurrentItem(w->item(0));
+      }
+
+//---------------------------------------------------------
+//   selectFirst
+//---------------------------------------------------------
+
+void ScoreBrowser::selectLast()
+      {
+      if (scoreLists.isEmpty())
+            return;
+      ScoreListWidget* w = scoreLists.front();
+      if (w->count() == 0)
+            return;
+      w->setCurrentItem(w->item(w->count()-1));
+      }
+
+//---------------------------------------------------------
 //   scoreChanged
 //---------------------------------------------------------
 
