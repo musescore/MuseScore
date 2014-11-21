@@ -68,6 +68,7 @@
 #include "textcursor.h"
 #include "navigator.h"
 #include "continuouspanel.h"
+#include "breaksdialog.h"
 
 #include "libmscore/pitchspelling.h"
 #include "libmscore/notedot.h"
@@ -2925,6 +2926,10 @@ void ScoreView::cmd(const QAction* a)
             mscore->endCmd();
             }
 
+      else if (cmd == "add-remove-breaks") {
+            cmdAddRemoveBreaks();
+            }
+
       // STATE_HARMONY_FIGBASS_EDIT actions
 
       else if (cmd == "advance-longa") {
@@ -5670,6 +5675,64 @@ void ScoreView::cmdMoveCR(bool left)
       }
 
 //---------------------------------------------------------
+//   cmdAddRemoveBreaks
+///   add or remove line breaks within a selection or score
+//---------------------------------------------------------
+
+void ScoreView::cmdAddRemoveBreaks()
+      {
+      if (!_score->selection().isRange())
+            _score->cmdSelectAll();
+
+      Segment* startSegment = _score->selection().startSegment();
+      Segment* endSegment = _score->selection().endSegment();
+      Measure* startMeasure = startSegment->measure();
+      Measure* endMeasure = endSegment ? endSegment->measure() : _score->lastMeasure();
+
+      BreaksDialog bd;
+      if (!bd.exec())
+            return;
+
+      int interval = bd.interval;
+      bool lock = bd.lock;
+      bool remove = bd.remove;
+
+      // loop through measures in selection
+      int count = 0;
+      for (Measure* m = startMeasure; m != endMeasure; m = m->nextMeasure()) {
+            if (lock) {
+                  // skip if it already has a break
+                  if (m->lineBreak() || m->pageBreak())
+                        continue;
+                  // add break if last measure of system
+                  if (m == m->system()->lastMeasure())
+                        m->undoSetLineBreak(true);
+                  }
+            else {
+                  if (remove) {
+                        // remove line break if present
+                        if (m->lineBreak())
+                             m->undoSetLineBreak(false);
+                        }
+                  else {
+                        if (++count == interval) {
+                              // found place for break; add if not already one present
+                              if (!(m->lineBreak() || m->pageBreak()))
+                                    m->undoSetLineBreak(true);
+                              // reset count
+                              count = 0;
+                              }
+                        else if (m->lineBreak()) {
+                              // remove line break if present in wrong place
+                              m->undoSetLineBreak(false);
+                              }
+                        }
+                  }
+            }
+
+      }
+
+//---------------------------------------------------------
 //   updateContinuousPanel
 //   slot triggered when moving around the score to keep the panel visible
 //---------------------------------------------------------
@@ -5679,4 +5742,6 @@ void ScoreView::updateContinuousPanel()
       if (_score->layoutMode() == LayoutMode::LINE)
             update();
       }
+
 }
+
