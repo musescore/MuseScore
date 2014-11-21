@@ -297,6 +297,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void normalCopy();
       void normalPaste();
 
+      void fotoModeCopy();
+
       void cloneElement(Element* e);
       void doFotoDragEdit(QMouseEvent* ev);
 

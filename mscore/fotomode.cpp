@@ -251,6 +251,9 @@ void ScoreView::setupFotoMode()
       s->addTransition(new CommandTransition("escape", states[NORMAL]));    // ->normal
       s->addTransition(new CommandTransition("fotomode", states[NORMAL]));  // ->normal
       s->addTransition(new ScoreViewDragTransition(this, states[DRAG]));    // ->stateDrag
+      CommandTransition* ct = new CommandTransition("copy", 0);              // copy
+      connect(ct, SIGNAL(triggered()), SLOT(fotoModeCopy()));
+      s->addTransition(ct);
 
       QState* f1 = new QState(s);
       f1->setObjectName("foto-normal");
@@ -623,29 +626,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       else if (cmd == "screenshot")
             saveFotoAs(false, _foto->rect());
       else if (cmd == "copy") {
-            QMimeData* mimeData = new QMimeData;
-
-            // oowriter wants transparent==false
-            bool transparent = false; // preferences.pngTransparent;
-            double convDpi   = preferences.pngResolution;
-            double mag       = convDpi / MScore::DPI;
-
-            QRectF r(_foto->rect());
-
-            int w = lrint(r.width()  * mag);
-            int h = lrint(r.height() * mag);
-
-            QImage::Format f;
-            f = QImage::Format_ARGB32_Premultiplied;
-            QImage printer(w, h, f);
-            printer.setDotsPerMeterX(lrint(MScore::DPMM * 1000.0));
-            printer.setDotsPerMeterY(lrint(MScore::DPMM * 1000.0));
-            printer.fill(transparent ? 0 : 0xffffffff);
-            QPainter p(&printer);
-            paintRect(true, p, r, mag);
-            p.end();
-            mimeData->setImageData(printer);
-            QApplication::clipboard()->setMimeData(mimeData);
+            fotoModeCopy();
             }
       else if (cmd == "set-res") {
             bool ok;
@@ -678,6 +659,37 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             preferences.pngTransparent = bgAction->isChecked();
             preferences.dirty = true;
             }
+      }
+
+//---------------------------------------------------------
+//   fotoModeCopy
+//---------------------------------------------------------
+
+void ScoreView::fotoModeCopy()
+      {
+      QMimeData* mimeData = new QMimeData;
+
+      // oowriter wants transparent==false
+      bool transparent = false; // preferences.pngTransparent;
+      double convDpi   = preferences.pngResolution;
+      double mag       = convDpi / MScore::DPI;
+
+      QRectF r(_foto->rect());
+
+      int w = lrint(r.width()  * mag);
+      int h = lrint(r.height() * mag);
+
+      QImage::Format f;
+      f = QImage::Format_ARGB32_Premultiplied;
+      QImage printer(w, h, f);
+      printer.setDotsPerMeterX(lrint(MScore::DPMM * 1000.0));
+      printer.setDotsPerMeterY(lrint(MScore::DPMM * 1000.0));
+      printer.fill(transparent ? 0 : 0xffffffff);
+      QPainter p(&printer);
+      paintRect(true, p, r, mag);
+      p.end();
+      mimeData->setImageData(printer);
+      QApplication::clipboard()->setMimeData(mimeData);
       }
 
 //---------------------------------------------------------
