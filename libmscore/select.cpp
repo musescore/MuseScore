@@ -141,6 +141,19 @@ Element* Selection::element() const
       {
       return _el.size() == 1 ? _el[0] : 0;
       }
+//---------------------------------------------------------
+//   cr
+//---------------------------------------------------------
+
+ChordRest* Selection::cr() const
+      {
+      Element* e = element();
+      if (e->type() == Element::Type::NOTE)
+            e = e->parent();
+      if (e->isChordRest())
+            return static_cast<ChordRest*>(e);
+      return 0;
+      }
 
 //---------------------------------------------------------
 //   activeCR
@@ -214,8 +227,7 @@ ChordRest* Selection::lastChordRest(int track) const
             return 0;
             }
       ChordRest* cr = 0;
-      for (auto i = _el.begin(); i != _el.end(); ++i) {
-            Element* el = *i;
+      for (auto el : _el) {
             if (el->type() == Element::Type::NOTE)
                   el = ((Note*)el)->chord();
             if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->segmentType() == Segment::Type::ChordRest) {
@@ -259,15 +271,31 @@ void Selection::deselectAll()
       }
 
 //---------------------------------------------------------
+//   changeSelection
+//---------------------------------------------------------
+
+static QRectF changeSelection(Element* e, bool b)
+      {
+      QRectF r = e->canvasBoundingRect();
+      e->setSelected(b);
+      r |= e->canvasBoundingRect();
+      return r;
+      }
+
+//---------------------------------------------------------
 //   clear
 //---------------------------------------------------------
 
 void Selection::clear()
       {
-      foreach(Element* e, _el) {
-            _score->addRefresh(e->canvasBoundingRect());
-            e->setSelected(false);
-            _score->addRefresh(e->canvasBoundingRect());
+      for (Element* e : _el) {
+            if (e->isSpanner()) {   // TODO: only visible elements should be selectable?
+                  Spanner* sp = static_cast<Spanner*>(e);
+                  for (auto s : sp->spannerSegments())
+                        e->score()->addRefresh(changeSelection(s, false));
+                  }
+            else
+                  e->score()->addRefresh(changeSelection(e, false));
             }
       _el.clear();
       _startSegment  = 0;
@@ -286,6 +314,7 @@ void Selection::clear()
 void Selection::remove(Element* el)
       {
       _el.removeOne(el);
+      qDebug("deselect1 %p <%s>", el, el->name());
       el->setSelected(false);
       updateState();
       }
@@ -407,6 +436,7 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
+qDebug("updateSelectedElements");
       foreach(Element* e, _el)
             e->setSelected(false);
       _el.clear();
@@ -504,7 +534,7 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffSt
 
 void Selection::update()
       {
-      foreach (Element* e, _el)
+      for (Element* e : _el)
             e->setSelected(true);
       updateState();
       }

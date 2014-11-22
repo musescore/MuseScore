@@ -407,12 +407,13 @@ QPointF Chord::stemPosBeam() const
 //   setSelected
 //---------------------------------------------------------
 
-void Chord::setSelected(bool f)
+void Chord::setSelected(bool)
       {
-      Element::setSelected(f);
+/*      Element::setSelected(f);
       int n = _notes.size();
       for (int i = 0; i < n; ++i)
             _notes.at(i)->setSelected(f);
+      */
       }
 
 //---------------------------------------------------------

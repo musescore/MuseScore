@@ -2635,13 +2635,12 @@ void Score::padToggle(Pad n)
                   }
             }
 
-      Element* el = selection().element();
-      if (el->type() == Element::Type::NOTE)
-            el = el->parent();
-      if (!el->isChordRest())
+      ChordRest* cr = selection().cr();
+      if (!cr)
             return;
 
-      ChordRest* cr = static_cast<ChordRest*>(el);
+      deselectAll();
+
       if (cr->type() == Element::Type::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
@@ -2651,6 +2650,7 @@ void Score::padToggle(Pad n)
             }
       else
             changeCRlen(cr, _is.duration());
+
       }
 
 //---------------------------------------------------------

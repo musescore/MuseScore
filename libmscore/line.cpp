@@ -778,7 +778,6 @@ void SLine::layout()
                   }
             seg->layout();
             }
-
       adjustReadPos();
       }
 
