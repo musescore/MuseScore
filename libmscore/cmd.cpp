@@ -1044,7 +1044,7 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
                                     oc = cc;
                                     }
                               if (first) {
-                                    select(oc, SelectType::SINGLE, 0);
+                                    // select(oc, SelectType::SINGLE, 0);
                                     first = false;
                                     }
                               tick += oc->actualTicks();
