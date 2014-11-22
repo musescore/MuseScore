@@ -43,6 +43,7 @@ public:
         RequestEndpointError,       // Request endpoint is not valid.
         RequestValidationError,     // Request is not valid: some parameter missing?
         RequestUnauthorized,        // Authorization error: trying to access a resource without tokens.
+        AuthenticationRequiredError,// Authentication is required, key or auth is invalid
         RequestError,               // The given request to KQOAuthManager is invalid: NULL?,
         ManagerError                // Manager error, cannot use for sending requests.
     };

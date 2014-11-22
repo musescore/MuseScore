@@ -101,6 +101,8 @@ void LoginManager::onAuthorizedRequestDone()
       {
       if (_oauthManager->lastError() == KQOAuthManager::NetworkError)
             QMessageBox::critical(0, tr("Network error"), tr("Please check your internet connection"));
+      else if (_oauthManager->lastError() == KQOAuthManager::AuthenticationRequiredError)
+            QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
       }
 
 /*------- TRY LOGIN ROUTINES ----------------------------*/
@@ -208,6 +210,9 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
             }
       else if (_oauthManager->lastError() == KQOAuthManager::NetworkError) {
             QMessageBox::critical(0, tr("Network error"), tr("Please check your internet connection"));
+            }
+      else if (_oauthManager->lastError() == KQOAuthManager::AuthenticationRequiredError) {
+            QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
             }
       }
 
