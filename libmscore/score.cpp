@@ -2932,7 +2932,10 @@ void Score::collectMatch(void* data, Element* e)
       if ((p->staffStart != -1)
           && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
-      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS || e->type() == Element::Type::STEM) {
+      if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
+         || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS
+         || e->type() == Element::Type::BEAM
+         || e->type() == Element::Type::STEM) {
             if (p->voice != -1 && p->voice != e->voice())
                   return;
             }

@@ -3632,6 +3632,7 @@ void MuseScore::selectSimilarInRange(Element* e)
             selectionChanged(ss);
             }
       }
+
 //---------------------------------------------------------
 //   selectElementDialog
 //---------------------------------------------------------
