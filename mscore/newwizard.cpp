@@ -267,9 +267,9 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       setAccessibleDescription(subTitle());
 
       templateFileBrowser = new ScoreBrowser;
+      templateFileBrowser->setStripNumbers(true);
       QDir dir(mscoreGlobalShare + "/templates");
       templateFileBrowser->setScores(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
-      templateFileBrowser->setStripNumbers(true);
       templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 
       QFileInfo myTemplates(preferences.myTemplatesPath);
