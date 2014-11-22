@@ -3454,8 +3454,18 @@ void Shortcut::read(XmlReader& e)
                   _key = e.readElementText().toLocal8Bit();
             else if (tag == "std")
                   _standardKey = QKeySequence::StandardKey(e.readInt());
-            else if (tag == "seq")
-                  _keys.append(Shortcut::keySeqFromString(e.readElementText(), QKeySequence::PortableText));
+            else if (tag == "seq") {
+                  QKeySequence seq  = Shortcut::keySeqFromString(e.readElementText(), QKeySequence::PortableText);
+#ifndef NDEBUG
+                  for (const Shortcut& sc : _sc) {
+                        for (const QKeySequence s : sc._keys) {
+                              if (s == seq)
+                                    qDebug("ambigous shortcut for action <%s>", _key.data());
+                              }
+                        }
+#endif
+                  _keys.append(seq);
+                  }
             else
                   e.unknown();
             }

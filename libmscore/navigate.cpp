@@ -90,7 +90,7 @@ ChordRest* nextChordRest(ChordRest* cr)
       int track = cr->track();
       Segment::Type st = Segment::Type::ChordRest;
 
-      for (Segment* seg = cr->segment()->next1(st); seg; seg = seg->next1(st)) {
+      for (Segment* seg = cr->segment()->next1MM(st); seg; seg = seg->next1MM(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
                   if (e->type() == Element::Type::CHORD) {

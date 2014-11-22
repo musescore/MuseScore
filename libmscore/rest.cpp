@@ -333,7 +333,7 @@ void Rest::layout()
 
       for (Element* e : _el)
             e->layout();
-      if (parent() && measure() && measure()->isMMRest()) {
+      if (measure() && measure()->isMMRest()) {
             _space.setRw(point(score()->styleS(StyleIdx::minMMRestWidth)));
 
             static const qreal verticalLineWidth = .2;
