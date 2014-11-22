@@ -5647,6 +5647,8 @@ void ScoreView::loopToggled(bool val)
 
 //---------------------------------------------------------
 //   cmdMoveCR
+//    swap selected cr with cr to the left or right
+//      - not across measure boundaries
 //---------------------------------------------------------
 
 void ScoreView::cmdMoveCR(bool left)
@@ -5663,14 +5665,24 @@ void ScoreView::cmdMoveCR(bool left)
             else
                   crl.append(static_cast<ChordRest*>(e));
 
+            bool cmdActive = false;
             for (ChordRest* cr1 : crl) {
+                  if (cr1->type() == Element::Type::REST) {
+                        Rest* r = static_cast<Rest*>(cr1);
+                        if (r->measure() && r->measure()->isMMRest())
+                              break;
+                        }
                   ChordRest* cr2 = left ? prevChordRest(cr1) : nextChordRest(cr1);
                   if (cr2 && cr1->measure() == cr2->measure()) {
-                        _score->startCmd();
+                        if (!cmdActive) {
+                              _score->startCmd();
+                              cmdActive = true;
+                              }
                         _score->undo(new SwapCR(cr1, cr2));
-                        _score->endCmd();
                         }
                   }
+            if (cmdActive)
+                  _score->endCmd();
             }
       }
 
