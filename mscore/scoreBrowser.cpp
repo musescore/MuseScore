@@ -18,7 +18,7 @@
 namespace Ms {
 
 static const int CELLW = 110;
-static const int CELLH = 130;
+static const int CELLH = 140;
 static const int SPACE = 10;
 
 //---------------------------------------------------------
@@ -74,12 +74,13 @@ QListWidget* ScoreBrowser::createScoreList()
       static_cast<QVBoxLayout*>(scoreList->layout())->addWidget(sl);
       sl->setWrapping(true);
       sl->setViewMode(QListView::IconMode);
-      sl->setIconSize(QSize(CELLW, CELLH-20));
+      sl->setIconSize(QSize(CELLW, CELLH-30));
       sl->setSpacing(10);
       sl->setResizeMode(QListView::Adjust);
       sl->setFlow(QListView::LeftToRight);
       sl->setMovement(QListView::Static);
       sl->setTextElideMode(Qt::ElideRight);
+      sl->setWordWrap(true);
       sl->setUniformItemSizes(true);
       sl->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
       sl->setLineWidth(0);
@@ -114,6 +115,10 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi)
             s = s.mid(3);
       s = s.replace('_', ' ');
       item->setText(s);
+      QFont f = item->font();
+      f.setPointSize(f.pointSize() - 2.0);
+      item->setFont(f);
+      item->setTextAlignment(Qt::AlignHCenter | Qt::AlignTop);
       item->setIcon(QIcon(si.pixmap()));
       return item;
       }
@@ -150,8 +155,11 @@ void ScoreBrowser::setScores(QFileInfoList s)
                   if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
                         s = s.mid(3);
                   s = s.replace('_', ' ');
-                  QLabel* l = new QLabel(s);
-                  static_cast<QVBoxLayout*>(scoreList->layout())->addWidget(l);
+                  QLabel* label = new QLabel(s);
+                  QFont f = label->font();
+                  f.setBold(true);
+                  label->setFont(f);
+                  static_cast<QVBoxLayout*>(l)->addWidget(label);
                   QDir dir(fi.filePath());
                   sl = createScoreList();
                   for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name))
