@@ -20,6 +20,11 @@ class QPainter;
 namespace Ms {
 
 class ChordRest;
+class Segment;
+class Measure;
+class System;
+class Page;
+
 enum class SymId;
 
 //---------------------------------------------------------
@@ -115,6 +120,11 @@ class Articulation : public Element {
       MScore::Direction direction() const   { return _direction; }
 
       ChordRest* chordRest() const;
+      Segment* segment() const;
+      Measure* measure() const;
+      System* system() const;
+      Page* page() const;
+      void canvasBoundingRectChanged();
 
       static ArticulationInfo articulationList[];
 

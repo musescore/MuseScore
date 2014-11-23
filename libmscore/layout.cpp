@@ -60,9 +60,8 @@ namespace Ms {
 
 void Score::rebuildBspTree()
       {
-      int n = _pages.size();
-      for (int i = 0; i < n; ++i)
-            _pages.at(i)->rebuildBspTree();
+      for (Page* page : _pages)
+            page->rebuildBspTree();
       }
 
 //---------------------------------------------------------
