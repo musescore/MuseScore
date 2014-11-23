@@ -935,10 +935,10 @@ void Palette::dropEvent(QDropEvent* event)
 void Palette::write(Xml& xml) const
       {
       xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(_name)));
-      xml.tag("gridWidth", hgrid);
-      xml.tag("gridHeight", vgrid);
+      xml.tag("gridWidth", hgrid / guiScaling);
+      xml.tag("gridHeight", vgrid / guiScaling);
       if (extraMag != 1.0)
-            xml.tag("mag", extraMag);
+            xml.tag("mag", extraMag / guiScaling);
       if (_drawGrid)
             xml.tag("grid", _drawGrid);
 
@@ -1178,11 +1178,11 @@ void Palette::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& t(e.name());
             if (t == "gridWidth")
-                  hgrid = e.readDouble();
+                  hgrid = e.readDouble() * guiScaling;
             else if (t == "gridHeight")
-                  vgrid = e.readDouble();
+                  vgrid = e.readDouble() * guiScaling;
             else if (t == "mag")
-                  extraMag = e.readDouble();
+                  extraMag = e.readDouble() * guiScaling;
             else if (t == "grid")
                   _drawGrid = e.readInt();
             else if (t == "moreElements")
