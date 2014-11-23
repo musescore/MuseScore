@@ -1442,6 +1442,21 @@ class ChangeLayoutMode : public UndoCommand {
       UNDO_NAME("ChangeLayoutMode")
       };
 
+//---------------------------------------------------------
+//   ChangeMetaTags
+//---------------------------------------------------------
+
+class ChangeMetaTags : public UndoCommand {
+      Score* score;
+      QMap<QString,QString> metaTags;
+
+      void flip();
+
+   public:
+      ChangeMetaTags(Score* s, const QMap<QString,QString>& m) : score(s), metaTags(m) {}
+      UNDO_NAME("ChangeMetaTags")
+      };
+
 
 }     // namespace Ms
 #endif

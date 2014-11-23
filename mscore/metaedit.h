@@ -36,8 +36,11 @@ class MetaEditDialog : public QDialog, public Ui::MetaEditDialog {
 
       Score* score;
 
+      bool dirty;
+
    private slots:
       void newClicked();
+      void setDirty() { dirty = true; }
 
    public slots:
       virtual void accept();

@@ -1917,20 +1917,6 @@ TimeSigMap* Score::sigmap() const
       }
 
 //---------------------------------------------------------
-//   metaTags
-//---------------------------------------------------------
-
-const QMap<QString, QString>& Score::metaTags() const
-      {
-      return _metaTags;
-      }
-
-QMap<QString, QString>& Score::metaTags()
-      {
-      return _metaTags;
-      }
-
-//---------------------------------------------------------
 //   metaTag
 //---------------------------------------------------------
 

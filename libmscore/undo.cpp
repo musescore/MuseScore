@@ -3853,4 +3853,15 @@ void ChangeLayoutMode::flip()
       score->setLayoutAll(true);
       }
 
+//---------------------------------------------------------
+//   ChangeMetaTags::flip
+//---------------------------------------------------------
+
+void ChangeMetaTags::flip()
+      {
+      QMap<QString,QString> t = score->metaTags();
+      score->setMetaTags(metaTags);
+      metaTags = t;
+      }
+
 }
