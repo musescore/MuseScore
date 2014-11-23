@@ -458,6 +458,13 @@ qDebug("updateSelectedElements");
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
                   if (s->segmentType() == Segment::Type::EndBarLine)  // do not select end bar line
                         continue;
+                  foreach(Element* e, s->annotations()) {
+                        if (e->track() != st)
+                              continue;
+                        if (e->systemFlag()) //exclude system text
+                              continue;
+                        appendFiltered(e);
+                        }
                   Element* e = s->element(st);
                   if (!e)
                         continue;
@@ -481,13 +488,6 @@ qDebug("updateSelectedElements");
                         appendChord(chord);
                         }
                   else {
-                        appendFiltered(e);
-                        }
-                  foreach(Element* e, s->annotations()) {
-                        if (e->track() < startTrack || e->track() >= endTrack)
-                              continue;
-                        if (e->systemFlag()) //exclude system text
-                              continue;
                         appendFiltered(e);
                         }
                   }
