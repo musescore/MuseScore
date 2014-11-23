@@ -39,6 +39,7 @@ class TestSelectionRangeDelete : public QObject, public MTest
       void deleteSegmentWithSpanner();
       void deleteVoice1() { deleteVoice(0,"03"); }
       void deleteVoice2() { deleteVoice(1,"04"); }
+      void deleteSkipAnnotations();
       };
 
 //---------------------------------------------------------
@@ -197,6 +198,32 @@ void TestSelectionRangeDelete::deleteVoice(int voice, QString idx)
 
       QVERIFY(saveCompareScore(score, QString("selectionrangedelete%1.mscx").arg(idx),
          DIR + QString("selectionrangedelete%1-ref.mscx").arg(idx)));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   deleteSkipAnnotations
+//---------------------------------------------------------
+
+void TestSelectionRangeDelete::deleteSkipAnnotations()
+      {
+      Score* score = readScore(DIR + QString("selectionrangedelete05.mscx"));
+
+      Measure* m1 = score->firstMeasure();
+      QVERIFY(m1);
+
+      SelectionFilterType annotationFilterType = SelectionFilterType((int)SelectionFilterType::CHORD_SYMBOL);
+      score->selectionFilter().setFiltered(annotationFilterType, false);
+
+      score->startCmd();
+      score->cmdSelectAll();
+      score->cmdDeleteSelection();
+      score->endCmd();
+
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("selectionrangedelete05.mscx"),
+         DIR + QString("selectionrangedelete05-ref.mscx")));
       delete score;
       }
 
