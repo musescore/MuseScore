@@ -2247,7 +2247,7 @@ void TransposeHarmony::flip()
       int rootTpc1 = harmony->rootTpc();
       harmony->setBaseTpc(baseTpc);
       harmony->setRootTpc(rootTpc);
-      harmony->render();
+      harmony->setText(harmony->harmonyName());
       rootTpc = rootTpc1;
       baseTpc = baseTpc1;
       }

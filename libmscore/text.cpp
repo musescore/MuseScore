@@ -1488,7 +1488,12 @@ void Text::endEdit()
 
       genText();
 
-      if (_text != oldText) {
+      if (_text != oldText || type() == Element::Type::HARMONY) {
+            // avoid creating unnecessary state on undo stack if edit did not change anything
+            // but go ahead and do this anyhow for chord symbols no matter what
+            // the code to special case transposition relies on the fact
+            // that we are setting all linked elements to same text here
+
             for (Element* e : linkList()) {
                   // this line was added in https://github.com/musescore/MuseScore/commit/dcf963b3d6140fa550c08af18d9fb6f6e59733a3
                   // it replaced the commented-out call to undoPushProperty in startEdit() above
@@ -1499,15 +1504,21 @@ void Text::endEdit()
                   // by also checking for empty old text, we avoid creating an unnecessary element on undo stack
                   // that returns us to the initial empty text created upon startEdit()
 
-                  if (!oldText.isEmpty())
-                        score()->undo()->push1(new ChangeProperty(e, P_ID::TEXT, oldText));
+                  if (!oldText.isEmpty()) {
+                        // oldText is good for original element
+                        // but use original text for each linked element
+                        // these can differ (eg, for chord symbols in transposing parts)
+
+                        QString undoText = (e == this) ? oldText : static_cast<Text*>(e)->_text;
+                        score()->undo()->push1(new ChangeProperty(e, P_ID::TEXT, undoText));
+                        }
 
                   // because we are pushing each individual linked element's old text to the undo stack,
                   // we don't actually need to call the undo version of change property here
 
                   e->setProperty(P_ID::TEXT, _text);
 
-                  // the change mentioned above eliminated the following line, which is where the linked elements actually got their text set
+                  // the change mentioned previously eliminated the following line, which is where the linked elements actually got their text set
                   // one would think this line alone would be enough to make undo work
                   // but it is not, because by the time we get here, we've already overwritten _text for the current item
                   // that is why formerly we skipped this call for "this"
@@ -1515,7 +1526,13 @@ void Text::endEdit()
                   //if (e != this) e->undoChangeProperty(P_ID::TEXT, _text);
                   }
             }
-      textChanged();
+      else {
+            // only necessary in the case of _text == oldtext
+            // because otherwise, setProperty() call above calls setText(), which calls textChanged()
+            // yet we still need to consider this a change, since newly added palette texts end up here
+            textChanged();
+            }
+
       // formerly we needed to setLayoutAll here to force the text to be laid out after editing
       // but now that we are calling setProperty for all elements - including "this"
       // it is no longer necessary

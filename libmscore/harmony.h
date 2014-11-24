@@ -122,6 +122,7 @@ class Harmony : public Text {
 
       void determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& rootLowerCase, NoteSpellingType& baseSpelling, bool& baseLowerCase);
 
+      virtual void textChanged() override;
       virtual void layout();
 
       const QRectF& bboxtight() const          { return _tbbox;        }

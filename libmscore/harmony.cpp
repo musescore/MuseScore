@@ -597,7 +597,6 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
       if (!textList.isEmpty()) {
             QString s(harmonyName());
             setText(s);
-            Text::createLayout(); // create TextBlocks from text
             }
       Text::startEdit(view, p);
       layout();
@@ -626,15 +625,16 @@ bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers
 void Harmony::endEdit()
       {
       Text::endEdit();
-      setHarmony(plainText(true));
       layout();
       if (links()) {
             foreach(Element* e, *links()) {
                   if (e == this)
                         continue;
                   Harmony* h = static_cast<Harmony*>(e);
-                  h->setHarmony(text());
                   // transpose if necessary
+                  // at this point chord will already have been rendered in same key as original
+                  // (as a result of Text::endEdit() calling setText() for linked elements)
+                  // we may now need to change the TPC's and the text, and re-render
                   if (score()->styleB(StyleIdx::concertPitch) != h->score()->styleB(StyleIdx::concertPitch)) {
                         Part* partDest = h->staff()->part();
                         Interval interval = partDest->instr()->transpose();
@@ -643,12 +643,16 @@ void Harmony::endEdit()
                                     interval.flip();
                               int rootTpc = transposeTpc(h->rootTpc(), interval, false);
                               int baseTpc = transposeTpc(h->baseTpc(), interval, false);
-                              h->score()->undoTransposeHarmony(h, rootTpc, baseTpc);
+                              //score()->undoTransposeHarmony(h, rootTpc, baseTpc);
+                              h->setRootTpc(rootTpc);
+                              h->setBaseTpc(baseTpc);
+                              // this invokes textChanged(), which handles the rendering
+                              h->setText(h->harmonyName());
                               }
                         }
                   }
             }
-      score()->setLayoutAll(true);  // done in Text::endEdit() too, but no harm being sure
+      score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
@@ -887,6 +891,17 @@ const ChordDescription* Harmony::generateDescription()
 bool Harmony::isEmpty() const
       {
       return textList.isEmpty() && Text::isEmpty();
+      }
+
+//---------------------------------------------------------
+//   textChanged
+//    text may have changed
+//---------------------------------------------------------
+
+void Harmony::textChanged()
+      {
+      Text::createLayout();
+      setHarmony(plainText(true));
       }
 
 //---------------------------------------------------------
