@@ -101,7 +101,7 @@ void LoginManager::onAuthorizedRequestDone()
       {
       if (_oauthManager->lastError() == KQOAuthManager::NetworkError)
             QMessageBox::critical(0, tr("Network error"), tr("Please check your internet connection"));
-      else if (_oauthManager->lastError() == KQOAuthManager::AuthenticationRequiredError)
+      else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError)
             QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
       }
 
@@ -211,7 +211,7 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
       else if (_oauthManager->lastError() == KQOAuthManager::NetworkError) {
             QMessageBox::critical(0, tr("Network error"), tr("Please check your internet connection"));
             }
-      else if (_oauthManager->lastError() == KQOAuthManager::AuthenticationRequiredError) {
+      else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError) {
             QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
             }
       }
@@ -316,7 +316,10 @@ void LoginManager::onGetScoreRequestReady(QByteArray ba)
                   if (user.value("uid") != QJsonValue::Undefined) {
                         int uid = user.value("uid").toString().toInt();
                         qDebug() << "uid"  <<  uid << _uid;
-                        emit getScoreSuccess(title, description, (sharing == "private"), license, tags);
+                        if (uid == _uid)
+                              emit getScoreSuccess(title, description, (sharing == "private"), license, tags);
+                        else
+                              emit getScoreError("");
                         }
                   else {
                        emit getScoreError("");
