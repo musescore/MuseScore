@@ -1791,6 +1791,9 @@ void Score::cmdDeleteSelection()
                               continue;
                               }
                         foreach (Element* annotation, s->annotations()) {
+                              // skip if not included in selection (eg, filter)
+                              if (!selectionFilter().canSelect(annotation))
+                                    continue;
                               if (!annotation->systemFlag() && annotation->track() == track)
                                     undoRemoveElement(annotation);
                               }
