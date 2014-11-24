@@ -2,13 +2,19 @@
 <ui version="4.0">
  <class>SynthControl</class>
  <widget class="QWidget" name="SynthControl">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>697</width>
+    <width>742</width>
     <height>281</height>
    </rect>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
   </property>
   <property name="windowTitle">
    <string>Synthesizer</string>
@@ -24,6 +30,9 @@
     <layout class="QGridLayout" name="gridLayout_4">
      <item row="0" column="3">
       <widget class="QPushButton" name="storeButton">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="text">
         <string>Set as Default</string>
        </property>
@@ -31,6 +40,9 @@
      </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="saveButton">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="toolTip">
         <string>Save to score</string>
        </property>
@@ -54,6 +66,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="loadButton">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="toolTip">
         <string>Load from score</string>
        </property>
@@ -64,6 +79,9 @@
      </item>
      <item row="0" column="4">
       <widget class="QPushButton" name="recallButton">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="text">
         <string>Load Default</string>
        </property>
@@ -74,11 +92,20 @@
    <item row="0" column="2" rowspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="Awl::MeterSlider" name="gain">
+      <widget class="Awl::MeterSlider" name="gain" native="true">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="statusTip">
         <string>Master volume</string>
        </property>
-       <property name="channel">
+       <property name="accessibleName">
+        <string>Master volume</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Use up and down arrows to modify</string>
+       </property>
+       <property name="channel" stdset="0">
         <number>2</number>
        </property>
       </widget>
@@ -102,14 +129,23 @@
     </layout>
    </item>
    <item row="0" column="1">
-    <widget class="Awl::VolSlider" name="mgain">
+    <widget class="Awl::VolSlider" name="mgain" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="center">
+     <property name="focusPolicy">
+      <enum>Qt::TabFocus</enum>
+     </property>
+     <property name="accessibleName">
+      <string>Metronome gain</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Use up and down arrows to modify</string>
+     </property>
+     <property name="center" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
@@ -117,7 +153,7 @@
    <item row="0" column="0" rowspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="masterEffectsTab">
       <attribute name="title">
@@ -161,6 +197,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>Effect A</string>
+         </property>
         </widget>
        </item>
        <item row="2" column="0" colspan="6">
@@ -200,6 +239,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="accessibleName">
+          <string>Effect B</string>
+         </property>
         </widget>
        </item>
        <item row="0" column="2">
@@ -231,6 +273,12 @@
        </item>
        <item row="0" column="1">
         <widget class="QDoubleSpinBox" name="masterTuning">
+         <property name="accessibleName">
+          <string>Master tunning</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Hertz</string>
+         </property>
          <property name="suffix">
           <string extracomment="Frequency Herz">Hz</string>
          </property>
@@ -276,6 +324,9 @@
        </item>
        <item row="2" column="0">
         <widget class="QPushButton" name="changeTuningButton">
+         <property name="focusPolicy">
+          <enum>Qt::TabFocus</enum>
+         </property>
          <property name="text">
           <string>Change Tuning</string>
          </property>
@@ -313,15 +364,17 @@
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>metronome</tabstop>
-  <tabstop>saveButton</tabstop>
-  <tabstop>loadButton</tabstop>
-  <tabstop>storeButton</tabstop>
-  <tabstop>recallButton</tabstop>
   <tabstop>effectA</tabstop>
   <tabstop>effectB</tabstop>
   <tabstop>masterTuning</tabstop>
   <tabstop>changeTuningButton</tabstop>
+  <tabstop>metronome</tabstop>
+  <tabstop>mgain</tabstop>
+  <tabstop>gain</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>loadButton</tabstop>
+  <tabstop>storeButton</tabstop>
+  <tabstop>recallButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

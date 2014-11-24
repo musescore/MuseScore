@@ -31,6 +31,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="remove">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="text">
         <string>Delete</string>
        </property>
@@ -38,6 +41,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="add">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="text">
         <string>Add</string>
        </property>

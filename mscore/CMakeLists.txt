@@ -238,7 +238,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorGroupElement.cpp dragdrop.cpp inspector/inspectorImage.cpp
       inspector/inspectorFret.cpp
       waveview.cpp helpBrowser.cpp inspector/inspectorLasso.cpp
-      editelement.cpp inspector/inspectorVolta.cpp inspector/inspectorOttava.cpp
+      editelement.cpp inspector/inspectorVolta.cpp inspector/inspectorOttava.cpp enableplayforwidget.cpp
       inspector/inspectorTrill.cpp
       inspector/inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
       musicxmlfonthandler.cpp musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp

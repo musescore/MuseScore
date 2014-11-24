@@ -22,6 +22,7 @@
 #define __AWLASLIDER_H__
 
 // #include "synthesizer/sparm.h"
+#include <QAccessibleWidget>
 
 namespace Awl {
 
@@ -135,6 +136,18 @@ class AbstractSlider : public QWidget {
       void setDclickValue2(double val) { _dclickValue2 = val;  }
       void setEnabled(bool val);
       };
+
+class AccessibleAbstractSlider : public QObject, QAccessibleWidget {
+      Q_OBJECT
+      AbstractSlider* slider;
+      QAccessible::Role role() const Q_DECL_OVERRIDE;
+      QString text(QAccessible::Text t) const Q_DECL_OVERRIDE;
+public:
+      static QAccessibleInterface* AbstractSliderFactory(const QString &classname, QObject *object);
+      AccessibleAbstractSlider(AbstractSlider*);
+public slots:
+      void valueChanged(double,int);
+};
 
 }
 

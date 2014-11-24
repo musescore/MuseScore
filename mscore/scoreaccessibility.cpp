@@ -8,8 +8,12 @@
 #include "libmscore/measure.h"
 #include "inspector/inspector.h"
 #include "selectionwindow.h"
+#include "playpanel.h"
+#include "synthcontrol.h"
+#include "mixer.h"
 
 namespace Ms{
+
 AccessibleScoreView::AccessibleScoreView(ScoreView* scView) : QAccessibleWidget(scView){
       s = scView;
       }
@@ -181,7 +185,11 @@ void ScoreAccessibility::updateAccessibilityInfo()
       if ( (qApp->focusWidget() != w) &&
            !mscore->inspector()->isAncestorOf(qApp->focusWidget()) &&
            !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) &&
-           !(mscore->getSelectionWindow() && mscore->getSelectionWindow()->isAncestorOf(qApp->focusWidget()))) {
+           !(mscore->getSelectionWindow() && mscore->getSelectionWindow()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getPlayPanel() && mscore->getPlayPanel()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getSynthControl() && mscore->getSynthControl()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getMixer() && mscore->getMixer()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) ) {
             mscore->activateWindow();
             w->setFocus();
             }
