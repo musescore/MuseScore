@@ -5037,21 +5037,21 @@
           <item>
            <widget class="QRadioButton" name="radioKeySigNatNone">
             <property name="text">
-             <string>Only for change to C Maj / A min</string>
+             <string>Only for a change to C Maj / A min</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="radioKeySigNatBefore">
             <property name="text">
-             <string>Before change to less sharps / flats</string>
+             <string>Before a change to fewer sharps or flats</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="radioKeySigNatAfter">
             <property name="text">
-             <string>After change to less sharps / flats (but before change sharps &lt;=&gt; flats)</string>
+             <string>After a change to fewer sharps or flats but before a change from sharps to flats or vice versa</string>
             </property>
            </widget>
           </item>
