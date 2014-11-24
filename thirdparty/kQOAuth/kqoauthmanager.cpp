@@ -607,7 +607,7 @@ void KQOAuthManager::onRequestReplyReceived() {
     emit requestReady(networkReply);
     if (!d->isAuthorized || !d->isVerified) {
         if (d->setSuccessfulRequestToken(responseTokens)) {
-            qDebug() << "Successfully got request tokens.";
+            //qDebug() << "Successfully got request tokens.";
             d->consumerKey = d->r->consumerKeyForManager();
             d->consumerKeySecret = d->r->consumerKeySecretForManager();
             d->signatureMethod = d->r->requestSignatureMethodForManager();
@@ -617,7 +617,7 @@ void KQOAuthManager::onRequestReplyReceived() {
             d->emitTokens();
 
         } else if (d->setSuccessfulAuthorized(responseTokens)) {
-              qDebug() << "Successfully got access tokens.";
+              //qDebug() << "Successfully got access tokens.";
               d->opaqueRequest->setSignatureMethod(KQOAuthRequest::HMAC_SHA1);
               d->emitTokens();
           } else if (d->currentRequestType == KQOAuthRequest::AuthorizedRequest) {
@@ -718,8 +718,8 @@ void KQOAuthManager::onVerificationReceived(QMultiMap<QString, QString> response
 }
 
 void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
-    //Q_UNUSED(error)
-    qDebug() << error;
+    Q_UNUSED(error)
+    //qDebug() << error;
     
     Q_D(KQOAuthManager);
 
@@ -742,7 +742,7 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
     }
     QByteArray emptyResponse;
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
-    qDebug() << "STATUS" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    //qDebug() << "STATUS" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     d->r = d->requestMap.key(reply);
     d->currentRequestType = d->r->requestType();
     if( d->requestIds.contains(reply) ) {

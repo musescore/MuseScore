@@ -137,14 +137,11 @@ void UploadScoreDialog::display()
       QString source = mscore->currentScore()->rootScore()->metaTag("source");
       if (!source.isEmpty()) {
             QStringList sl = source.split("/");
-            qDebug() << sl;
             if (sl.length() > 0) {
                   QString nidString = sl.last();
-                  qDebug() << sl;
                   bool ok;
 			int nid = nidString.toInt(&ok);
                   if (ok) {
-                         qDebug() << nid;
                          _nid = nid;
                          _loginManager->getScore(nid);
                          return;

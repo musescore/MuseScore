@@ -172,7 +172,7 @@ void LoginManager::login(QString login, QString password)
 
 void LoginManager::onAccessTokenReceived(QString token, QString tokenSecret)
       {
-      qDebug() << "Access token received: " << token << tokenSecret;
+      //qDebug() << "Access token received: " << token << tokenSecret;
       _accessToken = token;
       _accessTokenSecret = tokenSecret;
       disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)), this, SLOT(onAccessTokenRequestReady(QByteArray)));
@@ -185,7 +185,7 @@ void LoginManager::onAccessTokenReceived(QString token, QString tokenSecret)
 
 void LoginManager::onAccessTokenRequestReady(QByteArray ba)
       {
-      qDebug() << "onAccessTokenRequestReady" << ba;
+      //qDebug() << "onAccessTokenRequestReady" << ba;
       if (_oauthManager->lastError() == KQOAuthManager::RequestUnauthorized) { // 401/406
             
             QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
@@ -299,8 +299,8 @@ void LoginManager::getScore(int nid)
 
 void LoginManager::onGetScoreRequestReady(QByteArray ba)
       {
-      qDebug() << "onGetScoreRequestReady" << ba;
-      qDebug() << _oauthManager->lastError();
+      //qDebug() << "onGetScoreRequestReady" << ba;
+      //qDebug() << _oauthManager->lastError();
       disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
             this, SLOT(onGetScoreRequestReady(QByteArray)));
       if (_oauthManager->lastError() == KQOAuthManager::NoError) {
@@ -315,7 +315,6 @@ void LoginManager::onGetScoreRequestReady(QByteArray ba)
                   QString tags = score.value("tags").toString();
                   if (user.value("uid") != QJsonValue::Undefined) {
                         int uid = user.value("uid").toString().toInt();
-                        qDebug() << "uid"  <<  uid << _uid;
                         if (uid == _uid)
                               emit getScoreSuccess(title, description, (sharing == "private"), license, tags);
                         else
@@ -323,17 +322,14 @@ void LoginManager::onGetScoreRequestReady(QByteArray ba)
                         }
                   else {
                        emit getScoreError("");
-                       qDebug() << "SCORE NOT FOUND";
                        }
                   }
             else {
                   emit getScoreError("");
-                  qDebug() << "SCORE NOT FOUND";
                   }
             }
       else {
             emit getScoreError("");
-            qDebug() << "SCORE NOT FOUND";
             }
 
       }
@@ -407,7 +403,7 @@ void LoginManager::onUploadRequestReady(QByteArray ba)
       {
       disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
             this, SLOT(onUploadRequestReady(QByteArray)));
-      qDebug() << "onUploadRequestReady" << ba;
+      //qDebug() << "onUploadRequestReady" << ba;
       if (_oauthManager->lastError() == KQOAuthManager::NoError) {
             QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
             QJsonObject score = jsonResponse.object();
