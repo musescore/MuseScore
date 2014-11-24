@@ -113,8 +113,8 @@ namespace Ms {
 //   local defines for debug output
 //---------------------------------------------------------
 
-// #define DEBUG_VOICE_MAPPER true
-// #define DEBUG_TICK true
+//#define DEBUG_VOICE_MAPPER true
+//#define DEBUG_TICK true
 
 //---------------------------------------------------------
 //   MusicXMLStepAltOct2Pitch
@@ -189,6 +189,10 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* ottav
 
 static int calcTicks(QString text, int divisions)
       {
+      if (divisions <= 0) {
+            qDebug("MusicXml-Import: bad divisions value: <%d>", divisions);
+            return 0;
+            }
       bool ok;
       int val = MxmlSupport::stringToInt(text, &ok);
       if (!ok) {
@@ -303,6 +307,11 @@ static Fraction noteDurationAsFraction(const int divisions, const QDomElement e)
 
 static void moveTick(const int mtick, int& tick, int& maxtick, Fraction& typFr, const int divisions, const QDomElement e)
       {
+      if (divisions <= 0) {
+            qDebug("moveTick: invalid divisions %d", divisions);
+            return;
+            }
+            
       if (e.tagName() == "forward") {
             for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                   if (ee.tagName() == "duration") {
@@ -414,6 +423,7 @@ MusicXml::MusicXml(QDomDocument* d, MxmlReaderFirstPass const& p1)
       lastVolta(0),
       doc(d),
       pass1(p1),
+      divisions(-1),    // set to impossible value to detect usage without initialization
       beamMode(Beam::Mode::NONE),
       pageWidth(0),
       pageHeight(0)
@@ -1860,9 +1870,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
 #ifdef DEBUG_VOICE_MAPPER
       // debug: print voice mapper contents
       qDebug("voiceMapperStats: new staff");
-      for (QMap<int, VoiceDesc>::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
-            qDebug("voiceMapperStats: voice %d staff data %s",
-                   i.key() + 1, qPrintable(i.value().toString()));
+      for (QMap<QString, Ms::VoiceDesc>::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
+            qDebug("voiceMapperStats: voice %s staff data %s",
+                   qPrintable(i.key()), qPrintable(i.value().toString()));
             }
 #endif
 
@@ -2121,7 +2131,6 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
           accTmp.append(false);
           i++;
       }
-      Note* note;
 
       // current "tick" within this measure as fraction
       // calculated using note type, backup and forward
@@ -2179,7 +2188,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
             if (e.tagName() == "attributes")
                   xmlAttributes(measure, staff, e.firstChildElement(), currKeySig);
             else if (e.tagName() == "note") {
-                  note = xmlNote(measure, staff, part->id(), beam, cv, e, graceNotes, alt);
+                  Note* note = xmlNote(measure, staff, part->id(), beam, cv, e, graceNotes, alt);
                   if(note) {
                         if(note->accidental()){
                               if(note->accidental()->accidentalType() != Accidental::Type::NONE){
@@ -4886,10 +4895,15 @@ static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration d
 Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam*& beam,
                         QString& currentVoice, QDomElement e, QList<Chord*>& graceNotes, int& alt)
       {
-      int ticks = 0;
 #ifdef DEBUG_TICK
       qDebug("xmlNote start tick=%d (%d div) divisions=%d", tick, tick * divisions / MScore::division, divisions);
 #endif
+      if (divisions <= 0) {
+            qDebug("xmlNote: invalid divisions %d", divisions);
+            return 0;
+            }
+
+      int ticks = 0;
       QDomNode pn = e; // TODO remove pn
       QDomElement org_e = e; // save e for later
       QString strVoice = "1";

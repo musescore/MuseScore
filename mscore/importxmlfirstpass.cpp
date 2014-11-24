@@ -84,8 +84,8 @@ static void aaadomError(const QDomElement e)
 //   local defines for debug output
 //---------------------------------------------------------
 
-// #define DEBUG_VOICE_MAPPER true
-// #define DEBUG_TICK true
+//#define DEBUG_VOICE_MAPPER true
+//#define DEBUG_TICK true
 
 //---------------------------------------------------------
 //   noteDurationAsFraction
@@ -108,13 +108,14 @@ static Fraction noteDurationAsFraction(const int divisions, QDomElement e, Fract
       bool rest = false;
       QString type;
       noteDurDesc = "";
+      duration = Fraction(0, 0); // duration is invalid until a valid value is determined
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "chord")
                   chord = true;
             else if (e.tagName() == "dot")
                   dots++;
             else if (e.tagName() == "duration") {
-                  duration = MxmlSupport::durationAsFraction(divisions, e);
+                  if (divisions > 0) duration = MxmlSupport::durationAsFraction(divisions, e);
                   }
             else if (e.tagName() == "grace")
                   grace = true;
@@ -174,10 +175,15 @@ static Fraction noteDurationAsFraction(const int divisions, QDomElement e, Fract
       qDebug("time-in-fraction: %s", qPrintable(noteDurDesc));
 #endif
 
-      if (rest && (type == "" || type == "whole"))
-            // accept typeless and "whole" measure rests
+      if (rest && type == "")
+            // typeless "whole" measure rests are determined by duration
+            return duration;
+            
+      if (rest && type == "whole" && duration.isValid())
+            // "whole" measure rests with valid duration are determined by duration
             return duration;
 
+      // else fall back to calculated duration
       return f;
       }
 
@@ -256,6 +262,10 @@ static void aaamoveTick(Fraction& tick, Fraction& maxtick,
                   }
             else
                   errorStr = "calculated and specified duration invalid";
+
+#ifdef DEBUG_TICK
+            if (errorStr != "") qDebug("error %s", qPrintable(errorStr));
+#endif
 
             if (tick > maxtick)
                   maxtick = tick;
@@ -574,61 +584,61 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                           }
                                     }
                               }
-                        // most of following tags can only be handled if duration is valid
-                        if (loc_divisions > 0) {
-                              if (ee.tagName() == "note") {
-                                    bool chord = false;
-                                    bool grace = false;
-                                    QString voice = "1";    // correct default for missing voice
-                                    QString pitch = "    ";
-                                    int staff = 0;          // correct default for missing staff
-                                    bool rest = false;
-                                    for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                                          QString tag(eee.tagName());
-                                          QString s(eee.text());
-                                          if (tag == "chord")
-                                                chord = true;
-                                          else if (tag == "grace")
-                                                grace = true;
-                                          else if (tag == "voice")
-                                                voice = s;
-                                          else if (tag == "staff")
-                                                staff = s.toInt() - 1;
-                                          else if (tag == "pitch")
-                                                ;  // TODO pitch = parsePitch(eee);
-                                          else if (tag == "rest")
-                                                rest = true;
+                        if (ee.tagName() == "note") {
+                              bool chord = false;
+                              bool grace = false;
+                              QString voice = "1";    // correct default for missing voice
+                              QString pitch = "    ";
+                              int staff = 0;          // correct default for missing staff
+                              bool rest = false;
+                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
+                                    QString tag(eee.tagName());
+                                    QString s(eee.text());
+                                    if (tag == "chord")
+                                          chord = true;
+                                    else if (tag == "grace")
+                                          grace = true;
+                                    else if (tag == "voice")
+                                          voice = s;
+                                    else if (tag == "staff")
+                                          staff = s.toInt() - 1;
+                                    else if (tag == "pitch")
+                                          ;  // TODO pitch = parsePitch(eee);
+                                    else if (tag == "rest")
+                                          rest = true;
+                                    }
+                              if (rest)
+                                    pitch = "rest";
+                              if (!chord) {
+                                    // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
+                                    // Same fix is required in MusicXml::xmlNote
+                                    // make sure staff is valid
+                                    int corrStaff = (staff >= 0 && staff < staves) ? staff : 0;
+                                    
+                                    // count the chords (only the first note in a chord is counted)
+                                    if (corrStaff < MAX_STAVES) {
+                                          if (!parts[partNr].voicelist.contains(voice)) {
+                                                VoiceDesc vs;
+                                                parts[partNr].voicelist.insert(voice, vs);
+                                                }
+                                          parts[partNr].voicelist[voice].incrChordRests(corrStaff);
                                           }
-                                    if (rest)
-                                          pitch = "rest";
-                                    if (!chord) {
-                                          // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
-                                          // Same fix is required in MusicXml::xmlNote
-                                          // make sure staff is valid
-                                          int corrStaff = (staff >= 0 && staff < staves) ? staff : 0;
-                                          
-                                          // count the chords (only the first note in a chord is counted)
-                                          if (corrStaff < MAX_STAVES) {
-                                                if (!parts[partNr].voicelist.contains(voice)) {
-                                                      VoiceDesc vs;
-                                                      parts[partNr].voicelist.insert(voice, vs);
-                                                      }
-                                                parts[partNr].voicelist[voice].incrChordRests(corrStaff);
-                                                }
-                                          // determine note length for voice overlap detection
-                                          if (!grace) {
-                                                Fraction startTick = loc_tick; // start tick for the last note
-                                                Fraction duration;
-                                                QString noteDurDesc;
-                                                QString errorStr;
-                                                aaamoveTick(loc_tick, loc_maxtick, loc_divisions, ee,
-                                                            duration, noteDurDesc, errorStr);
-                                                // TODO: migrate voice overlap detector to Fraction
-                                                vod.addNote(startTick.ticks(), loc_tick.ticks(), voice, corrStaff);
-                                                }
+                                    // determine note length for voice overlap detection
+                                    if (!grace) {
+                                          Fraction startTick = loc_tick; // start tick for the last note
+                                          Fraction duration;
+                                          QString noteDurDesc;
+                                          QString errorStr;
+                                          aaamoveTick(loc_tick, loc_maxtick, loc_divisions, ee,
+                                                      duration, noteDurDesc, errorStr);
+                                          // TODO: migrate voice overlap detector to Fraction
+                                          vod.addNote(startTick.ticks(), loc_tick.ticks(), voice, corrStaff);
                                           }
                                     }
-                              else if (ee.tagName() == "backup") {
+                              }
+                        // following tags can only be handled if duration is valid
+                        if (loc_divisions > 0) {
+                              if (ee.tagName() == "backup") {
                                     Fraction dummyFr;
                                     QString noteDurDesc;
                                     QString errorStr;
