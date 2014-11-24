@@ -99,9 +99,9 @@
 #include "qmlplugin.h"
 #include "accessibletoolbutton.h"
 #include "searchComboBox.h"
-
 #include "startcenter.h"
 #include "help.h"
+#include "awl/aslider.h"
 
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
@@ -533,7 +533,8 @@ MuseScore::MuseScore()
       transportTools->addSeparator();
 #endif
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("rewind")));
-      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("play")));
+      _playButton = new AccessibleToolButton(transportTools, getAction("play"));
+      transportTools->addWidget(_playButton);
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("loop")));
       transportTools->addSeparator();
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("repeat")));
@@ -4534,6 +4535,8 @@ int main(int argc, char* av[])
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
+      QAccessible::installFactory(Awl::AccessibleAbstractSlider::AbstractSliderFactory);
+
       Q_INIT_RESOURCE(zita);
 
 #ifndef Q_OS_MAC

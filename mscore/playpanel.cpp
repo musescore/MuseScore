@@ -51,6 +51,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       move(settings.value("playPanel/pos", QPoint(DEFAULT_POS_X, DEFAULT_POS_Y)).toPoint());
 
       setScore(0);
+
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
       countInButton->setDefaultAction(getAction("countin"));
@@ -58,6 +59,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       loopButton->setDefaultAction(getAction("loop"));
       loopInButton->setDefaultAction(getAction("loop-in"));
       loopOutButton->setDefaultAction(getAction("loop-out"));
+      enablePlay = new EnablePlayForWidget(this);
 
       tempoSlider->setDclickValue1(100.0);
       tempoSlider->setDclickValue2(100.0);
@@ -135,6 +137,36 @@ void PlayPanel::hideEvent(QHideEvent* ev)
       settings.setValue("playPanel/pos", pos());
       settings.setValue("playPanel/geometry", saveGeometry());
       QWidget::hideEvent(ev);
+      }
+
+//---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void PlayPanel::showEvent(QShowEvent* e)
+      {
+      enablePlay->showEvent(e);
+      QWidget::showEvent(e);
+      activateWindow();
+      }
+
+//---------------------------------------------------------
+//   eventFilter
+//---------------------------------------------------------
+
+bool PlayPanel::eventFilter(QObject* obj, QEvent* e)
+      {
+      if (enablePlay->eventFilter(obj, e))
+            return true;
+      return QWidget::eventFilter(obj, e);
+      }
+
+void PlayPanel::keyPressEvent(QKeyEvent* ev) {
+      if (ev->key() == Qt::Key_Escape && ev->modifiers() == Qt::NoModifier) {
+            close();
+            return;
+            }
+      QWidget::keyPressEvent(ev);
       }
 
 //---------------------------------------------------------

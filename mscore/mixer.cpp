@@ -104,6 +104,7 @@ Mixer::Mixer(QWidget* parent)
       area->setLayout(vb);
       setWidget(area);
 
+      enablePlay = new EnablePlayForWidget(this);
       if (!useFactorySettings) {
             QSettings settings;
             settings.beginGroup("Mixer");
@@ -122,6 +123,37 @@ void Mixer::closeEvent(QCloseEvent* ev)
       emit closed(false);
       QWidget::closeEvent(ev);
       }
+
+//---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void Mixer::showEvent(QShowEvent* e)
+      {
+      enablePlay->showEvent(e);
+      QScrollArea::showEvent(e);
+      activateWindow();
+      }
+
+//---------------------------------------------------------
+//   eventFilter
+//---------------------------------------------------------
+
+bool Mixer::eventFilter(QObject* obj, QEvent* e)
+      {
+      if (enablePlay->eventFilter(obj, e))
+            return true;
+      return QScrollArea::eventFilter(obj, e);
+      }
+
+void Mixer::keyPressEvent(QKeyEvent* ev) {
+      if (ev->key() == Qt::Key_Escape && ev->modifiers() == Qt::NoModifier) {
+            close();
+            return;
+            }
+      QWidget::keyPressEvent(ev);
+      }
+
 
 //---------------------------------------------------------
 //   updateAll
