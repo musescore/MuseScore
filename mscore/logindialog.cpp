@@ -56,7 +56,6 @@ void LoginDialog::buttonBoxClicked(QAbstractButton* button)
       if (sb == QDialogButtonBox::Ok) {
             if (usernameEdit->text().trimmed().isEmpty() || passwordEdit->text().trimmed().isEmpty())
                   QMessageBox::critical(this, tr("Login error"), tr("Please fill in your username and password"));
-            qDebug() << "buttonCLICKED";
             login();
             }
       else
@@ -69,7 +68,6 @@ void LoginDialog::buttonBoxClicked(QAbstractButton* button)
 
 void LoginDialog::login()
       {
-      qDebug() << "LoginDialog::login()";
       _loginManager->login(usernameEdit->text(), passwordEdit->text());
       }
 

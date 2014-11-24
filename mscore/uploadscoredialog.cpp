@@ -12,6 +12,7 @@
 
 #include "musescore.h"
 #include "libmscore/score.h"
+#include "libmscore/undo.h"
 #include "uploadscoredialog.h"
 
 namespace Ms {
@@ -100,8 +101,13 @@ void UploadScoreDialog::upload(int nid)
 void UploadScoreDialog::uploadSuccess(const QString& url)
       {
       setVisible(false);
-      mscore->currentScore()->rootScore()->setMetaTag("source", url);
-      mscore->currentScore()->rootScore()->setDirty(true);
+      Score* score = mscore->currentScore()->rootScore();
+      QMap<QString, QString>  metatags = score->metaTags();
+      metatags.insert("source", url);
+      score->startCmd();
+      score->undo(new ChangeMetaTags(score, metatags));
+      score->endCmd();
+      mscore->endCmd();
       QMessageBox::information(this,
                tr("Success"),
                tr("Finished! <a href=\"%1\">Go to my score</a>.").arg(url),

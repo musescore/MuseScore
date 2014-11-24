@@ -550,10 +550,11 @@ void KQOAuthManager::onRequestReplyReceived() {
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::UnknownContentError:
     case QNetworkReply::ContentNotFoundError:
+    case QNetworkReply::AuthenticationRequiredError:
         d->error = KQOAuthManager::RequestUnauthorized;
         break;
-    case QNetworkReply::AuthenticationRequiredError:
-        d->error = KQOAuthManager::AuthenticationRequiredError;
+    case QNetworkReply::ContentOperationNotPermittedError:
+        d->error = KQOAuthManager::ContentOperationNotPermittedError;
         break;
     default:
         d->error = KQOAuthManager::NetworkError;
@@ -639,10 +640,11 @@ void KQOAuthManager::onAuthorizedRequestReplyReceived() {
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::UnknownContentError:
     case QNetworkReply::ContentNotFoundError:
+    case QNetworkReply::AuthenticationRequiredError:
         d->error = KQOAuthManager::RequestUnauthorized;
         break;
-    case QNetworkReply::AuthenticationRequiredError:
-        d->error = KQOAuthManager::AuthenticationRequiredError;
+    case QNetworkReply::ContentOperationNotPermittedError:
+        d->error = KQOAuthManager::ContentOperationNotPermittedError;
         break;
     default:
         d->error = KQOAuthManager::NetworkError;
@@ -716,22 +718,23 @@ void KQOAuthManager::onVerificationReceived(QMultiMap<QString, QString> response
 }
 
 void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
-    Q_UNUSED(error)
-    //qDebug() << error;
+    //Q_UNUSED(error)
+    qDebug() << error;
+    
     Q_D(KQOAuthManager);
 
     switch (error) {
     case QNetworkReply::NoError:
         d->error = KQOAuthManager::NoError;
         break;
-
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::UnknownContentError:
     case QNetworkReply::ContentNotFoundError:
+    case QNetworkReply::AuthenticationRequiredError:
         d->error = KQOAuthManager::RequestUnauthorized;
         break;
-    case QNetworkReply::AuthenticationRequiredError:
-        d->error = KQOAuthManager::AuthenticationRequiredError;
+    case QNetworkReply::ContentOperationNotPermittedError:
+        d->error = KQOAuthManager::ContentOperationNotPermittedError;
         break;
     default:
         d->error = KQOAuthManager::NetworkError;
@@ -739,6 +742,7 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
     }
     QByteArray emptyResponse;
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+    qDebug() << "STATUS" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     d->r = d->requestMap.key(reply);
     d->currentRequestType = d->r->requestType();
     if( d->requestIds.contains(reply) ) {
