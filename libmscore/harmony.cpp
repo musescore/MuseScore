@@ -597,7 +597,8 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
       if (!textList.isEmpty()) {
             QString s(harmonyName());
             setText(s);
-            Text::createLayout(); // create TextBlocks from text
+            // done in textChanged()
+            //Text::createLayout();
             }
       Text::startEdit(view, p);
       layout();
@@ -626,14 +627,16 @@ bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers
 void Harmony::endEdit()
       {
       Text::endEdit();
-      setHarmony(plainText(true));
+      // done in textChanged()
+      //setHarmony(plainText(true));
       layout();
       if (links()) {
             foreach(Element* e, *links()) {
                   if (e == this)
                         continue;
                   Harmony* h = static_cast<Harmony*>(e);
-                  h->setHarmony(text());
+                  // done in textChanged()
+                  //h->setHarmony(text());
                   // transpose if necessary
                   if (score()->styleB(StyleIdx::concertPitch) != h->score()->styleB(StyleIdx::concertPitch)) {
                         Part* partDest = h->staff()->part();
@@ -648,7 +651,7 @@ void Harmony::endEdit()
                         }
                   }
             }
-      score()->setLayoutAll(true);  // done in Text::endEdit() too, but no harm being sure
+      score()->setLayoutAll(true);  // probably done in Text::endEdit() too, but no harm being sure
       }
 
 //---------------------------------------------------------
@@ -887,6 +890,17 @@ const ChordDescription* Harmony::generateDescription()
 bool Harmony::isEmpty() const
       {
       return textList.isEmpty() && Text::isEmpty();
+      }
+
+//---------------------------------------------------------
+//   textChanged
+//    text may have changed
+//---------------------------------------------------------
+
+void Harmony::textChanged()
+      {
+      Text::createLayout();
+      setHarmony(plainText(true));
       }
 
 //---------------------------------------------------------
