@@ -1515,7 +1515,12 @@ void Text::endEdit()
                   //if (e != this) e->undoChangeProperty(P_ID::TEXT, _text);
                   }
             }
-      textChanged();
+      else {
+            // only necessary in the case of _text == oldtext
+            // because otherwise, setProperty() call above calls setText(), which calls textChanged()
+            // yet we still need to consider this a change, since newly added palette texts end up here
+            textChanged();
+            }
       // formerly we needed to setLayoutAll here to force the text to be laid out after editing
       // but now that we are calling setProperty for all elements - including "this"
       // it is no longer necessary
