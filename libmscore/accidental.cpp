@@ -310,9 +310,9 @@ void Accidental::layout()
 
       m = magS();
       if (_hasBracket) {
-            SymElement e(SymId::noteheadParenthesisLeft, 0.0);
+            SymElement e(SymId::accidentalParensLeft, 0.0);
             el.append(e);
-            r |= symBbox(SymId::noteheadParenthesisLeft);
+            r |= symBbox(SymId::accidentalParensLeft);
             }
 
       SymId s = symbol();
@@ -323,9 +323,9 @@ void Accidental::layout()
 
       if (_hasBracket) {
             x = r.x()+r.width();
-            SymElement e(SymId::noteheadParenthesisRight, x);
+            SymElement e(SymId::accidentalParensRight, x);
             el.append(e);
-            r |= symBbox(SymId::noteheadParenthesisRight).translated(x, 0.0);
+            r |= symBbox(SymId::accidentalParensRight).translated(x, 0.0);
             }
       setbbox(r);
       }
