@@ -82,6 +82,12 @@
     },
     "accidentalQuarterToneFlatNaturalArrowDown": {
         "codepoint": "U+e1bf"
+    },
+    "accidentalParensLeft": {
+        "codepoint": "U+E26A"
+    }, 
+    "accidentalParensRight": {
+        "codepoint": "U+E26B"
     },                    
     "arrowheadBlackDown": {
         "codepoint": "U+E126"

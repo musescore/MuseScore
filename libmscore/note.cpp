@@ -1641,20 +1641,28 @@ void Note::layout2()
             if (!score()->tagIsValid(e->tag()))
                   continue;
             e->setMag(mag());
-            if (e->type() == Element::Type::SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
+            if (e->type() == Element::Type::SYMBOL) {
                   qreal w = headWidth();
-                  if (staff()->isTabStaff()) {
-                        StaffType* tab = staff()->staffType();
-                        w = tabHeadWidth(tab);
-                        }
+                  Symbol* sym = static_cast<Symbol*>(e);
                   QPointF rp = e->readPos();
                   e->layout();
-                  e->rxpos() += w;
-                  // adjustReadPos() was called too early in layout(), adjust:
-                  if (!rp.isNull()) {
-                        e->setUserOff(QPointF());
-                        e->setReadPos(rp);
-                        e->adjustReadPos();
+                  if (sym->sym() == SymId::noteheadParenthesisRight) {
+                        if (staff()->isTabStaff()) {
+                              StaffType* tab = staff()->staffType();
+                              w = tabHeadWidth(tab);
+                              }
+                        e->rxpos() += w;
+                        }
+                  else if (sym->sym() == SymId::noteheadParenthesisLeft) {
+                        e->rxpos() -= symWidth(SymId::noteheadParenthesisLeft);
+                        }
+                  if (sym->sym() == SymId::noteheadParenthesisLeft || sym->sym() == SymId::noteheadParenthesisRight) {
+                        // adjustReadPos() was called too early in layout(), adjust:
+                        if (!rp.isNull()) {
+                              e->setUserOff(QPointF());
+                              e->setReadPos(rp);
+                              e->adjustReadPos();
+                              }
                         }
                   }
             else
