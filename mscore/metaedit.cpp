@@ -88,9 +88,11 @@ void MetaEditDialog::accept()
             for (int i = 0; i < idx; ++i) {
                   QLayoutItem* labelItem = grid->itemAtPosition(i, 0);
                   QLayoutItem* dataItem  = grid->itemAtPosition(i, 1);
-                  QLabel* label = static_cast<QLabel*>(labelItem->widget());
-                  QLineEdit* le = static_cast<QLineEdit*>(dataItem->widget());
-                  m.insert(label->text(), le->text());
+                  if (labelItem && dataItem) {
+                        QLabel* label = static_cast<QLabel*>(labelItem->widget());
+                        QLineEdit* le = static_cast<QLineEdit*>(dataItem->widget());
+                        m.insert(label->text(), le->text());
+                        }
                   }
             score->undo(new ChangeMetaTags(score, m));
             }
