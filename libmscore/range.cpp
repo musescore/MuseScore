@@ -355,13 +355,16 @@ bool TrackList::write(Measure* measure) const
                         else {
                               Fraction d = qMin(rest, duration);
                               if (e->type() == Element::Type::REST || e->type() == Element::Type::REPEAT_MEASURE) {
-                                    segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
-                                    Rest* r = new Rest(score, TDuration(d));
-                                    r->setTrack(_track);
-                                    segment->add(r);
-                                    duration -= d;
-                                    rest     -= d;
-                                    pos      += d;
+                                    for (TDuration k : toDurationList(d, false)) {
+                                          Rest* r = new Rest(score, k);
+                                          Fraction dd(k.fraction());
+                                          r->setTrack(_track);
+                                          segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
+                                          segment->add(r);
+                                          duration -= dd;
+                                          rest     -= dd;
+                                          pos      += dd;
+                                          }
                                     }
                               else if (e->type() == Element::Type::CHORD) {
                                     segment = m->getSegment(e, m->tick() + pos.ticks());
