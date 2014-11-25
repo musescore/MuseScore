@@ -346,6 +346,9 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
 
       Segment* s1 = _selection.startSegment();
+      // if range start on mmRest, get the actual segment instead
+      if (s1->measure()->isMMRest())
+      	s1 = tick2segment(s1->tick(), true, s1->segmentType(), false);
       // if range starts with first CR of measure
       // then start looping from very beginning of measure
       // so we include key signature and can transpose that if requested
