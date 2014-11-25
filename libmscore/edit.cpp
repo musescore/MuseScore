@@ -517,6 +517,8 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns)
 
 void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       {
+      deselectAll();
+
       Fraction ns  = ts->sig();
       int tick     = fm->tick();
       TimeSig* lts = staff(staffIdx)->timeSig(tick);
