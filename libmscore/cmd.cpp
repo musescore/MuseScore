@@ -1890,9 +1890,9 @@ Element* Score::selectMove(const QString& cmd)
       else if (cmd == "select-prev-chord")
             el = prevChordRest(cr);
       else if (cmd == "select-next-measure")
-            el = nextMeasure(cr, true);
+            el = nextMeasure(cr, true, true);
       else if (cmd == "select-prev-measure")
-            el = prevMeasure(cr);
+            el = prevMeasure(cr, true);
       else if (cmd == "select-begin-line") {
             Measure* measure = cr->segment()->measure()->system()->firstMeasure();
             if (!measure)

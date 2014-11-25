@@ -381,8 +381,8 @@ class Score : public QObject {
 
       //------------------
 
-      ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false);
-      ChordRest* prevMeasure(ChordRest* element);
+      ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
+      ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
       void cmdSetBeamMode(Beam::Mode);
       void cmdFlip();
       Note* getSelectedNote();

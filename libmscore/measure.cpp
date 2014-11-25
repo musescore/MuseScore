@@ -3864,7 +3864,8 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                                     Note* on = och->notes().at(i);
                                     Note* nn = nch->notes().at(i);
                                     if (on->tieFor()) {
-                                          Tie* tie = new Tie(sc);
+                                          Tie* tie = on->tieFor()->clone();
+                                          tie->setScore(sc);
                                           nn->setTieFor(tie);
                                           tie->setStartNote(nn);
                                           tieMap->add(on->tieFor(), tie);
