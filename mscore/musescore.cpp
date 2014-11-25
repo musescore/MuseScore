@@ -3760,7 +3760,12 @@ void MuseScore::transpose()
             startStaffIdx = cs->selection().staffStart();
             startTick     = cs->selection().tickStart();
             }
-      td.setKey(cs->staff(startStaffIdx)->key(startTick));
+      Staff* staff = cs->staff(startStaffIdx);
+      Key key = staff->key(startTick);
+      int diff = staff->part()->instr(startTick)->transpose().chromatic;
+      if (diff)
+            key = transposeKey(key, diff);
+      td.setKey(key);
       if (!td.exec())
             return;
       cs->transpose(td.mode(), td.direction(), td.transposeKey(), td.transposeInterval(),
