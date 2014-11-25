@@ -151,27 +151,17 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
             }
       }
 
-#if 0 // yet(?) unused
-//---------------------------------------------------------
-//   qt_intensity
-//---------------------------------------------------------
-
-static inline uint qt_intensity(uint r, uint g, uint b)
-      {
-      // 30% red, 59% green, 11% blue
-      return (77 * r + 150 * g + 28 * b) / 255;
-      }
-
 //---------------------------------------------------------
 //   pixmap
 //---------------------------------------------------------
-#endif
 
 QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state)
       {
       QPixmap pm;
 
       QString pmckey(d->pmcKey(size, mode, state));
+      pmckey.prepend("Ms");
+
       if (QPixmapCache::find(pmckey, pm))
             return pm;
 
@@ -196,6 +186,7 @@ QPixmap MIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State st
       renderer.render(&p);
       p.end();
       pm = QPixmap::fromImage(img);
+
       if (!pm.isNull())
             QPixmapCache::insert(pmckey, pm);
       return pm;
@@ -256,7 +247,7 @@ void MIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, 
 
 QString MIconEngine::key() const
       {
-      return QLatin1String("svg");
+      return QLatin1String("micon-svg");
       }
 
 //---------------------------------------------------------
