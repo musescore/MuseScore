@@ -99,8 +99,10 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
       _space        = cr._space;
 
       for (Lyrics* l : cr._lyricsList) {        // make deep copy
-            if (l == 0)
+            if (l == 0) {
+                  _lyricsList.append(0);
                   continue;
+                  }
             Lyrics* nl = new Lyrics(*l);
             if (link)
                   nl->linkTo(l);
