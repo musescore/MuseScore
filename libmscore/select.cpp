@@ -78,11 +78,9 @@ int Selection::tickStart() const
       switch (_state) {
             case SelState::RANGE:
                   return _startSegment->tick();
-                  break;
             case SelState::LIST: {
                   ChordRest* cr = firstChordRest();
                   return (cr) ? cr->tick() : -1;
-                  break;
                   }
             default:
                   return -1;

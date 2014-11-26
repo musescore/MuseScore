@@ -1815,7 +1815,7 @@ void Score::cmdDeleteSelection()
                                     f      = Fraction();
                                     }
                               tuplet = cr->tuplet();
-                              if (tuplet && (tuplet->tick() == tick) && ((tuplet->tick() + tuplet->actualTicks()) < tick2) ) {
+                              if (tuplet && (tuplet->tick() == tick) && ((tuplet->tick() + tuplet->actualTicks()) <= tick2) ) {
                                     // remove complete top level tuplet
 
                                     Tuplet* t = cr->tuplet();
