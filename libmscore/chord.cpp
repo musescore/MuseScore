@@ -2746,7 +2746,7 @@ void Chord::setStemSlash(StemSlash* s)
 bool Chord::slash()
       {
       Note* n = upNote();
-      return n->fixed() && n->headGroup() == NoteHead::Group::HEAD_SLASH && !n->play();
+      return n->fixed();
       }
 
 //---------------------------------------------------------
@@ -2756,6 +2756,7 @@ bool Chord::slash()
 void Chord::setSlash(bool flag, bool stemless)
       {
       int line = 0;
+      NoteHead::Group head = NoteHead::Group::HEAD_SLASH;
 
       if (!flag) {
             // restore to normal
@@ -2768,22 +2769,33 @@ void Chord::setSlash(bool flag, bool stemless)
                   n->undoChangeProperty(P_ID::FIXED_LINE, 0);
                   n->undoChangeProperty(P_ID::PLAY, true);
                   n->undoChangeProperty(P_ID::VISIBLE, true);
+                  if (staff()->isDrumStaff()) {
+                        Drumset* ds = staff()->part()->instr()->drumset();
+                        int pitch = n->pitch();
+                        if (ds && ds->isValid(pitch)) {
+                              undoChangeProperty(P_ID::STEM_DIRECTION, static_cast<int>(ds->stemDirection(pitch)));
+                              n->undoChangeProperty(P_ID::HEAD_GROUP, static_cast<int>(ds->noteHead(pitch)));
+                              }
+                        }
                   }
             return;
             }
 
       // set stem to auto (mostly important for rhythmic notation on drum staves)
-      undoChangeProperty(P_ID::STEM_DIRECTION, int(MScore::Direction::AUTO));
+      undoChangeProperty(P_ID::STEM_DIRECTION, static_cast<int>(MScore::Direction::AUTO));
 
       // make stemless if asked
       if (stemless)
             undoChangeProperty(P_ID::NO_STEM, true);
 
+      // voice-dependent attributes - line, size, offset, head
       if (track() % VOICES < 2) {
             // use middle line
             line = staff()->lines() - 1;
             }
       else {
+            // set small
+            undoChangeProperty(P_ID::SMALL, true);
             // set outside the staff
             qreal y = 0.0;
             if (track() % 2) {
@@ -2792,17 +2804,21 @@ void Chord::setSlash(bool flag, bool stemless)
                   }
             else {
                   line = -1;
+                  if (!staff()->isDrumStaff())
                   y = -0.5 * spatium();
                   }
-            // set small,  and add a little vertical offset to separate from staff
-            undoChangeProperty(P_ID::SMALL, true);
-            undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, y));
+            // for non-drum staves, add an additional offset
+            // for drum staves, no offset, but use normal head
+            if (!staff()->isDrumStaff())
+                  undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, y));
+            else
+                  head = NoteHead::Group::HEAD_NORMAL;
             }
 
       int ns = _notes.size();
       for (int i = 0; i < ns; ++i) {
             Note* n = _notes[i];
-            n->undoChangeProperty(P_ID::HEAD_GROUP, static_cast<int>(NoteHead::Group::HEAD_SLASH));
+            n->undoChangeProperty(P_ID::HEAD_GROUP, static_cast<int>(head));
             n->undoChangeProperty(P_ID::FIXED, true);
             n->undoChangeProperty(P_ID::FIXED_LINE, line);
             n->undoChangeProperty(P_ID::PLAY, false);

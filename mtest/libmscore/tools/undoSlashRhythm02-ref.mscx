@@ -825,8 +825,8 @@
           </Chord>
         <Beam id="13">
           <track>6</track>
-          <l1>-15</l1>
-          <l2>-15</l2>
+          <l1>-13</l1>
+          <l2>-13</l2>
           </Beam>
         <Chord>
           <track>6</track>
@@ -855,8 +855,8 @@
           </Chord>
         <Beam id="14">
           <track>6</track>
-          <l1>-15</l1>
-          <l2>-15</l2>
+          <l1>-13</l1>
+          <l2>-13</l2>
           </Beam>
         <Chord>
           <track>6</track>
@@ -914,8 +914,8 @@
           </Chord>
         <Beam id="15">
           <track>7</track>
-          <l1>31</l1>
-          <l2>31</l2>
+          <l1>29</l1>
+          <l2>29</l2>
           </Beam>
         <Chord>
           <track>7</track>
@@ -944,8 +944,8 @@
           </Chord>
         <Beam id="16">
           <track>7</track>
-          <l1>31</l1>
-          <l2>31</l2>
+          <l1>29</l1>
+          <l2>29</l2>
           </Beam>
         <Chord>
           <track>7</track>
