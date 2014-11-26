@@ -1186,6 +1186,37 @@ void MusicXml::readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
             //qDebug("importedtext '%s'", qPrintable(importedtext));
             return importedtext;
       }
+      
+//---------------------------------------------------------
+//   updateStyles
+//---------------------------------------------------------
+      
+/**
+ Update the style definitions to match the MusicXML word-font and lyric-font.
+ */
+
+static void updateStyles(Score* score,
+                         const QString& wordFamily, const QString& wordSize,
+                         const QString& lyricFamily, const QString& lyricSize)
+      {
+      const float fWordSize = wordSize.toFloat();   // note conversion error results in value 0.0
+      const float fLyricSize = lyricSize.toFloat(); // but avoid comparing float with exact value later
+
+      // loop over all text styles (except the empty, always hidden, first one)
+      // set all text styles to the MusicXML defaults
+      for (int i = int(TextStyleType::DEFAULT) + 1; i < int(TextStyleType::TEXT_STYLES); ++i) {
+            TextStyle ts = score->style()->textStyle(TextStyleType(i));
+            if (i == int(TextStyleType::LYRIC1) || i == int(TextStyleType::LYRIC2)) {
+                  if (lyricFamily != "") ts.setFamily(lyricFamily);
+                  if (fLyricSize > 0.001) ts.setSize(fLyricSize);
+                  }
+            else {
+                  if (wordFamily != "") ts.setFamily(wordFamily);
+                  if (fWordSize > 0.001) ts.setSize(fWordSize);
+                  }
+            score->style()->setTextStyle(ts);
+            }
+      }
 
 //---------------------------------------------------------
 //   scorePartwise
@@ -1259,6 +1290,10 @@ void MusicXml::scorePartwise(QDomElement ee)
                   // IMPORT_LAYOUT
                   double millimeter = score->spatium()/10.0;
                   double tenths = 1.0;
+                  QString lyricFontFamily;
+                  QString lyricFontSize;
+                  QString wordFontFamily;
+                  QString wordFontSize;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         QString tag(ee.tagName());
                         if (tag == "scaling") {
@@ -1313,10 +1348,14 @@ void MusicXml::scorePartwise(QDomElement ee)
                               }
                         else if (tag == "music-font")
                               domNotImplemented(ee);
-                        else if (tag == "word-font")
-                              domNotImplemented(ee);
-                        else if (tag == "lyric-font")
-                              domNotImplemented(ee);
+                        else if (tag == "word-font") {
+                              wordFontFamily = ee.attribute("font-family");
+                              wordFontSize = ee.attribute("font-size");
+                              }
+                        else if (tag == "lyric-font") {
+                              lyricFontFamily = ee.attribute("font-family");
+                              lyricFontSize = ee.attribute("font-size");
+                              }
                         else if (tag == "appearance")
                               domNotImplemented(ee);
                         else if (tag == "lyric-language")
@@ -1324,6 +1363,11 @@ void MusicXml::scorePartwise(QDomElement ee)
                         else
                               domError(ee);
                         }
+
+                  qDebug("word font family '%s' size '%s' lyric font family '%s' size '%s'",
+                         qPrintable(wordFontFamily), qPrintable(wordFontSize),
+                         qPrintable(lyricFontFamily), qPrintable(lyricFontSize));
+                  updateStyles(score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
 
                   score->setDefaultsRead(true); // TODO only if actually succeeded ?
                   // IMPORT_LAYOUT END
