@@ -73,6 +73,7 @@ void TestCompat::compat_data()
       QTest::newRow("hor_frame_and_mmrest") << "hor_frame_and_mmrest";
       QTest::newRow("chord_symbol") << "chord_symbol";
       QTest::newRow("style") << "style";
+      QTest::newRow("text_scaling") << "text_scaling";
       }
 
 //---------------------------------------------------------

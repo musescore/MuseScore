@@ -2526,8 +2526,12 @@ QString Text::convertFromHtml(const QString& ss) const
                   if (f.isValid()) {
                         QTextCharFormat tf = f.charFormat();
                         QFont font = tf.font();
-                        if (fabs(size - font.pointSizeF()) > 0.1) {
-                              size = font.pointSizeF();
+                        qreal htmlSize = font.pointSizeF();
+                        // html font sizes may have spatium adjustments; need to undo this
+                        if (textStyle().sizeIsSpatiumDependent())
+                              htmlSize *= SPATIUM20 * MScore::DPI / spatium();
+                        if (fabs(size - htmlSize) > 0.1) {
+                              size = htmlSize;
                               s += QString("<font size=\"%1\"/>").arg(size);
                               }
                         if (family != font.family()) {
