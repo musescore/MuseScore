@@ -366,7 +366,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
       {
       startCmd();
       for (Note* on : nl) {
-            Note* note = new Note(*on);
+            Note* note = new Note(this);
             Chord* chord = on->chord();
             note->setParent(chord);
             int valTmp = val < 0 ? val+1 : val-1;
