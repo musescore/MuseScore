@@ -2087,9 +2087,14 @@ void Note::updateAccidental(AccidentalState* as)
 
 void Note::updateRelLine(int relLine, bool undoable)
       {
-      int idx = staffIdx() + chord()->staffMove();
-      if (idx < 0 && chord()->staffMove())                    // can happen if a staff is removed
-            chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
+      if (staff() && chord()->staffMove()) {
+            // check that destination staff makes sense (might have been deleted)
+            int idx = staffIdx() + chord()->staffMove();
+            int minStaff = staff()->part()->startTrack() / VOICES;
+            int maxStaff = staff()->part()->endTrack() / VOICES;
+            if (idx < minStaff || idx >= maxStaff || score()->staff(idx)->staffGroup() != staff()->staffGroup())
+                  chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
+            }
 
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
