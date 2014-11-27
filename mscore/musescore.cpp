@@ -2418,7 +2418,7 @@ void MuseScore::changeState(ScoreState val)
             }
 
       if (getAction("file-part-export")->isEnabled())
-            getAction("file-part-export")->setEnabled(cs->rootScore()->excerpts().size() > 0);
+            getAction("file-part-export")->setEnabled(cs && cs->rootScore()->excerpts().size() > 0);
 
 
       // disabling top level menu entries does not
