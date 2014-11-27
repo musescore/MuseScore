@@ -140,10 +140,11 @@ void TestChordSymbol::testNoSystem()
       score->undo(new AddExcerpt(nscore));
 
       {
-      Excerpt ex(nscore);
+      Excerpt ex(score);
+      ex.setPartScore(nscore);
       ex.setTitle(parts.front()->longName());
       ex.setParts(parts);
-      ::createExcerpt(nscore, &ex);
+      ::createExcerpt(&ex);
       QVERIFY(nscore);
       }
 
@@ -158,10 +159,11 @@ void TestChordSymbol::testNoSystem()
       nscore = new Score(score);
       score->undo(new AddExcerpt(nscore));
       {
-      Excerpt ex(nscore);
+      Excerpt ex(score);
       ex.setTitle(parts.front()->longName());
       ex.setParts(parts);
-      ::createExcerpt(nscore, &ex);
+      ex.setPartScore(nscore);
+      ::createExcerpt(&ex);
       QVERIFY(nscore);
       }
 

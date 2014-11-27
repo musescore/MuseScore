@@ -2341,7 +2341,8 @@ Score::FileError importGTP(Score* score, const QString& name)
             pscore->appendPart(p);
 
             pscore->setName(part->partName());
-            Excerpt* excerpt = new Excerpt(pscore);
+            Excerpt* excerpt = new Excerpt(score);
+            excerpt->setPartScore(pscore);
             excerpt->setTitle(part->partName());
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);

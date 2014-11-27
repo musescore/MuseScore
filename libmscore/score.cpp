@@ -1945,7 +1945,8 @@ void Score::setMetaTag(const QString& tag, const QString& val)
 
 void Score::addExcerpt(Score* score)
       {
-      Excerpt* ex = new Excerpt(score);
+      Excerpt* ex = new Excerpt(this);
+      ex->setPartScore(score);
       excerpts().append(ex);
       ex->setTitle(score->name());
       foreach(Staff* s, score->staves()) {

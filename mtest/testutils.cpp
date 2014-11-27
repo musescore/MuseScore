@@ -164,7 +164,7 @@ Score* MTest::readCreatedScore(const QString& name)
             }
       score->updateNotes();
       for (Excerpt* e : score->excerpts())
-            e->score()->updateNotes();
+            e->partScore()->updateNotes();
       return score;
       }
 
