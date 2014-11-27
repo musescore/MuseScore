@@ -786,6 +786,10 @@ ScoreView::ScoreView(QWidget* parent)
       connect(ct, SIGNAL(triggered()), SLOT(editCopy()));
       s->addTransition(ct);
 
+      ct = new CommandTransition("cut", 0);                                  // cut
+      connect(ct, SIGNAL(triggered()), SLOT(editCut()));
+      s->addTransition(ct);
+
       ct = new CommandTransition("paste", 0);                                 // paste
       connect(ct, SIGNAL(triggered()), SLOT(editPaste()));
       s->addTransition(ct);
@@ -2371,6 +2375,23 @@ void ScoreView::editCopy()
             QString s = text->selectedText();
             if (!s.isEmpty())
                   QApplication::clipboard()->setText(s, QClipboard::Clipboard);
+            }
+      }
+
+//---------------------------------------------------------
+//   editCut
+//---------------------------------------------------------
+
+void ScoreView::editCut()
+      {
+      if (editObject && editObject->isText()) {
+            Text* text = static_cast<Text*>(editObject);
+            QString s = text->selectedText();
+            if (!s.isEmpty()) {
+                  QApplication::clipboard()->setText(s, QClipboard::Clipboard);
+                  text->edit(this, 0, Qt::Key_Delete, 0, QString());
+                  text->score()->update();
+                  }
             }
       }
 

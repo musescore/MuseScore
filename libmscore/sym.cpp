@@ -5653,6 +5653,5 @@ const QRectF ScoreFont::bbox(const QString& s, qreal mag) const
 
 ScoreFont::~ScoreFont()
       {
-
       }
 }
