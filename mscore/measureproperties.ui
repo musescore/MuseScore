@@ -294,7 +294,7 @@
           <item row="0" column="3">
            <widget class="QCheckBox" name="breakMultiMeasureRest">
             <property name="text">
-             <string>Break multimeasure rest</string>
+             <string>Break multi-measure rest</string>
             </property>
            </widget>
           </item>
