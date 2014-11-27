@@ -515,7 +515,7 @@ void MuseScore::newFile()
                         }
                   }
             foreach (Excerpt* excerpt, score->excerpts()) {
-                  Score* exScore =  excerpt->score();
+                  Score* exScore =  excerpt->partScore();
                   if (exScore->firstMeasure()) {
                         for (Segment* s = exScore->firstMeasure()->first(); s;) {
                               Segment* ns = s->next1();
@@ -1641,17 +1641,15 @@ bool MuseScore::exportParts()
             return false;
             }
 
-      Score* thisScore = cs;
-      if (thisScore->parentScore())
-            thisScore = thisScore->parentScore();
+      Score* thisScore = cs->rootScore();
       bool overwrite = false;
       bool noToAll = false;
       QString confirmReplaceTitle = tr("Confirm Replace");
       QString confirmReplaceMessage = tr("\"%1\" already exists.\nDo you want to replace it?\n");
       QString replaceMessage = tr("Replace");
       QString skipMessage = tr("Skip");
-      foreach(Excerpt* e, thisScore->excerpts())  {
-            Score* pScore = e->score();
+      foreach (Excerpt* e, thisScore->excerpts())  {
+            Score* pScore = e->partScore();
             QString partfn = fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(pScore->name()) + "." + ext;
             QFileInfo fip(partfn);
             if(fip.exists() && !overwrite) {
@@ -1684,7 +1682,7 @@ bool MuseScore::exportParts()
             QList<Score*> scores;
             scores.append(thisScore);
             foreach(Excerpt* e, thisScore->excerpts())  {
-                  scores.append(e->score());
+                  scores.append(e->partScore());
                   }
             QString partfn(fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(tr("Score_and_Parts")) + ".pdf");
             QFileInfo fip(partfn);

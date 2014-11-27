@@ -26,17 +26,19 @@ class XmlReader;
 //---------------------------------------------------------
 
 class Excerpt {
-      Score* _score;
+      Score* _oscore;               // main score
+      Score* _partScore  { 0 };
       QString _title;
       QList<Part*> _parts;
 
    public:
-      Excerpt(Score* s)               { _score = s;    }
+      Excerpt(Score* s)                    { _oscore = s;       }
 
-      QList<Part*>& parts()           { return _parts; }
-      void setParts(const QList<Part*>& p) { _parts = p;    }
-      Score* score() const            { return _score; }
-      void setScore(Score* s)         { _score = s;    }
+      QList<Part*>& parts()                { return _parts;     }
+      void setParts(const QList<Part*>& p) { _parts = p;        }
+      Score* oscore() const                { return _oscore;    }
+      void setPartScore(Score* s)          { _partScore = s;    }
+      Score* partScore() const             { return _partScore; }
 
       void read(XmlReader&);
 
@@ -45,7 +47,7 @@ class Excerpt {
       void setTitle(const QString& s) { _title = s;    }
       };
 
-extern void createExcerpt(Score*, Excerpt*);
+extern void createExcerpt(Excerpt*);
 extern void cloneStaves(Score* oscore, Score* score, const QList<int>& map);
 extern void cloneStaff(Staff* ostaff, Staff* nstaff);
 extern void cloneStaff2(Staff* ostaff, Staff* nstaff, int stick, int etick);

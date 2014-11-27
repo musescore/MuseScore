@@ -420,8 +420,8 @@ void MuseScore::editInstrList()
 
       QList<Score*> toDelete;
       for (Excerpt* excpt : rootScore->excerpts()) {
-            if (excpt->score()->staves().size() == 0)
-                  toDelete.append(excpt->score());
+            if (excpt->partScore()->staves().size() == 0)
+                  toDelete.append(excpt->partScore());
             }
       for(Score* s: toDelete)
             rootScore->undo(new RemoveExcerpt(s));

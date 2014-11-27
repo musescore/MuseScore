@@ -49,7 +49,7 @@ namespace Ms {
 
 void Excerpt::read(XmlReader& e)
       {
-      const QList<Part*>& pl = _score->parts();
+      const QList<Part*>& pl = _oscore->parts();
       QString name;
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
@@ -75,7 +75,7 @@ void Excerpt::read(XmlReader& e)
 
 bool Excerpt::operator!=(const Excerpt& e) const
       {
-      if (e._score != _score)
+      if (e._oscore != _oscore)
             return true;
       if (e._title != _title)
             return true;
@@ -97,12 +97,13 @@ static void localSetScore(void* score, Element* element)
 //   createExcerpt
 //---------------------------------------------------------
 
-void createExcerpt(Score* score, Excerpt* excerpt)
+void createExcerpt(Excerpt* excerpt)
       {
+      Score* oscore = excerpt->oscore();
+      Score* score  = excerpt->partScore();
+
       QList<Part*>& parts = excerpt->parts();
       QList<int> srcStaves;
-
-      Score* oscore = parts.front()->score();
 
       // clone layer:
       for (int i = 0; i < 32; ++i) {

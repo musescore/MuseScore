@@ -187,7 +187,7 @@ void TextStyleDialog::applyToAllParts()
       saveStyle(current);     // update local copy of style list
       QList<Excerpt*>& el = cs->rootScore()->excerpts();
       for (Excerpt* e : el)
-            applyToScore(e->score());
+            applyToScore(e->partScore());
       }
 
 //---------------------------------------------------------
