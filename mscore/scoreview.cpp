@@ -2610,16 +2610,22 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else if (cmd == "select-similar") {
-            Element* e = _score->selection().element();
-            mscore->selectSimilar(e, false);
+            if (_score->selection().isSingle()) {
+                  Element* e = _score->selection().element();
+                  mscore->selectSimilar(e, false);
+                  }
             }
       else if (cmd == "select-similar-staff") {
-            Element* e = _score->selection().element();
-            mscore->selectSimilar(e, true);
+            if (_score->selection().isSingle()) {
+                  Element* e = _score->selection().element();
+                  mscore->selectSimilar(e, true);
+                  }
             }
       else if (cmd == "select-dialog") {
-            Element* e = _score->selection().element();
-            mscore->selectElementDialog(e);
+            if (_score->selection().isSingle()) {
+                  Element* e = _score->selection().element();
+                  mscore->selectElementDialog(e);
+                  }
             }
       else if (cmd == "play") {
             if (seq && seq->canStart()) {
