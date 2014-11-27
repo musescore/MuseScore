@@ -43,6 +43,7 @@ Startcenter::Startcenter()
       setupUi(this);
 //      setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
 //      setWindowFlags(Qt::WindowStaysOnTopHint);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowModality(Qt::ApplicationModal);
       connect(createNewScore, SIGNAL(clicked()),      SLOT(newScore()));
       connect(recentScores,   SIGNAL(toggled(bool)),  SLOT(recentScoresToggled(bool)));

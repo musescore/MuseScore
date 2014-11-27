@@ -3180,7 +3180,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL,
          "startcenter",
-         QT_TRANSLATE_NOOP("action","Toggle Startcenter"),
+         QT_TRANSLATE_NOOP("action","Start Center"),
          0,
          0,
          Icons::Invalid_ICON,
