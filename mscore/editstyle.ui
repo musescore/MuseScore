@@ -123,7 +123,7 @@
           <item>
            <widget class="QGroupBox" name="multiMeasureRests">
             <property name="title">
-             <string>Create multimeasure rests</string>
+             <string>Create multi-measure rests</string>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -2122,7 +2122,7 @@
             <item row="11" column="0">
              <widget class="QLabel" name="label_103">
               <property name="text">
-               <string>Multimeasure rest margin:</string>
+               <string>Multi-measure rest margin:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
