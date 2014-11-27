@@ -148,6 +148,15 @@ void Palette::setReadOnly(bool val)
       }
 
 //---------------------------------------------------------
+//   setMag
+//---------------------------------------------------------
+
+void Palette::setMag(qreal val)
+      {
+      extraMag = val * guiScaling;
+      }
+
+//---------------------------------------------------------
 //   contextMenuEvent
 //---------------------------------------------------------
 
@@ -215,8 +224,8 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
 
 void Palette::setGrid(int hh, int vv)
       {
-      hgrid = hh;
-      vgrid = vv;
+      hgrid = hh * guiScaling;
+      vgrid = vv * guiScaling;
       QSize s(hgrid, vgrid);
       setSizeIncrement(s);
       setBaseSize(s);
@@ -926,10 +935,10 @@ void Palette::dropEvent(QDropEvent* event)
 void Palette::write(Xml& xml) const
       {
       xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(_name)));
-      xml.tag("gridWidth", hgrid);
-      xml.tag("gridHeight", vgrid);
+      xml.tag("gridWidth", hgrid / guiScaling);
+      xml.tag("gridHeight", vgrid / guiScaling);
       if (extraMag != 1.0)
-            xml.tag("mag", extraMag);
+            xml.tag("mag", extraMag / guiScaling);
       if (_drawGrid)
             xml.tag("grid", _drawGrid);
 
@@ -1169,11 +1178,11 @@ void Palette::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& t(e.name());
             if (t == "gridWidth")
-                  hgrid = e.readDouble();
+                  hgrid = e.readDouble() * guiScaling;
             else if (t == "gridHeight")
-                  vgrid = e.readDouble();
+                  vgrid = e.readDouble() * guiScaling;
             else if (t == "mag")
-                  extraMag = e.readDouble();
+                  extraMag = e.readDouble() * guiScaling;
             else if (t == "grid")
                   _drawGrid = e.readInt();
             else if (t == "moreElements")
@@ -1316,12 +1325,12 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       name->setText(palette->name());
-      cellWidth->setValue(palette->gridWidth());
-      cellHeight->setValue(palette->gridHeight());
+      cellWidth->setValue(palette->gridWidth() / guiScaling);
+      cellHeight->setValue(palette->gridHeight() / guiScaling);
       showGrid->setChecked(palette->drawGrid());
       moreElements->setChecked(palette->moreElements());
       elementOffset->setValue(palette->yOffset());
-      mag->setValue(palette->mag());
+      mag->setValue(palette->mag() / guiScaling);
       }
 
 //---------------------------------------------------------

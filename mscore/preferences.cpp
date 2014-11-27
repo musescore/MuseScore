@@ -1464,7 +1464,7 @@ void PreferenceDialog::apply()
 
       genIcons();
 
-      mscore->setIconSize(QSize(prefs.iconWidth, prefs.iconHeight));
+      mscore->setIconSize(QSize(prefs.iconWidth * guiScaling, prefs.iconHeight * guiScaling));
 
       preferences = prefs;
       emit preferencesChanged();
