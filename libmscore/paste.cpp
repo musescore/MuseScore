@@ -28,6 +28,7 @@
 #include "utils.h"
 #include "xml.h"
 #include "image.h"
+#include "repeat.h"
 
 namespace Ms {
 
@@ -456,7 +457,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         tick += c->actualTicks();
                         }
                   }
-            else {
+            else if (cr->type() == Element::Type::REST) {
                   // split Rest
                   Rest* r       = static_cast<Rest*>(cr);
                   Fraction rest = r->duration();
@@ -475,6 +476,30 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         tick += r2->actualTicks();
                         }
                   delete r;
+                  }
+            else if (cr->type() == Element::Type::REPEAT_MEASURE) {
+                  RepeatMeasure* rm = static_cast<RepeatMeasure*>(cr);
+                  QList<TDuration> list = toDurationList(rm->actualDuration(), true);
+                  for (auto dur : list) {
+                        Rest* r = new Rest(this, dur);
+                        r->setTrack(cr->track());
+                        Fraction rest = r->duration();
+                        while (!rest.isZero()) {
+                              Rest* r2      = static_cast<Rest*>(r->clone());
+                              measure       = tick2measure(tick);
+                              Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
+                              Fraction len  = rest > mlen ? mlen : rest;
+                              QList<TDuration> dl = toDurationList(len, false);
+                              TDuration d = dl[0];
+                              r2->setDuration(d.fraction());
+                              r2->setDurationType(d);
+                              undoAddCR(r2, measure, tick);
+                              rest -= d.fraction();
+                              tick += r2->actualTicks();
+                              }
+                        delete r;
+                        }
+                  delete cr;
                   }
             }
       else {
