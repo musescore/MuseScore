@@ -272,6 +272,8 @@ TimeSig* Staff::timeSig(int tick) const
       auto i = timesigs.upper_bound(tick);
       if (i != timesigs.begin())
             --i;
+      else if (tick < i->first)
+            return 0;
       return (i == timesigs.end()) ? 0 : i->second;
       }
 
@@ -309,6 +311,15 @@ void Staff::removeTimeSig(TimeSig* timesig)
       {
       if (timesig->segment()->segmentType() == Segment::Type::TimeSig)
             timesigs.erase(timesig->segment()->tick());
+      }
+
+//---------------------------------------------------------
+//   clearTimeSig
+//---------------------------------------------------------
+
+void Staff::clearTimeSig()
+      {
+      timesigs.clear();
       }
 
 //---------------------------------------------------------

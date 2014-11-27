@@ -160,7 +160,7 @@ class Staff : public QObject {
 
       void addTimeSig(TimeSig*);
       void removeTimeSig(TimeSig*);
-      void clearTimeSig()            { timesigs.clear(); }
+      void clearTimeSig();
       Fraction timeStretch(int tick) const;
       TimeSig* timeSig(int tick) const;
       const Groups& group(int tick) const;

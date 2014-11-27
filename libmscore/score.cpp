@@ -471,9 +471,11 @@ void Score::fixTicks()
 
       for (Staff* staff : _staves)
             staff->clearTimeSig();
+
       TimeSigMap* smap = sigmap();
       Fraction sig(fm->len());
       Fraction nsig(fm->timesig());
+
       if (!parentScore()) {
             tempomap()->clear();
             smap->clear();
@@ -493,7 +495,7 @@ void Score::fixTicks()
             if (m->mmRest())
                   m->mmRest()->moveTicks(diff);
 
-            if (!parentScore()) {
+//            if (!parentScore()) {
                   //
                   //  implement section break rest
                   //
@@ -514,8 +516,8 @@ void Score::fixTicks()
                                           staff(staffIdx)->addTimeSig(ts);
                                     }
                               }
-                        else if (s->segmentType() == Segment::Type::ChordRest) {
-                              foreach(Element* e, s->annotations()) {
+                        else if (!parentScore() && (s->segmentType() == Segment::Type::ChordRest)) {
+                              foreach (Element* e, s->annotations()) {
                                     if (e->type() == Element::Type::TEMPO_TEXT) {
                                           const TempoText* tt = static_cast<const TempoText*>(e);
                                           setTempo(tt->segment(), tt->tempo());
@@ -543,7 +545,7 @@ void Score::fixTicks()
                                     }
                               }
                         }
-                  }
+//                  }
 
             //
             // update time signature map
@@ -552,6 +554,7 @@ void Score::fixTicks()
                   sig = m->len();
                   smap->add(tick, SigEvent(sig, m->timesig(),  m->no()));
                   }
+
             tick += measureTicks;
             }
       if (tempomap()->empty())

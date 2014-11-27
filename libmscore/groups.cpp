@@ -76,6 +76,7 @@ Beam::Mode Groups::endBeam(ChordRest* cr, ChordRest* prev)
       const Groups& g = cr->staff()->group(cr->tick());
       Fraction stretch = cr->staff()->timeStretch(cr->tick());
       int tick = (cr->rtick() * stretch.numerator()) / stretch.denominator();
+
       Beam::Mode val = g.beamMode(tick, d.type());
 
       // context-dependent checks
