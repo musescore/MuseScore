@@ -3096,7 +3096,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "toggle-mmrest",
-         QT_TRANSLATE_NOOP("action","Toggle create multimeasure rest"),
+         QT_TRANSLATE_NOOP("action","Toggle create multi-measure rest"),
          0,
          0,
          Icons::Invalid_ICON,
