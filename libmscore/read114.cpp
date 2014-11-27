@@ -754,6 +754,7 @@ Score::FileError Score::read114(XmlReader& e)
             }
 
       // create excerpts
+
       foreach (Excerpt* excerpt, _excerpts) {
             if (excerpt->parts().isEmpty()) {         // ignore empty parts
                   _excerpts.removeOne(excerpt);
@@ -761,10 +762,10 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             if (!excerpt->parts().isEmpty()) {
                   Score* nscore = new Score(this);
-                  excerpt->setScore(nscore);
+                  excerpt->setPartScore(nscore);
                   nscore->setName(excerpt->title());
                   nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-                  Ms::createExcerpt(nscore, excerpt);
+                  Ms::createExcerpt(excerpt);
                   }
             }
 

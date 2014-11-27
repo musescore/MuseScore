@@ -221,9 +221,9 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
       xml.curTrack = -1;
       if (!selectionOnly) {
-            foreach(Excerpt* excerpt, _excerpts) {
-                  if (excerpt->score() != this)
-                        excerpt->score()->write(xml, false);       // recursion
+            for (const Excerpt* excerpt : _excerpts) {
+                  if (excerpt->partScore() != this)
+                        excerpt->partScore()->write(xml, false);       // recursion
                   }
             }
       if (parentScore())

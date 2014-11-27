@@ -322,9 +322,8 @@ void PageSettings::applyToScore(Score* s)
 
 void PageSettings::applyToAllParts()
       {
-      QList<Excerpt*>& el = cs->rootScore()->excerpts();
-      for (Excerpt* e : el)
-            applyToScore(e->score());
+      for (Excerpt* e : cs->rootScore()->excerpts())
+            applyToScore(e->partScore());
       mscore->endCmd();
       }
 

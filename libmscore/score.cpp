@@ -1969,7 +1969,7 @@ void Score::addExcerpt(Score* score)
 void Score::removeExcerpt(Score* score)
       {
       foreach (Excerpt* ex, excerpts()) {
-            if (ex->score() == score) {
+            if (ex->partScore() == score) {
                   if (excerpts().removeOne(ex)) {
                         delete ex;
                         return;
@@ -3271,8 +3271,10 @@ QList<Score*> Score::scoreList()
       QList<Score*> scores;
       Score* root = rootScore();
       scores.append(root);
-      for (const Excerpt* ex : root->excerpts())
-            scores.append(ex->score());
+      for (const Excerpt* ex : root->excerpts()) {
+            if (ex->partScore())
+                  scores.append(ex->partScore());
+            }
       return scores;
       }
 

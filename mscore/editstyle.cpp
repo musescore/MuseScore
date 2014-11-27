@@ -261,10 +261,9 @@ void EditStyle::apply()
 void EditStyle::applyToAllParts()
       {
       getValues();
-      QList<Excerpt*>& el = cs->rootScore()->excerpts();
-      for (Excerpt* e : el) {
-            e->score()->undo(new ChangeStyle(e->score(), lstyle));
-            e->score()->update();
+      for (Excerpt* e : cs->rootScore()->excerpts()) {
+            e->partScore()->undo(new ChangeStyle(e->partScore(), lstyle));
+            e->partScore()->update();
             }
       }
 
