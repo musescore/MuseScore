@@ -220,7 +220,7 @@ ChordRest* Selection::lastChordRest(int track) const
             Element* el = _el[0];
             if (el && el->type() == Element::Type::NOTE)
                   return static_cast<ChordRest*>(el->parent());
-            else if (el->type() == Element::Type::CHORD || el->type() == Element::Type::REST)
+            else if (el->type() == Element::Type::CHORD || el->type() == Element::Type::REST || el->type() == Element::Type::REPEAT_MEASURE)
                   return static_cast<ChordRest*>(el);
             return 0;
             }

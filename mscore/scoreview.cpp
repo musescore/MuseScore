@@ -1923,11 +1923,11 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   x1  = x2;
                   x2  = pt.x() + _spatium * 2;
 
-                  // HACK for whole measure rest:
+                  // HACK for whole measure rest & RepeatMeasure
                   if (ns == 0 || ns == es) {    // last segment?
                         Element* e = s->element(staffStart * VOICES);
-                        if (e && e->type() == Element::Type::REST && static_cast<Rest*>(e)->durationType().type() == TDuration::DurationType::V_MEASURE)
-                              x2 = s->measure()->abbox().right() - _spatium;
+                        if (e && ((e->type() == Element::Type::REST && static_cast<Rest*>(e)->durationType().type() == TDuration::DurationType::V_MEASURE) || e->type() == Element::Type::REPEAT_MEASURE) )
+                              x2 = s->measure()->abbox().right() - _spatium * 0.5;
                         }
 
                   if (system2 != system1)
