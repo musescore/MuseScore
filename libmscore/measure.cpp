@@ -1794,11 +1794,18 @@ void Measure::read(XmlReader& e, int staffIdx)
       Staff* staff = score()->staff(staffIdx);
       Fraction timeStretch(staff->timeStretch(tick()));
 
+      // keep track of tick of previous element
+      // this allows markings that need to apply to previous element to do so
+      // even though we may have already advanced to next tick position
+      int lastTick = e.tick();
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "tick")
+            if (tag == "tick") {
                   e.initTick(e.readInt());
+                  lastTick = e.tick();
+                  }
             else if (tag == "BarLine") {
                   BarLine* barLine = new BarLine(score());
                   barLine->setTrack(e.track());
@@ -1911,6 +1918,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                                     tremolo->setParent(chord);
                                     }
                               }
+                        lastTick = e.tick();
                         e.incTick(crticks);
                         }
                   }
@@ -1926,13 +1934,19 @@ void Measure::read(XmlReader& e, int staffIdx)
                   if (!rest->duration().isValid())     // hack
                         rest->setDuration(timesig()/timeStretch);
 
+                  lastTick = e.tick();
                   e.incTick(rest->actualTicks());
                   }
             else if (tag == "Breath") {
                   Breath* breath = new Breath(score());
                   breath->setTrack(e.track());
+                  int tick = e.tick();
                   breath->read(e);
-                  segment = getSegment(Segment::Type::Breath, e.tick());
+                  if (e.tick() < tick)
+                        tick = e.tick();  // use our own tick if we explicitly reset to earlier position
+                  else
+                        tick = lastTick;  // otherwise use last tick (of previous tick, chord, or rest tag)
+                  segment = getSegment(Segment::Type::Breath, tick);
                   segment->add(breath);
                   }
             else if (tag == "endSpanner") {
@@ -1998,6 +2012,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   rm->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(rm);
+                  lastTick = e.tick();
                   e.incTick(ticks());
                   }
             else if (tag == "Clef") {
