@@ -195,6 +195,7 @@ class Xml : public QTextStream {
       bool canWriteVoice(int track) const;
 
       static QString xmlString(const QString&);
+      static QString xmlString(ushort c);
       };
 
 extern PlaceText readPlacement(XmlReader&);

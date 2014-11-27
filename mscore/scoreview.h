@@ -291,6 +291,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void deselectAll();
 
       void editCopy();
+      void editCut();
       void editPaste();
 
       void normalCut();

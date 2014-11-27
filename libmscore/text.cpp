@@ -777,6 +777,7 @@ TextBlock TextBlock::split(int column)
 
 //---------------------------------------------------------
 //   text
+//    extract text, symbols are marked with <sym>xxx</sym>
 //---------------------------------------------------------
 
 QString TextBlock::text(int col1, int len) const
@@ -784,12 +785,23 @@ QString TextBlock::text(int col1, int len) const
       QString s;
       int col = 0;
       for (auto f : _text) {
-            for (const QChar& c : f.text) {
-                  if (c.isHighSurrogate())
-                        continue;
-                  if (col >= col1 && (len < 0 || ((col-col1) < len)))
-                        s += c;
-                  ++col;
+            if (f.text.isEmpty())
+                  continue;
+            if (f.format.type() == CharFormatType::TEXT) {
+                  for (const QChar& c : f.text) {
+                        if (c.isHighSurrogate())
+                              continue;
+                        if (col >= col1 && (len < 0 || ((col-col1) < len)))
+                              s += Xml::xmlString(c.unicode());
+                        ++col;
+                        }
+                  }
+            else {
+                  for (SymId id : f.ids) {
+                        if (col >= col1 && (len < 0 || ((col-col1) < len)))
+                              s += QString("<sym>%1</sym>").arg(Sym::id2name(id));
+                        ++col;
+                        }
                   }
             }
       return s;
@@ -2316,7 +2328,62 @@ void Text::paste()
       QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
       if (MScore::debugMode)
             qDebug("Text::paste() <%s>", qPrintable(txt));
-      insertText(txt);
+
+      int state = 0;
+      QString token;
+      QString sym;
+      bool symState = false;
+
+      for (const QChar& c : txt) {
+            if (state == 0) {
+                  if (c == '<') {
+                        state = 1;
+                        token.clear();
+                        }
+                  else if (c == '&') {
+                        state = 2;
+                        token.clear();
+                        }
+                  else {
+                        if (symState)
+                              sym += c;
+                        else
+                              insertText(c);
+                        }
+                  }
+            else if (state == 1) {
+                  if (c == '>') {
+                        state = 0;
+                        if (token == "sym") {
+                              symState = true;
+                              sym.clear();
+                              }
+                        else if (token == "/sym") {
+                              symState = false;
+                              insertSym(Sym::name2id(sym));
+                              }
+                        }
+                  else
+                        token += c;
+                  }
+            else if (state == 2) {
+                  if (c == ';') {
+                        state = 0;
+                        if (token == "lt")
+                              insertText("<");
+                        else if (token == "gt")
+                              insertText(">");
+                        else if (token == "amp")
+                              insertText("&");
+                        else if (token == "quot")
+                              insertText("\"");
+                        else
+                              insertSym(Sym::name2id(token));
+                        }
+                  else
+                        token += c;
+                  }
+            }
       layoutEdit();
       bool lo = type() == Element::Type::INSTRUMENT_NAME;
       score()->setLayoutAll(lo);
