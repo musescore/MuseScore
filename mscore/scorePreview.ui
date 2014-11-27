@@ -41,7 +41,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>nothing selected</string>
+      <string>Nothing selected</string>
      </property>
      <property name="scaledContents">
       <bool>false</bool>
