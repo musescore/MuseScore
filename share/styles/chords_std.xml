@@ -40,8 +40,10 @@
     <sym code="0x0394" name="triangle"/>
     <sym code="0x03bf" name="circle"/>
     <sym code="0x00f8" name="oslash"/>
-    <sym code="0x266f" name="#"/>
+
     <sym code="0x266d" name="b"/>
+    <sym code="0x266e" name="natural"/>
+    <sym code="0x266f" name="#"/>
 
 <!-- this allows "b" to render as a literal when when encountered as a note name -->
     <sym value="b" class="note" name="b"/>
@@ -50,13 +52,20 @@
     <sym value="Re" class="note" name="Re"/>
     <sym value="re" class="note" name="re"/>
 
-<!-- add "code" attributes to these, matching those for "b" and "#" above
-    (0x266d / 0x266f) to get German chords to render with flat and sharp -->
-    <sym class="accidental" name="es"/>
-    <sym class="accidental" name="is"/>
+<!-- remove "code" attributes from these to get "es" and "is" to render as literals rather than as flat and sharp signs -->
+    <sym class="accidental" code="0x266d" name="es"/>
+    <sym class="accidental" code="0x266f" name="is"/>
 <!-- this is to render the "s" in "As" and "Es" in German -->
-    <sym class="accidental" name="s"/>
+    <sym class="accidental" code="0x266d" name="s"/>
+<!-- change value of "code" attribute to "0x200b" (zero width space) to render Bb as B in German -->
+    <sym class="german_B" code="0x266d" name="b"/>
 
+    </font>
+
+    <font family="MScoreText">
+    <mag>1.4</mag>
+    <sym code="0xe263" name="##"/>
+    <sym code="0xe264" name="bb"/>
     </font>
 
 <!--

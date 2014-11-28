@@ -422,9 +422,21 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
       int n = s.size();
       QString acc = s.right(n-acci);
       if (acc != "") {
-            if (acc.startsWith("b")) {
+            if (acc.startsWith("bb")) {
+                  alter = -2;
+                  idx += 2;
+                  }
+            else if (acc.startsWith("b")) {
                   alter = -1;
                   idx += 1;
+                  }
+            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("eses")) {
+                  alter = -2;
+                  idx += 4;
+                  }
+            else if (spelling == NoteSpellingType::GERMAN && (acc.startsWith("ses") || acc.startsWith("sas"))) {
+                  alter = -2;
+                  idx += 3;
                   }
             else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("es")) {
                   alter = -1;
@@ -434,9 +446,21 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                   alter = -1;
                   idx += 1;
                   }
+            else if (acc.startsWith("##")) {
+                  alter = 2;
+                  idx += 2;
+                  }
+            else if (acc.startsWith("x")) {
+                  alter = 2;
+                  idx += 1;
+                  }
             else if (acc.startsWith("#")) {
                   alter = 1;
                   idx += 1;
+                  }
+            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("isis")) {
+                  alter = 2;
+                  idx += 4;
                   }
             else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("is")) {
                   alter = 1;
@@ -454,7 +478,7 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                   case 'a':   r = 5; break;
                   case 'h':   r = 6; break;
                   case 'b':
-                        if (alter)
+                        if (alter && alter != -1)
                               return Tpc::TPC_INVALID;
                         r = 6;
                         alter = -1;
@@ -1164,9 +1188,6 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
       int fontIdx = 0;
       qreal _spatium = spatium();
       qreal mag = (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * MScore::DPI));
-      // German spelling - render TPC_B_B as Bb, not B (even though B is used for input)
-      if (tpc == Tpc::TPC_B_B && spelling == NoteSpellingType::GERMAN)
-            spelling = NoteSpellingType::STANDARD;
 
       foreach(const RenderAction& a, renderList) {
             if (a.type == RenderAction::RenderActionType::SET) {
@@ -1217,10 +1238,17 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
             else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
                   QString c;
                   QString acc;
+                  QString context = "accidental";
                   tpc2name(tpc, spelling, lowerCase, c, acc);
+                  // German spelling - use special symbol for accidental in TPC_B_B
+                  // to allow it to be rendered as either Bb or B
+                  if (tpc == Tpc::TPC_B_B && spelling == NoteSpellingType::GERMAN) {
+                        acc = "b";
+                        context = "german_B";
+                        }
                   if (acc != "") {
                         TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
-                        QString lookup = "accidental" + acc;
+                        QString lookup = context + acc;
                         ChordSymbol cs = chordList->symbol(lookup);
                         if (!cs.isValid())
                               cs = chordList->symbol(acc);
