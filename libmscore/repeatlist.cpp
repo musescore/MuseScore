@@ -135,10 +135,10 @@ void RepeatList::update()
       int utick = 0;
       qreal t  = 0;
 
-      foreach(RepeatSegment* s, *this) {
+      for(RepeatSegment* s : *this) {
             s->utick      = utick;
             s->utime      = t;
-            qreal ct     = tl->tick2time(s->tick);
+            qreal ct      = tl->tick2time(s->tick);
             s->timeOffset = t - ct;
             utick        += s->len;
             t            += tl->tick2time(s->tick + s->len) - ct;
@@ -175,7 +175,7 @@ int RepeatList::utick2tick(int tick) const
 
 int RepeatList::tick2utick(int tick) const
       {
-      foreach (const RepeatSegment* s, *this) {
+      for (const RepeatSegment* s : *this) {
             if (tick >= s->tick && tick < (s->tick + s->len))
                   return s->utick + (tick - s->tick);
             }

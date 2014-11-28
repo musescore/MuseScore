@@ -50,8 +50,11 @@ enum class POS : char;
 //    message format for gui -> sequencer messages
 //---------------------------------------------------------
 
-enum class SeqMsgId : char { NO_MESSAGE, TEMPO_CHANGE, PLAY, SEEK,
-       MIDI_INPUT_EVENT
+enum class SeqMsgId : char {
+      NO_MESSAGE,
+      TEMPO_CHANGE,
+      PLAY, SEEK,
+      MIDI_INPUT_EVENT
       };
 
 struct SeqMsg {
