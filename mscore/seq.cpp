@@ -531,7 +531,6 @@ void Seq::processMessages()
                         if (playTime != 0) {
                               int utick = cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate));
                               cs->tempomap()->setRelTempo(msg.realVal);
-                              cs->repeatList()->update();
                               playTime = cs->utick2utime(utick) * MScore::sampleRate;
                               if (preferences.jackTimebaseMaster && preferences.useJackTransport)
                                     _driver->seekTransport(utick + 2 * cs->utime2utick(qreal((_driver->bufferSize()) + 1) / qreal(MScore::sampleRate)));
@@ -743,7 +742,7 @@ void Seq::process(unsigned n, float* buffer)
                      state, driverState);
             }
 
-      memset(buffer, 0, sizeof(float) * n * 2);
+      memset(buffer, 0, sizeof(float) * n * 2); // assume two channels
       float* p = buffer;
 
       processMessages();

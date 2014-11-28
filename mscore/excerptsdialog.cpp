@@ -170,7 +170,7 @@ QString ExcerptsDialog::createName(const QString& partName)
 void ExcerptsDialog::newClicked()
       {
       QString name = createName("Part");
-      Excerpt* e   = new Excerpt(0);
+      Excerpt* e   = new Excerpt(score);
       e->setTitle(name);
       ExcerptItem* ei = new ExcerptItem(e);
       excerptList->addItem(ei);
@@ -187,7 +187,7 @@ void ExcerptsDialog::newAllClicked()
       int n = partList->count();
       ExcerptItem* ei = 0;
       for (int i = 0; i < n; ++i) {
-            Excerpt* e   = new Excerpt(0);
+            Excerpt* e   = new Excerpt(score);
             PartItem* pi = static_cast<PartItem*>(partList->item(i));
             e->parts().append(pi->part());
             QString name = createName(pi->part()->partName());
