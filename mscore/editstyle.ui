@@ -5044,14 +5044,14 @@
           <item>
            <widget class="QRadioButton" name="radioKeySigNatBefore">
             <property name="text">
-             <string>Before a change to fewer sharps or flats</string>
+             <string>Before key signature if changing to fewer sharps or flats</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="radioKeySigNatAfter">
             <property name="text">
-             <string>After a change to fewer sharps or flats but before a change from sharps to flats or vice versa</string>
+             <string>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</string>
             </property>
            </widget>
           </item>
