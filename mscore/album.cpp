@@ -268,7 +268,7 @@ void Album::save(Xml& xml)
 //   write
 //---------------------------------------------------------
 
-bool Album::write(Xml& xml)
+void Album::write(Xml& xml)
       {
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");

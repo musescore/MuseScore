@@ -56,7 +56,7 @@ class Album {
       void print();
       bool createScore(const QString& fn);
       bool read(const QString& path);
-      bool write(Xml& xml);
+      void write(Xml& xml);
       bool dirty() const             { return _dirty; }
       QString name() const           { return _name;  }
       QString path() const           { return _path;  }
