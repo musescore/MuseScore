@@ -3042,7 +3042,7 @@ void Score::layoutLinear()
                         }
                   Measure* m = static_cast<Measure*>(mb);
                   Measure* nm = m->nextMeasure();
-                 if (m->repeatFlags() & Repeat::END) {
+                  if (m->repeatFlags() & Repeat::END) {
                         if (nm && (nm->repeatFlags() & Repeat::START))
                               m->setEndBarLineType(BarLineType::END_START_REPEAT, m->endBarLineGenerated());
                         else
