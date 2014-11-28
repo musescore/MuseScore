@@ -194,7 +194,6 @@ void PlayPanel::setTempo(double val)
 void PlayPanel::setRelTempo(qreal val)
       {
       val *= 100;
-      //relTempo->setText(QString("%1 %").arg(val, 3, 'f', 0));
       relTempoBox->setValue(val);
       tempoSlider->setValue(val);
       }
