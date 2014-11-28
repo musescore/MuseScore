@@ -378,6 +378,7 @@ class Score : public QObject {
 
       qreal _noteHeadWidth;
       QString accInfo;             ///< information used by the screen-reader
+      int _midiPortCount;          // A count of JACK/ALSA midi out ports. Stored in a root score
 
       //------------------
 
@@ -756,6 +757,9 @@ class Score : public QObject {
       void updateChannel();
       void updateSwing();
       void createPlayEvents();
+
+      int midiPortCount() const;
+      void setMidiPortCount(int);
 
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 
