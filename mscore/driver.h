@@ -53,6 +53,7 @@ class Driver {
       virtual void handleTimeSigTempoChanged() {}
       virtual void checkTransportSeek(int, int, bool) {}
       virtual int bufferSize() {return 0;}
+      virtual void updateOutPortCount(int) {}
       };
 
 

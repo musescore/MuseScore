@@ -136,6 +136,7 @@ class AlsaAudio : public Driver {
       void write(int n, void* l);
 
       virtual void midiRead();
+      virtual void updateOutPortCount(int maxport);
       };
 
 }

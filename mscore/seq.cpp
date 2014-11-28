@@ -142,6 +142,7 @@ Seq::Seq()
       cv              = 0;
       tackRest        = 0;
       tickRest        = 0;
+      maxMidiOutPort  = 0;
 
       endTick  = 0;
       state    = Transport::STOP;
@@ -513,6 +514,23 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       }
 
 //---------------------------------------------------------
+//   recomputeMaxMidiOutPort
+//   Computes the maximum number of midi out ports
+//   in all opened scores
+//---------------------------------------------------------
+
+void Seq::recomputeMaxMidiOutPort() {
+      if (!(preferences.useJackMidi || preferences.useAlsaAudio))
+            return;
+      int max = 0;
+      foreach(Score * s, mscoreCore->scores()) {
+            if (s->midiPortCount() > max)
+                  max = s->midiPortCount();
+            }
+      maxMidiOutPort = max;
+      }
+
+//---------------------------------------------------------
 //   processMessages
 //   from gui to process thread
 //---------------------------------------------------------
@@ -678,6 +696,7 @@ void Seq::process(unsigned n, float* buffer)
       Transport driverState = _driver->getState();
       // Checking for the reposition from JACK Transport
       _driver->checkTransportSeek(playTime, frames, inCountIn);
+
       if (driverState != state) {
             // Got a message from JACK Transport panel: Play
             if (state == Transport::STOP && driverState == Transport::PLAY) {
@@ -932,6 +951,16 @@ void Seq::process(unsigned n, float* buffer)
 
 void Seq::initInstruments(bool realTime)
       {
+      // Add midi out ports if necessary
+      if (cs && (preferences.useJackMidi || preferences.useAlsaAudio)) {
+            // Increase the maximum number of midi ports if user adds staves/instruments
+            int scoreMaxMidiPort = cs->midiPortCount();
+            if (maxMidiOutPort < scoreMaxMidiPort)
+                  maxMidiOutPort = scoreMaxMidiPort;
+            // if maxMidiOutPort is equal to existing ports number, it will do nothing
+            _driver->updateOutPortCount(maxMidiOutPort + 1);
+            }
+
       foreach(const MidiMapping& mm, *cs->midiMapping()) {
             Channel* channel = mm.articulation;
             foreach(const MidiCoreEvent& e, channel->init) {
@@ -1364,7 +1393,7 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
             }
       int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
       _synti->play(event, syntiIdx);
-      if (preferences.useJackMidi && _driver != 0)
+      if (_driver != 0 && (preferences.useJackMidi || preferences.useAlsaAudio))
             _driver->putEvent(event, framePos);
       }
 

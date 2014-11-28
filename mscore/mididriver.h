@@ -68,7 +68,7 @@ class Port {
 class MidiDriver {
    protected:
       Port midiInPort;
-      Port* midiOutPorts;
+      QList<Port> midiOutPorts;
       Seq* seq;
 
    public:

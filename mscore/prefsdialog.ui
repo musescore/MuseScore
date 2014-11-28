@@ -2285,8 +2285,11 @@
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
         <widget class="QGroupBox" name="pulseaudioDriver">
-         <property name="accessibleName">
-          <string>Pulse Audio</string>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
          <property name="title">
           <string>PulseAudio</string>
@@ -2634,8 +2637,43 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout71">
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="becomeTimebaseMaster">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Timebase Master</string>
+            </property>
+            <property name="text">
+             <string>Timebase Master</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="useJackTransport">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Use JACK Transport</string>
+            </property>
+            <property name="text">
+             <string>Use JACK Transport</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="useJackAudio">
+            <property name="accessibleName">
+             <string>Use JACK Audio</string>
+            </property>
             <property name="text">
              <string>Use JACK Audio</string>
             </property>
@@ -2644,87 +2682,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="useJackMidi">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Use JACK MIDI</string>
-            </property>
-            <property name="text">
-             <string>Use JACK MIDI</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <spacer name="horizontalSpacer_20">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>5</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label_22">
-            <property name="text">
-             <string>Ports:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QSpinBox" name="midiPorts">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Ports</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Choose number of ports</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>8</number>
-            </property>
-            <property name="value">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4" colspan="3">
-           <spacer name="horizontalSpacer_19">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>606</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="2" column="0" colspan="4">
+          <item row="0" column="3">
            <widget class="QCheckBox" name="rememberLastMidiConnections">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2743,39 +2701,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="4">
-           <widget class="QCheckBox" name="useJackTransport">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Use JACK Transport</string>
-            </property>
-            <property name="text">
-             <string>Use JACK Transport</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="5">
-           <widget class="QCheckBox" name="becomeTimebaseMaster">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Timebase Master</string>
-            </property>
-            <property name="text">
-             <string>Timebase Master</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="6">
+          <item row="1" column="3">
            <spacer name="horizontalSpacer_8">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -2787,6 +2713,22 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="useJackMidi">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Use JACK MIDI</string>
+            </property>
+            <property name="text">
+             <string>Use JACK MIDI</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -3691,7 +3633,6 @@
   <tabstop>jackDriver</tabstop>
   <tabstop>useJackAudio</tabstop>
   <tabstop>useJackMidi</tabstop>
-  <tabstop>midiPorts</tabstop>
   <tabstop>rememberLastMidiConnections</tabstop>
   <tabstop>useJackTransport</tabstop>
   <tabstop>becomeTimebaseMaster</tabstop>
