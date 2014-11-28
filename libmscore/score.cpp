@@ -2107,8 +2107,22 @@ void Score::removeAudio()
 
 bool Score::appendScore(Score* score)
       {
+      if (parts().size() != score->parts().size() || staves().size() != score->staves().size())
+            return false;
       TieMap  tieMap;
 
+      MeasureBase* lastMeasure = last();
+      int tickLen = lastMeasure->endTick();
+
+      if (!lastMeasure->lineBreak()) {
+            lastMeasure->undoSetBreak(true, LayoutBreak::Type::LINE);
+            }
+
+      if (!lastMeasure->sectionBreak()) {
+            lastMeasure->undoSetBreak(true, LayoutBreak::Type::SECTION);
+            }
+
+      // clone the measures
       MeasureBaseList* ml = &score->_measures;
       for (MeasureBase* mb = ml->first(); mb; mb = mb->next()) {
             MeasureBase* nmb;
@@ -2122,6 +2136,41 @@ bool Score::appendScore(Score* score)
             _measures.add(nmb);
             }
       fixTicks();
+
+      for (Staff* st : score->staves()) {
+            for (auto k : *(st->keyList())) {
+                  int tick = k.first;
+                  Key key = k.second;
+                  int staffIdx = score->staffIdx(st);
+                  staff(staffIdx)->setKey(tick + tickLen, key);
+                  }
+            }
+
+      // clone the spanners
+      for (auto sp : score->spanner()) {
+            Spanner* spanner = sp.second;
+            Spanner* ns = static_cast<Spanner*>(spanner->clone());
+            ns->setScore(this);
+            ns->setParent(0);
+            ns->setTick(spanner->tick() + tickLen);
+            ns->setTick2(spanner->tick2() + tickLen);
+            if (ns->type() == Element::Type::SLUR) {
+                  // set start/end element for slur
+                  ns->setStartElement(0);
+                  ns->setEndElement(0);
+                  Measure* sm = tick2measure(ns->tick());
+                  if (sm)
+                        ns->setStartElement(sm->findChordRest(ns->tick(), ns->track()));
+                  Measure * em = tick2measure(ns->tick2());
+                  if (em)
+                        ns->setEndElement(em->findChordRest(ns->tick2(), ns->track2()));
+                  if (!ns->startElement())
+                        qDebug("clone Slur: no start element");
+                  if (!ns->endElement())
+                        qDebug("clone Slur: no end element");
+                  }
+            addElement(ns);
+            }
       setLayoutAll(true);
       return true;
       }
