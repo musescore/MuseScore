@@ -2051,7 +2051,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
       if (!pixelsScrolled.isNull()) {
             dx = pixelsScrolled.x();
             dy = pixelsScrolled.y();
-            nReal = static_cast<qreal>(dx) / PIXELSSTEPSFACTOR;
+            nReal = static_cast<qreal>(dy) / PIXELSSTEPSFACTOR;
             }
       else if (!stepsScrolled.isNull()) {
             dx = static_cast<qreal>(stepsScrolled.x()) * qMax(2, width() / 10) / 120;
