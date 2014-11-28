@@ -538,6 +538,7 @@ void Seq::processMessages()
                               }
                         else
                               cs->tempomap()->setRelTempo(msg.realVal);
+                        cs->repeatList()->update();
                         prevTempo = curTempo();
                         emit tempoChanged();
                         }
