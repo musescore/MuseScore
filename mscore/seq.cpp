@@ -958,7 +958,8 @@ void Seq::initInstruments(bool realTime)
             if (maxMidiOutPort < scoreMaxMidiPort)
                   maxMidiOutPort = scoreMaxMidiPort;
             // if maxMidiOutPort is equal to existing ports number, it will do nothing
-            _driver->updateOutPortCount(maxMidiOutPort + 1);
+            if (_driver)
+                  _driver->updateOutPortCount(maxMidiOutPort + 1);
             }
 
       foreach(const MidiMapping& mm, *cs->midiMapping()) {

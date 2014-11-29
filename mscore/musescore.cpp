@@ -4260,6 +4260,9 @@ void MuseScore::updatePlayMode()
 
 void MuseScore::closeScore(Score* score)
       {
+      // Let's compute maximum count of ports in remaining scores
+      if (seq)
+            seq->recomputeMaxMidiOutPort();
       removeTab(scoreList.indexOf(score->rootScore()));
       }
 
