@@ -56,6 +56,15 @@ Tremolo::Tremolo(const Tremolo& t)
       }
 
 //---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Tremolo::mag() const
+      {
+      return parent() ? parent()->mag() : 1.0;
+      }
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -68,7 +77,7 @@ void Tremolo::draw(QPainter* painter) const
             qreal x = 0.0; // bbox().width() * .25;
             QPen pen(curColor(), point(score()->styleS(StyleIdx::stemWidth)));
             painter->setPen(pen);
-            qreal _spatium = spatium();
+            qreal _spatium = spatium() * mag();
             painter->drawLine(QLineF(x, -_spatium*.5, x, path.boundingRect().height() + _spatium));
             }
       }
@@ -105,7 +114,7 @@ void Tremolo::setTremoloType(TremoloType t)
 
 void Tremolo::layout()
       {
-      qreal _spatium  = spatium();
+      qreal _spatium  = spatium() * mag();
 
       qreal w2  = _spatium * score()->styleS(StyleIdx::tremoloWidth).val() * .5;
       qreal h2  = _spatium * score()->styleS(StyleIdx::tremoloBoxHeight).val()  * .5;
@@ -214,7 +223,7 @@ void Tremolo::layout()
                      },
                   };
             int idx = _chord1->hook() ? 1 : (_chord1->beam() ? 2 : 0);
-            y = (line + t[idx][up][_lines-1][line & 1]) * _spatium * .5;
+            y = (line + t[idx][up][_lines-1][line & 1]) * spatium() * .5;
             setPos(x, y);
             return;
             }
