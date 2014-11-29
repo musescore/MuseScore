@@ -121,7 +121,7 @@ class Accidental : public Element {
       virtual void startEdit(MuseScoreView*, const QPointF&) { setGenerated(false); }
 
       SymId symbol() const;
-      Note* note() const                  { return (Note*)parent(); }
+      Note* note() const       { return (parent() && parent()->type() == Element::Type::NOTE) ? (Note*)parent() : 0; }
 
       bool hasBracket() const             { return _hasBracket;     }
       void setHasBracket(bool val)        { _hasBracket = val;      }
