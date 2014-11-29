@@ -1160,10 +1160,28 @@ void Score::undoAddElement(Element* element)
                   ntremolo->setParent(c1);
                   undo(new AddElement(ntremolo));
                   }
-            else if (
-               (element->type() == Element::Type::TREMOLO && !static_cast<Tremolo*>(element)->twoNotes())
-               || (element->type() == Element::Type::ARPEGGIO))
-                  {
+            else if (element->type() == Element::Type::TREMOLO && !static_cast<Tremolo*>(element)->twoNotes()) {
+                  ChordRest* cr = static_cast<ChordRest*>(element->parent());
+                  Segment* s    = cr->segment();
+                  Measure* m    = s->measure();
+                  Measure* nm   = score->tick2measure(m->tick());
+                  Segment* ns   = nm->findSegment(s->segmentType(), s->tick());
+                  Chord* c1     = static_cast<Chord*>(ns->element(staffIdx * VOICES + cr->voice()));
+                  if (cr->isGrace()) { // find the corresponding grace note by index
+                        Chord* pcr = static_cast<Chord*>(cr->parent());
+                        int index = 0;
+                        for (Chord* gc : pcr->graceNotes()) {
+                              if (cr == gc)
+                                    break;
+                              index++;
+                              }
+                        if (index < c1->graceNotes().length())
+                              c1 = c1->graceNotes().at(index);
+                        }
+                  ne->setParent(c1);
+                  undo(new AddElement(ne));
+                  }
+            else if (element->type() == Element::Type::ARPEGGIO) {
                   ChordRest* cr = static_cast<ChordRest*>(element->parent());
                   Segment* s    = cr->segment();
                   Measure* m    = s->measure();

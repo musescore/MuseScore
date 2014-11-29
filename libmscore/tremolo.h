@@ -63,6 +63,7 @@ class Tremolo : public Element {
       void setTremoloType(TremoloType t);
       TremoloType tremoloType() const      { return _tremoloType; }
 
+      virtual qreal mag() const;
       virtual void draw(QPainter*) const;
       virtual void layout();
       virtual void write(Xml& xml) const;
