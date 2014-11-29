@@ -2144,7 +2144,7 @@ bool Score::appendScore(Score* score)
       MeasureBase* lastMeasure = last();
       int tickLen = lastMeasure->endTick();
 
-      if (!lastMeasure->lineBreak()) {
+      if (!lastMeasure->lineBreak() && !lastMeasure->pageBreak()) {
             lastMeasure->undoSetBreak(true, LayoutBreak::Type::LINE);
             }
 
