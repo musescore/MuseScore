@@ -2714,8 +2714,7 @@ void Score::padToggle(Pad n)
             //
             // handle appoggiatura and acciaccatura
             //
-            undo(new ChangeDurationType(cr, _is.duration()));
-            undo(new ChangeDuration(cr, _is.duration().fraction()));
+            undoChangeChordRestLen(cr, _is.duration());
             }
       else
             changeCRlen(cr, _is.duration());

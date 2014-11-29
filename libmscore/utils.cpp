@@ -715,6 +715,18 @@ Note* searchTieNote(Note* note)
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
 
+      if (chord->isGraceBefore()) {
+            chord = static_cast<Chord*>(chord->parent());
+            note2 = chord->findNote(note->pitch());
+            return note2;
+            }
+      QList<Chord*> gna;
+      if (chord->getGraceNotesAfter(&gna)) {
+            chord = gna[0];
+            note2 = chord->findNote(note->pitch());
+            return note2;
+            }
+
       while ((seg = seg->next1(Segment::Type::ChordRest))) {
             for (int track = strack; track < etrack; ++track) {
                   Chord* c = static_cast<Chord*>(seg->element(track));
