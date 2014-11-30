@@ -242,17 +242,42 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QS
       int n;
       tpc2name(tpc, spelling, lowerCase, s, n);
       switch (n) {
-            case -2: acc = explicitAccidental ? QObject::tr("double flat") : "bb" ; break;
+            case -2:
+                  if (explicitAccidental) {
+                        acc = QObject::tr("double flat");
+                        }
+                  else if (spelling == NoteSpellingType::GERMAN_PURE) {
+                        switch (tpc) {
+                              case TPC_A_BB: acc = "sas"; break;
+                              case TPC_E_BB: acc = "ses"; break;
+                              default: acc = "eses";
+                              }
+                        }
+                  else {
+                        acc = "bb";
+                        }
+                  break;
             case -1:
-                  if (spelling != NoteSpellingType::GERMAN)
-                        acc = explicitAccidental ? QObject::tr("flat") : "b";
+                  if (explicitAccidental)
+                        acc = QObject::tr("flat");
+                  else if (spelling == NoteSpellingType::GERMAN_PURE)
+                        acc = (tpc == TPC_A_B || tpc == TPC_E_B) ? "s" : "es";
                   else
-                        // render flats as "es" except for A and E, which get "s"
-                        acc = (tpc == 10 || tpc == 11) ? "s" : "es";
+                        acc = "b";
                   break;
             case  0: acc = ""; break;
-            case  1: acc = (spelling != NoteSpellingType::GERMAN) ? (explicitAccidental ? QObject::tr("sharp") : "#") : "is"; break;
-            case  2: acc = explicitAccidental ? QObject::tr("double sharp") : "##"; break;
+            case  1:
+                  if (explicitAccidental)
+                        acc = QObject::tr("sharp");
+                  else
+                        acc = (spelling == NoteSpellingType::GERMAN_PURE) ? "is" : "#";
+                  break;
+            case  2:
+                  if (explicitAccidental)
+                        acc = QObject::tr("double sharp");
+                  else
+                        acc = (spelling == NoteSpellingType::GERMAN_PURE) ? "isis" : "##";
+                  break;
             default:
                   qDebug("tpc2name(%d): acc %d", tpc, n);
                   acc = "";
@@ -274,6 +299,7 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, in
       int idx = (tpc + 1) % 7;
       switch (spelling) {
             case NoteSpellingType::GERMAN:
+            case NoteSpellingType::GERMAN_PURE:
                   s = gnames[idx];
                   if (s == "H" && acc == -1) {
                         s = "B";

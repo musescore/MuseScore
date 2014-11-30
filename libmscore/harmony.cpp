@@ -364,8 +364,12 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
       {
       if (score()->styleB(StyleIdx::useStandardNoteNames))
             rootSpelling = NoteSpellingType::STANDARD;
-      else if (score()->styleB(StyleIdx::useGermanNoteNames))
-            rootSpelling = NoteSpellingType::GERMAN;
+      else if (score()->styleB(StyleIdx::useGermanNoteNames)) {
+            if (score()->styleB(StyleIdx::lowerCaseMinorChords))
+                  rootSpelling = NoteSpellingType::GERMAN_PURE;
+            else
+                  rootSpelling = NoteSpellingType::GERMAN;
+            }
       else if (score()->styleB(StyleIdx::useSolfeggioNoteNames))
             rootSpelling = NoteSpellingType::SOLFEGGIO;
       baseSpelling = rootSpelling;
@@ -380,7 +384,7 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
             }
       else
             rootLowerCase = score()->styleB(StyleIdx::lowerCaseMinorChords);
-      if (baseSpelling == NoteSpellingType::GERMAN)
+      if (baseSpelling == NoteSpellingType::GERMAN_PURE)
             baseLowerCase = true;
       else
             baseLowerCase = false;
@@ -402,6 +406,7 @@ void Harmony::determineRootBaseSpelling()
 
 static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
       {
+      bool useGerman = false;
       static const int spellings[] = {
          // bb  b   -   #  ##
             0,  7, 14, 21, 28,  // C
@@ -416,9 +421,15 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
             return Tpc::TPC_INVALID;
       int acci;
       switch (spelling) {
-            case NoteSpellingType::GERMAN:      acci = 1; break;
-            case NoteSpellingType::SOLFEGGIO:   acci = 2; break;
-            default:                            acci = 1; break;
+            case NoteSpellingType::SOLFEGGIO:
+                  acci = 2;
+                  break;
+            case NoteSpellingType::GERMAN:
+            case NoteSpellingType::GERMAN_PURE:
+                  useGerman = true;
+                  // fall through
+            default:
+                  acci = 1;
             }
       idx = acci;
       int alter = 0;
@@ -433,19 +444,19 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                   alter = -1;
                   idx += 1;
                   }
-            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("eses")) {
+            else if (useGerman && acc.startsWith("eses")) {
                   alter = -2;
                   idx += 4;
                   }
-            else if (spelling == NoteSpellingType::GERMAN && (acc.startsWith("ses") || acc.startsWith("sas"))) {
+            else if (useGerman && (acc.startsWith("ses") || acc.startsWith("sas"))) {
                   alter = -2;
                   idx += 3;
                   }
-            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("es")) {
+            else if (useGerman && acc.startsWith("es")) {
                   alter = -1;
                   idx += 2;
                   }
-            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("s") && !acc.startsWith("su")) {
+            else if (useGerman && acc.startsWith("s") && !acc.startsWith("su")) {
                   alter = -1;
                   idx += 1;
                   }
@@ -461,17 +472,17 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                   alter = 1;
                   idx += 1;
                   }
-            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("isis")) {
+            else if (useGerman && acc.startsWith("isis")) {
                   alter = 2;
                   idx += 4;
                   }
-            else if (spelling == NoteSpellingType::GERMAN && acc.startsWith("is")) {
+            else if (useGerman && acc.startsWith("is")) {
                   alter = 1;
                   idx += 2;
                   }
             }
       int r;
-      if (spelling == NoteSpellingType::GERMAN) {
+      if (useGerman) {
             switch(s[0].toLower().toLatin1()) {
                   case 'c':   r = 0; break;
                   case 'd':   r = 1; break;
