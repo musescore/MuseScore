@@ -231,7 +231,7 @@ void Lyrics::layout1()
       //
       bool hasNumber = false; // _verseNumber;
       qreal adjust = 0.0;
-      QString s = plainText();
+      QString s = plainText(true);
       // find:
       // 1) string of numbers and non-word characters at start of syllable
       // 2) at least one other character (indicating start of actual lyric)
