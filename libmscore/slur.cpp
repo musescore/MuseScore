@@ -619,10 +619,9 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
       if (bbox.height() < minDistance * 2 * sp && st) {
             // slur/tie is fairly flat
             bool up = slurTie()->up();
-            qreal staffY = system()->staff(staffIdx())->y();
             qreal ld = st->lineDistance() * sp;
-            qreal topY = (bbox.top() - staffY) / ld;
-            qreal bottomY = (bbox.bottom() - staffY) / ld;
+            qreal topY = bbox.top() / ld;
+            qreal bottomY = bbox.bottom() / ld;
             int lineY = up ? qRound(topY) : qRound(bottomY);
             if (lineY >= 0 && lineY < st->lines() * st->lineDistance()) {
                   // on staff
