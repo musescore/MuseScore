@@ -1190,7 +1190,38 @@ void MusicXml::readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
 //---------------------------------------------------------
 //   updateStyles
 //---------------------------------------------------------
-      
+
+/**
+ Determine if i is a style type for which the default size must be set
+ */
+
+// The MusicXML specification does not specify to which kinds of text
+// the word-font setting applies. Setting all sizes to the size specified
+// gives bad results, e.g. for measure numbers, so a selection is made.
+// Some tweaking may still be required.
+
+static bool mustSetSize(const int i)
+      {
+      return
+            i == int(TextStyleType::TITLE)
+            || i == int(TextStyleType::SUBTITLE)
+            || i == int(TextStyleType::COMPOSER)
+            || i == int(TextStyleType::POET)
+            || i == int(TextStyleType::INSTRUMENT_LONG)
+            || i == int(TextStyleType::INSTRUMENT_SHORT)
+            || i == int(TextStyleType::INSTRUMENT_EXCERPT)
+            || i == int(TextStyleType::TEMPO)
+            || i == int(TextStyleType::METRONOME)
+            || i == int(TextStyleType::TRANSLATOR)
+            || i == int(TextStyleType::SYSTEM)
+            || i == int(TextStyleType::STAFF)
+            || i == int(TextStyleType::REPEAT_LEFT)
+            || i == int(TextStyleType::REPEAT_RIGHT)
+            || i == int(TextStyleType::TEXTLINE)
+            || i == int(TextStyleType::GLISSANDO)
+            || i == int(TextStyleType::INSTRUMENT_CHANGE);
+      }
+
 /**
  Update the style definitions to match the MusicXML word-font and lyric-font.
  */
@@ -1212,7 +1243,7 @@ static void updateStyles(Score* score,
                   }
             else {
                   if (wordFamily != "") ts.setFamily(wordFamily);
-                  if (fWordSize > 0.001) ts.setSize(fWordSize);
+                  if (fWordSize > 0.001 && mustSetSize(i)) ts.setSize(fWordSize);
                   }
             score->style()->setTextStyle(ts);
             }
@@ -3618,7 +3649,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
       }
 
 //---------------------------------------------------------
-//   addLyrics -- add a single lyric to the score
+//   addLyric -- add a single lyric to the score
 //                or delete it (if number too high)
 //---------------------------------------------------------
 
