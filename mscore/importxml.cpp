@@ -3182,16 +3182,20 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
                         }
                   else if (type == "stop") {
-                        handleSpannerStop(pedal, "pedal", tick, spanners);
-                        pedal = 0;
+                        if (pedal) {
+                              handleSpannerStop(pedal, "pedal", tick, spanners);
+                              pedal = 0;
+                              }
                         }
                   else if (type == "change") {
                         // pedal change is implemented as two separate pedals
                         // first stop the first one
-                        pedal->setEndHookType(HookType::HOOK_45);
-                        handleSpannerStop(pedal, "pedal", tick, spanners);
-                        pedalContinue = pedal; // mark for later fixup
-                        pedal = 0;
+                        if (pedal) {
+                              pedal->setEndHookType(HookType::HOOK_45);
+                              handleSpannerStop(pedal, "pedal", tick, spanners);
+                              pedalContinue = pedal; // mark for later fixup
+                              pedal = 0;
+                              }
                         // then start a new one
                         pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
                         pedal->setBeginHook(true);
