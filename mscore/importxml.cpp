@@ -1436,6 +1436,8 @@ void MusicXml::scorePartwise(QDomElement ee)
                                           }
                                     crwords += nextPartOfFormattedString(ee);
                                     }
+                              else if (tag == "credit-type")
+                                    domNotImplemented(ee); // TODO
                               else
                                     domError(ee);
                               }
@@ -3048,8 +3050,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   tempo = e.attribute("tempo");
                   dynaVelocity = e.attribute("dynamics");
                   }
-            //else if (e.tagName() == "offset")
+            else if (e.tagName() == "offset")
                   //offset = (e.text().toInt() * MScore::division)/divisions;
+                  ; // ignore, currently not supported
             else if (e.tagName() == "staff") {
                   // DEBUG: <staff>0</staff>
                   int rstaff = e.text().toInt() - 1;
@@ -3512,6 +3515,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                               key.setKey(Key(ee.text().toInt()));
                         else if (ee.tagName() == "mode")
                               domNotImplemented(ee);
+                        else if (ee.tagName() == "cancel")
+                              domNotImplemented(ee); // TODO
                         else
                               domError(ee);
                         }
