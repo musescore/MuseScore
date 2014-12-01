@@ -387,14 +387,19 @@ bool MuseScore::saveFile(Score* score)
 
             mscore->lastSaveDirectory = score->fileInfo()->absolutePath();
 
+            if (!score->saveFile()) {
+                  QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
+                  return false;
+                  }
             updateRecentScores(score);
             score->setCreated(false);
             writeSessionFile(false);
             }
-      if (!score->saveFile()) {
+      else if (!score->saveFile()) {
             QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
             return false;
             }
+
       setWindowTitle("MuseScore: " + score->name());
       int idx = scoreList.indexOf(score);
       tab1->setTabText(idx, score->name());
