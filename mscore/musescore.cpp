@@ -1200,7 +1200,7 @@ void MuseScore::updateRecentScores(Score* score)
 //---------------------------------------------------------
 void MuseScore::addRecentScore(const QString& scorePath)
       {
-      if (scorePath.isEmpty())
+      if (scorePath.isEmpty() || _recentScores.first() == scorePath)
             return;
       _recentScores.removeAll(scorePath);
       _recentScores.prepend(scorePath);
