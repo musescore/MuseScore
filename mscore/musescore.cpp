@@ -1189,9 +1189,21 @@ int MuseScore::appendScore(Score* score)
 
 void MuseScore::updateRecentScores(Score* score)
       {
-      QString path = score->fileInfo()->canonicalFilePath();
-      _recentScores.removeAll(path);
-      _recentScores.prepend(path);
+      QString path = score->importedFilePath(); // defined for scores imported from e.g. MIDI files
+      addRecentScore(path);
+      path = score->fileInfo()->canonicalFilePath();
+      addRecentScore(path);
+      }
+
+//---------------------------------------------------------
+//   addRecentScore
+//---------------------------------------------------------
+void MuseScore::addRecentScore(const QString& scorePath)
+      {
+      if (scorePath.isEmpty())
+            return;
+      _recentScores.removeAll(scorePath);
+      _recentScores.prepend(scorePath);
       if (_recentScores.size() > RECENT_LIST_SIZE)
             _recentScores.removeLast();
       if (startcenter)
