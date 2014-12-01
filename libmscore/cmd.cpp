@@ -1972,7 +1972,7 @@ void Score::cmdHalfDuration()
             //
             // handle appoggiatura and acciaccatura
             //
-            cr->setDurationType(d);
+            undoChangeChordRestLen(cr, d);
             }
       else
             changeCRlen(cr, d);
@@ -2002,7 +2002,7 @@ void Score::cmdDoubleDuration()
             //
             // handle appoggiatura and acciaccatura
             //
-            cr->setDurationType(d);
+            undoChangeChordRestLen(cr, d);
             }
       else
             changeCRlen(cr, d);

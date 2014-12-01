@@ -1437,10 +1437,18 @@ void Score::doLayout()
                               for (Chord* cc : c->graceNotes()) {
                                     if (cc->beam() && cc->beam()->elements().front() == cc)
                                           cc->beam()->layout();
+                                    for (Note* n : cc->notes()) {
+                                          Tie* tie = n->tieFor();
+                                          if (tie)
+                                                tie->layout();
+                                          for (Spanner* sp : n->spannerFor())
+                                                sp->layout();
+                                          }
                                     for (Element* e : cc->el()) {
                                           if (e->type() == Element::Type::SLUR)
                                                 e->layout();
                                           }
+                                    cc->layoutArticulations();
                                     }
                               c->layoutStem();
                               c->layoutArpeggio2();

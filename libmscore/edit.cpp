@@ -1181,8 +1181,6 @@ void Score::cmdAddTie()
 
       startCmd();
       foreach (Note* note, noteList) {
-            if (note->chord() &&  note->chord()->isGrace())
-                  continue;
             if (note->tieFor()) {
                   qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
                   continue;
@@ -1221,6 +1219,10 @@ void Score::cmdAddTie()
                   }
             else {
                   Note* note2 = searchTieNote(note);
+#if 0
+                  // this code appears to mostly duplicate searchTieNote()
+                  // not clear if it served any additional purpose
+                  // it might have before we supported extended ties?
                   Part* part = chord->staff()->part();
                   int strack = part->staves()->front()->idx() * VOICES;
                   int etrack = strack + part->staves()->size() * VOICES;
@@ -1239,6 +1241,7 @@ void Score::cmdAddTie()
                                           if (note2 == 0 || note->chord()->track() == chord->track())
                                                 note2 = n;
                                           }
+                                    // this may belong to *previous* if?
                                     else if (cr->track() == chord->track())
                                           noteFound = true;
                                     }
@@ -1246,6 +1249,7 @@ void Score::cmdAddTie()
                         if (noteFound || note2)
                               break;
                         }
+#endif
                   if (note2) {
                         Tie* tie = new Tie(this);
                         tie->setStartNote(note);
