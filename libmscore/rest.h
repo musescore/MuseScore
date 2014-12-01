@@ -77,6 +77,8 @@ class Rest : public ChordRest {
       SymId sym() const        { return _sym;    }
       int computeLineOffset();
       bool isFullMeasureRest() const { return durationType() == TDuration::DurationType::V_MEASURE; }
+      bool accent();
+      void setAccent(bool flag);
 
       virtual int upLine() const;
       virtual int downLine() const;

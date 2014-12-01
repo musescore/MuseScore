@@ -643,6 +643,35 @@ qreal Rest::stemPosX() const
       }
 
 //---------------------------------------------------------
+//   accent
+//---------------------------------------------------------
+
+bool Rest::accent()
+      {
+      return (voice() >= 2 && small());
+      }
+
+//---------------------------------------------------------
+//   setAccent
+//---------------------------------------------------------
+
+void Rest::setAccent(bool flag)
+      {
+      undoChangeProperty(P_ID::SMALL, flag);
+      if (voice() % 2 == 0) {
+            if (flag) {
+                  qreal yOffset = -(bbox().bottom());
+                  if (durationType() >= TDuration::DurationType::V_HALF)
+                        yOffset -= staff()->spatium() * 0.5;
+                  undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, yOffset));
+                  }
+            else {
+                  undoChangeProperty(P_ID::USER_OFF, QPointF());
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
