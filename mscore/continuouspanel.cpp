@@ -353,7 +353,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
 
            if (e->type() == Element::Type::STAFF_LINES) {
                   Staff* currentStaff = _score->staff(e->staffIdx());
-                  Segment* parent = _score->tick2segment(_currentMeasureTick);
+                  Segment* parent = _score->tick2segmentMM(_currentMeasureTick);
 
                   //
                   // Get barline height (used to center instrument name
