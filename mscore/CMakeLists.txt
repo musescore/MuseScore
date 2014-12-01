@@ -428,8 +428,8 @@ if (MINGW)
       ${CROSS}/lib/libogg.dll
       ${CROSS}/lib/libvorbis.dll
       ${CROSS}/lib/libvorbisfile.dll
-      ${CROSS}/lib/ssleay32.dll
-      ${CROSS}/lib/libeay32.dll
+      ${CROSS}/opt/bin/ssleay32.dll
+      ${CROSS}/opt/bin/libeay32.dll
       ${CROSSQT}/bin/Qt5Core.dll
       ${CROSSQT}/bin/Qt5Widgets.dll
       ${CROSSQT}/bin/Qt5Gui.dll
