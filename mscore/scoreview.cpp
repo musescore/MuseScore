@@ -969,8 +969,6 @@ ScoreView::~ScoreView()
       delete bgPixmap;
       delete fgPixmap;
       delete shadowNote;
-      // Let's compute maximum count of ports in remaining scores
-      seq->recomputeMaxMidiOutPort();
       }
 
 //---------------------------------------------------------
