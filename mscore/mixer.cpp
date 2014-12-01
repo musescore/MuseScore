@@ -87,6 +87,8 @@ Mixer::Mixer(QWidget* parent)
       setWidgetResizable(true);
       setWindowFlags(Qt::Dialog);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);
+
       QWidget* area = new QWidget(this);
       vb = new QVBoxLayout;
       vb->setMargin(0);

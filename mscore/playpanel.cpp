@@ -49,6 +49,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       tempoSliderIsPressed = false;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);
 
       QSettings settings;
       restoreGeometry(settings.value("playPanel/geometry").toByteArray());

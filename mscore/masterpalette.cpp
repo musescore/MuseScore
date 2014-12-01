@@ -116,6 +116,7 @@ MasterPalette::MasterPalette(QWidget* parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);
 
       addPalette(MuseScore::newGraceNotePalette(false));
       addPalette(MuseScore::newClefsPalette(false));
