@@ -1162,7 +1162,9 @@ int MuseScore::appendScore(Score* score)
       {
       int index = scoreList.size();
       for (int i = 0; i < scoreList.size(); ++i) {
-            if (scoreList[i]->filePath() == score->filePath() && score->fileInfo()->exists()) {
+            if ((!score->importedFilePath().isEmpty()
+                 && scoreList[i]->importedFilePath() == score->importedFilePath())
+                        || (scoreList[i]->filePath() == score->filePath() && score->fileInfo()->exists())) {
                   removeTab(i);
                   index = i;
                   break;
