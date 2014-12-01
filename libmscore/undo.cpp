@@ -625,6 +625,33 @@ static Element* findLinkedVoiceElement(Element* e, Staff* nstaff)
       }
 
 //---------------------------------------------------------
+//   findLinkedChord
+//---------------------------------------------------------
+
+static Chord* findLinkedChord(Chord* c, Staff* nstaff)
+      {
+      Segment* s  = c->segment();
+      Measure* nm = nstaff->score()->tick2measure(s->tick());
+      Segment* ns = nm->findSegment(s->segmentType(), s->tick());
+      Element* ne = ns->element(nstaff->idx() * VOICES + c->voice());
+      if (ne->type() != Element::Type::CHORD)
+            return 0;
+      Chord* nc   = static_cast<Chord*>(ne);
+      if (c->isGrace()) {
+            Chord* pc = static_cast<Chord*>(c->parent());
+            int index = 0;
+            for (Chord* gc : pc->graceNotes()) {
+                  if (c == gc)
+                        break;
+                  index++;
+                  }
+            if (index < nc->graceNotes().length())
+                  nc = nc->graceNotes().at(index);
+            }
+      return nc;
+      }
+
+//---------------------------------------------------------
 //   undoChangeChordRestLen
 //---------------------------------------------------------
 
@@ -636,7 +663,11 @@ void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
             foreach(Staff* staff, linkedStaves->staves()) {
                   if (staff == cr->staff())
                         continue;
-                  ChordRest* ncr = static_cast<ChordRest*>(findLinkedVoiceElement(cr, staff));
+                  ChordRest *ncr;
+                  if (cr->isGrace())
+                        ncr = findLinkedChord(static_cast<Chord*>(cr), staff);
+                  else
+                        ncr = static_cast<ChordRest*>(findLinkedVoiceElement(cr, staff));
                   undo(new ChangeChordRestLen(ncr, d));
                   }
             }
@@ -1042,7 +1073,12 @@ void Score::undoAddElement(Element* element)
                   int ntrack       = staffIdx * VOICES + a->voice();
                   na->setTrack(ntrack);
                   if (a->parent()->isChordRest()) {
-                        ChordRest* ncr = static_cast<ChordRest*>(seg->element(ntrack));
+                        ChordRest* cr = a->chordRest();
+                        ChordRest* ncr;
+                        if (cr->isGrace())
+                              ncr = findLinkedChord(static_cast<Chord*>(cr), score->staff(staffIdx));
+                        else
+                              ncr = static_cast<ChordRest*>(seg->element(ntrack));
                         na->setParent(ncr);
                         }
                   else {
@@ -1161,23 +1197,8 @@ void Score::undoAddElement(Element* element)
                   undo(new AddElement(ntremolo));
                   }
             else if (element->type() == Element::Type::TREMOLO && !static_cast<Tremolo*>(element)->twoNotes()) {
-                  ChordRest* cr = static_cast<ChordRest*>(element->parent());
-                  Segment* s    = cr->segment();
-                  Measure* m    = s->measure();
-                  Measure* nm   = score->tick2measure(m->tick());
-                  Segment* ns   = nm->findSegment(s->segmentType(), s->tick());
-                  Chord* c1     = static_cast<Chord*>(ns->element(staffIdx * VOICES + cr->voice()));
-                  if (cr->isGrace()) { // find the corresponding grace note by index
-                        Chord* pcr = static_cast<Chord*>(cr->parent());
-                        int index = 0;
-                        for (Chord* gc : pcr->graceNotes()) {
-                              if (cr == gc)
-                                    break;
-                              index++;
-                              }
-                        if (index < c1->graceNotes().length())
-                              c1 = c1->graceNotes().at(index);
-                        }
+                  Chord* cr = static_cast<Chord*>(element->parent());
+                  Chord* c1 = findLinkedChord(cr, score->staff(staffIdx));
                   ne->setParent(c1);
                   undo(new AddElement(ne));
                   }
@@ -1197,31 +1218,21 @@ void Score::undoAddElement(Element* element)
                   Note* n2       = tie->endNote();
                   Chord* cr1     = n1->chord();
                   Chord* cr2     = n2 ? n2->chord() : 0;
-                  Segment* s1    = cr1->segment();
-                  Segment* s2    = cr2 ? cr2->segment() : 0;
-                  Measure* nm1   = score->tick2measure(s1->tick());
-                  Measure* nm2   = s2 ? score->tick2measure(s2->tick()) : 0;
-                  Segment* ns1;
-                  Segment* ns2;
-                  ns1 = nm1->findSegment(s1->segmentType(), s1->tick());
-                  ns2 = nm2 ? nm2->findSegment(s2->segmentType(), s2->tick()) : 0;
-                  Chord* c1 = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
+
+                  // find corresponding notes in linked staff
+                  // accounting for grace notes and cross-staff notation
                   int sm = 0;
                   if (cr1->staffIdx() != cr2->staffIdx())
                         sm = cr1->staffMove() + cr2->staffMove();
+                  Chord* c1 = findLinkedChord(cr1, score->staff(staffIdx));
+                  Chord* c2 = findLinkedChord(cr2, score->staff(staffIdx + sm));
+                  Note* nn1 = c1->findNote(n1->pitch());
+                  Note* nn2 = c2 ? c2->findNote(n2->pitch()) : 0;
 
-                  Chord* c2 = 0;
-                  if (ns2) {
-                        Element* e = ns2->element((staffIdx + sm) * VOICES + cr2->voice());
-                        if (e->type() == Element::Type::CHORD)
-                              c2 = static_cast<Chord*>(e);
-                        }
-
-                  Note* nn1      = c1->findNote(n1->pitch());
-                  Note* nn2      = c2 ? c2->findNote(n2->pitch()) : 0;
-                  Tie* ntie      = static_cast<Tie*>(ne);
+                  // create tie
+                  Tie* ntie = static_cast<Tie*>(ne);
                   QList<SpannerSegment*>& segments = ntie->spannerSegments();
-                  foreach(SpannerSegment* segment, segments)
+                  foreach (SpannerSegment* segment, segments)
                         delete segment;
                   segments.clear();
                   ntie->setTrack(c1->track());
