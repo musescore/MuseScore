@@ -373,15 +373,9 @@ bool MuseScore::saveFile(Score* score)
             if (saveDirectory.isEmpty())
                   saveDirectory = preferences.myScoresPath;
 
-            QString fname;
-#ifdef Q_OS_WIN
-            if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
-                  fname = QString("%1/%2").arg(saveDirectory).arg(name);
-            else
-#endif
-            fname = QString("%1/%2").arg(saveDirectory).arg(name);
-
+            QString fname = QString("%1/%2").arg(saveDirectory).arg(name);
             QString filter = f1 + ";;" + f2;
+
             fn = mscore->getSaveScoreName(
                tr("MuseScore: Save Score"),
                fname,
