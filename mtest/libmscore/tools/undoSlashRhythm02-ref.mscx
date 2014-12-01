@@ -490,15 +490,10 @@
           <duration z="4" n="4"/>
           </Rest>
         <tick>3840</tick>
-        <Chord>
+        <Rest>
           <track>2</track>
           <durationType>quarter</durationType>
-          <Note>
-            <track>2</track>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+          </Rest>
         <Beam id="5">
           <track>2</track>
           <l1>-15</l1>
@@ -813,16 +808,10 @@
           <duration z="4" n="4"/>
           </Rest>
         <tick>3840</tick>
-        <Chord>
+        <Rest>
           <track>6</track>
           <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <track>6</track>
-            <pitch>38</pitch>
-            <tpc>16</tpc>
-            </Note>
-          </Chord>
+          </Rest>
         <Beam id="13">
           <track>6</track>
           <l1>-13</l1>

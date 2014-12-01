@@ -2658,18 +2658,23 @@ void Score::cmdSlashRhythm()
       QList<Chord*> chords;
       // loop through all notes in selection
       foreach (Element* e, selection().elements()) {
-            if (e->type() != Element::Type::NOTE)
+            if (e->voice() >= 2 && e->type() == Element::Type::REST) {
+                  Rest* r = static_cast<Rest*>(e);
+                  r->setAccent(!r->accent());
                   continue;
-            Note* n = static_cast<Note*>(e);
-            if (n->noteType() != NoteType::NORMAL)
-                  continue;
-            Chord* c = n->chord();
-            // check for duplicates (chords with multiple notes)
-            if (chords.contains(c))
-                  continue;
-            chords.append(c);
-            // toggle slash setting
-            c->setSlash(!c->slash(), false);
+                  }
+            else if (e->type() == Element::Type::NOTE) {
+                  Note* n = static_cast<Note*>(e);
+                  if (n->noteType() != NoteType::NORMAL)
+                        continue;
+                  Chord* c = n->chord();
+                  // check for duplicates (chords with multiple notes)
+                  if (chords.contains(c))
+                        continue;
+                  chords.append(c);
+                  // toggle slash setting
+                  c->setSlash(!c->slash(), false);
+                  }
             }
       setLayoutAll(true);
       }
