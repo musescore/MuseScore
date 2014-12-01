@@ -260,10 +260,9 @@ void MuseScore::editInstrList()
                   rootScore->undo(new InsertPart(part, staffIdx));
 
                   pli->part = part;
-                  QTreeWidgetItem* ci = 0;
                   QList<Staff*> linked;
-                  for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
-                        StaffListItem* sli = static_cast<StaffListItem*>(ci);
+                  for (int cidx = 0; pli->child(cidx); ++cidx) {
+                        StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         Staff* staff       = new Staff(rootScore);
                         staff->setPart(part);
                         sli->setStaff(staff);
@@ -294,9 +293,8 @@ void MuseScore::editInstrList()
                   if (part->show() != pli->visible()) {
                         part->score()->undo()->push(new ChangePartProperty(part, 0, pli->visible()));
                         }
-                  QTreeWidgetItem* ci = 0;
-                  for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
-                        StaffListItem* sli = (StaffListItem*)ci;
+                  for (int cidx = 0; pli->child(cidx); ++cidx) {
+                        StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         if (sli->op() == ListItemOp::I_DELETE) {
                               rootScore->systems()->clear();
                               Staff* staff = sli->staff();
@@ -313,9 +311,9 @@ void MuseScore::editInstrList()
                               Key nKey = part->staves()->empty() ? Key::C : part->staff(0)->key(0);
                               staff->setKey(0, nKey);
 
-                              rootScore->undoInsertStaff(staff, rstaff, !sli->linked());
                               Staff* linkedStaff = 0;
                               if (sli->linked()) {
+
                                     if (rstaff > 0)
                                           linkedStaff = part->staves()->front();
                                     else {
@@ -327,6 +325,17 @@ void MuseScore::editInstrList()
                                                 }
                                           }
                                     }
+                              if (linkedStaff) {
+                                    // do not create a link if linkedStaff will be removed,
+                                    for (int k = 0; pli->child(k); ++k) {
+                                          StaffListItem* i = static_cast<StaffListItem*>(pli->child(k));
+                                          if (i->op() == ListItemOp::I_DELETE && i->staff() == linkedStaff) {
+                                                linkedStaff = 0;
+                                                break;
+                                                }
+                                          }
+                                    }
+                              rootScore->undoInsertStaff(staff, rstaff, linkedStaff == 0);
                               if (linkedStaff)
                                     cloneStaff(linkedStaff, staff);
                               else {
