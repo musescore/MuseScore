@@ -58,6 +58,7 @@ install(FILES
 
 install(FILES
       05-Orchestral/01-Classical_Orchestra.mscz
+      05-Orchestral/02-String_Quartet.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/05-Orchestral
       )
 
