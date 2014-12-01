@@ -3070,11 +3070,24 @@ void MuseScore::writeSessionFile(bool cleanExit)
             xml.stag("Score");
             xml.tag("created", score->created());
             xml.tag("dirty", score->dirty());
+
+            QString path;
+            if (score->importedFilePath().isEmpty()) {
+                              // score was not imported from another format, e.g. MIDI file
+                  path = score->fileInfo()->absoluteFilePath();
+                  }
+            else if (score->fileInfo()->exists()) {   // score was saved
+                  path = score->fileInfo()->absoluteFilePath();
+                  }
+            else {      // score was imported but not saved - store original file (e.g. MIDI) path
+                  path = score->importedFilePath();
+                  }
+
             if (cleanExit || score->tmpName().isEmpty()) {
-                  xml.tag("path", score->fileInfo()->absoluteFilePath());
+                  xml.tag("path", path);
                   }
             else {
-                  xml.tag("name", score->fileInfo()->absoluteFilePath());
+                  xml.tag("name", path);
                   xml.tag("path", score->tmpName());
                   }
             xml.etag();
