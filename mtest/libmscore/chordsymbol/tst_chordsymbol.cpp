@@ -45,6 +45,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testAddLink();
       void testAddPart();
       void testNoSystem();
+      void testTranspose();
       };
 
 //---------------------------------------------------------
@@ -71,7 +72,7 @@ Score* TestChordSymbol::test_pre(const char* p)
 void TestChordSymbol::test_post(Score* score, const char* p)
       {
       QString p1 = p;
-      p1 += ".mscx";
+      p1 += "-test.mscx";
       QString p2 = DIR + p + "-ref.mscx";
       QVERIFY(saveCompareScore(score, p1, p2));
       delete score;
@@ -172,6 +173,16 @@ void TestChordSymbol::testNoSystem()
 
       score->doLayout();
       test_post(score, "no-system");
+      }
+
+void TestChordSymbol::testTranspose()
+      {
+      Score* score = test_pre("transpose");
+      score->startCmd();
+      score->cmdSelectAll();
+      score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+      score->endCmd();
+      test_post(score, "transpose");
       }
 
 QTEST_MAIN(TestChordSymbol)
