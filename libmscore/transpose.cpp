@@ -413,7 +413,14 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               rootTpc = transposeTpc(h->rootTpc(), interval, false);
                               baseTpc = transposeTpc(h->baseTpc(), interval, false);
                               }
-                        undoTransposeHarmony(h, rootTpc, baseTpc);
+                        // undoTransposeHarmony does not do links
+                        // because it is also used to handle transposing instruments
+                        // and score / parts could be in different concert pitch states
+                        const LinkedElements* le = h->links();
+                        if (le) {
+                              for (Element* e : *le)
+                                    undoTransposeHarmony(static_cast<Harmony*>(e), rootTpc, baseTpc);
+                              }
                         }
                   }
             }
