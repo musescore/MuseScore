@@ -44,8 +44,10 @@ QString Harmony::harmonyName()
       if (_rootTpc != Tpc::TPC_INVALID)
             r = tpc2name(_rootTpc, _rootSpelling, _rootLowerCase);
 
-      if (_textName != "")
-            e = _textName.remove('=');
+      if (_textName != "") {
+            e = _textName;
+            e.remove('=');
+            }
       else if (!_degreeList.isEmpty()) {
             hc.add(_degreeList);
             // try to find the chord in chordList
@@ -204,8 +206,9 @@ void Harmony::write(Xml& xml) const
             if (_id > 0)
                   xml.tag("extension", _id);
             // parser uses leading "=" as a hidden specifier for minor
+            // this may or may not currently be incorporated into _textName
             QString writeName = _textName;
-            if (_parsedForm && _parsedForm->name().startsWith("="))
+            if (_parsedForm && _parsedForm->name().startsWith("=") && !writeName.startsWith("="))
                   writeName = "=" + writeName;
             if (writeName != "")
                   xml.tag("name", writeName);
@@ -598,17 +601,24 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       else {
             _parsedForm = new ParsedChord();
             _parsedForm->parse(s, cl, syntaxOnly, preferMinor);
+            // parser prepends "=" to name of implied minor chords
+            // use this here as well
             if (preferMinor)
                   s = _parsedForm->name();
+            // look up to see if we already have a descriptor (chord has been used before)
             cd = descr(s, _parsedForm);
             }
       if (cd) {
+            // descriptor found; use its information
             _id = cd->id;
             if (!cd->names.isEmpty())
                   _textName = cd->names.front();
             }
-      else
+      else {
+            // no descriptor yet; just set textname
+            // we will generate descriptor later if necessary (when we are done editing this chord)
             _textName = s;
+            }
       return cd;
       }
 
@@ -698,6 +708,8 @@ void Harmony::setHarmony(const QString& s)
       int r, b;
       const ChordDescription* cd = parseHarmony(s, &r, &b);
       if (!cd && _parsedForm && _parsedForm->parseable()) {
+            // our first time encountering this chord
+            // generate a descriptor and use it
             cd = generateDescription();
             _id = cd->id;
             }
