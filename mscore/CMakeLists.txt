@@ -555,7 +555,7 @@ if (APPLE)
       ../fonts/gonville/GonvilleText.otf
       ../fonts/mscore/mscore.ttf
       ../fonts/mscore/MScoreText.ttf
-      ../fonts/MuseJazz-Mac.ttf
+      ../fonts/MuseJazz.ttf
       ../fonts/FreeSerif.ttf
       ../fonts/FreeSerifBold.ttf
       ../fonts/FreeSans.ttf
