@@ -152,6 +152,11 @@ void KeySig::layout()
             (prevMeas && prevMeas->sectionBreak() == nullptr
             && (score()->styleI(StyleIdx::keySigNaturals) != int(KeySigNatural::NONE) || t1 == 0) );
 
+      // Don't repeat naturals if shown in courtesy
+      if (prevMeas && prevMeas->findSegment(Segment::Type::KeySigAnnounce, measure()->tick()) != 0
+          && segment()->segmentType() != Segment::Type::KeySigAnnounce )
+            naturalsOn = false;
+
       int coffset = 0;
       Key t2      = Key::C;
       if (naturalsOn) {
