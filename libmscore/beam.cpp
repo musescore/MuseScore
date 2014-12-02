@@ -300,12 +300,15 @@ void Beam::layout1()
             minMove = 1000;
             maxMove = -1000;
             _isGrace = false;
+            qreal mag = 0.0;
 
             int mUp     = 0;
             int mDown   = 0;
             int upDnLimit = staff()->lines() - 1;           // was '4' hard-coded in following code
 
             foreach (ChordRest* cr, _elements) {
+                  qreal m = cr->small() ? score()->styleD(StyleIdx::smallNoteMag) : 1.0;
+                  mag = qMax(mag, m);
                   if (cr->type() == Element::Type::CHORD) {
                         c2 = static_cast<Chord*>(cr);
                         if (c1 == 0)
@@ -325,6 +328,7 @@ void Beam::layout1()
                   if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
                         maxDuration = cr->durationType();
                   }
+            setMag(mag);
             //
             // determine beam stem direction
             //
@@ -381,6 +385,8 @@ void Beam::layoutGraceNotes()
       minMove = 1000;
       maxMove = -1000;
       _isGrace = true;
+      qreal graceMag   = score()->styleD(StyleIdx::graceNoteMag);
+      setMag(graceMag);
 
       foreach (ChordRest* cr, _elements) {
             c2 = static_cast<Chord*>(cr);
@@ -1417,23 +1423,14 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
       qreal _spatium   = spatium();
       QPointF _pagePos(pagePos());
-      qreal beamMinLen = point(score()->styleS(StyleIdx::beamMinLen));
-      qreal graceMag   = score()->styleD(StyleIdx::graceNoteMag);
+      qreal beamMinLen = point(score()->styleS(StyleIdx::beamMinLen)) * mag();
 
       if (beamLevels == 4)
             _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance)*4/3);
       else
             _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance));
 
-      _beamDist *= c1->staff()->mag();
-      if (_isGrace) {
-            _beamDist *= graceMag;
-            setMag(graceMag);
-            beamMinLen *= graceMag;
-            }
-      else
-            setMag(1.0);
-
+      _beamDist *= mag();
       int n = crl.size();
 
       StaffType* tab = 0;
@@ -1656,7 +1653,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               // (allow some tolerance for tick rounding in tuplets
                               // without tuplet tolerance, could be simplified to:)
 
-//                            if (tickNext % tickMod == 0)
                               static const int BEAM_TUPLET_TOLERANCE = 6;
                               int mod = tickNext % tickMod;
                               if (mod <= BEAM_TUPLET_TOLERANCE || (tickMod - mod) <= BEAM_TUPLET_TOLERANCE)
