@@ -1129,23 +1129,32 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
       const ChordRest* c1 = cl.front();
       const ChordRest* c2 = cl.back();
       qreal dx            = c2->pagePos().x() - c1->pagePos().x();
-      bool grace          = c1->isGrace();
       bool zeroSlant      = slopeZero(cl);
 
       int l1 = c1->line() * 2;
       int l2 = c2->line() * 2;
 
       Bm bm;
+
+      // shorten stem length if grace notes beam is under main notes beam.
+      // Value 4 estimated. Desired: to find a good formula.
+
+      int graceStemLengthCorrection;
+      if (_isGrace)
+            graceStemLengthCorrection = static_cast<const Chord*>(c1)->underBeam() ? 4 : 3;
+      else
+            graceStemLengthCorrection = 0;
+
       if (beamLevels == 1) {
             bm = beamMetric1(_up, l1 / 2, l2 / 2);
             if (hasNoSlope())
                   bm.s = 0.0;
 
-            if (grace && bm.l) {
+            if (bm.l) {
                   if (bm.l > 0)
-                        bm.l -= 3;
+                        bm.l -= graceStemLengthCorrection;
                   else
-                        bm.l += 3;
+                        bm.l += graceStemLengthCorrection;
                   }
 
             if (bm.l && !(zeroSlant && cl.size() > 2)) {
@@ -1381,14 +1390,13 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
                   bm.l += adjust(_spStaff4, bm.s, cl);
                   }
             }
-      // shorten stem length if grace notes beam is under main notes beam.
-      // Value 4 estimated. Desired: to find a good formula.
-      if (grace && static_cast<const Chord*>(c1)->underBeam()){
+      if (_isGrace && (beamLevels > 1) && bm.l) {
             if (bm.l > 0)
-                  bm.l -= 4;
+                  bm.l -= graceStemLengthCorrection;
             else
-                  bm.l += 4;
+                  bm.l += graceStemLengthCorrection;
             }
+
       if (dx == 0.0)
             slope = 0.0;
       else
