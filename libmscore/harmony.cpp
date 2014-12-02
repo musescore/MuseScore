@@ -1136,11 +1136,18 @@ TextSegment::TextSegment(const QString& s, const QFont& f, qreal x, qreal y)
 qreal TextSegment::width() const
       {
       QFontMetricsF fm(font);
+#if 1
+      return fm.width(text);
+#else
       qreal w = 0.0;
       foreach(QChar c, text) {
+            // if we calculate width by character, at least skip high surrogates
+            if (c.isHighSurrogate())
+                  continue;
             w += fm.width(c);
             }
       return w;
+#endif
       }
 
 //---------------------------------------------------------

@@ -79,6 +79,9 @@
     <sym code="0x266e" name="natural"/>
     <sym code="0x266f" name="#"/>
 
+    <sym code="0x1d12a" name="##"/>
+    <sym code="0x1d12b" name="bb"/>
+
 <!-- remove "code" attributes from these to get "es" and "is" to render as literals rather than as flat and sharp signs -->
     <sym class="accidental" code="0x266d" name="es"/>
     <sym class="accidental" code="0x266f" name="is"/>
@@ -146,12 +149,6 @@
 
     <sym code="0xe18a" name="striangle"/>
 
-    </font>
-
-    <font family="MScoreText">
-    <mag>1.4</mag>
-    <sym code="0xe263" name="##"/>
-    <sym code="0xe264" name="bb"/>
     </font>
 
 <!--
