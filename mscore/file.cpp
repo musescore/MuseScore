@@ -1468,6 +1468,7 @@ void MuseScore::printFile()
       printerDev.setDocName(cs->name());
       printerDev.setDoubleSidedPrinting(pf->twosided());
       printerDev.setOutputFormat(QPrinter::NativeFormat);
+      printerDev.setFromTo(1, cs->pages().size());
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       printerDev.setOutputFileName("");
@@ -1478,6 +1479,7 @@ void MuseScore::printFile()
 #endif
 
       QPrintDialog pd(&printerDev, 0);
+
       if (!pd.exec())
             return;
 
