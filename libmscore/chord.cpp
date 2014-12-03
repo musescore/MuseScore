@@ -1902,8 +1902,30 @@ void Chord::layoutPitched()
                   else if (rtick()) {
                         // if this is not first chord of measure, get previous chord
                         Segment* s = segment()->prev(Segment::Type::ChordRest);
-                        if (s && s->element(track()) && s->element(track())->type() == Element::Type::CHORD)
-                              pc = static_cast<Chord*>(s->element(track()));
+                        if (s) {
+                              // prefer chord in same voice
+                              // but if nothing there, look at other voices
+                              // note this still leaves the possibility
+                              // that this voice does not have conflict but another voice does
+                              Element* e = s->element(track());
+                              if (e && e->type() == Element::Type::CHORD)
+                                    pc = static_cast<Chord*>(e);
+                              else {
+                                    int startTrack = staffIdx() * VOICES;
+                                    int endTrack = startTrack + VOICES;
+                                    for (int t = startTrack; t < endTrack; ++t) {
+                                          if (t == track())  // already checked current voice
+                                                continue;
+                                          e = s->element(t);
+                                          if (e && e->type() == Element::Type::CHORD) {
+                                                pc = static_cast<Chord*>(e);
+                                                // prefer chord with ledger lines
+                                                if (pc->ledgerLines())
+                                                      break;
+                                                }
+                                          }
+                                    }
+                              }
                         }
                   if (pc && !pc->graceNotes().isEmpty()) {
                         // if previous chord has grace notes after, find last one
