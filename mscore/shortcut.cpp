@@ -2199,11 +2199,11 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "backspace",
          QT_TRANSLATE_NOOP("action","Backspace"),
-         0,
-         0,
-         Icons::Invalid_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_CMD
+//         0,
+//         0,
+//         Icons::Invalid_ICON,
+//         Qt::WindowShortcut,
+//         ShortcutFlags::A_CMD
          },
       {
          MsWidget::MAIN_WINDOW,
