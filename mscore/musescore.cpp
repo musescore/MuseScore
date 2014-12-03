@@ -3965,11 +3965,14 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "layer")
             showLayerManager();
       else if (cmd == "backspace") {
-            if ( _sstate != STATE_NORMAL )
+            if (_sstate != STATE_NORMAL )
                   undo();
 #ifdef Q_OS_MAC
-            else if ( cs )
+            else if (cs) {
+                  cs->startCmd();
                   cs->cmdDeleteSelection();
+                  cs->endCmd();
+                  }
 #endif
             }
       else if (cmd == "zoomin")
