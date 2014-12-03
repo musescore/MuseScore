@@ -2708,8 +2708,6 @@ void Score::padToggle(Pad n)
       if (!cr)
             return;
 
-      deselectAll();
-
       if (cr->type() == Element::Type::CHORD && (static_cast<Chord*>(cr)->noteType() != NoteType::NORMAL)) {
             //
             // handle appoggiatura and acciaccatura
