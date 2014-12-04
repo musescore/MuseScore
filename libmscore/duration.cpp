@@ -46,8 +46,6 @@ DurationElement::DurationElement(const DurationElement& e)
 
 DurationElement::~DurationElement()
       {
-      if (tuplet() && !tuplet()->elements().isEmpty() && tuplet()->elements().front() == this)
-            delete tuplet();
       }
 
 //---------------------------------------------------------
