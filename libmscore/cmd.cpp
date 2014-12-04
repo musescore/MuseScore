@@ -2442,7 +2442,7 @@ void Score::cmdExplode()
             int n = 0;
             for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                   Element* e = s->element(srcTrack);
-                  if (e->type() == Element::Type::CHORD) {
+                  if (e && e->type() == Element::Type::CHORD) {
                         Chord* c = static_cast<Chord*>(e);
                         n = qMax(n, c->notes().size());
                         }
@@ -2450,12 +2450,15 @@ void Score::cmdExplode()
             lastStaff = qMin(nstaves(), srcStaff + n);
             }
 
+      // make our own copy of selection, since pasting modifies actual selection
+      Selection srcSelection(selection());
+
       // copy to all destination staves
       for (int i = 1; srcStaff + i < lastStaff; ++i) {
             int track = (srcStaff + i) * VOICES;
             ChordRest* cr = startMeasure->findChordRest(0, track);
             if (cr) {
-                  XmlReader e(selection().mimeData());
+                  XmlReader e(srcSelection.mimeData());
                   e.setPasteMode(true);
                   if (!pasteStaff(e, cr->segment(), cr->staffIdx()))
                         qDebug("explode: paste failed");
@@ -2495,6 +2498,7 @@ void Score::cmdExplode()
 //---------------------------------------------------------
 //   cmdImplode
 ///   implodes contents of selected staves into top staff
+///   for single staff, merge voices
 //---------------------------------------------------------
 
 void Score::cmdImplode()
@@ -2503,9 +2507,20 @@ void Score::cmdImplode()
             return;
 
       int dstStaff = selection().staffStart();
-      int lastStaff = selection().staffEnd();
-      if (dstStaff == lastStaff - 1)
-            return;
+      int endStaff = selection().staffEnd();
+      int startTrack = dstStaff * VOICES;
+      int endTrack;
+      int trackInc;
+      // if single staff selected, combine voices
+      // otherwise combine staves
+      if (dstStaff == endStaff - 1) {
+            endTrack = startTrack + VOICES;
+            trackInc = 1;
+            }
+      else {
+            endTrack = endStaff * VOICES;
+            trackInc = VOICES;
+            }
 
       Segment* startSegment = selection().startSegment();
       Segment* endSegment = selection().endSegment();
@@ -2528,9 +2543,9 @@ void Score::cmdImplode()
                               break;
                               }
                         }
-                  // loop through each subsequent staff looking for notes to add
-                  for (int i = 1; dstStaff + i < lastStaff; ++i) {
-                        int srcTrack = (dstStaff + i) * VOICES;
+                  // loop through each subsequent staff (or track within staff)
+                  // looking for notes to add
+                  for (int srcTrack = startTrack + trackInc; srcTrack < endTrack; srcTrack += trackInc) {
                         Element* src = s->element(srcTrack);
                         if (src && src->type() == Element::Type::CHORD) {
                               Chord* srcChord = static_cast<Chord*>(src);
@@ -2558,6 +2573,18 @@ void Score::cmdImplode()
                                           }
                                     }
                               }
+                        // delete chordrest from source track if possible
+                        if (src && src->voice())
+                              undoRemoveElement(src);
+                        }
+                  }
+            else if (trackInc == 1) {
+                  // destination track has either a rest or nothing
+                  // either way, remove everything from other voices if in "voice mode"
+                  for (int i = 1; i < VOICES; ++i) {
+                        Element* e = s->element(dstTrack + i);
+                        if (e)
+                              undoRemoveElement(e);
                         }
                   }
             }
