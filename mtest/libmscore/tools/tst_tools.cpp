@@ -32,6 +32,7 @@ class TestTools : public QObject, public MTest
       void initTestCase();
       void undoExplode();
       void undoImplode();
+      void undoImplodeVoice();
       void undoSlashFill();
       void undoSlashRhythm();
       };
@@ -85,6 +86,35 @@ void TestTools::undoImplode()
       QString reference1(DIR  + "undoImplode01-ref.mscx");
       QString writeFile2("undoImplode02-test.mscx");
       QString reference2(DIR  + "undoImplode02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // select all
+      score->startCmd();
+      score->cmdSelectAll();
+      score->endCmd();
+
+      // do
+      score->startCmd();
+      score->cmdImplode();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+void TestTools::undoImplodeVoice()
+      {
+      QString readFile(DIR + "undoImplodeVoice.mscx");
+      QString writeFile1("undoImplodeVoice01-test.mscx");
+      QString reference1(DIR  + "undoImplodeVoice01-ref.mscx");
+      QString writeFile2("undoImplodeVoice02-test.mscx");
+      QString reference2(DIR  + "undoImplodeVoice02-ref.mscx");
 
       Score* score = readScore(readFile);
       score->doLayout();
