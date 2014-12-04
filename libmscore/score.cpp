@@ -1770,79 +1770,16 @@ void Score::scanElements(void* data, void (*func)(void*, Element*), bool all)
             page->scanElements(data, func, all);
       }
 
+//---------------------------------------------------------
+//   scanElementsInRange
+//---------------------------------------------------------
+
 void Score::scanElementsInRange(void* data, void (*func)(void*, Element*), bool all)
       {
       Segment* startSeg = _selection.startSegment();
       for (Segment* s = startSeg; s && s!=_selection.endSegment(); s = s->next1MM()) {
             s->scanElements(data,func,all);
             }
-      }
-
-//---------------------------------------------------------
-//   customKeySigIdx
-//    try to find custom key signature in table,
-//    return index or -1 if not found
-//---------------------------------------------------------
-
-int Score::customKeySigIdx(KeySig* ks) const
-      {
-      int idx = 0;
-      foreach(KeySig* k, customKeysigs) {
-            if (*k == *ks)
-                  return idx;
-            ++idx;
-            }
-      qDebug("  not found");
-      return -1;
-      }
-
-//---------------------------------------------------------
-//   addCustomKeySig
-//---------------------------------------------------------
-
-int Score::addCustomKeySig(KeySig* ks)
-      {
-      customKeysigs.append(ks);
-      int idx = customKeysigs.size() - 1;
-      KeySigEvent k = ks->keySigEvent();
-      k.setCustomType(idx);
-      ks->setKeySigEvent(k);
-      ks->setScore(this);
-      return idx;
-      }
-
-//---------------------------------------------------------
-//   customKeySig
-//---------------------------------------------------------
-
-KeySig* Score::customKeySig(int idx) const
-      {
-      return customKeysigs.value(idx);
-      }
-
-//---------------------------------------------------------
-//   keySigFactory
-//---------------------------------------------------------
-
-KeySig* Score::keySigFactory(const KeySigEvent& e)
-      {
-      KeySig* ks;
-      if (!e.isValid())
-            return 0;
-      if (e.custom()) {
-            KeySig* cks = customKeysigs.value(e.customType());
-            if (cks)
-                  ks = new KeySig(*cks);
-            else {
-                  qDebug("Score::keySigFactory: invalid custom key index");
-                  return 0;
-                  }
-            }
-      else {
-            ks = new KeySig(this);
-            ks->setKeySigEvent(e);
-            }
-      return ks;
       }
 
 //---------------------------------------------------------

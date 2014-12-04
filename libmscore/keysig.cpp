@@ -56,9 +56,7 @@ KeySig::KeySig(const KeySig& k)
    : Element(k)
       {
       _showCourtesy = k._showCourtesy;
-      for (const KeySym& ks: k.keySymbols)
-            keySymbols.append(ks);
-      _sig = k._sig;
+      _sig          = k._sig;
       _hideNaturals = false;
       }
 
@@ -72,16 +70,6 @@ qreal KeySig::mag() const
       }
 
 //---------------------------------------------------------
-//   setCustom
-//---------------------------------------------------------
-
-void KeySig::setCustom(const QList<KeySym>& symbols)
-      {
-      _sig.setCustomType(0);
-      keySymbols = symbols;
-      }
-
-//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
@@ -90,7 +78,7 @@ void KeySig::addLayout(SymId sym, qreal x, int line)
       KeySym ks;
       ks.sym    = sym;
       ks.spos   = QPointF(x, qreal(line) * .5);
-      keySymbols.append(ks);
+      _sig.keySymbols().append(ks);
       }
 
 //---------------------------------------------------------
@@ -102,20 +90,17 @@ void KeySig::layout()
       qreal _spatium = spatium();
       setbbox(QRectF());
 
-      if (staff() && !staff()->genKeySig()) {     // no key sigs on TAB staves
-            keySymbols.clear();
-            return;
-            }
-
       if (isCustom()) {
-            for (KeySym& ks: keySymbols) {
+            for (KeySym& ks: _sig.keySymbols()) {
                   ks.pos = ks.spos * _spatium;
                   addbbox(symBbox(ks.sym).translated(ks.pos));
                   }
             return;
             }
 
-      keySymbols.clear();
+      _sig.keySymbols().clear();
+      if (staff() && !staff()->genKeySig())     // no key sigs on TAB staves
+            return;
 
       // determine current clef for this staff
       ClefType clef = ClefType::G;
@@ -251,7 +236,7 @@ void KeySig::layout()
             }
 
       // compute bbox
-      for (KeySym& ks : keySymbols) {
+      for (KeySym& ks : _sig.keySymbols()) {
             ks.pos = ks.spos * _spatium;
             addbbox(symBbox(ks.sym).translated(ks.pos));
             }
@@ -264,7 +249,7 @@ void KeySig::layout()
 void KeySig::draw(QPainter* p) const
       {
       p->setPen(curColor());
-      for (const KeySym& ks: keySymbols)
+      for (const KeySym& ks: _sig.keySymbols())
             drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));
       }
 
@@ -289,13 +274,10 @@ Element* KeySig::drop(const DropData& data)
             return 0;
             }
       KeySigEvent k = ks->keySigEvent();
-      if (k.custom() && (score()->customKeySigIdx(ks) == -1))
-            score()->addCustomKeySig(ks);
-      else
-            delete ks;
+      delete ks;
       if (data.modifiers & Qt::ControlModifier) {
             // apply only to this stave
-            if (k != keySigEvent())
+            if (!(k == keySigEvent()))
                   score()->undoChangeKeySig(staff(), tick(), k.key());
             }
       else {
@@ -335,8 +317,8 @@ void KeySig::write(Xml& xml) const
       xml.stag(name());
       Element::writeProperties(xml);
       if (_sig.custom()) {
-            xml.tag("custom", _sig.customType());
-            for (const KeySym& ks: keySymbols) {
+            xml.tag("custom", 1);
+            for (const KeySym& ks : _sig.keySymbols()) {
                   xml.stag("KeySym");
                   xml.tag("sym", Sym::id2name(ks.sym));
                   xml.tag("pos", ks.spos);
@@ -379,7 +361,7 @@ void KeySig::read(XmlReader& e)
                         else
                               e.unknown();
                         }
-                  keySymbols.append(ks);
+                  _sig.keySymbols().append(ks);
                   }
             else if (tag == "showCourtesySig")
                   _showCourtesy = e.readInt();
@@ -389,14 +371,16 @@ void KeySig::read(XmlReader& e)
                   _sig.setKey(Key(e.readInt()));
             else if (tag == "natural")                // obsolete
                   e.readInt();
-            else if (tag == "custom")
-                  _sig.setCustomType(e.readInt());
+            else if (tag == "custom") {
+                  e.readInt();
+                  _sig.setCustom(true);
+                  }
             else if (tag == "subtype")
                   subtype = e.readInt();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
-      if (_sig.invalid())
+      if (!_sig.isValid())
             _sig.initFromSubtype(subtype);     // for backward compatibility
       }
 
@@ -406,23 +390,6 @@ void KeySig::read(XmlReader& e)
 
 bool KeySig::operator==(const KeySig& k) const
       {
-      bool ct1 = customType() != 0;
-      bool ct2 = k.customType() != 0;
-      if (ct1 != ct2)
-            return false;
-
-      if (ct1) {
-            int n = keySymbols.size();
-            if (n != k.keySymbols.size())
-                  return false;
-            for (int i = 0; i < n; ++i) {
-                  if (keySymbols[i].sym != k.keySymbols[i].sym)
-                        return false;
-                  if (keySymbols[i].spos != k.keySymbols[i].spos)
-                        return false;
-                  }
-            return true;
-            }
       return _sig == k._sig;
       }
 
@@ -434,12 +401,6 @@ void KeySig::changeKeySigEvent(const KeySigEvent& t)
       {
       if (_sig == t)
             return;
-      if (t.custom()) {
-            KeySig* ks = _score->customKeySig(t.customType());
-            if (!ks)
-                  return;
-            keySymbols = ks->keySymbols;
-            }
       setKeySigEvent(t);
       }
 

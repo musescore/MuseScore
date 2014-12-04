@@ -2470,9 +2470,9 @@ void KeySigView::setElement(Element* e)
       KeySigEvent ev = ks->keySigEvent();
       keysig.showCourtesySig->setChecked(ks->showCourtesy());
       keysig.accidentalType->setValue(int(ev.key()));
-      keysig.customType->setValue(ev.customType());
+//      keysig.customType->setValue(ev.customType());
       keysig.custom->setChecked(ev.custom());
-      keysig.invalid->setChecked(ev.invalid());
+      keysig.invalid->setChecked(!ev.isValid());
       }
 
 //---------------------------------------------------------

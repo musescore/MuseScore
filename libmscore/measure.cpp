@@ -1381,27 +1381,16 @@ qDebug("drop staffList");
                   {
                   KeySig* ks    = static_cast<KeySig*>(e);
                   KeySigEvent k = ks->keySigEvent();
-                  //add custom key to score if not exist
-                  if (k.custom()) {
-                        int customIdx = score()->customKeySigIdx(ks);
-                        if (customIdx == -1) {
-                              customIdx = score()->addCustomKeySig(ks);
-                              k.setCustomType(customIdx);
-                              }
-                        else
-                              delete ks;
-                      }
-                  else
-                        delete ks;
+                  delete ks;
 
                   if (data.modifiers & Qt::ControlModifier) {
                         // apply only to this stave
-                        score()->undoChangeKeySig(staff, tick(), k.key());
+                        score()->undoChangeKeySig(staff, tick(), k);
                         }
                   else {
                         // apply to all staves:
                         foreach(Staff* s, score()->staves())
-                              score()->undoChangeKeySig(s, tick(), k.key());
+                              score()->undoChangeKeySig(s, tick(), k);
                         }
 
                   break;

@@ -884,6 +884,9 @@ void Palette::dropEvent(QDropEvent* event)
                               SlurTie* st = static_cast<SlurTie*>(e);
                               st->setTrack(0);
                               }
+//                        else if (e->type() == Element::Type::KEYSIG) {
+//                              KeySig* k = static_cast<KeySig*>(e);
+//                              }
                         }
                   }
             }
@@ -1015,8 +1018,10 @@ bool Palette::read(const QString& p)
             path += ".mpal";
 
       MQZipReader f(path);
-      if (!f.exists())
+      if (!f.exists()) {
+            qDebug("palette <%s> not found", qPrintable(path));
             return false;
+            }
       clear();
 
       QByteArray ba = f.fileData("META-INF/container.xml");
