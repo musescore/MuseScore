@@ -1602,19 +1602,18 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   //
                   // create missing key signature
                   //
-                  keysig = keySigFactory(keyIdx);
-                  if (keysig) {
-                        keysig->setTrack(i * VOICES);
-                        keysig->setGenerated(true);
-                        Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
-                        keysig->setParent(seg);
-                        keysig->layout();
-                        undoAddElement(keysig);
-                        }
+                  keysig = new KeySig(this);
+                  keysig->setKeySigEvent(keyIdx);
+                  keysig->setTrack(i * VOICES);
+                  keysig->setGenerated(true);
+                  Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
+                  keysig->setParent(seg);
+                  keysig->layout();
+                  undoAddElement(keysig);
                   }
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
-            else if (keysig && !keysig->isCustom() && keysig->keySigEvent() != keyIdx)
+            else if (keysig && !keysig->isCustom() && !(keysig->keySigEvent() == keyIdx))
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
 
             bool needClef = isFirstSystem || styleB(StyleIdx::genClef);
@@ -1930,7 +1929,7 @@ void Score::createMMRests()
                                           undo(new AddElement(nks));
                                           }
                                     else {
-                                          if (nts->keySigEvent() != ts->keySigEvent()) {
+                                          if (!(nts->keySigEvent() == ts->keySigEvent())) {
                                                 undo(new ChangeKeySig(nts, ts->keySigEvent(), nts->showCourtesy()));
                                                 }
                                           }

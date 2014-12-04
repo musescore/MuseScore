@@ -466,7 +466,7 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 //   undoChangeKeySig
 //---------------------------------------------------------
 
-void Score::undoChangeKeySig(Staff* ostaff, int tick, Key key)
+void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
       {
       KeySig* lks = 0;
       foreach (Staff* staff, ostaff->staffList()) {
@@ -486,23 +486,19 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, Key key)
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
             int diff = -staff->part()->instr()->transpose().chromatic;
-            Key nkey;
-            if (diff && !score->styleB(StyleIdx::concertPitch))
-                  nkey = transposeKey(key, diff);
-            else
-                  nkey = key;
+            KeySigEvent nkey = key;
+            if (diff && !score->styleB(StyleIdx::concertPitch) && !nkey.custom())
+                  nkey.setKey(transposeKey(key.key(), diff));
 
             if (ks) {
                   ks->undoChangeProperty(P_ID::GENERATED, false);
-                  KeySigEvent kse = ks->keySigEvent();
-                  kse.setKey(nkey);
-                  undo(new ChangeKeySig(ks, kse, ks->showCourtesy()));
+                  undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
                   }
             else {
                   KeySig* nks = new KeySig(score);
                   nks->setParent(s);
                   nks->setTrack(track);
-                  nks->setKey(nkey);
+                  nks->setKeySigEvent(nkey);
                   undo(new AddElement(nks));
                   if (lks)
                         lks->linkTo(nks);

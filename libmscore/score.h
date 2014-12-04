@@ -370,7 +370,6 @@ class Score : public QObject {
 
       Selection _selection;
       SelectionFilter _selectionFilter;
-      QList<KeySig*> customKeysigs;
       Omr* _omr;
       Audio* _audio;
       bool _showOmr;
@@ -533,7 +532,7 @@ class Score : public QObject {
       void undoChangeTuning(Note*, qreal);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);
       void undoChangeUserMirror(Note*, MScore::DirectionH);
-      void undoChangeKeySig(Staff* ostaff, int tick, Key);
+      void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
       void undoChangeBarLine(Measure* m, BarLineType);
       void undoChangeProperty(Element*, P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
@@ -847,10 +846,6 @@ class Score : public QObject {
       void expandVoice(Segment* s, int track);
       void expandVoice();
 
-      int customKeySigIdx(KeySig*) const;
-      int addCustomKeySig(KeySig*);
-      KeySig* customKeySig(int) const;
-      KeySig* keySigFactory(const KeySigEvent&);
       Element* selectMove(const QString& cmd);
       Element* move(const QString& cmd);
       void cmdEnterRest(const TDuration& d);

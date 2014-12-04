@@ -120,7 +120,8 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       addPalette(MuseScore::newGraceNotePalette(false));
       addPalette(MuseScore::newClefsPalette(false));
-      stack->addWidget(new KeyEditor);
+      keyEditor = new KeyEditor;
+      stack->addWidget(keyEditor);
 
       timeDialog = new TimeDialog;
       stack->addWidget(timeDialog);
@@ -157,6 +158,8 @@ void MasterPalette::closeEvent(QCloseEvent* ev)
       {
       if (timeDialog->dirty())
             timeDialog->save();
+      if (keyEditor->dirty())
+            keyEditor->save();
       emit closed(false);
       QWidget::closeEvent(ev);
       }

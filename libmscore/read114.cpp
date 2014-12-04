@@ -361,10 +361,11 @@ Score::FileError Score::read114(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "Staff")
                   readStaff(e);
-            else if (tag == "KeySig") {
+            else if (tag == "KeySig") {               // not supported
                   KeySig* ks = new KeySig(this);
                   ks->read(e);
-                  customKeysigs.append(ks);
+                  // customKeysigs.append(ks);
+                  delete ks;
                   }
             else if (tag == "siglist")
                   _sigmap->read(e, _fileDivision);
@@ -588,13 +589,12 @@ Score::FileError Score::read114(XmlReader& e)
                   else {
                         KeySigEvent ke;
                         ke.setKey(i->second);
-                        KeySig* ks = keySigFactory(ke);
-                        if (ks) {
-                              ks->setParent(seg);
-                              ks->setTrack(track);
-                              ks->setGenerated(false);
-                              seg->add(ks);
-                              }
+                        KeySig* ks = new KeySig(this);
+                        ks->setKeySigEvent(ke);
+                        ks->setParent(seg);
+                        ks->setTrack(track);
+                        ks->setGenerated(false);
+                        seg->add(ks);
                         }
                   }
             }

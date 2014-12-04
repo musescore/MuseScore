@@ -168,9 +168,6 @@ void Score::write(Xml& xml, bool selectionOnly)
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
             }
 
-      foreach(KeySig* ks, customKeysigs)
-            ks->write(xml);
-
       if (!selectionOnly) {
             xml.stag("PageList");
             foreach(Page* page, _pages)
@@ -961,11 +958,8 @@ bool Score::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "Staff")
                   readStaff(e);
-            else if (tag == "KeySig") {
-                  KeySig* ks = new KeySig(this);
-                  ks->read(e);
-                  customKeysigs.append(ks);
-                  }
+            else if (tag == "KeySig")           // obsolete
+                  e.skipCurrentElement();
             else if (tag == "StaffType") {      // obsolete
 #if 0
                   int idx           = e.intAttribute("idx");
