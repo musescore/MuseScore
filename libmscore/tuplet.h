@@ -91,7 +91,7 @@ class Tuplet : public DurationElement {
       void setRatio(const Fraction& r) { _ratio = r;            }
 
       const QList<DurationElement*>& elements() const { return _elements; }
-      void clear()                  { _elements.clear(); }
+      void clear()                                    { _elements.clear(); }
 
       virtual void layout();
       Text* number() const { return _number; }

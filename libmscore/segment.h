@@ -88,7 +88,7 @@ public:
       Segment* _prev;
 
       mutable bool empty;           // cached value
-      mutable bool _written;        // used for write()
+      mutable bool _written { false };        // used for write()
 
       Type _segmentType { Type::Invalid };
       int _tick;

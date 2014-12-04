@@ -72,11 +72,6 @@ Tuplet::Tuplet(const Tuplet& t)
 
 Tuplet::~Tuplet()
       {
-      //
-      // delete all references
-      //
-      foreach(DurationElement* e, _elements)
-            e->setTuplet(0);
       delete _number;
       }
 
