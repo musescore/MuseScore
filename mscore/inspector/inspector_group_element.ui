@@ -77,6 +77,9 @@
      </property>
      <item row="0" column="1">
       <widget class="QPushButton" name="setColor">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="accessibleName">
         <string>Set Color</string>
        </property>
@@ -97,6 +100,9 @@
      </item>
      <item row="1" column="0">
       <widget class="QPushButton" name="setVisible">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="accessibleName">
         <string>Set Visible</string>
        </property>
@@ -107,6 +113,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QPushButton" name="setInvisible">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="accessibleName">
         <string>Set Invisible</string>
        </property>
