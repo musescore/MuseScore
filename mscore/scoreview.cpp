@@ -2515,6 +2515,8 @@ void ScoreView::cmd(const QAction* a)
             sm->postEvent(new CommandEvent(cmd));
             }
       else if (cmd == "lyrics") {
+            if (noteEntryMode())          // force out of entry mode
+                  sm->postEvent(new CommandEvent("note-input"));
             Lyrics* lyrics = _score->addLyrics();
             if (lyrics) {
                   _score->setLayoutAll(true);
@@ -2523,6 +2525,8 @@ void ScoreView::cmd(const QAction* a)
                   }
             }
       else if (cmd == "figured-bass") {
+            if (noteEntryMode())          // force out of entry mode
+                  sm->postEvent(new CommandEvent("note-input"));
             FiguredBass* fb = _score->addFiguredBass();
             if (fb) {
                   _score->setLayoutAll(true);
@@ -2582,8 +2586,11 @@ void ScoreView::cmd(const QAction* a)
             cmdInsertNote(5);
       else if (cmd == "insert-b")
             cmdInsertNote(6);
-      else if (cmd == "chord-text")
+      else if (cmd == "chord-text") {
+            if (noteEntryMode())          // force out of entry mode
+                  sm->postEvent(new CommandEvent("note-input"));
             cmdAddChordName();
+            }
 
       else if (cmd == "title-text")
             cmdAddText(TEXT::TITLE);
@@ -4977,6 +4984,7 @@ void ScoreView::cmdAddChordName()
       {
       if (!_score->checkHasMeasures())
             return;
+
       ChordRest* cr = _score->getSelectedChordRest();
       if (!cr)
             return;
@@ -5000,6 +5008,9 @@ void ScoreView::cmdAddText(TEXT type)
       {
       if (!_score->checkHasMeasures())
             return;
+      if (noteEntryMode())          // force out of entry mode
+            sm->postEvent(new CommandEvent("note-input"));
+
       Text* s = 0;
       _score->startCmd();
       switch(type) {
