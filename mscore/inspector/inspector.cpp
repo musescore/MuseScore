@@ -252,25 +252,20 @@ void Inspector::setElements(const QList<Element*>& l)
             for (int i = 0; i < widgets.size(); i++) {
                   QWidget* currentWidget = widgets.at(i);
                   switch (currentWidget->focusPolicy()) {
-                        case Qt::TabFocus:
-#if defined(Q_OS_MAC)
-                              currentWidget->setFocusPolicy(Qt::StrongFocus);
-#endif
                         case Qt::WheelFocus:
                         case Qt::StrongFocus:
-#if defined(Q_OS_MAC)
-//leave them like they are
-#else
-                              if (currentWidget->parent()->inherits("QAbstractSpinBox") ||
+                              if (currentWidget->inherits("QComboBox")                  ||
+                                  currentWidget->parent()->inherits("QAbstractSpinBox") ||
                                   currentWidget->inherits("QAbstractSpinBox")           ||
                                   currentWidget->inherits("QLineEdit")) ; //leave it like it is
                               else
                                    currentWidget->setFocusPolicy(Qt::TabFocus);
-#endif
                               break;
                         case Qt::NoFocus:
                         case Qt::ClickFocus:
                                     currentWidget->setFocusPolicy(Qt::NoFocus);
+                              break;
+                        case Qt::TabFocus:
                               break;
                         }
                   }
