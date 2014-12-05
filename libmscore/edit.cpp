@@ -1404,6 +1404,7 @@ void Score::deleteItem(Element* el)
       {
       if (!el)
             return;
+
       switch (el->type()) {
             case Element::Type::INSTRUMENT_NAME: {
                   Part* part = el->staff()->part();
@@ -1415,8 +1416,18 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::TIMESIG:
-                  cmdRemoveTimeSig(static_cast<TimeSig*>(el));
+            case Element::Type::TIMESIG: {
+                  // timesig might already be removed
+                  TimeSig* ts = static_cast<TimeSig*>(el);
+                  Segment* s = ts->segment();
+                  Measure* m = s->measure();
+                  Segment* ns = m->findSegment(s->segmentType(), s->tick());
+                  if (!ns || (ns->element(ts->track()) != ts)) {
+                        qDebug("deleteItem: not found");
+                        break;
+                        }
+                  cmdRemoveTimeSig(ts);
+                  }
                   break;
 
             case Element::Type::KEYSIG:
@@ -1893,7 +1904,7 @@ void Score::cmdDeleteSelection()
             QList<Element*> el(selection().elements());
             if (el.isEmpty())
                   qDebug("...nothing selected");
-            foreach(Element* e, el)
+            for (Element* e : el)
                   deleteItem(e);
             }
       deselectAll();
