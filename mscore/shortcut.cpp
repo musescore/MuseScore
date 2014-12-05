@@ -1658,20 +1658,20 @@ Shortcut Shortcut::_sc[] = {
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
          },
-      {
-         MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
-         "toggle-transport",
-         QT_TRANSLATE_NOOP("action","Transport"),
-         QT_TRANSLATE_NOOP("action","Transport toolbar")
-         },
-      {
-         MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
-         "toggle-noteinput",
-         QT_TRANSLATE_NOOP("action","Note Input"),
-         QT_TRANSLATE_NOOP("action","Note input toolbar")
-         },
+//      {
+//         MsWidget::MAIN_WINDOW,
+//         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
+//         "toggle-transport",
+//         QT_TRANSLATE_NOOP("action","Transport"),
+//         QT_TRANSLATE_NOOP("action","Transport toolbar")
+//         },
+//      {
+//         MsWidget::MAIN_WINDOW,
+//         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,
+//         "toggle-noteinput",
+//         QT_TRANSLATE_NOOP("action","Note Input"),
+//         QT_TRANSLATE_NOOP("action","Note input toolbar")
+//         },
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT,

@@ -741,15 +741,16 @@ MuseScore::MuseScore()
       menuView->addAction(getAction("zoomout"));
       menuView->addSeparator();
 
-      a = getAction("toggle-transport");
-      a->setCheckable(true);
-      a->setChecked(transportTools->isVisible());
-      menuView->addAction(a);
+//      a = getAction("toggle-transport");
+//      a->setCheckable(true);
+//      a->setChecked(transportTools->isVisible());
+//      connect(transportTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+//      menuView->addAction(a);
 
-      a = getAction("toggle-noteinput");
-      a->setCheckable(true);
-      a->setChecked(true);
-      menuView->addAction(a);
+//      a = getAction("toggle-noteinput");
+//      a->setCheckable(true);
+//      a->setChecked(true);
+//      menuView->addAction(a);
 
       a = getAction("toggle-statusbar");
       a->setCheckable(true);
@@ -2680,10 +2681,10 @@ void MuseScore::readSettings()
       splitter->restoreState(settings.value("splitter").toByteArray());
       settings.endGroup();
 
-      QAction* a = getAction("toggle-transport");
-      a->setChecked(!transportTools->isHidden());
-      a = getAction("toggle-noteinput");
-      a->setChecked(!entryTools->isHidden());
+//      QAction* a = getAction("toggle-transport");
+//      a->setChecked(!transportTools->isHidden());
+//      a = getAction("toggle-noteinput");
+//      a->setChecked(!entryTools->isHidden());
       }
 
 //---------------------------------------------------------
@@ -4015,10 +4016,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showSelectionWindow(a->isChecked());
       else if (cmd == "show-keys")
             ;
-      else if (cmd == "toggle-transport")
-            transportTools->setVisible(!transportTools->isVisible());
-      else if (cmd == "toggle-noteinput")
-            entryTools->setVisible(!entryTools->isVisible());
+//      else if (cmd == "toggle-transport")
+//            transportTools->setVisible(!transportTools->isVisible());
+//      else if (cmd == "toggle-noteinput")
+//            entryTools->setVisible(!entryTools->isVisible());
       else if (cmd == "local-help")
             helpBrowser();
       else if (cmd == "follow")
