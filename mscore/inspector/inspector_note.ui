@@ -325,6 +325,9 @@
      </item>
      <item row="10" column="0">
       <widget class="QCheckBox" name="fixed">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="accessibleName">
         <string>Fix to line</string>
        </property>
