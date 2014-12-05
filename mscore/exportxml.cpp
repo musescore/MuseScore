@@ -4678,17 +4678,23 @@ double ExportMusicXml::getTenthsFromDots(double dots)
 
 void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd, int offset)
       {
-      double rx = h->userOff().x()*10;
-      QString relative;
-      if (rx > 0) {
-            relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
-            }
+      // this code was probably in place to allow chord symbols shifted *right* to export with offset
+      // since this was at once time the only way to get a chord to appear over beat 3 in an empty 4/4 measure
+      // but the value was calculated incorrectly (should be divided by spatium) and would be better off using offset anyhow
+      // since we now support placement of chord symbols over "empty" beats directly,
+      // and wedon't generally export position info for other elements
+      // it's just as well to not bother doing so here
+      //double rx = h->userOff().x()*10;
+      //QString relative;
+      //if (rx > 0) {
+      //      relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
+      //      }
       int rootTpc = h->rootTpc();
       if (rootTpc != Tpc::TPC_INVALID) {
             if (h->textStyle().hasFrame())
-                  xml.stag(QString("harmony print-frame=\"yes\"").append(relative));
+                  xml.stag(QString("harmony print-frame=\"yes\""));     // .append(relative));
             else
-                  xml.stag(QString("harmony print-frame=\"no\"").append(relative));
+                  xml.stag(QString("harmony print-frame=\"no\""));      // .append(relative));
             xml.stag("root");
             xml.tag("root-step", tpc2stepName(rootTpc));
             int alter = int(tpc2alter(rootTpc));
@@ -4761,9 +4767,9 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             // which may contain arbitrary text
             //
             if (h->textStyle().hasFrame())
-                  xml.stag(QString("harmony print-frame=\"yes\"").append(relative));
+                  xml.stag(QString("harmony print-frame=\"yes\""));     // .append(relative));
             else
-                  xml.stag(QString("harmony print-frame=\"no\"").append(relative));
+                  xml.stag(QString("harmony print-frame=\"no\""));      // .append(relative));
             xml.stag("root");
             xml.tag("root-step text=\"\"", "C");
             xml.etag();       // root

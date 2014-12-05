@@ -5615,8 +5615,11 @@ void MusicXml::xmlHarmony(QDomElement e, int tick, Measure* measure, int staff)
       // type:
 
       // placement:
-      double rx = 0.1 * e.attribute("relative-x", "0").toDouble();
-      double ry = -0.1 * e.attribute("relative-y", "0").toDouble();
+      // in order to work correctly, this should probably be adjusted to account for spatium
+      // but in any case, we don't support import relative-x/y for other elements
+      // no reason to do so for chord symbols
+      double rx = 0.0;  // 0.1 * e.attribute("relative-x", "0").toDouble();
+      double ry = 0.0;  // -0.1 * e.attribute("relative-y", "0").toDouble();
 
       double styleYOff = score->textStyle(TextStyleType::HARMONY).offset().y();
       OffsetType offsetType = score->textStyle(TextStyleType::HARMONY).offsetType();
