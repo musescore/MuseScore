@@ -1446,7 +1446,8 @@ qDebug("drop staffList");
                   {
                   BarLine* bl = static_cast<BarLine*>(e);
                   // if dropped bar line refers to span rather than to subtype
-                  if (bl->spanFrom() != 0 && bl->spanTo() != DEFAULT_BARLINE_TO) {
+                  // or if Ctrl key used
+                  if ((bl->spanFrom() != 0 && bl->spanTo() != DEFAULT_BARLINE_TO) || (data.modifiers & Qt::ControlModifier)) {
                         // get existing bar line for this staff, and drop the change to it
                         Segment* seg = undoGetSegment(Segment::Type::EndBarLine, tick() + ticks());
                         BarLine* cbl = static_cast<BarLine*>(seg->element(staffIdx * VOICES));
