@@ -55,12 +55,12 @@
     <sym value="Re" class="note" name="Re"/>
     <sym value="re" class="note" name="re"/>
 
-<!-- remove "code" attributes from these to get "es" and "is" to render as literals rather than as flat and sharp signs -->
-    <sym class="accidental" code="0x266d" name="es"/>
-    <sym class="accidental" code="0x266f" name="is"/>
+<!-- add "code" attributes (as for "b" and "#" above) to get these to render as flat and sharp signs -->
+    <sym class="accidental" name="es"/>
+    <sym class="accidental" name="is"/>
 <!-- this is to render the "s" in "As" and "Es" in German -->
-    <sym class="accidental" code="0x266d" name="s"/>
-<!-- change value of "code" attribute to "0x200b" (zero width space) to render Bb as B in German -->
+    <sym class="accidental" name="s"/>
+<!-- change value of "code" attribute to "0x200b" (zero width space) to force Bb to render as B in German -->
     <sym class="german_B" code="0x266d" name="b"/>
 
     </font>
