@@ -266,7 +266,8 @@ class ExportMusicXml {
       GlissandoHandler gh;
       int tick;
       Attributes attr;
-      TextLine const* bracket[MAX_BRACKETS];
+      TextLine const* brackets[MAX_BRACKETS];
+      Ottava const* ottavas[MAX_BRACKETS];
       int div;
       double millimeters;
       int tenths;
@@ -274,6 +275,7 @@ class ExportMusicXml {
       TrillHash trillStop;
 
       int findBracket(const TextLine* tl) const;
+      int findOttava(const Ottava* tl) const;
       void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset);
       void rest(Rest* chord, int staff);
       void clef(int staff, ClefType clef);
@@ -3035,6 +3037,18 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       xml.etag();
       directionETag(xml, staff);
       }
+      
+//---------------------------------------------------------
+//   findOttava -- get index of ottava in ottava table
+//   return -1 if not found
+//---------------------------------------------------------
+
+int ExportMusicXml::findOttava(const Ottava* ot) const
+      {
+            for (int i = 0; i < MAX_BRACKETS; ++i)
+                  if (ottavas[i] == ot) return i;
+            return -1;
+      }
 
 //---------------------------------------------------------
 //   ottava
@@ -3047,6 +3061,15 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       Ottava::Type st = ot->ottavaType();
       directionTag(xml, attr, ot);
       xml.stag("direction-type");
+            
+      int n = findOttava(ot);
+      if (n >= 0)
+            ottavas[n] = 0;
+      else {
+            n = findOttava(0);
+            ottavas[n] = ot;
+      }
+
       if (ot->tick() == tick) {
             const char* sz = 0;
             const char* tp = 0;
@@ -3071,13 +3094,13 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
                         qDebug("ottava subtype %hhd not understood", st);
                   }
             if (sz && tp)
-                  xml.tagE("octave-shift type=\"%s\" size=\"%s\"", tp, sz);
+                  xml.tagE("octave-shift type=\"%s\" size=\"%s\" number=\"%d\"", tp, sz, n + 1);
             }
       else {
             if (st == Ottava::Type::OTTAVA_8VA || st == Ottava::Type::OTTAVA_8VB)
-                  xml.tagE("octave-shift type=\"stop\" size=\"8\"");
+                  xml.tagE("octave-shift type=\"stop\" size=\"8\" number=\"%d\"", n + 1);
             else if (st == Ottava::Type::OTTAVA_15MA || st == Ottava::Type::OTTAVA_15MB)
-                  xml.tagE("octave-shift type=\"stop\" size=\"15\"");
+                  xml.tagE("octave-shift type=\"stop\" size=\"15\" number=\"%d\"", n + 1);
             else
                   qDebug("ottava subtype %hhd not understood", st);
             }
@@ -3109,7 +3132,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, int tick)
 int ExportMusicXml::findBracket(const TextLine* tl) const
       {
       for (int i = 0; i < MAX_BRACKETS; ++i)
-            if (bracket[i] == tl) return i;
+            if (brackets[i] == tl) return i;
       return -1;
       }
 
@@ -3129,7 +3152,6 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
       QString type;
       bool hook = false;
       double hookHeight = 0.0;
-      int n = 0;
       if (tl->tick() == tick) {
             if (!dashes) {
                   QString lineType;
@@ -3172,12 +3194,12 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             rest += QString(" end-length=\"%1\"").arg(hookHeight * 10);
             }
 
-      n = findBracket(tl);
+      int n = findBracket(tl);
       if (n >= 0)
-            bracket[n] = 0;
+            brackets[n] = 0;
       else {
             n = findBracket(0);
-            bracket[n] = tl;
+            brackets[n] = tl;
             }
 
       if (preferences.musicxmlExportLayout && p.x() != 0)
@@ -4005,8 +4027,10 @@ void ExportMusicXml::write(QIODevice* dev)
 
       calcDivisions();
 
-      for (int i = 0; i < MAX_BRACKETS; ++i)
-            bracket[i] = 0;
+      for (int i = 0; i < MAX_BRACKETS; ++i) {
+            brackets[i] = 0;
+            ottavas[i] = 0;
+            }
 
       xml.setDevice(dev);
       xml.setCodec("UTF-8");
