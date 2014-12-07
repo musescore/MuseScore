@@ -46,6 +46,7 @@ class TestChordSymbol : public QObject, public MTest {
       void testAddPart();
       void testNoSystem();
       void testTranspose();
+      void testTransposePart();
       };
 
 //---------------------------------------------------------
@@ -183,6 +184,16 @@ void TestChordSymbol::testTranspose()
       score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
       score->endCmd();
       test_post(score, "transpose");
+      }
+
+void TestChordSymbol::testTransposePart()
+      {
+      Score* score = test_pre("transpose-part");
+      score->startCmd();
+      score->cmdSelectAll();
+      score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+      score->endCmd();
+      test_post(score, "transpose-part");
       }
 
 QTEST_MAIN(TestChordSymbol)
