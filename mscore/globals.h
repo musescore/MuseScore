@@ -32,6 +32,7 @@ extern bool midiOutputTrace;  ///< debug option: dump midi output
 extern bool converterMode;
 extern double converterDpi;
 extern double guiScaling;
+extern int trimMargin;
 
 //---------------------------------------------------------
 // MsWidget

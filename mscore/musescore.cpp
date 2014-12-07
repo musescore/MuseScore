@@ -127,6 +127,7 @@ static bool pluginMode = false;
 static bool startWithNewScore = false;
 double converterDpi = 0;
 double guiScaling = 1.0;
+int trimMargin = -1;
 
 QString mscoreGlobalShare;
 
@@ -1248,6 +1249,7 @@ static void usage()
         "   -O        dump midi output\n"
         "   -o file   export to 'file'; format depends on file extension\n"
         "   -r dpi    set output resolution for image export\n"
+        "   -T margin trim exported image with specified margin (in pixels)\n"
         "   -x factor set scaling factor for GUI elements\n"
         "   -S style  load style file\n"
         "   -p name   execute named plugin\n"
@@ -4591,6 +4593,11 @@ int main(int argc, char* av[])
                         if (argv.size() - i < 2)
                               usage();
                         converterDpi = argv.takeAt(i + 1).toDouble();
+                        break;
+                  case 'T':
+                        if (argv.size() - i < 2)
+                              usage();
+                        trimMargin = argv.takeAt(i + 1).toInt();
                         break;
                   case 'x':
                         if (argv.size() - i < 2)
