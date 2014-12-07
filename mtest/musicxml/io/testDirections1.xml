@@ -233,7 +233,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <wedge type="crescendo"/>
+          <wedge type="crescendo" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -258,7 +258,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <wedge type="stop"/>
+          <wedge type="stop" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -285,7 +285,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo"/>
+          <wedge type="diminuendo" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -310,7 +310,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <wedge type="stop"/>
+          <wedge type="stop" number="1"/>
           </direction-type>
         </direction>
       <note>

@@ -57,7 +57,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <octave-shift type="down" size="8"/>
+          <octave-shift type="down" size="8" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -82,7 +82,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <octave-shift type="stop" size="8"/>
+          <octave-shift type="stop" size="8" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -109,7 +109,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <octave-shift type="up" size="8"/>
+          <octave-shift type="up" size="8" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -134,7 +134,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <octave-shift type="stop" size="8"/>
+          <octave-shift type="stop" size="8" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -161,7 +161,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <octave-shift type="up" size="15"/>
+          <octave-shift type="up" size="15" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -196,7 +196,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <octave-shift type="stop" size="15"/>
+          <octave-shift type="stop" size="15" number="1"/>
           </direction-type>
         </direction>
       </measure>
@@ -213,7 +213,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <octave-shift type="down" size="15"/>
+          <octave-shift type="down" size="15" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -248,7 +248,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <octave-shift type="stop" size="15"/>
+          <octave-shift type="stop" size="15" number="1"/>
           </direction-type>
         </direction>
       </measure>
@@ -317,7 +317,7 @@
         <notations>
           <ornaments>
             <trill-mark/>
-            <wavy-line type="start"/>
+            <wavy-line type="start" number="1"/>
             </ornaments>
           </notations>
         </note>
@@ -342,7 +342,7 @@
         <stem>down</stem>
         <notations>
           <ornaments>
-            <wavy-line type="stop"/>
+            <wavy-line type="stop" number="1"/>
             </ornaments>
           </notations>
         </note>
