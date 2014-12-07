@@ -266,16 +266,20 @@ class ExportMusicXml {
       GlissandoHandler gh;
       int tick;
       Attributes attr;
-      TextLine const* brackets[MAX_BRACKETS];
-      Ottava const* ottavas[MAX_BRACKETS];
+      TextLine const* brackets[MAX_NUMBER_LEVEL];
+      Hairpin const* hairpins[MAX_NUMBER_LEVEL];
+      Ottava const* ottavas[MAX_NUMBER_LEVEL];
+      Trill const* trills[MAX_NUMBER_LEVEL];
       int div;
       double millimeters;
       int tenths;
       TrillHash trillStart;
       TrillHash trillStop;
 
+      int findHairpin(const Hairpin* tl) const;
       int findBracket(const TextLine* tl) const;
       int findOttava(const Ottava* tl) const;
+      int findTrill(const Trill* tl) const;
       void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset);
       void rest(Rest* chord, int staff);
       void clef(int staff, ClefType clef);
@@ -290,6 +294,10 @@ class ExportMusicXml {
       double getTenthsFromInches(double);
       double getTenthsFromDots(double);
       void keysigTimesig(Measure* m, int strack, int etrack);
+      void chordAttributes(Chord* chord, Notations& notations, Technical& technical,
+                           TrillHash& trillStart, TrillHash& trillStop);
+      void wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments,
+                             TrillHash& trillStart, TrillHash& trillStop);
 
 public:
       ExportMusicXml(Score* s)
@@ -806,7 +814,7 @@ static void findTrills(Measure* measure, int strack, int etrack, TrillHash& tril
                   Chord* stopChord = 0;   // chord where trill stops
 
                   findTrillAnchors(tr, startChord, stopChord);
-                  //qDebug("findTrills 3 startChord %p stopChord %p", startChord, stopChord);
+                  //qDebug("findTrills 3 tr %p startChord %p stopChord %p", tr, startChord, stopChord);
 
                   if (startChord && stopChord) {
                         trillStart.insert(startChord, tr);
@@ -1548,28 +1556,57 @@ static void tupletStartStop(ChordRest* cr, Notations& notations, Xml& xml)
             xml.tagE("tuplet type=\"stop\"");
             }
       }
+      
+//---------------------------------------------------------
+//   findTrill -- get index of trill in trill table
+//   return -1 if not found
+//---------------------------------------------------------
+
+int ExportMusicXml::findTrill(const Trill* tr) const
+      {
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
+            if (trills[i] == tr) return i;
+      return -1;
+      }
 
 //---------------------------------------------------------
 //   wavyLineStartStop
 //---------------------------------------------------------
 
-static void wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments, Xml& xml,
+void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments,
                               TrillHash& trillStart, TrillHash& trillStop)
       {
-      // TODO LVI this does not support overlapping trills
       if (trillStop.contains(chord)) {
+            const Trill* tr = trillStop.value(chord);
+            int n = findTrill(tr);
+            if (n >= 0)
+                  // trill stop after trill start
+                  trills[n] = 0;
+            else {
+                  // trill stop before trill start
+                  n = findTrill(0);
+                  trills[n] = tr;
+                  }
             notations.tag(xml);
             ornaments.tag(xml);
-            xml.tagE("wavy-line type=\"stop\"");
+            xml.tagE("wavy-line type=\"stop\" number=\"%d\"", n + 1);
             trillStop.remove(chord);
             }
       if (trillStart.contains(chord)) {
-            notations.tag(xml);
-            ornaments.tag(xml);
-            // mscore only supports wavy-line with trill-mark
-            xml.tagE("trill-mark");
-            xml.tagE("wavy-line type=\"start\"");
-            trillStart.remove(chord);
+            const Trill* tr = trillStart.value(chord);
+            int n = findTrill(tr);
+            if (n >= 0)
+                  qDebug("wavyLineStartStop error");
+            else {
+                  n = findTrill(0);
+                  trills[n] = tr;
+                  // mscore only supports wavy-line with trill-mark
+                  notations.tag(xml);
+                  ornaments.tag(xml);
+                  xml.tagE("trill-mark");
+                  xml.tagE("wavy-line type=\"start\" number=\"%d\"", n + 1);
+                  trillStart.remove(chord);
+                  }
             }
       }
 
@@ -1645,7 +1682,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 //   chordAttributes
 //---------------------------------------------------------
 
-static void chordAttributes(Chord* chord, Notations& notations, Technical& technical, Xml& xml,
+void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
                             TrillHash& trillStart, TrillHash& trillStop)
       {
       const QList<Articulation*>& na = chord->articulations();
@@ -1930,7 +1967,7 @@ static void chordAttributes(Chord* chord, Notations& notations, Technical& techn
                   }
             }
       tremoloSingleStartStop(chord, notations, ornaments, xml);
-      wavyLineStartStop(chord, notations, ornaments, xml, trillStart, trillStop);
+      wavyLineStartStop(chord, notations, ornaments, trillStart, trillStop);
       ornaments.etag(xml);
 
       // and finally the attributes whose elements are children of <technical>
@@ -2437,7 +2474,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
                         sh.doSlurStop(chord, notations, xml);
                         sh.doSlurStart(chord, notations, xml);
                         }
-                  chordAttributes(chord, notations, technical, xml, trillStart, trillStop);
+                  chordAttributes(chord, notations, technical, trillStart, trillStop);
                   }
             foreach (const Element* e, note->el()) {
                   if (e->type() == Element::Type::FINGERING) {
@@ -3005,6 +3042,18 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       xml.etag();
       directionETag(xml, staff);
       }
+      
+//---------------------------------------------------------
+//   findHairpin -- get index of hairpin in hairpin table
+//   return -1 if not found
+//---------------------------------------------------------
+
+int ExportMusicXml::findHairpin(const Hairpin* hp) const
+      {
+            for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
+                  if (hairpins[i] == hp) return i;
+            return -1;
+      }
 
 //---------------------------------------------------------
 //   hairpin
@@ -3014,24 +3063,33 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       {
       directionTag(xml, attr, hp);
       xml.stag("direction-type");
+            
+      int n = findHairpin(hp);
+      if (n >= 0)
+            hairpins[n] = 0;
+      else {
+            n = findHairpin(0);
+            hairpins[n] = hp;
+            }
+
       if (hp->tick() == tick){
           if( hp->hairpinType() == Hairpin::Type::CRESCENDO ){
               if( hp->hairpinCircledTip() ){
-                xml.tagE( "wedge type=\"crescendo\" niente=\"yes\"" );
+                xml.tagE("wedge type=\"crescendo\" niente=\"yes\" number=\"%d\"", n + 1);
               }
               else{
-                xml.tagE( "wedge type=\"crescendo\"" );
+                xml.tagE("wedge type=\"crescendo\" number=\"%d\"", n + 1);
               }
           }
           else{
-              xml.tagE( "wedge type=\"diminuendo\"" );
+              xml.tagE("wedge type=\"diminuendo\" number=\"%d\"", n + 1);
           }
       }
       else{
           if( hp->hairpinCircledTip() && hp->hairpinType() == Hairpin::Type::DECRESCENDO )
-                xml.tagE( "wedge type=\"stop\" niente=\"yes\"" );
+                xml.tagE("wedge type=\"stop\" niente=\"yes\" number=\"%d\"", n + 1);
           else
-                xml.tagE( "wedge type=\"stop\"" );
+                xml.tagE("wedge type=\"stop\" number=\"%d\"", n + 1);
 
       }
       xml.etag();
@@ -3045,7 +3103,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
 
 int ExportMusicXml::findOttava(const Ottava* ot) const
       {
-            for (int i = 0; i < MAX_BRACKETS; ++i)
+            for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
                   if (ottavas[i] == ot) return i;
             return -1;
       }
@@ -3131,7 +3189,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, int tick)
 
 int ExportMusicXml::findBracket(const TextLine* tl) const
       {
-      for (int i = 0; i < MAX_BRACKETS; ++i)
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             if (brackets[i] == tl) return i;
       return -1;
       }
@@ -4027,9 +4085,11 @@ void ExportMusicXml::write(QIODevice* dev)
 
       calcDivisions();
 
-      for (int i = 0; i < MAX_BRACKETS; ++i) {
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
             brackets[i] = 0;
+            hairpins[i] = 0;
             ottavas[i] = 0;
+            trills[i] = 0;
             }
 
       xml.setDevice(dev);
