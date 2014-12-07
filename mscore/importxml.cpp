@@ -3256,7 +3256,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             // qDebug("wedge type='%s' hairpin=%p", qPrintable(type), hairpin);
             int n = number - 1;
             Hairpin*& h = hairpins[n];
-            qDebug("wedge n %d h %p", n, h);
             if (type == "crescendo" || type == "diminuendo") {
                   h = static_cast<Hairpin*>(checkSpannerOverlap(h, new Hairpin(score), "hairpin"));
                   h->setHairpinType(type == "crescendo"
