@@ -416,11 +416,8 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         // undoTransposeHarmony does not do links
                         // because it is also used to handle transposing instruments
                         // and score / parts could be in different concert pitch states
-                        const LinkedElements* le = h->links();
-                        if (le) {
-                              for (Element* e : *le)
-                                    undoTransposeHarmony(static_cast<Harmony*>(e), rootTpc, baseTpc);
-                              }
+                        for (Element* e : h->linkList())
+                              undoTransposeHarmony(static_cast<Harmony*>(e), rootTpc, baseTpc);
                         }
                   }
             }
