@@ -595,6 +595,9 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       bgAction->setData("set-bg");
 
       popup->addSeparator();
+      a = new QAction(tr("Auto-resize to page"), this);
+      a->setData("resizePage");
+      popup->addAction(a);
       for (int i = 0; i < 4; ++i) {
             a = new QAction(qApp->translate("fotomode", resizeEntry[i].text), this);
             a->setData(resizeEntry[i].label);
@@ -638,6 +641,15 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             if (ok) {
                   preferences.pngResolution = resolution;
                   preferences.dirty = true;
+                  }
+            }
+      else if (cmd == "resizePage") {
+            QRectF r = _foto->rect();
+            Page* page = point2page(r.center());
+            if (page) {
+                  r = page->tbbox().translated(page->canvasPos());
+                  _foto->setRect(r);
+                  updateGrips();
                   }
             }
       else if (cmd.startsWith("resize")) {

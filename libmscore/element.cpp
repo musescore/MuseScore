@@ -1667,6 +1667,36 @@ bool Element::isText() const
       }
 
 //---------------------------------------------------------
+//   isPrintable
+//---------------------------------------------------------
+
+bool Element::isPrintable() const
+      {
+      switch (type()) {
+            case Element::Type::PAGE:
+            case Element::Type::SYSTEM:
+            case Element::Type::MEASURE:
+            case Element::Type::SEGMENT:
+            case Element::Type::VBOX:
+            case Element::Type::HBOX:
+            case Element::Type::TBOX:
+            case Element::Type::FBOX:
+            case Element::Type::SPACER:
+            case Element::Type::SHADOW_NOTE:
+            case Element::Type::LASSO:
+            case Element::Type::RUBBERBAND:
+            case Element::Type::ELEMENT_LIST:
+            case Element::Type::STAFF_LIST:
+            case Element::Type::MEASURE_LIST:
+            case Element::Type::SELECTION:
+            case Element::Type::LAYOUT:
+                  return false;
+            default:
+                  return true;
+            }
+      }
+
+//---------------------------------------------------------
 //   findMeasure
 //---------------------------------------------------------
 
