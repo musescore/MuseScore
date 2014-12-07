@@ -59,7 +59,7 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <wedge type="crescendo"/>
+          <wedge type="crescendo" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -84,14 +84,14 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <wedge type="stop"/>
+          <wedge type="stop" number="1"/>
           </direction-type>
         </direction>
       </measure>
     <measure number="3">
       <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo"/>
+          <wedge type="diminuendo" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -116,7 +116,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <wedge type="stop"/>
+          <wedge type="stop" number="1"/>
           </direction-type>
         </direction>
       <barline location="right">
@@ -172,7 +172,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <wedge type="crescendo"/>
+          <wedge type="crescendo" number="1"/>
           </direction-type>
         <staff>2</staff>
         </direction>
@@ -241,7 +241,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <wedge type="stop"/>
+          <wedge type="stop" number="1"/>
           </direction-type>
         <staff>2</staff>
         </direction>
@@ -297,7 +297,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <wedge type="diminuendo"/>
+          <wedge type="diminuendo" number="1"/>
           </direction-type>
         <staff>2</staff>
         </direction>
@@ -340,7 +340,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <wedge type="stop"/>
+          <wedge type="stop" number="1"/>
           </direction-type>
         <staff>2</staff>
         </direction>
