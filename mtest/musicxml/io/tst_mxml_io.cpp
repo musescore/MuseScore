@@ -110,6 +110,7 @@ private slots:
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
+      void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
       void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
