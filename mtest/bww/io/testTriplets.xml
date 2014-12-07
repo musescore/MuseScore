@@ -351,8 +351,8 @@
           <normal-notes>2</normal-notes>
           </time-modification>
         <stem>down</stem>
-        <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         <beam number="3">end</beam>
         <notations>
           <tuplet type="stop"/>
@@ -367,6 +367,8 @@
         <voice>1</voice>
         <type>16th</type>
         <stem>down</stem>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

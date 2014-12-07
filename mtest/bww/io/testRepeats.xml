@@ -2,11 +2,11 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise>
   <work>
-    <work-title>Duration</work-title>
+    <work-title>Repeats</work-title>
     </work>
   <identification>
-    <creator type="composer">Leon Vinken</creator>
-    <rights>Part of bbw2mxml</rights>
+    <creator type="composer">Composer</creator>
+    <rights>Footer</rights>
     <encoding>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
@@ -29,142 +29,143 @@
     </part-list>
   <part id="P1">
     <measure number="1">
+      <barline location="left">
+        <bar-style>heavy-light</bar-style>
+        <repeat direction="forward"/>
+        </barline>
       <attributes>
-        <divisions>48</divisions>
+        <divisions>1</divisions>
         <key>
           <fifths>2</fifths>
           <mode>major</mode>
           </key>
         <time>
           <beats>2</beats>
-          <beat-type>16</beat-type>
+          <beat-type>4</beat-type>
           </time>
         <clef>
           <sign>G</sign>
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="above">
-        <direction-type>
-          <metronome parentheses="no">
-            <beat-unit>quarter</beat-unit>
-            <per-minute>90</per-minute>
-            </metronome>
-          </direction-type>
-        <sound tempo="90"/>
-        </direction>
       <note>
         <pitch>
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>32nd</type>
-        <time-modification>
-          <actual-notes>3</actual-notes>
-          <normal-notes>2</normal-notes>
-          </time-modification>
+        <type>half</type>
         <stem>down</stem>
-        <beam number="1">begin</beam>
-        <beam number="2">begin</beam>
-        <beam number="3">begin</beam>
-        <notations>
-          <tuplet type="start" bracket="no"/>
-          </notations>
         </note>
+      </measure>
+    <measure number="2">
       <note>
         <pitch>
           <step>A</step>
           <octave>4</octave>
           </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>32nd</type>
-        <time-modification>
-          <actual-notes>3</actual-notes>
-          <normal-notes>2</normal-notes>
-          </time-modification>
+        <type>half</type>
         <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
-        <beam number="3">continue</beam>
         </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        <repeat direction="backward"/>
+        </barline>
+      </measure>
+    <measure number="3">
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
           </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>32nd</type>
-        <time-modification>
-          <actual-notes>3</actual-notes>
-          <normal-notes>2</normal-notes>
-          </time-modification>
+        <type>half</type>
         <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
-        <beam number="3">end</beam>
-        <notations>
-          <tuplet type="stop"/>
-          </notations>
         </note>
+      </measure>
+    <measure number="4">
       <note>
         <pitch>
           <step>C</step>
           <alter>1</alter>
           <octave>5</octave>
           </pitch>
-        <duration>12</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>16th</type>
+        <type>half</type>
         <stem>down</stem>
-        <beam number="1">end</beam>
-        <beam number="2">end</beam>
         </note>
       </measure>
-    <measure number="2">
+    <measure number="5">
+      <print new-system="yes"/>
+      <barline location="left">
+        <bar-style>heavy-light</bar-style>
+        <repeat direction="forward"/>
+        </barline>
       <note>
         <pitch>
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>9</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>32nd</type>
-        <dot/>
+        <type>half</type>
         <stem>down</stem>
-        <beam number="1">begin</beam>
-        <beam number="2">begin</beam>
-        <beam number="3">begin</beam>
         </note>
+      </measure>
+    <measure number="6">
+      <barline location="left">
+        <ending number="1" type="start"/>
+        </barline>
       <note>
         <pitch>
           <step>A</step>
           <octave>4</octave>
           </pitch>
-        <duration>9</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>32nd</type>
-        <dot/>
+        <type>half</type>
         <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
-        <beam number="3">continue</beam>
         </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        <ending number="1" type="stop"/>
+        <repeat direction="backward"/>
+        </barline>
+      </measure>
+    <measure number="7">
+      <barline location="left">
+        <ending number="2" type="start"/>
+        </barline>
       <note>
         <pitch>
           <step>B</step>
           <octave>4</octave>
           </pitch>
-        <duration>6</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>32nd</type>
+        <type>half</type>
         <stem>down</stem>
-        <beam number="1">end</beam>
-        <beam number="2">end</beam>
-        <beam number="3">end</beam>
+        </note>
+      <barline location="right">
+        <ending number="2" type="discontinue"/>
+        </barline>
+      </measure>
+    <measure number="8">
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>down</stem>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
