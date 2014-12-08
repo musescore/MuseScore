@@ -712,6 +712,11 @@ bool isSameChannel(const MTrack &t1, const MTrack &t2)
       return (t1.mtrack->outChannel() == t2.mtrack->outChannel());
       }
 
+bool is3StaffOrgan(int program)
+      {
+      return program >= 16 && program <= 20;
+      }
+
 //---------------------------------------------------------
 // createInstruments
 //   for drum track, if any, set percussion clef
@@ -889,6 +894,7 @@ void processMeta(MTrack &mt, bool isLyric)
 
 void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiType midiType)
       {
+      int lastGrandStaffTrack = -1;
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
                         // pass current track index to the convertTrack function
@@ -899,13 +905,19 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
             processMeta(mt, false);
             if (midiType == MidiType::UNKNOWN)
                   midiType = MidiType::GM;
-            if (i % 2 && isSameChannel(tracks[i - 1], mt) && isGrandStaff(tracks[i - 1], mt)) {
-                  mt.program = tracks[i - 1].program;
+
+                        // detect Grand Staff even if MIDI programs of neibour tracks
+                        // are different (pick first program)
+            if (i > 0 && isSameChannel(tracks[i - 1], mt) && isGrandStaff(tracks[i - 1], mt)) {
+                              // for organ 3 staffs get the same program
+                  if (i - 1 != lastGrandStaffTrack || is3StaffOrgan(tracks[i - 1].program)) {
+                        mt.program = tracks[i - 1].program;
+                        lastGrandStaffTrack = i;
+                        }
                   }
                         // if tracks in Grand staff have different names - clear them,
                         // instrument name will be used instead
-            if (i % 2 == 0 && i < tracks.size() - 1
-                        && isGrandStaff(mt, tracks[i + 1])) {
+            if (i % 2 == 0 && i < tracks.size() - 1 && isGrandStaff(mt, tracks[i + 1])) {
                   if (mt.name != tracks[i + 1].name) {
                         mt.name = "";
                         tracks[i + 1].name = "";
