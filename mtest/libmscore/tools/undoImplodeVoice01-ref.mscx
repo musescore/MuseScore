@@ -186,10 +186,6 @@
         <Chord>
           <durationType>half</durationType>
           <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
@@ -227,6 +223,29 @@
               </Tie>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <tick>1920</tick>
+        <Chord>
+          <track>2</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>2</track>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>2</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>2</track>
+            <Accidental>
+              <subtype>flat</subtype>
+              <track>2</track>
+              </Accidental>
+            <pitch>68</pitch>
+            <tpc>10</tpc>
             </Note>
           </Chord>
         </Measure>
