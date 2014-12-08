@@ -1345,6 +1345,7 @@ void Score::layoutStage3()
 void Score::doLayout()
       {
 // printf("doLayout %p cmd %d undo empty %d\n", this, undo()->active(), undo()->isEmpty());
+
       if (!undo()->active() && !undo()->isEmpty() && !undoRedo()) {
             qDebug("layout outside cmd and dirty undo");
             // _layoutAll = false;
@@ -1571,8 +1572,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             // we assume that keysigs and clefs are only in the first
             // track (voice 0) of a staff
 
-            KeySigEvent keyIdx;
-            keyIdx.setKey(staff->key(tick));
+            KeySigEvent keyIdx = staff->keySigEvent(tick);
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   // search only up to the first ChordRest
@@ -1584,8 +1584,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   switch (el->type()) {
                         case Element::Type::KEYSIG:
                               keysig = static_cast<KeySig*>(el);
-                              if (!keysig->isCustom())
-                                    keysig->changeKeySigEvent(keyIdx);
                               break;
                         case Element::Type::CLEF:
                               clef = static_cast<Clef*>(el);
@@ -1598,7 +1596,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             bool needKeysig =        // keep key sigs in TABs: TABs themselves should hide them
                isFirstSystem || styleB(StyleIdx::genKeysig);
 
-            if (needKeysig && !keysig && (keyIdx.key() != Key::C)) {
+            if (needKeysig && !keysig && ((keyIdx.key() != Key::C) || keyIdx.custom())) {
                   //
                   // create missing key signature
                   //
@@ -1613,7 +1611,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   }
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
-            else if (keysig && !keysig->isCustom() && !(keysig->keySigEvent() == keyIdx))
+            else if (keysig && !(keysig->keySigEvent() == keyIdx))
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
 
             bool needClef = isFirstSystem || styleB(StyleIdx::genClef);
@@ -2754,9 +2752,9 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         Staff* staff = _staves[staffIdx];
                         showCourtesySig = false;
 
-                        Key key1 = staff->key(tick - 1);
-                        Key key2 = staff->key(tick);
-                        if (styleB(StyleIdx::genCourtesyKeysig) && (key1 != key2)) {
+                        KeySigEvent key1 = staff->keySigEvent(tick - 1);
+                        KeySigEvent key2 = staff->keySigEvent(tick);
+                        if (styleB(StyleIdx::genCourtesyKeysig) && !(key1 == key2)) {
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
                               s = nm->findSegment(Segment::Type::KeySig, tick);
@@ -2774,16 +2772,14 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
                                     if (!ks) {
                                           ks = new KeySig(this);
-                                          ks->setKey(key2);
+                                          ks->setKeySigEvent(key2);
                                           ks->setTrack(track);
                                           ks->setGenerated(true);
                                           ks->setParent(s);
                                           undoAddElement(ks);
                                           }
-                                    else if (ks->key() != key2) {
-                                          KeySigEvent ke = ks->keySigEvent();
-                                          ke.setKey(key2);
-                                          undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                                    else if (!(ks->keySigEvent() == key2)) {
+                                          undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
                                           }
                                     // change bar line to qreal bar line
                                     // m->setEndBarLineType(BarLineType::DOUBLE, true); // this caused issue #12918

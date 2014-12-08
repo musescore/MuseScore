@@ -71,7 +71,6 @@ class KeySigEvent {
    public:
       KeySigEvent() {}
       KeySigEvent(const KeySigEvent&);
-      KeySigEvent(Key);
 
       bool operator==(const KeySigEvent& e) const;
 

@@ -470,14 +470,16 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   if (ks && !ks->isCustom()) {
                         Key key  = st->key(s->tick());
                         Key nKey = transposeKey(key, interval);
-                        KeySigEvent ke(nKey);
+                        KeySigEvent ke;
+                        ke.setKey(nKey);
                         undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
                         }
                   }
             if (createKey && firstMeasure()) {
                   Key key  = Key::C;
                   Key nKey = transposeKey(key, interval);
-                  KeySigEvent ke(nKey);
+                  KeySigEvent ke;
+                  ke.setKey(nKey);
                   KeySig* ks = new KeySig(this);
                   ks->setTrack(staffIdx * VOICES);
                   ks->setKey(nKey);

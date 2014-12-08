@@ -30,12 +30,6 @@ KeySigEvent::KeySigEvent(const KeySigEvent& k)
       _keySymbols = k._keySymbols;
       }
 
-KeySigEvent::KeySigEvent(Key k)
-      {
-      Q_ASSERT(int(k) >= -7 && int(k) <= 7);
-      _key = k;
-      }
-
 //---------------------------------------------------------
 //   enforceLimits - ensure _key
 //   is within acceptable limits (-7 .. +7).
@@ -103,8 +97,7 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
                   }
             return true;
             }
-      else
-            return e._key == _key;
+      return e._key == _key;
       }
 
 //---------------------------------------------------------

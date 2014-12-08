@@ -223,7 +223,9 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                         qDebug("ImportMidi: illegal key %d", key);
                         break;
                         }
-                  staff->setKey(tick, Key(key));
+                  KeySigEvent ke;
+                  ke.setKey(Key(key));
+                  staff->setKey(tick, ke);
                   hasKey = true;
                   }
                   break;
@@ -522,11 +524,13 @@ void MTrack::createKeys(Key k)
 
       KeyList* km = staff->keyList();
       if (!hasKey && !mtrack->drumTrack()) {
-            (*km)[0] = k;
+            KeySigEvent ke;
+            ke.setKey(k);
+            (*km)[0] = ke;
             }
       for (auto it = km->begin(); it != km->end(); ++it) {
             const int tick = it->first;
-            Key key  = it->second;
+            Key key  = it->second.key();
             KeySig* ks = new KeySig(score);
             ks->setTrack(track);
             ks->setGenerated(false);

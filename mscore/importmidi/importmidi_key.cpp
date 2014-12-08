@@ -89,8 +89,11 @@ void setMainKeySig(QList<MTrack> &tracks)
                   continue;
             auto &opers = preferences.midiImportOperations;
             MidiOperations::CurrentTrackSetter setCurrentTrack{opers, track.indexOfOperation};
-            if (!track.hasKey || opers.data()->trackOpers.isHumanPerformance.value())
-                  track.staff->setKey(0, key);
+            if (!track.hasKey || opers.data()->trackOpers.isHumanPerformance.value()) {
+                  KeySigEvent ke;
+                  ke.setKey(key);
+                  track.staff->setKey(0, ke);
+                  }
             }
       }
 

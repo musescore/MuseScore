@@ -563,15 +563,17 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         {
                         qDebug("   <Key>");
                         CapKey* o = static_cast<CapKey*>(no);
-                        Key key = score->staff(staffIdx)->key(tick);
-                        if (key != Key(o->signature)) {
-                              score->staff(staffIdx)->setKey(tick, Key(o->signature));
+                        KeySigEvent key = score->staff(staffIdx)->keySigEvent(tick);
+                        KeySigEvent okey;
+                        okey.setKey(Key(o->signature));
+                        if (!(key == okey)) {
+                              score->staff(staffIdx)->setKey(tick, okey);
                               KeySig* ks = new KeySig(score);
                               ks->setTrack(staffIdx * VOICES);
                               Measure* m = score->getCreateMeasure(tick);
                               Segment* s = m->getSegment(Segment::Type::KeySig, tick);
                               s->add(ks);
-                              ks->setKey(Key(o->signature));
+                              ks->setKeySigEvent(okey);
                               }
                         }
                         break;

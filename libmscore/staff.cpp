@@ -328,7 +328,7 @@ void Staff::clearTimeSig()
 //    locates the key sig currently in effect at tick
 //---------------------------------------------------------
 
-Key Staff::key(int tick) const
+KeySigEvent Staff::keySigEvent(int tick) const
       {
       return _keys.key(tick);
       }
@@ -337,7 +337,7 @@ Key Staff::key(int tick) const
 //   setKey
 //---------------------------------------------------------
 
-void Staff::setKey(int tick, Key k)
+void Staff::setKey(int tick, KeySigEvent k)
       {
       _keys.setKey(tick, k);
       }
@@ -355,7 +355,7 @@ void Staff::removeKey(int tick)
 //   prevkey
 //---------------------------------------------------------
 
-Key Staff::prevKey(int tick) const
+KeySigEvent Staff::prevKey(int tick) const
       {
       return _keys.prevKey(tick);
       }
@@ -938,9 +938,10 @@ void Staff::insertTime(int tick, int len)
       // we would need to move the key signature from this measure to the first inserted measure
       // but either way, at the begining of the staff, we need to keep the original key,
       // so we use upper_bound() in that case, and the initial key signature is moved in insertMeasure()
+
       KeyList kl2;
       for (auto i = tick ? _keys.lower_bound(tick) : _keys.upper_bound(tick); i != _keys.end();) {
-            Key kse = i->second;
+            KeySigEvent kse = i->second;
             int k   = i->first;
             _keys.erase(i++);
             kl2[k + len] = kse;
@@ -954,6 +955,7 @@ void Staff::insertTime(int tick, int len)
       // if we wish to make this work like key signatures (see above),
       // we would need to move the clef from the previous measure to the last inserted measure
       // and be sure to continue to handle the initial clef well
+
       ClefList cl2;
       for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
