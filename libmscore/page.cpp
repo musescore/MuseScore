@@ -550,7 +550,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += _score->rootScore()->name();
                               break;
                         case 'F':
-                              d += _score->rootScore()->absoluteFilePath();
+                              d += _score->rootScore()->fileInfo()->absoluteFilePath();
                               break;
                         case 'd':
                               d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);

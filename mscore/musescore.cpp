@@ -1106,10 +1106,10 @@ void MuseScore::selectScore(QAction* action)
                   _recentScores.clear();
                   }
             else {
-            Score* score = readScore(a);
+                  Score* score = readScore(a);
                   if (score) {
                         setCurrentScoreView(appendScore(score));
-                        updateRecentScores(score);
+                        addRecentScore(score);
                         writeSessionFile(false);
                         }
                   }
@@ -1165,7 +1165,7 @@ int MuseScore::appendScore(Score* score)
       for (int i = 0; i < scoreList.size(); ++i) {
             if ((!score->importedFilePath().isEmpty()
                  && scoreList[i]->importedFilePath() == score->importedFilePath())
-                        || (scoreList[i]->filePath() == score->filePath() && score->fileInfo()->exists())) {
+                        || (scoreList[i]->fileInfo()->canonicalFilePath() == score->fileInfo()->canonicalFilePath() && score->fileInfo()->exists())) {
                   removeTab(i);
                   index = i;
                   break;
@@ -1185,30 +1185,27 @@ int MuseScore::appendScore(Score* score)
       }
 
 //---------------------------------------------------------
-//   updateRecentScores
+//   addRecentScore
 //---------------------------------------------------------
 
-void MuseScore::updateRecentScores(Score* score)
+void MuseScore::addRecentScore(Score* score)
       {
       QString path = score->importedFilePath(); // defined for scores imported from e.g. MIDI files
       addRecentScore(path);
       path = score->fileInfo()->canonicalFilePath();
       addRecentScore(path);
+      if (startcenter)
+            startcenter->updateRecentScores();
       }
 
-//---------------------------------------------------------
-//   addRecentScore
-//---------------------------------------------------------
 void MuseScore::addRecentScore(const QString& scorePath)
       {
-      if (scorePath.isEmpty() || _recentScores.first() == scorePath)
+      if (scorePath.isEmpty())
             return;
       _recentScores.removeAll(scorePath);
       _recentScores.prepend(scorePath);
       if (_recentScores.size() > RECENT_LIST_SIZE)
             _recentScores.removeLast();
-      if (startcenter)
-            startcenter->updateRecentScores();
       }
 
 //---------------------------------------------------------
@@ -1542,7 +1539,7 @@ void MuseScore::dropEvent(QDropEvent* event)
                         Score* score = readScore(file);
                         if (score) {
                               view = appendScore(score);
-                              updateRecentScores(score);
+                              addRecentScore(score);
                               }
                         }
                   }
@@ -2038,7 +2035,7 @@ static void loadScores(const QStringList& argv)
                         mscore->appendScore(score);
                         scoresOnCommandline = true;
                         if(!MScore::noGui) {
-                              mscore->updateRecentScores(score);
+                              mscore->addRecentScore(score);
                               mscore->writeSessionFile(false);
                               }
                         }
@@ -3018,7 +3015,7 @@ void MuseScore::handleMessage(const QString& message)
       Score* score = readScore(message);
       if (score) {
             setCurrentScoreView(appendScore(score));
-            updateRecentScores(score);
+            addRecentScore(score);
             writeSessionFile(false);
             }
       }
@@ -4465,6 +4462,8 @@ QQmlEngine* MuseScore::qml() { return 0; }
 
 //---------------------------------------------------------
 //   recentScores
+//    return a list of recent scores
+//    omit loaded scores
 //---------------------------------------------------------
 
 QFileInfoList MuseScore::recentScores() const
@@ -4478,7 +4477,7 @@ QFileInfoList MuseScore::recentScores() const
             bool alreadyLoaded = false;
             QString fp = fi.canonicalFilePath();
             for (Score* s : mscore->scores()) {
-                  if (s->fileInfo()->canonicalFilePath() == fp) {
+                  if ((s->fileInfo()->canonicalFilePath() == fp) || (s->importedFilePath() == fp)) {
                         alreadyLoaded = true;
                         break;
                         }
