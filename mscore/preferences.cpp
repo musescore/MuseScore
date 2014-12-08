@@ -106,7 +106,7 @@ void Preferences::init()
       enableMidiInput    = true;
       playNotes          = true;
 
-      showNavigator      = true;
+      showNavigator      = false;
       showPlayPanel      = false;
       showWebPanel       = true;
       showStatusBar      = true;
