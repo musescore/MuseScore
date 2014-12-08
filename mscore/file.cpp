@@ -294,7 +294,6 @@ Score* MuseScore::openScore(const QString& fn)
       Score* score = readScore(fn);
       if (score) {
             setCurrentScoreView(appendScore(score));
-            updateRecentScores(score);
             writeSessionFile(false);
             }
       return score;
@@ -329,6 +328,7 @@ Score* MuseScore::readScore(const QString& name)
             score = 0;
             }
       allowShowMidiPanel(name);
+      addRecentScore(score);
       return score;
       }
 
@@ -391,7 +391,7 @@ bool MuseScore::saveFile(Score* score)
                   QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
                   return false;
                   }
-            updateRecentScores(score);
+            addRecentScore(score);
             score->setCreated(false);
             writeSessionFile(false);
             }
@@ -1726,7 +1726,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             rv = true;
             // store new file and path into score fileInfo
             // to have it accessible to resources
-            QString originalScoreFName(cs->absoluteFilePath());
+            QString originalScoreFName(cs->fileInfo()->canonicalFilePath());
             cs->fileInfo()->setFile(fn);
             try {
                   if (ext == "mscz")
@@ -1746,7 +1746,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
                   cs->undo()->setClean();
                   dirtyChanged(cs);
                   cs->setCreated(false);
-                  updateRecentScores(cs);
+                  addRecentScore(cs);
                   writeSessionFile(false);
                   }
             }

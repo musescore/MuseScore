@@ -1244,7 +1244,7 @@ void Score::print(QPainter* painter, int pageNo)
 
 QByteArray Score::readCompressedToBuffer()
       {
-      MQZipReader uz(filePath());
+      MQZipReader uz(info.filePath());
       if (!uz.exists()) {
             qDebug("Score::readCompressedToBuffer: cannot read zip file");
             return QByteArray();
@@ -1261,7 +1261,7 @@ QByteArray Score::readCompressedToBuffer()
             }
 
       if (rootfile.isEmpty()) {
-            qDebug("=can't find rootfile in: %s", qPrintable(filePath()));
+            qDebug("=can't find rootfile in: %s", qPrintable(info.filePath()));
             return QByteArray();
             }
       return uz.fileData(rootfile);
@@ -1280,7 +1280,7 @@ QByteArray Score::readToBuffer()
             ba = readCompressedToBuffer();
             }
       if (cs.toLower() == "msc" || cs.toLower() == "mscx") {
-            QFile f(filePath());
+            QFile f(info.filePath());
             if (f.open(QIODevice::ReadOnly)) {
                   ba = f.readAll();
                   f.close();

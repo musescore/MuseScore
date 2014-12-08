@@ -521,7 +521,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateTabNames();
       QProgressBar* showProgressBar();
       void hideProgressBar();
-      void updateRecentScores(Score*);
+      void addRecentScore(Score*);
       QFileDialog* saveAsDialog();
       QFileDialog* saveCopyDialog();
 

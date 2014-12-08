@@ -666,10 +666,7 @@ class Score : public QObject {
       int fileDivision(int t) const { return (t * MScore::division + _fileDivision/2) / _fileDivision; }
       bool saveFile();
 
-      QString filePath() const       { return info.filePath(); }
-      QString absoluteFilePath() const { return info.absoluteFilePath(); }
       QFileInfo* fileInfo()          { return &info; }
-
       QString name() const           { return info.completeBaseName(); }
       void setName(QString s);
 
