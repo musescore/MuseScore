@@ -48,7 +48,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       staff    = 0;
 
       QWidget* mainWidget = new QWidget;
-      QToolBar* tb = addToolBar(tr("Toolbar 1"));
+      QToolBar* tb = addToolBar(QCoreApplication::translate("Ms::PianorollEditor","Toolbar 1"));
       tb->addAction(getAction("undo"));
       tb->addAction(getAction("redo"));
       tb->addSeparator();
@@ -68,15 +68,15 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addSeparator();
       tb->addAction(getAction("metronome"));
 
-      showWave = new QAction(tr("Wave"), tb);
-      showWave->setToolTip(tr("Show wave display"));
+      showWave = new QAction(QCoreApplication::translate("Ms::PianorollEditor","Wave"), tb);
+      showWave->setToolTip(QCoreApplication::translate("Ms::PianorollEditor","Show wave display"));
       showWave->setCheckable(true);
       showWave->setChecked(false);
       connect(showWave, SIGNAL(toggled(bool)), SLOT(showWaveView(bool)));
       tb->addAction(showWave);
 
       //-------------
-      tb = addToolBar(tr("Toolbar 2"));
+      tb = addToolBar(QCoreApplication::translate("Ms::PianorollEditor","Toolbar 2"));
       for (int i = 0; i < VOICES; ++i) {
             QToolButton* b = new QToolButton(this);
             b->setToolButtonStyle(Qt::ToolButtonTextOnly);
@@ -89,7 +89,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
             }
 
       tb->addSeparator();
-      tb->addWidget(new QLabel(tr("Cursor:")));
+      tb->addWidget(new QLabel(QCoreApplication::translate("Ms::PianorollEditor","Cursor:")));
       pos = new Awl::PosLabel;
       pos->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
 
@@ -99,10 +99,10 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addWidget(pl);
 
       tb->addSeparator();
-      tb->addWidget(new QLabel(tr("Velocity:")));
+      tb->addWidget(new QLabel(QCoreApplication::translate("Ms::PianorollEditor","Velocity:")));
       veloType = new QComboBox;
-      veloType->addItem(tr("Offset"), int(Note::ValueType::OFFSET_VAL));
-      veloType->addItem(tr("User"),   int (Note::ValueType::USER_VAL));
+      veloType->addItem(QCoreApplication::translate("Ms::PianorollEditor","Offset"), int(Note::ValueType::OFFSET_VAL));
+      veloType->addItem(QCoreApplication::translate("Ms::PianorollEditor","User"),   int (Note::ValueType::USER_VAL));
       tb->addWidget(veloType);
 
       velocity = new QSpinBox;
@@ -111,16 +111,16 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       velocity->setReadOnly(true);
       tb->addWidget(velocity);
 
-      tb->addWidget(new QLabel(tr("Pitch:")));
+      tb->addWidget(new QLabel(QCoreApplication::translate("Ms::PianorollEditor","Pitch:")));
       pitch = new Awl::PitchEdit;
       pitch->setReadOnly(true);
       tb->addWidget(pitch);
 
-      tb->addWidget(new QLabel(tr("OnTime:")));
+      tb->addWidget(new QLabel(QCoreApplication::translate("Ms::PianorollEditor","OnTime:")));
       tb->addWidget((onTime = new QSpinBox));
       onTime->setRange(-2000, 2000);
 
-      tb->addWidget(new QLabel(tr("Len:")));
+      tb->addWidget(new QLabel(QCoreApplication::translate("Ms::PianorollEditor","Len:")));
       tb->addWidget((tickLen = new QSpinBox));
       tickLen->setRange(-2000, 2000);
 
@@ -246,7 +246,7 @@ void PianorollEditor::setStaff(Staff* st)
             }
       staff = st;
       if (staff) {
-            setWindowTitle(QString(tr("MuseScore: <%1> Staff: %2")).arg(_score->name()).arg(st->idx()));
+            setWindowTitle(QString(QCoreApplication::translate("Ms::PianorollEditor","MuseScore: <%1> Staff: %2")).arg(_score->name()).arg(st->idx()));
             TempoMap* tl = _score->tempomap();
             TimeSigMap*  sl = _score->sigmap();
             for (int i = 0; i < 3; ++i)

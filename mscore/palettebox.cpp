@@ -25,7 +25,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 PaletteBox::PaletteBox(QWidget* parent)
-   : QDockWidget(tr("Palettes"), parent)
+   : QDockWidget(QCoreApplication::translate("Ms::PaletteBox","Palettes"), parent)
       {
       setObjectName("palette-box");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
@@ -36,14 +36,14 @@ PaletteBox::PaletteBox(QWidget* parent)
       hl->setContentsMargins(5,5,5,0);
 
       workspaceList = new QComboBox;
-      workspaceList->setToolTip(tr("Select workspace"));
+      workspaceList->setToolTip(QCoreApplication::translate("Ms::PaletteBox","Select workspace"));
       updateWorkspaces();
       hl->addWidget(workspaceList);
       QToolButton* nb = new QToolButton;
       
       nb->setMinimumHeight(27);
-      nb->setText(tr("+"));
-      nb->setToolTip(tr("Add new workspace"));
+      nb->setText(QCoreApplication::translate("Ms::PaletteBox","+"));
+      nb->setToolTip(QCoreApplication::translate("Ms::PaletteBox","Add new workspace"));
       hl->addWidget(nb);
 
       setWidget(w);
@@ -215,7 +215,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   break;
 
             case PaletteCommand::NEW:
-                  palette = newPalette(tr("new Palette"), slot);
+                  palette = newPalette(QCoreApplication::translate("Ms::PaletteBox","new Palette"), slot);
                   item   = vbox->itemAt(slot);
                   b = static_cast<PaletteBoxButton*>(item->widget());
                   // fall through
