@@ -532,15 +532,14 @@ bool BarLine::acceptDrop(const DropData& data) const
       if (type == Element::Type::BAR_LINE) {
             if (parent() && parent()->type() == Element::Type::SEGMENT)
                   return true;
-/* system bar lines not currently modifiable
-            TODO : support for special system-initial bar line
+            // accept drop to system bar line only if no span change
+            // and type is not structural (repeat or end)
             if (parent() && parent()->type() == Element::Type::SYSTEM) {
                   BarLine* b = static_cast<BarLine*>(data.element);
-                  return (b->barLineType() == BarLineType::BROKEN || b->barLineType() == BarLineType::DOTTED
-                     || b->barLineType() == BarLineType::NORMAL || b->barLineType() == BarLineType::DOUBLE
-                     || b->spanFrom() != 0 || b->spanTo() != DEFAULT_BARLINE_TO);
+                  return (b->spanFrom() == 0 && b->spanTo() == DEFAULT_BARLINE_TO
+                        && (b->barLineType() == BarLineType::BROKEN || b->barLineType() == BarLineType::DOTTED
+                     || b->barLineType() == BarLineType::NORMAL || b->barLineType() == BarLineType::DOUBLE));
                   }
-*/
             }
       else {
             return (type == Element::Type::ARTICULATION
@@ -567,10 +566,11 @@ Element* BarLine::drop(const DropData& data)
                   delete e;
                   return 0;
                   }
-            // system left-side bar line
+            // system left-side bar line: route type change to first measure of system
             if (parent()->type() == Element::Type::SYSTEM) {
-                  BarLine* b = static_cast<System*>(parent())->barLine();
-                  score()->undoChangeProperty(b, P_ID::SUBTYPE, int(bl->barLineType()));
+                  Measure* m = static_cast<System*>(parent())->firstMeasure();
+                  if (m && m->systemInitialBarLineType() != bl->barLineType())
+                        score()->undoChangeSystemBarLineType(m, bl->barLineType());
                   delete e;
                   return 0;
                   }
@@ -995,11 +995,19 @@ int BarLine::tick() const
 
 //---------------------------------------------------------
 //   barLineTypeName
+//
+//    Instance form returning the name string of the bar line type and
+//    static form returning the name string for an arbitrary bar line type.
 //---------------------------------------------------------
 
 QString BarLine::barLineTypeName() const
       {
       return QString(barLineNames[int(barLineType())]);
+      }
+
+QString BarLine::barLineTypeName(BarLineType t)
+      {
+      return QString(barLineNames[int(t)]);
       }
 
 //---------------------------------------------------------

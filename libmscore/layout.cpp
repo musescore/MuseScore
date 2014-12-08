@@ -2686,6 +2686,14 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
       bool needRelayout = false;
 
       foreach (System* system, sl) {
+            // set system initial bar line type here, as in System::layout...() methods
+            // it is either too early (in System::layout() measures are not added to the system yet)
+            // or too late (in System::layout2(), horizontal spacing has already been done
+            //    and bar line width will be ignored).
+            // We only set bar line type here; track and bar line span values are set in System::layout2()
+            if (system->barLine() && system->firstMeasure())
+                  system->barLine()->setBarLineType(system->firstMeasure()->systemInitialBarLineType());
+
             //
             //    add cautionary time/key signatures if needed
             //
