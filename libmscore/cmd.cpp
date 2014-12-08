@@ -2551,6 +2551,9 @@ void Score::cmdImplode()
                         Element* src = s->element(srcTrack);
                         if (src && src->type() == Element::Type::CHORD) {
                               Chord* srcChord = static_cast<Chord*>(src);
+                              // when combining voices, skip if not same duration
+                              if ((trackInc == 1) && (srcChord->duration() != dstChord->duration()))
+                                    continue;
                               // add notes
                               foreach (Note* n, srcChord->notes()) {
                                     NoteVal nv(n->pitch());
@@ -2580,9 +2583,9 @@ void Score::cmdImplode()
                               undoRemoveElement(src);
                         }
                   }
-            else if (trackInc == 1) {
-                  // destination track has either a rest or nothing
-                  // either way, remove everything from other voices if in "voice mode"
+            else if (dst && trackInc == 1) {
+                  // destination track has something, but it isn't a chord
+                  // remove everything from other voices if in "voice mode"
                   for (int i = 1; i < VOICES; ++i) {
                         Element* e = s->element(dstTrack + i);
                         if (e)
