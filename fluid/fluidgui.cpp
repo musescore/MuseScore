@@ -196,14 +196,14 @@ void FluidGui::soundFontAddClicked()
       if (sl.contains(sfPath)) {
             QMessageBox::warning(this,
             tr("MuseScore"),
-            QString(tr("Soundfont %1 already loaded")).arg(sfPath));
+            tr("Soundfont %1 already loaded").arg(sfPath));
             }
       else {
             bool loaded = fluid()->addSoundFont(sfPath);
             if (!loaded) {
                   QMessageBox::warning(this,
                   tr("MuseScore"),
-                  QString(tr("cannot load soundfont %1")).arg(sfPath));
+                  tr("cannot load soundfont %1").arg(sfPath));
                   }
             else {
                   soundFonts->insertItem(0, sfName);
