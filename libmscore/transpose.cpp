@@ -310,11 +310,13 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         undoTransposeHarmony(h, rootTpc, baseTpc);
                         }
                   else if ((e->type() == Element::Type::KEYSIG) && mode != TransposeMode::DIATONICALLY && trKeys) {
-                        KeySig* ks = static_cast<KeySig*>(e);
-                        Key key    = st->key(ks->tick());
-                        KeySigEvent ke = ks->keySigEvent();
-                        ke.setKey(key);
-                        undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                        KeySig* ks     = static_cast<KeySig*>(e);
+                        if (!ks->isCustom()) {
+                              Key key        = st->key(ks->tick());
+                              KeySigEvent ke = ks->keySigEvent();
+                              ke.setKey(key);
+                              undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                              }
                         }
                   }
             return;
@@ -388,10 +390,12 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         QList<Element*> ll = e->linkList();
                         for (Element* e : ll) {
                               KeySig* ks = static_cast<KeySig*>(e);
-                              Key nKey = transposeKey(ks->key(), interval);
-                              KeySigEvent ke = ks->keySigEvent();
-                              ke.setKey(nKey);
-                              undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                              if (!ks->isCustom()) {
+                                    Key nKey = transposeKey(ks->key(), interval);
+                                    KeySigEvent ke = ks->keySigEvent();
+                                    ke.setKey(nKey);
+                                    undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                                    }
                               }
                         }
                   }
@@ -463,7 +467,8 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   if (s->tick() == 0)
                         createKey = false;
                   KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
-                  if (ks) {
+printf("Keyig %d custom %d\n", ks->track(), ks->isCustom());
+                  if (ks && !ks->isCustom()) {
                         Key key  = st->key(s->tick());
                         Key nKey = transposeKey(key, interval);
                         KeySigEvent ke(nKey);
