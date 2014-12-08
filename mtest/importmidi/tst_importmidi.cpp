@@ -358,6 +358,7 @@ class TestImportMidi : public QObject, public MTest
 
       // MIDI instruments and Grand Staff
       void instrumentGrand() { mf("instrument_grand"); }
+      void instrumentChannels() { mf("instrument_channels"); }
       };
 
 //---------------------------------------------------------
