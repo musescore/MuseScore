@@ -25,7 +25,7 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  user-offset-1,user-offset-2,chord-space-1,chord-space-2,tablature-1,image-1, ^
  lyrics-1,lyrics-2,lyrics-3,voice-1,slash-1,slash-2
 
-set MSCORE=..\win32install\bin\mscore.exe
+set MSCORE=..\win32install\bin\musescore.exe
 set DPI=130
 set F=vtest.html
 
