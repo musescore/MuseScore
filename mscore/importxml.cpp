@@ -155,7 +155,7 @@ static int MusicXMLStepAltOct2Pitch(char step, int alter, int octave)
  Note that n's staff and track have not been set yet
  */
 
-static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* ottava, int track)
+static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* (&ottavas)[MAX_NUMBER_LEVEL], int track)
       {
       //qDebug("xmlSetPitch(n=%p, st=%c, alter=%d, octave=%d)",
       //       n, step, alter, octave);
@@ -171,8 +171,10 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* ottav
       // ensure sane values
       pitch = limit(pitch, 0, 127);
 
-      if (ottava != 0 && ottava->track() == track)
-            pitch -= ottava->pitchShift();
+      for(int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
+            if (ottavas[i] != 0 && ottavas[i]->track() == track)
+                  pitch -= ottavas[i]->pitchShift();
+            }
 
       //                        a  b  c  d  e  f  g
       static int table1[7]  = { 5, 6, 0, 1, 2, 3, 4 };
@@ -772,13 +774,16 @@ void MusicXml::initPartState()
             bracket[i] = 0;
       for (int i = 0; i < MAX_DASHES; ++i)
             dashes[i] = 0;
-      ottava = 0;
-      trill = 0;
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
+            ottavas[i] = 0;
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
+            hairpins[i] = 0;
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
+            trills[i] = 0;
       pedal = 0;
       pedalContinue = 0;
       harmony = 0;
       tremStart = 0;
-      hairpin = 0;
       figBass = 0;
       figBassExtend = false;
       glissandoText = "";
@@ -1436,6 +1441,8 @@ void MusicXml::scorePartwise(QDomElement ee)
                                           }
                                     crwords += nextPartOfFormattedString(ee);
                                     }
+                              else if (tag == "credit-type")
+                                    domNotImplemented(ee); // TODO
                               else
                                     domError(ee);
                               }
@@ -3005,8 +3012,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                                     }
                               }
                         else if (dirType == "wedge") {
-                              type   = ee.attribute(QString("type"));
-                              niente   = ee.attribute(QString("niente"),"no");
+                              type      = ee.attribute(QString("type"));
+                              number    = ee.attribute(QString("number"), "1").toInt();
+                              niente    = ee.attribute(QString("niente"),"no");
                               // spread = ee.attribute(QString("spread"), "0").toInt();
                               }
                         else if (dirType == "dashes") {
@@ -3024,6 +3032,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                               metrEl = ee;
                         else if (dirType == "octave-shift") {
                               type       = ee.attribute(QString("type"));
+                              number     = ee.attribute(QString("number"), "1").toInt();
                               ottavasize = ee.attribute(QString("size"), "0").toInt();
                               }
                         else if (dirType == "coda")
@@ -3048,8 +3057,9 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   tempo = e.attribute("tempo");
                   dynaVelocity = e.attribute("dynamics");
                   }
-            //else if (e.tagName() == "offset")
+            else if (e.tagName() == "offset")
                   //offset = (e.text().toInt() * MScore::division)/divisions;
+                  ; // ignore, currently not supported
             else if (e.tagName() == "staff") {
                   // DEBUG: <staff>0</staff>
                   int rstaff = e.text().toInt() - 1;
@@ -3182,16 +3192,20 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
                         }
                   else if (type == "stop") {
-                        handleSpannerStop(pedal, "pedal", tick, spanners);
-                        pedal = 0;
+                        if (pedal) {
+                              handleSpannerStop(pedal, "pedal", tick, spanners);
+                              pedal = 0;
+                              }
                         }
                   else if (type == "change") {
                         // pedal change is implemented as two separate pedals
                         // first stop the first one
-                        pedal->setEndHookType(HookType::HOOK_45);
-                        handleSpannerStop(pedal, "pedal", tick, spanners);
-                        pedalContinue = pedal; // mark for later fixup
-                        pedal = 0;
+                        if (pedal) {
+                              pedal->setEndHookType(HookType::HOOK_45);
+                              handleSpannerStop(pedal, "pedal", tick, spanners);
+                              pedalContinue = pedal; // mark for later fixup
+                              pedal = 0;
+                              }
                         // then start a new one
                         pedal = static_cast<Pedal*>(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
                         pedal->setBeginHook(true);
@@ -3240,19 +3254,21 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             }
       else if (dirType == "wedge") {
             // qDebug("wedge type='%s' hairpin=%p", qPrintable(type), hairpin);
+            int n = number - 1;
+            Hairpin*& h = hairpins[n];
             if (type == "crescendo" || type == "diminuendo") {
-                  hairpin = static_cast<Hairpin*>(checkSpannerOverlap(hairpin, new Hairpin(score), "hairpin"));
-                  hairpin->setHairpinType(type == "crescendo"
-                                          ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
+                  h = static_cast<Hairpin*>(checkSpannerOverlap(h, new Hairpin(score), "hairpin"));
+                  h->setHairpinType(type == "crescendo"
+                                    ? Hairpin::Type::CRESCENDO : Hairpin::Type::DECRESCENDO);
                   if (niente == "yes")
-                      hairpin->setHairpinCircledTip(true);
-                  handleSpannerStart(hairpin, "hairpin", track, placement, tick, spanners);
+                        h->setHairpinCircledTip(true);
+                  handleSpannerStart(h, QString("wedge %1").arg(number), track, placement, tick, spanners);
                   }
             else if (type == "stop") {
-                  if (hairpin && niente == "yes")
-                      hairpin->setHairpinCircledTip(true);
-                  handleSpannerStop(hairpin, "wedge", tick, spanners);
-                  hairpin = 0;
+                  if (h && niente == "yes")
+                        h->setHairpinCircledTip(true);
+                  handleSpannerStop(h, QString("wedge %1").arg(number), tick, spanners);
+                  h = 0;
                   }
             else
                   qDebug("unknown wedge type: %s", qPrintable(type));
@@ -3281,7 +3297,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   else if (lineType == "dotted")
                         b->setLineStyle(Qt::DotLine);
                   else
-                        qDebug("unsupported line-type: %s", lineType.toLatin1().data());
+                        qDebug("unsupported line-type: %s", qPrintable(lineType));
 
                   handleSpannerStart(b, QString("bracket %1").arg(number), track, placement, tick, spanners);
                   //qDebug("bracket=%p inserted at first tick %d", b, tick);
@@ -3325,28 +3341,30 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   }
             }
       else if (dirType == "octave-shift") {
+            int n = number - 1;
+            Ottava*& o = ottavas[n];
             if (type == "up" || type == "down") {
                   if (!(ottavasize == 8 || ottavasize == 15)) {
                         qDebug("unknown octave-shift size %d", ottavasize);
                         }
                   else {
-                        ottava = static_cast<Ottava*>(checkSpannerOverlap(ottava, new Ottava(score), "octave-shift"));
+                        o = static_cast<Ottava*>(checkSpannerOverlap(o, new Ottava(score), "octave-shift"));
 
                         if (placement == "") placement = "above";  // set default
 
-                        if (type == "down" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VA);
-                        if (type == "down" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MA);
-                        if (type ==   "up" && ottavasize ==  8) ottava->setOttavaType(Ottava::Type::OTTAVA_8VB);
-                        if (type ==   "up" && ottavasize == 15) ottava->setOttavaType(Ottava::Type::OTTAVA_15MB);
+                        if (type == "down" && ottavasize ==  8) o->setOttavaType(Ottava::Type::OTTAVA_8VA);
+                        if (type == "down" && ottavasize == 15) o->setOttavaType(Ottava::Type::OTTAVA_15MA);
+                        if (type ==   "up" && ottavasize ==  8) o->setOttavaType(Ottava::Type::OTTAVA_8VB);
+                        if (type ==   "up" && ottavasize == 15) o->setOttavaType(Ottava::Type::OTTAVA_15MB);
 
-                        handleSpannerStart(ottava, "octave-shift", track, placement, tick, spanners);
-                        //qDebug("ottava=%p inserted at first tick %d", ottava, tick);
+                        handleSpannerStart(o, QString("octave-shift %1").arg(number), track, placement, tick, spanners);
+                        //qDebug("ottava=%p inserted at first tick %d", o, tick);
                         }
                   }
             else if (type == "stop") {
-                  handleSpannerStop(ottava, "octave-shift", tick, spanners);
-                  //qDebug("ottava=%p second tick %d", ottava, tick);
-                  ottava = 0;
+                  handleSpannerStop(o, QString("octave-shift %1").arg(number), tick, spanners);
+                  //qDebug("ottava=%p second tick %d", o, tick);
+                  o = 0;
                   }
             }
       }
@@ -3508,6 +3526,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                               key.setKey(Key(ee.text().toInt()));
                         else if (ee.tagName() == "mode")
                               domNotImplemented(ee);
+                        else if (ee.tagName() == "cancel")
+                              domNotImplemented(ee); // TODO
                         else
                               domError(ee);
                         }
@@ -4423,6 +4443,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
       int track = cr->track();
 
       QString wavyLineType;
+      int wavyLineNo = 0;
       QString arpeggioType;
       QString glissandoType;
       int breath = -1;
@@ -4607,8 +4628,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                               continue;
                         else if (eee.tagName() == "trill-mark")
                               trillMark = true;
-                        else if (eee.tagName() == "wavy-line")
+                        else if (eee.tagName() == "wavy-line") {
                               wavyLineType = eee.attribute(QString("type"));
+                              wavyLineNo   = eee.attribute(QString("number"), "1").toInt() - 1;
+                              }
                         else if (eee.tagName() == "tremolo") {
                               tremolo = eee.text().toInt();
                               tremoloType = eee.attribute(QString("type"));
@@ -4741,31 +4764,33 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
             }
 
       if (!wavyLineType.isEmpty()) {
+            int n = wavyLineNo - 1;
+            Trill*& t = trills[n];
             if (wavyLineType == "start") {
-                  if (trill) {
-                        qDebug("overlapping wavy-line not supported");
-                        delete trill;
-                        trill = 0;
+                  if (t) {
+                        qDebug("overlapping wavy-line %d not supported", wavyLineNo);
+                        delete t;
+                        t = 0;
                         }
                   else {
-                        trill = new Trill(score);
-                        trill->setTrack(trk);
-                        spanners[trill] = QPair<int, int>(tick, -1);
+                        t = new Trill(score);
+                        t->setTrack(trk);
+                        spanners[t] = QPair<int, int>(tick, -1);
                         // qDebug("wedge trill=%p inserted at first tick %d", trill, tick);
                         }
                   }
             else if (wavyLineType == "stop") {
-                  if (!trill) {
-                        qDebug("wavy-line stop without start");
+                  if (!t) {
+                        qDebug("wavy-line %d stop without start", wavyLineNo);
                         }
                   else {
-                        spanners[trill].second = tick + ticks;
+                        spanners[t].second = tick + ticks;
                         // qDebug("wedge trill=%p second tick %d", trill, tick);
-                        trill = 0;
+                        t = 0;
                         }
                   }
             else
-                  qDebug("unknown wavy-line type %s", wavyLineType.toLatin1().data());
+                  qDebug("unknown wavy-line type %s", qPrintable(wavyLineType));
             }
 
       if (breath >= 0) {
@@ -5432,7 +5457,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   note->setTpc(pitch2tpc(pitch, Key::C, Prefer::NEAREST)); // TODO: necessary ?
                   }
             else
-                  xmlSetPitch(note, c, alter, octave, ottava, track);
+                  xmlSetPitch(note, c, alter, octave, ottavas, track);
 
             cr->add(note);
 
