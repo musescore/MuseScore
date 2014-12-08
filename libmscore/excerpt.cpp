@@ -182,7 +182,10 @@ void createExcerpt(Excerpt* excerpt)
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
 
-                  score->transposeKeys(staffIdx, staffIdx+1, 0, score->lastSegment()->tick(), interval);
+                  int endTick = 0;
+                  if (score->lastSegment())
+                        endTick = score->lastSegment()->tick();
+                  score->transposeKeys(staffIdx, staffIdx+1, 0, endTick, interval);
 
                   for (auto segment = score->firstSegment(Segment::Type::ChordRest); segment; segment = segment->next1(Segment::Type::ChordRest)) {
                         for (auto e : segment->annotations()) {
