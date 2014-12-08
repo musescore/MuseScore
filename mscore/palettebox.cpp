@@ -16,7 +16,6 @@
 #include "musescore.h"
 #include "preferences.h"
 #include "libmscore/xml.h"
-#include "paletteBoxButton.h"
 #include "workspace.h"
 
 namespace Ms {

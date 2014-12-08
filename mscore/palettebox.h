@@ -14,12 +14,13 @@
 #ifndef __PALETTE_BOX_H__
 #define __PALETTE_BOX_H__
 
+#include "paletteBoxButton.h"
+
 namespace Ms {
 
 class Xml;
 class XmlReader;
 class Palette;
-enum class PaletteCommand : char;
 
 //---------------------------------------------------------
 //   PaletteBox
