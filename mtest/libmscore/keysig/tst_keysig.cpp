@@ -68,17 +68,19 @@ void TestKeySig::keysig()
       Measure* m2 = score->firstMeasure()->nextMeasure();
 
       // add a key signature (D major) in measure 2
-      KeySigEvent ke2(Key::D);
+      KeySigEvent ke2;
+      ke2.setKey(Key::D);
       score->startCmd();
-      score->undoChangeKeySig(score->staff(0), m2->tick(), Key(2));
+      score->undoChangeKeySig(score->staff(0), m2->tick(), ke2);
       score->cmdUpdateNotes();
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // change key signature in measure 2 to E flat major
-      KeySigEvent ke_3(Key(-3));
+      KeySigEvent ke_3;
+      ke_3.setKey(Key(-3));
       score->startCmd();
-      score->undoChangeKeySig(score->staff(0), m2->tick(), Key(-3));
+      score->undoChangeKeySig(score->staff(0), m2->tick(), ke_3);
       score->cmdUpdateNotes();
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
