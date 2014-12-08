@@ -360,6 +360,7 @@ class TestImportMidi : public QObject, public MTest
       void instrumentGrand() { mf("instrument_grand"); }
       void instrumentGrand2() { mf("instrument_grand2"); }
       void instrumentChannels() { mf("instrument_channels"); }
+      void instrument3StaffOrgan() { mf("instrument_3staff_organ"); }
       };
 
 //---------------------------------------------------------
