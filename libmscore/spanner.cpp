@@ -490,7 +490,6 @@ Chord* Spanner::endChord()
             if (_endElement->type() != Element::Type::CHORD)
                   _endElement = nullptr;
             }
-      Q_ASSERT(_endElement->type() == Element::Type::CHORD);
       return static_cast<Chord*>(_endElement);
       }
 
