@@ -15,6 +15,8 @@
 
 #include "libmscore/mscoreview.h"
 #include "libmscore/pos.h"
+#include "libmscore/score.h"
+#include "libmscore/select.h"
 
 namespace Awl {
       class PitchEdit;
@@ -22,9 +24,6 @@ namespace Awl {
       };
 
 namespace Ms {
-
-enum class POS : char;
-enum class SelState : char;
 
 class Score;
 class Staff;
