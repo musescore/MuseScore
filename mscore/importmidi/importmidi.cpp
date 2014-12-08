@@ -899,7 +899,7 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
             processMeta(mt, false);
             if (midiType == MidiType::UNKNOWN)
                   midiType = MidiType::GM;
-            if (i % 2 && isSameChannel(tracks[i - 1], mt)) {
+            if (i % 2 && isSameChannel(tracks[i - 1], mt) && isGrandStaff(tracks[i - 1], mt)) {
                   mt.program = tracks[i - 1].program;
                   }
                         // if tracks in Grand staff have different names - clear them,
