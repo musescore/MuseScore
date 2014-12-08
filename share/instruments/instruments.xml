@@ -5425,7 +5425,7 @@
                         <head>0</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>High WooBlock</name>
+                        <name>High Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -5433,7 +5433,7 @@
                         <head>0</head>
                         <line>1</line>
                         <voice>0</voice>
-                        <name>Low WooBlock</name>
+                        <name>Low Wood Block</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
                   </Drum>
@@ -5654,7 +5654,7 @@
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>High WooBlock</name>
+                        <name>High Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -5793,7 +5793,7 @@
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Low WooBlock</name>
+                        <name>Low Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -5815,7 +5815,7 @@
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>High WoodBlock</name>
+                        <name>High Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
