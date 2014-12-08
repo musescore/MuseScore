@@ -467,7 +467,6 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                   if (s->tick() == 0)
                         createKey = false;
                   KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
-printf("Keyig %d custom %d\n", ks->track(), ks->isCustom());
                   if (ks && !ks->isCustom()) {
                         Key key  = st->key(s->tick());
                         Key nKey = transposeKey(key, interval);

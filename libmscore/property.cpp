@@ -210,6 +210,8 @@ static const PropertyData propertyList[] = {
       { P_ID::VOLTA_ENDING,        true,  "endings",               P_TYPE::INT_LIST },
       { P_ID::LINE_VISIBLE,        true,  "lineVisible",           P_TYPE::BOOL },
 
+      { P_ID::SYSTEM_INITIAL_BARLINE_TYPE, false, "sysInitBarLineType", P_TYPE::INT },
+
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
 

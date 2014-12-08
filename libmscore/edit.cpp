@@ -1532,7 +1532,7 @@ void Score::deleteItem(Element* el)
                   if (bl->parent()->type() == Element::Type::SYSTEM) {
                         Measure* m = static_cast<System*>(bl->parent())->firstMeasure();
                         if (m && m->systemInitialBarLineType() != BarLineType::NORMAL)
-                              undoChangeSystemBarLineType(m, BarLineType::NORMAL);
+                              m->undoChangeProperty(P_ID::SYSTEM_INITIAL_BARLINE_TYPE, int(BarLineType::NORMAL));
                         break;
                         }
                   // if regular measure bar line

@@ -207,6 +207,7 @@ enum class P_ID : unsigned char {
       LYRIC_TICKS,
       VOLTA_ENDING,
       LINE_VISIBLE,
+      SYSTEM_INITIAL_BARLINE_TYPE,
 
       END
       };

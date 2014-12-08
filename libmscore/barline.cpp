@@ -570,7 +570,7 @@ Element* BarLine::drop(const DropData& data)
             if (parent()->type() == Element::Type::SYSTEM) {
                   Measure* m = static_cast<System*>(parent())->firstMeasure();
                   if (m && m->systemInitialBarLineType() != bl->barLineType())
-                        score()->undoChangeSystemBarLineType(m, bl->barLineType());
+                        m->undoChangeProperty(P_ID::SYSTEM_INITIAL_BARLINE_TYPE, int(bl->barLineType()));
                   delete e;
                   return 0;
                   }
