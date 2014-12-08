@@ -474,7 +474,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
                         }
                   }
-            if (createKey) {
+            if (createKey && firstMeasure()) {
                   Key key  = Key::C;
                   Key nKey = transposeKey(key, interval);
                   KeySigEvent ke(nKey);
