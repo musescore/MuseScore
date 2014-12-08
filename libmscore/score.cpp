@@ -2107,7 +2107,7 @@ bool Score::appendScore(Score* score)
       for (Staff* st : score->staves()) {
             for (auto k : *(st->keyList())) {
                   int tick = k.first;
-                  Key key = k.second;
+                  KeySigEvent key = k.second;
                   int staffIdx = score->staffIdx(st);
                   staff(staffIdx)->setKey(tick + tickLen, key);
                   }
@@ -2166,7 +2166,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       clef->setParent(seg);
       undoAddElement(clef);
 
-      undoChangeKeySig(ns, 0, s->key(0));
+      undoChangeKeySig(ns, 0, s->keySigEvent(0));
 
       rebuildMidiMapping();
       _instrumentsChanged = true;
@@ -2420,15 +2420,15 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                   Measure* measure = tick2measure(tick);
                   if (!measure)
                         continue;
-                  Key oKey = i->second;
-                  Key nKey = oKey;
+                  KeySigEvent oKey = i->second;
+                  KeySigEvent nKey = oKey;
                   int diff = -staff->part()->instr()->transpose().chromatic;
-                  if (diff != 0 && !styleB(StyleIdx::concertPitch))
-                        nKey = transposeKey(nKey, diff);
+                  if (diff != 0 && !styleB(StyleIdx::concertPitch) && !oKey.custom())
+                        nKey.setKey(transposeKey(nKey.key(), diff));
                   staff->setKey(tick, nKey);
                   KeySig* keysig = new KeySig(this);
                   keysig->setTrack(staffIdx * VOICES);
-                  keysig->setKey(nKey);
+                  keysig->setKeySigEvent(nKey);
                   Segment* s = measure->getSegment(keysig, tick);
                   s->add(keysig);
                   }

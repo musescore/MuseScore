@@ -609,7 +609,7 @@ void MuseScore::newFile()
                                     int diff = -part->instr()->transpose().chromatic;
                                     nKey.setKey(transposeKey(nKey.key(), diff));
                                     }
-                              staff->setKey(0, nKey.key());
+                              staff->setKey(0, nKey);
                               KeySig* keysig = new KeySig(score);
                               keysig->setTrack(staffIdx * VOICES);
                               keysig->setKeySigEvent(nKey);

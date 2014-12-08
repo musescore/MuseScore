@@ -578,7 +578,7 @@ Score::FileError Score::read114(XmlReader& e)
                         qDebug("read114: Key tick %d", tick);
                         continue;
                         }
-                  if (tick == 0 && i->second == Key::C)
+                  if (tick == 0 && i->second.key() == Key::C)
                         continue;
                   Measure* m = tick2measure(tick);
                   if (!m)           //empty score
@@ -587,8 +587,7 @@ Score::FileError Score::read114(XmlReader& e)
                   if (seg->element(track))
                         static_cast<KeySig*>(seg->element(track))->setGenerated(false);
                   else {
-                        KeySigEvent ke;
-                        ke.setKey(i->second);
+                        KeySigEvent ke = i->second;
                         KeySig* ks = new KeySig(this);
                         ks->setKeySigEvent(ke);
                         ks->setParent(seg);

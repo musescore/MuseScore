@@ -490,7 +490,7 @@ void Segment::add(Element* el)
                   checkElement(el, track);
                   _elist[track] = el;
                   if (!el->generated())
-                        el->staff()->setKey(tick(), static_cast<KeySig*>(el)->key());
+                        el->staff()->setKey(tick(), static_cast<KeySig*>(el)->keySigEvent());
                   empty = false;
                   break;
 

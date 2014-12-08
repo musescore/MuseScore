@@ -291,8 +291,8 @@ inline void Cursor::firstChordRestInTrack()
 
 int Cursor::qmlKeySignature()
       {
-	    Staff *staff = _score->staves()[staffIdx()];
-            return (int) staff->key(tick());
+      Staff *staff = _score->staves()[staffIdx()];
+      return (int) staff->key(tick());
       }
 }
 

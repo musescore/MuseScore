@@ -278,12 +278,12 @@ Element* KeySig::drop(const DropData& data)
       if (data.modifiers & Qt::ControlModifier) {
             // apply only to this stave
             if (!(k == keySigEvent()))
-                  score()->undoChangeKeySig(staff(), tick(), k.key());
+                  score()->undoChangeKeySig(staff(), tick(), k);
             }
       else {
             // apply to all staves:
             foreach(Staff* s, score()->rootScore()->staves())
-                  score()->undoChangeKeySig(s, tick(), k.key());
+                  score()->undoChangeKeySig(s, tick(), k);
             }
       return this;
       }

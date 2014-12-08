@@ -53,8 +53,10 @@ void MuseData::musicalAttribute(QString s, Part* part)
       foreach(QString item, al) {
             if (item.startsWith("K:")) {
                   int key = item.mid(2).toInt();
+                  KeySigEvent ke;
+                  ke.setKey(Key(key));
                   foreach(Staff* staff, *(part->staves()))
-                        staff->setKey(curTick, Key(key));
+                        staff->setKey(curTick, ke);
                   }
             else if (item.startsWith("Q:")) {
                   _division = item.mid(2).toInt();

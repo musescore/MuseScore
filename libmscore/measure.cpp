@@ -2120,7 +2120,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         segment = getSegment(courtesySig ? Segment::Type::KeySigAnnounce : Segment::Type::KeySig, curTick);
                         segment->add(ks);
                         if (!courtesySig)
-                              staff->setKey(curTick, ks->key());
+                              staff->setKey(curTick, ks->keySigEvent());
                         }
                   }
             else if (tag == "Lyrics") {       // obsolete, keep for compatibility with version 114

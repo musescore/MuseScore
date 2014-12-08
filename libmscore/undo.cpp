@@ -2011,7 +2011,7 @@ void ChangeElement::flip()
       if (newElement->type() == Element::Type::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(newElement);
             if (!ks->generated())
-                  ks->staff()->setKey(ks->tick(), ks->key());
+                  ks->staff()->setKey(ks->tick(), ks->keySigEvent());
             }
       else if (newElement->type() == Element::Type::DYNAMIC)
             newElement->score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
@@ -2086,10 +2086,12 @@ void ChangeKeySig::flip()
       keysig->setShowCourtesy(showCourtesy);
       keysig->measure()->setDirty();
 
+      keysig->staff()->setKey(keysig->segment()->tick(), keysig->keySigEvent());
+
       int tick = keysig->segment()->tick();
       // update keys if keysig was not generated
       if (!keysig->generated())
-            keysig->staff()->setKey(tick, ks.key());
+            keysig->staff()->setKey(tick, ks);
 
       showCourtesy = sc;
       ks           = oe;

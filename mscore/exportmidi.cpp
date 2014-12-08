@@ -145,7 +145,7 @@ void ExportMidi::writeHeader()
                         keysigFound = true;
                         MidiEvent ev;
                         ev.setType(ME_META);
-                        Key key       = ik->second;   // -7 -- +7
+                        Key key       = ik->second.key();   // -7 -- +7
                         ev.setMetaType(META_KEY_SIGNATURE);
                         ev.setLen(2);
                         unsigned char* data = new unsigned char[2];
@@ -282,7 +282,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
                         data[0] = int(track.outPort());
                         ev.setEData(data);
                         track.insert(0, ev);
-	    
+
                         for (auto i = events.begin(); i != events.end(); ++i) {
                               NPlayEvent event(i->second);
                               char eventPort    = cs->midiPort(event.channel());
