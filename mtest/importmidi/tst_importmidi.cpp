@@ -355,6 +355,9 @@ class TestImportMidi : public QObject, public MTest
 
       // division (fps and ticks per frame case)
       void division() { mf("division"); }
+
+      // MIDI instruments and Grand Staff
+      void instrumentGrand() { mf("instrument_grand"); }
       };
 
 //---------------------------------------------------------
