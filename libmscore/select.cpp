@@ -434,7 +434,6 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
-qDebug("updateSelectedElements");
       foreach(Element* e, _el)
             e->setSelected(false);
       _el.clear();
@@ -500,7 +499,7 @@ qDebug("updateSelectedElements");
                   continue;
             if (sp->type() == Element::Type::SLUR) {
                 if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
-                      if (canSelect(sp->startChord()) && canSelect(sp->endChord()))
+                      if (canSelect(sp->startCR()) && canSelect(sp->endCR()))
                         appendFiltered(sp); // slur with start or end in range selection
             }
             else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick))
