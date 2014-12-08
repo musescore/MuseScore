@@ -143,6 +143,7 @@ class Measure : public MeasureBase {
       bool        _endBarLineGenerated;
       bool        _endBarLineVisible;
       QColor      _endBarLineColor;
+      BarLineType _systemInitialBarLineType;    ///< type used for system bar line, when measure is initial
 
       int _playbackCount;     // temp. value used in RepeatList
                               // counts how many times this measure was already played
@@ -266,6 +267,8 @@ class Measure : public MeasureBase {
       void setEndBarLineGenerated(bool v)       { _endBarLineGenerated = v;    }
       bool endBarLineVisible() const            { return _endBarLineVisible;   }
       QColor endBarLineColor() const            { return _endBarLineColor;     }
+      void setSystemInitialBarLineType(BarLineType v) { _systemInitialBarLineType = v;    }
+      BarLineType systemInitialBarLineType() const    { return _systemInitialBarLineType; }
 
       RepeatMeasure* cmdInsertRepeatMeasure(int staffIdx);
 
