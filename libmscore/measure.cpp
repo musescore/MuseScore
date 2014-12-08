@@ -3998,6 +3998,8 @@ QVariant Measure::getProperty(P_ID propertyId) const
                   return noOffset();
             case P_ID::IRREGULAR:
                   return irregular();
+            case P_ID::SYSTEM_INITIAL_BARLINE_TYPE:
+                  return int(systemInitialBarLineType());
             default:
                   return MeasureBase::getProperty(propertyId);
             }
@@ -4037,6 +4039,9 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
             case P_ID::IRREGULAR:
                   setIrregular(value.toBool());
                   break;
+            case P_ID::SYSTEM_INITIAL_BARLINE_TYPE:
+                  setSystemInitialBarLineType(BarLineType(value.toInt()));
+                  break;
             default:
                   return MeasureBase::setProperty(propertyId, value);
             }
@@ -4068,6 +4073,8 @@ QVariant Measure::propertyDefault(P_ID propertyId) const
                   return 0;
             case P_ID::IRREGULAR:
                   return false;
+            case P_ID::SYSTEM_INITIAL_BARLINE_TYPE:
+                  return int(BarLineType::NORMAL);
             default:
                   break;
             }

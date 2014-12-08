@@ -438,20 +438,6 @@ class ChangeEndBarLineType : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeSystemBarLineType
-//---------------------------------------------------------
-
-class ChangeSystemBarLineType : public UndoCommand {
-      Measure* measure;
-      BarLineType subtype;
-      void flip();
-
-   public:
-      ChangeSystemBarLineType(Measure*, BarLineType subtype);
-      UNDO_NAME("ChangeSystemBarLineType")
-      };
-
-//---------------------------------------------------------
 //   ChangeBarLineSpan
 //---------------------------------------------------------
 
