@@ -373,15 +373,9 @@ bool MuseScore::saveFile(Score* score)
             if (saveDirectory.isEmpty())
                   saveDirectory = preferences.myScoresPath;
 
-            QString fname;
-#ifdef Q_OS_WIN
-            if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
-                  fname = QString("%1/%2").arg(saveDirectory).arg(name);
-            else
-#endif
-            fname = QString("%1/%2.mscz").arg(saveDirectory).arg(name);
-
+            QString fname = QString("%1/%2").arg(saveDirectory).arg(name);
             QString filter = f1 + ";;" + f2;
+
             fn = mscore->getSaveScoreName(
                tr("MuseScore: Save Score"),
                fname,
@@ -393,14 +387,19 @@ bool MuseScore::saveFile(Score* score)
 
             mscore->lastSaveDirectory = score->fileInfo()->absolutePath();
 
+            if (!score->saveFile()) {
+                  QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
+                  return false;
+                  }
             updateRecentScores(score);
             score->setCreated(false);
             writeSessionFile(false);
             }
-      if (!score->saveFile()) {
+      else if (!score->saveFile()) {
             QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
             return false;
             }
+
       setWindowTitle("MuseScore: " + score->name());
       int idx = scoreList.indexOf(score);
       tab1->setTabText(idx, score->name());

@@ -414,6 +414,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void resizeEvent(QResizeEvent*);
       void updateInspector();
       void showModeText(const QString&);
+      void addRecentScore(const QString& scorePath);
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
@@ -675,7 +676,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void restoreDialogState(const char* name, QFileDialog* d);
 
       QPixmap extractThumbnail(const QString& name);
-      
+
       void showLoginDialog();
       void showUploadScoreDialog();
       LoginManager* loginManager() { return _loginManager; }
@@ -702,4 +703,3 @@ struct PluginDescription;
 extern void collectPluginMetaInformation(PluginDescription*);
 } // namespace Ms
 #endif
-

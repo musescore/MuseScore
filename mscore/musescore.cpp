@@ -1163,7 +1163,9 @@ int MuseScore::appendScore(Score* score)
       {
       int index = scoreList.size();
       for (int i = 0; i < scoreList.size(); ++i) {
-            if (scoreList[i]->filePath() == score->filePath() && score->fileInfo()->exists()) {
+            if ((!score->importedFilePath().isEmpty()
+                 && scoreList[i]->importedFilePath() == score->importedFilePath())
+                        || (scoreList[i]->filePath() == score->filePath() && score->fileInfo()->exists())) {
                   removeTab(i);
                   index = i;
                   break;
@@ -1188,9 +1190,21 @@ int MuseScore::appendScore(Score* score)
 
 void MuseScore::updateRecentScores(Score* score)
       {
-      QString path = score->fileInfo()->canonicalFilePath();
-      _recentScores.removeAll(path);
-      _recentScores.prepend(path);
+      QString path = score->importedFilePath(); // defined for scores imported from e.g. MIDI files
+      addRecentScore(path);
+      path = score->fileInfo()->canonicalFilePath();
+      addRecentScore(path);
+      }
+
+//---------------------------------------------------------
+//   addRecentScore
+//---------------------------------------------------------
+void MuseScore::addRecentScore(const QString& scorePath)
+      {
+      if (scorePath.isEmpty() || _recentScores.first() == scorePath)
+            return;
+      _recentScores.removeAll(scorePath);
+      _recentScores.prepend(scorePath);
       if (_recentScores.size() > RECENT_LIST_SIZE)
             _recentScores.removeLast();
       if (startcenter)
@@ -3057,11 +3071,24 @@ void MuseScore::writeSessionFile(bool cleanExit)
             xml.stag("Score");
             xml.tag("created", score->created());
             xml.tag("dirty", score->dirty());
+
+            QString path;
+            if (score->importedFilePath().isEmpty()) {
+                              // score was not imported from another format, e.g. MIDI file
+                  path = score->fileInfo()->absoluteFilePath();
+                  }
+            else if (score->fileInfo()->exists()) {   // score was saved
+                  path = score->fileInfo()->absoluteFilePath();
+                  }
+            else {      // score was imported but not saved - store original file (e.g. MIDI) path
+                  path = score->importedFilePath();
+                  }
+
             if (cleanExit || score->tmpName().isEmpty()) {
-                  xml.tag("path", score->fileInfo()->absoluteFilePath());
+                  xml.tag("path", path);
                   }
             else {
-                  xml.tag("name", score->fileInfo()->absoluteFilePath());
+                  xml.tag("name", path);
                   xml.tag("path", score->tmpName());
                   }
             xml.etag();
