@@ -79,7 +79,7 @@ void MeasureProperties::gotoPreviousMeasure()
 void MeasureProperties::setMeasure(Measure* _m)
       {
       m = _m;
-      setWindowTitle(QString(tr("MuseScore: Measure Properties for Measure %1")).arg(m->no()+1));
+      setWindowTitle(tr("MuseScore: Measure Properties for Measure %1").arg(m->no()+1));
       m->score()->select(0, SelectType::SINGLE, 0);
       m->score()->select(m, SelectType::ADD, 0);
 

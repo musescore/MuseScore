@@ -212,7 +212,7 @@ void TextStyleDialog::newClicked()
             if (!notFound) {
                   s = QInputDialog::getText(this,
                      tr("MuseScore: Read Style Name"),
-                     QString(tr("'%1' does already exist,\nplease choose a different name:")).arg(s)
+                     tr("'%1' does already exist,\nplease choose a different name:").arg(s)
                      );
                   if (s.isEmpty())
                         return;
