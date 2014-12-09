@@ -47,9 +47,9 @@
           <keysig>0</keysig>
           </StaffType>
         </Staff>
-      <trackName>Drum Set</trackName>
+      <trackName>Percussion, Drum Set</trackName>
       <Instrument>
-        <longName pos="0">Drum Set</longName>
+        <longName pos="0">Percussion, Drum Set</longName>
         <trackName></trackName>
         <useDrumset>1</useDrumset>
         <Drum pitch="35">
