@@ -3177,6 +3177,17 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CMD
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "resequence-rehearsal-marks",
+         QT_TRANSLATE_NOOP("action","Resequence Rehearsal Marks"),
+         0,
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL,
          "startcenter",
