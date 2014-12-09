@@ -341,11 +341,13 @@ value_ptr bplist_read_file(char *filename)
     file = fopen(filename, "rb");
     if (!file) {
         bplist_log("Could not open %s\n", filename);
+        free(pldata.data);
         return NULL;
     }
     n = fread(pldata.data, 1, pldata.len, file);
     if (n != pldata.len) {
         bplist_log("Error reading from %s\n", filename);
+        free(pldata.data);
         return NULL;
     }
     value = bplist_read_pldata(&pldata);
