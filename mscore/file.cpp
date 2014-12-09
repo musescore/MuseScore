@@ -328,7 +328,8 @@ Score* MuseScore::readScore(const QString& name)
             score = 0;
             }
       allowShowMidiPanel(name);
-      addRecentScore(score);
+      if (score)
+            addRecentScore(score);
       return score;
       }
 
