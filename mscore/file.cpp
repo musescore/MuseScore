@@ -1958,7 +1958,7 @@ void importSoundfont(QString name)
                   QFile destFile(destFilePath);
                   if (destFileInfo.exists()) {
                         int ret1 = QMessageBox::question(0, QWidget::tr("Overwrite?"),
-                          QWidget::tr("%1 already exists./nDo you want to overwrite it?").arg(destFileInfo.absoluteFilePath()),
+                          QWidget::tr("%1 already exists.\nDo you want to overwrite it?").arg(destFileInfo.absoluteFilePath()),
                           QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
                         if (ret1 == QMessageBox::No)
                               return;
