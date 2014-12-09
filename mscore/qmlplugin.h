@@ -111,8 +111,7 @@ class QmlPlugin : public QQuickItem {
       Q_INVOKABLE Ms::Score* readScore(const QString& name);
       };
 
-#endif
 
 } // namespace Ms
 #endif
-
+#endif
