@@ -51,9 +51,9 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Church Organ</trackName>
+      <trackName>Church Organ, Manual</trackName>
       <Instrument>
-        <longName pos="0">Church Organ</longName>
+        <longName pos="0">Church Organ, Manual</longName>
         <trackName></trackName>
         <Channel>
           <program value="19"/>
@@ -65,9 +65,9 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Church Organ</trackName>
+      <trackName>Church Organ, Pedal</trackName>
       <Instrument>
-        <longName pos="0">Church Organ</longName>
+        <longName pos="0">Church Organ, Pedal</longName>
         <trackName></trackName>
         <Channel>
           <program value="19"/>

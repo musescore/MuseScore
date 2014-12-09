@@ -45,9 +45,9 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>untitled</trackName>
+      <trackName>Grand Piano, untitled</trackName>
       <Instrument>
-        <longName pos="0">untitled</longName>
+        <longName pos="0">Grand Piano, untitled</longName>
         <trackName></trackName>
         <Channel>
           <program value="0"/>

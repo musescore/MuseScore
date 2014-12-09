@@ -816,33 +816,38 @@ QString instrumentName(MidiType type, int program, bool isDrumTrack)
       return MidiInstrument::instrName(int(type), hbank, lbank, program);
       }
 
+static QString concatenateWithComma(const QString &left, const QString &right)
+      {
+      if (left.isEmpty())
+            return right;
+      if (right.isEmpty())
+            return left;
+      return left + ", " + right;
+      }
+
 void setTrackInfo(MidiType midiType, MTrack &mt)
       {
-      if (mt.staff->isTop()) {
-            Part *part  = mt.staff->part();
-            auto &opers = preferences.midiImportOperations;
-            const QString instrName = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
+      if (!mt.staff->isTop())
+            return;
 
-            if (opers.data()->processingsOfOpenedFile == 0) {
-                  const int currentTrack = opers.currentTrack();
-                  opers.data()->trackOpers.instrumentName.setValue(currentTrack, instrName);
-                  }
-            if (mt.name.isEmpty()) {
-                  if (!instrName.isEmpty()) {
-                        mt.name = instrName;
-                        part->setLongName(instrName);
-                        }
-                  }
-            else {
-                  part->setLongName(mt.name);
-                  }
-            part->setPartName(part->longName());
-            part->setMidiChannel(mt.mtrack->outChannel());
-            int bank = 0;
-            if (mt.mtrack->drumTrack())
-                  bank = 128;
-            part->setMidiProgram(mt.program & 0x7f, bank);  // only GM
+      Part *part  = mt.staff->part();
+      auto &opers = preferences.midiImportOperations;
+      const QString instrName = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
+
+      if (opers.data()->processingsOfOpenedFile == 0) {
+            const int currentTrack = opers.currentTrack();
+            opers.data()->trackOpers.instrumentName.setValue(currentTrack, instrName);
             }
+      part->setLongName(concatenateWithComma(instrName, mt.name));
+      if (mt.name.isEmpty() && !instrName.isEmpty())
+            mt.name = instrName;
+
+      part->setPartName(part->longName());
+      part->setMidiChannel(mt.mtrack->outChannel());
+      int bank = 0;
+      if (mt.mtrack->drumTrack())
+            bank = 128;
+      part->setMidiProgram(mt.program & 0x7f, bank);  // only GM
       }
 
 void createTimeSignatures(Score *score)
@@ -892,9 +897,27 @@ void processMeta(MTrack &mt, bool isLyric)
             }
       }
 
+bool areNext2GrandStaff(int currentTrack, const QList<MTrack> &tracks)
+      {
+      if (currentTrack + 1 >= tracks.size())
+            return false;
+      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1]);
+      }
+
+bool areNext3OrganStaff(int currentTrack, const QList<MTrack> &tracks)
+      {
+      if (currentTrack + 2 >= tracks.size())
+            return false;
+      if (!is3StaffOrgan(tracks[currentTrack].program))
+            return false;
+
+      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1])
+                  && isSameChannel(tracks[currentTrack + 1], tracks[currentTrack + 2]);
+      }
+
 void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiType midiType)
       {
-      int lastGrandStaffTrack = -1;
+      int lastOrganTrack = -1;
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
                         // pass current track index to the convertTrack function
@@ -906,23 +929,23 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
             if (midiType == MidiType::UNKNOWN)
                   midiType = MidiType::GM;
 
-                        // detect Grand Staff even if MIDI programs of neibour tracks
-                        // are different (pick first program)
-            if (i > 0 && isSameChannel(tracks[i - 1], mt) && isGrandStaff(tracks[i - 1], mt)) {
-                              // for organ 3 staffs get the same program
-                  if (i - 1 != lastGrandStaffTrack || is3StaffOrgan(tracks[i - 1].program)) {
-                        mt.program = tracks[i - 1].program;
-                        lastGrandStaffTrack = i;
-                        }
+            if (areNext3OrganStaff(i, tracks)) {
+                  lastOrganTrack = i + 2;
+                  tracks[i + 1].program = mt.program;
+                  tracks[i + 2].program = mt.program;
+
+                  mt.name = concatenateWithComma(mt.name, "Manual");
+                  tracks[i + 1].name = "";
+                  tracks[i + 2].name = concatenateWithComma(tracks[i + 2].name, "Pedal");
                   }
-                        // if tracks in Grand staff have different names - clear them,
-                        // instrument name will be used instead
-            if (i % 2 == 0 && i < tracks.size() - 1 && isGrandStaff(mt, tracks[i + 1])) {
+            else if (i > lastOrganTrack && areNext2GrandStaff(i, tracks)) {
+                  tracks[i + 1].program = mt.program;
                   if (mt.name != tracks[i + 1].name) {
-                        mt.name = "";
-                        tracks[i + 1].name = "";
+                        mt.name = "";             // only one name place near bracket is available
+                        tracks[i + 1].name = "";  // so instrument name will be used instead
                         }
                   }
+
             setTrackInfo(midiType, mt);
             mt.convertTrack(lastTick);
             processMeta(mt, true);
