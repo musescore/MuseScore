@@ -35,6 +35,10 @@ class TestTools : public QObject, public MTest
       void undoImplodeVoice();
       void undoSlashFill();
       void undoSlashRhythm();
+      void undoResequenceAlpha();
+      void undoResequenceNumeric();
+      void undoResequenceMeasure();
+      void undoResequencePart();
       };
 
 //---------------------------------------------------------
@@ -185,6 +189,102 @@ void TestTools::undoSlashRhythm()
       // do
       score->startCmd();
       score->cmdSlashRhythm();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+void TestTools::undoResequenceAlpha()
+      {
+      QString readFile(DIR + "undoResequenceAlpha.mscx");
+      QString writeFile1("undoResequenceAlpha01-test.mscx");
+      QString reference1(DIR  + "undoResequenceAlpha01-ref.mscx");
+      QString writeFile2("undoResequenceAlpha02-test.mscx");
+      QString reference2(DIR  + "undoResequenceAlpha02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // do
+      score->startCmd();
+      score->cmdResequenceRehearsalMarks();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+void TestTools::undoResequenceNumeric()
+      {
+      QString readFile(DIR + "undoResequenceNumeric.mscx");
+      QString writeFile1("undoResequenceNumeric01-test.mscx");
+      QString reference1(DIR  + "undoResequenceNumeric01-ref.mscx");
+      QString writeFile2("undoResequenceNumeric02-test.mscx");
+      QString reference2(DIR  + "undoResequenceNumeric02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // do
+      score->startCmd();
+      score->cmdResequenceRehearsalMarks();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+void TestTools::undoResequenceMeasure()
+      {
+      QString readFile(DIR + "undoResequenceMeasure.mscx");
+      QString writeFile1("undoResequenceMeasure01-test.mscx");
+      QString reference1(DIR  + "undoResequenceMeasure01-ref.mscx");
+      QString writeFile2("undoResequenceMeasure02-test.mscx");
+      QString reference2(DIR  + "undoResequenceMeasure02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // do
+      score->startCmd();
+      score->cmdResequenceRehearsalMarks();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+void TestTools::undoResequencePart()
+      {
+      QString readFile(DIR + "undoResequencePart.mscx");
+      QString writeFile1("undoResequencePart01-test.mscx");
+      QString reference1(DIR  + "undoResequencePart01-ref.mscx");
+      QString writeFile2("undoResequencePart02-test.mscx");
+      QString reference2(DIR  + "undoResequencePart02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // do
+      score->startCmd();
+      score->cmdResequenceRehearsalMarks();
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
