@@ -160,7 +160,7 @@ void ZerberusGui::addClicked()
       if (sl.contains(sfPath)) {
             QMessageBox::warning(this,
             tr("MuseScore"),
-            QString(tr("Soundfont %1 already loaded")).arg(sfPath));
+            tr("Soundfont %1 already loaded").arg(sfPath));
             }
       else {
             _loadedSfName = sfName;
@@ -191,7 +191,7 @@ void ZerberusGui::onSoundFontLoaded()
       if (!loaded) {
             QMessageBox::warning(this,
             tr("MuseScore"),
-            QString(tr("cannot load soundfont %1")).arg(_loadedSfPath));
+            tr("cannot load soundfont %1").arg(_loadedSfPath));
             }
       else {
             files->insertItem(0, _loadedSfName);
