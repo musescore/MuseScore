@@ -263,7 +263,8 @@ class Score : public QObject {
             FILE_NO_ROOTFILE,
             FILE_TOO_OLD,
             FILE_TOO_NEW,
-            FILE_USER_ABORT
+            FILE_USER_ABORT,
+            FILE_IGNORE_ERROR
             };
 
    private:
