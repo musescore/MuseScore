@@ -1547,12 +1547,6 @@ void MuseScore::dropEvent(QDropEvent* event)
                   setCurrentScoreView(view);
                   writeSessionFile(false);
                   }
-            else {
-                  QMessageBox::critical(0,
-                        tr("MuseScore: Load Error"),
-                        tr("Open failed: Unknown file extension or broken file"));
-                  }
-
             event->acceptProposedAction();
             }
       }
