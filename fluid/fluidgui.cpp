@@ -15,8 +15,8 @@
 
 using namespace Ms;
 
-SfListDialog::SfListDialog()
-   : QDialog(0)
+SfListDialog::SfListDialog(QWidget* parent)
+   : QDialog(parent)
       {
       setWindowTitle(tr("Soundfont Files"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -177,7 +177,7 @@ void FluidGui::soundFontAddClicked()
       {
       QFileInfoList l = FluidS::Fluid::sfFiles();
 
-      SfListDialog ld;
+      SfListDialog ld(this);
       foreach (const QFileInfo& fi, l)
             ld.add(fi.fileName(), fi.absoluteFilePath());
       if (!ld.exec())

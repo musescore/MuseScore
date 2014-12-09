@@ -30,7 +30,7 @@ class SfListDialog : public QDialog {
       void itemSelected(QListWidgetItem*);
 
    public:
-      SfListDialog();
+      SfListDialog(QWidget* parent = 0);
       QString name();
       QString path();
       void add(const QString& name, const QString& path);
