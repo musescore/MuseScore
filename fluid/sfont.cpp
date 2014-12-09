@@ -623,6 +623,7 @@ void Sample::load()
             char* p = new char[size];
             if (fd.read(p, size) != size) {
                   printf("  read %d failed\n", size);
+                  delete[] p;
                   return;
                   }
             decompressOggVorbis(p, size);
