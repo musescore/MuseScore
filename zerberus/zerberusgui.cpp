@@ -18,8 +18,8 @@
 //   SfzListDialog
 //---------------------------------------------------------
 
-SfzListDialog::SfzListDialog()
-   : QDialog(0)
+SfzListDialog::SfzListDialog(QWidget* parent)
+   : QDialog(parent)
       {
       setWindowTitle(tr("SFZ Files"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -141,7 +141,7 @@ void ZerberusGui::addClicked()
       {
       QFileInfoList l = Zerberus::sfzFiles();
 
-      SfzListDialog ld;
+      SfzListDialog ld(this);
       foreach (const QFileInfo& fi, l)
             ld.add(fi.fileName(), fi.absoluteFilePath());
       if (!ld.exec())
