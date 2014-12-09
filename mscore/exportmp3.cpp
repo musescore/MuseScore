@@ -829,7 +829,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       hideProgressBar();
       delete synti;
-      delete bufferOut;
+      delete[] bufferOut;
       file.close();
       MScore::sampleRate = oldSampleRate;
       return true;
