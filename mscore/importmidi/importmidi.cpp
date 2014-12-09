@@ -827,10 +827,6 @@ static QString concatenateWithComma(const QString &left, const QString &right)
 
 void setTrackInfo(MidiType midiType, MTrack &mt)
       {
-      if (!mt.staff->isTop())
-            return;
-
-      Part *part  = mt.staff->part();
       auto &opers = preferences.midiImportOperations;
       const QString instrName = instrumentName(midiType, mt.program, mt.mtrack->drumTrack());
 
@@ -838,16 +834,20 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
             const int currentTrack = opers.currentTrack();
             opers.data()->trackOpers.instrumentName.setValue(currentTrack, instrName);
             }
-      part->setLongName(concatenateWithComma(instrName, mt.name));
+
+      if (mt.staff->isTop()) {
+            Part *part  = mt.staff->part();
+            part->setLongName(concatenateWithComma(instrName, mt.name));
+            part->setPartName(part->longName());
+            part->setMidiChannel(mt.mtrack->outChannel());
+            int bank = 0;
+            if (mt.mtrack->drumTrack())
+                  bank = 128;
+            part->setMidiProgram(mt.program & 0x7f, bank);  // only GM
+            }
+
       if (mt.name.isEmpty() && !instrName.isEmpty())
             mt.name = instrName;
-
-      part->setPartName(part->longName());
-      part->setMidiChannel(mt.mtrack->outChannel());
-      int bank = 0;
-      if (mt.mtrack->drumTrack())
-            bank = 128;
-      part->setMidiProgram(mt.program & 0x7f, bank);  // only GM
       }
 
 void createTimeSignatures(Score *score)
