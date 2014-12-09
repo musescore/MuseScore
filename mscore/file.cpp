@@ -102,6 +102,8 @@ extern Score::FileError importCapXml(Score*, const QString& name);
 
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
+extern void importSoundfont(QString name);
+
 extern bool savePositions(Score*, const QString& name, bool segments);
 extern MasterSynthesizer* synti;
 
@@ -322,7 +324,7 @@ Score* MuseScore::readScore(const QString& name)
       if (rv != Score::FileError::FILE_NO_ERROR) {
             // in case of user abort while reading, the error has already been reported
             // else report it now
-            if (rv != Score::FileError::FILE_USER_ABORT)
+            if (rv != Score::FileError::FILE_USER_ABORT && rv != Score::FileError::FILE_IGNORE_ERROR)
                   readScoreError(name, rv, false);
             delete score;
             score = 0;
@@ -1932,6 +1934,44 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       }
 
 //---------------------------------------------------------
+//   importSoundfont
+//---------------------------------------------------------
+
+void importSoundfont(QString name)
+      {
+      QFileInfo info(name);
+      int ret = QMessageBox::question(0, QWidget::tr("Save as MP3"),
+            QWidget::tr("Do you want to install %1?").arg(info.fileName()),
+             QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
+      if (ret == QMessageBox::Yes) {
+            QStringList pl = preferences.sfPath.split(";");
+            QString destPath;
+            for (QString s : pl) {
+                  QFileInfo dest(s);
+                  if (dest.isWritable())
+                        destPath = s;
+                  }
+            if (!destPath.isEmpty()) {
+                  QString destFilePath = destPath+ "/" +info.fileName();
+                  QFileInfo destFileInfo(destFilePath);
+                  QFile destFile(destFilePath);
+                  if (destFileInfo.exists()) {
+                        int ret1 = QMessageBox::question(0, QWidget::tr("Override?"),
+                          QWidget::tr("Do you want to override %1?").arg(destFileInfo.absoluteFilePath()),
+                          QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
+                        if (ret1 == QMessageBox::No)
+                              return;
+                        destFile.remove();
+                        }
+                  QFile orig(name);
+                  if (orig.copy(destFilePath)) {
+                        QMessageBox::information(0, QWidget::tr("Soundfont installed"), QWidget::tr("Soundfont installed. Please go to View > Synthesizer to use it and View > Mixer to choose instrument sound."));
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   readScore
 ///   Import file \a name
 //---------------------------------------------------------
@@ -1947,6 +1987,10 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
             if (rv != Score::FileError::FILE_NO_ERROR)
                   return rv;
+            }
+      else if (suffix == "sf2" || suffix == "sf3") {
+            importSoundfont(name);
+            return Score::FileError::FILE_IGNORE_ERROR;
             }
       else {
             // typedef Score::FileError (*ImportFunction)(Score*, const QString&);
