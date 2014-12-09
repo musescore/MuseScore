@@ -349,10 +349,15 @@ void ScoreView::startFotomode()
       qreal h = 8.0 / _matrix.m22();
       QRectF r(-w*.5, -h*.5, w, h);
 
-      if (_foto->rect().isEmpty()) {
-            qreal w = width() / _matrix.m11();
-            qreal h = height() / _matrix.m22();
-            _foto->setRect(QRectF(w * .3, h * .3, w * .4, h * .4));
+      // try to find existing rect within current view
+      QRectF view = toLogical(QRect(0.0, 0.0, width(), height()));
+      if (_foto->rect().isEmpty() || !view.intersects(_foto->rect())) {
+            // rect not found - construct new rect with default size & relative position
+            qreal w = view.width();
+            qreal h = view.height();
+            QRectF rect(w * .3, h * .3, w * .4, h * .4);
+            // convert to absolute position
+            _foto->setRect(rect.translated(view.topLeft()));
             }
       for (int i = 0; i < MAX_GRIPS; ++i)
             grip[i] = r;
