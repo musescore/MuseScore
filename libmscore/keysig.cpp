@@ -354,6 +354,12 @@ void KeySig::read(XmlReader& e)
                               SymId id = SymId(val.toInt(&valid));
                               if (!valid)
                                     id = Sym::name2id(val);
+                              if (score()->mscVersion() <= 114) {
+                                    if (valid)
+                                          id = KeySig::convertFromOldId(val.toInt(&valid));
+                                    else
+                                          id = Sym::oldName2id(val);
+                                    }
                               ks.sym = id;
                               }
                         else if (tag == "pos")
@@ -382,6 +388,50 @@ void KeySig::read(XmlReader& e)
             }
       if (!_sig.isValid())
             _sig.initFromSubtype(subtype);     // for backward compatibility
+      }
+
+//---------------------------------------------------------
+//   convertFromOldId
+//
+//    for import of 1.3 scores
+//---------------------------------------------------------
+
+SymId KeySig::convertFromOldId(int val) const
+      {
+      SymId symId = SymId::noSym;
+      switch (val) {
+            case 32: symId = SymId::accidentalSharp; break;
+            case 33: symId = SymId::accidentalThreeQuarterTonesSharpArrowUp; break;
+            case 34: symId = SymId::accidentalQuarterToneSharpArrowDown; break;
+            // case 35: // "sharp arrow both" missing in SMuFL
+            case 36: symId = SymId::accidentalQuarterToneSharpStein; break;
+            case 37: symId = SymId::accidentalBuyukMucennebSharp; break;
+            case 38: symId = SymId::accidentalKomaSharp; break;
+            case 39: symId = SymId::accidentalThreeQuarterTonesSharpStein; break;
+            case 40: symId = SymId::accidentalNatural; break;
+            case 41: symId = SymId::accidentalQuarterToneSharpNaturalArrowUp; break;
+            case 42: symId = SymId::accidentalQuarterToneFlatNaturalArrowDown; break;
+            // case 43: // "natural arrow both" missing in SMuFL
+            case 44: symId = SymId::accidentalFlat; break;
+            case 45: symId = SymId::accidentalQuarterToneFlatArrowUp; break;
+            case 46: symId = SymId::accidentalThreeQuarterTonesFlatArrowDown; break;
+            // case 47: // "flat arrow both" missing in SMuFL
+            case 48: symId = SymId::accidentalBakiyeFlat; break;
+            case 49: symId = SymId::accidentalBuyukMucennebFlat; break;
+            case 50: symId = SymId::accidentalThreeQuarterTonesFlatZimmermann; break;
+            case 51: symId = SymId::accidentalQuarterToneFlatStein; break;
+            // case 52: // "mirrored flat slash" missing in SMuFL
+            case 53: symId = SymId::accidentalDoubleFlat; break;
+            // case 54: // "flat flat slash" missing in SMuFL
+            case 55: symId = SymId::accidentalDoubleSharp; break;
+            case 56: symId = SymId::accidentalSori; break;
+            case 57: symId = SymId::accidentalKoron; break;
+            default:
+                  qDebug("MuseScore 1.3 symbol id corresponding to <%d> not found", val);
+                  symId = SymId::noSym;
+                  break;
+            }
+      return symId;
       }
 
 //---------------------------------------------------------
