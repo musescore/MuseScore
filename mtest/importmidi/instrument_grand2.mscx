@@ -44,10 +44,36 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
+        <bracket type="1" span="2"/>
+        <barLineSpan>2</barLineSpan>
         </Staff>
-      <trackName>Grand Piano, untitled</trackName>
+      <Staff id="2">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>E.Piano</trackName>
       <Instrument>
-        <longName pos="0">Grand Piano, untitled</longName>
+        <longName pos="0">E.Piano</longName>
+        <trackName></trackName>
+        <Channel>
+          <program value="4"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="3">
+        <StaffType group="pitched">
+          </StaffType>
+        <bracket type="1" span="2"/>
+        <barLineSpan>2</barLineSpan>
+        </Staff>
+      <Staff id="4">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>Grand Piano</trackName>
+      <Instrument>
+        <longName pos="0">Grand Piano</longName>
         <trackName></trackName>
         <Channel>
           <program value="0"/>
@@ -65,17 +91,9 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
         <Chord>
-          <durationType>quarter</durationType>
+          <durationType>whole</durationType>
           <Note>
-            <Tie id="2">
-              </Tie>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -83,75 +101,54 @@
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>100</velocity>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         </Measure>
-      <Measure number="2">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Tie id="3">
-              </Tie>
-            <endSpanner id="2"/>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>100</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>16th</durationType>
-          <Note>
-            <endSpanner id="3"/>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>100</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>16th</durationType>
-          </Rest>
-        <Rest>
-          <durationType>eighth</durationType>
-          </Rest>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
-        </Measure>
-      <Measure number="3">
-        <KeySig>
-          <accidental>1</accidental>
-          </KeySig>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
         <TimeSig>
-          <sigN>3</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
-          <dots>1</dots>
-          <durationType>half</durationType>
+          <durationType>whole</durationType>
           <Note>
-            <Tie id="4">
-              </Tie>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -159,20 +156,28 @@
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>100</velocity>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         </Measure>
-      <Measure number="4">
+      </Staff>
+    <Staff id="3">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
         <Chord>
-          <durationType>quarter</durationType>
+          <durationType>whole</durationType>
           <Note>
-            <Tie id="5">
-              </Tie>
-            <endSpanner id="4"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -180,16 +185,12 @@
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>100</velocity>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
-          </Chord>
-        <Chord>
-          <durationType>16th</durationType>
           <Note>
-            <endSpanner id="5"/>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -197,21 +198,54 @@
                 <len>1000</len>
                 </Event>
               </Events>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <velocity>100</velocity>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Rest>
-          <durationType>16th</durationType>
-          </Rest>
-        <Rest>
-          <durationType>eighth</durationType>
-          </Rest>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <Events>
+              <Event>
+                <pitch>0</pitch>
+                <ontime>0</ontime>
+                <len>1000</len>
+                </Event>
+              </Events>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         </Measure>
       </Staff>
     </Score>
