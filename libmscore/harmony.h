@@ -89,12 +89,12 @@ class Harmony : public Text {
       mutable QRectF _tbbox;
 
       NoteSpellingType _rootSpelling, _baseSpelling;
-      bool _rootLowerCase, _baseLowerCase;
+      bool _rootLowerCase, _baseLowerCase, _noteUpperCase;
 
       void determineRootBaseSpelling();
       virtual void draw(QPainter*) const;
       void render(const QString&, qreal&, qreal&);
-      void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType spelling = NoteSpellingType::STANDARD, bool lowerCase = false);
+      void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType spelling = NoteSpellingType::STANDARD, bool lowerCase = false, bool upperCase = false);
       virtual void styleChanged() override     { render(); }
       virtual void setTextStyle(const TextStyle& st) override;
 
@@ -120,7 +120,7 @@ class Harmony : public Text {
       const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
       const ChordDescription* generateDescription();
 
-      void determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& rootLowerCase, NoteSpellingType& baseSpelling, bool& baseLowerCase);
+      void determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& rootLowerCase, NoteSpellingType& baseSpelling, bool& baseLowerCase, bool& noteUpperCase);
 
       virtual void textChanged() override;
       virtual void layout();

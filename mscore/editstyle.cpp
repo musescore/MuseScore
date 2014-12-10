@@ -361,8 +361,12 @@ void EditStyle::getValues()
 
       lstyle.set(StyleIdx::useStandardNoteNames,    useStandardNoteNames->isChecked());
       lstyle.set(StyleIdx::useGermanNoteNames,      useGermanNoteNames->isChecked());
+      lstyle.set(StyleIdx::useFullGermanNoteNames,  useFullGermanNoteNames->isChecked());
       lstyle.set(StyleIdx::useSolfeggioNoteNames,   useSolfeggioNoteNames->isChecked());
+      lstyle.set(StyleIdx::useFrenchNoteNames,      useFrenchNoteNames->isChecked());
       lstyle.set(StyleIdx::lowerCaseMinorChords,    lowerCaseMinorChords->isChecked());
+      lstyle.set(StyleIdx::lowerCaseBassNotes,      lowerCaseBassNotes->isChecked());
+      lstyle.set(StyleIdx::allCapsNoteNames,        allCapsNoteNames->isChecked());
 
       lstyle.set(StyleIdx::concertPitch,            concertPitch->isChecked());
       lstyle.set(StyleIdx::createMultiMeasureRests, multiMeasureRests->isChecked());
@@ -640,8 +644,12 @@ void EditStyle::setValues()
             }
       useStandardNoteNames->setChecked(lstyle.value(StyleIdx::useStandardNoteNames).toBool());
       useGermanNoteNames->setChecked(lstyle.value(StyleIdx::useGermanNoteNames).toBool());
+      useFullGermanNoteNames->setChecked(lstyle.value(StyleIdx::useFullGermanNoteNames).toBool());
       useSolfeggioNoteNames->setChecked(lstyle.value(StyleIdx::useSolfeggioNoteNames).toBool());
+      useFrenchNoteNames->setChecked(lstyle.value(StyleIdx::useFrenchNoteNames).toBool());
       lowerCaseMinorChords->setChecked(lstyle.value(StyleIdx::lowerCaseMinorChords).toBool());
+      lowerCaseBassNotes->setChecked(lstyle.value(StyleIdx::lowerCaseBassNotes).toBool());
+      allCapsNoteNames->setChecked(lstyle.value(StyleIdx::allCapsNoteNames).toBool());
       concertPitch->setChecked(lstyle.value(StyleIdx::concertPitch).toBool());
 
       multiMeasureRests->setChecked(lstyle.value(StyleIdx::createMultiMeasureRests).toBool());

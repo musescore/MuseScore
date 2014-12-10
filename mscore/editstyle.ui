@@ -4226,7 +4226,7 @@
                <item>
                 <widget class="QRadioButton" name="useGermanNoteNames">
                  <property name="toolTip">
-                  <string>A, B, H, C, Cis, ...</string>
+                  <string>A, B♭, H, C, C♯, ...</string>
                  </property>
                  <property name="text">
                   <string>German</string>
@@ -4234,12 +4234,32 @@
                 </widget>
                </item>
                <item>
+                <widget class="QRadioButton" name="useFullGermanNoteNames">
+                 <property name="toolTip">
+                  <string>A, B, H, C, Cis</string>
+                 </property>
+                 <property name="text">
+                  <string>Full German</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QRadioButton" name="useSolfeggioNoteNames">
                  <property name="toolTip">
-                  <string>La, Si♭, Si, Do, Do♯, ...</string>
+                  <string>Do, Do♯, Re♭, Re, ...</string>
                  </property>
                  <property name="text">
                   <string>Solfeggio</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="useFrenchNoteNames">
+                 <property name="toolTip">
+                  <string>Do, Do♯, Ré♭, Ré, ...</string>
+                 </property>
+                 <property name="text">
+                  <string>French</string>
                  </property>
                 </widget>
                </item>
@@ -4259,11 +4279,42 @@
               </layout>
              </item>
              <item>
-              <widget class="QCheckBox" name="lowerCaseMinorChords">
-               <property name="text">
-                <string>Lower case minor chords</string>
-               </property>
-              </widget>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QCheckBox" name="lowerCaseMinorChords">
+                 <property name="text">
+                  <string>Lower case minor chords</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="lowerCaseBassNotes">
+                 <property name="text">
+                  <string>Lower case bass notes</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="allCapsNoteNames">
+                 <property name="text">
+                  <string>All caps note names</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_17">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>
@@ -5486,6 +5537,7 @@
  <tabstops>
   <tabstop>pageList</tabstop>
   <tabstop>musicalSymbolFont</tabstop>
+  <tabstop>musicalTextFont</tabstop>
   <tabstop>concertPitch</tabstop>
   <tabstop>multiMeasureRests</tabstop>
   <tabstop>minEmptyMeasures</tabstop>
@@ -5494,6 +5546,10 @@
   <tabstop>dontHideStavesInFirstSystem</tabstop>
   <tabstop>crossMeasureValues</tabstop>
   <tabstop>hideInstrumentNameIfOneInstrument</tabstop>
+  <tabstop>SwingOff</tabstop>
+  <tabstop>swingEighth</tabstop>
+  <tabstop>swingSixteenth</tabstop>
+  <tabstop>swingBox</tabstop>
   <tabstop>staffUpperBorder</tabstop>
   <tabstop>staffLowerBorder</tabstop>
   <tabstop>staffDistance</tabstop>
@@ -5629,8 +5685,12 @@
   <tabstop>chordsXmlFile</tabstop>
   <tabstop>useStandardNoteNames</tabstop>
   <tabstop>useGermanNoteNames</tabstop>
+  <tabstop>useFullGermanNoteNames</tabstop>
   <tabstop>useSolfeggioNoteNames</tabstop>
+  <tabstop>useFrenchNoteNames</tabstop>
   <tabstop>lowerCaseMinorChords</tabstop>
+  <tabstop>lowerCaseBassNotes</tabstop>
+  <tabstop>allCapsNoteNames</tabstop>
   <tabstop>harmonyY</tabstop>
   <tabstop>harmonyFretDist</tabstop>
   <tabstop>minHarmonyDistance</tabstop>
@@ -5665,7 +5725,6 @@
   <tabstop>tupletNoteLeftDistance</tabstop>
   <tabstop>tupletStemRightDistance</tabstop>
   <tabstop>tupletNoteRightDistance</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>
