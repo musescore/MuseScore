@@ -51,10 +51,6 @@
 <!-- this allows "b" to render as a literal when when encountered as a note name -->
     <sym value="b" class="note" name="b"/>
 
-<!-- edit the "value" attribute of these to get an accent on the "e" for French spelling -->
-    <sym value="Re" class="note" name="Re"/>
-    <sym value="re" class="note" name="re"/>
-
 <!-- add "code" attributes (as for "b" and "#" above) to get these to render as flat and sharp signs -->
     <sym class="accidental" name="es"/>
     <sym class="accidental" name="is"/>
