@@ -103,6 +103,8 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
             auto &chords = track.second.chords;
+            if (chords.empty())
+                  continue;
 
             Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, track.second.tuplets),
                        "MChord::removeOverlappingNotes", "Tuplet chord/note is outside tuplet "
@@ -383,6 +385,8 @@ void splitUnequalChords(std::multimap<int, MTrack> &tracks)
       for (auto &track: tracks) {
             std::vector<std::pair<ReducedFraction, MidiChord>> newChordEvents;
             auto &chords = track.second.chords;
+            if (chords.empty())
+                  continue;
             sortNotesByLength(chords);
             for (auto &chordEvent: chords) {
                   auto &chord = chordEvent.second;
@@ -430,6 +434,8 @@ void mergeChordsWithEqualOnTimeAndVoice(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
             auto &chords = track.second.chords;
+            if (chords.empty())
+                  continue;
                         // the key is pair<onTime, voice>
             std::map<std::pair<ReducedFraction, int>,
                      std::multimap<ReducedFraction, MidiChord>::iterator> onTimes;

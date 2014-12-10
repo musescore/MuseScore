@@ -66,6 +66,17 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.simplifyDurations.setDefaultValue(false, false);
             data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
             data.trackOpers.doStaffSplit.setDefaultValue(false, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
+            mf(file);
+            }
+      void noTempoText(const char *file)
+            {
+            auto &opers = preferences.midiImportOperations;
+            opers.addNewMidiFile(midiFilePath(file));
+            MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFilePath(file));
+            auto &data = *opers.data();
+
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(file);
             }
       void voiceSeparation(const char *file, bool simplify = false)
@@ -78,6 +89,7 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.doStaffSplit.setDefaultValue(false, false);
             data.trackOpers.simplifyDurations.setDefaultValue(simplify, false);
             data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_4, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(file);
             }
       void simplification(const char *file)
@@ -90,6 +102,7 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.doStaffSplit.setDefaultValue(false, false);
             data.trackOpers.simplifyDurations.setDefaultValue(true, false);
             data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(file);
             }
       void staffSplit(const char *file)
@@ -102,6 +115,7 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.doStaffSplit.setDefaultValue(true, false);
             data.trackOpers.simplifyDurations.setDefaultValue(false, false);
             data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(file);
             }
 
@@ -139,13 +153,14 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.doStaffSplit.setDefaultValue(false, false);
             data.trackOpers.simplifyDurations.setDefaultValue(false, false);
             data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(midiFile.toStdString().c_str());
             }
 
       // chord detection
-      void chordSmallError() { mf("chord_small_error"); }
-      void chordBigError() { mf("chord_big_error"); }
-      void chordLegato() { mf("chord_legato"); }
+      void chordSmallError() { noTempoText("chord_small_error"); }
+      void chordBigError() { noTempoText("chord_big_error"); }
+      void chordLegato() { noTempoText("chord_legato"); }
 
       // test tuplet recognition functions
       void findChordInBar();
@@ -193,9 +208,10 @@ class TestImportMidi : public QObject, public MTest
             auto &data = *opers.data();
 
             data.trackOpers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_32, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(midiFile.toStdString().c_str());
             }
-      void tuplet2VoicesTupletNon() { mf("tuplet_2_voices_tuplet_non"); }
+      void tuplet2VoicesTupletNon() { noTempoText("tuplet_2_voices_tuplet_non"); }
       void tuplet3_5_7tuplets()
             {
             QString midiFile("tuplet_3_5_7_tuplets");
@@ -207,6 +223,7 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.changeClef.setDefaultValue(false, false);
             data.trackOpers.doStaffSplit.setDefaultValue(false, false);
             data.trackOpers.simplifyDurations.setDefaultValue(false, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(midiFile.toStdString().c_str());
             }
       void tuplet5_5TupletsRests() { dontSimplify("tuplet_5_5_tuplets_rests"); }
@@ -271,7 +288,7 @@ class TestImportMidi : public QObject, public MTest
       void tupletOffTimeOtherBar() { dontSimplify("tuplet_off_time_other_bar"); }
       void tupletOffTimeOtherBar2() { dontSimplify("tuplet_off_time_other_bar2"); }
       void tuplet16th8th() { dontSimplify("tuplet_16th_8th"); }
-      void tuplet7Staccato() { mf("tuplet_7_staccato"); }
+      void tuplet7Staccato() { noTempoText("tuplet_7_staccato"); }
       void minDuration() { dontSimplify("min_duration"); }
 
       void pickupMeasure() { dontSimplify("pickup"); }
@@ -296,6 +313,7 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.doStaffSplit.setDefaultValue(false, false);
             data.trackOpers.simplifyDurations.setDefaultValue(false, false);
             data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(midiFile.toStdString().c_str());
             }
       void swingShuffle()
@@ -310,6 +328,7 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.doStaffSplit.setDefaultValue(false, false);
             data.trackOpers.simplifyDurations.setDefaultValue(false, false);
             data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(midiFile.toStdString().c_str());
             }
       void swingClef()
@@ -325,12 +344,13 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.doStaffSplit.setDefaultValue(false, false);
             data.trackOpers.simplifyDurations.setDefaultValue(false, false);
             data.trackOpers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_1, false);
+            data.trackOpers.showTempoText.setDefaultValue(false);
             mf(midiFile.toStdString().c_str());
             }
 
       // percussion
-      void percDrums() { mf("perc_drums"); }
-      void percRemoveTies() { mf("perc_remove_ties"); }
+      void percDrums() { noTempoText("perc_drums"); }
+      void percRemoveTies() { noTempoText("perc_remove_ties"); }
 
       // clef changes along the score
       void clefTied() { dontSimplify("clef_tied"); }
