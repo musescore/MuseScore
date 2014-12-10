@@ -575,17 +575,17 @@ Element* BarLine::drop(const DropData& data)
                   return 0;
                   }
 
-            //parent is a segment
+            // parent is a segment
             Measure* m = static_cast<Segment*>(parent())->measure();
-
             // check if the new property can apply to this single bar line
             bool oldRepeat = (barLineType() == BarLineType::START_REPEAT || barLineType() == BarLineType::END_REPEAT
                         || barLineType() == BarLineType::END_START_REPEAT);
             bool newRepeat = (bl->barLineType() == BarLineType::START_REPEAT || bl->barLineType() == BarLineType::END_REPEAT
                         || bl->barLineType() == BarLineType::END_START_REPEAT);
-            // if repeats are not involved or drop refers to span rather than subtype =>
+            // if ctrl was used and repeats are not involved,
+            // or if drop refers to span rather than subtype =>
             // single bar line drop
-            if( (!oldRepeat && !newRepeat) || (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) ) {
+            if (((data.modifiers & Qt::ControlModifier) && !oldRepeat && !newRepeat) || (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) ) {
                   // if drop refers to span, update this bar line span
                   if(bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) {
                         // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
@@ -595,7 +595,7 @@ Element* BarLine::drop(const DropData& data)
                         int spanTo     = bl->spanTo() > 4 ? bottomSpan - (8 - bl->spanTo()) : bl->spanTo();
                         score()->undoChangeSingleBarLineSpan(this, 1, spanFrom, spanTo);
                         }
-                  // if drop refer to subtype, update this bar line subtype
+                  // if drop refers to subtype, update this bar line subtype
                   else {
 //                        score()->undoChangeBarLine(m, bl->barLineType());
                         score()->undoChangeProperty(this, P_ID::SUBTYPE, int(bl->barLineType()));
@@ -612,7 +612,9 @@ Element* BarLine::drop(const DropData& data)
                         return 0;
                         }
                   }
-            m->drop(data);
+            score()->undoChangeBarLine(m, bl->barLineType());
+            delete e;
+            return 0;
             }
       else if (type == Element::Type::ARTICULATION) {
             Articulation* atr = static_cast<Articulation*>(e);
