@@ -39,6 +39,8 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
       for (auto &track: tracks) {
             MTrack &mtrack = track.second;
             auto &chords = mtrack.chords;
+            if (chords.empty())
+                  continue;
             const Drumset* const drumset = mtrack.mtrack->drumTrack() ? smDrumset : 0;
             if (!drumset)
                   continue;
@@ -144,7 +146,7 @@ std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
 void splitDrumTracks(std::multimap<int, MTrack> &tracks)
       {
       for (auto it = tracks.begin(); it != tracks.end(); ++it) {
-            if (!it->second.mtrack->drumTrack())
+            if (!it->second.mtrack->drumTrack() || it->second.chords.empty())
                   continue;
             const auto &opers = preferences.midiImportOperations.data()->trackOpers;
             if (!opers.doStaffSplit.value(it->second.indexOfOperation))
@@ -226,7 +228,7 @@ void removeRests(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
 
       for (auto &trackItem: tracks) {
             MTrack &track = trackItem.second;
-            if (!track.mtrack->drumTrack())
+            if (!track.mtrack->drumTrack() || track.chords.empty())
                   continue;
             if (!opers.simplifyDurations.value(track.indexOfOperation))
                   continue;
