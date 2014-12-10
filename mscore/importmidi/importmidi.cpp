@@ -152,6 +152,8 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
 
       for (auto &track: tracks) {
             MTrack &mtrack = track.second;
+            if (mtrack.chords.empty())
+                  continue;
                         // pass current track index through MidiImportOperations
                         // for further usage
             MidiOperations::CurrentTrackSetter setCurrentTrack{opers, mtrack.indexOfOperation};
@@ -611,7 +613,8 @@ QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       {
       QList<MTrack> trackList;
       for (const auto &track: tracks) {
-            trackList.push_back(track.second);
+            if (!track.second.chords.empty())
+                  trackList.push_back(track.second);
             }
       return trackList;
       }
@@ -630,7 +633,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
             track.mtrack = &t;
             track.division = mf->division();
             track.isDivisionInTps = mf->isDivisionInTps();
-            int events = 0;
+            bool hasNotes = false;
                         //  - create time signature list from meta events
                         //  - create MidiChord list
                         //  - extract some information from track: program, min/max pitch
@@ -648,7 +651,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                         sigmap->add(sigmap->bar2tick(bars, 0), metaTimeSignature(e));
                         }
                   else if (e.type() == ME_NOTE) {
-                        ++events;
+                        hasNotes = true;
                         const int pitch = e.pitch();
                         const auto len = toMuseScoreTicks(e.len(), track.division,
                                                           track.isDivisionInTps);
@@ -671,8 +674,9 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   if (tick > lastTick)
                         lastTick = tick;
                   }
-            if (events != 0) {
+            if (hasNotes) {
                   ++trackIndex;
+                  track.hasNotes = true;
                   const auto *data = preferences.midiImportOperations.data();
                   if (data->processingsOfOpenedFile > 0) {
                         if (data->trackOpers.doImport.value(trackIndex)) {
@@ -686,6 +690,10 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                         track.indexOfOperation = trackIndex;
                         tracks.insert({trackIndex, track});
                         }
+                  }
+            else {
+                  track.hasNotes = false;       // it's a tempo track or something else
+                  tracks.insert({-1, track});
                   }
             }
 
@@ -923,7 +931,7 @@ void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
       for (const auto &track: tracks) {
             int trackIndex = track.first;
             const MTrack &mtrack = track.second;
-            if (mtrack.mtrack->drumTrack())
+            if (mtrack.mtrack->drumTrack() || mtrack.chords.empty())
                   continue;
             bool needToSplit = false;
             if (LRHand::needToSplit(mtrack.chords, mtrack.program))
@@ -943,7 +951,11 @@ void convertMidi(Score *score, const MidiFile *mf)
       auto &opers = preferences.midiImportOperations;
 
       if (opers.data()->processingsOfOpenedFile == 0) {       // for newly opened MIDI file
-            opers.data()->trackCount = tracks.size();
+            opers.data()->trackCount = 0;
+            for (const auto &track: tracks) {
+                  if (track.first != -1)
+                        ++opers.data()->trackCount;
+                  }
             MidiLyrics::extractLyricsToMidiData(mf);
             }
                   // for newly opened MIDI file - detect if it is a human performance
