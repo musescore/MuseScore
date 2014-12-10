@@ -498,14 +498,15 @@ void setTempoToScore(Score *score, int tick, double beatsPerSecond)
       {
       if (score->tempomap()->find(tick) != score->tempomap()->end())
             return;
-      if (score->tempo(tick) == beatsPerSecond)
+                  // don't repeat tempo, always set only tempo for tick 0
+      if (tick > 0 && score->tempo(tick) == beatsPerSecond)
             return;
 
       score->setTempo(tick, beatsPerSecond);
 
       auto *data = preferences.midiImportOperations.data();
       if (data->trackOpers.showTempoText.value()) {
-            const int tempoInBpm = qRound(beatsPerSecond * 60.0 / 2) * 2;
+            const int tempoInBpm = qRound(beatsPerSecond * 60.0);
 
             TempoText *tempoText = new TempoText(score);
             tempoText->setTempo(beatsPerSecond);
