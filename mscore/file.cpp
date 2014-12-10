@@ -2207,6 +2207,43 @@ void MuseScore::addImage(Score* score, Element* e)
       score->undoAddElement(s);
       }
 
+#if 0
+//---------------------------------------------------------
+//   trim
+//    returns copy of source with whitespace trimmed and margin added
+//---------------------------------------------------------
+
+static QRect trim(QImage source, int margin)
+      {
+      int w = source.width();
+      int h = source.height();
+      int x1 = w;
+      int x2 = 0;
+      int y1 = h;
+      int y2 = 0;
+      for (int x = 0; x < w; ++x) {
+            for (int y = 0; y < h; ++y) {
+                  QRgb c = source.pixel(x, y);
+                  if (c != 0 && c != 0xffffffff) {
+                        if (x < x1)
+                              x1 = x;
+                        if (x > x2)
+                              x2 = x;
+                        if (y < y1)
+                              y1 = y;
+                        if (y > y2)
+                              y2 = y;
+                        }
+                  }
+            }
+      int x = qMax(x1 - margin, 0);
+      int y = qMax(y1 - margin, 0);
+      w = qMin(w, x2 + 1 + margin) - x;
+      h = qMin(h, y2 + 1 + margin) - y;
+      return QRect(x, y, w, h);
+      }
+#endif
+
 //---------------------------------------------------------
 //   savePng
 //    return true on success
@@ -2214,7 +2251,7 @@ void MuseScore::addImage(Score* score, Element* e)
 
 bool MuseScore::savePng(Score* score, const QString& name)
       {
-      return savePng(score, name, false, true, converterDpi, QImage::Format_ARGB32_Premultiplied );
+      return savePng(score, name, false, preferences.pngTransparent, converterDpi, trimMargin, QImage::Format_ARGB32_Premultiplied);
       }
 
 //---------------------------------------------------------
@@ -2222,7 +2259,7 @@ bool MuseScore::savePng(Score* score, const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool transparent, double convDpi, QImage::Format format)
+bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool transparent, double convDpi, int trimMargin, QImage::Format format)
       {
       bool rv = true;
       score->setPrinting(!screenshot);    // dont print page break symbols etc.
@@ -2242,7 +2279,13 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
       for (int pageNumber = 0; pageNumber < pages; ++pageNumber) {
             Page* page = pl.at(pageNumber);
 
-            QRectF r = page->abbox();
+            QRectF r;
+            if (trimMargin >= 0) {
+                  QMarginsF margins(trimMargin, trimMargin, trimMargin, trimMargin);
+                  r = page->tbbox() + margins;
+                  }
+            else
+                  r = page->abbox();
             int w = lrint(r.width()  * convDpi / MScore::DPI);
             int h = lrint(r.height() * convDpi / MScore::DPI);
 
@@ -2254,10 +2297,11 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
 
             double mag = convDpi / MScore::DPI;
             QPainter p(&printer);
-
             p.setRenderHint(QPainter::Antialiasing, true);
             p.setRenderHint(QPainter::TextAntialiasing, true);
             p.scale(mag, mag);
+            if (trimMargin >= 0)
+                  p.translate(-r.topLeft());
 
             QList<const Element*> pel = page->elements();
             qStableSort(pel.begin(), pel.end(), elementLessThan);
@@ -2424,8 +2468,16 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       const PageFormat* pf = cs->pageFormat();
       double mag = converterDpi / MScore::DPI;
 
-      qreal w = pf->width() * MScore::DPI * score->pages().size();
-      qreal h = pf->height() * MScore::DPI;
+      QRectF r;
+      if (trimMargin >= 0 && score->npages() == 1) {
+            QMarginsF margins(trimMargin, trimMargin, trimMargin, trimMargin);
+            r = score->pages().first()->tbbox() + margins;
+            }
+      else
+            r = QRectF(0, 0, pf->width() * MScore::DPI * score->pages().size(), pf->height() * MScore::DPI);
+      qreal w = r.width();
+      qreal h = r.height();
+
       printer.setSize(QSize(w * mag, h * mag));
       printer.setViewBox(QRectF(0.0, 0.0, w * mag, h * mag));
 
@@ -2435,6 +2487,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
       p.scale(mag, mag);
+      if (trimMargin >= 0 && score->npages() == 1)
+            p.translate(-r.topLeft());
 
       foreach (Page* page, score->pages()) {
             QList<const Element*> pel = page->elements();

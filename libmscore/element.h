@@ -500,6 +500,7 @@ class Element : public QObject {
       qreal magS() const;
 
       bool isText() const;
+      bool isPrintable() const;
       virtual bool isSpanner() const           { return false; }
       virtual bool isSpannerSegment() const    { return false; }
 
