@@ -42,7 +42,7 @@ QString Harmony::harmonyName()
             s = "(";
 
       if (_rootTpc != Tpc::TPC_INVALID)
-            r = tpc2name(_rootTpc, _rootSpelling, _rootLowerCase);
+            r = tpc2name(_rootTpc, _rootSpelling, _rootLowerCase, _noteUpperCase);
 
       if (_textName != "") {
             e = _textName;
@@ -70,7 +70,7 @@ QString Harmony::harmonyName()
             }
 
       if (_baseTpc != Tpc::TPC_INVALID)
-            b = "/" + tpc2name(_baseTpc, _baseSpelling, _baseLowerCase);
+            b = "/" + tpc2name(_baseTpc, _baseSpelling, _baseLowerCase, _noteUpperCase);
 
       s += r + e + b;
 
@@ -360,18 +360,19 @@ void Harmony::read(XmlReader& e)
 //   determineRootBaseSpelling
 //---------------------------------------------------------
 
-void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& rootLowerCase, NoteSpellingType& baseSpelling, bool& baseLowerCase)
+void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& rootLowerCase, NoteSpellingType& baseSpelling, bool& baseLowerCase, bool& noteUpperCase)
       {
       if (score()->styleB(StyleIdx::useStandardNoteNames))
             rootSpelling = NoteSpellingType::STANDARD;
-      else if (score()->styleB(StyleIdx::useGermanNoteNames)) {
-            if (score()->styleB(StyleIdx::lowerCaseMinorChords))
-                  rootSpelling = NoteSpellingType::GERMAN_PURE;
-            else
-                  rootSpelling = NoteSpellingType::GERMAN;
-            }
+      else if (score()->styleB(StyleIdx::useGermanNoteNames))
+            rootSpelling = NoteSpellingType::GERMAN;
+      else if (score()->styleB(StyleIdx::useFullGermanNoteNames))
+            rootSpelling = NoteSpellingType::GERMAN_PURE;
       else if (score()->styleB(StyleIdx::useSolfeggioNoteNames))
             rootSpelling = NoteSpellingType::SOLFEGGIO;
+      else if (score()->styleB(StyleIdx::useFrenchNoteNames))
+            rootSpelling = NoteSpellingType::FRENCH;
+
       baseSpelling = rootSpelling;
       const ChordDescription* cd = descr();
       if (cd) {
@@ -384,10 +385,8 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
             }
       else
             rootLowerCase = score()->styleB(StyleIdx::lowerCaseMinorChords);
-      if (baseSpelling == NoteSpellingType::GERMAN_PURE)
-            baseLowerCase = true;
-      else
-            baseLowerCase = false;
+      baseLowerCase = score()->styleB(StyleIdx::lowerCaseBassNotes);
+      noteUpperCase = score()->styleB(StyleIdx::allCapsNoteNames);
       }
 
 //---------------------------------------------------------
@@ -396,7 +395,7 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
 
 void Harmony::determineRootBaseSpelling()
 {
-      determineRootBaseSpelling(_rootSpelling, _rootLowerCase, _baseSpelling, _baseLowerCase);
+      determineRootBaseSpelling(_rootSpelling, _rootLowerCase, _baseSpelling, _baseLowerCase, _noteUpperCase);
 }
 
 //---------------------------------------------------------
@@ -407,6 +406,7 @@ void Harmony::determineRootBaseSpelling()
 static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
       {
       bool useGerman = false;
+      bool useSolfeggio = false;
       static const int spellings[] = {
          // bb  b   -   #  ##
             0,  7, 14, 21, 28,  // C
@@ -422,7 +422,12 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
       int acci;
       switch (spelling) {
             case NoteSpellingType::SOLFEGGIO:
-                  acci = 2;
+            case NoteSpellingType::FRENCH:
+                  useSolfeggio = true;
+                  if (s.toLower().startsWith("sol"))
+                        acci = 3;
+                  else
+                        acci = 2;
                   break;
             case NoteSpellingType::GERMAN:
             case NoteSpellingType::GERMAN_PURE:
@@ -501,17 +506,17 @@ static int convertRoot(const QString& s, NoteSpellingType spelling, int& idx)
                         return Tpc::TPC_INVALID;
                   }
             }
-      else if (spelling == NoteSpellingType::SOLFEGGIO) {
+      else if (useSolfeggio) {
             QString ss = s.toLower().left(2);
             if (ss == "do")
                   r = 0;
-            else if (ss == "re")
+            else if (ss == "re" || ss == "ré")
                   r = 1;
             else if (ss == "mi")
                   r = 2;
             else if (ss == "fa")
                   r = 3;
-            else if (ss == "sol")
+            else if (ss == "so")    // sol, but only check first 2 characters
                   r = 4;
             else if (ss == "la")
                   r = 5;
@@ -1211,7 +1216,7 @@ void Harmony::render(const QString& s, qreal& x, qreal& y)
 //   render
 //---------------------------------------------------------
 
-void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, int tpc, NoteSpellingType spelling, bool lowerCase)
+void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, int tpc, NoteSpellingType spelling, bool lowerCase, bool upperCase)
       {
       ChordList* chordList = score()->style()->chordList();
       QStack<QPointF> stack;
@@ -1250,7 +1255,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
             else if (a.type == RenderAction::RenderActionType::NOTE) {
                   QString c;
                   int acc;
-                  tpc2name(tpc, spelling, lowerCase, c, acc);
+                  tpc2name(tpc, spelling, lowerCase, upperCase, c, acc);
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   QString lookup = "note" + c;
                   ChordSymbol cs = chordList->symbol(lookup);
@@ -1269,13 +1274,11 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   QString c;
                   QString acc;
                   QString context = "accidental";
-                  tpc2name(tpc, spelling, lowerCase, c, acc);
+                  tpc2name(tpc, spelling, lowerCase, upperCase, c, acc);
                   // German spelling - use special symbol for accidental in TPC_B_B
                   // to allow it to be rendered as either Bb or B
-                  if (tpc == Tpc::TPC_B_B && spelling == NoteSpellingType::GERMAN) {
-                        acc = "b";
+                  if (tpc == Tpc::TPC_B_B && spelling == NoteSpellingType::GERMAN)
                         context = "german_B";
-                        }
                   if (acc != "") {
                         TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                         QString lookup = context + acc;
@@ -1335,7 +1338,7 @@ void Harmony::render(const TextStyle* st)
 
       if (_rootTpc != Tpc::TPC_INVALID) {
             // render root
-            render(chordList->renderListRoot, x, y, _rootTpc, _rootSpelling, _rootLowerCase);
+            render(chordList->renderListRoot, x, y, _rootTpc, _rootSpelling, _rootLowerCase, _noteUpperCase);
             // render extension
             const ChordDescription* cd = getDescription();
             if (cd)
@@ -1346,7 +1349,7 @@ void Harmony::render(const TextStyle* st)
 
       // render bass
       if (_baseTpc != Tpc::TPC_INVALID)
-            render(chordList->renderListBase, x, y, _baseTpc, _baseSpelling, _baseLowerCase);
+            render(chordList->renderListBase, x, y, _baseTpc, _baseSpelling, _baseLowerCase, _noteUpperCase);
 
       if (_rootTpc != Tpc::TPC_INVALID && capo > 0 && capo < 12) {
             int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
@@ -1372,7 +1375,7 @@ void Harmony::render(const TextStyle* st)
                   }
 
             render("(", x, y);
-            render(chordList->renderListRoot, x, y, capoRootTpc, _rootSpelling, _rootLowerCase);
+            render(chordList->renderListRoot, x, y, capoRootTpc, _rootSpelling, _rootLowerCase, _noteUpperCase);
 
             // render extension
             const ChordDescription* cd = getDescription();
@@ -1380,7 +1383,7 @@ void Harmony::render(const TextStyle* st)
                   render(cd->renderList, x, y, 0);
 
             if (capoBassTpc != Tpc::TPC_INVALID)
-                  render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseLowerCase);
+                  render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseLowerCase, _noteUpperCase);
             render(")", x, y);
             }
 

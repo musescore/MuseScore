@@ -52,7 +52,7 @@ const int   STEP_DELTA_OCTAVE       = 7;  // the number of steps in an octave
 // pitch2tpc(pitch) replaced by pitch2tpc(pitch, Key::C, Prefer::NEAREST)
 
 enum class Prefer : char { FLATS=8, NEAREST=11, SHARPS=13 };
-enum class NoteSpellingType : char { STANDARD = 0, GERMAN, GERMAN_PURE, SOLFEGGIO };
+enum class NoteSpellingType : char { STANDARD = 0, GERMAN, GERMAN_PURE, SOLFEGGIO, FRENCH };
 
 extern int pitch2tpc(int pitch, Key, Prefer prefer);
 
@@ -60,9 +60,9 @@ extern void spell(QList<Event>& notes, int);
 extern void spell(QList<Note*>& notes);
 extern int computeWindow(const QList<Note*>& notes, int start, int end);
 extern int tpc(int idx, int pitch, int opt);
-extern QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool explicitAccidental = false);
-extern void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QString& acc, bool explicitAccidental = false);
-extern void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, int& acc);
+extern QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase = false, bool upperCase = false, bool explicitAccidental = false);
+extern void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool upperCase, QString& s, QString& acc, bool explicitAccidental = false);
+extern void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool upperCase, QString& s, int& acc);
 extern int step2tpc(const QString& stepName, AccidentalVal alter);
 extern int step2tpc(int step);
 extern int step2tpc(int step, AccidentalVal alter);
