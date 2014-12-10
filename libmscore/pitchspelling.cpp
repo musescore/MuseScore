@@ -225,11 +225,11 @@ int tpc2alterByKey(int tpc, Key key) {
 //    return note name
 //---------------------------------------------------------
 
-QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool explicitAccidental)
+QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool upperCase, bool explicitAccidental)
       {
       QString s;
       QString acc;
-      tpc2name(tpc, spelling, lowerCase, s, acc, explicitAccidental);
+      tpc2name(tpc, spelling, lowerCase, upperCase, s, acc, explicitAccidental);
       return s + (explicitAccidental ? " " : "") + acc;
       }
 
@@ -237,10 +237,10 @@ QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool explic
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QString& acc, bool explicitAccidental)
+void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool upperCase, QString& s, QString& acc, bool explicitAccidental)
       {
       int n;
-      tpc2name(tpc, spelling, lowerCase, s, n);
+      tpc2name(tpc, spelling, lowerCase, upperCase, s, n);
       switch (n) {
             case -2:
                   if (explicitAccidental) {
@@ -289,11 +289,11 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QS
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, int& acc)
+void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool upperCase, QString& s, int& acc)
       {
       const char names[]  = "FCGDAEB";
       const char gnames[] = "FCGDAEH";
-      const QString inames[] = { "Fa", "Do", "Sol", "Re", "La", "Mi", "Si" };
+      const QString snames[] = { "Fa", "Do", "Sol", "Re", "La", "Mi", "Si" };
 
       acc = ((tpc+1) / 7) - 2;
       int idx = (tpc + 1) % 7;
@@ -303,14 +303,26 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, in
                   s = gnames[idx];
                   if (s == "H" && acc == -1) {
                         s = "B";
-                        acc = 0;
+                        if (spelling == NoteSpellingType::GERMAN_PURE)
+                              acc = 0;
                         }
                   break;
-            case NoteSpellingType::SOLFEGGIO:   s = inames[idx]; break;
-            default:          s = names[idx]; break;
+            case NoteSpellingType::SOLFEGGIO:
+                  s = snames[idx];
+                  break;
+            case NoteSpellingType::FRENCH:
+                  s = snames[idx];
+                  if (s == "Re")
+                        s = "Ré";
+                  break;
+            default:
+                  s = names[idx];
+                  break;
             }
       if (lowerCase)
             s = s.toLower();
+      else if (upperCase)
+            s = s.toUpper();
       }
 
 //---------------------------------------------------------

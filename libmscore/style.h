@@ -270,8 +270,12 @@ enum class StyleIdx : unsigned char {
 
       useStandardNoteNames,
       useGermanNoteNames,
+      useFullGermanNoteNames,
       useSolfeggioNoteNames,
+      useFrenchNoteNames,
       lowerCaseMinorChords,
+      lowerCaseBassNotes,
+      allCapsNoteNames,
       chordStyle,
       chordsXmlFile,
       chordDescriptionFile,
