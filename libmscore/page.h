@@ -167,6 +167,7 @@ class Page : public Element {
       MeasureBase* pos2measure(const QPointF&, int* staffIdx, int* pitch,
          Segment**, QPointF* offset) const;
       QList<const Element*> elements();         ///< list of visible elements
+      QRectF tbbox();                           // tight bounding box, excluding white space
       };
 
 extern const PaperSize paperSizes[];
