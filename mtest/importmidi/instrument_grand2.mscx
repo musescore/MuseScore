@@ -91,6 +91,10 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Tempo>
+          <tempo>2</tempo>
+          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          </Tempo>
         <Chord>
           <durationType>whole</durationType>
           <Note>
