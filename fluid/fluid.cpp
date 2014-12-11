@@ -90,7 +90,6 @@ void Fluid::init(float sampleRate)
       Synthesizer::init(sampleRate);
       sample_rate        = sampleRate;
       sfont_id           = 0;
-      _gain              = .2;
 
       _state       = FLUID_SYNTH_PLAYING; // as soon as the synth is created it starts playing.
       noteid      = 0;

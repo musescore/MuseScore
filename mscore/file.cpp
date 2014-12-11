@@ -461,36 +461,34 @@ void MuseScore::newFile()
       newWizard->restart();
       if (newWizard->exec() != QDialog::Accepted)
             return;
-      int pickupTimesigZ, pickupTimesigN;
-      int measures       = newWizard->measures();
-      Fraction timesig   = newWizard->timesig();
+      int measures            = newWizard->measures();
+      Fraction timesig        = newWizard->timesig();
       TimeSigType timesigType = newWizard->timesigType();
+      KeySigEvent ks          = newWizard->keysig();
 
+      int pickupTimesigZ;
+      int pickupTimesigN;
       bool pickupMeasure = newWizard->pickupMeasure(&pickupTimesigZ, &pickupTimesigN);
       if (pickupMeasure)
             measures += 1;
-      KeySigEvent ks     = newWizard->keysig();
 
       Score* score = new Score(MScore::defaultStyle());
+      QString tp = newWizard->templatePath();
 
-      //
-      //  create score from template
-      //
-      if (newWizard->useTemplate()) {
-            Score::FileError rv = Ms::readScore(score, newWizard->templatePath(), false);
+      if (QFileInfo(tp).baseName() != "00-Empty") {
+            Score::FileError rv = Ms::readScore(score, tp, false);
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
                   delete score;
                   return;
                   }
-            score->setCreated(true);
-            score->fileInfo()->setFile(createDefaultName());
 
-            int m = 0;
+            int tmeasures = 0;
             for (Measure* mb = score->firstMeasure(); mb; mb = mb->nextMeasure()) {
                   if (mb->type() == Element::Type::MEASURE)
-                        ++m;
+                        ++tmeasures;
                   }
+
             //
             // remove all notes & rests
             //
@@ -507,7 +505,6 @@ void MuseScore::newFile()
                               }
                         else if (
                            (s->segmentType() == Segment::Type::ChordRest)
-      //                     || (s->subtype() == Segment::Type::Clef)
                            || (s->segmentType() == Segment::Type::KeySig)
                            || (s->segmentType() == Segment::Type::Breath)
                            ) {
@@ -540,14 +537,12 @@ void MuseScore::newFile()
                         }
                   }
             }
-      //
-      //  create new score from scratch
-      //
       else {
-            score->setCreated(true);
-            score->fileInfo()->setFile(createDefaultName());
             newWizard->createInstruments(score);
             }
+      score->setCreated(true);
+      score->fileInfo()->setFile(createDefaultName());
+
       if (!score->style()->chordList()->loaded()) {
             if (score->style()->value(StyleIdx::chordsXmlFile).toBool())
                   score->style()->chordList()->read("chords.xml");

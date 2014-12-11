@@ -167,7 +167,6 @@ NewWizardPage1::NewWizardPage1(QWidget* parent)
 
       w = new TitleWizard;
 
-      registerField("useTemplate", w->rb1, "checked");
       QGridLayout* grid = new QGridLayout;
       grid->addWidget(w, 0, 0);
       setLayout(grid);
@@ -181,9 +180,6 @@ void NewWizardPage1::initializePage()
       {
       w->title->setText("");
       w->subtitle->setText("");
-      // w->composer->text();
-      // w->poet->text();
-      // w->copyright->text();
       }
 
 //---------------------------------------------------------
@@ -291,19 +287,7 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
 void NewWizardPage4::initializePage()
       {
       templateFileBrowser->show();
-
-/*      QList<QPushButton*>widgets = templateFileBrowser->findChildren<QPushButton*>();
-      foreach(QPushButton* w, widgets) {
-            w->setEnabled(false);
-            w->setVisible(false);
-            }
-*/
       path.clear();
-/*      if (templateFileBrowser->selectedFiles().size() > 0) {
-            path = templateFileBrowser->selectedFiles()[0];
-            emit completeChanged();
-            }
- */
       }
 
 //---------------------------------------------------------
@@ -342,10 +326,7 @@ void NewWizardPage4::templateChanged(const QString& s)
 
 QString NewWizardPage4::templatePath() const
       {
-      bool useTemplate = field("useTemplate").toBool();
-      if (useTemplate)
-            return path;
-      return QString();
+      return path;
       }
 
 //---------------------------------------------------------
@@ -417,6 +398,7 @@ NewWizard::NewWizard(QWidget* parent)
       setPixmap(QWizard::LogoPixmap, QPixmap(":/data/mscore.png"));
       setPixmap(QWizard::WatermarkPixmap, QPixmap());
       setWindowTitle(tr("MuseScore: Create New Score"));
+
       setOption(QWizard::NoCancelButton, false);
       setOption(QWizard::CancelButtonOnLeft, true);
       setOption(QWizard::HaveFinishButtonOnEarlyPages, true);
@@ -430,8 +412,8 @@ NewWizard::NewWizard(QWidget* parent)
       p5 = new NewWizardPage5;
 
       setPage(int(Page::Type), p1);
-      setPage(int(Page::Instruments), p2);
       setPage(int(Page::Template), p4);
+      setPage(int(Page::Instruments), p2);
       setPage(int(Page::Timesig), p3);
       setPage(int(Page::Keysig), p5);
       p2->setFinalPage(true);
@@ -449,26 +431,22 @@ int NewWizard::nextId() const
       {
       switch(Page(currentId())) {
             case Page::Type:
-                  return useTemplate() ? int(Page::Template) : int(Page::Instruments);
+                  return int(Page::Template);
+            case Page::Template: {
+                  QString p = p4->templatePath();
+                  QFileInfo fi(p);
+                  if (fi.baseName() == "00-Empty")
+                        return int(Page::Instruments);
+                  return int(Page::Keysig);
+                  }
             case Page::Instruments:
                   return int(Page::Keysig);
             case Page::Keysig:
                   return int(Page::Timesig);
-            case Page::Template:
-                  return int(Page::Keysig);
             case Page::Timesig:
             default:
                   return int(Page::Invalid);
             }
-      }
-
-//---------------------------------------------------------
-//   useTemplate
-//---------------------------------------------------------
-
-bool NewWizard::useTemplate() const
-      {
-      return field("useTemplate").toBool();
       }
 
 }

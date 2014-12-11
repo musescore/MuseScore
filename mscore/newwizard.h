@@ -183,10 +183,9 @@ class NewWizard : public QWizard {
       friend class QWizardPage;
       virtual int nextId() const;
 
-      enum class Page : signed char { Invalid = -1, Type, Instruments, Template, Keysig, Timesig};
+      enum class Page : signed char      { Invalid = -1, Type, Instruments, Template, Keysig, Timesig};
 
       QString templatePath() const       { return p4->templatePath(); }
-      bool useTemplate() const;
       int measures() const               { return p3->measures();    }
       Fraction timesig() const           { return p3->timesig();     }
       void createInstruments(Score* s)   { p2->createInstruments(s); }
@@ -195,10 +194,10 @@ class NewWizard : public QWizard {
       QString composer() const           { return p1->composer();    }
       QString poet() const               { return p1->poet();        }
       QString copyright() const          { return p1->copyright();   }
-      KeySigEvent keysig() const          { return p5->keysig();      }
+      KeySigEvent keysig() const         { return p5->keysig();      }
       bool pickupMeasure(int* z, int* n) const { return p3->pickupMeasure(z, n); }
       TimeSigType timesigType() const     { return p3->timesigType();       }
-      double tempo() const                { return p5->tempo(); }
+      double tempo() const                { return p5->tempo();       }
       bool createTempo() const            { return p5->createTempo(); }
       };
 
