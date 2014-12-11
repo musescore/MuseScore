@@ -27,11 +27,17 @@ class ScoreItem;
 class ScoreListWidget : public QListWidget
       {
       Q_OBJECT
+      int CELLW           { 110   };
+      int CELLH           { 140   };
+      int SPACE           { 10    };
 
       virtual QSize sizeHint() const override;
 
    public:
       ScoreListWidget(QWidget* parent = 0) : QListWidget(parent) {}
+      int cellWidth() const { return CELLW; }
+      int cellHeight() const { return CELLH; }
+      QSize cellSize() const { return QSize(CELLW, CELLH); }
       };
 
 //---------------------------------------------------------
@@ -42,11 +48,13 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       {
       Q_OBJECT
 
-      QListWidget* createScoreList();
       QList<ScoreListWidget*> scoreLists;
       bool _stripNumbers  { false };
+      bool _showPreview   { false };      // no preview: - no selection
+                                          //             - single click action
 
-      ScoreItem* genScoreItem(const QFileInfo& fi);
+      ScoreListWidget* createScoreList();
+      ScoreItem* genScoreItem(const QFileInfo&, ScoreListWidget*);
 
    private slots:
       void scoreChanged(QListWidgetItem*);
