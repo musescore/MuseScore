@@ -31,7 +31,8 @@ VolSlider::VolSlider(QWidget* parent)
    : Slider(parent)
       {
       setLog(true);
-      setRange(-60.0f, 10.0f);
+//      setRange(-60.0f, 10.0f);
+      setRange(-60.0f, 20.0f);
       setScaleWidth(7);
       setLineStep(.8f);
       setPageStep(3.0f);
@@ -49,7 +50,6 @@ void VolSlider::mouseDoubleClickEvent(QMouseEvent* ev)
             _value = _minValue;
       valueChange();
       }
-
 
 //---------------------------------------------------------
 //   setValue
@@ -77,8 +77,9 @@ void VolSlider::setValue(double val)
 
 double VolSlider::value() const
       {
-      return _log ? (_value <= _minValue) ? 0.0f : pow(10.0, _value*0.05f)
-                  : _value;
+      double val = _log ? (_value <= _minValue) ? 0.0f : pow(10.0, _value*0.05f)
+         : _value;
+      return val;
       }
 
 }
