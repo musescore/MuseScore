@@ -1980,7 +1980,8 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             Spanner* sp = i.key();
             int tick1 = i.value().first;
             int tick2 = i.value().second;
-            //qDebug("spanner %p tp %hhd tick1 %d tick2 %d", sp, sp->type(), tick1, tick2);
+            //qDebug("spanner %p tp %hhd tick1 %d tick2 %d track %d track2 %d",
+            //       sp, sp->type(), tick1, tick2, sp->track(), sp->track2());
             sp->setTick(tick1);
             sp->setTick2(tick2);
             sp->score()->addElement(sp);
@@ -2790,13 +2791,14 @@ static void handleSpannerStart(SLine* new_sp, QString /* type */, int track, QSt
 //   handleSpannerStop
 //---------------------------------------------------------
 
-static void handleSpannerStop(SLine* cur_sp, QString type, int tick, MusicXmlSpannerMap& spanners)
+static void handleSpannerStop(SLine* cur_sp, QString type, int track2, int tick, MusicXmlSpannerMap& spanners)
       {
       if (!cur_sp) {
             qDebug("%s stop without start", qPrintable(type));
             return;
             }
 
+      cur_sp->setTrack2(track2);
       spanners[cur_sp].second = tick;
       //qDebug("pedal %p second tick %d", cur_sp, tick);
       }
@@ -3193,7 +3195,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         }
                   else if (type == "stop") {
                         if (pedal) {
-                              handleSpannerStop(pedal, "pedal", tick, spanners);
+                              handleSpannerStop(pedal, "pedal", track, tick, spanners);
                               pedal = 0;
                               }
                         }
@@ -3202,7 +3204,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         // first stop the first one
                         if (pedal) {
                               pedal->setEndHookType(HookType::HOOK_45);
-                              handleSpannerStop(pedal, "pedal", tick, spanners);
+                              handleSpannerStop(pedal, "pedal", track, tick, spanners);
                               pedalContinue = pedal; // mark for later fixup
                               pedal = 0;
                               }
@@ -3267,7 +3269,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             else if (type == "stop") {
                   if (h && niente == "yes")
                         h->setHairpinCircledTip(true);
-                  handleSpannerStop(h, QString("wedge %1").arg(number), tick, spanners);
+                  handleSpannerStop(h, QString("wedge %1").arg(number), track, tick, spanners);
                   h = 0;
                   }
             else
@@ -3308,7 +3310,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         if (lineEnd == "up")
                               b->setEndHookHeight(-1 * b->endHookHeight());
                         }
-                  handleSpannerStop(b, QString("bracket %1").arg(number), tick, spanners);
+                  handleSpannerStop(b, QString("bracket %1").arg(number), track, tick, spanners);
                   //qDebug("bracket=%p second tick %d", b, tick);
                   b = 0;
                   }
@@ -3335,7 +3337,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   }
             else if (type == "stop") {
                   // TODO: MuseScore doesn't support lines which start and end on different staves
-                  handleSpannerStop(b, QString("dashes %1").arg(number), tick, spanners);
+                  handleSpannerStop(b, QString("dashes %1").arg(number), track, tick, spanners);
                   //qDebug("dashes=%p second tick %d", b, tick);
                   b = 0;
                   }
@@ -3362,7 +3364,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         }
                   }
             else if (type == "stop") {
-                  handleSpannerStop(o, QString("octave-shift %1").arg(number), tick, spanners);
+                  handleSpannerStop(o, QString("octave-shift %1").arg(number), track, tick, spanners);
                   //qDebug("ottava=%p second tick %d", o, tick);
                   o = 0;
                   }
@@ -5568,7 +5570,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       // fixup pedal type="change" to end at the end of this note
       // note tick is still at note start
       if (pedalContinue) {
-            handleSpannerStop(pedalContinue, "pedal", tick + ticks, spanners);
+            handleSpannerStop(pedalContinue, "pedal", track, tick + ticks, spanners);
             pedalContinue = 0;
             }
 
