@@ -3331,7 +3331,7 @@ void Score::appendPart(const QString& name)
             a.name   = "normal";
             a.bank   = 0;
             a.volume = 100;
-            a.pan    = 60;
+            a.pan    = 64; // actually 63.5 for center
             t->channel.append(a);
             }
       Part* part = new Part(this);
