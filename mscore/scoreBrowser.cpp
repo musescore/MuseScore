@@ -32,7 +32,6 @@ QSize ScoreListWidget::sizeHint() const
       int rows = (n+cols-1) / cols;
       if (rows <= 0)
             rows = 1;
-//      printf("ScoreListWidget count %d width %d  %d %d\n", count(), width(), cols, rows);
       return QSize(cols * CELLW, rows * (CELLH + SPACE) + SPACE);
       }
 
@@ -90,7 +89,7 @@ QListWidget* ScoreBrowser::createScoreList()
       sl->setLayoutMode(QListView::SinglePass);
       sl->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
 
-      connect(sl, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),SLOT(scoreChanged(QListWidgetItem*,QListWidgetItem*)));
+      connect(sl, SIGNAL(itemClicked(QListWidgetItem*)),SLOT(scoreChanged(QListWidgetItem*)));
       connect(sl, SIGNAL(itemActivated(QListWidgetItem*)), SLOT(setScoreActivated(QListWidgetItem*)));
       scoreLists.append(sl);
       return sl;
@@ -180,11 +179,13 @@ void ScoreBrowser::selectFirst()
       ScoreListWidget* w = scoreLists.front();
       if (w->count() == 0)
             return;
-      w->setCurrentItem(w->item(0));
+      ScoreItem* item = static_cast<ScoreItem*>(w->item(0));
+      w->setCurrentItem(item);
+      preview->setScore(item->info());
       }
 
 //---------------------------------------------------------
-//   selectFirst
+//   selectLast
 //---------------------------------------------------------
 
 void ScoreBrowser::selectLast()
@@ -194,20 +195,28 @@ void ScoreBrowser::selectLast()
       ScoreListWidget* w = scoreLists.front();
       if (w->count() == 0)
             return;
-      w->setCurrentItem(w->item(w->count()-1));
+      ScoreItem* item = static_cast<ScoreItem*>(w->item(w->count()-1));
+      w->setCurrentItem(item);
+      preview->setScore(item->info());
       }
 
 //---------------------------------------------------------
 //   scoreChanged
 //---------------------------------------------------------
 
-void ScoreBrowser::scoreChanged(QListWidgetItem* current, QListWidgetItem*)
+void ScoreBrowser::scoreChanged(QListWidgetItem* current)
       {
       if (!current)
             return;
       ScoreItem* item = static_cast<ScoreItem*>(current);
       preview->setScore(item->info());
       emit scoreSelected(item->info().filePath());
+
+      for (ScoreListWidget* sl : scoreLists) {
+            if (static_cast<QListWidget*>(sl) != item->listWidget()) {
+                  sl->clearSelection();
+                  }
+            }
       }
 
 //---------------------------------------------------------
