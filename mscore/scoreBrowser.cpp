@@ -17,10 +17,6 @@
 
 namespace Ms {
 
-static const int CELLW = 110;
-static const int CELLH = 140;
-static const int SPACE = 10;
-
 //---------------------------------------------------------
 //   sizeHint
 //---------------------------------------------------------
@@ -44,9 +40,7 @@ class ScoreItem : public QListWidgetItem
       ScoreInfo _info;
 
    public:
-      ScoreItem(const ScoreInfo& i) : QListWidgetItem(), _info(i) {
-            setSizeHint(QSize(CELLW, CELLH));
-            }
+      ScoreItem(const ScoreInfo& i) : QListWidgetItem(), _info(i) {}
       const ScoreInfo& info() const { return _info; }
       };
 
@@ -61,19 +55,21 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
       scoreList->setLayout(new QVBoxLayout);
       scoreList->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
       connect(preview, SIGNAL(doubleClicked(QString)), SIGNAL(scoreActivated(QString)));
+      if (!_showPreview)
+            preview->setVisible(false);
       }
 
 //---------------------------------------------------------
 //   createScoreList
 //---------------------------------------------------------
 
-QListWidget* ScoreBrowser::createScoreList()
+ScoreListWidget* ScoreBrowser::createScoreList()
       {
       ScoreListWidget* sl = new ScoreListWidget;
       static_cast<QVBoxLayout*>(scoreList->layout())->addWidget(sl);
       sl->setWrapping(true);
       sl->setViewMode(QListView::IconMode);
-      sl->setIconSize(QSize(CELLW, CELLH-30));
+      sl->setIconSize(QSize(sl->cellWidth(), sl->cellHeight()-30));
       sl->setSpacing(10);
       sl->setResizeMode(QListView::Adjust);
       sl->setFlow(QListView::LeftToRight);
@@ -88,8 +84,10 @@ QListWidget* ScoreBrowser::createScoreList()
       sl->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
       sl->setLayoutMode(QListView::SinglePass);
       sl->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+      if (!_showPreview)
+            sl->setSelectionMode(QAbstractItemView::NoSelection);
 
-      connect(sl, SIGNAL(itemClicked(QListWidgetItem*)),SLOT(scoreChanged(QListWidgetItem*)));
+      connect(sl, SIGNAL(itemClicked(QListWidgetItem*)),   this, SLOT(scoreChanged(QListWidgetItem*)), Qt::QueuedConnection);
       connect(sl, SIGNAL(itemActivated(QListWidgetItem*)), SLOT(setScoreActivated(QListWidgetItem*)));
       scoreLists.append(sl);
       return sl;
@@ -99,7 +97,7 @@ QListWidget* ScoreBrowser::createScoreList()
 //   genScoreItem
 //---------------------------------------------------------
 
-ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi)
+ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
       {
       ScoreInfo si(fi);
       QPixmap pm = mscore->extractThumbnail(fi.filePath());
@@ -119,6 +117,7 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi)
       item->setFont(f);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignTop);
       item->setIcon(QIcon(si.pixmap()));
+      item->setSizeHint(l->cellSize());
       return item;
       }
 
@@ -135,7 +134,7 @@ void ScoreBrowser::setScores(QFileInfoList s)
       while (l->count())
             l->removeItem(l->itemAt(0));
 
-      QListWidget* sl = 0;
+      ScoreListWidget* sl = 0;
 
       QStringList filter = { "*.mscz" };
       for (const QFileInfo& fi : s) {
@@ -144,7 +143,7 @@ void ScoreBrowser::setScores(QFileInfoList s)
                   if (s.endsWith(".mscz") || s.endsWith(".mscx")) {
                         if (!sl)
                               sl = createScoreList();
-                        sl->addItem(genScoreItem(fi));
+                        sl->addItem(genScoreItem(fi, sl));
                         }
                   }
             }
@@ -162,7 +161,7 @@ void ScoreBrowser::setScores(QFileInfoList s)
                   QDir dir(fi.filePath());
                   sl = createScoreList();
                   for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name))
-                        sl->addItem(genScoreItem(fi));
+                        sl->addItem(genScoreItem(fi, sl));
                   sl = 0;
                   }
             }
@@ -209,12 +208,16 @@ void ScoreBrowser::scoreChanged(QListWidgetItem* current)
       if (!current)
             return;
       ScoreItem* item = static_cast<ScoreItem*>(current);
-      preview->setScore(item->info());
-      emit scoreSelected(item->info().filePath());
+      if (!_showPreview)
+            emit scoreActivated(item->info().filePath());
+      else {
+            preview->setScore(item->info());
+            emit scoreSelected(item->info().filePath());
 
-      for (ScoreListWidget* sl : scoreLists) {
-            if (static_cast<QListWidget*>(sl) != item->listWidget()) {
-                  sl->clearSelection();
+            for (ScoreListWidget* sl : scoreLists) {
+                  if (static_cast<QListWidget*>(sl) != item->listWidget()) {
+                        sl->clearSelection();
+                        }
                   }
             }
       }
