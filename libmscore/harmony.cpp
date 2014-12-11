@@ -375,16 +375,32 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, bool& ro
 
       baseSpelling = rootSpelling;
       const ChordDescription* cd = descr();
+      QString quality;
       if (cd) {
-            QString quality;
+            // use chord description if possible
+            // this is the usual case
             quality = cd->quality();
-            if (score()->styleB(StyleIdx::lowerCaseMinorChords) && (quality == "minor" || quality == "diminished" || quality == "half-diminished"))
-                  rootLowerCase = true;
-            else
-                  rootLowerCase = false;
             }
+      else if (_parsedForm) {
+            // this happens on load of new chord list
+            // for chord symbols that were added/edited since the score was loaded
+            // or read aloud with screenreader
+            // parsed form is usable even if out of date with respect to chord list
+            quality = _parsedForm->quality();
+            }
+      else {
+            // this happens on load of new chord list
+            // for chord symbols that have not been edited since the score was loaded
+            // we need to parse this chord for now to determine quality
+            // but don't keep the parsed form around as we're not ready for it yet
+            quality = parsedForm()->quality();
+            delete _parsedForm;
+            _parsedForm = 0;
+            }
+      if (score()->styleB(StyleIdx::lowerCaseMinorChords) && (quality == "minor" || quality == "diminished" || quality == "half-diminished"))
+            rootLowerCase = true;
       else
-            rootLowerCase = score()->styleB(StyleIdx::lowerCaseMinorChords);
+            rootLowerCase = false;
       baseLowerCase = score()->styleB(StyleIdx::lowerCaseBassNotes);
       noteUpperCase = score()->styleB(StyleIdx::allCapsNoteNames);
       }
