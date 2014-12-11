@@ -386,7 +386,7 @@ Channel::Channel()
       program  = -1;
       bank     = 0;
       volume   = 100;
-      pan      = 64;
+      pan      = 64; // actually 63.5 for center
       chorus   = 0;
       reverb   = 0;
 
