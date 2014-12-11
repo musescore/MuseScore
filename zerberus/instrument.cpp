@@ -75,7 +75,6 @@ Sample* ZInstrument::readSample(const QString& s, MQZipReader* uz)
 
       if (frames != a.read(data + channel, frames)) {
             printf("Sample read failed: %s\n", a.error());
-            delete[] data;
             delete sa;
             sa = 0;
             }

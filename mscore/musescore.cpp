@@ -962,6 +962,11 @@ MuseScore::MuseScore()
       _loginManager = new LoginManager(this);
       }
 
+MuseScore::~MuseScore()
+      {
+      delete synti;
+      }
+
 //---------------------------------------------------------
 //   resizeEvent
 //---------------------------------------------------------

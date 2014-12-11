@@ -487,7 +487,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
    public:
       MuseScore();
-      ~MuseScore() {}
+      ~MuseScore();
       bool checkDirty(Score*);
       PlayPanel* getPlayPanel() const { return playPanel; }
       QMenu* genCreateMenu(QWidget* parent = 0);
@@ -527,7 +527,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QString lastSaveCopyDirectory;
       QString lastSaveDirectory;
-      SynthControl* getSynthControl() const { return synthControl; }
+      SynthControl* getSynthControl() const       { return synthControl; }
       void editInPianoroll(Staff* staff);
       void editInDrumroll(Staff* staff);
       PianorollEditor* getPianorollEditor() const { return pianorollEditor; }
