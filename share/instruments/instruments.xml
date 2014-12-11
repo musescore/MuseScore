@@ -7044,7 +7044,7 @@
                   <clef staff="3">F8vb</clef>
                   <barlineSpan staff="3">1</barlineSpan>
                   <Channel>
-                        <program value="75"/>
+                        <program value="19"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
