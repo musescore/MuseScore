@@ -76,6 +76,7 @@ struct PluginDescription {
       QString menuPath;
       QQmlComponent *component;
       bool error;
+      bool loaded;
       };
 
 //---------------------------------------------------------

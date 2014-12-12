@@ -387,9 +387,10 @@ bool MuseScore::loadPlugin(const QString& filename)
             if (fi.exists()) {
                   QString path(fi.filePath());
                   PluginDescription* p = new PluginDescription;
-                  p->path = path;
-                  p->load = false;
-                  p->error= false;
+                  p->path   = path;
+                  p->load   = false;
+                  p->error  = false;
+                  p->loaded = false;
                   collectPluginMetaInformation(p);
                   registerPlugin(p);
                   result = true;
@@ -464,7 +465,7 @@ void MuseScore::continueLoadingPlugin(QQmlComponent *targetComponent)
       const QList<PluginDescription> pl = preferences.pluginLoadingList;
 
       foreach(PluginDescription pd, pl) {
-            if(pd.component == targetComponent) {
+            if(pd.component == targetComponent && !pd.loaded) {
                   if (pd.component->isError()) {
                         qDebug("creating component <%s> failed", qPrintable(pd.path));
                         foreach(QQmlError e, pd.component->errors()) {
@@ -480,6 +481,7 @@ void MuseScore::continueLoadingPlugin(QQmlComponent *targetComponent)
                                     pd.version      = item->version();
                                     pd.description  = item->description();
                                     pd.error        = false;
+                                    pd.loaded       = true;
                                     }
                               delete obj;
                               preferences.pluginList.append(pd);
