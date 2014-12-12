@@ -1614,10 +1614,8 @@ void MuseScore::showPlayPanel(bool visible)
             connect(playPanel, SIGNAL(posChange(int)),         seq, SLOT(seek(int)));
             connect(playPanel, SIGNAL(closed(bool)),          playId,   SLOT(setChecked(bool)));
             connect(synti,     SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
-
             playPanel->setGain(synti->gain());
             playPanel->setScore(cs);
-//            playPanel->move(preferences.playPanelPos);
             }
       playPanel->setVisible(visible);
       playId->setChecked(visible);

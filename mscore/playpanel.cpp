@@ -64,6 +64,9 @@ PlayPanel::PlayPanel(QWidget* parent)
       loopInButton->setDefaultAction(getAction("loop-in"));
       loopOutButton->setDefaultAction(getAction("loop-out"));
 
+      tempoSlider->setDclickValue1(100.0);
+      tempoSlider->setDclickValue2(100.0);
+
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
