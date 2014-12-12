@@ -26,6 +26,7 @@
 #include "accidental.h"
 #include "ottava.h"
 #include "spannermap.h"
+#include "rehearsalmark.h"
 
 class QPainter;
 
@@ -1008,12 +1009,14 @@ class Score : public QObject {
       void cmdImplode();
       void cmdSlashFill();
       void cmdSlashRhythm();
+      void cmdResequenceRehearsalMarks();
 
       void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
       QString accessibleInfo()          { return accInfo;          }
 
       QImage createThumbnail();
-      QString createRehearsalmarkText(int tick) const;
+      QString createRehearsalMarkText(RehearsalMark* current) const;
+      QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
       friend class ChangeSynthesizerState;
       friend class Chord;
