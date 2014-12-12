@@ -852,7 +852,7 @@ Element* ChordRest::drop(const DropData& data)
                   if (st >= TextStyleType::DEFAULT)
                         f->setTextStyleType(st);
                   if (e->type() == Element::Type::REHEARSAL_MARK)
-                        f->setText(score()->createRehearsalmarkText(segment()->tick()));
+                        f->setText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
                   }
                   score()->undoAddElement(e);
                   return e;

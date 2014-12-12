@@ -72,6 +72,7 @@
 #include "accidental.h"
 #include "sequencer.h"
 #include "tremolo.h"
+#include "rehearsalmark.h"
 
 namespace Ms {
 
@@ -2357,6 +2358,8 @@ void Score::cmd(const QAction* a)
             cmdSlashFill();
       else if (cmd == "slash-rhythm")
             cmdSlashRhythm();
+      else if (cmd == "resequence-rehearsal-marks")
+            cmdResequenceRehearsalMarks();
       else
             qDebug("unknown cmd <%s>", qPrintable(cmd));
       }
@@ -2709,6 +2712,34 @@ void Score::cmdSlashRhythm()
                   }
             }
       setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   cmdResequenceRehearsalMarks
+///   resequences rehearsal marks
+//---------------------------------------------------------
+
+void Score::cmdResequenceRehearsalMarks()
+      {
+      if (selection().isNone())
+            cmdSelectAll();
+      else if (!selection().isRange())
+            return;
+
+      RehearsalMark* last = 0;
+      for (Segment* s = selection().startSegment(); s && s != selection().endSegment(); s = s->next1()) {
+            for (Element* e : s->annotations()) {
+                  if (e->type() == Element::Type::REHEARSAL_MARK) {
+                        RehearsalMark* rm = static_cast<RehearsalMark*>(e);
+                        if (last) {
+                              QString rmText = nextRehearsalMarkText(last, rm);
+                              for (Element* le : rm->linkList())
+                                    le->undoChangeProperty(P_ID::TEXT, rmText);
+                              }
+                        last = rm;
+                        }
+                  }
+            }
       }
 
 }
