@@ -36,19 +36,8 @@ VolSlider::VolSlider(QWidget* parent)
       setScaleWidth(7);
       setLineStep(.8f);
       setPageStep(3.0f);
-      }
-
-//---------------------------------------------------------
-//   mouseDoubleClickEvent
-//---------------------------------------------------------
-
-void VolSlider::mouseDoubleClickEvent(QMouseEvent* ev)
-      {
-      if (ev->button() == Qt::RightButton)
-            _value = 0.0;
-      else
-            _value = _minValue;
-      valueChange();
+      setDclickValue1(_minValue);
+      setDclickValue2(0.0);
       }
 
 //---------------------------------------------------------
