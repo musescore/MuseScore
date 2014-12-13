@@ -658,6 +658,7 @@ void System::add(Element* el)
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
             case Element::Type::LYRICSLINE_SEGMENT:
+            case Element::Type::GLISSANDO_SEGMENT:
                   {
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
 #ifndef NDEBUG
@@ -715,6 +716,7 @@ void System::remove(Element* el)
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
             case Element::Type::LYRICSLINE_SEGMENT:
+            case Element::Type::GLISSANDO_SEGMENT:
                   if (!_spannerSegments.removeOne(static_cast<SpannerSegment*>(el))) {
                         qDebug("System::remove: %p(%s) not found, score %p", el, el->name(), score());
                         Q_ASSERT(score() == el->score());

@@ -407,7 +407,7 @@ void Selection::appendChord(Chord* chord)
       if (chord->stem()) _el.append(chord->stem());
       if (chord->hook()) _el.append(chord->hook());
       if (chord->arpeggio()) appendFiltered(chord->arpeggio());
-      if (chord->glissando()) appendFiltered(chord->glissando());
+//      if (chord->glissando()) appendFiltered(chord->glissando());
       if (chord->stemSlash()) _el.append(chord->stemSlash());
       if (chord->tremolo()) appendFiltered(chord->tremolo());
       foreach(Note* note, chord->notes()) {

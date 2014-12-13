@@ -5040,13 +5040,13 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                         glissandoColor = "";
                         }
                   }
-            if ((static_cast<Chord*>(cr))->glissando()) {
+/*            if ((static_cast<Chord*>(cr))->glissando()) {
                   // there can be only one
                   delete g;
                   g = 0;
                   }
             else
-                  cr->add(g);
+                  cr->add(g); */
             }
 
       if (!wavyLineType.isEmpty()) {

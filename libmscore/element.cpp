@@ -143,7 +143,8 @@ static const ElementName elementNames[] = {
       ElementName("TextLineSegment",      QT_TRANSLATE_NOOP("elementName", "Text Line Segment")),
       ElementName("VoltaSegment",         QT_TRANSLATE_NOOP("elementName", "Volta Segment")),
       ElementName("PedalSegment",         QT_TRANSLATE_NOOP("elementName", "Pedal Segment")),
-      ElementName("LyricsLineSegment",    QT_TRANSLATE_NOOP("elementName", "Melisma Line Segment")),
+      ElementName("LyricsLineSegment",    QT_TRANSLATE_NOOP("elementName", "Lyrics Line Segment")),
+      ElementName("GlissandoSegment",     QT_TRANSLATE_NOOP("elementName", "Glissando Segment")),
       ElementName("LayoutBreak",          QT_TRANSLATE_NOOP("elementName", "Layout Break")),
       ElementName("Spacer",               QT_TRANSLATE_NOOP("elementName", "Spacer")),
       ElementName("StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State")),
@@ -1286,6 +1287,8 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::AMBITUS:           return new Ambitus(score);
 
             case Element::Type::TEXTLINE_SEGMENT:    // return new TextLineSegment(score);
+            case Element::Type::GLISSANDO_SEGMENT:
+            case Element::Type::MELISMA_SEGMENT:
 
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::STEM_SLASH:
