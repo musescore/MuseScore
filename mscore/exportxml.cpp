@@ -4181,7 +4181,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                     xml.tag("midi-program", part->midiProgram() + 1);
                               xml.tag("midi-unpitched", i + 1);
                               xml.tag("volume", (part->volume() / 127.0) * 100);  //percent
-                              xml.tag("pan", ((int)((part->pan() - 63.5) / 63.5)) * 90); //-90 hard left, +90 hard right
+                              xml.tag("pan", int(((part->pan() - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
                               xml.etag();
                               }
                         }
@@ -4199,7 +4199,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   if (part->midiProgram() >= 0) // <0 is not valid
                         xml.tag("midi-program", part->midiProgram() + 1);
                   xml.tag("volume", (part->volume() / 127.0) * 100);  //percent
-                  xml.tag("pan", ((int)((part->pan() - 63.5) / 63.5)) * 90); //-90 hard left, +90 hard right
+                  xml.tag("pan", int(((part->pan() - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
                   xml.etag();
                   }
 
