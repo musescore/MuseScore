@@ -1001,7 +1001,7 @@ bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
                              "MidiVoice::separateVoices", "Different voices of chord and tuplet "
                              "before voice separation");
 
-                  if (!changed && doVoiceSeparation(mtrack.chords, sigmap, mtrack.tuplets))
+                  if (doVoiceSeparation(mtrack.chords, sigmap, mtrack.tuplets))
                         changed = true;
 
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
