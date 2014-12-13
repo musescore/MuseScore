@@ -284,7 +284,7 @@ class ExportMusicXml {
       void rest(Rest* chord, int staff);
       void clef(int staff, ClefType clef);
       void timesig(TimeSig* tsig);
-      void keysig(Key, int staff = 0, bool visible = true);
+      void keysig(const KeySigEvent ks, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
       void barlineRight(Measure* m);
       void lyrics(const QList<Lyrics*>* ll, const int trk);
@@ -1491,8 +1491,16 @@ void ExportMusicXml::timesig(TimeSig* tsig)
 //   keysig
 //---------------------------------------------------------
 
-void ExportMusicXml::keysig(Key key, int staff, bool visible)
+void ExportMusicXml::keysig(const KeySigEvent kse, int staff, bool visible)
       {
+      qDebug("keysig st %d key %d custom %d", staff, kse.key(), kse.custom());
+      const QList<KeySym> keysyms = kse.keySymbols();
+      for (int i = 0; i < keysyms.size(); ++i) {
+            KeySym ksym = keysyms.at(i);
+            qDebug(" keysym %d sym %d spos %g,%g pos %g,%g",
+                   i, ksym.sym, ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y());
+            }
+
       QString tg = "key";
       if (staff)
             tg += QString(" number=\"%1\"").arg(staff);
@@ -1500,7 +1508,7 @@ void ExportMusicXml::keysig(Key key, int staff, bool visible)
             tg += " print-object=\"no\"";
       attr.doAttr(xml, true);
       xml.stag(tg);
-      xml.tag("fifths", int(key));
+      xml.tag("fifths", static_cast<int>(kse.key()));
       xml.tag("mode", QString("major"));
       xml.etag();
       }
@@ -3985,18 +3993,21 @@ void ExportMusicXml::keysigTimesig(Measure* m, int strack, int etrack)
             // write the keysigs
             if (singleKey) {
                   // keysig applies to all staves
-                  keysig(keysigs.value(0)->key(), 0, keysigs.value(0)->visible());
+                  keysig(keysigs.value(0)->keySigEvent(), 0, keysigs.value(0)->visible());
                   }
             else {
                   // staff-specific keysigs
                   foreach(int st, keysigs.keys())
-                  keysig(keysigs.value(st)->key(), st + 1, keysigs.value(st)->visible());
+                  keysig(keysigs.value(st)->keySigEvent(), st + 1, keysigs.value(st)->visible());
                   }
             }
       else {
             // always write a keysig at tick = 0
-            if (m->tick() == 0)
-                  keysig(Key::C);
+            if (m->tick() == 0) {
+                  KeySigEvent kse;
+                  kse.setKey(Key::C);
+                  keysig(kse);
+                  }
             }
 
       TimeSig* tsig = 0;
