@@ -241,6 +241,7 @@ class Element : public QObject, public ScoreElement {
             VOLTA_SEGMENT,
             PEDAL_SEGMENT,
             LYRICSLINE_SEGMENT,
+            GLISSANDO_SEGMENT,
             LAYOUT_BREAK,
             SPACER,
             STAFF_STATE,

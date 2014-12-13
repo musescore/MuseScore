@@ -10,47 +10,47 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "page.h"
-#include "sig.h"
-#include "key.h"
-#include "clef.h"
-#include "score.h"
-#include "segment.h"
-#include "text.h"
-#include "staff.h"
-#include "style.h"
-#include "timesig.h"
-#include "chord.h"
-#include "note.h"
-#include "slur.h"
-#include "tie.h"
-#include "keysig.h"
-#include "barline.h"
-#include "repeat.h"
-#include "box.h"
-#include "system.h"
-#include "part.h"
-#include "utils.h"
-#include "measure.h"
-#include "volta.h"
-#include "beam.h"
-#include "tuplet.h"
-#include "sym.h"
-#include "fingering.h"
-#include "stem.h"
-#include "layoutbreak.h"
-#include "mscore.h"
-#include "beam.h"
 #include "accidental.h"
-#include "undo.h"
+#include "barline.h"
+#include "beam.h"
+#include "box.h"
+#include "chord.h"
+#include "clef.h"
+#include "element.h"
+#include "fingering.h"
+#include "glissando.h"
+#include "harmony.h"
+#include "key.h"
+#include "keysig.h"
+#include "layoutbreak.h"
 #include "layout.h"
 #include "lyrics.h"
-#include "harmony.h"
-#include "ottava.h"
-#include "notedot.h"
-#include "element.h"
-#include "tremolo.h"
 #include "marker.h"
+#include "measure.h"
+#include "mscore.h"
+#include "notedot.h"
+#include "note.h"
+#include "ottava.h"
+#include "page.h"
+#include "part.h"
+#include "repeat.h"
+#include "score.h"
+#include "segment.h"
+#include "sig.h"
+#include "slur.h"
+#include "staff.h"
+#include "stem.h"
+#include "style.h"
+#include "sym.h"
+#include "system.h"
+#include "text.h"
+#include "tie.h"
+#include "timesig.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "utils.h"
+#include "volta.h"
 
 namespace Ms {
 
@@ -2621,25 +2621,45 @@ void Score::connectTies(bool silent)
                   if (c == 0 || c->type() != Element::Type::CHORD)
                         continue;
                   for (Note* n : c->notes()) {
+                        // connect a tie without end note
                         Tie* tie = n->tieFor();
-                        if (!tie || tie->endNote())
-                              continue;
-                        Note* nnote;
-                        if (_mscVersion <= 114)
-                              nnote = searchTieNote114(n);
-                        else
-                              nnote = searchTieNote(n);
-                        if (nnote == 0) {
-                              if (!silent) {
-                                    qDebug("next note at %d track %d for tie not found (version %d)", s->tick(), i, _mscVersion);
-                                    delete tie;
-                                    n->setTieFor(0);
+                        if (tie && !tie->endNote()) {
+                              Note* nnote;
+                              if (_mscVersion <= 114)
+                                    nnote = searchTieNote114(n);
+                              else
+                                    nnote = searchTieNote(n);
+                              if (nnote == 0) {
+                                    if (!silent) {
+                                          qDebug("next note at %d track %d for tie not found (version %d)", s->tick(), i, _mscVersion);
+                                          delete tie;
+                                          n->setTieFor(0);
+                                          }
+                                    }
+                              else {
+                                    tie->setEndNote(nnote);
+                                    nnote->setTieBack(tie);
                                     }
                               }
-                        else {
-                              tie->setEndNote(nnote);
-                              nnote->setTieBack(tie);
-                              }
+                        // connect a glissando without initial note (old glissando format)
+                        for (Spanner* spanner : n->spannerBack())
+                              if (spanner->type() == Element::Type::GLISSANDO
+                                          && spanner->startElement() == nullptr) {
+                                    Note* initialNote = Glissando::guessInitialNote(n->chord());
+                                    n->removeSpannerBack(spanner);
+                                    if (initialNote != nullptr) {
+                                          spanner->setStartElement(initialNote);
+                                          spanner->setEndElement(n);
+                                          spanner->setTick(initialNote->chord()->tick());
+                                          spanner->setTick2(n->chord()->tick());
+                                          spanner->setTrack(n->track());
+                                          spanner->setTrack2(n->track());
+                                          spanner->setParent(initialNote);
+                                          undoAddElement(spanner);            // undo?
+                                          }
+                                    else
+                                          delete spanner;
+                                    }
                         }
                   // connect two note tremolos
                   Tremolo* tremolo = c->tremolo();
@@ -3755,8 +3775,8 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
 
                               if (firstMeasureInSystem && cr->type() == Element::Type::CHORD && cr->tick() == cr->measure()->tick()) {
                                     Chord* c = static_cast<Chord*>(cr);
-                                    if (c->glissando()) {
-                                          minDistance = qMax(minDistance, _spatium * 2);
+                                    if (c->endsGlissando()) {
+                                          minDistance = qMax(minDistance, _spatium * GLISS_STARTOFSYSTEM_WIDTH);
                                           }
                                     else {
                                           for (Note* note : c->notes()) {
