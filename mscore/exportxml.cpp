@@ -1488,7 +1488,7 @@ void ExportMusicXml::timesig(TimeSig* tsig)
       }
 
 //---------------------------------------------------------
-//   keysig
+//   accSymId2alter
 //---------------------------------------------------------
 
 static int accSymId2alter(SymId id)
@@ -1504,12 +1504,16 @@ static int accSymId2alter(SymId id)
       return res;
       }
 
+//---------------------------------------------------------
+//   keysig
+//---------------------------------------------------------
+
 void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool visible)
       {
       static char table2[]  = "CDEFGAB";
       int po = ClefInfo::pitchOffset(ct); // actually 7 * oct + step for topmost staff line
-      qDebug("keysig st %d key %d custom %d ct %hhd st %d", staff, kse.key(), kse.custom(), ct, staff);
-      qDebug(" pitch offset clef %d stp %d oct %d ", po, po % 7, po / 7);
+      //qDebug("keysig st %d key %d custom %d ct %hhd st %d", staff, kse.key(), kse.custom(), ct, staff);
+      //qDebug(" pitch offset clef %d stp %d oct %d ", po, po % 7, po / 7);
 
       QString tg = "key";
       if (staff)
@@ -1518,6 +1522,7 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
             tg += " print-object=\"no\"";
       attr.doAttr(xml, true);
       xml.stag(tg);
+
       const QList<KeySym> keysyms = kse.keySymbols();
       if (kse.custom() && keysyms.size() > 0) {
             // non-traditional key signature
@@ -1525,9 +1530,8 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
                   KeySym ksym = keysyms.at(i);
                   int line = static_cast<int>(round(2 * ksym.spos.y()));
                   int step = (po - line) % 7;
-                  qDebug(" keysym %d sym %d spos %g,%g pos %g,%g -> line %d step %d",
-                         i, ksym.sym, ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y(),
-                         line, step);
+                  //qDebug(" keysym %d sym %d spos %g,%g pos %g,%g -> line %d step %d",
+                  //       i, ksym.sym, ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y(), line, step);
                   xml.tag("key-step", QString(QChar(table2[step])));
                   xml.tag("key-alter", accSymId2alter(ksym.sym));
                   }
@@ -1537,6 +1541,7 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
             xml.tag("fifths", static_cast<int>(kse.key()));
             xml.tag("mode", QString("major"));
             }
+
       xml.etag();
       }
 
@@ -3986,7 +3991,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
       {
       int strack = p->startTrack();
       int etrack = p->endTrack();
-      qDebug("keysigTimesig m %p strack %d etrack %d", m, strack, etrack);
+      //qDebug("keysigTimesig m %p strack %d etrack %d", m, strack, etrack);
 
       // search all staves for non-generated key signatures
       QMap<int, KeySig*> keysigs; // map staff to key signature
@@ -3998,7 +4003,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                   if (!el)
                         continue;
                   if (el->type() == Element::Type::KEYSIG) {
-                        qDebug(" found keysig %p track %d", el, el->track());
+                        //qDebug(" found keysig %p track %d", el, el->track());
                         int st = (t - strack) / VOICES;
                         if (!el->generated())
                               keysigs[st] = static_cast<KeySig*>(el);
@@ -4025,7 +4030,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                               singleKey = false;
 
             // write the keysigs
-            qDebug(" singleKey %d", singleKey);
+            //qDebug(" singleKey %d", singleKey);
             if (singleKey) {
                   // keysig applies to all staves
                   keysig(keysigs.value(0)->keySigEvent(), p->staff(0)->clef(m->tick()), 0, keysigs.value(0)->visible());
