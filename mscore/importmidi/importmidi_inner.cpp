@@ -184,9 +184,13 @@ ReducedFraction time2Tick(double time, double ticksPerSec)
 
 // tempo in beats per second
 
-double findBasicTempo(const std::multimap<int, MTrack> &tracks)
+double findBasicTempo(const std::multimap<int, MTrack> &tracks, bool isHumanPerformance)
       {
       for (const auto &track: tracks) {
+                        // don't read tempo from tempo track for human performed files
+                        // because very often the tempo in such track is completely erroneous
+            if (isHumanPerformance && track.second.chords.empty())
+                  continue;
             for (const auto &ie : track.second.mtrack->events()) {
                   const MidiEvent &e = ie.second;
                   if (e.type() == ME_META && e.metaType() == META_TEMPO) {
