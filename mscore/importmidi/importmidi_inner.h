@@ -132,7 +132,7 @@ std::string fromUchar(const uchar *text);
 namespace MidiTempo {
 
 ReducedFraction time2Tick(double time, double ticksPerSec);
-double findBasicTempo(const std::multimap<int, MTrack> &tracks);
+double findBasicTempo(const std::multimap<int, MTrack> &tracks, bool isHumanPerformance);
 
 } // namespace MidiTempo
 
