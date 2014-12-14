@@ -1157,6 +1157,12 @@ void quantizeOffTimes(
             MidiChord &chord = chordIt->second;
                         // quantize off times
             for (auto &note: chord.notes) {
+                              // check if note is not in tuplet anymore
+                  if (note.isInTuplet) {
+                        if (chordIt->first >= note.tuplet->first + note.tuplet->second.len)
+                              note.isInTuplet = false;
+                        }
+
                   const auto result = (note.isInTuplet)
                               ? quantizeOffTimeForTuplet(note.offTime, chordIt, quantizedChords,
                                                          basicQuant, note.tuplet->second)
