@@ -115,9 +115,10 @@
         <Chord>
           <dots>1</dots>
           <durationType>32nd</durationType>
+          <Articulation>
+            <subtype>staccato</subtype>
+            </Articulation>
           <Note>
-            <Tie id="2">
-              </Tie>
             <Events>
               <Event>
                 <pitch>0</pitch>
@@ -131,24 +132,12 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Chord>
-          <dots>1</dots>
+        <Rest>
+          <durationType>16th</durationType>
+          </Rest>
+        <Rest>
           <durationType>eighth</durationType>
-          <Note>
-            <endSpanner id="2"/>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
-            <pitch>64</pitch>
-            <tpc>18</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
+          </Rest>
         <Rest>
           <durationType>half</durationType>
           </Rest>

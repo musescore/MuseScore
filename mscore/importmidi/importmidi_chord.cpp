@@ -97,6 +97,12 @@ ReducedFraction minNoteLen(const std::pair<const ReducedFraction, MidiChord> &ch
       return minOffTime - chord.first;
       }
 
+ReducedFraction maxNoteLen(const std::pair<const ReducedFraction, MidiChord> &chord)
+      {
+      const auto maxOffTime = maxNoteOffTime(chord.second.notes);
+      return maxOffTime - chord.first;
+      }
+
 // remove overlapping notes with the same pitch
 
 void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
