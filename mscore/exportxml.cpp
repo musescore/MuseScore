@@ -1525,13 +1525,21 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
 
       const QList<KeySym> keysyms = kse.keySymbols();
       if (kse.custom() && keysyms.size() > 0) {
+
             // non-traditional key signature
-            for (int i = 0; i < keysyms.size(); ++i) {
-                  KeySym ksym = keysyms.at(i);
+            // MusicXML order is left-to-right order, while KeySims in keySymbols()
+            // are in insertion order -> sorting required
+
+            // first put the KeySyms in a map
+            QMap<qreal, KeySym> map;
+            foreach(const KeySym& ksym, keysyms)
+                  map.insert(ksym.spos.x(), ksym);
+            // then write them (automatically sorted on key)
+            foreach(const KeySym& ksym, map) {
                   int line = static_cast<int>(round(2 * ksym.spos.y()));
                   int step = (po - line) % 7;
-                  //qDebug(" keysym %d sym %d spos %g,%g pos %g,%g -> line %d step %d",
-                  //       i, ksym.sym, ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y(), line, step);
+                  //qDebug(" keysym sym %d spos %g,%g pos %g,%g -> line %d step %d",
+                  //       ksym.sym, ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y(), line, step);
                   xml.tag("key-step", QString(QChar(table2[step])));
                   xml.tag("key-alter", accSymId2alter(ksym.sym));
                   }

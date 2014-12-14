@@ -3500,12 +3500,16 @@ static void addSymToSig(KeySigEvent& sig, QString& step, int& alter)
       {
       SymId id = alter2accSymId(alter);
       if (step.size() == 1 && id != SymId::noSym) {
-            QString table = "FEDCBAG";
-            int line = table.indexOf(step);
+            const QString table = "FEDCBAG";
+            const int line = table.indexOf(step);
+            // no auto layout for custom keysig, calculate xpos
+            // TODO: use symbol width ?
+            const qreal spread = 1.4;
+            const qreal x = sig.keySymbols().size() * spread;
             if (line >= 0) {
                   KeySym ks;
                   ks.sym  = id;
-                  ks.spos = QPointF(0, qreal(line) * 0.5);
+                  ks.spos = QPointF(x, qreal(line) * 0.5);
                   sig.keySymbols().append(ks);
                   sig.setCustom(true);
                   }
