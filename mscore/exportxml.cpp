@@ -284,7 +284,7 @@ class ExportMusicXml {
       void rest(Rest* chord, int staff);
       void clef(int staff, ClefType clef);
       void timesig(TimeSig* tsig);
-      void keysig(Key, int staff = 0, bool visible = true);
+      void keysig(const KeySigEvent ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
       void barlineRight(Measure* m);
       void lyrics(const QList<Lyrics*>* ll, const int trk);
@@ -293,7 +293,7 @@ class ExportMusicXml {
       void calcDivisions();
       double getTenthsFromInches(double);
       double getTenthsFromDots(double);
-      void keysigTimesig(Measure* m, int strack, int etrack);
+      void keysigTimesig(const Measure* m, const Part* p);
       void chordAttributes(Chord* chord, Notations& notations, Technical& technical,
                            TrillHash& trillStart, TrillHash& trillStop);
       void wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments,
@@ -1488,11 +1488,33 @@ void ExportMusicXml::timesig(TimeSig* tsig)
       }
 
 //---------------------------------------------------------
+//   accSymId2alter
+//---------------------------------------------------------
+
+static int accSymId2alter(SymId id)
+      {
+      int res = 0;
+      switch (id) {
+            case SymId::accidentalDoubleFlat:   res = -2; break;
+            case SymId::accidentalFlat:         res = -1; break;
+            case SymId::accidentalSharp:        res =  1; break;
+            case SymId::accidentalDoubleSharp:  res =  2; break;
+            default: qDebug("accSymId2alter: unsupported sym %s", Sym::id2name(id));
+            }
+      return res;
+      }
+
+//---------------------------------------------------------
 //   keysig
 //---------------------------------------------------------
 
-void ExportMusicXml::keysig(Key key, int staff, bool visible)
+void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool visible)
       {
+      static char table2[]  = "CDEFGAB";
+      int po = ClefInfo::pitchOffset(ct); // actually 7 * oct + step for topmost staff line
+      //qDebug("keysig st %d key %d custom %d ct %hhd st %d", staff, kse.key(), kse.custom(), ct, staff);
+      //qDebug(" pitch offset clef %d stp %d oct %d ", po, po % 7, po / 7);
+
       QString tg = "key";
       if (staff)
             tg += QString(" number=\"%1\"").arg(staff);
@@ -1500,8 +1522,34 @@ void ExportMusicXml::keysig(Key key, int staff, bool visible)
             tg += " print-object=\"no\"";
       attr.doAttr(xml, true);
       xml.stag(tg);
-      xml.tag("fifths", int(key));
-      xml.tag("mode", QString("major"));
+
+      const QList<KeySym> keysyms = kse.keySymbols();
+      if (kse.custom() && keysyms.size() > 0) {
+
+            // non-traditional key signature
+            // MusicXML order is left-to-right order, while KeySims in keySymbols()
+            // are in insertion order -> sorting required
+
+            // first put the KeySyms in a map
+            QMap<qreal, KeySym> map;
+            foreach(const KeySym& ksym, keysyms)
+                  map.insert(ksym.spos.x(), ksym);
+            // then write them (automatically sorted on key)
+            foreach(const KeySym& ksym, map) {
+                  int line = static_cast<int>(round(2 * ksym.spos.y()));
+                  int step = (po - line) % 7;
+                  //qDebug(" keysym sym %d spos %g,%g pos %g,%g -> line %d step %d",
+                  //       ksym.sym, ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y(), line, step);
+                  xml.tag("key-step", QString(QChar(table2[step])));
+                  xml.tag("key-alter", accSymId2alter(ksym.sym));
+                  }
+            }
+      else {
+            // traditional key signature
+            xml.tag("fifths", static_cast<int>(kse.key()));
+            xml.tag("mode", QString("major"));
+            }
+
       xml.etag();
       }
 
@@ -3947,8 +3995,12 @@ static void spannerStop(ExportMusicXml* exp, int strack, int tick2, int sstaff, 
  Output attributes at start of measure: key, time
  */
 
-void ExportMusicXml::keysigTimesig(Measure* m, int strack, int etrack)
+void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
       {
+      int strack = p->startTrack();
+      int etrack = p->endTrack();
+      //qDebug("keysigTimesig m %p strack %d etrack %d", m, strack, etrack);
+
       // search all staves for non-generated key signatures
       QMap<int, KeySig*> keysigs; // map staff to key signature
       for (Segment* seg = m->first(); seg; seg = seg->next()) {
@@ -3959,18 +4011,21 @@ void ExportMusicXml::keysigTimesig(Measure* m, int strack, int etrack)
                   if (!el)
                         continue;
                   if (el->type() == Element::Type::KEYSIG) {
+                        //qDebug(" found keysig %p track %d", el, el->track());
                         int st = (t - strack) / VOICES;
                         if (!el->generated())
                               keysigs[st] = static_cast<KeySig*>(el);
                         }
                   }
             }
+            
+      //ClefType ct = rest->staff()->clef(rest->tick());
 
       // write the key signatues
       if (!keysigs.isEmpty()) {
             // determine if all staves have a keysig and all keysigs are identical
             // in that case a single <key> is written, without number=... attribute
-            int nstaves = (etrack - strack) / VOICES;
+            int nstaves = p->nstaves();
             bool singleKey = true;
             // check if all staves have a keysig
             for (int i = 0; i < nstaves; i++)
@@ -3983,20 +4038,24 @@ void ExportMusicXml::keysigTimesig(Measure* m, int strack, int etrack)
                               singleKey = false;
 
             // write the keysigs
+            //qDebug(" singleKey %d", singleKey);
             if (singleKey) {
                   // keysig applies to all staves
-                  keysig(keysigs.value(0)->key(), 0, keysigs.value(0)->visible());
+                  keysig(keysigs.value(0)->keySigEvent(), p->staff(0)->clef(m->tick()), 0, keysigs.value(0)->visible());
                   }
             else {
                   // staff-specific keysigs
                   foreach(int st, keysigs.keys())
-                  keysig(keysigs.value(st)->key(), st + 1, keysigs.value(st)->visible());
+                  keysig(keysigs.value(st)->keySigEvent(), p->staff(st)->clef(m->tick()), st + 1, keysigs.value(st)->visible());
                   }
             }
       else {
             // always write a keysig at tick = 0
-            if (m->tick() == 0)
-                  keysig(Key::C);
+            if (m->tick() == 0) {
+                  KeySigEvent kse;
+                  kse.setKey(Key::C);
+                  keysig(kse, p->staff(0)->clef(m->tick()));
+                  }
             }
 
       TimeSig* tsig = 0;
@@ -4225,8 +4284,8 @@ void ExportMusicXml::write(QIODevice* dev)
             xml.stag(QString("part id=\"P%1\"").arg(idx+1));
 
             int staves = part->nstaves();
-            int strack = _score->staffIdx(part) * VOICES;
-            int etrack = strack + staves * VOICES;
+            int strack = part->startTrack();
+            int etrack = part->endTrack();
 
             trillStart.clear();
             trillStop.clear();
@@ -4397,7 +4456,7 @@ void ExportMusicXml::write(QIODevice* dev)
                         xml.tag("divisions", MScore::division / div);
                         }
                   // output attributes at start of measure: key, time
-                  keysigTimesig(m, strack, etrack);
+                  keysigTimesig(m, part);
                   // output attributes with the first actual measure (pickup or regular) only
                   if ((irregularMeasureNo + measureNo + pickupMeasureNo) == 4) {
                         if (staves > 1)
