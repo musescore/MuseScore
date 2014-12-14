@@ -3047,10 +3047,8 @@ void Score::layoutLinear()
       foreach (MeasureBase* mb, system->measures()) {
             qreal w = 0.0;
             if (mb->type() == Element::Type::MEASURE) {
-                  if(isFirstMeasure) {
+                  if (isFirstMeasure)
                         pos.rx() += system->leftMargin();
-                        isFirstMeasure = false;
-                        }
                   Measure* m = static_cast<Measure*>(mb);
                   Measure* nm = m->nextMeasure();
                   if (m->repeatFlags() & Repeat::END) {
@@ -3062,11 +3060,25 @@ void Score::layoutLinear()
                   else if (nm && (nm->repeatFlags() & Repeat::START))
                         m->setEndBarLineType(BarLineType::START_REPEAT, m->endBarLineGenerated());
                   m->createEndBarLines();
-                  w = m->minWidth1() * styleD(StyleIdx::linearStretch);
+                  if (isFirstMeasure) {
+                        // width with header
+                        qreal w2 = m->minWidth2();
+                        // width *completely* excluding header
+                        // minWidth1() includes the initial key / time signatures since they are considered non-generated
+                        Segment* s = m->first();
+                        while (s && s->segmentType() != Segment::Type::ChordRest)
+                              s = s->next();
+                        qreal w1 = s ? computeMinWidth(s, true) : m->minWidth1();
+                        w = (w2 - w1) + w1 * styleD(StyleIdx::linearStretch);
+                        }
+                  else {
+                        w = m->minWidth1() * styleD(StyleIdx::linearStretch);
+                        }
                   qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
                   if (w < minMeasureWidth)
                         w = minMeasureWidth;
                   m->layout(w);
+                  isFirstMeasure = false;
                   }
             else {
                   mb->layout();
