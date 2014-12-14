@@ -95,6 +95,7 @@ Iter findEndChordInRange(const ReducedFraction &endRangeTick,
 ReducedFraction minNoteOffTime(const QList<MidiNote> &notes);
 ReducedFraction maxNoteOffTime(const QList<MidiNote> &notes);
 ReducedFraction minNoteLen(const std::pair<const ReducedFraction, MidiChord> &chord);
+ReducedFraction maxNoteLen(const std::pair<const ReducedFraction, MidiChord> &chord);
 
 const ReducedFraction& minAllowedDuration();
 ReducedFraction findMinDuration(const ReducedFraction &onTime,
@@ -102,7 +103,17 @@ ReducedFraction findMinDuration(const ReducedFraction &onTime,
                                 const ReducedFraction &length);
 void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord> &chords);
 void sortNotesByLength(std::multimap<ReducedFraction, MidiChord> &chords);
-void collectChords(std::multimap<int, MTrack> &tracks);
+
+void collectChords(
+            std::multimap<int, MTrack> &tracks,
+            const ReducedFraction &humanTolCoeff,
+            const ReducedFraction &nonHumanTolCoeff);
+
+void collectChords(
+            MTrack &track,
+            const ReducedFraction &humanTolCoeff,
+            const ReducedFraction &nonHumanTolCoeff);
+
 void removeOverlappingNotes(std::multimap<int, MTrack> &tracks);
 void mergeChordsWithEqualOnTimeAndVoice(std::multimap<int, MTrack> &tracks);
 void splitUnequalChords(std::multimap<int, MTrack> &tracks);
