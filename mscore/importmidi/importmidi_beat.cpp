@@ -583,7 +583,7 @@ void setTempo(const std::multimap<int, MTrack> &tracks, Score *score)
                   }
             averageTempoFactor /= counter;
 
-            const double basicTempo = MidiTempo::findBasicTempo(tracks);
+            const double basicTempo = MidiTempo::findBasicTempo(tracks, true);
             const double tempo = basicTempo * averageTempoFactor;
 
             score->tempomap()->clear();         // use only one tempo marking for all score

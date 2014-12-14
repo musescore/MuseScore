@@ -340,13 +340,15 @@ bool isHumanPerformance(
       if (chords.empty())
             return false;
 
-      const auto quant = ReducedFraction::fromTicks(MScore::division) / 4;    // 1/16
+      const auto basicQuant = ReducedFraction::fromTicks(MScore::division) / 4;    // 1/16
       int matches = 0;
       int count = 0;
 
       std::set<ReducedFraction> usedOnTimes;
 
       for (const auto &chord: chords) {
+            const auto quant = qMin(basicQuant,
+                                    quantForLen(MChord::maxNoteLen(chord), basicQuant));
             const auto onTime = quantizeValue(chord.first, quant);
             int barIndex, beat, tick;
             sigmap->tickValues(onTime.ticks(), &barIndex, &beat, &tick);
@@ -390,7 +392,7 @@ void setIfHumanPerformance(
             TimeSigMap *sigmap)
       {
       auto allChordsTrack = getTrackWithAllChords(tracks);
-      MChord::collectChords(allChordsTrack);
+      MChord::collectChords(allChordsTrack, {2, 1}, {1, 2});
       const MTrack &track = allChordsTrack.begin()->second;
       const auto &allChords = track.chords;
       if (allChords.empty())
@@ -405,7 +407,7 @@ void setIfHumanPerformance(
                   opers.quantValue.setDefaultValue(MidiOperations::QuantValue::Q_8);
             if (opers.maxVoiceCount.canRedefineDefaultLater())
                   opers.maxVoiceCount.setDefaultValue(MidiOperations::VoiceCount::V_2);
-            const double ticksPerSec = MidiTempo::findBasicTempo(tracks) * MScore::division;
+            const double ticksPerSec = MidiTempo::findBasicTempo(tracks, true) * MScore::division;
             MidiBeat::findBeatLocations(allChords, sigmap, ticksPerSec);      // and set time sig
             }
       }
@@ -1157,6 +1159,12 @@ void quantizeOffTimes(
             MidiChord &chord = chordIt->second;
                         // quantize off times
             for (auto &note: chord.notes) {
+                              // check if note is not in tuplet anymore
+                  if (note.isInTuplet) {
+                        if (chordIt->first >= note.tuplet->first + note.tuplet->second.len)
+                              note.isInTuplet = false;
+                        }
+
                   const auto result = (note.isInTuplet)
                               ? quantizeOffTimeForTuplet(note.offTime, chordIt, quantizedChords,
                                                          basicQuant, note.tuplet->second)
