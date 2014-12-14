@@ -161,6 +161,7 @@ class TestImportMidi : public QObject, public MTest
       void chordSmallError() { noTempoText("chord_small_error"); }
       void chordBigError() { noTempoText("chord_big_error"); }
       void chordLegato() { noTempoText("chord_legato"); }
+      void chordCollect() { noTempoText("chord_collect"); }
 
       // test tuplet recognition functions
       void findChordInBar();
