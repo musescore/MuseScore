@@ -340,13 +340,15 @@ bool isHumanPerformance(
       if (chords.empty())
             return false;
 
-      const auto quant = ReducedFraction::fromTicks(MScore::division) / 4;    // 1/16
+      const auto basicQuant = ReducedFraction::fromTicks(MScore::division) / 4;    // 1/16
       int matches = 0;
       int count = 0;
 
       std::set<ReducedFraction> usedOnTimes;
 
       for (const auto &chord: chords) {
+            const auto quant = qMin(basicQuant,
+                                    quantForLen(MChord::maxNoteLen(chord), basicQuant));
             const auto onTime = quantizeValue(chord.first, quant);
             int barIndex, beat, tick;
             sigmap->tickValues(onTime.ticks(), &barIndex, &beat, &tick);
