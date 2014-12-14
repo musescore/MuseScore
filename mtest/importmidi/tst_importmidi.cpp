@@ -156,6 +156,7 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.showTempoText.setDefaultValue(false);
             mf(midiFile.toStdString().c_str());
             }
+      void humanTempo() { mf("human_tempo"); }
 
       // chord detection
       void chordSmallError() { noTempoText("chord_small_error"); }
