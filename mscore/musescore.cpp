@@ -1790,7 +1790,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 //   midiCtrlReceived
 //---------------------------------------------------------
 
-void MuseScore::midiCtrlReceived(int controller, int /*value*/)
+void MuseScore::midiCtrlReceived(int controller, int value)
       {
       if (!midiinEnabled())
             return;
@@ -1802,7 +1802,8 @@ void MuseScore::midiCtrlReceived(int controller, int /*value*/)
                   preferenceDialog->updateRemote();
             return;
             }
-      if (processMidiRemote(MIDI_REMOTE_TYPE_CTRL, controller))
+      // when value is 0 (usually when a key is released ) nothing happens
+      if (value && processMidiRemote(MIDI_REMOTE_TYPE_CTRL, controller))
             return;
       }
 
