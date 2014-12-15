@@ -319,16 +319,16 @@ void initStyle(MStyle* s)
          true, Spatium(.2), Spatium(.5), 20, Qt::black, false, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Left"), ff,  20, false, false, false,
-         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0, -1.5), OffsetType::SPATIUM, true,
          false, Spatium(.2), Spatium(.5), 25, Qt::black, false, true));
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text Right"), ff,  12, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true,
+         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -3.0), OffsetType::SPATIUM, true,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
 
       // for backward compatibility
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Repeat Text"), ff,  12, false, false, false,
-         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -2.0), OffsetType::SPATIUM, true,
+         AlignmentFlags::RIGHT | AlignmentFlags::BASELINE, QPointF(0, -1.0), OffsetType::SPATIUM, true,
          false, Spatium(0.2), Spatium(0.5), 25, Qt::black, false, true));
 
       // y offset may depend on voltaHook style element
