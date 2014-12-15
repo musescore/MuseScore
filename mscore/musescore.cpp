@@ -3729,7 +3729,10 @@ void MuseScore::transpose()
       {
       if (cs->last() == 0)     // empty score?
             return;
-      if (!cs->selection().isRange()) {
+
+      bool noSelection = cs->selection().isNone();
+
+      if (noSelection) {
             QMessageBox::StandardButton sb = QMessageBox::question(mscore,
                tr("MuseScore: Transpose"),
                tr("There is nothing selected. Transpose whole score?"),
@@ -3751,6 +3754,7 @@ void MuseScore::transpose()
       // TRANSPOSE_BY_KEY and "transpose keys" is only possible if selection state is SelState::RANGE
       td.enableTransposeKeys(rangeSelection);
       td.enableTransposeByKey(rangeSelection);
+      td.enableTransposeChordNames(rangeSelection);
 
       int startStaffIdx = 0;
       int startTick     = 0;
@@ -3768,6 +3772,9 @@ void MuseScore::transpose()
             return;
       cs->transpose(td.mode(), td.direction(), td.transposeKey(), td.transposeInterval(),
          td.getTransposeKeys(), td.getTransposeChordNames(), td.useDoubleSharpsFlats());
+
+      if (noSelection)
+            cs->deselectAll();
       }
 
 //---------------------------------------------------------
