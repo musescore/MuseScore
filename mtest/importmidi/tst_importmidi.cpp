@@ -156,11 +156,13 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.showTempoText.setDefaultValue(false);
             mf(midiFile.toStdString().c_str());
             }
+      void humanTempo() { mf("human_tempo"); }
 
       // chord detection
       void chordSmallError() { noTempoText("chord_small_error"); }
       void chordBigError() { noTempoText("chord_big_error"); }
       void chordLegato() { noTempoText("chord_legato"); }
+      void chordCollect() { noTempoText("chord_collect"); }
 
       // test tuplet recognition functions
       void findChordInBar();

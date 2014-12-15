@@ -1980,7 +1980,8 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             Spanner* sp = i.key();
             int tick1 = i.value().first;
             int tick2 = i.value().second;
-            //qDebug("spanner %p tp %hhd tick1 %d tick2 %d", sp, sp->type(), tick1, tick2);
+            //qDebug("spanner %p tp %hhd tick1 %d tick2 %d track %d track2 %d",
+            //       sp, sp->type(), tick1, tick2, sp->track(), sp->track2());
             sp->setTick(tick1);
             sp->setTick2(tick2);
             sp->score()->addElement(sp);
@@ -2790,13 +2791,14 @@ static void handleSpannerStart(SLine* new_sp, QString /* type */, int track, QSt
 //   handleSpannerStop
 //---------------------------------------------------------
 
-static void handleSpannerStop(SLine* cur_sp, QString type, int tick, MusicXmlSpannerMap& spanners)
+static void handleSpannerStop(SLine* cur_sp, QString type, int track2, int tick, MusicXmlSpannerMap& spanners)
       {
       if (!cur_sp) {
             qDebug("%s stop without start", qPrintable(type));
             return;
             }
 
+      cur_sp->setTrack2(track2);
       spanners[cur_sp].second = tick;
       //qDebug("pedal %p second tick %d", cur_sp, tick);
       }
@@ -3193,7 +3195,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         }
                   else if (type == "stop") {
                         if (pedal) {
-                              handleSpannerStop(pedal, "pedal", tick, spanners);
+                              handleSpannerStop(pedal, "pedal", track, tick, spanners);
                               pedal = 0;
                               }
                         }
@@ -3202,7 +3204,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         // first stop the first one
                         if (pedal) {
                               pedal->setEndHookType(HookType::HOOK_45);
-                              handleSpannerStop(pedal, "pedal", tick, spanners);
+                              handleSpannerStop(pedal, "pedal", track, tick, spanners);
                               pedalContinue = pedal; // mark for later fixup
                               pedal = 0;
                               }
@@ -3267,7 +3269,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             else if (type == "stop") {
                   if (h && niente == "yes")
                         h->setHairpinCircledTip(true);
-                  handleSpannerStop(h, QString("wedge %1").arg(number), tick, spanners);
+                  handleSpannerStop(h, QString("wedge %1").arg(number), track, tick, spanners);
                   h = 0;
                   }
             else
@@ -3308,7 +3310,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         if (lineEnd == "up")
                               b->setEndHookHeight(-1 * b->endHookHeight());
                         }
-                  handleSpannerStop(b, QString("bracket %1").arg(number), tick, spanners);
+                  handleSpannerStop(b, QString("bracket %1").arg(number), track, tick, spanners);
                   //qDebug("bracket=%p second tick %d", b, tick);
                   b = 0;
                   }
@@ -3335,7 +3337,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   }
             else if (type == "stop") {
                   // TODO: MuseScore doesn't support lines which start and end on different staves
-                  handleSpannerStop(b, QString("dashes %1").arg(number), tick, spanners);
+                  handleSpannerStop(b, QString("dashes %1").arg(number), track, tick, spanners);
                   //qDebug("dashes=%p second tick %d", b, tick);
                   b = 0;
                   }
@@ -3362,7 +3364,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                         }
                   }
             else if (type == "stop") {
-                  handleSpannerStop(o, QString("octave-shift %1").arg(number), tick, spanners);
+                  handleSpannerStop(o, QString("octave-shift %1").arg(number), track, tick, spanners);
                   //qDebug("ottava=%p second tick %d", o, tick);
                   o = 0;
                   }
@@ -3472,7 +3474,50 @@ static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement 
             i->setStringData(*t);
             }
       }
+      
+//---------------------------------------------------------
+//   alter2accSymId
+//---------------------------------------------------------
+      
+static SymId alter2accSymId(int alter)
+      {
+      SymId res = SymId::noSym;
+      switch (alter) {
+            case -2: res = SymId::accidentalDoubleFlat; break;
+            case -1: res = SymId::accidentalFlat; break;
+            case  1: res = SymId::accidentalSharp; break;
+            case  2: res = SymId::accidentalDoubleSharp; break;
+            default: qDebug("alter2accSymId: unsupported alter %d", alter);
+            }
+      return res;
+      }
 
+//---------------------------------------------------------
+//   addSymToSig
+//---------------------------------------------------------
+
+static void addSymToSig(KeySigEvent& sig, QString& step, int& alter)
+      {
+      SymId id = alter2accSymId(alter);
+      if (step.size() == 1 && id != SymId::noSym) {
+            const QString table = "FEDCBAG";
+            const int line = table.indexOf(step);
+            // no auto layout for custom keysig, calculate xpos
+            // TODO: use symbol width ?
+            const qreal spread = 1.4;
+            const qreal x = sig.keySymbols().size() * spread;
+            if (line >= 0) {
+                  KeySym ks;
+                  ks.sym  = id;
+                  ks.spos = QPointF(x, qreal(line) * 0.5);
+                  sig.keySymbols().append(ks);
+                  sig.setCustom(true);
+                  }
+            }
+      step = "";
+      alter = 0;
+      }
+      
 //---------------------------------------------------------
 //   xmlAttributes
 //---------------------------------------------------------
@@ -3481,10 +3526,9 @@ static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement 
  Read the MusicXML attributes element.
  */
 
-// Standard order of attributes as written by Dolet for Finale is divisions,
-// key, time, staves and clef(s). For the first measure this means number of
-// staves must be read first, as it determines how many key and time signatures
-// must be inserted.
+// Order of attributes is divisions, key, time, staves and clef(s).
+// For the first measure this means number of staves must be read first,
+// as it determines how many key and time signatures must be inserted.
 
 void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig* currKeySig)
       {
@@ -3521,6 +3565,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                   if (number != -1)
                         staffIdx += number - 1;
                   KeySigEvent key;
+                  QString keyStep;
+                  int keyAlter = 0;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "fifths")
                               key.setKey(Key(ee.text().toInt()));
@@ -3528,6 +3574,13 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                               domNotImplemented(ee);
                         else if (ee.tagName() == "cancel")
                               domNotImplemented(ee); // TODO
+                        else if (ee.tagName() == "key-step") {
+                              keyStep = ee.text();
+                              }
+                        else if (ee.tagName() == "key-alter") {
+                              keyAlter = ee.text().toInt();
+                              addSymToSig(key, keyStep, keyAlter);
+                              }
                         else
                               domError(ee);
                         }
@@ -3539,7 +3592,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         // apply to all staves in part
                         for (int i = 0; i < staves; ++i) {
                               Key oldkey = score->staff(staffIdx+i)->key(tick);
-                              if (oldkey != key.key()) {
+                              // TODO only if different custom key ?
+                              if (oldkey != key.key() || key.custom()) {
                                     // new key differs from key in effect at this tick
                                     KeySig* keysig = new KeySig(score);
                                     keysig->setTrack((staffIdx + i) * VOICES);
@@ -3556,7 +3610,8 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         // apply key to staff(staffIdx) only
                         //
                         Key oldkey = score->staff(staffIdx)->key(tick);
-                        if (oldkey != key.key()) {
+                        // TODO only if different custom key ?
+                        if (oldkey != key.key() || key.custom()) {
                               // new key differs from key in effect at this tick
                               KeySig* keysig = new KeySig(score);
                               keysig->setTrack(staffIdx * VOICES);
@@ -5568,7 +5623,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       // fixup pedal type="change" to end at the end of this note
       // note tick is still at note start
       if (pedalContinue) {
-            handleSpannerStop(pedalContinue, "pedal", tick + ticks, spanners);
+            handleSpannerStop(pedalContinue, "pedal", track, tick + ticks, spanners);
             pedalContinue = 0;
             }
 

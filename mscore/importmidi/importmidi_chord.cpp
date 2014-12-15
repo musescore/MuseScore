@@ -97,6 +97,12 @@ ReducedFraction minNoteLen(const std::pair<const ReducedFraction, MidiChord> &ch
       return minOffTime - chord.first;
       }
 
+ReducedFraction maxNoteLen(const std::pair<const ReducedFraction, MidiChord> &chord)
+      {
+      const auto maxOffTime = maxNoteOffTime(chord.second.notes);
+      return maxOffTime - chord.first;
+      }
+
 // remove overlapping notes with the same pitch
 
 void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
@@ -171,22 +177,15 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
 
 #ifdef QT_DEBUG
 
+// check for equal on time values with the same voice that is invalid
 bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
       {
-      std::set<ReducedFraction> onTimes;
+      std::map<ReducedFraction, int> onTimeVoices;
       for (const auto &chordEvent: chords) {
-            if (onTimes.find(chordEvent.first) == onTimes.end())
-                  onTimes.insert(chordEvent.first);
-            else
-                  return false;
-            }
-      return true;
-      }
-
-bool areSingleNoteChords(const std::multimap<ReducedFraction, MidiChord> &chords)
-      {
-      for (const auto &chordEvent: chords) {
-            if (chordEvent.second.notes.size() > 1)
+            const auto it = onTimeVoices.find(chordEvent.first);
+            if (it == onTimeVoices.end())
+                  onTimeVoices.insert({chordEvent.first, chordEvent.second.voice});
+            else if (chordEvent.second.voice == it->second)
                   return false;
             }
       return true;
@@ -246,6 +245,33 @@ bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord> &chords)
 
 #endif
 
+void setToNegative(ReducedFraction &v1, ReducedFraction &v2, ReducedFraction &v3)
+      {
+      v1 = ReducedFraction(-1, 1);
+      v2 = ReducedFraction(-1, 1);
+      v3 = ReducedFraction(-1, 1);
+      }
+
+bool hasNotesWithEqualPitch(const MidiChord &chord1, const MidiChord &chord2)
+      {
+      std::set<int> notes1;
+      for (const auto &note: chord1.notes)
+            notes1.insert(note.pitch);
+      for (const auto &note: chord2.notes) {
+            if (notes1.find(note.pitch) != notes1.end())
+                  return true;
+            }
+      return false;
+      }
+
+void collectChords(
+            std::multimap<int, MTrack> &tracks,
+            const ReducedFraction &humanTolCoeff,
+            const ReducedFraction &nonHumanTolCoeff)
+      {
+      for (auto &track: tracks)
+            collectChords(track.second, humanTolCoeff, nonHumanTolCoeff);
+      }
 
 // based on quickthresh algorithm
 //
@@ -267,81 +293,87 @@ bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord> &chords)
 // in the object's inlet in the "fudge" time zone
 // threshExtTime = 20 ms
 
-void collectChords(std::multimap<int, MTrack> &tracks)
+//     chord                             |<--fudge time-->|
+// ------x-------------------------------|----------------|---------------------|------
+//       |<-----------------thresh time------------------>|<--thresh ext time-->|
+//
+void collectChords(
+            MTrack &track,
+            const ReducedFraction &humanTolCoeff,
+            const ReducedFraction &nonHumanTolCoeff)
       {
-      for (auto &track: tracks) {
-            auto &chords = track.second.chords;
-            if (chords.empty())
-                  continue;
+      auto &chords = track.chords;
+      if (chords.empty())
+            return;
 
-            const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-            const auto minAllowedDur = minAllowedDuration();
+      Q_ASSERT_X(areNotesLongEnough(chords),
+                 "MChord::collectChords", "There are too short notes");
 
-            const auto threshTime = (opers.isHumanPerformance.value())
-                                          ? minAllowedDur * 2 : minAllowedDur / 2;
-            const auto fudgeTime = threshTime / 4;
-            const auto threshExtTime = threshTime / 2;
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const auto minAllowedDur = minAllowedDuration();
 
-            ReducedFraction currentChordStart(-1, 1);    // invalid
-            ReducedFraction curThreshTime(-1, 1);
-                        // if note onTime goes after max chord offTime
-                        // then this is not a chord but arpeggio
-            ReducedFraction maxOffTime(-1, 1);
+      const auto threshTime = (opers.isHumanPerformance.value())
+                                    ? minAllowedDur * humanTolCoeff
+                                    : minAllowedDur * nonHumanTolCoeff;
+      const auto fudgeTime = threshTime / 4;
+      const auto threshExtTime = threshTime / 2;
 
-                              // chords here should consist of a single note
-                              // because notes are not united into chords yet
-            Q_ASSERT_X(areSingleNoteChords(chords),
-                       "MChord: collectChords", "Some chords have more than one note");
+      ReducedFraction currentChordStart;
+      ReducedFraction curThreshTime;
+                  // if note onTime goes after max chord offTime
+                  // then this is not a chord but arpeggio
+      ReducedFraction maxOffTime;
 
-            for (auto it = chords.begin(); it != chords.end(); ) {
-                  const auto &note = it->second.notes[0];
+      setToNegative(currentChordStart, curThreshTime, maxOffTime); // invalidate
 
-                              // short events with len < minAllowedDuration must be cleaned up
-                  Q_ASSERT_X(note.offTime - it->first >= minAllowedDuration(),
-                             "MChord: collectChords", "Note length is less than min allowed duration");
-
-                  if (it->first < currentChordStart + curThreshTime) {
-
-                                    // this branch should not be executed when it == chords.begin()
-                        Q_ASSERT_X(it != chords.begin(),
-                                   "MChord: collectChords", "it == chords.begin()");
-
-                        if (it->first <= maxOffTime - minAllowedDur) {
-                                          // add current note to the previous chord
-                              auto prev = std::prev(it);
-
-                              bool hasNoteWithThisPitch = false;
-                              for (const auto &n: prev->second.notes) {
-                                    if (n.pitch == note.pitch) {
-                                          hasNoteWithThisPitch = true;
-                                          break;
-                                          }
-                                    }
-                              if (!hasNoteWithThisPitch) {
-                                    prev->second.notes.push_back(note);
-                                    if (note.offTime > maxOffTime)
-                                          maxOffTime = note.offTime;
-                                    }
-                              if (it->first >= currentChordStart + curThreshTime - fudgeTime
-                                          && curThreshTime == threshTime) {
-                                    curThreshTime += threshExtTime;
-                                    }
-                              it = chords.erase(it);
-                              continue;
-                              }
-                        }
-                  currentChordStart = it->first;
-                  maxOffTime = note.offTime;
-                  curThreshTime = threshTime;
+      for (auto it = chords.begin(); it != chords.end(); ) {
+            if (it->second.isInTuplet) {
+                  setToNegative(currentChordStart, curThreshTime, maxOffTime);
                   ++it;
+                  continue;
                   }
 
-            Q_ASSERT_X(areOnTimeValuesDifferent(chords),
-                       "MChord: collectChords",
-                       "onTime values of chords are equal but should be different");
-            Q_ASSERT_X(areNotesLongEnough(chords),
-                       "MChord::collectChords", "There are too short notes");
+            const auto maxNoteOffTime = MChord::maxNoteOffTime(it->second.notes);
+            if (it->first < currentChordStart + curThreshTime) {
+
+                  // this branch should not be executed when it == chords.begin()
+                  Q_ASSERT_X(it != chords.begin(),
+                             "MChord: collectChords", "it == chords.begin()");
+
+                  if (it->first <= maxOffTime - minAllowedDur) {
+                                    // add current note to the previous chord
+                        auto chordAddTo = std::prev(it);
+                        if (it->second.voice != chordAddTo->second.voice) {
+                              setToNegative(currentChordStart, curThreshTime, maxOffTime);
+                              ++it;
+                              continue;
+                              }
+
+                        if (!hasNotesWithEqualPitch(chordAddTo->second, it->second)) {
+                              for (const auto &note: it->second.notes)
+                                    chordAddTo->second.notes.push_back(note);
+                              if (maxNoteOffTime > maxOffTime)
+                                    maxOffTime = maxNoteOffTime;
+                              }
+                        if (it->first >= currentChordStart + curThreshTime - fudgeTime
+                                    && curThreshTime == threshTime) {
+                              curThreshTime += threshExtTime;
+                              }
+
+                        it = chords.erase(it);
+                        continue;
+                        }
+                  }
+
+            currentChordStart = it->first;
+            maxOffTime = maxNoteOffTime;
+            curThreshTime = threshTime;
+            ++it;
             }
+
+      Q_ASSERT_X(areOnTimeValuesDifferent(chords),
+                 "MChord: collectChords",
+                 "onTime values of chords are equal but should be different");
       }
 
 void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord> &chords)

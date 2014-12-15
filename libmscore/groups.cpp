@@ -91,6 +91,11 @@ Beam::Mode Groups::endBeam(ChordRest* cr, ChordRest* prev)
                   else
                         val = g.beamMode(tick, TDuration::DurationType::V_64TH);
                   }
+            // if there is a hole between previous and current cr, break beam
+            // exclude tuplets from this check; tick calculations can be unreliable
+            // and they seem to be handled well anyhow
+            if (cr->voice() && prev && !prev->tuplet() && prev->tick() + prev->actualTicks() < cr->tick())
+                  val = Beam::Mode::BEGIN;
             }
 
       return val;
