@@ -41,18 +41,11 @@ KeySigEvent KeyList::key(int tick) const
 
 void KeyList::setKey(int tick, KeySigEvent k)
       {
-      if (key(tick) == k)
-            return;
-      if (tick > 0 && key(tick-1) == k)
-            erase(tick);
-      else  {
-            auto i = find(tick);
-            if (i == end())
-                  insert(std::pair<int, KeySigEvent>(tick, k));
-            else
-                  i->second = k;
-            }
-
+      auto i = find(tick);
+      if (i == end())
+            insert(std::pair<int, KeySigEvent>(tick, k));
+      else
+            i->second = k;
       }
 
 //---------------------------------------------------------
