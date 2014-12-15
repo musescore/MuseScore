@@ -1048,6 +1048,8 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
                                     }
                               if (first) {
                                     // select(oc, SelectType::SINGLE, 0);
+                                    if (selElement)
+                                          select(selElement, SelectType::SINGLE, 0);
                                     first = false;
                                     }
                               tick += oc->actualTicks();
@@ -1695,17 +1697,14 @@ bool Score::processMidiInput()
                         }
                   NoteVal nval(ev.pitch);
                   Staff* st = staff(inputState().track() / VOICES);
-                  Key key   = st->key(inputState().tick());
 
-                  if (styleB(StyleIdx::concertPitch)) {
-                        nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
-                        nval.tpc2 = nval.tpc1;  // DEBUG
-                        }
-                  else {
+                  // if transposing, interpret MIDI pitch as representing desired written pitch
+                  // set pitch based on corresponding sounding pitch
+                  if (!styleB(StyleIdx::concertPitch))
                         nval.pitch += st->part()->instr(inputState().tick())->transpose().chromatic;
-                        nval.tpc2  = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
-                        nval.tpc1 = nval.tpc2;  // DEBUG
-                        }
+                  // let addPitch calculate tpc values from pitch
+                  //Key key   = st->key(inputState().tick());
+                  //nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
 
                   addPitch(nval, ev.chord);
                   }
