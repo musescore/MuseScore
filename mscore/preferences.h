@@ -48,6 +48,7 @@ enum {
       RMIDI_DOT,
       RMIDI_DOTDOT,
       RMIDI_TIE,
+      RMIDI_UNDO,
       RMIDI_NOTE_EDIT_MODE,
       MIDI_REMOTES
       };

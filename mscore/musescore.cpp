@@ -1714,6 +1714,7 @@ bool MuseScore::processMidiRemote(MidiRemoteType type, int data)
                         case RMIDI_DOT:     a = getAction("pad-dot");  break;
                         case RMIDI_DOTDOT:  a = getAction("pad-dotdot");  break;
                         case RMIDI_TIE:     a = getAction("tie");  break;
+			case RMIDI_UNDO:    a = getAction("undo"); break;
                         case RMIDI_NOTE_EDIT_MODE: a = getAction("note-input");  break;
                         }
                   if (a)
