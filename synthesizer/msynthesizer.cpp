@@ -385,7 +385,6 @@ SynthesizerState MasterSynthesizer::state() const
 
 void MasterSynthesizer::setGain(float f)
       {
-      printf("setGain %f\n", f);
       if (_gain != f) {
             _gain = f;
             emit gainChanged(_gain);
