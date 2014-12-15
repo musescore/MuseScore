@@ -510,7 +510,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                         chord->setDuration(d.fraction());
                         chord->setStemDirection(stemDirection);
                         chord->add(note);
-                        note->setNval(nval);
+                        note->setNval(nval, tick);
                         ncr = chord;
                         if (i+1 < n) {
                               tie = new Tie(this);

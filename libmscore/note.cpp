@@ -2122,7 +2122,7 @@ void Note::updateLine()
 //    set note properties from NoteVal
 //---------------------------------------------------------
 
-void Note::setNval(const NoteVal& nval)
+void Note::setNval(const NoteVal& nval, int tick)
       {
       setPitch(nval.pitch);
       _fret   = nval.fret;
@@ -2132,7 +2132,9 @@ void Note::setNval(const NoteVal& nval)
       _tpc[1] = nval.tpc2;
 
       if (nval.tpc1 == Tpc::TPC_INVALID) {
-            Key key = staff()->key(chord()->tick());
+            if (tick == -1)
+                  tick = chord()->tick();
+            Key key = staff()->key(tick);
             _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
             }
       if (nval.tpc2 == Tpc::TPC_INVALID) {
