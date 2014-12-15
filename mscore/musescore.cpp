@@ -2912,44 +2912,10 @@ void MuseScore::setPos(int t)
       }
 
 //---------------------------------------------------------
-//   undo
+//   undoRedo
 //---------------------------------------------------------
 
-void MuseScore::undo()
-      {
-      if (_sstate == STATE_EDIT
-         || _sstate == STATE_LYRICS_EDIT
-         || _sstate == STATE_HARMONY_FIGBASS_EDIT
-         || _sstate == STATE_TEXT_EDIT) {
-            cv->postCmd("escape");
-            qApp->processEvents();
-            }
-      if (cv)
-            cv->startUndoRedo();
-      if (cs)
-            cs->undo()->undo();
-      if (cv) {
-            if (cs->inputState().segment())
-                  setPos(cs->inputState().tick());
-            if (cs->noteEntryMode() && !cv->noteEntryMode()) {
-                  // enter note entry mode
-                  cv->postCmd("note-input");
-                  }
-            else if (!cs->noteEntryMode() && cv->noteEntryMode()) {
-                  // leave note entry mode
-                  cv->postCmd("escape");
-                  }
-            cs->endUndoRedo();
-            updateInputState(cs);
-            }
-      endCmd();
-      }
-
-//---------------------------------------------------------
-//   redo
-//---------------------------------------------------------
-
-void MuseScore::redo()
+void MuseScore::undoRedo(bool undo)
       {
       if (_sstate == STATE_EDIT
          || _sstate == STATE_TEXT_EDIT
@@ -2960,8 +2926,12 @@ void MuseScore::redo()
             }
       if (cv)
             cv->startUndoRedo();
-      if (cs)
-            cs->undo()->redo();
+      if (cs) {
+            if (undo)
+                  cs->undo()->undo();
+            else
+                  cs->undo()->redo();
+            }
       if (cv) {
             if (cs->inputState().segment())
                   setPos(cs->inputState().tick());
@@ -2977,6 +2947,8 @@ void MuseScore::redo()
             updateInputState(cs);
             }
       endCmd();
+      if (_inspector)
+            _inspector->reset();
       }
 
 //---------------------------------------------------------
@@ -3990,7 +3962,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             showLayerManager();
       else if (cmd == "backspace") {
             if (_sstate != STATE_NORMAL )
-                  undo();
+                  undoRedo(true);
 #ifdef Q_OS_MAC
             else if (cs) {
                   cs->startCmd();
@@ -4005,16 +3977,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             decMag();
       else if (cmd == "midi-on")
             midiinToggled(a->isChecked());
-      else if (cmd == "undo") {
-            undo();
-            if (_inspector)
-                  _inspector->reset();
-            }
-      else if (cmd == "redo") {
-            redo();
-            if (_inspector)
-                  _inspector->reset();
-            }
+      else if (cmd == "undo")
+            undoRedo(true);
+      else if (cmd == "redo")
+            undoRedo(false);
       else if (cmd == "toggle-palette")
             showPalette(a->isChecked());
       else if (cmd == "startcenter")

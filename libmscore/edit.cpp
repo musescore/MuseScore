@@ -2351,7 +2351,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
 
                   if (tick == 0) {
                         //
-                        // remove time and key signatures
+                        // remove clef, time and key signatures
                         //
                         for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                               for (Segment* s = score->firstSegment(); s && s->tick() == 0; s = s->next()) {
@@ -2361,23 +2361,21 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                                     if (e->type() == Element::Type::KEYSIG) {
                                           KeySig* ks = static_cast<KeySig*>(e);
                                           ksl.append(ks);
-                                          undo(new RemoveElement(ks));
-                                          if (ks->segment()->isEmpty())
-                                                undoRemoveElement(ks->segment());
                                           }
                                     else if (e->type() == Element::Type::TIMESIG) {
                                           TimeSig* ts = static_cast<TimeSig*>(e);
                                           tsl.append(ts);
-                                          undo(new RemoveElement(ts));
-                                          if (ts->segment()->isEmpty())
-                                                undoRemoveElement(ts->segment());
                                           }
                                     else if (e->type() == Element::Type::CLEF) {
                                           Clef* clef = static_cast<Clef*>(e);
                                           cl.append(clef);
+                                          }
+                                    else
+                                          e = 0;
+                                    if (e) {
                                           undo(new RemoveElement(e));
-                                          if (clef->segment()->isEmpty())
-                                                undoRemoveElement(clef->segment());
+                                          if (s->isEmpty())
+                                                undoRemoveElement(s);
                                           }
                                     }
                               }

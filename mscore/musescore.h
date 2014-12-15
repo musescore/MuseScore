@@ -387,8 +387,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       int  pluginIdxFromPath(QString pluginPath);
       void startDebugger();
       void midiinToggled(bool);
-      void undo();
-      void redo();
+      void undoRedo(bool undo);
       void showPalette(bool);
       void showInspector(bool);
       void showOmrPanel(bool);

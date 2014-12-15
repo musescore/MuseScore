@@ -1700,8 +1700,16 @@ Measure* Score::lastMeasureMM() const
 
 Segment* Score::firstSegment(Segment::Type segType) const
       {
+      Segment* seg;
       Measure* m = firstMeasure();
-      Segment* seg = m ? m->first(segType) : 0;
+      if (!m)
+            seg = 0;
+      else {
+            seg = m->first();
+            if (seg && !(seg->segmentType() & segType))
+                  seg = seg->next1(segType);
+            }
+
 #ifdef SCRIPT_INTERFACE
       // if called from QML/JS, tell QML engine not to garbage collect this object
       if (seg)
