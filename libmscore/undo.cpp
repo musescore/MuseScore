@@ -470,7 +470,6 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
       {
       KeySig* lks = 0;
       foreach (Staff* staff, ostaff->staffList()) {
-
             if (staff->isDrumStaff())
                   continue;
 
@@ -485,11 +484,13 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
-            int diff = -staff->part()->instr()->transpose().chromatic;
+            Interval interval = staff->part()->instr()->transpose();
             KeySigEvent nkey = key;
-            if (diff && !score->styleB(StyleIdx::concertPitch) && !nkey.custom())
-                  nkey.setKey(transposeKey(key.key(), diff));
-
+            bool concertPitch = score->styleB(StyleIdx::concertPitch);
+            if (interval.chromatic && !concertPitch && !nkey.custom()) {
+                  interval.flip();
+                  nkey.setKey(transposeKey(key.key(), interval));
+                  }
             if (ks) {
                   ks->undoChangeProperty(P_ID::GENERATED, false);
                   undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
@@ -2086,9 +2087,8 @@ void ChangeKeySig::flip()
       keysig->setShowCourtesy(showCourtesy);
       keysig->measure()->setDirty();
 
-      keysig->staff()->setKey(keysig->segment()->tick(), keysig->keySigEvent());
-
       int tick = keysig->segment()->tick();
+
       // update keys if keysig was not generated
       if (!keysig->generated())
             keysig->staff()->setKey(tick, ks);
