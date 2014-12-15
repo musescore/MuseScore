@@ -3731,23 +3731,8 @@ void MuseScore::transpose()
             return;
 
       bool noSelection = cs->selection().isNone();
-
-      if (noSelection) {
-            QMessageBox::StandardButton sb = QMessageBox::question(mscore,
-               tr("MuseScore: Transpose"),
-               tr("There is nothing selected. Transpose whole score?"),
-               QMessageBox::Yes | QMessageBox::Cancel,
-               QMessageBox::Yes
-            );
-            if (sb == QMessageBox::Cancel)
-                  return;
-            //
-            // select all
-            //
-
+      if (noSelection)
             cs->cmdSelectAll();
-
-            }
       bool rangeSelection = cs->selection().isRange();
       TransposeDialog td;
 
