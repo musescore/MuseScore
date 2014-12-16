@@ -5726,15 +5726,22 @@ void ScoreView::cmdMoveCR(bool left)
 
 //---------------------------------------------------------
 //   cmdAddRemoveBreaks
-///   add or remove line breaks within a selection or score
+///   add or remove line breaks within a range selection
+///   or, if nothing is selected, the entire score
 //---------------------------------------------------------
 
 void ScoreView::cmdAddRemoveBreaks()
       {
-      if (!_score->selection().isRange())
+      bool noSelection = _score->selection().isNone();
+
+      if (noSelection)
             _score->cmdSelectAll();
+      else if (!_score->selection().isRange())
+            return;
 
       Segment* startSegment = _score->selection().startSegment();
+      if (!startSegment) // empty score?
+            return;
       Segment* endSegment = _score->selection().endSegment();
       Measure* startMeasure = startSegment->measure();
       Measure* endMeasure = endSegment ? endSegment->measure() : _score->lastMeasure();
@@ -5780,6 +5787,8 @@ void ScoreView::cmdAddRemoveBreaks()
                   }
             }
 
+      if (noSelection)
+             _score->deselectAll();
       }
 
 //---------------------------------------------------------

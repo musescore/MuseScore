@@ -2614,6 +2614,9 @@ void Score::cmdSlashFill()
       int startStaff = selection().staffStart();
       int endStaff = selection().staffEnd();
       Segment* startSegment = selection().startSegment();
+      if (!startSegment) // empty score?
+            return;
+
       Segment* endSegment = selection().endSegment();
       int endTick = endSegment ? endSegment->tick() : lastSegment()->tick() + 1;
       Chord* firstSlash = 0;
@@ -2715,12 +2718,15 @@ void Score::cmdSlashRhythm()
 
 //---------------------------------------------------------
 //   cmdResequenceRehearsalMarks
-///   resequences rehearsal marks
+///   resequences rehearsal marks within a range selection
+///   or, if nothing is selected, the entire score
 //---------------------------------------------------------
 
 void Score::cmdResequenceRehearsalMarks()
       {
-      if (selection().isNone())
+      bool noSelection = selection().isNone();
+
+      if (noSelection)
             cmdSelectAll();
       else if (!selection().isRange())
             return;
@@ -2739,6 +2745,9 @@ void Score::cmdResequenceRehearsalMarks()
                         }
                   }
             }
+
+      if (noSelection)
+             deselectAll();
       }
 
 }
