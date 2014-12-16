@@ -24,20 +24,12 @@ namespace Ms {
 class Startcenter : public QDialog, public Ui::Startcenter
       {
       Q_OBJECT
-
-      bool webPageInitialized       { false  };
-      bool recentPageInitialized    { false  };
-      bool templatesPageInitialized { false  };
-      bool demosPageInitialized     { false  };
       virtual void closeEvent(QCloseEvent*);
 
    private slots:
-      void recentScoresToggled(bool);
-      void templatesToggled(bool);
-      void demosToggled(bool);
-      void connectWebToggled(bool);
       void loadScore(QString);
       void newScore();
+      void openScoreClicked();
 
    signals:
       void closed(bool);

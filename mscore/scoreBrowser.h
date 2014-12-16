@@ -27,9 +27,9 @@ class ScoreItem;
 class ScoreListWidget : public QListWidget
       {
       Q_OBJECT
-      int CELLW           { 110   };
-      int CELLH           { 140   };
-      int SPACE           { 10    };
+      int CELLW           { 112   };
+      int CELLH           { 224   };
+      int SPACE           { 4    };
 
       virtual QSize sizeHint() const override;
 
@@ -52,6 +52,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       bool _stripNumbers  { false };
       bool _showPreview   { false };      // no preview: - no selection
                                           //             - single click action
+      bool _boldTitle     { false }; // score title are displayed in bold
 
       ScoreListWidget* createScoreList();
       ScoreItem* genScoreItem(const QFileInfo&, ScoreListWidget*);
@@ -71,6 +72,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       void setStripNumbers(bool val) { _stripNumbers = val; }
       void selectFirst();
       void selectLast();
+      void setBoldTitle(bool bold) { _boldTitle = bold; }
       };
 }
 
