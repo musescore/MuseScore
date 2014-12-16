@@ -475,7 +475,7 @@ void MuseScore::newFile()
       Score* score = new Score(MScore::defaultStyle());
       QString tp = newWizard->templatePath();
 
-      if (QFileInfo(tp).baseName() != "00-Empty") {
+      if (QFileInfo(tp).baseName() != "00-Blank") {
             Score::FileError rv = Ms::readScore(score, tp, false);
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
