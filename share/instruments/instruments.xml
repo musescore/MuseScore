@@ -5651,11 +5651,11 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
-                  <Drum pitch="76">
+                  <Drum pitch="85">
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>High Wood Block</name>
+                        <name>Castanets</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
