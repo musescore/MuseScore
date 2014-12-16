@@ -435,7 +435,7 @@ int NewWizard::nextId() const
             case Page::Template: {
                   QString p = p4->templatePath();
                   QFileInfo fi(p);
-                  if (fi.baseName() == "00-Empty")
+                  if (fi.baseName() == "00-Blank")
                         return int(Page::Instruments);
                   return int(Page::Keysig);
                   }
