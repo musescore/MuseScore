@@ -104,6 +104,7 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       virtual const QTransform& matrix() const;
       virtual void setDropRectangle(const QRectF&) {}
       virtual void cmdAddSlur(Note*, Note*)     {}
+      virtual void cmdAddHairpin(bool)          {}
       virtual void startEdit()                  {}
       virtual void startEdit(Element*, int)     {}
       virtual Element* elementNear(QPointF)     { return 0; }
