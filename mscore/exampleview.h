@@ -68,6 +68,7 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual const QRectF& getGrip(int) const;
       virtual void setDropRectangle(const QRectF&);
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
+      virtual void cmdAddHairpin(bool) {}
       virtual void startEdit();
       virtual void startEdit(Element*, int startGrip);
       virtual Element* elementNear(QPointF);

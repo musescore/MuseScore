@@ -55,6 +55,7 @@
 #include "spanner.h"
 #include "glissando.h"
 #include "bagpembell.h"
+#include "hairpin.h"
 
 namespace Ms {
 
@@ -1269,6 +1270,7 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == Element::Type::BAR_LINE)
          || (type == Element::Type::GLISSANDO)
          || (type == Element::Type::SLUR)
+         || (type == Element::Type::HAIRPIN)
          || (type == Element::Type::STAFF_TEXT)
          || (type == Element::Type::TEMPO_TEXT)
          || (type == Element::Type::BEND && (staff()->isTabStaff()))
@@ -1309,6 +1311,15 @@ Element* Note::drop(const DropData& data)
             case Element::Type::SLUR:
                   delete e;
                   data.view->cmdAddSlur(this, 0);
+                  return 0;
+
+            case Element::Type::HAIRPIN:
+                  {
+                  Hairpin* hairpin = static_cast<Hairpin*>(e);
+                  bool cresc = (hairpin->hairpinType() == Hairpin::Type::CRESCENDO);
+                  delete e;
+                  data.view->cmdAddHairpin(cresc);
+                  }
                   return 0;
 
             case Element::Type::LYRICS:
