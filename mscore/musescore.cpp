@@ -4302,6 +4302,11 @@ void MuseScore::switchLayoutMode(int val)
       if (cs) {
             cs->startCmd();
             LayoutMode mode;
+            // find a measure to use as reference, if possible
+            QRectF view = cv->toLogical(QRect(0.0, 0.0, width(), height()));
+            MeasureBase* m = cs->measures()->first();
+            while (m && !view.intersects(m->canvasBoundingRect()))
+                  m = m->nextMM();
             if (val == 0)
                   mode = LayoutMode::PAGE;
             else
@@ -4309,6 +4314,13 @@ void MuseScore::switchLayoutMode(int val)
             cs->undo(new ChangeLayoutMode(cs, mode));
             cv->loopUpdate(getAction("loop")->isChecked());
             cs->endCmd();
+            // adjustCanvasPosition often tries to preserve Y position
+            // but this doesn't make sense when switching modes
+            // also, better positioning is usually achieved if you start from the top
+            // and there is really no better place to position canvas if we were all the way off page previously
+            cv->pageTop();
+            if (m)
+                  cv->adjustCanvasPosition(m, false);
             endCmd();
             }
       }

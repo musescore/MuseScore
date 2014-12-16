@@ -3648,7 +3648,7 @@ void ScoreView::pagePrev()
 void ScoreView::pageTop()
       {
       if (score()->layoutMode() == LayoutMode::LINE)
-            setOffset(0.0, yoffset());
+            setOffset(0.0, 0.0);
       else
             setOffset(10.0, 10.0);
       update();
@@ -3686,6 +3686,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             return;
 
       if (score()->layoutMode() == LayoutMode::LINE) {
+
             if (!el)
                   return;
 
