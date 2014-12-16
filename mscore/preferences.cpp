@@ -658,6 +658,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       recordButtons->addButton(rcr10,        RMIDI_DOT);
       recordButtons->addButton(rcr11,        RMIDI_DOTDOT);
       recordButtons->addButton(rcr12,        RMIDI_TIE);
+      recordButtons->addButton(recordUndo,   RMIDI_UNDO);
       recordButtons->addButton(recordEditMode, RMIDI_NOTE_EDIT_MODE);
 
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
@@ -741,6 +742,7 @@ void PreferenceDialog::updateRemote()
       rca10->setChecked(preferences.midiRemote[RMIDI_DOT].type         != -1);
       rca11->setChecked(preferences.midiRemote[RMIDI_DOTDOT].type      != -1);
       rca12->setChecked(preferences.midiRemote[RMIDI_TIE].type        != -1);
+      recordUndoActive->setChecked(preferences.midiRemote[RMIDI_UNDO].type != -1);
       editModeActive->setChecked(preferences.midiRemote[RMIDI_NOTE_EDIT_MODE].type != -1);
 
       int id = mscore->midiRecordId();
@@ -759,6 +761,7 @@ void PreferenceDialog::updateRemote()
       rcr10->setChecked(id      == RMIDI_DOT);
       rcr11->setChecked(id      == RMIDI_DOTDOT);
       rcr12->setChecked(id      == RMIDI_TIE);
+      recordUndo->setChecked(id == RMIDI_UNDO);
       recordEditMode->setChecked(id == RMIDI_NOTE_EDIT_MODE);
       }
 

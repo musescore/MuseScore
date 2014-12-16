@@ -1714,6 +1714,7 @@ bool MuseScore::processMidiRemote(MidiRemoteType type, int data)
                         case RMIDI_DOT:     a = getAction("pad-dot");  break;
                         case RMIDI_DOTDOT:  a = getAction("pad-dotdot");  break;
                         case RMIDI_TIE:     a = getAction("tie");  break;
+                        case RMIDI_UNDO:    a = getAction("undo"); break;
                         case RMIDI_NOTE_EDIT_MODE: a = getAction("note-input");  break;
                         }
                   if (a)
@@ -1756,7 +1757,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 
       QWidget* w = QApplication::activeModalWidget();
       if (!cv || w) {
-            active = 0;
+            active = 1;
             return;
             }
       if (velo) {
@@ -1780,7 +1781,12 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
             ++active;
             }
       else {
-            if (channel != 0x09)
+      		/* 
+		* Since a note may be assigned to a midi_remote, don't decrease active below zero
+		* on noteoff.
+		*/
+
+            if ((channel != 0x09) && (active > 0))
                   --active;
             }
       }
@@ -1789,7 +1795,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 //   midiCtrlReceived
 //---------------------------------------------------------
 
-void MuseScore::midiCtrlReceived(int controller, int /*value*/)
+void MuseScore::midiCtrlReceived(int controller, int value)
       {
       if (!midiinEnabled())
             return;
@@ -1801,7 +1807,8 @@ void MuseScore::midiCtrlReceived(int controller, int /*value*/)
                   preferenceDialog->updateRemote();
             return;
             }
-      if (processMidiRemote(MIDI_REMOTE_TYPE_CTRL, controller))
+      // when value is 0 (usually when a key is released ) nothing happens
+      if (value && processMidiRemote(MIDI_REMOTE_TYPE_CTRL, controller))
             return;
       }
 
