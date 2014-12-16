@@ -2087,6 +2087,8 @@ bool Score::appendScore(Score* score)
       TieMap  tieMap;
 
       MeasureBase* lastMeasure = last();
+      if (!lastMeasure)
+            return false;
       int tickLen = lastMeasure->endTick();
 
       if (!lastMeasure->lineBreak() && !lastMeasure->pageBreak()) {
