@@ -2964,12 +2964,24 @@ bool Measure::systemHeader() const
 qreal Measure::minWidth1() const
       {
       if (_minWidth1 == 0.0) {
+            int nstaves = score()->nstaves();
             Segment* s = first();
             Segment::Type st = Segment::Type::Clef | Segment::Type::KeySig | Segment::Type::StartRepeatBarLine;
-            while ((s->segmentType() & st)
-               && s->next()
-               && (!s->element(0) || s->element(0)->generated())
-               ) {
+            while ((s->segmentType() & st) && s->next()) {
+                  // found a segment that we might be able to skip
+                  // we can do so only if it contains no non-generated elements
+                  // note that it is possible for the same segment to contain both generated and non-generated elements
+                  // consider, a keysig segment at the start of a system in which one staff has a local key change
+                  bool generated = true;
+                  for (int i = 0; i < nstaves; ++i) {
+                        Element* e = s->element(i * VOICES);
+                        if (e && !e->generated()) {
+                              generated = false;
+                              break;
+                              }
+                        }
+                  if (!generated)
+                        break;
                   s = s->next();
                   }
             _minWidth1 = score()->computeMinWidth(s, false);
