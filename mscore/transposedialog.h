@@ -45,6 +45,7 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase {
       TransposeDialog(QWidget* parent = 0);
       void enableTransposeKeys(bool val)  { transposeKeys->setEnabled(val);       }
       void enableTransposeByKey(bool val);
+      void enableTransposeChordNames(bool val);
       bool getTransposeKeys() const       { return chromaticBox->isChecked()
                                                 ? transposeKeys->isChecked()
                                                 : keepDegreeAlterations->isChecked();}
