@@ -1997,6 +1997,42 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="9">
+           <widget class="Ms::GreendotButton" name="recordUndoActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Undo is active</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="10">
+           <widget class="Ms::RecordButton" name="recordUndo">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Undo record</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="8">
+           <widget class="QLabel" name="label_53">
+            <property name="text">
+             <string>Undo</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="12" colspan="3">
            <widget class="QPushButton" name="midiRemoteControlClear">
             <property name="accessibleName">
@@ -3610,6 +3646,8 @@
   <tabstop>rcr11</tabstop>
   <tabstop>rca12</tabstop>
   <tabstop>rcr12</tabstop>
+  <tabstop>recordUndo</tabstop>
+  <tabstop>recordUndoActive</tabstop>
   <tabstop>midiRemoteControlClear</tabstop>
   <tabstop>instrumentList1</tabstop>
   <tabstop>instrumentList1Button</tabstop>
