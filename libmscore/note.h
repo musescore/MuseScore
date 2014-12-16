@@ -389,7 +389,7 @@ class Note : public Element {
       QQmlListProperty<Ms::NoteDot> qmlDots();
       void updateAccidental(AccidentalState*);
       void updateLine();
-      void setNval(const NoteVal&);
+      void setNval(const NoteVal&, int tick = -1);
       NoteEventList& playEvents()                { return _playEvents; }
       const NoteEventList& playEvents() const    { return _playEvents; }
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }

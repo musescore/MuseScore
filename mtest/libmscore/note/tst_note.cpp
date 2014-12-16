@@ -39,6 +39,7 @@ class TestNote : public QObject, public MTest
       void initTestCase();
       void note();
       void grace();
+      void tpc();
       };
 
 //---------------------------------------------------------
@@ -324,10 +325,8 @@ void TestNote::grace()
 //      delete n;
 
       // tie
-      score->startCmd();
       score->select(gn);
       score->cmdAddTie();
-      score->endCmd();
 //      n = static_cast<Note*>(writeReadElement(gn));
 //      QVERIFY(n->tieFor() != 0);
 //      delete n;
@@ -357,6 +356,36 @@ void TestNote::grace()
 //      delete c;
 
       QVERIFY(saveCompareScore(score, "grace-test.mscx", DIR + "grace-ref.mscx"));
+
+      }
+
+//---------------------------------------------------------
+///   tpc
+///   read/write test of note tpc values
+//---------------------------------------------------------
+
+void TestNote::tpc()
+      {
+      Score* score = readScore(DIR + "tpc.mscx");
+      score->doLayout();
+
+      score->inputState().setTrack(0);
+      score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
+      score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+      score->inputState().setNoteEntryMode(true);
+      int octave = 5 * 7;
+      score->cmdAddPitch(octave + 1, false);
+      score->cmdAddPitch(octave + 2, false);
+      score->cmdAddPitch(octave + 3, false);
+      score->cmdAddPitch(octave + 4, false);
+      score->cmdAddPitch(octave + 5, false);
+      score->cmdAddPitch(octave + 6, false);
+      score->cmdAddPitch(octave + 7, false);
+      score->cmdAddPitch(octave + 8, false);
+
+      score->cmdConcertPitchChanged(true, true);
+
+      QVERIFY(saveCompareScore(score, "tpc-test.mscx", DIR + "tpc-ref.mscx"));
 
       }
 
