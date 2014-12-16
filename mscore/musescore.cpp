@@ -1110,6 +1110,8 @@ void MuseScore::selectScore(QAction* action)
       if (!a.isEmpty()) {
             if (a == "clear-recent") {
                   _recentScores.clear();
+                  if (startcenter)
+                        startcenter->updateRecentScores();
                   }
             else {
                   Score* score = readScore(a);

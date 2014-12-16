@@ -25,7 +25,9 @@ QSize ScoreListWidget::sizeHint() const
       {
       int cols = (width()-SPACE) / (CELLW + SPACE);
       int n    = count();
-      int rows = (n+cols-1) / cols;
+      int rows = 1;
+      if (cols > 0)
+            rows = (n+cols-1) / cols;
       if (rows <= 0)
             rows = 1;
       return QSize(cols * CELLW, rows * (CELLH + SPACE) + SPACE);
@@ -54,6 +56,7 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
       setupUi(this);
       scoreList->setLayout(new QVBoxLayout);
       scoreList->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+      scoreList->layout()->setMargin(0);
       connect(preview, SIGNAL(doubleClicked(QString)), SIGNAL(scoreActivated(QString)));
       if (!_showPreview)
             preview->setVisible(false);
@@ -103,6 +106,10 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
       QPixmap pm = mscore->extractThumbnail(fi.filePath());
       if (pm.isNull())
             pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
+      // add border
+      QPainter p(&pm);
+      p.setPen(QColor(0,0,0,128));
+      p.drawRect(0, 0, pm.width() - 1, pm.height() - 1);
       si.setPixmap(pm);
       ScoreItem* item = new ScoreItem(si);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignBottom);
@@ -114,6 +121,7 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
       item->setText(s);
       QFont f = item->font();
       f.setPointSize(f.pointSize() - 2.0);
+      f.setBold(_boldTitle);
       item->setFont(f);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignTop);
       item->setIcon(QIcon(si.pixmap()));

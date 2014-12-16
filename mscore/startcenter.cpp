@@ -41,20 +41,15 @@ Startcenter::Startcenter()
  : QDialog(0)
       {
       setupUi(this);
-//      setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
-//      setWindowFlags(Qt::WindowStaysOnTopHint);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowModality(Qt::ApplicationModal);
-      connect(createNewScore, SIGNAL(clicked()),      SLOT(newScore()));
-      connect(recentScores,   SIGNAL(toggled(bool)),  SLOT(recentScoresToggled(bool)));
-      connect(templates,      SIGNAL(toggled(bool)),  SLOT(templatesToggled(bool)));
-      connect(demos,          SIGNAL(toggled(bool)),  SLOT(demosToggled(bool)));
-      connect(connectWeb,     SIGNAL(toggled(bool)),  SLOT(connectWebToggled(bool)));
+      connect(recentPage,  &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
+      connect(openScore, SIGNAL(clicked()), this, SLOT(openScoreClicked()));
 
-      connect(demosPage,      &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
-      connect(templatesPage,  &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
-      connect(recentPage,     &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
-      recentScoresToggled(true);
+      //init webview
+      webView->setUrl(QUrl("https://connect.musescore.com/"));
+      recentPage->setBoldTitle(true);
+      updateRecentScores();
       }
 
 //---------------------------------------------------------
@@ -63,8 +58,12 @@ Startcenter::Startcenter()
 
 void Startcenter::loadScore(QString s)
       {
-      mscore->openScore(s);
-      close();
+      if (s.endsWith("Create_New_Score.mscz")) {
+            newScore();
+      } else {
+            mscore->openScore(s);
+            close();
+            }
       }
 
 //---------------------------------------------------------
@@ -87,86 +86,26 @@ void Startcenter::closeEvent(QCloseEvent*)
       }
 
 //---------------------------------------------------------
-//   recentScoresToggled
-//---------------------------------------------------------
-
-void Startcenter::recentScoresToggled(bool val)
-      {
-      if (!val)
-            return;
-      if (!recentPageInitialized) {
-            recentPage->setScores(mscore->recentScores());
-            recentPageInitialized = true;
-            recentPage->selectLast();
-            }
-      stack->setCurrentWidget(recentPage);
-      }
-
-//---------------------------------------------------------
 //   updateRecentScores
 //---------------------------------------------------------
 
 void Startcenter::updateRecentScores()
       {
-      recentPageInitialized = false;
-      if (recentScores->isChecked())
-            recentScoresToggled(true);
+      QFileInfoList fil = mscore->recentScores();
+      QFileInfo newScore(":/data/Create_New_Score.mscz");
+      fil.prepend(newScore);
+      recentPage->setScores(fil);
+      recentPage->selectLast();
       }
 
 //---------------------------------------------------------
-//   templatesToggled
+//   openScoreClicked
 //---------------------------------------------------------
 
-void Startcenter::templatesToggled(bool val)
+void Startcenter::openScoreClicked()
       {
-      if (!val)
-            return;
-      if (!templatesPageInitialized) {
-            QDir dir(mscoreGlobalShare + "/templates");
-            templatesPage->setStripNumbers(true);
-            templatesPage->setScores(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
-            templatesPage->selectFirst();
-            templatesPageInitialized = true;
-            }
-      stack->setCurrentWidget(templatesPage);
-      }
-
-//---------------------------------------------------------
-//   demosToggled
-//---------------------------------------------------------
-
-void Startcenter::demosToggled(bool val)
-      {
-      if (!val)
-            return;
-      if (!demosPageInitialized) {
-            QDir dir(mscoreGlobalShare + "/demos");
-            QFileInfoList fil;
-            QStringList filter = { "*.mscz" };
-            for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)) {
-                  if (fi.exists())
-                        fil.append(fi);
-                  }
-            demosPage->setScores(fil);
-            demosPageInitialized = true;
-            demosPage->selectFirst();
-            }
-      stack->setCurrentWidget(demosPage);
-      }
-
-//---------------------------------------------------------
-//   connectWebToggled
-//---------------------------------------------------------
-
-void Startcenter::connectWebToggled(bool val)
-      {
-      if (!val)
-            return;
-      if (!webPageInitialized) {
-            webView->setUrl(QUrl("https://musescore.com/sheetmusic"));
-            webPageInitialized = true;
-            }
-      stack->setCurrentWidget(webPage);
+      close();
+      getAction("file-open")->trigger();
       }
 
 //---------------------------------------------------------
