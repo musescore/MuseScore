@@ -533,9 +533,13 @@ void MTrack::createKeys(Key k)
             ke.setKey(k);
             (*km)[0] = ke;
             }
+      Key pkey = Key::C;
       for (auto it = km->begin(); it != km->end(); ++it) {
             const int tick = it->first;
             Key key  = it->second.key();
+            if ((key == Key::C) && (key == pkey))     // dont insert uneccessary C key
+                  continue;
+            pkey = key;
             KeySig* ks = new KeySig(score);
             ks->setTrack(track);
             ks->setGenerated(false);
