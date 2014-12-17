@@ -1190,7 +1190,8 @@ void StyleData::save(Xml& xml, bool optimize) const
             const ArticulationInfo& ai = Articulation::articulationList[i];
             xml.tag(ai.name + "Anchor", int(_articulationAnchor[i]));
             }
-      _pageFormat.write(xml);
+      if (!MScore::saveTemplateMode || (_pageFormat.name() != "A4" && _pageFormat.name() != "Letter"))
+            _pageFormat.write(xml);
       xml.tag("Spatium", _spatium / MScore::DPMM);
       xml.etag();
       }

@@ -395,6 +395,7 @@ class MScore : public QObject {
       static qreal DPMM;
       static bool debugMode;
       static bool testMode;
+      static bool saveTemplateMode;
       static bool noGui;
 
       static bool noExcerpts;
