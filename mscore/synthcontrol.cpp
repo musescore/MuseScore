@@ -30,8 +30,6 @@ namespace Ms {
 extern MasterSynthesizer* synti;
 extern bool useFactorySettings;
 
-static std::vector<const char*> effectNames = { "None", "Freeverb", "Zita1" };
-
 //---------------------------------------------------------
 //   SynthControl
 //---------------------------------------------------------
@@ -60,14 +58,14 @@ SynthControl::SynthControl(QWidget* parent)
       effectA->clear();
       for (Effect* e : synti->effectList(0)) {
             effectA->addItem(tr(e->name()));
-            effectStackA->addWidget(QWidget::createWindowContainer(e->gui()));
+            effectStackA->addWidget(e->gui());
             connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
             }
 
       effectB->clear();
       for (Effect* e : synti->effectList(1)) {
             effectB->addItem(tr(e->name()));
-            effectStackB->addWidget(QWidget::createWindowContainer(e->gui()));
+            effectStackB->addWidget(e->gui());
             connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
             }
       if (!useFactorySettings) {
@@ -316,8 +314,10 @@ void SynthControl::updateGui()
       int idx = synti->indexOfEffect(0);
       effectA->setCurrentIndex(idx);
       effectStackA->setCurrentIndex(idx);
-      synti->effect(0)->gui()->updateValues();
-      synti->effect(1)->gui()->updateValues();
+      if (synti->effect(0))
+            synti->effect(0)->gui()->updateValues();
+      if (synti->effect(1))
+            synti->effect(1)->gui()->updateValues();
 
       idx = synti->indexOfEffect(1);
       effectB->setCurrentIndex(idx);

@@ -21,11 +21,25 @@ namespace Ms {
 //---------------------------------------------------------
 
 EffectGui::EffectGui(Effect* e)
-   : QQuickView()
+   : QQuickWidget()
       {
       _effect = e;
-      setResizeMode(QQuickView::SizeViewToRootObject);
+      setResizeMode(QQuickWidget::SizeViewToRootObject);
 //      setFocusPolicy(Qt::StrongFocus);
+      connect(this, SIGNAL(statusChanged(QQuickWidget::Status)), SLOT(reportErrors(QQuickWidget::Status)));
+      }
+
+//---------------------------------------------------------
+//   reportErrors
+//---------------------------------------------------------
+
+void EffectGui::reportErrors(QQuickWidget::Status status)
+      {
+//      printf("EffectGui::statusChange: %d\n", int(status));
+      if (status == QQuickWidget::Error) {
+            for (auto e : errors())
+                  qDebug("EffectGui: Error: %s", qPrintable(e.toString()));
+            }
       }
 
 //---------------------------------------------------------
