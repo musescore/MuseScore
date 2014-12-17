@@ -50,6 +50,7 @@ set (QT_mingw_LIBRARIES
     Qt5XmlPatterns
     Qt5PrintSupport
     Qt5Quick
+    Qt5QuickWidgets
     Qt5Qml
     )
 
