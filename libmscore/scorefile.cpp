@@ -164,7 +164,7 @@ void Score::write(Xml& xml, bool selectionOnly)
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {
             i.next();
-            if (!MScore::testMode  || (i.key() != "platform" && i.key() != "creationDate"))
+            if ((!MScore::testMode  && !MScore::saveTemplateMode) || (i.key() != "platform" && i.key() != "creationDate"))
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
             }
 
