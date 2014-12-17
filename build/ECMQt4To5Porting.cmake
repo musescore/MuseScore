@@ -166,6 +166,7 @@ set(_qt_modules
   UiTools
   Qml
   Quick
+  QuickWidgets
   WebKit
   WebKitWidgets
   Sql

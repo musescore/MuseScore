@@ -14,6 +14,7 @@ if (Qt5Core_FOUND)
         Test
         Qml
         Quick
+        QuickWidgets
         Xml
         XmlPatterns
         Svg

@@ -21,12 +21,15 @@ class Effect;
 //   EffectGui
 //---------------------------------------------------------
 
-class EffectGui : public QQuickView {
+class EffectGui : public QQuickWidget {
       Q_OBJECT
       Effect* _effect;
 
    signals:
       void valueChanged();
+
+   private slots:
+      void reportErrors(QQuickWidget::Status);
 
    public slots:
       void valueChanged(const QString& name, qreal);

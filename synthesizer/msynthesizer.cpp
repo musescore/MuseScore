@@ -307,6 +307,8 @@ int MasterSynthesizer::indexOfEffect(int ab, const QString& name)
 
 int MasterSynthesizer::indexOfEffect(int ab)
       {
+      if (!_effect[ab])
+            return 0;
       return indexOfEffect(ab, _effect[ab]->name());
       }
 

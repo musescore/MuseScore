@@ -1783,7 +1783,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
             ++active;
             }
       else {
-      		/* 
+      		/*
 		* Since a note may be assigned to a midi_remote, don't decrease active below zero
 		* on noteoff.
 		*/
