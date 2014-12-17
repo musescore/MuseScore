@@ -52,8 +52,8 @@ class XmlReader : public XmlStreamReader {
       int _trackOffset      { 0       };
       bool _pasteMode       { false   };        // modifies read behaviour on paste operation
       Measure* _lastMeasure { nullptr };
-      QList<Beam*>    _beams;
-      QList<Tuplet*>  _tuplets;
+      QHash<int, Beam*>    _beams;
+      QHash<int, Tuplet*>  _tuplets;
       QList<SpannerValues> _spannerValues;
       QList<std::pair<int,Spanner*>> _spanner;
       QList<StaffType> _staffTypes;
@@ -104,17 +104,15 @@ class XmlReader : public XmlStreamReader {
       bool pasteMode() const       { return _pasteMode; }
       void setPasteMode(bool v)    { _pasteMode = v;    }
 
+      void addBeam(Beam* s);
+      Beam* findBeam(int id) const { return _beams.value(id);   }
+
       void addTuplet(Tuplet* s);
-      void addBeam(Beam* s)        { _beams.append(s); }
+      Tuplet* findTuplet(int id) const { return _tuplets.value(id); }
+      QHash<int, Tuplet*>& tuplets()   { return _tuplets; }
 
       void setLastMeasure(Measure* m) { _lastMeasure = m;    }
       Measure* lastMeasure() const    { return _lastMeasure; }
-
-      Beam* findBeam(int) const;
-      Tuplet* findTuplet(int) const;
-
-      QList<Tuplet*>& tuplets()                      { return _tuplets; }
-      QList<Beam*>& beams()                          { return _beams; }
 
       void removeSpanner(const Spanner*);
       void addSpanner(int id, Spanner*);

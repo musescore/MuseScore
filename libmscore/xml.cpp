@@ -182,31 +182,12 @@ void XmlReader::unknown() const
       }
 
 //---------------------------------------------------------
-//   findBeam
+//   addBeam
 //---------------------------------------------------------
 
-Beam* XmlReader::findBeam(int id) const
+void XmlReader::addBeam(Beam* s)
       {
-      int n = _beams.size();
-      for (int i = 0; i < n; ++i) {
-            if (_beams.at(i)->id() == id)
-                  return _beams.at(i);
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
-//   findTuplet
-//---------------------------------------------------------
-
-Tuplet* XmlReader::findTuplet(int id) const
-      {
-      int n = _tuplets.size();
-      for (int i = 0; i < n; ++i) {
-            if (_tuplets.at(i)->id() == id)
-                  return _tuplets.at(i);
-            }
-      return 0;
+      _beams.insert(s->id(), s);
       }
 
 //---------------------------------------------------------
@@ -215,15 +196,7 @@ Tuplet* XmlReader::findTuplet(int id) const
 
 void XmlReader::addTuplet(Tuplet* s)
       {
-#ifndef NDEBUG
-      Tuplet* t = findTuplet(s->id());
-      if (t) {
-            qDebug("Tuplet %d already read", s->id());
-            delete s;
-            return;
-            }
-#endif
-      _tuplets.append(s);
+      _tuplets.insert(s->id(), s);
       }
 
 //---------------------------------------------------------
