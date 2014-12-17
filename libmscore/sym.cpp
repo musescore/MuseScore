@@ -5190,6 +5190,11 @@ QPixmap ScoreFont::sym2pixmap(SymId id, qreal mag)
 
 void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPointF& pos) const
       {
+#if defined(Q_OS_WIN) && (QT_VERSION == QT_VERSION_CHECK(5,4,0))
+      if (dynamic_cast<QPrinter*>(painter->device()) &&
+          painter->device()->paintEngine()->type() == QPaintEngine::Pdf)
+            mag *= 4.333;
+#endif
       qreal imag = 1.0 / mag;
       painter->scale(mag, mag);
       painter->setFont(font());
