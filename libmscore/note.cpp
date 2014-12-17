@@ -1316,9 +1316,9 @@ Element* Note::drop(const DropData& data)
             case Element::Type::HAIRPIN:
                   {
                   Hairpin* hairpin = static_cast<Hairpin*>(e);
-                  bool cresc = (hairpin->hairpinType() == Hairpin::Type::CRESCENDO);
+                  bool decresc = (hairpin->hairpinType() == Hairpin::Type::DECRESCENDO);
                   delete e;
-                  data.view->cmdAddHairpin(cresc);
+                  data.view->cmdAddHairpin(decresc);
                   }
                   return 0;
 
