@@ -104,7 +104,7 @@ QString HChord::name(int tpc) const
       static const HChord C0(0,3,6,9);
       static const HChord C1(0,3);
 
-      QString buf = tpc2name(tpc, NoteSpellingType::STANDARD, false, false, false);
+      QString buf = tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, false);
       HChord c(*this);
 
       int key = tpc2pitch(tpc);
