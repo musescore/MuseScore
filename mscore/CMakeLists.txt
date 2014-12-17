@@ -440,11 +440,13 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Xml.dll
       ${CROSSQT}/bin/Qt5Svg.dll
       ${CROSSQT}/bin/Qt5Network.dll
+      ${CROSSQT}/bin/Qt5WebChannel.dll
       ${CROSSQT}/bin/Qt5WebKit.dll
       ${CROSSQT}/bin/Qt5WebKitWidgets.dll
       ${CROSSQT}/bin/Qt5XmlPatterns.dll
       ${CROSSQT}/bin/Qt5Qml.dll
       ${CROSSQT}/bin/Qt5Quick.dll
+      ${CROSSQT}/bin/Qt5QuickWidgets.dll
       ${CROSSQT}/bin/Qt5Script.dll
       ${CROSSQT}/bin/Qt5Sql.dll
       ${CROSSQT}/bin/Qt5Positioning.dll
@@ -453,9 +455,9 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Sensors.dll
       ${CROSSQT}/bin/Qt5Multimedia.dll
       ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
-      ${CROSSQT}/bin/icuin52.dll
-      ${CROSSQT}/bin/icuuc52.dll
-      ${CROSSQT}/bin/icudt52.dll
+      ${CROSSQT}/bin/icuin53.dll
+      ${CROSSQT}/bin/icuuc53.dll
+      ${CROSSQT}/bin/icudt53.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
@@ -477,10 +479,6 @@ if (MINGW)
     install(FILES
       ${CROSSQT}/plugins/printsupport/windowsprintersupport.dll
       DESTINATION bin/printsupport)
-
-    install(FILES
-      ${CROSSQT}/plugins/accessible/qtaccessiblewidgets.dll
-      DESTINATION bin/accessible)
 
     install(DIRECTORY
       ${CROSSQT}/qml
