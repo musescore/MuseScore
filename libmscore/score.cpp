@@ -3066,7 +3066,7 @@ void Score::lassoSelectEnd()
       Segment* endSegment   = 0;
       int startStaff        = 0x7fffffff;
       int endStaff          = 0;
-      const ChordRest* endCR;
+      const ChordRest* endCR = 0;
 
       if (_selection.elements().isEmpty()) {
             _selection.setState(SelState::NONE);

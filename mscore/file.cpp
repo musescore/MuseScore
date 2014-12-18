@@ -552,7 +552,7 @@ void MuseScore::newFile()
             score->fileInfo()->setFile(newWizard->title());
       Measure* pm = score->firstMeasure();
 
-      Measure* nm;
+      Measure* nm = 0;
       for (int i = 0; i < measures; ++i) {
             if (pm) {
                   nm  = pm;

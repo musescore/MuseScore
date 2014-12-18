@@ -455,6 +455,9 @@ void setVoicesFromPrevBars(
             const ReducedFraction &basicQuant,
             const ReducedFraction &barStart)
       {
+#ifdef NDEBUG
+      (void)pendingNonTuplets;
+#endif
       bool loopAgain = false;
       do {
             for (auto it = backTiedTuplets.begin(); it != backTiedTuplets.end(); ) {
