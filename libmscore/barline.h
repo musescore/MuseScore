@@ -52,11 +52,12 @@ static const int UNKNOWN_BARLINE_TO = -6;
 class BarLine : public Element {
       Q_OBJECT
 
-      BarLineType _barLineType;
-      bool _customSpan;
-      bool _customSubtype;
-      int _span;                    // number of staves spanned by the barline
-      int _spanFrom, _spanTo;       // line number on start and end staves
+      BarLineType _barLineType { BarLineType::NORMAL };
+      bool _customSpan         { false };
+      bool _customSubtype      { false };
+      int _span                { 1 };     // number of staves spanned by the barline
+      int _spanFrom            { 0 };                      // line number on start and end staves
+      int _spanTo              { DEFAULT_BARLINE_TO };
 
       // static variables used while dragging
       static int _origSpan, _origSpanFrom, _origSpanTo;     // original span value before editing
@@ -76,39 +77,41 @@ class BarLine : public Element {
       BarLine(Score*);
       BarLine &operator=(const BarLine&) = delete;
 
-      virtual BarLine* clone() const     { return new BarLine(*this); }
-      virtual Element::Type type() const { return Element::Type::BAR_LINE; }
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
-      virtual void draw(QPainter*) const;
-      virtual Space space() const;
-      virtual QPointF pagePos() const;      ///< position in canvas coordinates
-      virtual QPointF canvasPos() const;    ///< position in canvas coordinates
-      virtual void layout();
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      virtual void add(Element*);
-      virtual void remove(Element*);
-      virtual QPainterPath shape() const;
+      virtual BarLine* clone() const override     { return new BarLine(*this); }
+      virtual Element::Type type() const override { return Element::Type::BAR_LINE; }
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
+      virtual void draw(QPainter*) const override;
+      virtual Space space() const override;
+      virtual QPointF pagePos() const override;      ///< position in canvas coordinates
+      virtual QPointF canvasPos() const override;    ///< position in canvas coordinates
+      virtual void layout() override;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
+      virtual QPainterPath shape() const override;
 
       virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&);
+      virtual Element* drop(const DropData&) override;
+
       void setCustomSpan(bool val)    { _customSpan = val;    }
       void setCustomSubtype(bool val) { _customSubtype = val; }
-      void setSpan(int val)           { _span = val;        updateCustomSpan();     }
-      void setSpanFrom(int val)       { _spanFrom = val;    updateCustomSpan();     }
-      void setSpanTo(int val)         { _spanTo = val;      updateCustomSpan();     }
+      void setSpan(int val);
+      void setSpanFrom(int val);
+      void setSpanTo(int val);
       bool customSpan() const         { return _customSpan;   }
       bool customSubtype() const      { return _customSubtype;}
       int span() const                { return _span;         }
       int spanFrom() const            { return _spanFrom;     }
       int spanTo() const              { return _spanTo;       }
 
-      virtual bool isEditable() const { return parent()->type() == Element::Type::SEGMENT; }
-      virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual void endEdit();
-      virtual void editDrag(const EditData&);
-      virtual void endEditDrag();
+      virtual bool isEditable() const override { return parent()->type() == Element::Type::SEGMENT; }
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual void endEdit() override;
+      virtual void editDrag(const EditData&) override;
+      virtual void endEditDrag() override;
       virtual void updateGrips(int*, int*, QRectF*) const override;
+
       int tick() const;
 
       ElementList* el()                  { return &_el; }
@@ -123,23 +126,24 @@ class BarLine : public Element {
       void setBarLineType(BarLineType i) { _barLineType = i;     updateCustomType();      }
       BarLineType barLineType() const    { return _barLineType;  }
 
-      virtual int subtype() const         { return int(_barLineType); }
-      virtual QString subtypeName() const { return qApp->translate("barline", barLineTypeName().toUtf8()); }
+      virtual int subtype() const override         { return int(_barLineType); }
+      virtual QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
 
-      virtual qreal mag() const;
+      virtual qreal mag() const override;
 
-      static void  setCtrlDrag(bool val)  { ctrlDrag = val; }
+      static void  setCtrlDrag(bool val)   { ctrlDrag = val; }
       static void  setShiftDrag(bool val)  { shiftDrag = val; }
       static qreal layoutWidth(Score*, BarLineType, qreal mag);
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
-      QString accessibleInfo() override;
-      QString accessibleExtraInfo() override;
+
+      virtual QString accessibleInfo() override;
+      virtual QString accessibleExtraInfo() override;
       };
 
 typedef struct {
