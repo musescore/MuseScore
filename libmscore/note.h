@@ -168,7 +168,7 @@ class Note : public Element {
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
       Q_PROPERTY(Ms::Accidental* accidental              READ accidental)
       Q_PROPERTY(Ms::Accidental::Type accidentalType     READ accidentalType   WRITE setAccidentalType)
-      Q_PROPERTY(QQmlListProperty<Ms::NoteDot> dots      READ qmlDots)
+      Q_PROPERTY(int dots      READ qmlDots)
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
       Q_PROPERTY(Ms::Tie* tieBack                        READ tieBack)
       Q_ENUMS(ValueType)
@@ -386,7 +386,7 @@ class Note : public Element {
 
       int customizeVelocity(int velo) const;
       NoteDot* dot(int n)                       { return _dots[n];           }
-      QQmlListProperty<Ms::NoteDot> qmlDots();
+      int qmlDots();
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(const NoteVal&, int tick = -1);
