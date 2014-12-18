@@ -589,8 +589,8 @@ Fraction GuitarPro6::rhythmToDuration(QString value)
 
 void GuitarPro6::readDrumNote(Note* note, int element, int variation)
       {
-      int octaveInt;
-      int toneInt;
+      int octaveInt = 0;
+      int toneInt = 0;
       /* These numbers below were determined by creating all drum
        * notes in a GPX format file and then analyzing the score.gpif
        * file which specifies the score. */

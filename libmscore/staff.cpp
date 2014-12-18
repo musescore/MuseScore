@@ -612,7 +612,7 @@ qreal Staff::mag() const
 SwingParameters Staff::swing(int tick) const
       {
       SwingParameters sp;
-      int swingUnit;
+      int swingUnit = 0;
       QString unit = score()->styleSt(StyleIdx::swingUnit);
       int swingRatio = score()->styleI(StyleIdx::swingRatio);
       if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
