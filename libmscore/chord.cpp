@@ -388,9 +388,9 @@ QPointF Chord::stemPos() const
 QPointF Chord::stemPosBeam() const
       {
       qreal _spatium = spatium();
-      if (staff() && staff()->isTabStaff())
-            return staff()->staffType()->chordStemPosBeam(this) * _spatium + pagePos();
       QPointF p(pagePos());
+      if (staff() && staff()->isTabStaff())
+            return staff()->staffType()->chordStemPosBeam(this) * _spatium + p;
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
             if (_noteType != NoteType::NORMAL)
