@@ -3431,27 +3431,6 @@ void MuseScore::showPianoKeyboard(bool on)
       }
 
 //---------------------------------------------------------
-//   showWeb
-//---------------------------------------------------------
-
-void MuseScore::showWebPanel(bool on)
-      {
-      QAction* a = getAction("musescore-connect");
-      if (on) {
-            if (_webPage == 0) {
-                  _webPage = new WebPageDockWidget(this, this);
-                  connect(_webPage, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
-                  addDockWidget(Qt::RightDockWidgetArea, _webPage);
-                  }
-            _webPage->show();
-            }
-      else {
-            if (_webPage)
-                  _webPage->hide();
-            }
-      }
-
-//---------------------------------------------------------
 //   showPluginCreator
 //---------------------------------------------------------
 
@@ -4041,8 +4020,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             ;
       else if (cmd == "toogle-piano")
             showPianoKeyboard(a->isChecked());
-      else if (cmd == "musescore-connect")
-            showWebPanel(a->isChecked());
       else if (cmd == "plugin-creator")
             showPluginCreator(a);
       else if (cmd == "plugin-manager")
@@ -4182,17 +4159,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
 void MuseScore::openExternalLink(const QString& url)
       {
       QDesktopServices::openUrl(url);
-      }
-
-//---------------------------------------------------------
-//   closeWebPanelPermanently
-//---------------------------------------------------------
-
-void MuseScore::closeWebPanelPermanently()
-      {
-      showWebPanel(false);
-      preferences.showWebPanel = false;
-      preferences.dirty  = true;
       }
 
 //---------------------------------------------------------
@@ -4922,7 +4888,6 @@ int main(int argc, char* av[])
             QObject::connect(qApp, SIGNAL(messageReceived(const QString&)),
                mscore, SLOT(handleMessage(const QString&)));
 
-            mscore->showWebPanel(preferences.showWebPanel);
             static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
             // count filenames specified on the command line
             // these are the non-empty strings remaining in argv

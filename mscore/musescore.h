@@ -513,7 +513,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       TextTools* textTools();
       void showDrumTools(Drumset*, Staff*);
       void updateDrumTools();
-      void showWebPanel(bool on);
       void showPluginCreator(QAction*);
       void showPluginManager();
 
@@ -588,7 +587,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void transpose();
 
       Q_INVOKABLE void openExternalLink(const QString&);
-      Q_INVOKABLE void closeWebPanelPermanently();
 
       void endCmd();
       void printFile();

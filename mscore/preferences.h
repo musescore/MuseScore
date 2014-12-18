@@ -92,7 +92,6 @@ struct Preferences {
       bool playNotes;         // play notes on click
       bool showNavigator;
       bool showPlayPanel;
-      bool showWebPanel;
       bool showStatusBar;
 
       bool useAlsaAudio;
