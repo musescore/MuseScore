@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>904</width>
-    <height>577</height>
+    <width>1148</width>
+    <height>738</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -4208,7 +4208,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_23">
             <property name="title">
-             <string>Root / Bass Spelling</string>
+             <string>Note Spelling</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_37">
              <item>
@@ -4279,42 +4279,50 @@
               </layout>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_3">
-               <item>
-                <widget class="QCheckBox" name="lowerCaseMinorChords">
-                 <property name="text">
-                  <string>Lower case minor chords</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="lowerCaseBassNotes">
-                 <property name="text">
-                  <string>Lower case bass notes</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="allCapsNoteNames">
-                 <property name="text">
-                  <string>All caps note names</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_17">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
+              <widget class="QGroupBox" name="automaticCapitalization">
+               <property name="title">
+                <string>Automatic Capitalization</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <item>
+                 <widget class="QCheckBox" name="lowerCaseMinorChords">
+                  <property name="text">
+                   <string>Lower case minor chords</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="lowerCaseBassNotes">
+                  <property name="text">
+                   <string>Lower case bass notes</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="allCapsNoteNames">
+                  <property name="text">
+                   <string>All caps note names</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_17">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -5688,6 +5696,7 @@
   <tabstop>useFullGermanNoteNames</tabstop>
   <tabstop>useSolfeggioNoteNames</tabstop>
   <tabstop>useFrenchNoteNames</tabstop>
+  <tabstop>automaticCapitalization</tabstop>
   <tabstop>lowerCaseMinorChords</tabstop>
   <tabstop>lowerCaseBassNotes</tabstop>
   <tabstop>allCapsNoteNames</tabstop>
