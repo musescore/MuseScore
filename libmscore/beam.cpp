@@ -292,7 +292,7 @@ void Beam::layout1()
                               }
                         }
                   }
-            foreach(ChordRest* cr, _elements)
+            for (ChordRest* cr : _elements)
                   cr->setUp(_up);
             }
       else {
@@ -357,11 +357,11 @@ void Beam::layout1()
                   }
 
 
-            _cross   = minMove < maxMove;
+            _cross = minMove < maxMove;
             // int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
-            slope   = 0.0;
+            slope = 0.0;
 
-            foreach(ChordRest* cr, _elements)
+            for (ChordRest* cr : _elements)
                   cr->setUp(_up);
 
             }     // end of if/else(tablature)
@@ -1027,14 +1027,15 @@ static int adjust(qreal _spatium4, int slant, const QList<ChordRest*>& cl)
       int n = cl.size();
       const ChordRest* c1 = cl[0];
       const ChordRest* c2 = cl[n-1];
+      if (c1->staff() && c1->staff()->isTabStaff())
+            return 0;
 
       QPointF p1(c1->stemPosBeam());   // canvas coordinates
       qreal slope = (slant * _spatium4) / (c2->stemPosBeam().x() - p1.x());
       int ml = -1000;
       if (c1->up()) {
             for (int i = 1; i < n; ++i) {
-                  const ChordRest* c = cl[i];
-                  QPointF p3(c->stemPosBeam());
+                  QPointF p3(cl[i]->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
                   int l       = lrint((yUp - p3.y()) / (_spatium4));
                   ml          = qMax(ml, l);
@@ -1396,7 +1397,6 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
             else
                   bm.l += graceStemLengthCorrection;
             }
-
       if (dx == 0.0)
             slope = 0.0;
       else
