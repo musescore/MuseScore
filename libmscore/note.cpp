@@ -424,7 +424,7 @@ int Note::tpc() const
 
 QString Note::tpcUserName(bool explicitAccidental)
       {
-      QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, false, explicitAccidental);
+      QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
       QString octaveName = QString::number((pitch() / 12) - 1);
       return pitchName + (explicitAccidental ? " " : "") + octaveName;
       }

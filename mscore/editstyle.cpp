@@ -364,6 +364,7 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::useFullGermanNoteNames,  useFullGermanNoteNames->isChecked());
       lstyle.set(StyleIdx::useSolfeggioNoteNames,   useSolfeggioNoteNames->isChecked());
       lstyle.set(StyleIdx::useFrenchNoteNames,      useFrenchNoteNames->isChecked());
+      lstyle.set(StyleIdx::automaticCapitalization, automaticCapitalization->isChecked());
       lstyle.set(StyleIdx::lowerCaseMinorChords,    lowerCaseMinorChords->isChecked());
       lstyle.set(StyleIdx::lowerCaseBassNotes,      lowerCaseBassNotes->isChecked());
       lstyle.set(StyleIdx::allCapsNoteNames,        allCapsNoteNames->isChecked());
@@ -647,6 +648,7 @@ void EditStyle::setValues()
       useFullGermanNoteNames->setChecked(lstyle.value(StyleIdx::useFullGermanNoteNames).toBool());
       useSolfeggioNoteNames->setChecked(lstyle.value(StyleIdx::useSolfeggioNoteNames).toBool());
       useFrenchNoteNames->setChecked(lstyle.value(StyleIdx::useFrenchNoteNames).toBool());
+      automaticCapitalization->setChecked(lstyle.value(StyleIdx::automaticCapitalization).toBool());
       lowerCaseMinorChords->setChecked(lstyle.value(StyleIdx::lowerCaseMinorChords).toBool());
       lowerCaseBassNotes->setChecked(lstyle.value(StyleIdx::lowerCaseBassNotes).toBool());
       allCapsNoteNames->setChecked(lstyle.value(StyleIdx::allCapsNoteNames).toBool());
