@@ -82,7 +82,7 @@
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
-#include "libmscore/measurebase.h"
+#include "libmscore/measure.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/volta.h"
 #include "libmscore/lasso.h"
@@ -4275,9 +4275,9 @@ void MuseScore::switchLayoutMode(int val)
             LayoutMode mode;
             // find a measure to use as reference, if possible
             QRectF view = cv->toLogical(QRect(0.0, 0.0, width(), height()));
-            MeasureBase* m = cs->measures()->first();
+            Measure* m = cs->firstMeasure();
             while (m && !view.intersects(m->canvasBoundingRect()))
-                  m = m->nextMM();
+                  m = m->nextMeasureMM();
             if (val == 0)
                   mode = LayoutMode::PAGE;
             else
@@ -4290,7 +4290,7 @@ void MuseScore::switchLayoutMode(int val)
             // also, better positioning is usually achieved if you start from the top
             // and there is really no better place to position canvas if we were all the way off page previously
             cv->pageTop();
-            if (m)
+            if (m && m != cs->firstMeasure())
                   cv->adjustCanvasPosition(m, false);
             endCmd();
             }
