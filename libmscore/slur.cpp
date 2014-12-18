@@ -205,7 +205,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
       {
       if (curGrip == int(GripSlurSegment::START)) {
             spanner()->setStartElement(element);
-            switch(spanner()->anchor()) {
+            switch (spanner()->anchor()) {
                   case Spanner::Anchor::NOTE: {
                         Tie* tie = static_cast<Tie*>(spanner());
                         tie->startNote()->setTieFor(0);
@@ -216,7 +216,6 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   case Spanner::Anchor::CHORD:
                         spanner()->setTick(static_cast<Chord*>(element)->tick());
                         spanner()->setTrack(element->track());
-                        spanner()->setStartElement(element);
                         break;
                   case Spanner::Anchor::SEGMENT:
                   case Spanner::Anchor::MEASURE:
@@ -226,7 +225,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
             }
       else {
             spanner()->setEndElement(element);
-            switch(spanner()->anchor()) {
+            switch (spanner()->anchor()) {
                   case Spanner::Anchor::NOTE: {
                         Tie* tie = static_cast<Tie*>(spanner());
                         tie->endNote()->setTieBack(0);
@@ -237,7 +236,6 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   case Spanner::Anchor::CHORD:
                         spanner()->setTick2(static_cast<Chord*>(element)->tick());
                         spanner()->setTrack2(element->track());
-                        spanner()->setEndElement(element);
                         break;
 
                   case Spanner::Anchor::SEGMENT:
@@ -379,8 +377,8 @@ void SlurSegment::editDrag(const EditData& ed)
                               ed.view->setDropTarget(note);
                               if (c != spanner->endCR()) {
                                     changeAnchor(ed.view, ed.curGrip, c);
-                                    QPointF p1 = ed.pos - ups[ed.curGrip].p - canvasPos();
-                                    ups[ed.curGrip].off = p1 / _spatium;
+//                                    QPointF p1 = ed.pos - ups[ed.curGrip].p - canvasPos();
+//                                    ups[ed.curGrip].off = p1 / _spatium;
                                     slurTie()->layout();
                                     }
                               }
