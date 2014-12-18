@@ -2577,16 +2577,16 @@ NoteVal Note::noteVal() const
 
 //---------------------------------------------------------
 //   qmlDots
-//    returns dots as a list property for plugins
+//    returns number of dots for plugins
 //---------------------------------------------------------
 
-QQmlListProperty<Ms::NoteDot> Note::qmlDots()
+int Note::qmlDots()
       {
       QList<NoteDot*> list;
       for (NoteDot* dot : _dots)
             if (dot != nullptr)
                   list.append(dot);
-      return QQmlListProperty<Ms::NoteDot>(this, list);
+      return list.size();
       }
 
 const char* NoteHead::groupToGroupName(NoteHead::Group group)
