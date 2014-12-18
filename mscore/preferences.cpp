@@ -108,7 +108,6 @@ void Preferences::init()
 
       showNavigator      = false;
       showPlayPanel      = false;
-      showWebPanel       = true;
       showStatusBar      = true;
 //      playPanelPos       = QPoint(100, 300);
 
@@ -249,7 +248,6 @@ void Preferences::write()
 
       s.setValue("showNavigator",      showNavigator);
       s.setValue("showPlayPanel",      showPlayPanel);
-      s.setValue("showWebPanel",       showWebPanel);
       s.setValue("showStatusBar",      showStatusBar);
 
       s.setValue("useAlsaAudio",       useAlsaAudio);
@@ -398,8 +396,6 @@ void Preferences::read()
 
       showNavigator   = s.value("showNavigator", showNavigator).toBool();
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
-      showPlayPanel   = s.value("showPlayPanel", showPlayPanel).toBool();
-      showWebPanel    = s.value("showWebPanel", showWebPanel).toBool();
 
       useAlsaAudio       = s.value("useAlsaAudio", useAlsaAudio).toBool();
       useJackAudio       = s.value("useJackAudio", useJackAudio).toBool();
@@ -815,7 +811,6 @@ void PreferenceDialog::updateValues()
 
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
-      webPanelShow->setChecked(prefs.showWebPanel);
 
       alsaDriver->setChecked(prefs.useAlsaAudio);
       jackDriver->setChecked(prefs.useJackAudio || prefs.useJackMidi);
@@ -1276,7 +1271,6 @@ void PreferenceDialog::apply()
 
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
-      prefs.showWebPanel       = webPanelShow->isChecked();
       prefs.antialiasedDrawing = drawAntialiased->isChecked();
 
       prefs.useJackTransport   = jackDriver->isChecked() && useJackTransport->isChecked();
