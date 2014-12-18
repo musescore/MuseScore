@@ -4696,7 +4696,7 @@ int main(int argc, char* av[])
       QSplashScreen* sc = 0;
       QTimer* stimer = 0;
       if (!MScore::noGui && preferences.showSplashScreen) {
-            QPixmap pm(":/data/splash.jpg");
+            QPixmap pm(":/data/splash.png");
             sc = new QSplashScreen(pm);
             sc->setWindowTitle(QString("MuseScore Startup"));
 #ifdef Q_OS_MAC // to have session dialog on top of splashscreen on mac
