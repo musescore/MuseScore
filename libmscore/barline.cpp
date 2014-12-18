@@ -76,15 +76,18 @@ QString BarLine::userTypeName(BarLineType t)
       return qApp->translate("barline", barLineNames[int(t)]);
       }
 
+//---------------------------------------------------------
+//   userTypeName2
+//---------------------------------------------------------
+
 QString BarLine::userTypeName2(BarLineType t)
       {
-      for (unsigned i = 0; i < sizeof(barLineTable)/sizeof(*barLineTable); ++i) {
-           if(barLineTable[i].type == t)
-                 return qApp->translate("Palette", barLineTable[i].name);
+      for (const auto& i : barLineTable) {
+           if (i.type == t)
+                 return qApp->translate("Palette", i.name);
            }
       return QString();
       }
-
 
 //---------------------------------------------------------
 //   BarLine
@@ -93,13 +96,37 @@ QString BarLine::userTypeName2(BarLineType t)
 BarLine::BarLine(Score* s)
    : Element(s)
       {
-      _barLineType = BarLineType::NORMAL;
-      _span     = 1;
-      _spanFrom = 0;
-      _spanTo   = DEFAULT_BARLINE_TO;
-      _customSpan = false;
-      _customSubtype = false;
       setHeight(DEFAULT_BARLINE_TO/2 * spatium()); // for use in palettes
+      }
+
+//---------------------------------------------------------
+//   setSpan
+//---------------------------------------------------------
+
+void BarLine::setSpan(int val)
+      {
+      _span = val;
+      updateCustomSpan();
+      }
+
+//---------------------------------------------------------
+//   setSpanFrom
+//---------------------------------------------------------
+
+void BarLine::setSpanFrom(int val)
+      {
+      _spanFrom = val;
+      updateCustomSpan();
+      }
+
+//---------------------------------------------------------
+//   setSpanTo
+//---------------------------------------------------------
+
+void BarLine::setSpanTo(int val)
+      {
+      _spanTo = val;
+      updateCustomSpan();
       }
 
 //---------------------------------------------------------
@@ -202,7 +229,7 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                                     break;
                               sysStaff1 = system->staff(++staffIdx1);
                               staff1    = score()->staff(staffIdx1);
-                        }
+                              }
                         // if end staff not shown, reduce span and move one staff up
                         else if ( !(sysStaff2->show() && staff2->show()) ) {
                               span--;
@@ -210,16 +237,16 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                                     break;
                               sysStaff2 = system->staff(--staffIdx2);
                               staff2    = score()->staff(staffIdx2);
-                        }
+                              }
                         // if both staves shown, exit loop
                         else
                               break;
-                  }
+                        }
                   // if no longer any span, set 0 length and exit
                   if (span <= 0) {
                         *y1 = *y2 = 0;
                         return;
-                  }
+                        }
                   // both staffIdx1 and staffIdx2 are shown: compute corresponding line length
                   StaffLines* l1 = measure->staffLines(staffIdx1);
                   StaffLines* l2 = measure->staffLines(staffIdx2);
@@ -495,13 +522,22 @@ void BarLine::read(XmlReader& e)
             else if (tag == "customSubtype")
                   _customSubtype = e.readInt();
             else if (tag == "span") {
-                  _spanFrom   = e.intAttribute("from", _spanFrom);
-                  _spanTo     = e.intAttribute("to", _spanTo);
-                  _span       = e.readInt();
+                  _spanFrom = e.intAttribute("from", _spanFrom);
+                  _spanTo   = e.intAttribute("to", _spanTo);
+                  _span     = e.readInt();
+
+                  if (_spanTo == UNKNOWN_BARLINE_TO)
+                        _spanTo = staff() ? (staff()->lines() -1) * _span : 4 * _span;
+
                   // WARNING: following statements assume staff and staff bar line spans are correctly set
+                  // ws: _spanTo can be UNKNOWN_BARLINE_TO
+
                   if (staff() && (_span != staff()->barLineSpan()
-                     || _spanFrom != staff()->barLineFrom() || _spanTo != staff()->barLineTo()))
+                     || _spanFrom != staff()->barLineFrom()
+                     || ((staff()->barLineTo() != UNKNOWN_BARLINE_TO) && (_spanTo != staff()->barLineTo())))
+                     ) {
                         _customSpan = true;
+                        }
                   }
             else if (tag == "Articulation") {
                   Articulation* a = new Articulation(score());
@@ -587,7 +623,7 @@ Element* BarLine::drop(const DropData& data)
             // single bar line drop
             if (((data.modifiers & Qt::ControlModifier) && !oldRepeat && !newRepeat) || (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) ) {
                   // if drop refers to span, update this bar line span
-                  if(bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) {
+                  if (bl->spanFrom() != 0 || bl->spanTo() != DEFAULT_BARLINE_TO) {
                         // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
                         // adjust to the number of syaff lines
                         int bottomSpan = (staff()->lines()-1) * 2;
@@ -646,12 +682,12 @@ void BarLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 //---------------------------------------------------------
 
 void BarLine::startEdit(MuseScoreView*, const QPointF&)
-{
+      {
       // keep a copy of original span values
       _origSpan         = _span;
       _origSpanFrom     = _spanFrom;
       _origSpanTo       = _spanTo;
-}
+      }
 
 //---------------------------------------------------------
 //   endEdit
@@ -692,7 +728,7 @@ void BarLine::endEdit()
 
       int idx1 = staffIdx();
 
-      if(_span != staff()->barLineSpan()) {
+      if (_span != staff()->barLineSpan()) {
             // if now bar lines span more staves
             if (_span > staff()->barLineSpan()) {
                   int idx2 = idx1 + _span;
@@ -703,7 +739,7 @@ void BarLine::endEdit()
                         //    the last spanned staff BUT NOT the last score staff
                         //          keep its bar lines
                         // otherwise remove them
-                        if(_spanTo > 0 || !(idx == idx2-1 && idx != score()->nstaves()-1) )
+                        if (_spanTo > 0 || !(idx == idx2-1 && idx != score()->nstaves()-1) )
                               score()->undoChangeBarLineSpan(score()->staff(idx), 0, 0,
                                           (score()->staff(idx)->lines()-1)*2);
                   }
@@ -732,19 +768,19 @@ void BarLine::editDrag(const EditData& ed)
       getY(&y1, &y2);
       y1 -= yoff1;                  // current positions of barline ends, ignoring any in-process dragging
       y2 -= yoff2;
-      if(ed.curGrip == 0) {
+      if (ed.curGrip == 0) {
             // min offset for top grip is line -1
             // max offset is 1 line above bottom grip or 1 below last staff line, whichever comes first
             min = -y1 - lineDist;
             max = y2 - y1 - lineDist;                                   // 1 line above bottom grip
             lastmax = (staff()->lines() - _spanFrom/2) * lineDist;      // 1 line below last staff line
-            if(lastmax < max)
+            if (lastmax < max)
                   max = lastmax;
             // update yoff1 and bring it within limits
             yoff1 += ed.delta.y();
-            if(yoff1 < min)
+            if (yoff1 < min)
                   yoff1 = min;
-            if(yoff1 > max)
+            if (yoff1 > max)
                   yoff1 = max;
             }
       else {
@@ -753,7 +789,7 @@ void BarLine::editDrag(const EditData& ed)
             min = y1 - y2 + lineDist;
             // update yoff2 and bring it within limit
             yoff2 += ed.delta.y();
-            if(yoff2 < min)
+            if (yoff2 < min)
                   yoff2 = min;
             }
       }
@@ -817,37 +853,37 @@ void BarLine::endEditDrag()
 
       if (shiftDrag) {                    // if precision dragging
             newSpanFrom = _spanFrom;
-            if(yoff1 != 0.0) {
+            if (yoff1 != 0.0) {
                   // round bar line top coord to nearest line of 1st staff (in half line dist units)
                   newSpanFrom = ((int)floor(y1 / (staff()->lineDistance() * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
-                  if(newSpanFrom <  MIN_BARLINE_SPAN_FROMTO)
+                  if (newSpanFrom <  MIN_BARLINE_SPAN_FROMTO)
                         newSpanFrom = MIN_BARLINE_SPAN_FROMTO;
-                  if(newSpanFrom > Staff1lines*2)
+                  if (newSpanFrom > Staff1lines*2)
                         newSpanFrom = Staff1lines*2;
                   }
 
             newSpanTo = _spanTo;
-            if(yoff2 != 0.0) {
+            if (yoff2 != 0.0) {
                   // round bar line bottom coord to nearest line of 2nd staff (in half line dist units)
                   qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
                   newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance() * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
-                  if(newSpanTo <  MIN_BARLINE_SPAN_FROMTO)
+                  if (newSpanTo <  MIN_BARLINE_SPAN_FROMTO)
                         newSpanTo = MIN_BARLINE_SPAN_FROMTO;
-                  if(newSpanTo > Staff2lines*2)
+                  if (newSpanTo > Staff2lines*2)
                         newSpanTo = Staff2lines*2;
                   }
 //            shiftDrag = false;          // NO: a last call to this function is made when exiting editing:
-      }                                   // it would find shiftDrag = false and reset extrema to coarse resolution
+            }                             // it would find shiftDrag = false and reset extrema to coarse resolution
 
       else {                              // if coarse dragging
             newSpanFrom = 0;
             newSpanTo   = (Staff2lines - 1) * 2;
-      }
+            }
 
       // if any value changed, update
-      if(newSpan != _span || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
+      if (newSpan != _span || newSpanFrom != _spanFrom || newSpanTo != _spanTo) {
             _span       = newSpan;
             _spanFrom   = newSpanFrom;
             _spanTo     = newSpanTo;
@@ -954,7 +990,7 @@ void BarLine::layout()
             }
 
       // in any case, lay out attached elements
-      foreach(Element* e, _el) {
+      foreach (Element* e, _el) {
             e->layout();
             if (e->type() == Element::Type::ARTICULATION) {
                   Articulation* a       = static_cast<Articulation*>(e);
@@ -1172,11 +1208,11 @@ void BarLine::updateGenerated(bool canBeTrue)
                         // if any other segment (namely, StartBarLine and BarLine), bar line is not generated
                         else
                               generatedType = false;
-                  }
+                        }
                   // if bar line does not belongs to a segment, it belongs to a system and is generated only if NORMAL
                   else
                         generatedType = (_barLineType == BarLineType::NORMAL);
-            }
+                  }
             // set to generated only if all properties are non-customized
             setGenerated(
                   color()           == MScore::defaultColor
@@ -1313,7 +1349,7 @@ QString BarLine::accessibleExtraInfo()
             Segment* seg = static_cast<Segment*>(parent());
             QString rez = "";
 
-            foreach(Element* e, *el())
+            foreach (Element* e, *el())
                   rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
 
             foreach (Element* e, seg->annotations()) {
@@ -1325,9 +1361,9 @@ QString BarLine::accessibleExtraInfo()
             if (m) {
                   //jumps
                   foreach (Element* e, *m->el()) {
-                        if(e->type() == Element::Type::JUMP)
+                        if (e->type() == Element::Type::JUMP)
                               rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
-                        if(e->type() == Element::Type::MARKER) {
+                        if (e->type() == Element::Type::MARKER) {
                               Marker* m = static_cast<Marker*>(e);
                               if (m->markerType() == Marker::Type::FINE)
                                     rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
@@ -1338,8 +1374,8 @@ QString BarLine::accessibleExtraInfo()
                   Measure* nextM = m->nextMeasureMM();
                   if (nextM) {
                         foreach (Element* e, *nextM->el()) {
-                              if(e->type() == Element::Type::MARKER)
-                                    if(static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)
+                              if (e->type() == Element::Type::MARKER)
+                                    if (static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)
                                           continue; //added above^
                                     rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                               }
@@ -1348,14 +1384,14 @@ QString BarLine::accessibleExtraInfo()
 
             int tick = seg->tick();
 
-            std::vector< ::Interval<Spanner*> > spanners = score()->spannerMap().findOverlapping(tick, tick);
-            for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
+            auto spanners = score()->spannerMap().findOverlapping(tick, tick);
+            for (auto i = spanners.begin(); i < spanners.end(); i++) {
                   ::Interval<Spanner*> interval = *i;
                   Spanner* s = interval.value;
                   if (s->type() == Element::Type::VOLTA) {
-                        if(s->tick() == tick)
+                        if (s->tick() == tick)
                               rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
-                        if(s->tick2() == tick)
+                        if (s->tick2() == tick)
                               rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                         }
                   }

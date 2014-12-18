@@ -160,7 +160,7 @@ QString Staff::partName() const
 Staff::Staff(Score* s)
       {
       _score     = s;
-      _barLineTo = (lines()-1)*2;
+      _barLineTo = (lines() - 1) * 2;
       }
 
 //---------------------------------------------------------
@@ -522,13 +522,16 @@ void Staff::read(XmlReader& e)
 // WARNING: following statement assumes number of staff lines to be correctly set
                   // must read <StaffType> before reading the <barLineSpan>
                   int defaultSpan = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
-                  _barLineFrom = e.attribute("from", QString::number(defaultSpan)).toInt();
+                  _barLineFrom = e.intAttribute("from", defaultSpan);
+
                   // the proper default SpanTo depends upon the barLineSpan
                   // as we do not know it yet, set a generic (UNKNOWN) default
                   defaultSpan = UNKNOWN_BARLINE_TO;
                   _barLineTo = e.intAttribute("to", defaultSpan);
+
                   // ready to read the main value...
                   _barLineSpan = e.readInt();
+
                   //...and to adjust the SpanTo value if the source did not provide an explicit value
                   // if no bar line or single staff span, set _barLineTo to this staff height
                   // if span to another staff (yet to be read), leave as unknown
