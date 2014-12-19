@@ -21,7 +21,6 @@ class TracksModel : public QAbstractTableModel
                  bool hasHumanBeats,
                  bool hasTempoText);
       void clear();
-      void setTrackShuffleIndex(int trackIndex, int newIndex);
       void updateCharset();
 
       const MidiOperations::Opers& trackOpers() const;
