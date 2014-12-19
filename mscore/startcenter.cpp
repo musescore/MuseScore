@@ -52,7 +52,8 @@ Startcenter::Startcenter()
       MyWebView* _webView = new MyWebView(this);
       _webView->setUrl(QUrl("http://connect2.musescore.com/"));
       horizontalLayout->addWidget(_webView);
-      QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+      if (enableExperimental)
+            QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
       recentPage->setBoldTitle(true);
       updateRecentScores();
       }
@@ -181,6 +182,9 @@ MyWebView::MyWebView(QWidget *parent):
       page()->setNetworkAccessManager(networkManager);
       
       setZoomFactor(guiScaling);
+      
+      if(!enableExperimental)
+            setContextMenuPolicy(Qt::NoContextMenu);
 
       //set cookie jar for persistent cookies
       CookieJar* jar = new CookieJar(QString(dataPath + "/cookies.txt"));
