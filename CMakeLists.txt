@@ -78,7 +78,7 @@ if (APPLE)
 
       # Adjust and uncomment this variable, if you target a different version
       # of MacOSX.
-      # set(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
+      # set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk)
 
       set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)      #min version required
       set(HAS_AUDIOFILE TRUE)            # requires libsndfile
@@ -382,7 +382,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 subdirs(
       mscore  awl bww2mxml share midi audiofile fluid mstyle libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
-      thirdparty/xmlstream thirdparty/qzip thirdparty/kQOAuth
+      thirdparty/xmlstream thirdparty/qzip thirdparty/kQOAuth thirdparty/qtwaitingspinner
       )
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 #with xcode, we need to have all the targets in the same project

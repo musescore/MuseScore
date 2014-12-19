@@ -12,6 +12,7 @@
 
 
 #include "musescore.h"
+#include "libmscore/mscore.h"
 #include "startcenter.h"
 #include "scoreBrowser.h"
 
@@ -47,10 +48,20 @@ Startcenter::Startcenter()
       connect(openScore, SIGNAL(clicked()), this, SLOT(openScoreClicked()));
 
       //init webview
-      webView->setUrl(QUrl("https://connect.musescore.com/"));
+      MyWebView* _webView = new MyWebView(this);
+      _webView->setUrl(QUrl("http://connect2.musescore.com/"));
+      horizontalLayout->addWidget(_webView);
       recentPage->setBoldTitle(true);
       updateRecentScores();
       }
+
+//---------------------------------------------------------
+//   ~Startcenter
+//---------------------------------------------------------
+
+Startcenter::~Startcenter() {
+      delete _webView;
+}
 
 //---------------------------------------------------------
 //   loadScore
@@ -130,6 +141,190 @@ void Startcenter::readSettings(QSettings& settings)
       resize(settings.value("size", QSize(1161, 694)).toSize());
       move(settings.value("pos", QPoint(200, 100)).toPoint());
       settings.endGroup();
+      }
+
+//---------------------------------------------------------
+//   MyNetworkAccessManager
+//---------------------------------------------------------
+
+QNetworkReply * MyNetworkAccessManager::createRequest(Operation op,
+                                          const QNetworkRequest & req,
+                                          QIODevice * outgoingData)
+      {
+      QNetworkRequest new_req(req);
+      new_req.setRawHeader("User-Agent",  QString("MuseScore %1").arg(VERSION).toAscii());
+      new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toAscii());
+      return QNetworkAccessManager::createRequest(op, new_req, outgoingData);
+      }
+
+//---------------------------------------------------------
+//   MyWebView
+//---------------------------------------------------------
+
+MyWebView::MyWebView(QWidget *parent):
+   QWebView(parent)
+      {
+      page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+      QNetworkAccessManager *networkManager = new MyNetworkAccessManager(this);
+#ifndef QT_NO_OPENSSL
+      connect(networkManager,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),this, SLOT(ignoreSSLErrors(QNetworkReply*,QList<QSslError>)));
+#endif
+
+      connect(this, SIGNAL(loadFinished(bool)), SLOT(stopBusy(bool)));
+      connect(this, SIGNAL(linkClicked(const QUrl&)), SLOT(link(const QUrl&)));
+     
+     
+      page()->setNetworkAccessManager(networkManager);
+      
+      setZoomFactor(guiScaling);
+
+      //set cookie jar for persistent cookies
+      CookieJar* jar = new CookieJar(QString(dataPath + "/cookies.txt"));
+      page()->networkAccessManager()->setCookieJar(jar);
+      
+      page()->currentFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+      page()->currentFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAsNeeded);
+
+       _loadingSpinner = new QtWaitingSpinner(this);
+      _loadingSpinner->setVisible(true);
+      _loadingSpinner->start();
+      QVBoxLayout* layout = new QVBoxLayout(this);
+      layout->addWidget(_loadingSpinner);
+      layout->setAlignment ( _loadingSpinner, Qt::AlignCenter);
+      setLayout(layout);
+      }
+
+//---------------------------------------------------------
+//   ~MyWebView
+//---------------------------------------------------------
+
+MyWebView::~MyWebView()
+      {
+      disconnect(this, SIGNAL(loadFinished(bool)), this, SLOT(stopBusy(bool)));
+      }
+
+#ifndef QT_NO_OPENSSL
+/**
+Slot connected to the sslErrors signal of QNetworkAccessManager
+When this slot is called, call ignoreSslErrors method of QNetworkReply
+*/
+void MyWebView::ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors)
+      {      
+      foreach (const QSslError &error, sslErrors)
+            qDebug("Ignore SSL error: %d %s", error.error(), qPrintable(error.errorString()));
+      reply->ignoreSslErrors(sslErrors);
+      }
+#endif
+
+//---------------------------------------------------------
+//   stopBusy
+//---------------------------------------------------------
+
+void MyWebView::stopBusy(bool val)
+      {
+      if (!val) {
+            setHtml(QString("<html><head>"
+                  "<link rel=\"stylesheet\" href=\"data/webview.css\" type=\"text/css\" /></head>"
+            "<body>"
+            "<div id=\"content\">"
+            "<div id=\"middle\">"
+            "  <div class=\"title\" align=\"center\"><h2>%1</h2></div>"
+            "  <ul><li>%2</li></ul>"
+            "</div></div>"
+            "</body></html>")
+            .arg(tr("Could not<br /> connect"))
+            .arg(tr("To connect with the community, <br /> you need to have internet <br /> connection enabled")),
+            QUrl("qrc:/"));
+            }
+      _loadingSpinner->stop();
+      _loadingSpinner->setVisible(false);
+      setCursor(Qt::ArrowCursor);
+      }
+
+//---------------------------------------------------------
+//   setBusy
+//---------------------------------------------------------
+
+void MyWebView::setBusy()
+      {
+      setCursor(Qt::WaitCursor);
+      }
+
+//---------------------------------------------------------
+//   link
+//---------------------------------------------------------
+
+void MyWebView::link(const QUrl& url)
+      {
+      QDesktopServices::openUrl(url);
+      }
+
+//---------------------------------------------------------
+//   sizeHint
+//---------------------------------------------------------
+
+QSize MyWebView::sizeHint() const
+      {
+      return QSize(300 , 600);
+      }
+
+//---------------------------------------------------------
+//   CookieJar
+//
+//   Once the QNetworkCookieJar object is deleted, all cookies it held will be
+//   discarded as well. If you want to save the cookies, you should derive from
+//   this class and implement the saving to disk to your own storage format.
+//   (From QNetworkCookieJar documentation.)
+//---------------------------------------------------------
+
+CookieJar::CookieJar(QString path, QObject *parent)
+    : QNetworkCookieJar(parent)
+      {
+      file = path;
+      QFile cookieFile(this->file);
+
+      if (cookieFile.exists() && cookieFile.open(QIODevice::ReadOnly)) {
+            QList<QNetworkCookie> list;
+            QByteArray line;
+
+            while(!(line = cookieFile.readLine()).isNull()) {
+                  list.append(QNetworkCookie::parseCookies(line));
+                  }
+            setAllCookies(list);
+            }
+      else {
+            if (MScore::debugMode)
+                  qDebug() << "Can't open "<< this->file << " to read cookies";
+            }
+      }
+
+//---------------------------------------------------------
+//   ~CookieJar
+//---------------------------------------------------------
+
+CookieJar::~CookieJar()
+      {
+      QList <QNetworkCookie> cookieList;
+      cookieList = allCookies();
+
+      QFile file(this->file);
+
+      if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            if (MScore::debugMode)
+                  qDebug() << "Can't open "<< this->file << " to save cookies";
+            return;
+            }
+
+      QTextStream out(&file);
+      for(int i = 0 ; i < cookieList.size() ; i++) {
+                //get cookie data
+                QNetworkCookie cookie = cookieList.at(i);
+                if (!cookie.isSessionCookie()) {
+                      QByteArray line =  cookieList.at(i).toRawForm(QNetworkCookie::Full);
+                      out << line << "\n";
+                      }
+            }
+      file.close();
       }
 
 }

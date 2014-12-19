@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
-    <height>410</height>
+    <width>405</width>
+    <height>378</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,78 +19,31 @@
   <property name="windowTitle">
    <string>Start Center</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="tabPosition">
-      <enum>QTabWidget::North</enum>
-     </property>
-     <property name="tabShape">
-      <enum>QTabWidget::Rounded</enum>
-     </property>
-     <property name="currentIndex">
-      <number>0</number>
-     </property>
-     <widget class="Ms::ScoreBrowser" name="recentPage">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <attribute name="title">
-       <string>Recent</string>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="webPage">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <attribute name="title">
-       <string>Community</string>
-      </attribute>
-      <widget class="QWebView" name="webView">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>800</width>
-         <height>641</height>
-        </rect>
-       </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="Ms::ScoreBrowser" name="recentPage" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="url">
-        <url>
-         <string>about:blank</string>
-        </url>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="openScore">
+       <property name="text">
+        <string>Open an existing score</string>
        </property>
       </widget>
-     </widget>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="openScore">
-     <property name="text">
-      <string>Open an existing score</string>
-     </property>
-    </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header>QtWebKitWidgets/QWebView</header>
-  </customwidget>
   <customwidget>
    <class>Ms::ScoreBrowser</class>
    <extends>QWidget</extends>
