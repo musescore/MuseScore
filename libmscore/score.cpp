@@ -2555,8 +2555,8 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         if ((e->type() != Element::Type::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                               continue;
                         Harmony* h  = static_cast<Harmony*>(e);
-                        int rootTpc = transposeTpc(h->rootTpc(), interval, false);
-                        int baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                        int rootTpc = transposeTpc(h->rootTpc(), interval, true);
+                        int baseTpc = transposeTpc(h->baseTpc(), interval, true);
                         undoTransposeHarmony(h, rootTpc, baseTpc);
                         }
                   }
