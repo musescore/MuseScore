@@ -28,7 +28,7 @@ static const int FALLBACK_FONT = 2;       // Bravura
 
 QVector<ScoreFont> ScoreFont::_scoreFonts = {
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"   ),
-      ScoreFont("Gonville",   "Gonville",    ":/fonts/gonville/", "Gonville.otf" ),
+      ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" ),
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"  )
       };
 
@@ -5299,7 +5299,7 @@ void initScoreFonts()
       for (oldName i : oldNames)
             Sym::lonhash.insert(i.name, SymId(i.symId));
       QFont::insertSubstitution("MScore Text", "Bravura Text");
-      QFont::insertSubstitution("Gonville Text", "Bravura Text");
+      QFont::insertSubstitution("Gootville Text", "Bravura Text");
       QFont::insertSubstitution("ScoreFont", "Bravura Text");
       QFont::insertSubstitution("MuseJazz", "Bravura Text");
       }

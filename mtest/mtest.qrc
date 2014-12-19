@@ -3,8 +3,8 @@
    <qresource prefix="/">
       <file alias="fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
       <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>           
-      <file alias="fonts/gonville/glyphnames.json">../fonts/gonville/glyphnames.json</file>
-      <file alias="fonts/gonville/metadata.json">../fonts/gonville/metadata.json</file>       
+      <file alias="fonts/gootville/glyphnames.json">../fonts/gootville/glyphnames.json</file>
+      <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>       
       <file alias="fonts/bravura/glyphnames.json">../fonts/bravura/glyphnames.json</file>
       <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>         
       <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
