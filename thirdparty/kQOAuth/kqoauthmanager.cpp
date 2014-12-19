@@ -306,7 +306,7 @@ void KQOAuthManager::executeAuthorizedRequest(KQOAuthRequest *request, int id) {
     }
     networkRequest.setRawHeader("Authorization", authHeader);
 
-    QNetworkReply *reply;
+    QNetworkReply *reply = 0;
 
     if (request->httpMethod() == KQOAuthRequest::POST) {
 
