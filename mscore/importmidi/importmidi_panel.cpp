@@ -120,6 +120,7 @@ void ImportMidiPanel::setupUi()
       {
       connect(_updateUiTimer, SIGNAL(timeout()), this, SLOT(updateUi()));
       connect(_ui->pushButtonApply, SIGNAL(clicked()), SLOT(applyMidiImport()));
+      connect(_ui->pushButtonCancel, SIGNAL(clicked()), SLOT(cancelChanges()));
       connect(_ui->pushButtonUp, SIGNAL(clicked()), SLOT(moveTrackUp()));
       connect(_ui->pushButtonDown, SIGNAL(clicked()), SLOT(moveTrackDown()));
       connect(_ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
@@ -203,6 +204,19 @@ void ImportMidiPanel::applyMidiImport()
       mscore->openScore(_midiFile);
       saveTableViewState();
       _importInProgress = false;
+      }
+
+void ImportMidiPanel::cancelChanges()
+      {
+      auto &opers = preferences.midiImportOperations;
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+
+      _model->reset(opers.data()->trackOpers,
+                    MidiLyrics::makeLyricsListForUI(),
+                    opers.data()->trackCount,
+                    _midiFile,
+                    !opers.data()->humanBeatData.beatSet.empty(),
+                    opers.data()->hasTempoText);
       }
 
 bool ImportMidiPanel::canImportMidi() const
