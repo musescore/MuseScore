@@ -63,7 +63,6 @@
 #include "pianotools.h"
 #include "mediadialog.h"
 #include "workspace.h"
-#include "webpage.h"
 #include "selectdialog.h"
 #include "transposedialog.h"
 #include "metaedit.h"
@@ -499,7 +498,7 @@ MuseScore::MuseScore()
       fileTools = addToolBar(tr("File Operations"));
       fileTools->setObjectName("file-operations");
 
-      for (auto i : { "file-new", "file-open", "file-save", "print", "musescore-connect", "undo", "redo"})
+      for (auto i : { "file-new", "file-open", "file-save", "print", "undo", "redo"})
             fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(i)));
 
       fileTools->addSeparator();
@@ -730,10 +729,6 @@ MuseScore::MuseScore()
       menuView->addAction(a);
 
       a = getAction("toogle-piano");
-      a->setCheckable(true);
-      menuView->addAction(a);
-
-      a = getAction("musescore-connect");
       a->setCheckable(true);
       menuView->addAction(a);
 

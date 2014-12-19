@@ -729,10 +729,6 @@
     <std>21</std>
     </SC>
   <SC>
-    <key>musescore-connect</key>
-    <seq>F7</seq>
-    </SC>
-  <SC>
     <key>inspector</key>
     <seq>F8</seq>
     </SC>
