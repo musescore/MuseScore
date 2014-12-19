@@ -338,6 +338,7 @@ class InspectorEmpty : public InspectorBase {
 
    public:
       InspectorEmpty(QWidget* parent);
+      virtual QSize sizeHint() const {return QSize(255,170);}
       };
 
 } // namespace Ms
