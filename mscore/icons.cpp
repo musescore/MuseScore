@@ -115,7 +115,6 @@ static const char* iconNames[] = {
       "list-ordered.svg",
       "format-indent-more.svg",
       "format-indent-less.svg",
-      "panel-community.svg",
       "media-playback-loop.svg",
       "media-playback-loop-in.svg",
       "media-playback-loop-out.svg",
