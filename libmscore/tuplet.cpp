@@ -36,6 +36,7 @@ Tuplet::Tuplet(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _numberType   = Tuplet::NumberType::SHOW_NUMBER;
       _bracketType  = Tuplet::BracketType::AUTO_BRACKET;
+      _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
@@ -925,7 +926,7 @@ QVariant Tuplet::propertyDefault(P_ID id) const
                   return int(Tuplet::BracketType::AUTO_BRACKET);
             case P_ID::NORMAL_NOTES:
             case P_ID::ACTUAL_NOTES:
-                  return 1;
+                  return 0;
             case P_ID::P1:
             case P_ID::P2:
                   return QPointF();
