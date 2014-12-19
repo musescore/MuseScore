@@ -37,6 +37,7 @@ class ImportMidiPanel : public QWidget
       void applyMidiImport();
       void moveTrackUp();
       void moveTrackDown();
+      void cancelChanges();
 
    private:
       void setupUi();
