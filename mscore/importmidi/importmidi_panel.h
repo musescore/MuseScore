@@ -42,6 +42,7 @@ class ImportMidiPanel : public QWidget
    private:
       void setupUi();
       bool canImportMidi() const;
+      bool canTryCancelChanges() const;
       bool canMoveTrackUp(int visualIndex) const;
       bool canMoveTrackDown(int visualIndex) const;
       void setReorderedIndexes();

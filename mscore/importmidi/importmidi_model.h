@@ -22,6 +22,7 @@ class TracksModel : public QAbstractTableModel
                  bool hasTempoText);
       void clear();
       void updateCharset();
+      void notifyAllApplied();
 
       const MidiOperations::Opers& trackOpers() const;
       int trackCount() const { return _trackCount; }
@@ -30,6 +31,7 @@ class TracksModel : public QAbstractTableModel
       int frozenColCount() const;
       int rowFromTrackIndex(int trackIndex) const;
       int trackIndexFromRow(int row) const;
+      bool isAllApplied() const { return _isAllApplied; }
 
       int rowCount(const QModelIndex &/*parent*/) const;
       int columnCount(const QModelIndex &/*parent*/) const;
@@ -54,6 +56,7 @@ class TracksModel : public QAbstractTableModel
       QString _midiFile;
       class Column;
       std::vector<std::unique_ptr<Column>> _columns;
+      bool _isAllApplied;
       };
 
 } // namespace Ms
