@@ -180,7 +180,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* (&ott
       static int table1[7]  = { 5, 6, 0, 1, 2, 3, 4 };
       int istep = step - 'A';
       int tpc2 = step2tpc(table1[istep], AccidentalVal(alter));
-      int tpc1 = Ms::transposeTpc(tpc2, intval, false);
+      int tpc1 = Ms::transposeTpc(tpc2, intval, true);
       n->setPitch(pitch, tpc1, tpc2);
       //qDebug("  pitch=%d tpc1=%d tpc2=%d", n->pitch(), n->tpc1(), n->tpc2());
       }

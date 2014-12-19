@@ -304,8 +304,8 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);
                         }
                         else {
-                              rootTpc = transposeTpc(h->rootTpc(), interval, false);
-                              baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                              rootTpc = transposeTpc(h->rootTpc(), interval, useDoubleSharpsFlats);
+                              baseTpc = transposeTpc(h->baseTpc(), interval, useDoubleSharpsFlats);
                               }
                         undoTransposeHarmony(h, rootTpc, baseTpc);
                         }
@@ -414,8 +414,8 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                                           transposeInterval, key, trKeys, useDoubleSharpsFlats);
                               }
                         else {
-                              rootTpc = transposeTpc(h->rootTpc(), interval, false);
-                              baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                              rootTpc = transposeTpc(h->rootTpc(), interval, useDoubleSharpsFlats);
+                              baseTpc = transposeTpc(h->baseTpc(), interval, useDoubleSharpsFlats);
                               }
                         // undoTransposeHarmony does not do links
                         // because it is also used to handle transposing instruments
