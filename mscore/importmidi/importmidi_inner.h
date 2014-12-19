@@ -121,14 +121,6 @@ bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction> &interva
 
 } // namespace MidiTuplet
 
-namespace MidiCharset {
-
-QString convertToCharset(const std::string &text);
-QString defaultCharset();
-std::string fromUchar(const uchar *text);
-
-} // namespace MidiCharset
-
 namespace MidiTempo {
 
 ReducedFraction time2Tick(double time, double ticksPerSec);

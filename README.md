@@ -77,6 +77,12 @@ Kept as an example of how to integrate with a complex synthesizer.
     * **thirdparty/beatroot**
     It's a core part of BeatRoot Vamp Plugin by Simon Dixon and Chris Cannam, 
     used in MIDI import for beat detection. (http://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository)
+    
+    * **thirdparty/universalchardet**
+    It's a C++ implementation of the universal charset detection library by Mozilla.
+    universalchardet is an encoding detector library, which takes a sequence of bytes in an unknown character encoding without any additional information, and attempts to determine the encoding of the text.
+    The original code of universalchardet is available at http://lxr.mozilla.org/seamonkey/source/extensions/universalchardet/
+    Techniques used by universalchardet are described at http://www.mozilla.org/projects/intl/UniversalCharsetDetection.html
 
 
 ## Installation

@@ -1,5 +1,6 @@
 #include "importmidi_model.h"
 #include "importmidi_inner.h"
+#include "importmidi_charset.h"
 #include "mscore/preferences.h"
 
 

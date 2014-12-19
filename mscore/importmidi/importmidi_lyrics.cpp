@@ -1,6 +1,7 @@
 #include "importmidi_lyrics.h"
 #include "importmidi_inner.h"
 #include "importmidi_fraction.h"
+#include "importmidi_charset.h"
 #include "importmidi_chord.h"
 #include "importmidi_operations.h"
 #include "libmscore/box.h"
@@ -280,14 +281,12 @@ void setLyricsToScore(QList<MTrack> &tracks)
             }
       }
 
-QList<std::string> makeLyricsListForUI()
+QList<std::string> makeLyricsListForUI(size_t symbolLimit)
       {
       QList<std::string> list;
       const auto &lyrics = preferences.midiImportOperations.data()->lyricTracks;
       if (lyrics.isEmpty())
             return list;
-
-      const unsigned int symbolLimit = 16;
 
       for (const auto &trackLyric: lyrics) {
             std::string lyricText;
@@ -310,6 +309,43 @@ QList<std::string> makeLyricsListForUI()
             list.push_back(lyricText);
             }
       return list;
+      }
+
+void setStaffNames(const std::multimap<int, MTrack> &tracks)
+      {
+      for (const auto &trackPair: tracks) {
+            auto &opers = preferences.midiImportOperations;
+            MidiOperations::CurrentTrackSetter setCurrentTrack(
+                                    opers, trackPair.second.indexOfOperation);
+            for (const auto &i: trackPair.second.mtrack->events()) {
+                  const auto& e = i.second;
+                  if (e.type() == ME_META && e.metaType() == META_TRACK_NAME) {
+                        const uchar* data = (uchar*)e.edata();
+                        const std::string text = MidiCharset::fromUchar(data);
+
+                        const int currentTrack = opers.currentTrack();
+                        opers.data()->trackOpers.staffName.setValue(currentTrack, text);
+                        }
+                  }
+            }
+      }
+
+void extractOtherMetaTextForCharset(const std::multimap<int, MTrack> &tracks)
+      {
+      for (const auto &trackPair: tracks) {
+            auto &opers = preferences.midiImportOperations;
+            MidiOperations::CurrentTrackSetter setCurrentTrack(
+                                    opers, trackPair.second.indexOfOperation);
+            for (const auto &i: trackPair.second.mtrack->events()) {
+                  const auto& e = i.second;
+                  if (e.type() == ME_META
+                              && (e.metaType() == META_TITLE || e.metaType() == META_COPYRIGHT)) {
+                        const uchar* data = (uchar*)e.edata();
+                        const std::string text = MidiCharset::fromUchar(data);
+                        preferences.midiImportOperations.data()->textForCharsetDetection += text;
+                        }
+                  }
+            }
       }
 
 } // namespace MidiLyrics

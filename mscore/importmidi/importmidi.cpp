@@ -51,6 +51,7 @@
 #include "importmidi_fraction.h"
 #include "importmidi_drum.h"
 #include "importmidi_inner.h"
+#include "importmidi_charset.h"
 #include "importmidi_clef.h"
 #include "importmidi_lrhand.h"
 #include "importmidi_lyrics.h"
@@ -206,18 +207,15 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             case META_LYRIC:
                   break;      // lyric and text are added in importmidi_lyrics.cpp
             case META_TRACK_NAME:
-                  {
-                  const std::string text = MidiCharset::fromUchar(data);
-
-                  auto &opers = preferences.midiImportOperations;
-                  if (opers.data()->processingsOfOpenedFile == 0) {
-                        const int currentTrack = opers.currentTrack();
-                        opers.data()->trackOpers.staffName.setValue(currentTrack, text);
+                  if (name.isEmpty()) {      // staff name was already extracted from MIDI file
+                        auto &opers = preferences.midiImportOperations;
+                        if (opers.data()->processingsOfOpenedFile == 0) {
+                              const int currentTrack = opers.currentTrack();
+                              const std::string text = opers.data()->trackOpers.staffName.value(
+                                                                                    currentTrack);
+                              name = MidiCharset::convertToCharset(text);
+                              }
                         }
-
-                  if (name.isEmpty())
-                        name = MidiCharset::convertToCharset(text);
-                  }
                   break;
             case META_TEMPO:  // add later, after adding of notes
                   break;
@@ -259,7 +257,8 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                               break;
                         }
 
-                  text->setText((const char*)(mm.edata()));
+                 std::string t = MidiCharset::fromUchar(mm.edata());
+                 text->setText(MidiCharset::convertToCharset(t));
 
                   MeasureBase* measure = cs->first();
                   if (measure->type() != Element::Type::VBOX) {
@@ -272,7 +271,10 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   }
                   break;
             case META_COPYRIGHT:
-                  cs->setMetaTag("copyright", QString((const char*)(mm.edata())));
+                  {
+                  std::string text = MidiCharset::fromUchar(mm.edata());
+                  cs->setMetaTag("copyright", MidiCharset::convertToCharset(text));
+                  }
                   break;
             case META_TIME_SIGNATURE:
                   break;                  // added earlier
@@ -999,6 +1001,8 @@ void convertMidi(Score *score, const MidiFile *mf)
                         ++opers.data()->trackCount;
                   }
             MidiLyrics::extractLyricsToMidiData(mf);
+            MidiLyrics::setStaffNames(tracks);
+            MidiLyrics::extractOtherMetaTextForCharset(tracks);
             }
                   // for newly opened MIDI file - detect if it is a human performance
                   // if so - detect beats and set initial time signature
@@ -1048,6 +1052,11 @@ void convertMidi(Score *score, const MidiFile *mf)
       MChord::splitUnequalChords(tracks);
                   // no more track insertion/reordering/deletion from now
       QList<MTrack> trackList = prepareTrackList(tracks);
+                  // for newly opened MIDI file
+      if (opers.data()->processingsOfOpenedFile == 0
+                  && opers.data()->trackOpers.doStaffSplit.canRedefineDefaultLater()) {
+            MidiCharset::tryToDetectCharset();
+            }
       createInstruments(score, trackList);
       MidiDrum::setStaffBracketForDrums(trackList);
       createMeasures(lastTick, score);
