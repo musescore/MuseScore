@@ -29,6 +29,7 @@ class TracksModel::Column
 TracksModel::TracksModel()
       : _trackCount(0)
       , _frozenColCount(0)
+      , _isAllApplied(true)
       {
       }
 
@@ -49,6 +50,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
       _trackCount = trackCount;
       _frozenColCount = 0;
       _midiFile = midiFile;
+      _isAllApplied = true;
       if (trackCount == 0)
             return;
 
@@ -624,6 +626,7 @@ void TracksModel::clear()
       _frozenColCount = 0;
       _trackOpers = MidiOperations::Opers();
       _columns.clear();
+      _isAllApplied = true;
       endResetModel();
       }
 
@@ -634,7 +637,13 @@ const MidiOperations::Opers& TracksModel::trackOpers() const
 
 void TracksModel::updateCharset()
       {
+      _isAllApplied = false;
       forceAllChanged();
+      }
+
+void TracksModel::notifyAllApplied()
+      {
+      _isAllApplied = true;
       }
 
 int TracksModel::rowFromTrackIndex(int trackIndex) const
@@ -896,6 +905,8 @@ bool TracksModel::setData(const QModelIndex &index, const QVariant &value, int /
             if (_trackCount > 1)    // update 'all tracks' row
                   forceRowDataChanged(0);
             }
+
+      _isAllApplied = false;
       return true;
       }
 
