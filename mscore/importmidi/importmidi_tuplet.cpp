@@ -1088,6 +1088,9 @@ void findAllTuplets(
             const ReducedFraction &lastTick,
             const ReducedFraction &basicQuant)
       {
+#ifdef NDEBUG
+      (void)lastTick;
+#endif
       if (chords.empty())
             return;
 

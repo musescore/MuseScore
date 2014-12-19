@@ -56,7 +56,7 @@ ReducedFraction quantValueToFraction(MidiOperations::QuantValue quantValue)
 MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction &fraction)
       {
       const auto division = ReducedFraction::fromTicks(MScore::division);
-       MidiOperations::QuantValue quantValue;
+       MidiOperations::QuantValue quantValue = MidiOperations::QuantValue::Q_4;
 
       if (fraction == division)
             quantValue = MidiOperations::QuantValue::Q_4;
@@ -815,6 +815,9 @@ void findChordRangeEnds(
             const ReducedFraction &barStart,
             const ReducedFraction &beatLen)
       {
+#ifdef NDEBUG
+      (void)rangeStart;
+#endif
       for (auto it = data.rbegin(); it != data.rend(); ++it) {
             QuantData &d = *it;
             d.chordRangeEnd = barStart + quantizeToSmall(rangeEnd - barStart, d.quant);

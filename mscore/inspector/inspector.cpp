@@ -910,7 +910,7 @@ void InspectorBarLine::spanTypeChanged(int idx)
       Score*      score = bl->score();
       score->startCmd();
 
-      int spanStaves, spanFrom, spanTo;
+      int spanStaves, spanFrom = 0, spanTo = 0;
       // the amount to adjust To value of short types, if staff num. of lines != 5
       int shortDelta = bl->staff() ? (bl->staff()->lines() - 5)*2 : 0;
       spanStaves = 1;               // in most cases, num. of spanned staves is 1

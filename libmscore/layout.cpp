@@ -2022,7 +2022,7 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
       Segment* ns       = nm->findSegment(Segment::Type::TimeSig, tick);
       bool showCourtesy = styleB(StyleIdx::genCourtesyTimesig);
 
-      qreal w;
+      qreal w = 0.0;
       if (showCourtesy && ns) {
             TimeSig* ts = static_cast<TimeSig*>(ns->element(0));
             if (ts && ts->showCourtesySig()) {
@@ -2039,8 +2039,6 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
                         }
                   }
             }
-      else
-            w = 0.0;
 
       // courtesy key signatures
 
