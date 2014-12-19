@@ -4757,7 +4757,7 @@ int main(int argc, char* av[])
                               { QPalette::ToolTipBase,   "ToolTipBaseColor",   "#fefac2"  },
                               { QPalette::ToolTipText,   "ToolTipTextColor",   "#000000"  },
                               { QPalette::Link,          "LinkColor",          "#3a80c6"  },
-                              { QPalette::LinkVisited,   "LinkVisitedColor",          "#3a80c6"  },
+                              { QPalette::LinkVisited,   "LinkVisitedColor",   "#3a80c6"  },
                               };
                         for (auto i : pi)
                               p.setColor(i.role, s.value(i.name, i.color).value<QColor>());

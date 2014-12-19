@@ -42,10 +42,11 @@ Startcenter::Startcenter()
  : QDialog(0)
       {
       setupUi(this);
+      setBackgroundRole(QPalette::Window);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowModality(Qt::ApplicationModal);
       connect(recentPage,  &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
-      connect(openScore, SIGNAL(clicked()), this, SLOT(openScoreClicked()));
+      connect(openScore, SIGNAL(linkActivated(QString)), this, SLOT(openScoreClicked(QString)));
 
       //init webview
       MyWebView* _webView = new MyWebView(this);
@@ -113,7 +114,7 @@ void Startcenter::updateRecentScores()
 //   openScoreClicked
 //---------------------------------------------------------
 
-void Startcenter::openScoreClicked()
+void Startcenter::openScoreClicked(const QString & link)
       {
       close();
       getAction("file-open")->trigger();
@@ -138,7 +139,7 @@ void Startcenter::writeSettings(QSettings& settings)
 void Startcenter::readSettings(QSettings& settings)
       {
       settings.beginGroup("Startcenter");
-      resize(settings.value("size", QSize(1161, 694)).toSize());
+      resize(settings.value("size", QSize(740, 500)).toSize());
       move(settings.value("pos", QPoint(200, 100)).toPoint());
       settings.endGroup();
       }
