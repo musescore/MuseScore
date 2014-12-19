@@ -2514,16 +2514,6 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_INIT | STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY | STATE_FOTO,
-         "musescore-connect",
-         QT_TRANSLATE_NOOP("action", "MuseScore Connect"),
-         0,
-         0,
-         Icons::community_ICON,
-         Qt::ApplicationShortcut
-         },
-      {
-         MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "plugin-creator",
          QT_TRANSLATE_NOOP("action", "Plugin Creator"),
