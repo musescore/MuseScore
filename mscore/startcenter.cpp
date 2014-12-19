@@ -52,6 +52,7 @@ Startcenter::Startcenter()
       MyWebView* _webView = new MyWebView(this);
       _webView->setUrl(QUrl("http://connect2.musescore.com/"));
       horizontalLayout->addWidget(_webView);
+      QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
       recentPage->setBoldTitle(true);
       updateRecentScores();
       }
@@ -173,8 +174,10 @@ MyWebView::MyWebView(QWidget *parent):
 
       connect(this, SIGNAL(loadFinished(bool)), SLOT(stopBusy(bool)));
       connect(this, SIGNAL(linkClicked(const QUrl&)), SLOT(link(const QUrl&)));
-     
-     
+
+      QWebFrame* frame = page()->mainFrame();
+      connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(addToJavascript()));
+
       page()->setNetworkAccessManager(networkManager);
       
       setZoomFactor(guiScaling);
@@ -258,6 +261,16 @@ void MyWebView::setBusy()
 void MyWebView::link(const QUrl& url)
       {
       QDesktopServices::openUrl(url);
+      }
+
+//---------------------------------------------------------
+//   addToJavascript
+//---------------------------------------------------------
+
+void MyWebView::addToJavascript()
+      {
+      QWebFrame* frame = page()->mainFrame();
+      frame->addToJavaScriptWindowObject("mscore", mscore);
       }
 
 //---------------------------------------------------------
