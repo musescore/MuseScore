@@ -30,7 +30,7 @@
 inline void initMyResources() {
       Q_INIT_RESOURCE(mtest);
       Q_INIT_RESOURCE(musescorefonts_MScore);
-      Q_INIT_RESOURCE(musescorefonts_Gonville);
+      Q_INIT_RESOURCE(musescorefonts_Gootville);
       Q_INIT_RESOURCE(musescorefonts_Bravura);
       Q_INIT_RESOURCE(musescorefonts_MuseJazz);
       Q_INIT_RESOURCE(musescorefonts_FreeSerif);
