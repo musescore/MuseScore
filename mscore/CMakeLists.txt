@@ -169,7 +169,7 @@ if (APPLE)
 else (APPLE)
       QT5_ADD_RESOURCES (qrc_files musescore.qrc
             musescorefonts-MScore.qrc
-            musescorefonts-Gonville.qrc
+            musescorefonts-Gootville.qrc
             musescorefonts-Bravura.qrc
             musescorefonts-MuseJazz.qrc
             musescorefonts-FreeSerif.qrc
@@ -556,8 +556,8 @@ endif (MINGW)
 
 if (APPLE)
      install (FILES
-      ../fonts/gonville/Gonville.otf
-      ../fonts/gonville/GonvilleText.otf
+      ../fonts/gootville/Gootville.otf
+      ../fonts/gootville/GootvilleText.otf
       ../fonts/mscore/mscore.ttf
       ../fonts/mscore/MScoreText.ttf
       ../fonts/MuseJazz.ttf

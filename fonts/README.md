@@ -7,7 +7,7 @@ This directory contains the fonts used internally by MuseScore and the sources u
 ## Sub-directories
 
 * **bravura** The [_Bravura_](http://www.smufl.org/fonts/) fonts and the documentation for them and for SMuFL. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
-* **gonville** The [_Gonville_ font](http://www.chiark.greenend.org.uk/~sgtatham/gonville/) for score musical symbols. This font is modified and maintained by the MuseScore project.
+* **gootville** The [_Gonville_ font](http://www.chiark.greenend.org.uk/~sgtatham/gonville/) for score musical symbols. This font is modified and maintained by the MuseScore project.
 * **mscore** The main font used in MuseScore scores for musical symbols (formerly known as [_Emmentaler_](http://lilypond.org/doc/v2.18/Documentation/notation/the-feta-font)), as well its counterpart used for texts.
 
 Other files in the main **fonts** directories are for collateral fonts used by MuseScore for specific tasks. If an *.sfd* file is present, the font is maintained/customized by the MuseScore community.
