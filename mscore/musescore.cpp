@@ -2666,6 +2666,7 @@ void MuseScore::readSettings()
             sizes << 500 << 100;
             mainWindow->setSizes(sizes);
             mscore->showPalette(true);
+            mscore->showInspector(true);
             return;
             }
 
@@ -2680,7 +2681,7 @@ void MuseScore::readSettings()
       if (settings.value("maximized", false).toBool() && !QAccessible::isActive())
             showMaximized();
       mscore->showPalette(settings.value("showPanel", "1").toBool());
-      mscore->showInspector(settings.value("showInspector", "0").toBool());
+      mscore->showInspector(settings.value("showInspector", "1").toBool());
       mscore->showPianoKeyboard(settings.value("showPianoKeyboard", "0").toBool());
       mscore->showSelectionWindow(settings.value("showSelectionWindow", "0").toBool());
 
