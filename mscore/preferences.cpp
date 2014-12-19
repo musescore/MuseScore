@@ -108,7 +108,11 @@ void Preferences::init()
 
       showNavigator      = false;
       showPlayPanel      = false;
+      showSplashScreen   = true;
+      showStartcenter    = true;
+
       showStatusBar      = true;
+
 //      playPanelPos       = QPoint(100, 300);
 
       useAlsaAudio       = false;
@@ -142,8 +146,6 @@ void Preferences::init()
       sessionStart             = SessionStart::SCORE;
       startScore               = ":/data/My_First_Score.mscz";
       defaultStyleFile         = "";
-      showSplashScreen         = true;
-      showStartcenter          = true;
 
       useMidiRemote      = false;
       for (int i = 0; i < MIDI_REMOTES; ++i)
@@ -248,6 +250,9 @@ void Preferences::write()
 
       s.setValue("showNavigator",      showNavigator);
       s.setValue("showPlayPanel",      showPlayPanel);
+      s.setValue("showSplashScreen",   showSplashScreen);
+      s.setValue("showStartcenter1",    showStartcenter);
+
       s.setValue("showStatusBar",      showStatusBar);
 
       s.setValue("useAlsaAudio",       useAlsaAudio);
@@ -277,8 +282,6 @@ void Preferences::write()
             }
       s.setValue("startScore",         startScore);
       s.setValue("defaultStyle",       defaultStyleFile);
-      s.setValue("showSplashScreen",   showSplashScreen);
-      s.setValue("showStartcenter1",    showStartcenter);
 
       s.setValue("midiExpandRepeats",  midiExpandRepeats);
       s.setValue("playRepeats",        MScore::playRepeats);
@@ -394,7 +397,11 @@ void Preferences::read()
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
       playNotes               = s.value("playNotes", playNotes).toBool();
 
-      showNavigator   = s.value("showNavigator", showNavigator).toBool();
+      showNavigator            = s.value("showNavigator", showNavigator).toBool();
+      showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
+      showStartcenter          = s.value("showStartcenter1", showStartcenter).toBool();
+      showPlayPanel            = s.value("showPlayPanel", showPlayPanel).toBool();
+
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
 
       useAlsaAudio       = s.value("useAlsaAudio", useAlsaAudio).toBool();
@@ -417,8 +424,6 @@ void Preferences::read()
 
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
 
-      showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
-      showStartcenter          = s.value("showStartcenter1", showStartcenter).toBool();
       midiExpandRepeats        = s.value("midiExpandRepeats", midiExpandRepeats).toBool();
       MScore::playRepeats      = s.value("playRepeats", MScore::playRepeats).toBool();
       MScore::panPlayback      = s.value("panPlayback", MScore::panPlayback).toBool();
@@ -811,6 +816,8 @@ void PreferenceDialog::updateValues()
 
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
+      showSplashScreen->setChecked(prefs.showSplashScreen);
+      showStartcenter->setChecked(prefs.showStartcenter);
 
       alsaDriver->setChecked(prefs.useAlsaAudio);
       jackDriver->setChecked(prefs.useJackAudio || prefs.useJackMidi);
@@ -837,8 +844,6 @@ void PreferenceDialog::updateValues()
             case SessionStart::SCORE:  scoreSession->setChecked(true); break;
             }
       sessionScore->setText(prefs.startScore);
-      showSplashScreen->setChecked(prefs.showSplashScreen);
-      showStartcenter->setChecked(prefs.showStartcenter);
       expandRepeats->setChecked(prefs.midiExpandRepeats);
       instrumentList1->setText(prefs.instrumentList1);
       instrumentList2->setText(prefs.instrumentList2);
@@ -1271,6 +1276,9 @@ void PreferenceDialog::apply()
 
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
+      prefs.showSplashScreen   = showSplashScreen->isChecked();
+      prefs.showStartcenter    = showStartcenter->isChecked();
+
       prefs.antialiasedDrawing = drawAntialiased->isChecked();
 
       prefs.useJackTransport   = jackDriver->isChecked() && useJackTransport->isChecked();
@@ -1363,8 +1371,6 @@ void PreferenceDialog::apply()
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
 
-      prefs.showSplashScreen   = showSplashScreen->isChecked();
-      prefs.showStartcenter    = showStartcenter->isChecked();
       prefs.midiExpandRepeats  = expandRepeats->isChecked();
       prefs.instrumentList1    = instrumentList1->text();
       prefs.instrumentList2    = instrumentList2->text();
