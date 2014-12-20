@@ -1977,7 +1977,6 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
       QFileInfo info(name);
       QString suffix  = info.suffix().toLower();
       score->setName(info.completeBaseName());
-      score->setImportedFilePath(name);
 
       if (suffix == "mscz" || suffix == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);

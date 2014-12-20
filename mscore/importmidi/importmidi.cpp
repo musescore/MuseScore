@@ -1081,6 +1081,7 @@ Score::FileError importMidi(Score *score, const QString &name)
       {
       if (name.isEmpty())
             return Score::FileError::FILE_NOT_FOUND;
+      score->setImportedFilePath(name);
 
       auto &opers = preferences.midiImportOperations;
 
