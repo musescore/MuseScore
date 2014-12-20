@@ -1162,20 +1162,20 @@ void Seq::stopNoteTimer()
 
 void Seq::stopNotes(int channel, bool realTime)
       {
+      auto send = [this, realTime](const NPlayEvent& event) {
+            if (realTime)
+                  putEvent(event);
+            else
+                  sendEvent(event);
+      };
+      send(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
       // Stop notes in all channels
       if (channel == -1) {
-            for(int ch = 0; ch < cs->midiMapping()->size(); ch++) {
-                  if (realTime)
-                        putEvent(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_SOUNDS_OFF, 0));
-                  else
-                        sendEvent(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_SOUNDS_OFF, 0));
-                  }
+            for(int ch = 0; ch < cs->midiMapping()->size(); ch++)
+                  send(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_NOTES_OFF, 0));
             }
       else {
-            if (realTime)
-                  putEvent(NPlayEvent(ME_CONTROLLER, channel, CTRL_ALL_SOUNDS_OFF, 0));
-            else
-                  sendEvent(NPlayEvent(ME_CONTROLLER, channel, CTRL_ALL_SOUNDS_OFF, 0));
+            send(NPlayEvent(ME_CONTROLLER, channel, CTRL_ALL_NOTES_OFF, 0));
             }
       if (preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
             _synti->allNotesOff(channel);
