@@ -201,8 +201,8 @@ void Harmony::write(Xml& xml) const
             if (staff()) {
                   const Interval& interval = staff()->part()->instr()->transpose();
                   if (xml.clipboardmode && !score()->styleB(StyleIdx::concertPitch) && interval.chromatic) {
-                        rRootTpc = transposeTpc(_rootTpc, interval, false);
-                        rBaseTpc = transposeTpc(_baseTpc, interval, false);
+                        rRootTpc = transposeTpc(_rootTpc, interval, true);
+                        rBaseTpc = transposeTpc(_baseTpc, interval, true);
                         }
                   }
             if (rRootTpc != Tpc::TPC_INVALID) {
@@ -749,8 +749,8 @@ void Harmony::endEdit()
                         if (!interval.isZero()) {
                               if (!h->score()->styleB(StyleIdx::concertPitch))
                                     interval.flip();
-                              int rootTpc = transposeTpc(h->rootTpc(), interval, false);
-                              int baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                              int rootTpc = transposeTpc(h->rootTpc(), interval, true);
+                              int baseTpc = transposeTpc(h->baseTpc(), interval, true);
                               //score()->undoTransposeHarmony(h, rootTpc, baseTpc);
                               h->setRootTpc(rootTpc);
                               h->setBaseTpc(baseTpc);

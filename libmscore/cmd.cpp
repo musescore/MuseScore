@@ -391,12 +391,12 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                         if (styleB(StyleIdx::concertPitch)) {
                               v.flip();
                               ntpc1 = ntpc;
-                              ntpc2 = Ms::transposeTpc(ntpc, v, false);
+                              ntpc2 = Ms::transposeTpc(ntpc, v, true);
                               }
                         else {
                               npitch += v.chromatic;
                               ntpc2 = ntpc;
-                              ntpc1 = Ms::transposeTpc(ntpc, v, false);
+                              ntpc1 = Ms::transposeTpc(ntpc, v, true);
                               }
                         }
                   }

@@ -258,8 +258,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Interval interval = partDest->instr()->transpose();
                               if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
-                                    int rootTpc = transposeTpc(harmony->rootTpc(), interval, false);
-                                    int baseTpc = transposeTpc(harmony->baseTpc(), interval, false);
+                                    int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
+                                    int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
                                     undoTransposeHarmony(harmony, rootTpc, baseTpc);
                                     }
 
@@ -577,8 +577,8 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               Interval interval = partDest->instr()->transpose();
                               if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
-                                    int rootTpc = transposeTpc(el->rootTpc(), interval, false);
-                                    int baseTpc = transposeTpc(el->baseTpc(), interval, false);
+                                    int rootTpc = transposeTpc(el->rootTpc(), interval, true);
+                                    int baseTpc = transposeTpc(el->baseTpc(), interval, true);
                                     undoTransposeHarmony(el, rootTpc, baseTpc);
                                     }
                               el->setParent(harmSegm);

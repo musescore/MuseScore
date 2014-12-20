@@ -1127,8 +1127,8 @@ void Score::undoAddElement(Element* element)
                               if (!interval.isZero()) {
                                     if (!score->styleB(StyleIdx::concertPitch))
                                           interval.flip();
-                                    int rootTpc = transposeTpc(h->rootTpc(), interval, false);
-                                    int baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                                    int rootTpc = transposeTpc(h->rootTpc(), interval, true);
+                                    int baseTpc = transposeTpc(h->baseTpc(), interval, true);
                                     score->undoTransposeHarmony(h, rootTpc, baseTpc);
                                     }
                               }
