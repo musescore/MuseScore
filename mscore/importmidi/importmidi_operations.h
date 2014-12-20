@@ -247,7 +247,7 @@ class CurrentTrackSetter
 // scoped setter of current MIDI file
 class CurrentMidiFileSetter
       {
-public:
+   public:
       CurrentMidiFileSetter(Data &opers, const QString &fileName)
             : _opers(opers)
             {
@@ -259,7 +259,7 @@ public:
             {
             _opers._currentMidiFile = _oldValue;
             }
-private:
+   private:
       Data &_opers;
       QString _oldValue;
                   // disallow heap allocation - for stack-only usage
