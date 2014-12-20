@@ -3627,8 +3627,8 @@ void ScoreView::pagePrev()
             return;
       if (score()->layoutMode() == LayoutMode::LINE) {
             qreal x = xoffset() + width() * .8;
-            if (x > 0.0)
-                  x = 0;
+            if (x > 10.0)
+                  x = 10.0;
             setOffset(x, yoffset());
             }
       else {
@@ -3648,7 +3648,7 @@ void ScoreView::pagePrev()
 void ScoreView::pageTop()
       {
       if (score()->layoutMode() == LayoutMode::LINE)
-            setOffset(0.0, 0.0);
+            setOffset(10.0, 0.0);
       else
             setOffset(10.0, 10.0);
       update();
@@ -3727,8 +3727,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
                   xo = -curPosR * mag() + width() - marginRight;
 
                   // Bring back the score to the left to avoid blank gap on the left.
-                  if (xo > 0)
-                        xo = 0;
+                  if (xo > 10)
+                        xo = 10;
 
                   setOffset(xo, yoffset());
                   update();
