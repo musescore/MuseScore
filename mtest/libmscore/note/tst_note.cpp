@@ -40,6 +40,7 @@ class TestNote : public QObject, public MTest
       void note();
       void grace();
       void tpc();
+      void tpcTranspose();
       };
 
 //---------------------------------------------------------
@@ -361,7 +362,7 @@ void TestNote::grace()
 
 //---------------------------------------------------------
 ///   tpc
-///   read/write test of note tpc values
+///   test of note tpc values
 //---------------------------------------------------------
 
 void TestNote::tpc()
@@ -386,6 +387,34 @@ void TestNote::tpc()
       score->cmdConcertPitchChanged(true, true);
 
       QVERIFY(saveCompareScore(score, "tpc-test.mscx", DIR + "tpc-ref.mscx"));
+
+      }
+
+//---------------------------------------------------------
+///   tpcTranspose
+///   test of note tpc values & transposition
+//---------------------------------------------------------
+
+void TestNote::tpcTranspose()
+      {
+      Score* score = readScore(DIR + "tpc-transpose.mscx");
+      score->doLayout();
+
+      score->startCmd();
+      Measure* m = score->firstMeasure();
+      score->select(m, SelectType::SINGLE, 0);
+      score->changeAccidental(Accidental::Type::FLAT);
+      score->endCmd();
+
+      score->startCmd();
+      m = m->nextMeasure();
+      score->select(m, SelectType::SINGLE, 0);
+      score->upDown(false, UpDownMode::CHROMATIC);
+      score->endCmd();
+
+      score->cmdConcertPitchChanged(true, true);
+
+      QVERIFY(saveCompareScore(score, "tpc-transpose-test.mscx", DIR + "tpc-transpose-ref.mscx"));
 
       }
 
