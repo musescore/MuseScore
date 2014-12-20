@@ -34,6 +34,7 @@
         <key>
           <key-step>C</key-step>
           <key-alter>-2</key-alter>
+          <key-accidental>flat-flat</key-accidental>
           </key>
         <time>
           <beats>4</beats>
@@ -55,6 +56,7 @@
         <key>
           <key-step>D</key-step>
           <key-alter>-2</key-alter>
+          <key-accidental>flat-flat</key-accidental>
           </key>
         </attributes>
       <note>
@@ -68,6 +70,7 @@
         <key>
           <key-step>E</key-step>
           <key-alter>-2</key-alter>
+          <key-accidental>flat-flat</key-accidental>
           </key>
         </attributes>
       <note>
@@ -81,6 +84,7 @@
         <key>
           <key-step>F</key-step>
           <key-alter>-2</key-alter>
+          <key-accidental>flat-flat</key-accidental>
           </key>
         </attributes>
       <note>
@@ -95,6 +99,7 @@
         <key>
           <key-step>G</key-step>
           <key-alter>-2</key-alter>
+          <key-accidental>flat-flat</key-accidental>
           </key>
         </attributes>
       <note>
@@ -108,6 +113,7 @@
         <key>
           <key-step>A</key-step>
           <key-alter>-2</key-alter>
+          <key-accidental>flat-flat</key-accidental>
           </key>
         </attributes>
       <note>
@@ -121,6 +127,7 @@
         <key>
           <key-step>B</key-step>
           <key-alter>-2</key-alter>
+          <key-accidental>flat-flat</key-accidental>
           </key>
         </attributes>
       <note>
@@ -145,6 +152,7 @@
         <key>
           <key-step>C</key-step>
           <key-alter>2</key-alter>
+          <key-accidental>double-sharp</key-accidental>
           </key>
         </attributes>
       <note>
@@ -158,6 +166,7 @@
         <key>
           <key-step>D</key-step>
           <key-alter>2</key-alter>
+          <key-accidental>double-sharp</key-accidental>
           </key>
         </attributes>
       <note>
@@ -171,6 +180,7 @@
         <key>
           <key-step>E</key-step>
           <key-alter>2</key-alter>
+          <key-accidental>double-sharp</key-accidental>
           </key>
         </attributes>
       <note>
@@ -184,6 +194,7 @@
         <key>
           <key-step>F</key-step>
           <key-alter>2</key-alter>
+          <key-accidental>double-sharp</key-accidental>
           </key>
         </attributes>
       <note>
@@ -198,6 +209,7 @@
         <key>
           <key-step>G</key-step>
           <key-alter>2</key-alter>
+          <key-accidental>double-sharp</key-accidental>
           </key>
         </attributes>
       <note>
@@ -211,6 +223,7 @@
         <key>
           <key-step>A</key-step>
           <key-alter>2</key-alter>
+          <key-accidental>double-sharp</key-accidental>
           </key>
         </attributes>
       <note>
@@ -224,6 +237,7 @@
         <key>
           <key-step>B</key-step>
           <key-alter>2</key-alter>
+          <key-accidental>double-sharp</key-accidental>
           </key>
         </attributes>
       <note>

@@ -1542,6 +1542,7 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
                   //       ksym.sym, ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y(), line, step);
                   xml.tag("key-step", QString(QChar(table2[step])));
                   xml.tag("key-alter", accSymId2alter(ksym.sym));
+                  xml.tag("key-accidental", accSymId2MxmlString(ksym.sym));
                   }
             }
       else {
@@ -2356,43 +2357,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
 
             // accidental
             if (acc) {
-                  /*
-                        MusicXML 2.0 accidental names include:
-                        sharp,natural, flat, double-sharp, sharp-sharp, flat-flat,
-                        natural-sharp, natural-flat, quarter-flat, quarter-sharp,
-                        three-quarters-flat, and three-quarters-sharp.
-                        Added in MusicXml 3.0: sharp-down, sharp-up, natural-down, natural-up,
-                        flat-down, flat-up, triple-sharp, triple-flat, slash-quarter-sharp,
-                        slash-sharp, slash-flat, double-slash-flat, sharp-1, sharp-2,
-                        sharp-3, sharp-5, flat-1, flat-2, flat-3, flat-4, sori, and koron.
-                    */
-                  QString s;
-                  switch (acc->accidentalType()) {
-                        case Accidental::Type::SHARP:              s = "sharp";                break;
-                        case Accidental::Type::FLAT:               s = "flat";                 break;
-                        case Accidental::Type::SHARP2:             s = "double-sharp";         break;
-                        case Accidental::Type::FLAT2:              s = "flat-flat";            break;
-                        case Accidental::Type::NATURAL:            s = "natural";              break;
-                        case Accidental::Type::FLAT_SLASH:         s = "slash-flat";           break;
-                        case Accidental::Type::MIRRORED_FLAT:      s = "quarter-flat";         break; // (recommended by Michael)
-                        case Accidental::Type::FLAT_ARROW_UP:      s = "flat-up";              break;
-                        case Accidental::Type::NATURAL_ARROW_DOWN: s = "natural-down";         break;
-                        case Accidental::Type::SHARP_SLASH:        s = "quarter-sharp";        break; // (recommended by Michael)
-                        case Accidental::Type::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
-                        case Accidental::Type::NATURAL_ARROW_UP:   s = "natural-up";           break;
-                        case Accidental::Type::MIRRORED_FLAT2:     s = "three-quarters-flat";  break; // (recommended by Michael)
-                        case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break; // (alternative) - not used ?
-                        case Accidental::Type::FLAT_ARROW_DOWN:    s = "flat-down";            break;
-                        case Accidental::Type::SHARP_SLASH4:       s = "three-quarters-sharp"; break; // (recommended by Michael)
-                        case Accidental::Type::SHARP_ARROW_UP:     s = "sharp-up";             break;
-                        case Accidental::Type::SHARP_SLASH3:       s = "slash-quarter-sharp";  break;
-                        case Accidental::Type::FLAT_SLASH2:        s = "double-slash-flat";    break;
-                        case Accidental::Type::SHARP_SLASH2:       s = "slash-sharp";          break;
-                        case Accidental::Type::SORI:               s = "sori";                 break; //sori
-                        case Accidental::Type::KORON:              s = "koron";                break; //koron
-                        default:
-                              qDebug("unknown accidental %d", int(acc->accidentalType()));
-                        }
+                  QString s = accidentalType2MxmlString(acc->accidentalType());
                   if (s != "") {
                         if (note->accidental()->hasBracket())
                               xml.tag("accidental parentheses=\"yes\"", s);

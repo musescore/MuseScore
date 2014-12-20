@@ -34,12 +34,16 @@
         <key>
           <key-step>C</key-step>
           <key-alter>-2</key-alter>
+          <key-accidental>flat-flat</key-accidental>
           <key-step>D</key-step>
           <key-alter>-1</key-alter>
+          <key-accidental>flat</key-accidental>
           <key-step>E</key-step>
           <key-alter>1</key-alter>
+          <key-accidental>sharp</key-accidental>
           <key-step>F</key-step>
           <key-alter>2</key-alter>
+          <key-accidental>double-sharp</key-accidental>
           </key>
         <time>
           <beats>4</beats>

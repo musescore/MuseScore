@@ -24,6 +24,7 @@
 
 #include "globals.h"
 #include "musicxmlsupport.h"
+#include "libmscore/sym.h"
 
 namespace Ms {
 
@@ -360,5 +361,79 @@ Fraction MxmlSupport::calculateFraction(QString type, int dots, int normalNotes,
             }
       return f;
       }
-}
 
+//---------------------------------------------------------
+//   accSymId2MxmlString
+//---------------------------------------------------------
+
+QString accSymId2MxmlString(const SymId id)
+      {
+      QString s;
+      switch (id) {
+            case SymId::accidentalSharp:               s = "sharp";                break;
+            case SymId::accidentalFlat:                s = "flat";                 break;
+            case SymId::accidentalDoubleSharp:         s = "double-sharp";         break;
+            case SymId::accidentalDoubleFlat:          s = "flat-flat";            break;
+            case SymId::accidentalNatural:             s = "natural";              break;
+                  /* TODO
+            case Accidental::Type::FLAT_SLASH:         s = "slash-flat";           break;
+            case Accidental::Type::MIRRORED_FLAT:      s = "quarter-flat";         break;
+            case Accidental::Type::FLAT_ARROW_UP:      s = "flat-up";              break;
+            case Accidental::Type::NATURAL_ARROW_DOWN: s = "natural-down";         break;
+            case Accidental::Type::SHARP_SLASH:        s = "quarter-sharp";        break;
+            case Accidental::Type::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
+            case Accidental::Type::NATURAL_ARROW_UP:   s = "natural-up";           break;
+            case Accidental::Type::MIRRORED_FLAT2:     s = "three-quarters-flat";  break;
+            case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
+            case Accidental::Type::FLAT_ARROW_DOWN:    s = "flat-down";            break;
+            case Accidental::Type::SHARP_SLASH4:       s = "three-quarters-sharp"; break;
+            case Accidental::Type::SHARP_ARROW_UP:     s = "sharp-up";             break;
+            case Accidental::Type::SHARP_SLASH3:       s = "slash-quarter-sharp";  break;
+            case Accidental::Type::FLAT_SLASH2:        s = "double-slash-flat";    break;
+            case Accidental::Type::SHARP_SLASH2:       s = "slash-sharp";          break;
+            case Accidental::Type::SORI:               s = "sori";                 break;
+            case Accidental::Type::KORON:              s = "koron";                break;
+                   */
+            default:
+                  qDebug("unknown accidental %d", static_cast<int>(id));
+            }
+      return s;
+      }
+      
+//---------------------------------------------------------
+//   accidentalType2MxmlString
+//---------------------------------------------------------
+      
+QString accidentalType2MxmlString(const Accidental::Type type)
+      {
+      QString s;
+      switch (type) {
+            case Accidental::Type::SHARP:              s = "sharp";                break;
+            case Accidental::Type::FLAT:               s = "flat";                 break;
+            case Accidental::Type::SHARP2:             s = "double-sharp";         break;
+            case Accidental::Type::FLAT2:              s = "flat-flat";            break;
+            case Accidental::Type::NATURAL:            s = "natural";              break;
+            case Accidental::Type::FLAT_SLASH:         s = "slash-flat";           break;
+            case Accidental::Type::MIRRORED_FLAT:      s = "quarter-flat";         break;
+            case Accidental::Type::FLAT_ARROW_UP:      s = "flat-up";              break;
+            case Accidental::Type::NATURAL_ARROW_DOWN: s = "natural-down";         break;
+            case Accidental::Type::SHARP_SLASH:        s = "quarter-sharp";        break;
+            case Accidental::Type::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
+            case Accidental::Type::NATURAL_ARROW_UP:   s = "natural-up";           break;
+            case Accidental::Type::MIRRORED_FLAT2:     s = "three-quarters-flat";  break;
+            case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
+            case Accidental::Type::FLAT_ARROW_DOWN:    s = "flat-down";            break;
+            case Accidental::Type::SHARP_SLASH4:       s = "three-quarters-sharp"; break;
+            case Accidental::Type::SHARP_ARROW_UP:     s = "sharp-up";             break;
+            case Accidental::Type::SHARP_SLASH3:       s = "slash-quarter-sharp";  break;
+            case Accidental::Type::FLAT_SLASH2:        s = "double-slash-flat";    break;
+            case Accidental::Type::SHARP_SLASH2:       s = "slash-sharp";          break;
+            case Accidental::Type::SORI:               s = "sori";                 break;
+            case Accidental::Type::KORON:              s = "koron";                break;
+            default:
+                  qDebug("unknown accidental %d", static_cast<int>(type));
+            }
+      return s;
+      }
+
+}
