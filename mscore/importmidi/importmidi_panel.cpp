@@ -237,11 +237,19 @@ bool ImportMidiPanel::canImportMidi() const
 
 bool ImportMidiPanel::canTryCancelChanges() const
       {
+      if (!_model->isAllApplied())
+            return true;
+
       auto &opers = preferences.midiImportOperations;
       MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+      if (!opers.data())
+            return false;
 
-      return !_model->isAllApplied()
-            || (opers.data() && opers.data()->charset != _ui->comboBoxCharset->currentText());
+      if (opers.data()->charset != _ui->comboBoxCharset->currentText())
+            return true;
+
+      const QByteArray vData = _ui->tracksView->verticalHeader()->saveState();
+      return opers.data()->VHeaderData != vData;
       }
 
 bool ImportMidiPanel::canMoveTrackUp(int visualIndex) const
