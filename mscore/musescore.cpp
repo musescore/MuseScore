@@ -1195,7 +1195,7 @@ void MuseScore::addRecentScore(Score* score)
       {
       QString path = score->importedFilePath(); // defined for scores imported from e.g. MIDI files
       addRecentScore(path);
-      path = score->fileInfo()->canonicalFilePath();
+      path = score->fileInfo()->absoluteFilePath();
       addRecentScore(path);
       if (startcenter)
             startcenter->updateRecentScores();
