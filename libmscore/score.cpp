@@ -2332,6 +2332,8 @@ void Score::insertStaff(Staff* staff, int ridx)
 
       for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
             Spanner* s = i->second;
+            if (s->systemFlag())
+                  continue;
             if (s->staffIdx() >= idx) {
                   int t = s->track() + VOICES;
                   s->setTrack(t < ntracks() ? t : ntracks() - 1);
@@ -2457,7 +2459,7 @@ void Score::cmdRemoveStaff(int staffIdx)
       QList<Spanner*> sl;
       for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
             Spanner* s = i->second;
-            if (s->staffIdx() == staffIdx && (staffIdx != 0 || s->type() != Element::Type::VOLTA))
+            if (s->staffIdx() == staffIdx && (staffIdx != 0 || !s->systemFlag()))
                   sl.append(s);
             }
       for (auto i : sl) {
@@ -2516,6 +2518,8 @@ void Score::sortStaves(QList<int>& dst)
             }
       for (auto i : _spanner.map()) {
             Spanner* sp = i.second;
+            if (sp->systemFlag())
+                  continue;
             int voice    = sp->voice();
             int staffIdx = sp->staffIdx();
             int idx = dst.indexOf(staffIdx);

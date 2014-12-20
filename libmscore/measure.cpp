@@ -1027,7 +1027,7 @@ void Measure::insertStaves(int sStaff, int eStaff)
             if (e->track() == -1)
                   continue;
             int staffIdx = e->staffIdx();
-            if (staffIdx >= sStaff) {
+            if (staffIdx >= sStaff && !e->systemFlag()) {
                   int voice = e->voice();
                   staffIdx += eStaff - sStaff;
                   e->setTrack(staffIdx * VOICES + voice);
@@ -1068,7 +1068,7 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
             if (e->track() == -1)
                   continue;
             int staffIdx = e->staffIdx();
-            if (staffIdx >= sStaff && staffIdx < eStaff) {
+            if (staffIdx >= sStaff && (staffIdx < eStaff) && !e->systemFlag()) {
                   e->undoUnlink();
                   _score->undo(new RemoveElement(e));
                   }
@@ -2709,7 +2709,7 @@ void Measure::sortStaves(QList<int>& dst)
             s->sortStaves(dst);
 
       foreach (Element* e, _el) {
-            if (e->track() == -1)
+            if (e->track() == -1 || e->systemFlag())
                   continue;
             int voice    = e->voice();
             int staffIdx = e->staffIdx();
