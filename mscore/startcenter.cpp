@@ -187,7 +187,7 @@ MyWebView::MyWebView(QWidget *parent):
             setContextMenuPolicy(Qt::NoContextMenu);
 
       //set cookie jar for persistent cookies
-      CookieJar* jar = new CookieJar(QString(dataPath + "/cookies.txt"));
+      CookieJar* jar = new CookieJar(QString(dataPath + "/cookie_store.txt"));
       page()->networkAccessManager()->setCookieJar(jar);
       
       page()->currentFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
