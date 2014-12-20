@@ -425,7 +425,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                   bool firstpart = true;
                   while (rest) {
                         measure = tick2measure(tick);
-                        Chord* c2 = static_cast<Chord*>(c->clone());
+                        Chord* c2 = firstpart ? c : static_cast<Chord*>(c->clone());
                         int mlen = measure->tick() + measure->ticks() - tick;
                         int len = mlen > rest ? rest : mlen;
                         QList<TDuration> dl = toDurationList(Fraction::fromTicks(len), true);
@@ -462,8 +462,9 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                   Rest* r       = static_cast<Rest*>(cr);
                   Fraction rest = r->duration();
 
+                  bool firstpart = true;
                   while (!rest.isZero()) {
-                        Rest* r2      = static_cast<Rest*>(r->clone());
+                        Rest* r2      = firstpart ? r : static_cast<Rest*>(r->clone());
                         measure       = tick2measure(tick);
                         Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
                         Fraction len  = rest > mlen ? mlen : rest;
@@ -474,8 +475,8 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         undoAddCR(r2, measure, tick);
                         rest -= d.fraction();
                         tick += r2->actualTicks();
+                        firstpart = false;
                         }
-                  delete r;
                   }
             else if (cr->type() == Element::Type::REPEAT_MEASURE) {
                   RepeatMeasure* rm = static_cast<RepeatMeasure*>(cr);
