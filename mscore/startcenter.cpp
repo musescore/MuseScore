@@ -116,7 +116,7 @@ void Startcenter::updateRecentScores()
 //   openScoreClicked
 //---------------------------------------------------------
 
-void Startcenter::openScoreClicked(const QString & link)
+void Startcenter::openScoreClicked(const QString & /*link*/)
       {
       close();
       getAction("file-open")->trigger();
