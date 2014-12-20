@@ -15,6 +15,8 @@ class Score;
 
 namespace MidiBeat {
 
+void removeEvery2ndBeat(std::set<ReducedFraction> &beatSet);
+
 void findBeatLocations(
             const std::multimap<ReducedFraction, MidiChord> &allChords,
             TimeSigMap *sigmap,
@@ -27,12 +29,6 @@ void adjustChordsToBeats(
 void setTimeSignature(TimeSigMap *sigmap);
 
 } // namespace MidiBeat
-
-namespace MidiTempo {
-
-void setTempo(const std::multimap<int, MTrack> &tracks, Score *score);
-
-} // namespace MidiTempo
 } // namespace Ms
 
 

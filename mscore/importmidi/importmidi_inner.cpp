@@ -175,37 +175,6 @@ std::string fromUchar(const uchar *text)
 
 } // namespace MidiCharset
 
-namespace MidiTempo {
-
-ReducedFraction time2Tick(double time, double ticksPerSec)
-      {
-      return ReducedFraction::fromTicks(int(ticksPerSec * time));
-      }
-
-// tempo in beats per second
-
-double findBasicTempo(const std::multimap<int, MTrack> &tracks, bool isHumanPerformance)
-      {
-      for (const auto &track: tracks) {
-                        // don't read tempo from tempo track for human performed files
-                        // because very often the tempo in such track is completely erroneous
-            if (isHumanPerformance && track.second.chords.empty())
-                  continue;
-            for (const auto &ie : track.second.mtrack->events()) {
-                  const MidiEvent &e = ie.second;
-                  if (e.type() == ME_META && e.metaType() == META_TEMPO) {
-                        const uchar* data = (uchar*)e.edata();
-                        const unsigned tempo = data[2] + (data[1] << 8) + (data[0] << 16);
-                        return 1000000.0 / double(tempo);
-                        }
-                  }
-            }
-
-      return 2;   // default beats per second = 120 beats per minute
-      }
-
-} // namespace MidiTempo
-
 namespace MidiBar {
 
 ReducedFraction findBarStart(const ReducedFraction &time, const TimeSigMap *sigmap)
