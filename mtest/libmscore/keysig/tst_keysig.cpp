@@ -116,8 +116,9 @@ void TestKeySig::concertPitch()
       {
       Score* score = readScore(DIR + "concert-pitch.mscx");
       score->cmdConcertPitchChanged(true, true);
+      QVERIFY(saveCompareScore(score, "concert-pitch-01-test.mscx", DIR + "concert-pitch-01-ref.mscx"));
       score->cmdConcertPitchChanged(false, true);
-      QVERIFY(saveCompareScore(score, "concert-pitch-test.mscx", DIR + "concert-pitch-ref.mscx"));
+      QVERIFY(saveCompareScore(score, "concert-pitch-02-test.mscx", DIR + "concert-pitch-02-ref.mscx"));
       }
 
 QTEST_MAIN(TestKeySig)
