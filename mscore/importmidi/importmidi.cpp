@@ -56,6 +56,7 @@
 #include "importmidi_lyrics.h"
 #include "importmidi_tie.h"
 #include "importmidi_beat.h"
+#include "importmidi_tempo.h"
 #include "importmidi_simplify.h"
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
