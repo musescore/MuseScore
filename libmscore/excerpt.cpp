@@ -192,8 +192,8 @@ void createExcerpt(Excerpt* excerpt)
                               if ((e->type() != Element::Type::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                                     continue;
                               Harmony* h  = static_cast<Harmony*>(e);
-                              int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, false);
-                              int baseTpc = Ms::transposeTpc(h->baseTpc(), interval, false);
+                              int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, true);
+                              int baseTpc = Ms::transposeTpc(h->baseTpc(), interval, true);
                               score->undoTransposeHarmony(h, rootTpc, baseTpc);
                               }
                         }

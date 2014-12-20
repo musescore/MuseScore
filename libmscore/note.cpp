@@ -443,10 +443,10 @@ int Note::transposeTpc(int tpc)
             return tpc;
       if (concertPitch()) {
             v.flip();
-            return Ms::transposeTpc(tpc, v, false);
+            return Ms::transposeTpc(tpc, v, true);
             }
       else
-            return Ms::transposeTpc(tpc, v, false);
+            return Ms::transposeTpc(tpc, v, true);
       }
 
 //---------------------------------------------------------
@@ -1128,13 +1128,13 @@ void Note::read(XmlReader& e)
                   if (v.isZero())
                         _tpc[1] = _tpc[0];
                   else
-                        _tpc[1] = Ms::transposeTpc(_tpc[0], v, false);
+                        _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
                   }
             else {
                   if (v.isZero())
                         _tpc[0] = _tpc[1];
                   else
-                        _tpc[0] = Ms::transposeTpc(_tpc[1], v, false);
+                        _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
                   }
             }
       }
@@ -2154,7 +2154,7 @@ void Note::setNval(const NoteVal& nval, int tick)
                   _tpc[1] = _tpc[0];
             else {
                   v.flip();
-                  _tpc[1] = Ms::transposeTpc(_tpc[0], v, false);
+                  _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
                   }
             }
 
