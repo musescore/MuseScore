@@ -74,7 +74,7 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
 
       _ui->tracksView->setFrozenRowCount(_model->frozenRowCount());
       _ui->tracksView->setFrozenColCount(_model->frozenColCount());
-      _ui->comboBoxCharset->setCurrentText(preferences.midiImportOperations.data()->charset);
+      _ui->comboBoxCharset->setCurrentText(opers.data()->charset);
                   // tracks view has multiple headers (need for frozen rows/columns)
                   // so to set all headers special methods there have been implemented
       _ui->tracksView->setHHeaderResizeMode(QHeaderView::ResizeToContents);
@@ -120,6 +120,7 @@ void ImportMidiPanel::setupUi()
       {
       connect(_updateUiTimer, SIGNAL(timeout()), this, SLOT(updateUi()));
       connect(_ui->pushButtonApply, SIGNAL(clicked()), SLOT(applyMidiImport()));
+      connect(_ui->pushButtonCancel, SIGNAL(clicked()), SLOT(cancelChanges()));
       connect(_ui->pushButtonUp, SIGNAL(clicked()), SLOT(moveTrackUp()));
       connect(_ui->pushButtonDown, SIGNAL(clicked()), SLOT(moveTrackDown()));
       connect(_ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
@@ -155,6 +156,7 @@ void ImportMidiPanel::fillCharsetList()
 void ImportMidiPanel::updateUi()
       {
       _ui->pushButtonApply->setEnabled(canImportMidi());
+      _ui->pushButtonCancel->setEnabled(canTryCancelChanges());
 
       const int visualIndex = currentVisualIndex();
       _ui->pushButtonUp->setEnabled(canMoveTrackUp(visualIndex));
@@ -197,6 +199,7 @@ void ImportMidiPanel::applyMidiImport()
             _model->updateCharset();
             }
 
+      _model->notifyAllApplied();
       opers.data()->trackOpers = _model->trackOpers();
       setReorderedIndexes();
 
@@ -205,9 +208,48 @@ void ImportMidiPanel::applyMidiImport()
       _importInProgress = false;
       }
 
+void ImportMidiPanel::cancelChanges()
+      {
+      if (!canTryCancelChanges())
+            return;
+
+      auto &opers = preferences.midiImportOperations;
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+
+      _model->reset(opers.data()->trackOpers,
+                    MidiLyrics::makeLyricsListForUI(),
+                    opers.data()->trackCount,
+                    _midiFile,
+                    !opers.data()->humanBeatData.beatSet.empty(),
+                    opers.data()->hasTempoText);
+
+      restoreTableViewState();
+      _ui->comboBoxCharset->setCurrentText(opers.data()->charset);
+                  // tracks view has multiple headers (need for frozen rows/columns)
+                  // so to set all headers special methods there have been implemented
+      _ui->tracksView->setHHeaderResizeMode(QHeaderView::ResizeToContents);
+      }
+
 bool ImportMidiPanel::canImportMidi() const
       {
       return QFile(_midiFile).exists() && _model->trackCountForImport() > 0;
+      }
+
+bool ImportMidiPanel::canTryCancelChanges() const
+      {
+      if (!_model->isAllApplied())
+            return true;
+
+      auto &opers = preferences.midiImportOperations;
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
+      if (!opers.data())
+            return false;
+
+      if (opers.data()->charset != _ui->comboBoxCharset->currentText())
+            return true;
+
+      const QByteArray vData = _ui->tracksView->verticalHeader()->saveState();
+      return opers.data()->VHeaderData != vData;
       }
 
 bool ImportMidiPanel::canMoveTrackUp(int visualIndex) const
