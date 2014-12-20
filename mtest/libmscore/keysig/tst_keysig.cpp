@@ -33,6 +33,7 @@ class TestKeySig : public QObject, public MTest
    private slots:
       void initTestCase();
       void keysig();
+      void concertPitch();
       };
 
 //---------------------------------------------------------
@@ -109,6 +110,14 @@ void TestKeySig::keysig()
       QVERIFY(saveCompareScore(score, writeFile6, reference6));
 
       delete score;
+      }
+
+void TestKeySig::concertPitch()
+      {
+      Score* score = readScore(DIR + "concert-pitch.mscx");
+      score->cmdConcertPitchChanged(true, true);
+      score->cmdConcertPitchChanged(false, true);
+      QVERIFY(saveCompareScore(score, "concert-pitch-test.mscx", DIR + "concert-pitch-ref.mscx"));
       }
 
 QTEST_MAIN(TestKeySig)
