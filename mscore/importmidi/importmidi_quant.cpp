@@ -9,6 +9,7 @@
 #include "importmidi_inner.h"
 #include "importmidi_beat.h"
 #include "importmidi_voice.h"
+#include "importmidi_tempo.h"
 #include "importmidi_operations.h"
 
 #include <set>
