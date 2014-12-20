@@ -658,15 +658,14 @@ Palette* MuseScore::newArpeggioPalette()
       sp->append(cl, qApp->translate("articulation", "Slide out up"));
 
       cl = new ChordLine(gscore);
-      cl->setChordLineType(ChordLineType::SCOOP);
-      cl->setStraight(true);
-      sp->append(cl, qApp->translate("articulation", "Slide in below"));
-
-      cl = new ChordLine(gscore);
       cl->setChordLineType(ChordLineType::PLOP);
       cl->setStraight(true);
       sp->append(cl, qApp->translate("articulation", "Slide in above"));
 
+      cl = new ChordLine(gscore);
+      cl->setChordLineType(ChordLineType::SCOOP);
+      cl->setStraight(true);
+      sp->append(cl, qApp->translate("articulation", "Slide in below"));
 
       return sp;
       }
