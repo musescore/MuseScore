@@ -89,7 +89,7 @@ class Startcenter : public QDialog, public Ui::Startcenter
    private slots:
       void loadScore(QString);
       void newScore();
-      void openScoreClicked(const QString & link);
+      void openScoreClicked(const QString &);
 
    signals:
       void closed(bool);
