@@ -970,16 +970,25 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
 
 void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
       {
-      for (const auto &track: tracks) {
-            int trackIndex = track.first;
-            const MTrack &mtrack = track.second;
+      for (auto it = tracks.begin(); it != tracks.end(); ++it) {
+            int trackIndex = it->first;
+            const MTrack &mtrack = it->second;
             if (mtrack.mtrack->drumTrack() || mtrack.chords.empty())
                   continue;
-            bool needToSplit = false;
-            if (LRHand::needToSplit(mtrack.chords, mtrack.program))
-                  needToSplit = true;
-            preferences.midiImportOperations.data()->trackOpers.doStaffSplit.setValue(
-                                                                    trackIndex, needToSplit);
+
+                        // don't split staff if it is already in Grand Staff
+            const auto nextIt = std::next(it);
+            if (nextIt != tracks.end()) {
+                  if (isGrandStaff(mtrack, nextIt->second)) {
+                        ++it;
+                        continue;
+                        }
+                  }
+
+            if (LRHand::needToSplit(mtrack.chords, mtrack.program)) {
+                  preferences.midiImportOperations.data()->trackOpers.doStaffSplit.setValue(
+                                                                              trackIndex, true);
+                  }
             }
       }
 
