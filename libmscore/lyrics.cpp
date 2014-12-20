@@ -39,8 +39,15 @@ Lyrics::Lyrics(const Lyrics& l)
       _no       = l._no;
       _ticks    = l._ticks;
       _syllabic = l._syllabic;
-      for (const Line* line : l._separator)
-            _separator.append(new Line(*line));
+#if 0
+      // if we copy lines at all, they need to be parented to new lyric
+      // but they will be regenerated upon layout anyhow
+      for (const Line* line : l._separator) {
+            Line* nline = new Line(*line);
+            nline->setParent(this);
+            _separator.append(nline);
+            }
+#endif
       }
 
 //---------------------------------------------------------
