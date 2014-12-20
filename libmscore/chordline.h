@@ -42,6 +42,7 @@ class ChordLine : public Element {
       bool modified;
       float _lengthX;
       float _lengthY;
+      const int _initialLength = 2;
 
    public:
       ChordLine(Score*);

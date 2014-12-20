@@ -576,29 +576,29 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
       // slide out downwards (fall)
       else if (slide == SLIDE_OUT_DOWN) {
             ChordLine* cl = new ChordLine(score);
-            cl->setChordLineType(ChordLineType::FALL);
             cl->setStraight(true);
+            cl->setChordLineType(ChordLineType::FALL);
             cr->add(cl);
             }
       // slide out upwards (doit)
       else if (slide == SLIDE_OUT_UP) {
             ChordLine* cl = new ChordLine(score);
-            cl->setChordLineType(ChordLineType::DOIT);
             cl->setStraight(true);
+            cl->setChordLineType(ChordLineType::DOIT);
             cr->add(cl);
             }
       // slide in from below (plop)
       else if (slide == SLIDE_IN_BELOW) {
             ChordLine* cl = new ChordLine(score);
-            cl->setChordLineType(ChordLineType::PLOP);
             cl->setStraight(true);
+            cl->setChordLineType(ChordLineType::PLOP);
             cr->add(cl);
             }
       // slide in from above (scoop)
       else if (slide == SLIDE_IN_ABOVE) {
             ChordLine* cl = new ChordLine(score);
-            cl->setChordLineType(ChordLineType::SCOOP);
             cl->setStraight(true);
+            cl->setChordLineType(ChordLineType::SCOOP);
             cr->add(cl);
             }
       }
