@@ -464,17 +464,18 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         continue;
                   if (s->tick() >= tickEnd)
                         break;
-                  if (s->tick() == 0)
-                        createKey = false;
                   KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
                   if (!ks)
                         continue;
                   if (ks->generated())
                         continue;
+                  if (s->tick() == 0)
+                        createKey = false;
                   if (!ks->isCustom()) {
                         Key key  = st->key(s->tick());
                         Key nKey = transposeKey(key, interval);
-                        if (nKey == Key::C) {
+                        // remove initial C major key signatures
+                        if (nKey == Key::C && s->tick() == 0) {
                               undo(new RemoveElement(ks));
                               if (s->isEmpty())
                                     undo(new RemoveElement(s));
