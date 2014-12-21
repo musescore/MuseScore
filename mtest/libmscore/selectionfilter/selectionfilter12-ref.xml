@@ -19,6 +19,7 @@
         <track>0</track>
         <pitch>60</pitch>
         <tpc>14</tpc>
+        <endSpanner id="2"/>
         </Note>
       </Chord>
     <Chord>
@@ -37,6 +38,7 @@
         <track>0</track>
         <pitch>79</pitch>
         <tpc>15</tpc>
+        <endSpanner id="3"/>
         </Note>
       </Chord>
     </Staff>
