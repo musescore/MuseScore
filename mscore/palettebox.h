@@ -57,7 +57,7 @@ class PaletteBoxScrollArea : public QScrollArea {
        Q_OBJECT
 
     public:
-      virtual QSize sizeHint() const {return QSize(170,170);}
+      virtual QSize sizeHint() const;
       };
 
 } // namespace Ms
