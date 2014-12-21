@@ -189,6 +189,7 @@ extern void domNotImplemented(const QDomElement&);
 extern QString accSymId2MxmlString(const SymId id);
 extern QString accidentalType2MxmlString(const Accidental::Type type);
 extern Accidental::Type mxmlString2accidentalType(const QString mxmlName);
+extern SymId mxmlString2accSymId(const QString mxmlName);
 
 } // namespace Ms
 #endif

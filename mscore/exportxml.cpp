@@ -1491,14 +1491,19 @@ void ExportMusicXml::timesig(TimeSig* tsig)
 //   accSymId2alter
 //---------------------------------------------------------
 
-static int accSymId2alter(SymId id)
+static double accSymId2alter(SymId id)
       {
-      int res = 0;
+      double res = 0;
       switch (id) {
-            case SymId::accidentalDoubleFlat:   res = -2; break;
-            case SymId::accidentalFlat:         res = -1; break;
-            case SymId::accidentalSharp:        res =  1; break;
-            case SymId::accidentalDoubleSharp:  res =  2; break;
+            case SymId::accidentalDoubleFlat:                      res = -2;   break;
+            case SymId::accidentalThreeQuarterTonesFlatZimmermann: res = -1.5; break;
+            case SymId::accidentalFlat:                            res = -1;   break;
+            case SymId::accidentalQuarterToneFlatStein:            res = -0.5; break;
+            case SymId::accidentalNatural:                         res =  0;   break;
+            case SymId::accidentalQuarterToneSharpStein:           res =  0.5; break;
+            case SymId::accidentalSharp:                           res =  1;   break;
+            case SymId::accidentalThreeQuarterTonesSharpStein:     res =  1.5; break;
+            case SymId::accidentalDoubleSharp:                     res =  2;   break;
             default: qDebug("accSymId2alter: unsupported sym %s", Sym::id2name(id));
             }
       return res;
