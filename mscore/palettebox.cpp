@@ -338,5 +338,15 @@ void PaletteBox::displayMore(const QString& s)
       {
       mscore->showMasterPalette(s);
       }
+
+//---------------------------------------------------------
+//   sizeHint
+//---------------------------------------------------------
+
+QSize PaletteBoxScrollArea::sizeHint() const
+      {
+      return QSize(170 * guiScaling, 170 * guiScaling);
+      }
+
 }
 
