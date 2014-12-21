@@ -491,7 +491,7 @@ void MuseScore::continueLoadingPlugin(QQmlComponent *targetComponent)
             }
       }
 
-void MuseScore::continueLoadingPluginSlot(int slotStatus) {
+void MuseScore::continueLoadingPluginSlot(QQmlComponent::Status status) {
       QQmlComponent* qSource = qobject_cast<QQmlComponent *>(QObject::sender());
       continueLoadingPlugin(qSource);
       }
