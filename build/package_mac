@@ -50,7 +50,7 @@ EOF
 rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
 #tip: increase the size if error on copy or macdeployqt
-hdiutil create -size 220m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
+hdiutil create -size 300m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
  
 # Mount the disk image
 hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME}
@@ -85,6 +85,9 @@ done
 #homebrew libs may not be writable force it?
 chmod -R +w /usr/local/Cellar/
 macdeployqt ${VOLUME}/${APPNAME}.app
+codesign --deep -s "Developer ID Application: MuseScore" ${VOLUME}/${APPNAME}.app
+codesign -v ${VOLUME}/${APPNAME}.app
+spctl --assess --type execute ${VOLUME}/${APPNAME}.app
 
 for f in $(find "${VOLUME}/${APPNAME}.app/Contents" -iname "*");
 do
@@ -99,8 +102,22 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/PlugIns/sqldrivers
 
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/Enginio.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtBluetooth.*
-rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebSockets.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtNfc.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtLocation.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtPurchasing.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtQuickParticles.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngine.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.*
+
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/Enginio
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtBluetooth
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtNfc
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtLocation
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPositioning
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPurchasing
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtQuick/Particles*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/Qt/WebSockets
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtWebEngine
 
 mv ${VOLUME}/${APPNAME}.app  "${VOLUME}/${LONGER_NAME}.app"
 
