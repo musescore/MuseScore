@@ -388,10 +388,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void startDebugger();
       void midiinToggled(bool);
       void undoRedo(bool undo);
-      void showPlayPanel(bool);
       void showPalette(bool);
       void showInspector(bool);
       void showOmrPanel(bool);
+      void showPlayPanel(bool);
       void showNavigator(bool);
       void showMixer(bool);
       void showSynthControl(bool);
