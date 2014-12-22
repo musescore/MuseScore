@@ -793,6 +793,15 @@ InspectorEmpty::InspectorEmpty(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   sizeHint
+//---------------------------------------------------------
+
+QSize InspectorEmpty::sizeHint() const
+      {
+      return QSize(255 * guiScaling, 170 * guiScaling);
+      }
+
+//---------------------------------------------------------
 //   InspectorBarLine
 //---------------------------------------------------------
 
