@@ -264,7 +264,14 @@ void MyWebView::setBusy()
 
 void MyWebView::link(const QUrl& url)
       {
-      QDesktopServices::openUrl(url);
+      QString path(url.path());
+      QFileInfo fi(path);
+      if (fi.suffix() == "mscz" || fi.suffix() == "xml" || fi.suffix() == "mxl") {
+            mscore->loadFile(url);
+            mscore->showStartcenter(false);
+            }
+      else
+            QDesktopServices::openUrl(url);
       }
 
 //---------------------------------------------------------
