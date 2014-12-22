@@ -667,7 +667,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);
 
-      void showStartcenter(bool);
+      Q_INVOKABLE void showStartcenter(bool);
       QFileInfoList recentScores() const;
       void saveDialogState(const char* name, QFileDialog* d);
       void restoreDialogState(const char* name, QFileDialog* d);
