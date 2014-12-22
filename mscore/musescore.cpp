@@ -728,7 +728,7 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       menuView->addAction(a);
 
-      a = getAction("toogle-piano");
+      a = getAction("toggle-piano");
       a->setCheckable(true);
       menuView->addAction(a);
 
@@ -3411,7 +3411,7 @@ void MuseScore::editRaster()
 void MuseScore::showPianoKeyboard(bool on)
       {
       if (_pianoTools == 0) {
-            QAction* a = getAction("toogle-piano");
+            QAction* a = getAction("toggle-piano");
             _pianoTools = new PianoTools(this);
             addDockWidget(Qt::BottomDockWidgetArea, _pianoTools);
             connect(_pianoTools, SIGNAL(keyPressed(int, bool)), SLOT(midiNoteReceived(int, bool)));
@@ -4014,7 +4014,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             editRaster();
       else if (cmd == "hraster" || cmd == "vraster")  // value in [hv]RasterAction already set
             ;
-      else if (cmd == "toogle-piano")
+      else if (cmd == "toggle-piano")
             showPianoKeyboard(a->isChecked());
       else if (cmd == "plugin-creator")
             showPluginCreator(a);

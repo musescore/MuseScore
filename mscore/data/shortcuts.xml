@@ -717,7 +717,7 @@
     <seq>Ctrl+Shift+I</seq>
     </SC>
   <SC>
-    <key>toogle-piano</key>
+    <key>toggle-piano</key>
     <seq>P</seq>
     </SC>
   <SC>
