@@ -785,11 +785,24 @@ Element* ChordRest::drop(const DropData& data)
                   if (tick() == m->tick())
                         return m->drop(data);
 
-                  Segment* seg = m->undoGetSegment(Segment::Type::BarLine, tick());
-                  bl->setParent(seg);
-                  score()->undoAddElement(bl);
+                  BarLine* obl = 0;
+                  for (Staff* st  : staff()->staffList()) {
+                        Score* score = st->score();
+                        Measure* measure = score->tick2measure(m->tick());
+                        Segment* seg = measure->undoGetSegment(Segment::Type::BarLine, tick());
+                        BarLine* l;
+                        if (obl == 0)
+                              obl = l = bl->clone();
+                        else
+                              l = static_cast<BarLine*>(obl->linkedClone());
+                        l->setTrack(st->idx() * VOICES);
+                        l->setScore(score);
+                        l->setParent(seg);
+                        score->undoAddElement(l);
+                        }
                   }
-                  return e;
+                  delete e;
+                  return 0;
 
             case Element::Type::CLEF:
                   score()->cmdInsertClef(static_cast<Clef*>(e), this);

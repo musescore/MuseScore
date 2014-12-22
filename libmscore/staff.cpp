@@ -1010,5 +1010,6 @@ bool Staff::isTop() const
       {
       return _part->staves()->front() == this;
       }
+
 }
 
