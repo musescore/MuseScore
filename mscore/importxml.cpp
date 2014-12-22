@@ -3476,35 +3476,84 @@ static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement 
       }
       
 //---------------------------------------------------------
-//   alter2accSymId
+//   isAppr
 //---------------------------------------------------------
-      
-static SymId alter2accSymId(int alter)
+
+/**
+ Check if v approximately equals ref.
+ Used to prevent floating point comparison for equality from failing
+ */
+
+static bool isAppr(const double v, const double ref, const double epsilon)
       {
-      SymId res = SymId::noSym;
-      switch (alter) {
-            case -2: res = SymId::accidentalDoubleFlat; break;
-            case -1: res = SymId::accidentalFlat; break;
-            case  1: res = SymId::accidentalSharp; break;
-            case  2: res = SymId::accidentalDoubleSharp; break;
-            default: qDebug("alter2accSymId: unsupported alter %d", alter);
-            }
-      return res;
+      return v > ref - epsilon && v < ref + epsilon;
+      }
+      
+//---------------------------------------------------------
+//   microtonalGuess
+//---------------------------------------------------------
+
+/**
+ Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum Accidental::Type.
+ Works only for quarter tone, half tone, three-quarters tone and whole tone accidentals.
+ */
+
+static Accidental::Type microtonalGuess(double val)
+      {
+      const double eps = 0.001;
+      if (isAppr(val, -2, eps))
+            return Accidental::Type::FLAT2;
+      else if (isAppr(val, -1.5, eps))
+            return Accidental::Type::MIRRORED_FLAT2;
+      else if (isAppr(val, -1, eps))
+            return Accidental::Type::FLAT;
+      else if (isAppr(val, -0.5, eps))
+            return Accidental::Type::MIRRORED_FLAT;
+      else if (isAppr(val, 0, eps))
+            return Accidental::Type::NATURAL;
+      else if (isAppr(val, 0.5, eps))
+            return Accidental::Type::SHARP_SLASH;
+      else if (isAppr(val, 1, eps))
+            return Accidental::Type::SHARP;
+      else if (isAppr(val, 1.5, eps))
+            return Accidental::Type::SHARP_SLASH4;
+      else if (isAppr(val, 2, eps))
+            return Accidental::Type::SHARP2;
+      else
+            qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);
+
+      // default
+      return Accidental::Type::NONE;
       }
 
 //---------------------------------------------------------
 //   addSymToSig
 //---------------------------------------------------------
 
-static void addSymToSig(KeySigEvent& sig, QString& step, int& alter)
+/**
+ Add a symbol defined as key-step \a step , -alter \a alter and -accidental \a accid to \a sig.
+ */
+
+static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& alter, const QString& accid)
       {
-      SymId id = alter2accSymId(alter);
+      //qDebug("addSymToSig(step '%s' alt '%s' acc '%s')",
+      //       qPrintable(step), qPrintable(alter), qPrintable(accid));
+
+      SymId id = mxmlString2accSymId(accid);
+      if (id == SymId::noSym) {
+            bool ok;
+            double d;
+            d = alter.toDouble(&ok);
+            Accidental::Type accTpAlter = ok ? microtonalGuess(d) : Accidental::Type::NONE;
+            id = mxmlString2accSymId(accidentalType2MxmlString(accTpAlter));
+            }
+
       if (step.size() == 1 && id != SymId::noSym) {
             const QString table = "FEDCBAG";
             const int line = table.indexOf(step);
             // no auto layout for custom keysig, calculate xpos
             // TODO: use symbol width ?
-            const qreal spread = 1.4;
+            const qreal spread = 1.4; // assumed glyph width in space
             const qreal x = sig.keySymbols().size() * spread;
             if (line >= 0) {
                   KeySym ks;
@@ -3514,8 +3563,39 @@ static void addSymToSig(KeySigEvent& sig, QString& step, int& alter)
                   sig.setCustom(true);
                   }
             }
+      }
+      
+//---------------------------------------------------------
+//   flushAlteredTone
+//---------------------------------------------------------
+
+/**
+ If a valid key-step, -alter, -accidental combination has been read,
+ convert it to a key symbol and add to the key.
+ Clear key-step, -alter, -accidental.
+ */
+
+static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QString& acc)
+      {
+      //qDebug("flushAlteredTone(step '%s' alt '%s' acc '%s')",
+      //       qPrintable(step), qPrintable(alt), qPrintable(acc));
+
+      if (step == "" && alt == ""  && acc == "")
+            return; // nothing to do
+
+      // step and alt are required, but also accept step and acc
+      if (step != "" && (alt != ""  || acc != "")) {
+            addSymToSig(kse, step, alt, acc);
+            }
+      else {
+            qDebug("flushAlteredTone invalid combination of step '%s' alt '%s' acc '%s')",
+                   qPrintable(step), qPrintable(alt), qPrintable(acc));
+            }
+
+      // clean up
       step = "";
-      alter = 0;
+      alt  = "";
+      acc  = "";
       }
       
 //---------------------------------------------------------
@@ -3564,9 +3644,15 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                   int staffIdx = staff;
                   if (number != -1)
                         staffIdx += number - 1;
+
+                  // for custom keys, a single altered tone is described by
+                  // key-step (required),  key-alter (required) and key-accidental (optional)
+                  // none, one or more altered tone may be present
+                  // a simple state machine is required to detect them
                   KeySigEvent key;
                   QString keyStep;
-                  int keyAlter = 0;
+                  QString keyAlter;
+                  QString keyAccidental;
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "fifths")
                               key.setKey(Key(ee.text().toInt()));
@@ -3575,15 +3661,18 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         else if (ee.tagName() == "cancel")
                               domNotImplemented(ee); // TODO
                         else if (ee.tagName() == "key-step") {
+                              flushAlteredTone(key, keyStep, keyAlter, keyAccidental);
                               keyStep = ee.text();
                               }
-                        else if (ee.tagName() == "key-alter") {
-                              keyAlter = ee.text().toInt();
-                              addSymToSig(key, keyStep, keyAlter);
-                              }
+                        else if (ee.tagName() == "key-alter")
+                              keyAlter = ee.text();
+                        else if (ee.tagName() == "key-accidental")
+                              keyAccidental = ee.text();
                         else
                               domError(ee);
                         }
+                  flushAlteredTone(key, keyStep, keyAlter, keyAccidental);
+
                   if (number == -1) {
                         //
                         // apply key to all staves in the part
@@ -4313,81 +4402,6 @@ static bool readArticulations(ChordRest* cr, QString mxmlName)
             }
       else
             return false;
-      }
-
-//---------------------------------------------------------
-//   convertAccidental
-//---------------------------------------------------------
-
-/**
- Convert a MusicXML accidental name to a MuseScore enum Accidental::Type.
- */
-
-static Accidental::Type convertAccidental(QString mxmlName)
-      {
-      QMap<QString, Accidental::Type> map; // map MusicXML accidental name to MuseScore enum Accidental::Type
-      map["natural"] = Accidental::Type::NATURAL;
-      map["flat"] = Accidental::Type::FLAT;
-      map["sharp"] = Accidental::Type::SHARP;
-      map["double-sharp"] = Accidental::Type::SHARP2;
-      map["sharp-sharp"] = Accidental::Type::SHARP2;
-      map["flat-flat"] = Accidental::Type::FLAT2;
-      map["double-flat"] = Accidental::Type::FLAT2;
-      map["natural-flat"] = Accidental::Type::FLAT;
-
-      map["quarter-flat"] = Accidental::Type::MIRRORED_FLAT;
-      map["quarter-sharp"] = Accidental::Type::SHARP_SLASH;
-      map["three-quarters-flat"] = Accidental::Type::MIRRORED_FLAT2;
-      map["three-quarters-sharp"] = Accidental::Type::SHARP_SLASH4;
-
-      map["sharp-down"] = Accidental::Type::SHARP_ARROW_DOWN;
-      map["sharp-up"] = Accidental::Type::SHARP_ARROW_UP;
-      map["natural-down"] = Accidental::Type::NATURAL_ARROW_DOWN;
-      map["natural-up"] = Accidental::Type::NATURAL_ARROW_UP;
-      map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
-      map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
-
-      map["slash-quarter-sharp"] = Accidental::Type::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
-      map["slash-sharp"] = Accidental::Type::SHARP_SLASH2; // SHARP_SLASH; ?
-      map["slash-flat"] = Accidental::Type::FLAT_SLASH;
-      map["double-slash-flat"] = Accidental::Type::FLAT_SLASH2;
-
-      map["sori"] = Accidental::Type::SORI;
-      map["koron"] = Accidental::Type::KORON;
-
-      map["natural-sharp"] = Accidental::Type::SHARP;
-
-      if (map.contains(mxmlName))
-            return map.value(mxmlName);
-      else
-            qDebug("unknown accidental %s", qPrintable(mxmlName));
-      // default: return Accidental::Type::NONE
-      return Accidental::Type::NONE;
-      }
-
-//---------------------------------------------------------
-//   microtonalGuess
-//---------------------------------------------------------
-
-/**
- Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum Accidental::Type.
- Works only for quarter tone and three-quarters tone accidentals.
- */
-
-static Accidental::Type microtonalGuess(double val)
-      {
-      if (val == 0.5)
-            return Accidental::Type::SHARP_SLASH;
-      else if (val == -0.5)
-            return Accidental::Type::MIRRORED_FLAT;
-      else if (val == 1.5)
-            return Accidental::Type::SHARP_SLASH4;
-      else if (val == -1.5)
-            return Accidental::Type::MIRRORED_FLAT2;
-      else
-            qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);
-      // default: return Accidental::Type::NONE
-      return Accidental::Type::NONE;
       }
 
 //---------------------------------------------------------
@@ -5290,7 +5304,10 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             else if (tag == "dot")
                   duration.setDots(duration.dots() + 1);
             else if (tag == "accidental") {
-                  accidental = convertAccidental(s);
+                  if (s != "")
+                        accidental = mxmlString2accidentalType(s);
+                  else
+                        qDebug("empty accidental");
                   if (e.attribute(QString("cautionary")) == "yes")
                         cautionary = true;
                   if (e.attribute(QString("editorial")) == "yes")
