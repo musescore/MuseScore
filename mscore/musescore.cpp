@@ -1426,7 +1426,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       else
             mag->setCurrentIndex(int(view->magIdx()));
 
-      setWindowTitle("MuseScore: " + cs->name());
+      if (cs->parentScore())
+            setWindowTitle("MuseScore: " + cs->parentScore()->name() + "-" + cs->name());
+      else
+            setWindowTitle("MuseScore: " + cs->name());
 
       QAction* a = getAction("concert-pitch");
       a->setChecked(cs->styleB(StyleIdx::concertPitch));
