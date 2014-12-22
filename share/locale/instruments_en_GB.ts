@@ -17,11 +17,6 @@
         <translation>Orchestral instruments</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4"/>
-        <source>Early Music</source>
-        <translation>Early Music</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Ethnic instruments</source>
         <translation>Ethnic instruments</translation>
@@ -4621,7 +4616,7 @@ String Synthesizer</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1310"/>
         <source> Balalaika</source>
-        <translation> Balalaika</translation>
+        <translation>Balalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1311"/>
@@ -4930,6 +4925,11 @@ Acoustic Guitar</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1408"/>
         <source>Archlute</source>
         <translation>Archlute</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4"/>
+        <source>Early music</source>
+        <translation>Early music</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1411"/>
