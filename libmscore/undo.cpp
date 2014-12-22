@@ -505,7 +505,6 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
                         lks->linkTo(nks);
                   else
                         lks = nks;
-                  cmdUpdateNotes();
                   }
             }
       }
@@ -1514,6 +1513,9 @@ void AddElement::endUndoRedo(bool isUndo) const
             Measure* m = static_cast<Note*>(element)->chord()->measure();
             m->cmdUpdateNotes(element->staffIdx());
             }
+      else if (element->type() == Element::Type::KEYSIG) {
+            element->score()->cmdUpdateNotes();
+            }
       }
 
 //---------------------------------------------------------
@@ -1728,6 +1730,7 @@ void ChangeConcertPitch::flip()
       int oval = int(score->styleB(StyleIdx::concertPitch));
       score->style()->set(StyleIdx::concertPitch, val);
       score->setLayoutAll(true);
+      score->cmdUpdateNotes();
       val = oval;
       }
 
