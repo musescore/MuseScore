@@ -61,6 +61,7 @@
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
 #include "importmidi_key.h"
+#include "libmscore/instrtemplate.h"
 
 #include <set>
 
@@ -69,6 +70,7 @@ namespace Ms {
 
 extern Preferences preferences;
 extern void updateNoteLines(Segment*, int track);
+extern QList<InstrumentGroup*> instrumentGroups;
 
 
 void cleanUpMidiEvents(std::multimap<int, MTrack> &tracks)
@@ -733,6 +735,88 @@ bool is3StaffOrgan(int program)
       return program >= 16 && program <= 20;
       }
 
+std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
+      {
+      std::vector<InstrumentTemplate *> suitableTemplates;
+      const int program = track.program;
+
+      for (const auto &group: instrumentGroups) {
+            for (const auto &templ: group->instrumentTemplates) {
+                  const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
+                  if (track.mtrack->drumTrack() != isDrumTemplate)
+                        continue;
+                  for (const auto &channel: templ->channel) {
+                        if (channel.program == program) {
+                              suitableTemplates.push_back(templ);
+                              break;
+                              }
+                        }
+                  }
+            }
+      return suitableTemplates;
+      }
+
+std::pair<int, int> findMinMaxPitch(const MTrack &track)
+      {
+      int minPitch = std::numeric_limits<int>::max();
+      int maxPitch = -1;
+
+      for (const auto &chord: track.chords) {
+            for (const auto &note: chord.second.notes) {
+                  if (note.pitch < minPitch)
+                        minPitch = note.pitch;
+                  if (note.pitch > maxPitch)
+                        maxPitch = note.pitch;
+                  }
+            }
+      return std::make_pair(minPitch, maxPitch);
+      }
+
+int findMaxPitchDiff(const std::pair<int, int> &minMaxPitch, const InstrumentTemplate *templ)
+      {
+      int diff = 0;
+      if (minMaxPitch.first < templ->minPitchA)
+            diff = templ->minPitchA - minMaxPitch.first;
+      if (minMaxPitch.second > templ->maxPitchA)
+            diff = qMax(diff, minMaxPitch.second - templ->maxPitchA);
+      return diff;
+      }
+
+void sortInstrumentTemplates(
+            std::vector<InstrumentTemplate *> &templates,
+            const std::pair<int, int> &minMaxPitch)
+      {
+      std::sort(templates.begin(), templates.end(),
+                [minMaxPitch](const InstrumentTemplate *templ1, const InstrumentTemplate *templ2) {
+            const int diff1 = findMaxPitchDiff(minMaxPitch, templ1);
+            const int diff2 = findMaxPitchDiff(minMaxPitch, templ2);
+
+            if (diff1 != diff2)
+                  return diff1 < diff2;
+            return templ1->genres.size() > templ2->genres.size();
+            });
+      }
+
+std::vector<InstrumentTemplate *> findSuitableInstruments(const MTrack &track)
+      {
+      std::vector<InstrumentTemplate *> templates = findInstrumentsForProgram(track);
+      if (templates.empty())
+            return templates;
+
+      const std::pair<int, int> minMaxPitch = findMinMaxPitch(track);
+      sortInstrumentTemplates(templates, minMaxPitch);
+
+      for (auto it = std::next(templates.begin()); it != templates.end(); ++it) {
+            const int diff = findMaxPitchDiff(minMaxPitch, *it);
+            if (diff > 0) {
+                  templates.erase(it, templates.end());
+                  break;
+                  }
+            }
+
+      return templates;
+      }
+
 //---------------------------------------------------------
 // createInstruments
 //   for drum track, if any, set percussion clef
@@ -747,7 +831,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
       const int ntracks = tracks.size();
       for (int idx = 0; idx < ntracks; ++idx) {
             MTrack& track = tracks[idx];
-            Part* part   = new Part(score);
+            Part* part = new Part(score);
 
             if (track.mtrack->drumTrack()) {
                   part->setStaves(1);
@@ -774,6 +858,11 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
             track.staff = part->staff(0);
             part->staves()->front()->setBarLineSpan(part->nstaves());
+
+            const auto instrTemplates = findSuitableInstruments(tracks[idx]);
+            if (!instrTemplates.empty())
+                  part->initFromInstrTemplate(instrTemplates.front());
+
             score->appendPart(part);
             }
       }
