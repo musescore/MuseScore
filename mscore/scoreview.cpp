@@ -5248,9 +5248,14 @@ void ScoreView::cmdRepeatSelection()
             if (e) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   _score->startCmd();
-                  _score->pasteStaff(xml, cr->segment(), cr->staffIdx());
-                  _score->setLayoutAll(true);
-                  _score->endCmd();
+                  if (!_score->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
+                        qDebug("cmdRepeatSelection: paste fails");
+                        _score->endCmd(true);   // rollback
+                        }
+                  else {
+                        _score->setLayoutAll(true);
+                        _score->endCmd();
+                        }
                   }
             else
                   qDebug("ScoreView::cmdRepeatSelection: cannot paste: %p <%s>", e, e ? e->name() : "");
