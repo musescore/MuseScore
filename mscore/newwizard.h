@@ -199,6 +199,7 @@ class NewWizard : public QWizard {
       TimeSigType timesigType() const     { return p3->timesigType();       }
       double tempo() const                { return p5->tempo();       }
       bool createTempo() const            { return p5->createTempo(); }
+      bool emptyScore() const;
       };
 
 
