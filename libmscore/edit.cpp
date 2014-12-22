@@ -2451,7 +2451,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         }
                   }
             }
-
+      deselectAll();
       return omb;
       }
 
