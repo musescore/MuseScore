@@ -74,7 +74,8 @@ void Startcenter::loadScore(QString s)
       {
       if (s.endsWith("Create_New_Score.mscz")) {
             newScore();
-      } else {
+            }
+      else {
             mscore->openScore(s);
             close();
             }
@@ -180,16 +181,16 @@ MyWebView::MyWebView(QWidget *parent):
       connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(addToJavascript()));
 
       page()->setNetworkAccessManager(networkManager);
-      
+
       setZoomFactor(guiScaling);
-      
+
       if(!enableExperimental)
             setContextMenuPolicy(Qt::NoContextMenu);
 
       //set cookie jar for persistent cookies
       CookieJar* jar = new CookieJar(QString(dataPath + "/cookie_store.txt"));
       page()->networkAccessManager()->setCookieJar(jar);
-      
+
       page()->currentFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
       page()->currentFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAsNeeded);
 
@@ -217,7 +218,7 @@ Slot connected to the sslErrors signal of QNetworkAccessManager
 When this slot is called, call ignoreSslErrors method of QNetworkReply
 */
 void MyWebView::ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors)
-      {      
+      {
       foreach (const QSslError &error, sslErrors)
             qDebug("Ignore SSL error: %d %s", error.error(), qPrintable(error.errorString()));
       reply->ignoreSslErrors(sslErrors);
