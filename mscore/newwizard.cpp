@@ -433,9 +433,7 @@ int NewWizard::nextId() const
             case Page::Type:
                   return int(Page::Template);
             case Page::Template: {
-                  QString p = p4->templatePath();
-                  QFileInfo fi(p);
-                  if (fi.baseName() == "00-Empty")
+                  if (emptyScore())
                         return int(Page::Instruments);
                   return int(Page::Keysig);
                   }
@@ -449,5 +447,15 @@ int NewWizard::nextId() const
             }
       }
 
+//---------------------------------------------------------
+//   emptyScore
+//---------------------------------------------------------
+
+bool NewWizard::emptyScore() const
+      {
+      QString p = p4->templatePath();
+      QFileInfo fi(p);
+      return fi.baseName() == "00-Empty";
+      }
 }
 
