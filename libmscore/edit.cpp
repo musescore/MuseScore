@@ -1685,8 +1685,11 @@ void Score::cmdDeleteSelectedMeasures()
             return;
 
       MeasureBase* is = selection().startSegment()->measure();
+      if (is->type() == Element::Type::MEASURE && static_cast<Measure*>(is)->isMMRest())
+            is = static_cast<Measure*>(is)->mmRestFirst();
       Segment* seg    = selection().endSegment();
       MeasureBase* ie;
+
       // choose the correct last measure based on the end segment
       // this depends on whether a whole measure is selected or only a few notes within it
       if (seg)
@@ -1698,8 +1701,11 @@ void Score::cmdDeleteSelectedMeasures()
       bool createEndBar = false;
       if (ie->type() == Element::Type::MEASURE) {
             Measure* iem = static_cast<Measure*>(ie);
+            if (iem->isMMRest())
+                  ie = iem = iem->mmRestLast();
             createEndBar = (iem == lastMeasureMM()) && (iem->endBarLineType() == BarLineType::END);
             }
+
 
       // get the last deleted timesig in order to restore after deletion
       TimeSig* lastDeletedSig = 0;
