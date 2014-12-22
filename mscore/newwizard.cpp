@@ -455,7 +455,7 @@ bool NewWizard::emptyScore() const
       {
       QString p = p4->templatePath();
       QFileInfo fi(p);
-      return fi.baseName() == "00-Empty";
+      return fi.baseName() == "00-Blank";
       }
 }
 
