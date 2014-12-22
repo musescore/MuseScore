@@ -379,6 +379,8 @@ bool MuseScore::saveFile(Score* score)
 
             QString fname = QString("%1/%2").arg(saveDirectory).arg(name);
             QString filter = f1 + ";;" + f2;
+            if (QFileInfo(fname).suffix().isEmpty())
+                  fname += ".mscz";
 
             fn = mscore->getSaveScoreName(
                tr("MuseScore: Save Score"),
