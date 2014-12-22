@@ -107,7 +107,7 @@ void Score::startCmd()
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
-void Score::endCmd()
+void Score::endCmd(bool rollback)
       {
       if (!undo()->active()) {
             // if (MScore::debugMode)
@@ -134,7 +134,9 @@ void Score::endCmd()
 
       if (MScore::debugMode)
             qDebug("===endCmd() %d", undo()->current()->childCount());
-      bool noUndo = undo()->current()->childCount() <= 1;
+      if (rollback)
+            undo()->current()->unwind();
+      bool noUndo = (undo()->current()->childCount() <= 1);       // nothing to undo?
       if (!noUndo)
             setDirty(true);
       undo()->endMacro(noUndo);

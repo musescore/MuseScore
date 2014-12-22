@@ -590,7 +590,7 @@ class Score : public QObject {
       void cmdAddPitch(int pitch, bool addFlag);
 
       Q_INVOKABLE void startCmd();        // start undoable command
-      Q_INVOKABLE void endCmd();          // end undoable command
+      Q_INVOKABLE void endCmd(bool rollback = false);          // end undoable command
       void end();             // layout & update canvas
       void end1();
       void update();
