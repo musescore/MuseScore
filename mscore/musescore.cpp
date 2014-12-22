@@ -4451,14 +4451,14 @@ int main(int argc, char* av[])
       f.close();
 
 #ifdef Q_OS_MAC
-      MuseScoreApplication* app = new MuseScoreApplication("mscore-dev", argc, av);
+      MuseScoreApplication* app = new MuseScoreApplication("mscore2", argc, av);
 #else
-      QtSingleApplication* app = new QtSingleApplication("mscore-dev", argc, av);
+      QtSingleApplication* app = new QtSingleApplication("mscore2", argc, av);
 #endif
 
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
-      QCoreApplication::setApplicationName("MuseScoreDevelopment");
+      QCoreApplication::setApplicationName("MuseScore2");
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       Q_INIT_RESOURCE(zita);
       Q_INIT_RESOURCE(noeffect);
