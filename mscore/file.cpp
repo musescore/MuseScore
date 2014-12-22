@@ -1560,11 +1560,18 @@ bool MuseScore::exportFile()
 
       QString name;
 #ifdef Q_OS_WIN
-      if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
-            name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+      if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+            if (cs->parentScore())
+                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name()));
+            else
+                  name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+            }
       else
 #endif
-      name = QString("%1/%2.pdf").arg(saveDirectory).arg(cs->name());
+      if (cs->parentScore())
+            name = QString("%1/%2-%3.pdf").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name()));
+      else
+            name = QString("%1/%2.pdf").arg(saveDirectory).arg(cs->name());
 
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
@@ -2095,11 +2102,18 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
 
       QString name;
 #ifdef Q_OS_WIN
-      if (QSysInfo::WindowsVersion == QSysInfo::WV_XP)
-            name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+      if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+            if (cs->parentScore())
+                  name = QString("%1/%2-%3").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name()));
+            else
+                  name = QString("%1/%2").arg(saveDirectory).arg(cs->name());
+            }
       else
 #endif
-      name = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->name());
+      if (cs->parentScore())
+            name = QString("%1/%2-%3.mscz").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name()));
+      else
+            name = QString("%1/%2.mscz").arg(saveDirectory).arg(cs->name());
 
       QString filter = fl.join(";;");
       QString fn     = mscore->getSaveScoreName(saveDialogTitle, name, filter);
