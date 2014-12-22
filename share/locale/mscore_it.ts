@@ -117,20 +117,12 @@ p, li { white-space: pre-wrap; }
         <translation>MuseScore: Gestione album</translation>
     </message>
     <message>
-        <source>Album Name</source>
-        <translation>Nome Album</translation>
-    </message>
-    <message>
         <source>Add Score</source>
         <translation>Aggiungi spartito</translation>
     </message>
     <message>
-        <source>Remove Current Score</source>
-        <translation>Rimuovi Spartito Corrente</translation>
-    </message>
-    <message>
         <source>Remove Score</source>
-        <translation>Rimuovi Spartito</translation>
+        <translation>Rimuovi spartito</translation>
     </message>
     <message>
         <source>Down</source>
@@ -141,16 +133,8 @@ p, li { white-space: pre-wrap; }
         <translation>Su</translation>
     </message>
     <message>
-        <source>Create New Album</source>
-        <translation>Crea Nuovo Album</translation>
-    </message>
-    <message>
         <source>New</source>
         <translation>Nuovo</translation>
-    </message>
-    <message>
-        <source>Load an Existing Album</source>
-        <translation>Carica un album esistente</translation>
     </message>
     <message>
         <source>Load</source>
@@ -158,11 +142,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Print Album</source>
-        <translation>Stampa Album</translation>
+        <translation>Stampa album</translation>
     </message>
     <message>
         <source>Join Scores</source>
-        <translation>Unisci Spartiti</translation>
+        <translation>Unisci spartiti</translation>
     </message>
     <message>
         <source>Album name:</source>
@@ -175,6 +159,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Move current score up in list</source>
         <translation>Sposta lo spartito corrente in alto nella lista</translation>
+    </message>
+    <message>
+        <source>Album name</source>
+        <translation>Nome album</translation>
+    </message>
+    <message>
+        <source>Remove current score</source>
+        <translation>Rimuovi spartito corrente</translation>
+    </message>
+    <message>
+        <source>Create new album</source>
+        <translation>Crea nuovo album</translation>
+    </message>
+    <message>
+        <source>Load an existing album</source>
+        <translation>Carica un album esistente</translation>
     </message>
 </context>
 <context>
@@ -217,23 +217,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Above Staff</source>
-        <translation>Sopra il Pentagramma</translation>
+        <translation>Sopra il pentagramma</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation>Sotto il Pentagramma</translation>
+        <translation>Sotto il pentagramma</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation>Accordo Automatico</translation>
+        <translation>Accordo automatico</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation>Sopra l&apos;Accordo</translation>
+        <translation>Sopra l&apos;accordo</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation>Sotto l&apos;Accordo</translation>
+        <translation>Sotto l&apos;accordo</translation>
     </message>
 </context>
 <context>
@@ -244,6 +244,17 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>BarLineBase</name>
+    <message>
+        <source>custom subtype</source>
+        <translation>sottotipo personalizzato:</translation>
+    </message>
+    <message>
+        <source>custom span</source>
+        <translation>ampiezza personalizzata</translation>
+    </message>
+</context>
+<context>
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
@@ -251,7 +262,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Bend type:</source>
-        <translation>Tipo di Bend:</translation>
+        <translation>Tipo di bend:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
@@ -279,71 +290,38 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>BoxPropertiesBase</name>
+    <name>BreaksDialog</name>
     <message>
-        <source>MuseScore: Frame Properties</source>
-        <translation>MuseScore: Proprietà casella</translation>
+        <source>MuseScore: Add/Remove Line Breaks</source>
+        <translation>MuseScore: Aggiungi / Rimuovi interruzioni di riga</translation>
     </message>
     <message>
-        <source>Gaps</source>
-        <translation>Spazi vuoti</translation>
+        <source>Break lines every</source>
+        <translation>Interrompi linee ogni</translation>
     </message>
     <message>
-        <source>sp</source>
-        <extracomment>spatium unit</extracomment>
-        <translation>spazio</translation>
+        <source>Number of measures</source>
+        <translation>Numero di  battute</translation>
     </message>
     <message>
-        <source>Inner Margins</source>
-        <translation>Margini interni</translation>
+        <source>measures</source>
+        <translation>battute</translation>
     </message>
     <message>
-        <source>mm</source>
-        <translation>mm</translation>
+        <source>Add line breaks at end of each system</source>
+        <translation>Aggiungi interruzioni di riga alla fine di ogni accollatura</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Dimensione</translation>
+        <source>Remove current line breaks</source>
+        <translation>Rimuovere le attuali interruzioni di riga </translation>
     </message>
     <message>
-        <source>Left:</source>
-        <translation>Sinistra</translation>
-    </message>
-    <message>
-        <source>Right:</source>
-        <translation>Destra:</translation>
-    </message>
-    <message>
-        <source>Bottom:</source>
-        <translation>Margine inferiore:</translation>
-    </message>
-    <message>
-        <source>Top:</source>
-        <translation>Margine superiore:</translation>
-    </message>
-    <message>
-        <source>Width:</source>
-        <translation>Larghezza:</translation>
-    </message>
-    <message>
-        <source>Height:</source>
-        <translation>Altezza:</translation>
-    </message>
-    <message>
-        <source>Top/Left:</source>
-        <translation>Alto/Sinistra:</translation>
-    </message>
-    <message>
-        <source>Bottom/Right:</source>
-        <translation>Basso/Destra:</translation>
+        <source>Break lines every X measures</source>
+        <translation>Interrompi le linee ogni X battute</translation>
     </message>
 </context>
 <context>
     <name>ChordStyleEditor</name>
-    <message>
-        <source>Id</source>
-        <translation>Id.</translation>
-    </message>
     <message>
         <source>Name</source>
         <translation>Nome</translation>
@@ -364,91 +342,60 @@ p, li { white-space: pre-wrap; }
         <source>Load</source>
         <translation>Carica</translation>
     </message>
-</context>
-<context>
-    <name>DrumrollEditor</name>
     <message>
-        <source>toolbar 1</source>
-        <translation>barra degli strumenti 1</translation>
-    </message>
-    <message>
-        <source>toolbar 3</source>
-        <translation>barra degli strumenti 3</translation>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>Cursore</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>Intensità:</translation>
-    </message>
-    <message>
-        <source>offset</source>
-        <translation>spiazzamento</translation>
-    </message>
-    <message>
-        <source>user</source>
-        <translation>utente</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>Altezza nota:</translation>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; Pentagramma: %2</translation>
+        <source>ID</source>
+        <translation>ID</translation>
     </message>
 </context>
 <context>
     <name>EditDrumset</name>
     <message>
-        <source>normal</source>
-        <translation>normale</translation>
+        <source>Normal</source>
+        <translation>Normale</translation>
     </message>
     <message>
-        <source>cross</source>
-        <translation>croce</translation>
+        <source>Cross</source>
+        <translation>Croce</translation>
     </message>
     <message>
-        <source>diamond</source>
-        <translation>losanga</translation>
+        <source>Diamond</source>
+        <translation>Losanga</translation>
     </message>
     <message>
-        <source>triangle</source>
-        <translation>triangolo</translation>
+        <source>Triangle</source>
+        <translation>Triangolo</translation>
     </message>
     <message>
-        <source>mi</source>
-        <translation>mi</translation>
+        <source>Mi</source>
+        <translation>Mi</translation>
     </message>
     <message>
-        <source>slash</source>
-        <translation>barra</translation>
+        <source>Slash</source>
+        <translation>Barra</translation>
     </message>
     <message>
-        <source>xcircle</source>
-        <translation>x cerchiato</translation>
+        <source>XCircle</source>
+        <translation>Xcerchiato</translation>
     </message>
     <message>
-        <source>do</source>
-        <translation>do</translation>
+        <source>Do</source>
+        <translation>Do</translation>
     </message>
     <message>
-        <source>re</source>
-        <translation>re</translation>
+        <source>Re</source>
+        <translation>Re</translation>
     </message>
     <message>
-        <source>fa</source>
-        <translation>fa</translation>
+        <source>Fa</source>
+        <translation>Fa</translation>
     </message>
     <message>
-        <source>la</source>
-        <translation>la</translation>
+        <source>La</source>
+        <translation>La</translation>
     </message>
     <message>
-        <source>ti</source>
-        <translation>ti</translation>
+        <source>Ti</source>
+        <translation>Ti</translation>
     </message>
 </context>
 <context>
@@ -589,10 +536,6 @@ p, li { white-space: pre-wrap; }
         <translation>Nome:</translation>
     </message>
     <message>
-        <source>Short Name:</source>
-        <translation>Nome abbreviato:</translation>
-    </message>
-    <message>
         <source>Pitch:</source>
         <translation>Altezza nota:</translation>
     </message>
@@ -601,23 +544,27 @@ p, li { white-space: pre-wrap; }
         <translation>Trasporto:</translation>
     </message>
     <message>
-        <source>MIDI Program:</source>
-        <translation>Programma MIDI</translation>
-    </message>
-    <message>
         <source>Staves:</source>
         <translation>Pentagrammi:</translation>
+    </message>
+    <message>
+        <source>Short name:</source>
+        <translation>Nome abbreviato:</translation>
+    </message>
+    <message>
+        <source>MIDI program:</source>
+        <translation>Programma MIDI:</translation>
     </message>
 </context>
 <context>
     <name>EditPitchBase</name>
     <message>
         <source>Note Selection</source>
-        <translation>Selezione Nota</translation>
+        <translation>Selezione nota</translation>
     </message>
     <message>
         <source>Select Note:</source>
-        <translation>Seleziona Nota:</translation>
+        <translation>Seleziona nota:</translation>
     </message>
     <message>
         <source>Octave 8</source>
@@ -1191,28 +1138,28 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>EditRaster</name>
     <message>
-        <source>MuseScore: Edit Raster</source>
-        <translation>MuseScore: Modifica Reticolo</translation>
-    </message>
-    <message>
-        <source>Edit Raster</source>
-        <translation>Modifica Reticolo</translation>
-    </message>
-    <message>
-        <source>horizontal Raster:</source>
-        <translation>Reticolo orizzontale:</translation>
-    </message>
-    <message>
         <source>1 / </source>
         <translation>1 / </translation>
     </message>
     <message>
-        <source>vertical  Raster:</source>
-        <translation>Reticolo verticale:</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>s.</translation>
+    </message>
+    <message>
+        <source>MuseScore: Edit Grid</source>
+        <translation>MuseScore: Modifica reticolo</translation>
+    </message>
+    <message>
+        <source>Edit Grid</source>
+        <translation>Modifica reticolo</translation>
+    </message>
+    <message>
+        <source>Horizontal grid:</source>
+        <translation>Reticolo orizzontale:</translation>
+    </message>
+    <message>
+        <source>Vertical  grid:</source>
+        <translation>Reticolo verticale:</translation>
     </message>
 </context>
 <context>
@@ -1223,7 +1170,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Part Properties</source>
-        <translation>Proprietà Parte</translation>
+        <translation>Proprietà parte</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
@@ -1275,7 +1222,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>2 - Diminished Third</source>
-        <translation>2 - Terza Diminuita</translation>
+        <translation>2 - Terza diminuita</translation>
     </message>
     <message>
         <source>3 - Minor Third</source>
@@ -1291,11 +1238,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>4 - Diminished Fourth</source>
-        <translation>4 - Quarta Diminuita</translation>
+        <translation>4 - Quarta diminuita</translation>
     </message>
     <message>
         <source>5 - Perfect Fourth</source>
-        <translation>5 - Quarta Giusta</translation>
+        <translation>5 - Quarta giusta</translation>
     </message>
     <message>
         <source>6 - Augmented Fourth</source>
@@ -1303,11 +1250,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>6 - Diminished Fifth</source>
-        <translation>6 - Quinta Diminuita</translation>
+        <translation>6 - Quinta diminuita</translation>
     </message>
     <message>
         <source>7 - Perfect Fifth</source>
-        <translation>7 - Quinta Giusta</translation>
+        <translation>7 - Quinta giusta</translation>
     </message>
     <message>
         <source>8 - Augmented Fifth</source>
@@ -1315,11 +1262,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>7 - Diminished Sixth</source>
-        <translation>7 - Sesta Diminuita</translation>
+        <translation>7 - Sesta diminuita</translation>
     </message>
     <message>
         <source>8 - Minor Sixth</source>
-        <translation>8 - Sesta Minore</translation>
+        <translation>8 - Sesta minore</translation>
     </message>
     <message>
         <source>9 - Major Sixth</source>
@@ -1331,7 +1278,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>9 - Diminished Seventh</source>
-        <translation>9 - Settima Diminuita</translation>
+        <translation>9 - Settima diminuita</translation>
     </message>
     <message>
         <source>10 - Minor Seventh</source>
@@ -1347,11 +1294,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>11 - Diminished Octave</source>
-        <translation>11 - Ottava Diminuita</translation>
+        <translation>11 - Ottava diminuita</translation>
     </message>
     <message>
         <source>12 - Perfect Octave</source>
-        <translation>12 - Ottava Giusta</translation>
+        <translation>12 - Ottava giusta</translation>
     </message>
     <message>
         <source>Number of strings:</source>
@@ -1411,19 +1358,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Edit String Data...</source>
-        <translation>Modifica Stringa Dati...</translation>
+        <translation>Modifica stringa dati...</translation>
     </message>
     <message>
         <source>Show time signature</source>
         <translation>Mostra unità di tempo</translation>
     </message>
     <message>
-        <source>Advanced style properties...</source>
-        <translation>Stile, proprietà avanzate...</translation>
-    </message>
-    <message>
         <source>Style group:</source>
-        <translation>Gruppo Stile:</translation>
+        <translation>Stile gruppo:</translation>
     </message>
     <message>
         <source>Show barlines</source>
@@ -1460,6 +1403,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>%</source>
         <translation>%</translation>
+    </message>
+    <message>
+        <source>Advanced Style Properties...</source>
+        <translation>Stile, proprietà avanzate...</translation>
     </message>
 </context>
 <context>
@@ -1534,7 +1481,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Note Values</source>
-        <translation>Valore della Nota</translation>
+        <translation>Valore della nota</translation>
     </message>
     <message>
         <source>Shown as:</source>
@@ -1594,7 +1541,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show clef</source>
-        <translation>Mostra Chiave</translation>
+        <translation>Mostra chiave</translation>
     </message>
     <message>
         <source>Show time signature</source>
@@ -1637,10 +1584,6 @@ p, li { white-space: pre-wrap; }
         <translation>Modelli:</translation>
     </message>
     <message>
-        <source>&lt; Reset to template</source>
-        <translation>&lt; Reimposta modelli</translation>
-    </message>
-    <message>
         <source>Show key signature</source>
         <translation>Mostra armatura di chiave</translation>
     </message>
@@ -1652,12 +1595,16 @@ p, li { white-space: pre-wrap; }
         <source>Show Key signature</source>
         <translation>Mostra armatura di chiave</translation>
     </message>
+    <message>
+        <source>&lt; Reset to Template</source>
+        <translation>&lt; Ripristino a modello</translation>
+    </message>
 </context>
 <context>
     <name>EditStringDataBase</name>
     <message>
         <source>String Data</source>
-        <translation>Dati Stringa</translation>
+        <translation>Dati stringa</translation>
     </message>
     <message>
         <source>Strings Tuning:</source>
@@ -1673,7 +1620,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delete String</source>
-        <translation>Cancella Corda</translation>
+        <translation>Cancella corda</translation>
     </message>
     <message>
         <source>Number of frets:</source>
@@ -1704,7 +1651,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Header, Footer, Numbers</source>
-        <translation>Intestazione, Piè di pagina, Numeri</translation>
+        <translation>Intestazione, piè di pagina, numeri</translation>
     </message>
     <message>
         <source>System</source>
@@ -1745,7 +1692,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hairpins, Volta, Ottava</source>
-        <translation>Forcelle, Volta, Ottava</translation>
+        <translation>Forcelle, volta, ottava</translation>
     </message>
     <message>
         <source>Pedal, Trill</source>
@@ -1879,20 +1826,8 @@ space unit</extracomment>
         <translation>Soglia riempimento ultima accollatura:</translation>
     </message>
     <message>
-        <source>Header text</source>
-        <translation>Testo intestazione</translation>
-    </message>
-    <message>
-        <source>show header also on first page</source>
-        <translation>mostra intestazione anche sulla prima pagina</translation>
-    </message>
-    <message>
         <source>Show first</source>
         <translation>mostra il primo</translation>
-    </message>
-    <message>
-        <source>use odd even page header</source>
-        <translation>usa intestazione pagine pari/dispari</translation>
     </message>
     <message>
         <source>Odd/Even</source>
@@ -1904,19 +1839,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Middle</source>
-        <translation>CENTRO</translation>
+        <translation>Centro</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>destra:</translation>
+        <translation>Destra:</translation>
     </message>
     <message>
         <source>Even</source>
         <translation>Pari</translation>
-    </message>
-    <message>
-        <source>edit even page header</source>
-        <translation>modificare intestazione pagina pari</translation>
     </message>
     <message>
         <source>...</source>
@@ -1925,34 +1856,6 @@ space unit</extracomment>
     <message>
         <source>Odd</source>
         <translation>Dispari</translation>
-    </message>
-    <message>
-        <source>add odd page header</source>
-        <translation>aggiungi intestazione pagina dispari</translation>
-    </message>
-    <message>
-        <source>Footer text</source>
-        <translation>Piè di pagina</translation>
-    </message>
-    <message>
-        <source>show footer also on first page</source>
-        <translation>mostra piè di pagina anche sulla prima pagina</translation>
-    </message>
-    <message>
-        <source>use odd even page footer</source>
-        <translation>utilizza piè di pagina sulle pagine pari/dispari</translation>
-    </message>
-    <message>
-        <source>edit odd page header</source>
-        <translation>modifica intestazione pagina dispari</translation>
-    </message>
-    <message>
-        <source>edit even page footer</source>
-        <translation>modifica piè di pagina pagina pari</translation>
-    </message>
-    <message>
-        <source>Measure numbers</source>
-        <translation>Numeri delle battute</translation>
     </message>
     <message>
         <source>All staves</source>
@@ -1969,22 +1872,6 @@ space unit</extracomment>
     <message>
         <source>Brace distance:</source>
         <translation>Distanza graffa:</translation>
-    </message>
-    <message>
-        <source>Fix number of measures/system:</source>
-        <translation>Numero fisso di battute per accollatura</translation>
-    </message>
-    <message>
-        <source>Fix measure width</source>
-        <translation>Larghezza fissa della battuta</translation>
-    </message>
-    <message>
-        <source>System bracket width:</source>
-        <translation>Ampiezza della graffa di accollatura:</translation>
-    </message>
-    <message>
-        <source>Brace width:</source>
-        <translation>Ampiezza graffa:</translation>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
@@ -2004,7 +1891,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clef left margin:</source>
-        <translation>Margine sinistro Chiave</translation>
+        <translation>Margine sinistro chiave</translation>
     </message>
     <message>
         <source>Minimum note distance:</source>
@@ -2111,10 +1998,6 @@ space unit</extracomment>
         <translation>Dimensione punto:</translation>
     </message>
     <message>
-        <source>Default TAB clef</source>
-        <translation>Chiave tablatura predefinita</translation>
-    </message>
-    <message>
         <source>Distance to note:</source>
         <translation>Distanza dalla nota:</translation>
     </message>
@@ -2179,16 +2062,8 @@ space unit</extracomment>
         <translation>Altezza</translation>
     </message>
     <message>
-        <source>Line break height:</source>
-        <translation>Altezza interruzione linea</translation>
-    </message>
-    <message>
         <source>Default vertical position:</source>
         <translation>Posizione verticale predefinita:</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>Volta</source>
@@ -2199,36 +2074,12 @@ space unit</extracomment>
         <translation>Altezza cediglia:</translation>
     </message>
     <message>
-        <source>Solid</source>
-        <translation>Continua</translation>
-    </message>
-    <message>
-        <source>Dash</source>
-        <translation>Trattino</translation>
-    </message>
-    <message>
-        <source>Dot</source>
-        <translation>Punto</translation>
-    </message>
-    <message>
-        <source>DashDot</source>
-        <translation>Tratto-punto</translation>
-    </message>
-    <message>
-        <source>DashDotDot</source>
-        <translation>Tratto-punto-punto</translation>
-    </message>
-    <message>
         <source>Line style:</source>
         <translation>Stile linea:</translation>
     </message>
     <message>
         <source>Ottava</source>
         <translation>Ottava</translation>
-    </message>
-    <message>
-        <source>numbers only</source>
-        <translation>solo numeri</translation>
     </message>
     <message>
         <source>Pedal Line</source>
@@ -2257,10 +2108,6 @@ space unit</extracomment>
     <message>
         <source>Load chords.xml</source>
         <translation>Carica chords.xml</translation>
-    </message>
-    <message>
-        <source>Root / bass spelling</source>
-        <translation>Origine / Basso ortografia</translation>
     </message>
     <message>
         <source>German</source>
@@ -2356,26 +2203,6 @@ space unit</extracomment>
         <translation>Alterazione</translation>
     </message>
     <message>
-        <source>Naturals in key signatures</source>
-        <translation>Bequadri in armatura di chiave</translation>
-    </message>
-    <message>
-        <source>Only for change to C Maj / A min</source>
-        <translation>Solo per il cambio a Do maggiore / La minore</translation>
-    </message>
-    <message>
-        <source>Before change to less sharps / flats</source>
-        <translation>Prima del passaggio a meno diesis/bemolle</translation>
-    </message>
-    <message>
-        <source>After change to less sharps / flats (but before change sharps &lt;=&gt; flats)</source>
-        <translation>Dopo il passaggio a meno diesis/bemolle (ma prima di cambiare diesis &lt;=&gt; bemolle)</translation>
-    </message>
-    <message>
-        <source>Vertical distance from the notes</source>
-        <translation>Distanza verticale tra le note</translation>
-    </message>
-    <message>
         <source>Maximum slope:</source>
         <translation>Pendenza massima:</translation>
     </message>
@@ -2386,10 +2213,6 @@ space unit</extracomment>
     <message>
         <source>Avoid the staves</source>
         <translation>Evita i pentagrammi</translation>
-    </message>
-    <message>
-        <source>Horizontal distance from the notes</source>
-        <translation>Distanza orizzontale tra le note</translation>
     </message>
     <message>
         <source>Distance before the stem of the first note:</source>
@@ -2428,14 +2251,6 @@ space unit</extracomment>
         <translation>Distanza verticale dalla testa delle note</translation>
     </message>
     <message>
-        <source>Create multimeasure rests</source>
-        <translation>Crea le pause di più battute</translation>
-    </message>
-    <message>
-        <source>Multimeasure rest margin:</source>
-        <translation> Margini pause di più battute:</translation>
-    </message>
-    <message>
         <source>Capo fret position:</source>
         <translation>Posizione capotasto:</translation>
     </message>
@@ -2452,20 +2267,12 @@ space unit</extracomment>
         <translation>La, Si♭, Si, Do, Do♯, ...</translation>
     </message>
     <message>
-        <source>A, B, H, C, Cis, ...</source>
-        <translation>A, B, H, C, Cis, ...</translation>
-    </message>
-    <message>
-        <source>La, Si♭, Si, Do, Do♯, ...</source>
-        <translation>La, Si♭, Si, Do, Do♯, ...</translation>
-    </message>
-    <message>
         <source>Chord Symbols, Fretboard Diagrams</source>
         <translation>Simboli accordo, schemi tastiera</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation>Schema Tastiera</translation>
+        <translation>Schema tastiera</translation>
     </message>
     <message>
         <source>Fret offset number font size:</source>
@@ -2501,7 +2308,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation>Impostazioni Swing</translation>
+        <translation>Impostazioni swing</translation>
     </message>
     <message>
         <source>Off</source>
@@ -2543,6 +2350,162 @@ space unit</extracomment>
         <source>Bravura Text</source>
         <translation>Testo Bravura</translation>
     </message>
+    <message>
+        <source>Gonville Text</source>
+        <translation>Testo Gonville</translation>
+    </message>
+    <message>
+        <source>Show header also on first page</source>
+        <translation>Mostra intestazione anche sulla prima pagina</translation>
+    </message>
+    <message>
+        <source>Show footer also on first page</source>
+        <translation>Mostra piè di pagina anche sulla prima pagina</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Use odd/even page header</source>
+        <translation>Usa intestazione pagina pari/dispari</translation>
+    </message>
+    <message>
+        <source>Use odd/even page footer</source>
+        <translation>Usa piè di pagina pari/dispari</translation>
+    </message>
+    <message>
+        <source>Fixed number of measures/system:</source>
+        <translation>Numero fisso di battute per accollatura:</translation>
+    </message>
+    <message>
+        <source>Fixed measure width</source>
+        <translation>Larghezza fissa della battuta</translation>
+    </message>
+    <message>
+        <source>System bracket thickness:</source>
+        <translation>Ampiezza della graffa di accollatura:</translation>
+    </message>
+    <message>
+        <source>Brace thickness:</source>
+        <translation>Spessore graffa:</translation>
+    </message>
+    <message>
+        <source>Continue height:</source>
+        <translation>Altezza continua:</translation>
+    </message>
+    <message>
+        <source>Continuous</source>
+        <translation>Continuo</translation>
+    </message>
+    <message>
+        <source>Dashed</source>
+        <translation>Tratteggiata</translation>
+    </message>
+    <message>
+        <source>Dotted</source>
+        <translation>Punteggiata</translation>
+    </message>
+    <message>
+        <source>Dash-dotted</source>
+        <translation>Tratto-punto</translation>
+    </message>
+    <message>
+        <source>Dash-dot-dotted</source>
+        <translation>Tratto-punto-punteggiato</translation>
+    </message>
+    <message>
+        <source>Numbers only</source>
+        <translation>Solo numeri</translation>
+    </message>
+    <message>
+        <source>Header Text</source>
+        <translation>Testo intestazione</translation>
+    </message>
+    <message>
+        <source>Footer Text</source>
+        <translation>Testo piè di pagina</translation>
+    </message>
+    <message>
+        <source>Measure Numbers</source>
+        <translation>Numeri delle battute</translation>
+    </message>
+    <message>
+        <source>Default TAB Clef</source>
+        <translation>Chiave tablatura predefinita</translation>
+    </message>
+    <message>
+        <source>Naturals in Key Signatures</source>
+        <translation>Bequadri in armatura di chiave</translation>
+    </message>
+    <message>
+        <source>Vertical Distance from the Notes</source>
+        <translation>Distanza verticale dalle note</translation>
+    </message>
+    <message>
+        <source>Horizontal Distance from the Notes</source>
+        <translation>Distanza orizzontale dalle note</translation>
+    </message>
+    <message>
+        <source>Only for a change to C Maj / A min</source>
+        <translation>Solo per il cambio a Do maggiore / La minore</translation>
+    </message>
+    <message>
+        <source>Create multimeasure rests</source>
+        <translation>Crea le pause di più battute</translation>
+    </message>
+    <message>
+        <source>Multimeasure rest margin:</source>
+        <translation> Margini pause di più battute:</translation>
+    </message>
+    <message>
+        <source>Before key signature if changing to fewer sharps or flats</source>
+        <translation>Prima dell&apos;armatura di chiave se cambia a un minor numero di diesis o bemolli</translation>
+    </message>
+    <message>
+        <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
+        <translation>Dopo l&apos;armatura di chiave se cambia a un minor numero di diesis o bemolli. Prima se cambia tra diesis e bemolle</translation>
+    </message>
+    <message>
+        <source>A, B♭, H, C, C♯, ...</source>
+        <translation>A, B♭, H, C, C♯, ...</translation>
+    </message>
+    <message>
+        <source>A, B, H, C, Cis</source>
+        <translation>A, B, H, C, Cis</translation>
+    </message>
+    <message>
+        <source>Full German</source>
+        <translation>Puro Tedesco</translation>
+    </message>
+    <message>
+        <source>Do, Do♯, Re♭, Re, ...</source>
+        <translation>Do, Do♯, Re♭, Re, ...</translation>
+    </message>
+    <message>
+        <source>Do, Do♯, Ré♭, Ré, ...</source>
+        <translation>Do, Do♯, Ré♭, Ré, ...</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation>Francese</translation>
+    </message>
+    <message>
+        <source>Lower case bass notes</source>
+        <translation>Note basse minuscolo</translation>
+    </message>
+    <message>
+        <source>All caps note names</source>
+        <translation>Nomi delle note maiuscolo</translation>
+    </message>
+    <message>
+        <source>Note Spelling</source>
+        <translation>Ortografia nota</translation>
+    </message>
+    <message>
+        <source>Automatic Capitalization</source>
+        <translation>Maiuscole automatiche</translation>
+    </message>
 </context>
 <context>
     <name>ExcerptsDialog</name>
@@ -2572,7 +2535,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Edit Part</source>
-        <translation>Modifica Parte</translation>
+        <translation>Modifica parte</translation>
     </message>
     <message>
         <source>Select Part</source>
@@ -2643,8 +2606,8 @@ space unit</extracomment>
 <context>
     <name>GreendotButton</name>
     <message>
-        <source>record</source>
-        <translation>Registra</translation>
+        <source>Record</source>
+        <translation>registra</translation>
     </message>
 </context>
 <context>
@@ -2685,6 +2648,14 @@ space unit</extracomment>
         <source>Apply</source>
         <translation>Applica</translation>
     </message>
+    <message>
+        <source>Cancel not applied MIDI import operations</source>
+        <translation>Annulla non applicare le operazioni di importazione MIDI</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annulla</translation>
+    </message>
 </context>
 <context>
     <name>InsertMeasuresDialogBase</name>
@@ -2716,10 +2687,6 @@ space unit</extracomment>
         <translation>Alterazione</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -2729,86 +2696,30 @@ space unit</extracomment>
     </message>
     <message>
         <source>Accidental Inspector</source>
-        <translation>Ispettore Alterazione</translation>
+        <translation>Ispettore alterazione</translation>
     </message>
     <message>
         <source>Reset Small value</source>
         <translation>Reimposta il valore piccolo</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
     <name>InspectorAmbitus</name>
     <message>
         <source>Part Range</source>
-        <translation>Gamma della Parte</translation>
+        <translation>Gamma della parte</translation>
     </message>
     <message>
         <source>Head group</source>
         <translation>Gruppo testa della nota</translation>
     </message>
     <message>
-        <source>normal</source>
-        <translation>normale</translation>
-    </message>
-    <message>
-        <source>cross</source>
-        <translation>croce</translation>
-    </message>
-    <message>
-        <source>diamond</source>
-        <translation>losanga</translation>
-    </message>
-    <message>
-        <source>triangle</source>
-        <translation>triangolo</translation>
-    </message>
-    <message>
-        <source>slash</source>
-        <translation>barra</translation>
-    </message>
-    <message>
-        <source>xcircle</source>
-        <translation>x cerchiato</translation>
-    </message>
-    <message>
-        <source>do</source>
-        <translation>do</translation>
-    </message>
-    <message>
-        <source>re</source>
-        <translation>re</translation>
-    </message>
-    <message>
-        <source>mi</source>
-        <translation>mi</translation>
-    </message>
-    <message>
-        <source>fa</source>
-        <translation>fa</translation>
-    </message>
-    <message>
-        <source>sol</source>
-        <translation>sol</translation>
-    </message>
-    <message>
-        <source>la</source>
-        <translation>la</translation>
-    </message>
-    <message>
-        <source>ti</source>
-        <translation>ti</translation>
-    </message>
-    <message>
-        <source>alt. brevis</source>
-        <translation>alt. brevis</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>spazio</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -2817,10 +2728,6 @@ space unit</extracomment>
     <message>
         <source>Bottom note</source>
         <translation>Nota inferiore</translation>
-    </message>
-    <message>
-        <source>[undefined]</source>
-        <translation>[non definita]</translation>
     </message>
     <message>
         <source>C♭♭</source>
@@ -2971,10 +2878,6 @@ space unit</extracomment>
         <translation>Con linea</translation>
     </message>
     <message>
-        <source>Line width</source>
-        <translation>Larghezza linea:</translation>
-    </message>
-    <message>
         <source>Top note</source>
         <translation>Nota apicale</translation>
     </message>
@@ -3004,7 +2907,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Update Range</source>
-        <translation>Aggiorna Gamma</translation>
+        <translation>Aggiorna gamma</translation>
     </message>
     <message>
         <source>Direction</source>
@@ -3024,11 +2927,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Ambitus Inspector</source>
-        <translation>Ispettore Ambitus</translation>
-    </message>
-    <message>
-        <source>Reset Line width value</source>
-        <translation>Reimposta il valore larghezza Linea</translation>
+        <translation>Ispettore ambitus</translation>
     </message>
     <message>
         <source>Oct</source>
@@ -3040,11 +2939,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation>Reimposta il valore gruppo Testa della nota</translation>
+        <translation>Reimposta il valore gruppo testa della nota</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Reimposta il valore Direzione</translation>
+        <translation>Reimposta il valore direzione</translation>
     </message>
     <message>
         <source>Update range</source>
@@ -3052,7 +2951,79 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation>Reimposta il valore Testa della nota</translation>
+        <translation>Reimposta il valore testa della nota</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation>Normale</translation>
+    </message>
+    <message>
+        <source>Cross</source>
+        <translation>Croce</translation>
+    </message>
+    <message>
+        <source>Diamond</source>
+        <translation>Losanga</translation>
+    </message>
+    <message>
+        <source>Triangle</source>
+        <translation>Triangolo</translation>
+    </message>
+    <message>
+        <source>Slash</source>
+        <translation>Barra</translation>
+    </message>
+    <message>
+        <source>XCircle</source>
+        <translation>Xcerchiato</translation>
+    </message>
+    <message>
+        <source>Do</source>
+        <translation>Do</translation>
+    </message>
+    <message>
+        <source>Re</source>
+        <translation>Re</translation>
+    </message>
+    <message>
+        <source>Mi</source>
+        <translation>Mi</translation>
+    </message>
+    <message>
+        <source>Fa</source>
+        <translation>Fa</translation>
+    </message>
+    <message>
+        <source>Sol</source>
+        <translation>Sol</translation>
+    </message>
+    <message>
+        <source>La</source>
+        <translation>La</translation>
+    </message>
+    <message>
+        <source>Ti</source>
+        <translation>Ti</translation>
+    </message>
+    <message>
+        <source>Alt. Brevis</source>
+        <translation>Alt. breve</translation>
+    </message>
+    <message>
+        <source>Line thickness</source>
+        <translation>Spessore linea</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Reset Line thickness value</source>
+        <translation>Reimposta il valore spessore linea</translation>
+    </message>
+    <message>
+        <source>[Undefined]</source>
+        <translation>[non definita]</translation>
     </message>
 </context>
 <context>
@@ -3071,7 +3042,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation>Accordo Automatico</translation>
+        <translation>Accordo automatico</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3091,7 +3062,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation>Sopra il Pentagramma </translation>
+        <translation>Sopra il pentagramma </translation>
     </message>
     <message>
         <source>Below Staff</source>
@@ -3099,11 +3070,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation>Sopra l&apos;Accordo </translation>
+        <translation>Sopra l&apos;accordo </translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation>Sotto l&apos;Accordo</translation>
+        <translation>Sotto l&apos;accordo</translation>
     </message>
     <message>
         <source>Time stretch</source>
@@ -3111,19 +3082,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Articulation Inspector</source>
-        <translation>Ispettore Articolazione</translation>
+        <translation>Ispettore articolazione</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Reimposta il valore Direzione</translation>
+        <translation>Reimposta il valore direzione</translation>
     </message>
     <message>
         <source>Reset Anchor value</source>
-        <translation>Reimposta il valore Ancoraggio</translation>
+        <translation>Reimposta il valore ancoraggio</translation>
     </message>
     <message>
         <source>Reset Time stretch value</source>
-        <translation>Ripristina valore aumento Tempo</translation>
+        <translation>Ripristina valore aumento tempo</translation>
     </message>
 </context>
 <context>
@@ -3131,10 +3102,6 @@ space unit</extracomment>
     <message>
         <source>Barline</source>
         <translation>Stanghetta</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -3162,7 +3129,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline Inspector</source>
-        <translation>Ispettore Stanghette</translation>
+        <translation>Ispettore stanghette</translation>
     </message>
     <message>
         <source>Type</source>
@@ -3170,7 +3137,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reimposta il valore Tipo</translation>
+        <translation>Reimposta il valore tipo</translation>
     </message>
     <message>
         <source>Span from</source>
@@ -3186,15 +3153,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Span value</source>
-        <translation>Reimposta il valore Estensione</translation>
+        <translation>Reimposta il valore estensione</translation>
     </message>
     <message>
         <source>Reset Span from value</source>
-        <translation>Reimposta Estensione dal valore  </translation>
+        <translation>Reimposta estensione dal valore  </translation>
     </message>
     <message>
         <source>Reset Span to value</source>
-        <translation>Reimposta Estensione al valore </translation>
+        <translation>Reimposta estensione al valore </translation>
     </message>
     <message>
         <source>Spantype</source>
@@ -3202,7 +3169,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Span type value</source>
-        <translation>Reimposta il valore tipo Estensione</translation>
+        <translation>Reimposta il valore tipo estensione</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
@@ -3224,14 +3195,6 @@ space unit</extracomment>
         <translation>Giù</translation>
     </message>
     <message>
-        <source>Grow Right</source>
-        <translation>Aumenta destra</translation>
-    </message>
-    <message>
-        <source>Grow Left</source>
-        <translation>Aumenta sinistra</translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation>Direzione:</translation>
     </message>
@@ -3248,20 +3211,12 @@ space unit</extracomment>
         <translation>...</translation>
     </message>
     <message>
-        <source>Local Relayout</source>
-        <translation>Ridefinisci impaginazione locale</translation>
-    </message>
-    <message>
-        <source>User Position</source>
-        <translation>Posizione utente</translation>
-    </message>
-    <message>
         <source>Horizontal</source>
         <translation>Orizzontale</translation>
     </message>
     <message>
         <source>Beam Inspector</source>
-        <translation>Ispettore Travi</translation>
+        <translation>Ispettore travi</translation>
     </message>
     <message>
         <source>Vertical position offset left</source>
@@ -3269,23 +3224,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Reimposta il valore Direzione</translation>
+        <translation>Reimposta il valore direzione</translation>
     </message>
     <message>
         <source>Vertical position offset right</source>
         <translation>Posizione verticale spiazzamento di destra</translation>
     </message>
     <message>
-        <source>Reset Grow Right value</source>
-        <translation>Reimposta valore Aumenta Destra</translation>
-    </message>
-    <message>
-        <source>Reset Grow Left value</source>
-        <translation>Reimposta valore Aumenta Sinistra</translation>
-    </message>
-    <message>
         <source>Reset User position value</source>
-        <translation>Reimposta valore posizione Utente</translation>
+        <translation>Reimposta valore posizione utente</translation>
     </message>
     <message>
         <source>Reset Local Relayout value</source>
@@ -3293,7 +3240,39 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Horizontal value</source>
-        <translation>Reimposta il valore Orizzontale</translation>
+        <translation>Reimposta il valore orizzontale</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Sinistra</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Destra:</translation>
+    </message>
+    <message>
+        <source>Grow right</source>
+        <translation>Aumenta a destra</translation>
+    </message>
+    <message>
+        <source>Grow left</source>
+        <translation>Aumenta a sinistra</translation>
+    </message>
+    <message>
+        <source>Reset Grow right value</source>
+        <translation>Reimposta valore aumenta a destra</translation>
+    </message>
+    <message>
+        <source>Reset Grow left value</source>
+        <translation>Reimposta valore aumenta a sinistra</translation>
+    </message>
+    <message>
+        <source>Local relayout</source>
+        <translation>Ridefinisci impaginazione locale</translation>
+    </message>
+    <message>
+        <source>User position</source>
+        <translation>Posizione utente</translation>
     </message>
 </context>
 <context>
@@ -3332,10 +3311,6 @@ space unit</extracomment>
         <translation>spazio</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
-    </message>
-    <message>
         <source>Horizontal offset</source>
         <translation>Spiazzamento orizzontale</translation>
     </message>
@@ -3349,15 +3324,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord Inspector</source>
-        <translation>Ispettore Accordi</translation>
+        <translation>Ispettore accordi</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation>Reimposta valore spiazzamento Verticale</translation>
+        <translation>Reimposta valore spiazzamento verticale</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation>Reimposta valore spiazzamento Orizzontale</translation>
+        <translation>Reimposta valore spiazzamento orizzontale</translation>
     </message>
     <message>
         <source>Reset Stem direction value</source>
@@ -3365,7 +3340,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Horizontal Offset</source>
-        <translation>Spiazzamento Orizzontale</translation>
+        <translation>Spiazzamento orizzontale</translation>
     </message>
     <message>
         <source>Reset Small Value</source>
@@ -3375,16 +3350,16 @@ space unit</extracomment>
         <source>Reset Stemless value</source>
         <translation>Reimposta il valore senza gambo</translation>
     </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
 </context>
 <context>
     <name>InspectorClef</name>
     <message>
         <source>Clef</source>
         <translation>Chiave</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -3396,11 +3371,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clef Inspector</source>
-        <translation>Ispettore Chiave</translation>
+        <translation>Ispettore chiave</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation>Reimposta il valore Mostra cortesia </translation>
+        <translation>Reimposta il valore mostra cortesia </translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
@@ -3412,10 +3391,6 @@ space unit</extracomment>
     <message>
         <source>Dynamic Range</source>
         <translation>Gamma dinamica</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -3439,7 +3414,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dynamic Inspector</source>
-        <translation>Ispettore Dinamiche</translation>
+        <translation>Ispettore dinamiche</translation>
     </message>
     <message>
         <source>Reset Velocity value</source>
@@ -3447,7 +3422,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation>Reimposta il valore gamma Dinamica</translation>
+        <translation>Reimposta il valore gamma dinamica</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Dynamic range</source>
+        <translation>Gamma dinamica</translation>
     </message>
 </context>
 <context>
@@ -3483,23 +3466,34 @@ space unit</extracomment>
     </message>
     <message>
         <source>Element Inspector</source>
-        <translation>Ispettore Elemento</translation>
+        <translation>Ispettore elemento</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation>Reimposta valore spiazzamento Orizzontale</translation>
+        <translation>Reimposta valore spiazzamento orizzontale</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation>Reimposta valore spiazzamento Verticale</translation>
+        <translation>Reimposta valore spiazzamento verticale</translation>
     </message>
     <message>
         <source>Reset Visible value</source>
-        <translation>Reimposta il valore Visibile</translation>
+        <translation>Reimposta il valore visibile</translation>
     </message>
     <message>
         <source>Reset Color value</source>
-        <translation>Reimposta il valore Colore</translation>
+        <translation>Reimposta il valore colore</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorEmpty</name>
+    <message>
+        <source>Empty Inspector</source>
+        <translation>Ispettore vuoto</translation>
+    </message>
+    <message>
+        <source>Nothing selected</source>
+        <translation>Nulla di selezionato</translation>
     </message>
 </context>
 <context>
@@ -3521,32 +3515,32 @@ space unit</extracomment>
         <translation>...</translation>
     </message>
     <message>
-        <source>straight</source>
-        <translation>diritto</translation>
-    </message>
-    <message>
-        <source>wavy</source>
-        <translation>ondulato</translation>
-    </message>
-    <message>
-        <source>Show Text</source>
-        <translation>Mostra testo</translation>
-    </message>
-    <message>
         <source>Glissando Inspector</source>
-        <translation>Ispettore Glissando</translation>
+        <translation>Ispettore glissando</translation>
     </message>
     <message>
         <source>Reset Text value</source>
-        <translation>Reimposta il valore Testo</translation>
+        <translation>Reimposta il valore testo</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reimposta il valore Tipo</translation>
+        <translation>Reimposta il valore tipo</translation>
     </message>
     <message>
-        <source>Reset Show Text value</source>
-        <translation>Reimposta il valore Mostra Testo</translation>
+        <source>Straight</source>
+        <translation>Preciso</translation>
+    </message>
+    <message>
+        <source>Wavy</source>
+        <translation>Ondulato</translation>
+    </message>
+    <message>
+        <source>Reset Show text value</source>
+        <translation>Reimposta mostra valore del testo</translation>
+    </message>
+    <message>
+        <source>Show text</source>
+        <translation>Mostra testo</translation>
     </message>
 </context>
 <context>
@@ -3592,32 +3586,32 @@ space unit</extracomment>
         <translation>Larghezza</translation>
     </message>
     <message>
-        <source>Left Gap</source>
-        <translation>Spazio vuoto Sinistra</translation>
-    </message>
-    <message>
-        <source>Right Gap</source>
-        <translation>Spazio vuoto destra</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <source>Horizontal Frame Inspector</source>
-        <translation>Ispettore Casella Orizzontale</translation>
+        <translation>Ispettore casella orizzontale</translation>
     </message>
     <message>
-        <source>Reset Left Gap value</source>
-        <translation>Reimposta il valore Spazio vuoto Sinistra</translation>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
     <message>
-        <source>Reset Right Gap value</source>
-        <translation>Reimposta il valore Spazio vuoto Destra</translation>
+        <source>Right gap</source>
+        <translation>Spazio vuoto a destra</translation>
+    </message>
+    <message>
+        <source>Left gap</source>
+        <translation>Spazio vuoto a sinistra</translation>
+    </message>
+    <message>
+        <source>Reset Left gap value</source>
+        <translation>Reimposta il valore spazio vuoto a sinistra</translation>
+    </message>
+    <message>
+        <source>Reset Right gap value</source>
+        <translation>Reimposta il valore spazio vuoto a destra</translation>
     </message>
 </context>
 <context>
@@ -3631,24 +3625,12 @@ space unit</extracomment>
         <translation>Ampiezza</translation>
     </message>
     <message>
-        <source>crescendo</source>
-        <translation>crescendo</translation>
-    </message>
-    <message>
-        <source>decrescendo</source>
-        <translation>decrescendo</translation>
-    </message>
-    <message>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
         <source>Dynamic range</source>
         <translation>Gamma dinamica</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -3684,7 +3666,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Hairpin Inspector</source>
-        <translation>Ispettore Forcelle</translation>
+        <translation>Ispettore forcelle</translation>
     </message>
     <message>
         <source>Reset Velocity change value</source>
@@ -3692,23 +3674,35 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reimposta il valore Tipo</translation>
+        <translation>Reimposta il valore tipo</translation>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation>Reimposta il valore gamma Dinamica</translation>
+        <translation>Reimposta il valore gamma dinamica</translation>
     </message>
     <message>
         <source>Reset Height value</source>
-        <translation>Reimposta il valore Altezza</translation>
-    </message>
-    <message>
-        <source>Reset continue Height value</source>
-        <translation>Reimposta il valore Altezza continua</translation>
+        <translation>Reimposta il valore altezza</translation>
     </message>
     <message>
         <source>Reset Circled tip value</source>
-        <translation>Reimposta il valore punta Cerchiata</translation>
+        <translation>Reimposta il valore punta cerchiata</translation>
+    </message>
+    <message>
+        <source>Crescendo</source>
+        <translation>Crescendo</translation>
+    </message>
+    <message>
+        <source>Decrescendo</source>
+        <translation>Decrescendo</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Reset Continue height value</source>
+        <translation>Reimposta il valore altezza continua</translation>
     </message>
 </context>
 <context>
@@ -3716,10 +3710,6 @@ space unit</extracomment>
     <message>
         <source>Image</source>
         <translation>Immagine</translation>
-    </message>
-    <message>
-        <source>Scale to Frame Size</source>
-        <translation>Ridimensiona a misura cornice</translation>
     </message>
     <message>
         <source>...</source>
@@ -3734,24 +3724,12 @@ space unit</extracomment>
         <translation>Scala</translation>
     </message>
     <message>
-        <source>Lock Aspect Ratio</source>
-        <translation>Blocca le proporzioni</translation>
-    </message>
-    <message>
-        <source>Size in Spatium Units</source>
-        <translation>Dimensione in unità di spazio</translation>
-    </message>
-    <message>
         <source>Image Inspector</source>
         <translation>Ispettore Immagine</translation>
     </message>
     <message>
         <source>Scale to frame size</source>
         <translation>Scala a misura cornice</translation>
-    </message>
-    <message>
-        <source>Reset Scale to Frame Size value</source>
-        <translation>Reimposta il valore Scala a Misura Cornice</translation>
     </message>
     <message>
         <source>Height</source>
@@ -3763,19 +3741,35 @@ space unit</extracomment>
     </message>
     <message>
         <source>Scale Width</source>
-        <translation>Scala Larghezza</translation>
+        <translation>Scala larghezza</translation>
     </message>
     <message>
         <source>Scale Height</source>
-        <translation>Scala Altezza</translation>
+        <translation>Scala altezza</translation>
     </message>
     <message>
-        <source>Reset Lock Aspect Ratio value</source>
-        <translation>Reimposta il valore Blocca le Proporzioni</translation>
+        <source>Reset Scale to frame size value</source>
+        <translation>Reimposta il valore scala alla dimensione cornice</translation>
     </message>
     <message>
-        <source>Reset Size in Spatium Units value</source>
-        <translation>Reimposta il valore Dimensione in unità di spazio</translation>
+        <source>Reset Lock aspect ratio value</source>
+        <translation>Reimposta il valore blocca le proporzioni</translation>
+    </message>
+    <message>
+        <source>Lock aspect ratio</source>
+        <translation>Blocca le proporzioni</translation>
+    </message>
+    <message>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>Distanza tra due linee su un pentagramma standard di 5 linee</translation>
+    </message>
+    <message>
+        <source>Size in staff space units</source>
+        <translation>Dimensione in unità di spazio del pentagramma</translation>
+    </message>
+    <message>
+        <source>Reset Size in staff space units value</source>
+        <translation>Reimposta dimensione in unità di spazio del pentagramma</translation>
     </message>
 </context>
 <context>
@@ -3802,19 +3796,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Jump Inspector</source>
-        <translation>Ispettore Vai a</translation>
+        <translation>Ispettore vai a</translation>
     </message>
     <message>
         <source>Reset Jump to value</source>
-        <translation>Reimposta il valore Vai a</translation>
+        <translation>Reimposta il valore vai a</translation>
     </message>
     <message>
         <source>Reset Play until value</source>
-        <translation>Reimposta il valore Suona fino a</translation>
+        <translation>Reimposta il valore suona fino a</translation>
     </message>
     <message>
         <source>Reset Continue at value</source>
-        <translation>Reimposta il valore Continua</translation>
+        <translation>Reimposta il valore continua</translation>
     </message>
 </context>
 <context>
@@ -3822,10 +3816,6 @@ space unit</extracomment>
     <message>
         <source>Key Signature</source>
         <translation>Tonalità (armatura di chiave)</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -3841,7 +3831,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation>Reimposta il valore Mostra cortesia</translation>
+        <translation>Reimposta il valore mostra cortesia</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
@@ -3880,7 +3874,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Horizontal Position</source>
-        <translation>Posizione Orizzontale</translation>
+        <translation>Posizione orizzontale</translation>
     </message>
 </context>
 <context>
@@ -3890,45 +3884,17 @@ space unit</extracomment>
         <translation>Linea</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <source>sp</source>
-        <extracomment>Spatium unit</extracomment>
+        <extracomment>Staff space unit</extracomment>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>Solid</source>
-        <translation>continua</translation>
-    </message>
-    <message>
-        <source>Dash</source>
-        <translation>trattino</translation>
-    </message>
-    <message>
-        <source>Dot</source>
-        <translation>Punto</translation>
-    </message>
-    <message>
-        <source>DashDot</source>
-        <translation>Tratto-punto</translation>
-    </message>
-    <message>
-        <source>DashDotDot</source>
-        <translation>Tratto-punto-punto</translation>
     </message>
     <message>
         <source>Line color</source>
         <translation>Colore linea</translation>
-    </message>
-    <message>
-        <source>Line width</source>
-        <translation>Larghezza linea</translation>
     </message>
     <message>
         <source>Line style</source>
@@ -3940,7 +3906,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line Inspector</source>
-        <translation>Ispettore Linea</translation>
+        <translation>Ispettore linea</translation>
     </message>
     <message>
         <source>Reset Line color value</source>
@@ -3948,15 +3914,51 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Allow diagonal value</source>
-        <translation>Reimposta il valore Consenti diagonale</translation>
-    </message>
-    <message>
-        <source>Reset Line width value</source>
-        <translation>Reimposta il valore larghezza Linea</translation>
+        <translation>Reimposta il valore consenti diagonale</translation>
     </message>
     <message>
         <source>Reset Line style value</source>
-        <translation>Reimposta il valore stile Linea</translation>
+        <translation>Reimposta il valore stile linea</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Line thickness</source>
+        <translation>Spessore linea</translation>
+    </message>
+    <message>
+        <source>Continuous</source>
+        <translation>Continuo</translation>
+    </message>
+    <message>
+        <source>Dashed</source>
+        <translation>Tratteggiata</translation>
+    </message>
+    <message>
+        <source>Dotted</source>
+        <translation>Punteggiata</translation>
+    </message>
+    <message>
+        <source>Dash-dotted</source>
+        <translation>Tratto-punteggiato</translation>
+    </message>
+    <message>
+        <source>Dash-dot-dotted</source>
+        <translation>Tratto-punto-punteggiato</translation>
+    </message>
+    <message>
+        <source>Reset Line thickness value</source>
+        <translation>Reimposta il valore spessore linea</translation>
+    </message>
+    <message>
+        <source>Reset Line visible value</source>
+        <translation>Reimposta al valore linea visibile</translation>
+    </message>
+    <message>
+        <source>Line visible</source>
+        <translation>Linea visibile</translation>
     </message>
 </context>
 <context>
@@ -3978,16 +3980,8 @@ space unit</extracomment>
         <translation>Segno</translation>
     </message>
     <message>
-        <source>Segno Variation</source>
-        <translation>Variazione Segno</translation>
-    </message>
-    <message>
         <source>Coda</source>
         <translation>Coda</translation>
-    </message>
-    <message>
-        <source>Coda Variation</source>
-        <translation>Variazione Coda</translation>
     </message>
     <message>
         <source>Codetta</source>
@@ -4002,28 +3996,36 @@ space unit</extracomment>
         <translation>Al Coda</translation>
     </message>
     <message>
-        <source>User defined</source>
-        <translation>Definito dall&apos;utente</translation>
-    </message>
-    <message>
         <source>Marker type</source>
-        <translation>Tipo di Marcatore</translation>
+        <translation>Tipo di marcatore</translation>
     </message>
     <message>
         <source>Marker Inspector</source>
-        <translation>Ispettore Marcatori</translation>
+        <translation>Ispettore marcatori</translation>
     </message>
     <message>
         <source>Reset Marker type value</source>
-        <translation>Reimposta il valore tipo Marcatore</translation>
+        <translation>Reimposta il valore tipo marcatore</translation>
     </message>
     <message>
         <source>Reset Label value</source>
-        <translation>Reimposta il valore Etichetta</translation>
+        <translation>Reimposta il valore etichetta</translation>
     </message>
     <message>
         <source>Marker Type</source>
-        <translation>Tipo di Marcatore</translation>
+        <translation>Tipo di marcatore</translation>
+    </message>
+    <message>
+        <source>Segno variation</source>
+        <translation>Variazione segno</translation>
+    </message>
+    <message>
+        <source>Varied coda</source>
+        <translation>Coda variata</translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation>Personalizzato</translation>
     </message>
 </context>
 <context>
@@ -4061,10 +4063,6 @@ space unit</extracomment>
         <translation>Margine inferiore</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4086,7 +4084,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Offset</source>
-        <translation>Spiazzamento</translation>
+        <translation>Bilanciato</translation>
     </message>
     <message>
         <source>User</source>
@@ -4122,31 +4120,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>Note Inspector</source>
-        <translation>Ispettore Nota</translation>
-    </message>
-    <message>
-        <source>Dot Position</source>
-        <translation>Posizione punto</translation>
-    </message>
-    <message>
-        <source>Reset Dot Position Value</source>
-        <translation>Reimposta valore Posizione Punto</translation>
+        <translation>Ispettore nota</translation>
     </message>
     <message>
         <source>Reset Mirror head value</source>
-        <translation>Reimposta il valore Rovescia la testa della nota</translation>
+        <translation>Reimposta il valore rovescia la testa della nota</translation>
     </message>
     <message>
         <source>Reset Velocity type value</source>
-        <translation>Reimposta il valore tipo Intensità</translation>
+        <translation>Reimposta il valore tipo intensità</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation>Reimposta il valore Testa della nota</translation>
+        <translation>Reimposta il valore testa della nota</translation>
     </message>
     <message>
         <source>Reset Velocity value</source>
-        <translation>Reimposta il valore Intensità</translation>
+        <translation>Reimposta il valore intensità</translation>
     </message>
     <message>
         <source>Mirror Head</source>
@@ -4158,7 +4148,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation>Reimposta il valore gruppo Testa della nota</translation>
+        <translation>Reimposta il valore gruppo testa della nota</translation>
     </message>
     <message>
         <source>Reset Small value</source>
@@ -4170,7 +4160,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Play value</source>
-        <translation>Reimposta il valore Suona</translation>
+        <translation>Reimposta il valore suona</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Reset Dot position value</source>
+        <translation>Reimposta valore posizione punto</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation>Linea</translation>
+    </message>
+    <message>
+        <source>Fix to line</source>
+        <translation>Fissa alla linea</translation>
+    </message>
+    <message>
+        <source>Reset Fix to line</source>
+        <translation>Ripristina fissa alla linea</translation>
+    </message>
+    <message>
+        <source>Reset Line</source>
+        <translation>Ripristina linea</translation>
     </message>
 </context>
 <context>
@@ -4182,10 +4196,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Tipo</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -4220,14 +4230,6 @@ space unit</extracomment>
         <translation>22mb</translation>
     </message>
     <message>
-        <source>above</source>
-        <translation>sopra</translation>
-    </message>
-    <message>
-        <source>below</source>
-        <translation>sotto</translation>
-    </message>
-    <message>
         <source>Numbers only</source>
         <translation>Solo numeri</translation>
     </message>
@@ -4237,14 +4239,26 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reimposta il valore Tipo</translation>
+        <translation>Reimposta il valore tipo</translation>
     </message>
     <message>
         <source>Reset Placement value</source>
-        <translation>Reimposta il valore Posizione</translation>
+        <translation>Reimposta il valore posizione</translation>
     </message>
     <message>
-        <source>Reset numbers only value</source>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Above</source>
+        <translation>Sopra</translation>
+    </message>
+    <message>
+        <source>Below</source>
+        <translation>Sotto</translation>
+    </message>
+    <message>
+        <source>Reset Numbers only value</source>
         <translation>Reimposta il valore solo numeri</translation>
     </message>
 </context>
@@ -4253,10 +4267,6 @@ space unit</extracomment>
     <message>
         <source>Rest</source>
         <translation>Pausa</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -4268,11 +4278,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Rest Inspector</source>
-        <translation>Ispettore Pause</translation>
+        <translation>Ispettore pause</translation>
     </message>
     <message>
         <source>Reset Small value</source>
         <translation>Reimposta il valore piccolo</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
@@ -4285,10 +4299,6 @@ space unit</extracomment>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>spazio</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -4304,38 +4314,26 @@ space unit</extracomment>
     </message>
     <message>
         <source>Segment Inspector</source>
-        <translation>Ispettore Segmento</translation>
+        <translation>Ispettore segmento</translation>
     </message>
     <message>
         <source>Reset Leading space value</source>
-        <translation>Reimposta il valore Spazio precedente</translation>
+        <translation>Reimposta il valore spazio precedente</translation>
     </message>
     <message>
         <source>Reset Trailing space value</source>
-        <translation>Reimposta il valore spazio Seguente</translation>
+        <translation>Reimposta il valore spazio seguente</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
     <name>InspectorSlur</name>
     <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>solid</source>
-        <translation>continua</translation>
-    </message>
-    <message>
-        <source>dotted</source>
-        <translation>punteggiata</translation>
-    </message>
-    <message>
-        <source>dashed</source>
-        <translation>tratteggiata</translation>
     </message>
     <message>
         <source>Line type:</source>
@@ -4347,15 +4345,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Slur Inspector</source>
-        <translation>Ispettore Legatura di portamento</translation>
+        <translation>Ispettore legatura di portamento</translation>
     </message>
     <message>
         <source>Reset Line type value</source>
-        <translation>Reimposta il valore tipo Linea</translation>
+        <translation>Reimposta il valore tipo linea</translation>
     </message>
     <message>
         <source>Line type</source>
         <translation>Tipo linea</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Continuous</source>
+        <translation>Continuo</translation>
+    </message>
+    <message>
+        <source>Dotted</source>
+        <translation>Punteggiata</translation>
+    </message>
+    <message>
+        <source>Dashed</source>
+        <translation>Tratteggiata</translation>
     </message>
 </context>
 <context>
@@ -4379,11 +4393,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Spacer Inspector</source>
-        <translation>Ispettore Spaziatore</translation>
+        <translation>Ispettore spaziatore</translation>
     </message>
     <message>
         <source>Reset Height value</source>
-        <translation>Reimposta il valore Altezza</translation>
+        <translation>Reimposta il valore altezza</translation>
     </message>
 </context>
 <context>
@@ -4391,10 +4405,6 @@ space unit</extracomment>
     <message>
         <source>Tempo Marking</source>
         <translation>Marcatore di tempo</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -4417,12 +4427,16 @@ space unit</extracomment>
         <translation>Ispettore marcatore di tempo</translation>
     </message>
     <message>
-        <source>Reset follow text value</source>
-        <translation>Reimposta il valore segui testo</translation>
+        <source>Reset Tempo value</source>
+        <translation>Reimposta il valore tempo</translation>
     </message>
     <message>
-        <source>Reset Tempo value</source>
-        <translation>Reimposta il valore Tempo</translation>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Reset Follow text value</source>
+        <translation>Reimposta il valore segui testo</translation>
     </message>
 </context>
 <context>
@@ -4436,20 +4450,20 @@ space unit</extracomment>
         <translation>Stile</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <source>Text Inspector</source>
-        <translation>Ispettore Testo</translation>
+        <translation>Ispettore testo</translation>
     </message>
     <message>
         <source>Reset Style value</source>
-        <translation>Reimposta il valore Stile</translation>
+        <translation>Reimposta il valore stile</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
@@ -4460,7 +4474,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Text Line Inspector</source>
-        <translation>Ispettore Linea Testo</translation>
+        <translation>Ispettore Linea testo</translation>
     </message>
 </context>
 <context>
@@ -4468,10 +4482,6 @@ space unit</extracomment>
     <message>
         <source>Time Signature</source>
         <translation>Unità di tempo</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -4487,7 +4497,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation>Reimposta il valore Mostra cortesia</translation>
+        <translation>Reimposta il valore mostra cortesia</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
@@ -4501,40 +4515,40 @@ space unit</extracomment>
         <translation>Tipo</translation>
     </message>
     <message>
-        <source>trill line</source>
-        <translation>linea trillo</translation>
-    </message>
-    <message>
-        <source>up prall</source>
-        <translation>mordente superiore</translation>
-    </message>
-    <message>
-        <source>down prall</source>
-        <translation>mordente inferiore</translation>
-    </message>
-    <message>
-        <source>prall prall</source>
-        <translation>mordente doppio</translation>
-    </message>
-    <message>
-        <source>wavy line</source>
-        <translation>linea ondulata</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <source>Trill Inspector</source>
-        <translation>Ispettore Trillo</translation>
+        <translation>Ispettore trillo</translation>
     </message>
     <message>
         <source>Reset Trill type</source>
-        <translation>Reimposta il valore tipo Trillo</translation>
+        <translation>Reimposta il valore tipo trillo</translation>
+    </message>
+    <message>
+        <source>Trill Line</source>
+        <translation>Linea trillo</translation>
+    </message>
+    <message>
+        <source>Up Prall</source>
+        <translation>Mordente superiore</translation>
+    </message>
+    <message>
+        <source>Down Prall</source>
+        <translation>Mordente inferiore</translation>
+    </message>
+    <message>
+        <source>Prall Prall</source>
+        <translation>Prall prall</translation>
+    </message>
+    <message>
+        <source>Wavy Line</source>
+        <translation>Linea ondulata</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
@@ -4542,10 +4556,6 @@ space unit</extracomment>
     <message>
         <source>Tuplet</source>
         <translation>Gruppo irregolare</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
     </message>
     <message>
         <source>...</source>
@@ -4562,14 +4572,6 @@ space unit</extracomment>
     <message>
         <source>Nothing</source>
         <translation>Niente</translation>
-    </message>
-    <message>
-        <source>Number Type</source>
-        <translation>Tipo di numero</translation>
-    </message>
-    <message>
-        <source>Bracket Type</source>
-        <translation>Tipo di Graffa</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -4597,42 +4599,42 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplet Inspector</source>
-        <translation>Ispettore Gruppi irregolari</translation>
-    </message>
-    <message>
-        <source>Reset Number Type value</source>
-        <translation>Reimposta il valore Tipo Numeri</translation>
-    </message>
-    <message>
-        <source>Reset Bracket Type value</source>
-        <translation>Reimposta il valore Tipo Graffa</translation>
+        <translation>Ispettore gruppi irregolari</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Reimposta il valore Direzione</translation>
+        <translation>Reimposta il valore direzione</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
+    </message>
+    <message>
+        <source>Reset Number type value</source>
+        <translation>Reimposta il valore tipo di numeri</translation>
+    </message>
+    <message>
+        <source>Reset Bracket type value</source>
+        <translation>Reimposta il valore tipo di graffa</translation>
+    </message>
+    <message>
+        <source>Number type</source>
+        <translation>Tipo di numero</translation>
+    </message>
+    <message>
+        <source>Bracket type</source>
+        <translation>Tipo di parentesi</translation>
     </message>
 </context>
 <context>
     <name>InspectorVBox</name>
     <message>
         <source>Vertical Frame</source>
-        <translation>Casella Verticale</translation>
-    </message>
-    <message>
-        <source>Right Margin</source>
-        <translation>Margine Destro</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
+        <translation>Casella verticale</translation>
     </message>
     <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Bottom Margin</source>
-        <translation>Margine Inferiore</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4644,52 +4646,64 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>Top Gap</source>
-        <translation>Spazio vuoto superiore</translation>
-    </message>
-    <message>
         <source>Height</source>
         <translation>Altezza</translation>
     </message>
     <message>
-        <source>Top Margin</source>
-        <translation>Margine Superiore</translation>
+        <source>Vertical Frame Inspector</source>
+        <translation>Ispettore casella verticale</translation>
     </message>
     <message>
-        <source>Left Margin</source>
-        <translation>Margine Sinistro</translation>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
     <message>
-        <source>Bottom Gap</source>
+        <source>Right margin</source>
+        <translation>Margine destro</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Reimposta il valore spazio vuoto superiore</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Reimposta il valore spazio vuoto inferiore</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Margine inferiore</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Margine sinistro</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Spazio vuoto superiore</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
         <translation>Spazio vuoto inferiore</translation>
     </message>
     <message>
-        <source>Vertical Frame Inspector</source>
-        <translation>Ispettore Casella Verticale</translation>
+        <source>Top margin</source>
+        <translation>Margine superiore</translation>
     </message>
     <message>
-        <source>Reset Top Gap value</source>
-        <translation>Reimposta il valore Spazio vuoto Superiore</translation>
+        <source>Reset Left margin value</source>
+        <translation>Reimposta il valore margine sinistro</translation>
     </message>
     <message>
-        <source>Reset Bottom Gap value</source>
-        <translation>Reimposta il valore Spazio vuoto Inferiore</translation>
+        <source>Reset Right margin value</source>
+        <translation>Reimposta il valore margine destro</translation>
     </message>
     <message>
-        <source>Reset Left Margin value</source>
-        <translation>Reimposta il valore Margine Sinistro</translation>
+        <source>Reset Top margin value</source>
+        <translation>Reimposta il valore margine superiore</translation>
     </message>
     <message>
-        <source>Reset Right Margin value</source>
-        <translation>Reimposta il valore Margine Destro</translation>
-    </message>
-    <message>
-        <source>Reset Top Margin value</source>
-        <translation>Reimposta il valore Margine Superiore</translation>
-    </message>
-    <message>
-        <source>Reset Bottom Margin value</source>
-        <translation>Reimposta il valore Margine Inferiore</translation>
+        <source>Reset Bottom margin value</source>
+        <translation>Reimposta il valore margine inferiore</translation>
     </message>
 </context>
 <context>
@@ -4711,20 +4725,20 @@ space unit</extracomment>
         <translation>Tipo</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reimposta il valore</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <source>Volta Inspector</source>
-        <translation>Ispettore Volta</translation>
+        <translation>Ispettore volta</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reimposta il valore Tipo</translation>
+        <translation>Reimposta il valore tipo</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reimposta il valore</translation>
     </message>
 </context>
 <context>
@@ -4779,15 +4793,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument wizard</source>
-        <translation>Procedura guidata Strumenti</translation>
+        <translation>Procedura guidata strumenti</translation>
     </message>
     <message>
         <source>Instrument List</source>
-        <translation>Lista Strumenti</translation>
+        <translation>Lista strumenti</translation>
     </message>
     <message>
         <source>Added Instruments</source>
-        <translation>Strumenti Aggiunti</translation>
+        <translation>Strumenti aggiunti</translation>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
@@ -4829,7 +4843,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument List</source>
-        <translation>Lista Strumenti</translation>
+        <translation>Lista strumenti</translation>
     </message>
     <message>
         <source>Search</source>
@@ -4880,10 +4894,6 @@ space unit</extracomment>
         <translation>Collegati</translation>
     </message>
     <message>
-        <source>Staff Linked to Previous</source>
-        <translation>Pentagramma Collegato al Precedente</translation>
-    </message>
-    <message>
         <source>Staff type</source>
         <translation>Tipo di pentagramma</translation>
     </message>
@@ -4893,15 +4903,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument list</source>
-        <translation>Elenco Strumenti</translation>
+        <translation>Elenco strumenti</translation>
     </message>
     <message>
         <source>Clear Search box</source>
-        <translation>Cancella casella di Ricerca</translation>
+        <translation>Cancella casella di ricerca</translation>
     </message>
     <message>
         <source>Partitur List</source>
-        <translation>Elenco Spartiti</translation>
+        <translation>Elenco spartiti</translation>
+    </message>
+    <message>
+        <source>Staff linked to previous</source>
+        <translation>Pentagramma collegato al precedente</translation>
     </message>
 </context>
 <context>
@@ -4915,12 +4929,12 @@ space unit</extracomment>
         <translation>Pulisci</translation>
     </message>
     <message>
-        <source>add time signature to palette</source>
-        <translation>aggiungi unità di tempo alla tavolozza</translation>
-    </message>
-    <message>
         <source>Add</source>
         <translation>Aggiungi</translation>
+    </message>
+    <message>
+        <source>Add time signature to palette</source>
+        <translation>Aggiungi unità di tempo alla tavolozza</translation>
     </message>
 </context>
 <context>
@@ -4947,11 +4961,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add Tag</source>
-        <translation>Aggiungi Tag</translation>
+        <translation>Aggiungi tag</translation>
     </message>
     <message>
         <source>Delete Tag</source>
-        <translation>Cancella Tag</translation>
+        <translation>Cancella tag</translation>
     </message>
     <message>
         <source>1</source>
@@ -5150,6 +5164,21 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>LoginDialog</name>
+    <message>
+        <source>Log in to MuseScore</source>
+        <translation>Accedi a MuseScore</translation>
+    </message>
+    <message>
+        <source>Username or email</source>
+        <translation>Nome utente o email</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Password</translation>
+    </message>
+</context>
+<context>
     <name>MIDI import operations</name>
     <message>
         <source>Quarter</source>
@@ -5197,7 +5226,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff name</source>
-        <translation>Nome Pentagramma</translation>
+        <translation>Nome pentagramma</translation>
     </message>
     <message>
         <source>Sound</source>
@@ -5482,6 +5511,19 @@ Vuoi procurartelo %2 ora?</translation>
     </message>
 </context>
 <context>
+    <name>MeasureProperties</name>
+    <message>
+        <source>MuseScore</source>
+        <translation>MuseScore</translation>
+    </message>
+    <message>
+        <source>cannot change measure length:
+tuplet would cross measure</source>
+        <translation>impossibile modificare la lunghezza della battuta:
+il gruppo irregolare la attraversa</translation>
+    </message>
+</context>
+<context>
     <name>MeasurePropertiesBase</name>
     <message>
         <source>MuseScore: Measure Properties</source>
@@ -5493,7 +5535,7 @@ Vuoi procurartelo %2 ora?</translation>
     </message>
     <message>
         <source>New Row</source>
-        <translation>Nuova Riga</translation>
+        <translation>Nuova riga</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -5560,36 +5602,8 @@ Vuoi procurartelo %2 ora?</translation>
         <translation>Altro</translation>
     </message>
     <message>
-        <source>do not count</source>
-        <translation>non contare</translation>
-    </message>
-    <message>
         <source>Exclude from measure count</source>
         <translation>Escludi dal conteggio battute</translation>
-    </message>
-    <message>
-        <source>AUTO</source>
-        <translation>AUTO</translation>
-    </message>
-    <message>
-        <source>always show</source>
-        <translation>mostra sempre</translation>
-    </message>
-    <message>
-        <source>always hide</source>
-        <translation>nascondi sempre</translation>
-    </message>
-    <message>
-        <source>goto previous measure</source>
-        <translation>vai alla misura precedente</translation>
-    </message>
-    <message>
-        <source>goto next measure</source>
-        <translation>vai alla misura successiva</translation>
-    </message>
-    <message>
-        <source>Break multimeasure rest</source>
-        <translation>Interrompi la pausa di più battute</translation>
     </message>
     <message>
         <source>Repeat count:</source>
@@ -5614,6 +5628,34 @@ Vuoi procurartelo %2 ora?</translation>
     <message>
         <source>Add to measure number:</source>
         <translation>Aggiungi al numero di battuta:</translation>
+    </message>
+    <message>
+        <source>Do not count</source>
+        <translation>non contare</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Automatico</translation>
+    </message>
+    <message>
+        <source>Always Show</source>
+        <translation>Mostra sempre</translation>
+    </message>
+    <message>
+        <source>Always Hide</source>
+        <translation>Nascondi sempre</translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation>Vai alla misura precedente</translation>
+    </message>
+    <message>
+        <source>Go to next measure</source>
+        <translation>Vai alla misura successiva</translation>
+    </message>
+    <message>
+        <source>Break multimeasure rest</source>
+        <translation>Interrompi la pausa di più battute</translation>
     </message>
 </context>
 <context>
@@ -5643,7 +5685,7 @@ Vuoi procurartelo %2 ora?</translation>
     <name>MediaDialog</name>
     <message>
         <source>Dialog</source>
-        <translation>Finestra di Avvio</translation>
+        <translation>Finestra di avvio</translation>
     </message>
     <message>
         <source>PDF-Scan</source>
@@ -5659,7 +5701,7 @@ Vuoi procurartelo %2 ora?</translation>
     </message>
     <message>
         <source>Remove Scan</source>
-        <translation>Rimuovi Scansione</translation>
+        <translation>Rimuovi scansione</translation>
     </message>
     <message>
         <source>Audio</source>
@@ -5671,7 +5713,7 @@ Vuoi procurartelo %2 ora?</translation>
     </message>
     <message>
         <source>Remove Audio</source>
-        <translation>Rimuovi Audio</translation>
+        <translation>Rimuovi audio</translation>
     </message>
 </context>
 <context>
@@ -5693,7 +5735,7 @@ Vuoi procurartelo %2 ora?</translation>
     </message>
     <message>
         <source>API-Level:</source>
-        <translation>API-Livello:</translation>
+        <translation>Livello API:</translation>
     </message>
     <message>
         <source>New</source>
@@ -5707,27 +5749,27 @@ Vuoi procurartelo %2 ora?</translation>
 <context>
     <name>Ms</name>
     <message>
-        <source>fall</source>
-        <translation>fall</translation>
+        <source>Fall</source>
+        <translation>Fall</translation>
     </message>
     <message>
-        <source>doit</source>
-        <translation>doit</translation>
+        <source>Doit</source>
+        <translation>Doit</translation>
     </message>
     <message>
-        <source>plop</source>
-        <translation>plop</translation>
+        <source>Plop</source>
+        <translation>Plop</translation>
     </message>
     <message>
-        <source>scoop</source>
-        <translation>scoop</translation>
+        <source>Scoop</source>
+        <translation>Scoop</translation>
     </message>
 </context>
 <context>
     <name>Ms::AboutBoxDialog</name>
     <message>
         <source>Unstable Prerelease for Version: </source>
-        <translation>Prerelease Instabile della Versione: </translation>
+        <translation>Prerelease instabile della versione: </translation>
     </message>
     <message>
         <source>Version: </source>
@@ -5748,24 +5790,24 @@ Vuoi procurartelo %2 ora?</translation>
 <context>
     <name>Ms::AlbumManager</name>
     <message>
-        <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation>File MuseScore (*.mscz *.mscx);;</translation>
-    </message>
-    <message>
-        <source>All Files (*)</source>
-        <translation>Tutti i File (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Add Score</source>
         <translation>MuseScore: Aggiungi spartito</translation>
     </message>
     <message>
-        <source>MuseScore Album Files (*.album);;</source>
-        <translation>MuseScore File Album (*.album);;</translation>
-    </message>
-    <message>
         <source>MuseScore: Load Album</source>
         <translation>MuseScore: Carica album</translation>
+    </message>
+    <message>
+        <source>MuseScore Files (*.mscz *.mscx)</source>
+        <translation>File MuseScore (*.mscz *.mscx)</translation>
+    </message>
+    <message>
+        <source>MuseScore Album Files (*.album)</source>
+        <translation>MuseScore file album (*.album)</translation>
+    </message>
+    <message>
+        <source>Error while creating score from album.</source>
+        <translation>Errore durante la creazione dello spartito da album.</translation>
     </message>
 </context>
 <context>
@@ -5856,10 +5898,6 @@ Personalizzato</translation>
         <translation>Nonuplina</translation>
     </message>
     <message>
-        <source>Duration</source>
-        <translation>Durata</translation>
-    </message>
-    <message>
         <source>%1 Start of %2</source>
         <translation>%1 Inizio di %2</translation>
     </message>
@@ -5879,15 +5917,50 @@ Personalizzato</translation>
     <name>Ms::DrumTools</name>
     <message>
         <source>Drum Tools</source>
-        <translation>Strumenti Percussioni</translation>
+        <translation>Strumenti percussioni</translation>
     </message>
     <message>
         <source>Edit Drumset</source>
-        <translation>Modifica Set Percussioni...</translation>
+        <translation>Modifica set percussioni...</translation>
     </message>
     <message>
         <source>Drums</source>
         <translation>Percussioni</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::DrumrollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation>Barra degli strumenti 1</translation>
+    </message>
+    <message>
+        <source>Toolbar 3</source>
+        <translation>Barra degli strumenti 3</translation>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>Cursore:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>Dinamica:</translation>
+    </message>
+    <message>
+        <source>offset</source>
+        <translation>spiazzamento</translation>
+    </message>
+    <message>
+        <source>user</source>
+        <translation>utente</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>Altezza:</translation>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; Pentagramma: %2</translation>
     </message>
 </context>
 <context>
@@ -5902,7 +5975,7 @@ Personalizzato</translation>
     </message>
     <message>
         <source>Write File failed: </source>
-        <translation>Scrittura del File fallita: </translation>
+        <translation>Scrittura del file fallita: </translation>
     </message>
     <message>
         <source>MuseScore: Write Drumset</source>
@@ -5915,17 +5988,6 @@ failed: </source>
         <translation>Apertura File
 %1
 fallita: </translation>
-    </message>
-</context>
-<context>
-    <name>Ms::EditStaff</name>
-    <message>
-        <source>Edit Short Name</source>
-        <translation>Modifica Nome abbreviato</translation>
-    </message>
-    <message>
-        <source>Edit Long Name</source>
-        <translation>Modifica Nome Esteso</translation>
     </message>
 </context>
 <context>
@@ -5952,24 +6014,20 @@ fallita: </translation>
         <translation>Ancoraggio</translation>
     </message>
     <message>
-        <source>Edit HTML Text</source>
-        <translation>Modifica Testo HTML</translation>
-    </message>
-    <message>
         <source>Above Staff</source>
-        <translation>Sopra il Pentagramma</translation>
+        <translation>Sopra il pentagramma</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation>Sotto il Pentagramma</translation>
+        <translation>Sotto il pentagramma</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation>Accordo Automatico</translation>
+        <translation>Accordo automatico</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation>Sopra l&apos;Accordo</translation>
+        <translation>Sopra l&apos;accordo</translation>
     </message>
     <message>
         <source>Below Chord</source>
@@ -6029,7 +6087,19 @@ fallita: </translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation>Applica a tutte le Parti</translation>
+        <translation>Applica a tutte le parti</translation>
+    </message>
+    <message>
+        <source>last modification time</source>
+        <translation>ora dell&apos;ultima modifica</translation>
+    </message>
+    <message>
+        <source>last modification date</source>
+        <translation>data dell&apos;ultima modifica</translation>
+    </message>
+    <message>
+        <source>page number, if there is more than one page</source>
+        <translation>numero di pagina, se c&apos;è più di una pagina</translation>
     </message>
 </context>
 <context>
@@ -6095,13 +6165,6 @@ fallita: </translation>
     </message>
 </context>
 <context>
-    <name>Ms::InspectorEmpty</name>
-    <message>
-        <source>Select an element to display its properties</source>
-        <translation>Selezionare un elemento per mostrarne le proprietà</translation>
-    </message>
-</context>
-<context>
     <name>Ms::InspectorNote</name>
     <message>
         <source>Select</source>
@@ -6131,16 +6194,27 @@ fallita: </translation>
         <source>Beam</source>
         <translation>Gruppo note</translation>
     </message>
+    <message>
+        <source>Tuplet</source>
+        <translation>Gruppo irregolare</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::InspectorRest</name>
+    <message>
+        <source>Select</source>
+        <translation>Seleziona</translation>
+    </message>
+    <message>
+        <source>Tuplet</source>
+        <translation>Gruppo irregolare</translation>
+    </message>
 </context>
 <context>
     <name>Ms::InstrumentsDialog</name>
     <message>
         <source>MuseScore: Save Instrument List</source>
         <translation>MuseScore: Salva elenco strumenti</translation>
-    </message>
-    <message>
-        <source>MuseScore Instruments (*.xml);;</source>
-        <translation>MuseScore Strumenti (*.xml);;</translation>
     </message>
     <message>
         <source>Write Style failed: </source>
@@ -6155,10 +6229,6 @@ fallita: </translation>
         <translation>MuseScore: Carica elenco strumenti</translation>
     </message>
     <message>
-        <source>MuseScore Instruments (*.xml);;All files (*)</source>
-        <translation>MuseScore: Strumenti (*.xml);;Tutti i file (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Open Instruments File</source>
         <translation>MuseScore: Apri file strumenti musicali</translation>
     </message>
@@ -6169,6 +6239,10 @@ failed: </source>
         <translation>Apertura File Strumenti Musicali
 %1
 fallita: </translation>
+    </message>
+    <message>
+        <source>MuseScore Instruments (*.xml)</source>
+        <translation>Strumenti musicali di MuseScore (*.xml)</translation>
     </message>
 </context>
 <context>
@@ -6182,27 +6256,27 @@ fallita: </translation>
         <translation>Pentagrammi</translation>
     </message>
     <message>
-        <source>Visib.</source>
-        <translation>Visib.</translation>
-    </message>
-    <message>
         <source>Clef</source>
         <translation>Chiave</translation>
     </message>
     <message>
-        <source>Link.</source>
-        <translation>Collegamento.</translation>
-    </message>
-    <message>
         <source>Staff type</source>
         <translation>Tipo di pentagramma</translation>
+    </message>
+    <message>
+        <source>Visible</source>
+        <translation>Visibile</translation>
+    </message>
+    <message>
+        <source>Linked</source>
+        <translation>Collegati</translation>
     </message>
 </context>
 <context>
     <name>Ms::KeyEditor</name>
     <message>
         <source>MuseScore: Key Signatures</source>
-        <translation>MuseScore: Armature di Chiave</translation>
+        <translation>MuseScore: Armature di chiave</translation>
     </message>
 </context>
 <context>
@@ -6221,6 +6295,78 @@ fallita: </translation>
     <message>
         <source>layer tag</source>
         <translation>livello tag</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::LoginDialog</name>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Crea un account&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Password dimenticata?&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>Login error</source>
+        <translation>Errore di accesso</translation>
+    </message>
+    <message>
+        <source>Please fill in your username and password</source>
+        <translation>Inserisci il tuo nome utente e la password</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::LoginManager</name>
+    <message>
+        <source>Network error</source>
+        <translation>Errore di rete</translation>
+    </message>
+    <message>
+        <source>Please check your internet connection</source>
+        <translation>Controlla la tua connessione a internet</translation>
+    </message>
+    <message>
+        <source>Unsuccessful login. Please try again.</source>
+        <translation>Accesso non riuscito. Si prega di riprovare.</translation>
+    </message>
+    <message>
+        <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
+        <translation>Spiacenti, indirizzo email errato, nome utente o password. Si prega di controllare di nuovo. &lt;a href=&quot;%1&quot;&gt;Hai dimenticato la tua password&lt;/a&gt;?</translation>
+    </message>
+    <message>
+        <source>This account has been blocked.</source>
+        <translation>Questo account è stato bloccato.</translation>
+    </message>
+    <message>
+        <source>Your account has not been activated yet. Please check your mailbox to activate your account or &lt;a href=&quot;%1&quot;&gt;request a new activation email&lt;/a&gt;.</source>
+        <translation>Il tuo account non è stato ancora attivato. Controlla la tua casella di posta per attivare il tuo account o &lt;a href=&quot;%1&quot;&gt;richiedi una nuova mail di attivazione&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>Error while getting user info. Please try again</source>
+        <translation>Errore durante il recupero informazioni utente. Riprova</translation>
+    </message>
+    <message>
+        <source>Error while getting user info: %1</source>
+        <translation>Errore durante il recupero informazioni utente: %1</translation>
+    </message>
+    <message>
+        <source>An error occurred during the file transfer. Please try again</source>
+        <translation>Si è verificato un errore durante il trasferimento del file. Riprova</translation>
+    </message>
+    <message>
+        <source>Cannot upload: %1</source>
+        <translation>Impossibile caricare: %1</translation>
+    </message>
+    <message>
+        <source>Please upgrade</source>
+        <translation>Si prega di aggiornare</translation>
+    </message>
+    <message>
+        <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
+        <translation>La tua versione di MuseScore è troppo vecchia per utilizzare questa funzione.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;
+Si prega di aggiornare quanto prima
+&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -6266,8 +6412,8 @@ fallita: </translation>
         <translation>MuseScore: Inserisci nome tag</translation>
     </message>
     <message>
-        <source>New Tag Name:</source>
-        <translation>Nuovo Nome Tag</translation>
+        <source>New tag name:</source>
+        <translation>Nuovo nome tag:</translation>
     </message>
 </context>
 <context>
@@ -6335,27 +6481,15 @@ prima di chiudere?</translation>
     </message>
     <message>
         <source>Overture / Score Writer Files &lt;experimental&gt; (*.ove *.scw);;</source>
-        <translation>Overture / File Scrittura Spartiti &lt;experimental&gt; (*.ove *.scw);;</translation>
+        <translation>Overture / File scrittura spartiti &lt;experimental&gt; (*.ove *.scw);;</translation>
     </message>
     <message>
         <source>Bagpipe Music Writer Files &lt;experimental&gt; (*.bww);;</source>
         <translation>File Bagpipe Music Writer (*.bww);;</translation>
     </message>
     <message>
-        <source>All Files (*)</source>
-        <translation>Tutti i File (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Load Score</source>
         <translation>MuseScore: Apri spartito</translation>
-    </message>
-    <message>
-        <source>Compressed MuseScore File (*.mscz)</source>
-        <translation>File MuseScore compresso (*.mscz)</translation>
-    </message>
-    <message>
-        <source>MuseScore File (*.mscx)</source>
-        <translation>File MuseScore (*.mscx)</translation>
     </message>
     <message>
         <source>MuseScore: Save Score</source>
@@ -6367,15 +6501,11 @@ prima di chiudere?</translation>
     </message>
     <message>
         <source>Untitled</source>
-        <translation>Senza Titolo</translation>
+        <translation>Senza titolo</translation>
     </message>
     <message>
         <source>MuseScore: Load Style</source>
         <translation>MuseScore: Carica stile</translation>
-    </message>
-    <message>
-        <source>MuseScore Styles (*.mss);;All Files (*)</source>
-        <translation>Stili di MuseScore (*.mss);;Tutti i File (*)</translation>
     </message>
     <message>
         <source>MuseScore: Save Style</source>
@@ -6386,16 +6516,12 @@ prima di chiudere?</translation>
         <translation>File di Stile di MuseScore (*.mss)</translation>
     </message>
     <message>
-        <source>;;All Files (*)</source>
-        <translation>;;Tutti i File (*)</translation>
-    </message>
-    <message>
         <source>PDF Scan File (*.pdf);;All (*)</source>
-        <translation>PDF File Scansione (*.pdf);;Tutto (*)</translation>
+        <translation>PDF File scansione (*.pdf);;Tutto (*)</translation>
     </message>
     <message>
         <source>Choose PDF Scan</source>
-        <translation>Scegli Scansione PDF</translation>
+        <translation>Scegli scansione PDF</translation>
     </message>
     <message>
         <source>MuseScore: Choose PDF Scan</source>
@@ -6403,7 +6529,7 @@ prima di chiudere?</translation>
     </message>
     <message>
         <source>Choose Audio File</source>
-        <translation>Seleziona File Audio</translation>
+        <translation>Seleziona file audio</translation>
     </message>
     <message>
         <source>MuseScore: Save Image</source>
@@ -6412,10 +6538,6 @@ prima di chiudere?</translation>
     <message>
         <source>MuseScore: Load Palette</source>
         <translation>MuseScore: Carica tavolozza</translation>
-    </message>
-    <message>
-        <source>MuseScore Palette (*.mpal);;All Files (*)</source>
-        <translation>MuseScore Tavolozza (*.mpal);;Tutti i File (*)</translation>
     </message>
     <message>
         <source>MuseScore: Save Palette</source>
@@ -6430,24 +6552,16 @@ prima di chiudere?</translation>
         <translation>MuseScore: Carica plugin</translation>
     </message>
     <message>
-        <source>MuseScore Plugin (*.qml);;All Files (*)</source>
-        <translation>MuseScore Plugin (*.qml);;Tutti i File (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Plugin</source>
         <translation>MuseScore: Salva plugin</translation>
     </message>
     <message>
         <source>MuseScore Plugin File (*.qml)</source>
-        <translation>MuseScore File Plugin (*.qml)</translation>
+        <translation>MuseScore fFile plugin (*.qml)</translation>
     </message>
     <message>
         <source>MuseScore: Load Drumset</source>
         <translation>MuseScore: Carica set percussioni</translation>
-    </message>
-    <message>
-        <source>MuseScore Drumset (*.drm);;All Files (*)</source>
-        <translation>MuseScore Set percussioni (*.drm);;All Files (*)</translation>
     </message>
     <message>
         <source>MuseScore: Save Drumset</source>
@@ -6455,23 +6569,11 @@ prima di chiudere?</translation>
     </message>
     <message>
         <source>MuseScore Drumset File (*.drm)</source>
-        <translation>MuseScore File Drumset (*.drm)</translation>
-    </message>
-    <message>
-        <source>Uncompressed MuseScore Format (*.mscx)</source>
-        <translation>MuseScore Formato non Compresso (*.mscx)</translation>
-    </message>
-    <message>
-        <source>MusicXML Format (*.xml)</source>
-        <translation>Formato MusicXml (*.xml)</translation>
-    </message>
-    <message>
-        <source>Compressed MusicXML Format (*.mxl)</source>
-        <translation>Formato MusicXml Compresso (*.mxl)</translation>
+        <translation>MuseScore file drumset (*.drm)</translation>
     </message>
     <message>
         <source>Standard MIDI File (*.mid)</source>
-        <translation>Standard MIDI File (*.mid)</translation>
+        <translation>File MIDI standard (*.mid)</translation>
     </message>
     <message>
         <source>PDF File (*.pdf)</source>
@@ -6479,23 +6581,23 @@ prima di chiudere?</translation>
     </message>
     <message>
         <source>PNG Bitmap Graphic (*.png)</source>
-        <translation>PNG Bitmap Graphic (*.png)</translation>
+        <translation>PNG bitmap graphic (*.png)</translation>
     </message>
     <message>
         <source>Scalable Vector Graphic (*.svg)</source>
-        <translation>Scalable Vector Graphic (*.svg)</translation>
+        <translation>Scalable vector graphic (*.svg)</translation>
     </message>
     <message>
         <source>Wave Audio (*.wav)</source>
-        <translation>Wave Audio (*.wav)</translation>
+        <translation>Wave audio (*.wav)</translation>
     </message>
     <message>
         <source>Ogg Vorbis Audio (*.ogg)</source>
-        <translation>Ogg Vorbis Audio (*.ogg)</translation>
+        <translation>Ogg Vorbis audio (*.ogg)</translation>
     </message>
     <message>
         <source>MP3 Audio (*.mp3)</source>
-        <translation>Wave Audio (*.wav)</translation>
+        <translation>MP3 audio (*.mp3)</translation>
     </message>
     <message>
         <source>MuseScore: Export</source>
@@ -6542,14 +6644,6 @@ Vuoi sostituirlo?
         <translation>Parti esportate con successo</translation>
     </message>
     <message>
-        <source>MuseScore Format (*.mscz)</source>
-        <translation>Formato MuseScore (*.mscz)</translation>
-    </message>
-    <message>
-        <source>MuseScore Format (*.mscx)</source>
-        <translation>Formato MuseScore (*.mscx)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save a Copy</source>
         <translation>MuseScore: Salva una copia</translation>
     </message>
@@ -6560,10 +6654,6 @@ Vuoi sostituirlo?
     <message>
         <source>MuseScore: Save Selected</source>
         <translation>MuseScore: Salva selezionati</translation>
-    </message>
-    <message>
-        <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable vector graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png);;All Files (*)</source>
-        <translation>Tutti i file supportati (*.svg *.jpg *.jpeg *.png);;Scalable vector graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png);;All Files (*)</translation>
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
@@ -6634,10 +6724,6 @@ Vuoi sostituirlo?
         <translation>Glissando</translation>
     </message>
     <message>
-        <source>Tempo Text</source>
-        <translation>Testo Tempo</translation>
-    </message>
-    <message>
         <source>Staff Text</source>
         <translation>Testo di pentagramma</translation>
     </message>
@@ -6646,24 +6732,8 @@ Vuoi sostituirlo?
         <translation>Testo di accollatura</translation>
     </message>
     <message>
-        <source>Rehearsal Mark</source>
-        <translation>Marcatore di riferimento</translation>
-    </message>
-    <message>
         <source>Instrument</source>
         <translation>Strumento:</translation>
-    </message>
-    <message>
-        <source>Instrument Change</source>
-        <translation>Cambio dello strumento</translation>
-    </message>
-    <message>
-        <source>1.</source>
-        <translation>1.</translation>
-    </message>
-    <message>
-        <source>Lyrics Verse Number</source>
-        <translation>Numero Strofa Parole</translation>
     </message>
     <message>
         <source>4/4 common time</source>
@@ -6672,22 +6742,6 @@ Vuoi sostituirlo?
     <message>
         <source>2/2 alla breve</source>
         <translation>2/2 alla breve</translation>
-    </message>
-    <message>
-        <source>set visible</source>
-        <translation>Rendi visibile</translation>
-    </message>
-    <message>
-        <source>set invisible</source>
-        <translation>Rendi invisibile</translation>
-    </message>
-    <message>
-        <source>change staff type</source>
-        <translation>Cambia tipo di pentagramma</translation>
-    </message>
-    <message>
-        <source>change instrument</source>
-        <translation>Cambia strumento</translation>
     </message>
     <message>
         <source>&amp;Add</source>
@@ -6716,10 +6770,6 @@ Please select a measure and try again</source>
 selezionare una battuta e riprovare</translation>
     </message>
     <message>
-        <source>switch layer</source>
-        <translation>interruttore livello</translation>
-    </message>
-    <message>
         <source>synthesizer</source>
         <translation>Sintetizzatore</translation>
     </message>
@@ -6728,12 +6778,8 @@ selezionare una battuta e riprovare</translation>
         <translation>traccia audio</translation>
     </message>
     <message>
-        <source>switch play mode</source>
-        <translation>interruttore modalità di riproduzione</translation>
-    </message>
-    <message>
         <source>File Operations</source>
-        <translation>Operazioni sul File</translation>
+        <translation>Operazioni sul file</translation>
     </message>
     <message>
         <source>Transport Tools</source>
@@ -6845,7 +6891,7 @@ selezionare una battuta e riprovare</translation>
     </message>
     <message>
         <source>DRUM entry mode</source>
-        <translation>modalità inserimento Set percussioni</translation>
+        <translation>modalità inserimento set percussioni</translation>
     </message>
     <message>
         <source>TAB entry mode</source>
@@ -6876,14 +6922,6 @@ Restore session?</source>
 Ripristinare la sessione?</translation>
     </message>
     <message>
-        <source>MuseScore: Transpose</source>
-        <translation>MuseScore: Trasporto</translation>
-    </message>
-    <message>
-        <source>There is nothing selected. Transpose whole score?</source>
-        <translation>Nessuna selezione. Si desidera trasporre l&apos;intero spartito?</translation>
-    </message>
-    <message>
         <source>Go To: </source>
         <translation>Vai a: </translation>
     </message>
@@ -6908,26 +6946,14 @@ Ripristinare la sessione?</translation>
         <translation>MuseScore: Lettura area di lavoro</translation>
     </message>
     <message>
-        <source>Workspace Name:</source>
-        <translation>Nome area di lavoro</translation>
-    </message>
-    <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; esiste già,
 scegli un nome diverso:</translation>
     </message>
     <message>
-        <source>Fretboard Diagram</source>
-        <translation>Schema Tastiera</translation>
-    </message>
-    <message>
-        <source>measure:beat:tick</source>
-        <translation>battuta:ritmo:battito</translation>
-    </message>
-    <message>
         <source>Ogg Audio File (*.ogg);;All (*)</source>
-        <translation>File Audio Ogg (*.ogg);;All (*)</translation>
+        <translation>File audio Ogg (*.ogg);;All (*)</translation>
     </message>
     <message>
         <source>MuseScore: Choose Ogg Audio File</source>
@@ -6976,15 +7002,11 @@ scegli un nome diverso:</translation>
     </message>
     <message>
         <source>Encoding Error</source>
-        <translation>Codifica Errore</translation>
+        <translation>Codifica errore</translation>
     </message>
     <message>
         <source>Confirm Replace</source>
-        <translation>Conferma Sostituisci</translation>
-    </message>
-    <message>
-        <source>MuseScore: Load Error</source>
-        <translation>MuseScore: Errore di caricamento</translation>
+        <translation>Conferma sostituisci</translation>
     </message>
     <message>
         <source>Error reading language file %s at line %d column %d: %s
@@ -7017,16 +7039,12 @@ scegli un nome diverso:</translation>
         <translation>Tutti i File Supportati (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
-        <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
-    </message>
-    <message>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
         <source>View Mode</source>
-        <translation>Modalità di Visualizzazione</translation>
+        <translation>Modalità di visualizzazione</translation>
     </message>
     <message>
         <source>Screenshot Mode</source>
@@ -7057,12 +7075,120 @@ scegli un nome diverso:</translation>
         <translation>Simboli</translation>
     </message>
     <message>
-        <source>Open failed: Unknown file extension or broken file</source>
-        <translation>Apertura fallita: estensione Sconosciuta o file danneggiato</translation>
-    </message>
-    <message>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>Impossibile creare il gruppo irregolare: valore della Nota troppo breve</translation>
+    </message>
+    <message>
+        <source>MuseScore File (*.mscz)</source>
+        <translation>File MuseScore (*.mscz)</translation>
+    </message>
+    <message>
+        <source>Uncompressed MuseScore File (*.mscx)</source>
+        <translation>File MuseScore non compresso (*.mscx)</translation>
+    </message>
+    <message>
+        <source>MusicXML File (*.xml)</source>
+        <translation>File MusicXML (*.xml)</translation>
+    </message>
+    <message>
+        <source>Compressed MusicXML File (*.mxl)</source>
+        <translation>File MusicXML compresso (*.mxl)</translation>
+    </message>
+    <message>
+        <source>Show MIDI import panel</source>
+        <translation>Mostra pannello importazione MIDI</translation>
+    </message>
+    <message>
+        <source>Tempo text</source>
+        <translation>Testo tempo</translation>
+    </message>
+    <message>
+        <source>Staff text</source>
+        <translation>Testo di pentagramma</translation>
+    </message>
+    <message>
+        <source>System text</source>
+        <translation>Testo di accollatura</translation>
+    </message>
+    <message>
+        <source>Rehearsal mark</source>
+        <translation>Marcatore di riferimento</translation>
+    </message>
+    <message>
+        <source>Instrument change</source>
+        <translation>Variazione strumento</translation>
+    </message>
+    <message>
+        <source>Set visible</source>
+        <translation>Rendi visibile</translation>
+    </message>
+    <message>
+        <source>Set invisible</source>
+        <translation>Rendi invisibile</translation>
+    </message>
+    <message>
+        <source>Change staff type</source>
+        <translation>Cambia tipo di pentagramma</translation>
+    </message>
+    <message>
+        <source>Change instrument</source>
+        <translation>Cambia strumento</translation>
+    </message>
+    <message>
+        <source>Fretboard diagram</source>
+        <translation>Schema tastiera</translation>
+    </message>
+    <message>
+        <source>Measure:Beat:Tick</source>
+        <translation>Battuta:ritmo:battito</translation>
+    </message>
+    <message>
+        <source>Switch layer</source>
+        <translation>Interruttore livello</translation>
+    </message>
+    <message>
+        <source>Switch play mode</source>
+        <translation>Interruttore modalità di riproduzione</translation>
+    </message>
+    <message>
+        <source>Workspace name:</source>
+        <translation>Nome area di lavoro:</translation>
+    </message>
+    <message>
+        <source>Score_and_Parts</source>
+        <translation>Spartito_e_Parti</translation>
+    </message>
+    <message>
+        <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
+        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</translation>
+    </message>
+    <message>
+        <source>MuseScore Styles (*.mss)</source>
+        <translation>Stili di MuseScore (*.mss)</translation>
+    </message>
+    <message>
+        <source>MuseScore Plugin (*.qml)</source>
+        <translation>Plugin di MuseScore (*.qml)</translation>
+    </message>
+    <message>
+        <source>MuseScore Drumset (*.drm)</source>
+        <translation>Set percussioni MuseScore (*.drm)</translation>
+    </message>
+    <message>
+        <source>RH Guitar Fingering %1</source>
+        <translation>Diteggiatura chitarra mano destra %1</translation>
+    </message>
+    <message>
+        <source>LH Guitar Fingering %1</source>
+        <translation>Diteggiatura chitarra mano sinistra %1</translation>
+    </message>
+    <message>
+        <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</source>
+        <translation>Tutti i file supportati (*.svg *.jpg *.jpeg *.png);;Grafica vettoriale scalabile (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</translation>
+    </message>
+    <message>
+        <source>&amp;Tools</source>
+        <translation>&amp;Strumenti</translation>
     </message>
 </context>
 <context>
@@ -7095,7 +7221,7 @@ scegli un nome diverso:</translation>
     <name>Ms::NewWizardPage1</name>
     <message>
         <source>Create New Score</source>
-        <translation>Crea Nuovo Spartito</translation>
+        <translation>Crea nuovo spartito</translation>
     </message>
     <message>
         <source>This wizard creates a new score</source>
@@ -7106,7 +7232,7 @@ scegli un nome diverso:</translation>
     <name>Ms::NewWizardPage2</name>
     <message>
         <source>Create New Score</source>
-        <translation>Crea Nuovo Spartito</translation>
+        <translation>Crea nuovo spartito</translation>
     </message>
     <message>
         <source>Define a set of instruments. Each instrument is represented by one or more staves</source>
@@ -7117,7 +7243,7 @@ scegli un nome diverso:</translation>
     <name>Ms::NewWizardPage3</name>
     <message>
         <source>Create New Score</source>
-        <translation>Crea Nuovo Spartito</translation>
+        <translation>Crea nuovo spartito</translation>
     </message>
     <message>
         <source>Create Time Signature</source>
@@ -7128,26 +7254,18 @@ scegli un nome diverso:</translation>
     <name>Ms::NewWizardPage4</name>
     <message>
         <source>Create New Score</source>
-        <translation>Crea Nuovo Spartito</translation>
+        <translation>Crea nuovo spartito</translation>
     </message>
     <message>
         <source>Select Template File:</source>
-        <translation>Seleziona File modello:</translation>
-    </message>
-    <message>
-        <source>MuseScore: Select Template</source>
-        <translation>MuseScore: Seleziona modello:</translation>
-    </message>
-    <message>
-        <source>MuseScore Template Files (*.mscz *.mscx)</source>
-        <translation>MuseScore File Modello (*.mscz *.mscx)</translation>
+        <translation>Seleziona file modello:</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage5</name>
     <message>
         <source>Create New Score</source>
-        <translation>Crea Nuovo Spartito</translation>
+        <translation>Crea nuovo spartito</translation>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
@@ -7173,10 +7291,6 @@ scegli un nome diverso:</translation>
 <context>
     <name>Ms::Note</name>
     <message>
-        <source>Pitch: %1</source>
-        <translation>Altezza: %1</translation>
-    </message>
-    <message>
         <source>Appoggiatura</source>
         <translation>Appoggiatura</translation>
     </message>
@@ -7190,7 +7304,7 @@ scegli un nome diverso:</translation>
     </message>
     <message>
         <source>Invalid note</source>
-        <translation>Nota non Valida</translation>
+        <translation>Nota non valida</translation>
     </message>
     <message>
         <source>Note</source>
@@ -7212,6 +7326,18 @@ scegli un nome diverso:</translation>
         <source>%1 End of %2</source>
         <translation>%1 Fine di %2</translation>
     </message>
+    <message>
+        <source>%1; Pitch: %2; Duration: %3%4</source>
+        <translation>%1; Tono: %2; Durata: %3%4</translation>
+    </message>
+    <message>
+        <source>Beat Slash</source>
+        <translation>Battito slash</translation>
+    </message>
+    <message>
+        <source>Rhythm Slash</source>
+        <translation>Ritmo slash</translation>
+    </message>
 </context>
 <context>
     <name>Ms::OmrPanel</name>
@@ -7223,16 +7349,39 @@ scegli un nome diverso:</translation>
 <context>
     <name>Ms::Palette</name>
     <message>
-        <source>Show More...</source>
-        <translation>Mostra di più</translation>
-    </message>
-    <message>
         <source>Clear</source>
         <translation>Pulisci</translation>
     </message>
     <message>
         <source>Properties...</source>
         <translation>Proprietà...</translation>
+    </message>
+    <message>
+        <source>More Elements...</source>
+        <translation>Più elementi...</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::PaletteBox</name>
+    <message>
+        <source>Palettes</source>
+        <translation>Tavolozze</translation>
+    </message>
+    <message>
+        <source>Select workspace</source>
+        <translation>Seleziona area di lavoro</translation>
+    </message>
+    <message>
+        <source>+</source>
+        <translation>+</translation>
+    </message>
+    <message>
+        <source>Add new workspace</source>
+        <translation>Aggiungi nuova area di lavoro</translation>
+    </message>
+    <message>
+        <source>new Palette</source>
+        <translation>nuova tavolozza</translation>
     </message>
 </context>
 <context>
@@ -7280,15 +7429,66 @@ scegli un nome diverso:</translation>
 <context>
     <name>Ms::PianoTools</name>
     <message>
-        <source>Piano</source>
-        <translation>Piano</translation>
+        <source>Piano Keyboard</source>
+        <translation>Tastiera pianoforte</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::PianorollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation>Barra degli strumenti 1</translation>
+    </message>
+    <message>
+        <source>Wave</source>
+        <translation>Wave</translation>
+    </message>
+    <message>
+        <source>Show wave display</source>
+        <translation>Mostra visualizzatore onda</translation>
+    </message>
+    <message>
+        <source>Toolbar 2</source>
+        <translation>Barra degli strumenti 2</translation>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>Cursore:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>Dinamica:</translation>
+    </message>
+    <message>
+        <source>Offset</source>
+        <translation>Spiazzamento</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Utente</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>Altezza:</translation>
+    </message>
+    <message>
+        <source>OnTime:</source>
+        <translation>A Tempo:</translation>
+    </message>
+    <message>
+        <source>Len:</source>
+        <translation>Lung.:</translation>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; Pentagramma: %2</translation>
     </message>
 </context>
 <context>
     <name>Ms::PluginCreator</name>
     <message>
         <source>File Operations</source>
-        <translation>Operazioni sul File</translation>
+        <translation>Operazioni sul file</translation>
     </message>
     <message>
         <source>Edit Operations</source>
@@ -7308,13 +7508,21 @@ scegli un nome diverso:</translation>
     </message>
     <message>
         <source>MuseScore Plugin Creator</source>
-        <translation>MuseScore Creatore plugin</translation>
+        <translation>MuseScore creatore plugin</translation>
     </message>
     <message>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
         <translation>Il plugin &quot;%1&quot; contiene delle modifiche.
 Salvare prima di chiudere?</translation>
+    </message>
+    <message>
+        <source>MuseScore: Save Plugin</source>
+        <translation>MuseScore: Salva plugin</translation>
+    </message>
+    <message>
+        <source>cannot determine file type</source>
+        <translation>impossibile determinare il tipo di file</translation>
     </message>
 </context>
 <context>
@@ -7337,7 +7545,7 @@ Salvare prima di chiudere?</translation>
     </message>
     <message>
         <source>Choose Default Style for Parts</source>
-        <translation>Scegli lo stile predefinito per le Parti</translation>
+        <translation>Scegli lo stile predefinito per le parti</translation>
     </message>
     <message>
         <source>Choose Instrument List</source>
@@ -7352,16 +7560,12 @@ Salvare prima di chiudere?</translation>
         <translation>Scegli lo spartito di avvio</translation>
     </message>
     <message>
-        <source>MuseScore Files (*.mscz *.mscx *.msc);;All (*)</source>
-        <translation>File MuseScore (*.mscz *.mscx *.msc);;Tutti (*)</translation>
-    </message>
-    <message>
         <source>MuseScore Shortcuts</source>
         <translation>Scorciatoie MuseScore</translation>
     </message>
     <message>
         <source>Print Shortcuts</source>
-        <translation>Stampa Scorciatoie</translation>
+        <translation>Stampa scorciatoie</translation>
     </message>
     <message>
         <source>Choose Default Style for Imports</source>
@@ -7403,6 +7607,10 @@ Salvare prima di chiudere?</translation>
         <source>No shortcut defined</source>
         <translation>Nessuna scorciatoia definita</translation>
     </message>
+    <message>
+        <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
+        <translation>File MuseScore (*.mscz *.mscx);;Tutti (*)</translation>
+    </message>
 </context>
 <context>
     <name>Ms::ResourceManager</name>
@@ -7440,6 +7648,10 @@ Salvare prima di chiudere?</translation>
     <message>
         <source>Voice: %1</source>
         <translation>Voce: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Durata: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -7525,23 +7737,23 @@ fallita: %2</translation>
     </message>
     <message>
         <source>Range Selection</source>
-        <translation>Selezione Intervallo</translation>
+        <translation>Selezione intervallo</translation>
     </message>
     <message>
         <source>List Selection</source>
-        <translation>Selezione Lista</translation>
+        <translation>Selezione lista</translation>
     </message>
     <message>
         <source>Measure: %1</source>
-        <translation>Misura:% 1</translation>
+        <translation>Misura: %1</translation>
     </message>
     <message>
         <source>Start Measure: %1; Start Beat: %2</source>
-        <translation>Inizio misura:% 1; Inizio battito: %2</translation>
+        <translation>Inizio misura: %1; Inizio battito: %2</translation>
     </message>
     <message>
         <source>End Measure: %1; End Beat: %2</source>
-        <translation>Fine misura:% 1; Fine battito: %2</translation>
+        <translation>Fine misura: %1; Fine battito: %2</translation>
     </message>
     <message>
         <source>Staff %1</source>
@@ -7556,7 +7768,7 @@ fallita: %2</translation>
     </message>
     <message>
         <source>Set Standard Size...</source>
-        <translation>Imposta Formato standard ...</translation>
+        <translation>Imposta formato standard ...</translation>
     </message>
     <message>
         <source>Save As (print mode)...</source>
@@ -7604,19 +7816,15 @@ fallita: %2</translation>
     </message>
     <message>
         <source>Bend Properties...</source>
-        <translation>Proprietà Bend...</translation>
+        <translation>Proprietà bend...</translation>
     </message>
     <message>
         <source>Add</source>
         <translation>Aggiungi</translation>
     </message>
     <message>
-        <source>Frame Properties...</source>
-        <translation>Proprietà Cornice...</translation>
-    </message>
-    <message>
         <source>Volta Properties...</source>
-        <translation>Proprietà Volta</translation>
+        <translation>Proprietà volta</translation>
     </message>
     <message>
         <source>Time Signature Properties...</source>
@@ -7632,7 +7840,7 @@ fallita: %2</translation>
     </message>
     <message>
         <source>Change Instrument Properties...</source>
-        <translation>Modifica Proprietà strumento</translation>
+        <translation>Modifica proprietà strumento</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -7648,7 +7856,7 @@ fallita: %2</translation>
     </message>
     <message>
         <source>Measure Properties...</source>
-        <translation>Proprietà Battuta...</translation>
+        <translation>Proprietà battuta...</translation>
     </message>
     <message>
         <source>Style...</source>
@@ -7656,7 +7864,7 @@ fallita: %2</translation>
     </message>
     <message>
         <source>Chord Articulation...</source>
-        <translation>Articolazione Accordo</translation>
+        <translation>Articolazione accordo</translation>
     </message>
     <message>
         <source>Section Break Properties...</source>
@@ -7692,7 +7900,7 @@ fallita: %2</translation>
     </message>
     <message>
         <source>Drumroll Editor...</source>
-        <translation>Editore Drumroll...</translation>
+        <translation>Editore drumroll...</translation>
     </message>
     <message>
         <source>Pianoroll Editor...</source>
@@ -7708,11 +7916,11 @@ fallita: %2</translation>
     </message>
     <message>
         <source>Please select the complete tuplet and retry the copy operation</source>
-        <translation>Selezionare tutto il gruppo irregolare e ripetere l&apos;operazione Copia</translation>
+        <translation>Selezionare tutto il gruppo irregolare e ripetere l&apos;operazione copia</translation>
     </message>
     <message>
         <source>Please select the complete tuplet and retry the cut operation</source>
-        <translation>Selezionare tutto il gruppo irregolare e ripetere l&apos;operazione Taglia</translation>
+        <translation>Selezionare tutto il gruppo irregolare e ripetere l&apos;operazione taglia</translation>
     </message>
     <message>
         <source>no destination to paste</source>
@@ -7738,7 +7946,7 @@ selezionare una battuta e riprovare</translation>
     </message>
     <message>
         <source>Fretboard Diagram Properties...</source>
-        <translation>Proprietà Schema Tastiera...</translation>
+        <translation>Proprietà schema tastiera...</translation>
     </message>
     <message>
         <source>Set output resolution for PNG/SVG</source>
@@ -7810,6 +8018,10 @@ Please select a range of measures to join and try again</source>
         <translation>Nessuna battuta selezionata:
 Selezionare un intervallo di battute da unire e riprovare</translation>
     </message>
+    <message>
+        <source>Auto-resize to page</source>
+        <translation>Ridimensionamento automatico alla pagina</translation>
+    </message>
 </context>
 <context>
     <name>Ms::Segment</name>
@@ -7867,7 +8079,7 @@ Selezionare un intervallo di battute da unire e riprovare</translation>
     <name>Ms::StartDialog</name>
     <message>
         <source>MuseScore Startup Dialog</source>
-        <translation>MuseScore Finestra di Avvio</translation>
+        <translation>MuseScore finestra di avvio</translation>
     </message>
 </context>
 <context>
@@ -7897,65 +8109,38 @@ Selezionare un intervallo di battute da unire e riprovare</translation>
     </message>
 </context>
 <context>
-    <name>Ms::Text</name>
-    <message>
-        <source>Title</source>
-        <translation>Titolo</translation>
-    </message>
-    <message>
-        <source>Subtitle</source>
-        <translation>Sottotitolo</translation>
-    </message>
-    <message>
-        <source>Composer</source>
-        <translation>Compositore</translation>
-    </message>
-    <message>
-        <source>Translator</source>
-        <translation>Traduttore</translation>
-    </message>
-    <message>
-        <source>Measure number</source>
-        <translation>Numero battuta</translation>
-    </message>
-    <message>
-        <source>Lyricist</source>
-        <translation>Paroliere</translation>
-    </message>
-</context>
-<context>
     <name>Ms::TextEditor</name>
     <message>
-        <source>bold</source>
-        <translation>grassetto</translation>
+        <source>Bold</source>
+        <translation>Grassetto</translation>
     </message>
     <message>
-        <source>italic</source>
-        <translation>corsivo</translation>
+        <source>Italic</source>
+        <translation>Corsivo</translation>
     </message>
     <message>
-        <source>underline</source>
+        <source>Underline</source>
         <translation>Sottolineato</translation>
     </message>
     <message>
-        <source>align left</source>
-        <translation>allinea a sinistra</translation>
+        <source>Align left</source>
+        <translation>allineato a sinistra</translation>
     </message>
     <message>
-        <source>align center</source>
-        <translation>centrato</translation>
+        <source>Align center</source>
+        <translation>Centrato</translation>
     </message>
     <message>
-        <source>align right</source>
-        <translation>allinea a destra</translation>
+        <source>Align right</source>
+        <translation>Allinea a destra</translation>
     </message>
     <message>
-        <source>subscript</source>
-        <translation>pedice</translation>
+        <source>Subscript</source>
+        <translation>Pedice</translation>
     </message>
     <message>
-        <source>superscript</source>
-        <translation>apice</translation>
+        <source>Superscript</source>
+        <translation>Apice</translation>
     </message>
 </context>
 <context>
@@ -7985,10 +8170,6 @@ Selezionare un intervallo di battute da unire e riprovare</translation>
         <translation>MuseScore: Lettura nome dello stile</translation>
     </message>
     <message>
-        <source>Text Style Name:</source>
-        <translation>Nome Stile di Testo</translation>
-    </message>
-    <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; esiste già,
@@ -7996,38 +8177,42 @@ scegli un nome diverso:</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation>Applica a tutte le Parti</translation>
+        <translation>Applica a tutte le parti</translation>
+    </message>
+    <message>
+        <source>Text style name:</source>
+        <translation>Nome stile di testo:</translation>
     </message>
 </context>
 <context>
     <name>Ms::TextTools</name>
     <message>
         <source>Text Tools</source>
-        <translation>Strumenti Testo</translation>
+        <translation>Strumenti testo</translation>
     </message>
     <message>
         <source>Text Edit</source>
-        <translation>Modifica Testo</translation>
+        <translation>Modifica testo</translation>
     </message>
     <message>
-        <source>bold</source>
-        <translation>grassetto</translation>
+        <source>Bold</source>
+        <translation>Grassetto</translation>
     </message>
     <message>
-        <source>italic</source>
-        <translation>corsivo</translation>
+        <source>Italic</source>
+        <translation>Corsivo</translation>
     </message>
     <message>
-        <source>underline</source>
+        <source>Underline</source>
         <translation>Sottolineato</translation>
     </message>
     <message>
-        <source>subscript</source>
-        <translation>pedice</translation>
+        <source>Subscript</source>
+        <translation>Pedice</translation>
     </message>
     <message>
-        <source>superscript</source>
-        <translation>apice</translation>
+        <source>Superscript</source>
+        <translation>Apice</translation>
     </message>
 </context>
 <context>
@@ -8060,11 +8245,81 @@ scegli un nome diverso:</translation>
     </message>
     <message>
         <source>Update Available</source>
-        <translation>Aggiornamento Disponibile</translation>
+        <translation>Aggiornamento disponibile</translation>
     </message>
     <message>
         <source>No Update Available</source>
-        <translation>Nessun Aggiornamento Disponibile</translation>
+        <translation>Nessun aggiornamento disponibile</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::UploadScoreDialog</name>
+    <message>
+        <source>All Rights reserved</source>
+        <translation>Tutti i diritti riservati</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution</source>
+        <translation>Creative Commons Attribution</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Share Alike</source>
+        <translation>Creative Commons Attribution condividi allo stesso modo</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution No Derivative Works</source>
+        <translation>Creative Commons Attribuzione non opere derivate</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Noncommercial</source>
+        <translation>Creative Commons Attribution non commerciale</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Noncommercial Share Alike</source>
+        <translation>Creative Commons Attribution non commerciale condividi allo stesso modo</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
+        <translation>Creative Commons Attribution non commerciale non opere derivate</translation>
+    </message>
+    <message>
+        <source>Public Domain</source>
+        <translation>Pubblico dominio</translation>
+    </message>
+    <message>
+        <source>Creative Commons Zero</source>
+        <translation>Creative Commons Zero</translation>
+    </message>
+    <message>
+        <source>Missing title</source>
+        <translation>Titolo mancante</translation>
+    </message>
+    <message>
+        <source>Please provide a title</source>
+        <translation>Si prega di fornire un titolo</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>Riuscito</translation>
+    </message>
+    <message>
+        <source>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</source>
+        <translation>Finito! &lt;a href=&quot;%1&quot;&gt;Vai al mio punteggio&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Errore</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Workspace</name>
+    <message>
+        <source>Advanced</source>
+        <translation>Avanzato</translation>
+    </message>
+    <message>
+        <source>Basic</source>
+        <translation>Essenziale</translation>
     </message>
 </context>
 <context>
@@ -8164,14 +8419,6 @@ scegli un nome diverso:</translation>
         <translation>Diritti d&apos;autore:</translation>
     </message>
     <message>
-        <source>Create new score from template</source>
-        <translation>Crea nuovo spartito da modello</translation>
-    </message>
-    <message>
-        <source>Create new score from scratch</source>
-        <translation>Crea nuovo spartito da zero</translation>
-    </message>
-    <message>
         <source>Title</source>
         <translation>Titolo</translation>
     </message>
@@ -8262,8 +8509,12 @@ scegli un nome diverso:</translation>
         <translation>Mostra linee</translation>
     </message>
     <message>
-        <source>Spatium:</source>
-        <translation>Distanza tra i righi del pentagramma:</translation>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>Distanza tra due linee su un pentagramma standard di 5 linee</translation>
+    </message>
+    <message>
+        <source>Staff space:</source>
+        <translation>Spazio pentagramma:</translation>
     </message>
 </context>
 <context>
@@ -8291,14 +8542,6 @@ scegli un nome diverso:</translation>
     <message>
         <source>Scaling</source>
         <translation>Ampiezza spazi pentagramma</translation>
-    </message>
-    <message>
-        <source>Distance between two lines on a normal staff</source>
-        <translation>Distanza tra due linee su un pentagramma normale</translation>
-    </message>
-    <message>
-        <source>Space:</source>
-        <translation>Spazio</translation>
     </message>
     <message>
         <source>mm</source>
@@ -8348,6 +8591,14 @@ scegli un nome diverso:</translation>
         <source>Apply to all Parts</source>
         <translation>Applica a tutte le Parti</translation>
     </message>
+    <message>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>Distanza tra due linee su un pentagramma standard di 5 linee</translation>
+    </message>
+    <message>
+        <source>Staff space:</source>
+        <translation>Spazio pentagramma:</translation>
+    </message>
 </context>
 <context>
     <name>Palette</name>
@@ -8374,18 +8625,6 @@ scegli un nome diverso:</translation>
     <message>
         <source>Normal</source>
         <translation>Normale</translation>
-    </message>
-    <message>
-        <source>Start Repeat</source>
-        <translation>Inizio Ritornello</translation>
-    </message>
-    <message>
-        <source>End Repeat</source>
-        <translation>Fine Ritornello</translation>
-    </message>
-    <message>
-        <source>End-Start Repeat</source>
-        <translation>Inizio-Fine Ritornello</translation>
     </message>
     <message>
         <source>Repeats</source>
@@ -8531,7 +8770,7 @@ scegli un nome diverso:</translation>
         <source>Writing Palette File
 %1
 failed: </source>
-        <translation>Scrittura File Tavolozza
+        <translation>Scrittura file tavolozza
 %1
 fallita: </translation>
     </message>
@@ -8552,14 +8791,6 @@ fallita: </translation>
         <translation>Stile punteggiato</translation>
     </message>
     <message>
-        <source>End Bar style</source>
-        <translation>Stile stanghetta finale</translation>
-    </message>
-    <message>
-        <source>Double Bar style</source>
-        <translation>Stile Stanghetta Doppia</translation>
-    </message>
-    <message>
         <source>Tick 1 span</source>
         <translation>Estendi Tick 1</translation>
     </message>
@@ -8575,27 +8806,36 @@ fallita: </translation>
         <source>Short 2 span</source>
         <translation>Mezza stanghetta</translation>
     </message>
-</context>
-<context>
-    <name>PaletteBox</name>
     <message>
-        <source>Palettes</source>
-        <translation>Tavolozze</translation>
+        <source>End bar style</source>
+        <translation>Stile stanghetta finale</translation>
     </message>
     <message>
-        <source>new Palette</source>
-        <translation>nuova Tavolozza</translation>
+        <source>Double bar style</source>
+        <translation>Stile stanghetta doppia</translation>
+    </message>
+    <message>
+        <source>Start repeat</source>
+        <translation>Inizio ritornello</translation>
+    </message>
+    <message>
+        <source>End repeat</source>
+        <translation>Fine ritornello</translation>
+    </message>
+    <message>
+        <source>End-start repeat</source>
+        <translation>Inizio-fine ritornello</translation>
     </message>
 </context>
 <context>
     <name>PaletteCellProperties</name>
     <message>
         <source>Cell Properties</source>
-        <translation>Proprietà Cella</translation>
+        <translation>Proprietà cella</translation>
     </message>
     <message>
         <source>Palette Cell Properties</source>
-        <translation>Proprietà Cella tavolozza</translation>
+        <translation>Proprietà cella tavolozza</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -8623,7 +8863,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Content scale:</source>
-        <translation>Dimensioni Contenuto:</translation>
+        <translation>Dimensioni contenuto:</translation>
     </message>
 </context>
 <context>
@@ -8637,20 +8877,12 @@ fallita: </translation>
         <translation>Nome:</translation>
     </message>
     <message>
-        <source>Cell Size:</source>
-        <translation>Dimensioni cella:</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
         <source>Scale:</source>
         <translation>Scala:</translation>
-    </message>
-    <message>
-        <source>Show Grid</source>
-        <translation>Mostra griglia</translation>
     </message>
     <message>
         <source>Width:</source>
@@ -8661,27 +8893,27 @@ fallita: </translation>
         <translation>Altezza:</translation>
     </message>
     <message>
-        <source>Show &apos;more Elements&apos;</source>
-        <translation>Mostra &apos;più elementi&apos;</translation>
+        <source>Cell size:</source>
+        <translation>Dimensioni cella:</translation>
     </message>
     <message>
-        <source>Element Offset:</source>
-        <translation>Spiazzamento elementi:</translation>
+        <source>Element offset:</source>
+        <translation>Spiazzamento elemento</translation>
+    </message>
+    <message>
+        <source>Show grid</source>
+        <translation>Mostra griglia</translation>
+    </message>
+    <message>
+        <source>Show &apos;More Elements...&apos;</source>
+        <translation>Mostra &apos;più elementi...&apos;</translation>
     </message>
 </context>
 <context>
     <name>PartEditBase</name>
     <message>
-        <source>Part Name</source>
-        <translation>Nome parte</translation>
-    </message>
-    <message>
         <source>Volume</source>
         <translation>Volume</translation>
-    </message>
-    <message>
-        <source>Panorama Position</source>
-        <translation>Bilanciamento</translation>
     </message>
     <message>
         <source>Reverb</source>
@@ -8724,19 +8956,27 @@ fallita: </translation>
         <translation>Suono:</translation>
     </message>
     <message>
-        <source>MIDI Sound</source>
-        <translation>Suono MIDI</translation>
-    </message>
-    <message>
         <source>MIDI sound for part</source>
         <translation>Suono MIDI per la parte</translation>
+    </message>
+    <message>
+        <source>Part name</source>
+        <translation>Nome parte</translation>
+    </message>
+    <message>
+        <source>Panorama position</source>
+        <translation>Posizione panorama</translation>
+    </message>
+    <message>
+        <source>MIDI sound</source>
+        <translation>Suono MIDI</translation>
     </message>
 </context>
 <context>
     <name>PathListDialog</name>
     <message>
         <source>Dialog</source>
-        <translation>Modifica Metadati</translation>
+        <translation>Modifica metadati</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -8748,65 +8988,10 @@ fallita: </translation>
     </message>
 </context>
 <context>
-    <name>PianorollEditor</name>
-    <message>
-        <source>toolbar 1</source>
-        <translation>barra degli strumenti 1</translation>
-    </message>
-    <message>
-        <source>Wave</source>
-        <translation>Wave</translation>
-    </message>
-    <message>
-        <source>show wave display</source>
-        <translation>mostra visualizzatore onda</translation>
-    </message>
-    <message>
-        <source>toolbar 2</source>
-        <translation>barra degli strumenti 2</translation>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>Cursore</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>Intensità:</translation>
-    </message>
-    <message>
-        <source>offset</source>
-        <translation>spiazzamento</translation>
-    </message>
-    <message>
-        <source>user</source>
-        <translation>utente</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>Altezza nota:</translation>
-    </message>
-    <message>
-        <source>OnTime:</source>
-        <translation>A Tempo:</translation>
-    </message>
-    <message>
-        <source>Len:</source>
-        <translation>Lung.</translation>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; Pentagramma: %2</translation>
-    </message>
-</context>
-<context>
     <name>PlayPanelBase</name>
     <message>
         <source>MuseScore: Play Panel</source>
         <translation>MuseScore: Controlli riproduzione</translation>
-    </message>
-    <message>
-        <source>measure.beat</source>
-        <translation>misura.battito</translation>
     </message>
     <message>
         <source>001.01</source>
@@ -8822,7 +9007,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Relative tempo</source>
-        <translation>Tempo Relativo</translation>
+        <translation>Tempo relativo</translation>
     </message>
     <message>
         <source>Master volume</source>
@@ -8845,6 +9030,10 @@ fallita: </translation>
         <source>Tempo</source>
         <extracomment>short text for tempo slider</extracomment>
         <translation>Tempo</translation>
+    </message>
+    <message>
+        <source>Measure.Beat</source>
+        <translation>misura.battito</translation>
     </message>
 </context>
 <context>
@@ -8902,8 +9091,8 @@ fallita: </translation>
         <translation>R</translation>
     </message>
     <message>
-        <source>reload current plugin source</source>
-        <translation>ricarica sorgente del plugin corrente</translation>
+        <source>Reload current plugin source</source>
+        <translation>Ricarica sorgente del plugin corrente</translation>
     </message>
 </context>
 <context>
@@ -8914,7 +9103,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Define Shortcut</source>
-        <translation>Definisci Scorciatoie</translation>
+        <translation>Definisci scorciatoie</translation>
     </message>
     <message>
         <source>Path:</source>
@@ -8923,10 +9112,6 @@ fallita: </translation>
     <message>
         <source>Version:</source>
         <translation>Versione: </translation>
-    </message>
-    <message>
-        <source>Load</source>
-        <translation>Carica</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -8972,36 +9157,12 @@ fallita: </translation>
         <translation>minuti</translation>
     </message>
     <message>
-        <source>Windows</source>
-        <translation>Finestre</translation>
-    </message>
-    <message>
-        <source>Show Play Panel</source>
-        <translation>Mostra Controlli riproduzione</translation>
-    </message>
-    <message>
-        <source>Show Navigator</source>
-        <translation>Mostra Navigatore</translation>
-    </message>
-    <message>
-        <source>Show MuseScore Connect</source>
-        <translation>Mostra MuseScore Connect</translation>
-    </message>
-    <message>
         <source>OSC remote control</source>
         <translation>Controllo remoto OSC</translation>
     </message>
     <message>
         <source>Style</source>
         <translation>Stile</translation>
-    </message>
-    <message>
-        <source>dark</source>
-        <translation>scuro</translation>
-    </message>
-    <message>
-        <source>light</source>
-        <translation>chiaro</translation>
     </message>
     <message>
         <source>Icon size:</source>
@@ -9062,18 +9223,6 @@ fallita: </translation>
     <message>
         <source>Color notes outside of usable pitch range</source>
         <translation>Colora le note fuori estensione</translation>
-    </message>
-    <message>
-        <source>enable MIDI remote control</source>
-        <translation>abilita controllo remoto MIDI</translation>
-    </message>
-    <message>
-        <source>is active</source>
-        <translation>è attivo</translation>
-    </message>
-    <message>
-        <source>record</source>
-        <translation>registra</translation>
     </message>
     <message>
         <source>16th note</source>
@@ -9173,7 +9322,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Period Size:</source>
-        <translation>Dimensione Periodo:</translation>
+        <translation>Dimensione periodo:</translation>
     </message>
     <message>
         <source>4096</source>
@@ -9445,7 +9594,7 @@ fallita: </translation>
     </message>
     <message>
         <source>JACK audio server</source>
-        <translation>Usa JACK Audio Server</translation>
+        <translation>Usa JACK audio server</translation>
     </message>
     <message>
         <source>Character Set Used When Importing Binary Files</source>
@@ -9500,10 +9649,6 @@ fallita: </translation>
         <translation>Zoom predefinito:</translation>
     </message>
     <message>
-        <source>Ports:</source>
-        <translation>Porte:</translation>
-    </message>
-    <message>
         <source>Resolution DPI:</source>
         <translation>Risoluzione DPI:</translation>
     </message>
@@ -9514,11 +9659,11 @@ fallita: </translation>
     <message>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
-        <translation>Numero Porta:</translation>
+        <translation>Numero porta:</translation>
     </message>
     <message>
         <source>Use JACK Audio</source>
-        <translation>Usa JACK Audio</translation>
+        <translation>Usa JACK audio</translation>
     </message>
     <message>
         <source>Use JACK Transport</source>
@@ -9538,7 +9683,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Preferences Tab Manager</source>
-        <translation>Scheda Gestione Preferenze</translation>
+        <translation>Scheda gestione preferenze</translation>
     </message>
     <message>
         <source>General Tab</source>
@@ -9582,11 +9727,11 @@ fallita: </translation>
     </message>
     <message>
         <source>Icon Height</source>
-        <translation>Altezza Icone</translation>
+        <translation>Altezza icone</translation>
     </message>
     <message>
         <source>Icon Width</source>
-        <translation>Larghezza Icone</translation>
+        <translation>Larghezza icone</translation>
     </message>
     <message>
         <source>Style folder</source>
@@ -9754,7 +9899,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Note Entry Tab</source>
-        <translation>Scheda Inserimento note</translation>
+        <translation>Scheda inserimento note</translation>
     </message>
     <message>
         <source>Enable MIDI Input</source>
@@ -9866,7 +10011,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Score Tab</source>
-        <translation>Scheda Spartito</translation>
+        <translation>Scheda spartito</translation>
     </message>
     <message>
         <source>Default zoom</source>
@@ -9874,7 +10019,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Choose Instrument list 1</source>
-        <translation>Scegli Elenco Strumenti 1</translation>
+        <translation>Scegli elenco strumenti 1</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a instrument list file</source>
@@ -9922,15 +10067,11 @@ fallita: </translation>
     </message>
     <message>
         <source>Choose Instrument list 2</source>
-        <translation>Scegli elenco Strumenti 2</translation>
+        <translation>Scegli elenco strumenti 2</translation>
     </message>
     <message>
         <source>I/O Tab</source>
         <translation>Scheda I/O</translation>
-    </message>
-    <message>
-        <source>Pulse Audio</source>
-        <translation>Pulse Audio</translation>
     </message>
     <message>
         <source>Port Audio</source>
@@ -9970,7 +10111,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Period Size</source>
-        <translation>Dimensione Periodo</translation>
+        <translation>Dimensione periodo</translation>
     </message>
     <message>
         <source>Choose period size</source>
@@ -9978,23 +10119,15 @@ fallita: </translation>
     </message>
     <message>
         <source>Sample rate</source>
-        <translation>Frequenza Campionamento</translation>
+        <translation>Frequenza campionamento</translation>
     </message>
     <message>
         <source>Choose sample rate</source>
         <translation>Scegli frequenza campionamento</translation>
     </message>
     <message>
-        <source>Ports</source>
-        <translation>Porte</translation>
-    </message>
-    <message>
-        <source>Choose number of ports</source>
-        <translation>Scegli il numero di porte</translation>
-    </message>
-    <message>
         <source>Import Tab</source>
-        <translation>Scheda Importazione</translation>
+        <translation>Scheda importazione</translation>
     </message>
     <message>
         <source>Build in style</source>
@@ -10030,7 +10163,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Export Tab</source>
-        <translation>Scheda Esportazione</translation>
+        <translation>Scheda esportazione</translation>
     </message>
     <message>
         <source>Resolution DPI</source>
@@ -10042,7 +10175,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Shortcuts Tab</source>
-        <translation>Scheda Scorciatoie</translation>
+        <translation>Scheda scorciatoie</translation>
     </message>
     <message>
         <source>Shortcuts table</source>
@@ -10058,7 +10191,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Update Tab</source>
-        <translation>Aggiorna Scheda</translation>
+        <translation>Aggiorna scheda</translation>
     </message>
     <message>
         <source>Check for new versions of MuseScore on startup</source>
@@ -10123,6 +10256,62 @@ fallita: </translation>
     <message>
         <source>Update translations</source>
         <translation>Aggiorna traduzioni</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Scuro</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Chiaro</translation>
+    </message>
+    <message>
+        <source>Enable MIDI remote control</source>
+        <translation>Abilita controllo remoto MIDI</translation>
+    </message>
+    <message>
+        <source>Is active</source>
+        <translation>È attivo</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>registra</translation>
+    </message>
+    <message>
+        <source>Default scale for new score views</source>
+        <translation>Impostazione predefinita ampiezza visualizzazione nuovo spartito</translation>
+    </message>
+    <message>
+        <source>Show play panel</source>
+        <translation>Mostra controlli riproduzione</translation>
+    </message>
+    <message>
+        <source>Show navigator</source>
+        <translation>Mostra navigatore</translation>
+    </message>
+    <message>
+        <source>OSC Remote Control</source>
+        <translation>Controllo remoto OSC</translation>
+    </message>
+    <message>
+        <source>MIDI Remote Control</source>
+        <translation>Controllo remoto MIDI</translation>
+    </message>
+    <message>
+        <source>Show start center</source>
+        <translation>Mostra finestra di avvio</translation>
+    </message>
+    <message>
+        <source>Undo is active</source>
+        <translation>Annulla è attivo</translation>
+    </message>
+    <message>
+        <source>Undo record</source>
+        <translation>Annulla registrazione</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation>Annulla</translation>
     </message>
 </context>
 <context>
@@ -10254,9 +10443,9 @@ selezionare una nota o una pausa e ripetere l&apos;operazione
         <source>Open Chord Description
 %1
 failed: %2</source>
-        <translation>Open Chord Description
+        <translation>Apertura descrizione accordo
 %1
-failed: %2</translation>
+fallita: %2</translation>
     </message>
     <message>
         <source>Write Chord Description failed: %1</source>
@@ -10444,10 +10633,6 @@ Visita il &lt;a href=&quot;http://musescore.org&quot;&gt;sito MuseScore &lt;/a&g
 <context>
     <name>QWidget</name>
     <message>
-        <source>Compressed MuseScore File (*.mscz);;</source>
-        <translation>File MuseScore compresso (*.mscz);;</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Album into Score</source>
         <translation>MuseScore: Salva album nello spartito</translation>
     </message>
@@ -10464,12 +10649,8 @@ Visita il &lt;a href=&quot;http://musescore.org&quot;&gt;sito MuseScore &lt;/a&g
         <translation>MuseScore: Salva album</translation>
     </message>
     <message>
-        <source>MuseScore Files (*.album);;</source>
-        <translation>File MuseScore (*.album);;</translation>
-    </message>
-    <message>
         <source>Write Album failed: </source>
-        <translation>Scrittura Album fallita: </translation>
+        <translation>Scrittura album fallita: </translation>
     </message>
     <message>
         <source>MuseScore: Write Album</source>
@@ -10477,7 +10658,7 @@ Visita il &lt;a href=&quot;http://musescore.org&quot;&gt;sito MuseScore &lt;/a&g
     </message>
     <message>
         <source>Untitled</source>
-        <translation>Senza Titolo</translation>
+        <translation>Senza titolo</translation>
     </message>
     <message>
         <source>MuseScore: Import Capella</source>
@@ -10515,7 +10696,7 @@ Visita il &lt;a href=&quot;http://musescore.org&quot;&gt;sito MuseScore &lt;/a&g
         <source>Open Album File
 %1
 failed: </source>
-        <translation>Apertura File Album
+        <translation>Apertura file album
 %1
 fallita: </translation>
     </message>
@@ -10523,11 +10704,45 @@ fallita: </translation>
         <source>MuseScore: Open Album File</source>
         <translation>MuseScore: Apri file album</translation>
     </message>
+    <message>
+        <source>MuseScore File (*.mscz)</source>
+        <translation>File MuseScore (*.mscz)</translation>
+    </message>
+    <message>
+        <source>MuseScore Files (*.album)</source>
+        <translation>File MuseScore (*.album)</translation>
+    </message>
+    <message>
+        <source>Soundfont installed</source>
+        <translation>Libreria di suoni installata</translation>
+    </message>
+    <message>
+        <source>Install Soundfont</source>
+        <translation>Installa libreria di suoni</translation>
+    </message>
+    <message>
+        <source>Do you want to install the soundfont %1?</source>
+        <translation>Vuoi installare la libreria di suoni %1?</translation>
+    </message>
+    <message>
+        <source>Overwrite?</source>
+        <translation>Sovrascrivere?</translation>
+    </message>
+    <message>
+        <source>Soundfont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
+        <translation>Libreria di suoni installata. Vai a Visualizza &gt; Sintetizzatore per aggiungerla e a Visualizza &gt; Mixer per scegliere il suono dello strumento.</translation>
+    </message>
+    <message>
+        <source>%1 already exists.
+Do you want to overwrite it?</source>
+        <translation>%1 esiste già.
+Vuoi sovrascriverlo?</translation>
+    </message>
 </context>
 <context>
     <name>RecordButton</name>
     <message>
-        <source>record</source>
+        <source>Record</source>
         <translation>registra</translation>
     </message>
 </context>
@@ -10535,7 +10750,7 @@ fallita: </translation>
     <name>Resource</name>
     <message>
         <source>MuseScore Resources</source>
-        <translation>MuseScore Risorse</translation>
+        <translation>MuseScore risorse</translation>
     </message>
     <message>
         <source>Tab 1</source>
@@ -10547,11 +10762,11 @@ fallita: </translation>
     </message>
     <message>
         <source>Filename</source>
-        <translation>Nome del File</translation>
+        <translation>Nome del file</translation>
     </message>
     <message>
         <source>File Size</source>
-        <translation>Dimensione File</translation>
+        <translation>Dimensione file</translation>
     </message>
     <message>
         <source>Install/Update</source>
@@ -10560,6 +10775,36 @@ fallita: </translation>
     <message>
         <source>Tab 2</source>
         <translation>Scheda 2</translation>
+    </message>
+</context>
+<context>
+    <name>ScoreBrowser</name>
+    <message>
+        <source>Form</source>
+        <translation>Modulo</translation>
+    </message>
+</context>
+<context>
+    <name>ScorePreview</name>
+    <message>
+        <source>Form</source>
+        <translation>Modulo</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation>Dimensione:</translation>
+    </message>
+    <message>
+        <source>Created: </source>
+        <translation>Creato:</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation>Nome:</translation>
+    </message>
+    <message>
+        <source>Nothing selected</source>
+        <translation>Nulla di selezionato</translation>
     </message>
 </context>
 <context>
@@ -10577,12 +10822,12 @@ fallita: </translation>
         <translation>sec</translation>
     </message>
     <message>
-        <source>start new section with long instrument names</source>
-        <translation>inizia una nuova sezione con nomi strumento estesi</translation>
+        <source>Start new section with long instrument names</source>
+        <translation>Inizia una nuova sezione con nomi strumento estesi</translation>
     </message>
     <message>
-        <source>start new section with measure number one</source>
-        <translation>inizia una nuova sezione con la battuta numero uno</translation>
+        <source>Start new section with measure number one</source>
+        <translation>Inizia una nuova sezione con la battuta numero uno</translation>
     </message>
 </context>
 <context>
@@ -10592,52 +10837,52 @@ fallita: </translation>
         <translation>MuseScore: Seleziona</translation>
     </message>
     <message>
-        <source>Element Type:</source>
-        <translation>Tipo Elemento</translation>
-    </message>
-    <message>
-        <source>same staff</source>
-        <translation>stesso pentagramma</translation>
-    </message>
-    <message>
-        <source>same voice</source>
-        <translation>stessa voce</translation>
-    </message>
-    <message>
-        <source>same system</source>
-        <translation>stessa accollatura</translation>
-    </message>
-    <message>
         <source>Action</source>
         <translation>Azione</translation>
-    </message>
-    <message>
-        <source>replace selection</source>
-        <translation>sostituisci selezione</translation>
-    </message>
-    <message>
-        <source>add to selection</source>
-        <translation>aggiungi alla selezione</translation>
-    </message>
-    <message>
-        <source>search in selection</source>
-        <translation>cerca nella selezione</translation>
-    </message>
-    <message>
-        <source>subtract from selection</source>
-        <translation>sottrai alla selezione</translation>
-    </message>
-    <message>
-        <source>same subtype:</source>
-        <translation>stesso sottotipo:</translation>
     </message>
     <message>
         <source>Select</source>
         <translation>Seleziona</translation>
     </message>
     <message>
-        <source>in selection</source>
-        <translation>nella selezione</translation>
+        <source>Element type:</source>
+        <translation>Tipo elemento:</translation>
+    </message>
+    <message>
+        <source>Same staff</source>
+        <translation>Stesso pentagramma</translation>
+    </message>
+    <message>
+        <source>Same voice</source>
+        <translation>Stessa voce</translation>
+    </message>
+    <message>
+        <source>Same subtype:</source>
+        <translation>Stesso sottotipo:</translation>
+    </message>
+    <message>
+        <source>Same system</source>
+        <translation>Stessa accollatura</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>Sostituisci selezione</translation>
+    </message>
+    <message>
+        <source>Add to selection</source>
+        <translation>Aggiungi alla selezione</translation>
+    </message>
+    <message>
+        <source>Search in selection</source>
+        <translation>Cerca nella selezione</translation>
+    </message>
+    <message>
+        <source>Subtract from selection</source>
+        <translation>Sottrai alla selezione</translation>
+    </message>
+    <message>
+        <source>In selection</source>
+        <translation>Nella selezione</translation>
     </message>
 </context>
 <context>
@@ -10763,7 +11008,7 @@ fallita: </translation>
     <name>StaffTextProperties</name>
     <message>
         <source>Change Channel</source>
-        <translation>Cambia Canale</translation>
+        <translation>Cambia canale</translation>
     </message>
     <message>
         <source>1</source>
@@ -10803,7 +11048,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Change Stops:</source>
-        <translation>Cambia Registri:</translation>
+        <translation>Cambia registri:</translation>
     </message>
     <message>
         <source>III</source>
@@ -11081,7 +11326,7 @@ altera</translation>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation>Impostazioni Swing</translation>
+        <translation>Impostazioni swing</translation>
     </message>
     <message>
         <source>Swing:</source>
@@ -11092,14 +11337,6 @@ altera</translation>
         <translation>Spento</translation>
     </message>
     <message>
-        <source>Eighth Note</source>
-        <translation>Croma</translation>
-    </message>
-    <message>
-        <source>Sixteenth Note</source>
-        <translation>Semicroma</translation>
-    </message>
-    <message>
         <source>Select swing ratio:</source>
         <translation>Seleziona rapporto di swing :</translation>
     </message>
@@ -11107,12 +11344,20 @@ altera</translation>
         <source>%</source>
         <translation>%</translation>
     </message>
+    <message>
+        <source>Eighth note</source>
+        <translation>Croma</translation>
+    </message>
+    <message>
+        <source>Sixteenth note</source>
+        <translation>Semicroma</translation>
+    </message>
 </context>
 <context>
     <name>StaffTypeTemplates</name>
     <message>
         <source>Staff Type Templates</source>
-        <translation>Modelli Tipi di Pentagramma...</translation>
+        <translation>Modelli tipi di pentagramma</translation>
     </message>
     <message>
         <source>Save Templates</source>
@@ -11131,7 +11376,7 @@ altera</translation>
     </message>
     <message>
         <source>Create New Score</source>
-        <translation>Crea Nuovo Spartito</translation>
+        <translation>Crea nuovo spartito</translation>
     </message>
     <message>
         <source>Load Score</source>
@@ -11139,18 +11384,29 @@ altera</translation>
     </message>
     <message>
         <source>Startup Dialog</source>
-        <translation>Finestra di Avvio</translation>
+        <translation>Finestra di avvio</translation>
+    </message>
+</context>
+<context>
+    <name>Startcenter</name>
+    <message>
+        <source>Start Center</source>
+        <translation>Finestra di avvio</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;#&quot;&gt;Open an existing score&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;#&quot;&gt;Apri uno spartito esistente&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
     <name>SymbolDialogBase</name>
     <message>
-        <source>System Flag</source>
-        <translation>Marcatore di accollatura</translation>
-    </message>
-    <message>
         <source>Font:</source>
         <translation>Carattere:</translation>
+    </message>
+    <message>
+        <source>System flag</source>
+        <translation>Marcatore di accollatura</translation>
     </message>
 </context>
 <context>
@@ -11194,7 +11450,7 @@ altera</translation>
     </message>
     <message>
         <source>Change Tuning</source>
-        <translation>Cambia Accordatura</translation>
+        <translation>Cambia accordatura</translation>
     </message>
     <message>
         <source>Master volume</source>
@@ -11202,7 +11458,7 @@ altera</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation>Reimposta come Predefinite</translation>
+        <translation>Reimposta come predefinite</translation>
     </message>
     <message>
         <source>Load Default</source>
@@ -11211,6 +11467,14 @@ altera</translation>
     <message>
         <source>Master tuning:</source>
         <translation>Accordatura generale:</translation>
+    </message>
+    <message>
+        <source>Save to score</source>
+        <translation>Salva nello spartito</translation>
+    </message>
+    <message>
+        <source>Load from score</source>
+        <translation>Carica da spartito</translation>
     </message>
 </context>
 <context>
@@ -11221,15 +11485,15 @@ altera</translation>
     </message>
     <message>
         <source>Code Page:</source>
-        <translation>Tabella Codice</translation>
+        <translation>Tabella codice</translation>
     </message>
     <message>
-        <source>common</source>
-        <translation>comune</translation>
+        <source>Common</source>
+        <translation>Comune</translation>
     </message>
     <message>
-        <source>all</source>
-        <translation>tutti</translation>
+        <source>All</source>
+        <translation>Tutti</translation>
     </message>
 </context>
 <context>
@@ -11247,64 +11511,12 @@ altera</translation>
         <translation>Carattere:</translation>
     </message>
     <message>
-        <source>font face</source>
-        <translation>aspetto carattere</translation>
-    </message>
-    <message>
         <source>Size:</source>
         <translation>Dimensione:</translation>
     </message>
     <message>
-        <source>font point size</source>
-        <translation>grandezza del font in punti</translation>
-    </message>
-    <message>
-        <source>bold</source>
-        <translation>grassetto</translation>
-    </message>
-    <message>
-        <source>italic</source>
-        <translation>corsivo</translation>
-    </message>
-    <message>
-        <source>underline</source>
-        <translation>sottolineato</translation>
-    </message>
-    <message>
-        <source>align left edge of text to reference point</source>
-        <translation>allineare il bordo sinistro del testo al punto di riferimento</translation>
-    </message>
-    <message>
-        <source>center text on reference point</source>
-        <translation>centrare il testo al punto di riferimento</translation>
-    </message>
-    <message>
-        <source>align right edge of text to reference point</source>
-        <translation>allineare il bordo destro del testo al punto di riferimento</translation>
-    </message>
-    <message>
-        <source>align top edge of text to reference point</source>
-        <translation>allineare il bordo superiore del testo al punto di riferimento</translation>
-    </message>
-    <message>
-        <source>center text vertical to reference point</source>
-        <translation>centrare il testo verticalmente al punto di riferimento</translation>
-    </message>
-    <message>
-        <source>center text vertical to text baseline</source>
-        <translation>centrare il testo verticalmente alla linea di base</translation>
-    </message>
-    <message>
-        <source>align bottom edge of text to reference point</source>
-        <translation>allineare il bordo inferiore del testo al punto di riferimento</translation>
-    </message>
-    <message>
         <source>Color:</source>
         <translation>Colore:</translation>
-    </message>
-    <message>
-        <source>text color</source>
-        <translation>colore testo</translation>
     </message>
     <message>
         <source>System flag</source>
@@ -11320,94 +11532,41 @@ altera</translation>
         <translation>Orizzontale</translation>
     </message>
     <message>
-        <source>horizontal offset to reference point</source>
-        <translation>spiazzamento orizzontale al punto di riferimento</translation>
-    </message>
-    <message>
         <source>Vertical:</source>
         <extracomment>coordinate</extracomment>
         <translation>Verticale</translation>
-    </message>
-    <message>
-        <source>vertical offset to reference point</source>
-        <translation>spiazzamento verticale dal punto di riferimento</translation>
     </message>
     <message>
         <source>Unit:</source>
         <translation>Unità:</translation>
     </message>
     <message>
-        <source>offset is absolute</source>
-        <translation>spiazzamento assoluto</translation>
-    </message>
-    <message>
         <source>mm</source>
         <translation>mm</translation>
-    </message>
-    <message>
-        <source>offset in Space units</source>
-        <translation>spiazzamento in unità di spazio</translation>
-    </message>
-    <message>
-        <source>Space</source>
-        <extracomment>spatium unit</extracomment>
-        <translation>Spazio</translation>
-    </message>
-    <message>
-        <source>enable text frame</source>
-        <translation>abilita la cornice del testo</translation>
     </message>
     <message>
         <source>Frame</source>
         <translation>Cornice</translation>
     </message>
     <message>
-        <source>draw circled frame</source>
-        <translation>disegna cornice circolare</translation>
-    </message>
-    <message>
         <source>Circle</source>
         <translation>Cerchio</translation>
-    </message>
-    <message>
-        <source>draw boxed frame</source>
-        <translation>disegna cornice rettangolare</translation>
     </message>
     <message>
         <source>Box</source>
         <translation>Rettangolo</translation>
     </message>
     <message>
-        <source>frame line width</source>
-        <translation>spessore linea cornice</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>spazio</translation>
-    </message>
-    <message>
-        <source>frame inner margin</source>
-        <translation>margine interno cornice</translation>
-    </message>
-    <message>
-        <source>corner round</source>
-        <translation>angolo arrotondato</translation>
     </message>
     <message>
         <source>Foreground color:</source>
         <translation>Colore di primo piano:</translation>
     </message>
     <message>
-        <source>frame color</source>
-        <translation>colore cornice</translation>
-    </message>
-    <message>
         <source>Background color:</source>
         <translation>Colore di sfondo:</translation>
-    </message>
-    <message>
-        <source>Size follows Space unit</source>
-        <translation>Dimensiona seguendo unità di spazio</translation>
     </message>
     <message>
         <source>Alignment</source>
@@ -11415,11 +11574,7 @@ altera</translation>
     </message>
     <message>
         <source>Reset to Style</source>
-        <translation>Reimposta Stile</translation>
-    </message>
-    <message>
-        <source>Border width:</source>
-        <translation>Larghezza bordo:</translation>
+        <translation>Reimposta stile</translation>
     </message>
     <message>
         <source>Text margin:</source>
@@ -11430,8 +11585,121 @@ altera</translation>
         <translation>Ampiezza bordo:</translation>
     </message>
     <message>
-        <source>text background color</source>
-        <translation>Colore di sfondo del testo:</translation>
+        <source>Font face</source>
+        <translation>Aspetto carattere</translation>
+    </message>
+    <message>
+        <source>Font point size</source>
+        <translation>Dimensione del font in punti</translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>Grassetto</translation>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation>Corsivo</translation>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation>Sottolineato</translation>
+    </message>
+    <message>
+        <source>Text color</source>
+        <translation>Colore testo</translation>
+    </message>
+    <message>
+        <source>Horizontal offset to reference point</source>
+        <translation>Spiazzamento orizzontale al punto di riferimento</translation>
+    </message>
+    <message>
+        <source>Vertical offset to reference point</source>
+        <translation>Spiazzamento verticale dal punto di riferimento</translation>
+    </message>
+    <message>
+        <source>Offset is absolute</source>
+        <translation>Spiazzamento assoluto</translation>
+    </message>
+    <message>
+        <source>Align left edge of text to reference point</source>
+        <translation>Allinea il bordo sinistro del testo al punto di riferimento</translation>
+    </message>
+    <message>
+        <source>Center text on reference point</source>
+        <translation>Centra il testo al punto di riferimento</translation>
+    </message>
+    <message>
+        <source>Align top edge of text to reference point</source>
+        <translation>Allinea il bordo superiore del testo al punto di riferimento</translation>
+    </message>
+    <message>
+        <source>Align right edge of text to reference point</source>
+        <translation>Allinea il bordo destro del testo al punto di riferimento</translation>
+    </message>
+    <message>
+        <source>Center text vertical to text baseline</source>
+        <translation>Centra il testo verticalmente alla linea di base</translation>
+    </message>
+    <message>
+        <source>Center text vertical to reference point</source>
+        <translation>Centra il testo verticalmente al punto di riferimento</translation>
+    </message>
+    <message>
+        <source>Align bottom edge of text to reference point</source>
+        <translation>Allinea il bordo inferiore del testo al punto di riferimento</translation>
+    </message>
+    <message>
+        <source>Enable text frame</source>
+        <translation>Abilita la cornice del testo</translation>
+    </message>
+    <message>
+        <source>Draw circled frame</source>
+        <translation>Disegna cornice circolare</translation>
+    </message>
+    <message>
+        <source>Draw boxed frame</source>
+        <translation>Disegna cornice rettangolare</translation>
+    </message>
+    <message>
+        <source>Border thickness:</source>
+        <translation>Spessore del bordo:</translation>
+    </message>
+    <message>
+        <source>Frame line thickness</source>
+        <translation>Spessore linea della cornice</translation>
+    </message>
+    <message>
+        <source>Frame inner margin</source>
+        <translation>Margine interno cornice</translation>
+    </message>
+    <message>
+        <source>Corner round</source>
+        <translation>Angolo arrotondato</translation>
+    </message>
+    <message>
+        <source>Text background color</source>
+        <translation>Colore di sfondo del testo</translation>
+    </message>
+    <message>
+        <source>Frame color</source>
+        <translation>Colore cornice</translation>
+    </message>
+    <message>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>Distanza tra due linee su un pentagramma standard di 5 linee</translation>
+    </message>
+    <message>
+        <source>Offset in staff space units</source>
+        <translation>Spiazzamento in unità di spazio pentagramma</translation>
+    </message>
+    <message>
+        <source>Staff space</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>Spazio pentagramma</translation>
+    </message>
+    <message>
+        <source>Size follows &apos;Staff space&apos; setting</source>
+        <translation>Dimensiona seguendo unità di &quot;spazio pentagramma&quot;</translation>
     </message>
 </context>
 <context>
@@ -11573,12 +11841,16 @@ altera</translation>
         <translation>Cambio dello strumento</translation>
     </message>
     <message>
-        <source>Lyrics Verse</source>
-        <translation>Verso delle parole</translation>
-    </message>
-    <message>
         <source>Figured Bass</source>
         <translation>Basso figurato</translation>
+    </message>
+    <message>
+        <source>LH Guitar Fingering</source>
+        <translation>Diteggiatura chitarra mano sinistra</translation>
+    </message>
+    <message>
+        <source>RH Guitar Fingering</source>
+        <translation>Diteggiatura chitarra mano destra</translation>
     </message>
 </context>
 <context>
@@ -11646,12 +11918,12 @@ altera</translation>
         <translation>Testo:</translation>
     </message>
     <message>
-        <source>add time signature to palette</source>
-        <translation>aggiungi unità di tempo alla tavolozza</translation>
-    </message>
-    <message>
         <source>Add</source>
         <translation>Aggiungi</translation>
+    </message>
+    <message>
+        <source>Add time signature to palette</source>
+        <translation>Aggiungi unità di tempo alla tavolozza</translation>
     </message>
 </context>
 <context>
@@ -11686,7 +11958,7 @@ altera</translation>
     </message>
     <message>
         <source>Global value:</source>
-        <translation>Valore Globale:</translation>
+        <translation>Valore globale:</translation>
     </message>
     <message>
         <source>Actual value:</source>
@@ -11765,11 +12037,11 @@ altera</translation>
     </message>
     <message>
         <source>Common Time</source>
-        <translation>Tempo Comune</translation>
+        <translation>Tempo comune</translation>
     </message>
     <message>
         <source>Enter Number of Measures</source>
-        <translation>Inserisci Numero di Misure</translation>
+        <translation>Inserisci numero di misure</translation>
     </message>
     <message>
         <source>Measures</source>
@@ -11963,32 +12235,8 @@ altera</translation>
         <translation>Opzioni</translation>
     </message>
     <message>
-        <source>Single sharps and flats only</source>
-        <translation>Usa solo diesis e bemolli semplici</translation>
-    </message>
-    <message>
-        <source>Use double sharps and flats</source>
-        <translation>Usa doppi diesis e doppi bemolli</translation>
-    </message>
-    <message>
         <source>Transpose chord symbols</source>
         <translation>Trasponi i simboli degli accordi</translation>
-    </message>
-    <message>
-        <source>Transpose chromatically</source>
-        <translation>Trasponi cromaticamente</translation>
-    </message>
-    <message>
-        <source>By key</source>
-        <translation>Per chiave</translation>
-    </message>
-    <message>
-        <source>Transpose diatonically</source>
-        <translation>Trasponi diatonicamente</translation>
-    </message>
-    <message>
-        <source>By interval</source>
-        <translation>Per intervallo</translation>
     </message>
     <message>
         <source>C♭ major / A♭ minor</source>
@@ -12034,6 +12282,30 @@ altera</translation>
         <source>C♯ major / A♯ minor</source>
         <translation>Do♯ maggiore / La♯ minore</translation>
     </message>
+    <message>
+        <source>Single Sharps and Flats Only</source>
+        <translation>Solo diesis e bemolli semplici</translation>
+    </message>
+    <message>
+        <source>Use Double Sharps and Flats</source>
+        <translation>Usa doppi diesis e doppi bemolli</translation>
+    </message>
+    <message>
+        <source>Transpose Chromatically</source>
+        <translation>Trasponi cromaticamente</translation>
+    </message>
+    <message>
+        <source>By Key</source>
+        <translation>Per chiave</translation>
+    </message>
+    <message>
+        <source>By Interval</source>
+        <translation>Per intervallo</translation>
+    </message>
+    <message>
+        <source>Transpose Diatonically</source>
+        <translation>Trasponi diatonicamente</translation>
+    </message>
 </context>
 <context>
     <name>Tremolo</name>
@@ -12074,7 +12346,7 @@ altera</translation>
     <name>TremoloBarDialog</name>
     <message>
         <source>Bend type:</source>
-        <translation>Tipo di Bend:</translation>
+        <translation>Tipo di bend:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
@@ -12082,31 +12354,38 @@ altera</translation>
     </message>
     <message>
         <source>Dip</source>
-        <translation>Dip</translation>
+        <translation>Inclinazione</translation>
     </message>
     <message>
         <source>Dive</source>
-        <translation>Dive</translation>
-    </message>
-    <message>
-        <source>Release(up)</source>
-        <translation>Release(up)</translation>
+        <translation>Tuffo</translation>
     </message>
     <message>
         <source>Inverted Dip</source>
-        <translation>Inverted Dip</translation>
+        <translation>Inverti inclinazione</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation>Return</translation>
-    </message>
-    <message>
-        <source>Release(down)</source>
-        <translation>Release(down)</translation>
+        <translation>Ripristina</translation>
     </message>
     <message>
         <source>MuseScore: Tremolo Bar Properties</source>
         <translation>MuseScore: Proprietà barra del tremolo</translation>
+    </message>
+    <message>
+        <source>Release(Up)</source>
+        <translation>Rilascia(su)</translation>
+    </message>
+    <message>
+        <source>Release(Down)</source>
+        <translation>Rilascia(giù)</translation>
+    </message>
+</context>
+<context>
+    <name>TupletBase</name>
+    <message>
+        <source>Tuplet</source>
+        <translation>Gruppo irregolare</translation>
     </message>
 </context>
 <context>
@@ -12153,10 +12432,101 @@ altera</translation>
     </message>
 </context>
 <context>
+    <name>UploadScoreDialog</name>
+    <message>
+        <source>Score Information</source>
+        <translation>Informazioni spartito</translation>
+    </message>
+    <message>
+        <source>You&apos;re logged in as</source>
+        <translation>Sei registrato come</translation>
+    </message>
+    <message>
+        <source>USERNAME</source>
+        <translation>NOME UTENTE</translation>
+    </message>
+    <message>
+        <source>Sign out</source>
+        <translation>Disconnetti</translation>
+    </message>
+    <message>
+        <source>Sign out on exit</source>
+        <translation>Disconnetti all&apos;uscita</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation>Titolo</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation>Descrizione</translation>
+    </message>
+    <message>
+        <source>Who can access this score?</source>
+        <translation>Chi può accedere a questo spartito?</translation>
+    </message>
+    <message>
+        <source>Anyone</source>
+        <translation>Chiunque</translation>
+    </message>
+    <message>
+        <source>Just you</source>
+        <translation>Solo tu</translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation>Licenza</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;What does this mean?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;Cosa significa questo?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Tags</source>
+        <translation>Tag</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use a comma to separate the tags&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Usa una virgola per separare i tag&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Respect the &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;community guidelines&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Only make your scores accessible to anyone with permission from the right holders.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Rispetta le&lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;linee guida della comunità&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Rendi i tuoi spartiti accessibili a chiunque solo con il permesso dei detentori dei diritti.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Update the existing score </source>
+        <translation>Aggiorna l&apos;attuale spartito</translation>
+    </message>
+</context>
+<context>
     <name>VoltaPropertyBase</name>
     <message>
         <source>Volta Properties</source>
-        <translation>Proprietà Volta</translation>
+        <translation>Proprietà volta</translation>
     </message>
     <message>
         <source>Text:</source>
@@ -12177,7 +12547,7 @@ altera</translation>
         <source>Writing Workspace File
 %1
 failed: </source>
-        <translation>Scrittura File Set di Tavolozze 
+        <translation>Scrittura file area di lavoro
 %1
 fallita: </translation>
     </message>
@@ -12270,7 +12640,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Expected character data.</source>
-        <translation>carattere dati previsto</translation>
+        <translation>Carattere dati previsto</translation>
     </message>
 </context>
 <context>
@@ -12299,112 +12669,112 @@ fallita: </translation>
 <context>
     <name>accidental</name>
     <message>
-        <source>none</source>
-        <translation>nessuno</translation>
+        <source>None</source>
+        <translation>Nona</translation>
     </message>
     <message>
-        <source>sharp</source>
-        <translation>diesis</translation>
+        <source>Sharp</source>
+        <translation>Diesis</translation>
     </message>
     <message>
-        <source>flat</source>
+        <source>Flat</source>
         <translation>bemolle</translation>
     </message>
     <message>
-        <source>double sharp</source>
-        <translation>doppio diesis</translation>
+        <source>Double sharp</source>
+        <translation>Doppio diesis</translation>
     </message>
     <message>
-        <source>double flat</source>
-        <translation>doppio bemolle</translation>
+        <source>Double flat</source>
+        <translation>Doppio bemolle</translation>
     </message>
     <message>
-        <source>natural</source>
-        <translation>bequadro</translation>
+        <source>Natural</source>
+        <translation>Bequadro</translation>
     </message>
     <message>
-        <source>flat-slash</source>
-        <translation>bemolle barrato</translation>
+        <source>Flat-slash</source>
+        <translation>Bemolle barrato</translation>
     </message>
     <message>
-        <source>flat-slash2</source>
-        <translation>bemolle barrato2 </translation>
+        <source>Flat-slash2</source>
+        <translation>Bemolle barrato2 </translation>
     </message>
     <message>
-        <source>mirrored-flat2</source>
+        <source>Mirrored-flat2</source>
         <translation>Tribemolle</translation>
     </message>
     <message>
-        <source>mirrored-flat</source>
-        <translation>mobemolle</translation>
+        <source>Mirrored-flat</source>
+        <translation>Mobemolle</translation>
     </message>
     <message>
-        <source>mirrored-flat-slash</source>
+        <source>Mirrored-flat-slash</source>
         <translation>Tribemolle barrato</translation>
     </message>
     <message>
-        <source>flat-flat-slash</source>
-        <translation>doppio bemolle barrato</translation>
+        <source>Flat-flat-slash</source>
+        <translation>Doppio bemolle barrato</translation>
     </message>
     <message>
-        <source>sharp-slash</source>
-        <translation>monesis</translation>
+        <source>Sharp-slash</source>
+        <translation>Monesis</translation>
     </message>
     <message>
-        <source>sharp-slash2</source>
-        <translation>triesis</translation>
+        <source>Sharp-slash2</source>
+        <translation>Triesis</translation>
     </message>
     <message>
-        <source>sharp-slash3</source>
-        <translation>monesis2</translation>
+        <source>Sharp-slash3</source>
+        <translation>Monesis2</translation>
     </message>
     <message>
-        <source>sharp-slash4</source>
-        <translation>triesis2</translation>
+        <source>Sharp-slash4</source>
+        <translation>Triesis2</translation>
     </message>
     <message>
-        <source>sharp arrow up</source>
-        <translation>diesis + 1/8 di tono</translation>
+        <source>Sharp arrow up</source>
+        <translation>Diesis + 1/8 di tono</translation>
     </message>
     <message>
-        <source>sharp arrow down</source>
-        <translation>diesis - 1/8 di tono</translation>
+        <source>Sharp arrow down</source>
+        <translation>Diesis - 1/8 di tono</translation>
     </message>
     <message>
-        <source>sharp arrow both</source>
-        <translation>diesis arrow both</translation>
+        <source>Sharp arrow both</source>
+        <translation>Sharp arrow both</translation>
     </message>
     <message>
-        <source>flat arrow up</source>
-        <translation>bemolle + 1/8 di tono</translation>
+        <source>Flat arrow up</source>
+        <translation>Bemolle + 1/8 di tono</translation>
     </message>
     <message>
-        <source>flat arrow down</source>
-        <translation>bemolle - 1/8 di tono</translation>
+        <source>Flat arrow down</source>
+        <translation>Bemolle - 1/8 di tono</translation>
     </message>
     <message>
-        <source>flat arrow both</source>
-        <translation>bemolle arrow both</translation>
+        <source>Flat arrow both</source>
+        <translation>Flat arrow both</translation>
     </message>
     <message>
-        <source>natural arrow up</source>
-        <translation>bequadro + 1/8 di tono</translation>
+        <source>Natural arrow up</source>
+        <translation>Bequadro + 1/8 di tono</translation>
     </message>
     <message>
-        <source>natural arrow down</source>
-        <translation>bequadro - 1/8 di tono</translation>
+        <source>Natural arrow down</source>
+        <translation>Bequadro - 1/8 di tono</translation>
     </message>
     <message>
-        <source>natural arrow both</source>
-        <translation>bequadro arrow both</translation>
+        <source>Natural arrow both</source>
+        <translation>Natural arrow both</translation>
     </message>
     <message>
-        <source>sori</source>
-        <translation>sori</translation>
+        <source>Sori</source>
+        <translation>Sori</translation>
     </message>
     <message>
-        <source>koron</source>
-        <translation>koron</translation>
+        <source>Koron</source>
+        <translation>Koron</translation>
     </message>
 </context>
 <context>
@@ -13594,18 +13964,6 @@ fallita: </translation>
         <translation>Mixer</translation>
     </message>
     <message>
-        <source>Transport</source>
-        <translation>Barra Riproduzione</translation>
-    </message>
-    <message>
-        <source>Transport toolbar</source>
-        <translation>Barra trasporto</translation>
-    </message>
-    <message>
-        <source>Note input toolbar</source>
-        <translation>Barra inserimento note</translation>
-    </message>
-    <message>
         <source>Status Bar</source>
         <translation>Barra di stato</translation>
     </message>
@@ -13967,7 +14325,7 @@ fallita: </translation>
     </message>
     <message>
         <source>General...</source>
-        <translation>Generale:</translation>
+        <translation>Generale...</translation>
     </message>
     <message>
         <source>Edit general style</source>
@@ -14070,28 +14428,12 @@ fallita: </translation>
         <translation>Schermo intero</translation>
     </message>
     <message>
-        <source>Enable horizontal raster</source>
-        <translation>Abilita reticolo orizzontale</translation>
-    </message>
-    <message>
-        <source>Enable vertical raster</source>
-        <translation>Abilita reticolo verticale</translation>
-    </message>
-    <message>
-        <source>Configure raster</source>
-        <translation>Configura reticolo</translation>
-    </message>
-    <message>
         <source>Re-Pitch Mode</source>
         <translation>Modalità modifica altezza note</translation>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
         <translation>Sostituisci le altezze delle note senza modificare i ritmi</translation>
-    </message>
-    <message>
-        <source>Stack down</source>
-        <translation>Impila in basso</translation>
     </message>
     <message>
         <source>Piano Keyboard</source>
@@ -14142,10 +14484,6 @@ fallita: </translation>
         <translation>Spartito precedente</translation>
     </message>
     <message>
-        <source>MuseScore Connect</source>
-        <translation>MuseScore Connect</translation>
-    </message>
-    <message>
         <source>Plugin Creator</source>
         <translation>Creatore plugin</translation>
     </message>
@@ -14167,7 +14505,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Show OMR Panel</source>
-        <translation>Mostra Controlli OMR</translation>
+        <translation>Mostra controlli OMR</translation>
     </message>
     <message>
         <source>Loop</source>
@@ -14539,11 +14877,11 @@ fallita: </translation>
     </message>
     <message>
         <source>Previous measure (F.B./Harm.)</source>
-        <translation>Battuta precedente (F.B./Harm.)</translation>
+        <translation>Battuta precedente (F.B./Arm.)</translation>
     </message>
     <message>
         <source>Next measure (F.B./Harm.)</source>
-        <translation>Battuta successiva (F.B./Harm.)</translation>
+        <translation>Battuta successiva (F.B./Arm.)</translation>
     </message>
     <message>
         <source>Insert Fretboard Diagram Frame</source>
@@ -14580,10 +14918,6 @@ fallita: </translation>
     <message>
         <source>Respell Pitches</source>
         <translation>Sostituzione enarmonica delle alterazioni</translation>
-    </message>
-    <message>
-        <source>Toggle create multimeasure rest</source>
-        <translation>Attiva/disattiva crea pausa di più battute</translation>
     </message>
     <message>
         <source>bold face</source>
@@ -14699,7 +15033,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Eighth rest</source>
-        <translation>Pausa Croma</translation>
+        <translation>Pausa croma</translation>
     </message>
     <message>
         <source>Toggle screenshot mode</source>
@@ -14789,6 +15123,94 @@ fallita: </translation>
         <source>Add less stretch to selected measures</source>
         <translation>Diminuisci larghezza battuta selezionata</translation>
     </message>
+    <message>
+        <source>Enable snap to horizontal grid</source>
+        <translation>Abilita aggancia al reticolo orizzontale</translation>
+    </message>
+    <message>
+        <source>Enable snap to vertical grid</source>
+        <translation>Abilita aggancia al reticolo verticale</translation>
+    </message>
+    <message>
+        <source>Configure grid</source>
+        <translation>Configura reticolo</translation>
+    </message>
+    <message>
+        <source>Insert one measure</source>
+        <translation>Inserisci una battuta</translation>
+    </message>
+    <message>
+        <source>Insert horizontal frame</source>
+        <translation>Inserisci casella orizzontale</translation>
+    </message>
+    <message>
+        <source>Insert text frame</source>
+        <translation>Inserisci casella di testo</translation>
+    </message>
+    <message>
+        <source>Insert vertical frame</source>
+        <translation>Inserisci casella verticale</translation>
+    </message>
+    <message>
+        <source>Part Name</source>
+        <translation>Nome parte</translation>
+    </message>
+    <message>
+        <source>Add part name</source>
+        <translation>Aggiungi nome parte</translation>
+    </message>
+    <message>
+        <source>Save Online...</source>
+        <translation>Salva online...</translation>
+    </message>
+    <message>
+        <source>File save online</source>
+        <translation>File di salvataggio on-line</translation>
+    </message>
+    <message>
+        <source>Save score on MuseScore.com</source>
+        <translation>Salva lo spartito su MuseScore.com</translation>
+    </message>
+    <message>
+        <source>Explode</source>
+        <translation>Esplodi</translation>
+    </message>
+    <message>
+        <source>Explode contents of top selected staff into staves below</source>
+        <translation>Esplode il contenuto del pentagramma superiore selezionato nei pentagrammi sottostanti</translation>
+    </message>
+    <message>
+        <source>Implode</source>
+        <translation>Implodi</translation>
+    </message>
+    <message>
+        <source>Implode contents of selected staves into top selected staff</source>
+        <translation>Implode il contenuto dei pentagrammi selezionati nel pentagramma superiore selezionato</translation>
+    </message>
+    <message>
+        <source>Fill With Slashes</source>
+        <translation>Riempire con gli slash</translation>
+    </message>
+    <message>
+        <source>Toggle Rhythmic Slash Notation</source>
+        <translation>Attiva/Disattiva notazione ritmica slash</translation>
+    </message>
+    <message>
+        <source>Add/Remove Line Breaks</source>
+        <translation>Aggiungi/Rimuovi interruzioni di riga</translation>
+    </message>
+    <message>
+        <source>Start Center</source>
+        <translation>Finestra di avvio</translation>
+    </message>
+    <message>
+        <source>Toggle create multimeasure rest</source>
+        <translation>Attiva/disattiva crea pausa di più battute</translation>
+    </message>
+    <message>
+        <source>Resequence Rehearsal Marks</source>
+        <translation>Risequenzia marcatori di riferimento</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -14806,172 +15228,8 @@ Il gruppo irregolare attraversa la battuta</translation>
 <context>
     <name>articulation</name>
     <message>
-        <source>fermata</source>
-        <translation>corona</translation>
-    </message>
-    <message>
-        <source>thumb</source>
-        <translation>pollice</translation>
-    </message>
-    <message>
-        <source>sforzato</source>
-        <translation>sforzato</translation>
-    </message>
-    <message>
-        <source>staccato</source>
-        <translation>staccato</translation>
-    </message>
-    <message>
-        <source>staccatissimo</source>
-        <translation>staccatissimo</translation>
-    </message>
-    <message>
-        <source>tenuto</source>
-        <translation>tenuto</translation>
-    </message>
-    <message>
-        <source>portato</source>
-        <translation>portato</translation>
-    </message>
-    <message>
-        <source>marcato</source>
-        <translation>marcato</translation>
-    </message>
-    <message>
-        <source>turn</source>
-        <translation>gruppetto</translation>
-    </message>
-    <message>
-        <source>trill</source>
-        <translation>trillo</translation>
-    </message>
-    <message>
-        <source>prall</source>
-        <translation>mordente</translation>
-    </message>
-    <message>
-        <source>mordent</source>
-        <translation>mordente</translation>
-    </message>
-    <message>
-        <source>schleifer</source>
-        <translation>schleifer</translation>
-    </message>
-    <message>
-        <source>tapping</source>
-        <translation>tapping</translation>
-    </message>
-    <message>
-        <source>slapping</source>
-        <translation>slapping</translation>
-    </message>
-    <message>
-        <source>popping</source>
-        <translation>popping</translation>
-    </message>
-    <message>
         <source>Bend</source>
         <translation>Bend</translation>
-    </message>
-    <message>
-        <source>Tremolo Bar</source>
-        <translation>Barra del tremolo</translation>
-    </message>
-    <message>
-        <source>ouvert</source>
-        <translation>aperto</translation>
-    </message>
-    <message>
-        <source>short fermata</source>
-        <translation>corona breve</translation>
-    </message>
-    <message>
-        <source>long fermata</source>
-        <translation>corona lunga</translation>
-    </message>
-    <message>
-        <source>very long fermata</source>
-        <translation>corona molto lunga</translation>
-    </message>
-    <message>
-        <source>up bow</source>
-        <translation>arco su</translation>
-    </message>
-    <message>
-        <source>down bow</source>
-        <translation>arco giù</translation>
-    </message>
-    <message>
-        <source>reverse turn</source>
-        <translation>gruppetto rovesciato</translation>
-    </message>
-    <message>
-        <source>prall prall</source>
-        <translation>prall prall</translation>
-    </message>
-    <message>
-        <source>prall mordent</source>
-        <translation>prall mordent</translation>
-    </message>
-    <message>
-        <source>up prall</source>
-        <translation>up prall</translation>
-    </message>
-    <message>
-        <source>down prall</source>
-        <translation>down prall</translation>
-    </message>
-    <message>
-        <source>up mordent</source>
-        <translation>mordente superiore</translation>
-    </message>
-    <message>
-        <source>down mordent</source>
-        <translation>mordente inferiore</translation>
-    </message>
-    <message>
-        <source>prall down</source>
-        <translation>prall down</translation>
-    </message>
-    <message>
-        <source>prall up</source>
-        <translation>prall up</translation>
-    </message>
-    <message>
-        <source>line prall</source>
-        <translation>linea prall</translation>
-    </message>
-    <message>
-        <source>snap pizzicato</source>
-        <translation>snap pizzicato</translation>
-    </message>
-    <message>
-        <source>stopped/pizzicato left hand</source>
-        <translation>stoppato/pizzicato mano sinistra</translation>
-    </message>
-    <message>
-        <source>fade in</source>
-        <translation>Attiva dissolvenza </translation>
-    </message>
-    <message>
-        <source>fade out</source>
-        <translation>Disattiva dissolvenza</translation>
-    </message>
-    <message>
-        <source>volume swell</source>
-        <translation>volume crescente</translation>
-    </message>
-    <message>
-        <source>wiggle sawtooth</source>
-        <translation>onda a dente di sega</translation>
-    </message>
-    <message>
-        <source>wiggle sawtooth wide</source>
-        <translation>onda a dente di sega ampia</translation>
-    </message>
-    <message>
-        <source>wiggle vibrato large faster</source>
-        <translation>onda vibrato ampio più veloce</translation>
     </message>
     <message>
         <source>Slide out down</source>
@@ -14990,8 +15248,188 @@ Il gruppo irregolare attraversa la battuta</translation>
         <translation>Slide in sopra</translation>
     </message>
     <message>
-        <source>wiggle vibrato large slowest</source>
-        <translation>onda vibrato ampio più lenta</translation>
+        <source>Fermata</source>
+        <translation>Corona</translation>
+    </message>
+    <message>
+        <source>Short fermata</source>
+        <translation>Corona breve</translation>
+    </message>
+    <message>
+        <source>Long fermata</source>
+        <translation>Corona lunga</translation>
+    </message>
+    <message>
+        <source>Very long fermata</source>
+        <translation>Corona molto lunga</translation>
+    </message>
+    <message>
+        <source>Sforzato</source>
+        <translation>Sforzato</translation>
+    </message>
+    <message>
+        <source>Staccato</source>
+        <translation>staccato</translation>
+    </message>
+    <message>
+        <source>Staccatissimo</source>
+        <translation>Staccatissimo</translation>
+    </message>
+    <message>
+        <source>Tenuto</source>
+        <translation>Tenuto</translation>
+    </message>
+    <message>
+        <source>Portato</source>
+        <translation>Portato</translation>
+    </message>
+    <message>
+        <source>Marcato</source>
+        <translation>Marcato</translation>
+    </message>
+    <message>
+        <source>Fade in</source>
+        <translation>Attiva dissolvenza </translation>
+    </message>
+    <message>
+        <source>Fade out</source>
+        <translation>Disattiva dissolvenza</translation>
+    </message>
+    <message>
+        <source>Volume swell</source>
+        <translation>Volume crescente</translation>
+    </message>
+    <message>
+        <source>Wiggle sawtooth</source>
+        <translation>Onda a dente di sega</translation>
+    </message>
+    <message>
+        <source>Wiggle sawtooth wide</source>
+        <translation>Onda a dente di sega ampia</translation>
+    </message>
+    <message>
+        <source>Wiggle vibrato large faster</source>
+        <translation>Onda vibrato ampio più veloce</translation>
+    </message>
+    <message>
+        <source>Wiggle vibrato large slowest</source>
+        <translation>Onda vibrato ampio più lenta</translation>
+    </message>
+    <message>
+        <source>Ouvert</source>
+        <translation>Aperto</translation>
+    </message>
+    <message>
+        <source>Stopped/Pizzicato left hand</source>
+        <translation>Stoppato/pizzicato mano sinistra</translation>
+    </message>
+    <message>
+        <source>Up bow</source>
+        <translation>Arcata su</translation>
+    </message>
+    <message>
+        <source>Down bow</source>
+        <translation>Arcata giù</translation>
+    </message>
+    <message>
+        <source>Reverse turn</source>
+        <translation>Gruppetto rovesciato</translation>
+    </message>
+    <message>
+        <source>Turn</source>
+        <translation>Gruppetto</translation>
+    </message>
+    <message>
+        <source>Trill</source>
+        <translation>Trillo</translation>
+    </message>
+    <message>
+        <source>Prall</source>
+        <translation>Mordente</translation>
+    </message>
+    <message>
+        <source>Mordent</source>
+        <translation>Mordente</translation>
+    </message>
+    <message>
+        <source>Prall prall</source>
+        <translation>Prall prall</translation>
+    </message>
+    <message>
+        <source>Prall mordent</source>
+        <translation>Prall mordente</translation>
+    </message>
+    <message>
+        <source>Up prall</source>
+        <translation>Mordente superiore</translation>
+    </message>
+    <message>
+        <source>Down prall</source>
+        <translation>Mordente inferiore</translation>
+    </message>
+    <message>
+        <source>Up mordent</source>
+        <translation>Mordente superiore</translation>
+    </message>
+    <message>
+        <source>Down mordent</source>
+        <translation>Mordente inferiore</translation>
+    </message>
+    <message>
+        <source>Prall down</source>
+        <translation>Prall down</translation>
+    </message>
+    <message>
+        <source>Prall up</source>
+        <translation>Prall up</translation>
+    </message>
+    <message>
+        <source>Line prall</source>
+        <translation>Linea mordente</translation>
+    </message>
+    <message>
+        <source>Schleifer</source>
+        <translation>Schleifer</translation>
+    </message>
+    <message>
+        <source>Snap pizzicato</source>
+        <translation>Snap pizzicato</translation>
+    </message>
+    <message>
+        <source>Tapping</source>
+        <translation>Tapping</translation>
+    </message>
+    <message>
+        <source>Slapping</source>
+        <translation>Slapping</translation>
+    </message>
+    <message>
+        <source>Popping</source>
+        <translation>Popping</translation>
+    </message>
+    <message>
+        <source>Thumb pos.</source>
+        <translation>Pos. pollice</translation>
+    </message>
+    <message>
+        <source>Lute thumb fing.</source>
+        <translation>Diteg. pollice liuto</translation>
+    </message>
+    <message>
+        <source>Lute 1 fing.</source>
+        <translation>Diteg. 1 liuto</translation>
+    </message>
+    <message>
+        <source>Lute 2 fing.</source>
+        <translation>Diteg. 2 liuto</translation>
+    </message>
+    <message>
+        <source>Lute 3 fing.</source>
+        <translation>Diteg. 3 liuto</translation>
+    </message>
+    <message>
+        <source>Tremolo bar</source>
+        <translation>Barra del tremolo</translation>
     </message>
 </context>
 <context>
@@ -15890,11 +16328,11 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Metronome Click</source>
-        <translation>Click Metronomo</translation>
+        <translation>Click metronomo</translation>
     </message>
     <message>
         <source>Metronome Bell</source>
-        <translation>Campana Metronomo</translation>
+        <translation>Campana metronomo</translation>
     </message>
     <message>
         <source>Bass Drum 1</source>
@@ -15902,15 +16340,15 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Acoustic Snare</source>
-        <translation>Rullante Acustico</translation>
+        <translation>Rullante acustico</translation>
     </message>
     <message>
         <source>Hand Clap</source>
-        <translation>Hand Clap</translation>
+        <translation>Battimano</translation>
     </message>
     <message>
         <source>Electric Snare</source>
-        <translation>Rullante Elettrico</translation>
+        <translation>Rullante elettrico</translation>
     </message>
     <message>
         <source>Low Floor Tom</source>
@@ -15918,7 +16356,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Closed Hi-Hat</source>
-        <translation>Hi-Hat Chiuso</translation>
+        <translation>Hi-Hat chiuso</translation>
     </message>
     <message>
         <source>High Floor Tom</source>
@@ -15934,7 +16372,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Open Hi-Hat</source>
-        <translation>Hi-Hat Aperto</translation>
+        <translation>Hi-Hat aperto</translation>
     </message>
     <message>
         <source>Low-Mid Tom</source>
@@ -15946,7 +16384,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Crash Cymbal 1</source>
-        <translation>Piatto Crash 1</translation>
+        <translation>Piatto crash 1</translation>
     </message>
     <message>
         <source>High Tom</source>
@@ -15966,7 +16404,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Low Bongo</source>
-        <translation>Bongo Basso</translation>
+        <translation>Bongo basso</translation>
     </message>
     <message>
         <source>Mute Hi Conga</source>
@@ -16054,7 +16492,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Bell Tree</source>
-        <translation>Campana Albero</translation>
+        <translation>Campana albero</translation>
     </message>
     <message>
         <source>Mute Surdo</source>
@@ -16090,7 +16528,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Square Click</source>
-        <translation>Click Rullante</translation>
+        <translation>Click rullante</translation>
     </message>
     <message>
         <source>Hi Bongo</source>
@@ -16098,7 +16536,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Sleigh Bell</source>
-        <translation>Campanelle Slitta</translation>
+        <translation>Campanelle slitta</translation>
     </message>
 </context>
 <context>
@@ -16419,7 +16857,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Chord Line</source>
-        <translation>Linea Accordo</translation>
+        <translation>Linea accordo</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -16439,7 +16877,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Hairpin Segment</source>
-        <translation>Segmento della Forcella</translation>
+        <translation>Segmento della forcella</translation>
     </message>
     <message>
         <source>Ottava Segment</source>
@@ -16447,19 +16885,19 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Trill Segment</source>
-        <translation>Segmento del Trillo</translation>
+        <translation>Segmento del trillo</translation>
     </message>
     <message>
         <source>Text Line Segment</source>
-        <translation>Segmento della Linea del Testo</translation>
+        <translation>Segmento della linea del testo</translation>
     </message>
     <message>
         <source>Volta Segment</source>
-        <translation>Segmento della Volta</translation>
+        <translation>Segmento della volta</translation>
     </message>
     <message>
         <source>Pedal Segment</source>
-        <translation>Segmento del Pedale</translation>
+        <translation>Segmento del pedale</translation>
     </message>
     <message>
         <source>Layout Break</source>
@@ -16467,7 +16905,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Staff State</source>
-        <translation>Stato del Pentagramma</translation>
+        <translation>Stato del pentagramma</translation>
     </message>
     <message>
         <source>Ledger Line</source>
@@ -16479,7 +16917,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Note Dot</source>
-        <translation>Punto della Nota</translation>
+        <translation>Punto della nota</translation>
     </message>
     <message>
         <source>Shadow Note</source>
@@ -16491,7 +16929,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
-        <translation>Simbolo Dutara Tablatura</translation>
+        <translation>Simbolo durata tablatura</translation>
     </message>
     <message>
         <source>Font Symbol</source>
@@ -16507,7 +16945,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Note Line</source>
-        <translation>Linea della Nota</translation>
+        <translation>Linea della nota</translation>
     </message>
     <message>
         <source>Element List</source>
@@ -16515,11 +16953,11 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Staff List</source>
-        <translation>Elenco Pentagrammi</translation>
+        <translation>Elenco pentagrammi</translation>
     </message>
     <message>
         <source>Measure List</source>
-        <translation>Elenco Battute</translation>
+        <translation>Elenco battute</translation>
     </message>
     <message>
         <source>Horizontal Frame</source>
@@ -16535,7 +16973,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Fretboard Diagram Frame</source>
-        <translation>Casella Schema Tastiera</translation>
+        <translation>Casella schema tastiera</translation>
     </message>
     <message>
         <source>Bagpipe Embellishment</source>
@@ -16543,7 +16981,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Fretboard Diagram</source>
-        <translation>Schema Tastiera</translation>
+        <translation>Schema tastiera</translation>
     </message>
     <message>
         <source>Ambitus</source>
@@ -16687,10 +17125,6 @@ Il gruppo irregolare attraversa la battuta</translation>
         <translation>Segno</translation>
     </message>
     <message>
-        <source>Segno Variation</source>
-        <translation>Variazione Segno</translation>
-    </message>
-    <message>
         <source>Coda</source>
         <translation>Coda</translation>
     </message>
@@ -16714,64 +17148,68 @@ Il gruppo irregolare attraversa la battuta</translation>
         <source>Custom</source>
         <translation>Personalizzato</translation>
     </message>
+    <message>
+        <source>Segno variation</source>
+        <translation>Variazione segno</translation>
+    </message>
 </context>
 <context>
     <name>noteheadnames</name>
     <message>
-        <source>normal</source>
-        <translation>normale</translation>
+        <source>Normal</source>
+        <translation>Normale</translation>
     </message>
     <message>
-        <source>cross</source>
-        <translation>croce</translation>
+        <source>Cross</source>
+        <translation>Croce</translation>
     </message>
     <message>
-        <source>diamond</source>
-        <translation>losanga</translation>
+        <source>Diamond</source>
+        <translation>Losanga</translation>
     </message>
     <message>
-        <source>triangle</source>
-        <translation>triangolo</translation>
+        <source>Triangle</source>
+        <translation>Triangolo</translation>
     </message>
     <message>
-        <source>mi</source>
-        <translation>mi</translation>
+        <source>Mi</source>
+        <translation>Mi</translation>
     </message>
     <message>
-        <source>slash</source>
-        <translation>barra</translation>
+        <source>Slash</source>
+        <translation>Barra</translation>
     </message>
     <message>
-        <source>xcircle</source>
-        <translation>x cerchiato</translation>
+        <source>XCircle</source>
+        <translation>Xcerchiato</translation>
     </message>
     <message>
-        <source>do</source>
-        <translation>do</translation>
+        <source>Do</source>
+        <translation>Do</translation>
     </message>
     <message>
-        <source>re</source>
-        <translation>re</translation>
+        <source>Re</source>
+        <translation>Re</translation>
     </message>
     <message>
-        <source>fa</source>
-        <translation>fa</translation>
+        <source>Fa</source>
+        <translation>Fa</translation>
     </message>
     <message>
-        <source>la</source>
-        <translation>la</translation>
+        <source>La</source>
+        <translation>La</translation>
     </message>
     <message>
-        <source>ti</source>
-        <translation>ti</translation>
+        <source>Ti</source>
+        <translation>Ti</translation>
     </message>
     <message>
-        <source>sol</source>
-        <translation>sol</translation>
+        <source>Sol</source>
+        <translation>Sol</translation>
     </message>
     <message>
-        <source>alt. brevis</source>
-        <translation>alt. breve</translation>
+        <source>Alt. Brevis</source>
+        <translation>Alt. breve</translation>
     </message>
 </context>
 <context>
@@ -16784,32 +17222,32 @@ Il gruppo irregolare attraversa la battuta</translation>
 <context>
     <name>preferences</name>
     <message>
-        <source>Every day</source>
+        <source>Never</source>
+        <translation>Mai</translation>
+    </message>
+    <message>
+        <source>Every Day</source>
         <translation>Ogni giorno</translation>
     </message>
     <message>
-        <source>Every 3 days</source>
+        <source>Every 3 Days</source>
         <translation>Ogni 3 giorni</translation>
     </message>
     <message>
-        <source>Every week</source>
+        <source>Every Week</source>
         <translation>Ogni settimana</translation>
     </message>
     <message>
-        <source>Every 2 weeks</source>
+        <source>Every 2 Weeks</source>
         <translation>Ogni 2 settimane</translation>
     </message>
     <message>
-        <source>Every month</source>
+        <source>Every Month</source>
         <translation>Ogni mese</translation>
     </message>
     <message>
-        <source>Every 2 months</source>
+        <source>Every 2 Months</source>
         <translation>Ogni 2mesi</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation>Mai</translation>
     </message>
 </context>
 <context>
@@ -16883,11 +17321,11 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Pedal Lines</source>
-        <translation>Linea Pedale</translation>
+        <translation>Linea pedale</translation>
     </message>
     <message>
         <source>Other Lines</source>
-        <translation>Altre Linee</translation>
+        <translation>Altre linee</translation>
     </message>
     <message>
         <source>Arpeggios</source>
@@ -16899,7 +17337,7 @@ Il gruppo irregolare attraversa la battuta</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation>Schemi Tastiera</translation>
+        <translation>Schemi tastiera</translation>
     </message>
     <message>
         <source>Breathmarks</source>

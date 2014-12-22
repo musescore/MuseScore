@@ -117,16 +117,8 @@ p, li { white-space: pre-wrap; }
         <translation>MuseScore: Album Manager</translation>
     </message>
     <message>
-        <source>Album Name</source>
-        <translation>Album Name</translation>
-    </message>
-    <message>
         <source>Add Score</source>
         <translation>Add Score</translation>
-    </message>
-    <message>
-        <source>Remove Current Score</source>
-        <translation>Remove Current Score</translation>
     </message>
     <message>
         <source>Remove Score</source>
@@ -141,16 +133,8 @@ p, li { white-space: pre-wrap; }
         <translation>Up</translation>
     </message>
     <message>
-        <source>Create New Album</source>
-        <translation>Create New Album</translation>
-    </message>
-    <message>
         <source>New</source>
         <translation>New</translation>
-    </message>
-    <message>
-        <source>Load an Existing Album</source>
-        <translation>Load an Existing Album</translation>
     </message>
     <message>
         <source>Load</source>
@@ -175,6 +159,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Move current score up in list</source>
         <translation>Move current score up in list</translation>
+    </message>
+    <message>
+        <source>Album name</source>
+        <translation>Album name</translation>
+    </message>
+    <message>
+        <source>Remove current score</source>
+        <translation>Remove current score</translation>
+    </message>
+    <message>
+        <source>Create new album</source>
+        <translation>Create new album</translation>
+    </message>
+    <message>
+        <source>Load an existing album</source>
+        <translation>Load an existing album</translation>
     </message>
 </context>
 <context>
@@ -244,6 +244,17 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>BarLineBase</name>
+    <message>
+        <source>custom subtype</source>
+        <translation>custom subtype</translation>
+    </message>
+    <message>
+        <source>custom span</source>
+        <translation>custom span</translation>
+    </message>
+</context>
+<context>
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
@@ -279,71 +290,38 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>BoxPropertiesBase</name>
+    <name>BreaksDialog</name>
     <message>
-        <source>MuseScore: Frame Properties</source>
-        <translation>MuseScore: Frame Properties</translation>
+        <source>MuseScore: Add/Remove Line Breaks</source>
+        <translation>MuseScore: Add/Remove Line Breaks</translation>
     </message>
     <message>
-        <source>Gaps</source>
-        <translation>Gaps</translation>
+        <source>Break lines every</source>
+        <translation>Break lines every</translation>
     </message>
     <message>
-        <source>sp</source>
-        <extracomment>spatium unit</extracomment>
-        <translation>sp</translation>
+        <source>Number of measures</source>
+        <translation>Number of measures</translation>
     </message>
     <message>
-        <source>Inner Margins</source>
-        <translation>Inner Margins</translation>
+        <source>measures</source>
+        <translation>bars</translation>
     </message>
     <message>
-        <source>mm</source>
-        <translation>mm</translation>
+        <source>Add line breaks at end of each system</source>
+        <translation>Add line breaks at end of each system</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Size</translation>
+        <source>Remove current line breaks</source>
+        <translation>Remove current line breaks</translation>
     </message>
     <message>
-        <source>Left:</source>
-        <translation>Left:</translation>
-    </message>
-    <message>
-        <source>Right:</source>
-        <translation>Right:</translation>
-    </message>
-    <message>
-        <source>Bottom:</source>
-        <translation>Bottom:</translation>
-    </message>
-    <message>
-        <source>Top:</source>
-        <translation>Top:</translation>
-    </message>
-    <message>
-        <source>Width:</source>
-        <translation>Width:</translation>
-    </message>
-    <message>
-        <source>Height:</source>
-        <translation>Height:</translation>
-    </message>
-    <message>
-        <source>Top/Left:</source>
-        <translation>Top/Left:</translation>
-    </message>
-    <message>
-        <source>Bottom/Right:</source>
-        <translation>Bottom/Right:</translation>
+        <source>Break lines every X measures</source>
+        <translation>Break lines every X bars</translation>
     </message>
 </context>
 <context>
     <name>ChordStyleEditor</name>
-    <message>
-        <source>Id</source>
-        <translation>Id</translation>
-    </message>
     <message>
         <source>Name</source>
         <translation>Name</translation>
@@ -364,91 +342,60 @@ p, li { white-space: pre-wrap; }
         <source>Load</source>
         <translation>Load</translation>
     </message>
-</context>
-<context>
-    <name>DrumrollEditor</name>
     <message>
-        <source>toolbar 1</source>
-        <translation>toolbar 1</translation>
-    </message>
-    <message>
-        <source>toolbar 3</source>
-        <translation>toolbar 3</translation>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>Cursor:</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>Velocity:</translation>
-    </message>
-    <message>
-        <source>offset</source>
-        <translation>offset</translation>
-    </message>
-    <message>
-        <source>user</source>
-        <translation>user</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>Pitch:</translation>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; Stave: %2</translation>
+        <source>ID</source>
+        <translation>ID</translation>
     </message>
 </context>
 <context>
     <name>EditDrumset</name>
     <message>
-        <source>normal</source>
-        <translation>normal</translation>
+        <source>Normal</source>
+        <translation>Normal</translation>
     </message>
     <message>
-        <source>cross</source>
-        <translation>cross</translation>
+        <source>Cross</source>
+        <translation>Cross</translation>
     </message>
     <message>
-        <source>diamond</source>
-        <translation>diamond</translation>
+        <source>Diamond</source>
+        <translation>Diamond</translation>
     </message>
     <message>
-        <source>triangle</source>
-        <translation>triangle</translation>
+        <source>Triangle</source>
+        <translation>Triangle</translation>
     </message>
     <message>
-        <source>mi</source>
-        <translation>mi</translation>
+        <source>Mi</source>
+        <translation>Mi</translation>
     </message>
     <message>
-        <source>slash</source>
-        <translation>slash</translation>
+        <source>Slash</source>
+        <translation>Slash</translation>
     </message>
     <message>
-        <source>xcircle</source>
-        <translation>xcircle</translation>
+        <source>XCircle</source>
+        <translation>XCircle</translation>
     </message>
     <message>
-        <source>do</source>
-        <translation>do</translation>
+        <source>Do</source>
+        <translation>Do</translation>
     </message>
     <message>
-        <source>re</source>
-        <translation>re</translation>
+        <source>Re</source>
+        <translation>Re</translation>
     </message>
     <message>
-        <source>fa</source>
-        <translation>fa</translation>
+        <source>Fa</source>
+        <translation>Fa</translation>
     </message>
     <message>
-        <source>la</source>
-        <translation>la</translation>
+        <source>La</source>
+        <translation>La</translation>
     </message>
     <message>
-        <source>ti</source>
-        <translation>ti</translation>
+        <source>Ti</source>
+        <translation>Ti</translation>
     </message>
 </context>
 <context>
@@ -589,10 +536,6 @@ p, li { white-space: pre-wrap; }
         <translation>Name:</translation>
     </message>
     <message>
-        <source>Short Name:</source>
-        <translation>Short Name:</translation>
-    </message>
-    <message>
         <source>Pitch:</source>
         <translation>Pitch:</translation>
     </message>
@@ -601,12 +544,16 @@ p, li { white-space: pre-wrap; }
         <translation>Transpose:</translation>
     </message>
     <message>
-        <source>MIDI Program:</source>
-        <translation>MIDI Programme:</translation>
-    </message>
-    <message>
         <source>Staves:</source>
         <translation>Staves:</translation>
+    </message>
+    <message>
+        <source>Short name:</source>
+        <translation>Short name:</translation>
+    </message>
+    <message>
+        <source>MIDI program:</source>
+        <translation>MIDI program:</translation>
     </message>
 </context>
 <context>
@@ -1191,28 +1138,28 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>EditRaster</name>
     <message>
-        <source>MuseScore: Edit Raster</source>
-        <translation>MuseScore: Edit Raster</translation>
-    </message>
-    <message>
-        <source>Edit Raster</source>
-        <translation>Edit Raster</translation>
-    </message>
-    <message>
-        <source>horizontal Raster:</source>
-        <translation>horizontal Raster:</translation>
-    </message>
-    <message>
         <source>1 / </source>
         <translation>1 / </translation>
     </message>
     <message>
-        <source>vertical  Raster:</source>
-        <translation>vertical  Raster:</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>sp</translation>
+    </message>
+    <message>
+        <source>MuseScore: Edit Grid</source>
+        <translation>MuseScore: Edit Grid</translation>
+    </message>
+    <message>
+        <source>Edit Grid</source>
+        <translation>Edit Grid</translation>
+    </message>
+    <message>
+        <source>Horizontal grid:</source>
+        <translation>Horizontal grid:</translation>
+    </message>
+    <message>
+        <source>Vertical  grid:</source>
+        <translation>Vertical  grid:</translation>
     </message>
 </context>
 <context>
@@ -1418,10 +1365,6 @@ p, li { white-space: pre-wrap; }
         <translation>Show time signature</translation>
     </message>
     <message>
-        <source>Advanced style properties...</source>
-        <translation>Advanced style properties...</translation>
-    </message>
-    <message>
         <source>Style group:</source>
         <translation>Style group:</translation>
     </message>
@@ -1460,6 +1403,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>%</source>
         <translation>%</translation>
+    </message>
+    <message>
+        <source>Advanced Style Properties...</source>
+        <translation>Advanced Style Properties...</translation>
     </message>
 </context>
 <context>
@@ -1637,10 +1584,6 @@ p, li { white-space: pre-wrap; }
         <translation>Template:</translation>
     </message>
     <message>
-        <source>&lt; Reset to template</source>
-        <translation>&lt; Reset to template</translation>
-    </message>
-    <message>
         <source>Show key signature</source>
         <translation>Show key signature</translation>
     </message>
@@ -1651,6 +1594,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Show Key signature</source>
         <translation>Show Key signature</translation>
+    </message>
+    <message>
+        <source>&lt; Reset to Template</source>
+        <translation>&lt; Reset to Template</translation>
     </message>
 </context>
 <context>
@@ -1879,20 +1826,8 @@ space unit</extracomment>
         <translation>Last system fill threshold:</translation>
     </message>
     <message>
-        <source>Header text</source>
-        <translation>Header text</translation>
-    </message>
-    <message>
-        <source>show header also on first page</source>
-        <translation>show header also on first page</translation>
-    </message>
-    <message>
         <source>Show first</source>
         <translation>Show first</translation>
-    </message>
-    <message>
-        <source>use odd even page header</source>
-        <translation>use odd even page header</translation>
     </message>
     <message>
         <source>Odd/Even</source>
@@ -1915,44 +1850,12 @@ space unit</extracomment>
         <translation>Even</translation>
     </message>
     <message>
-        <source>edit even page header</source>
-        <translation>edit even page header</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <source>Odd</source>
         <translation>Odd</translation>
-    </message>
-    <message>
-        <source>add odd page header</source>
-        <translation>add odd page header</translation>
-    </message>
-    <message>
-        <source>Footer text</source>
-        <translation>Footer text</translation>
-    </message>
-    <message>
-        <source>show footer also on first page</source>
-        <translation>show footer also on first page</translation>
-    </message>
-    <message>
-        <source>use odd even page footer</source>
-        <translation>use odd even page footer</translation>
-    </message>
-    <message>
-        <source>edit odd page header</source>
-        <translation>edit odd page header</translation>
-    </message>
-    <message>
-        <source>edit even page footer</source>
-        <translation>edit even page footer</translation>
-    </message>
-    <message>
-        <source>Measure numbers</source>
-        <translation>Bar numbers</translation>
     </message>
     <message>
         <source>All staves</source>
@@ -1969,22 +1872,6 @@ space unit</extracomment>
     <message>
         <source>Brace distance:</source>
         <translation>Brace distance:</translation>
-    </message>
-    <message>
-        <source>Fix number of measures/system:</source>
-        <translation>Fix number of bars/system:</translation>
-    </message>
-    <message>
-        <source>Fix measure width</source>
-        <translation>Fix bar width</translation>
-    </message>
-    <message>
-        <source>System bracket width:</source>
-        <translation>System bracket width:</translation>
-    </message>
-    <message>
-        <source>Brace width:</source>
-        <translation>Brace width:</translation>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
@@ -2111,10 +1998,6 @@ space unit</extracomment>
         <translation>Dot size:</translation>
     </message>
     <message>
-        <source>Default TAB clef</source>
-        <translation>Default TAB clef</translation>
-    </message>
-    <message>
         <source>Distance to note:</source>
         <translation>Distance to note:</translation>
     </message>
@@ -2179,16 +2062,8 @@ space unit</extracomment>
         <translation>Height:</translation>
     </message>
     <message>
-        <source>Line break height:</source>
-        <translation>Line break height:</translation>
-    </message>
-    <message>
         <source>Default vertical position:</source>
         <translation>Default vertical position:</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>Volta</source>
@@ -2199,36 +2074,12 @@ space unit</extracomment>
         <translation>Hook height:</translation>
     </message>
     <message>
-        <source>Solid</source>
-        <translation>Solid</translation>
-    </message>
-    <message>
-        <source>Dash</source>
-        <translation>Dash</translation>
-    </message>
-    <message>
-        <source>Dot</source>
-        <translation>Dot</translation>
-    </message>
-    <message>
-        <source>DashDot</source>
-        <translation>DashDot</translation>
-    </message>
-    <message>
-        <source>DashDotDot</source>
-        <translation>DashDotDot</translation>
-    </message>
-    <message>
         <source>Line style:</source>
         <translation>Line style:</translation>
     </message>
     <message>
         <source>Ottava</source>
         <translation>Ottava</translation>
-    </message>
-    <message>
-        <source>numbers only</source>
-        <translation>numbers only</translation>
     </message>
     <message>
         <source>Pedal Line</source>
@@ -2257,10 +2108,6 @@ space unit</extracomment>
     <message>
         <source>Load chords.xml</source>
         <translation>Load chords.xml</translation>
-    </message>
-    <message>
-        <source>Root / bass spelling</source>
-        <translation>Root / bass spelling</translation>
     </message>
     <message>
         <source>German</source>
@@ -2356,26 +2203,6 @@ space unit</extracomment>
         <translation>Accidental</translation>
     </message>
     <message>
-        <source>Naturals in key signatures</source>
-        <translation>Naturals in key signatures</translation>
-    </message>
-    <message>
-        <source>Only for change to C Maj / A min</source>
-        <translation>Only for change to C Maj / A min</translation>
-    </message>
-    <message>
-        <source>Before change to less sharps / flats</source>
-        <translation>Before change to less sharps / flats</translation>
-    </message>
-    <message>
-        <source>After change to less sharps / flats (but before change sharps &lt;=&gt; flats)</source>
-        <translation>After change to less sharps / flats (but before change sharps &lt;=&gt; flats)</translation>
-    </message>
-    <message>
-        <source>Vertical distance from the notes</source>
-        <translation>Vertical distance from the notes</translation>
-    </message>
-    <message>
         <source>Maximum slope:</source>
         <translation>Maximum slope:</translation>
     </message>
@@ -2386,10 +2213,6 @@ space unit</extracomment>
     <message>
         <source>Avoid the staves</source>
         <translation>Avoid the staves</translation>
-    </message>
-    <message>
-        <source>Horizontal distance from the notes</source>
-        <translation>Horizontal distance from the notes</translation>
     </message>
     <message>
         <source>Distance before the stem of the first note:</source>
@@ -2428,14 +2251,6 @@ space unit</extracomment>
         <translation>Vertical distance from note head:</translation>
     </message>
     <message>
-        <source>Create multimeasure rests</source>
-        <translation>Create multimeasure rests</translation>
-    </message>
-    <message>
-        <source>Multimeasure rest margin:</source>
-        <translation>Multimeasure rest margin:</translation>
-    </message>
-    <message>
         <source>Capo fret position:</source>
         <translation>Capo fret position:</translation>
     </message>
@@ -2450,14 +2265,6 @@ space unit</extracomment>
     <message>
         <source>A, B♭, B, C, C♯, ...</source>
         <translation>A, B♭, B, C, C♯, ...</translation>
-    </message>
-    <message>
-        <source>A, B, H, C, Cis, ...</source>
-        <translation>A, B, H, C, Cis, ...</translation>
-    </message>
-    <message>
-        <source>La, Si♭, Si, Do, Do♯, ...</source>
-        <translation>La, Si♭, Si, Do, Do♯, ...</translation>
     </message>
     <message>
         <source>Chord Symbols, Fretboard Diagrams</source>
@@ -2542,6 +2349,162 @@ space unit</extracomment>
     <message>
         <source>Bravura Text</source>
         <translation>Bravura Text</translation>
+    </message>
+    <message>
+        <source>Gonville Text</source>
+        <translation>Gonville Text</translation>
+    </message>
+    <message>
+        <source>Show header also on first page</source>
+        <translation>Show header also on first page</translation>
+    </message>
+    <message>
+        <source>Show footer also on first page</source>
+        <translation>Show footer also on first page</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Use odd/even page header</source>
+        <translation>Use odd/even page header</translation>
+    </message>
+    <message>
+        <source>Use odd/even page footer</source>
+        <translation>Use odd/even page footer</translation>
+    </message>
+    <message>
+        <source>Fixed number of measures/system:</source>
+        <translation>Fixed number of bars/system:</translation>
+    </message>
+    <message>
+        <source>Fixed measure width</source>
+        <translation>Fixed bar width</translation>
+    </message>
+    <message>
+        <source>System bracket thickness:</source>
+        <translation>System bracket thickness:</translation>
+    </message>
+    <message>
+        <source>Brace thickness:</source>
+        <translation>Brace thickness:</translation>
+    </message>
+    <message>
+        <source>Continue height:</source>
+        <translation>Continue height:</translation>
+    </message>
+    <message>
+        <source>Continuous</source>
+        <translation>Continuous</translation>
+    </message>
+    <message>
+        <source>Dashed</source>
+        <translation>Dashed</translation>
+    </message>
+    <message>
+        <source>Dotted</source>
+        <translation>Dotted</translation>
+    </message>
+    <message>
+        <source>Dash-dotted</source>
+        <translation>Dash-dotted</translation>
+    </message>
+    <message>
+        <source>Dash-dot-dotted</source>
+        <translation>Dash-dot-dotted</translation>
+    </message>
+    <message>
+        <source>Numbers only</source>
+        <translation>Numbers only</translation>
+    </message>
+    <message>
+        <source>Header Text</source>
+        <translation>Header Text</translation>
+    </message>
+    <message>
+        <source>Footer Text</source>
+        <translation>Footer Text</translation>
+    </message>
+    <message>
+        <source>Measure Numbers</source>
+        <translation>Bar Numbers</translation>
+    </message>
+    <message>
+        <source>Default TAB Clef</source>
+        <translation>Default TAB Clef</translation>
+    </message>
+    <message>
+        <source>Naturals in Key Signatures</source>
+        <translation>Naturals in Key Signatures</translation>
+    </message>
+    <message>
+        <source>Vertical Distance from the Notes</source>
+        <translation>Vertical Distance from the Notes</translation>
+    </message>
+    <message>
+        <source>Horizontal Distance from the Notes</source>
+        <translation>Horizontal Distance from the Notes</translation>
+    </message>
+    <message>
+        <source>Only for a change to C Maj / A min</source>
+        <translation>Only for a change to C Maj / A min</translation>
+    </message>
+    <message>
+        <source>Create multimeasure rests</source>
+        <translation>Create multi-bar rests</translation>
+    </message>
+    <message>
+        <source>Multimeasure rest margin:</source>
+        <translation>Multi-bar rest margin:</translation>
+    </message>
+    <message>
+        <source>Before key signature if changing to fewer sharps or flats</source>
+        <translation>Before key signature if changing to fewer sharps or flats</translation>
+    </message>
+    <message>
+        <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
+        <translation>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</translation>
+    </message>
+    <message>
+        <source>A, B♭, H, C, C♯, ...</source>
+        <translation>A, B♭, H, C, C♯, ...</translation>
+    </message>
+    <message>
+        <source>A, B, H, C, Cis</source>
+        <translation>A, B, H, C, Cis</translation>
+    </message>
+    <message>
+        <source>Full German</source>
+        <translation>Full German</translation>
+    </message>
+    <message>
+        <source>Do, Do♯, Re♭, Re, ...</source>
+        <translation>Do, Do♯, Re♭, Re, ...</translation>
+    </message>
+    <message>
+        <source>Do, Do♯, Ré♭, Ré, ...</source>
+        <translation>Do, Do♯, Ré♭, Ré, ...</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation>French</translation>
+    </message>
+    <message>
+        <source>Lower case bass notes</source>
+        <translation>Lower case bass notes</translation>
+    </message>
+    <message>
+        <source>All caps note names</source>
+        <translation>All caps note names</translation>
+    </message>
+    <message>
+        <source>Note Spelling</source>
+        <translation>Note Spelling</translation>
+    </message>
+    <message>
+        <source>Automatic Capitalization</source>
+        <translation>Automatic Capitalisation</translation>
     </message>
 </context>
 <context>
@@ -2643,7 +2606,7 @@ space unit</extracomment>
 <context>
     <name>GreendotButton</name>
     <message>
-        <source>record</source>
+        <source>Record</source>
         <translation>record</translation>
     </message>
 </context>
@@ -2685,6 +2648,14 @@ space unit</extracomment>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
+    <message>
+        <source>Cancel not applied MIDI import operations</source>
+        <translation>Cancel not applied MIDI import operations</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
 </context>
 <context>
     <name>InsertMeasuresDialogBase</name>
@@ -2716,10 +2687,6 @@ space unit</extracomment>
         <translation>Accidental</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -2733,7 +2700,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation>Reset Small value</translation>
+        <translation>Reset &apos;Small&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
@@ -2747,68 +2718,8 @@ space unit</extracomment>
         <translation>Head group</translation>
     </message>
     <message>
-        <source>normal</source>
-        <translation>normal</translation>
-    </message>
-    <message>
-        <source>cross</source>
-        <translation>cross</translation>
-    </message>
-    <message>
-        <source>diamond</source>
-        <translation>diamond</translation>
-    </message>
-    <message>
-        <source>triangle</source>
-        <translation>triangle</translation>
-    </message>
-    <message>
-        <source>slash</source>
-        <translation>slash</translation>
-    </message>
-    <message>
-        <source>xcircle</source>
-        <translation>xcircle</translation>
-    </message>
-    <message>
-        <source>do</source>
-        <translation>do</translation>
-    </message>
-    <message>
-        <source>re</source>
-        <translation>re</translation>
-    </message>
-    <message>
-        <source>mi</source>
-        <translation>mi</translation>
-    </message>
-    <message>
-        <source>fa</source>
-        <translation>fa</translation>
-    </message>
-    <message>
-        <source>sol</source>
-        <translation>sol</translation>
-    </message>
-    <message>
-        <source>la</source>
-        <translation>la</translation>
-    </message>
-    <message>
-        <source>ti</source>
-        <translation>ti</translation>
-    </message>
-    <message>
-        <source>alt. brevis</source>
-        <translation>alt. brevis</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -2817,10 +2728,6 @@ space unit</extracomment>
     <message>
         <source>Bottom note</source>
         <translation>Bottom note</translation>
-    </message>
-    <message>
-        <source>[undefined]</source>
-        <translation>[undefined]</translation>
     </message>
     <message>
         <source>C♭♭</source>
@@ -2971,10 +2878,6 @@ space unit</extracomment>
         <translation>Has line</translation>
     </message>
     <message>
-        <source>Line width</source>
-        <translation>Line width</translation>
-    </message>
-    <message>
         <source>Top note</source>
         <translation>Top note</translation>
     </message>
@@ -3027,24 +2930,20 @@ space unit</extracomment>
         <translation>Ambitus Inspector</translation>
     </message>
     <message>
-        <source>Reset Line width value</source>
-        <translation>Reset Line width value</translation>
-    </message>
-    <message>
         <source>Oct</source>
         <translation>Oct</translation>
     </message>
     <message>
         <source>Reset Has line value</source>
-        <translation>Reset Has line value</translation>
+        <translation>Reset &apos;Has line&apos; value</translation>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation>Reset Head group value</translation>
+        <translation>Reset &apos;Head group&apos; value</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Reset Direction value</translation>
+        <translation>Reset &apos;Direction&apos; value</translation>
     </message>
     <message>
         <source>Update range</source>
@@ -3052,7 +2951,79 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation>Reset Head type value</translation>
+        <translation>Reset &apos;Head type&apos; value</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation>Normal</translation>
+    </message>
+    <message>
+        <source>Cross</source>
+        <translation>Cross</translation>
+    </message>
+    <message>
+        <source>Diamond</source>
+        <translation>Diamond</translation>
+    </message>
+    <message>
+        <source>Triangle</source>
+        <translation>Triangle</translation>
+    </message>
+    <message>
+        <source>Slash</source>
+        <translation>Slash</translation>
+    </message>
+    <message>
+        <source>XCircle</source>
+        <translation>XCircle</translation>
+    </message>
+    <message>
+        <source>Do</source>
+        <translation>Do</translation>
+    </message>
+    <message>
+        <source>Re</source>
+        <translation>Re</translation>
+    </message>
+    <message>
+        <source>Mi</source>
+        <translation>Mi</translation>
+    </message>
+    <message>
+        <source>Fa</source>
+        <translation>Fa</translation>
+    </message>
+    <message>
+        <source>Sol</source>
+        <translation>Sol</translation>
+    </message>
+    <message>
+        <source>La</source>
+        <translation>La</translation>
+    </message>
+    <message>
+        <source>Ti</source>
+        <translation>Ti</translation>
+    </message>
+    <message>
+        <source>Alt. Brevis</source>
+        <translation>Alt. Brevis</translation>
+    </message>
+    <message>
+        <source>Line thickness</source>
+        <translation>Line thickness</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Reset Line thickness value</source>
+        <translation>Reset &apos;Line thickness&apos; value</translation>
+    </message>
+    <message>
+        <source>[Undefined]</source>
+        <translation>[Undefined]</translation>
     </message>
 </context>
 <context>
@@ -3115,15 +3086,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Reset Direction value</translation>
+        <translation>Reset &apos;Direction&apos; value</translation>
     </message>
     <message>
         <source>Reset Anchor value</source>
-        <translation>Reset Anchor value</translation>
+        <translation>Reset &apos;Anchor&apos; value</translation>
     </message>
     <message>
         <source>Reset Time stretch value</source>
-        <translation>Reset Time stretch value</translation>
+        <translation>Reset &apos;Time stretch&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3131,10 +3102,6 @@ space unit</extracomment>
     <message>
         <source>Barline</source>
         <translation>Barline</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -3170,7 +3137,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reset Type value</translation>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
         <source>Span from</source>
@@ -3186,15 +3153,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Span value</source>
-        <translation>Reset Span value</translation>
+        <translation>Reset &apos;Span&apos; value</translation>
     </message>
     <message>
         <source>Reset Span from value</source>
-        <translation>Reset Span from value</translation>
+        <translation>Reset &apos;Span from&apos; value</translation>
     </message>
     <message>
         <source>Reset Span to value</source>
-        <translation>Reset Span to value</translation>
+        <translation>Reset &apos;Span to&apos; value</translation>
     </message>
     <message>
         <source>Spantype</source>
@@ -3202,7 +3169,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Span type value</source>
-        <translation>Reset Span type value</translation>
+        <translation>Reset &apos;Span type&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
@@ -3224,14 +3195,6 @@ space unit</extracomment>
         <translation>Down</translation>
     </message>
     <message>
-        <source>Grow Right</source>
-        <translation>Grow Right</translation>
-    </message>
-    <message>
-        <source>Grow Left</source>
-        <translation>Grow Left</translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation>Direction</translation>
     </message>
@@ -3248,14 +3211,6 @@ space unit</extracomment>
         <translation>...</translation>
     </message>
     <message>
-        <source>Local Relayout</source>
-        <translation>Local Relayout</translation>
-    </message>
-    <message>
-        <source>User Position</source>
-        <translation>User Position</translation>
-    </message>
-    <message>
         <source>Horizontal</source>
         <translation>Horizontal</translation>
     </message>
@@ -3269,31 +3224,55 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Reset Direction value</translation>
+        <translation>Reset &apos;Direction&apos; value</translation>
     </message>
     <message>
         <source>Vertical position offset right</source>
         <translation>Vertical position offset right</translation>
     </message>
     <message>
-        <source>Reset Grow Right value</source>
-        <translation>Reset Grow Right value</translation>
-    </message>
-    <message>
-        <source>Reset Grow Left value</source>
-        <translation>Reset Grow Left value</translation>
-    </message>
-    <message>
         <source>Reset User position value</source>
-        <translation>Reset User position value</translation>
+        <translation>Reset &apos;User position&apos; value</translation>
     </message>
     <message>
         <source>Reset Local Relayout value</source>
-        <translation>Reset Local Relayout value</translation>
+        <translation>Reset &apos;Local Relayout&apos; value</translation>
     </message>
     <message>
         <source>Reset Horizontal value</source>
-        <translation>Reset Horizontal value</translation>
+        <translation>Reset &apos;Horizontal&apos; value</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Left</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Right</translation>
+    </message>
+    <message>
+        <source>Grow right</source>
+        <translation>Grow right</translation>
+    </message>
+    <message>
+        <source>Grow left</source>
+        <translation>Grow left</translation>
+    </message>
+    <message>
+        <source>Reset Grow right value</source>
+        <translation>Reset &apos;Grow right&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Grow left value</source>
+        <translation>Reset &apos;Grow left&apos; value</translation>
+    </message>
+    <message>
+        <source>Local relayout</source>
+        <translation>Local relayout</translation>
+    </message>
+    <message>
+        <source>User position</source>
+        <translation>User position</translation>
     </message>
 </context>
 <context>
@@ -3332,10 +3311,6 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>Horizontal offset</source>
         <translation>Horizontal offset</translation>
     </message>
@@ -3353,15 +3328,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation>Reset Vertical offset value</translation>
+        <translation>Reset &apos;Vertical offset&apos; value</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation>Reset Horizontal offset value</translation>
+        <translation>Reset &apos;Horizontal offset&apos; value</translation>
     </message>
     <message>
         <source>Reset Stem direction value</source>
-        <translation>Reset Stem direction value</translation>
+        <translation>Reset &apos;Stem direction&apos; value</translation>
     </message>
     <message>
         <source>Horizontal Offset</source>
@@ -3369,11 +3344,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Small Value</source>
-        <translation>Reset Small Value</translation>
+        <translation>Reset &apos;Small&apos; Value</translation>
     </message>
     <message>
         <source>Reset Stemless value</source>
-        <translation>Reset Stemless value</translation>
+        <translation>Reset &apos;Stemless&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
@@ -3381,10 +3360,6 @@ space unit</extracomment>
     <message>
         <source>Clef</source>
         <translation>Clef</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -3400,7 +3375,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation>Reset Show courtesy value</translation>
+        <translation>Reset &apos;Show courtesy&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
@@ -3412,10 +3391,6 @@ space unit</extracomment>
     <message>
         <source>Dynamic Range</source>
         <translation>Dynamic Range</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -3443,11 +3418,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Velocity value</source>
-        <translation>Reset Velocity value</translation>
+        <translation>Reset &apos;Velocity&apos; value</translation>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation>Reset Dynamic range value</translation>
+        <translation>Reset &apos;Dynamic range&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Dynamic range</source>
+        <translation>Dynamic range</translation>
     </message>
 </context>
 <context>
@@ -3487,19 +3470,30 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation>Reset Horizontal offset value</translation>
+        <translation>Reset &apos;Horizontal offset&apos; value</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation>Reset Vertical offset value</translation>
+        <translation>Reset &apos;Vertical offset&apos; value</translation>
     </message>
     <message>
         <source>Reset Visible value</source>
-        <translation>Reset Visible value</translation>
+        <translation>Reset &apos;Visible&apos; value</translation>
     </message>
     <message>
         <source>Reset Color value</source>
-        <translation>Reset Colour value</translation>
+        <translation>Reset &apos;Colour&apos; value</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorEmpty</name>
+    <message>
+        <source>Empty Inspector</source>
+        <translation>Empty Inspector</translation>
+    </message>
+    <message>
+        <source>Nothing selected</source>
+        <translation>Nothing selected</translation>
     </message>
 </context>
 <context>
@@ -3521,32 +3515,32 @@ space unit</extracomment>
         <translation>...</translation>
     </message>
     <message>
-        <source>straight</source>
-        <translation>straight</translation>
-    </message>
-    <message>
-        <source>wavy</source>
-        <translation>wavy</translation>
-    </message>
-    <message>
-        <source>Show Text</source>
-        <translation>Show Text</translation>
-    </message>
-    <message>
         <source>Glissando Inspector</source>
         <translation>Glissando Inspector</translation>
     </message>
     <message>
         <source>Reset Text value</source>
-        <translation>Reset Text value</translation>
+        <translation>Reset &apos;Text&apos; value</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reset Type value</translation>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
-        <source>Reset Show Text value</source>
-        <translation>Reset Show Text value</translation>
+        <source>Straight</source>
+        <translation>Straight</translation>
+    </message>
+    <message>
+        <source>Wavy</source>
+        <translation>Wavy</translation>
+    </message>
+    <message>
+        <source>Reset Show text value</source>
+        <translation>Reset &apos;Show text&apos; value</translation>
+    </message>
+    <message>
+        <source>Show text</source>
+        <translation>Show Text</translation>
     </message>
 </context>
 <context>
@@ -3592,18 +3586,6 @@ space unit</extracomment>
         <translation>Width</translation>
     </message>
     <message>
-        <source>Left Gap</source>
-        <translation>Left Gap</translation>
-    </message>
-    <message>
-        <source>Right Gap</source>
-        <translation>Right Gap</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -3612,12 +3594,24 @@ space unit</extracomment>
         <translation>Horizontal Frame Inspector</translation>
     </message>
     <message>
-        <source>Reset Left Gap value</source>
-        <translation>Reset Left Gap value</translation>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
     <message>
-        <source>Reset Right Gap value</source>
-        <translation>Reset Right Gap value</translation>
+        <source>Right gap</source>
+        <translation>Right gap</translation>
+    </message>
+    <message>
+        <source>Left gap</source>
+        <translation>Left gap</translation>
+    </message>
+    <message>
+        <source>Reset Left gap value</source>
+        <translation>Reset &apos;Left gap&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Right gap value</source>
+        <translation>Reset &apos;Right gap&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3631,24 +3625,12 @@ space unit</extracomment>
         <translation>Height</translation>
     </message>
     <message>
-        <source>crescendo</source>
-        <translation>crescendo</translation>
-    </message>
-    <message>
-        <source>decrescendo</source>
-        <translation>Diminuendo</translation>
-    </message>
-    <message>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
         <source>Dynamic range</source>
         <translation>Dynamic range</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -3688,27 +3670,39 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Velocity change value</source>
-        <translation>Reset Velocity change value</translation>
+        <translation>Reset &apos;Velocity change&apos; value</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reset Type value</translation>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation>Reset Dynamic range value</translation>
+        <translation>Reset &apos;Dynamic range&apos; value</translation>
     </message>
     <message>
         <source>Reset Height value</source>
-        <translation>Reset Height value</translation>
-    </message>
-    <message>
-        <source>Reset continue Height value</source>
-        <translation>Reset continue Height value</translation>
+        <translation>Reset &apos;Height&apos; value</translation>
     </message>
     <message>
         <source>Reset Circled tip value</source>
-        <translation>Reset Circled tip value</translation>
+        <translation>Reset &apos;Circled tip&apos; value</translation>
+    </message>
+    <message>
+        <source>Crescendo</source>
+        <translation>Crescendo</translation>
+    </message>
+    <message>
+        <source>Decrescendo</source>
+        <translation>Diminuendo</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Reset Continue height value</source>
+        <translation>Reset &apos;Continue height&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3716,10 +3710,6 @@ space unit</extracomment>
     <message>
         <source>Image</source>
         <translation>Image</translation>
-    </message>
-    <message>
-        <source>Scale to Frame Size</source>
-        <translation>Scale to Frame Size</translation>
     </message>
     <message>
         <source>...</source>
@@ -3734,24 +3724,12 @@ space unit</extracomment>
         <translation>Scale</translation>
     </message>
     <message>
-        <source>Lock Aspect Ratio</source>
-        <translation>Lock Aspect Ratio</translation>
-    </message>
-    <message>
-        <source>Size in Spatium Units</source>
-        <translation>Size in Spatium Units</translation>
-    </message>
-    <message>
         <source>Image Inspector</source>
         <translation>Image Inspector</translation>
     </message>
     <message>
         <source>Scale to frame size</source>
         <translation>Scale to frame size</translation>
-    </message>
-    <message>
-        <source>Reset Scale to Frame Size value</source>
-        <translation>Reset Scale to Frame Size value</translation>
     </message>
     <message>
         <source>Height</source>
@@ -3770,12 +3748,28 @@ space unit</extracomment>
         <translation>Scale Height</translation>
     </message>
     <message>
-        <source>Reset Lock Aspect Ratio value</source>
-        <translation>Reset Lock Aspect Ratio value</translation>
+        <source>Reset Scale to frame size value</source>
+        <translation>Reset &apos;Scale to frame size&apos; value</translation>
     </message>
     <message>
-        <source>Reset Size in Spatium Units value</source>
-        <translation>Reset Size in Spatium Units value</translation>
+        <source>Reset Lock aspect ratio value</source>
+        <translation>Reset &apos;Lock aspect ratio&apos; value</translation>
+    </message>
+    <message>
+        <source>Lock aspect ratio</source>
+        <translation>Lock aspect ratio</translation>
+    </message>
+    <message>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>Distance between two lines on a standard 5-line stave</translation>
+    </message>
+    <message>
+        <source>Size in staff space units</source>
+        <translation>Size in stave space units</translation>
+    </message>
+    <message>
+        <source>Reset Size in staff space units value</source>
+        <translation>Reset &apos;Size in stave space units&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3806,7 +3800,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Jump to value</source>
-        <translation>Reset Jump to value</translation>
+        <translation>Reset &apos;Jump to&apos; value</translation>
     </message>
     <message>
         <source>Reset Play until value</source>
@@ -3814,7 +3808,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Continue at value</source>
-        <translation>Reset Continue at value</translation>
+        <translation>Reset &apos;Continue at&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3822,10 +3816,6 @@ space unit</extracomment>
     <message>
         <source>Key Signature</source>
         <translation>Key Signature</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -3841,7 +3831,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation>Reset Show courtesy value</translation>
+        <translation>Reset &apos;Show courtesy&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
@@ -3890,45 +3884,17 @@ space unit</extracomment>
         <translation>Line</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <source>sp</source>
-        <extracomment>Spatium unit</extracomment>
+        <extracomment>Staff space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>Solid</source>
-        <translation>Solid</translation>
-    </message>
-    <message>
-        <source>Dash</source>
-        <translation>Dash</translation>
-    </message>
-    <message>
-        <source>Dot</source>
-        <translation>Dot</translation>
-    </message>
-    <message>
-        <source>DashDot</source>
-        <translation>DashDot</translation>
-    </message>
-    <message>
-        <source>DashDotDot</source>
-        <translation>DashDotDot</translation>
-    </message>
-    <message>
         <source>Line color</source>
-        <translation>Line coulor</translation>
-    </message>
-    <message>
-        <source>Line width</source>
-        <translation>Line width</translation>
+        <translation>Line colour</translation>
     </message>
     <message>
         <source>Line style</source>
@@ -3944,19 +3910,55 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Line color value</source>
-        <translation>Reset Line colour value</translation>
+        <translation>Reset &apos;Line colour&apos; value</translation>
     </message>
     <message>
         <source>Reset Allow diagonal value</source>
-        <translation>Reset Allow diagonal value</translation>
-    </message>
-    <message>
-        <source>Reset Line width value</source>
-        <translation>Reset Line width value</translation>
+        <translation>Reset &apos;Allow diagonal&apos; value</translation>
     </message>
     <message>
         <source>Reset Line style value</source>
-        <translation>Reset Line style value</translation>
+        <translation>Reset &apos;Line style&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Line thickness</source>
+        <translation>Line thickness</translation>
+    </message>
+    <message>
+        <source>Continuous</source>
+        <translation>Continuous</translation>
+    </message>
+    <message>
+        <source>Dashed</source>
+        <translation>Dashed</translation>
+    </message>
+    <message>
+        <source>Dotted</source>
+        <translation>Dotted</translation>
+    </message>
+    <message>
+        <source>Dash-dotted</source>
+        <translation>Dash-dotted</translation>
+    </message>
+    <message>
+        <source>Dash-dot-dotted</source>
+        <translation>Dash-dot-dotted</translation>
+    </message>
+    <message>
+        <source>Reset Line thickness value</source>
+        <translation>Reset &apos;Line thickness&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Line visible value</source>
+        <translation>Reset &apos;Line visible&apos; value</translation>
+    </message>
+    <message>
+        <source>Line visible</source>
+        <translation>Line visible</translation>
     </message>
 </context>
 <context>
@@ -3978,16 +3980,8 @@ space unit</extracomment>
         <translation>Segno</translation>
     </message>
     <message>
-        <source>Segno Variation</source>
-        <translation>Segno Variation</translation>
-    </message>
-    <message>
         <source>Coda</source>
         <translation>Coda</translation>
-    </message>
-    <message>
-        <source>Coda Variation</source>
-        <translation>Coda Variation</translation>
     </message>
     <message>
         <source>Codetta</source>
@@ -4002,10 +3996,6 @@ space unit</extracomment>
         <translation>To Coda</translation>
     </message>
     <message>
-        <source>User defined</source>
-        <translation>User defined</translation>
-    </message>
-    <message>
         <source>Marker type</source>
         <translation>Marker type</translation>
     </message>
@@ -4015,15 +4005,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Marker type value</source>
-        <translation>Reset Marker type value</translation>
+        <translation>Reset &apos;Marker type&apos; value</translation>
     </message>
     <message>
         <source>Reset Label value</source>
-        <translation>Reset Label value</translation>
+        <translation>Reset &apos;Label&apos; value</translation>
     </message>
     <message>
         <source>Marker Type</source>
         <translation>Marker Type</translation>
+    </message>
+    <message>
+        <source>Segno variation</source>
+        <translation>Segno variation</translation>
+    </message>
+    <message>
+        <source>Varied coda</source>
+        <translation>Varied coda</translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation>Custom</translation>
     </message>
 </context>
 <context>
@@ -4059,10 +4061,6 @@ space unit</extracomment>
     <message>
         <source>Bottom</source>
         <translation>Bottom</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -4125,28 +4123,20 @@ space unit</extracomment>
         <translation>Note Inspector</translation>
     </message>
     <message>
-        <source>Dot Position</source>
-        <translation>Dot Position</translation>
-    </message>
-    <message>
-        <source>Reset Dot Position Value</source>
-        <translation>Reset Dot Position Value</translation>
-    </message>
-    <message>
         <source>Reset Mirror head value</source>
-        <translation>Reset Mirror head value</translation>
+        <translation>Reset &apos;Mirror head&apos; value</translation>
     </message>
     <message>
         <source>Reset Velocity type value</source>
-        <translation>Reset Velocity type value</translation>
+        <translation>Reset &apos;Velocity type&apos; value</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation>Reset Head type value</translation>
+        <translation>Reset &apos;Head type&apos; value</translation>
     </message>
     <message>
         <source>Reset Velocity value</source>
-        <translation>Reset Velocity value</translation>
+        <translation>Reset &apos;Velocity&apos; value</translation>
     </message>
     <message>
         <source>Mirror Head</source>
@@ -4158,19 +4148,43 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation>Reset Head group value</translation>
+        <translation>Reset &apos;Head group&apos; value</translation>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation>Reset Small value</translation>
+        <translation>Reset &apos;Small&apos; value</translation>
     </message>
     <message>
         <source>Reset Tuning value</source>
-        <translation>Reset Tuning value</translation>
+        <translation>Reset &apos;Tuning&apos; value</translation>
     </message>
     <message>
         <source>Reset Play value</source>
-        <translation>Reset Play value</translation>
+        <translation>Reset &apos;Play&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Reset Dot position value</source>
+        <translation>Reset &apos;Dot position&apos; value</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation>Line</translation>
+    </message>
+    <message>
+        <source>Fix to line</source>
+        <translation>Fix to line</translation>
+    </message>
+    <message>
+        <source>Reset Fix to line</source>
+        <translation>Reset &apos;Fix to line&apos;</translation>
+    </message>
+    <message>
+        <source>Reset Line</source>
+        <translation>Reset &apos;Line&apos;</translation>
     </message>
 </context>
 <context>
@@ -4182,10 +4196,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Type</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -4220,14 +4230,6 @@ space unit</extracomment>
         <translation>22mb</translation>
     </message>
     <message>
-        <source>above</source>
-        <translation>above</translation>
-    </message>
-    <message>
-        <source>below</source>
-        <translation>below</translation>
-    </message>
-    <message>
         <source>Numbers only</source>
         <translation>Numbers only</translation>
     </message>
@@ -4237,15 +4239,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reset Type value</translation>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
         <source>Reset Placement value</source>
-        <translation>Reset Placement value</translation>
+        <translation>Reset &apos;Placement&apos; value</translation>
     </message>
     <message>
-        <source>Reset numbers only value</source>
-        <translation>Reset numbers only value</translation>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Above</source>
+        <translation>Above</translation>
+    </message>
+    <message>
+        <source>Below</source>
+        <translation>Below</translation>
+    </message>
+    <message>
+        <source>Reset Numbers only value</source>
+        <translation>Reset &apos;Numbers only&apos; value</translation>
     </message>
 </context>
 <context>
@@ -4253,10 +4267,6 @@ space unit</extracomment>
     <message>
         <source>Rest</source>
         <translation>Rest</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -4272,7 +4282,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation>Reset Small value</translation>
+        <translation>Reset &apos;Small&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
@@ -4285,10 +4299,6 @@ space unit</extracomment>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -4308,34 +4318,22 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Leading space value</source>
-        <translation>Reset Leading space value</translation>
+        <translation>Reset &apos;Leading space&apos; value</translation>
     </message>
     <message>
         <source>Reset Trailing space value</source>
-        <translation>Reset Trailing space value</translation>
+        <translation>Reset &apos;Trailing space&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
     <name>InspectorSlur</name>
     <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>solid</source>
-        <translation>solid</translation>
-    </message>
-    <message>
-        <source>dotted</source>
-        <translation>dotted</translation>
-    </message>
-    <message>
-        <source>dashed</source>
-        <translation>dashed</translation>
     </message>
     <message>
         <source>Line type:</source>
@@ -4351,11 +4349,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Line type value</source>
-        <translation>Reset Line type value</translation>
+        <translation>Reset &apos;Line type&apos; value</translation>
     </message>
     <message>
         <source>Line type</source>
         <translation>Line type</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Continuous</source>
+        <translation>Continuous</translation>
+    </message>
+    <message>
+        <source>Dotted</source>
+        <translation>Dotted</translation>
+    </message>
+    <message>
+        <source>Dashed</source>
+        <translation>Dashed</translation>
     </message>
 </context>
 <context>
@@ -4383,7 +4397,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Height value</source>
-        <translation>Reset Height value</translation>
+        <translation>Reset &apos;Height&apos; value</translation>
     </message>
 </context>
 <context>
@@ -4391,10 +4405,6 @@ space unit</extracomment>
     <message>
         <source>Tempo Marking</source>
         <translation>Tempo Marking</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -4417,12 +4427,16 @@ space unit</extracomment>
         <translation>Tempo Marking Inspector</translation>
     </message>
     <message>
-        <source>Reset follow text value</source>
-        <translation>Reset follow text value</translation>
+        <source>Reset Tempo value</source>
+        <translation>Reset &apos;Tempo&apos; value</translation>
     </message>
     <message>
-        <source>Reset Tempo value</source>
-        <translation>Reset Tempo value</translation>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Reset Follow text value</source>
+        <translation>Reset &apos;Follow text&apos; value</translation>
     </message>
 </context>
 <context>
@@ -4436,10 +4450,6 @@ space unit</extracomment>
         <translation>Style</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4449,7 +4459,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Style value</source>
-        <translation>Reset Style value</translation>
+        <translation>Reset &apos;Style&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
@@ -4470,10 +4484,6 @@ space unit</extracomment>
         <translation>Time Signature</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4487,7 +4497,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation>Reset Show courtesy value</translation>
+        <translation>Reset &apos;Show courtesy&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
@@ -4501,30 +4515,6 @@ space unit</extracomment>
         <translation>Type</translation>
     </message>
     <message>
-        <source>trill line</source>
-        <translation>trill line</translation>
-    </message>
-    <message>
-        <source>up prall</source>
-        <translation>up prall</translation>
-    </message>
-    <message>
-        <source>down prall</source>
-        <translation>down prall</translation>
-    </message>
-    <message>
-        <source>prall prall</source>
-        <translation>prall prall</translation>
-    </message>
-    <message>
-        <source>wavy line</source>
-        <translation>wavy line</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4536,16 +4526,36 @@ space unit</extracomment>
         <source>Reset Trill type</source>
         <translation>Reset Trill type</translation>
     </message>
+    <message>
+        <source>Trill Line</source>
+        <translation>Trill Line</translation>
+    </message>
+    <message>
+        <source>Up Prall</source>
+        <translation>Up Prall</translation>
+    </message>
+    <message>
+        <source>Down Prall</source>
+        <translation>Down Prall</translation>
+    </message>
+    <message>
+        <source>Prall Prall</source>
+        <translation>Prall Prall</translation>
+    </message>
+    <message>
+        <source>Wavy Line</source>
+        <translation>Wavy Line</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
 </context>
 <context>
     <name>InspectorTuplet</name>
     <message>
         <source>Tuplet</source>
         <translation>Tuplet</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
     </message>
     <message>
         <source>...</source>
@@ -4562,14 +4572,6 @@ space unit</extracomment>
     <message>
         <source>Nothing</source>
         <translation>Nothing</translation>
-    </message>
-    <message>
-        <source>Number Type</source>
-        <translation>Number Type</translation>
-    </message>
-    <message>
-        <source>Bracket Type</source>
-        <translation>Bracket Type</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -4600,16 +4602,28 @@ space unit</extracomment>
         <translation>Tuplet Inspector</translation>
     </message>
     <message>
-        <source>Reset Number Type value</source>
-        <translation>Reset Number Type value</translation>
-    </message>
-    <message>
-        <source>Reset Bracket Type value</source>
-        <translation>Reset Bracket Type value</translation>
-    </message>
-    <message>
         <source>Reset Direction value</source>
-        <translation>Reset Direction value</translation>
+        <translation>Reset &apos;Direction&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
+    </message>
+    <message>
+        <source>Reset Number type value</source>
+        <translation>Reset &apos;Number type&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Bracket type value</source>
+        <translation>Reset &apos;Bracket type&apos; value</translation>
+    </message>
+    <message>
+        <source>Number type</source>
+        <translation>Number type</translation>
+    </message>
+    <message>
+        <source>Bracket type</source>
+        <translation>Bracket type</translation>
     </message>
 </context>
 <context>
@@ -4619,20 +4633,8 @@ space unit</extracomment>
         <translation>Vertical Frame</translation>
     </message>
     <message>
-        <source>Right Margin</source>
-        <translation>Right Margin</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Bottom Margin</source>
-        <translation>Bottom Margin</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4644,52 +4646,64 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>Top Gap</source>
-        <translation>Top Gap</translation>
-    </message>
-    <message>
         <source>Height</source>
         <translation>Height</translation>
-    </message>
-    <message>
-        <source>Top Margin</source>
-        <translation>Top Margin</translation>
-    </message>
-    <message>
-        <source>Left Margin</source>
-        <translation>Left Margin</translation>
-    </message>
-    <message>
-        <source>Bottom Gap</source>
-        <translation>Bottom Gap</translation>
     </message>
     <message>
         <source>Vertical Frame Inspector</source>
         <translation>Vertical Frame Inspector</translation>
     </message>
     <message>
-        <source>Reset Top Gap value</source>
-        <translation>Reset Top Gap value</translation>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
     <message>
-        <source>Reset Bottom Gap value</source>
-        <translation>Reset Bottom Gap value</translation>
+        <source>Right margin</source>
+        <translation>Right margin</translation>
     </message>
     <message>
-        <source>Reset Left Margin value</source>
-        <translation>Reset Left Margin value</translation>
+        <source>Reset Top gap value</source>
+        <translation>Reset &apos;Top gap&apos; value</translation>
     </message>
     <message>
-        <source>Reset Right Margin value</source>
-        <translation>Reset Right Margin value</translation>
+        <source>Reset Bottom gap value</source>
+        <translation>Reset &apos;Bottom gap&apos; value</translation>
     </message>
     <message>
-        <source>Reset Top Margin value</source>
-        <translation>Reset Top Margin value</translation>
+        <source>Bottom margin</source>
+        <translation>Bottom margin</translation>
     </message>
     <message>
-        <source>Reset Bottom Margin value</source>
-        <translation>Reset Bottom Margin value</translation>
+        <source>Left margin</source>
+        <translation>Left margin</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Top gap</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Bottom gap</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Top margin</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Reset &apos;Left margin&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Reset &apos;Right margin&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Reset &apos;Top margin&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Reset &apos;Bottom margin&apos; value</translation>
     </message>
 </context>
 <context>
@@ -4711,10 +4725,6 @@ space unit</extracomment>
         <translation>Type</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>reset value</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4724,7 +4734,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation>Reset Type value</translation>
+        <translation>Reset &apos;Type&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reset value</translation>
     </message>
 </context>
 <context>
@@ -4880,10 +4894,6 @@ space unit</extracomment>
         <translation>Linked</translation>
     </message>
     <message>
-        <source>Staff Linked to Previous</source>
-        <translation>Stave Linked to Previous</translation>
-    </message>
-    <message>
         <source>Staff type</source>
         <translation>Stave type</translation>
     </message>
@@ -4903,6 +4913,10 @@ space unit</extracomment>
         <source>Partitur List</source>
         <translation>Partitur List</translation>
     </message>
+    <message>
+        <source>Staff linked to previous</source>
+        <translation>Stave linked to previous</translation>
+    </message>
 </context>
 <context>
     <name>KeyEdit</name>
@@ -4915,12 +4929,12 @@ space unit</extracomment>
         <translation>Clear</translation>
     </message>
     <message>
-        <source>add time signature to palette</source>
-        <translation>add time signature to palette</translation>
-    </message>
-    <message>
         <source>Add</source>
         <translation>Add</translation>
+    </message>
+    <message>
+        <source>Add time signature to palette</source>
+        <translation>Add time signature to palette</translation>
     </message>
 </context>
 <context>
@@ -5150,6 +5164,21 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>LoginDialog</name>
+    <message>
+        <source>Log in to MuseScore</source>
+        <translation>Log in to MuseScore</translation>
+    </message>
+    <message>
+        <source>Username or email</source>
+        <translation>Username or email</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Password</translation>
+    </message>
+</context>
+<context>
     <name>MIDI import operations</name>
     <message>
         <source>Quarter</source>
@@ -5340,12 +5369,12 @@ tempo text</translation>
     <message>
         <source>Recognize
 pickup measure</source>
-        <translation>Recognize
+        <translation>Recognise
 anacrusis</translation>
     </message>
     <message>
         <source>Max. quantization</source>
-        <translation>Max. quantization</translation>
+        <translation>Max. quantisation</translation>
     </message>
     <message>
         <source>Max. voices</source>
@@ -5484,6 +5513,19 @@ Would you like to locate %2 now?</translation>
     </message>
 </context>
 <context>
+    <name>MeasureProperties</name>
+    <message>
+        <source>MuseScore</source>
+        <translation>MuseScore</translation>
+    </message>
+    <message>
+        <source>cannot change measure length:
+tuplet would cross measure</source>
+        <translation>cannot change bar length:
+tuplet would cross bar</translation>
+    </message>
+</context>
+<context>
     <name>MeasurePropertiesBase</name>
     <message>
         <source>MuseScore: Measure Properties</source>
@@ -5562,36 +5604,8 @@ Would you like to locate %2 now?</translation>
         <translation>Other</translation>
     </message>
     <message>
-        <source>do not count</source>
-        <translation>do not count</translation>
-    </message>
-    <message>
         <source>Exclude from measure count</source>
         <translation>Exclude from bar count</translation>
-    </message>
-    <message>
-        <source>AUTO</source>
-        <translation>AUTO</translation>
-    </message>
-    <message>
-        <source>always show</source>
-        <translation>always show</translation>
-    </message>
-    <message>
-        <source>always hide</source>
-        <translation>always hide</translation>
-    </message>
-    <message>
-        <source>goto previous measure</source>
-        <translation>goto previous bar</translation>
-    </message>
-    <message>
-        <source>goto next measure</source>
-        <translation>goto next bar</translation>
-    </message>
-    <message>
-        <source>Break multimeasure rest</source>
-        <translation>Break multimeasure rest</translation>
     </message>
     <message>
         <source>Repeat count:</source>
@@ -5616,6 +5630,34 @@ Would you like to locate %2 now?</translation>
     <message>
         <source>Add to measure number:</source>
         <translation>Add to bar number:</translation>
+    </message>
+    <message>
+        <source>Do not count</source>
+        <translation>do not count</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Automatic</translation>
+    </message>
+    <message>
+        <source>Always Show</source>
+        <translation>Always Show</translation>
+    </message>
+    <message>
+        <source>Always Hide</source>
+        <translation>Always Hide</translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation>Go to previous bar</translation>
+    </message>
+    <message>
+        <source>Go to next measure</source>
+        <translation>Go to next bar</translation>
+    </message>
+    <message>
+        <source>Break multimeasure rest</source>
+        <translation>Break multi-bar rest</translation>
     </message>
 </context>
 <context>
@@ -5709,20 +5751,20 @@ Would you like to locate %2 now?</translation>
 <context>
     <name>Ms</name>
     <message>
-        <source>fall</source>
-        <translation>fall</translation>
+        <source>Fall</source>
+        <translation>Fall</translation>
     </message>
     <message>
-        <source>doit</source>
-        <translation>doit</translation>
+        <source>Doit</source>
+        <translation>Doit</translation>
     </message>
     <message>
-        <source>plop</source>
-        <translation>plop</translation>
+        <source>Plop</source>
+        <translation>Plop</translation>
     </message>
     <message>
-        <source>scoop</source>
-        <translation>scoop</translation>
+        <source>Scoop</source>
+        <translation>Scoop</translation>
     </message>
 </context>
 <context>
@@ -5750,24 +5792,24 @@ Would you like to locate %2 now?</translation>
 <context>
     <name>Ms::AlbumManager</name>
     <message>
-        <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation>MuseScore Files (*.mscz *.mscx);;</translation>
-    </message>
-    <message>
-        <source>All Files (*)</source>
-        <translation>All Files (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Add Score</source>
         <translation>MuseScore: Add Score</translation>
     </message>
     <message>
-        <source>MuseScore Album Files (*.album);;</source>
-        <translation>MuseScore Album Files (*.album);;</translation>
-    </message>
-    <message>
         <source>MuseScore: Load Album</source>
         <translation>MuseScore: Load Album</translation>
+    </message>
+    <message>
+        <source>MuseScore Files (*.mscz *.mscx)</source>
+        <translation>MuseScore Files (*.mscz *.mscx)</translation>
+    </message>
+    <message>
+        <source>MuseScore Album Files (*.album)</source>
+        <translation>MuseScore Album Files (*.album)</translation>
+    </message>
+    <message>
+        <source>Error while creating score from album.</source>
+        <translation>Error while creating score from album.</translation>
     </message>
 </context>
 <context>
@@ -5857,10 +5899,6 @@ Would you like to locate %2 now?</translation>
         <translation>Nonuplet</translation>
     </message>
     <message>
-        <source>Duration</source>
-        <translation>Duration</translation>
-    </message>
-    <message>
         <source>%1 Start of %2</source>
         <translation>%1 Start of %2</translation>
     </message>
@@ -5892,6 +5930,41 @@ Would you like to locate %2 now?</translation>
     </message>
 </context>
 <context>
+    <name>Ms::DrumrollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation>Toolbar 1</translation>
+    </message>
+    <message>
+        <source>Toolbar 3</source>
+        <translation>Toolbar 3</translation>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>Cursor:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>Velocity:</translation>
+    </message>
+    <message>
+        <source>offset</source>
+        <translation>offset</translation>
+    </message>
+    <message>
+        <source>user</source>
+        <translation>user</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>Pitch:</translation>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; Stave: %2</translation>
+    </message>
+</context>
+<context>
     <name>Ms::EditDrumset</name>
     <message>
         <source>invalid</source>
@@ -5919,17 +5992,6 @@ failed: </translation>
     </message>
 </context>
 <context>
-    <name>Ms::EditStaff</name>
-    <message>
-        <source>Edit Short Name</source>
-        <translation>Edit Short Name</translation>
-    </message>
-    <message>
-        <source>Edit Long Name</source>
-        <translation>Edit Long Name</translation>
-    </message>
-</context>
-<context>
     <name>Ms::EditStringData</name>
     <message>
         <source>Open</source>
@@ -5951,10 +6013,6 @@ failed: </translation>
     <message>
         <source>Anchor</source>
         <translation>Anchor</translation>
-    </message>
-    <message>
-        <source>Edit HTML Text</source>
-        <translation>Edit HTML Text</translation>
     </message>
     <message>
         <source>Above Staff</source>
@@ -6032,6 +6090,18 @@ failed: </translation>
         <source>Apply to all Parts</source>
         <translation>Apply to all Parts</translation>
     </message>
+    <message>
+        <source>last modification time</source>
+        <translation>last modification time</translation>
+    </message>
+    <message>
+        <source>last modification date</source>
+        <translation>last modification date</translation>
+    </message>
+    <message>
+        <source>page number, if there is more than one page</source>
+        <translation>page number, if there is more than one page</translation>
+    </message>
 </context>
 <context>
     <name>Ms::FiguredBass</name>
@@ -6070,11 +6140,11 @@ failed: </translation>
     <name>Ms::Harmony</name>
     <message>
         <source>sharp</source>
-        <translation>♯ (sharp)</translation>
+        <translation>sharp</translation>
     </message>
     <message>
         <source>flat</source>
-        <translation>♭(flat)</translation>
+        <translation>flat</translation>
     </message>
 </context>
 <context>
@@ -6093,13 +6163,6 @@ failed: </translation>
     <message>
         <source>Inspector</source>
         <translation>Inspector</translation>
-    </message>
-</context>
-<context>
-    <name>Ms::InspectorEmpty</name>
-    <message>
-        <source>Select an element to display its properties</source>
-        <translation>Select an element to display its properties</translation>
     </message>
 </context>
 <context>
@@ -6132,16 +6195,27 @@ failed: </translation>
         <source>Beam</source>
         <translation>Beam</translation>
     </message>
+    <message>
+        <source>Tuplet</source>
+        <translation>Tuplet</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::InspectorRest</name>
+    <message>
+        <source>Select</source>
+        <translation>Select</translation>
+    </message>
+    <message>
+        <source>Tuplet</source>
+        <translation>Tuplet</translation>
+    </message>
 </context>
 <context>
     <name>Ms::InstrumentsDialog</name>
     <message>
         <source>MuseScore: Save Instrument List</source>
         <translation>MuseScore: Save Instrument List</translation>
-    </message>
-    <message>
-        <source>MuseScore Instruments (*.xml);;</source>
-        <translation>MuseScore Instruments (*.xml);;</translation>
     </message>
     <message>
         <source>Write Style failed: </source>
@@ -6156,10 +6230,6 @@ failed: </translation>
         <translation>MuseScore: Load Instrument List</translation>
     </message>
     <message>
-        <source>MuseScore Instruments (*.xml);;All files (*)</source>
-        <translation>MuseScore Instruments (*.xml);;All files (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Open Instruments File</source>
         <translation>MuseScore: Open Instruments File</translation>
     </message>
@@ -6170,6 +6240,10 @@ failed: </source>
         <translation>Open Instruments File
 %1
 failed: </translation>
+    </message>
+    <message>
+        <source>MuseScore Instruments (*.xml)</source>
+        <translation>MuseScore Instruments (*.xml)</translation>
     </message>
 </context>
 <context>
@@ -6183,20 +6257,20 @@ failed: </translation>
         <translation>Staves</translation>
     </message>
     <message>
-        <source>Visib.</source>
-        <translation>Visib.</translation>
-    </message>
-    <message>
         <source>Clef</source>
         <translation>Clef</translation>
     </message>
     <message>
-        <source>Link.</source>
-        <translation>Link.</translation>
-    </message>
-    <message>
         <source>Staff type</source>
         <translation>Stave type</translation>
+    </message>
+    <message>
+        <source>Visible</source>
+        <translation>Visible</translation>
+    </message>
+    <message>
+        <source>Linked</source>
+        <translation>Linked</translation>
     </message>
 </context>
 <context>
@@ -6222,6 +6296,76 @@ failed: </translation>
     <message>
         <source>layer tag</source>
         <translation>layer tag</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::LoginDialog</name>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>Login error</source>
+        <translation>Login error</translation>
+    </message>
+    <message>
+        <source>Please fill in your username and password</source>
+        <translation>Please fill in your username and password</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::LoginManager</name>
+    <message>
+        <source>Network error</source>
+        <translation>Network error</translation>
+    </message>
+    <message>
+        <source>Please check your internet connection</source>
+        <translation>Please check your internet connection</translation>
+    </message>
+    <message>
+        <source>Unsuccessful login. Please try again.</source>
+        <translation>Unsuccessful login. Please try again.</translation>
+    </message>
+    <message>
+        <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
+        <translation>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</translation>
+    </message>
+    <message>
+        <source>This account has been blocked.</source>
+        <translation>This account has been blocked.</translation>
+    </message>
+    <message>
+        <source>Your account has not been activated yet. Please check your mailbox to activate your account or &lt;a href=&quot;%1&quot;&gt;request a new activation email&lt;/a&gt;.</source>
+        <translation>Your account has not been activated yet. Please check your mailbox to activate your account or &lt;a href=&quot;%1&quot;&gt;request a new activation email&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>Error while getting user info. Please try again</source>
+        <translation>Error while getting user info. Please try again</translation>
+    </message>
+    <message>
+        <source>Error while getting user info: %1</source>
+        <translation>Error while getting user info: %1</translation>
+    </message>
+    <message>
+        <source>An error occurred during the file transfer. Please try again</source>
+        <translation>An error occurred during the file transfer. Please try again</translation>
+    </message>
+    <message>
+        <source>Cannot upload: %1</source>
+        <translation>Cannot upload: %1</translation>
+    </message>
+    <message>
+        <source>Please upgrade</source>
+        <translation>Please upgrade</translation>
+    </message>
+    <message>
+        <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
+        <translation>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -6267,8 +6411,8 @@ failed: </translation>
         <translation>MuseScore: Input Tag Name</translation>
     </message>
     <message>
-        <source>New Tag Name:</source>
-        <translation>New Tag Name:</translation>
+        <source>New tag name:</source>
+        <translation>New tag name:</translation>
     </message>
 </context>
 <context>
@@ -6343,20 +6487,8 @@ before closing?</translation>
         <translation>Bagpipe Music Writer Files &lt;experimental&gt; (*.bww);;</translation>
     </message>
     <message>
-        <source>All Files (*)</source>
-        <translation>All Files (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Load Score</source>
         <translation>MuseScore: Load Score</translation>
-    </message>
-    <message>
-        <source>Compressed MuseScore File (*.mscz)</source>
-        <translation>Compressed MuseScore File (*.mscz)</translation>
-    </message>
-    <message>
-        <source>MuseScore File (*.mscx)</source>
-        <translation>MuseScore File (*.mscx)</translation>
     </message>
     <message>
         <source>MuseScore: Save Score</source>
@@ -6375,20 +6507,12 @@ before closing?</translation>
         <translation>MuseScore: Load Style</translation>
     </message>
     <message>
-        <source>MuseScore Styles (*.mss);;All Files (*)</source>
-        <translation>MuseScore Styles (*.mss);;All Files (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Style</source>
         <translation>MuseScore: Save Style</translation>
     </message>
     <message>
         <source>MuseScore Style File (*.mss)</source>
         <translation>MuseScore Style File (*.mss)</translation>
-    </message>
-    <message>
-        <source>;;All Files (*)</source>
-        <translation>;;All Files (*)</translation>
     </message>
     <message>
         <source>PDF Scan File (*.pdf);;All (*)</source>
@@ -6415,10 +6539,6 @@ before closing?</translation>
         <translation>MuseScore: Load Palette</translation>
     </message>
     <message>
-        <source>MuseScore Palette (*.mpal);;All Files (*)</source>
-        <translation>MuseScore Palette (*.mpal);;All Files (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Palette</source>
         <translation>MuseScore: Save Palette</translation>
     </message>
@@ -6429,10 +6549,6 @@ before closing?</translation>
     <message>
         <source>MuseScore: Load Plugin</source>
         <translation>MuseScore: Load Plugin</translation>
-    </message>
-    <message>
-        <source>MuseScore Plugin (*.qml);;All Files (*)</source>
-        <translation>MuseScore Plugin (*.qml);;All Files (*)</translation>
     </message>
     <message>
         <source>MuseScore: Save Plugin</source>
@@ -6447,28 +6563,12 @@ before closing?</translation>
         <translation>MuseScore: Load Drumset</translation>
     </message>
     <message>
-        <source>MuseScore Drumset (*.drm);;All Files (*)</source>
-        <translation>MuseScore Drumset (*.drm);;All Files (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Drumset</source>
         <translation>MuseScore: Save Drumset</translation>
     </message>
     <message>
         <source>MuseScore Drumset File (*.drm)</source>
         <translation>MuseScore Drumset File (*.drm)</translation>
-    </message>
-    <message>
-        <source>Uncompressed MuseScore Format (*.mscx)</source>
-        <translation>Uncompressed MuseScore Format (*.mscx)</translation>
-    </message>
-    <message>
-        <source>MusicXML Format (*.xml)</source>
-        <translation>MusicXML Format (*.xml)</translation>
-    </message>
-    <message>
-        <source>Compressed MusicXML Format (*.mxl)</source>
-        <translation>Compressed MusicXML Format (*.mxl)</translation>
     </message>
     <message>
         <source>Standard MIDI File (*.mid)</source>
@@ -6543,14 +6643,6 @@ Do you want to replace it?
         <translation>Parts were successfully exported</translation>
     </message>
     <message>
-        <source>MuseScore Format (*.mscz)</source>
-        <translation>MuseScore Format (*.mscz)</translation>
-    </message>
-    <message>
-        <source>MuseScore Format (*.mscx)</source>
-        <translation>MuseScore Format (*.mscx)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save a Copy</source>
         <translation>MuseScore: Save a Copy</translation>
     </message>
@@ -6561,10 +6653,6 @@ Do you want to replace it?
     <message>
         <source>MuseScore: Save Selected</source>
         <translation>MuseScore: Save Selected</translation>
-    </message>
-    <message>
-        <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable vector graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png);;All Files (*)</source>
-        <translation>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable vector graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png);;All Files (*)</translation>
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
@@ -6635,10 +6723,6 @@ Do you want to replace it?
         <translation>Glissando</translation>
     </message>
     <message>
-        <source>Tempo Text</source>
-        <translation>Tempo Text</translation>
-    </message>
-    <message>
         <source>Staff Text</source>
         <translation>Stave Text</translation>
     </message>
@@ -6647,24 +6731,8 @@ Do you want to replace it?
         <translation>System Text</translation>
     </message>
     <message>
-        <source>Rehearsal Mark</source>
-        <translation>Rehearsal Mark</translation>
-    </message>
-    <message>
         <source>Instrument</source>
         <translation>Instrument</translation>
-    </message>
-    <message>
-        <source>Instrument Change</source>
-        <translation>Instrument Change</translation>
-    </message>
-    <message>
-        <source>1.</source>
-        <translation>1.</translation>
-    </message>
-    <message>
-        <source>Lyrics Verse Number</source>
-        <translation>Lyrics Verse Number</translation>
     </message>
     <message>
         <source>4/4 common time</source>
@@ -6673,22 +6741,6 @@ Do you want to replace it?
     <message>
         <source>2/2 alla breve</source>
         <translation>2/2 alla breve</translation>
-    </message>
-    <message>
-        <source>set visible</source>
-        <translation>set visible</translation>
-    </message>
-    <message>
-        <source>set invisible</source>
-        <translation>set invisible</translation>
-    </message>
-    <message>
-        <source>change staff type</source>
-        <translation>change stave type</translation>
-    </message>
-    <message>
-        <source>change instrument</source>
-        <translation>change instrument</translation>
     </message>
     <message>
         <source>&amp;Add</source>
@@ -6717,20 +6769,12 @@ Please select a measure and try again</source>
 Please select a bar and try again</translation>
     </message>
     <message>
-        <source>switch layer</source>
-        <translation>switch layer</translation>
-    </message>
-    <message>
         <source>synthesizer</source>
         <translation>synthesiser</translation>
     </message>
     <message>
         <source>audio track</source>
         <translation>audio track</translation>
-    </message>
-    <message>
-        <source>switch play mode</source>
-        <translation>switch play mode</translation>
     </message>
     <message>
         <source>File Operations</source>
@@ -6877,14 +6921,6 @@ Restore session?</source>
 Restore session?</translation>
     </message>
     <message>
-        <source>MuseScore: Transpose</source>
-        <translation>MuseScore: Transpose</translation>
-    </message>
-    <message>
-        <source>There is nothing selected. Transpose whole score?</source>
-        <translation>There is nothing selected. Transpose whole score?</translation>
-    </message>
-    <message>
         <source>Go To: </source>
         <translation>Go To: </translation>
     </message>
@@ -6909,22 +6945,10 @@ Restore session?</translation>
         <translation>MuseScore: Read Workspace Name</translation>
     </message>
     <message>
-        <source>Workspace Name:</source>
-        <translation>Workspace Name:</translation>
-    </message>
-    <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; does already exist,
 please choose a different name:</translation>
-    </message>
-    <message>
-        <source>Fretboard Diagram</source>
-        <translation>Fretboard Diagram</translation>
-    </message>
-    <message>
-        <source>measure:beat:tick</source>
-        <translation>bar:beat:tick</translation>
     </message>
     <message>
         <source>Ogg Audio File (*.ogg);;All (*)</source>
@@ -6984,10 +7008,6 @@ please choose a different name:</translation>
         <translation>Confirm Replace</translation>
     </message>
     <message>
-        <source>MuseScore: Load Error</source>
-        <translation>MuseScore: Load Error</translation>
-    </message>
-    <message>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
         <translation>Error reading language file %s at line %d column %d: %s
@@ -7016,10 +7036,6 @@ please choose a different name:</translation>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
         <translation>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
-    </message>
-    <message>
-        <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>Zoom</source>
@@ -7058,12 +7074,120 @@ please choose a different name:</translation>
         <translation>Symbols</translation>
     </message>
     <message>
-        <source>Open failed: Unknown file extension or broken file</source>
-        <translation>Open failed: Unknown file extension or broken file</translation>
-    </message>
-    <message>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>Cannot create tuplet: Note value is too short</translation>
+    </message>
+    <message>
+        <source>MuseScore File (*.mscz)</source>
+        <translation>MuseScore File (*.mscz)</translation>
+    </message>
+    <message>
+        <source>Uncompressed MuseScore File (*.mscx)</source>
+        <translation>Uncompressed MuseScore File (*.mscx)</translation>
+    </message>
+    <message>
+        <source>MusicXML File (*.xml)</source>
+        <translation>MusicXML File (*.xml)</translation>
+    </message>
+    <message>
+        <source>Compressed MusicXML File (*.mxl)</source>
+        <translation>Compressed MusicXML File (*.mxl)</translation>
+    </message>
+    <message>
+        <source>Show MIDI import panel</source>
+        <translation>Show MIDI import panel</translation>
+    </message>
+    <message>
+        <source>Tempo text</source>
+        <translation>Tempo text</translation>
+    </message>
+    <message>
+        <source>Staff text</source>
+        <translation>Stave text</translation>
+    </message>
+    <message>
+        <source>System text</source>
+        <translation>System text</translation>
+    </message>
+    <message>
+        <source>Rehearsal mark</source>
+        <translation>Rehearsal mark</translation>
+    </message>
+    <message>
+        <source>Instrument change</source>
+        <translation>Instrument change</translation>
+    </message>
+    <message>
+        <source>Set visible</source>
+        <translation>Set visible</translation>
+    </message>
+    <message>
+        <source>Set invisible</source>
+        <translation>Set invisible</translation>
+    </message>
+    <message>
+        <source>Change staff type</source>
+        <translation>Change stave type</translation>
+    </message>
+    <message>
+        <source>Change instrument</source>
+        <translation>Change instrument</translation>
+    </message>
+    <message>
+        <source>Fretboard diagram</source>
+        <translation>Fretboard diagram</translation>
+    </message>
+    <message>
+        <source>Measure:Beat:Tick</source>
+        <translation>Bar:Beat:Tick</translation>
+    </message>
+    <message>
+        <source>Switch layer</source>
+        <translation>Switch layer</translation>
+    </message>
+    <message>
+        <source>Switch play mode</source>
+        <translation>Switch play mode</translation>
+    </message>
+    <message>
+        <source>Workspace name:</source>
+        <translation>Workspace name:</translation>
+    </message>
+    <message>
+        <source>Score_and_Parts</source>
+        <translation>Score_and_Parts</translation>
+    </message>
+    <message>
+        <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
+        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</translation>
+    </message>
+    <message>
+        <source>MuseScore Styles (*.mss)</source>
+        <translation>MuseScore Styles (*.mss)</translation>
+    </message>
+    <message>
+        <source>MuseScore Plugin (*.qml)</source>
+        <translation>MuseScore Plugin (*.qml)</translation>
+    </message>
+    <message>
+        <source>MuseScore Drumset (*.drm)</source>
+        <translation>MuseScore Drumset (*.drm)</translation>
+    </message>
+    <message>
+        <source>RH Guitar Fingering %1</source>
+        <translation>RH Guitar Fingering %1</translation>
+    </message>
+    <message>
+        <source>LH Guitar Fingering %1</source>
+        <translation>LH Guitar Fingering %1</translation>
+    </message>
+    <message>
+        <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</source>
+        <translation>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</translation>
+    </message>
+    <message>
+        <source>&amp;Tools</source>
+        <translation>&amp;Tools</translation>
     </message>
 </context>
 <context>
@@ -7135,14 +7259,6 @@ please choose a different name:</translation>
         <source>Select Template File:</source>
         <translation>Select Template File:</translation>
     </message>
-    <message>
-        <source>MuseScore: Select Template</source>
-        <translation>MuseScore: Select Template</translation>
-    </message>
-    <message>
-        <source>MuseScore Template Files (*.mscz *.mscx)</source>
-        <translation>MuseScore Template Files (*.mscz *.mscx)</translation>
-    </message>
 </context>
 <context>
     <name>Ms::NewWizardPage5</name>
@@ -7173,10 +7289,6 @@ please choose a different name:</translation>
 </context>
 <context>
     <name>Ms::Note</name>
-    <message>
-        <source>Pitch: %1</source>
-        <translation>Pitch: %1</translation>
-    </message>
     <message>
         <source>Appoggiatura</source>
         <translation>Appoggiatura</translation>
@@ -7213,6 +7325,18 @@ please choose a different name:</translation>
         <source>%1 End of %2</source>
         <translation>%1 End of %2</translation>
     </message>
+    <message>
+        <source>%1; Pitch: %2; Duration: %3%4</source>
+        <translation>%1; Pitch: %2; Duration: %3%4</translation>
+    </message>
+    <message>
+        <source>Beat Slash</source>
+        <translation>Beat Slash</translation>
+    </message>
+    <message>
+        <source>Rhythm Slash</source>
+        <translation>Rhythm Slash</translation>
+    </message>
 </context>
 <context>
     <name>Ms::OmrPanel</name>
@@ -7224,16 +7348,39 @@ please choose a different name:</translation>
 <context>
     <name>Ms::Palette</name>
     <message>
-        <source>Show More...</source>
-        <translation>Show More...</translation>
-    </message>
-    <message>
         <source>Clear</source>
         <translation>Clear</translation>
     </message>
     <message>
         <source>Properties...</source>
         <translation>Properties...</translation>
+    </message>
+    <message>
+        <source>More Elements...</source>
+        <translation>More Elements...</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::PaletteBox</name>
+    <message>
+        <source>Palettes</source>
+        <translation>Palettes</translation>
+    </message>
+    <message>
+        <source>Select workspace</source>
+        <translation>Select workspace</translation>
+    </message>
+    <message>
+        <source>+</source>
+        <translation>+</translation>
+    </message>
+    <message>
+        <source>Add new workspace</source>
+        <translation>Add new workspace</translation>
+    </message>
+    <message>
+        <source>new Palette</source>
+        <translation>new Palette</translation>
     </message>
 </context>
 <context>
@@ -7281,8 +7428,59 @@ please choose a different name:</translation>
 <context>
     <name>Ms::PianoTools</name>
     <message>
-        <source>Piano</source>
-        <translation>Piano</translation>
+        <source>Piano Keyboard</source>
+        <translation>Piano Keyboard</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::PianorollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation>Toolbar 1</translation>
+    </message>
+    <message>
+        <source>Wave</source>
+        <translation>Wave</translation>
+    </message>
+    <message>
+        <source>Show wave display</source>
+        <translation>Show wave display</translation>
+    </message>
+    <message>
+        <source>Toolbar 2</source>
+        <translation>Toolbar 2</translation>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>Cursor:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>Velocity:</translation>
+    </message>
+    <message>
+        <source>Offset</source>
+        <translation>Offset</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>User</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>Pitch:</translation>
+    </message>
+    <message>
+        <source>OnTime:</source>
+        <translation>OnTime:</translation>
+    </message>
+    <message>
+        <source>Len:</source>
+        <translation>Len:</translation>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; Stave: %2</translation>
     </message>
 </context>
 <context>
@@ -7316,6 +7514,14 @@ please choose a different name:</translation>
 Save before closing?</source>
         <translation>Plugin &quot;%1&quot; has changes.
 Save before closing?</translation>
+    </message>
+    <message>
+        <source>MuseScore: Save Plugin</source>
+        <translation>MuseScore: Save Plugin</translation>
+    </message>
+    <message>
+        <source>cannot determine file type</source>
+        <translation>cannot determine file type</translation>
     </message>
 </context>
 <context>
@@ -7351,10 +7557,6 @@ Save before closing?</translation>
     <message>
         <source>Choose Starting Score</source>
         <translation>Choose Starting Score</translation>
-    </message>
-    <message>
-        <source>MuseScore Files (*.mscz *.mscx *.msc);;All (*)</source>
-        <translation>MuseScore Files (*.mscz *.mscx *.msc);;All (*)</translation>
     </message>
     <message>
         <source>MuseScore Shortcuts</source>
@@ -7404,6 +7606,10 @@ Save before closing?</translation>
         <source>No shortcut defined</source>
         <translation>No shortcut defined</translation>
     </message>
+    <message>
+        <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
+        <translation>MuseScore Files (*.mscz *.mscx);;All (*)</translation>
+    </message>
 </context>
 <context>
     <name>Ms::ResourceManager</name>
@@ -7441,6 +7647,10 @@ Save before closing?</translation>
     <message>
         <source>Voice: %1</source>
         <translation>Voice: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Duration: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -7610,10 +7820,6 @@ failed: %2</translation>
     <message>
         <source>Add</source>
         <translation>Add</translation>
-    </message>
-    <message>
-        <source>Frame Properties...</source>
-        <translation>Frame Properties...</translation>
     </message>
     <message>
         <source>Volta Properties...</source>
@@ -7811,6 +8017,10 @@ Please select a range of measures to join and try again</source>
         <translation>No bar selected:
 Please select a range of bars to join and try again</translation>
     </message>
+    <message>
+        <source>Auto-resize to page</source>
+        <translation>Auto-resize to page</translation>
+    </message>
 </context>
 <context>
     <name>Ms::Segment</name>
@@ -7898,65 +8108,38 @@ Please select a range of bars to join and try again</translation>
     </message>
 </context>
 <context>
-    <name>Ms::Text</name>
-    <message>
-        <source>Title</source>
-        <translation>Title</translation>
-    </message>
-    <message>
-        <source>Subtitle</source>
-        <translation>Subtitle</translation>
-    </message>
-    <message>
-        <source>Composer</source>
-        <translation>Composer</translation>
-    </message>
-    <message>
-        <source>Translator</source>
-        <translation>Translator</translation>
-    </message>
-    <message>
-        <source>Measure number</source>
-        <translation>Bar number</translation>
-    </message>
-    <message>
-        <source>Lyricist</source>
-        <translation>Lyricist</translation>
-    </message>
-</context>
-<context>
     <name>Ms::TextEditor</name>
     <message>
-        <source>bold</source>
-        <translation>bold</translation>
+        <source>Bold</source>
+        <translation>Bold</translation>
     </message>
     <message>
-        <source>italic</source>
-        <translation>italic</translation>
+        <source>Italic</source>
+        <translation>Italic</translation>
     </message>
     <message>
-        <source>underline</source>
-        <translation>underline</translation>
+        <source>Underline</source>
+        <translation>Underline</translation>
     </message>
     <message>
-        <source>align left</source>
-        <translation>align left</translation>
+        <source>Align left</source>
+        <translation>Align left</translation>
     </message>
     <message>
-        <source>align center</source>
-        <translation>align centre</translation>
+        <source>Align center</source>
+        <translation>Align centre</translation>
     </message>
     <message>
-        <source>align right</source>
-        <translation>align right</translation>
+        <source>Align right</source>
+        <translation>Align right</translation>
     </message>
     <message>
-        <source>subscript</source>
-        <translation>subscript</translation>
+        <source>Subscript</source>
+        <translation>Subscript</translation>
     </message>
     <message>
-        <source>superscript</source>
-        <translation>superscript</translation>
+        <source>Superscript</source>
+        <translation>Superscript</translation>
     </message>
 </context>
 <context>
@@ -7986,10 +8169,6 @@ Please select a range of bars to join and try again</translation>
         <translation>MuseScore: Read Style Name</translation>
     </message>
     <message>
-        <source>Text Style Name:</source>
-        <translation>Text Style Name:</translation>
-    </message>
-    <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; does already exist,
@@ -7998,6 +8177,10 @@ please choose a different name:</translation>
     <message>
         <source>Apply to all Parts</source>
         <translation>Apply to all Parts</translation>
+    </message>
+    <message>
+        <source>Text style name:</source>
+        <translation>Text style name:</translation>
     </message>
 </context>
 <context>
@@ -8011,24 +8194,24 @@ please choose a different name:</translation>
         <translation>Text Edit</translation>
     </message>
     <message>
-        <source>bold</source>
-        <translation>bold</translation>
+        <source>Bold</source>
+        <translation>Bold</translation>
     </message>
     <message>
-        <source>italic</source>
-        <translation>italic</translation>
+        <source>Italic</source>
+        <translation>Italic</translation>
     </message>
     <message>
-        <source>underline</source>
-        <translation>underline</translation>
+        <source>Underline</source>
+        <translation>Underline</translation>
     </message>
     <message>
-        <source>subscript</source>
-        <translation>subscript</translation>
+        <source>Subscript</source>
+        <translation>Subscript</translation>
     </message>
     <message>
-        <source>superscript</source>
-        <translation>superscript</translation>
+        <source>Superscript</source>
+        <translation>Superscript</translation>
     </message>
 </context>
 <context>
@@ -8066,6 +8249,76 @@ please choose a different name:</translation>
     <message>
         <source>No Update Available</source>
         <translation>No Update Available</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::UploadScoreDialog</name>
+    <message>
+        <source>All Rights reserved</source>
+        <translation>All Rights reserved</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution</source>
+        <translation>Creative Commons Attribution</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Share Alike</source>
+        <translation>Creative Commons Attribution Share Alike</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution No Derivative Works</source>
+        <translation>Creative Commons Attribution No Derivative Works</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Noncommercial</source>
+        <translation>Creative Commons Attribution Noncommercial</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Noncommercial Share Alike</source>
+        <translation>Creative Commons Attribution Noncommercial Share Alike</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
+        <translation>Creative Commons Attribution Noncommercial Non Derivate Works</translation>
+    </message>
+    <message>
+        <source>Public Domain</source>
+        <translation>Public Domain</translation>
+    </message>
+    <message>
+        <source>Creative Commons Zero</source>
+        <translation>Creative Commons Zero</translation>
+    </message>
+    <message>
+        <source>Missing title</source>
+        <translation>Missing title</translation>
+    </message>
+    <message>
+        <source>Please provide a title</source>
+        <translation>Please provide a title</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>Success</translation>
+    </message>
+    <message>
+        <source>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</source>
+        <translation>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Error</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Workspace</name>
+    <message>
+        <source>Advanced</source>
+        <translation>Advanced</translation>
+    </message>
+    <message>
+        <source>Basic</source>
+        <translation>Basic</translation>
     </message>
 </context>
 <context>
@@ -8165,14 +8418,6 @@ please choose a different name:</translation>
         <translation>Copyright:</translation>
     </message>
     <message>
-        <source>Create new score from template</source>
-        <translation>Create new score from template</translation>
-    </message>
-    <message>
-        <source>Create new score from scratch</source>
-        <translation>Create new score from scratch</translation>
-    </message>
-    <message>
         <source>Title</source>
         <translation>Title</translation>
     </message>
@@ -8263,8 +8508,12 @@ please choose a different name:</translation>
         <translation>Show lines</translation>
     </message>
     <message>
-        <source>Spatium:</source>
-        <translation>Spatium:</translation>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>Distance between two lines on a standard 5-line stave</translation>
+    </message>
+    <message>
+        <source>Staff space:</source>
+        <translation>Stave space:</translation>
     </message>
 </context>
 <context>
@@ -8292,14 +8541,6 @@ please choose a different name:</translation>
     <message>
         <source>Scaling</source>
         <translation>Scaling</translation>
-    </message>
-    <message>
-        <source>Distance between two lines on a normal staff</source>
-        <translation>Distance between two lines on a normal stave</translation>
-    </message>
-    <message>
-        <source>Space:</source>
-        <translation>Space:</translation>
     </message>
     <message>
         <source>mm</source>
@@ -8349,6 +8590,14 @@ please choose a different name:</translation>
         <source>Apply to all Parts</source>
         <translation>Apply to all Parts</translation>
     </message>
+    <message>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>Distance between two lines on a standard 5-line stave</translation>
+    </message>
+    <message>
+        <source>Staff space:</source>
+        <translation>Stave space:</translation>
+    </message>
 </context>
 <context>
     <name>Palette</name>
@@ -8375,18 +8624,6 @@ please choose a different name:</translation>
     <message>
         <source>Normal</source>
         <translation>Normal</translation>
-    </message>
-    <message>
-        <source>Start Repeat</source>
-        <translation>Start Repeat</translation>
-    </message>
-    <message>
-        <source>End Repeat</source>
-        <translation>End Repeat</translation>
-    </message>
-    <message>
-        <source>End-Start Repeat</source>
-        <translation>End-Start Repeat</translation>
     </message>
     <message>
         <source>Repeats</source>
@@ -8553,14 +8790,6 @@ failed: </translation>
         <translation>Dotted style</translation>
     </message>
     <message>
-        <source>End Bar style</source>
-        <translation>End Barline style</translation>
-    </message>
-    <message>
-        <source>Double Bar style</source>
-        <translation>Double Barline style</translation>
-    </message>
-    <message>
         <source>Tick 1 span</source>
         <translation>Tick 1 span</translation>
     </message>
@@ -8576,16 +8805,25 @@ failed: </translation>
         <source>Short 2 span</source>
         <translation>Short 2 span</translation>
     </message>
-</context>
-<context>
-    <name>PaletteBox</name>
     <message>
-        <source>Palettes</source>
-        <translation>Palettes</translation>
+        <source>End bar style</source>
+        <translation>End barline style</translation>
     </message>
     <message>
-        <source>new Palette</source>
-        <translation>new Palette</translation>
+        <source>Double bar style</source>
+        <translation>Double barline style</translation>
+    </message>
+    <message>
+        <source>Start repeat</source>
+        <translation>Start repeat</translation>
+    </message>
+    <message>
+        <source>End repeat</source>
+        <translation>End repeat</translation>
+    </message>
+    <message>
+        <source>End-start repeat</source>
+        <translation>End-start repeat</translation>
     </message>
 </context>
 <context>
@@ -8638,20 +8876,12 @@ failed: </translation>
         <translation>Name:</translation>
     </message>
     <message>
-        <source>Cell Size:</source>
-        <translation>Cell Size:</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
         <source>Scale:</source>
         <translation>Scale:</translation>
-    </message>
-    <message>
-        <source>Show Grid</source>
-        <translation>Show Grid</translation>
     </message>
     <message>
         <source>Width:</source>
@@ -8662,27 +8892,27 @@ failed: </translation>
         <translation>Height:</translation>
     </message>
     <message>
-        <source>Show &apos;more Elements&apos;</source>
-        <translation>Show &apos;more Elements&apos;</translation>
+        <source>Cell size:</source>
+        <translation>Cell Size:</translation>
     </message>
     <message>
-        <source>Element Offset:</source>
-        <translation>Element Offset:</translation>
+        <source>Element offset:</source>
+        <translation>Element Offset</translation>
+    </message>
+    <message>
+        <source>Show grid</source>
+        <translation>Show Grid</translation>
+    </message>
+    <message>
+        <source>Show &apos;More Elements...&apos;</source>
+        <translation>Show &apos;More Elements...&apos;</translation>
     </message>
 </context>
 <context>
     <name>PartEditBase</name>
     <message>
-        <source>Part Name</source>
-        <translation>Part Name</translation>
-    </message>
-    <message>
         <source>Volume</source>
         <translation>Volume</translation>
-    </message>
-    <message>
-        <source>Panorama Position</source>
-        <translation>Panorama Position</translation>
     </message>
     <message>
         <source>Reverb</source>
@@ -8725,12 +8955,20 @@ failed: </translation>
         <translation>Sound:</translation>
     </message>
     <message>
-        <source>MIDI Sound</source>
-        <translation>MIDI Sound</translation>
-    </message>
-    <message>
         <source>MIDI sound for part</source>
         <translation>MIDI sound for part</translation>
+    </message>
+    <message>
+        <source>Part name</source>
+        <translation>Part name</translation>
+    </message>
+    <message>
+        <source>Panorama position</source>
+        <translation>Panorama position</translation>
+    </message>
+    <message>
+        <source>MIDI sound</source>
+        <translation>MIDI sound</translation>
     </message>
 </context>
 <context>
@@ -8749,65 +8987,10 @@ failed: </translation>
     </message>
 </context>
 <context>
-    <name>PianorollEditor</name>
-    <message>
-        <source>toolbar 1</source>
-        <translation>toolbar 1</translation>
-    </message>
-    <message>
-        <source>Wave</source>
-        <translation>Wave</translation>
-    </message>
-    <message>
-        <source>show wave display</source>
-        <translation>show wave display</translation>
-    </message>
-    <message>
-        <source>toolbar 2</source>
-        <translation>toolbar 2</translation>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>Cursor:</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>Velocity:</translation>
-    </message>
-    <message>
-        <source>offset</source>
-        <translation>offset</translation>
-    </message>
-    <message>
-        <source>user</source>
-        <translation>user</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>Pitch:</translation>
-    </message>
-    <message>
-        <source>OnTime:</source>
-        <translation>OnTime:</translation>
-    </message>
-    <message>
-        <source>Len:</source>
-        <translation>Len:</translation>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; Stave: %2</translation>
-    </message>
-</context>
-<context>
     <name>PlayPanelBase</name>
     <message>
         <source>MuseScore: Play Panel</source>
         <translation>MuseScore: Play Panel</translation>
-    </message>
-    <message>
-        <source>measure.beat</source>
-        <translation>Bar.Beat</translation>
     </message>
     <message>
         <source>001.01</source>
@@ -8846,6 +9029,10 @@ failed: </translation>
         <source>Tempo</source>
         <extracomment>short text for tempo slider</extracomment>
         <translation>Tempo</translation>
+    </message>
+    <message>
+        <source>Measure.Beat</source>
+        <translation>Bar.Beat</translation>
     </message>
 </context>
 <context>
@@ -8903,8 +9090,8 @@ failed: </translation>
         <translation>R</translation>
     </message>
     <message>
-        <source>reload current plugin source</source>
-        <translation>reload current plugin source</translation>
+        <source>Reload current plugin source</source>
+        <translation>Reload current plugin source</translation>
     </message>
 </context>
 <context>
@@ -8924,10 +9111,6 @@ failed: </translation>
     <message>
         <source>Version:</source>
         <translation>Version:</translation>
-    </message>
-    <message>
-        <source>Load</source>
-        <translation>Load</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -8973,36 +9156,12 @@ failed: </translation>
         <translation>minutes</translation>
     </message>
     <message>
-        <source>Windows</source>
-        <translation>Windows</translation>
-    </message>
-    <message>
-        <source>Show Play Panel</source>
-        <translation>Show Play Panel</translation>
-    </message>
-    <message>
-        <source>Show Navigator</source>
-        <translation>Show Navigator</translation>
-    </message>
-    <message>
-        <source>Show MuseScore Connect</source>
-        <translation>Show MuseScore Connect</translation>
-    </message>
-    <message>
         <source>OSC remote control</source>
         <translation>OSC remote control</translation>
     </message>
     <message>
         <source>Style</source>
         <translation>Style</translation>
-    </message>
-    <message>
-        <source>dark</source>
-        <translation>dark</translation>
-    </message>
-    <message>
-        <source>light</source>
-        <translation>light</translation>
     </message>
     <message>
         <source>Icon size:</source>
@@ -9063,18 +9222,6 @@ failed: </translation>
     <message>
         <source>Color notes outside of usable pitch range</source>
         <translation>Colour notes outside of usable pitch range</translation>
-    </message>
-    <message>
-        <source>enable MIDI remote control</source>
-        <translation>enable MIDI remote control</translation>
-    </message>
-    <message>
-        <source>is active</source>
-        <translation>is active</translation>
-    </message>
-    <message>
-        <source>record</source>
-        <translation>record</translation>
     </message>
     <message>
         <source>16th note</source>
@@ -9499,10 +9646,6 @@ failed: </translation>
     <message>
         <source>Default zoom:</source>
         <translation>Default zoom:</translation>
-    </message>
-    <message>
-        <source>Ports:</source>
-        <translation>Ports:</translation>
     </message>
     <message>
         <source>Resolution DPI:</source>
@@ -9930,10 +10073,6 @@ failed: </translation>
         <translation>I/O Tab</translation>
     </message>
     <message>
-        <source>Pulse Audio</source>
-        <translation>Pulse Audio</translation>
-    </message>
-    <message>
         <source>Port Audio</source>
         <translation>Port Audio</translation>
     </message>
@@ -9984,14 +10123,6 @@ failed: </translation>
     <message>
         <source>Choose sample rate</source>
         <translation>Choose sample rate</translation>
-    </message>
-    <message>
-        <source>Ports</source>
-        <translation>Ports</translation>
-    </message>
-    <message>
-        <source>Choose number of ports</source>
-        <translation>Choose number of ports</translation>
     </message>
     <message>
         <source>Import Tab</source>
@@ -10124,6 +10255,62 @@ failed: </translation>
     <message>
         <source>Update translations</source>
         <translation>Update translations</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Dark</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Light</translation>
+    </message>
+    <message>
+        <source>Enable MIDI remote control</source>
+        <translation>Enable MIDI remote control</translation>
+    </message>
+    <message>
+        <source>Is active</source>
+        <translation>Is active</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>record</translation>
+    </message>
+    <message>
+        <source>Default scale for new score views</source>
+        <translation>Default scale for new score views</translation>
+    </message>
+    <message>
+        <source>Show play panel</source>
+        <translation>Show play panel</translation>
+    </message>
+    <message>
+        <source>Show navigator</source>
+        <translation>Show navigator</translation>
+    </message>
+    <message>
+        <source>OSC Remote Control</source>
+        <translation>OSC Remote Control</translation>
+    </message>
+    <message>
+        <source>MIDI Remote Control</source>
+        <translation>MIDI Remote Control</translation>
+    </message>
+    <message>
+        <source>Show start center</source>
+        <translation>Show start centre</translation>
+    </message>
+    <message>
+        <source>Undo is active</source>
+        <translation>Undo is active</translation>
+    </message>
+    <message>
+        <source>Undo record</source>
+        <translation>Undo record</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation>Undo</translation>
     </message>
 </context>
 <context>
@@ -10421,11 +10608,11 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>flat</source>
-        <translation>♭(flat)</translation>
+        <translation>flat</translation>
     </message>
     <message>
         <source>sharp</source>
-        <translation>♯ (sharp)</translation>
+        <translation>sharp</translation>
     </message>
     <message>
         <source>double sharp</source>
@@ -10445,10 +10632,6 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
 <context>
     <name>QWidget</name>
     <message>
-        <source>Compressed MuseScore File (*.mscz);;</source>
-        <translation>Compressed MuseScore File (*.mscz);;</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Album into Score</source>
         <translation>MuseScore: Save Album into Score</translation>
     </message>
@@ -10463,10 +10646,6 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>MuseScore: Save Album</source>
         <translation>MuseScore: Save Album</translation>
-    </message>
-    <message>
-        <source>MuseScore Files (*.album);;</source>
-        <translation>MuseScore Files (*.album);;</translation>
     </message>
     <message>
         <source>Write Album failed: </source>
@@ -10524,11 +10703,45 @@ failed: </translation>
         <source>MuseScore: Open Album File</source>
         <translation>MuseScore: Open Album File</translation>
     </message>
+    <message>
+        <source>MuseScore File (*.mscz)</source>
+        <translation>MuseScore File (*.mscz)</translation>
+    </message>
+    <message>
+        <source>MuseScore Files (*.album)</source>
+        <translation>MuseScore Files (*.album)</translation>
+    </message>
+    <message>
+        <source>Soundfont installed</source>
+        <translation>Soundfont installed</translation>
+    </message>
+    <message>
+        <source>Install Soundfont</source>
+        <translation>Install Soundfont</translation>
+    </message>
+    <message>
+        <source>Do you want to install the soundfont %1?</source>
+        <translation>Do you want to install the soundfont %1?</translation>
+    </message>
+    <message>
+        <source>Overwrite?</source>
+        <translation>Overwrite?</translation>
+    </message>
+    <message>
+        <source>Soundfont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
+        <translation>Soundfont installed. Please go to View &gt; Synthesiser to add it and View &gt; Mixer to choose an instrument sound.</translation>
+    </message>
+    <message>
+        <source>%1 already exists.
+Do you want to overwrite it?</source>
+        <translation>%1 already exists.
+Do you want to overwrite it?</translation>
+    </message>
 </context>
 <context>
     <name>RecordButton</name>
     <message>
-        <source>record</source>
+        <source>Record</source>
         <translation>record</translation>
     </message>
 </context>
@@ -10564,6 +10777,36 @@ failed: </translation>
     </message>
 </context>
 <context>
+    <name>ScoreBrowser</name>
+    <message>
+        <source>Form</source>
+        <translation>Form</translation>
+    </message>
+</context>
+<context>
+    <name>ScorePreview</name>
+    <message>
+        <source>Form</source>
+        <translation>Form</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation>Size:</translation>
+    </message>
+    <message>
+        <source>Created: </source>
+        <translation>Created: </translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation>Name:</translation>
+    </message>
+    <message>
+        <source>Nothing selected</source>
+        <translation>Nothing selected</translation>
+    </message>
+</context>
+<context>
     <name>SectionBreakProperties</name>
     <message>
         <source>MuseScore: Section Break Properties</source>
@@ -10578,12 +10821,12 @@ failed: </translation>
         <translation>sec</translation>
     </message>
     <message>
-        <source>start new section with long instrument names</source>
-        <translation>start new section with long instrument names</translation>
+        <source>Start new section with long instrument names</source>
+        <translation>Start new section with long instrument names</translation>
     </message>
     <message>
-        <source>start new section with measure number one</source>
-        <translation>start new section with bar number one</translation>
+        <source>Start new section with measure number one</source>
+        <translation>Start new section with bar number one</translation>
     </message>
 </context>
 <context>
@@ -10593,52 +10836,52 @@ failed: </translation>
         <translation>MuseScore: Select</translation>
     </message>
     <message>
-        <source>Element Type:</source>
-        <translation>Element Type:</translation>
-    </message>
-    <message>
-        <source>same staff</source>
-        <translation>same stave</translation>
-    </message>
-    <message>
-        <source>same voice</source>
-        <translation>same voice</translation>
-    </message>
-    <message>
-        <source>same system</source>
-        <translation>same system</translation>
-    </message>
-    <message>
         <source>Action</source>
         <translation>Action</translation>
-    </message>
-    <message>
-        <source>replace selection</source>
-        <translation>replace selection</translation>
-    </message>
-    <message>
-        <source>add to selection</source>
-        <translation>add to selection</translation>
-    </message>
-    <message>
-        <source>search in selection</source>
-        <translation>search in selection</translation>
-    </message>
-    <message>
-        <source>subtract from selection</source>
-        <translation>subtract from selection</translation>
-    </message>
-    <message>
-        <source>same subtype:</source>
-        <translation>same subtype:</translation>
     </message>
     <message>
         <source>Select</source>
         <translation>Select</translation>
     </message>
     <message>
-        <source>in selection</source>
-        <translation>in selection</translation>
+        <source>Element type:</source>
+        <translation>Element type:</translation>
+    </message>
+    <message>
+        <source>Same staff</source>
+        <translation>Same stave</translation>
+    </message>
+    <message>
+        <source>Same voice</source>
+        <translation>Same voice</translation>
+    </message>
+    <message>
+        <source>Same subtype:</source>
+        <translation>Same subtype:</translation>
+    </message>
+    <message>
+        <source>Same system</source>
+        <translation>Same system</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>Replace selection</translation>
+    </message>
+    <message>
+        <source>Add to selection</source>
+        <translation>Add to selection</translation>
+    </message>
+    <message>
+        <source>Search in selection</source>
+        <translation>Search in selection</translation>
+    </message>
+    <message>
+        <source>Subtract from selection</source>
+        <translation>Subtract from selection</translation>
+    </message>
+    <message>
+        <source>In selection</source>
+        <translation>In selection</translation>
     </message>
 </context>
 <context>
@@ -11093,20 +11336,20 @@ altera</translation>
         <translation>Off</translation>
     </message>
     <message>
-        <source>Eighth Note</source>
-        <translation>Quaver Note</translation>
-    </message>
-    <message>
-        <source>Sixteenth Note</source>
-        <translation>Semiquaver Note</translation>
-    </message>
-    <message>
         <source>Select swing ratio:</source>
         <translation>Select swing ratio:</translation>
     </message>
     <message>
         <source>%</source>
         <translation>%</translation>
+    </message>
+    <message>
+        <source>Eighth note</source>
+        <translation>Quaver note</translation>
+    </message>
+    <message>
+        <source>Sixteenth note</source>
+        <translation>Semiquaver note</translation>
     </message>
 </context>
 <context>
@@ -11144,14 +11387,25 @@ altera</translation>
     </message>
 </context>
 <context>
-    <name>SymbolDialogBase</name>
+    <name>Startcenter</name>
     <message>
-        <source>System Flag</source>
-        <translation>System Flag</translation>
+        <source>Start Center</source>
+        <translation>Start Centre</translation>
     </message>
+    <message>
+        <source>&lt;a href=&quot;#&quot;&gt;Open an existing score&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;#&quot;&gt;Open an existing score&lt;/a&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>SymbolDialogBase</name>
     <message>
         <source>Font:</source>
         <translation>Font:</translation>
+    </message>
+    <message>
+        <source>System flag</source>
+        <translation>System flag</translation>
     </message>
 </context>
 <context>
@@ -11213,6 +11467,14 @@ altera</translation>
         <source>Master tuning:</source>
         <translation>Master tuning:</translation>
     </message>
+    <message>
+        <source>Save to score</source>
+        <translation>Save to score</translation>
+    </message>
+    <message>
+        <source>Load from score</source>
+        <translation>Load from score</translation>
+    </message>
 </context>
 <context>
     <name>TextPaletteBase</name>
@@ -11225,12 +11487,12 @@ altera</translation>
         <translation>Code Page:</translation>
     </message>
     <message>
-        <source>common</source>
-        <translation>common</translation>
+        <source>Common</source>
+        <translation>Common</translation>
     </message>
     <message>
-        <source>all</source>
-        <translation>all</translation>
+        <source>All</source>
+        <translation>All</translation>
     </message>
 </context>
 <context>
@@ -11248,64 +11510,12 @@ altera</translation>
         <translation>Font:</translation>
     </message>
     <message>
-        <source>font face</source>
-        <translation>font face</translation>
-    </message>
-    <message>
         <source>Size:</source>
         <translation>Size:</translation>
     </message>
     <message>
-        <source>font point size</source>
-        <translation>font point size</translation>
-    </message>
-    <message>
-        <source>bold</source>
-        <translation>bold</translation>
-    </message>
-    <message>
-        <source>italic</source>
-        <translation>italic</translation>
-    </message>
-    <message>
-        <source>underline</source>
-        <translation>underline</translation>
-    </message>
-    <message>
-        <source>align left edge of text to reference point</source>
-        <translation>align left edge of text to reference point</translation>
-    </message>
-    <message>
-        <source>center text on reference point</source>
-        <translation>centre text on reference point</translation>
-    </message>
-    <message>
-        <source>align right edge of text to reference point</source>
-        <translation>align right edge of text to reference point</translation>
-    </message>
-    <message>
-        <source>align top edge of text to reference point</source>
-        <translation>align top edge of text to reference point</translation>
-    </message>
-    <message>
-        <source>center text vertical to reference point</source>
-        <translation>centre text vertical to reference point</translation>
-    </message>
-    <message>
-        <source>center text vertical to text baseline</source>
-        <translation>centre text vertical to text baseline</translation>
-    </message>
-    <message>
-        <source>align bottom edge of text to reference point</source>
-        <translation>align bottom edge of text to reference point</translation>
-    </message>
-    <message>
         <source>Color:</source>
         <translation>Colour:</translation>
-    </message>
-    <message>
-        <source>text color</source>
-        <translation>text colour</translation>
     </message>
     <message>
         <source>System flag</source>
@@ -11321,94 +11531,41 @@ altera</translation>
         <translation>Horizontal:</translation>
     </message>
     <message>
-        <source>horizontal offset to reference point</source>
-        <translation>horizontal offset to reference point</translation>
-    </message>
-    <message>
         <source>Vertical:</source>
         <extracomment>coordinate</extracomment>
         <translation>Vertical:</translation>
-    </message>
-    <message>
-        <source>vertical offset to reference point</source>
-        <translation>vertical offset to reference point</translation>
     </message>
     <message>
         <source>Unit:</source>
         <translation>Unit:</translation>
     </message>
     <message>
-        <source>offset is absolute</source>
-        <translation>offset is absolute</translation>
-    </message>
-    <message>
         <source>mm</source>
         <translation>mm</translation>
-    </message>
-    <message>
-        <source>offset in Space units</source>
-        <translation>offset in Space units</translation>
-    </message>
-    <message>
-        <source>Space</source>
-        <extracomment>spatium unit</extracomment>
-        <translation>Space</translation>
-    </message>
-    <message>
-        <source>enable text frame</source>
-        <translation>enable text frame</translation>
     </message>
     <message>
         <source>Frame</source>
         <translation>Frame</translation>
     </message>
     <message>
-        <source>draw circled frame</source>
-        <translation>draw circled frame</translation>
-    </message>
-    <message>
         <source>Circle</source>
         <translation>Circle</translation>
-    </message>
-    <message>
-        <source>draw boxed frame</source>
-        <translation>draw boxed frame</translation>
     </message>
     <message>
         <source>Box</source>
         <translation>Box</translation>
     </message>
     <message>
-        <source>frame line width</source>
-        <translation>frame line width</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>frame inner margin</source>
-        <translation>frame inner margin</translation>
-    </message>
-    <message>
-        <source>corner round</source>
-        <translation>corner round</translation>
     </message>
     <message>
         <source>Foreground color:</source>
         <translation>Foreground colour:</translation>
     </message>
     <message>
-        <source>frame color</source>
-        <translation>frame colour</translation>
-    </message>
-    <message>
         <source>Background color:</source>
         <translation>Background colour:</translation>
-    </message>
-    <message>
-        <source>Size follows Space unit</source>
-        <translation>Size follows Space unit</translation>
     </message>
     <message>
         <source>Alignment</source>
@@ -11419,10 +11576,6 @@ altera</translation>
         <translation>Reset to Style</translation>
     </message>
     <message>
-        <source>Border width:</source>
-        <translation>Border width:</translation>
-    </message>
-    <message>
         <source>Text margin:</source>
         <translation>Text margin:</translation>
     </message>
@@ -11431,8 +11584,121 @@ altera</translation>
         <translation>Border radius:</translation>
     </message>
     <message>
-        <source>text background color</source>
-        <translation>text background colour</translation>
+        <source>Font face</source>
+        <translation>Font face</translation>
+    </message>
+    <message>
+        <source>Font point size</source>
+        <translation>Font point size</translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>Bold</translation>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation>Italic</translation>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation>Underline</translation>
+    </message>
+    <message>
+        <source>Text color</source>
+        <translation>Text colour</translation>
+    </message>
+    <message>
+        <source>Horizontal offset to reference point</source>
+        <translation>Horizontal offset to reference point</translation>
+    </message>
+    <message>
+        <source>Vertical offset to reference point</source>
+        <translation>Vertical offset to reference point</translation>
+    </message>
+    <message>
+        <source>Offset is absolute</source>
+        <translation>Offset is absolute</translation>
+    </message>
+    <message>
+        <source>Align left edge of text to reference point</source>
+        <translation>Align left edge of text to reference point</translation>
+    </message>
+    <message>
+        <source>Center text on reference point</source>
+        <translation>Centre text on reference point</translation>
+    </message>
+    <message>
+        <source>Align top edge of text to reference point</source>
+        <translation>Align top edge of text to reference point</translation>
+    </message>
+    <message>
+        <source>Align right edge of text to reference point</source>
+        <translation>Align right edge of text to reference point</translation>
+    </message>
+    <message>
+        <source>Center text vertical to text baseline</source>
+        <translation>Centre text vertical to text baseline</translation>
+    </message>
+    <message>
+        <source>Center text vertical to reference point</source>
+        <translation>Centre text vertical to reference point</translation>
+    </message>
+    <message>
+        <source>Align bottom edge of text to reference point</source>
+        <translation>Align bottom edge of text to reference point</translation>
+    </message>
+    <message>
+        <source>Enable text frame</source>
+        <translation>Enable text frame</translation>
+    </message>
+    <message>
+        <source>Draw circled frame</source>
+        <translation>Draw circled frame</translation>
+    </message>
+    <message>
+        <source>Draw boxed frame</source>
+        <translation>Draw boxed frame</translation>
+    </message>
+    <message>
+        <source>Border thickness:</source>
+        <translation>Border thickness:</translation>
+    </message>
+    <message>
+        <source>Frame line thickness</source>
+        <translation>Frame line thickness</translation>
+    </message>
+    <message>
+        <source>Frame inner margin</source>
+        <translation>Frame inner margin</translation>
+    </message>
+    <message>
+        <source>Corner round</source>
+        <translation>Corner round</translation>
+    </message>
+    <message>
+        <source>Text background color</source>
+        <translation>Text background colour</translation>
+    </message>
+    <message>
+        <source>Frame color</source>
+        <translation>Frame colour</translation>
+    </message>
+    <message>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>Distance between two lines on a standard 5-line stave</translation>
+    </message>
+    <message>
+        <source>Offset in staff space units</source>
+        <translation>Offset in stave space units</translation>
+    </message>
+    <message>
+        <source>Staff space</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>Stave space</translation>
+    </message>
+    <message>
+        <source>Size follows &apos;Staff space&apos; setting</source>
+        <translation>Size follows &apos;Stave space&apos; setting</translation>
     </message>
 </context>
 <context>
@@ -11574,12 +11840,16 @@ altera</translation>
         <translation>Instrument Change</translation>
     </message>
     <message>
-        <source>Lyrics Verse</source>
-        <translation>Lyrics Verse</translation>
-    </message>
-    <message>
         <source>Figured Bass</source>
         <translation>Figured Bass</translation>
+    </message>
+    <message>
+        <source>LH Guitar Fingering</source>
+        <translation>LH Guitar Fingering</translation>
+    </message>
+    <message>
+        <source>RH Guitar Fingering</source>
+        <translation>RH Guitar Fingering</translation>
     </message>
 </context>
 <context>
@@ -11647,12 +11917,12 @@ altera</translation>
         <translation>Text:</translation>
     </message>
     <message>
-        <source>add time signature to palette</source>
-        <translation>add time signature to palette</translation>
-    </message>
-    <message>
         <source>Add</source>
         <translation>Add</translation>
+    </message>
+    <message>
+        <source>Add time signature to palette</source>
+        <translation>Add time signature to palette</translation>
     </message>
 </context>
 <context>
@@ -11964,32 +12234,8 @@ altera</translation>
         <translation>Options</translation>
     </message>
     <message>
-        <source>Single sharps and flats only</source>
-        <translation>Single sharps and flats only</translation>
-    </message>
-    <message>
-        <source>Use double sharps and flats</source>
-        <translation>Use double sharps and flats</translation>
-    </message>
-    <message>
         <source>Transpose chord symbols</source>
         <translation>Transpose chord symbols</translation>
-    </message>
-    <message>
-        <source>Transpose chromatically</source>
-        <translation>Transpose chromatically</translation>
-    </message>
-    <message>
-        <source>By key</source>
-        <translation>By key</translation>
-    </message>
-    <message>
-        <source>Transpose diatonically</source>
-        <translation>Transpose diatonically</translation>
-    </message>
-    <message>
-        <source>By interval</source>
-        <translation>By interval</translation>
     </message>
     <message>
         <source>C♭ major / A♭ minor</source>
@@ -12034,6 +12280,30 @@ altera</translation>
     <message>
         <source>C♯ major / A♯ minor</source>
         <translation>C♯ major / A♯ minor</translation>
+    </message>
+    <message>
+        <source>Single Sharps and Flats Only</source>
+        <translation>Single Sharps and Flats Only</translation>
+    </message>
+    <message>
+        <source>Use Double Sharps and Flats</source>
+        <translation>Use Double Sharps and Flats</translation>
+    </message>
+    <message>
+        <source>Transpose Chromatically</source>
+        <translation>Transpose Chromatically</translation>
+    </message>
+    <message>
+        <source>By Key</source>
+        <translation>By Key</translation>
+    </message>
+    <message>
+        <source>By Interval</source>
+        <translation>By Interval</translation>
+    </message>
+    <message>
+        <source>Transpose Diatonically</source>
+        <translation>Transpose Diatonically</translation>
     </message>
 </context>
 <context>
@@ -12090,10 +12360,6 @@ altera</translation>
         <translation>Dive</translation>
     </message>
     <message>
-        <source>Release(up)</source>
-        <translation>Release(up)</translation>
-    </message>
-    <message>
         <source>Inverted Dip</source>
         <translation>Inverted Dip</translation>
     </message>
@@ -12102,12 +12368,23 @@ altera</translation>
         <translation>Return</translation>
     </message>
     <message>
-        <source>Release(down)</source>
-        <translation>Release(down)</translation>
-    </message>
-    <message>
         <source>MuseScore: Tremolo Bar Properties</source>
         <translation>MuseScore: Tremolo Bar Properties</translation>
+    </message>
+    <message>
+        <source>Release(Up)</source>
+        <translation>Release(Up)</translation>
+    </message>
+    <message>
+        <source>Release(Down)</source>
+        <translation>Release(Down)</translation>
+    </message>
+</context>
+<context>
+    <name>TupletBase</name>
+    <message>
+        <source>Tuplet</source>
+        <translation>Tuplet</translation>
     </message>
 </context>
 <context>
@@ -12151,6 +12428,97 @@ altera</translation>
     <message>
         <source>Auto bracket</source>
         <translation>Auto bracket</translation>
+    </message>
+</context>
+<context>
+    <name>UploadScoreDialog</name>
+    <message>
+        <source>Score Information</source>
+        <translation>Score Information</translation>
+    </message>
+    <message>
+        <source>You&apos;re logged in as</source>
+        <translation>You&apos;re logged in as</translation>
+    </message>
+    <message>
+        <source>USERNAME</source>
+        <translation>USERNAME</translation>
+    </message>
+    <message>
+        <source>Sign out</source>
+        <translation>Sign out</translation>
+    </message>
+    <message>
+        <source>Sign out on exit</source>
+        <translation>Sign out on exit</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation>Title</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation>Description</translation>
+    </message>
+    <message>
+        <source>Who can access this score?</source>
+        <translation>Who can access this score?</translation>
+    </message>
+    <message>
+        <source>Anyone</source>
+        <translation>Anyone</translation>
+    </message>
+    <message>
+        <source>Just you</source>
+        <translation>Just you</translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation>Licence</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;What does this mean?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;What does this mean?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Tags</source>
+        <translation>Tags</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use a comma to separate the tags&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use a comma to separate the tags&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Respect the &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;community guidelines&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Only make your scores accessible to anyone with permission from the right holders.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Respect the &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;community guidelines&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Only make your scores accessible to anyone with permission from the right holders.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Update the existing score </source>
+        <translation>Update the existing score </translation>
     </message>
 </context>
 <context>
@@ -12300,112 +12668,112 @@ failed: </translation>
 <context>
     <name>accidental</name>
     <message>
-        <source>none</source>
-        <translation>none</translation>
+        <source>None</source>
+        <translation>None</translation>
     </message>
     <message>
-        <source>sharp</source>
-        <translation>♯ (sharp)</translation>
+        <source>Sharp</source>
+        <translation>Sharp</translation>
     </message>
     <message>
-        <source>flat</source>
-        <translation>♭(flat)</translation>
+        <source>Flat</source>
+        <translation>Flat</translation>
     </message>
     <message>
-        <source>double sharp</source>
-        <translation>double sharp</translation>
+        <source>Double sharp</source>
+        <translation>Double sharp</translation>
     </message>
     <message>
-        <source>double flat</source>
-        <translation>double flat</translation>
+        <source>Double flat</source>
+        <translation>Double flat</translation>
     </message>
     <message>
-        <source>natural</source>
-        <translation>natural</translation>
+        <source>Natural</source>
+        <translation>Natural</translation>
     </message>
     <message>
-        <source>flat-slash</source>
-        <translation>flat-slash</translation>
+        <source>Flat-slash</source>
+        <translation>Flat-slash</translation>
     </message>
     <message>
-        <source>flat-slash2</source>
-        <translation>flat-slash2</translation>
+        <source>Flat-slash2</source>
+        <translation>Flat-slash2</translation>
     </message>
     <message>
-        <source>mirrored-flat2</source>
-        <translation>mirrored flat2</translation>
+        <source>Mirrored-flat2</source>
+        <translation>Mirrored-flat2</translation>
     </message>
     <message>
-        <source>mirrored-flat</source>
-        <translation>mirrored flat</translation>
+        <source>Mirrored-flat</source>
+        <translation>Mirrored-flat</translation>
     </message>
     <message>
-        <source>mirrored-flat-slash</source>
-        <translation>mirrored flat-slash</translation>
+        <source>Mirrored-flat-slash</source>
+        <translation>Mirrored-flat-slash</translation>
     </message>
     <message>
-        <source>flat-flat-slash</source>
-        <translation>flat-flat-slash</translation>
+        <source>Flat-flat-slash</source>
+        <translation>Flat-flat-slash</translation>
     </message>
     <message>
-        <source>sharp-slash</source>
-        <translation>sharp-slash</translation>
+        <source>Sharp-slash</source>
+        <translation>Sharp-slash</translation>
     </message>
     <message>
-        <source>sharp-slash2</source>
-        <translation>sharp-slash2</translation>
+        <source>Sharp-slash2</source>
+        <translation>Sharp-slash2</translation>
     </message>
     <message>
-        <source>sharp-slash3</source>
-        <translation>sharp-slash3</translation>
+        <source>Sharp-slash3</source>
+        <translation>Sharp-slash3</translation>
     </message>
     <message>
-        <source>sharp-slash4</source>
-        <translation>sharp-slash4</translation>
+        <source>Sharp-slash4</source>
+        <translation>Sharp-slash4</translation>
     </message>
     <message>
-        <source>sharp arrow up</source>
-        <translation>sharp arrow up</translation>
+        <source>Sharp arrow up</source>
+        <translation>Sharp arrow up</translation>
     </message>
     <message>
-        <source>sharp arrow down</source>
-        <translation>sharp arrow down</translation>
+        <source>Sharp arrow down</source>
+        <translation>Sharp arrow down</translation>
     </message>
     <message>
-        <source>sharp arrow both</source>
-        <translation>sharp arrow both</translation>
+        <source>Sharp arrow both</source>
+        <translation>Sharp arrow both</translation>
     </message>
     <message>
-        <source>flat arrow up</source>
-        <translation>flat arrow up</translation>
+        <source>Flat arrow up</source>
+        <translation>Flat arrow up</translation>
     </message>
     <message>
-        <source>flat arrow down</source>
-        <translation>flat arrow down</translation>
+        <source>Flat arrow down</source>
+        <translation>Flat arrow down</translation>
     </message>
     <message>
-        <source>flat arrow both</source>
-        <translation>flat arrow both</translation>
+        <source>Flat arrow both</source>
+        <translation>Flat arrow both</translation>
     </message>
     <message>
-        <source>natural arrow up</source>
-        <translation>natural arrow up</translation>
+        <source>Natural arrow up</source>
+        <translation>Natural arrow up</translation>
     </message>
     <message>
-        <source>natural arrow down</source>
-        <translation>natural arrow down</translation>
+        <source>Natural arrow down</source>
+        <translation>Natural arrow down</translation>
     </message>
     <message>
-        <source>natural arrow both</source>
-        <translation>natural arrow both</translation>
+        <source>Natural arrow both</source>
+        <translation>Natural arrow both</translation>
     </message>
     <message>
-        <source>sori</source>
-        <translation>sori</translation>
+        <source>Sori</source>
+        <translation>Sori</translation>
     </message>
     <message>
-        <source>koron</source>
-        <translation>koron</translation>
+        <source>Koron</source>
+        <translation>Koron</translation>
     </message>
 </context>
 <context>
@@ -13389,11 +13757,11 @@ Demisemiquaver (32nd note)</translation>
     </message>
     <message>
         <source>128th note</source>
-        <translation>Quasihemisemidemiquaver (128th note)</translation>
+        <translation>Quasihemidemisemiquaver (128th note)</translation>
     </message>
     <message>
         <source>Note duration: 128th</source>
-        <translation>Note duration: quasihemisemidemiquaver </translation>
+        <translation>Note duration: quasihemidemisemiquaver </translation>
     </message>
     <message>
         <source>Increase active duration</source>
@@ -13594,18 +13962,6 @@ Demisemiquaver (32nd note)</translation>
     <message>
         <source>Mixer</source>
         <translation>Mixer</translation>
-    </message>
-    <message>
-        <source>Transport</source>
-        <translation>Transport</translation>
-    </message>
-    <message>
-        <source>Transport toolbar</source>
-        <translation>Transport toolbar</translation>
-    </message>
-    <message>
-        <source>Note input toolbar</source>
-        <translation>Note input toolbar</translation>
     </message>
     <message>
         <source>Status Bar</source>
@@ -13937,7 +14293,7 @@ Demisemiquaver (32nd note)</translation>
     </message>
     <message>
         <source>Note entry: half rest</source>
-        <translation>Note entry: miním rest</translation>
+        <translation>Note entry: minim rest</translation>
     </message>
     <message>
         <source>Quarter rest</source>
@@ -14072,28 +14428,12 @@ Demisemiquaver (32nd note)</translation>
         <translation>Full Screen</translation>
     </message>
     <message>
-        <source>Enable horizontal raster</source>
-        <translation>Enable horizontal raster</translation>
-    </message>
-    <message>
-        <source>Enable vertical raster</source>
-        <translation>Enable vertical raster</translation>
-    </message>
-    <message>
-        <source>Configure raster</source>
-        <translation>Configure raster</translation>
-    </message>
-    <message>
         <source>Re-Pitch Mode</source>
         <translation>Re-Pitch Mode</translation>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
         <translation>Replace pitches without changing rhythms</translation>
-    </message>
-    <message>
-        <source>Stack down</source>
-        <translation>Stack down</translation>
     </message>
     <message>
         <source>Piano Keyboard</source>
@@ -14142,10 +14482,6 @@ Demisemiquaver (32nd note)</translation>
     <message>
         <source>Previous Score</source>
         <translation>Previous Score</translation>
-    </message>
-    <message>
-        <source>MuseScore Connect</source>
-        <translation>MuseScore Connect</translation>
     </message>
     <message>
         <source>Plugin Creator</source>
@@ -14309,7 +14645,7 @@ Demisemiquaver (32nd note)</translation>
     </message>
     <message>
         <source>Note duration: half (TAB)</source>
-        <translation>Note duration: miním (TAB)</translation>
+        <translation>Note duration: minim (TAB)</translation>
     </message>
     <message>
         <source>Quarter note (TAB)</source>
@@ -14345,11 +14681,11 @@ Demisemiquaver (32nd note)</translation>
     </message>
     <message>
         <source>128th note (TAB)</source>
-        <translation>quasihemisemidemiquaver note (TAB)</translation>
+        <translation>quasihemidemisemiquaver note (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 128th (TAB)</source>
-        <translation>Note duration: quasihemisemidemiquaver (TAB)</translation>
+        <translation>Note duration: quasihemidemisemiquaver (TAB)</translation>
     </message>
     <message>
         <source>Increase active duration (TAB)</source>
@@ -14497,7 +14833,7 @@ Demisemiquaver (32nd note)</translation>
     </message>
     <message>
         <source>Advance of a half note (F.B./Harm. only)</source>
-        <translation>Advance of a minum (F.B./Harm. only)</translation>
+        <translation>Advance of a minim (F.B./Harm. only)</translation>
     </message>
     <message>
         <source>Quarter note advance (F.B./Harm.)</source>
@@ -14582,10 +14918,6 @@ Demisemiquaver (32nd note)</translation>
     <message>
         <source>Respell Pitches</source>
         <translation>Respell Pitches</translation>
-    </message>
-    <message>
-        <source>Toggle create multimeasure rest</source>
-        <translation>Toggle create multimeasure rest</translation>
     </message>
     <message>
         <source>bold face</source>
@@ -14791,6 +15123,94 @@ Demisemiquaver (32nd note)</translation>
         <source>Add less stretch to selected measures</source>
         <translation>Add less stretch to selected bars</translation>
     </message>
+    <message>
+        <source>Enable snap to horizontal grid</source>
+        <translation>Enable snap to horizontal grid</translation>
+    </message>
+    <message>
+        <source>Enable snap to vertical grid</source>
+        <translation>Enable snap to vertical grid</translation>
+    </message>
+    <message>
+        <source>Configure grid</source>
+        <translation>Configure grid</translation>
+    </message>
+    <message>
+        <source>Insert one measure</source>
+        <translation>Insert one bar</translation>
+    </message>
+    <message>
+        <source>Insert horizontal frame</source>
+        <translation>Insert horizontal frame</translation>
+    </message>
+    <message>
+        <source>Insert text frame</source>
+        <translation>Insert text frame</translation>
+    </message>
+    <message>
+        <source>Insert vertical frame</source>
+        <translation>Insert vertical frame</translation>
+    </message>
+    <message>
+        <source>Part Name</source>
+        <translation>Part Name</translation>
+    </message>
+    <message>
+        <source>Add part name</source>
+        <translation>Add part name</translation>
+    </message>
+    <message>
+        <source>Save Online...</source>
+        <translation>Save Online...</translation>
+    </message>
+    <message>
+        <source>File save online</source>
+        <translation>File save online</translation>
+    </message>
+    <message>
+        <source>Save score on MuseScore.com</source>
+        <translation>Save score on MuseScore.com</translation>
+    </message>
+    <message>
+        <source>Explode</source>
+        <translation>Explode</translation>
+    </message>
+    <message>
+        <source>Explode contents of top selected staff into staves below</source>
+        <translation>Explode contents of top selected stave into staves below</translation>
+    </message>
+    <message>
+        <source>Implode</source>
+        <translation>Implode</translation>
+    </message>
+    <message>
+        <source>Implode contents of selected staves into top selected staff</source>
+        <translation>Implode contents of selected staves into top selected stave</translation>
+    </message>
+    <message>
+        <source>Fill With Slashes</source>
+        <translation>Fill With Slashes</translation>
+    </message>
+    <message>
+        <source>Toggle Rhythmic Slash Notation</source>
+        <translation>Toggle Rhythmic Slash Notation</translation>
+    </message>
+    <message>
+        <source>Add/Remove Line Breaks</source>
+        <translation>Add/Remove Line Breaks</translation>
+    </message>
+    <message>
+        <source>Start Center</source>
+        <translation>Start Centre</translation>
+    </message>
+    <message>
+        <source>Toggle create multimeasure rest</source>
+        <translation>Toggle create multi-bar rest</translation>
+    </message>
+    <message>
+        <source>Resequence Rehearsal Marks</source>
+        <translation>Resequence Rehearsal Marks</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -14808,172 +15228,8 @@ Tuplet would cross bar</translation>
 <context>
     <name>articulation</name>
     <message>
-        <source>fermata</source>
-        <translation>fermata</translation>
-    </message>
-    <message>
-        <source>thumb</source>
-        <translation>thumb</translation>
-    </message>
-    <message>
-        <source>sforzato</source>
-        <translation>sforzato</translation>
-    </message>
-    <message>
-        <source>staccato</source>
-        <translation>staccato</translation>
-    </message>
-    <message>
-        <source>staccatissimo</source>
-        <translation>staccatissimo</translation>
-    </message>
-    <message>
-        <source>tenuto</source>
-        <translation>tenuto</translation>
-    </message>
-    <message>
-        <source>portato</source>
-        <translation>portato</translation>
-    </message>
-    <message>
-        <source>marcato</source>
-        <translation>marcato</translation>
-    </message>
-    <message>
-        <source>turn</source>
-        <translation>turn</translation>
-    </message>
-    <message>
-        <source>trill</source>
-        <translation>trill</translation>
-    </message>
-    <message>
-        <source>prall</source>
-        <translation>prall</translation>
-    </message>
-    <message>
-        <source>mordent</source>
-        <translation>mordent</translation>
-    </message>
-    <message>
-        <source>schleifer</source>
-        <translation>schleifer</translation>
-    </message>
-    <message>
-        <source>tapping</source>
-        <translation>tapping</translation>
-    </message>
-    <message>
-        <source>slapping</source>
-        <translation>slapping</translation>
-    </message>
-    <message>
-        <source>popping</source>
-        <translation>popping</translation>
-    </message>
-    <message>
         <source>Bend</source>
         <translation>Bend</translation>
-    </message>
-    <message>
-        <source>Tremolo Bar</source>
-        <translation>Tremolo Bar</translation>
-    </message>
-    <message>
-        <source>ouvert</source>
-        <translation>ouvert</translation>
-    </message>
-    <message>
-        <source>short fermata</source>
-        <translation>short fermata</translation>
-    </message>
-    <message>
-        <source>long fermata</source>
-        <translation>long fermata</translation>
-    </message>
-    <message>
-        <source>very long fermata</source>
-        <translation>very long fermata</translation>
-    </message>
-    <message>
-        <source>up bow</source>
-        <translation>up bow</translation>
-    </message>
-    <message>
-        <source>down bow</source>
-        <translation>down bow</translation>
-    </message>
-    <message>
-        <source>reverse turn</source>
-        <translation>reverse turn</translation>
-    </message>
-    <message>
-        <source>prall prall</source>
-        <translation>prall prall</translation>
-    </message>
-    <message>
-        <source>prall mordent</source>
-        <translation>prall mordent</translation>
-    </message>
-    <message>
-        <source>up prall</source>
-        <translation>up prall</translation>
-    </message>
-    <message>
-        <source>down prall</source>
-        <translation>down prall</translation>
-    </message>
-    <message>
-        <source>up mordent</source>
-        <translation>up mordent</translation>
-    </message>
-    <message>
-        <source>down mordent</source>
-        <translation>down mordent</translation>
-    </message>
-    <message>
-        <source>prall down</source>
-        <translation>prall down</translation>
-    </message>
-    <message>
-        <source>prall up</source>
-        <translation>prall up</translation>
-    </message>
-    <message>
-        <source>line prall</source>
-        <translation>line prall</translation>
-    </message>
-    <message>
-        <source>snap pizzicato</source>
-        <translation>snap pizzicato</translation>
-    </message>
-    <message>
-        <source>stopped/pizzicato left hand</source>
-        <translation>stopped/pizzicato left hand</translation>
-    </message>
-    <message>
-        <source>fade in</source>
-        <translation>fade in</translation>
-    </message>
-    <message>
-        <source>fade out</source>
-        <translation>fade out</translation>
-    </message>
-    <message>
-        <source>volume swell</source>
-        <translation>volume swell</translation>
-    </message>
-    <message>
-        <source>wiggle sawtooth</source>
-        <translation>wiggle sawtooth</translation>
-    </message>
-    <message>
-        <source>wiggle sawtooth wide</source>
-        <translation>wiggle sawtooth wide</translation>
-    </message>
-    <message>
-        <source>wiggle vibrato large faster</source>
-        <translation>wiggle vibrato large faster</translation>
     </message>
     <message>
         <source>Slide out down</source>
@@ -14992,8 +15248,188 @@ Tuplet would cross bar</translation>
         <translation>Slide in above</translation>
     </message>
     <message>
-        <source>wiggle vibrato large slowest</source>
-        <translation>wiggle vibrato large slowest</translation>
+        <source>Fermata</source>
+        <translation>Fermata</translation>
+    </message>
+    <message>
+        <source>Short fermata</source>
+        <translation>Short fermata</translation>
+    </message>
+    <message>
+        <source>Long fermata</source>
+        <translation>Long fermata</translation>
+    </message>
+    <message>
+        <source>Very long fermata</source>
+        <translation>Very long fermata</translation>
+    </message>
+    <message>
+        <source>Sforzato</source>
+        <translation>Sforzato</translation>
+    </message>
+    <message>
+        <source>Staccato</source>
+        <translation>Staccato</translation>
+    </message>
+    <message>
+        <source>Staccatissimo</source>
+        <translation>Staccatissimo</translation>
+    </message>
+    <message>
+        <source>Tenuto</source>
+        <translation>Tenuto</translation>
+    </message>
+    <message>
+        <source>Portato</source>
+        <translation>Portato</translation>
+    </message>
+    <message>
+        <source>Marcato</source>
+        <translation>Marcato</translation>
+    </message>
+    <message>
+        <source>Fade in</source>
+        <translation>Fade in</translation>
+    </message>
+    <message>
+        <source>Fade out</source>
+        <translation>Fade out</translation>
+    </message>
+    <message>
+        <source>Volume swell</source>
+        <translation>Volume swell</translation>
+    </message>
+    <message>
+        <source>Wiggle sawtooth</source>
+        <translation>Wiggle sawtooth</translation>
+    </message>
+    <message>
+        <source>Wiggle sawtooth wide</source>
+        <translation>Wiggle sawtooth wide</translation>
+    </message>
+    <message>
+        <source>Wiggle vibrato large faster</source>
+        <translation>Wiggle vibrato large faster</translation>
+    </message>
+    <message>
+        <source>Wiggle vibrato large slowest</source>
+        <translation>Wiggle vibrato large slowest</translation>
+    </message>
+    <message>
+        <source>Ouvert</source>
+        <translation>Ouvert</translation>
+    </message>
+    <message>
+        <source>Stopped/Pizzicato left hand</source>
+        <translation>Stopped/Pizzicato left hand</translation>
+    </message>
+    <message>
+        <source>Up bow</source>
+        <translation>Up bow</translation>
+    </message>
+    <message>
+        <source>Down bow</source>
+        <translation>Down bow</translation>
+    </message>
+    <message>
+        <source>Reverse turn</source>
+        <translation>Reverse turn</translation>
+    </message>
+    <message>
+        <source>Turn</source>
+        <translation>Turn</translation>
+    </message>
+    <message>
+        <source>Trill</source>
+        <translation>Trill</translation>
+    </message>
+    <message>
+        <source>Prall</source>
+        <translation>Prall</translation>
+    </message>
+    <message>
+        <source>Mordent</source>
+        <translation>Mordent</translation>
+    </message>
+    <message>
+        <source>Prall prall</source>
+        <translation>Prall prall</translation>
+    </message>
+    <message>
+        <source>Prall mordent</source>
+        <translation>Prall mordent</translation>
+    </message>
+    <message>
+        <source>Up prall</source>
+        <translation>Up prall</translation>
+    </message>
+    <message>
+        <source>Down prall</source>
+        <translation>Down prall</translation>
+    </message>
+    <message>
+        <source>Up mordent</source>
+        <translation>Up mordent</translation>
+    </message>
+    <message>
+        <source>Down mordent</source>
+        <translation>Down mordent</translation>
+    </message>
+    <message>
+        <source>Prall down</source>
+        <translation>Prall down</translation>
+    </message>
+    <message>
+        <source>Prall up</source>
+        <translation>Prall up</translation>
+    </message>
+    <message>
+        <source>Line prall</source>
+        <translation>Line prall</translation>
+    </message>
+    <message>
+        <source>Schleifer</source>
+        <translation>Schleifer</translation>
+    </message>
+    <message>
+        <source>Snap pizzicato</source>
+        <translation>Snap pizzicato</translation>
+    </message>
+    <message>
+        <source>Tapping</source>
+        <translation>Tapping</translation>
+    </message>
+    <message>
+        <source>Slapping</source>
+        <translation>Slapping</translation>
+    </message>
+    <message>
+        <source>Popping</source>
+        <translation>Popping</translation>
+    </message>
+    <message>
+        <source>Thumb pos.</source>
+        <translation>Thumb pos.</translation>
+    </message>
+    <message>
+        <source>Lute thumb fing.</source>
+        <translation>Lute thumb fing.</translation>
+    </message>
+    <message>
+        <source>Lute 1 fing.</source>
+        <translation>Lute 1 fing.</translation>
+    </message>
+    <message>
+        <source>Lute 2 fing.</source>
+        <translation>Lute 2 fing.</translation>
+    </message>
+    <message>
+        <source>Lute 3 fing.</source>
+        <translation>Lute 3 fing.</translation>
+    </message>
+    <message>
+        <source>Tremolo bar</source>
+        <translation>Tremolo bar</translation>
     </message>
 </context>
 <context>
@@ -16397,7 +16833,7 @@ Tuplet would cross bar</translation>
     </message>
     <message>
         <source>Staff Lines</source>
-        <translation>Staff Lines</translation>
+        <translation>Stave Lines</translation>
     </message>
     <message>
         <source>Bar Line</source>
@@ -16689,10 +17125,6 @@ Tuplet would cross bar</translation>
         <translation>Segno</translation>
     </message>
     <message>
-        <source>Segno Variation</source>
-        <translation>Segno Variation</translation>
-    </message>
-    <message>
         <source>Coda</source>
         <translation>Coda</translation>
     </message>
@@ -16716,64 +17148,68 @@ Tuplet would cross bar</translation>
         <source>Custom</source>
         <translation>Custom</translation>
     </message>
+    <message>
+        <source>Segno variation</source>
+        <translation>Segno variation</translation>
+    </message>
 </context>
 <context>
     <name>noteheadnames</name>
     <message>
-        <source>normal</source>
-        <translation>normal</translation>
+        <source>Normal</source>
+        <translation>Normal</translation>
     </message>
     <message>
-        <source>cross</source>
-        <translation>cross</translation>
+        <source>Cross</source>
+        <translation>Cross</translation>
     </message>
     <message>
-        <source>diamond</source>
-        <translation>diamond</translation>
+        <source>Diamond</source>
+        <translation>Diamond</translation>
     </message>
     <message>
-        <source>triangle</source>
-        <translation>triangle</translation>
+        <source>Triangle</source>
+        <translation>Triangle</translation>
     </message>
     <message>
-        <source>mi</source>
-        <translation>mi</translation>
+        <source>Mi</source>
+        <translation>Mi</translation>
     </message>
     <message>
-        <source>slash</source>
-        <translation>slash</translation>
+        <source>Slash</source>
+        <translation>Slash</translation>
     </message>
     <message>
-        <source>xcircle</source>
-        <translation>xcircle</translation>
+        <source>XCircle</source>
+        <translation>XCircle</translation>
     </message>
     <message>
-        <source>do</source>
-        <translation>do</translation>
+        <source>Do</source>
+        <translation>Do</translation>
     </message>
     <message>
-        <source>re</source>
-        <translation>re</translation>
+        <source>Re</source>
+        <translation>Re</translation>
     </message>
     <message>
-        <source>fa</source>
-        <translation>fa</translation>
+        <source>Fa</source>
+        <translation>Fa</translation>
     </message>
     <message>
-        <source>la</source>
-        <translation>la</translation>
+        <source>La</source>
+        <translation>La</translation>
     </message>
     <message>
-        <source>ti</source>
-        <translation>ti</translation>
+        <source>Ti</source>
+        <translation>Ti</translation>
     </message>
     <message>
-        <source>sol</source>
-        <translation>sol</translation>
+        <source>Sol</source>
+        <translation>Sol</translation>
     </message>
     <message>
-        <source>alt. brevis</source>
-        <translation>alt. brevis</translation>
+        <source>Alt. Brevis</source>
+        <translation>Alt. Brevis</translation>
     </message>
 </context>
 <context>
@@ -16786,32 +17222,32 @@ Tuplet would cross bar</translation>
 <context>
     <name>preferences</name>
     <message>
-        <source>Every day</source>
-        <translation>Every day</translation>
-    </message>
-    <message>
-        <source>Every 3 days</source>
-        <translation>Every 3 days</translation>
-    </message>
-    <message>
-        <source>Every week</source>
-        <translation>Every week</translation>
-    </message>
-    <message>
-        <source>Every 2 weeks</source>
-        <translation>Every 2 weeks</translation>
-    </message>
-    <message>
-        <source>Every month</source>
-        <translation>Every month</translation>
-    </message>
-    <message>
-        <source>Every 2 months</source>
-        <translation>Every 2 months</translation>
-    </message>
-    <message>
         <source>Never</source>
         <translation>Never</translation>
+    </message>
+    <message>
+        <source>Every Day</source>
+        <translation>Every Day</translation>
+    </message>
+    <message>
+        <source>Every 3 Days</source>
+        <translation>Every 3 Days</translation>
+    </message>
+    <message>
+        <source>Every Week</source>
+        <translation>Every Week</translation>
+    </message>
+    <message>
+        <source>Every 2 Weeks</source>
+        <translation>Every 2 Weeks</translation>
+    </message>
+    <message>
+        <source>Every Month</source>
+        <translation>Every Month</translation>
+    </message>
+    <message>
+        <source>Every 2 Months</source>
+        <translation>Every 2 Months</translation>
     </message>
 </context>
 <context>

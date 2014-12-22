@@ -17,11 +17,6 @@
         <translation>Strumenti orchestrali</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4"/>
-        <source>Early Music</source>
-        <translation>Early Music</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Ethnic instruments</source>
         <translation>Strumenti etnici</translation>
@@ -4930,6 +4925,11 @@ Acoustic Guitar</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1408"/>
         <source>Archlute</source>
         <translation>Arciliuto</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4"/>
+        <source>Early music</source>
+        <translation>Early music</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1411"/>

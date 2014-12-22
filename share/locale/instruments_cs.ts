@@ -17,11 +17,6 @@
         <translation>Orchestrální nástroje</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4"/>
-        <source>Early Music</source>
-        <translation>Stará hudba</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Ethnic instruments</source>
         <translation>Národnostní nástroje</translation>
@@ -1510,7 +1505,7 @@ Sheng</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="420"/>
         <source>Cb. Sar.</source>
         <extracomment>Contrabass Sarrusophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kb. sar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="421"/>
@@ -4284,67 +4279,67 @@ Pipe Organ</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1196"/>
         <source>Percussive Organ</source>
-        <translation type="unfinished"/>
+        <translation>Perkusivní varhany</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1198"/>
         <source>Perc. Org.</source>
         <extracomment>Percussive Organ</extracomment>
-        <translation type="unfinished"/>
+        <translation>Perk. varh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1199"/>
         <source>Hammond Organ</source>
-        <translation type="unfinished"/>
+        <translation>Hammondovy varhany</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1201"/>
         <source>Hm. Org.</source>
         <extracomment>Hammond Organ</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ham. varh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1202"/>
         <source>Rotary Organ</source>
-        <translation type="unfinished"/>
+        <translation>Otáčivé varhany</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1204"/>
         <source>Rot. Org.</source>
         <extracomment>Rotary Organ</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ot. varh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1205"/>
         <location filename="../instruments/instrumentsxml.h" line="1208"/>
         <source>Pipe Organ</source>
-        <translation type="unfinished"/>
+        <translation>Píšťalové varhany</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1209"/>
         <source>Harmonium</source>
-        <translation type="unfinished"/>
+        <translation>Harmonium</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1212"/>
         <source>Reed Organ</source>
-        <translation type="unfinished"/>
+        <translation>Harmonium</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1214"/>
         <source>Rd. Org.</source>
         <extracomment>Reed Organ</extracomment>
-        <translation type="unfinished"/>
+        <translation>Harm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1215"/>
         <source>Electronic Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Elektronické nástroje</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1216"/>
         <source>Effect Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Efektový syntetizátor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1218"/>
@@ -4419,331 +4414,331 @@ Bass Synthesizer
 Brass Synthesizer
 ----------
 String Synthesizer</extracomment>
-        <translation type="unfinished"/>
+        <translation>Synt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1219"/>
         <source>Atmosphere Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor atmosféry</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1222"/>
         <source>Brightness Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor jasu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1225"/>
         <source>Crystal Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor křišťálu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1228"/>
         <source>Echoes Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor ozvěny</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1231"/>
         <source>Goblins Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor skřítků</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1234"/>
         <source>Rain Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor deště</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1237"/>
         <source>Sci-fi Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor vědecké fantastiky</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1240"/>
         <source>Soundtrack Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor ozvučení</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1243"/>
         <source>Pad Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor plochy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1246"/>
         <source>New Age Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor nového věku</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1249"/>
         <source>Warm Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor teplé plochy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1252"/>
         <source>Poly Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Polyfonní syntetizátor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1255"/>
         <source>Choir Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor sboru</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1258"/>
         <source>Bowed Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor skleněné plochy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1261"/>
         <source>Metallic Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor kovové plochy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1264"/>
         <source>Halo Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor světelného kruhu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1267"/>
         <source>Sweep Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor pásové plochy</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1270"/>
         <source>Saw Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Syntetizátor pily</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1273"/>
         <source>Sine Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Sinusový syntetizátor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1276"/>
         <source>Square Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Obdélníkový syntetizátor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1279"/>
         <source>Ondes Martenot</source>
-        <translation type="unfinished"/>
+        <translation>Ondes martenot</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1281"/>
         <source>O.M.</source>
         <extracomment>Ondes Martenot</extracomment>
-        <translation type="unfinished"/>
+        <translation>O. m.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1282"/>
         <source>Mallet Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Paličkový syntetizátor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1284"/>
         <source>Mal. Syn.</source>
         <extracomment>Mallet Synthesizer</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pal. synt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1285"/>
         <source>Bass Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Basový syntetizátor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1288"/>
         <source>Brass Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Žesťový syntetizátor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1291"/>
         <source>String Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Smyčcový syntetizátor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1294"/>
         <source>Theremin</source>
-        <translation type="unfinished"/>
+        <translation>Theremin</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1296"/>
         <source>Thmn.</source>
         <extracomment>Theremin</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ther.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1297"/>
         <source>Percussion Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Perkusivní syntetizátor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1299"/>
         <source>Perc. Syn.</source>
         <extracomment>Percussion Synthesizer</extracomment>
-        <translation type="unfinished"/>
+        <translation>Perk. synt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1300"/>
         <source>Plucked Strings</source>
-        <translation type="unfinished"/>
+        <translation>Drnkací hudební nástroje</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1301"/>
         <source>Banjo</source>
-        <translation type="unfinished"/>
+        <translation>Bendžo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1303"/>
         <source>Bj.</source>
         <extracomment>Banjo</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bž.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1304"/>
         <source>Tenor Banjo</source>
-        <translation type="unfinished"/>
+        <translation>Tenorové bendžo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1306"/>
         <source>T. Bj.</source>
         <extracomment>Tenor Banjo</extracomment>
-        <translation type="unfinished"/>
+        <translation>T. Bž.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1307"/>
         <source>Balalaika</source>
-        <translation type="unfinished"/>
+        <translation>Balalajka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1309"/>
         <source>Bal.</source>
         <extracomment>Balalaika</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1310"/>
         <source> Balalaika</source>
-        <translation type="unfinished"/>
+        <translation> Balalajka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1311"/>
         <location filename="../instruments/instrumentsxml.h" line="1314"/>
         <source>Piccolo Balalaika</source>
-        <translation type="unfinished"/>
+        <translation>Piccolo balalajka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1313"/>
         <source>Pic. Bal.</source>
         <extracomment>Piccolo Balalaika</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pic. bal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1315"/>
         <location filename="../instruments/instrumentsxml.h" line="1318"/>
         <source>Prima Balalaika</source>
-        <translation type="unfinished"/>
+        <translation>Prima balalajka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1317"/>
         <source>Pr. Bal.</source>
         <extracomment>Prima Balalaika</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pr. bal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1319"/>
         <location filename="../instruments/instrumentsxml.h" line="1322"/>
         <source>Secunda Balalaika</source>
-        <translation type="unfinished"/>
+        <translation>Sekunda balalajka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1321"/>
         <source>Sec. Bal.</source>
         <extracomment>Secunda Balalaika</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sek. bal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1323"/>
         <location filename="../instruments/instrumentsxml.h" line="1326"/>
         <source>Alto Balalaika</source>
-        <translation type="unfinished"/>
+        <translation>Altová balalajka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1325"/>
         <source>Al. Bal.</source>
         <extracomment>Alto Balalaika</extracomment>
-        <translation type="unfinished"/>
+        <translation>Al. bal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1327"/>
         <location filename="../instruments/instrumentsxml.h" line="1330"/>
         <source>Bass Balalaika</source>
-        <translation type="unfinished"/>
+        <translation>Basová balalajka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1329"/>
         <source>B. Bal.</source>
         <extracomment>Bass Balalaika</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. bal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1331"/>
         <location filename="../instruments/instrumentsxml.h" line="1334"/>
         <source>Contrabass Balalaika</source>
-        <translation type="unfinished"/>
+        <translation>Kontrabasová balalajka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1333"/>
         <source>CB. Bal.</source>
         <extracomment>Contrabass Balalaika</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kb. bal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1335"/>
         <location filename="../instruments/instrumentsxml.h" line="1339"/>
         <source>Bouzouki</source>
-        <translation type="unfinished"/>
+        <translation>Buzuki</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1337"/>
         <location filename="../instruments/instrumentsxml.h" line="1341"/>
         <source>Bou.</source>
         <extracomment>Bouzouki</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bzk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1338"/>
         <source>Bouzouki (3-course)</source>
-        <translation type="unfinished"/>
+        <translation>Buzuki (třístrunná)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1342"/>
         <source>Bouzouki (4-course)</source>
-        <translation type="unfinished"/>
+        <translation>Buzuki (čtyřstrunná)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1343"/>
         <source>Soprano Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Sopránová kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1345"/>
         <source>S. Guit.</source>
         <extracomment>Soprano Guitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>S. kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1346"/>
         <source>Alto Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Altová kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1348"/>
         <source>A. Guit.</source>
         <extracomment>Alto Guitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>A. kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1349"/>
         <source>Classical Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Klasická kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1351"/>
@@ -4752,93 +4747,93 @@ String Synthesizer</extracomment>
         <extracomment>Classical Guitar
 ----------
 Acoustic Guitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1352"/>
         <source>Classical Guitar [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>Klasická kytara [tabulatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1353"/>
         <source>Acoustic Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Akustická kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1356"/>
         <source>Acoustic Guitar [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>Akustická kytara [tabulatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1357"/>
         <source>11-string Alto Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Jedenáctistrunná altová kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1359"/>
         <source>11-str. A. Guit.</source>
         <extracomment>11-string Alto Guitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>11-str. a. kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1360"/>
         <source>12-string Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Dvanáctistrunná kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1362"/>
         <source>12-str. Guit.</source>
         <extracomment>12-string Guitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>12-str. kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1363"/>
         <source>Pedal Steel Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Pedálová ocelová kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1365"/>
         <source>Ped. St. Guit.</source>
         <extracomment>Pedal Steel Guitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ped. oc. kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1366"/>
         <source>Electric Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Elektrická kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1368"/>
         <source>El. Guit.</source>
         <extracomment>Electric Guitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>El. kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1369"/>
         <source>Electric Guitar [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>Elektrická kytara [tabulatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1370"/>
         <source>Harp</source>
-        <translation type="unfinished"/>
+        <translation>Harfa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1372"/>
         <source>Hrp.</source>
         <extracomment>Harp</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hrf.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1373"/>
         <source>Koto</source>
-        <translation type="unfinished"/>
+        <translation>Koto (japonská citera)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1375"/>
         <source>Ko.</source>
         <extracomment>Koto</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ko.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1376"/>
@@ -4850,7 +4845,7 @@ Acoustic Guitar</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1400"/>
         <location filename="../instruments/instrumentsxml.h" line="1404"/>
         <source>Lute</source>
-        <translation type="unfinished"/>
+        <translation>Loutna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1378"/>
@@ -4863,100 +4858,105 @@ Acoustic Guitar</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1406"/>
         <source>Lt.</source>
         <extracomment>Lute</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lout.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1379"/>
         <source>Lute [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>Loutna [tabulatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1383"/>
         <source>Lute 5-course</source>
-        <translation type="unfinished"/>
+        <translation>Pětistrunná loutna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1387"/>
         <source>Lute 6-course</source>
-        <translation type="unfinished"/>
+        <translation>Šestistrunná loutna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1391"/>
         <source>Lute 7-course</source>
-        <translation type="unfinished"/>
+        <translation>Sedmistrunná loutna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1395"/>
         <source>Lute 8-course</source>
-        <translation type="unfinished"/>
+        <translation>Osmistrunná loutna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1399"/>
         <source>Lute 9-course</source>
-        <translation type="unfinished"/>
+        <translation>Devítistrunná loutna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1403"/>
         <source>Lute 10-course</source>
-        <translation type="unfinished"/>
+        <translation>Desítistrunná loutna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1407"/>
         <source>Lute 13-course</source>
-        <translation type="unfinished"/>
+        <translation>Třináctistrunná loutna</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1410"/>
         <source>A. Lt.</source>
         <extracomment>Archlute</extracomment>
-        <translation type="unfinished"/>
+        <translation>A. lout.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1462"/>
         <source>5-str. Electric Bass</source>
-        <translation type="unfinished"/>
+        <translation>Pětistrunná elektrická basová kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1465"/>
         <source>5-str. Electric Bass [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>Pětistrunná elektrická basová kytara [tabulatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1502"/>
         <source>Viola da gamba (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Viola da gamba  (tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1408"/>
         <source>Archlute</source>
-        <translation type="unfinished"/>
+        <translation>Arciloutna</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4"/>
+        <source>Early music</source>
+        <translation>Stará hudba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1411"/>
         <source>Theorbo</source>
-        <translation type="unfinished"/>
+        <translation>Theorba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1413"/>
         <source>Thb.</source>
         <extracomment>Theorbo</extracomment>
-        <translation type="unfinished"/>
+        <translation>Thb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1414"/>
         <source>Mandolin</source>
-        <translation type="unfinished"/>
+        <translation>Mandolína</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1416"/>
         <source>Mdn.</source>
         <extracomment>Mandolin</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mand.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1417"/>
         <source>Mandola</source>
-        <translation type="unfinished"/>
+        <translation>Mandola</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1419"/>
@@ -4968,125 +4968,125 @@ Acoustic Guitar</extracomment>
 Alto Mandola
 ----------
 Tenor Mandola</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mda.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1420"/>
         <source>Alto Mandola</source>
-        <translation type="unfinished"/>
+        <translation>Altová mandola</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1423"/>
         <source>Tenor Mandola</source>
-        <translation type="unfinished"/>
+        <translation>Tenorová mandola</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1426"/>
         <source>Mandocello</source>
-        <translation type="unfinished"/>
+        <translation>Mandoloncello</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1428"/>
         <source>Mncl.</source>
         <extracomment>Mandocello</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mncl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1429"/>
         <source>Octave Mandolin</source>
-        <translation type="unfinished"/>
+        <translation>Oktávová mandolína</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1431"/>
         <source>OM.</source>
         <extracomment>Octave Mandolin</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ok. man.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1432"/>
         <source>Shamisen</source>
-        <translation type="unfinished"/>
+        <translation>Šamisen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1434"/>
         <source>Sh.</source>
         <extracomment>Shamisen</extracomment>
-        <translation type="unfinished"/>
+        <translation>Š.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1435"/>
         <source>Sitar</source>
-        <translation type="unfinished"/>
+        <translation>Sitár</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1437"/>
         <source>Si.</source>
         <extracomment>Sitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>Si.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1438"/>
         <source>Ukulele</source>
-        <translation type="unfinished"/>
+        <translation>Ukulele</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1440"/>
         <source>Uk.</source>
         <extracomment>Ukulele</extracomment>
-        <translation type="unfinished"/>
+        <translation>Uk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1441"/>
         <source>Ukulele [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>Ukulele [tabulatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1442"/>
         <source>Tenor Ukulele</source>
-        <translation type="unfinished"/>
+        <translation>Tenorové ukulele</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1444"/>
         <source>Ten. Uk.</source>
         <extracomment>Tenor Ukulele</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ten. uk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1445"/>
         <source>Baritone Ukulele</source>
-        <translation type="unfinished"/>
+        <translation>Barytonové ukulele</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1447"/>
         <source>Bar. Uk.</source>
         <extracomment>Baritone Ukulele</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bar. uk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1448"/>
         <source>Bass Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Basová kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1450"/>
         <source>B. Guit.</source>
         <extracomment>Bass Guitar</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1451"/>
         <source>Bass Guitar [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>Basová kytara [tabulatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1452"/>
         <source>Acoustic Bass</source>
-        <translation type="unfinished"/>
+        <translation>Akustická basová kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1455"/>
         <source>Electric Bass</source>
-        <translation type="unfinished"/>
+        <translation>Elektrická basová kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1457"/>
@@ -5095,138 +5095,138 @@ Tenor Mandola</extracomment>
         <extracomment>Electric Bass
 ----------
 5-str. Electric Bass</extracomment>
-        <translation type="unfinished"/>
+        <translation>El .b. kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1458"/>
         <source>Electric Bass [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>Elektrická basová kytara [tabulatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1459"/>
         <source>Fretless Electric Bass</source>
-        <translation type="unfinished"/>
+        <translation>Elektrická basová kytara</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1461"/>
         <source>Frtl. El. B.</source>
         <extracomment>Fretless Electric Bass</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bezpr. el. b. kyt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1466"/>
         <source>Strings</source>
-        <translation type="unfinished"/>
+        <translation>Smyčcové nástroje</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1467"/>
         <location filename="../instruments/instrumentsxml.h" line="1470"/>
         <source>String Section</source>
-        <translation type="unfinished"/>
+        <translation>Smyčce</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1469"/>
         <source>Str.</source>
         <extracomment>String Section</extracomment>
-        <translation type="unfinished"/>
+        <translation>Smyč.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1471"/>
         <source>Violin</source>
-        <translation type="unfinished"/>
+        <translation>Housle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1473"/>
         <source>Vln.</source>
         <extracomment>Violin</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hsl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1474"/>
         <source>Viola</source>
-        <translation type="unfinished"/>
+        <translation>Viola, brač</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1476"/>
         <source>Vla.</source>
         <extracomment>Viola</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vla.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1477"/>
         <source>Violoncello</source>
-        <translation type="unfinished"/>
+        <translation>Violoncello</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1479"/>
         <source>Vlc.</source>
         <extracomment>Violoncello</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vlc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1480"/>
         <source>Contrabass</source>
-        <translation type="unfinished"/>
+        <translation>Kontrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1482"/>
         <source>Cb.</source>
         <extracomment>Contrabass</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1483"/>
         <source>Double Bass</source>
-        <translation type="unfinished"/>
+        <translation>Kontrabas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1484"/>
         <source>Pardessus de viole</source>
-        <translation type="unfinished"/>
+        <translation>Pardessus de viole</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1486"/>
         <source>Pds. v.</source>
         <extracomment>Pardessus de viole</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pds. v.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1487"/>
         <source>Treble Viol</source>
-        <translation type="unfinished"/>
+        <translation>Sopránová viola da gamba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1489"/>
         <source>Tr. vl.</source>
         <extracomment>Treble Viol</extracomment>
-        <translation type="unfinished"/>
+        <translation>S. vla. d. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1490"/>
         <source>Alto Viol</source>
-        <translation type="unfinished"/>
+        <translation>Altová viola da gamba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1492"/>
         <source>A. Vl.</source>
         <extracomment>Alto Viol</extracomment>
-        <translation type="unfinished"/>
+        <translation>A. vla. d. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1493"/>
         <source>Tenor Viol</source>
-        <translation type="unfinished"/>
+        <translation>Tenorová viola da gamba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1495"/>
         <source>T. Vl.</source>
         <extracomment>Tenor Viol</extracomment>
-        <translation type="unfinished"/>
+        <translation>T. vla. d. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1496"/>
         <source>Viola da gamba</source>
-        <translation type="unfinished"/>
+        <translation>Viola da gamba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1498"/>
@@ -5235,17 +5235,17 @@ Tenor Mandola</extracomment>
         <extracomment>Viola da gamba
 ----------
 Viola da gamba (Tab)</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vla. d. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1499"/>
         <source>Viola da gamba (Tab)</source>
-        <translation type="unfinished"/>
+        <translation>Viola da gamba [tabulatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1503"/>
         <source>Violone</source>
-        <translation type="unfinished"/>
+        <translation>Violon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1505"/>
@@ -5254,12 +5254,12 @@ Viola da gamba (Tab)</extracomment>
         <extracomment>Violone
 ----------
 D Violone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vln.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1506"/>
         <source>D Violone</source>
-        <translation type="unfinished"/>
+        <translation>D Violon (basová viola)</translation>
     </message>
 </context>
 </TS>
