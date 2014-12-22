@@ -2443,7 +2443,7 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
-         "toogle-piano",
+         "toggle-piano",
          QT_TRANSLATE_NOOP("action","Piano Keyboard")
          },
       {
