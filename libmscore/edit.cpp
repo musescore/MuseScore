@@ -1479,8 +1479,6 @@ void Score::deleteItem(Element* el)
                                           }
                                     }
                               }
-
-                        select(rest, SelectType::SINGLE, 0);
                         }
                   else  {
                         // remove segment if empty
@@ -1541,12 +1539,15 @@ void Score::deleteItem(Element* el)
                   int tick       = seg->tick();
                   Segment::Type segType = seg->segmentType();
 
+                  if (segType == Segment::Type::BarLine) {
+                        undoRemoveElement(el);
+                        break;
+                        }
+
                   foreach(Score* score, scoreList()) {
                         Measure* m   = score->tick2measure(tick);
                         if (segType == Segment::Type::StartRepeatBarLine)
                               undoChangeProperty(m, P_ID::REPEAT_FLAGS, int(m->repeatFlags()) & ~int(Repeat::START));
-                        else if (segType == Segment::Type::BarLine)
-                              undoRemoveElement(el);
                         else if (segType == Segment::Type::EndBarLine) {
                               // if bar line has custom barLineType, change to barLineType of the whole measure
                               if (bl->customSubtype()) {
