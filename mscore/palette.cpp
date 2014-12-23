@@ -727,7 +727,9 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
                   if (idx != selectedIdx) {
                         // show voice colors for notes
                         if (el->type() == Element::Type::CHORD) {
-                              el->setSelected(true);
+                              Chord* c = static_cast<Chord*>(el);
+                              for (Note* n : c->notes())
+                                    n->setSelected(true);
                               color = el->curColor();
                               }
                         else
