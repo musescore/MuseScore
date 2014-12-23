@@ -2019,7 +2019,7 @@ static void loadScores(const QStringList& argv)
                         case SessionStart::SCORE:
                               {
                               Score* score = mscore->readScore(preferences.startScore);
-                              if (preferences.startScore.startsWith(":/"))
+                              if (preferences.startScore.startsWith(":/") && score)
                                     score->setCreated(true);
                               if (score == 0) {
                                     score = mscore->readScore(":/data/My_First_Score.mscz");
