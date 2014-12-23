@@ -21,6 +21,7 @@
  MusicXML font handling support.
  */
 
+#include "libmscore/sym.h"
 #include "libmscore/xml.h"
 #include "musicxmlfonthandler.h"
 
@@ -42,6 +43,32 @@ static QString charFormat2QString(const CharFormat& f)
             .arg(f.fontSize())
             .arg(f.fontFamily())
                  ;
+      }
+
+void dumpText(const Text* text)
+      {
+      QList<TextFragment> list = text->fragmentList();
+      qDebug("MScoreTextToMXML::dumpText %d fragment(s)", list.size());
+      for (const TextFragment& f : list) {
+            QString t = "fragment";
+            if (f.format.type() == CharFormatType::TEXT) {
+                  t += QString(" text '%1'").arg(f.text);
+                  t += QString(" len %1").arg(f.text.size());
+                  }
+            else {
+                  t += " syms";
+                  int len = 0;
+                  for (const SymId id : f.ids) {
+                        t += QString(" '%1'").arg(Sym::id2name(id));
+                        QString s = QString("<sym>%1</sym>").arg(Sym::id2name(id));
+                        len += s.size();
+                        }
+                  t += QString(" len %1").arg(len);
+                  }
+            t += " format ";
+            t += charFormat2QString(f.format);
+            qDebug("%s", qPrintable(t));
+            }
       }
 #endif
 
@@ -97,6 +124,27 @@ QString MScoreTextToMXML::toPlainText(const QString& text)
                   }
             }
       //qDebug("MScoreTextToMXML::toPlainText('%s') res '%s'", qPrintable(text), qPrintable(res));
+      return res;
+      }
+      
+//---------------------------------------------------------
+//   toPlainTextPlusSymbols
+//    convert to plain text plus <sym>[name]</sym> encoded symbols
+//---------------------------------------------------------
+
+QString MScoreTextToMXML::toPlainTextPlusSymbols(const QList<TextFragment>& list)
+      {
+      qDebug("MScoreTextToMXML::toPlainTextPlusSymbols %d fragment(s)", list.size());
+      QString res;
+      for (const TextFragment& f : list) {
+            if (f.format.type() == CharFormatType::TEXT)
+                  res += f.text;
+            else {
+                  for (const SymId id : f.ids)
+                        res += QString("<sym>%1</sym>").arg(Sym::id2name(id));
+                  }
+            }
+      qDebug("res '%s'", qPrintable(res));
       return res;
       }
 

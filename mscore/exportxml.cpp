@@ -2919,11 +2919,12 @@ static bool findMetronome(QString words,
                         metroRight = s5;
 
                   /*
-                  qDebug(" '%s'%s'%s'%s'",
+                  qDebug("-> found '%s'%s'%s'%s' hasParen %d",
                          qPrintable(wordsLeft),
                          qPrintable(metroLeft),
                          qPrintable(metroRight),
-                         qPrintable(wordsRight)
+                         qPrintable(wordsRight),
+                         hasParen
                          );
                    */
                   return true;
@@ -2946,12 +2947,15 @@ static void beatUnit(Xml& xml, const TDuration dur)
 
 static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
       {
+      //qDebug("wordsMetrome('%s' len %d)", qPrintable(text->text()), text->text().size());
+      const QList<TextFragment> list = text->fragmentList();
+      QString plainText = MScoreTextToMXML::toPlainTextPlusSymbols(list);
       QString wordsLeft;  // words left of metronome
       bool hasParen;      // parenthesis
       QString metroLeft;  // left part of metronome
       QString metroRight; // right part of metronome
       QString wordsRight; // words right of metronome
-      if (findMetronome(text->text(), wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
+      if (findMetronome(plainText, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
             if (wordsLeft != "") {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD

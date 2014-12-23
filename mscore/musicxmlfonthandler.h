@@ -33,6 +33,7 @@ class MScoreTextToMXML {
 public:
       MScoreTextToMXML(const QString& tag, const QString& attr, const QString& t, const TextStyle& defTs, const TextStyle& actTs);
       static QString toPlainText(const QString& text);
+      static QString toPlainTextPlusSymbols(const QList<TextFragment>& list);
       void write(Xml& xml);
 
 private:

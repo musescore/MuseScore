@@ -2713,5 +2713,30 @@ QString Text::subtypeName() const
             }
       return rez;
       }
+      
+//---------------------------------------------------------
+//   fragmentList
+//---------------------------------------------------------
+
+/**
+ Return the text as a single list of TextFragment
+ Used by the MusicXML formatted export to avoid parsing the xml text format
+ */
+
+QList<TextFragment> Text::fragmentList() const
+      {
+      QList<TextFragment> res;
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  /* TODO TBD
+                  if (f.text.isEmpty())                     // skip empty fragments, not to
+                        continue;                           // insert extra HTML formatting
+                   */
+                  res.append(f);
+                  }
+            }
+      return res;
+      }
+
 }
 
