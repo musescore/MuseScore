@@ -959,37 +959,85 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
             }
       }
 
-void createMeasures(ReducedFraction &lastTick, Score *score)
+bool isPickupWithLessTimeSig(const Fraction &firstBarTimeSig, const Fraction &secondBarTimeSig)
       {
-      int bars, beat, tick;
-      score->sigmap()->tickValues(lastTick.ticks(), &bars, &beat, &tick);
+      return firstBarTimeSig < secondBarTimeSig;
+      }
+
+bool isPickupWithGreaterTimeSig(
+            const Fraction &firstBarTimeSig,
+            const Fraction &secondBarTimeSig,
+            const ReducedFraction &firstTick)
+      {
+      return firstBarTimeSig == secondBarTimeSig * 2
+                  && firstBarTimeSig.numerator() % 3 != 0
+                  && firstTick > ReducedFraction(0, 1);
+      }
+
+void createMeasures(const ReducedFraction &firstTick, ReducedFraction &lastTick, Score *score)
+      {
+      int barCount, beat, tick;
+      score->sigmap()->tickValues(lastTick.ticks(), &barCount, &beat, &tick);
       if (beat > 0 || tick > 0)
-            ++bars;           // convert bar index to number of bars
+            ++barCount;           // convert bar index to number of bars
 
       const auto& opers = preferences.midiImportOperations;
-      const bool pickupMeasure = opers.data()->trackOpers.searchPickupMeasure.value();
+      const bool tryDetectPickupMeasure = opers.data()->trackOpers.searchPickupMeasure.value();
 
-      for (int i = 0; i < bars; ++i) {
-            Measure* measure  = new Measure(score);
-            const int tick = score->sigmap()->bar2tick(i, 0);
-            measure->setTick(tick);
-            measure->setNo(i);
-            const Fraction ts = score->sigmap()->timesig(tick).timesig();
-            Fraction nominalTs = ts;
+      int beginBeat = 0;
+      if (tryDetectPickupMeasure && barCount > 1) {
+            const int firstBarTick = score->sigmap()->bar2tick(0, 0);
+            const int secondBarTick = score->sigmap()->bar2tick(1, 0);
+            const Fraction firstTimeSig = score->sigmap()->timesig(firstBarTick).timesig();
+            const Fraction secondTimeSig = score->sigmap()->timesig(secondBarTick).timesig();
 
-            if (pickupMeasure && i == 0 && bars > 1) {
-                  const int secondBarIndex = 1;
-                  const int secondBarTick = score->sigmap()->bar2tick(secondBarIndex, 0);
-                  Fraction secondTs(score->sigmap()->timesig(secondBarTick).timesig());
-                  if (ts < secondTs) {          // the first measure is a pickup measure
-                        nominalTs = secondTs;
-                        measure->setIrregular(true);
-                        }
+            if (isPickupWithLessTimeSig(firstTimeSig, secondTimeSig)) {
+                  Measure* pickup = new Measure(score);
+                  pickup->setTick(firstBarTick);
+                  pickup->setNo(0);
+                  pickup->setIrregular(true);
+                  pickup->setTimesig(secondTimeSig);       // nominal time signature
+                  pickup->setLen(firstTimeSig);            // actual length
+                  score->measures()->add(pickup);
+                  beginBeat = 1;
                   }
-            measure->setTimesig(nominalTs);
-            measure->setLen(ts);
-            score->measures()->add(measure);
+            else if (isPickupWithGreaterTimeSig(firstTimeSig, secondTimeSig, firstTick)) {
+                              // split measure into 2 normal
+                              // but for simplicity don't treat first bar as a pickup bar:
+                              // leave its actual length equal to nominal length
+                  ++barCount;
+
+                  score->sigmap()->add(firstBarTick, secondTimeSig);
+
+                  Measure* firstBar = new Measure(score);
+                  firstBar->setTick(firstBarTick);
+                  firstBar->setNo(0);
+                  firstBar->setTimesig(secondTimeSig);
+                  firstBar->setLen(secondTimeSig);
+                  score->measures()->add(firstBar);
+
+                  Measure* secondBar = new Measure(score);
+                  secondBar->setTick(firstBarTick + secondTimeSig.ticks());
+                  secondBar->setNo(1);
+                  secondBar->setTimesig(secondTimeSig);
+                  secondBar->setLen(secondTimeSig);
+                  score->measures()->add(secondBar);
+
+                  beginBeat = 2;
+                  }
             }
+
+      for (int i = beginBeat; i < barCount; ++i) {
+            Measure* m = new Measure(score);
+            const int tick = score->sigmap()->bar2tick(i, 0);
+            m->setTick(tick);
+            m->setNo(i);
+            const Fraction timeSig = score->sigmap()->timesig(tick).timesig();
+            m->setTimesig(timeSig);
+            m->setLen(timeSig);
+            score->measures()->add(m);
+            }
+
       const Measure *m = score->lastMeasure();
       if (m) {
             score->fixTicks();
@@ -1167,6 +1215,18 @@ void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
             }
       }
 
+ReducedFraction findFirstChordTick(const QList<MTrack> &tracks)
+      {
+      ReducedFraction minTick(-1, 1);
+      for (const auto &track: tracks) {
+            for (const auto &chord: track.chords) {
+                  if (minTick == ReducedFraction(-1, 1) || chord.first < minTick)
+                        minTick = chord.first;
+                  }
+            }
+      return minTick;
+      }
+
 void convertMidi(Score *score, const MidiFile *mf)
       {
       ReducedFraction lastTick;
@@ -1236,7 +1296,9 @@ void convertMidi(Score *score, const MidiFile *mf)
       findInstrumentsForAllTracks(trackList);
       createInstruments(score, trackList);
       MidiDrum::setStaffBracketForDrums(trackList);
-      createMeasures(lastTick, score);
+
+      const auto firstTick = findFirstChordTick(trackList);
+      createMeasures(firstTick, lastTick, score);
       createNotes(lastTick, trackList, mf->midiType());
       createTimeSignatures(score);
       score->connectTies();
