@@ -3,7 +3,6 @@ APPNAME=mscore
 LONG_NAME=MuseScore
 LONGER_NAME="MuseScore 2"
 
-
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.png
 APP_PATH=applebuild/${APPNAME}.app
@@ -85,9 +84,6 @@ done
 #homebrew libs may not be writable force it?
 chmod -R +w /usr/local/Cellar/
 macdeployqt ${VOLUME}/${APPNAME}.app
-codesign --deep -s "Developer ID Application: MuseScore" ${VOLUME}/${APPNAME}.app
-codesign -v ${VOLUME}/${APPNAME}.app
-spctl --assess --type execute ${VOLUME}/${APPNAME}.app
 
 for f in $(find "${VOLUME}/${APPNAME}.app/Contents" -iname "*");
 do
@@ -119,7 +115,7 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtQuick/Particles*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/Qt/WebSockets
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtWebEngine
 
-mv ${VOLUME}/${APPNAME}.app  "${VOLUME}/${LONGER_NAME}.app"
+mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 
 # copy in background image
 mkdir -p ${VOLUME}/Pictures
@@ -130,6 +126,11 @@ cp  ${BACKGROUND} ${VOLUME}/Pictures/background.png
 ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
+
+#codesign
+codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+codesign -v "${VOLUME}/${LONGER_NAME}.app"
+spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
  
 # Unmount the disk image
 hdiutil detach $DEV
