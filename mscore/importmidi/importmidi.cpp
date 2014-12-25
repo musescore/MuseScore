@@ -974,6 +974,53 @@ bool isPickupWithGreaterTimeSig(
                   && firstTick > ReducedFraction(0, 1);
       }
 
+void tryCreatePickupMeasure(
+            const ReducedFraction &firstTick,
+            Score *score,
+            int *begBarIndex,
+            int *barCount)
+      {
+      const int firstBarTick = score->sigmap()->bar2tick(0, 0);
+      const int secondBarTick = score->sigmap()->bar2tick(1, 0);
+      const Fraction firstTimeSig = score->sigmap()->timesig(firstBarTick).timesig();
+      const Fraction secondTimeSig = score->sigmap()->timesig(secondBarTick).timesig();
+
+      if (isPickupWithLessTimeSig(firstTimeSig, secondTimeSig)) {
+            Measure* pickup = new Measure(score);
+            pickup->setTick(firstBarTick);
+            pickup->setNo(0);
+            pickup->setIrregular(true);
+            pickup->setTimesig(secondTimeSig);       // nominal time signature
+            pickup->setLen(firstTimeSig);            // actual length
+            score->measures()->add(pickup);
+            *begBarIndex = 1;
+            }
+      else if (isPickupWithGreaterTimeSig(firstTimeSig, secondTimeSig, firstTick)) {
+                        // split measure into 2 equal measures
+                        // but for simplicity don't treat first bar as a pickup measure:
+                        // leave its actual length equal to nominal length
+            ++(*barCount);
+
+            score->sigmap()->add(firstBarTick, secondTimeSig);
+
+            Measure* firstBar = new Measure(score);
+            firstBar->setTick(firstBarTick);
+            firstBar->setNo(0);
+            firstBar->setTimesig(secondTimeSig);
+            firstBar->setLen(secondTimeSig);
+            score->measures()->add(firstBar);
+
+            Measure* secondBar = new Measure(score);
+            secondBar->setTick(firstBarTick + secondTimeSig.ticks());
+            secondBar->setNo(1);
+            secondBar->setTimesig(secondTimeSig);
+            secondBar->setLen(secondTimeSig);
+            score->measures()->add(secondBar);
+
+            *begBarIndex = 2;
+            }
+      }
+
 void createMeasures(const ReducedFraction &firstTick, ReducedFraction &lastTick, Score *score)
       {
       int barCount, beat, tick;
@@ -984,50 +1031,11 @@ void createMeasures(const ReducedFraction &firstTick, ReducedFraction &lastTick,
       const auto& opers = preferences.midiImportOperations;
       const bool tryDetectPickupMeasure = opers.data()->trackOpers.searchPickupMeasure.value();
 
-      int beginBeat = 0;
-      if (tryDetectPickupMeasure && barCount > 1) {
-            const int firstBarTick = score->sigmap()->bar2tick(0, 0);
-            const int secondBarTick = score->sigmap()->bar2tick(1, 0);
-            const Fraction firstTimeSig = score->sigmap()->timesig(firstBarTick).timesig();
-            const Fraction secondTimeSig = score->sigmap()->timesig(secondBarTick).timesig();
+      int begBarIndex = 0;
+      if (tryDetectPickupMeasure && barCount > 1)
+            tryCreatePickupMeasure(firstTick, score, &begBarIndex, &barCount);
 
-            if (isPickupWithLessTimeSig(firstTimeSig, secondTimeSig)) {
-                  Measure* pickup = new Measure(score);
-                  pickup->setTick(firstBarTick);
-                  pickup->setNo(0);
-                  pickup->setIrregular(true);
-                  pickup->setTimesig(secondTimeSig);       // nominal time signature
-                  pickup->setLen(firstTimeSig);            // actual length
-                  score->measures()->add(pickup);
-                  beginBeat = 1;
-                  }
-            else if (isPickupWithGreaterTimeSig(firstTimeSig, secondTimeSig, firstTick)) {
-                              // split measure into 2 normal
-                              // but for simplicity don't treat first bar as a pickup bar:
-                              // leave its actual length equal to nominal length
-                  ++barCount;
-
-                  score->sigmap()->add(firstBarTick, secondTimeSig);
-
-                  Measure* firstBar = new Measure(score);
-                  firstBar->setTick(firstBarTick);
-                  firstBar->setNo(0);
-                  firstBar->setTimesig(secondTimeSig);
-                  firstBar->setLen(secondTimeSig);
-                  score->measures()->add(firstBar);
-
-                  Measure* secondBar = new Measure(score);
-                  secondBar->setTick(firstBarTick + secondTimeSig.ticks());
-                  secondBar->setNo(1);
-                  secondBar->setTimesig(secondTimeSig);
-                  secondBar->setLen(secondTimeSig);
-                  score->measures()->add(secondBar);
-
-                  beginBeat = 2;
-                  }
-            }
-
-      for (int i = beginBeat; i < barCount; ++i) {
+      for (int i = begBarIndex; i < barCount; ++i) {
             Measure* m = new Measure(score);
             const int tick = score->sigmap()->bar2tick(i, 0);
             m->setTick(tick);
