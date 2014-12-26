@@ -2841,15 +2841,19 @@ static bool findMetronome(QString words,
                           bool& hasParen,      // parenthesis
                           QString& metroLeft,  // left part of metronome
                           QString& metroRight, // right part of metronome
-                          QString& wordsRight  // words right of metronome
+                          QString& wordsRight, // words right of metronome
+                          int& metroPos,       // metronome start position TODO support surrogate pairs
+                          int& metroLen        // metronome length
                           )
       {
-      //qDebug("findMetronome('%s')", qPrintable(words));
+      qDebug("findMetronome('%s')", qPrintable(words));
       wordsLeft  = "";
       hasParen   = false;
       metroLeft  = "";
       metroRight = "";
       wordsRight = "";
+      metroPos = -1;
+      metroLen = 0;
       int indEq  = words.indexOf('=');
       if (indEq <= 0)
             return false;
@@ -2905,7 +2909,6 @@ static bool findMetronome(QString words,
                   int lparen = s1.indexOf("(");
                   int rparen = s6.indexOf(")");
                   hasParen = (lparen == s1.length() - 1 && rparen == 0);
-                  //qDebug(" lparen=%d rparen=%d hasP=%d", lparen, rparen, hasParen);
 
                   if (hasParen)
                         wordsLeft = s1.mid(0, lparen);
@@ -2918,13 +2921,27 @@ static bool findMetronome(QString words,
                   else
                         metroRight = s5;
 
+                  metroPos = pos1;               // metronome position
+                  metroLen = len1 + len2 + len3; // metronome length
+                  if (hasParen) {
+                        metroPos -= 1; // move left one position
+                        metroLen += 2; // add length of '(' and ')'
+                        }
+
+                  // calculate starting position corrected for surrogate pairs (ignored by toPlainTextPlusSymbols())
+                  int corrPos = metroPos;
+                  for (int i = 0; i < metroPos; ++i)
+                        if (words.at(i).isHighSurrogate())
+                              --corrPos;
+                  metroPos = corrPos;
+
                   /*
-                  qDebug("-> found '%s'%s'%s'%s' hasParen %d",
+                  qDebug("-> found '%s'%s'%s'%s' hasParen %d metro pos %d len %d",
                          qPrintable(wordsLeft),
                          qPrintable(metroLeft),
                          qPrintable(metroRight),
                          qPrintable(wordsRight),
-                         hasParen
+                         hasParen, metroPos, metroLen
                          );
                    */
                   return true;
@@ -2947,7 +2964,7 @@ static void beatUnit(Xml& xml, const TDuration dur)
 
 static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
       {
-      //qDebug("wordsMetrome('%s' len %d)", qPrintable(text->text()), text->text().size());
+      qDebug("wordsMetrome('%s' len %d)", qPrintable(text->text()), text->text().size());
       const QList<TextFragment> list = text->fragmentList();
       QString plainText = MScoreTextToMXML::toPlainTextPlusSymbols(list);
       QString wordsLeft;  // words left of metronome
@@ -2955,7 +2972,13 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
       QString metroLeft;  // left part of metronome
       QString metroRight; // right part of metronome
       QString wordsRight; // words right of metronome
-      if (findMetronome(plainText, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
+      int metroPos = -1;   // metronome start position
+      int metroLen = 0;    // metronome length
+      if (findMetronome(plainText, wordsLeft, hasParen, metroLeft, metroRight, wordsRight, metroPos, metroLen)) {
+            QList<TextFragment> left;
+            QList<TextFragment> mid;
+            QList<TextFragment> right;
+            MScoreTextToMXML::split(list, metroPos, metroLen, left, mid, right);
             if (wordsLeft != "") {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD

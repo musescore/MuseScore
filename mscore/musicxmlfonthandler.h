@@ -34,6 +34,8 @@ public:
       MScoreTextToMXML(const QString& tag, const QString& attr, const QString& t, const TextStyle& defTs, const TextStyle& actTs);
       static QString toPlainText(const QString& text);
       static QString toPlainTextPlusSymbols(const QList<TextFragment>& list);
+      static bool split(const QList<TextFragment>& in, const int pos, const int len,
+                        QList<TextFragment>& left, QList<TextFragment>& mid, QList<TextFragment>& right);
       void write(Xml& xml);
 
 private:
