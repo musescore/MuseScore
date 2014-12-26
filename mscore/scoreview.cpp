@@ -5415,8 +5415,9 @@ void ScoreView::layoutChanged()
       if (mscore->navigator())
             mscore->navigator()->layoutChanged();
       _curLoopIn->move(_score->pos(POS::LEFT));
-      if (_score->pos(POS::RIGHT) > _score->lastMeasure()->endTick())
-            _score->setPos(POS::RIGHT, _score->lastMeasure()->endTick());
+      Measure* lm = _score->lastMeasure();
+      if (lm && _score->pos(POS::RIGHT) > lm->endTick())
+            _score->setPos(POS::RIGHT, lm->endTick());
       _curLoopOut->move(_score->pos(POS::RIGHT));
       }
 
