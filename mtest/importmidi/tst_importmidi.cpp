@@ -296,6 +296,7 @@ class TestImportMidi : public QObject, public MTest
       void minDuration() { dontSimplify("min_duration"); }
 
       void pickupMeasure() { dontSimplify("pickup"); }
+      void pickupMeasureLong() { noTempoText("pickup_long"); }
 
       // LH/RH separation
       void LHRH_Nontuplet() { staffSplit("split_nontuplet"); }
