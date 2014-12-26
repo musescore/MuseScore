@@ -104,9 +104,9 @@ void ResourceManager::displayLanguages()
             QString hashInstruments = instrumentsObject.value("hash").toString();
             QString filenameInstruments = instrumentsObject.value("file_name").toString();
             
-            bool verifyInstruments = verifyLanguageFile(filenameMscore, hashMscore);
+            bool verifyInstruments = verifyLanguageFile(filenameInstruments, hashInstruments);
 
-            if (verifyMScore || verifyInstruments) { // compare local file with distant hash
+            if (verifyMScore && verifyInstruments) { // compare local file with distant hash
                   temp->setText(tr("No update"));
                   temp->setDisabled(1);
                   }
