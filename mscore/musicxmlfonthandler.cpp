@@ -32,7 +32,7 @@ namespace Ms {
 //    convert charFormat to QString for debug print
 //---------------------------------------------------------
 
-#if 0
+#if 1
 static QString charFormat2QString(const CharFormat& f)
       {
       return QString("b %1 i %2 u %3 va %4 fs %5 fam %6")
@@ -45,9 +45,8 @@ static QString charFormat2QString(const CharFormat& f)
                  ;
       }
 
-void dumpText(const Text* text)
+void dumpText(const QList<TextFragment>& list)
       {
-      QList<TextFragment> list = text->fragmentList();
       qDebug("MScoreTextToMXML::dumpText %d fragment(s)", list.size());
       for (const TextFragment& f : list) {
             QString t = "fragment";
@@ -134,7 +133,6 @@ QString MScoreTextToMXML::toPlainText(const QString& text)
 
 QString MScoreTextToMXML::toPlainTextPlusSymbols(const QList<TextFragment>& list)
       {
-      qDebug("MScoreTextToMXML::toPlainTextPlusSymbols %d fragment(s)", list.size());
       QString res;
       for (const TextFragment& f : list) {
             if (f.format.type() == CharFormatType::TEXT)
@@ -144,8 +142,121 @@ QString MScoreTextToMXML::toPlainTextPlusSymbols(const QList<TextFragment>& list
                         res += QString("<sym>%1</sym>").arg(Sym::id2name(id));
                   }
             }
-      qDebug("res '%s'", qPrintable(res));
       return res;
+      }
+
+//---------------------------------------------------------
+//   plainTextPlusSymbolsSize
+//---------------------------------------------------------
+
+static int plainTextPlusSymbolsFragmentSize(const TextFragment& f)
+      {
+      int res = 0;
+      if (f.format.type() == CharFormatType::TEXT)
+            res += f.columns();
+      else {
+            for (const SymId id : f.ids)
+                  res += QString("<sym>%1</sym>").arg(Sym::id2name(id)).size();
+            }
+      return res;
+      }
+
+//---------------------------------------------------------
+//   plainTextPlusSymbolsSize
+//---------------------------------------------------------
+
+static int plainTextPlusSymbolsListSize(const QList<TextFragment>& list)
+      {
+      int res = 0;
+      for (const TextFragment& f : list) {
+            res += plainTextPlusSymbolsFragmentSize(f);
+            }
+      return res;
+      }
+
+//---------------------------------------------------------
+//   split
+//---------------------------------------------------------
+
+/**
+ Split \a in into \a left, \a mid and \a right. Mid starts at \a pos and is \a len characters long.
+ Pos and len refer to the representation returned by toPlainTextPlusSymbols().
+ TODO Make sure surrogate pairs are handled correctly
+ Return true if OK, false on error.
+ */
+
+bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const int len,
+                             QList<TextFragment>& left, QList<TextFragment>& mid, QList<TextFragment>& right)
+      {
+      qDebug("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
+      qDebug("-> in");
+      dumpText(in);
+
+      if (pos < 0 || len < 0)
+            return false;
+
+      // ensure output is empty at start
+      left.clear();
+      mid.clear();
+      right.clear();
+
+      // set pos to begin of first fragment
+      int fragmentNr = 0;
+      TextFragment fragment;
+      if (fragmentNr < in.size()) fragment = in.at(fragmentNr);
+      QList<TextFragment>* currentDest = &left;
+      int currentMaxSize = pos;
+
+      // while text left
+      while (fragmentNr < in.size()) {
+            int destSize = plainTextPlusSymbolsListSize(*currentDest);
+            int fragSize = plainTextPlusSymbolsFragmentSize(fragment);
+            //qDebug("destSize %d fragSize %d maxSize %d", destSize, fragSize, currentMaxSize);
+            // if no room left in current destination (check applies only to left and mid)
+            if ((currentDest != &right && destSize >= currentMaxSize)
+                || currentDest == &right) {
+                  // move to next destination
+                  if (currentDest == &left) {
+                        //qDebug("no room in dest move to next dest mid");
+                        currentDest = &mid;
+                        currentMaxSize = len;
+                        }
+                  else if (currentDest == &mid) {
+                        //qDebug("no room in dest move to next dest right");
+                        currentDest = &right;
+                        }
+                  }
+            // if current fragment fits in current destination (check applies only to left and mid)
+            if ((currentDest != &right && destSize + fragSize <= currentMaxSize)
+                || currentDest == &right) {
+                  // add it
+                  //qDebug("fragment fits in dest, adding %d", plainTextPlusSymbolsFragmentSize(fragment));
+                  currentDest->append(fragment);
+                  // move to next fragment
+                  fragmentNr++;
+                  //posInFragment = 0;
+                  if (fragmentNr < in.size()) fragment = in.at(fragmentNr);
+                  }
+            else {
+                  // split current fragment
+                  //qDebug("fragment does not fit in dest, splitting");
+                  TextFragment rightPart = fragment.split(currentMaxSize - plainTextPlusSymbolsListSize(*currentDest));
+                  // add first part to current destination
+                  currentDest->append(fragment);
+                  //qDebug("adding %d", plainTextPlusSymbolsFragmentSize(fragment));
+                  fragment = rightPart;
+                  //qDebug("remainder: %d", plainTextPlusSymbolsFragmentSize(fragment));
+                  }
+            }
+
+      qDebug("-> left");
+      dumpText(left);
+      qDebug("-> mid");
+      dumpText(mid);
+      qDebug("-> right");
+      dumpText(right);
+
+      return true;
       }
 
 //---------------------------------------------------------
