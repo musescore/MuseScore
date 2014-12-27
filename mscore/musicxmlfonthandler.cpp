@@ -98,7 +98,17 @@ MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, cons
       // convert text into valid xml by adding dummy start and end tags
       text = "<dummy>" + t + "</dummy>";
       }
-      
+
+MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt)
+      : attribs(attr), tagname(tag), oldFormat(defFmt)
+      {
+            /* not needed ?
+      oldFormat.setBold(false);
+      oldFormat.setItalic(false);
+      oldFormat.setUnderline(false);
+             */
+      }
+
 //---------------------------------------------------------
 //   toPlainText
 //    convert to plain text
@@ -188,9 +198,9 @@ static int plainTextPlusSymbolsListSize(const QList<TextFragment>& list)
 bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const int len,
                              QList<TextFragment>& left, QList<TextFragment>& mid, QList<TextFragment>& right)
       {
-      qDebug("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
-      qDebug("-> in");
-      dumpText(in);
+      //qDebug("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
+      //qDebug("-> in");
+      //dumpText(in);
 
       if (pos < 0 || len < 0)
             return false;
@@ -211,18 +221,15 @@ bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const
       while (fragmentNr < in.size()) {
             int destSize = plainTextPlusSymbolsListSize(*currentDest);
             int fragSize = plainTextPlusSymbolsFragmentSize(fragment);
-            //qDebug("destSize %d fragSize %d maxSize %d", destSize, fragSize, currentMaxSize);
             // if no room left in current destination (check applies only to left and mid)
             if ((currentDest != &right && destSize >= currentMaxSize)
                 || currentDest == &right) {
                   // move to next destination
                   if (currentDest == &left) {
-                        //qDebug("no room in dest move to next dest mid");
                         currentDest = &mid;
                         currentMaxSize = len;
                         }
                   else if (currentDest == &mid) {
-                        //qDebug("no room in dest move to next dest right");
                         currentDest = &right;
                         }
                   }
@@ -230,31 +237,28 @@ bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const
             if ((currentDest != &right && destSize + fragSize <= currentMaxSize)
                 || currentDest == &right) {
                   // add it
-                  //qDebug("fragment fits in dest, adding %d", plainTextPlusSymbolsFragmentSize(fragment));
                   currentDest->append(fragment);
                   // move to next fragment
                   fragmentNr++;
-                  //posInFragment = 0;
                   if (fragmentNr < in.size()) fragment = in.at(fragmentNr);
                   }
             else {
                   // split current fragment
-                  //qDebug("fragment does not fit in dest, splitting");
                   TextFragment rightPart = fragment.split(currentMaxSize - plainTextPlusSymbolsListSize(*currentDest));
                   // add first part to current destination
                   currentDest->append(fragment);
-                  //qDebug("adding %d", plainTextPlusSymbolsFragmentSize(fragment));
                   fragment = rightPart;
-                  //qDebug("remainder: %d", plainTextPlusSymbolsFragmentSize(fragment));
                   }
             }
 
+      /*
       qDebug("-> left");
       dumpText(left);
       qDebug("-> mid");
       dumpText(mid);
       qDebug("-> right");
       dumpText(right);
+       */
 
       return true;
       }
@@ -363,6 +367,29 @@ void MScoreTextToMXML::handleEndElement(QXmlStreamReader& r)
             r.skipCurrentElement();
       }
 }
+      
+//---------------------------------------------------------
+//   writeTextFragments
+//---------------------------------------------------------
+
+void MScoreTextToMXML::writeTextFragments(const QList<TextFragment>& fr, Xml& xml)
+      {
+      qDebug("MScoreTextToMXML::writeTextFragments defFmt %s", qPrintable(charFormat2QString(oldFormat)));
+      dumpText(fr);
+      bool firstTime = true; // write additional attributes only the first time characters are written
+      for (const TextFragment& f : fr) {
+            newFormat = f.format;
+            if (f.format.type() == CharFormatType::TEXT) {
+                  QString formatAttr = updateFormat();
+                  xml.tag(tagname + (firstTime ? attribs : "") + formatAttr, f.text);
+                  firstTime = false;
+                  }
+            else {
+                  for (const SymId id : f.ids)
+                        ; // TODO TBD
+                  }
+            }
+      }
 
 //---------------------------------------------------------
 //   attribute
