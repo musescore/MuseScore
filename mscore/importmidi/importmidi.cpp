@@ -812,8 +812,12 @@ std::vector<InstrumentTemplate *> findSuitableInstruments(const MTrack &track)
 
 void createInstruments(Score *score, QList<MTrack> &tracks)
       {
+      auto& opers = preferences.midiImportOperations;
+      auto &instrListOption = opers.data()->trackOpers.msInstrList;
+
       const int ntracks = tracks.size();
       for (int idx = 0; idx < ntracks; ++idx) {
+
             MTrack& track = tracks[idx];
             Part* part = new Part(score);
 
@@ -843,9 +847,20 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
             track.staff = part->staff(0);
             part->staves()->front()->setBarLineSpan(part->nstaves());
 
-            const auto instrTemplates = findSuitableInstruments(tracks[idx]);
-            if (!instrTemplates.empty())
-                  part->initFromInstrTemplate(instrTemplates.front());
+            if (opers.data()->processingsOfOpenedFile == 0) {
+                              // create instrument list on MIDI file opening
+                  instrListOption.setValue(track.indexOfOperation,
+                                           findSuitableInstruments(tracks[idx]));
+                  if (!instrListOption.value(track.indexOfOperation).empty())
+                        opers.data()->trackOpers.msInstrIndex.setDefaultValue(0);
+                  }
+
+            const auto &trackInstrList = instrListOption.value(track.indexOfOperation);
+            if (!trackInstrList.empty()) {
+                  const int index = opers.data()->trackOpers.msInstrIndex.value(
+                                                            track.indexOfOperation);
+                  part->initFromInstrTemplate(trackInstrList[index]);
+                  }
 
             score->appendPart(part);
             }
