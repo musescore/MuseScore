@@ -1055,15 +1055,22 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
 //   creditWords
 //---------------------------------------------------------
 
-static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QString val, QString words, const TextStyle& ts)
+static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QString val, const QList<TextFragment>& words)
       {
+      // set the default words format
+      const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
+      CharFormat defFmt;
+      defFmt.setFontFamily(tsStaff.family());
+      defFmt.setFontSize(tsStaff.size());
+
+      // export formatted
       xml.stag("credit page=\"1\"");
       QString attr = QString(" default-x=\"%1\"").arg(x);
       attr += QString(" default-y=\"%1\"").arg(y);
       attr += " justify=\"" + just + "\"";
       attr += " valign=\"" + val + "\"";
-      MScoreTextToMXML mttm("credit-words", attr, words, s->textStyle(TextStyleType::STAFF), ts);
-      mttm.write(xml);
+      MScoreTextToMXML mttm("credit-words", attr, defFmt);
+      mttm.writeTextFragments(words, xml);
       xml.etag();
       }
 
@@ -1150,15 +1157,21 @@ void ExportMusicXml::credits(Xml& xml)
                               // ty already set correctly
                               }
 
-                        creditWords(xml, _score, tx, ty, just, val, text->text(), text->textStyle());
+                        creditWords(xml, _score, tx, ty, just, val, text->fragmentList());
                         }
                   }
             }
 
       if (!rights.isEmpty()) {
             // put copyright at the bottom center of the page
-            // note: as the copyright metatag contains plan text, special XML characters must be escaped
-            creditWords(xml, _score, w / 2, bm, "center", "bottom", Xml::xmlString(rights), _score->textStyle(TextStyleType::FOOTER));
+            // note: as the copyright metatag contains plain text, special XML characters must be escaped
+            TextFragment f(Xml::xmlString(rights));
+            const TextStyle tsFooter = _score->textStyle(TextStyleType::FOOTER);
+            f.changeFormat(FormatId::FontFamily, tsFooter.family());
+            f.changeFormat(FormatId::FontSize, tsFooter.size());
+            QList<TextFragment> list;
+            list.append(f);
+            creditWords(xml, _score, w / 2, bm, "center", "bottom", list);
             }
       }
 
@@ -2967,8 +2980,8 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
       QList<TextFragment>       wordsRight; // words right of metronome
 
       // set the default words format
-      const TextStyle           tsStaff = s->textStyle(TextStyleType::STAFF);
-      CharFormat                defFmt;
+      const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
+      CharFormat defFmt;
       defFmt.setFontFamily(tsStaff.family());
       defFmt.setFontSize(tsStaff.size());
 
@@ -3015,8 +3028,8 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
                   else
                         attr = " enclosure=\"rectangle\"";
                   }
-            MScoreTextToMXML mttm("words", attr, text->text(), s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF));
-            mttm.write(xml);
+            MScoreTextToMXML mttm("words", attr, defFmt);
+            mttm.writeTextFragments(text->fragmentList(), xml);
             xml.etag();
             }
       }
@@ -3078,10 +3091,14 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       xml.stag("direction-type");
       QString attr;
       if (!rmk->textStyle().hasFrame()) attr = " enclosure=\"none\"";
-      MScoreTextToMXML mttm("rehearsal", attr, rmk->text(),
-                            _score->textStyle(TextStyleType::STAFF),
-                            _score->textStyle(TextStyleType::REHEARSAL_MARK));
-      mttm.write(xml);
+      // set the default words format
+      const TextStyle tsStaff = _score->textStyle(TextStyleType::STAFF);
+      CharFormat defFmt;
+      defFmt.setFontFamily(tsStaff.family());
+      defFmt.setFontSize(tsStaff.size());
+      // write formatted
+      MScoreTextToMXML mttm("rehearsal", attr, defFmt);
+      mttm.writeTextFragments(rmk->fragmentList(), xml);
       xml.etag();
       directionETag(xml, staff);
       }
@@ -3376,8 +3393,14 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             }
       else  {
             QString attr; // TODO TBD
-            MScoreTextToMXML mttm("words", attr, t, _score->textStyle(TextStyleType::STAFF), _score->textStyle(TextStyleType::DYNAMICS));
-            mttm.write(xml);
+            // set the default words format
+            const TextStyle tsStaff = _score->textStyle(TextStyleType::STAFF);
+            CharFormat defFmt;
+            defFmt.setFontFamily(tsStaff.family());
+            defFmt.setFontSize(tsStaff.size());
+            // write formatted
+            MScoreTextToMXML mttm("words", attr, defFmt);
+            mttm.writeTextFragments(dyn->fragmentList(), xml);
             }
       xml.etag();
       /*
@@ -3442,8 +3465,14 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                               }
                         xml.tag("syllabic", s);
                         QString attr; // TODO TBD
-                        MScoreTextToMXML mttm("text", attr, (l)->text(), _score->textStyle(TextStyleType::LYRIC1), _score->textStyle(TextStyleType::LYRIC1));
-                        mttm.write(xml);
+                        // set the default words format
+                        const TextStyle tsStaff = _score->textStyle(TextStyleType::LYRIC1);
+                        CharFormat defFmt;
+                        defFmt.setFontFamily(tsStaff.family());
+                        defFmt.setFontSize(tsStaff.size());
+                        // write formatted
+                        MScoreTextToMXML mttm("text", attr, defFmt);
+                        mttm.writeTextFragments(l->fragmentList(), xml);
                         /*
                          Temporarily disabled because it doesn't work yet (and thus breaks the regression test).
                          See MusicXml::xmlLyric: "// TODO-WS      l->setTick(tick);"

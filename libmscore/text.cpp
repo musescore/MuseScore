@@ -2733,6 +2733,24 @@ QList<TextFragment> Text::fragmentList() const
                         continue;                           // insert extra HTML formatting
                    */
                   res.append(f);
+                  if (block.eol()) {
+                        qDebug("Text::fragmentList() found eol");
+                        if (f.format.type() == CharFormatType::TEXT) {
+                              // simply append a newline
+                              f.text += "\n";
+                              }
+                        else {
+                              // create and append a fragment containing only a newline,
+                              // with the same formatting as f
+                              TextFragment newline("\n");
+                              newline.changeFormat(FormatId::FontSize, f.format.fontSize());
+                              newline.changeFormat(FormatId::FontFamily, f.format.fontFamily());
+                              newline.changeFormat(FormatId::Bold, f.format.bold());
+                              newline.changeFormat(FormatId::Underline, f.format.underline());
+                              newline.changeFormat(FormatId::Italic, f.format.italic());
+                              res.append(newline);
+                              }
+                        }
                   }
             }
       return res;
