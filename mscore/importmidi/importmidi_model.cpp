@@ -132,7 +132,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             bool isEditable() const { return false; }
             QVariant value(int trackIndex) const
                   {
-                  return _opers.instrumentName.value(trackIndex);
+                  return _opers.midiInstrName.value(trackIndex);
                   }
             void setValue(const QVariant &/*value*/, int /*trackIndex*/) {}
             };

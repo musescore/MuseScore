@@ -921,7 +921,7 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
 
       if (opers.data()->processingsOfOpenedFile == 0) {
             const int currentTrack = opers.currentTrack();
-            opers.data()->trackOpers.instrumentName.setValue(currentTrack, instrName);
+            opers.data()->trackOpers.midiInstrName.setValue(currentTrack, instrName);
                         // set channel number (from 1): number = index + 1
             opers.data()->trackOpers.channel.setValue(currentTrack, mt.mtrack->outChannel() + 1);
             }
