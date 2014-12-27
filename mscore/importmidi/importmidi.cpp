@@ -803,6 +803,24 @@ std::vector<InstrumentTemplate *> findSuitableInstruments(const MTrack &track)
       return templates;
       }
 
+void findInstrumentsForAllTracks(const QList<MTrack> &tracks)
+      {
+      auto& opers = preferences.midiImportOperations;
+      auto &instrListOption = opers.data()->trackOpers.msInstrList;
+
+      if (opers.data()->processingsOfOpenedFile == 0) {
+                        // create instrument list on MIDI file opening
+            for (const auto &track: tracks) {
+                  instrListOption.setValue(track.indexOfOperation,
+                                           findSuitableInstruments(track));
+                  if (!instrListOption.value(track.indexOfOperation).empty()) {
+                        const int defaultInstrIndex = 0;
+                        opers.data()->trackOpers.msInstrIndex.setDefaultValue(defaultInstrIndex);
+                        }
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 // createInstruments
 //   for drum track, if any, set percussion clef
@@ -848,14 +866,6 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
             track.staff = part->staff(0);
             part->staves()->front()->setBarLineSpan(part->nstaves());
-
-            if (opers.data()->processingsOfOpenedFile == 0) {
-                              // create instrument list on MIDI file opening
-                  instrListOption.setValue(track.indexOfOperation,
-                                           findSuitableInstruments(tracks[idx]));
-                  if (!instrListOption.value(track.indexOfOperation).empty())
-                        opers.data()->trackOpers.msInstrIndex.setDefaultValue(0);
-                  }
 
             const auto &trackInstrList = instrListOption.value(track.indexOfOperation);
             if (!trackInstrList.empty()) {
@@ -1150,6 +1160,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       MChord::splitUnequalChords(tracks);
                   // no more track insertion/reordering/deletion from now
       QList<MTrack> trackList = prepareTrackList(tracks);
+      findInstrumentsForAllTracks(trackList);
       createInstruments(score, trackList);
       MidiDrum::setStaffBracketForDrums(trackList);
       createMeasures(lastTick, score);
