@@ -726,6 +726,8 @@ std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
 
       for (const auto &group: instrumentGroups) {
             for (const auto &templ: group->instrumentTemplates) {
+                  if (templ->staffGroup == StaffGroup::TAB)
+                        continue;
                   const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
                   if (track.mtrack->drumTrack() != isDrumTemplate)
                         continue;
