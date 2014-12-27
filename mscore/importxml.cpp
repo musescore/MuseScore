@@ -6001,8 +6001,9 @@ void MusicXml::addGraceNoteAfter(Chord* graceNote, Segment* segm)
       {
       if(segm){
             graceNote->toGraceAfter();
-            Chord* cr = static_cast<Chord*>(segm->element(graceNote->track()));
-            if(cr){
+            Element* el = segm->element(graceNote->track());
+            if (el && el->type() == Element::Type::CHORD) {
+                  Chord* cr = static_cast<Chord*>(el);
                   cr->add(graceNote);
                   }
             }
