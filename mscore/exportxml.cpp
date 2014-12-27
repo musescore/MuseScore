@@ -2836,29 +2836,29 @@ static bool findUnit(TDuration::DurationType val, QString& unit)
       return true;
       }
 
-static bool findMetronome(QString words,
-                          QString& wordsLeft,  // words left of metronome
+static bool findMetronome(const QList<TextFragment>& list,
+                          QList<TextFragment>& wordsLeft,  // words left of metronome
                           bool& hasParen,      // parenthesis
                           QString& metroLeft,  // left part of metronome
                           QString& metroRight, // right part of metronome
-                          QString& wordsRight, // words right of metronome
-                          int& metroPos,       // metronome start position TODO support surrogate pairs
-                          int& metroLen        // metronome length
+                          QList<TextFragment>& wordsRight // words right of metronome
                           )
       {
-      qDebug("findMetronome('%s')", qPrintable(words));
-      wordsLeft  = "";
+      QString words = MScoreTextToMXML::toPlainTextPlusSymbols(list);
+      //qDebug("findMetronome('%s')", qPrintable(words));
       hasParen   = false;
       metroLeft  = "";
       metroRight = "";
-      wordsRight = "";
-      metroPos = -1;
-      metroLen = 0;
+      int metroPos = -1;   // metronome start position
+      int metroLen = 0;    // metronome length
+
       int indEq  = words.indexOf('=');
       if (indEq <= 0)
             return false;
+
       int len1 = 0;
       TDuration dur;
+
       // find first note, limiting search to the part left of the first '=',
       // to prevent matching the second note in a "note1 = note2" metronome
       int pos1 = TempoText::findTempoDuration(words.left(indEq), len1, dur);
@@ -2879,6 +2879,7 @@ static bool findMetronome(QString words,
                          qPrintable(s4)
                          );
                    */
+
                   // now determine what is to the right of the equals sign
                   // must have either a (dotted) note or a number at start of s4
                   int len3 = 0;
@@ -2910,25 +2911,18 @@ static bool findMetronome(QString words,
                   int rparen = s6.indexOf(")");
                   hasParen = (lparen == s1.length() - 1 && rparen == 0);
 
-                  if (hasParen)
-                        wordsLeft = s1.mid(0, lparen);
-                  else
-                        wordsLeft = s1;
                   metroLeft = s2;
                   metroRight = s5;
-                  if (hasParen)
-                        wordsRight = s6.mid(1);
-                  else
-                        metroRight = s5;
 
                   metroPos = pos1;               // metronome position
                   metroLen = len1 + len2 + len3; // metronome length
                   if (hasParen) {
-                        metroPos -= 1; // move left one position
-                        metroLen += 2; // add length of '(' and ')'
+                        metroPos -= 1;           // move left one position
+                        metroLen += 2;           // add length of '(' and ')'
                         }
 
-                  // calculate starting position corrected for surrogate pairs (ignored by toPlainTextPlusSymbols())
+                  // calculate starting position corrected for surrogate pairs
+                  // (which were ignored by toPlainTextPlusSymbols())
                   int corrPos = metroPos;
                   for (int i = 0; i < metroPos; ++i)
                         if (words.at(i).isHighSurrogate())
@@ -2936,14 +2930,14 @@ static bool findMetronome(QString words,
                   metroPos = corrPos;
 
                   /*
-                  qDebug("-> found '%s'%s'%s'%s' hasParen %d metro pos %d len %d",
-                         qPrintable(wordsLeft),
+                  qDebug("-> found '%s'%s' hasParen %d metro pos %d len %d",
                          qPrintable(metroLeft),
                          qPrintable(metroRight),
-                         qPrintable(wordsRight),
                          hasParen, metroPos, metroLen
                          );
                    */
+                  QList<TextFragment> mid; // not used
+                  MScoreTextToMXML::split(list, metroPos, metroLen, wordsLeft, mid, wordsRight);
                   return true;
                   }
             }
@@ -2964,28 +2958,30 @@ static void beatUnit(Xml& xml, const TDuration dur)
 
 static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
       {
-      qDebug("wordsMetrome('%s' len %d)", qPrintable(text->text()), text->text().size());
+      //qDebug("wordsMetrome('%s')", qPrintable(text->text()));
       const QList<TextFragment> list = text->fragmentList();
-      QString plainText = MScoreTextToMXML::toPlainTextPlusSymbols(list);
-      QString wordsLeft;  // words left of metronome
-      bool hasParen;      // parenthesis
-      QString metroLeft;  // left part of metronome
-      QString metroRight; // right part of metronome
-      QString wordsRight; // words right of metronome
-      int metroPos = -1;   // metronome start position
-      int metroLen = 0;    // metronome length
-      if (findMetronome(plainText, wordsLeft, hasParen, metroLeft, metroRight, wordsRight, metroPos, metroLen)) {
-            QList<TextFragment> left;
-            QList<TextFragment> mid;
-            QList<TextFragment> right;
-            MScoreTextToMXML::split(list, metroPos, metroLen, left, mid, right);
-            if (wordsLeft != "") {
+      QList<TextFragment>       wordsLeft;  // words left of metronome
+      bool                      hasParen;   // parenthesis
+      QString                   metroLeft;  // left part of metronome
+      QString                   metroRight; // right part of metronome
+      QList<TextFragment>       wordsRight; // words right of metronome
+
+      // set the default words format
+      const TextStyle           tsStaff = s->textStyle(TextStyleType::STAFF);
+      CharFormat                defFmt;
+      defFmt.setFontFamily(tsStaff.family());
+      defFmt.setFontSize(tsStaff.size());
+
+      if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
+
+            if (wordsLeft.size() > 0) {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD
-                  MScoreTextToMXML mttm("words", attr, wordsLeft, s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF) /* TODO: verify correct value */);
-                  mttm.write(xml);
+                  MScoreTextToMXML mttm("words", attr, defFmt);
+                  mttm.writeTextFragments(wordsLeft, xml);
                   xml.etag();
                   }
+
             xml.stag("direction-type");
             xml.stag(QString("metronome parentheses=\"%1\"").arg(hasParen ? "yes" : "no"));
             int len1 = 0;
@@ -3000,14 +2996,16 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
 
             xml.etag();
             xml.etag();
-            if (wordsRight != "") {
+
+            if (wordsRight.size() > 0) {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD
-                  MScoreTextToMXML mttm("words", attr, wordsRight, s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF) /* TODO: verify correct value */);
-                  mttm.write(xml);
+                  MScoreTextToMXML mttm("words", attr, defFmt);
+                  mttm.writeTextFragments(wordsRight, xml);
                   xml.etag();
                   }
             }
+
       else {
             xml.stag("direction-type");
             QString attr;

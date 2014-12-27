@@ -46,7 +46,7 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <words>Largo </words>
+          <words font-weight="bold" font-size="12">Largo </words>
           </direction-type>
         <direction-type>
           <metronome parentheses="no">
