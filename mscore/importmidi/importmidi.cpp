@@ -394,15 +394,10 @@ void MTrack::fillGapWithRests(Score* score,
 
 void setMusicNotesFromMidi(Score *score,
                            const QList<MidiNote> &midiNotes,
-                           const ReducedFraction &onTime,
-                           const ReducedFraction &len,
                            Chord *chord,
-                           const ReducedFraction &tick,
                            const Drumset *drumset,
                            DrumsetKind useDrumset)
       {
-      auto actualFraction = ReducedFraction(chord->actualFraction());
-
       for (int i = 0; i < midiNotes.size(); ++i) {
             const MidiNote& mn = midiNotes[i];
             Note* note = new Note(score);
@@ -414,15 +409,6 @@ void setMusicNotesFromMidi(Score *score,
             chord->add(note);
             note->setVeloType(Note::ValueType::USER_VAL);
             note->setVeloOffset(mn.velo);
-
-            NoteEventList el;
-            ReducedFraction f = (onTime - tick) / actualFraction * 1000;
-            const int ron = f.numerator() / f.denominator();
-            f = len / actualFraction * 1000;
-            const int rlen = f.numerator() / f.denominator();
-
-            el.append(NoteEvent(0, ron, rlen));
-            note->setPlayEvents(el);
 
             if (useDrumset != DrumsetKind::NONE) {
                   if (!drumset->isValid(mn.pitch))
@@ -505,13 +491,11 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
 
             Segment* s = measure->getSegment(chord, tick.ticks());
             s->add(chord);
-            chord->setPlayEventType(PlayEventType::User);
             MidiTuplet::addElementToTuplet(voice, tick, len, chord, tuplets);
 
             for (int k = 0; k < midiChords.size(); ++k) {
                   MidiChord& midiChord = midiChords[k];
-                  setMusicNotesFromMidi(score, midiChord.notes, startChordTick,
-                                        len, chord, tick, drumset, useDrumset);
+                  setMusicNotesFromMidi(score, midiChord.notes, chord, drumset, useDrumset);
                   if (!midiChord.notes.empty() && midiChord.notes.first().offTime - tick <= len) {
                         midiChords.removeAt(k);
                         --k;
