@@ -2121,10 +2121,15 @@ bool Score::appendScore(Score* score)
       // adjust key signatures
       for (Staff* st : score->staves()) {
             int staffIdx = score->staffIdx(st);
+            Staff* joinedStaff = staff(staffIdx);
             // special case for initial "C" key signature - these have no explicit element
             Measure* m = tick2measure(tickLen);
             Segment* seg = m->getSegment(Segment::Type::KeySig, tickLen);
             if (!seg->element(staffIdx * VOICES)) {
+                  // no need to create new initial "C" key sig
+                  // if staff already ends in that key
+                  if (joinedStaff->key(tickLen - 1) == Key::C)
+                        continue;
                   Key key = Key::C;
                   KeySig* ks = new KeySig(this);
                   ks->setTrack(staffIdx * VOICES);
@@ -2136,7 +2141,7 @@ bool Score::appendScore(Score* score)
             for (auto k : *(st->keyList())) {
                   int tick = k.first;
                   KeySigEvent key = k.second;
-                  staff(staffIdx)->setKey(tick + tickLen, key);
+                  joinedStaff->setKey(tick + tickLen, key);
                   }
             }
 
