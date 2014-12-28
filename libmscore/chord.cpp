@@ -2547,6 +2547,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       // TENUTO and STACCATO: always near the note head (or stem end if beyond a stem)
       if ((st == ArticulationType::Tenuto || st == ArticulationType::Staccato || st == ArticulationType::Sforzatoaccent) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
+            bool alignToStem = false;
             // if there area voices, articulation is on stem side
             if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
                   bottom = !up();
@@ -2577,6 +2578,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         qreal dy = (score()->styleS(StyleIdx::beamWidth).val() + 1) * _spatium2;
                         pos.ry() += bottom ? dy : - dy;
                         }
+                  alignToStem = (st == ArticulationType::Staccato && articulations().size() == 1);
                   }
             else {                              // if articulation is not beyond a stem
                   int line;
@@ -2602,7 +2604,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         }
                   pos.ry() += line * _spStaff2;                         // convert staff position to sp distance
                   }
-            if (!staff()->isTabStaff()) {
+            if (!staff()->isTabStaff() && !alignToStem) {
                   if (up())
                         pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
                   else
