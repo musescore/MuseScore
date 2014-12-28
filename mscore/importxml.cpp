@@ -1665,16 +1665,25 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
 
       for (; !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "part-name") {
-                  // OK? (ws) Yes it should be ok.part-name is display in front of staff in finale. (la)
-                  part->setLongName(e.text());
-                  // part->setTrackName(e.text());
+                  // Element part-name contains the displayed (full) part name
+                  // It is displayed by default, but can be suppressed (print-object=”no”)
+                  // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
+                  // and the formatted version in the part-name-display element
+                  if (!(e.attribute("print-object") == "no"))
+                        part->setLongName(e.text());
+                  part->setPartName(e.text());
                   }
             else if (e.tagName() == "part-name-display") {
                   // TODO
                   domNotImplemented(e);
             }
             else if (e.tagName() == "part-abbreviation") {
-                  part->setShortName(e.text());
+                  // Element part-name contains the displayed (abbreviated) part name
+                  // It is displayed by default, but can be suppressed (print-object=”no”)
+                  // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
+                  // and the formatted version in the part-abbreviation-display element
+                  if (!(e.attribute("print-object") == "no"))
+                        part->setShortName(e.text());
                   }
             else if (e.tagName() == "part-abbreviation-display") {
                   // TODO
@@ -1689,9 +1698,9 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               qDebug("MusicXml::xmlScorePart: instrument id %s name %s",
                                      qPrintable(instrId), qPrintable(ee.text()));
                               drumsets[id].insert(instrId, MusicXMLDrumInstrument(ee.text()));
-                              // part-name or instrument-name?
-                              if (part->longName().isEmpty())
-                                    part->setLongName(ee.text());
+                              // Element instrument-name is typically not displayed in the score,
+                              // but used only internally
+                              part->instr()->setTrackName(ee.text());
                               }
                         else if (ee.tagName() == "instrument-sound")
                               domNotImplemented(e);
@@ -1712,6 +1721,8 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               part->setMidiChannel(ee.text().toInt() - 1);
                         else if (ee.tagName() == "midi-program") {
                               int program = ee.text().toInt();
+                              qDebug("MusicXml::xmlScorePart: instrument id %s MIDI program %d",
+                                     qPrintable(instrId), program);
                               // Bug fix for Cubase 6.5.5 which generates <midi-program>2</midi-program>
                               // Check program number range
                               if (program < 1) {
