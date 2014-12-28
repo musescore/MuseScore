@@ -384,6 +384,9 @@ class TestImportMidi : public QObject, public MTest
       void instrumentChannels() { mf("instrument_channels"); }
       void instrument3StaffOrgan() { mf("instrument_3staff_organ"); }
       void instrumentClef() { noTempoText("instrument_clef"); }
+
+      // very short note - need clean up (remove note) but show empty track
+      void emptyTrack() { noTempoText("empty_track"); }
       };
 
 //---------------------------------------------------------
