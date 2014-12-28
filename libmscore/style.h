@@ -404,6 +404,7 @@ class MStyle {
       bool load(QFile* qf);
       void load(XmlReader& e);
       void save(Xml& xml, bool optimize);
+      PageFormat* pageFormat();
       const PageFormat* pageFormat() const;
       void setPageFormat(const PageFormat& pf);
       qreal spatium() const;

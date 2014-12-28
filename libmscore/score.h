@@ -237,21 +237,40 @@ enum class PasteStatus : char {
 //   @P npages          int               number of pages (read only)
 //   @P nstaves         int               number of staves (read only)
 //   @P ntracks         int               number of tracks (staves * 4) (read only)
+//   @P nmeasures       int               number of measures (read only)
 //   @P parts           array[Ms::Part]   the list of parts (read only)
+//   @P title           QString           title of the score (read only)
+//   @P subtitle        QString           subtitle of the score (read only)
+//   @P composer        QString           composer of the score (read only)
+//   @P poet            QString           poet of the score (read only)
+//   @P hasLyrics       bool              score has lyrics (read only)
+//   @P hasHarmonies    bool              score has chord symbols (read only)
+//   @P keysig          int               key signature at the start of the score (read only)
+//   @P duration        int               duration of score in seconds (read only)
 //---------------------------------------------------------
 
 class Score : public QObject {
       Q_OBJECT
-      Q_PROPERTY(Ms::Measure*       firstMeasure      READ firstMeasure)
-      Q_PROPERTY(Ms::Measure*       firstMeasureMM    READ firstMeasure)
-      Q_PROPERTY(Ms::Measure*       lastMeasure       READ firstMeasure)
-      Q_PROPERTY(Ms::Measure*       lastMeasureMM     READ firstMeasure)
-      Q_PROPERTY(Ms::Segment*       lastSegment       READ lastSegment)
-      Q_PROPERTY(QString            name              READ name               WRITE setName)
-      Q_PROPERTY(int                npages            READ npages)
-      Q_PROPERTY(int                nstaves           READ nstaves)
-      Q_PROPERTY(int                ntracks           READ ntracks)
+      Q_PROPERTY(Ms::Measure*           firstMeasure      READ firstMeasure)
+      Q_PROPERTY(Ms::Measure*           firstMeasureMM    READ firstMeasureMM)
+      Q_PROPERTY(Ms::Measure*           lastMeasure       READ lastMeasure)
+      Q_PROPERTY(Ms::Measure*           lastMeasureMM     READ lastMeasureMM)
+      Q_PROPERTY(Ms::Segment*           lastSegment       READ lastSegment)
+      Q_PROPERTY(QString                name              READ name           WRITE setName)
+      Q_PROPERTY(int                    npages            READ npages)
+      Q_PROPERTY(int                    nstaves           READ nstaves)
+      Q_PROPERTY(int                    ntracks           READ ntracks)
+      Q_PROPERTY(int                    nmeasures         READ nmeasures)
       Q_PROPERTY(QQmlListProperty<Ms::Part> parts     READ qmlParts)
+      Q_PROPERTY(QString                title             READ title)
+      Q_PROPERTY(QString                subtitle          READ subtitle)
+      Q_PROPERTY(QString                composer          READ composer)
+      Q_PROPERTY(QString                poet              READ poet)
+      Q_PROPERTY(bool                   hasLyrics         READ hasLyrics)
+      Q_PROPERTY(bool                   hasHarmonies      READ hasHarmonies)
+      Q_PROPERTY(int                    keysig            READ keysig)
+      Q_PROPERTY(int                    duration          READ duration)
+      Q_PROPERTY(Ms::PageFormat*        pageFormat        READ pageFormat     WRITE undoChangePageFormat)
 
    public:
       enum class FileError : char {
@@ -532,6 +551,7 @@ class Score : public QObject {
       void undoChangeInvisible(Element*, bool);
       void undoChangeBracketSpan(Staff* staff, int column, int span);
       void undoChangeTuning(Note*, qreal);
+      void undoChangePageFormat(PageFormat*);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);
       void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent);
@@ -805,6 +825,7 @@ class Score : public QObject {
 
       qreal spatium() const                    { return style()->spatium();    }
       void setSpatium(qreal v);
+      PageFormat* pageFormat()                 { return style()->pageFormat(); }
       const PageFormat* pageFormat() const     { return style()->pageFormat(); }
       void setPageFormat(const PageFormat& pf) { style()->setPageFormat(pf);   }
       qreal loWidth() const;
@@ -1002,6 +1023,14 @@ class Score : public QObject {
       Element* lastElement();
 
       QString title();
+      QString subtitle();
+      QString composer();
+      QString poet();
+      int nmeasures();
+      bool hasLyrics();
+      bool hasHarmonies();
+      int keysig();
+      int duration();
 
       void cmdInsertClef(Clef* clef, ChordRest* cr);
 
