@@ -1044,25 +1044,26 @@ void processMeta(MTrack &mt, bool isLyric)
 // also handle track names
 void setGrandStaffProgram(QList<MTrack> &tracks)
       {
-      int lastOrganTrack = -1;
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
 
             if (areNext3OrganStaff(i, tracks)) {
-                  lastOrganTrack = i + 2;
                   tracks[i + 1].program = mt.program;
                   tracks[i + 2].program = mt.program;
 
                   mt.name = concatenateWithComma(mt.name, "Manual");
                   tracks[i + 1].name = "";
                   tracks[i + 2].name = concatenateWithComma(tracks[i + 2].name, "Pedal");
+
+                  i += 2;
                   }
-            else if (i > lastOrganTrack && areNext2GrandStaff(i, tracks)) {
+            else if (areNext2GrandStaff(i, tracks)) {
                   tracks[i + 1].program = mt.program;
                   if (mt.name != tracks[i + 1].name) {
                         mt.name = "";             // only one name place near bracket is available
                         tracks[i + 1].name = "";  // so instrument name will be used instead
                         }
+                  i += 1;
                   }
             }
       }
