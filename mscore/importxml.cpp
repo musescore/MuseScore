@@ -2705,7 +2705,7 @@ static void addElem(Element* el, int track, QString& placement, Measure* measure
 //---------------------------------------------------------
 
 /**
- Read the MusicXML metronome element.
+ Read the MusicXML metronome element, convert to text and set r to calculated tempo.
  */
 
 /*
@@ -2722,10 +2722,10 @@ static void addElem(Element* el, int track, QString& placement, Measure* measure
             </metronome>
 */
 
-static void metronome(QDomElement e, Text* t)
+static QString metronome(QDomElement e, double& r)
       {
-      if (!t) return;
-      QString tempoText = t->text();
+      r = 0;
+      QString tempoText;
       QString perMinute;
 
       QString parenth = e.attribute("parentheses");
@@ -2761,9 +2761,17 @@ static void metronome(QDomElement e, Text* t)
             tempoText += " = ";
             tempoText += perMinute;
             }
+      if (dur1.isValid() && !dur2.isValid() && perMinute != "") {
+            bool ok;
+            double d = perMinute.toDouble(&ok);
+            if (ok) {
+                  // convert fraction to beats per minute
+                  r = 4 * dur1.fraction().numerator() * d / dur1.fraction().denominator();
+                  }
+            }
       if (parenth == "yes")
             tempoText += ")";
-      t->setText(tempoText);
+      return tempoText;
       }
 
 //---------------------------------------------------------
@@ -3155,10 +3163,22 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                    fontWeight.toUtf8().data()
                    );
             */
+
+            double tpoMetro = 0;           // tempo according to metronome
+            // determine tempo text and calculate bpm according to metronome
+            if (metrEl.tagName() != "") formattedText += metronome(metrEl, tpoMetro);
+            double tpo = tempo.toDouble(); // tempo according to sound tempo=...
+
+            // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
+            // if necessary, use the value calculated by metronome()
+            // note: no floating point comparisons with 0 ...
+            if (tpo < 0.1 && tpoMetro > 0.1)
+                  tpo = tpoMetro;
+            
             Text* t;
-            if (tempo != "" && tempo.toDouble() > 0) {
+            if (tpo > 0.1) {
+                  tpo /= 60;
                   t = new TempoText(score);
-                  double tpo = tempo.toDouble()/60.0;
                   ((TempoText*) t)->setTempo(tpo);
                   ((TempoText*) t)->setFollowText(true);
                   score->setTempo(tick, tpo);
@@ -3179,7 +3199,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   t->textStyle().setFrameRound(0);
             }
 
-            if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElem(t, track, placement, measure, tick);
             }
