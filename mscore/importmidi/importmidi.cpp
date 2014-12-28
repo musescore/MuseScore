@@ -867,9 +867,12 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
                   const int staveCount = qMin(t->nstaves(), tracks.size() - idx);
                   part->setStaves(staveCount);
-                  part->staff(0)->setBarLineSpan(staveCount);
-                  part->staff(0)->setBracket(0, t->bracket[0]);
-                  part->staff(0)->setBracketSpan(0, staveCount);
+
+                  if (staveCount > 1) {
+                        part->staff(0)->setBarLineSpan(staveCount);
+                        part->staff(0)->setBracket(0, t->bracket[0]);
+                        part->staff(0)->setBracketSpan(0, staveCount);
+                        }
 
                   for (int i = 0; i != staveCount; ++i) {
                         part->staff(i)->setLines(t->staffLines[i]);
