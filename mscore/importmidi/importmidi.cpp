@@ -821,6 +821,24 @@ void findInstrumentsForAllTracks(const QList<MTrack> &tracks)
             }
       }
 
+bool areNext2GrandStaff(int currentTrack, const QList<MTrack> &tracks)
+      {
+      if (currentTrack + 1 >= tracks.size())
+            return false;
+      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1]);
+      }
+
+bool areNext3OrganStaff(int currentTrack, const QList<MTrack> &tracks)
+      {
+      if (currentTrack + 2 >= tracks.size())
+            return false;
+      if (!is3StaffOrgan(tracks[currentTrack].program))
+            return false;
+
+      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1])
+                  && isSameChannel(tracks[currentTrack + 1], tracks[currentTrack + 2]);
+      }
+
 void createInstruments(Score *score, QList<MTrack> &tracks)
       {
       const auto& opers = preferences.midiImportOperations;
@@ -830,58 +848,54 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
       for (int idx = 0; idx < ntracks; ++idx) {
             MTrack& track = tracks[idx];
             Part* part = new Part(score);
-            const auto &trackInstrList = instrListOption.value(track.indexOfOperation);
 
-            if (trackInstrList.empty()) {       // if no suitable instruments were found
-                  if (track.mtrack->drumTrack()) {
-                        part->setStaves(1);
+            const auto &instrList = instrListOption.value(track.indexOfOperation);
+            const InstrumentTemplate *instr = nullptr;
+            if (!instrList.empty()) {
+                  const int instrIndex = opers.data()->trackOpers.msInstrIndex.value(
+                                                                    track.indexOfOperation);
+                  instr = instrList[instrIndex];
+                  part->initFromInstrTemplate(instr);
+                  }
+
+            if (areNext3OrganStaff(idx, tracks))
+                  part->setStaves(3);
+            else if (areNext2GrandStaff(idx, tracks))
+                  part->setStaves(2);
+            else
+                  part->setStaves(1);
+
+            if (part->nstaves() == 1) {
+                  if (!instr && track.mtrack->drumTrack()) {
                         part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                         part->instr()->setDrumset(smDrumset);
                         part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
-                        track.staff = part->staff(0);
-                        }
-                  else {
-                        if (idx < (tracks.size() - 1) && idx >= 0
-                                    && isGrandStaff(tracks[idx], tracks[idx + 1])) {
-                                          // assume that the current track and the next track
-                                          // form a piano part
-                              part->setStaves(2);
-                              part->staff(0)->setBracket(0, BracketType::BRACE);
-                              part->staff(0)->setBracketSpan(0, 2);
-
-                              track.staff = part->staff(0);
-                              ++idx;
-                              tracks[idx].staff = part->staff(1);
-                              }
-                        else {
-                              part->setStaves(1);
-                              track.staff = part->staff(0);
-                              }
                         }
                   }
             else {
-                  const int msInstrIndex = opers.data()->trackOpers.msInstrIndex.value(
-                                                                    track.indexOfOperation);
-                  const InstrumentTemplate *t = trackInstrList[msInstrIndex];
-                  part->initFromInstrTemplate(t);
-
-                  const int staveCount = qMin(t->nstaves(), tracks.size() - idx);
-                  part->setStaves(staveCount);
-
-                  if (staveCount > 1) {
-                        part->staff(0)->setBarLineSpan(staveCount);
-                        part->staff(0)->setBracket(0, t->bracket[0]);
-                        part->staff(0)->setBracketSpan(0, staveCount);
+                  if (!instr) {
+                        part->staff(0)->setBarLineSpan(2);
+                        part->staff(0)->setBracket(0, BracketType::BRACE);
                         }
-
-                  for (int i = 0; i != staveCount; ++i) {
-                        part->staff(i)->setLines(t->staffLines[i]);
-                        part->staff(i)->setSmall(t->smallStaff[i]);
-                        part->staff(i)->setDefaultClefType(t->clefTypes[i]);
-                        if (i > 0)
-                              ++idx;
-                        tracks[idx].staff = part->staff(i);
+                  else {
+                        part->staff(0)->setBarLineSpan(instr->barlineSpan[0]);
+                        part->staff(0)->setBracket(0, instr->bracket[0]);
                         }
+                  part->staff(0)->setBracketSpan(0, 2);
+                  }
+
+            if (instr) {
+                  for (int i = 0; i != part->nstaves(); ++i) {
+                        part->staff(i)->setLines(instr->staffLines[i]);
+                        part->staff(i)->setSmall(instr->smallStaff[i]);
+                        part->staff(i)->setDefaultClefType(instr->clefTypes[i]);
+                        }
+                  }
+
+            for (int i = 0; i != part->nstaves(); ++i) {
+                  if (i > 0)
+                        ++idx;
+                  tracks[idx].staff = part->staff(i);
                   }
 
             score->appendPart(part);
@@ -1023,24 +1037,6 @@ void processMeta(MTrack &mt, bool isLyric)
             if ((e.type() == ME_META) && ((e.metaType() == META_LYRIC) == isLyric))
                   mt.processMeta(tick.ticks(), e);
             }
-      }
-
-bool areNext2GrandStaff(int currentTrack, const QList<MTrack> &tracks)
-      {
-      if (currentTrack + 1 >= tracks.size())
-            return false;
-      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1]);
-      }
-
-bool areNext3OrganStaff(int currentTrack, const QList<MTrack> &tracks)
-      {
-      if (currentTrack + 2 >= tracks.size())
-            return false;
-      if (!is3StaffOrgan(tracks[currentTrack].program))
-            return false;
-
-      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1])
-                  && isSameChannel(tracks[currentTrack + 1], tracks[currentTrack + 2]);
       }
 
 // set program equal to all staves, as it should be
