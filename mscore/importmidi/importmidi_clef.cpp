@@ -27,6 +27,7 @@
 #include "importmidi_fraction.h"
 #include "importmidi_operations.h"
 #include "mscore/preferences.h"
+#include "libmscore/instrtemplate.h"
 
 #include <set>
 
@@ -398,19 +399,42 @@ void createMainClefFromAveragePitch(Staff *staff, int strack)
       createClef(mainClef, staff, 0);
       }
 
+bool hasGFclefs(const InstrumentTemplate *templ)
+      {
+      const int staveCount = templ->nstaves();
+      bool hasG = false;
+      bool hasF = false;
+      for (int i = 0; i != staveCount; ++i) {
+            switch (templ->clefTypes[i]._concertClef) {
+                  case ClefType::G:
+                        hasG = true;
+                        break;
+                  case ClefType::F:
+                        hasF = true;
+                        break;
+                  default:
+                        break;
+                  }
+            }
+      return hasG && hasF;
+      }
+
 void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       {
-      if (isDrumTrack) {
+      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const auto &trackInstrList = opers.msInstrList.value(indexOfOperation);
+
+      if (isDrumTrack && trackInstrList.empty()) {
             createClef(ClefType::PERC, staff, 0);
             return;
             }
 
       const int strack = staff->idx() * VOICES;
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-
       bool mainClefWasSet = false;
+      const int msInstrIndex = opers.msInstrIndex.value(indexOfOperation);
 
-      if (opers.changeClef.value(indexOfOperation)) {
+      if (opers.changeClef.value(indexOfOperation)
+                  && (trackInstrList.empty() || hasGFclefs(trackInstrList[msInstrIndex]))) {
             MidiTie::TieStateMachine tieTracker;
 
                         // find optimal clef changes via dynamic programming
@@ -444,7 +468,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                         mainClefWasSet = true;
                   }
             }
-      if (!mainClefWasSet)
+      if (!mainClefWasSet && trackInstrList.empty())
             createMainClefFromAveragePitch(staff, strack);
 
       Q_ASSERT_X(!doesClefBreakTie(staff), "MidiClef::createClefs", "Clef breaks the tie");
