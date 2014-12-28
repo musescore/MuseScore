@@ -821,57 +821,64 @@ void findInstrumentsForAllTracks(const QList<MTrack> &tracks)
             }
       }
 
-//---------------------------------------------------------
-// createInstruments
-//   for drum track, if any, set percussion clef
-//   for piano 2 tracks, if any, set G and F clefs
-//   for other track types set G or F clef
-//
-//  note: after set, clefs also should be created later
-//---------------------------------------------------------
-
 void createInstruments(Score *score, QList<MTrack> &tracks)
       {
-      auto& opers = preferences.midiImportOperations;
-      auto &instrListOption = opers.data()->trackOpers.msInstrList;
+      const auto& opers = preferences.midiImportOperations;
+      const auto &instrListOption = opers.data()->trackOpers.msInstrList;
 
       const int ntracks = tracks.size();
       for (int idx = 0; idx < ntracks; ++idx) {
-
             MTrack& track = tracks[idx];
             Part* part = new Part(score);
+            const auto &trackInstrList = instrListOption.value(track.indexOfOperation);
 
-            if (track.mtrack->drumTrack()) {
-                  part->setStaves(1);
-                  part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
-                  part->instr()->setDrumset(smDrumset);
-                  part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
-                  }
-            else {
-                  if (idx < (tracks.size() - 1) && idx >= 0
-                              && isGrandStaff(tracks[idx], tracks[idx + 1])) {
-                                    // assume that the current track and the next track
-                                    // form a piano part
-                        part->setStaves(2);
-                        part->staff(0)->setBracket(0, BracketType::BRACE);
-                        part->staff(0)->setBracketSpan(0, 2);
-
-                        ++idx;
-                        tracks[idx].staff = part->staff(1);
+            if (trackInstrList.empty()) {       // if no suitable instruments were found
+                  if (track.mtrack->drumTrack()) {
+                        part->setStaves(1);
+                        part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                        part->instr()->setDrumset(smDrumset);
+                        part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
+                        track.staff = part->staff(0);
                         }
                   else {
-                        part->setStaves(1);
+                        if (idx < (tracks.size() - 1) && idx >= 0
+                                    && isGrandStaff(tracks[idx], tracks[idx + 1])) {
+                                          // assume that the current track and the next track
+                                          // form a piano part
+                              part->setStaves(2);
+                              part->staff(0)->setBracket(0, BracketType::BRACE);
+                              part->staff(0)->setBracketSpan(0, 2);
+
+                              track.staff = part->staff(0);
+                              ++idx;
+                              tracks[idx].staff = part->staff(1);
+                              }
+                        else {
+                              part->setStaves(1);
+                              track.staff = part->staff(0);
+                              }
                         }
                   }
+            else {
+                  const int msInstrIndex = opers.data()->trackOpers.msInstrIndex.value(
+                                                                    track.indexOfOperation);
+                  const InstrumentTemplate *t = trackInstrList[msInstrIndex];
+                  part->initFromInstrTemplate(t);
 
-            track.staff = part->staff(0);
-            part->staves()->front()->setBarLineSpan(part->nstaves());
+                  const int staveCount = qMin(t->nstaves(), tracks.size() - idx);
+                  part->setStaves(staveCount);
+                  part->staff(0)->setBarLineSpan(staveCount);
+                  part->staff(0)->setBracket(0, t->bracket[0]);
+                  part->staff(0)->setBracketSpan(0, staveCount);
 
-            const auto &trackInstrList = instrListOption.value(track.indexOfOperation);
-            if (!trackInstrList.empty()) {
-                  const int index = opers.data()->trackOpers.msInstrIndex.value(
-                                                            track.indexOfOperation);
-                  part->initFromInstrTemplate(trackInstrList[index]);
+                  for (int i = 0; i != staveCount; ++i) {
+                        part->staff(i)->setLines(t->staffLines[i]);
+                        part->staff(i)->setSmall(t->smallStaff[i]);
+                        part->staff(i)->setDefaultClefType(t->clefTypes[i]);
+                        if (i > 0)
+                              ++idx;
+                        tracks[idx].staff = part->staff(i);
+                        }
                   }
 
             score->appendPart(part);
