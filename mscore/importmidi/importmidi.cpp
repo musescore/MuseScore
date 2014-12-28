@@ -1040,19 +1040,14 @@ bool areNext3OrganStaff(int currentTrack, const QList<MTrack> &tracks)
                   && isSameChannel(tracks[currentTrack + 1], tracks[currentTrack + 2]);
       }
 
-void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiType midiType)
+// set program equal to all staves, as it should be
+// often only first stave in Grand Staff have correct program, other - default (piano)
+// also handle track names
+void setGrandStaffProgram(QList<MTrack> &tracks)
       {
       int lastOrganTrack = -1;
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
-                        // pass current track index to the convertTrack function
-                        //   through MidiImportOperations
-            auto &opers = preferences.midiImportOperations;
-            MidiOperations::CurrentTrackSetter setCurrentTrack(opers, mt.indexOfOperation);
-
-            processMeta(mt, false);
-            if (midiType == MidiType::UNKNOWN)
-                  midiType = MidiType::GM;
 
             if (areNext3OrganStaff(i, tracks)) {
                   lastOrganTrack = i + 2;
@@ -1070,13 +1065,26 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
                         tracks[i + 1].name = "";  // so instrument name will be used instead
                         }
                   }
+            }
+      }
 
+void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiType midiType)
+      {
+      for (int i = 0; i < tracks.size(); ++i) {
+            MTrack &mt = tracks[i];
+                        // pass current track index to the convertTrack function
+                        //   through MidiImportOperations
+            auto &opers = preferences.midiImportOperations;
+            MidiOperations::CurrentTrackSetter setCurrentTrack(opers, mt.indexOfOperation);
+
+            processMeta(mt, false);
+            if (midiType == MidiType::UNKNOWN)
+                  midiType = MidiType::GM;
             setTrackInfo(midiType, mt);
             mt.convertTrack(lastTick);
             processMeta(mt, true);
             }
       }
-
 
 void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
       {
@@ -1167,6 +1175,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       MChord::splitUnequalChords(tracks);
                   // no more track insertion/reordering/deletion from now
       QList<MTrack> trackList = prepareTrackList(tracks);
+      setGrandStaffProgram(trackList);
       findInstrumentsForAllTracks(trackList);
       createInstruments(score, trackList);
       MidiDrum::setStaffBracketForDrums(trackList);
