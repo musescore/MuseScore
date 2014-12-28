@@ -1414,6 +1414,15 @@ void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
 //   undoChangePageFormat
 //---------------------------------------------------------
 
+void Score::undoChangePageFormat(PageFormat* p)
+      {
+      undoChangePageFormat(p, spatium(), pageNumberOffset());
+      }
+
+//---------------------------------------------------------
+//   undoChangePageFormat
+//---------------------------------------------------------
+
 void Score::undoChangePageFormat(PageFormat* p, qreal v, int pageOffset)
       {
       undo(new ChangePageFormat(this, p, v, pageOffset));

@@ -3604,17 +3604,148 @@ void Score::setImportedFilePath(const QString& filePath)
 
 QString Score::title()
       {
-      QString fn = metaTag("workTitle");
-      if (fn.isEmpty())
-            fn = fileInfo()->baseName();
-      else
-            return fn;
+      QString fn;
       Text* t = getText(TextStyleType::TITLE);
       if (t)
             fn = QTextDocumentFragment::fromHtml(t->text()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+
+      if (fn.isEmpty())
+            fn = metaTag("workTitle");
+
+      if (fn.isEmpty())
+            fn = fileInfo()->baseName();
+
       if (fn.isEmpty())
             fn = "Untitled";
+
       return fn.simplified();
+      }
+
+//---------------------------------------------------------
+//   subtitle
+//---------------------------------------------------------
+
+QString Score::subtitle()
+      {
+      QString fn;
+      Text* t = getText(TextStyleType::SUBTITLE);
+      if (t)
+            fn = QTextDocumentFragment::fromHtml(t->text()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+
+      return fn.simplified();
+      }
+
+//---------------------------------------------------------
+//   composer
+//---------------------------------------------------------
+
+QString Score::composer()
+      {
+      QString fn;
+      Text* t = getText(TextStyleType::COMPOSER);
+      if (t)
+            fn = QTextDocumentFragment::fromHtml(t->text()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+
+      if (fn.isEmpty())
+            fn = metaTag("composer");
+
+      return fn.simplified();
+      }
+
+//---------------------------------------------------------
+//   poet
+//---------------------------------------------------------
+
+QString Score::poet()
+      {
+      QString fn;
+      Text* t = getText(TextStyleType::POET);
+      if (t)
+            fn = QTextDocumentFragment::fromHtml(t->text()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+
+      if (fn.isEmpty())
+            fn = metaTag("lyricist");
+
+      if (fn.isEmpty())
+            fn = "";
+
+      return fn.simplified();
+      }
+
+//---------------------------------------------------------
+//   nmeasure
+//---------------------------------------------------------
+
+int Score::nmeasures()
+      {
+      int n = 0;
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
+            n++;
+      return n;
+      }
+
+//---------------------------------------------------------
+//   hasLyrics
+//---------------------------------------------------------
+
+bool Score::hasLyrics()
+      {
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+            for (int i = 0; i < ntracks() ; ++i) {
+                  if (seg->lyricsList(i) && seg->lyricsList(i)->size() > 0)
+                        return true;
+                  }
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   hasHarmonies
+//---------------------------------------------------------
+
+bool Score::hasHarmonies()
+      {
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+            for (Element* e : seg->annotations()) {
+                        if (e->type() == Element::Type::HARMONY)
+                              return true;
+                  }
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   keysig
+//---------------------------------------------------------
+
+int Score::keysig()
+      {
+      Key result = Key::C;
+      for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+            Staff* st = staff(staffIdx);
+            Key key = st->key(0);
+            if (st->staffType()->group() == StaffGroup::PERCUSSION || st->keySigEvent(0).custom())      // ignore percussion and custom key
+                  continue;
+            result = key;
+            int diff = st->part()->instr()->transpose().chromatic;
+            if (!styleB(StyleIdx::concertPitch) && diff)
+                  result = transposeKey(key, diff);
+            break;
+            }
+      return int(result);
+      }
+
+//---------------------------------------------------------
+//   duration
+//---------------------------------------------------------
+
+int Score::duration()
+      {
+      updateRepeatList(true);
+      RepeatSegment* rs = repeatList()->last();
+      return lrint(utick2utime(rs->utick + rs->len));
       }
 
 //---------------------------------------------------------
