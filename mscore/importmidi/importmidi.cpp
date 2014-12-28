@@ -607,7 +607,8 @@ QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       {
       QList<MTrack> trackList;
       for (const auto &track: tracks) {
-            if (!track.second.chords.empty())
+                        // show track even if all initial notes were cleaned up
+            if (track.second.hadInitialNotes)
                   trackList.push_back(track.second);
             }
       return trackList;
@@ -670,7 +671,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   }
             if (hasNotes) {
                   ++trackIndex;
-                  track.hasNotes = true;
+                  track.hadInitialNotes = true;
                   const auto *data = preferences.midiImportOperations.data();
                   if (data->processingsOfOpenedFile > 0) {
                         if (data->trackOpers.doImport.value(trackIndex)) {
@@ -686,7 +687,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                         }
                   }
             else {
-                  track.hasNotes = false;       // it's a tempo track or something else
+                  track.hadInitialNotes = false;       // it's a tempo track or something else
                   tracks.insert({-1, track});
                   }
             }
