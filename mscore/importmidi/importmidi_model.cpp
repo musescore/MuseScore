@@ -166,10 +166,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         const auto &trackInstrList = _opers.msInstrList.value(trackIndex);
                         const InstrumentTemplate *instr = (trackInstrList.empty())
                                     ? nullptr : trackInstrList[instrIndex];
-                        if (!instr)
-                              return "";
-                        return (instr->longNames.isEmpty()
-                                ? instr->id : instr->longNames.front().name);
+                        return instrName(instr);
                         }
                   void setValue(const QVariant &value, int trackIndex)
                         {
@@ -179,11 +176,21 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         {
                         auto list = QStringList();
                         const auto &trackInstrList = _opers.msInstrList.value(trackIndex);
-                        for (const InstrumentTemplate *instr: trackInstrList) {
-                              list.append(instr->longNames.isEmpty()
-                                          ? instr->id : instr->longNames.front().name);
-                              }
+                        for (const InstrumentTemplate *instr: trackInstrList)
+                              list.append(instrName(instr));
                         return list;
+                        }
+
+               private:
+                  static QString instrName(const InstrumentTemplate *instr)
+                        {
+                        if (!instr)
+                              return "";
+                        if (!instr->trackName.isEmpty())
+                              return instr->trackName;
+                        if (instr->longNames.isEmpty())
+                              return instr->id;
+                        return instr->longNames.front().name;
                         }
                   };
             _columns.push_back(std::unique_ptr<Column>(new MsInstrument(_trackOpers)));
