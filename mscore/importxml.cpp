@@ -1701,6 +1701,9 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               // Element instrument-name is typically not displayed in the score,
                               // but used only internally
                               part->instr()->setTrackName(ee.text());
+                              // try to prevent an empty track name
+                              if (part->partName() == "")
+                                    part->setPartName(ee.text());
                               }
                         else if (ee.tagName() == "instrument-sound")
                               domNotImplemented(e);

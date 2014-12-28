@@ -4184,7 +4184,19 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
 
             xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
-            xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
+            // by default export the parts long name as part-name
+            if (part->longName() != "")
+                  xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
+            else {
+                  if (part->partName() != "") {
+                        // use the track name if no part long name
+                        // to prevent an empty track name on import
+                        xml.tag("part-name print-object=\"no\"", MScoreTextToMXML::toPlainText(part->partName()));
+                        }
+                  else
+                        // part-name is required
+                        xml.tag("part-name", "");
+                  }
             if (!part->shortName().isEmpty())
                   xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
@@ -4217,7 +4229,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
             else {
                   xml.stag(QString("score-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
-                  xml.tag("instrument-name", MScoreTextToMXML::toPlainText(part->longName()));
+                  xml.tag("instrument-name", MScoreTextToMXML::toPlainText(part->instr()->trackName()));
                   xml.etag();
 
                   xml.tag(QString("midi-device id=\"P%1-I%2\" port=\"%3\"").arg(idx+1).arg(3).arg(part->midiPort() + 1), "");
