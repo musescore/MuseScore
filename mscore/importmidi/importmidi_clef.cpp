@@ -432,9 +432,10 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       const int strack = staff->idx() * VOICES;
       bool mainClefWasSet = false;
       const int msInstrIndex = opers.msInstrIndex.value(indexOfOperation);
+      const bool canChangeClef = trackInstrList.empty()
+                                  || hasGFclefs(trackInstrList[msInstrIndex]);
 
-      if (opers.changeClef.value(indexOfOperation)
-                  && (trackInstrList.empty() || hasGFclefs(trackInstrList[msInstrIndex]))) {
+      if (opers.changeClef.value(indexOfOperation) && canChangeClef) {
             MidiTie::TieStateMachine tieTracker;
 
                         // find optimal clef changes via dynamic programming
@@ -468,7 +469,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
                         mainClefWasSet = true;
                   }
             }
-      if (!mainClefWasSet && trackInstrList.empty())
+      if (!mainClefWasSet && canChangeClef)
             createMainClefFromAveragePitch(staff, strack);
 
       Q_ASSERT_X(!doesClefBreakTie(staff), "MidiClef::createClefs", "Clef breaks the tie");
