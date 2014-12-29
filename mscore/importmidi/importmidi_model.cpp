@@ -1,5 +1,6 @@
 #include "importmidi_model.h"
 #include "importmidi_inner.h"
+#include "importmidi_clef.h"
 #include "mscore/preferences.h"
 #include "libmscore/instrtemplate.h"
 
@@ -561,6 +562,18 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   }
             QString headerName() const { return QCoreApplication::translate(
                                                       "MIDI import operations", "Clef\nchanges"); }
+            bool isEditable(int trackIndex) const
+                  {
+                  if (_opers.isDrumTrack.value(trackIndex))
+                        return false;
+                  const int instrIndex = _opers.msInstrIndex.value(trackIndex);
+                  const auto &trackInstrList = _opers.msInstrList.value(trackIndex);
+                  const InstrumentTemplate *instr = (trackInstrList.empty())
+                                          ? nullptr : trackInstrList[instrIndex];
+                  if (instr && !MidiClef::hasGFclefs(instr))
+                        return false;
+                  return true;
+                  }
             QVariant value(int trackIndex) const
                   {
                   return _opers.changeClef.value(trackIndex);
@@ -568,6 +581,10 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             void setValue(const QVariant &value, int trackIndex)
                   {
                   _opers.changeClef.setValue(trackIndex, value.toBool());
+                  }
+            bool isVisible(int trackIndex) const
+                  {
+                  return isEditable(trackIndex);
                   }
             };
       _columns.push_back(std::unique_ptr<Column>(new ClefChanges(_trackOpers)));
@@ -848,7 +865,8 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                                     return (value.toBool()) ? Qt::Checked : Qt::Unchecked;
                               }
                         }
-                  else if (editableSingleTrack(trackIndex, index.column())) {
+                  else if (editableSingleTrack(trackIndex, index.column())
+                           && _columns[index.column()]->isVisible(trackIndex)) {
                         QVariant value = _columns[index.column()]->value(trackIndex);
                         if (value.type() == QVariant::Bool)
                               return (value.toBool()) ? Qt::Checked : Qt::Unchecked;
