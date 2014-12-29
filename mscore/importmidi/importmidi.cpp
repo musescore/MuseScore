@@ -720,10 +720,24 @@ bool is3StaffOrgan(int program)
       return program >= 16 && program <= 20;
       }
 
+std::set<int> findAllPitches(const MTrack &track)
+      {
+      std::set<int> pitches;
+      for (const auto &chord: track.chords) {
+            for (const auto &note: chord.second.notes)
+                  pitches.insert(note.pitch);
+            }
+      return pitches;
+      }
+
 std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
       {
       std::vector<InstrumentTemplate *> suitableTemplates;
       const int program = track.program;
+
+      std::set<int> trackPitches;
+      if (track.mtrack->drumTrack())
+            trackPitches = findAllPitches(track);
 
       for (const auto &group: instrumentGroups) {
             for (const auto &templ: group->instrumentTemplates) {
@@ -732,8 +746,28 @@ std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
                   const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
                   if (track.mtrack->drumTrack() != isDrumTemplate)
                         continue;
+
+                  std::set<int> drumPitches;
+                  if (isDrumTemplate && templ->drumset) {
+                        for (int i = 0; i != DRUM_INSTRUMENTS; ++i) {
+                              if (!templ->drumset->name(i).isEmpty())
+                                    drumPitches.insert(i);
+                              }
+                        }
+
                   for (const auto &channel: templ->channel) {
                         if (channel.program == program) {
+                              if (isDrumTemplate) {
+                                    bool hasNotDefinedPitch = false;
+                                    for (const int pitch: trackPitches) {
+                                          if (drumPitches.find(pitch) == drumPitches.end()) {
+                                                hasNotDefinedPitch = true;
+                                                break;
+                                                }
+                                          }
+                                    if (hasNotDefinedPitch)
+                                          break;
+                                    }
                               suitableTemplates.push_back(templ);
                               break;
                               }
