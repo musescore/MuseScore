@@ -824,6 +824,8 @@ void sortInstrumentTemplates(
 
             if (diff1 != diff2)
                   return diff1 < diff2;
+            if (templ1->drumset && !templ2->drumset)
+                  return true;
             return templ1->genres.size() > templ2->genres.size();
             });
       }
