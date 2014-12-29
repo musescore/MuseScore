@@ -757,7 +757,7 @@ std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
 
                   for (const auto &channel: templ->channel) {
                         if (channel.program == program) {
-                              if (isDrumTemplate) {
+                              if (isDrumTemplate && templ->drumset) {
                                     bool hasNotDefinedPitch = false;
                                     for (const int pitch: trackPitches) {
                                           if (drumPitches.find(pitch) == drumPitches.end()) {
