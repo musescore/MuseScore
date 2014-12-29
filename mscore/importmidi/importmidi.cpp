@@ -824,6 +824,9 @@ void sortInstrumentTemplates(
 
             if (diff1 != diff2)
                   return diff1 < diff2;
+                        // if drumset is not null - it's a particular drum instrument
+                        // if drum set is null - it's a common drumset
+                        // so prefer particular drum instruments
             if (templ1->drumset && !templ2->drumset)
                   return true;
             return templ1->genres.size() > templ2->genres.size();
