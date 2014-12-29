@@ -730,6 +730,27 @@ std::set<int> findAllPitches(const MTrack &track)
       return pitches;
       }
 
+void findNotEmptyDrumPitches(std::set<int> &drumPitches, const InstrumentTemplate *templ)
+      {
+      for (int i = 0; i != DRUM_INSTRUMENTS; ++i) {
+            if (!templ->drumset->name(i).isEmpty())
+                  drumPitches.insert(i);
+            }
+      }
+
+bool hasNotDefinedDrumPitch(const std::set<int> &trackPitches, const std::set<int> &drumPitches)
+      {
+      bool hasNotDefinedPitch = false;
+      for (const int pitch: trackPitches) {
+            if (drumPitches.find(pitch) == drumPitches.end()) {
+                  hasNotDefinedPitch = true;
+                  break;
+                  }
+            }
+
+      return hasNotDefinedPitch;
+      }
+
 std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
       {
       std::vector<InstrumentTemplate *> suitableTemplates;
@@ -748,24 +769,13 @@ std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
                         continue;
 
                   std::set<int> drumPitches;
-                  if (isDrumTemplate && templ->drumset) {
-                        for (int i = 0; i != DRUM_INSTRUMENTS; ++i) {
-                              if (!templ->drumset->name(i).isEmpty())
-                                    drumPitches.insert(i);
-                              }
-                        }
+                  if (isDrumTemplate && templ->drumset)
+                        findNotEmptyDrumPitches(drumPitches, templ);
 
                   for (const auto &channel: templ->channel) {
                         if (channel.program == program) {
                               if (isDrumTemplate && templ->drumset) {
-                                    bool hasNotDefinedPitch = false;
-                                    for (const int pitch: trackPitches) {
-                                          if (drumPitches.find(pitch) == drumPitches.end()) {
-                                                hasNotDefinedPitch = true;
-                                                break;
-                                                }
-                                          }
-                                    if (hasNotDefinedPitch)
+                                    if (hasNotDefinedDrumPitch(trackPitches, drumPitches))
                                           break;
                                     }
                               suitableTemplates.push_back(templ);
