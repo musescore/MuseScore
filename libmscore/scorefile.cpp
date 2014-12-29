@@ -1376,6 +1376,10 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                               if (s->generated() || !xml.canWrite(s))
                                     continue;
 
+                              // don't write voltas to clipboard
+                              if (clip && s->type() == Element::Type::VOLTA)
+                                    continue;
+
                               if (s->track() == track) {
                                     bool end = false;
                                     if (s->anchor() == Spanner::Anchor::CHORD || s->anchor() == Spanner::Anchor::NOTE)
