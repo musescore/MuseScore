@@ -1069,26 +1069,6 @@ class ChangeInstrument : public UndoCommand {
 extern void updateNoteLines(Segment*, int track);
 
 //---------------------------------------------------------
-//   ChangeBoxProperties
-//---------------------------------------------------------
-
-class ChangeBoxProperties : public UndoCommand {
-      Box* _box;
-
-      qreal _marginLeft, _marginTop, _marginRight, _marginBottom;
-      Spatium _height, _width;
-      qreal _topGap, _bottomGap;
-
-      void flip();
-
-   public:
-      ChangeBoxProperties(Box *, qreal, qreal, qreal, qreal,
-         Spatium, Spatium,
-         qreal, qreal);
-      UNDO_NAME("ChangeBoxProperties")
-      };
-
-//---------------------------------------------------------
 //   SwapCR
 //---------------------------------------------------------
 
