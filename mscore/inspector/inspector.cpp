@@ -492,6 +492,16 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
       mapSignals();
       }
 
+//   InspectorTimeSig::setElement
+
+void InspectorTimeSig::setElement()
+      {
+      InspectorBase::setElement();
+      TimeSig* ts = static_cast<TimeSig*>(inspector->element());
+      if (ts->generated())
+            t.showCourtesy->setEnabled(false);
+      }
+
 //---------------------------------------------------------
 //   InspectorKeySig
 //---------------------------------------------------------
@@ -514,6 +524,16 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
 //            { P_ID::SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
             };
       mapSignals();
+      }
+
+//   InspectorKeySig::setElement
+
+void InspectorKeySig::setElement()
+      {
+      InspectorBase::setElement();
+      KeySig* ks = static_cast<KeySig*>(inspector->element());
+      if (ks->generated())
+            k.showCourtesy->setEnabled(false);
       }
 
 //---------------------------------------------------------
@@ -589,7 +609,7 @@ void InspectorClef::setElement()
       InspectorBase::setElement();
 
       // try to locate the 'other clef' of a courtesy / main pair
-      Clef * clef = static_cast<Clef*>(inspector->element());
+      Clef* clef = static_cast<Clef*>(inspector->element());
       // if not in a clef-segment-measure hierachy, do nothing
       if (!clef->parent() || clef->parent()->type() != Element::Type::SEGMENT)
             return;

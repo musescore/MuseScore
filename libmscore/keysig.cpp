@@ -493,6 +493,8 @@ bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::SHOW_COURTESY:
+                  if (generated())
+                        return false;
                   setShowCourtesy(v.toBool());
                   break;
             default:
@@ -512,8 +514,9 @@ bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
 QVariant KeySig::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_ID::SHOW_COURTESY:      return true;
-            default:                   return Element::propertyDefault(id);
+            case P_ID::SHOW_COURTESY:     return true;
+            default:
+                  return Element::propertyDefault(id);
             }
       }
 
