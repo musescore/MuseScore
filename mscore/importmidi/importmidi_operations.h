@@ -128,6 +128,7 @@ class Op
 struct Opers
       {
                   // data that cannot be changed by the user
+      TrackOp<int> channel = TrackOp<int>(int());
       TrackOp<std::string> staffName = TrackOp<std::string>(std::string());       // will be converted to unicode later
       TrackOp<QString> instrumentName = TrackOp<QString>(QString());
       TrackOp<bool> isDrumTrack = TrackOp<bool>(false);
