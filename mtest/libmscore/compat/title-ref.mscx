@@ -126,7 +126,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <bottomGap>58.3334</bottomGap>
+        <bottomGap>7</bottomGap>
         <Text>
           <style>Title</style>
           <text><font face="Times New Roman"/>title</text>

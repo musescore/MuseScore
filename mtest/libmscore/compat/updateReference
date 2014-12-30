@@ -17,6 +17,7 @@ cp $P/clef_missing_first-test.mscx clef_missing_first-ref.mscx
 cp $P/hor_frame_and_mmrest-test.mscx hor_frame_and_mmrest-ref.mscx
 cp $P/chord_symbol-test.mscx chord_symbol-ref.mscx
 cp $P/style-test.mscx style-ref.mscx
+cp $P/text_scaling-test.mscx text_scaling-ref.mscx
 
 
 
