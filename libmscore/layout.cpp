@@ -54,6 +54,8 @@
 
 namespace Ms {
 
+// #define PAGE_DEBUG
+
 //---------------------------------------------------------
 //   rebuildBspTree
 //---------------------------------------------------------
@@ -3195,7 +3197,6 @@ struct PageContext {
       qreal tm() const { return sr.tm(); }
       };
 
-#define PAGE_DEBUG
 
 #ifdef PAGE_DEBUG
 #define PAGEDBG(...)  qDebug(__VA_ARGS__)
@@ -3246,7 +3247,7 @@ PAGEDBG("   system %d", i);
             if (pC.sr.isVbox()) {
                   VBox* vbox = pC.sr.vbox();
                   bmargin  = vbox->bottomGap();
-                  tmargin += vbox->topGap();
+                  tmargin  = vbox->topGap();
                   if (pC.lastSystem) {
                        if (pC.lastSystem->isVbox())
                               tmargin += pC.lastSystem->vbox()->bottomGap();

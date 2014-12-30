@@ -184,8 +184,11 @@ void Box::writeProperties(Xml& xml) const
       {
       writeProperty(xml, P_ID::BOX_HEIGHT);
       writeProperty(xml, P_ID::BOX_WIDTH);
-      writeProperty(xml, P_ID::TOP_GAP);
-      writeProperty(xml, P_ID::BOTTOM_GAP);
+
+      if (getProperty(P_ID::TOP_GAP) != propertyDefault(P_ID::TOP_GAP))
+            xml.tag("topGap", _topGap / spatium());
+      if (getProperty(P_ID::BOTTOM_GAP) != propertyDefault(P_ID::BOTTOM_GAP))
+            xml.tag("bottomGap", _bottomGap / spatium());
       writeProperty(xml, P_ID::LEFT_MARGIN);
       writeProperty(xml, P_ID::RIGHT_MARGIN);
       writeProperty(xml, P_ID::TOP_MARGIN);
@@ -211,10 +214,16 @@ void Box::read(XmlReader& e)
                   _boxHeight = Spatium(e.readDouble());
             else if (tag == "width")
                   _boxWidth = Spatium(e.readDouble());
-            else if (tag == "topGap")
-                  _topGap = e.readDouble();
-            else if (tag == "bottomGap")
-                  _bottomGap = e.readDouble();
+            else if (tag == "topGap") {                     // this value is not device independent for
+                  _topGap = e.readDouble();                 // versions < 2.03
+                  if (score()->mscVersion() >= 203)
+                        _topGap *= score()->spatium();
+                  }
+            else if (tag == "bottomGap") {                  // this value is not device independent for
+                  _bottomGap = e.readDouble();              // versions < 2.03
+                  if (score()->mscVersion() >= 203)
+                        _bottomGap *= score()->spatium();
+                  }
             else if (tag == "leftMargin")
                   _leftMargin = e.readDouble();
             else if (tag == "rightMargin")

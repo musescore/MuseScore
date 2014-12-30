@@ -3409,67 +3409,6 @@ void ChangeInstrument::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeBoxProperties
-//---------------------------------------------------------
-
-ChangeBoxProperties::ChangeBoxProperties(Box* box,
-   qreal marginLeft, qreal marginTop, qreal marginRight, qreal marginBottom,
-   Spatium height, Spatium width, qreal tg, qreal bg)
-      {
-      _box              = box;
-      _marginLeft       = marginLeft;
-      _marginTop        = marginTop;
-      _marginRight      = marginRight;
-      _marginBottom     = marginBottom;
-      _height           = height;
-      _width            = width;
-      _topGap           = tg;
-      _bottomGap        = bg;
-      }
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeBoxProperties::flip()
-      {
-      // flip margins
-      qreal marginLeft       = _box->leftMargin();
-      qreal marginTop        = _box->topMargin();
-      qreal marginRight      = _box->rightMargin();
-      qreal marginBottom     = _box->bottomMargin();
-      qreal tg               = _box->topGap();
-      qreal bg               = _box->bottomGap();
-
-      _box->setLeftMargin  (_marginLeft);
-      _box->setRightMargin (_marginRight);
-      _box->setTopMargin   (_marginTop);
-      _box->setBottomMargin(_marginBottom);
-      _box->setTopGap      (_topGap);
-      _box->setBottomGap   (_bottomGap);
-
-      _marginLeft       = marginLeft;
-      _marginTop        = marginTop;
-      _marginRight      = marginRight;
-      _marginBottom     = marginBottom;
-      _topGap           = tg;
-      _bottomGap        = bg;
-
-      // according to box type, flip either height or width (or none)
-      Spatium val;
-      if (_box->type() == Element::Type::VBOX) {
-            val = _box->boxHeight();
-            _box->setBoxHeight(_height);
-            _height = val;
-            }
-      if (_box->type() == Element::Type::HBOX) {
-            val = _box->boxWidth();
-            _box->setBoxWidth(_width);
-            _width = val;
-            }
-      }
-
-//---------------------------------------------------------
 //   flip
 //---------------------------------------------------------
 
