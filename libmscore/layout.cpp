@@ -3195,6 +3195,14 @@ struct PageContext {
       qreal tm() const { return sr.tm(); }
       };
 
+#define PAGE_DEBUG
+
+#ifdef PAGE_DEBUG
+#define PAGEDBG(...)  qDebug(__VA_ARGS__)
+#else
+#define PAGEDBG(...)  ;
+#endif
+
 //---------------------------------------------------------
 //   layoutPages
 //    create list of pages
@@ -3216,7 +3224,9 @@ void Score::layoutPages()
 
       int nSystems = _systems.size();
 
+PAGEDBG("layoutPages");
       for (int i = 0; i < nSystems; ++i) {
+PAGEDBG("   system %d", i);
             //
             // collect system row
             //
@@ -3260,7 +3270,9 @@ void Score::layoutPages()
 
 
             qreal h = pC.sr.height();
+PAGEDBG("   %f + %f + %f + qMax(%f,%f)[=%f] > %f", pC.y, h, tmargin, bmargin, slb, pC.y + h + tmargin + qMax(bmargin, slb), pC.ey);
             if (pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {
+PAGEDBG("      == page break");
                   //
                   // prepare next page
                   //
