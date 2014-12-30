@@ -1,5 +1,4 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
+<RCC>
     <qresource prefix="/">
         <file>data/shortcuts.xml</file>
         <file>data/paper1.png</file>
@@ -152,5 +151,7 @@
         <file>data/icons/dialog-information.svg</file>
         <file>data/icons/dialog-question.svg</file>
         <file>data/icons/dialog-warning.svg</file>
+        <file>data/icons/arrow_down.svg</file>
+        <file>data/icons/arrow_up.svg</file>
     </qresource>
 </RCC>
