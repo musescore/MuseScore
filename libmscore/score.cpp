@@ -2082,7 +2082,7 @@ void Score::removeAudio()
 
 bool Score::appendScore(Score* score)
       {
-      if (parts().size() != score->parts().size() || staves().size() != score->staves().size())
+      if (parts().size() < score->parts().size() || staves().size() < score->staves().size())
             return false;
       TieMap  tieMap;
 
