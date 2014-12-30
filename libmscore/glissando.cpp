@@ -85,8 +85,8 @@ void Glissando::layout()
 
       // since line will be drawn relative to end note,
       // calculate offsets for start note coordinates relative to end note
-      qreal x1off;
-      qreal y1off;
+      qreal x1off = 0.0;
+      qreal y1off = 0.0;
       QPointF cp1 = anchor1->pagePos();
       QPointF cp2 = anchor2->pagePos();
 
