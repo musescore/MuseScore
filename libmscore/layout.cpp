@@ -3270,7 +3270,16 @@ PAGEDBG("   system %d", i);
 
 
             qreal h = pC.sr.height();
-PAGEDBG("   %f + %f + %f + qMax(%f,%f)[=%f] > %f", pC.y, h, tmargin, bmargin, slb, pC.y + h + tmargin + qMax(bmargin, slb), pC.ey);
+PAGEDBG("   %f + %f + %f + qMax(%f,%f)[=%f] > %f",
+    pC.y / MScore::DPMM,
+    h / MScore::DPMM,
+    tmargin / MScore::DPMM,
+    bmargin / MScore::DPMM,
+    slb / MScore::DPMM,
+    (pC.y + h + tmargin + qMax(bmargin, slb)) / MScore::DPMM,
+    pC.ey / MScore::DPMM
+    );
+
             if (pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {
 PAGEDBG("      == page break");
                   //

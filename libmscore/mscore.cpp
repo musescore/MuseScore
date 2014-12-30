@@ -51,8 +51,8 @@
 
 namespace Ms {
 
-qreal MScore::PDPI = 1200;
-qreal MScore::DPI  = 1200;
+qreal MScore::PDPI;
+qreal MScore::DPI;
 qreal MScore::DPMM;
 bool  MScore::debugMode;
 bool  MScore::testMode = false;
