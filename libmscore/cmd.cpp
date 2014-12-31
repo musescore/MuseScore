@@ -2626,6 +2626,8 @@ void Score::cmdSlashFill()
 
       // loop through staves in selection
       for (int staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
+            int track = staffIdx * VOICES;
+            int voice = -1;
             // loop through segments adding slashes on each beat
             for (Segment* s = startSegment; s && s->tick() < endTick; s = s->next1()) {
                   if (s->segmentType() != Segment::Type::ChordRest)
@@ -2637,7 +2639,42 @@ void Score::cmdSlashFill()
                   // skip over any leading segments before next (first) beat
                   if (s->tick() % f.ticks())
                         continue;
-                  //expandVoice(s, staffIdx * VOICES);
+                  // determine voice to use - first available voice for this measure / staff
+                  if (voice == -1 || s->rtick() == 0) {
+                        bool needGap[VOICES];
+                        for (voice = 0; voice < VOICES; ++voice) {
+                              needGap[voice] = false;
+                              ChordRest* cr = static_cast<ChordRest*>(s->element(track + voice));
+                              // no chordrest == treat as ordinary rest for purpose of determining availbility of voice
+                              // but also, we will need to make a gap for this voice if we do end up choosing it
+                              if (!cr)
+                                    needGap[voice] = true;
+                              // chord == keep looking for an available voice
+                              else if (cr->type() == Element::Type::CHORD)
+                                    continue;
+                              // full measure rest == OK to use voice
+                              else if (cr->durationType() == TDuration::DurationType::V_MEASURE)
+                                    break;
+                              // no chordrest or ordinary rest == OK to use voice
+                              // if there are nothing but rests for duration of measure / selection
+                              bool ok = true;
+                              for (Segment* ns = s->next(Segment::Type::ChordRest); ns && ns != endSegment; ns = ns->next(Segment::Type::ChordRest)) {
+                                    ChordRest* ncr = static_cast<ChordRest*>(ns->element(track + voice));
+                                    if (ncr && ncr->type() == Element::Type::CHORD) {
+                                          ok = false;
+                                          break;
+                                          }
+                                    }
+                              if (ok)
+                                    break;
+                              }
+                        // no available voices, just use voice 0
+                        if (voice == VOICES)
+                              voice = 0;
+                        // no cr was found in segment for this voice, so make gap
+                        if (needGap[voice])
+                              makeGapVoice(s, track + voice, f, s->tick());
+                        }
                   // construct note
                   int line = 0;
                   bool error = false;
@@ -2662,8 +2699,8 @@ void Score::cmdSlashFill()
                   if (error)
                         continue;
                   // insert & turn into slash
-                  s = setNoteRest(s, staffIdx * VOICES, nv, f);
-                  Chord* c = static_cast<Chord*>(s->element(staffIdx * VOICES));
+                  s = setNoteRest(s, track + voice, nv, f);
+                  Chord* c = static_cast<Chord*>(s->element(track + voice));
                   if (c->links()) {
                         foreach (Element* e, *c->links()) {
                               Chord* lc = static_cast<Chord*>(e);

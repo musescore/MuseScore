@@ -15,6 +15,7 @@
 #include "mtest/testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
+#include "libmscore/measure.h"
 
 #define DIR QString("libmscore/tools/")
 
@@ -152,10 +153,9 @@ void TestTools::undoSlashFill()
       Score* score = readScore(readFile);
       score->doLayout();
 
-      // select all
-      score->startCmd();
-      score->cmdSelectAll();
-      score->endCmd();
+      // select
+      Segment* s = score->firstMeasure()->findSegment(Segment::Type::ChordRest, 960 /* MScore::division * 2 */);
+      score->selection().setRange(s, score->lastSegment(), 0, 2);
 
       // do
       score->startCmd();
