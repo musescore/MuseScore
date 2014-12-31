@@ -53,6 +53,7 @@ enum class Icons : signed char { Invalid_ICON = -1,
       timesig_allabreve_ICON, timesig_common_ICON, timesig_prolatio01_ICON, timesig_prolatio02_ICON,
       timesig_prolatio03_ICON, timesig_prolatio04_ICON, timesig_prolatio05_ICON, timesig_prolatio07_ICON,
       timesig_prolatio08_ICON, timesig_prolatio10_ICON, timesig_prolatio11_ICON, edit_ICON, reset_ICON, close_ICON,
+      arrowUp_ICON, arrowDown_ICON,
       voice1_ICON, voice2_ICON, voice3_ICON, voice4_ICON,
       ICONS
       };
