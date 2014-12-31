@@ -886,7 +886,8 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
             int sysIdx1 = systems->indexOf(s1);
             int sysIdx2 = systems->indexOf(s2);
 
-            qreal  x1 = l->bbox().right();      // lyrics width
+            qreal x1 = l->bbox().right();       // lyrics width
+            x1 += 0.1 * _spatium;               // padding
             QPointF p1(x1, 0);                  // melisma y is at base line
 
             int segIdx = 0;
@@ -992,7 +993,7 @@ qDebug("Lyrics: melisma end segment not implemented");
             }
 
       qreal gap = x2 - x1;
-      len       = gap;
+      len       = gap - 0.2 * _spatium * lmag * staffMag;
       if (len > maxl)
             len = maxl;
       qreal xo = (gap - len) * .5;
