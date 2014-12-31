@@ -73,12 +73,17 @@ void setTempoToScore(Score *score, int tick, double beatsPerSecond)
             }
       }
 
+double roundToBpm(double beatsPerSecond)
+      {
+      return qRound(beatsPerSecond * 60.0) / 60.0;
+      }
+
 void applyAllTempoEvents(const std::multimap<int, MTrack> &tracks, Score *score)
       {
       for (const auto &track: tracks) {
             if (track.second.isDivisionInTps) {     // ticks per second
                   const double ticksPerBeat = MScore::division;
-                  const double beatsPerSecond = track.second.division / ticksPerBeat;
+                  const double beatsPerSecond = roundToBpm(track.second.division / ticksPerBeat);
                   setTempoToScore(score, 0, beatsPerSecond);
                   }
             else {      // beats per second
@@ -88,9 +93,8 @@ void applyAllTempoEvents(const std::multimap<int, MTrack> &tracks, Score *score)
                               const auto tick = toMuseScoreTicks(
                                                 ie.first, track.second.division, false);
                               const uchar* data = (uchar*)e.edata();
-                              const unsigned tempo = data[2] + (data[1] << 8)
-                                                             + (data[0] << 16);
-                              const double beatsPerSecond = 1000000.0 / tempo;
+                              const unsigned tempo = data[2] + (data[1] << 8) + (data[0] << 16);
+                              const double beatsPerSecond = roundToBpm(1000000.0 / tempo);
                               setTempoToScore(score, tick.ticks(), beatsPerSecond);
                               }
                         }
@@ -134,7 +138,7 @@ void setTempo(const std::multimap<int, MTrack> &tracks, Score *score)
             averageTempoFactor /= counter;
 
             const double basicTempo = MidiTempo::findBasicTempo(tracks, true);
-            const double tempo = basicTempo * averageTempoFactor;
+            const double tempo = roundToBpm(basicTempo * averageTempoFactor);
 
             score->tempomap()->clear();         // use only one tempo marking for all score
             setTempoToScore(score, 0, tempo);
