@@ -73,6 +73,21 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
       _columns.push_back(std::unique_ptr<Column>(new Import(_trackOpers)));
 
       //-----------------------------------------------------------------------
+      struct Channel : Column {
+            Channel(MidiOperations::Opers &opers) : Column(opers) {}
+            QString headerName() const { return QCoreApplication::translate(
+                                                      "MIDI import operations", "Channel"); }
+            bool isEditable() const { return false; }
+            QVariant value(int trackIndex) const
+                  {
+                  return QString::number(_opers.channel.value(trackIndex));
+                  }
+            void setValue(const QVariant &/*value*/, int /*trackIndex*/) {}
+            };
+      ++_frozenColCount;
+      _columns.push_back(std::unique_ptr<Column>(new Channel(_trackOpers)));
+
+      //-----------------------------------------------------------------------
       bool hasStaffName = false;
       for (int i = 0; i != _trackCount; ++i) {
             if (_trackOpers.staffName.value(i) != "") {
