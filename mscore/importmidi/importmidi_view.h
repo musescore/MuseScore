@@ -36,7 +36,9 @@ class SeparatorDelegate : public QStyledItemDelegate
             if (index.column() == _frozenColIndex) {
                   painter->save();
                   painter->setPen(option.palette.foreground().color());
-                  painter->drawLine(option.rect.topRight(), option.rect.bottomRight());
+                              // use -1 padding to create double-line effect
+                  const int x = option.rect.right() - 1;
+                  painter->drawLine(x, option.rect.top(), x, option.rect.bottom());
                   painter->restore();
                   }
             }
