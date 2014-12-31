@@ -60,13 +60,13 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
       struct Import : Column {
             Import(MidiOperations::Opers &opers) : Column(opers) {}
 
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Import"); }
-            QVariant value(int trackIndex) const
+            QVariant value(int trackIndex) const override
                   {
                   return _opers.doImport.value(trackIndex);
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   _opers.doImport.setValue(trackIndex, value.toBool());
                   }
@@ -77,14 +77,14 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
       //-----------------------------------------------------------------------
       struct Channel : Column {
             Channel(MidiOperations::Opers &opers) : Column(opers) {}
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Channel"); }
-            bool isEditable(int /*trackIndex*/) const { return false; }
-            QVariant value(int trackIndex) const
+            bool isEditable(int /*trackIndex*/) const override { return false; }
+            QVariant value(int trackIndex) const override
                   {
                   return QString::number(_opers.channel.value(trackIndex));
                   }
-            void setValue(const QVariant &/*value*/, int /*trackIndex*/) {}
+            void setValue(const QVariant &/*value*/, int /*trackIndex*/) override {}
             };
       ++_frozenColCount;
       _columns.push_back(std::unique_ptr<Column>(new Channel(_trackOpers)));
@@ -103,18 +103,18 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         : Column(opers), _midiFile(midiFile)
                         {
                         }
-                  int width() const { return 180; }
-                  QString headerName() const { return QCoreApplication::translate(
+                  int width() const override { return 180; }
+                  QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Staff name"); }
-                  bool isEditable(int /*trackIndex*/) const { return false; }
-                  QVariant value(int trackIndex) const
+                  bool isEditable(int /*trackIndex*/) const override { return false; }
+                  QVariant value(int trackIndex) const override
                         {
                         MidiOperations::Data &opers = preferences.midiImportOperations;
                         MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
                         return MidiCharset::convertToCharset(_opers.staffName.value(trackIndex));
                         }
-                  void setValue(const QVariant &/*value*/, int /*trackIndex*/) {}
+                  void setValue(const QVariant &/*value*/, int /*trackIndex*/) override {}
 
                private:
                   QString _midiFile;
@@ -128,15 +128,15 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             MidiInstrumentName(MidiOperations::Opers &opers) : Column(opers)
                   {
                   }
-            int width() const { return 130; }
-            QString headerName() const { return QCoreApplication::translate(
+            int width() const override { return 130; }
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Sound"); }
-            bool isEditable(int /*trackIndex*/) const { return false; }
-            QVariant value(int trackIndex) const
+            bool isEditable(int /*trackIndex*/) const override { return false; }
+            QVariant value(int trackIndex) const override
                   {
                   return _opers.midiInstrName.value(trackIndex);
                   }
-            void setValue(const QVariant &/*value*/, int /*trackIndex*/) {}
+            void setValue(const QVariant &/*value*/, int /*trackIndex*/) override {}
             };
       ++_frozenColCount;
       _columns.push_back(std::unique_ptr<Column>(new MidiInstrumentName(_trackOpers)));
@@ -154,14 +154,14 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   MsInstrument(MidiOperations::Opers &opers) : Column(opers)
                         {
                         }
-                  int width() const { return 220; }
-                  QString headerName() const { return QCoreApplication::translate(
+                  int width() const override { return 220; }
+                  QString headerName() const override { return QCoreApplication::translate(
                                           "MIDI import operations", "MuseScore instrument"); }
-                  bool isEditable(int trackIndex) const
+                  bool isEditable(int trackIndex) const override
                         {
                         return _opers.msInstrList.value(trackIndex).size() > 1;
                         }
-                  QVariant value(int trackIndex) const
+                  QVariant value(int trackIndex) const override
                         {
                         const int instrIndex = _opers.msInstrIndex.value(trackIndex);
                         const auto &trackInstrList = _opers.msInstrList.value(trackIndex);
@@ -169,11 +169,11 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                                     ? nullptr : trackInstrList[instrIndex];
                         return instrName(instr);
                         }
-                  void setValue(const QVariant &value, int trackIndex)
+                  void setValue(const QVariant &value, int trackIndex) override
                         {
                         _opers.msInstrIndex.setValue(trackIndex, value.toInt());
                         }
-                  QStringList valueList(int trackIndex) const
+                  QStringList valueList(int trackIndex) const override
                         {
                         auto list = QStringList();
                         const auto &trackInstrList = _opers.msInstrList.value(trackIndex);
@@ -206,10 +206,10 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         : Column(opers), _lyricsList(lyricsList), _midiFile(midiFile)
                         {
                         }
-                  int width() const { return 185; }
-                  QString headerName() const { return QCoreApplication::translate(
+                  int width() const override { return 185; }
+                  QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Lyrics"); }
-                  QVariant value(int trackIndex) const
+                  QVariant value(int trackIndex) const override
                         {
                         int index = _opers.lyricTrackIndex.value(trackIndex);
                         if (index >= 0) {
@@ -220,12 +220,12 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                               }
                         return "";
                         }
-                  void setValue(const QVariant &value, int trackIndex)
+                  void setValue(const QVariant &value, int trackIndex) override
                         {
                                     // GUI lyrics list always have "" row, so: (index - 1)
                         _opers.lyricTrackIndex.setValue(trackIndex, value.toInt() - 1);
                         }
-                  QStringList valueList(int /*trackIndex*/) const
+                  QStringList valueList(int /*trackIndex*/) const override
                         {
                         MidiOperations::Data &opers = preferences.midiImportOperations;
                         MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
@@ -253,13 +253,13 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back(QCoreApplication::translate("MIDI import operations", "64th"));
                   _values.push_back(QCoreApplication::translate("MIDI import operations", "128th"));
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                 "MIDI import operations", "Max. quantization"); }
-            QVariant value(int trackIndex) const
+            QVariant value(int trackIndex) const override
                   {
                   return _values[(int)_opers.quantValue.value(trackIndex)];
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   _opers.quantValue.setValue(trackIndex, (MidiOperations::QuantValue)value.toInt());
                   }
@@ -275,17 +275,17 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back("3");
                   _values.push_back("4");
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Max. voices"); }
-            QVariant value(int trackIndex) const
+            QVariant value(int trackIndex) const override
                   {
                   return _values[(int)_opers.maxVoiceCount.value(trackIndex)];
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   _opers.maxVoiceCount.setValue(trackIndex, (MidiOperations::VoiceCount)value.toInt());
                   }
-            bool isVisible(int trackIndex) const
+            bool isVisible(int trackIndex) const override
                   {
                   if (_opers.isDrumTrack.value(trackIndex))
                         return false;
@@ -306,10 +306,10 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back(QCoreApplication::translate("MIDI import operations", "7-plets"));
                   _values.push_back(QCoreApplication::translate("MIDI import operations", "9-plets"));
                   }
-            int width() const { return 140; }
-            QString headerName() const { return QCoreApplication::translate(
+            int width() const override { return 140; }
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Tuplets"); }
-            QVariant value(int trackIndex) const
+            QVariant value(int trackIndex) const override
                   {
                   QString val;
                   if (_opers.search2plets.value(trackIndex)) {
@@ -344,7 +344,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         }
                   return val;
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   const QStringList list = value.toStringList();
 
@@ -390,7 +390,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         }
                   _opers.searchTuplets.setValue(trackIndex, searchTuplets);
                   }
-            QStringList valueList(int trackIndex) const
+            QStringList valueList(int trackIndex) const override
                   {
                   auto list = QStringList("__MultiValue__");
 
@@ -452,17 +452,17 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         _values.push_back(QCoreApplication::translate("MIDI import operations", "16"));
                         _values.push_back(QCoreApplication::translate("MIDI import operations", "32"));
                         }
-                  QString headerName() const { return QCoreApplication::translate(
+                  QString headerName() const override { return QCoreApplication::translate(
                                                             "MIDI import operations", "Time signature"); }
-                  bool isForAllTracksOnly() const { return true; }
-                  QVariant value(int /*trackIndex*/) const
+                  bool isForAllTracksOnly() const override { return true; }
+                  QVariant value(int /*trackIndex*/) const override
                         {
                         const int numeratorIndex = (int)_opers.timeSigNumerator.value();
                         const int denominatorIndex = (int)_opers.timeSigDenominator.value();
 
                         return _values[numeratorIndex] + " / " + _values[_numeratorCount + denominatorIndex];
                         }
-                  void setValue(const QVariant &value, int /*trackIndex*/)
+                  void setValue(const QVariant &value, int /*trackIndex*/) override
                         {
                         const QStringList list = value.toStringList();
 
@@ -480,7 +480,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         Q_ASSERT_X(ok, "Midi import operations", "Invalid denominator value");
 
                         }
-                  QStringList valueList(int /*trackIndex*/) const
+                  QStringList valueList(int /*trackIndex*/) const override
                         {
                         auto list = QStringList("__TimeSig__");
                         list.append("__Numerator__");
@@ -503,14 +503,14 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   MeasureCount2xLess(MidiOperations::Opers &opers) : Column(opers)
                         {
                         }
-                  QString headerName() const { return QCoreApplication::translate(
+                  QString headerName() const override { return QCoreApplication::translate(
                                           "MIDI import operations", "2x less\nmeasure count"); }
-                  bool isForAllTracksOnly() const { return true; }
-                  QVariant value(int /*trackIndex*/) const
+                  bool isForAllTracksOnly() const override { return true; }
+                  QVariant value(int /*trackIndex*/) const override
                         {
                         return _opers.measureCount2xLess.value();
                         }
-                  void setValue(const QVariant &value, int /*trackIndex*/)
+                  void setValue(const QVariant &value, int /*trackIndex*/) override
                         {
                         _opers.measureCount2xLess.setValue(value.toBool());
                         }
@@ -523,14 +523,14 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             Human(MidiOperations::Opers &opers) : Column(opers)
                   {
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Is human\nperformance"); }
-            bool isForAllTracksOnly() const { return true; }
-            QVariant value(int /*trackIndex*/) const
+            bool isForAllTracksOnly() const override { return true; }
+            QVariant value(int /*trackIndex*/) const override
                   {
                   return _opers.isHumanPerformance.value();
                   }
-            void setValue(const QVariant &value, int /*trackIndex*/)
+            void setValue(const QVariant &value, int /*trackIndex*/) override
                   {
                   _opers.isHumanPerformance.setValue(value.toBool());
                   }
@@ -542,13 +542,13 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             StaffSplit(MidiOperations::Opers &opers) : Column(opers)
                   {
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Split staff"); }
-            QVariant value(int trackIndex) const
+            QVariant value(int trackIndex) const override
                   {
                   return _opers.doStaffSplit.value(trackIndex);
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   _opers.doStaffSplit.setValue(trackIndex, value.toBool());
                   }
@@ -560,9 +560,9 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             ClefChanges(MidiOperations::Opers &opers) : Column(opers)
                   {
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Clef\nchanges"); }
-            bool isEditable(int trackIndex) const
+            bool isEditable(int trackIndex) const override
                   {
                   if (_opers.isDrumTrack.value(trackIndex))
                         return false;
@@ -574,15 +574,15 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         return false;
                   return true;
                   }
-            QVariant value(int trackIndex) const
+            QVariant value(int trackIndex) const override
                   {
                   return _opers.changeClef.value(trackIndex);
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   _opers.changeClef.setValue(trackIndex, value.toBool());
                   }
-            bool isVisible(int trackIndex) const
+            bool isVisible(int trackIndex) const override
                   {
                   return isEditable(trackIndex);
                   }
@@ -594,13 +594,13 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             Simplify(MidiOperations::Opers &opers) : Column(opers)
                   {
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Simplify\ndurations"); }
-            QVariant value(int trackIndex) const
+            QVariant value(int trackIndex) const override
                   {
                   return _opers.simplifyDurations.value(trackIndex);
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   _opers.simplifyDurations.setValue(trackIndex, value.toBool());
                   }
@@ -612,13 +612,13 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             ShowStaccato(MidiOperations::Opers &opers) : Column(opers)
                   {
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Show\nstaccato"); }
-            QVariant value(int trackIndex) const
+            QVariant value(int trackIndex) const override
                   {
                   return _opers.showStaccato.value(trackIndex);
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   _opers.showStaccato.setValue(trackIndex, value.toBool());
                   }
@@ -630,13 +630,13 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             DottedNotes(MidiOperations::Opers &opers) : Column(opers)
                   {
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                       "MIDI import operations", "Dotted\nnotes"); }
-            QVariant value(int trackIndex) const
+            QVariant value(int trackIndex) const override
                   {
                   return _opers.useDots.value(trackIndex);
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   _opers.useDots.setValue(trackIndex, value.toBool());
                   }
@@ -649,14 +649,14 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   ShowTempoText(MidiOperations::Opers &opers) : Column(opers)
                         {
                         }
-                  QString headerName() const { return QCoreApplication::translate(
+                  QString headerName() const override { return QCoreApplication::translate(
                                           "MIDI import operations", "Show\ntempo text"); }
-                  bool isForAllTracksOnly() const { return true; }
-                  QVariant value(int /*trackIndex*/) const
+                  bool isForAllTracksOnly() const override { return true; }
+                  QVariant value(int /*trackIndex*/) const override
                         {
                         return _opers.showTempoText.value();
                         }
-                  void setValue(const QVariant &value, int /*trackIndex*/)
+                  void setValue(const QVariant &value, int /*trackIndex*/) override
                         {
                         _opers.showTempoText.setValue(value.toBool());
                         }
@@ -669,14 +669,14 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             PickupBar(MidiOperations::Opers &opers) : Column(opers)
                   {
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                            "MIDI import operations", "Recognize\npickup measure"); }
-            bool isForAllTracksOnly() const { return true; }
-            QVariant value(int /*trackIndex*/) const
+            bool isForAllTracksOnly() const override { return true; }
+            QVariant value(int /*trackIndex*/) const override
                   {
                   return _opers.searchPickupMeasure.value();
                   }
-            void setValue(const QVariant &value, int /*trackIndex*/)
+            void setValue(const QVariant &value, int /*trackIndex*/) override
                   {
                   _opers.searchPickupMeasure.setValue(value.toBool());
                   }
@@ -691,14 +691,14 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   _values.push_back(QCoreApplication::translate("MIDI import operations", "Swing (2:1)"));
                   _values.push_back(QCoreApplication::translate("MIDI import operations", "Shuffle (3:1)"));
                   }
-            QString headerName() const { return QCoreApplication::translate(
+            QString headerName() const override { return QCoreApplication::translate(
                                                        "MIDI import operations", "Detect swing"); }
-            int width() const { return 130; }
-            QVariant value(int trackIndex) const
+            int width() const override { return 130; }
+            QVariant value(int trackIndex) const override
                   {
                   return _values[(int)_opers.swing.value(trackIndex)];
                   }
-            void setValue(const QVariant &value, int trackIndex)
+            void setValue(const QVariant &value, int trackIndex) override
                   {
                   _opers.swing.setValue(trackIndex, (MidiOperations::Swing)value.toInt());
                   }
