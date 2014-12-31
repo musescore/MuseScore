@@ -79,7 +79,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             Channel(MidiOperations::Opers &opers) : Column(opers) {}
             QString headerName() const { return QCoreApplication::translate(
                                                       "MIDI import operations", "Channel"); }
-            bool isEditable() const { return false; }
+            bool isEditable(int /*trackIndex*/) const { return false; }
             QVariant value(int trackIndex) const
                   {
                   return QString::number(_opers.channel.value(trackIndex));

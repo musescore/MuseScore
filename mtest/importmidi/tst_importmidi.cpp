@@ -1171,15 +1171,19 @@ void TestImportMidi::testGuiTracksModel()
 
       QVERIFY(model.trackCount() == 1);
 
-      Qt::ItemFlags disabledFlags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+      Qt::ItemFlags notEditableFlags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 
       const int clefChangeCol = findColByHeader(model, "Clef\nchanges");
       QVERIFY(clefChangeCol >= 0);
-      QCOMPARE(model.flags(model.index(0, clefChangeCol)), disabledFlags);
+      QCOMPARE(model.flags(model.index(0, clefChangeCol)), notEditableFlags);
 
       const int voiceCol = findColByHeader(model, "Max. voices");
       QVERIFY(voiceCol >= 0);
-      QCOMPARE(model.flags(model.index(0, voiceCol)), disabledFlags);
+      QCOMPARE(model.flags(model.index(0, voiceCol)), notEditableFlags);
+
+      const int channelCol = findColByHeader(model, "Channel");
+      QVERIFY(channelCol >= 0);
+      QCOMPARE(model.flags(model.index(0, channelCol)), notEditableFlags);
       }
 
 
