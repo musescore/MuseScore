@@ -1439,6 +1439,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance));
 
       _beamDist *= mag();
+      _beamDist *= c1->staff()->mag();
       int n = crl.size();
 
       StaffType* tab = 0;
