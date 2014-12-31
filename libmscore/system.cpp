@@ -887,7 +887,7 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
             int sysIdx2 = systems->indexOf(s2);
 
             qreal x1 = l->bbox().right();       // lyrics width
-            x1 += 0.1 * _spatium;               // padding
+            x1 += 0.2 * _spatium;               // padding
             QPointF p1(x1, 0);                  // melisma y is at base line
 
             int segIdx = 0;
