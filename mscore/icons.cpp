@@ -145,7 +145,9 @@ static const char* iconNames[] = {
       "timesig_prolatio11.svg",
       "edit.svg",
       "edit-reset.svg",
-      "window-close.svg"
+      "window-close.svg",
+      "arrow_up.svg",
+      "arrow_down.svg"
       };
 
 void genIcons()
