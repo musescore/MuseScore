@@ -379,7 +379,7 @@ void OperationsDelegate::setEditorData(QWidget *editor,
                   lw->setMinimumWidth(lw->sizeHintForColumn(0) + extraWidth);
 
                               // to prevent possible hiding bottom part of the list
-                  const int h = lw->count() * (lw->visualItemRect(lw->currentItem()).height() + extraHeight);
+                  const int h = lw->count() * lw->visualItemRect(lw->currentItem()).height() + extraHeight;
                   const int y = (lw->parentWidget() && (lw->parentWidget()->rect().bottom() < lw->y() + h))
                               ? lw->parentWidget()->rect().bottom() - h - extraHeight : lw->y();
                   lw->setGeometry(lw->x(), y, lw->width(), h);

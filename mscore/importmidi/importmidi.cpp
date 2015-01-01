@@ -61,6 +61,7 @@
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
 #include "importmidi_key.h"
+#include "libmscore/instrtemplate.h"
 
 #include <set>
 
@@ -69,6 +70,7 @@ namespace Ms {
 
 extern Preferences preferences;
 extern void updateNoteLines(Segment*, int track);
+extern QList<InstrumentGroup*> instrumentGroups;
 
 
 void cleanUpMidiEvents(std::multimap<int, MTrack> &tracks)
@@ -392,15 +394,10 @@ void MTrack::fillGapWithRests(Score* score,
 
 void setMusicNotesFromMidi(Score *score,
                            const QList<MidiNote> &midiNotes,
-                           const ReducedFraction &onTime,
-                           const ReducedFraction &len,
                            Chord *chord,
-                           const ReducedFraction &tick,
                            const Drumset *drumset,
                            DrumsetKind useDrumset)
       {
-      auto actualFraction = ReducedFraction(chord->actualFraction());
-
       for (int i = 0; i < midiNotes.size(); ++i) {
             const MidiNote& mn = midiNotes[i];
             Note* note = new Note(score);
@@ -412,15 +409,6 @@ void setMusicNotesFromMidi(Score *score,
             chord->add(note);
             note->setVeloType(Note::ValueType::USER_VAL);
             note->setVeloOffset(mn.velo);
-
-            NoteEventList el;
-            ReducedFraction f = (onTime - tick) / actualFraction * 1000;
-            const int ron = f.numerator() / f.denominator();
-            f = len / actualFraction * 1000;
-            const int rlen = f.numerator() / f.denominator();
-
-            el.append(NoteEvent(0, ron, rlen));
-            note->setPlayEvents(el);
 
             if (useDrumset != DrumsetKind::NONE) {
                   if (!drumset->isValid(mn.pitch))
@@ -503,13 +491,11 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
 
             Segment* s = measure->getSegment(chord, tick.ticks());
             s->add(chord);
-            chord->setPlayEventType(PlayEventType::User);
             MidiTuplet::addElementToTuplet(voice, tick, len, chord, tuplets);
 
             for (int k = 0; k < midiChords.size(); ++k) {
                   MidiChord& midiChord = midiChords[k];
-                  setMusicNotesFromMidi(score, midiChord.notes, startChordTick,
-                                        len, chord, tick, drumset, useDrumset);
+                  setMusicNotesFromMidi(score, midiChord.notes, chord, drumset, useDrumset);
                   if (!midiChord.notes.empty() && midiChord.notes.first().offTime - tick <= len) {
                         midiChords.removeAt(k);
                         --k;
@@ -621,7 +607,8 @@ QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       {
       QList<MTrack> trackList;
       for (const auto &track: tracks) {
-            if (!track.second.chords.empty())
+                        // show track even if all initial notes were cleaned up
+            if (track.second.hadInitialNotes)
                   trackList.push_back(track.second);
             }
       return trackList;
@@ -684,7 +671,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   }
             if (hasNotes) {
                   ++trackIndex;
-                  track.hasNotes = true;
+                  track.hadInitialNotes = true;
                   const auto *data = preferences.midiImportOperations.data();
                   if (data->processingsOfOpenedFile > 0) {
                         if (data->trackOpers.doImport.value(trackIndex)) {
@@ -700,7 +687,7 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                         }
                   }
             else {
-                  track.hasNotes = false;       // it's a tempo track or something else
+                  track.hadInitialNotes = false;       // it's a tempo track or something else
                   tracks.insert({-1, track});
                   }
             }
@@ -733,47 +720,234 @@ bool is3StaffOrgan(int program)
       return program >= 16 && program <= 20;
       }
 
-//---------------------------------------------------------
-// createInstruments
-//   for drum track, if any, set percussion clef
-//   for piano 2 tracks, if any, set G and F clefs
-//   for other track types set G or F clef
-//
-//  note: after set, clefs also should be created later
-//---------------------------------------------------------
+std::set<int> findAllPitches(const MTrack &track)
+      {
+      std::set<int> pitches;
+      for (const auto &chord: track.chords) {
+            for (const auto &note: chord.second.notes)
+                  pitches.insert(note.pitch);
+            }
+      return pitches;
+      }
+
+void findNotEmptyDrumPitches(std::set<int> &drumPitches, const InstrumentTemplate *templ)
+      {
+      for (int i = 0; i != DRUM_INSTRUMENTS; ++i) {
+            if (!templ->drumset->name(i).isEmpty())
+                  drumPitches.insert(i);
+            }
+      }
+
+bool hasNotDefinedDrumPitch(const std::set<int> &trackPitches, const std::set<int> &drumPitches)
+      {
+      bool hasNotDefinedPitch = false;
+      for (const int pitch: trackPitches) {
+            if (drumPitches.find(pitch) == drumPitches.end()) {
+                  hasNotDefinedPitch = true;
+                  break;
+                  }
+            }
+
+      return hasNotDefinedPitch;
+      }
+
+std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
+      {
+      std::vector<InstrumentTemplate *> suitableTemplates;
+      const int program = track.program;
+
+      std::set<int> trackPitches;
+      if (track.mtrack->drumTrack())
+            trackPitches = findAllPitches(track);
+
+      for (const auto &group: instrumentGroups) {
+            for (const auto &templ: group->instrumentTemplates) {
+                  if (templ->staffGroup == StaffGroup::TAB)
+                        continue;
+                  const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
+                  if (track.mtrack->drumTrack() != isDrumTemplate)
+                        continue;
+
+                  std::set<int> drumPitches;
+                  if (isDrumTemplate && templ->drumset)
+                        findNotEmptyDrumPitches(drumPitches, templ);
+
+                  for (const auto &channel: templ->channel) {
+                        if (channel.program == program) {
+                              if (isDrumTemplate && templ->drumset) {
+                                    if (hasNotDefinedDrumPitch(trackPitches, drumPitches))
+                                          break;
+                                    }
+                              suitableTemplates.push_back(templ);
+                              break;
+                              }
+                        }
+                  }
+            }
+      return suitableTemplates;
+      }
+
+std::pair<int, int> findMinMaxPitch(const MTrack &track)
+      {
+      int minPitch = std::numeric_limits<int>::max();
+      int maxPitch = -1;
+
+      for (const auto &chord: track.chords) {
+            for (const auto &note: chord.second.notes) {
+                  if (note.pitch < minPitch)
+                        minPitch = note.pitch;
+                  if (note.pitch > maxPitch)
+                        maxPitch = note.pitch;
+                  }
+            }
+      return std::make_pair(minPitch, maxPitch);
+      }
+
+int findMaxPitchDiff(const std::pair<int, int> &minMaxPitch, const InstrumentTemplate *templ)
+      {
+      int diff = 0;
+      if (minMaxPitch.first < templ->minPitchA)
+            diff = templ->minPitchA - minMaxPitch.first;
+      if (minMaxPitch.second > templ->maxPitchA)
+            diff = qMax(diff, minMaxPitch.second - templ->maxPitchA);
+      return diff;
+      }
+
+void sortInstrumentTemplates(
+            std::vector<InstrumentTemplate *> &templates,
+            const std::pair<int, int> &minMaxPitch)
+      {
+      std::sort(templates.begin(), templates.end(),
+                [minMaxPitch](const InstrumentTemplate *templ1, const InstrumentTemplate *templ2) {
+            const int diff1 = findMaxPitchDiff(minMaxPitch, templ1);
+            const int diff2 = findMaxPitchDiff(minMaxPitch, templ2);
+
+            if (diff1 != diff2)
+                  return diff1 < diff2;
+                        // if drumset is not null - it's a particular drum instrument
+                        // if drum set is null - it's a common drumset
+                        // so prefer particular drum instruments
+            if (templ1->drumset && !templ2->drumset)
+                  return true;
+            return templ1->genres.size() > templ2->genres.size();
+            });
+      }
+
+std::vector<InstrumentTemplate *> findSuitableInstruments(const MTrack &track)
+      {
+      std::vector<InstrumentTemplate *> templates = findInstrumentsForProgram(track);
+      if (templates.empty())
+            return templates;
+
+      const std::pair<int, int> minMaxPitch = findMinMaxPitch(track);
+      sortInstrumentTemplates(templates, minMaxPitch);
+
+      for (auto it = std::next(templates.begin()); it != templates.end(); ++it) {
+            const int diff = findMaxPitchDiff(minMaxPitch, *it);
+            if (diff > 0) {
+                  templates.erase(it, templates.end());
+                  break;
+                  }
+            }
+
+      return templates;
+      }
+
+void findInstrumentsForAllTracks(const QList<MTrack> &tracks)
+      {
+      auto& opers = preferences.midiImportOperations;
+      auto &instrListOption = opers.data()->trackOpers.msInstrList;
+
+      if (opers.data()->processingsOfOpenedFile == 0) {
+                        // create instrument list on MIDI file opening
+            for (const auto &track: tracks) {
+                  instrListOption.setValue(track.indexOfOperation,
+                                           findSuitableInstruments(track));
+                  if (!instrListOption.value(track.indexOfOperation).empty()) {
+                        const int defaultInstrIndex = 0;
+                        opers.data()->trackOpers.msInstrIndex.setDefaultValue(defaultInstrIndex);
+                        }
+                  }
+            }
+      }
+
+bool areNext2GrandStaff(int currentTrack, const QList<MTrack> &tracks)
+      {
+      if (currentTrack + 1 >= tracks.size())
+            return false;
+      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1]);
+      }
+
+bool areNext3OrganStaff(int currentTrack, const QList<MTrack> &tracks)
+      {
+      if (currentTrack + 2 >= tracks.size())
+            return false;
+      if (!is3StaffOrgan(tracks[currentTrack].program))
+            return false;
+
+      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1])
+                  && isSameChannel(tracks[currentTrack + 1], tracks[currentTrack + 2]);
+      }
 
 void createInstruments(Score *score, QList<MTrack> &tracks)
       {
+      const auto& opers = preferences.midiImportOperations;
+      const auto &instrListOption = opers.data()->trackOpers.msInstrList;
+
       const int ntracks = tracks.size();
       for (int idx = 0; idx < ntracks; ++idx) {
             MTrack& track = tracks[idx];
-            Part* part   = new Part(score);
+            Part* part = new Part(score);
 
-            if (track.mtrack->drumTrack()) {
+            const auto &instrList = instrListOption.value(track.indexOfOperation);
+            const InstrumentTemplate *instr = nullptr;
+            if (!instrList.empty()) {
+                  const int instrIndex = opers.data()->trackOpers.msInstrIndex.value(
+                                                                    track.indexOfOperation);
+                  instr = instrList[instrIndex];
+                  part->initFromInstrTemplate(instr);
+                  }
+
+            if (areNext3OrganStaff(idx, tracks))
+                  part->setStaves(3);
+            else if (areNext2GrandStaff(idx, tracks))
+                  part->setStaves(2);
+            else
                   part->setStaves(1);
-                  part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
-                  part->instr()->setDrumset(smDrumset);
-                  part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
+
+            if (part->nstaves() == 1) {
+                  if (!instr && track.mtrack->drumTrack()) {
+                        part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                        part->instr()->setDrumset(smDrumset);
+                        part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
+                        }
                   }
             else {
-                  if (idx < (tracks.size() - 1) && idx >= 0
-                              && isGrandStaff(tracks[idx], tracks[idx + 1])) {
-                                    // assume that the current track and the next track
-                                    // form a piano part
-                        part->setStaves(2);
+                  if (!instr) {
+                        part->staff(0)->setBarLineSpan(2);
                         part->staff(0)->setBracket(0, BracketType::BRACE);
-                        part->staff(0)->setBracketSpan(0, 2);
-
-                        ++idx;
-                        tracks[idx].staff = part->staff(1);
                         }
                   else {
-                        part->setStaves(1);
+                        part->staff(0)->setBarLineSpan(instr->barlineSpan[0]);
+                        part->staff(0)->setBracket(0, instr->bracket[0]);
+                        }
+                  part->staff(0)->setBracketSpan(0, 2);
+                  }
+
+            if (instr) {
+                  for (int i = 0; i != part->nstaves(); ++i) {
+                        part->staff(i)->setLines(instr->staffLines[i]);
+                        part->staff(i)->setSmall(instr->smallStaff[i]);
+                        part->staff(i)->setDefaultClefType(instr->clefTypes[i]);
                         }
                   }
 
-            track.staff = part->staff(0);
-            part->staves()->front()->setBarLineSpan(part->nstaves());
+            for (int i = 0; i != part->nstaves(); ++i) {
+                  if (i > 0)
+                        ++idx;
+                  tracks[idx].staff = part->staff(i);
+                  }
+
             score->appendPart(part);
             }
       }
@@ -848,7 +1022,7 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
 
       if (opers.data()->processingsOfOpenedFile == 0) {
             const int currentTrack = opers.currentTrack();
-            opers.data()->trackOpers.instrumentName.setValue(currentTrack, instrName);
+            opers.data()->trackOpers.midiInstrName.setValue(currentTrack, instrName);
                         // set channel number (from 1): number = index + 1
             opers.data()->trackOpers.channel.setValue(currentTrack, mt.mtrack->outChannel() + 1);
             }
@@ -915,27 +1089,37 @@ void processMeta(MTrack &mt, bool isLyric)
             }
       }
 
-bool areNext2GrandStaff(int currentTrack, const QList<MTrack> &tracks)
+// set program equal to all staves, as it should be
+// often only first stave in Grand Staff have correct program, other - default (piano)
+// also handle track names
+void setGrandStaffProgram(QList<MTrack> &tracks)
       {
-      if (currentTrack + 1 >= tracks.size())
-            return false;
-      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1]);
-      }
+      for (int i = 0; i < tracks.size(); ++i) {
+            MTrack &mt = tracks[i];
 
-bool areNext3OrganStaff(int currentTrack, const QList<MTrack> &tracks)
-      {
-      if (currentTrack + 2 >= tracks.size())
-            return false;
-      if (!is3StaffOrgan(tracks[currentTrack].program))
-            return false;
+            if (areNext3OrganStaff(i, tracks)) {
+                  tracks[i + 1].program = mt.program;
+                  tracks[i + 2].program = mt.program;
 
-      return isGrandStaff(tracks[currentTrack], tracks[currentTrack + 1])
-                  && isSameChannel(tracks[currentTrack + 1], tracks[currentTrack + 2]);
+                  mt.name = concatenateWithComma(mt.name, "Manual");
+                  tracks[i + 1].name = "";
+                  tracks[i + 2].name = concatenateWithComma(tracks[i + 2].name, "Pedal");
+
+                  i += 2;
+                  }
+            else if (areNext2GrandStaff(i, tracks)) {
+                  tracks[i + 1].program = mt.program;
+                  if (mt.name != tracks[i + 1].name) {
+                        mt.name = "";             // only one name place near bracket is available
+                        tracks[i + 1].name = "";  // so instrument name will be used instead
+                        }
+                  i += 1;
+                  }
+            }
       }
 
 void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiType midiType)
       {
-      int lastOrganTrack = -1;
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
                         // pass current track index to the convertTrack function
@@ -946,30 +1130,11 @@ void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiTyp
             processMeta(mt, false);
             if (midiType == MidiType::UNKNOWN)
                   midiType = MidiType::GM;
-
-            if (areNext3OrganStaff(i, tracks)) {
-                  lastOrganTrack = i + 2;
-                  tracks[i + 1].program = mt.program;
-                  tracks[i + 2].program = mt.program;
-
-                  mt.name = concatenateWithComma(mt.name, "Manual");
-                  tracks[i + 1].name = "";
-                  tracks[i + 2].name = concatenateWithComma(tracks[i + 2].name, "Pedal");
-                  }
-            else if (i > lastOrganTrack && areNext2GrandStaff(i, tracks)) {
-                  tracks[i + 1].program = mt.program;
-                  if (mt.name != tracks[i + 1].name) {
-                        mt.name = "";             // only one name place near bracket is available
-                        tracks[i + 1].name = "";  // so instrument name will be used instead
-                        }
-                  }
-
             setTrackInfo(midiType, mt);
             mt.convertTrack(lastTick);
             processMeta(mt, true);
             }
       }
-
 
 void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
       {
@@ -1060,6 +1225,8 @@ void convertMidi(Score *score, const MidiFile *mf)
       MChord::splitUnequalChords(tracks);
                   // no more track insertion/reordering/deletion from now
       QList<MTrack> trackList = prepareTrackList(tracks);
+      setGrandStaffProgram(trackList);
+      findInstrumentsForAllTracks(trackList);
       createInstruments(score, trackList);
       MidiDrum::setStaffBracketForDrums(trackList);
       createMeasures(lastTick, score);

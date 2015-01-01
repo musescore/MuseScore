@@ -50,13 +50,52 @@
       <Staff id="2">
         <StaffType group="pitched">
           </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Syn.Strings 1</trackName>
       <Instrument>
         <longName pos="0">Syn.Strings 1</longName>
-        <trackName></trackName>
-        <Channel>
+        <shortName pos="0">Synth.</shortName>
+        <trackName>String Synthesizer</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>36</minPitchA>
+        <maxPitchA>96</maxPitchA>
+        <instrumentId>strings.group.synth</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel name="synth-string-1">
           <program value="50"/>
+          </Channel>
+        <Channel name="synth-string-2">
+          <program value="51"/>
           </Channel>
         </Instrument>
       </Part>
@@ -70,11 +109,47 @@
       <Staff id="4">
         <StaffType group="pitched">
           </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Grand Piano</trackName>
       <Instrument>
         <longName pos="0">Grand Piano</longName>
-        <trackName></trackName>
+        <shortName pos="0">Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="0"/>
           </Channel>
@@ -94,13 +169,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -110,13 +178,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <velocity>80</velocity>
@@ -126,13 +187,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -142,13 +196,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <velocity>80</velocity>
@@ -171,13 +218,6 @@
         <Chord>
           <durationType>half</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -187,13 +227,6 @@
         <Chord>
           <durationType>half</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <velocity>80</velocity>
@@ -216,13 +249,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -232,13 +258,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <velocity>80</velocity>
@@ -248,13 +267,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -264,13 +276,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <velocity>80</velocity>
@@ -293,13 +298,6 @@
         <Chord>
           <durationType>half</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -309,13 +307,6 @@
         <Chord>
           <durationType>half</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <velocity>80</velocity>

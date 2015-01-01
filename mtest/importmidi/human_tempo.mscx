@@ -50,11 +50,47 @@
       <Staff id="2">
         <StaffType group="pitched">
           </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Grand Piano</trackName>
+      <trackName>Grand Piano, PIANO                               </trackName>
       <Instrument>
-        <longName pos="0">Grand Piano</longName>
-        <trackName></trackName>
+        <longName pos="0">Grand Piano, PIANO                               </longName>
+        <shortName pos="0">Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="0"/>
           </Channel>
@@ -93,13 +129,6 @@
         <Chord>
           <durationType>32nd</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>75</pitch>
             <tpc>11</tpc>
             <velocity>101</velocity>
@@ -111,13 +140,6 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>100</velocity>
@@ -144,13 +166,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>63</velocity>
@@ -166,13 +181,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>108</velocity>
@@ -184,13 +192,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>68</velocity>
@@ -206,13 +207,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>100</velocity>
@@ -228,13 +222,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>109</velocity>
@@ -250,13 +237,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>75</velocity>
@@ -272,13 +252,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <velocity>109</velocity>
@@ -290,13 +263,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>63</velocity>
@@ -312,13 +278,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>69</pitch>
             <tpc>17</tpc>
             <velocity>79</velocity>
@@ -333,13 +292,6 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>69</pitch>
             <tpc>17</tpc>
             <velocity>93</velocity>
@@ -349,13 +301,6 @@
         <Chord>
           <durationType>half</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>68</pitch>
             <tpc>22</tpc>
             <velocity>95</velocity>
@@ -380,13 +325,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>75</velocity>
@@ -402,13 +340,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>68</pitch>
             <tpc>22</tpc>
             <velocity>100</velocity>
@@ -428,13 +359,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>66</velocity>
@@ -450,13 +374,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>66</velocity>
@@ -472,13 +389,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>64</velocity>
@@ -494,13 +404,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>74</pitch>
             <tpc>16</tpc>
             <velocity>104</velocity>
@@ -512,13 +415,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>71</velocity>
@@ -530,13 +426,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>71</pitch>
             <tpc>19</tpc>
             <velocity>100</velocity>
@@ -554,13 +443,6 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>104</velocity>
@@ -576,13 +458,6 @@
           <durationType>eighth</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>103</velocity>
@@ -599,13 +474,6 @@
           <durationType>32nd</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>60</velocity>
@@ -625,13 +493,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>106</velocity>
@@ -643,13 +504,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>82</velocity>
@@ -665,13 +519,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>108</velocity>
@@ -688,13 +535,6 @@
           <durationType>32nd</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>82</velocity>
@@ -710,13 +550,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>77</pitch>
             <tpc>13</tpc>
             <velocity>99</velocity>
@@ -728,13 +561,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>102</velocity>
@@ -746,13 +572,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>74</pitch>
             <tpc>16</tpc>
             <velocity>92</velocity>
@@ -764,13 +583,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <velocity>88</velocity>
@@ -782,13 +594,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>71</pitch>
             <tpc>19</tpc>
             <velocity>88</velocity>
@@ -804,13 +609,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>69</pitch>
             <tpc>17</tpc>
             <velocity>84</velocity>
@@ -825,13 +623,6 @@
         <Chord>
           <durationType>half</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>68</pitch>
             <tpc>22</tpc>
             <velocity>89</velocity>
@@ -847,13 +638,6 @@
           <durationType>eighth</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>69</pitch>
             <tpc>17</tpc>
             <velocity>101</velocity>
@@ -869,13 +653,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>68</pitch>
             <tpc>22</tpc>
             <velocity>96</velocity>
@@ -895,13 +672,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>54</velocity>
@@ -917,13 +687,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>71</velocity>
@@ -939,13 +702,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>57</velocity>
@@ -961,13 +717,6 @@
             </Articulation>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>74</pitch>
             <tpc>16</tpc>
             <velocity>103</velocity>
@@ -979,13 +728,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>63</velocity>
@@ -997,13 +739,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>71</pitch>
             <tpc>19</tpc>
             <velocity>94</velocity>
@@ -1040,13 +775,6 @@
           <Note>
             <Tie id="2">
               </Tie>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>76</velocity>
@@ -1055,13 +783,6 @@
           <Note>
             <Tie id="3">
               </Tie>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>85</velocity>
@@ -1070,13 +791,6 @@
           <Note>
             <Tie id="4">
               </Tie>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>86</velocity>
@@ -1089,13 +803,6 @@
           <durationType>eighth</durationType>
           <Note>
             <endSpanner id="2"/>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>76</velocity>
@@ -1103,13 +810,6 @@
             </Note>
           <Note>
             <endSpanner id="3"/>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>85</velocity>
@@ -1117,13 +817,6 @@
             </Note>
           <Note>
             <endSpanner id="4"/>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>86</velocity>
@@ -1136,26 +829,12 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>59</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>70</velocity>
@@ -1168,39 +847,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>57</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>69</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>68</velocity>
@@ -1213,26 +871,12 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>59</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>70</velocity>
@@ -1245,39 +889,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>62</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>68</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>70</velocity>
@@ -1290,26 +913,12 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>59</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>71</velocity>
@@ -1322,39 +931,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>61</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>68</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>67</velocity>
@@ -1367,26 +955,12 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>68</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>71</velocity>
@@ -1401,39 +975,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>55</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>59</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>77</velocity>
@@ -1446,52 +999,24 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>55</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>60</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>65</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>58</velocity>
@@ -1504,52 +1029,24 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>36</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>55</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>68</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>61</velocity>
@@ -1562,39 +1059,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>34</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>57</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>71</velocity>
@@ -1607,39 +1083,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>54</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>51</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>69</velocity>
@@ -1652,39 +1107,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>51</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>60</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>68</velocity>
@@ -1697,52 +1131,24 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>53</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>65</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>72</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>70</velocity>
@@ -1755,39 +1161,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>50</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>68</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>71</velocity>
@@ -1802,39 +1187,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>74</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>81</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>83</velocity>
@@ -1847,26 +1211,12 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>43</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>66</velocity>
@@ -1879,39 +1229,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>43</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>76</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>64</velocity>
@@ -1924,26 +1253,12 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>78</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>93</velocity>
@@ -1957,26 +1272,12 @@
           <dots>1</dots>
           <durationType>32nd</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>60</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>88</velocity>
@@ -1992,39 +1293,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>60</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>84</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>71</velocity>
@@ -2037,39 +1317,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>51</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>76</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>65</velocity>
@@ -2082,39 +1341,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>44</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>60</pitch>
             <tpc>14</tpc>
             <velocity>63</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>61</velocity>
@@ -2129,52 +1367,24 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>59</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>76</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>82</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>73</velocity>
@@ -2187,52 +1397,24 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>44</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>59</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>68</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>53</velocity>
@@ -2245,52 +1427,24 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>42</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>64</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>65</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>60</velocity>
@@ -2303,39 +1457,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>36</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>60</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>61</velocity>
@@ -2348,39 +1481,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>48</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>57</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>68</velocity>
@@ -2393,39 +1505,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>35</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>53</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>65</velocity>
@@ -2438,52 +1529,24 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>40</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>51</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>68</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>62</velocity>
@@ -2496,39 +1559,18 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>57</pitch>
             <tpc>17</tpc>
             <velocity>36</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <velocity>51</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <velocity>64</velocity>
