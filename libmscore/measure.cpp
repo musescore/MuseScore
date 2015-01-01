@@ -3272,10 +3272,13 @@ void Measure::layoutX(qreal stretch)
                                     QRectF b(l->bbox().translated(l->pos()));
                                     llw = qMax(llw, -(b.left()+lx+cx));
                                     rrw = qMax(rrw, b.right()+rx+cx);
-                                    // allocate enough space for hyphen (TODO: style setting)
+                                    // hyphen will be drawn using actual (perhaps minimum) note distance
+                                    // but since we are adding padding in System::layoutLyrics(),
+                                    // make enough room for that here
+                                    // (TODO: make padding amount a style setting)
                                     Lyrics::Syllabic ls = l->syllabic();
                                     if (ls == Lyrics::Syllabic::BEGIN || ls == Lyrics::Syllabic::MIDDLE)
-                                          rrw += 0.25 * _spatium;
+                                          rrw += 0.2 * _spatium;
                                     }
                               }
                         if (lyrics) {
