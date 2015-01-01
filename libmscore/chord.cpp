@@ -1629,9 +1629,11 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       int gnb = getGraceNotesBefore(&graceNotesBefore);
       if (gnb) {
             for (Chord* ch : graceNotesBefore) {
-                  QList<Note*> notes(ch->notes());  // we need a copy!
-                  for (Note* note : notes)
-                        note->updateAccidental(as);
+                  if (staffGroup != StaffGroup::PERCUSSION) {
+                        QList<Note*> notes(ch->notes());  // we need a copy!
+                        for (Note* note : notes)
+                              note->updateAccidental(as);
+                        }
                   ch->sortNotes();
                   }
             }
@@ -1664,13 +1666,16 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         }
                   }
             }
+
       QList<Chord*> graceNotesAfter;
       int gna = getGraceNotesAfter(&graceNotesAfter);
       if (gna) {
             for (Chord* ch : graceNotesAfter) {
-                  QList<Note*> notes(ch->notes());  // we need a copy!
-                  for (Note* note : notes)
-                        note->updateAccidental(as);
+                  if (staffGroup != StaffGroup::PERCUSSION) {
+                        QList<Note*> notes(ch->notes());  // we need a copy!
+                        for (Note* note : notes)
+                              note->updateAccidental(as);
+                        }
                   ch->sortNotes();
                   }
             }
