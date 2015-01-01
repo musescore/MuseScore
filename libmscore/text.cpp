@@ -2734,10 +2734,9 @@ QList<TextFragment> Text::fragmentList() const
                    */
                   res.append(f);
                   if (block.eol()) {
-                        qDebug("Text::fragmentList() found eol");
                         if (f.format.type() == CharFormatType::TEXT) {
                               // simply append a newline
-                              f.text += "\n";
+                              res.last().text += "\n";
                               }
                         else {
                               // create and append a fragment containing only a newline,

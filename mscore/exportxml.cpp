@@ -3029,6 +3029,7 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
                         attr = " enclosure=\"rectangle\"";
                   }
             MScoreTextToMXML mttm("words", attr, defFmt);
+            //qDebug("words('%s')", qPrintable(text->text()));
             mttm.writeTextFragments(text->fragmentList(), xml);
             xml.etag();
             }
