@@ -1665,16 +1665,25 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
 
       for (; !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "part-name") {
-                  // OK? (ws) Yes it should be ok.part-name is display in front of staff in finale. (la)
-                  part->setLongName(e.text());
-                  // part->setTrackName(e.text());
+                  // Element part-name contains the displayed (full) part name
+                  // It is displayed by default, but can be suppressed (print-object=”no”)
+                  // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
+                  // and the formatted version in the part-name-display element
+                  if (!(e.attribute("print-object") == "no"))
+                        part->setLongName(e.text());
+                  part->setPartName(e.text());
                   }
             else if (e.tagName() == "part-name-display") {
                   // TODO
                   domNotImplemented(e);
             }
             else if (e.tagName() == "part-abbreviation") {
-                  part->setShortName(e.text());
+                  // Element part-name contains the displayed (abbreviated) part name
+                  // It is displayed by default, but can be suppressed (print-object=”no”)
+                  // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
+                  // and the formatted version in the part-abbreviation-display element
+                  if (!(e.attribute("print-object") == "no"))
+                        part->setShortName(e.text());
                   }
             else if (e.tagName() == "part-abbreviation-display") {
                   // TODO
@@ -1689,9 +1698,12 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               qDebug("MusicXml::xmlScorePart: instrument id %s name %s",
                                      qPrintable(instrId), qPrintable(ee.text()));
                               drumsets[id].insert(instrId, MusicXMLDrumInstrument(ee.text()));
-                              // part-name or instrument-name?
-                              if (part->longName().isEmpty())
-                                    part->setLongName(ee.text());
+                              // Element instrument-name is typically not displayed in the score,
+                              // but used only internally
+                              part->instr()->setTrackName(ee.text());
+                              // try to prevent an empty track name
+                              if (part->partName() == "")
+                                    part->setPartName(ee.text());
                               }
                         else if (ee.tagName() == "instrument-sound")
                               domNotImplemented(e);
@@ -1712,6 +1724,8 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               part->setMidiChannel(ee.text().toInt() - 1);
                         else if (ee.tagName() == "midi-program") {
                               int program = ee.text().toInt();
+                              qDebug("MusicXml::xmlScorePart: instrument id %s MIDI program %d",
+                                     qPrintable(instrId), program);
                               // Bug fix for Cubase 6.5.5 which generates <midi-program>2</midi-program>
                               // Check program number range
                               if (program < 1) {
@@ -2691,7 +2705,7 @@ static void addElem(Element* el, int track, QString& placement, Measure* measure
 //---------------------------------------------------------
 
 /**
- Read the MusicXML metronome element.
+ Read the MusicXML metronome element, convert to text and set r to calculated tempo.
  */
 
 /*
@@ -2708,10 +2722,10 @@ static void addElem(Element* el, int track, QString& placement, Measure* measure
             </metronome>
 */
 
-static void metronome(QDomElement e, Text* t)
+static QString metronome(QDomElement e, double& r)
       {
-      if (!t) return;
-      QString tempoText = t->text();
+      r = 0;
+      QString tempoText;
       QString perMinute;
 
       QString parenth = e.attribute("parentheses");
@@ -2747,9 +2761,17 @@ static void metronome(QDomElement e, Text* t)
             tempoText += " = ";
             tempoText += perMinute;
             }
+      if (dur1.isValid() && !dur2.isValid() && perMinute != "") {
+            bool ok;
+            double d = perMinute.toDouble(&ok);
+            if (ok) {
+                  // convert fraction to beats per minute
+                  r = 4 * dur1.fraction().numerator() * d / dur1.fraction().denominator();
+                  }
+            }
       if (parenth == "yes")
             tempoText += ")";
-      t->setText(tempoText);
+      return tempoText;
       }
 
 //---------------------------------------------------------
@@ -3141,10 +3163,22 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                    fontWeight.toUtf8().data()
                    );
             */
+
+            double tpoMetro = 0;           // tempo according to metronome
+            // determine tempo text and calculate bpm according to metronome
+            if (metrEl.tagName() != "") formattedText += metronome(metrEl, tpoMetro);
+            double tpo = tempo.toDouble(); // tempo according to sound tempo=...
+
+            // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
+            // if necessary, use the value calculated by metronome()
+            // note: no floating point comparisons with 0 ...
+            if (tpo < 0.1 && tpoMetro > 0.1)
+                  tpo = tpoMetro;
+            
             Text* t;
-            if (tempo != "" && tempo.toDouble() > 0) {
+            if (tpo > 0.1) {
+                  tpo /= 60;
                   t = new TempoText(score);
-                  double tpo = tempo.toDouble()/60.0;
                   ((TempoText*) t)->setTempo(tpo);
                   ((TempoText*) t)->setFollowText(true);
                   score->setTempo(tick, tpo);
@@ -3165,7 +3199,6 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
                   t->textStyle().setFrameRound(0);
             }
 
-            if (metrEl.tagName() != "") metronome(metrEl, t);
             if (hasYoffset) t->textStyle().setYoff(yoffset);
             addElem(t, track, placement, measure, tick);
             }
@@ -6001,8 +6034,9 @@ void MusicXml::addGraceNoteAfter(Chord* graceNote, Segment* segm)
       {
       if(segm){
             graceNote->toGraceAfter();
-            Chord* cr = static_cast<Chord*>(segm->element(graceNote->track()));
-            if(cr){
+            Element* el = segm->element(graceNote->track());
+            if (el && el->type() == Element::Type::CHORD) {
+                  Chord* cr = static_cast<Chord*>(el);
                   cr->add(graceNote);
                   }
             }
