@@ -3312,49 +3312,30 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
 
 void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       {
-      QString t = dyn->text();
-      Dynamic::Type st = dyn->dynamicType();
+      QSet<QString> set; // the valid MusicXML dynamics
+      set << "f" << "ff" << "fff" << "ffff" << "fffff" << "ffffff"
+          << "fp" << "fz"
+          << "mf" << "mp"
+          << "p" << "pp" << "ppp" << "pppp" << "ppppp" << "pppppp"
+          << "rf" << "rfz"
+          << "sf" << "sffz" << "sfp" << "sfpp" << "sfz";
 
       directionTag(xml, attr, dyn);
+
       xml.stag("direction-type");
-      if (st == Dynamic::Type::P
-          || st == Dynamic::Type::PP
-          || st == Dynamic::Type::PPP
-          || st == Dynamic::Type::PPPP
-          || st == Dynamic::Type::PPPPP
-          || st == Dynamic::Type::PPPPPP
-          || st == Dynamic::Type::F
-          || st == Dynamic::Type::FF
-          || st == Dynamic::Type::FFF
-          || st == Dynamic::Type::FFFF
-          || st == Dynamic::Type::FFFFF
-          || st == Dynamic::Type::FFFFFF
-          || st == Dynamic::Type::MP
-          || st == Dynamic::Type::MF
-          || st == Dynamic::Type::SF
-          || st == Dynamic::Type::SFP
-          || st == Dynamic::Type::SFPP
-          || st == Dynamic::Type::FP
-          || st == Dynamic::Type::RF
-          || st == Dynamic::Type::RFZ
-          || st == Dynamic::Type::SFZ
-          || st == Dynamic::Type::SFFZ
-          || st == Dynamic::Type::FZ) {
-            xml.stag("dynamics");
-            xml.tagE(dyn->dynamicTypeName());
-            xml.etag();
+
+      xml.stag("dynamics");
+      QString dynTypeName = dyn->dynamicTypeName();
+      if (set.contains(dynTypeName)) {
+            xml.tagE(dynTypeName);
             }
-      else if (st == Dynamic::Type::M || st == Dynamic::Type::Z) {
-            xml.stag("dynamics");
-            xml.tag("other-dynamics", dyn->dynamicTypeName());
-            xml.etag();
-            }
-      else  {
-            QString attr; // TODO TBD
-            MScoreTextToMXML mttm("words", attr, t, _score->textStyle(TextStyleType::STAFF), _score->textStyle(TextStyleType::DYNAMICS));
-            mttm.write(xml);
+      else if (dynTypeName != "") {
+            xml.tag("other-dynamics", dynTypeName);
             }
       xml.etag();
+
+      xml.etag();
+
       /*
       int offs = dyn->mxmlOff();
       if (offs)
@@ -4184,7 +4165,19 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
 
             xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
-            xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
+            // by default export the parts long name as part-name
+            if (part->longName() != "")
+                  xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
+            else {
+                  if (part->partName() != "") {
+                        // use the track name if no part long name
+                        // to prevent an empty track name on import
+                        xml.tag("part-name print-object=\"no\"", MScoreTextToMXML::toPlainText(part->partName()));
+                        }
+                  else
+                        // part-name is required
+                        xml.tag("part-name", "");
+                  }
             if (!part->shortName().isEmpty())
                   xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
@@ -4217,7 +4210,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
             else {
                   xml.stag(QString("score-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
-                  xml.tag("instrument-name", MScoreTextToMXML::toPlainText(part->longName()));
+                  xml.tag("instrument-name", MScoreTextToMXML::toPlainText(part->instr()->trackName()));
                   xml.etag();
 
                   xml.tag(QString("midi-device id=\"P%1-I%2\" port=\"%3\"").arg(idx+1).arg(3).arg(part->midiPort() + 1), "");
