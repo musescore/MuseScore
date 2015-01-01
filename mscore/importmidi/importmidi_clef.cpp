@@ -401,6 +401,8 @@ void createMainClefFromAveragePitch(Staff *staff, int strack)
 
 bool hasGFclefs(const InstrumentTemplate *templ)
       {
+      if (!templ)
+            return false;
       const int staveCount = templ->nstaves();
       bool hasG = false;
       bool hasF = false;
@@ -432,7 +434,7 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       const int strack = staff->idx() * VOICES;
       bool mainClefWasSet = false;
       const int msInstrIndex = opers.msInstrIndex.value(indexOfOperation);
-      const bool canChangeClef = trackInstrList.empty()
+      const bool canChangeClef = trackInstrList.empty() || !trackInstrList[msInstrIndex]
                                   || hasGFclefs(trackInstrList[msInstrIndex]);
 
       if (opers.changeClef.value(indexOfOperation) && canChangeClef) {
