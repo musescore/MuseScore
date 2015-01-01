@@ -48,9 +48,49 @@
       <trackName>Strings 1</trackName>
       <Instrument>
         <longName pos="0">Strings 1</longName>
-        <trackName></trackName>
+        <shortName pos="0">Str.</shortName>
+        <trackName>String Section</trackName>
+        <minPitchP>55</minPitchP>
+        <maxPitchP>103</maxPitchP>
+        <minPitchA>55</minPitchA>
+        <maxPitchA>88</maxPitchA>
+        <instrumentId>strings.group</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="48"/>
+          </Channel>
+        <Channel name="pizzicato">
+          <program value="45"/>
+          </Channel>
+        <Channel name="tremolo">
+          <program value="44"/>
           </Channel>
         </Instrument>
       </Part>
@@ -62,9 +102,48 @@
       <trackName>Trumpet</trackName>
       <Instrument>
         <longName pos="0">Trumpet</longName>
-        <trackName></trackName>
+        <shortName pos="0">B♭ Cnt.</shortName>
+        <trackName>B♭ Cornet</trackName>
+        <minPitchP>52</minPitchP>
+        <maxPitchP>82</maxPitchP>
+        <minPitchA>52</minPitchA>
+        <maxPitchA>79</maxPitchA>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>brass.cornet</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="56"/>
+          </Channel>
+        <Channel name="mute">
+          <program value="59"/>
           </Channel>
         </Instrument>
       </Part>
@@ -72,11 +151,47 @@
       <Staff id="3">
         <StaffType group="pitched">
           </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Trombone</trackName>
       <Instrument>
         <longName pos="0">Trombone</longName>
-        <trackName></trackName>
+        <shortName pos="0">Trb.</shortName>
+        <trackName>Trombone</trackName>
+        <minPitchP>35</minPitchP>
+        <maxPitchP>74</maxPitchP>
+        <minPitchA>35</minPitchA>
+        <maxPitchA>70</maxPitchA>
+        <instrumentId>brass.trombone</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="57"/>
           </Channel>
@@ -84,10 +199,6 @@
       </Part>
     <Staff id="1">
       <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -103,13 +214,6 @@
         <Chord>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>88</pitch>
             <tpc>18</tpc>
             <velocity>80</velocity>
@@ -122,13 +226,6 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>86</pitch>
             <tpc>16</tpc>
             <velocity>80</velocity>
@@ -141,13 +238,6 @@
         <Chord>
           <durationType>16th</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>84</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -157,13 +247,6 @@
         <Chord>
           <durationType>16th</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>83</pitch>
             <tpc>19</tpc>
             <velocity>80</velocity>
@@ -173,13 +256,6 @@
         <Chord>
           <durationType>16th</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>81</pitch>
             <tpc>17</tpc>
             <velocity>80</velocity>
@@ -189,13 +265,6 @@
         <Chord>
           <durationType>16th</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>79</pitch>
             <tpc>15</tpc>
             <velocity>80</velocity>
@@ -206,10 +275,6 @@
       </Staff>
     <Staff id="2">
       <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -227,13 +292,6 @@
         <Chord>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -244,10 +302,6 @@
       </Staff>
     <Staff id="3">
       <Measure number="1">
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -259,13 +313,6 @@
         <Chord>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>41</pitch>
             <tpc>13</tpc>
             <velocity>80</velocity>
@@ -278,13 +325,6 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>40</pitch>
             <tpc>18</tpc>
             <velocity>80</velocity>
@@ -297,13 +337,6 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>41</pitch>
             <tpc>13</tpc>
             <velocity>80</velocity>
@@ -316,13 +349,6 @@
         <Chord>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>45</pitch>
             <tpc>17</tpc>
             <velocity>80</velocity>

@@ -48,7 +48,7 @@ class TracksModel : public QAbstractTableModel
       void forceColumnDataChanged(int col);
       void forceAllChanged();
       bool editableSingleTrack(int trackIndex, int column) const;
-      Qt::ItemFlags itemFlags(int row, int col) const;
+      Qt::ItemFlags editableFlags(int row, int col) const;
 
       MidiOperations::Opers _trackOpers;
       int _trackCount;

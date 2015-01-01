@@ -5,10 +5,12 @@
 namespace Ms {
 
 class Staff;
+class InstrumentTemplate;
 enum class ClefType : signed char;
 
 namespace MidiClef {
 
+bool hasGFclefs(const InstrumentTemplate *templ);
 void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack);
 ClefType clefTypeFromAveragePitch(int averagePitch);
 

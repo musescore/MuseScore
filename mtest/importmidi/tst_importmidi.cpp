@@ -32,6 +32,8 @@
 #include "mscore/importmidi/importmidi_quant.h"
 #include "mscore/importmidi/importmidi_fraction.h"
 #include "mscore/importmidi/importmidi_operations.h"
+#include "mscore/importmidi/importmidi_model.h"
+#include "mscore/importmidi/importmidi_lyrics.h"
 #include "mscore/preferences.h"
 
 
@@ -383,6 +385,13 @@ class TestImportMidi : public QObject, public MTest
       void instrumentGrand2() { mf("instrument_grand2"); }
       void instrumentChannels() { mf("instrument_channels"); }
       void instrument3StaffOrgan() { mf("instrument_3staff_organ"); }
+      void instrumentClef() { noTempoText("instrument_clef"); }
+
+      // very short note - need clean up (remove note) but show empty track
+      void emptyTrack() { noTempoText("empty_track"); }
+
+      // gui - tracks model
+      void testGuiTracksModel();
       };
 
 //---------------------------------------------------------
@@ -1126,6 +1135,55 @@ void TestImportMidi::isSimpleDuration()
       QVERIFY(!Meter::isSimpleNoteDuration({3, 4}));
       QVERIFY(!Meter::isSimpleNoteDuration({3, 8}));
       QVERIFY(!Meter::isSimpleNoteDuration({1, 5}));
+      }
+
+static int findColByHeader(const TracksModel &model, const char *colHeader)
+      {
+      const int colCount = model.columnCount(QModelIndex());
+      for (int i = 0; i != colCount; ++i) {
+            const QString headerTitle = model.headerData(
+                                          i, Qt::Horizontal, Qt::DisplayRole).toString();
+            if (headerTitle == QObject::tr(colHeader))
+                  return i;
+            }
+      return -1;
+      }
+
+void TestImportMidi::testGuiTracksModel()
+      {
+      QString midiFile("perc_drums");
+      QString midiFileFullPath = midiFilePath(midiFile);
+      auto &opers = preferences.midiImportOperations;
+      opers.addNewMidiFile(midiFileFullPath);
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFileFullPath);
+
+      Score score(mscore->baseStyle());
+      score.setName(midiFile);
+      QCOMPARE(importMidi(&score, midiFileFullPath), Score::FileError::FILE_NO_ERROR);
+
+      TracksModel model;
+      model.reset(opers.data()->trackOpers,
+                  MidiLyrics::makeLyricsListForUI(),
+                  opers.data()->trackCount,
+                  midiFileFullPath,
+                  !opers.data()->humanBeatData.beatSet.empty(),
+                  opers.data()->hasTempoText);
+
+      QVERIFY(model.trackCount() == 1);
+
+      Qt::ItemFlags notEditableFlags = Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+
+      const int clefChangeCol = findColByHeader(model, "Clef\nchanges");
+      QVERIFY(clefChangeCol >= 0);
+      QCOMPARE(model.flags(model.index(0, clefChangeCol)), notEditableFlags);
+
+      const int voiceCol = findColByHeader(model, "Max. voices");
+      QVERIFY(voiceCol >= 0);
+      QCOMPARE(model.flags(model.index(0, voiceCol)), notEditableFlags);
+
+      const int channelCol = findColByHeader(model, "Channel");
+      QVERIFY(channelCol >= 0);
+      QCOMPARE(model.flags(model.index(0, channelCol)), notEditableFlags);
       }
 
 

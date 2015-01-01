@@ -50,25 +50,49 @@
       <Staff id="2">
         <StaffType group="pitched">
           </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <Staff id="3">
+        <StaffType group="pitched">
+          </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Church Organ, Manual</trackName>
       <Instrument>
         <longName pos="0">Church Organ, Manual</longName>
-        <trackName></trackName>
-        <Channel>
-          <program value="19"/>
-          </Channel>
-        </Instrument>
-      </Part>
-    <Part>
-      <Staff id="3">
-        <StaffType group="pitched">
-          </StaffType>
-        </Staff>
-      <trackName>Church Organ, Pedal</trackName>
-      <Instrument>
-        <longName pos="0">Church Organ, Pedal</longName>
-        <trackName></trackName>
+        <shortName pos="0">Org.</shortName>
+        <trackName>Organ</trackName>
+        <instrumentId>keyboard.organ</instrumentId>
+        <clef staff="2">F</clef>
+        <clef staff="3">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="19"/>
           </Channel>
@@ -92,13 +116,6 @@
         <Chord>
           <durationType>whole</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -121,13 +138,6 @@
         <Chord>
           <durationType>whole</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -150,13 +160,6 @@
         <Chord>
           <durationType>whole</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>48</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>

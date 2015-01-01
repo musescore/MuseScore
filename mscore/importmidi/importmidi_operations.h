@@ -8,6 +8,7 @@
 namespace Ms {
 
 class ReducedFraction;
+class InstrumentTemplate;
 
 namespace MidiCharset {
       QString defaultCharset();
@@ -34,7 +35,7 @@ class TrackOp
             : _operation{{-1, defaultValue}}, _canRedefineDefaultLater(true)
             {}
 
-      T value(int trackIndex) const
+      const T& value(int trackIndex) const
             {
             const auto it = _operation.find(trackIndex);
             if (it == _operation.end())
@@ -50,7 +51,7 @@ class TrackOp
                   _operation[trackIndex] = value;
             }
 
-      T defaultValue() const
+      const T& defaultValue() const
             {
             return _operation.find(-1)->second;
             }
@@ -130,7 +131,9 @@ struct Opers
                   // data that cannot be changed by the user
       TrackOp<int> channel = TrackOp<int>(int());
       TrackOp<std::string> staffName = TrackOp<std::string>(std::string());       // will be converted to unicode later
-      TrackOp<QString> instrumentName = TrackOp<QString>(QString());
+      TrackOp<QString> midiInstrName = TrackOp<QString>(QString());
+      TrackOp<std::vector<InstrumentTemplate *> > msInstrList
+            = TrackOp<std::vector<InstrumentTemplate *> >(std::vector<InstrumentTemplate *>());
       TrackOp<bool> isDrumTrack = TrackOp<bool>(false);
 
                   // operations for all tracks
@@ -160,7 +163,8 @@ struct Opers
       TrackOp<bool> changeClef = TrackOp<bool>(true);
       TrackOp<Swing> swing = TrackOp<Swing>(Swing::NONE);
       TrackOp<bool> removeDrumRests = TrackOp<bool>(true);
-      TrackOp<int> lyricTrackIndex = TrackOp<int>(-1);        // empty lyric
+      TrackOp<int> lyricTrackIndex = TrackOp<int>(-1);         // empty lyric
+      TrackOp<int> msInstrIndex = TrackOp<int>(-1);            // for empty instrument list
       };
 
 struct HumanBeatData
