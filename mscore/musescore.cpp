@@ -2382,6 +2382,11 @@ void MuseScore::changeState(ScoreState val)
 
 //      if (_sstate == val)
 //            return;
+
+      // disallow change to edit modes if currently in play mode
+      if (_sstate == STATE_PLAY && (val == STATE_EDIT || val & STATE_ALLTEXTUAL_EDIT || val & STATE_NOTE_ENTRY))
+            return;
+
       static const char* stdNames[] = {
             "note-longa", "note-breve", "pad-note-1", "pad-note-2", "pad-note-4",
       "pad-note-8", "pad-note-16", "pad-note-32", "pad-note-64", "pad-note-128", "pad-rest", "rest"};
@@ -2437,7 +2442,6 @@ void MuseScore::changeState(ScoreState val)
 
       if (getAction("file-part-export")->isEnabled())
             getAction("file-part-export")->setEnabled(cs && cs->rootScore()->excerpts().size() > 0);
-
 
       // disabling top level menu entries does not
       // work for MAC
