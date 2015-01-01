@@ -1055,15 +1055,22 @@ static void defaults(Xml& xml, Score* s, double& millimeters, const int& tenths)
 //   creditWords
 //---------------------------------------------------------
 
-static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QString val, QString words, const TextStyle& ts)
+static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QString val, const QList<TextFragment>& words)
       {
+      // set the default words format
+      const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
+      CharFormat defFmt;
+      defFmt.setFontFamily(tsStaff.family());
+      defFmt.setFontSize(tsStaff.size());
+
+      // export formatted
       xml.stag("credit page=\"1\"");
       QString attr = QString(" default-x=\"%1\"").arg(x);
       attr += QString(" default-y=\"%1\"").arg(y);
       attr += " justify=\"" + just + "\"";
       attr += " valign=\"" + val + "\"";
-      MScoreTextToMXML mttm("credit-words", attr, words, s->textStyle(TextStyleType::STAFF), ts);
-      mttm.write(xml);
+      MScoreTextToMXML mttm("credit-words", attr, defFmt);
+      mttm.writeTextFragments(words, xml);
       xml.etag();
       }
 
@@ -1150,15 +1157,21 @@ void ExportMusicXml::credits(Xml& xml)
                               // ty already set correctly
                               }
 
-                        creditWords(xml, _score, tx, ty, just, val, text->text(), text->textStyle());
+                        creditWords(xml, _score, tx, ty, just, val, text->fragmentList());
                         }
                   }
             }
 
       if (!rights.isEmpty()) {
             // put copyright at the bottom center of the page
-            // note: as the copyright metatag contains plan text, special XML characters must be escaped
-            creditWords(xml, _score, w / 2, bm, "center", "bottom", Xml::xmlString(rights), _score->textStyle(TextStyleType::FOOTER));
+            // note: as the copyright metatag contains plain text, special XML characters must be escaped
+            TextFragment f(Xml::xmlString(rights));
+            const TextStyle tsFooter = _score->textStyle(TextStyleType::FOOTER);
+            f.changeFormat(FormatId::FontFamily, tsFooter.family());
+            f.changeFormat(FormatId::FontSize, tsFooter.size());
+            QList<TextFragment> list;
+            list.append(f);
+            creditWords(xml, _score, w / 2, bm, "center", "bottom", list);
             }
       }
 
@@ -2836,25 +2849,29 @@ static bool findUnit(TDuration::DurationType val, QString& unit)
       return true;
       }
 
-static bool findMetronome(QString words,
-                          QString& wordsLeft,  // words left of metronome
+static bool findMetronome(const QList<TextFragment>& list,
+                          QList<TextFragment>& wordsLeft,  // words left of metronome
                           bool& hasParen,      // parenthesis
                           QString& metroLeft,  // left part of metronome
                           QString& metroRight, // right part of metronome
-                          QString& wordsRight  // words right of metronome
+                          QList<TextFragment>& wordsRight // words right of metronome
                           )
       {
+      QString words = MScoreTextToMXML::toPlainTextPlusSymbols(list);
       //qDebug("findMetronome('%s')", qPrintable(words));
-      wordsLeft  = "";
       hasParen   = false;
       metroLeft  = "";
       metroRight = "";
-      wordsRight = "";
+      int metroPos = -1;   // metronome start position
+      int metroLen = 0;    // metronome length
+
       int indEq  = words.indexOf('=');
       if (indEq <= 0)
             return false;
+
       int len1 = 0;
       TDuration dur;
+
       // find first note, limiting search to the part left of the first '=',
       // to prevent matching the second note in a "note1 = note2" metronome
       int pos1 = TempoText::findTempoDuration(words.left(indEq), len1, dur);
@@ -2875,6 +2892,7 @@ static bool findMetronome(QString words,
                          qPrintable(s4)
                          );
                    */
+
                   // now determine what is to the right of the equals sign
                   // must have either a (dotted) note or a number at start of s4
                   int len3 = 0;
@@ -2905,27 +2923,34 @@ static bool findMetronome(QString words,
                   int lparen = s1.indexOf("(");
                   int rparen = s6.indexOf(")");
                   hasParen = (lparen == s1.length() - 1 && rparen == 0);
-                  //qDebug(" lparen=%d rparen=%d hasP=%d", lparen, rparen, hasParen);
 
-                  if (hasParen)
-                        wordsLeft = s1.mid(0, lparen);
-                  else
-                        wordsLeft = s1;
                   metroLeft = s2;
                   metroRight = s5;
-                  if (hasParen)
-                        wordsRight = s6.mid(1);
-                  else
-                        metroRight = s5;
+
+                  metroPos = pos1;               // metronome position
+                  metroLen = len1 + len2 + len3; // metronome length
+                  if (hasParen) {
+                        metroPos -= 1;           // move left one position
+                        metroLen += 2;           // add length of '(' and ')'
+                        }
+
+                  // calculate starting position corrected for surrogate pairs
+                  // (which were ignored by toPlainTextPlusSymbols())
+                  int corrPos = metroPos;
+                  for (int i = 0; i < metroPos; ++i)
+                        if (words.at(i).isHighSurrogate())
+                              --corrPos;
+                  metroPos = corrPos;
 
                   /*
-                  qDebug(" '%s'%s'%s'%s'",
-                         qPrintable(wordsLeft),
+                  qDebug("-> found '%s'%s' hasParen %d metro pos %d len %d",
                          qPrintable(metroLeft),
                          qPrintable(metroRight),
-                         qPrintable(wordsRight)
+                         hasParen, metroPos, metroLen
                          );
                    */
+                  QList<TextFragment> mid; // not used
+                  MScoreTextToMXML::split(list, metroPos, metroLen, wordsLeft, mid, wordsRight);
                   return true;
                   }
             }
@@ -2946,19 +2971,30 @@ static void beatUnit(Xml& xml, const TDuration dur)
 
 static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
       {
-      QString wordsLeft;  // words left of metronome
-      bool hasParen;      // parenthesis
-      QString metroLeft;  // left part of metronome
-      QString metroRight; // right part of metronome
-      QString wordsRight; // words right of metronome
-      if (findMetronome(text->text(), wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
-            if (wordsLeft != "") {
+      //qDebug("wordsMetrome('%s')", qPrintable(text->text()));
+      const QList<TextFragment> list = text->fragmentList();
+      QList<TextFragment>       wordsLeft;  // words left of metronome
+      bool                      hasParen;   // parenthesis
+      QString                   metroLeft;  // left part of metronome
+      QString                   metroRight; // right part of metronome
+      QList<TextFragment>       wordsRight; // words right of metronome
+
+      // set the default words format
+      const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
+      CharFormat defFmt;
+      defFmt.setFontFamily(tsStaff.family());
+      defFmt.setFontSize(tsStaff.size());
+
+      if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
+
+            if (wordsLeft.size() > 0) {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD
-                  MScoreTextToMXML mttm("words", attr, wordsLeft, s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF) /* TODO: verify correct value */);
-                  mttm.write(xml);
+                  MScoreTextToMXML mttm("words", attr, defFmt);
+                  mttm.writeTextFragments(wordsLeft, xml);
                   xml.etag();
                   }
+
             xml.stag("direction-type");
             xml.stag(QString("metronome parentheses=\"%1\"").arg(hasParen ? "yes" : "no"));
             int len1 = 0;
@@ -2973,14 +3009,16 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
 
             xml.etag();
             xml.etag();
-            if (wordsRight != "") {
+
+            if (wordsRight.size() > 0) {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD
-                  MScoreTextToMXML mttm("words", attr, wordsRight, s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF) /* TODO: verify correct value */);
-                  mttm.write(xml);
+                  MScoreTextToMXML mttm("words", attr, defFmt);
+                  mttm.writeTextFragments(wordsRight, xml);
                   xml.etag();
                   }
             }
+
       else {
             xml.stag("direction-type");
             QString attr;
@@ -2990,8 +3028,9 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
                   else
                         attr = " enclosure=\"rectangle\"";
                   }
-            MScoreTextToMXML mttm("words", attr, text->text(), s->textStyle(TextStyleType::STAFF), s->textStyle(TextStyleType::STAFF));
-            mttm.write(xml);
+            MScoreTextToMXML mttm("words", attr, defFmt);
+            //qDebug("words('%s')", qPrintable(text->text()));
+            mttm.writeTextFragments(text->fragmentList(), xml);
             xml.etag();
             }
       }
@@ -3053,10 +3092,14 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       xml.stag("direction-type");
       QString attr;
       if (!rmk->textStyle().hasFrame()) attr = " enclosure=\"none\"";
-      MScoreTextToMXML mttm("rehearsal", attr, rmk->text(),
-                            _score->textStyle(TextStyleType::STAFF),
-                            _score->textStyle(TextStyleType::REHEARSAL_MARK));
-      mttm.write(xml);
+      // set the default words format
+      const TextStyle tsStaff = _score->textStyle(TextStyleType::STAFF);
+      CharFormat defFmt;
+      defFmt.setFontFamily(tsStaff.family());
+      defFmt.setFontSize(tsStaff.size());
+      // write formatted
+      MScoreTextToMXML mttm("rehearsal", attr, defFmt);
+      mttm.writeTextFragments(rmk->fragmentList(), xml);
       xml.etag();
       directionETag(xml, staff);
       }
@@ -3398,8 +3441,14 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                               }
                         xml.tag("syllabic", s);
                         QString attr; // TODO TBD
-                        MScoreTextToMXML mttm("text", attr, (l)->text(), _score->textStyle(TextStyleType::LYRIC1), _score->textStyle(TextStyleType::LYRIC1));
-                        mttm.write(xml);
+                        // set the default words format
+                        const TextStyle tsStaff = _score->textStyle(TextStyleType::LYRIC1);
+                        CharFormat defFmt;
+                        defFmt.setFontFamily(tsStaff.family());
+                        defFmt.setFontSize(tsStaff.size());
+                        // write formatted
+                        MScoreTextToMXML mttm("text", attr, defFmt);
+                        mttm.writeTextFragments(l->fragmentList(), xml);
                         /*
                          Temporarily disabled because it doesn't work yet (and thus breaks the regression test).
                          See MusicXml::xmlLyric: "// TODO-WS      l->setTick(tick);"

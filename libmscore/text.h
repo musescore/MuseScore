@@ -308,6 +308,8 @@ class Text : public Element {
 
       virtual int subtype() const;
       virtual QString subtypeName() const;
+
+      QList<TextFragment> fragmentList() const; // for MusicXML formatted export
       };
 
 
