@@ -993,6 +993,9 @@ qDebug("Lyrics: melisma end segment not implemented");
             }
 
       qreal gap = x2 - x1;
+      // leave 0.1sp padding on each side
+      // space for this is allocated in layoutX() and computeMinWidth(),
+      // so that hyphens are not shortened too much
       len       = gap - 0.2 * _spatium * lmag * staffMag;
       if (len > maxl)
             len = maxl;
