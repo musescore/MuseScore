@@ -3312,49 +3312,30 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
 
 void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       {
-      QString t = dyn->text();
-      Dynamic::Type st = dyn->dynamicType();
+      QSet<QString> set; // the valid MusicXML dynamics
+      set << "f" << "ff" << "fff" << "ffff" << "fffff" << "ffffff"
+          << "fp" << "fz"
+          << "mf" << "mp"
+          << "p" << "pp" << "ppp" << "pppp" << "ppppp" << "pppppp"
+          << "rf" << "rfz"
+          << "sf" << "sffz" << "sfp" << "sfpp" << "sfz";
 
       directionTag(xml, attr, dyn);
+
       xml.stag("direction-type");
-      if (st == Dynamic::Type::P
-          || st == Dynamic::Type::PP
-          || st == Dynamic::Type::PPP
-          || st == Dynamic::Type::PPPP
-          || st == Dynamic::Type::PPPPP
-          || st == Dynamic::Type::PPPPPP
-          || st == Dynamic::Type::F
-          || st == Dynamic::Type::FF
-          || st == Dynamic::Type::FFF
-          || st == Dynamic::Type::FFFF
-          || st == Dynamic::Type::FFFFF
-          || st == Dynamic::Type::FFFFFF
-          || st == Dynamic::Type::MP
-          || st == Dynamic::Type::MF
-          || st == Dynamic::Type::SF
-          || st == Dynamic::Type::SFP
-          || st == Dynamic::Type::SFPP
-          || st == Dynamic::Type::FP
-          || st == Dynamic::Type::RF
-          || st == Dynamic::Type::RFZ
-          || st == Dynamic::Type::SFZ
-          || st == Dynamic::Type::SFFZ
-          || st == Dynamic::Type::FZ) {
-            xml.stag("dynamics");
-            xml.tagE(dyn->dynamicTypeName());
-            xml.etag();
+
+      xml.stag("dynamics");
+      QString dynTypeName = dyn->dynamicTypeName();
+      if (set.contains(dynTypeName)) {
+            xml.tagE(dynTypeName);
             }
-      else if (st == Dynamic::Type::M || st == Dynamic::Type::Z) {
-            xml.stag("dynamics");
-            xml.tag("other-dynamics", dyn->dynamicTypeName());
-            xml.etag();
-            }
-      else  {
-            QString attr; // TODO TBD
-            MScoreTextToMXML mttm("words", attr, t, _score->textStyle(TextStyleType::STAFF), _score->textStyle(TextStyleType::DYNAMICS));
-            mttm.write(xml);
+      else if (dynTypeName != "") {
+            xml.tag("other-dynamics", dynTypeName);
             }
       xml.etag();
+
+      xml.etag();
+
       /*
       int offs = dyn->mxmlOff();
       if (offs)
