@@ -850,6 +850,8 @@ std::vector<InstrumentTemplate *> findSuitableInstruments(const MTrack &track)
             if (diff > 0) {
                   if (it != templates.begin())
                         templates.erase(it, templates.end());
+                  else              // add empty template option
+                        templates.push_back(nullptr);
                   break;
                   }
             }
@@ -909,7 +911,8 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                   const int instrIndex = opers.data()->trackOpers.msInstrIndex.value(
                                                                     track.indexOfOperation);
                   instr = instrList[instrIndex];
-                  part->initFromInstrTemplate(instr);
+                  if (instr)
+                        part->initFromInstrTemplate(instr);
                   }
 
             if (areNext3OrganStaff(idx, tracks))

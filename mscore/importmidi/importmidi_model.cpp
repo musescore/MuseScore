@@ -186,7 +186,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   static QString instrName(const InstrumentTemplate *instr)
                         {
                         if (!instr)
-                              return "";
+                              return "-";
                         if (!instr->trackName.isEmpty())
                               return instr->trackName;
                         if (instr->longNames.isEmpty())
