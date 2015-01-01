@@ -1923,7 +1923,7 @@ int Note::line() const
       }
 
 //---------------------------------------------------------
-//   setLine
+//   setAccidentalType
 //---------------------------------------------------------
 
 void Note::setAccidentalType(Accidental::Type type)
