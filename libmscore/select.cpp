@@ -497,6 +497,9 @@ void Selection::updateSelectedElements()
             // ignore spanners belonging to other tracks
             if (sp->track() < startTrack || sp->track() >= endTrack)
                   continue;
+            // ignore voltas
+            if (sp->type() == Element::Type::VOLTA)
+                  continue;
             if (sp->type() == Element::Type::SLUR) {
                 if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
                       if (canSelect(sp->startCR()) && canSelect(sp->endCR()))
