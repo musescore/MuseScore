@@ -1285,6 +1285,7 @@ bool Note::acceptDrop(const DropData& data) const
 Element* Note::drop(const DropData& data)
       {
       Element* e = data.element;
+      bool fromPalette = (e->track() == -1);
 
       Chord* ch = chord();
       switch(e->type()) {
@@ -1304,7 +1305,9 @@ Element* Note::drop(const DropData& data)
                   // set style
                   Fingering* f = static_cast<Fingering*>(e);
                   TextStyleType st = f->textStyleType();
-                  f->setTextStyleType(st);
+                  //f->setTextStyleType(st);
+                  if (st >= TextStyleType::DEFAULT && fromPalette)
+                        f->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
                   }
                   return e;
 
