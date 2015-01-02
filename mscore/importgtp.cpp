@@ -553,9 +553,36 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
       // shift slide
       if (slide == SHIFT_SLIDE) {
             Glissando* s = new Glissando(score);
-            s->setText("");
+/*            s->setText("");
             s->setGlissandoType(Glissando::Type::STRAIGHT);
-            cr->add(s);
+            cr->add(s); */
+            s->setAnchor(Spanner::Anchor::NOTE);
+            Segment* prevSeg = cr->segment()->prev1(Segment::Type::ChordRest);
+            Element* e = prevSeg->element(staffIdx);
+            if (e) {
+                  if (e->type() == Element::Type::CHORD) {
+                        Chord* prevChord = static_cast<Chord*>(e);
+                        /** we should not just take the top note here
+                        * but the /correct/ note need to check whether GP
+                        * supports multi-note gliss. I think it can in modern
+                        * versions */
+                        s->setStartElement(prevChord->upNote());
+                        s->setTick(prevSeg->tick());
+                        s->setTrack(staffIdx);
+                        s->setParent(prevChord->upNote());
+                        s->setText("");
+                        s->setGlissandoType(Glissando::Type::STRAIGHT);
+                        }
+                  }
+
+            Chord* chord = (Chord*) cr;
+            /* again here, we should not just set the up note but the
+             * /correct/ note need to check whether GP supports
+             * multi-note gliss. I think it can in modern versions */
+            s->setEndElement(chord->upNote());
+            s->setTick2(chord->segment()->tick());
+            s->setTrack2(staffIdx);
+            score->addElement(s);
             }
       // legato slide
       else if (slide == LEGATO_SLIDE) {
