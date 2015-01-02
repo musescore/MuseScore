@@ -2713,5 +2713,47 @@ QString Text::subtypeName() const
             }
       return rez;
       }
+      
+//---------------------------------------------------------
+//   fragmentList
+//---------------------------------------------------------
+
+/**
+ Return the text as a single list of TextFragment
+ Used by the MusicXML formatted export to avoid parsing the xml text format
+ */
+
+QList<TextFragment> Text::fragmentList() const
+      {
+      QList<TextFragment> res;
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  /* TODO TBD
+                  if (f.text.isEmpty())                     // skip empty fragments, not to
+                        continue;                           // insert extra HTML formatting
+                   */
+                  res.append(f);
+                  if (block.eol()) {
+                        if (f.format.type() == CharFormatType::TEXT) {
+                              // simply append a newline
+                              res.last().text += "\n";
+                              }
+                        else {
+                              // create and append a fragment containing only a newline,
+                              // with the same formatting as f
+                              TextFragment newline("\n");
+                              newline.changeFormat(FormatId::FontSize, f.format.fontSize());
+                              newline.changeFormat(FormatId::FontFamily, f.format.fontFamily());
+                              newline.changeFormat(FormatId::Bold, f.format.bold());
+                              newline.changeFormat(FormatId::Underline, f.format.underline());
+                              newline.changeFormat(FormatId::Italic, f.format.italic());
+                              res.append(newline);
+                              }
+                        }
+                  }
+            }
+      return res;
+      }
+
 }
 
