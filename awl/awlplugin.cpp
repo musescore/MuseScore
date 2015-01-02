@@ -102,5 +102,5 @@ QList<QDesignerCustomWidgetInterface*> AwlPlugins::customWidgets() const
       return plugins;
 	}
 
-Q_EXPORT_PLUGIN(AwlPlugins)
+// Q_EXPORT_PLUGIN(AwlPlugins)
 

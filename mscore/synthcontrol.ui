@@ -13,8 +13,14 @@
   <property name="windowTitle">
    <string>Synthesizer</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="1" column="0">
+  <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0">
+   <property name="leftMargin">
+    <number>10</number>
+   </property>
+   <property name="horizontalSpacing">
+    <number>10</number>
+   </property>
+   <item row="2" column="0">
     <layout class="QGridLayout" name="gridLayout_4">
      <item row="0" column="3">
       <widget class="QPushButton" name="storeButton">
@@ -65,7 +71,7 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="1" rowspan="2">
+   <item row="0" column="2" rowspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="Awl::MeterSlider" name="gain">
@@ -95,7 +101,20 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
+   <item row="0" column="1">
+    <widget class="Awl::VolSlider" name="mgain">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="center">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>1</number>
@@ -235,9 +254,15 @@
      </widget>
     </widget>
    </item>
+   <item row="1" column="1">
+    <widget class="QToolButton" name="metronome">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
- <pixmapfunction>getIconPixmap</pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>Awl::Slider</class>
@@ -255,6 +280,8 @@
    <header>awl/mslider.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

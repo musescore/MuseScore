@@ -87,14 +87,18 @@ class SeqMsgFifo : public FifoBase {
       SeqMsg dequeue();                   // remove object from fifo
       };
 
+// this are also the jack audio transport states:
+enum class Transport : char {
+      STOP=0,
+      PLAY=1,
+      STARTING=3,
+      NET_STARTING=4
+      };
+
 //---------------------------------------------------------
 //   Seq
 //    sequencer
 //---------------------------------------------------------
-
-// this are also the jack audio transport states:
-enum class Transport : char { STOP=0, PLAY=1, STARTING=3,
-     NET_STARTING=4 };
 
 class Seq : public QObject, public Sequencer {
       Q_OBJECT
@@ -173,6 +177,7 @@ class Seq : public QObject, public Sequencer {
       void start();
       void stop();
       void setPos(POS, unsigned);
+      void setMetronomeGain(float val) { metronomeVolume = val; }
 
    signals:
       void started();
@@ -234,6 +239,7 @@ class Seq : public QObject, public Sequencer {
       void eventToGui(NPlayEvent);
       void stopNoteTimer();
       void recomputeMaxMidiOutPort();
+      float metronomeGain() const      { return metronomeVolume; }
       };
 
 extern Seq* seq;
