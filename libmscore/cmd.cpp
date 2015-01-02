@@ -1753,6 +1753,9 @@ Element* Score::move(const QString& cmd)
             // cr is the ChordRest to move from on other cmd's
             int track = el->track();            // keep note of element track
             el = el->parent();
+            // element with no parent (eg, a newly-added line) - no way to find context
+            if (!el)
+                  return 0;
             switch (el->type()) {
                   case Element::Type::NOTE:           // a note is a valid target
                         trg = el;
@@ -1768,7 +1771,7 @@ Element* Score::move(const QString& cmd)
                         // if segment is not chord/rest or grace, move to next chord/rest or grace segment
                         if (!seg->isChordRest()) {
                               seg = seg->next1(Segment::Type::ChordRest);
-                              if (seg == 0)     // if none found, reutrn failure
+                              if (seg == 0)     // if none found, return failure
                                     return 0;
                               }
                         // segment for sure contains chords/rests,
