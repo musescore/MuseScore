@@ -717,12 +717,16 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
       const QList<Articulation*>& al = c->articulations();
       if (al.size() >= 2) {
             Articulation* a = al.at(1);
-            if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
+            if (a->up() == c->up())
+                  return yo;
+            else if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       else if (al.size() >= 1) {
             Articulation* a = al.at(0);
-            if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
+            if (a->up() == c->up())
+                  return yo;
+            else if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       return yo;
