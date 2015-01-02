@@ -806,10 +806,10 @@ std::pair<int, int> findMinMaxPitch(const MTrack &track)
 int findMaxPitchDiff(const std::pair<int, int> &minMaxPitch, const InstrumentTemplate *templ)
       {
       int diff = 0;
-      if (minMaxPitch.first < templ->minPitchA)
-            diff = templ->minPitchA - minMaxPitch.first;
-      if (minMaxPitch.second > templ->maxPitchA)
-            diff = qMax(diff, minMaxPitch.second - templ->maxPitchA);
+      if (minMaxPitch.first < templ->minPitchP)
+            diff = templ->minPitchP - minMaxPitch.first;
+      if (minMaxPitch.second > templ->maxPitchP)
+            diff = qMax(diff, minMaxPitch.second - templ->maxPitchP);
       return diff;
       }
 
@@ -841,11 +841,17 @@ std::vector<InstrumentTemplate *> findSuitableInstruments(const MTrack &track)
 
       const std::pair<int, int> minMaxPitch = findMinMaxPitch(track);
       sortInstrumentTemplates(templates, minMaxPitch);
-
-      for (auto it = std::next(templates.begin()); it != templates.end(); ++it) {
+                  // instruments here are sorted primarily by valid pitch range difference,
+                  // so first nonzero difference means that current
+                  // and all successive instruments are unsuitable;
+                  // but if all instruments are unsuitable then leave them all in list
+      for (auto it = templates.begin(); it != templates.end(); ++it) {
             const int diff = findMaxPitchDiff(minMaxPitch, *it);
             if (diff > 0) {
-                  templates.erase(it, templates.end());
+                  if (it != templates.begin())
+                        templates.erase(it, templates.end());
+                  else              // add empty template option
+                        templates.push_back(nullptr);
                   break;
                   }
             }
@@ -905,7 +911,8 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                   const int instrIndex = opers.data()->trackOpers.msInstrIndex.value(
                                                                     track.indexOfOperation);
                   instr = instrList[instrIndex];
-                  part->initFromInstrTemplate(instr);
+                  if (instr)
+                        part->initFromInstrTemplate(instr);
                   }
 
             if (areNext3OrganStaff(idx, tracks))
