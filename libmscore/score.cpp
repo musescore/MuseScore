@@ -1772,8 +1772,15 @@ int Score::inputPos() const
 
 void Score::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      for (MeasureBase* m = first(); m; m = m->next())
-            m->scanElements(data, func, all);
+      for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+            mb->scanElements(data, func, all);
+            if (mb->type() == Element::Type::MEASURE) {
+                  Measure* m = static_cast<Measure*>(mb);
+                  Measure* mmr = m->mmRest();
+                  if (mmr)
+                        mmr->scanElements(data, func, all);
+                  }
+            }
       for (Page* page : pages())
             page->scanElements(data, func, all);
       }
@@ -1785,8 +1792,14 @@ void Score::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Score::scanElementsInRange(void* data, void (*func)(void*, Element*), bool all)
       {
       Segment* startSeg = _selection.startSegment();
-      for (Segment* s = startSeg; s && s!=_selection.endSegment(); s = s->next1MM()) {
-            s->scanElements(data,func,all);
+      for (Segment* s = startSeg; s && s !=_selection.endSegment(); s = s->next1()) {
+            s->scanElements(data, func, all);
+            Measure* m = s->measure();
+            if (m && s == m->first()) {
+                  Measure* mmr = m->mmRest();
+                  if (mmr)
+                        mmr->scanElements(data, func, all);
+                  }
             }
       }
 

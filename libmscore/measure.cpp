@@ -979,6 +979,15 @@ void Measure::change(Element* o, Element* n)
             }
       }
 
+//---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void Measure::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
+      {
+      setDirty();
+      }
+
 //-------------------------------------------------------------------
 //   moveTicks
 //    Also adjust endBarLine if measure len has changed. For this
@@ -2401,9 +2410,8 @@ void Measure::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   func(data, ms->noText());
             }
 
-      for (Segment* s = first(); s; s = s->next()) {
-            s->scanElements(data,func,all);
-            }
+      for (Segment* s = first(); s; s = s->next())
+            s->scanElements(data, func, all);
       }
 
 //---------------------------------------------------------
