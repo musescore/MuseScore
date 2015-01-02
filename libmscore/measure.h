@@ -176,6 +176,7 @@ class Measure : public MeasureBase {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void change(Element* o, Element* n) override;
+      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
 
       System* system() const               { return (System*)parent(); }
       QList<MStaff*>* staffList()          { return &staves;      }
