@@ -3,15 +3,15 @@
   <Staff id="0">
     <voice id="0">0</voice>
     <tick>0</tick>
-    <Volta id="2">
+    <TextLine id="2">
       <endHook>1</endHook>
       <track>0</track>
+      <lineWidth>0.15</lineWidth>
       <beginText>
-        <style>Volta</style>
-        <text>1.</text>
+        <style>Text Line</style>
+        <text>VII</text>
         </beginText>
-      <endings>1</endings>
-      </Volta>
+      </TextLine>
     <Chord>
       <track>0</track>
       <durationType>quarter</durationType>
