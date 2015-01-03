@@ -31,7 +31,7 @@ namespace Ms {
 class MScoreTextToMXML {
 
 public:
-      MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt);
+      MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt, const QString& mtf);
       static QString toPlainText(const QString& text);
       static QString toPlainTextPlusSymbols(const QList<TextFragment>& list);
       static bool split(const QList<TextFragment>& in, const int pos, const int len,
@@ -44,6 +44,7 @@ private:
       QString tagname;
       CharFormat oldFormat;
       CharFormat newFormat;
+      QString musicalTextFont;
 };
 
 } // namespace Ms
