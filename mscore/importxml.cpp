@@ -788,7 +788,6 @@ void MusicXml::initPartState()
       harmony = 0;
       tremStart = 0;
       figBass = 0;
-      figBassExtend = false;
       glissandoText = "";
       glissandoColor = "";
       }
@@ -2230,16 +2229,21 @@ void MusicXml::xmlPart(QDomElement e, QString id)
 //   readFiguredBassItem
 //---------------------------------------------------------
 
-static void readFiguredBassItem(FiguredBassItem* fgi, const QDomElement& de,
-                                bool paren, bool& extend)
+static void readFiguredBassItem(FiguredBassItem* fgi, const QDomElement& de, bool paren)
       {
       // read the <figure> node de
       for (QDomElement e = de.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             const QString& tag(e.tagName());
             const QString& val(e.text());
             int iVal = val.toInt();
-            if (tag == "extend")
-                  extend = true;
+            if (tag == "extend") {
+                  if (e.attribute("type") == "start")
+                        fgi->setContLine(FiguredBassItem::ContLine::EXTENDED);
+                  else if (e.attribute("type") == "continue")
+                        fgi->setContLine(FiguredBassItem::ContLine::EXTENDED);
+                  else if (e.attribute("type") == "stop")
+                        fgi->setContLine(FiguredBassItem::ContLine::SIMPLE);
+                  }
             else if (tag == "figure-number") {
                   // MusicXML spec states figure-number is a number
                   // MuseScore can only handle single digit
@@ -2280,12 +2284,10 @@ static void readFiguredBassItem(FiguredBassItem* fgi, const QDomElement& de,
 // as the required context is not present in the items DOM tree.
 // Exception: if a <duration> element is present, tick can be set.
 // Return true if valid, non-empty figure(s) are found
-// Set extend to true if extend elements were found
 //---------------------------------------------------------
 
-static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, bool& extend)
+static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions)
       {
-      extend = false;
       bool parentheses = (de.attribute("parentheses") == "yes");
       QString normalizedText;
       int idx = 0;
@@ -2305,13 +2307,10 @@ static bool readFigBass(FiguredBass* fb, const QDomElement& de, int divisions, b
                                qPrintable(val));
                   }
             else if (tag == "figure") {
-                  bool figureExtend = false;
                   FiguredBassItem* pItem = new FiguredBassItem(fb->score(), idx++);
                   pItem->setTrack(fb->track());
                   pItem->setParent(fb);
-                  readFiguredBassItem(pItem, e, parentheses, figureExtend);
-                  if (figureExtend)
-                        extend = true;
+                  readFiguredBassItem(pItem, e, parentheses);
                   fb->appendItem(pItem);
                   // add item normalized text
                   if (!normalizedText.isEmpty())
@@ -2681,21 +2680,18 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
             else if (e.tagName() == "harmony")
                   xmlHarmony(e, tick, measure, staff);
             else if (e.tagName() == "figured-bass") {
-                  if (figBass) {
-                        qDebug("more than one figured bass element on note not supported");
+                  // read figured bass element to attach to next note
+                  bool mustkeep = false;
+                  figBass = new FiguredBass(score);
+                  // mustkeep = figBass->readMusicXML(e, divisions);
+                  mustkeep = readFigBass(figBass, e, divisions);
+                  // qDebug("xmlMeaure: fb mustkeep %d", mustkeep);
+                  if (mustkeep) {
+                        figBassList.append(figBass);
                         }
                   else {
-                        // read figured bass element to attach to next note
-                        figBassExtend = false;
-                        bool mustkeep = false;
-                        figBass = new FiguredBass(score);
-                        // mustkeep = figBass->readMusicXML(e, divisions, figBassExtend);
-                        mustkeep = readFigBass(figBass, e, divisions, figBassExtend);
-                        // qDebug("xmlMeaure: fb mustkeep %d extend %d", mustkeep, figBassExtend);
-                        if (!mustkeep) {
-                              delete figBass;
-                              figBass = 0;
-                              }
+                        delete figBass;
+                        figBass = 0;
                         }
                   }
             else
@@ -5839,24 +5835,20 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics);
 
       // add figured bass element
-      if (figBass) {
-            // qDebug("add figured bass %p at tick %d ticks %d trk %d", figBass, tick, ticks, trk);
-            figBass->setTrack(trk);
-            figBass->setTicks(ticks);
-            // TODO: set correct onNote value
-            Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
-            // TODO: use addelement() instead of Segment::add() ?
-            s->add(figBass);
-            figBass = 0;
+      if (!figBassList.isEmpty()) {
+            int sTick = tick;  // starting tick
+            foreach (FiguredBass* fb, figBassList) {
+                  fb->setTrack(trk);
+                  // No duration tag defaults ticks() to 0; set to note value
+                  if (fb->ticks() == 0)
+                        fb->setTicks(ticks);
+                  // TODO: set correct onNote value
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, sTick);
+                  s->add(fb);
+                  sTick += fb->ticks();
+                  }
+            figBassList.clear();
             }
-      else if (figBassExtend) {
-            // extend last figured bass to end of this chord
-            // qDebug("extend figured bass at tick %d ticks %d trk %d end %d", tick, ticks, trk, tick + ticks);
-            FiguredBass* fb = findLastFiguredBass((trk / VOICES) * VOICES, cr->segment());
-            if (fb)
-                  fb->setTicks(tick + ticks - fb->segment()->tick());
-            }
-      figBassExtend = false;
 
       // fixup pedal type="change" to end at the end of this note
       // note tick is still at note start
