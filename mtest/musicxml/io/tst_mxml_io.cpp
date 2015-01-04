@@ -117,6 +117,7 @@ private slots:
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
+      void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
