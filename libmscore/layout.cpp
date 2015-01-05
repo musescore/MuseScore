@@ -56,6 +56,12 @@ namespace Ms {
 
 // #define PAGE_DEBUG
 
+#ifdef PAGE_DEBUG
+#define PAGEDBG(...)  qDebug(__VA_ARGS__)
+#else
+#define PAGEDBG(...)  ;
+#endif
+
 //---------------------------------------------------------
 //   rebuildBspTree
 //---------------------------------------------------------
@@ -3198,12 +3204,6 @@ struct PageContext {
       };
 
 
-#ifdef PAGE_DEBUG
-#define PAGEDBG(...)  qDebug(__VA_ARGS__)
-#else
-#define PAGEDBG(...)  ;
-#endif
-
 //---------------------------------------------------------
 //   layoutPages
 //    create list of pages
@@ -3227,7 +3227,7 @@ void Score::layoutPages()
 
 PAGEDBG("layoutPages");
       for (int i = 0; i < nSystems; ++i) {
-PAGEDBG("   system %d", i);
+PAGEDBG("  system %d", i);
             //
             // collect system row
             //
@@ -3241,8 +3241,8 @@ PAGEDBG("   system %d", i);
                         break;
                   ++i;
                   }
-            qreal tmargin = 0.0;    // top system margin
-            qreal bmargin;          // bottom system margin
+            qreal tmargin;    // top system margin
+            qreal bmargin;    // bottom system margin
 
             if (pC.sr.isVbox()) {
                   VBox* vbox = pC.sr.vbox();
@@ -3268,17 +3268,16 @@ PAGEDBG("   system %d", i);
                   }
 
             tmargin = qMax(tmargin, pC.prevDist);
-
-
             qreal h = pC.sr.height();
-PAGEDBG("   %f + %f + %f + qMax(%f,%f)[=%f] > %f",
-    pC.y / MScore::DPMM,
-    h / MScore::DPMM,
+
+PAGEDBG("   y:%f + h:%f + tm:%f + qMax(bm:%f,%f)[=%f] > %f",
+    pC.y    / MScore::DPMM,
+    h       / MScore::DPMM,
     tmargin / MScore::DPMM,
     bmargin / MScore::DPMM,
-    slb / MScore::DPMM,
+    slb     / MScore::DPMM,
     (pC.y + h + tmargin + qMax(bmargin, slb)) / MScore::DPMM,
-    pC.ey / MScore::DPMM
+    pC.ey   / MScore::DPMM
     );
 
             if (pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {
@@ -3303,7 +3302,7 @@ PAGEDBG("      == page break");
             pC.y   += tmargin;
             pC.prevDist = bmargin;
 
-            foreach(System* system, pC.sr.systems) {
+            for (System* system : pC.sr.systems) {
                   system->setPos(x, pC.y);
                   x += system->width();
                   pC.page->appendSystem(system);
@@ -3398,7 +3397,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                         tdd = restHeight;
                         td  = tdd / nn;
                         }
-                  if (s1->stretchDistance() + td > maxStretch) {
+                  if ((s1->stretchDistance() + td) > maxStretch) {
                         td = maxStretch - s1->stretchDistance();
                         tdd = td * nn;
                         }
@@ -3417,9 +3416,8 @@ void Score::layoutPage(const PageContext& pC, qreal d)
             }
 
       qreal y = 0.0;
-      n = page->systems()->size();
-      for (int i = 0; i < n; ++i) {
-            System* system = page->systems()->at(i);
+
+      for (System* system : *page->systems()) {
             system->move(0, y);
             if (system->addStretch())
                   y += system->stretchDistance();
