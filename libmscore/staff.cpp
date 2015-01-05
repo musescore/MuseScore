@@ -431,6 +431,8 @@ void Staff::write(Xml& xml) const
             xml.tag("neverHide", neverHide());
       if (showIfEmpty())
             xml.tag("showIfSystemEmpty", showIfEmpty());
+      if (_hideSystemBarLine)
+            xml.tag("hideSystemBarLine", _hideSystemBarLine);
 
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
@@ -509,6 +511,8 @@ void Staff::read(XmlReader& e)
                   setNeverHide(e.readInt());
             else if (tag == "showIfSystemEmpty")
                   setShowIfEmpty(e.readInt());
+            else if (tag == "hideSystemBarLine")
+                  _hideSystemBarLine = e.readInt();
             else if (tag == "keylist")
                   _keys.read(e, _score);
             else if (tag == "bracket") {

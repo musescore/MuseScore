@@ -15,8 +15,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "2.03"
-static const int MSCVERSION = 203;
+#define MSC_VERSION     "2.04"
+static const int MSCVERSION = 204;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -49,6 +49,7 @@ static const int MSCVERSION = 203;
 //    2.01  save SlurSegment position relative to staff
 //    2.02  save instrumentId, note slashes
 //    2.03  save Box topGap, bottomGap in spatium units
+//    2.04  added hideSystemBarLine flag to Staff
 
 
 

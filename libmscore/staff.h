@@ -113,6 +113,8 @@ class Staff : public QObject {
       bool _invisible    { false };
       bool _neverHide    { false };    ///< always show this staff, even if empty and hideEmptyStaves is true
       bool _showIfEmpty  { false };    ///< show this staff if system is empty and hideEmptyStaves is true
+      bool _hideSystemBarLine  { false }; // no system barline if not preceeded by staff with barline
+
       QColor _color      { MScore::defaultColor };
       qreal _userDist    { 0.0   };        ///< user edited extra distance
       qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
@@ -184,6 +186,9 @@ class Staff : public QObject {
       void setNeverHide(bool val)    { _neverHide = val;    }
       bool showIfEmpty() const       { return _showIfEmpty; }
       void setShowIfEmpty(bool val)  { _showIfEmpty = val;  }
+
+      void setHideSystemBarLine(bool val) { _hideSystemBarLine = val;  }
+      bool hideSystemBarLine() const      { return _hideSystemBarLine; }
 
       void setSlashStyle(bool val);
       int lines() const;

@@ -52,7 +52,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
-      
+
       const QIcon &editIcon = *icons[int(Icons::edit_ICON)];
       minPitchASelect->setIcon(editIcon);
       maxPitchASelect->setIcon(editIcon);
@@ -72,6 +72,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       staff->setNeverHide(orgStaff->neverHide());
       staff->setShowIfEmpty(orgStaff->showIfEmpty());
       staff->setUserMag(orgStaff->userMag());
+      staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
 
       // hide string data controls if instrument has no strings
       stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
@@ -83,6 +84,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       partName->setText(part->partName());
       neverHide->setChecked(staff->neverHide());
       showIfEmpty->setChecked(staff->showIfEmpty());
+      hideSystemBarLine->setChecked(staff->hideSystemBarLine());
       mag->setValue(staff->userMag() * 100.0);
       updateStaffType();
       updateInstrument();
@@ -251,6 +253,7 @@ void EditStaff::apply()
       QColor col     = color->color();
       bool nhide     = neverHide->isChecked();
       bool ifEmpty   = showIfEmpty->isChecked();
+      bool hideSystemBL = hideSystemBarLine->isChecked();
       qreal scale    = mag->value() / 100.0;
 
       QString newPartName = partName->text().simplified();
@@ -272,8 +275,9 @@ void EditStaff::apply()
          || nhide != orgStaff->neverHide()
          || ifEmpty != orgStaff->showIfEmpty()
          || scale != orgStaff->userMag()
+         || hideSystemBL != orgStaff->hideSystemBarLine()
          ) {
-            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide, ifEmpty, scale));
+            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide, ifEmpty, scale, hideSystemBL));
             }
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {

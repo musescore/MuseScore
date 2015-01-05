@@ -249,10 +249,10 @@ class StaffType {
       static const StaffType* preset(StaffTypes idx);
       static const StaffType* presetFromXmlName(QString& xmlName);
 
-      void setGenKeysig(bool val)              { _genKeysig = val;        }
-      bool genKeysig() const                   { return _genKeysig;       }
-      void setShowLedgerLines(bool val)        { _showLedgerLines = val;  }
-      bool showLedgerLines() const             { return _showLedgerLines; }
+      void setGenKeysig(bool val)              { _genKeysig = val;          }
+      bool genKeysig() const                   { return _genKeysig;         }
+      void setShowLedgerLines(bool val)        { _showLedgerLines = val;    }
+      bool showLedgerLines() const             { return _showLedgerLines;   }
 
       QString fretString(int fret, bool ghost) const;   // returns a string with the text for fret
       QString durationString(TDuration::DurationType type, int dots) const;
