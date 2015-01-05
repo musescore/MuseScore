@@ -194,6 +194,7 @@ QPointF BarLine::canvasPos() const
 void BarLine::getY(qreal* y1, qreal* y2) const
       {
       qreal _spatium = spatium();
+      int   span = _span;
       if (parent()) {
             int staffIdx1    = staffIdx();
             int staffIdx2    = staffIdx1 + _span - 1;
@@ -203,26 +204,35 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   }
             Measure* measure;
             System* system;
-            qreal yp = 0.0;
+            bool systemBarLine;
             if (parent()->type() == Element::Type::SEGMENT) {
                   Segment* segment = static_cast<Segment*>(parent());
                   measure = segment->measure();
                   system  = measure->system();
+                  systemBarLine = false;
                   }
             else {
                   system  = static_cast<System*>(parent());
                   measure = system->firstMeasure();
+                  for (int i = staffIdx1; i < staffIdx2; ++i) {
+                        if (!score()->staff(i)->hideSystemBarLine()) {
+                              span -= (i - staffIdx1);
+                              staffIdx1 = i;
+                              break;
+                              }
+                        }
+                  systemBarLine = true;
                   }
             if (measure) {
                   // test start and end staff visibility
-                  int   nstaves = score()->nstaves();
-                  int   span = _span;
+                  int nstaves = score()->nstaves();
                   Staff* staff1 = score()->staff(staffIdx1);
                   Staff* staff2 = score()->staff(staffIdx2);
                   SysStaff* sysStaff1 = system->staff(staffIdx1);
                   SysStaff* sysStaff2 = system->staff(staffIdx2);
                   while (span > 0) {
                         // if start staff not shown, reduce span and move one staff down
+
                         if ( !(sysStaff1->show() && staff1->show()) ) {
                               span--;
                               if (staffIdx1 >= nstaves-1)         // running out of staves?
@@ -251,8 +261,7 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   StaffLines* l1 = measure->staffLines(staffIdx1);
                   StaffLines* l2 = measure->staffLines(staffIdx2);
 
-                  if (system)
-                        yp += sysStaff1->y();
+                  qreal yp = (system && !systemBarLine) ? sysStaff1->y() : 0.0;
                   *y1 = l1->y1() - yp;
                   *y1 += (_spanFrom * staff1->lineDistance() * staff1->spatium()) / 2;
                   *y2 = l2->y1() - yp;
