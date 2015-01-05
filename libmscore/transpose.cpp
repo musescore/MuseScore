@@ -429,21 +429,24 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
       // create missing key signatures
       //
       if (trKeys && (mode != TransposeMode::DIATONICALLY) && (s1->tick() == 0)) {
-            Segment* seg = firstMeasure()->findSegment(Segment::Type::KeySig, 0);
+//            Segment* seg = firstMeasure()->findSegment(Segment::Type::KeySig, 0);
             Key nKey = transposeKey(Key::C, interval);
-            if (seg == 0) {
+//            if (seg == 0) {
                   for (int st : tracks) {
                         if (st % VOICES)
                               continue;
-                        KeySig* ks = new KeySig(this);
-                        ks->setTrack(st);
-                        ks->setKey(nKey);
                         Segment* seg = firstMeasure()->undoGetSegment(Segment::Type::KeySig, 0);
-                        ks->setParent(seg);
-                        undoAddElement(ks);
+                        KeySig* ks = static_cast<KeySig*>(seg->element(st));
+                        if (!ks) {
+                              ks = new KeySig(this);
+                              ks->setTrack(st);
+                              ks->setKey(nKey);
+                              ks->setParent(seg);
+                              undoAddElement(ks);
+                              }
                         }
                   }
-            }
+//            }
       }
 
 //---------------------------------------------------------
