@@ -1059,6 +1059,7 @@ static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QS
       {
       // set the default words format
       const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
+      const QString mtf = s->styleSt(StyleIdx::MusicalTextFont);
       CharFormat defFmt;
       defFmt.setFontFamily(tsStaff.family());
       defFmt.setFontSize(tsStaff.size());
@@ -1069,7 +1070,7 @@ static void creditWords(Xml& xml, Score* s, double x, double y, QString just, QS
       attr += QString(" default-y=\"%1\"").arg(y);
       attr += " justify=\"" + just + "\"";
       attr += " valign=\"" + val + "\"";
-      MScoreTextToMXML mttm("credit-words", attr, defFmt);
+      MScoreTextToMXML mttm("credit-words", attr, defFmt, mtf);
       mttm.writeTextFragments(words, xml);
       xml.etag();
       }
@@ -2981,6 +2982,7 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
 
       // set the default words format
       const TextStyle tsStaff = s->textStyle(TextStyleType::STAFF);
+      const QString mtf = s->styleSt(StyleIdx::MusicalTextFont);
       CharFormat defFmt;
       defFmt.setFontFamily(tsStaff.family());
       defFmt.setFontSize(tsStaff.size());
@@ -2990,7 +2992,7 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
             if (wordsLeft.size() > 0) {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD
-                  MScoreTextToMXML mttm("words", attr, defFmt);
+                  MScoreTextToMXML mttm("words", attr, defFmt, mtf);
                   mttm.writeTextFragments(wordsLeft, xml);
                   xml.etag();
                   }
@@ -3013,7 +3015,7 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
             if (wordsRight.size() > 0) {
                   xml.stag("direction-type");
                   QString attr; // TODO TBD
-                  MScoreTextToMXML mttm("words", attr, defFmt);
+                  MScoreTextToMXML mttm("words", attr, defFmt, mtf);
                   mttm.writeTextFragments(wordsRight, xml);
                   xml.etag();
                   }
@@ -3028,7 +3030,7 @@ static void wordsMetrome(Xml& xml, Score* s, Text const* const text)
                   else
                         attr = " enclosure=\"rectangle\"";
                   }
-            MScoreTextToMXML mttm("words", attr, defFmt);
+            MScoreTextToMXML mttm("words", attr, defFmt, mtf);
             //qDebug("words('%s')", qPrintable(text->text()));
             mttm.writeTextFragments(text->fragmentList(), xml);
             xml.etag();
@@ -3094,11 +3096,12 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       if (!rmk->textStyle().hasFrame()) attr = " enclosure=\"none\"";
       // set the default words format
       const TextStyle tsStaff = _score->textStyle(TextStyleType::STAFF);
+      const QString mtf = _score->styleSt(StyleIdx::MusicalTextFont);
       CharFormat defFmt;
       defFmt.setFontFamily(tsStaff.family());
       defFmt.setFontSize(tsStaff.size());
       // write formatted
-      MScoreTextToMXML mttm("rehearsal", attr, defFmt);
+      MScoreTextToMXML mttm("rehearsal", attr, defFmt, mtf);
       mttm.writeTextFragments(rmk->fragmentList(), xml);
       xml.etag();
       directionETag(xml, staff);
@@ -3443,11 +3446,12 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                         QString attr; // TODO TBD
                         // set the default words format
                         const TextStyle tsStaff = _score->textStyle(TextStyleType::LYRIC1);
+                        const QString mtf = _score->styleSt(StyleIdx::MusicalTextFont);
                         CharFormat defFmt;
                         defFmt.setFontFamily(tsStaff.family());
                         defFmt.setFontSize(tsStaff.size());
                         // write formatted
-                        MScoreTextToMXML mttm("text", attr, defFmt);
+                        MScoreTextToMXML mttm("text", attr, defFmt, mtf);
                         mttm.writeTextFragments(l->fragmentList(), xml);
                         /*
                          Temporarily disabled because it doesn't work yet (and thus breaks the regression test).

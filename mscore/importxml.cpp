@@ -1141,55 +1141,131 @@ void MusicXml::readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
       pf->setPrintableWidth(qMax(w1, w2));     // silently adjust right margins
       }
       
-      //---------------------------------------------------------
-      //   nextPartOfFormattedString
-      //---------------------------------------------------------
-      
-      /**
-       Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
-       */
-      
-      static QString nextPartOfFormattedString(QDomElement e)
+//---------------------------------------------------------
+//   text2syms
+//---------------------------------------------------------
+
+/**
+ Convert SMuFL code points to MuseScore <sym>...</sym>
+ */
+
+static QString text2syms(const QString& t)
       {
-            QString txt        = e.text();
-            QString lang       = e.attribute(QString("xml:lang"), "it");
-            QString fontWeight = e.attribute(QString("font-weight"));
-            QString fontSize   = e.attribute(QString("font-size"));
-            QString fontStyle  = e.attribute(QString("font-style"));
-            QString underline  = e.attribute(QString("underline"));
-            QString fontFamily = e.attribute(QString("font-family"));
-            // TODO: color, enclosure, yoffset in only part of the text, ...
-            QString importedtext;
-            if (!fontSize.isEmpty()) {
-                  bool ok = true;
-                  float size = fontSize.toFloat(&ok);
-                  if (ok)
-                        importedtext += QString("<font size=\"%1\"/>").arg(size);
+      //QTime time;
+      //time.start();
+
+      // first create a map from symbol (Unicode) text to symId
+      // note that this takes about 1 msec on a Core i5,
+      // caching does not gain much
+            
+      ScoreFont* sf = ScoreFont::fallbackFont();
+      QMap<QString, SymId> map;
+      int maxStringSize = 0;        // maximum string size found
+            
+      for (int i = int(SymId::noSym); i < int(SymId::lastSym); ++i) {
+            SymId id((SymId(i)));
+            QString string(sf->toString(id));
+            // insert all syms except space to prevent matching all regular spaces
+            if (id != SymId::space)
+                  map.insert(string, id);
+            if (string.size() > maxStringSize)
+                  maxStringSize = string.size();
             }
-            if (!fontFamily.isEmpty())
-                  importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
-            if (fontWeight == "bold")
-                  importedtext += "<b>";
-            if (fontStyle == "italic")
-                  importedtext += "<i>";
-            if (!underline.isEmpty()) {
-                  bool ok = true;
-                  int lines = underline.toInt(&ok);
-                  if (ok && (lines > 0))  // 1,2, or 3 underlines are imported as single underline
-                        importedtext += "<u>";
-                  else
-                        underline = "";
+      //qDebug("text2syms map count %d maxsz %d filling time elapsed: %d ms",
+      //       map.size(), maxStringSize, time.elapsed());
+      
+      // then look for matches
+      QString in = t;
+      QString res;
+            
+      while (in != "") {
+            // try to find the largest match possible
+            int maxMatch = qMin(in.size(), maxStringSize);
+            QString sym;
+            while (maxMatch > 0) {
+                  QString toBeMatched = in.left(maxMatch);
+                  if (map.contains(toBeMatched)) {
+                        sym = Sym::id2name(map.value(toBeMatched));
+                        break;
+                        }
+                  maxMatch--;
+                  }
+            if (maxMatch > 0) {
+                  // found a match, add sym to res and remove match from string in
+                  res += "<sym>";
+                  res += sym;
+                  res += "</sym>";
+                  in.remove(0, maxMatch);
+                  }
+            else {
+                  // not found, move one char from res to in
+                  res += in.left(1);
+                  in.remove(0, 1);
+                  }
             }
+
+      //qDebug("text2syms total time elapsed: %d ms, res '%s'", time.elapsed(), qPrintable(res));
+      return res;
+      }
+      
+//---------------------------------------------------------
+//   nextPartOfFormattedString
+//---------------------------------------------------------
+
+/**
+ Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
+ */
+      
+static QString nextPartOfFormattedString(QDomElement e)
+      {
+      QString txt        = e.text();
+      QString syms       = text2syms(txt);
+      QString lang       = e.attribute(QString("xml:lang"), "it");
+      QString fontWeight = e.attribute(QString("font-weight"));
+      QString fontSize   = e.attribute(QString("font-size"));
+      QString fontStyle  = e.attribute(QString("font-style"));
+      QString underline  = e.attribute(QString("underline"));
+      QString fontFamily = e.attribute(QString("font-family"));
+      // TODO: color, enclosure, yoffset in only part of the text, ...
+      QString importedtext;
+      if (!fontSize.isEmpty()) {
+            bool ok = true;
+            float size = fontSize.toFloat(&ok);
+            if (ok)
+                  importedtext += QString("<font size=\"%1\"/>").arg(size);
+      }
+      if (!fontFamily.isEmpty() && txt == syms) {
+            // add font family only if no <sym> replacement made
+            importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
+            }
+      if (fontWeight == "bold")
+            importedtext += "<b>";
+      if (fontStyle == "italic")
+            importedtext += "<i>";
+      if (!underline.isEmpty()) {
+            bool ok = true;
+            int lines = underline.toInt(&ok);
+            if (ok && (lines > 0))  // 1,2, or 3 underlines are imported as single underline
+                  importedtext += "<u>";
+            else
+                  underline = "";
+      }
+      if (txt == syms) {
             txt.replace(QString("\r"), QString("")); // convert Windows line break \r\n -> \n
             importedtext += txt.toHtmlEscaped();
-            if (underline != "")
-                  importedtext += "</u>";
-            if (fontStyle == "italic")
-                  importedtext += "</i>";
-            if (fontWeight == "bold")
-                  importedtext += "</b>";
-            //qDebug("importedtext '%s'", qPrintable(importedtext));
-            return importedtext;
+            }
+      else {
+            // <sym> replacement made, should be no need for line break or other conversions
+            importedtext += syms;
+            }
+      if (underline != "")
+            importedtext += "</u>";
+      if (fontStyle == "italic")
+            importedtext += "</i>";
+      if (fontWeight == "bold")
+            importedtext += "</b>";
+      //qDebug("importedtext '%s'", qPrintable(importedtext));
+      return importedtext;
       }
       
 //---------------------------------------------------------
