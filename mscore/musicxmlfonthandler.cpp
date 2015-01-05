@@ -75,8 +75,8 @@ void dumpText(const QList<TextFragment>& list)
 //   MScoreTextToMXML
 //---------------------------------------------------------
 
-MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt)
-      : attribs(attr), tagname(tag), oldFormat(defFmt)
+MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt, const QString& mtf)
+      : attribs(attr), tagname(tag), oldFormat(defFmt), musicalTextFont(mtf)
       {
       // set MusicXML defaults
       oldFormat.setBold(false);
@@ -249,15 +249,14 @@ void MScoreTextToMXML::writeTextFragments(const QList<TextFragment>& fr, Xml& xm
       bool firstTime = true; // write additional attributes only the first time characters are written
       for (const TextFragment& f : fr) {
             newFormat = f.format;
-            if (f.format.type() == CharFormatType::TEXT) {
-                  QString formatAttr = updateFormat();
-                  xml.tag(tagname + (firstTime ? attribs : "") + formatAttr, f.text);
-                  firstTime = false;
+            if (f.format.type() == CharFormatType::SYMBOL) {
+                  // for symbols, only an explicit font change is required
+                  // fragment text is already SMuFL-compliant
+                  newFormat.setFontFamily(musicalTextFont);
                   }
-            else {
-                  for (const SymId id : f.ids)
-                        ; // TODO TBD
-                  }
+            QString formatAttr = updateFormat();
+            xml.tag(tagname + (firstTime ? attribs : "") + formatAttr, f.text);
+            firstTime = false;
             }
       }
 
