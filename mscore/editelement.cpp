@@ -99,8 +99,6 @@ void ScoreView::endEdit()
             score()->addRefresh(grip[i]);
 
       editObject->endEdit();
-      if (mscore->inspector())
-            mscore->inspector()->setElement(0);
 
       _score->addRefresh(editObject->canvasBoundingRect());
 
@@ -115,7 +113,6 @@ void ScoreView::endEdit()
             Text* text = static_cast<Text*>(editObject);
             if (text->isEmpty())
                   _score->undoRemoveElement(text);
-            editObject = nullptr;
             }
 
       _score->endCmd();
@@ -126,8 +123,10 @@ void ScoreView::endEdit()
             _score->select(curElement);
             _score->end();
             }
-      editObject     = nullptr;
-      grips          = 0;
+      mscore->updateInspector();
+
+      editObject = nullptr;
+      grips      = 0;
       }
 
 //---------------------------------------------------------

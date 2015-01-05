@@ -279,6 +279,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       updateGrips();
       _score->update();
       mscore->endCmd();
+      mscore->updateInspector();
       ev->accept();
       }
 

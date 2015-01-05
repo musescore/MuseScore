@@ -411,7 +411,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateUndoRedo();
       void changeScore(int);
       virtual void resizeEvent(QResizeEvent*);
-      void updateInspector();
       void showModeText(const QString&);
       void addRecentScore(const QString& scorePath);
 
@@ -677,6 +676,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showLoginDialog();
       void showUploadScoreDialog();
       LoginManager* loginManager() { return _loginManager; }
+
+      void updateInspector();
       };
 
 extern MuseScore* mscore;
