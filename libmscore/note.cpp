@@ -2216,7 +2216,7 @@ QVariant Note::getProperty(P_ID propertyId) const
 
 bool Note::setProperty(P_ID propertyId, const QVariant& v)
       {
-      Measure* m = chord()->measure();
+      Measure* m = chord() ? chord()->measure() : nullptr;
       switch(propertyId) {
             case P_ID::PITCH:
                   setPitch(v.toInt());
