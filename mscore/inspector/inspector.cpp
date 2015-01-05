@@ -434,6 +434,8 @@ InspectorRest::InspectorRest(QWidget* parent)
       hbox->addWidget(tuplet);
       _layout->addLayout(hbox);
 
+      e.offsetY->setSingleStep(1.0);        // step in spatium units
+
       connect(tuplet,   SIGNAL(clicked()),     SLOT(tupletClicked()));
       }
 
