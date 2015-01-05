@@ -138,7 +138,7 @@ void Rest::draw(QPainter* painter) const
 
 //---------------------------------------------------------
 //   setUserOff, overriden from Element
-//    - raster vertical position in spatium units
+//    (- raster vertical position in spatium units) -> no
 //    - half rests and whole rests outside the staff are
 //      replaced by special symbols with ledger lines
 //---------------------------------------------------------
@@ -157,7 +157,8 @@ void Rest::setUserOff(const QPointF& o)
       else if (_sym == SymId::restHalfLegerLine && (line > -3 && line < 3))
             _sym = SymId::restHalf;
 
-      Element::setUserOff(QPointF(o.x(), qreal(line) * _spatium));
+//      Element::setUserOff(QPointF(o.x(), qreal(line) * _spatium));
+      Element::setUserOff(o);
       }
 
 //---------------------------------------------------------
