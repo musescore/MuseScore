@@ -310,6 +310,8 @@ class Text : public Element {
       virtual QString subtypeName() const;
 
       QList<TextFragment> fragmentList() const; // for MusicXML formatted export
+
+      static bool validateText(QString& s);
       };
 
 
