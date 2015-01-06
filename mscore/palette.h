@@ -116,6 +116,7 @@ class Palette : public QWidget {
       qreal extraMag;
       bool _drawGrid;
       bool _selectable;
+      bool _disableDoubleClick { false };
       bool _readOnly;
       bool _systemPalette;
       qreal _yOffset;         // in spatium units of "gscore"
@@ -176,6 +177,7 @@ class Palette : public QWidget {
       void setSelected(int idx)      { selectedIdx = idx;  }
       bool readOnly() const          { return _readOnly;   }
       void setReadOnly(bool val);
+      void setDisableDoubleClick(bool val) { _disableDoubleClick = val; }
 
       bool systemPalette() const     { return _systemPalette; }
       void setSystemPalette(bool val);

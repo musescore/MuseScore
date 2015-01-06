@@ -298,6 +298,8 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 
 void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       {
+      if (_disableDoubleClick)
+            return;
       int i = idx(ev->pos());
       if (i == -1)
             return;
