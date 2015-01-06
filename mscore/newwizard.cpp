@@ -346,6 +346,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       b1->setAccessibleName(title());
       sp = MuseScore::newKeySigPalette();
       sp->setSelectable(true);
+      sp->setDisableDoubleClick(true);
       sp->setSelected(14);
       PaletteScrollArea* sa = new PaletteScrollArea(sp);
       QVBoxLayout* l1 = new QVBoxLayout;
