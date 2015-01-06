@@ -92,8 +92,6 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
       connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
       connect(changeStaffType,      SIGNAL(clicked()),            SLOT(showStaffTypeDialog()));
-//      connect(editShortName,        SIGNAL(clicked()),            SLOT(editShortNameClicked()));
-//      connect(editLongName,         SIGNAL(clicked()),            SLOT(editLongNameClicked()));
       connect(minPitchASelect,      SIGNAL(clicked()),            SLOT(minPitchAClicked()));
       connect(maxPitchASelect,      SIGNAL(clicked()),            SLOT(maxPitchAClicked()));
       connect(minPitchPSelect,      SIGNAL(clicked()),            SLOT(minPitchPClicked()));
@@ -226,6 +224,17 @@ void EditStaff::apply()
       Score* score  = orgStaff->score();
       Part* part    = orgStaff->part();
 
+      QString sn = shortName->toPlainText();
+      QString ln = longName->toPlainText();
+      if (!Text::validateText(sn) || !Text::validateText(ln)) {
+            QMessageBox msgBox;
+            msgBox.setText(tr("The instrument name is invalid."));
+            msgBox.exec();
+            return;
+            }
+      shortName->setPlainText(sn);  // show the fixed text
+      longName->setPlainText(ln);
+
       int intervalIdx = iList->currentIndex();
       bool upFlag     = up->isChecked();
 
@@ -241,11 +250,10 @@ void EditStaff::apply()
       instrument.setMaxPitchA(_maxPitchA);
       instrument.setMinPitchP(_minPitchP);
       instrument.setMaxPitchP(_maxPitchP);
-      Text text(0);
-//      instrument.setShortName(text.convertFromHtml(shortName->toHtml()));
-      instrument.setShortName(shortName->toPlainText());
-//      instrument.setLongName(text.convertFromHtml(longName->toHtml()));
-      instrument.setLongName(longName->toPlainText());
+
+//      Text text(0);
+      instrument.setShortName(sn);
+      instrument.setLongName(ln);
 
       bool s         = small->isChecked();
       bool inv       = invisible->isChecked();

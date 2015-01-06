@@ -2713,7 +2713,7 @@ QString Text::subtypeName() const
             }
       return rez;
       }
-      
+
 //---------------------------------------------------------
 //   fragmentList
 //---------------------------------------------------------
@@ -2753,6 +2753,70 @@ QList<TextFragment> Text::fragmentList() const
                   }
             }
       return res;
+      }
+
+//---------------------------------------------------------
+//   validateText
+//    check if s is a valid musescore xml text string
+//    - simple bugs are automatically adjusted
+//   return true if text is valid or could be fixed
+//  (this is incomplete/experimental)
+//---------------------------------------------------------
+
+bool Text::validateText(QString& s)
+      {
+      QString d;
+      for (int i = 0; i < s.size(); ++i) {
+            QChar c = s[i];
+            if (c == '&') {
+                  const char* ok[] { "amp;", "lt;", "gt;", "quot" };
+                  QString t = s.mid(i+1);
+                  bool found = false;
+                  for (auto k : ok) {
+                        if (t.startsWith(k)) {
+                              d.append(c);
+                              d.append(k);
+                              i += strlen(k);
+                              found = true;
+                              break;
+                              }
+                        }
+                  if (!found)
+                        d.append("&amp;");
+                  }
+            else if (c == '<') {
+                  const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "font ", "/font>" };
+                  QString t = s.mid(i+1);
+                  bool found = false;
+                  for (auto k : ok) {
+                        if (t.startsWith(k)) {
+                              d.append(c);
+                              d.append(k);
+                              i += strlen(k);
+                              found = true;
+                              break;
+                              }
+                        }
+                  if (!found)
+                        d.append("&lt;");
+                  }
+            else
+                  d.append(c);
+            }
+      QString ss = "<data>" + d + "</data>\n";
+      XmlReader xml(ss);
+      while (xml.readNextStartElement())
+            ; // qDebug("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
+      if (xml.error() == XmlStreamReader::NoError) {
+            s = d;
+            return true;
+            }
+      qDebug("xml error at line %lld column %lld: %s",
+            xml.lineNumber(),
+            xml.columnNumber(),
+            qPrintable(xml.errorString()));
+      qDebug ("text: |%s|", qPrintable(ss));
+      return false;
       }
 
 }
