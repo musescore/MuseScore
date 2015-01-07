@@ -1811,6 +1811,7 @@ void Preferences::writePluginList()
 //    pluginList
 //---------------------------------------------------------
 
+#ifdef SCRIP_INTERFACE
 static void updatePluginList(QList<QString>& pluginPathList, const QString& pluginPath,
    QList<PluginDescription>& pluginList)
       {
@@ -1842,9 +1843,11 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
                   updatePluginList(pluginPathList, path, pluginList);
             }
       }
+#endif
 
 void Preferences::updatePluginList()
       {
+#ifdef SCRIP_INTERFACE
       QList<QString> pluginPathList;
       pluginPathList.append(dataPath + "/plugins");
       pluginPathList.append(mscoreGlobalShare + "plugins");
@@ -1863,6 +1866,7 @@ void Preferences::updatePluginList()
             else
                   ++i;
             }
+#endif
       }
 
 //---------------------------------------------------------

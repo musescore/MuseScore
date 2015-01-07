@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>616</width>
+    <width>697</width>
     <height>281</height>
    </rect>
   </property>
@@ -117,7 +117,7 @@
    <item row="0" column="0" rowspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="masterEffectsTab">
       <attribute name="title">
@@ -127,10 +127,22 @@
        <item row="1" column="0" colspan="6">
         <widget class="QStackedWidget" name="effectStackA">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>640</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>640</width>
+           <height>16777215</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -152,7 +164,26 @@
         </widget>
        </item>
        <item row="2" column="0" colspan="6">
-        <widget class="QStackedWidget" name="effectStackB"/>
+        <widget class="QStackedWidget" name="effectStackB">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>640</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>640</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_2">

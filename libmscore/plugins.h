@@ -14,6 +14,7 @@
 #define __PLUGINS_H__
 
 #include "config.h"
+
 #ifdef SCRIPT_INTERFACE
 #include "libmscore/element.h"
 #include "libmscore/score.h"

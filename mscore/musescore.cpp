@@ -69,9 +69,10 @@
 #include "inspector/inspector.h"
 #include "omrpanel.h"
 #include "shortcut.h"
+#ifdef SCRIPT_INTERFACE
 #include "pluginCreator.h"
 #include "pluginManager.h"
-// #include "plugins.h"
+#endif
 #include "helpBrowser.h"
 #include "drumtools.h"
 #include "editstafftype.h"
@@ -89,7 +90,6 @@
 
 #include "driver.h"
 
-// #include "effects/freeverb/freeverb.h"
 #include "effects/zita1/zita.h"
 #include "effects/noeffect/noeffect.h"
 #include "synthesizer/synthesizer.h"
@@ -4404,7 +4404,6 @@ void MuseScore::pluginTriggered(int) {}
 void MuseScore::loadPlugins() {}
 bool MuseScore::loadPlugin(const QString&) { return false;}
 void MuseScore::unloadPlugins() {}
-QQmlEngine* MuseScore::qml() { return 0; }
 #endif
 
 //---------------------------------------------------------
@@ -4445,6 +4444,7 @@ using namespace Ms;
 
 int main(int argc, char* av[])
       {
+      QApplication::setDesktopSettingsAware(false);
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
       qInstallMessageHandler(mscoreMessageHandler);
 #endif
@@ -4464,19 +4464,12 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
+
       Q_INIT_RESOURCE(zita);
-      Q_INIT_RESOURCE(noeffect);
-//      Q_INIT_RESOURCE(freeverb);
 
 #ifndef Q_OS_MAC
-      // Save the preferences in QSettings::NativeFormat
       QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
-
-      if (!QFontDatabase::supportsThreadedFontRendering()) {
-            qDebug("Your computer does not support threaded font rendering!");
-            exit(-1);
-            }
 
       QStringList argv =  QCoreApplication::arguments();
       argv.removeFirst();
@@ -4607,12 +4600,10 @@ int main(int argc, char* av[])
                         return 0;
                   }
             else
-                  if (app->sendMessage(QString(""))) {
+                  if (app->sendMessage(QString("")))
                       return 0;
-                      }
             }
 
-/**/
       if (dataPath.isEmpty())
             dataPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
 
@@ -4624,8 +4615,7 @@ int main(int argc, char* av[])
 
       // create local plugin directory
       // if not already there:
-      QDir dir;
-      dir.mkpath(dataPath + "/plugins");
+      QDir().mkpath(dataPath + "/plugins");
 
       if (MScore::debugMode)
             qDebug("global share: <%s>", qPrintable(mscoreGlobalShare));

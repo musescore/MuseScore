@@ -10,6 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "config.h"
+#ifdef SCRIPT_INTERFACE
+
 #include "qmlplugin.h"
 #include "shortcut.h"
 #include "musescoreCore.h"
@@ -138,4 +141,5 @@ MsProcess* QmlPlugin::newQProcess()
       return 0; // TODO: new MsProcess(this);
       }
 }
+#endif
 

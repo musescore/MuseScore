@@ -21,24 +21,20 @@ class Effect;
 //   EffectGui
 //---------------------------------------------------------
 
-class EffectGui : public QQuickWidget {
+class EffectGui : public QWidget {
       Q_OBJECT
       Effect* _effect;
 
    signals:
       void valueChanged();
 
-   private slots:
-      void reportErrors(QQuickWidget::Status);
-
    public slots:
       void valueChanged(const QString& name, qreal);
 
    public:
-      EffectGui(Effect*);
-      void init(QUrl& url);
+      EffectGui(Effect*, QWidget* parent = 0);
       Effect* effect() const    { return _effect; }
-      virtual void updateValues();
+      virtual void updateValues() = 0;
       };
 
 }
