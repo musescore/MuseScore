@@ -43,6 +43,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       cs                 = 0;
       tempoSliderIsPressed = false;
       setupUi(this);
+      setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       QSettings settings;
