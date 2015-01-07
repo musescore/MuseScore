@@ -58,6 +58,7 @@ void MuseScore::showMasterPalette(const QString& s)
       if (masterPalette == 0) {
             masterPalette = new MasterPalette(this);
             connect(masterPalette, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
+            mscore->stackUnder(masterPalette);
             }
       masterPalette->setVisible(a->isChecked());
       if (!s.isEmpty())
@@ -116,7 +117,6 @@ MasterPalette::MasterPalette(QWidget* parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);
 
       addPalette(MuseScore::newGraceNotePalette(false));
       addPalette(MuseScore::newClefsPalette(false));
