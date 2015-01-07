@@ -291,7 +291,7 @@ void MyWebView::addToJavascript()
 
 QSize MyWebView::sizeHint() const
       {
-      return QSize(300 , 600);
+      return QSize(300 * guiScaling, 600 * guiScaling);
       }
 
 //---------------------------------------------------------
