@@ -331,5 +331,15 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
             }
       }
 
+//---------------------------------------------------------
+//   sizeHint
+//---------------------------------------------------------
+
+QSize ExampleView::sizeHint() const
+      {
+      return QSize(1000 * guiScaling, 80 * guiScaling);
+      }
+
+
 }
 
