@@ -2463,9 +2463,10 @@ void Score::cmdExplode()
       Selection srcSelection(selection());
 
       // copy to all destination staves
+      Segment* firstCRSegment = startMeasure->tick2segment(startMeasure->tick());
       for (int i = 1; srcStaff + i < lastStaff; ++i) {
             int track = (srcStaff + i) * VOICES;
-            ChordRest* cr = startMeasure->findChordRest(0, track);
+            ChordRest* cr = static_cast<ChordRest*>(firstCRSegment->element(track));
             if (cr) {
                   XmlReader e(srcSelection.mimeData());
                   e.setPasteMode(true);
