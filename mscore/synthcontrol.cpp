@@ -58,15 +58,21 @@ SynthControl::SynthControl(QWidget* parent)
       effectA->clear();
       for (Effect* e : synti->effectList(0)) {
             effectA->addItem(tr(e->name()));
-            effectStackA->addWidget(e->gui());
-            connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
+            EffectGui* gui = e->gui();
+            if (gui) {
+                  effectStackA->addWidget(gui);
+                  connect(gui, SIGNAL(valueChanged()), SLOT(setDirty()));
+                  }
             }
 
       effectB->clear();
       for (Effect* e : synti->effectList(1)) {
             effectB->addItem(tr(e->name()));
-            effectStackB->addWidget(e->gui());
-            connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
+            EffectGui* gui = e->gui();
+            if (gui) {
+                  effectStackB->addWidget(gui);
+                  connect(gui, SIGNAL(valueChanged()), SLOT(setDirty()));
+                  }
             }
       if (!useFactorySettings) {
             QSettings settings;
@@ -75,7 +81,6 @@ SynthControl::SynthControl(QWidget* parent)
             move(settings.value("pos", QPoint(10, 10)).toPoint());
             settings.endGroup();
             }
-
       metronome->setDefaultAction(getAction("metronome"));
       mgain->setValue(seq->metronomeGain());
 
@@ -328,9 +333,9 @@ void SynthControl::updateGui()
       int idx = synti->indexOfEffect(0);
       effectA->setCurrentIndex(idx);
       effectStackA->setCurrentIndex(idx);
-      if (synti->effect(0))
+      if (synti->effect(0) && synti->effect(0)->gui())
             synti->effect(0)->gui()->updateValues();
-      if (synti->effect(1))
+      if (synti->effect(1) && synti->effect(1)->gui())
             synti->effect(1)->gui()->updateValues();
 
       idx = synti->indexOfEffect(1);

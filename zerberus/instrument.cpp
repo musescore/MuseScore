@@ -33,7 +33,7 @@ int ZInstrument::idx;
 
 Sample::~Sample()
       {
-      delete _data;
+      delete[] _data;
       }
 
 //---------------------------------------------------------
@@ -74,7 +74,7 @@ Sample* ZInstrument::readSample(const QString& s, MQZipReader* uz)
       Sample* sa  = new Sample(channel, data, frames, sr);
 
       if (frames != a.read(data + channel, frames)) {
-            printf("Sample read failed: %s\n", a.error());
+            qDebug("Sample read failed: %s\n", a.error());
             delete sa;
             sa = 0;
             }

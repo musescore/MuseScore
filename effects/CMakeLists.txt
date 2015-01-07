@@ -20,15 +20,14 @@ endif (APPLE)
 
 QT4_ADD_RESOURCES (qrc_effects_files
       zita1/zita.qrc
-#      freeverb/freeverb.qrc
-      noeffect/noeffect.qrc
       )
 
 QT4_WRAP_CPP(effectMocs
       effectgui.h
-#      freeverb/freeverb.h
       zita1/zita.h
+      zita1/zitagui.h
       noeffect/noeffect.h
+      noeffect/noeffectgui.h
       effect.h
       )
 
@@ -40,8 +39,6 @@ add_library (effects STATIC
       effect.cpp
       effectgui.cpp
       noeffect/noeffect.cpp
-#      freeverb/freeverb.cpp
-#      freeverb/freeverbgui.cpp
       zita1/zita.cpp
       zita1/zitagui.cpp
       ${INCS}
