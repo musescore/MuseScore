@@ -41,7 +41,6 @@ SynthControl::SynthControl(QWidget* parent)
       _score = 0;
 
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);
 
       int idx = 0;
       for (Synthesizer* s : synti->synthesizer()) {
@@ -132,6 +131,7 @@ void MuseScore::showSynthControl(bool val)
       QAction* a = getAction("synth-control");
       if (synthControl == 0) {
             synthControl = new SynthControl(this);
+            mscore->stackUnder(synthControl);
             synthControl->setScore(cs);
             connect(synti,        SIGNAL(gainChanged(float)), synthControl, SLOT(setGain(float)));
             connect(synthControl, SIGNAL(gainChanged(float)), synti, SLOT(setGain(float)));

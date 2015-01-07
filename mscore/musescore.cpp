@@ -1616,6 +1616,7 @@ void MuseScore::showPlayPanel(bool visible)
             connect(synti,     SIGNAL(gainChanged(float)), playPanel, SLOT(setGain(float)));
             playPanel->setGain(synti->gain());
             playPanel->setScore(cs);
+            mscore->stackUnder(playPanel);
             }
       playPanel->setVisible(visible);
       playId->setChecked(visible);

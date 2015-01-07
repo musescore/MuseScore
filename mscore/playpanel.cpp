@@ -28,11 +28,6 @@
 
 namespace Ms {
 
-#if 0 // yet(?) unused
-const int MIN_VOL = -60;
-const int MAX_VOL = 10;
-#endif
-
 static const int DEFAULT_POS_X  = 300;
 static const int DEFAULT_POS_Y  = 100;
 
@@ -49,7 +44,6 @@ PlayPanel::PlayPanel(QWidget* parent)
       tempoSliderIsPressed = false;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);
 
       QSettings settings;
       restoreGeometry(settings.value("playPanel/geometry").toByteArray());
