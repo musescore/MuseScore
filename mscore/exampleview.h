@@ -46,8 +46,8 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual void dragLeaveEvent(QDragLeaveEvent*);
       virtual void dragMoveEvent(QDragMoveEvent*);
       virtual void dropEvent(QDropEvent*);
-      virtual QSize sizeHint() const { return QSize(1000, 80); }
       virtual void mousePressEvent(QMouseEvent*);
+      virtual QSize sizeHint() const;
 
    signals:
       void noteClicked(Note*);
