@@ -4445,7 +4445,7 @@ using namespace Ms;
 
 int main(int argc, char* av[])
       {
-      QApplication::setDesktopSettingsAware(false);
+      QApplication::setDesktopSettingsAware(true);
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
       qInstallMessageHandler(mscoreMessageHandler);
 #endif
