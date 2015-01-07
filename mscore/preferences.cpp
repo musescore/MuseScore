@@ -37,7 +37,6 @@
 #include "file.h"
 #include "libmscore/mscore.h"
 #include "shortcut.h"
-// #include "plugins.h"
 #include "zerberus/zerberus.h"
 #include "fluid/fluid.h"
 #include "pathlistdialog.h"
@@ -1811,7 +1810,7 @@ void Preferences::writePluginList()
 //    pluginList
 //---------------------------------------------------------
 
-#ifdef SCRIP_INTERFACE
+#ifdef SCRIPT_INTERFACE
 static void updatePluginList(QList<QString>& pluginPathList, const QString& pluginPath,
    QList<PluginDescription>& pluginList)
       {
@@ -1847,7 +1846,7 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
 
 void Preferences::updatePluginList()
       {
-#ifdef SCRIP_INTERFACE
+#ifdef SCRIPT_INTERFACE
       QList<QString> pluginPathList;
       pluginPathList.append(dataPath + "/plugins");
       pluginPathList.append(mscoreGlobalShare + "plugins");
