@@ -481,13 +481,24 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         }
                   int track = -1;
                   if (e->track() != -1) {
+                        // try to map track
                         track = mapTrack(e->track(), map);
-                        if (track == -1)
-                              continue;
+                        if (track == -1) {
+                              // even if track not in excerpt, we need to clone system elements
+                              if (e->systemFlag())
+                                    track = 0;
+                              else
+                                    continue;
+                              }
                         }
 
                   Element* ne;
-                  if (e->type() == Element::Type::TEXT || e->type() == Element::Type::LAYOUT_BREAK) // link the title, subtitle etc...
+                  // link text - title, subtitle, also repeats (eg, coda/segno)
+                  // measure numbers are not stored in this list, but they should not be cloned anyhow
+                  // layout breaks other than section were skipped above,
+                  // but section breaks do need to be cloned & linked
+                  // other measure-attached elements (?) are cloned but not linked
+                  if (e->isText() || e->type() == Element::Type::LAYOUT_BREAK)
                         ne = e->linkedClone();
                   else
                         ne = e->clone();
