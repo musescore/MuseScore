@@ -1523,7 +1523,8 @@ void AddElement::endUndoRedo(bool isUndo) const
             m->cmdUpdateNotes(element->staffIdx());
             }
       else if (element->type() == Element::Type::KEYSIG) {
-            element->score()->cmdUpdateNotes();
+            if (element->score()->undo()->active())
+                  element->score()->cmdUpdateNotes();
             }
       }
 

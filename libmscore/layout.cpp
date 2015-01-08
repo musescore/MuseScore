@@ -1615,7 +1615,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
                   keysig->setParent(seg);
                   keysig->layout();
-                  undoAddElement(keysig);
+                  undo(new AddElement(keysig));
                   }
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
