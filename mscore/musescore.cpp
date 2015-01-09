@@ -215,10 +215,10 @@ static QString getSharePath()
 static void printVersion(const char* prog)
       {
 #ifdef MSCORE_UNSTABLE
-      qDebug("%s: Music Score Editor\nUnstable Prerelease for Version %s; Build %s",
+      fprintf(stderr, "%s: Music Score Editor\nUnstable Prerelease for Version %s; Build %s\n",
          prog, VERSION, qPrintable(revision));
 #else
-     qDebug("%s: Music Score Editor; Version %s; Build %s", prog, VERSION, qPrintable(revision));
+      fprintf(stderr, "%s: Music Score Editor; Version %s; Build %s\n", prog, VERSION, qPrintable(revision));
 #endif
       }
 
@@ -1238,7 +1238,11 @@ void MuseScore::updateTabNames()
 static void usage()
       {
       printVersion("MuseScore");
+#if defined(Q_OS_WIN)
+      fprintf(stderr, "Usage: MuseScore.exe flags scorefile\n"
+#else
       fprintf(stderr, "Usage: mscore flags scorefile\n"
+#endif
         "   Flags:\n"
         "   -v        print version\n"
         "   -d        debug mode\n"
