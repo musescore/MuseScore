@@ -20,6 +20,7 @@
 #include "config.h"
 #include "plugins.h"
 
+#ifdef SCRIPT_INTERFACE
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "libmscore/chord.h"
@@ -233,3 +234,4 @@ const QTransform& MsScoreView::matrix() const
       }
 
 }
+#endif
