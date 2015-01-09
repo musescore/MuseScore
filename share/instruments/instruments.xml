@@ -8159,6 +8159,12 @@
                   <trackName>Bouzouki (3-course)</trackName>
                   <description>Bouzouki (3-course)</description>
                   <musicXMLid>pluck.bouzouki</musicXMLid>
+                  <StringData>
+                        <frets>27</frets>
+                        <string>50</string>
+                        <string>57</string>
+                        <string>62</string>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-89</aPitchRange>
@@ -8174,6 +8180,13 @@
                   <trackName>Bouzouki (4-course)</trackName>
                   <description>Bouzouki (4-course)</description>
                   <musicXMLid>pluck.bouzouki</musicXMLid>
+                  <StringData>
+                        <frets>27</frets>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-89</aPitchRange>
