@@ -2742,8 +2742,9 @@ static void directionTag(Xml& xml, Attributes& attr, Element const* const el = 0
                         }
                   }
             else if (el->type() == Element::Type::DYNAMIC
-                     || el->type() == Element::Type::STAFF_TEXT
+                     || el->type() == Element::Type::INSTRUMENT_CHANGE
                      || el->type() == Element::Type::REHEARSAL_MARK
+                     || el->type() == Element::Type::STAFF_TEXT
                      || el->type() == Element::Type::SYMBOL
                      || el->type() == Element::Type::TEXT) {
                   // handle other elements attached (e.g. via Segment / Measure) to a system
@@ -3827,6 +3828,7 @@ static void annotations(ExportMusicXml* exp, Xml&, int strack, int etrack, int t
                                     break;
                               case Element::Type::STAFF_TEXT:
                               case Element::Type::TEXT:
+                              case Element::Type::INSTRUMENT_CHANGE:
                                     exp->words(static_cast<const Text*>(e), sstaff);
                                     break;
                               case Element::Type::DYNAMIC:
@@ -4324,15 +4326,12 @@ void ExportMusicXml::write(QIODevice* dev)
             else {
                   foreach (const Instrument* i, instrMap.keys()) {
                         int instNr = instrMap.value(i);
-                        // TODO: remove "+ 3" (requires regenerating the mtest xml files)
-                        // Furthermore, it invalidates multi-instrument part (no "+3" in ExportMusicXml::Chord)
-                        scoreInstrument(xml, idx + 1, instNr + 3, MScoreTextToMXML::toPlainText(i->trackName()));
+                        scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(i->trackName()));
                         }
                   foreach (const Instrument* i, instrMap.keys()) {
                         int instNr = instrMap.value(i);
-                        // TODO: remove "+ 3" (requires regenerating the mtest xml files)
-                        xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 3)).arg(part->midiPort() + 1), "");
-                        midiInstrument(xml, idx + 1, instNr + 3, i, _score);
+                        xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(part->midiPort() + 1), "");
+                        midiInstrument(xml, idx + 1, instNr + 1, i, _score);
                         }
                   }
 
