@@ -9,7 +9,7 @@ MuseScore {
 
       width:  400
       height: 400
-      onRun: {
+      Component.onCompleted: {
             if (typeof curScore === 'undefined')
                   Qt.quit();
 
