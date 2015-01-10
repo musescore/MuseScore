@@ -258,6 +258,7 @@ public:
 //---------------------------------------------------------
 
 typedef QHash<const Chord*, const Trill*> TrillHash;
+typedef QMap<const Instrument*, int> MxmlInstrumentMap;
 
 class ExportMusicXml {
       Score* _score;
@@ -275,6 +276,7 @@ class ExportMusicXml {
       int tenths;
       TrillHash trillStart;
       TrillHash trillStop;
+      MxmlInstrumentMap instrMap;
 
       int findHairpin(const Hairpin* tl) const;
       int findBracket(const TextLine* tl) const;
@@ -2225,6 +2227,15 @@ static void writeBeam(Xml& xml, ChordRest* cr, Beam* b)
                   xml.tag(QString("beam number=\"%1\"").arg(i), s);
             }
       }
+      
+//---------------------------------------------------------
+//   instrId
+//---------------------------------------------------------
+
+static QString instrId(int partNr, int instrNr)
+{
+      return QString("id=\"P%1-I%2\"").arg(partNr).arg(instrNr);
+}
 
 //---------------------------------------------------------
 //   chord
@@ -2238,9 +2249,14 @@ static void writeBeam(Xml& xml, ChordRest* cr, Beam* b)
 
 void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset)
       {
+      Part* part = chord->score()->staff(chord->track() / VOICES)->part();
+      int partNr = _score->parts().indexOf(part);
+      int instNr = instrMap.value(part->instr(tick), -1);
       /*
       qDebug("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",
              chord, chord->parent(), chord->isGrace(), chord->graceNotes().size(), chord->graceIndex());
+      qDebug("track %d tick %d part %p nr %d instr %p nr %d",
+             chord->track(), chord->tick(), part, partNr, part->instr(tick), instNr);
       foreach(Element* e, chord->el())
             qDebug("chord %p el %p", chord, e);
        */
@@ -2340,9 +2356,13 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
             if (note->tieFor())
                   xml.tagE("tie type=\"start\"");
 
-            // instrument for unpitched
-            if (useDrumset != DrumsetKind::NONE)
-                  xml.tagE(QString("instrument id=\"P%1-I%2\"").arg(_score->parts().indexOf(note->staff()->part()) + 1).arg(note->pitch() + 1));
+            // instrument for multi-instrument or unpitched parts
+            if (useDrumset == DrumsetKind::NONE) {
+                  if (instrMap.size() > 1 && instNr >= 0)
+                        xml.tagE(QString("instrument %1").arg(instrId(partNr + 1, instNr + 1)));
+                  }
+            else
+                  xml.tagE(QString("instrument %1").arg(instrId(partNr + 1, note->pitch() + 1)));
 
             // voice
             // for a single-staff part, staff is 0, which needs to be corrected
@@ -4124,6 +4144,57 @@ static int findPartGroupNumber(int* partGroupEnd)
       qDebug("no free part group number");
       return MAX_PART_GROUPS;
       }
+      
+//---------------------------------------------------------
+//  scoreInstrument
+//---------------------------------------------------------
+
+static void scoreInstrument(Xml& xml, const int partNr, const int instrNr, const QString& instrName)
+      {
+      xml.stag(QString("score-instrument %1").arg(instrId(partNr, instrNr)));
+      xml.tag("instrument-name", instrName);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//  midiInstrument
+//---------------------------------------------------------
+
+static void midiInstrument(Xml& xml, const int partNr, const int instrNr,
+                           const Instrument* instr, const Score* score, const int unpitched = 0)
+      {
+      xml.stag(QString("midi-instrument %1").arg(instrId(partNr, instrNr)));
+      int midiChannel = score->midiChannel(instr->channel(0).channel);
+      if (midiChannel >= 0 && midiChannel < 16)
+            xml.tag("midi-channel", midiChannel + 1);
+      int midiProgram = instr->channel(0).program;
+      if (midiProgram >= 0 && midiProgram < 128)
+            xml.tag("midi-program", midiProgram + 1);
+      if (unpitched > 0)
+            xml.tag("midi-unpitched", unpitched);
+      xml.tag("volume", (instr->channel(0).volume / 127.0) * 100);  //percent
+      xml.tag("pan", int(((instr->channel(0).pan - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
+      xml.etag();
+      }
+      
+//---------------------------------------------------------
+//  initInstrMap
+//---------------------------------------------------------
+
+/**
+ Initialize the Instrument* to number map for a Part
+ Used to generate instrument numbers for a multi-instrument part
+ */
+
+static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList* il, const Score* score)
+      {
+      im.clear();
+      for (auto i = il->begin(); i != il->end(); ++i) {
+            const Instrument* pinstr = &(i->second);
+            if (!im.contains(pinstr))
+                  im.insert(pinstr, im.size());
+            }
+      }
 
 //---------------------------------------------------------
 //  write
@@ -4218,6 +4289,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
 
             xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
+            initInstrMap(instrMap, part->instrList(), _score);
             // by default export the parts long name as part-name
             if (part->longName() != "")
                   xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
@@ -4238,44 +4310,30 @@ void ExportMusicXml::write(QIODevice* dev)
                   Drumset* drumset = part->instr()->drumset();
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
-                        if (di.notehead != NoteHead::Group::HEAD_INVALID) {
-                              xml.stag(QString("score-instrument id=\"P%1-I%2\"").arg(idx+1).arg(i + 1));
-                              xml.tag("instrument-name", di.name);
-                              xml.etag();
-                              }
+                        if (di.notehead != NoteHead::Group::HEAD_INVALID)
+                              scoreInstrument(xml, idx + 1, i + 1, di.name);
                         }
                   xml.tag(QString("midi-device port=\"%1\"").arg(part->midiPort() + 1), "");
 
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
-                        if (di.notehead != NoteHead::Group::HEAD_INVALID) {
-                              xml.stag(QString("midi-instrument id=\"P%1-I%2\"").arg(idx+1).arg(i + 1));
-                              if (part->midiChannel() >= 0) // <0 is not valid
-                                    xml.tag("midi-channel", part->midiChannel() + 1);
-                              if (part->midiProgram() >= 0) // <0 is not valid
-                                    xml.tag("midi-program", part->midiProgram() + 1);
-                              xml.tag("midi-unpitched", i + 1);
-                              xml.tag("volume", (part->volume() / 127.0) * 100);  //percent
-                              xml.tag("pan", int(((part->pan() - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
-                              xml.etag();
-                              }
+                        if (di.notehead != NoteHead::Group::HEAD_INVALID)
+                              midiInstrument(xml, idx + 1, i + 1, part->instr(), _score, i + 1);
                         }
                   }
             else {
-                  xml.stag(QString("score-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
-                  xml.tag("instrument-name", MScoreTextToMXML::toPlainText(part->instr()->trackName()));
-                  xml.etag();
-
-                  xml.tag(QString("midi-device id=\"P%1-I%2\" port=\"%3\"").arg(idx+1).arg(3).arg(part->midiPort() + 1), "");
-
-                  xml.stag(QString("midi-instrument id=\"P%1-I%2\"").arg(idx+1).arg(3));
-                  if (part->midiChannel() >= 0) // <0 is not valid
-                        xml.tag("midi-channel", part->midiChannel() + 1);
-                  if (part->midiProgram() >= 0) // <0 is not valid
-                        xml.tag("midi-program", part->midiProgram() + 1);
-                  xml.tag("volume", (part->volume() / 127.0) * 100);  //percent
-                  xml.tag("pan", int(((part->pan() - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
-                  xml.etag();
+                  foreach (const Instrument* i, instrMap.keys()) {
+                        int instNr = instrMap.value(i);
+                        // TODO: remove "+ 3" (requires regenerating the mtest xml files)
+                        // Furthermore, it invalidates multi-instrument part (no "+3" in ExportMusicXml::Chord)
+                        scoreInstrument(xml, idx + 1, instNr + 3, MScoreTextToMXML::toPlainText(i->trackName()));
+                        }
+                  foreach (const Instrument* i, instrMap.keys()) {
+                        int instNr = instrMap.value(i);
+                        // TODO: remove "+ 3" (requires regenerating the mtest xml files)
+                        xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 3)).arg(part->midiPort() + 1), "");
+                        midiInstrument(xml, idx + 1, instNr + 3, i, _score);
+                        }
                   }
 
             xml.etag();
@@ -4305,6 +4363,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
             trillStart.clear();
             trillStop.clear();
+            initInstrMap(instrMap, part->instrList(), _score);
 
             int measureNo = 1;          // number of next regular measure
             int irregularMeasureNo = 1; // number of next irregular measure
@@ -4477,6 +4536,8 @@ void ExportMusicXml::write(QIODevice* dev)
                   if ((irregularMeasureNo + measureNo + pickupMeasureNo) == 4) {
                         if (staves > 1)
                               xml.tag("staves", staves);
+                        if (instrMap.size() > 1)
+                              xml.tag("instruments", instrMap.size());
                         }
 
                   {
