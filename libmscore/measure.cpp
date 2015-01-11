@@ -550,12 +550,13 @@ void Measure::layout2()
                   ChordRest* cr = s->cr(track);
                   if (!cr)
                         continue;
-                  int n = cr->lyricsList().size();
+/* Lyrics line segments are now Spanner's belonging to System's: System takes care of them
+                   int n = cr->lyricsList().size();
                   for (int i = 0; i < n; ++i) {
                         Lyrics* lyrics = cr->lyricsList().at(i);
                         if (lyrics)
                               system()->layoutLyrics(lyrics, s, track/VOICES);
-                        }
+                        } */
                   }
             if (track % VOICES == 0) {
                   int staffIdx = track / VOICES;

@@ -48,6 +48,7 @@
 #include "stafftext.h"
 #include "mscoreview.h"
 #include "plugins.h"
+#include "chord.h"
 
 namespace Ms {
 

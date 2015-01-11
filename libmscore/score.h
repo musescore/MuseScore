@@ -27,71 +27,71 @@
 #include "ottava.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
+#include <set>
 
 class QPainter;
 
 namespace Ms {
 
-struct Interval;
-class TempoMap;
-struct TEvent;
-class SigEvent;
-class TimeSigMap;
-class System;
-class TextStyle;
-class Page;
-class PageFormat;
-class ElementList;
-class Selection;
-class Segment;
-class Rest;
-class Xml;
 class Articulation;
-class Note;
+class Audio;
+class BarLine;
+class Beam;
+class Bracket;
+class BSymbol;
 class Chord;
 class ChordRest;
-class Slur;
+class Clef;
+class Cursor;
+class Dynamic;
+class ElementList;
+class EventMap;
+class Excerpt;
+class FiguredBass;
+class Fingering;
 class Hairpin;
-class Undo;
-class Part;
-class BSymbol;
+class Harmony;
+class Instrument;
+class KeyList;
 class KeySig;
 class KeySigEvent;
-class Volta;
-class Excerpt;
-class EventMap;
-class Harmony;
-struct Channel;
-class Tuplet;
-class Dynamic;
+class LinkedElements;
+class Lyrics;
 class Measure;
 class MeasureBase;
-class Staff;
-class Part;
-class Instrument;
-class UndoStack;
-class RepeatList;
-class TimeSig;
-class Clef;
-class Beam;
-class Lyrics;
-class Text;
-class Omr;
-class Audio;
-class Parameter;
-class Revisions;
-class Spanner;
 class MuseScoreView;
-class LinkedElements;
-class Fingering;
-class FiguredBass;
-class UndoCommand;
-class Cursor;
-struct PageContext;
-class BarLine;
-class Bracket;
-class KeyList;
+class Note;
+class Omr;
+class Page;
+class PageFormat;
+class Parameter;
+class Part;
+class RepeatList;
+class Rest;
+class Revisions;
 class ScoreFont;
+class Segment;
+class Selection;
+class SigEvent;
+class Slur;
+class Spanner;
+class Staff;
+class System;
+class TempoMap;
+class Text;
+class TextStyle;
+class TimeSig;
+class TimeSigMap;
+class Tuplet;
+class Undo;
+class UndoCommand;
+class UndoStack;
+class Volta;
+class Xml;
+struct Channel;
+struct Interval;
+struct PageContext;
+struct TEvent;
 
 enum class ClefType : signed char;
 enum class SymId;
@@ -308,6 +308,7 @@ class Score : public QObject {
 
       MeasureBaseList _measures;          // here are the notes
       SpannerMap _spanner;
+      std::set<Spanner*> _unmanagedSpanner;
       //
       // generated objects during layout:
       //
@@ -995,6 +996,8 @@ class Score : public QObject {
       void addSpanner(Spanner*);
       void cmdAddSpanner(Spanner* e, const QPointF& pos);
       void checkSpanner(int startTick, int lastTick);
+      void addUnmanagedSpanner(Spanner*);
+      void removeUnmanagedSpanner(Spanner*);
 
       Hairpin* addHairpin(bool crescendo, int tickStart, int tickEnd, int track);
 
