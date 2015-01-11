@@ -1316,12 +1316,12 @@ void convertMidi(Score *score, const MidiFile *mf)
                  "convertMidi", "There are notes of length < min allowed duration");
 
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
-      Simplify::simplifyDurations(tracks, sigmap);
+      Simplify::simplifyDurationsNotDrums(tracks, sigmap);
       if (MidiVoice::separateVoices(tracks, sigmap))
-            Simplify::simplifyDurations(tracks, sigmap);    // again
+            Simplify::simplifyDurationsNotDrums(tracks, sigmap);    // again
       MidiDrum::splitDrumVoices(tracks);
       MidiDrum::splitDrumTracks(tracks);
-      MidiDrum::removeRests(tracks, sigmap);
+      Simplify::simplifyDurationsForDrums(tracks, sigmap);
       MChord::splitUnequalChords(tracks);
                   // no more track insertion/reordering/deletion from now
       QList<MTrack> trackList = prepareTrackList(tracks);

@@ -384,25 +384,15 @@
           <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
           <Note>
-            <Tie id="2">
-              </Tie>
             <pitch>42</pitch>
             <tpc>20</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Chord>
+        <Rest>
           <durationType>eighth</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <endSpanner id="2"/>
-            <pitch>42</pitch>
-            <tpc>20</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
+          </Rest>
         <Chord>
           <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
