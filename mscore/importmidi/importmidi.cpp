@@ -974,6 +974,22 @@ bool isPickupWithGreaterTimeSig(
                   && firstTick > ReducedFraction(0, 1);
       }
 
+// search for pickup measure only if next 3 bars have equal time signatures
+bool areNextBarsEqual(const Score *score, int barCount)
+      {
+      const int baseBarTick = score->sigmap()->bar2tick(1, 0);
+      const Fraction baseTimeSig = score->sigmap()->timesig(baseBarTick).timesig();
+
+      const int equalTimeSigCount = 3;
+      for (int i = 2; i <= equalTimeSigCount - 1 && i < barCount; ++i) {
+            const int barTick = score->sigmap()->bar2tick(i, 0);
+            const Fraction timeSig = score->sigmap()->timesig(barTick).timesig();
+            if (timeSig != baseTimeSig)
+                  return false;
+            }
+      return true;
+      }
+
 void tryCreatePickupMeasure(
             const ReducedFraction &firstTick,
             Score *score,
@@ -1028,10 +1044,15 @@ void createMeasures(const ReducedFraction &firstTick, ReducedFraction &lastTick,
       if (beat > 0 || tick > 0)
             ++barCount;           // convert bar index to number of bars
 
-      const auto& opers = preferences.midiImportOperations;
-      const bool tryDetectPickupMeasure = opers.data()->trackOpers.searchPickupMeasure.value();
+      auto &data = *preferences.midiImportOperations.data();
+      if (data.processingsOfOpenedFile == 0) {
+            if (!areNextBarsEqual(score, barCount))
+                  data.trackOpers.searchPickupMeasure.setValue(false);
+            }
 
+      const bool tryDetectPickupMeasure = data.trackOpers.searchPickupMeasure.value();
       int begBarIndex = 0;
+
       if (tryDetectPickupMeasure && barCount > 1)
             tryCreatePickupMeasure(firstTick, score, &begBarIndex, &barCount);
 
