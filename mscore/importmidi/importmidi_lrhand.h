@@ -9,7 +9,10 @@ class ReducedFraction;
 
 namespace LRHand {
 
-bool needToSplit(const std::multimap<ReducedFraction, MidiChord> &chords, int midiProgram);
+bool needToSplit(const std::multimap<ReducedFraction, MidiChord> &chords,
+                 int midiProgram,
+                 bool isDrumTrack);
+
 void splitIntoLeftRightHands(std::multimap<int, MTrack> &tracks);
 
 } // namespace LRHand
