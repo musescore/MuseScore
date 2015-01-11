@@ -67,7 +67,7 @@ void lengthenNote(
       const auto tupletsForDuration = MidiTuplet::findTupletsInBarForDuration(
                               voice, barStart, note.offTime, endTime - note.offTime, tuplets);
 
-      Q_ASSERT_X(note.quant != ReducedFraction(-1, 1),
+      Q_ASSERT_X(note.offTimeQuant != ReducedFraction(-1, 1),
                  "Simplify::lengthenNote", "Note quant value was not set");
 
       const auto origNoteDurations = Meter::toDurationList(
@@ -89,8 +89,8 @@ void lengthenNote(
 
       ReducedFraction bestOffTime(-1, 1);
 
-      for (ReducedFraction offTime = note.offTime + note.quant;
-                           offTime <= endTime; offTime += note.quant) {
+      for (ReducedFraction offTime = note.offTime + note.offTimeQuant;
+                           offTime <= endTime; offTime += note.offTimeQuant) {
             double noteDurationCount = 0;
             double restDurationCount = 0;
 
@@ -172,8 +172,8 @@ void minimizeNumberOfRests(
                               // for drum tracks note duration can be arbitrary
                               // so start with short duration to check different cases
                               // for the most simple one
-                  if (isDrumTrack && note.offTime - it->first > note.quant)
-                        note.offTime = it->first + note.quant;
+                  if (isDrumTrack && note.offTime - it->first > note.offTimeQuant)
+                        note.offTime = it->first + note.offTimeQuant;
 
                   const auto barStart = MidiBar::findBarStart(note.offTime, sigmap);
                   const auto barFraction = ReducedFraction(
