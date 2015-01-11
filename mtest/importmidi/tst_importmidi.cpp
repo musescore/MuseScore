@@ -357,6 +357,7 @@ class TestImportMidi : public QObject, public MTest
       // percussion
       void percDrums() { noTempoText("perc_drums"); }
       void percRemoveTies() { noTempoText("perc_remove_ties"); }
+      void percNoGrandStaff() { noTempoText("perc_no_grand_staff"); }
 
       // clef changes along the score
       void clefTied() { dontSimplify("clef_tied"); }
