@@ -116,7 +116,9 @@ void lengthenNote(
 
             if (noteDurationCount + restDurationCount
                               < minNoteDurationCount + minRestDurationCount) {
-                  if (opers.isHumanPerformance.value() || noteDurationCount <= 1.5) {
+                  if (opers.isHumanPerformance.value()
+                              || isDrumTrack
+                              || noteDurationCount <= 1.5) {
                         minNoteDurationCount = noteDurationCount;
                         minRestDurationCount = restDurationCount;
                         bestOffTime = offTime;
@@ -149,7 +151,8 @@ void lengthenNote(
       // discard change because it silently reduces duration accuracy
       // without significant improvement of readability
 
-      if (!opers.isHumanPerformance.value()
+      if (!isDrumTrack
+                  && !opers.isHumanPerformance.value()
                   && hasLossOfAccuracy
                   && (origNoteDurations.size() + origRestDurations.size())
                        - (minNoteDurationCount + minRestDurationCount) <= 1
@@ -169,13 +172,14 @@ void minimizeNumberOfRests(
       {
       for (auto it = chords.begin(); it != chords.end(); ++it) {
             for (MidiNote &note: it->second.notes) {
+                  auto noteOffTime = note.offTime;
                               // for drum tracks note duration can be arbitrary
                               // so start with short duration to check different cases
                               // for the most simple one
                   if (isDrumTrack && note.offTime - it->first > note.offTimeQuant)
-                        note.offTime = it->first + note.offTimeQuant;
+                        noteOffTime = it->first + note.offTimeQuant;
 
-                  const auto barStart = MidiBar::findBarStart(note.offTime, sigmap);
+                  const auto barStart = MidiBar::findBarStart(noteOffTime, sigmap);
                   const auto barFraction = ReducedFraction(
                                                 sigmap->timesig(barStart.ticks()).timesig());
                   auto durationStart = (it->first > barStart) ? it->first : barStart;
@@ -202,6 +206,9 @@ void minimizeNumberOfRests(
                         if (endTime > beatTime)
                               endTime = beatTime;
                         }
+
+                  if (isDrumTrack)
+                        note.offTime = noteOffTime;         // shorten for drum tracks
 
                   auto next = std::next(it);
                   while (next != chords.end()
