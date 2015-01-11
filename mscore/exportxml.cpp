@@ -1569,7 +1569,6 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
       else {
             // traditional key signature
             xml.tag("fifths", static_cast<int>(kse.key()));
-            xml.tag("mode", QString("major"));
             }
 
       xml.etag();
@@ -4117,6 +4116,7 @@ static void identification(Xml& xml, Score const* const score)
             xml.tag("rights", score->metaTag("copyright"));
 
       xml.stag("encoding");
+
       if (MScore::debugMode) {
             xml.tag("software", QString("MuseScore 0.7.0"));
             xml.tag("encoding-date", QString("2007-09-10"));
@@ -4125,6 +4125,23 @@ static void identification(Xml& xml, Score const* const score)
             xml.tag("software", QString("MuseScore ") + QString(VERSION));
             xml.tag("encoding-date", QDate::currentDate().toString(Qt::ISODate));
             }
+
+      // specify supported elements
+      xml.tagE("supports element=\"accidental\" type=\"yes\"");
+      xml.tagE("supports element=\"beam\" type=\"yes\"");
+      // set support for print new-page and new-system to match user preference
+      // for MusicxmlExportBreaks::MANUAL support is "no" because "yes" breaks Finale NotePad import
+      if (preferences.musicxmlExportLayout
+          && preferences.musicxmlExportBreaks == MusicxmlExportBreaks::ALL) {
+            xml.tagE("supports element=\"print\" attribute=\"new-page\" type=\"yes\" value=\"yes\"");
+            xml.tagE("supports element=\"print\" attribute=\"new-system\" type=\"yes\" value=\"yes\"");
+            }
+      else {
+            xml.tagE("supports element=\"print\" attribute=\"new-page\" type=\"no\"");
+            xml.tagE("supports element=\"print\" attribute=\"new-system\" type=\"no\"");
+            }
+      xml.tagE("supports element=\"stem\" type=\"yes\"");
+
       xml.etag();
 
       if (!score->metaTag("source").isEmpty())
