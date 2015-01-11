@@ -133,7 +133,7 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
 //   setScores
 //---------------------------------------------------------
 
-void ScoreBrowser::setScores(QFileInfoList s)
+void ScoreBrowser::setScores(const QFileInfoList& s)
       {
       qDeleteAll(scoreLists);
       scoreLists.clear();
