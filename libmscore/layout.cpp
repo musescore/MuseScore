@@ -1494,6 +1494,9 @@ void Score::doLayout()
                         sp->layout();
                   }
             }
+      for (Spanner* s : _unmanagedSpanner)
+            s->layout();
+
       if (layoutMode() != LayoutMode::LINE) {
             layoutSystems2();
             layoutPages();    // create list of pages
