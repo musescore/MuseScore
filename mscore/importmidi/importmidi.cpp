@@ -710,7 +710,8 @@ Measure* barFromIndex(const Score *score, int barIndex)
 bool isGrandStaff(const MTrack &t1, const MTrack &t2)
       {
       return t1.mtrack->outChannel() == t2.mtrack->outChannel()
-                  && MChord::isGrandStaffProgram(t1.program);
+                  && MChord::isGrandStaffProgram(t1.program)
+                  && !t1.mtrack->drumTrack() && !t2.mtrack->drumTrack();
       }
 
 bool isSameChannel(const MTrack &t1, const MTrack &t2)
@@ -1240,7 +1241,7 @@ void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
                         }
                   }
 
-            if (LRHand::needToSplit(mtrack.chords, mtrack.program)) {
+            if (LRHand::needToSplit(mtrack.chords, mtrack.program, mtrack.mtrack->drumTrack())) {
                   preferences.midiImportOperations.data()->trackOpers.doStaffSplit.setValue(
                                                                               trackIndex, true);
                   }
