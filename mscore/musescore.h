@@ -414,6 +414,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showModeText(const QString&);
       void addRecentScore(const QString& scorePath);
 
+      void updateNewWizard();
+
    private slots:
       void cmd(QAction* a, const QString& cmd);
       void autoSaveTimerTimeout();
