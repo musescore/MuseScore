@@ -29,6 +29,7 @@
 #include "xml.h"
 #include "image.h"
 #include "repeat.h"
+#include "chord.h"
 
 namespace Ms {
 

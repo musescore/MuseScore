@@ -66,6 +66,8 @@ class SpannerSegment : public Element {
       void setPos2(const QPointF& p)        { _p2 = p;                }
       QPointF pos2() const                  { return _p2 + _userOff2; }
       const QPointF& ipos2() const          { return _p2;             }
+      qreal& rxpos2()                       { return _p2.rx();        }
+      qreal& rypos2()                       { return _p2.ry();        }
 
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
