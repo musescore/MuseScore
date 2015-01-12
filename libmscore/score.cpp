@@ -1525,6 +1525,7 @@ void Score::removeElement(Element* element)
             case Element::Type::PEDAL:
             case Element::Type::TEXTLINE:
             case Element::Type::HAIRPIN:
+//            case Element::Type::LYRICSLINE:
                   {
                   Spanner* spanner = static_cast<Spanner*>(element);
                   if (et == Element::Type::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE)
@@ -1562,6 +1563,8 @@ void Score::removeElement(Element* element)
                   ChordRest* cr = static_cast<ChordRest*>(element);
                   if (cr->beam())
                         cr->beam()->remove(cr);
+                  for (Lyrics* lyr : cr->lyricsList())
+                        lyr->removeFromScore();
                   // TODO: check for tuplet?
                   }
                   break;
@@ -3463,6 +3466,24 @@ void Score::insertTime(int tick, int len)
             for (Staff* staff : score->staves())
                   staff->insertTime(tick, len);
             }
+      }
+
+//---------------------------------------------------------
+//   addUnmanagedSpanner
+//---------------------------------------------------------
+
+void Score::addUnmanagedSpanner(Spanner* s)
+      {
+      _unmanagedSpanner.insert(s);
+      }
+
+//---------------------------------------------------------
+//   removeSpanner
+//---------------------------------------------------------
+
+void Score::removeUnmanagedSpanner(Spanner* s)
+      {
+      _unmanagedSpanner.erase(s);
       }
 
 //---------------------------------------------------------

@@ -1112,6 +1112,7 @@ void ChordRest::remove(Element* e)
                   for (int i = 0; i < _lyricsList.size(); ++i) {
                         if (_lyricsList[i] != e)
                               continue;
+                        _lyricsList[i]->removeFromScore();
                         _lyricsList[i] = 0;
                         while (!_lyricsList.isEmpty() && _lyricsList.back() == 0)
                               _lyricsList.takeLast();

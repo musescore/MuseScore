@@ -166,7 +166,7 @@ class System : public Element {
       VBox* vbox() const          { return (VBox*)ml[0];       }
       void setVbox(bool v)        { _vbox = v;          }
 
-      void layoutLyrics(Lyrics*, Segment*, int staffIdx);
+//      void layoutLyrics(Lyrics*, Segment*, int staffIdx);
 
       bool addStretch() const     { return _addStretch; }
       void setAddStretch(bool v)  { _addStretch = v; }

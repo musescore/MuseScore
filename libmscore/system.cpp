@@ -657,6 +657,7 @@ void System::add(Element* el)
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
+            case Element::Type::LYRICSLINE_SEGMENT:
                   {
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
 #ifndef NDEBUG
@@ -713,6 +714,7 @@ void System::remove(Element* el)
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
+            case Element::Type::LYRICSLINE_SEGMENT:
                   if (!_spannerSegments.removeOne(static_cast<SpannerSegment*>(el))) {
                         qDebug("System::remove: %p(%s) not found, score %p", el, el->name(), score());
                         Q_ASSERT(score() == el->score());
@@ -831,6 +833,8 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 //---------------------------------------------------------
 //   searchNextLyrics
 //---------------------------------------------------------
+
+/* Lyrics line segments are now Spanner's belonging to System's: System already takes care of them
 
 static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
       {
@@ -1006,7 +1010,7 @@ qDebug("Lyrics: melisma end segment not implemented");
       line->setLen(Spatium(len / _spatium));
       line->layout();
       }
-
+*/
 //---------------------------------------------------------
 //   scanElements
 //    collect all visible elements
