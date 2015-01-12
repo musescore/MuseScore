@@ -609,7 +609,7 @@ void LyricsLine::layout()
       if (lyrics()->ticks() > 0) {              // melisma
             setLineWidth(Spatium(MELISMA_DEFAULT_LINE_THICKNESS));
             // Lyrics::_ticks points to the beginning of the last spanned segment,
-            // but the line shall go (almost) to the end of it:
+            // but the line shall include it:
             // include the duration of this last segment in the melisma duration
             bool        ticksSet    = false;
             Segment*    lastSeg     = score()->tick2segment(lyrics()->endTick(), false, Segment::Type::ChordRest, false);
