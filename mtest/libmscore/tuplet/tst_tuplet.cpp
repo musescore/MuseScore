@@ -77,6 +77,7 @@ bool TestTuplet::createTuplet(int n, ChordRest* cr)
       // "tuplet time" is "normal time" / tuplet->ratio()
       //    Example: an 1/8 has 240 midi ticks, in an 1/8 triplet the note
       //             has a tick duration of 240 / (3/2) = 160 ticks
+      //             (assume tpq = 480)
       //
 
       tuplet->setDuration(f);

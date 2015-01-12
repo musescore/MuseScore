@@ -82,7 +82,7 @@ int     MScore::defaultPlayDuration;
 // QString MScore::partStyle;
 QString MScore::lastError;
 bool    MScore::layoutDebug = false;
-int     MScore::division    = 480;   // pulses per quarter note (PPQ) // ticks per beat
+int     MScore::division    = 480; // 3840;   // pulses per quarter note (PPQ) // ticks per beat
 int     MScore::sampleRate  = 44100;
 int     MScore::mtcType;
 

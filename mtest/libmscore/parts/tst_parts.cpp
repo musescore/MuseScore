@@ -343,7 +343,7 @@ Score* TestParts::doAddBreath()
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(480);
+      Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
@@ -481,7 +481,7 @@ Score* TestParts::doAddFingering()
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(480);
+      Segment* s   = m->tick2segment(Mscore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
@@ -617,7 +617,7 @@ Score* TestParts::doAddSymbol()
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(480);
+      Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
@@ -753,7 +753,7 @@ Score* TestParts::doAddChordline()
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(480);
+      Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
@@ -891,7 +891,7 @@ Score* TestParts::doAddImage()
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(480);
+      Segment* s   = m->tick2segment(MScore::division);
       Chord* chord = static_cast<Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;

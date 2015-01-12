@@ -290,7 +290,7 @@ void Score::readStaff(XmlReader& e)
                         measures()->add(mb);
                         }
                   else if (tag == "tick")
-                        e.initTick(e.readInt());
+                        e.initTick(fileDivision(e.readInt()));
                   else
                         e.unknown();
                   }
@@ -320,7 +320,7 @@ void Score::readStaff(XmlReader& e)
                               }
                         }
                   else if (tag == "tick")
-                        e.initTick(e.readInt());
+                        e.initTick(fileDivision(e.readInt()));
                   else
                         e.unknown();
                   }
