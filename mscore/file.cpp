@@ -451,6 +451,13 @@ QString MuseScore::createDefaultName() const
       return name;
       }
 
+
+void MuseScore::updateNewWizard()
+      {
+      if (newWizard != 0)
+            newWizard = new NewWizard(this);
+      }
+    
 //---------------------------------------------------------
 //   newFile
 //    create new score
