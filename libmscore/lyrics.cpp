@@ -231,33 +231,30 @@ void Lyrics::draw(QPainter* painter) const
       Text::draw(painter);
       }
 */
+
 //---------------------------------------------------------
 //   isMelisma
 //---------------------------------------------------------
 
 bool Lyrics::isMelisma() const
       {
-/* This is not working: if called before the whole system has been laid out, there might not be a next lyrics yet;
-      and, in any case, the next lyrics is not necessarily in the next CR.
-
       // entered as melisma using underscore?
       if (_ticks > 0)
             return true;
 
       // hyphenated?
+      // if so, it is a melisma only if there is no lyric in same verse on next CR
       if (_syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
             // find next CR on same track and check for existence of lyric in same verse
             ChordRest* cr = chordRest();
             Segment* s = cr->segment()->next1();
             ChordRest* ncr = s ? s->nextChordRest(cr->track()) : nullptr;
-            if (ncr && ncr->lyrics(_no))
+            if (ncr && !ncr->lyrics(_no))
                   return true;
             }
 
       // default - not a melisma
-      return false; */
-
-      return (_ticks > 0 || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE);
+      return false;
 }
 
 //---------------------------------------------------------
@@ -358,7 +355,7 @@ void Lyrics::layout1()
       rxpos() += x;
       rypos() += y;
 
-      if (isMelisma()) {
+      if (_ticks > 0 || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
             if (_separator == nullptr) {
                   _separator = new LyricsLine(score());
                   _separator->setTick(cr->tick());
@@ -609,7 +606,7 @@ void LyricsLine::layout()
       if (lyrics()->ticks() > 0) {              // melisma
             setLineWidth(Spatium(MELISMA_DEFAULT_LINE_THICKNESS));
             // Lyrics::_ticks points to the beginning of the last spanned segment,
-            // but the line shall go (almost) to the end of it:
+            // but the line shall include it:
             // include the duration of this last segment in the melisma duration
             bool        ticksSet    = false;
             Segment*    lastSeg     = score()->tick2segment(lyrics()->endTick(), false, Segment::Type::ChordRest, false);
