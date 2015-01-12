@@ -481,7 +481,7 @@ Score* TestParts::doAddFingering()
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
-      Segment* s   = m->tick2segment(Mscore::division);
+      Segment* s   = m->tick2segment(MScore::division);
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       DropData dd;
