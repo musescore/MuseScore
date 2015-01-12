@@ -173,11 +173,17 @@ void ScoreBrowser::setScores(const QFileInfoList& s)
                   static_cast<QVBoxLayout*>(l)->addWidget(label);
                   QDir dir(fi.filePath());
                   sl = createScoreList();
+                  unsigned count = 0; //nbr of entries added
                   for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)){
-                      if(entries.contains(fi.filePath()))
-                          continue;
+                        if(entries.contains(fi.filePath()))
+                            continue;
                         sl->addItem(genScoreItem(fi, sl));
+                        count++;
                         entries.insert(fi.filePath());
+                        }
+                  if(count==0){
+                        delete label;
+                        delete sl;
                         }
                   sl = 0;
                   }
