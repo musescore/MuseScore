@@ -114,8 +114,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* z)
                     * .005 * c->gain();
 
       phase.set(0);
-      double sr = double(s->sampleRate()) / 44100.0;
-      phaseIncr.set(_zerberus->ct2hz(key * 100 + z->tune) * sr/_zerberus->ct2hz(z->keyBase * 100.0));
+      float sr = float(s->sampleRate()) / _zerberus->sampleRate();
+      phaseIncr.set(_zerberus->ct2hz(key * 100.0 + z->tune) * sr/_zerberus->ct2hz(z->keyBase * 100.0));
 
       fres        = 13500.0;
       last_fres   = -1.0;
