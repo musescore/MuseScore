@@ -266,12 +266,12 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       templateFileBrowser->setStripNumbers(true);
       QDir dir(mscoreGlobalShare + "/templates");
       QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
-      
-      QDir myTemplatesDir(preferences.myTemplatesPath);
-      fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
       if(fil.isEmpty()){
           fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
           }
+      
+      QDir myTemplatesDir(preferences.myTemplatesPath);
+      fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
       
       templateFileBrowser->setScores(fil);
       templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
