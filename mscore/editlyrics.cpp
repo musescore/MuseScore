@@ -12,9 +12,10 @@
 
 #include "musescore.h"
 #include "scoreview.h"
+#include "libmscore/chordrest.h"
+#include "libmscore/lyrics.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
-#include "libmscore/lyrics.h"
 
 namespace Ms {
 

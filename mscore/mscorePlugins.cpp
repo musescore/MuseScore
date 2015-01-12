@@ -437,7 +437,7 @@ void MuseScore::pluginTriggered(int idx)
                   dock->setWidget(w);
                   addDockWidget(area, dock);
                   connect(engine, SIGNAL(quit()), dock, SLOT(close()));
-                  view->show();
+                  dock->show();
                   }
             else {
                   connect(engine, SIGNAL(quit()), view, SLOT(close()));
