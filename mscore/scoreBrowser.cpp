@@ -145,13 +145,18 @@ void ScoreBrowser::setScores(const QFileInfoList& s)
       ScoreListWidget* sl = 0;
 
       QStringList filter = { "*.mscz" };
+
+      QSet<QString> entries; //to avoid duplicates
       for (const QFileInfo& fi : s) {
             if (fi.isFile()) {
                   QString s = fi.filePath();
+                  if(entries.contains(s))
+                      continue;
                   if (s.endsWith(".mscz") || s.endsWith(".mscx")) {
                         if (!sl)
                               sl = createScoreList();
                         sl->addItem(genScoreItem(fi, sl));
+                        entries.insert(s);
                         }
                   }
             }
@@ -168,8 +173,12 @@ void ScoreBrowser::setScores(const QFileInfoList& s)
                   static_cast<QVBoxLayout*>(l)->addWidget(label);
                   QDir dir(fi.filePath());
                   sl = createScoreList();
-                  for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name))
+                  for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)){
+                      if(entries.contains(fi.filePath()))
+                          continue;
                         sl->addItem(genScoreItem(fi, sl));
+                        entries.insert(fi.filePath());
+                        }
                   sl = 0;
                   }
             }
