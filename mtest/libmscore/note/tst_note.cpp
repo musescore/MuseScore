@@ -41,6 +41,7 @@ class TestNote : public QObject, public MTest
       void grace();
       void tpc();
       void tpcTranspose();
+      void tpcTranspose2();
       };
 
 //---------------------------------------------------------
@@ -415,6 +416,28 @@ void TestNote::tpcTranspose()
       score->cmdConcertPitchChanged(true, true);
 
       QVERIFY(saveCompareScore(score, "tpc-transpose-test.mscx", DIR + "tpc-transpose-ref.mscx"));
+
+      }
+
+//---------------------------------------------------------
+///   tpcTranspose2
+///   more tests of note tpc values & transposition
+//---------------------------------------------------------
+
+void TestNote::tpcTranspose2() {
+      Score* score = readScore(DIR + "tpc-transpose2.mscx");
+      score->doLayout();
+
+      score->inputState().setTrack(0);
+      score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
+      score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+      score->inputState().setNoteEntryMode(true);
+      int octave = 5 * 7;
+      score->cmdAddPitch(octave + 3, false);
+
+      score->cmdConcertPitchChanged(true, true);
+
+      QVERIFY(saveCompareScore(score, "tpc-transpose2-test.mscx", DIR + "tpc-transpose2-ref.mscx"));
 
       }
 
