@@ -1806,7 +1806,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             const QStringRef& tag(e.name());
 
             if (tag == "tick") {
-                  e.initTick(e.readInt());
+                  e.initTick(score()->fileDivision(e.readInt()));
                   lastTick = e.tick();
                   }
             else if (tag == "BarLine") {

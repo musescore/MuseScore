@@ -34,9 +34,11 @@ class FretDiagram : public Element {
       int _frets;
       int _fretOffset;
       int _maxFrets;
+
       char* _dots;
       char* _marker;
       char* _fingering;
+
       Harmony* _harmony;
 
       qreal lw1;

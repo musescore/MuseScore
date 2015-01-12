@@ -230,12 +230,12 @@ void RepeatList::dump() const
       qDebug("==Dump Repeat List:==");
       foreach(const RepeatSegment* s, *this) {
             qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
-               s->utick / 480,
-               s->utick / 480 / 4,
-               s->tick / 480,
-               s->tick / 480 / 4,
-               s->len / 480,
-               s->len / 480 / 4,
+               s->utick / MScore::division,
+               s->utick / MScore::division / 4,
+               s->tick / MScore::division,
+               s->tick / MScore::division / 4,
+               s->len / MScore::division,
+               s->len / MScore::division / 4,
                s->utime, s->timeOffset);
             }
 #endif

@@ -154,7 +154,7 @@ void TestTools::undoSlashFill()
       score->doLayout();
 
       // select
-      Segment* s = score->firstMeasure()->findSegment(Segment::Type::ChordRest, 960 /* MScore::division * 2 */);
+      Segment* s = score->firstMeasure()->findSegment(Segment::Type::ChordRest, MScore::division * 2);
       score->selection().setRange(s, score->lastSegment(), 0, 2);
 
       // do

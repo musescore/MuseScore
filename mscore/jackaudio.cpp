@@ -178,10 +178,12 @@ void JackAudio::connect(const char* src, const char* dst)
             qDebug("JackAudio::connect: unknown jack ports");
             return;
             }
+      qDebug("JackAudio::connect <%s> <%s>", src, dst);
       int rv = jack_connect(client, src, dst);
       if (rv)
             qDebug("jack connect port <%s> - <%s> failed: %d", src, dst, rv);
       }
+
 //---------------------------------------------------------
 //   disconnect
 //---------------------------------------------------------
@@ -775,8 +777,8 @@ void JackAudio::rememberAudioConnections()
 
 void JackAudio::restoreAudioConnections()
       {
-      foreach(jack_port_t* p, ports)
-            jack_port_disconnect(client,p);
+      for (auto p : ports)
+            jack_port_disconnect(client, p);
 
       QList<QString> portList = inputPorts();
       QList<QString>::iterator pi = portList.begin();
@@ -789,8 +791,8 @@ void JackAudio::restoreAudioConnections()
       if (!preferences.rememberLastConnections || n == 0) {
             if (MScore::debugMode)
                   qDebug("Connecting to system ports...");
-            for (int i = 0; i<ports.size(); i++) {
-                  const char* src = jack_port_name(ports[i]);
+            for (auto p : ports) {
+                  const char* src = jack_port_name(p);
                   if (pi != portList.end()) {
                         connect(src, qPrintable(*pi));
                         ++pi;

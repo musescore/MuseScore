@@ -90,7 +90,8 @@ void TestSelectionRangeDelete::verifyNoDelete(Score* score, size_t spanners)
 Element* chordRestAtBeat(Score* score, int beat, int half = 0)
       {
       qDebug("Chordrest at beat %i,%i",beat,half);
-      return score->tick2segment(beat * 480 + half * 240,false,Segment::Type::ChordRest,false)->element(0);
+      int division = MScore::division;
+      return score->tick2segment(beat * division + half * division/2,false,Segment::Type::ChordRest,false)->element(0);
       }
 
 //---------------------------------------------------------
