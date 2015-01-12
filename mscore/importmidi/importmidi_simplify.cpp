@@ -172,14 +172,50 @@ void minimizeNumberOfRests(
       {
       for (auto it = chords.begin(); it != chords.end(); ++it) {
             for (MidiNote &note: it->second.notes) {
-                  auto noteOffTime = note.offTime;
-                              // for drum tracks note duration can be arbitrary
-                              // so start with short duration to check different cases
-                              // for the most simple one
-                  if (isDrumTrack && note.offTime - it->first > note.offTimeQuant)
-                        noteOffTime = it->first + note.offTimeQuant;
+                  if (isDrumTrack) {
+                                    // for drum tracks note duration can be arbitrary
+                                    // so start with short duration to check different cases,
+                                    // to find the most simple one
 
-                  const auto barStart = MidiBar::findBarStart(noteOffTime, sigmap);
+                        if (it->second.isInTuplet) {
+                                          // if note on time is in tuplet -
+                                          // set note off time to be inside that tuplet
+                              const auto &tuplet = it->second.tuplet->second;
+                              const auto len = tuplet.len / tuplet.tupletNumber;
+                              if (note.offTime - it->first > len) {
+                                    note.offTime = it->first + len;
+                                    note.isInTuplet = true;
+                                    note.tuplet = it->second.tuplet;
+                                    note.offTimeQuant = len;
+                                    }
+                              }
+                        else {
+                                          // if note on time is outside tuplets -
+                                          // set note off time to be outside all tuplets
+                              auto next = std::next(it);
+                              while (next != chords.end()
+                                          && next->second.voice != it->second.voice) {
+                                    ++next;
+                                    }
+                              if (next != chords.end()) {
+                                    const auto len = ReducedFraction::fromTicks(
+                                                            MScore::division) / 8;   // 1/32
+                                    auto newOffTime = it->first + len;
+                                    if (next->second.isInTuplet) {
+                                          const auto &tuplet = next->second.tuplet->second;
+                                          if (tuplet.onTime < newOffTime)
+                                                newOffTime = tuplet.onTime;
+                                          }
+                                    if (newOffTime < note.offTime) {
+                                          note.offTime = newOffTime;
+                                          note.isInTuplet = false;
+                                          note.offTimeQuant = len;
+                                          }
+                                    }
+                              }
+                        }
+
+                  const auto barStart = MidiBar::findBarStart(note.offTime, sigmap);
                   const auto barFraction = ReducedFraction(
                                                 sigmap->timesig(barStart.ticks()).timesig());
                   auto durationStart = (it->first > barStart) ? it->first : barStart;
@@ -195,8 +231,11 @@ void minimizeNumberOfRests(
                         const auto &tuplet = note.tuplet->second;
                         if (note.offTime == tuplet.onTime + tuplet.len)
                               continue;
-                        endTime = barStart + Quantize::quantizeToLarge(
-                                    note.offTime - barStart, tuplet.len / tuplet.tupletNumber);
+                        if (!isDrumTrack) {
+                              endTime = barStart + Quantize::quantizeToLarge(
+                                                      note.offTime - barStart,
+                                                      tuplet.len / tuplet.tupletNumber);
+                              }
                         }
 
                   if (!isDrumTrack) {
@@ -206,9 +245,6 @@ void minimizeNumberOfRests(
                         if (endTime > beatTime)
                               endTime = beatTime;
                         }
-
-                  if (isDrumTrack)
-                        note.offTime = noteOffTime;         // shorten for drum tracks
 
                   auto next = std::next(it);
                   while (next != chords.end()
