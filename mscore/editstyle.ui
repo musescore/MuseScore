@@ -683,7 +683,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Vertical-frame upper margin</string>
+             <string>Vertical frame upper margin</string>
             </property>
             <property name="text">
              <string>Vertical frame top margin:</string>
@@ -721,7 +721,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Vertical-frame lower margin</string>
+             <string>Vertical frame lower margin</string>
             </property>
             <property name="text">
              <string>Vertical frame bottom margin:</string>

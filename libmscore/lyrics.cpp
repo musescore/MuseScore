@@ -11,34 +11,77 @@
 //=============================================================================
 
 #include "lyrics.h"
-#include "xml.h"
-#include "system.h"
-#include "measure.h"
+
+#include "chord.h"
 #include "score.h"
 #include "sym.h"
-#include "segment.h"
+#include "system.h"
+#include "xml.h"
 
 namespace Ms {
 
+// all in sp. units:
+static const qreal      MELISMA_DEFAULT_LINE_THICKNESS      = 0.10;     // for melisma line only;
+static const qreal      MELISMA_DEFAULT_PAD                 = 0.10;     // the empty space before a melisma line
+static const qreal      LYRICS_DASH_DEFAULT_STEP            = 16.0;     // the max. distance between dashes
+static const qreal      LYRICS_DASH_DEFAULT_PAD             = 0.05;     // the min. empty space before and after a dash
+static const qreal      LYRICS_DASH_MIN_LENGTH              = 0.25;     // below this length, the dash is skipped
+// These values are used when USE_FONT_DASH_METRIC is not defined in lyrics.h
+static const qreal      LYRICS_DASH_DEFAULT_LENGHT          = 0.80;     // in sp. units
+static const qreal      LYRICS_DASH_DEFAULT_LINE_THICKNESS  = 0.15;     // in sp. units
+static const qreal      LYRICS_DASH_Y_POS_RATIO             = 0.25;     // the fraction of lyrics font tot. height to
+                                                                        // raise the dashes above text base line;
+                                                                        // this usually raises at about 2/3 of x-height
+// sone useful values:
+static const qreal      HALF                                = 0.5;
+static const qreal      TWICE                               = 2.0;
+
 //---------------------------------------------------------
+//   searchNextLyrics
+//---------------------------------------------------------
+
+static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
+      {
+      Lyrics* l = 0;
+      while ((s = s->next1(Segment::Type::ChordRest))) {
+            int strack = staffIdx * VOICES;
+            int etrack = strack + VOICES;
+            // search through all tracks of current staff looking for a lyric in specified verse
+            for (int track = strack; track < etrack; ++track) {
+                  ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                  if (cr && !cr->lyricsList().isEmpty()) {
+                        // cr with lyrics found, but does it have a syllable in specified verse?
+                        l = cr->lyricsList().value(verse);
+                        if (l)
+                              break;
+                        }
+                  }
+            if (l)
+                  break;
+            }
+      return l;
+      }
+
+//=========================================================
 //   Lyrics
-//---------------------------------------------------------
+//=========================================================
 
 Lyrics::Lyrics(Score* s)
    : Text(s)
       {
       setTextStyleType(TextStyleType::LYRIC1);
-      _no          = 0;
-      _ticks       = 0;
-      _syllabic    = Syllabic::SINGLE;
+      _no         = 0;
+      _ticks      = 0;
+      _syllabic   = Syllabic::SINGLE;
+      _separator  = nullptr;
       }
 
 Lyrics::Lyrics(const Lyrics& l)
    : Text(l)
       {
-      _no       = l._no;
-      _ticks    = l._ticks;
-      _syllabic = l._syllabic;
+      _no         = l._no;
+      _ticks      = l._ticks;
+      _syllabic   = l._syllabic;
 #if 0
       // if we copy lines at all, they need to be parented to new lyric
       // but they will be regenerated upon layout anyhow
@@ -48,15 +91,28 @@ Lyrics::Lyrics(const Lyrics& l)
             _separator.append(nline);
             }
 #endif
+      _separator = nullptr;
+      }
+
+Lyrics::~Lyrics()
+      {
+      if (_separator != nullptr) {
+            _separator->unchain();
+            delete _separator;
+            }
       }
 
 //---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 
-void Lyrics::scanElements(void* data, void (*func)(void*, Element*), bool)
+void Lyrics::scanElements(void* data, void (*func)(void*, Element*), bool /*all*/)
       {
       func(data, this);
+/* DO NOT ADD EITHER THE LYRICSLINE OR THE SEGMENTS: segments are added through the system each belongs to;
+      LyricsLine is not needed, as it is internally manged.
+      if (_separator != nullptr)
+            _separator->scanElements(data, func, all); */
       }
 
 //---------------------------------------------------------
@@ -143,7 +199,8 @@ void Lyrics::add(Element* el)
       {
       el->setParent(this);
       if (el->type() == Element::Type::LINE)
-            _separator.append((Line*)el);
+//            _separator.append((Line*)el);           // ignore! Internally managed
+            ;
       else
             qDebug("Lyrics::add: unknown element %s", el->name());
       }
@@ -154,8 +211,11 @@ void Lyrics::add(Element* el)
 
 void Lyrics::remove(Element* el)
       {
-      if (el->type() == Element::Type::LINE)
-            _separator.removeAll((Line*)el);
+      if (el->type() == Element::Type::LYRICSLINE) {
+            _separator->unchain();
+            delete _separator;
+            _separator = nullptr;
+            }
       else
             qDebug("Lyrics::remove: unknown element %s", el->name());
       }
@@ -164,16 +224,41 @@ void Lyrics::remove(Element* el)
 //   draw
 //---------------------------------------------------------
 
+/* As the lyrics line is now drawn by the system it belongs to, standard Text drawing is enough.
+
 void Lyrics::draw(QPainter* painter) const
       {
       Text::draw(painter);
-      painter->setPen(curColor());
-      foreach(const Line* l, _separator) {
-            painter->translate(l->pos());
-            l->draw(painter);
-            painter->translate(-(l->pos()));
-            }
       }
+*/
+//---------------------------------------------------------
+//   isMelisma
+//---------------------------------------------------------
+
+bool Lyrics::isMelisma() const
+      {
+/* This is not working: if called before the whole system has been laid out, there might not be a next lyrics yet;
+      and, in any case, the next lyrics is not necessarily in the next CR.
+
+      // entered as melisma using underscore?
+      if (_ticks > 0)
+            return true;
+
+      // hyphenated?
+      if (_syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
+            // find next CR on same track and check for existence of lyric in same verse
+            ChordRest* cr = chordRest();
+            Segment* s = cr->segment()->next1();
+            ChordRest* ncr = s ? s->nextChordRest(cr->track()) : nullptr;
+            if (ncr && ncr->lyrics(_no))
+                  return true;
+            }
+
+      // default - not a melisma
+      return false; */
+
+      return (_ticks > 0 || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE);
+}
 
 //---------------------------------------------------------
 //   layout
@@ -194,29 +279,19 @@ void Lyrics::layout()
             }
       }
 
-bool Lyrics::isMelisma() const
-      {
-      // entered as melisma using underscore?
-      if (_ticks > 0)
-            return true;
-
-      // hyphenated?
-      if (_syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
-            // find next CR on same track and check for existence of lyric in same verse
-            ChordRest* cr = chordRest();
-            Segment* s = cr->segment()->next1();
-            ChordRest* ncr = s ? s->nextChordRest(cr->track()) : nullptr;
-            if (ncr && !ncr->lyrics(_no))
-                  return true;
-            }
-
-      // default - not a melisma
-      return false;
-      }
-
 //---------------------------------------------------------
 //   layout1
 //---------------------------------------------------------
+
+#if defined (USE_FONT_DASH_METRIC)
+      static QString    g_fontFamily      = QString();
+      static qreal      g_fontSize        = -1;
+      static qreal      g_cachedDashY;
+      static qreal      g_cachedDashLength;
+   #if defined(USE_FONT_DASH_TICKNESS)
+      static qreal      g_cachedDashThickness;
+   #endif
+#endif
 
 void Lyrics::layout1()
       {
@@ -225,7 +300,8 @@ void Lyrics::layout1()
       if (!parent()) // palette & clone trick
           return;
 
-      const QList<Lyrics*>* ll = &(chordRest()->lyricsList());
+      ChordRest* cr = chordRest();
+      const QList<Lyrics*>* ll = &(cr->lyricsList());
 
       qreal lh = lineSpacing() * score()->styleD(StyleIdx::lyricsLineHeight);
       int line = ll->indexOf(this);
@@ -263,7 +339,6 @@ void Lyrics::layout1()
             // however, lyrics that are melismas or have verse numbers will be forced to left alignment
             // TODO: provide a way to disable the automatic left alignment
             //
-            ChordRest* cr = chordRest();
             qreal maxWidth;
             if (cr->type() == Element::Type::CHORD)
                   maxWidth = static_cast<Chord*>(cr)->maxHeadWidth();
@@ -282,6 +357,46 @@ void Lyrics::layout1()
 
       rxpos() += x;
       rypos() += y;
+
+      if (isMelisma()) {
+            if (_separator == nullptr) {
+                  _separator = new LyricsLine(score());
+                  _separator->setTick(cr->tick());
+                  score()->addUnmanagedSpanner(_separator);
+                  }
+            _separator->setParent(this);
+            _separator->setTick(cr->tick());
+            _separator->setTrack(track());
+            _separator->setTrack2(track());
+#if defined(USE_FONT_DASH_METRIC)
+            // if font parameters different from font cached values, compute new dash values from font metrics
+            if (textStyle().family() != g_fontFamily && textStyle().size() != g_fontSize) {
+                  QFontMetricsF     fm    = textStyle().fontMetrics(spatium());
+                  QRectF            r     = fm.tightBoundingRect("\u2013");   // U+2013 EN DASH
+                  g_cachedDashY           = _dashY          = r.y() + (r.height() * HALF);
+                  g_cachedDashLength      = _dashLength     = r.width();
+   #if defined(USE_FONT_DASH_TICKNESS)
+                  g_cachedDashThickness   = _dashThickness  = r.height();
+   #endif
+                  g_fontFamily            = textStyle().family();
+                  g_fontSize              = textStyle().size();
+                  }
+            // if same font, use cached values
+            else {
+                  _dashY                  = g_cachedDashY;
+                  _dashLength             = g_cachedDashLength;
+   #if defined(USE_FONT_DASH_TICKNESS)
+                  _dashThickness          = g_cachedDashThickness;
+   #endif
+                  }
+#endif
+            }
+      else
+            if (_separator != nullptr) {
+                  _separator->unchain();
+                  delete _separator;
+                  _separator = nullptr;
+                  }
       }
 
 //---------------------------------------------------------
@@ -398,6 +513,19 @@ void Lyrics::endEdit()
       }
 
 //---------------------------------------------------------
+//   removeFromScore
+//---------------------------------------------------------
+
+void Lyrics::removeFromScore()
+      {
+      if (_separator) {
+            _separator->unchain();
+            delete _separator;
+            _separator = nullptr;
+            }
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -450,6 +578,221 @@ QVariant Lyrics::propertyDefault(P_ID id) const
             }
       }
 
+//=========================================================
+//   LyricsLine
+//=========================================================
+
+LyricsLine::LyricsLine(Score* s)
+  : SLine(s)
+      {
+      setFlags(0);
+
+      setGenerated(true);           // no need to save it, as it can be re-generated
+      setDiagonal(false);
+      setLineWidth(Spatium(LYRICS_DASH_DEFAULT_LINE_THICKNESS));
+      setAnchor(Spanner::Anchor::SEGMENT);
+      _nextLyrics = nullptr;
+      }
+
+LyricsLine::LyricsLine(const LyricsLine& g)
+   : SLine(g)
+      {
+      _nextLyrics = nullptr;
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void LyricsLine::layout()
+      {
+      if (lyrics()->ticks() > 0) {              // melisma
+            setLineWidth(Spatium(MELISMA_DEFAULT_LINE_THICKNESS));
+            // Lyrics::_ticks points to the beginning of the last spanned segment,
+            // but the line shall go (almost) to the end of it:
+            // include the duration of this last segment in the melisma duration
+            bool        ticksSet    = false;
+            Segment*    lastSeg     = score()->tick2segment(lyrics()->endTick(), false, Segment::Type::ChordRest, false);
+            if (lastSeg) {
+                  // if last segment found, locate the first non-empty ChordRest
+                  // in the same staff of this LyricsLine and use its duration
+                  int   firstTrack  = (track() >> 2) << 2;
+                  int   lastTrack   = firstTrack + VOICES;
+                  for (int i = firstTrack; i < lastTrack; i++) {
+                        ChordRest* cr = static_cast<ChordRest*>(lastSeg->elementAt(i));
+                        if (cr) {
+                              setTicks(lyrics()->ticks() + cr->durationTicks());
+                              ticksSet = true;
+                              break;
+                              }
+                        }
+                  }
+            // no suitable ChordRest found? go to the end of the last known segment
+            if (!ticksSet)
+                  setTicks(lyrics()->ticks());
+            }
+      else {                                    // dash(es)
+#if defined(USE_FONT_DASH_TICKNESS)
+            setLineWidth(Spatium(lyrics()->dashThickness() / spatium()));
+#endif
+            _nextLyrics = searchNextLyrics(lyrics()->segment(), staffIdx(), lyrics()->no());
+            setTick2(_nextLyrics != nullptr ? _nextLyrics->segment()->tick() : tick());
+      }
+      if (ticks())                  // only do layout if some time span
+            SLine::layout();
+      }
+
+//---------------------------------------------------------
+//   createLineSegment
+//---------------------------------------------------------
+
+LineSegment* LyricsLine::createLineSegment()
+      {
+      LyricsLineSegment* seg = new LyricsLineSegment(score());
+      seg->setTrack(track());
+      seg->setColor(color());
+      return seg;
+      }
+
+//---------------------------------------------------------
+//   unchain
+//
+//    Remove the LyricsLine and its segments from objects which may know about them
+//---------------------------------------------------------
+
+void LyricsLine::unchain()
+      {
+      for (SpannerSegment* ss : spannerSegments())
+            if (ss->system())
+                  ss->system()->remove(ss);
+      score()->removeUnmanagedSpanner(this);
+      }
+
+//=========================================================
+//   LyricsLineSegment
+//=========================================================
+
+LyricsLineSegment::LyricsLineSegment(Score* s)
+      : LineSegment(s)
+      {
+      setFlags(ElementFlag::SEGMENT | ElementFlag::ON_STAFF);
+      setGenerated(true);
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void LyricsLineSegment::layout()
+      {
+      Lyrics*     lyr;
+      System*     sys;
+      bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > 0;
+      qreal       sp                = spatium();
+
+      if (lyricsLine()->ticks() <= 0) {   // if no span,
+            _numOfDashes = 0;             // nothing to draw
+            return;                       // and do nothing
+            }
+
+      // HORIZONTAL POSITION
+      // A) if line precedes a syllable, advance line end to right before the next syllable text
+      // if not a melisma and there is a next syllable;
+      if (!isEndMelisma && lyricsLine()->nextLyrics() != nullptr
+                  && (spannerSegmentType() == SpannerSegmentType::END
+                        || spannerSegmentType() == SpannerSegmentType::SINGLE)) {
+            lyr   = lyricsLine()->nextLyrics();
+            sys   = lyr->segment()->system();
+            // if next lyrics is on a different sytem, this line segment is at the end of its system:
+            // do not adjust for next lyrics position
+            if (sys == system()) {
+                  qreal lyrX        = lyr->bbox().x();
+                  qreal lyrXp       = lyr->pagePos().x();
+                  qreal sysXp       = sys->pagePos().x();
+                  qreal offsetX     = lyrXp - sysXp + lyrX - pos().x() - pos2().x();
+                  //                    syst.rel. X pos.   | as a delta from current end pos.
+                  offsetX           -= LYRICS_DASH_DEFAULT_PAD * sp;    // add ending padding
+                  rxpos2()          += offsetX;
+                  }
+            }
+      // B) if line follows a syllable, advance line start to after the syllable text
+      lyr   = lyricsLine()->lyrics();
+      sys   = lyr->segment()->system();
+      if (spannerSegmentType() == SpannerSegmentType::BEGIN || spannerSegmentType() == SpannerSegmentType::SINGLE) {
+            qreal lyrX        = lyr->bbox().x();
+            qreal lyrXp       = lyr->pagePos().x();
+            qreal lyrW        = lyr->bbox().width();
+            qreal sysXp       = sys->pagePos().x();
+            qreal offsetX     = lyrXp - sysXp + lyrX + lyrW - pos().x();
+            //               syst.rel. X pos. | lyr.advance | as a delta from current pos.
+            // add initial padding
+            offsetX           += (isEndMelisma ? MELISMA_DEFAULT_PAD : LYRICS_DASH_DEFAULT_PAD) * sp;
+            rxpos()           += offsetX;
+            rxpos2()          -= offsetX;
+            }
+
+      // VERTICAL POSITION: at the base line of the syllable text relative to the system
+      qreal lyrY  = lyr->y();
+      qreal sysY  = sys->y();
+      rypos()     = lyrY - sysY;
+
+      // MELISMA vs. DASHES
+      if (isEndMelisma) {                 // melisma
+            _numOfDashes = 1;
+            rypos()  -= lyricsLine()->lineWidth().val() * sp * HALF; // let the line 'sit on' the base line
+            // reduce length to have some 'air' after the line
+            rxpos2() -= score()->styleD(StyleIdx::minNoteDistance) * sp;
+            }
+      else {                              // dash(es)
+#if defined(USE_FONT_DASH_METRIC)
+            rypos()           += lyr->dashY();
+            _dashLength       = lyr->dashLength();
+#else
+            rypos()           -= lyr->bbox().height() * LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
+            _dashLength       = LYRICS_DASH_DEFAULT_LENGHT * sp;                    // and dash length
+#endif
+            qreal len         = pos2().x();
+            if (len < LYRICS_DASH_MIN_LENGTH * sp)                                  // if no room for a dash
+                  _numOfDashes = 0;                                                 //    draw no dash
+            else if (len < (LYRICS_DASH_DEFAULT_STEP * TWICE * sp)) {               // if no room for two dashes
+                  _numOfDashes = 1;                                                 //    draw one dash
+                  if (_dashLength > len)                                            // if no room for a full dash
+                        _dashLength = len;                                          //    shorten it
+                  }
+            else
+                  _numOfDashes = len / (LYRICS_DASH_DEFAULT_STEP * sp);             // draw several dashes
+            }
+
+      // set bounding box
+      QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
+      qreal lw = spatium() * lyricsLine()->lineWidth().val() * HALF;
+      setbbox(r.adjusted(-lw, -lw, lw, lw));
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void LyricsLineSegment::draw(QPainter* painter) const
+      {
+      if (_numOfDashes < 1)               // nothing to draw
+            return;
+      qreal _spatium = spatium();
+
+      QPen pen(lyricsLine()->curColor());
+      pen.setWidthF(lyricsLine()->lineWidth().val() * _spatium);
+      pen.setCapStyle(Qt::FlatCap);
+      painter->setPen(pen);
+      if (lyricsLine()->lyrics()->ticks() > 0)           // melisma
+            painter->drawLine(QPointF(), pos2());
+      else {                                          // dash(es)
+            qreal step  = pos2().x() / (_numOfDashes+1);
+            qreal x     = step - _dashLength * HALF;
+            for (int i = 0; i < _numOfDashes; i++, x += step)
+                  painter->drawLine(QPointF(x, 0.0), QPointF(x + _dashLength, 0.0));
+            }
+      }
 
 }
 

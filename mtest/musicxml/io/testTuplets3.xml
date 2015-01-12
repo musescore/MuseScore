@@ -10,6 +10,11 @@
     <encoding>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
+      <supports element="accidental" type="yes"/>
+      <supports element="beam" type="yes"/>
+      <supports element="print" attribute="new-page" type="no"/>
+      <supports element="print" attribute="new-system" type="no"/>
+      <supports element="stem" type="yes"/>
       </encoding>
     <miscellaneous>
       <miscellaneous-field name="description">
@@ -22,23 +27,29 @@
     <score-part id="P1">
       <part-name>Flute</part-name>
       <part-abbreviation>Fl.</part-abbreviation>
-      <score-instrument id="P1-I3">
+      <score-instrument id="P1-I1">
         <instrument-name>Flute</instrument-name>
         </score-instrument>
-      <midi-instrument id="P1-I3">
+      <midi-device id="P1-I1" port="1"></midi-device>
+      <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
         <midi-program>74</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P2">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
-      <score-instrument id="P2-I3">
+      <score-instrument id="P2-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-instrument id="P2-I3">
+      <midi-device id="P2-I1" port="1"></midi-device>
+      <midi-instrument id="P2-I1">
         <midi-channel>2</midi-channel>
         <midi-program>1</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
         </midi-instrument>
       </score-part>
     </part-list>
@@ -48,7 +59,6 @@
         <divisions>3</divisions>
         <key>
           <fifths>0</fifths>
-          <mode>major</mode>
           </key>
         <time>
           <beats>4</beats>
@@ -175,7 +185,6 @@
         <divisions>3</divisions>
         <key>
           <fifths>0</fifths>
-          <mode>major</mode>
           </key>
         <time>
           <beats>4</beats>

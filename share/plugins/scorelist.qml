@@ -10,7 +10,7 @@ MuseScore {
 
     width:  150
     height: 75
-    onRun: {
+    Component.onCompleted: {
         console.log("hello scorelist");
         for (var i = 0; i < scores.length; i++) {
             console.log(scores[i].name);
@@ -23,7 +23,8 @@ MuseScore {
         anchors.fill: parent
 
         Text {
-            id:scoreList
+            id: scoreList
+            anchors.fill: parent
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             text: ""

@@ -16,73 +16,73 @@
 */
 
 #include "element.h"
-#include "style.h"
-#include "xml.h"
-#include "score.h"
-#include "staff.h"
-#include "utils.h"
-#include "sym.h"
-#include "symbol.h"
-#include "clef.h"
-#include "volta.h"
-#include "ottava.h"
-#include "textline.h"
-#include "trill.h"
-#include "pedal.h"
-#include "hairpin.h"
-#include "keysig.h"
-#include "timesig.h"
-#include "barline.h"
-#include "arpeggio.h"
-#include "breath.h"
-#include "bracket.h"
-#include "chordrest.h"
 #include "accidental.h"
-#include "dynamic.h"
-#include "text.h"
-#include "note.h"
-#include "tremolo.h"
-#include "layoutbreak.h"
-#include "repeat.h"
-#include "page.h"
-#include "system.h"
-#include "stafftext.h"
-#include "glissando.h"
+#include "ambitus.h"
+#include "arpeggio.h"
 #include "articulation.h"
-#include "chord.h"
-#include "spacer.h"
-#include "tempotext.h"
-#include "harmony.h"
-#include "lyrics.h"
-#include "rest.h"
-#include "slur.h"
-#include "measure.h"
-#include "fret.h"
-#include "staffstate.h"
-#include "fingering.h"
+#include "bagpembell.h"
+#include "barline.h"
 #include "bend.h"
-#include "tremolobar.h"
-#include "chordline.h"
-#include "undo.h"
-#include "segment.h"
 #include "box.h"
+#include "bracket.h"
+#include "breath.h"
+#include "chord.h"
+#include "chordline.h"
+#include "chordrest.h"
+#include "clef.h"
+#include "dynamic.h"
+#include "figuredbass.h"
+#include "fingering.h"
+#include "fret.h"
+#include "glissando.h"
+#include "hairpin.h"
+#include "harmony.h"
+#include "icon.h"
+#include "image.h"
+#include "iname.h"
 #include "instrchange.h"
+#include "jump.h"
+#include "keysig.h"
+#include "layoutbreak.h"
+#include "lyrics.h"
+#include "marker.h"
+#include "measure.h"
+#include "mscore.h"
+#include "notedot.h"
+#include "note.h"
+#include "noteline.h"
+#include "ossia.h"
+#include "ottava.h"
+#include "page.h"
+#include "pedal.h"
+#include "rehearsalmark.h"
+#include "repeat.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "slur.h"
+#include "spacer.h"
+#include "staff.h"
+#include "staffstate.h"
+#include "stafftext.h"
 #include "stafftype.h"
 #include "stem.h"
-#include "iname.h"
-#include "mscore.h"
-#include "icon.h"
-#include "ossia.h"
-#include "figuredbass.h"
-#include "rehearsalmark.h"
-#include "notedot.h"
+#include "style.h"
+#include "symbol.h"
+#include "sym.h"
+#include "system.h"
+#include "tempotext.h"
 #include "textframe.h"
-#include "image.h"
-#include "marker.h"
-#include "jump.h"
-#include "noteline.h"
-#include "bagpembell.h"
-#include "ambitus.h"
+#include "text.h"
+#include "textline.h"
+#include "timesig.h"
+#include "tremolobar.h"
+#include "tremolo.h"
+#include "trill.h"
+#include "undo.h"
+#include "utils.h"
+#include "volta.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -143,6 +143,7 @@ static const ElementName elementNames[] = {
       ElementName("TextLineSegment",      QT_TRANSLATE_NOOP("elementName", "Text Line Segment")),
       ElementName("VoltaSegment",         QT_TRANSLATE_NOOP("elementName", "Volta Segment")),
       ElementName("PedalSegment",         QT_TRANSLATE_NOOP("elementName", "Pedal Segment")),
+      ElementName("LyricsLineSegment",    QT_TRANSLATE_NOOP("elementName", "Lyrics Line Segment")),
       ElementName("LayoutBreak",          QT_TRANSLATE_NOOP("elementName", "Layout Break")),
       ElementName("Spacer",               QT_TRANSLATE_NOOP("elementName", "Spacer")),
       ElementName("StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State")),
@@ -164,6 +165,7 @@ static const ElementName elementNames[] = {
       ElementName("Trill",                QT_TRANSLATE_NOOP("elementName", "Trill")),
       ElementName("TextLine",             QT_TRANSLATE_NOOP("elementName", "Text Line")),
       ElementName("NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note Line")),
+      ElementName("LyricsLine",           QT_TRANSLATE_NOOP("elementName", "Lyrics Line")),
       ElementName("Segment",              QT_TRANSLATE_NOOP("elementName", "Segment")),
       ElementName("System",               QT_TRANSLATE_NOOP("elementName", "System")),
       ElementName("Compound",             QT_TRANSLATE_NOOP("elementName", "Compound")),
@@ -1333,6 +1335,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::OTTAVA:            return new Ottava(score);
             case Element::Type::TEXTLINE:          return new TextLine(score);
             case Element::Type::NOTELINE:          return new NoteLine(score);
+            case Element::Type::LYRICSLINE:        return new LyricsLine(score);
             case Element::Type::TRILL:             return new Trill(score);
             case Element::Type::PEDAL:             return new Pedal(score);
             case Element::Type::HAIRPIN:           return new Hairpin(score);
@@ -1404,6 +1407,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::TRILL_SEGMENT:
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
+            case Element::Type::LYRICSLINE_SEGMENT:
             case Element::Type::LEDGER_LINE:
             case Element::Type::STAFF_LINES:
             case Element::Type::SELECTION:
