@@ -1462,7 +1462,6 @@ void MuseScore::showMessage(const QString& s, int timeout)
 
 void MuseScore::midiPanelOnSwitchToFile(const QString &file)
       {
-return;
       bool isMidiFile = ImportMidiPanel::isMidiFile(file);
       if (isMidiFile) {
             importmidiPanel->setMidiFile(file);
