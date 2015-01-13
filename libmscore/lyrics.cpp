@@ -728,17 +728,19 @@ void LyricsLineSegment::layout()
             rxpos2()          -= offsetX;
             }
 
-      // VERTICAL POSITION: at the base line of the syllable text relative to the system
-      qreal lyrY  = lyr->y();
-      qreal sysY  = sys->y();
-      rypos()     = lyrY - sysY;
+      // VERTICAL POSITION: at the base line of the syllable text
+      rypos()     = lyr->y();
 
       // MELISMA vs. DASHES
       if (isEndMelisma) {                 // melisma
             _numOfDashes = 1;
             rypos()  -= lyricsLine()->lineWidth().val() * sp * HALF; // let the line 'sit on' the base line
-            // extend slightly after the chord
-            rxpos2() += score()->styleD(StyleIdx::minNoteDistance) * sp;
+            qreal offsetX = score()->styleD(StyleIdx::minNoteDistance) * sp;
+            // if final segment, extend slightly after the chord, otherwise shorten it
+            rxpos2() +=
+                  (spannerSegmentType() == SpannerSegmentType::BEGIN ||
+                        spannerSegmentType() == SpannerSegmentType::MIDDLE)
+                  ? -offsetX : +offsetX;
             }
       else {                              // dash(es)
 #if defined(USE_FONT_DASH_METRIC)
