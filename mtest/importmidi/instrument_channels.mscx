@@ -294,6 +294,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>

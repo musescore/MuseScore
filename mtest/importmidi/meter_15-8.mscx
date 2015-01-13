@@ -128,7 +128,7 @@
           <durationType>eighth</durationType>
           <Note>
             <pitch>44</pitch>
-            <tpc>22</tpc>
+            <tpc>10</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
