@@ -4205,7 +4205,7 @@ static void midiInstrument(Xml& xml, const int partNr, const int instrNr,
  Used to generate instrument numbers for a multi-instrument part
  */
 
-static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList* il, const Score* score)
+static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList* il, const Score* /*score*/)
       {
       im.clear();
       for (auto i = il->begin(); i != il->end(); ++i) {
