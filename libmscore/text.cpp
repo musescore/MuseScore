@@ -611,17 +611,21 @@ void TextBlock::simplify()
 //   remove
 //---------------------------------------------------------
 
-void TextBlock::remove(int start, int n)
+QString TextBlock::remove(int start, int n)
       {
       int col = 0;
+      QString s;
       for (auto i = _text.begin(); i != _text.end();) {
             int idx  = 0;
             int rcol = 0;
             bool inc = true;
-            for (const QChar& c : i->text) {
+            foreach (const QChar& c, i->text) {       // iterate on copy of i->text
                   if (col == start) {
-                        if (c.isSurrogate())
+                        if (c.isSurrogate()) {
+                              s += c;
                               i->text.remove(rcol, 1);
+                              }
+                        s += c;
                         i->text.remove(rcol, 1);
                         if (i->format.type() == CharFormatType::SYMBOL)
                               i->ids.removeAt(idx);
@@ -631,7 +635,7 @@ void TextBlock::remove(int start, int n)
                               }
                         --n;
                         if (n == 0)
-                              return;
+                              return s;
                         continue;
                         }
                   ++idx;
@@ -643,6 +647,7 @@ void TextBlock::remove(int start, int n)
             if (inc)
                   ++i;
             }
+      return s;
       }
 
 //---------------------------------------------------------
@@ -817,8 +822,6 @@ Text::Text(Score* s)
       _styleIndex = TextStyleType::DEFAULT;
       if (s)
             _textStyle = s->textStyle(TextStyleType::DEFAULT);
-      _layoutToParentWidth = false;
-      _editMode            = false;
       setFlag(ElementFlag::MOVABLE, true);
       }
 
@@ -831,6 +834,7 @@ Text::Text(const Text& st)
       _styleIndex          = st._styleIndex;
       _layoutToParentWidth = st._layoutToParentWidth;
       _editMode            = false;
+      hexState             = -1;
       _textStyle           = st._textStyle;
       }
 
@@ -1571,155 +1575,214 @@ TextBlock& Text::curLine()
 
 bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, const QString& _s)
       {
-      QRectF refresh(canvasBoundingRect());
-      QString s = _s;
-      QTextCursor::MoveMode mm = (modifiers & Qt::ShiftModifier)
-         ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-      bool ctrlPressed = modifiers & Qt::ControlModifier;
+      QString s         = _s;
+      bool ctrlPressed  = modifiers & Qt::ControlModifier;
+      bool shiftPressed = modifiers & Qt::ShiftModifier;
 
-      switch (key) {
-            case Qt::Key_Enter:
-            case Qt::Key_Return:
-                  {
-                  if (_cursor.hasSelection())
-                        deleteSelectedText();
-                  int line = _cursor.line();
+      QTextCursor::MoveMode mm = shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
-                  CharFormat* charFmt = _cursor.format();         // take current format
-                  _layout.insert(line + 1, curLine().split(_cursor.column()));
-                  _layout[line].setEol(true);
-
-                  _cursor.setLine(line+1);
-                  _cursor.setColumn(0);
-                  _cursor.setFormat(*charFmt);                    // restore orig. format at new line
-                  s.clear();
-                  _cursor.clearSelection();
-                  break;
+      bool wasHex = false;
+      if (hexState >= 0) {
+            if (modifiers == (Qt::ControlModifier | Qt::ShiftModifier | Qt::KeypadModifier)) {
+                  switch (key) {
+                        case Qt::Key_0:
+                        case Qt::Key_1:
+                        case Qt::Key_2:
+                        case Qt::Key_3:
+                        case Qt::Key_4:
+                        case Qt::Key_5:
+                        case Qt::Key_6:
+                        case Qt::Key_7:
+                        case Qt::Key_8:
+                        case Qt::Key_9:
+                              s = QChar::fromLatin1(key);
+                              ++hexState;
+                              wasHex = true;
+                              break;
+                        default:
+                              break;
+                        }
                   }
-
-            case Qt::Key_Backspace:
-                  if (_cursor.hasSelection())
-                        deleteSelectedText();
-                  else if (!deletePreviousChar())
-                        return false;
-                  s.clear();
-                  break;
-
-            case Qt::Key_Delete:
-                  if (_cursor.hasSelection())
-                        deleteSelectedText();
-                  else if (!deleteChar())
-                        return false;
-                  s.clear();
-                  break;
-
-            case Qt::Key_Left:
-                  if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
-                        return false;
-                  s.clear();
-                  break;
-
-            case Qt::Key_Right:
-                  if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
-                        return false;
-                  s.clear();
-                  break;
-
-            case Qt::Key_Up:
-                  movePosition(QTextCursor::Up, mm);
-                  s.clear();
-                  break;
-
-            case Qt::Key_Down:
-                  movePosition(QTextCursor::Down, mm);
-                  s.clear();
-                  break;
-
-            case Qt::Key_Home:
-                  movePosition(QTextCursor::Start, mm);
-                  s.clear();
-                  break;
-
-            case Qt::Key_End:
-                  movePosition(QTextCursor::End, mm);
-                  s.clear();
-                  break;
-
-            case Qt::Key_Space:
-                  s = " ";
-                  modifiers = 0;
-                  break;
-
-            case Qt::Key_Minus:
-                  s = "-";
-                  modifiers = 0;
-                  break;
-
-            case Qt::Key_Underscore:
-                  s = "_";
-                  modifiers = 0;
-                  break;
-
-            case Qt::Key_A:
-                  if (modifiers & Qt::ControlModifier) {
-                        selectAll();
-                        s.clear();
+            else if (modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
+                  switch (key) {
+                        case Qt::Key_A:
+                        case Qt::Key_B:
+                        case Qt::Key_C:
+                        case Qt::Key_D:
+                        case Qt::Key_E:
+                        case Qt::Key_F:
+                              s = QChar::fromLatin1(key);
+                              ++hexState;
+                              wasHex = true;
+                              break;
+                        default:
+                              break;
+                        }
                   }
-                  break;
-            default:
-                  break;
             }
-      if ((modifiers & Qt::ControlModifier) && (modifiers & Qt::ShiftModifier)) {
+
+      if (!wasHex) {
             switch (key) {
-                  case Qt::Key_B:
-                        insertSym(SymId::accidentalFlat);
+                  case Qt::Key_Enter:
+                  case Qt::Key_Return:
+                        {
+                        if (_cursor.hasSelection())
+                              deleteSelectedText();
+                        int line = _cursor.line();
+
+                        CharFormat* charFmt = _cursor.format();         // take current format
+                        _layout.insert(line + 1, curLine().split(_cursor.column()));
+                        _layout[line].setEol(true);
+
+                        _cursor.setLine(line+1);
+                        _cursor.setColumn(0);
+                        _cursor.setFormat(*charFmt);                    // restore orig. format at new line
+                        s.clear();
+                        _cursor.clearSelection();
+                        break;
+                        }
+
+                  case Qt::Key_Backspace:
+                        if (_cursor.hasSelection())
+                              deleteSelectedText();
+                        else if (!deletePreviousChar())
+                              return false;
                         s.clear();
                         break;
-                  case Qt::Key_NumberSign:
-                        insertSym(SymId::accidentalSharp);
+
+                  case Qt::Key_Delete:
+                        if (_cursor.hasSelection())
+                              deleteSelectedText();
+                        else if (!deleteChar())
+                              return false;
                         s.clear();
                         break;
-                  case Qt::Key_H:
-                        insertSym(SymId::accidentalNatural);
+
+                  case Qt::Key_Left:
+                        if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
+                              return false;
                         s.clear();
                         break;
+
+                  case Qt::Key_Right:
+                        if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
+                              return false;
+                        s.clear();
+                        break;
+
+                  case Qt::Key_Up:
+                        movePosition(QTextCursor::Up, mm);
+                        s.clear();
+                        break;
+
+                  case Qt::Key_Down:
+                        movePosition(QTextCursor::Down, mm);
+                        s.clear();
+                        break;
+
+                  case Qt::Key_Home:
+                        movePosition(QTextCursor::Start, mm);
+                        s.clear();
+                        break;
+
+                  case Qt::Key_End:
+                        movePosition(QTextCursor::End, mm);
+                        s.clear();
+                        break;
+
                   case Qt::Key_Space:
-                        insertSym(SymId::space);
-                        s.clear();
+                        s = " ";
+                        modifiers = 0;
                         break;
-                  case Qt::Key_F:
-                        insertSym(SymId::dynamicForte);
-                        s.clear();
+
+                  case Qt::Key_Minus:
+                        s = "-";
+                        modifiers = 0;
                         break;
-                  case Qt::Key_M:
-                        insertSym(SymId::dynamicMezzo);
-                        s.clear();
+
+                  case Qt::Key_Underscore:
+                        s = "_";
+                        modifiers = 0;
                         break;
-                  case Qt::Key_N:
-                        insertSym(SymId::dynamicNiente);
-                        s.clear();
+
+                  case Qt::Key_A:
+                        if (ctrlPressed) {
+                              selectAll();
+                              s.clear();
+                        }
                         break;
-                  case Qt::Key_P:
-                        insertSym(SymId::dynamicPiano);
-                        s.clear();
-                        break;
-                  case Qt::Key_S:
-                        insertSym(SymId::dynamicSforzando);
-                        s.clear();
-                        break;
-                  case Qt::Key_R:
-                        insertSym(SymId::dynamicRinforzando);
-                        s.clear();
-                        break;
-                  case Qt::Key_Z:
-                        // Ctrl+Z is normally "undo"
-                        // but this code gets hit even if you are also holding Shift
-                        // so Shift+Ctrl+Z works
-                        insertSym(SymId::dynamicZ);
-                        s.clear();
+                  default:
                         break;
                   }
+            if (ctrlPressed && shiftPressed) {
+                  switch (key) {
+                        case Qt::Key_U:
+                              if (hexState == -1) {
+                                    hexState = 0;
+                                    s = "u";
+                                    }
+                              break;
+                        case Qt::Key_B:
+                              insertSym(SymId::accidentalFlat);
+                              s.clear();
+                              break;
+                        case Qt::Key_NumberSign:
+                              insertSym(SymId::accidentalSharp);
+                              s.clear();
+                              break;
+                        case Qt::Key_H:
+                              insertSym(SymId::accidentalNatural);
+                              s.clear();
+                              break;
+                        case Qt::Key_Space:
+                              insertSym(SymId::space);
+                              s.clear();
+                              break;
+                        case Qt::Key_F:
+                              insertSym(SymId::dynamicForte);
+                              s.clear();
+                              break;
+                        case Qt::Key_M:
+                              insertSym(SymId::dynamicMezzo);
+                              s.clear();
+                              break;
+                        case Qt::Key_N:
+                              insertSym(SymId::dynamicNiente);
+                              s.clear();
+                              break;
+                        case Qt::Key_P:
+                              insertSym(SymId::dynamicPiano);
+                              s.clear();
+                              break;
+                        case Qt::Key_S:
+                              insertSym(SymId::dynamicSforzando);
+                              s.clear();
+                              break;
+                        case Qt::Key_R:
+                              insertSym(SymId::dynamicRinforzando);
+                              s.clear();
+                              break;
+                        case Qt::Key_Z:
+                              // Ctrl+Z is normally "undo"
+                              // but this code gets hit even if you are also holding Shift
+                              // so Shift+Ctrl+Z works
+                              insertSym(SymId::dynamicZ);
+                              s.clear();
+                              break;
+                        }
+                  }
             }
+      editInsertText(s);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   editInsertText
+//---------------------------------------------------------
+
+void Text::editInsertText(const QString& s)
+      {
+      QRectF refresh(canvasBoundingRect());
       if (!s.isEmpty())
             insertText(s);
       layout1();
@@ -1736,7 +1799,33 @@ bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, c
             refresh |= canvasBoundingRect();
             score()->addRefresh(refresh.adjusted(-w, -w, w, w));
             }
-      return true;
+      }
+
+//---------------------------------------------------------
+//   endHexState
+//---------------------------------------------------------
+
+void Text::endHexState()
+      {
+      if (hexState >= 0) {
+            if (hexState > 0) {
+                  int c2 = _cursor.column();
+                  int c1 = c2 - (hexState + 1);
+
+                  TextBlock& t = _layout[_cursor.line()];
+                  QString ss   = t.remove(c1, hexState + 1);
+                  bool ok;
+                  int code     = ss.mid(1).toInt(&ok, 16);
+                  _cursor.setColumn(c1);
+                  _cursor.clearSelection();
+                  if (ok)
+                        editInsertText(QString(code));
+                  else
+                        qDebug("cannot convert hex string <%s>, state %d (%d-%d)",
+                           qPrintable(ss.mid(1)), hexState, c1, c2);
+                  }
+            hexState = -1;
+            }
       }
 
 //---------------------------------------------------------

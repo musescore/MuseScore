@@ -275,6 +275,25 @@ class EditKeyTransition : public QEventTransition
       };
 
 //---------------------------------------------------------
+//   EditKeyReleaseTransition
+//---------------------------------------------------------
+
+class EditKeyReleaseTransition : public QEventTransition
+      {
+      ScoreView* canvas;
+
+   protected:
+      virtual void onTransition(QEvent* e) {
+            QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
+            QKeyEvent* ke = static_cast<QKeyEvent*>(we->event());
+            canvas->editKey(ke);
+            }
+   public:
+      EditKeyReleaseTransition(ScoreView* c)
+         : QEventTransition(c, QEvent::KeyRelease), canvas(c) {}
+      };
+
+//---------------------------------------------------------
 //   ScoreViewLassoTransition
 //---------------------------------------------------------
 
@@ -762,7 +781,8 @@ ScoreView::ScoreView(QWidget* parent)
       connect(ct, SIGNAL(triggered()), SLOT(endEdit()));
       s->addTransition(ct);
 
-      s->addTransition(new EditKeyTransition(this));                          // key events
+      s->addTransition(new EditKeyTransition(this));                          // key press events
+      s->addTransition(new EditKeyReleaseTransition(this));                   // key release events
 
       et = new EditTransition(this, s);                                       // ->EDIT
       connect(et, SIGNAL(triggered()), SLOT(endStartEdit()));
