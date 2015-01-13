@@ -71,8 +71,11 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction &fraction)
             quantValue = MidiOperations::QuantValue::Q_64;
       else if (fraction == division / 32)
             quantValue = MidiOperations::QuantValue::Q_128;
-      else
+      else {
+            qDebug("unknown quant fraction %d/%d  division %d/%d", fraction.numerator(), fraction.denominator(),
+               division.numerator(), division.denominator());
             Q_ASSERT_X(false, "Quantize::fractionToQuantValue", "Unknown quant fraction");
+            }
 
       return quantValue;
       }

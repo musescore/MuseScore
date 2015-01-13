@@ -150,7 +150,7 @@ class TextBlock {
       void insert(TextCursor*, const QString&);
       void insert(TextCursor*, SymId);
       void remove(int column);
-      void remove(int start, int n);
+      QString remove(int start, int n);
       int column(qreal x, Text*) const;
       TextBlock split(int column);
       qreal xpos(int col, const Text*) const;
@@ -183,8 +183,9 @@ class Text : public Element {
       QList<TextBlock> _layout;
       TextStyleType _styleIndex;
 
-      bool _layoutToParentWidth;
-      bool _editMode;
+      bool _layoutToParentWidth     { false };
+      bool _editMode                { false };
+      int  hexState                 { -1    };
       TextStyle _textStyle;
 
       static TextCursor _cursor;       // used during editing
@@ -200,6 +201,7 @@ class Text : public Element {
       void genText();
       void changeSelectionFormat(FormatId id, QVariant val);
       void setEditMode(bool val)              { _editMode = val;  }
+      void editInsertText(const QString&);
 
    protected:
       QColor textColor() const;
@@ -312,6 +314,8 @@ class Text : public Element {
       QList<TextFragment> fragmentList() const; // for MusicXML formatted export
 
       static bool validateText(QString& s);
+      bool inHexState() const { return hexState >= 0; }
+      void endHexState();
       };
 
 

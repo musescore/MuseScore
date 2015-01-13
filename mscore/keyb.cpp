@@ -134,13 +134,24 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
 
 void ScoreView::editKey(QKeyEvent* ev)
       {
+      if (ev->type() == QEvent::KeyRelease) {
+            auto modifiers = Qt::ControlModifier | Qt::ShiftModifier;
+            if (editObject && editObject->isText()
+               && ((ev->modifiers() & modifiers) == 0)) {
+                  Text* text = static_cast<Text*>(editObject);
+                  text->endHexState();
+                  ev->accept();
+                  update();
+                  }
+            return;
+            }
       int key                         = ev->key();
       Qt::KeyboardModifiers modifiers = ev->modifiers();
       QString s                       = ev->text();
 
       if (MScore::debugMode)
-            qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s>",
-               key, key, int(modifiers), qPrintable(s));
+            qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s> nativeKey 0x%02x scancode %d",
+               key, key, int(modifiers), qPrintable(s), ev->nativeVirtualKey(), ev->nativeScanCode());
 
       if (!editObject)
             return;

@@ -140,7 +140,7 @@ bool PulseAudio::init(bool)
 
       pa_stream* playstream = pa_stream_new(pa_ctx, "Playback", &ss, NULL);
       if (!playstream) {
-            qDebug("pa_stream_new failed");
+            qDebug("pa_stream_new failed: %s", pa_strerror(pa_context_errno(pa_ctx)));
             return false;
             }
       pa_stream_set_write_callback(playstream, paCallback, this);

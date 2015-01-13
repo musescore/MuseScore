@@ -427,7 +427,7 @@ MuseScore::MuseScore()
       envelope->setChildrenCollapsible(false);
       envelope->setOrientation(Qt::Vertical);
       envelope->addWidget(mainWindow);
-
+#if 0
       importmidiPanel = new ImportMidiPanel(this);
       importmidiPanel->setVisible(false);
       envelope->addWidget(importmidiPanel);
@@ -448,7 +448,7 @@ MuseScore::MuseScore()
       hl->addSpacerItem(item);
       envelope->addWidget(importmidiShowPanel);
       }
-
+#endif
       envelope->setSizes(QList<int>({550, 180}));
 
       splitter = new QSplitter;
@@ -1462,6 +1462,7 @@ void MuseScore::showMessage(const QString& s, int timeout)
 
 void MuseScore::midiPanelOnSwitchToFile(const QString &file)
       {
+return;
       bool isMidiFile = ImportMidiPanel::isMidiFile(file);
       if (isMidiFile) {
             importmidiPanel->setMidiFile(file);
