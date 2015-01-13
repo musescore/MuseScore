@@ -1486,7 +1486,10 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               int absLine = (int) clefMiddleTone + clefMiddleOctave * OCTAVE + oveNote->getLine();
                               int tone = absLine % OCTAVE;
                               int alter = accidentalToAlter(oveNote->getAccidental());
-                              note->setTpcFromPitch();
+                              NoteVal nv(pitch);
+                              note->setTrack(cr->track());
+                              note->setNval(nv, cr->tick());
+                              // note->setTpcFromPitch();
                               note->setTpc(step2tpc(tone, AccidentalVal(alter)));
 
                               note->setHeadGroup(getHeadGroup(oveNote->getHeadType()));
