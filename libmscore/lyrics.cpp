@@ -737,8 +737,8 @@ void LyricsLineSegment::layout()
       if (isEndMelisma) {                 // melisma
             _numOfDashes = 1;
             rypos()  -= lyricsLine()->lineWidth().val() * sp * HALF; // let the line 'sit on' the base line
-            // reduce length to have some 'air' after the line
-            rxpos2() -= score()->styleD(StyleIdx::minNoteDistance) * sp;
+            // extend slightly after the chord
+            rxpos2() += score()->styleD(StyleIdx::minNoteDistance) * sp;
             }
       else {                              // dash(es)
 #if defined(USE_FONT_DASH_METRIC)
