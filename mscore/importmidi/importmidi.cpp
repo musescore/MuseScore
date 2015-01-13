@@ -401,10 +401,13 @@ void setMusicNotesFromMidi(Score *score,
       for (int i = 0; i < midiNotes.size(); ++i) {
             const MidiNote& mn = midiNotes[i];
             Note* note = new Note(score);
+            note->setTrack(chord->track());
 
+            NoteVal nval(mn.pitch);
+            note->setNval(nval, chord->tick());
             // TODO - does this need to be key-aware?
-            note->setPitch(mn.pitch);
-            note->setTpcFromPitch();
+            //note->setPitch(mn.pitch);
+            //note->setTpcFromPitch();
 
             chord->add(note);
             note->setVeloType(Note::ValueType::USER_VAL);
