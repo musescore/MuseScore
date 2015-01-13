@@ -1288,7 +1288,6 @@ Element* Element::create(Element::Type type, Score* score)
 
             case Element::Type::TEXTLINE_SEGMENT:    // return new TextLineSegment(score);
             case Element::Type::GLISSANDO_SEGMENT:
-            case Element::Type::MELISMA_SEGMENT:
 
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::STEM_SLASH:
