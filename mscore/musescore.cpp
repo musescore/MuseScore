@@ -427,7 +427,7 @@ MuseScore::MuseScore()
       envelope->setChildrenCollapsible(false);
       envelope->setOrientation(Qt::Vertical);
       envelope->addWidget(mainWindow);
-#if 0
+
       importmidiPanel = new ImportMidiPanel(this);
       importmidiPanel->setVisible(false);
       envelope->addWidget(importmidiPanel);
@@ -448,7 +448,7 @@ MuseScore::MuseScore()
       hl->addSpacerItem(item);
       envelope->addWidget(importmidiShowPanel);
       }
-#endif
+
       envelope->setSizes(QList<int>({550, 180}));
 
       splitter = new QSplitter;
