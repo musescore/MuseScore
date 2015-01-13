@@ -608,25 +608,61 @@ void LyricsLine::layout()
             // Lyrics::_ticks points to the beginning of the last spanned segment,
             // but the line shall include it:
             // include the duration of this last segment in the melisma duration
-            bool        ticksSet    = false;
-            Segment*    lastSeg     = score()->tick2segment(lyrics()->endTick(), false, Segment::Type::ChordRest, false);
-            if (lastSeg) {
-                  // if last segment found, locate the first non-empty ChordRest
-                  // in the same staff of this LyricsLine and use its duration
-                  int   firstTrack  = (track() >> 2) << 2;
-                  int   lastTrack   = firstTrack + VOICES;
-                  for (int i = firstTrack; i < lastTrack; i++) {
-                        ChordRest* cr = static_cast<ChordRest*>(lastSeg->elementAt(i));
-                        if (cr) {
-                              setTicks(lyrics()->ticks() + cr->durationTicks());
-                              ticksSet = true;
+            Segment* lyricsSegment = lyrics()->segment();
+            int lyricsStartTick = lyricsSegment->tick();
+            int lyricsEndTick = lyrics()->endTick();
+            int lyricsTrack = lyrics()->track();
+            // find segment with tick >= endTick
+            Segment* s = lyricsSegment;
+            while (s && s->tick() < lyricsEndTick)
+                  s = s->nextCR();
+            if (!s) {
+                  // user probably deleted measures at end of score, leaving this melisma too long
+                  // set s to last segment and reset lyricsEndTick to trigger FIXUP code below
+                  s = score()->lastSegment();
+                  lyricsEndTick = -1;
+                  }
+            Element* se = s->element(lyricsTrack);
+            // everything is OK if we have reached a chord at right tick on right track
+            if (s->tick() == lyricsEndTick && se && se->type() == Element::Type::CHORD) {
+                  // advance to next CR, or last segment if no next CR
+                  s = s->nextCR();
+                  if (!s)
+                        s = score()->lastSegment();
+                  }
+            else {
+                  // FIXUP - lyrics tick count not valid
+                  // this happens if edits to score have removed the original end segment
+                  // so let's fix it here
+                  // s is already pointing to segment past endTick (or to last segment)
+                  // we should shorten the lyrics tick count to make this work
+                  Segment* ns = s;
+                  Segment* ps = s->prev1(Segment::Type::ChordRest);
+                  while (ps && ps != lyricsSegment) {
+                        Element* pe = ps->element(lyricsTrack);
+                        // we're looking for an actual chord on this track
+                        if (pe && pe->type() == Element::Type::CHORD)
                               break;
+                        s = ps;
+                        ps = ps->prev1(Segment::Type::ChordRest);
+                        }
+                  if (!ps || ps == lyricsSegment) {
+                        // no valid previous CR, so try to lengthen melisma instead
+                        ps = ns;
+                        s = ps->nextCR(lyricsTrack);
+                        Element* e = s ? s->element(lyricsTrack) : nullptr;
+                        // check to make sure we have a chord
+                        if (!e || e->type() != Element::Type::CHORD) {
+                              // nothing to do but set ticks to 0
+                              // this will result in melisma being deleted later
+                              lyrics()->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
+                              setTicks(0);
+                              return;
                               }
                         }
+                  lyrics()->undoChangeProperty(P_ID::LYRIC_TICKS, ps->tick() - lyricsStartTick);
                   }
-            // no suitable ChordRest found? go to the end of the last known segment
-            if (!ticksSet)
-                  setTicks(lyrics()->ticks());
+            setTicks(s->tick() - lyricsStartTick);
             }
       else {                                    // dash(es)
 #if defined(USE_FONT_DASH_TICKNESS)
@@ -728,17 +764,20 @@ void LyricsLineSegment::layout()
             rxpos2()          -= offsetX;
             }
 
-      // VERTICAL POSITION: at the base line of the syllable text relative to the system
-      qreal lyrY  = lyr->y();
-      qreal sysY  = sys->y();
-      rypos()     = lyrY - sysY;
+      // VERTICAL POSITION: at the base line of the syllable text
+      rypos()     = lyr->y();
 
       // MELISMA vs. DASHES
       if (isEndMelisma) {                 // melisma
             _numOfDashes = 1;
             rypos()  -= lyricsLine()->lineWidth().val() * sp * HALF; // let the line 'sit on' the base line
-            // extend slightly after the chord
-            rxpos2() += score()->styleD(StyleIdx::minNoteDistance) * sp;
+            qreal offsetX = score()->styleD(StyleIdx::minNoteDistance) * sp;
+            // if final segment, extend slightly after the chord, otherwise shorten it
+            rxpos2() +=
+                  (spannerSegmentType() == SpannerSegmentType::BEGIN ||
+                        spannerSegmentType() == SpannerSegmentType::MIDDLE)
+                  ? -offsetX : +offsetX;
+
             }
       else {                              // dash(es)
 #if defined(USE_FONT_DASH_METRIC)
