@@ -65,7 +65,7 @@ private slots:
       void repeats() { bwwIoTest("testRepeats"); }
       void tempo120() { bwwIoTest("testTempo120"); }
       void tempo60() { bwwIoTest("testTempo60"); }
-      void tieTriplets() { TODO IoTest("testTieTriplets"); }
+      void tieTriplets() { bwwIoTest("testTieTriplet"); }
       void triplets() { bwwIoTest("testTriplets"); }
       };
 
