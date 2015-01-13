@@ -531,7 +531,7 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                         else if (type() == Element::Type::LYRICSLINE) {
                               // layout to right edge of CR
                               if (cr)
-                                    x = cr->width();
+                                    x = cr->pos().x() + cr->width();
                               }
                         else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL
                                     || type() == Element::Type::TEXTLINE) {
