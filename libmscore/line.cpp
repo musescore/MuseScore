@@ -534,7 +534,7 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                                     x = cr->width();
                               }
                         else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL
-                                    || type() == Element::Type::TEXTLINE || type() == Element::Type::LYRICSLINE) {
+                                    || type() == Element::Type::TEXTLINE) {
                               // lay out to just before next CR or barline
                               if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
                                     qreal x2 = cr->x() + cr->space().rw();
