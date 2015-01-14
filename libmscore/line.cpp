@@ -529,10 +529,28 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                                     }
                               }
                         else if (type() == Element::Type::LYRICSLINE) {
+                              // it is possible CR won't be in correct track
+                              // prefer element in current track if available
+                              if (cr->track() != track()) {
+                                    Element* e = cr->segment()->element(track());
+                                    if (e)
+                                          cr = static_cast<ChordRest*>(e);
+                                    }
                               // layout to right edge of CR
-                              if (cr)
-                                    x = cr->width();
-                              }
+                              if (cr) {
+                                    qreal maxRight = 0.0;
+                                    if (cr->type() == Element::Type::CHORD) {
+                                          // chord bbox() is unreliable, look at notes
+                                          for (Note* n : static_cast<Chord*>(cr)->notes())
+                                                maxRight = qMax(maxRight, cr->x() + n->x() + n->width());
+                                          }
+                                    else {
+                                          // rest - won't normally happen
+                                          maxRight = cr->x() + cr->width();
+                                          }
+                                    x = maxRight; // cr->width()
+                                    }
+                             }
                         else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL
                                     || type() == Element::Type::TEXTLINE) {
                               // lay out to just before next CR or barline

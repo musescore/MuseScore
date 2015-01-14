@@ -608,25 +608,13 @@ void LyricsLine::layout()
             // Lyrics::_ticks points to the beginning of the last spanned segment,
             // but the line shall include it:
             // include the duration of this last segment in the melisma duration
-            bool        ticksSet    = false;
-            Segment*    lastSeg     = score()->tick2segment(lyrics()->endTick(), false, Segment::Type::ChordRest, false);
-            if (lastSeg) {
-                  // if last segment found, locate the first non-empty ChordRest
-                  // in the same staff of this LyricsLine and use its duration
-                  int   firstTrack  = (track() >> 2) << 2;
-                  int   lastTrack   = firstTrack + VOICES;
-                  for (int i = firstTrack; i < lastTrack; i++) {
-                        ChordRest* cr = static_cast<ChordRest*>(lastSeg->elementAt(i));
-                        if (cr) {
-                              setTicks(lyrics()->ticks() + cr->durationTicks());
-                              ticksSet = true;
-                              break;
-                              }
-                        }
-                  }
-            // no suitable ChordRest found? go to the end of the last known segment
-            if (!ticksSet)
-                  setTicks(lyrics()->ticks());
+            Segment* s = score()->tick2segment(lyrics()->endTick(), false, Segment::Type::ChordRest, false);
+            if (s)
+                  s = s->nextCR();
+            if (!s)
+                  s = score()->lastSegment();
+            int adjustedTicks = s ? s->tick() - lyrics()->segment()->tick() : lyrics()->ticks();
+            setTicks(adjustedTicks);
             }
       else {                                    // dash(es)
 #if defined(USE_FONT_DASH_TICKNESS)
@@ -728,17 +716,20 @@ void LyricsLineSegment::layout()
             rxpos2()          -= offsetX;
             }
 
-      // VERTICAL POSITION: at the base line of the syllable text relative to the system
-      qreal lyrY  = lyr->y();
-      qreal sysY  = sys->y();
-      rypos()     = lyrY - sysY;
+      // VERTICAL POSITION: at the base line of the syllable text
+      rypos()     = lyr->y();
 
       // MELISMA vs. DASHES
       if (isEndMelisma) {                 // melisma
             _numOfDashes = 1;
             rypos()  -= lyricsLine()->lineWidth().val() * sp * HALF; // let the line 'sit on' the base line
-            // extend slightly after the chord
-            rxpos2() += score()->styleD(StyleIdx::minNoteDistance) * sp;
+            qreal offsetX = score()->styleD(StyleIdx::minNoteDistance) * sp;
+            // if final segment, extend slightly after the chord, otherwise shorten it
+            rxpos2() +=
+                  (spannerSegmentType() == SpannerSegmentType::BEGIN ||
+                        spannerSegmentType() == SpannerSegmentType::MIDDLE)
+                  ? -offsetX : +offsetX;
+
             }
       else {                              // dash(es)
 #if defined(USE_FONT_DASH_METRIC)
