@@ -292,7 +292,12 @@ void ScoreView::lyricsUnderscore()
             segment = segment->prev1(Segment::Type::ChordRest);
             }
 
-      // if no place for a new lyrics found, update previous lyrics ticks and leave edit
+      // one-chord melisma?
+      // if still at melisma initial chord and there is a valid next chord (if not,
+      // there will be no melisma anyway), set a temporary melisma duration
+      if (oldLyrics == lyrics && nextSegment)
+            lyrics->setTicks(Lyrics::TEMP_MELISMA_TICKS);
+
       if (nextSegment == 0) {
             if (oldLyrics) {
                   switch(oldLyrics->syllabic()) {
