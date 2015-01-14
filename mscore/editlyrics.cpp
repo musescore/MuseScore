@@ -290,6 +290,9 @@ void ScoreView::lyricsUnderscore()
                         break;
                   }
             segment = segment->prev1(Segment::Type::ChordRest);
+            // if the segment has a rest in this track, stop going back
+            if (segment && segment->elementAt(track)->type() != Element::Type::CHORD)
+                  break;
             }
 
       if (nextSegment == 0) {
