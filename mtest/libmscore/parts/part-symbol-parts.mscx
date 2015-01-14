@@ -707,6 +707,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <metaTag name="partName">Alto</metaTag>
       <PageList>
         <Page>
           <System>
@@ -1074,6 +1075,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <metaTag name="partName">Tenor</metaTag>
       <PageList>
         <Page>
           <System>
