@@ -292,6 +292,7 @@ void ScoreView::lyricsUnderscore()
             segment = segment->prev1(Segment::Type::ChordRest);
             }
 
+      // if no place for a new lyrics found, update previous lyrics ticks and leave edit
       if (nextSegment == 0) {
             if (oldLyrics) {
                   switch(oldLyrics->syllabic()) {
@@ -305,8 +306,15 @@ void ScoreView::lyricsUnderscore()
                   if (oldLyrics->segment()->tick() < endTick)
                         oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - oldLyrics->segment()->tick());
                   }
+            // leave edit mode, select something (just for user feedback) and update to show extended melisam
+            mscore->changeState(STATE_NORMAL);
+            if (oldLyrics)
+                  _score->select(oldLyrics, SelectType::SINGLE, 0);
+            _score->update();
             return;
             }
+
+      // if a place for a new lyrics has been found, create a lyrics there
       _score->startCmd();
 
       const QList<Lyrics*>* ll = nextSegment->lyricsList(track);
