@@ -603,8 +603,12 @@ LyricsLine::LyricsLine(const LyricsLine& g)
 
 void LyricsLine::layout()
       {
+      bool tempMelismaTicks = (lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
       if (lyrics()->ticks() > 0) {              // melisma
             setLineWidth(Spatium(MELISMA_DEFAULT_LINE_THICKNESS));
+            // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
+            if (tempMelismaTicks)
+                  lyrics()->setTicks(0);
             // Lyrics::_ticks points to the beginning of the last spanned segment,
             // but the line shall include it:
             // include the duration of this last segment in the melisma duration
@@ -635,8 +639,17 @@ void LyricsLine::layout()
             _nextLyrics = searchNextLyrics(lyrics()->segment(), staffIdx(), lyrics()->no());
             setTick2(_nextLyrics != nullptr ? _nextLyrics->segment()->tick() : tick());
       }
-      if (ticks())                  // only do layout if some time span
+      if (ticks()) {                // only do layout if some time span
+            // do layout with non-0 duration
+            if (tempMelismaTicks)
+                  lyrics()->setTicks(Lyrics::TEMP_MELISMA_TICKS);
             SLine::layout();
+            // if temp melisma and there is a first line segment,
+            // extend it to be after the lyrics syllable (otherwise
+            // the melisma segment will be often covered by the syllable itself)
+            if (tempMelismaTicks && segments.size() > 0)
+                  segmentAt(0)->rxpos2() += lyrics()->width();
+            }
       }
 
 //---------------------------------------------------------
