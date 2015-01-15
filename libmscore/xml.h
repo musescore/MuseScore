@@ -82,6 +82,7 @@ class XmlReader : public XmlStreamReader {
       int readInt()         { return readElementText().toInt();    }
       int readInt(bool* ok) { return readElementText().toInt(ok);  }
       double readDouble()   { return readElementText().toDouble(); }
+      double readDouble(double min, double max);
       bool readBool()       { return readElementText().toInt() != 0; }
       QPointF readPoint();
       QSizeF readSize();

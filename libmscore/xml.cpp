@@ -200,6 +200,20 @@ void XmlReader::addTuplet(Tuplet* s)
       }
 
 //---------------------------------------------------------
+//   readDouble
+//---------------------------------------------------------
+
+double XmlReader::readDouble(double min, double max)
+      {
+      double val = readElementText().toDouble();
+      if (val < min)
+            val = min;
+      else if (val > max)
+            val = max;
+      return val;
+      }
+
+//---------------------------------------------------------
 //   compareProperty
 //---------------------------------------------------------
 

@@ -545,13 +545,8 @@ void Staff::read(XmlReader& e)
                   }
             else if (tag == "distOffset")
                   _userDist = e.readDouble() * spatium();
-            else if (tag == "mag") {
-                  _userMag = e.readDouble();
-                  if (_userMag < 0.1)
-                        _userMag = 0.1;
-                  else if (_userMag > 10.0)
-                        _userMag = 10;
-                  }
+            else if (tag == "mag")
+                  _userMag = e.readDouble(0.1, 10.0);
             else if (tag == "linkedTo") {
                   int v = e.readInt() - 1;
                   //

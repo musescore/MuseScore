@@ -49,6 +49,7 @@ FretDiagram::FretDiagram(const FretDiagram& f)
       maxStrings  = f.maxStrings;
       font        = f.font;
       _barre      = f._barre;
+      _userMag    = f._userMag;
 
       if (f._dots) {
             _dots = new char[_strings];
@@ -79,7 +80,6 @@ FretDiagram::~FretDiagram()
       delete[] _fingering;
       }
 
-#if 1
 //---------------------------------------------------------
 //   pagePos
 //---------------------------------------------------------
@@ -99,7 +99,6 @@ QPointF FretDiagram::pagePos() const
       else
             return Element::pagePos();
       }
-#endif
 
 //---------------------------------------------------------
 //   dragAnchor
@@ -189,7 +188,7 @@ void FretDiagram::setStrings(int n)
 
 void FretDiagram::init(StringData* stringData, Chord* chord)
       {
-      if (stringData == 0)
+      if (!stringData)
             setStrings(6);
       else
             setStrings(stringData->strings());
@@ -214,7 +213,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 
 void FretDiagram::draw(QPainter* painter) const
       {
-      qreal _spatium = spatium();
+      qreal _spatium = spatium() * _userMag;
       QPen pen(curColor());
       pen.setWidthF(lw2);
       pen.setCapStyle(Qt::FlatCap);
@@ -290,7 +289,7 @@ void FretDiagram::draw(QPainter* painter) const
 
 void FretDiagram::layout()
       {
-      qreal _spatium  = spatium();
+      qreal _spatium  = spatium() * _userMag;
       lw1             = _spatium * 0.08;
       lw2             = _fretOffset ? lw1 : _spatium * 0.2;
       stringDist      = _spatium * .7;
@@ -355,6 +354,7 @@ void FretDiagram::write(Xml& xml) const
             }
       if (_barre)
             xml.tag("barre", _barre);
+      writeProperty(xml, P_ID::MAG);
       if (_harmony)
             _harmony->write(xml);
       xml.etag();
@@ -390,6 +390,8 @@ void FretDiagram::read(XmlReader& e)
                   }
             else if (tag == "barre")
                   setBarre(e.readInt());
+            else if (tag == "mag")
+                  _userMag = e.readDouble(0.1, 10.0);
             else if (tag == "Harmony") {
                   Harmony* h = new Harmony(score());
                   h->read(e);
@@ -603,6 +605,48 @@ void FretDiagram::writeMusicXML(Xml& xml) const
                   xml.tag("root-alter", alter);
             */
             xml.etag();
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant FretDiagram::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::MAG:            return userMag();
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant FretDiagram::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::MAG:            return 1.0;
+            default:
+                  return Element::propertyDefault(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool FretDiagram::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::MAG:
+                  setUserMag(v.toDouble());
+                  break;
+            default:
+                  return Element::setProperty(propertyId, v);
+            }
+      return true;
       }
 
 }

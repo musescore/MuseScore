@@ -209,6 +209,8 @@ enum class P_ID : unsigned char {
       LINE_VISIBLE,
       SYSTEM_INITIAL_BARLINE_TYPE,
 
+      MAG,
+
       END
       };
 
