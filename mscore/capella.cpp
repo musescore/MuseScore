@@ -77,24 +77,6 @@ static void addDynamic(Score* score, Segment* s, int track, const char* name)
       s->add(d);
       }
 
-#if 0 // TODO-S
-//---------------------------------------------------------
-//   levelofGraceSeg
-//---------------------------------------------------------
-
-static int levelofGraceSeg(Measure* m,int tick)
-      {
-      int nGraces = 1;
-      Segment* seglist = m->findSegment(Segment::Type::Grace,tick);
-      // count SegGrace segments
-      for (Segment* ss = seglist; ss && ss->tick() == tick; ss = ss->prev()) {
-            if ((ss->segmentType() == Segment::Type::Grace) && (ss->tick() == tick))
-                  nGraces++;
-            }
-      return nGraces;
-      }
-#endif
-
 //---------------------------------------------------------
 //   SetCapGraceDuration
 //---------------------------------------------------------
@@ -102,6 +84,8 @@ static int levelofGraceSeg(Measure* m,int tick)
 static void SetCapGraceDuration(Chord* chord,ChordObj* o)
       {
       NoteType nt = NoteType::APPOGGIATURA;
+      if (o->nTremoloBars > 0)
+            nt = NoteType::ACCIACCATURA;
       ((Chord*)chord)->setNoteType(nt);
       if (o->t == TIMESTEP::D4) {
             ((Chord*)chord)->setNoteType(NoteType::GRACE4);
@@ -291,6 +275,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
       int tupletTick = 0;
 
       qDebug("    read voice: tick %d track: %d)", tick, track);
+      QList<Chord*> graceNotes;
       foreach(NoteObj* no, cvoice->objects) {
             switch (no->type()) {
                   case CapellaNoteObjectType::REST:
@@ -388,12 +373,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         d.setVal(ticks);
                         Measure* m = score->getCreateMeasure(tick);
 
-//TODO-S                        int gl = levelofGraceSeg(m,tick);
                         bool isgracenote = (!(o->invisible) && (ticks==0));
-//                        Segment* s = (isgracenote) ? m->getGraceSegment(tick, gl) : m->getSegment(Segment::Type::ChordRest, tick);
-                        Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
-//                        if (isgracenote)
-//                              s = m->getGraceSegment(tick,1);
                         if (o->count) {
                               if (tuplet == 0) {
                                     tupletCount = o->count;
@@ -446,7 +426,21 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               default:
                                     break;
                               }
-                        s->add(chord);
+                        Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
+                        if (isgracenote)
+                              graceNotes.push_back(chord);
+                        else {
+                              s->add(chord);
+                              // append grace notes before
+                              int ii = -1;
+                              for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
+                                    Chord* gc = graceNotes[ii];
+                                    if(gc->voice() == chord->voice()){
+                                          chord->add(gc);
+                                          }
+                                    }
+                              graceNotes.clear();
+                              }
                         ClefType clef = score->staff(staffIdx)->clef(tick);
                         Key key  = score->staff(staffIdx)->key(tick);
                         int off;
