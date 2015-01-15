@@ -541,8 +541,9 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                                     qreal maxRight = 0.0;
                                     if (cr->type() == Element::Type::CHORD) {
                                           // chord bbox() is unreliable, look at notes
+                                          // this also allows us to more easily ignore ledger lines
                                           for (Note* n : static_cast<Chord*>(cr)->notes())
-                                                maxRight = qMax(maxRight, cr->x() + n->x() + n->width());
+                                                maxRight = qMax(maxRight, cr->x() + n->x() + n->headWidth());
                                           }
                                     else {
                                           // rest - won't normally happen
