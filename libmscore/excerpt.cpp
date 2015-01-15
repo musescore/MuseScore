@@ -158,6 +158,7 @@ void createExcerpt(Excerpt* excerpt)
             txt->setText(partLabel);
             txt->setTrack(0);
             measure->add(txt);
+            score->setMetaTag("partName", partLabel);
             }
 
       //
