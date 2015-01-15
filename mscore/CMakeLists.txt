@@ -119,6 +119,7 @@ QT4_WRAP_UI (ui_headers
       inspector/inspector_text.ui
       inspector/inspector_ambitus.ui
       inspector/inspector_empty.ui
+      inspector/inspector_fret.ui
       ${SCRIPT_UI}
       )
 
@@ -154,6 +155,7 @@ QT4_WRAP_CPP (mocs
       inspector/inspectorHairpin.h qmlplugin.h palettebox.h workspace.h
       inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
       inspector/inspectorNote.h inspector/inspectorAmbitus.h
+      inspector/inspectorFret.h
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
       importmidi/importmidi_panel.h importmidi/importmidi_delegate.h importmidi/importmidi_view.h
       debugger/debugger.h
@@ -282,6 +284,7 @@ add_executable ( ${ExecutableName}
       inspector/inspector.cpp dragelement.cpp svggenerator.cpp
       inspector/inspectorBase.cpp inspector/inspectorBeam.cpp masterpalette.cpp
       inspector/inspectorGroupElement.cpp dragdrop.cpp inspector/inspectorImage.cpp
+      inspector/inspectorFret.cpp
       waveview.cpp helpBrowser.cpp inspector/inspectorLasso.cpp
       editelement.cpp inspector/inspectorVolta.cpp inspector/inspectorOttava.cpp
       inspector/inspectorTrill.cpp

@@ -50,20 +50,21 @@ class FretDiagram : public Element {
       qreal stringDist;
       qreal fretDist;
       QFont font;
+      qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
 
    public:
       FretDiagram(Score* s);
       FretDiagram(const FretDiagram&);
       ~FretDiagram();
-      virtual void draw(QPainter*) const;
-      virtual FretDiagram* clone() const { return new FretDiagram(*this); }
+      virtual void draw(QPainter*) const override;
+      virtual FretDiagram* clone() const override { return new FretDiagram(*this); }
 
-      virtual Element::Type type() const { return Element::Type::FRET_DIAGRAM; }
-      virtual void layout();
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
-      virtual QLineF dragAnchor() const;
-      virtual QPointF pagePos() const;
+      virtual Element::Type type() const override { return Element::Type::FRET_DIAGRAM; }
+      virtual void layout() override;
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
+      virtual QLineF dragAnchor() const override;
+      virtual QPointF pagePos() const override;
 
       // read / write MusicXML
       void readMusicXML(XmlReader& de);
@@ -92,13 +93,20 @@ class FretDiagram : public Element {
 
       void init(Ms::StringData *, Chord*);
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
 
       virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&);
+      virtual Element* drop(const DropData&) override;
 
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+
+      qreal userMag() const         { return _userMag;   }
+      void setUserMag(qreal m)      { _userMag = m;      }
       };
 
 

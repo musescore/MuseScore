@@ -26,6 +26,7 @@
 #include "inspectorGlissando.h"
 #include "inspectorNote.h"
 #include "inspectorAmbitus.h"
+#include "inspectorFret.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -232,6 +233,9 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case Element::Type::AMBITUS:
                               ie = new InspectorAmbitus(this);
+                              break;
+                        case Element::Type::FRET_DIAGRAM:
+                              ie = new InspectorFret(this);
                               break;
                         default:
                               if (_element->isText())
