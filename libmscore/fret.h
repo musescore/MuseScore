@@ -21,6 +21,9 @@ class StringData;
 class Chord;
 class Harmony;
 
+static const int DEFAULT_STRINGS = 6;
+static const int DEFAULT_FRETS = 5;
+
 //---------------------------------------------------------
 //   @@ FretDiagram
 ///    Fretboard diagram
@@ -29,17 +32,18 @@ class Harmony;
 class FretDiagram : public Element {
       Q_OBJECT
 
-      int _strings;
-      int maxStrings;
-      int _frets;
-      int _fretOffset;
-      int _maxFrets;
+      int _strings       { DEFAULT_STRINGS };
+      int maxStrings     { 0 };
+      int _frets         { DEFAULT_FRETS };
+      int _fretOffset    { 0  };
+      int _maxFrets      { 24 };
 
-      char* _dots;
-      char* _marker;
-      char* _fingering;
+      char* _dots        { 0 };
+      char* _marker      { 0 };
+      char* _fingering   { 0 };
+      int _barre         { 0 };
 
-      Harmony* _harmony;
+      Harmony* _harmony  { 0 };
 
       qreal lw1;
       qreal lw2;             // top line
@@ -69,8 +73,9 @@ class FretDiagram : public Element {
       int frets()   const    { return _frets; }
       void setOffset(int offset);
       void setStrings(int n);
-      void setFrets(int n)   { _frets = n; }
+      void setFrets(int n)        { _frets = n; }
       void setDot(int string, int fret);
+      void setBarre(int fret)     { _barre = fret; }
       void setMarker(int string, int marker);
       void setFingering(int string, int finger);
       int fretOffset() const      { return _fretOffset; }
@@ -81,6 +86,7 @@ class FretDiagram : public Element {
       char dot(int s) const       { return _dots      ? _dots[s]      : 0; }
       char marker(int s) const    { return _marker    ? _marker[s]    : 0; }
       char fingering(int s) const { return _fingering ? _fingering[s] : 0; }
+      int barre() const           { return _barre; }
 
       Harmony* harmony() const { return _harmony; }
 

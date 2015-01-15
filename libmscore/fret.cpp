@@ -23,9 +23,6 @@
 
 namespace Ms {
 
-static const int DEFAULT_STRINGS = 6;
-static const int DEFAULT_FRETS = 5;
-
 //    parent() is Segment or Box
 //
 
@@ -37,18 +34,9 @@ FretDiagram::FretDiagram(Score* score)
    : Element(score)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SELECTABLE);
-      _strings    = DEFAULT_STRINGS;
-      _frets      = DEFAULT_FRETS;
-      _maxFrets   = 24;
-      maxStrings  = 0;
-      _dots       = 0;
-      _marker     = 0;
-      _fingering  = 0;
-      _fretOffset = 0;
       font.setFamily("FreeSans");
       int size = lrint(4.0 * MScore::DPI * mag()/ PPI);
       font.setPixelSize(size);
-      _harmony = 0;
       }
 
 FretDiagram::FretDiagram(const FretDiagram& f)
@@ -59,10 +47,8 @@ FretDiagram::FretDiagram(const FretDiagram& f)
       _fretOffset = f._fretOffset;
       _maxFrets   = f._maxFrets;
       maxStrings  = f.maxStrings;
-      _dots       = 0;
-      _marker     = 0;
-      _fingering  = 0;
       font        = f.font;
+      _barre      = f._barre;
 
       if (f._dots) {
             _dots = new char[_strings];
@@ -250,9 +236,10 @@ void FretDiagram::draw(QPainter* painter) const
             }
       painter->setFont(font);
       QFontMetricsF fm(font);
+      qreal dotd = stringDist * .6;
+
       for (int i = 0; i < _strings; ++i) {
             if (_dots && _dots[i]) {
-                  qreal dotd = stringDist * .6;
                   int fret = _dots[i] - 1;
                   qreal x = stringDist * i - dotd * .5;
                   qreal y = fretDist * fret + fretDist * .5 - dotd * .5;
@@ -264,6 +251,21 @@ void FretDiagram::draw(QPainter* painter) const
                   painter->drawText(QRectF(x, y, .0,.0),
                      Qt::AlignHCenter|Qt::TextDontClip, QChar(_marker[i]));
                   }
+            }
+      if (_barre) {
+            int string;
+            for (int i = 0; i < _strings; ++i) {
+                  if (_dots[i] == _barre) {
+                        string = i;
+                        break;
+                        }
+                  }
+            qreal x1   = stringDist * string;
+            qreal x2   = stringDist * (_strings-1);
+            qreal y    = fretDist * (_barre-1) + fretDist * .5;
+            pen.setWidthF(dotd * .7);
+            painter->setPen(pen);
+            painter->drawLine(QLineF(x1, y, x2, y));
             }
       if (_fretOffset > 0) {
             qreal fretNumMag = score()->styleD(StyleIdx::fretNumMag);
@@ -351,6 +353,8 @@ void FretDiagram::write(Xml& xml) const
                   xml.etag();
                   }
             }
+      if (_barre)
+            xml.tag("barre", _barre);
       if (_harmony)
             _harmony->write(xml);
       xml.etag();
@@ -384,6 +388,8 @@ void FretDiagram::read(XmlReader& e)
                               e.unknown();
                         }
                   }
+            else if (tag == "barre")
+                  setBarre(e.readInt());
             else if (tag == "Harmony") {
                   Harmony* h = new Harmony(score());
                   h->read(e);
