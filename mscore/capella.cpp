@@ -498,18 +498,14 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 
                                     pitch = pitchKeyAdjust(l, key) + octave * 12;
                                     }
-                              pitch    += n.alteration;
+                              pitch += n.alteration;
+                              pitch += score->staff(staffIdx)->part()->instr()->transpose().chromatic; // assume not in concert pitch
+                              pitch = limit(pitch, 0, 127);
 
-                              if (pitch > 127)
-                                    pitch = 127;
-                              else if (pitch < 0)
-                                    pitch = 0;
-
+                              chord->add(note);
                               note->setPitch(pitch);
                               // TODO: compute tpc from pitch & line
                               note->setTpcFromPitch();
-
-                              chord->add(note);
                               if (o->rightTie) {
                                     Tie* tie = new Tie(score);
                                     tie->setStartNote(note);
@@ -572,8 +568,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               ks->setTrack(staffIdx * VOICES);
                               Measure* m = score->getCreateMeasure(tick);
                               Segment* s = m->getSegment(Segment::Type::KeySig, tick);
-                              s->add(ks);
                               ks->setKeySigEvent(okey);
+                              s->add(ks);
                               }
                         }
                         break;
@@ -881,6 +877,12 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             s->setSmall(cl->bSmall);
             part->insertStaff(s, -1);
+            Interval interval;
+            // guess diatonic transposition from chromatic transposition for the instrument
+            int values[23] = {-6,-6,-5,-5,-4,-3,-3,-2,-2,-1,-1,0,1,1,2,2,3,4,4,5,5,6,6};
+            interval.diatonic = values[(cl->transp % 12) + 11] + (cl->transp / 12) * 7;
+            interval.chromatic = cl->transp;
+            s->part()->instr()->setTranspose(interval);
             score->staves().push_back(s);
             // _parts.push_back(part);
             }
