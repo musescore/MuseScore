@@ -164,6 +164,49 @@ void lengthenNote(
       note.offTime = bestOffTime;
       }
 
+// for drum tracks note duration can be arbitrary
+// so start with short duration to check different cases,
+// to find the most simple one
+
+void shortenDrumNote(
+            MidiNote &note,
+            const std::multimap<ReducedFraction, MidiChord>::iterator &it,
+            const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      if (it->second.isInTuplet) {        // if note on time is in tuplet -
+                                          // set note off time to be inside that tuplet
+            const auto &tuplet = it->second.tuplet->second;
+            const auto len = tuplet.len / tuplet.tupletNumber;
+            if (note.offTime - it->first > len) {
+                  note.offTime = it->first + len;
+                  note.isInTuplet = true;
+                  note.tuplet = it->second.tuplet;
+                  note.offTimeQuant = len;
+                  }
+            }
+      else {            // if note on time is outside tuplets -
+                        // set note off time to be outside all tuplets
+            auto next = std::next(it);
+            while (next != chords.end() && next->second.voice != it->second.voice)
+                  ++next;
+            if (next != chords.end()) {
+                  const auto len = ReducedFraction::fromTicks(
+                                          MScore::division) / 8;   // 1/32
+                  auto newOffTime = it->first + len;
+                  if (next->second.isInTuplet) {
+                        const auto &tuplet = next->second.tuplet->second;
+                        if (tuplet.onTime < newOffTime)
+                              newOffTime = tuplet.onTime;
+                        }
+                  if (newOffTime < note.offTime) {
+                        note.offTime = newOffTime;
+                        note.isInTuplet = false;
+                        note.offTimeQuant = len;
+                        }
+                  }
+            }
+      }
+
 void minimizeNumberOfRests(
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
@@ -172,48 +215,8 @@ void minimizeNumberOfRests(
       {
       for (auto it = chords.begin(); it != chords.end(); ++it) {
             for (MidiNote &note: it->second.notes) {
-                  if (isDrumTrack) {
-                                    // for drum tracks note duration can be arbitrary
-                                    // so start with short duration to check different cases,
-                                    // to find the most simple one
-
-                        if (it->second.isInTuplet) {
-                                          // if note on time is in tuplet -
-                                          // set note off time to be inside that tuplet
-                              const auto &tuplet = it->second.tuplet->second;
-                              const auto len = tuplet.len / tuplet.tupletNumber;
-                              if (note.offTime - it->first > len) {
-                                    note.offTime = it->first + len;
-                                    note.isInTuplet = true;
-                                    note.tuplet = it->second.tuplet;
-                                    note.offTimeQuant = len;
-                                    }
-                              }
-                        else {
-                                          // if note on time is outside tuplets -
-                                          // set note off time to be outside all tuplets
-                              auto next = std::next(it);
-                              while (next != chords.end()
-                                          && next->second.voice != it->second.voice) {
-                                    ++next;
-                                    }
-                              if (next != chords.end()) {
-                                    const auto len = ReducedFraction::fromTicks(
-                                                            MScore::division) / 8;   // 1/32
-                                    auto newOffTime = it->first + len;
-                                    if (next->second.isInTuplet) {
-                                          const auto &tuplet = next->second.tuplet->second;
-                                          if (tuplet.onTime < newOffTime)
-                                                newOffTime = tuplet.onTime;
-                                          }
-                                    if (newOffTime < note.offTime) {
-                                          note.offTime = newOffTime;
-                                          note.isInTuplet = false;
-                                          note.offTimeQuant = len;
-                                          }
-                                    }
-                              }
-                        }
+                  if (isDrumTrack)
+                        shortenDrumNote(note, it, chords);
 
                   const auto barStart = MidiBar::findBarStart(note.offTime, sigmap);
                   const auto barFraction = ReducedFraction(
