@@ -733,6 +733,7 @@ void LyricsLineSegment::layout()
       {
       Lyrics*     lyr;
       System*     sys;
+      bool        endOfSystem = false;
       bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > 0;
       qreal       sp                = spatium();
 
@@ -747,11 +748,12 @@ void LyricsLineSegment::layout()
       if (!isEndMelisma && lyricsLine()->nextLyrics() != nullptr
                   && (spannerSegmentType() == SpannerSegmentType::END
                         || spannerSegmentType() == SpannerSegmentType::SINGLE)) {
-            lyr   = lyricsLine()->nextLyrics();
-            sys   = lyr->segment()->system();
+            lyr         = lyricsLine()->nextLyrics();
+            sys         = lyr->segment()->system();
+            endOfSystem = (sys != system());
             // if next lyrics is on a different sytem, this line segment is at the end of its system:
             // do not adjust for next lyrics position
-            if (sys == system()) {
+            if (!endOfSystem) {
                   qreal lyrX        = lyr->bbox().x();
                   qreal lyrXp       = lyr->pagePos().x();
                   qreal sysXp       = sys->pagePos().x();
@@ -803,22 +805,30 @@ void LyricsLineSegment::layout()
             }
       else {                              // dash(es)
 #if defined(USE_FONT_DASH_METRIC)
-            rypos()           += lyr->dashY();
-            _dashLength       = lyr->dashLength();
+            rypos()     += lyr->dashY();
+            _dashLength = lyr->dashLength();
 #else
-            rypos()           -= lyr->bbox().height() * LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
-            _dashLength       = LYRICS_DASH_DEFAULT_LENGHT * sp;                    // and dash length
+            rypos()     -= lyr->bbox().height() * LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
+            _dashLength = LYRICS_DASH_DEFAULT_LENGHT * sp;                    // and dash length
 #endif
             qreal len         = pos2().x();
-            if (len < LYRICS_DASH_MIN_LENGTH * sp)                                  // if no room for a dash
-                  _numOfDashes = 0;                                                 //    draw no dash
-            else if (len < (LYRICS_DASH_DEFAULT_STEP * TWICE * sp)) {               // if no room for two dashes
-                  _numOfDashes = 1;                                                 //    draw one dash
-                  if (_dashLength > len)                                            // if no room for a full dash
-                        _dashLength = len;                                          //    shorten it
+            qreal minDashLen  = LYRICS_DASH_MIN_LENGTH * sp;
+            if (len < minDashLen) {                                           // if no room for a dash
+                  if (endOfSystem) {                                          //   if at end of system
+                        rxpos2()          = minDashLen;                       //     draw minimal dash
+                        _numOfDashes      = 1;
+                        _dashLength       = minDashLen;
+                        }
+                  else                                                        //   if within system
+                        _numOfDashes = 0;                                     //     draw no dash
+                  }
+            else if (len < (LYRICS_DASH_DEFAULT_STEP * TWICE * sp)) {         // if no room for two dashes
+                  _numOfDashes = 1;                                           //    draw one dash
+                  if (_dashLength > len)                                      // if no room for a full dash
+                        _dashLength = len;                                    //    shorten it
                   }
             else
-                  _numOfDashes = len / (LYRICS_DASH_DEFAULT_STEP * sp);             // draw several dashes
+                  _numOfDashes = len / (LYRICS_DASH_DEFAULT_STEP * sp);       // draw several dashes
             }
 
       // set bounding box
