@@ -236,6 +236,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>nameEdit</tabstop>
+  <tabstop>shortNameEdit</tabstop>
+  <tabstop>minPitch</tabstop>
+  <tabstop>transposeChromatic</tabstop>
+  <tabstop>midiProgram</tabstop>
+  <tabstop>staves</tabstop>
+  <tabstop>maxPitch</tabstop>
+  <tabstop>transposeDiatonic</tabstop>
+  <tabstop>buttonOk</tabstop>
+  <tabstop>buttonCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

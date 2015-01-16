@@ -311,8 +311,18 @@
    <header>awl/mslider.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>metronome</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>loadButton</tabstop>
+  <tabstop>storeButton</tabstop>
+  <tabstop>recallButton</tabstop>
+  <tabstop>effectA</tabstop>
+  <tabstop>effectB</tabstop>
+  <tabstop>masterTuning</tabstop>
+  <tabstop>changeTuningButton</tabstop>
+ </tabstops>
+ <resources/>
  <connections/>
 </ui>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>904</width>
-    <height>780</height>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -5743,14 +5743,14 @@
   <tabstop>resetVoltaLineStyle</tabstop>
   <tabstop>ottavaY</tabstop>
   <tabstop>resetOttavaY</tabstop>
+  <tabstop>ottavaNumbersOnly</tabstop>
+  <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>ottavaHook</tabstop>
   <tabstop>resetOttavaHook</tabstop>
   <tabstop>ottavaLineWidth</tabstop>
   <tabstop>resetOttavaLineWidth</tabstop>
   <tabstop>ottavaLineStyle</tabstop>
   <tabstop>resetOttavaLineStyle</tabstop>
-  <tabstop>ottavaNumbersOnly</tabstop>
-  <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>pedalY</tabstop>
   <tabstop>pedalLineWidth</tabstop>
   <tabstop>pedalLineStyle</tabstop>
@@ -5776,9 +5776,11 @@
   <tabstop>maxHarmonyBarDistance</tabstop>
   <tabstop>capoPosition</tabstop>
   <tabstop>fretY</tabstop>
+  <tabstop>fretMag</tabstop>
   <tabstop>fretNumMag</tabstop>
   <tabstop>radioFretNumLeft</tabstop>
   <tabstop>radioFretNumRight</tabstop>
+  <tabstop>barreLineWidth</tabstop>
   <tabstop>comboFBFont</tabstop>
   <tabstop>doubleSpinFBSize</tabstop>
   <tabstop>doubleSpinFBVertPos</tabstop>
