@@ -86,6 +86,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>currentInstrument</tabstop>
+  <tabstop>instrumentGenreFilter</tabstop>
+  <tabstop>instrumentList</tabstop>
+  <tabstop>search</tabstop>
+  <tabstop>clearSearch</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

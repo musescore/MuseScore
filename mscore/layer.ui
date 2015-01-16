@@ -304,6 +304,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>layers</tabstop>
+  <tabstop>createButton</tabstop>
+  <tabstop>deleteButton</tabstop>
+  <tabstop>addTagButton</tabstop>
+  <tabstop>deleteTagButton</tabstop>
+  <tabstop>tags</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
