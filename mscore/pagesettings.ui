@@ -577,17 +577,27 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>buttonApply</tabstop>
-  <tabstop>buttonOk</tabstop>
-  <tabstop>buttonCancel</tabstop>
   <tabstop>pageGroup</tabstop>
   <tabstop>pageWidth</tabstop>
   <tabstop>pageHeight</tabstop>
   <tabstop>landscape</tabstop>
   <tabstop>twosided</tabstop>
   <tabstop>spatiumEntry</tabstop>
+  <tabstop>pageOffsetEntry</tabstop>
   <tabstop>mmButton</tabstop>
   <tabstop>inchButton</tabstop>
+  <tabstop>oddPageTopMargin</tabstop>
+  <tabstop>oddPageLeftMargin</tabstop>
+  <tabstop>oddPageRightMargin</tabstop>
+  <tabstop>oddPageBottomMargin</tabstop>
+  <tabstop>evenPageTopMargin</tabstop>
+  <tabstop>evenPageLeftMargin</tabstop>
+  <tabstop>evenPageBottomMargin</tabstop>
+  <tabstop>evenPageRightMargin</tabstop>
+  <tabstop>buttonApplyToAllParts</tabstop>
+  <tabstop>buttonApply</tabstop>
+  <tabstop>buttonOk</tabstop>
+  <tabstop>buttonCancel</tabstop>
  </tabstops>
  <resources/>
  <connections>

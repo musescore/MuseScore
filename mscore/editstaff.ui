@@ -852,9 +852,13 @@
   <tabstop>lines</tabstop>
   <tabstop>lineDistance</tabstop>
   <tabstop>spinExtraDistance</tabstop>
+  <tabstop>mag</tabstop>
+  <tabstop>neverHide</tabstop>
   <tabstop>showClef</tabstop>
   <tabstop>showTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
+  <tabstop>hideSystemBarLine</tabstop>
+  <tabstop>showIfEmpty</tabstop>
   <tabstop>small</tabstop>
   <tabstop>invisible</tabstop>
   <tabstop>color</tabstop>
@@ -879,7 +883,6 @@
   <tabstop>down</tabstop>
   <tabstop>numOfStrings</tabstop>
   <tabstop>editStringData</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>

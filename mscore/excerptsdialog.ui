@@ -112,6 +112,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>excerptList</tabstop>
+  <tabstop>title</tabstop>
+  <tabstop>partList</tabstop>
+  <tabstop>deleteButton</tabstop>
+  <tabstop>newAllButton</tabstop>
+  <tabstop>newButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

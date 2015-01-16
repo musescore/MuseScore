@@ -3562,6 +3562,11 @@
   <tabstop>oscPort</tabstop>
   <tabstop>resetToDefault</tabstop>
   <tabstop>buttonBox</tabstop>
+  <tabstop>bgColorButton</tabstop>
+  <tabstop>bgWallpaperButton</tabstop>
+  <tabstop>bgColorLabel</tabstop>
+  <tabstop>bgWallpaper</tabstop>
+  <tabstop>bgWallpaperSelect</tabstop>
   <tabstop>fgColorButton</tabstop>
   <tabstop>fgWallpaperButton</tabstop>
   <tabstop>fgColorLabel</tabstop>
@@ -3598,6 +3603,8 @@
   <tabstop>rcr7</tabstop>
   <tabstop>rca8</tabstop>
   <tabstop>rcr8</tabstop>
+  <tabstop>recordUndoActive</tabstop>
+  <tabstop>recordUndo</tabstop>
   <tabstop>rca9</tabstop>
   <tabstop>rcr9</tabstop>
   <tabstop>rca10</tabstop>
@@ -3606,8 +3613,6 @@
   <tabstop>rcr11</tabstop>
   <tabstop>rca12</tabstop>
   <tabstop>rcr12</tabstop>
-  <tabstop>recordUndo</tabstop>
-  <tabstop>recordUndoActive</tabstop>
   <tabstop>midiRemoteControlClear</tabstop>
   <tabstop>instrumentList1</tabstop>
   <tabstop>instrumentList1Button</tabstop>
@@ -3657,11 +3662,6 @@
   <tabstop>defineShortcut</tabstop>
   <tabstop>printShortcuts</tabstop>
   <tabstop>checkUpdateStartup</tabstop>
-  <tabstop>bgWallpaper</tabstop>
-  <tabstop>bgWallpaperSelect</tabstop>
-  <tabstop>bgColorButton</tabstop>
-  <tabstop>bgWallpaperButton</tabstop>
-  <tabstop>bgColorLabel</tabstop>
  </tabstops>
  <resources/>
  <connections/>

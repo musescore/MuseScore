@@ -90,6 +90,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>showLines</tabstop>
+  <tabstop>showBarlines</tabstop>
+  <tabstop>showSlices</tabstop>
+  <tabstop>showStaves</tabstop>
+  <tabstop>spatium</tabstop>
+  <tabstop>process</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
