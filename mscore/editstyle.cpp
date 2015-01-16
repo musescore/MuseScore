@@ -515,6 +515,9 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::tupletStemRightDistance,  Spatium(tupletStemRightDistance->value()));
       lstyle.set(StyleIdx::tupletNoteLeftDistance,   Spatium(tupletNoteLeftDistance->value()));
       lstyle.set(StyleIdx::tupletNoteRightDistance,  Spatium(tupletNoteRightDistance->value()));
+
+      lstyle.set(StyleIdx::barreLineWidth,           barreLineWidth->value());
+      lstyle.set(StyleIdx::fretMag,                  fretMag->value());
       }
 
 //---------------------------------------------------------
@@ -810,6 +813,9 @@ void EditStyle::setValues()
       tupletStemRightDistance->setValue(lstyle.value(StyleIdx::tupletStemRightDistance).toDouble());
       tupletNoteLeftDistance->setValue(lstyle.value(StyleIdx::tupletNoteLeftDistance).toDouble());
       tupletNoteRightDistance->setValue(lstyle.value(StyleIdx::tupletNoteRightDistance).toDouble());
+
+      barreLineWidth->setValue(lstyle.value(StyleIdx::barreLineWidth).toDouble());
+      fretMag->setValue(lstyle.value(StyleIdx::fretMag).toDouble());
       }
 
 //---------------------------------------------------------

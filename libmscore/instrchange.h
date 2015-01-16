@@ -29,14 +29,18 @@ class InstrumentChange : public Text  {
 
    public:
       InstrumentChange(Score*);
-      virtual InstrumentChange* clone() const { return new InstrumentChange(*this); }
-      virtual Element::Type type() const      { return Element::Type::INSTRUMENT_CHANGE; }
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
+      virtual InstrumentChange* clone() const override { return new InstrumentChange(*this); }
+      virtual Element::Type type() const override      { return Element::Type::INSTRUMENT_CHANGE; }
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
 
       Instrument instrument() const           { return _instrument; }
       void setInstrument(const Instrument& i) { _instrument = i;    }
       Segment* segment() const                { return (Segment*)parent(); }
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       };
 
 

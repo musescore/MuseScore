@@ -213,7 +213,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 
 void FretDiagram::draw(QPainter* painter) const
       {
-      qreal _spatium = spatium() * _userMag;
+      qreal _spatium = spatium() * _userMag * score()->styleD(StyleIdx::fretMag);
       QPen pen(curColor());
       pen.setWidthF(lw2);
       pen.setCapStyle(Qt::FlatCap);
@@ -252,19 +252,22 @@ void FretDiagram::draw(QPainter* painter) const
                   }
             }
       if (_barre) {
-            int string;
+            int string = -1;
             for (int i = 0; i < _strings; ++i) {
                   if (_dots[i] == _barre) {
                         string = i;
                         break;
                         }
                   }
-            qreal x1   = stringDist * string;
-            qreal x2   = stringDist * (_strings-1);
-            qreal y    = fretDist * (_barre-1) + fretDist * .5;
-            pen.setWidthF(dotd * .7);
-            painter->setPen(pen);
-            painter->drawLine(QLineF(x1, y, x2, y));
+            if (string != -1) {
+                  qreal x1   = stringDist * string;
+                  qreal x2   = stringDist * (_strings-1);
+                  qreal y    = fretDist * (_barre-1) + fretDist * .5;
+                  pen.setWidthF((dotd + lw2 * .5) * score()->styleD(StyleIdx::barreLineWidth));
+                  pen.setCapStyle(Qt::RoundCap);
+                  painter->setPen(pen);
+                  painter->drawLine(QLineF(x1, y, x2, y));
+                  }
             }
       if (_fretOffset > 0) {
             qreal fretNumMag = score()->styleD(StyleIdx::fretNumMag);
@@ -289,7 +292,7 @@ void FretDiagram::draw(QPainter* painter) const
 
 void FretDiagram::layout()
       {
-      qreal _spatium  = spatium() * _userMag;
+      qreal _spatium = spatium() * _userMag * score()->styleD(StyleIdx::fretMag);
       lw1             = _spatium * 0.08;
       lw2             = _fretOffset ? lw1 : _spatium * 0.2;
       stringDist      = _spatium * .7;

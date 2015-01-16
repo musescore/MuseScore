@@ -360,6 +360,10 @@ enum class StyleIdx : unsigned char {
       tupletNoteLeftDistance,
       tupletNoteRightDistance,
 
+      barreLineWidth,
+      fretMag,
+
+
       STYLES
       };
 
