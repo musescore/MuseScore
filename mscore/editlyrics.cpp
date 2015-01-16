@@ -134,6 +134,8 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
       if (oldLyrics && !moveOnly) {
             switch(lyrics->syllabic()) {
+                  // as we arrived at the destination lyrics by a [Space], it can be
+                  // the beginning of a multi-syllable, but cannot have syllabic dashes before
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::BEGIN:
                         break;
@@ -144,6 +146,8 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                         lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
                         break;
                   }
+            // as we moved away from the previous lyrics by a [Space], it can be
+            // the end of a multi-syllable, but cannot have syllabic dashes after
             switch(oldLyrics->syllabic()) {
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::END:
@@ -155,6 +159,8 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                         oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
                         break;
                   }
+            // for the same reason, it cannot have a melisma
+            oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
             }
 
       if (newLyrics)
