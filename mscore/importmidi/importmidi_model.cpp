@@ -542,7 +542,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                   {
                   }
             QString headerName() const override { return QCoreApplication::translate(
-                                                      "MIDI import operations", "Is human\nperformance"); }
+                                                      "MIDI import operations", "Human\nperformance"); }
             bool isForAllTracksOnly() const override { return true; }
             QVariant value(int /*trackIndex*/) const override
                   {
