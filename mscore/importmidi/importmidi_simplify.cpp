@@ -241,13 +241,11 @@ void minimizeNumberOfRests(
                               }
                         }
 
-                  if (!isDrumTrack) {
-                        const auto beatLen = Meter::beatLength(barFraction);
-                        const auto beatTime = barStart + Quantize::quantizeToLarge(
-                                                            note.offTime - barStart, beatLen);
-                        if (endTime > beatTime)
-                              endTime = beatTime;
-                        }
+                  const auto beatLen = Meter::beatLength(barFraction);
+                  const auto beatTime = barStart + Quantize::quantizeToLarge(
+                                                      note.offTime - barStart, beatLen);
+                  if (endTime > beatTime)
+                        endTime = beatTime;
 
                   auto next = std::next(it);
                   while (next != chords.end()

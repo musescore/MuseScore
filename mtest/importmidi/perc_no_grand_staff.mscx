@@ -447,7 +447,7 @@
         <Chord>
           <track>5</track>
           <dots>1</dots>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>5</track>
@@ -457,10 +457,15 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>5</track>
+          <dots>1</dots>
+          <durationType>quarter</durationType>
+          </Rest>
         <Chord>
           <track>5</track>
           <dots>1</dots>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>5</track>
@@ -470,6 +475,11 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>5</track>
+          <dots>1</dots>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       </Staff>
     </Score>
