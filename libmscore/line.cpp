@@ -11,16 +11,17 @@
 //=============================================================================
 
 #include "line.h"
-#include "textline.h"
-#include "segment.h"
-#include "measure.h"
-#include "score.h"
-#include "xml.h"
-#include "system.h"
-#include "staff.h"
-#include "utils.h"
 #include "barline.h"
 #include "chord.h"
+#include "lyrics.h"
+#include "measure.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "system.h"
+#include "textline.h"
+#include "utils.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -528,13 +529,14 @@ QPointF SLine::linePos(GripLine grip, System** sys) const
                                           }
                                     }
                               }
-                        else if (type() == Element::Type::LYRICSLINE) {
-                              // layout to right edge of CR
+                        // layout lyrics melisma (but not dashes) to right edge of CR
+                        else if (type() == Element::Type::LYRICSLINE && static_cast<const LyricsLine*>(this)->lyrics()->ticks() > 0) {
                               if (cr)
                                     x = cr->width();
                               }
+                        // (also includes dash lyrics line)
                         else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL
-                                    || type() == Element::Type::TEXTLINE) {
+                                    || type() == Element::Type::TEXTLINE || type() == Element::Type::LYRICSLINE) {
                               // lay out to just before next CR or barline
                               if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
                                     qreal x2 = cr->x() + cr->space().rw();
