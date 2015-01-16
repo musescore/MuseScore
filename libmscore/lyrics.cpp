@@ -765,7 +765,16 @@ void LyricsLineSegment::layout()
             }
 
       // VERTICAL POSITION: at the base line of the syllable text
-      rypos()     = lyr->y();
+      if (spannerSegmentType() != SpannerSegmentType::END)
+            rypos() = lyr->y();
+      else {
+            // use Y position of *next* syllable if there is one on same system
+            Lyrics* nextLyr = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no());
+            if (nextLyr && nextLyr->segment()->system() == system())
+                  rypos() = nextLyr->y();
+            else
+                  rypos() = lyr->y();
+            }
 
       // MELISMA vs. DASHES
       if (isEndMelisma) {                 // melisma
