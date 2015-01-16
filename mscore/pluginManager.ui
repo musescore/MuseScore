@@ -165,6 +165,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>pluginList</tabstop>
+  <tabstop>pluginName</tabstop>
+  <tabstop>pluginPath</tabstop>
+  <tabstop>pluginVersion</tabstop>
+  <tabstop>pluginShortcut</tabstop>
+  <tabstop>pluginDescription</tabstop>
+  <tabstop>definePluginShortcut</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

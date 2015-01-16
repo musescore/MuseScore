@@ -22,7 +22,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tab_1">
       <attribute name="title">
        <string>Change Channel</string>
       </attribute>
@@ -938,7 +938,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4">
+     <widget class="QWidget" name="tab_3">
       <attribute name="title">
        <string>Aeolus Stops</string>
       </attribute>
@@ -4685,7 +4685,7 @@ VI</string>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tab_4">
       <attribute name="title">
        <string>Swing Settings</string>
       </attribute>
@@ -4809,6 +4809,101 @@ VI</string>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>voice1_1</tabstop>
+  <tabstop>voice2_1</tabstop>
+  <tabstop>voice3_1</tabstop>
+  <tabstop>voice4_1</tabstop>
+  <tabstop>channelCombo1</tabstop>
+  <tabstop>voice1_2</tabstop>
+  <tabstop>voice2_2</tabstop>
+  <tabstop>voice3_2</tabstop>
+  <tabstop>voice4_2</tabstop>
+  <tabstop>channelCombo2</tabstop>
+  <tabstop>voice1_3</tabstop>
+  <tabstop>voice2_3</tabstop>
+  <tabstop>voice3_3</tabstop>
+  <tabstop>voice4_3</tabstop>
+  <tabstop>channelCombo3</tabstop>
+  <tabstop>voice1_4</tabstop>
+  <tabstop>voice2_4</tabstop>
+  <tabstop>voice3_4</tabstop>
+  <tabstop>voice4_4</tabstop>
+  <tabstop>channelCombo4</tabstop>
+  <tabstop>channelList</tabstop>
+  <tabstop>actionList</tabstop>
+  <tabstop>changeStops</tabstop>
+  <tabstop>stop_3_0</tabstop>
+  <tabstop>stop_3_1</tabstop>
+  <tabstop>stop_3_2</tabstop>
+  <tabstop>stop_3_3</tabstop>
+  <tabstop>stop_3_4</tabstop>
+  <tabstop>stop_3_5</tabstop>
+  <tabstop>stop_3_6</tabstop>
+  <tabstop>stop_3_7</tabstop>
+  <tabstop>stop_3_8</tabstop>
+  <tabstop>stop_3_9</tabstop>
+  <tabstop>stop_3_10</tabstop>
+  <tabstop>stop_3_11</tabstop>
+  <tabstop>stop_2_0</tabstop>
+  <tabstop>stop_2_1</tabstop>
+  <tabstop>stop_2_2</tabstop>
+  <tabstop>stop_2_3</tabstop>
+  <tabstop>stop_2_4</tabstop>
+  <tabstop>stop_2_5</tabstop>
+  <tabstop>stop_2_6</tabstop>
+  <tabstop>stop_2_7</tabstop>
+  <tabstop>stop_2_8</tabstop>
+  <tabstop>stop_2_9</tabstop>
+  <tabstop>stop_2_10</tabstop>
+  <tabstop>stop_2_11</tabstop>
+  <tabstop>stop_2_12</tabstop>
+  <tabstop>stop_1_0</tabstop>
+  <tabstop>stop_1_1</tabstop>
+  <tabstop>stop_1_2</tabstop>
+  <tabstop>stop_1_3</tabstop>
+  <tabstop>stop_1_4</tabstop>
+  <tabstop>stop_1_5</tabstop>
+  <tabstop>stop_1_6</tabstop>
+  <tabstop>stop_1_7</tabstop>
+  <tabstop>pushButton_20</tabstop>
+  <tabstop>pushButton_21</tabstop>
+  <tabstop>pushButton_22</tabstop>
+  <tabstop>pushButton_23</tabstop>
+  <tabstop>pushButton_24</tabstop>
+  <tabstop>pushButton_25</tabstop>
+  <tabstop>pushButton_26</tabstop>
+  <tabstop>stop_1_8</tabstop>
+  <tabstop>stop_1_9</tabstop>
+  <tabstop>stop_1_10</tabstop>
+  <tabstop>stop_1_11</tabstop>
+  <tabstop>stop_1_12</tabstop>
+  <tabstop>stop_1_13</tabstop>
+  <tabstop>stop_1_14</tabstop>
+  <tabstop>stop_1_15</tabstop>
+  <tabstop>setSwingBox</tabstop>
+  <tabstop>SwingOff</tabstop>
+  <tabstop>swingEighth</tabstop>
+  <tabstop>swingSixteenth</tabstop>
+  <tabstop>swingBox</tabstop>
+  <tabstop>stop_p_5</tabstop>
+  <tabstop>stop_p_6</tabstop>
+  <tabstop>stop_p_7</tabstop>
+  <tabstop>stop_p_8</tabstop>
+  <tabstop>stop_p_9</tabstop>
+  <tabstop>stop_p_10</tabstop>
+  <tabstop>stop_p_11</tabstop>
+  <tabstop>stop_p_12</tabstop>
+  <tabstop>stop_p_13</tabstop>
+  <tabstop>stop_p_14</tabstop>
+  <tabstop>stop_p_15</tabstop>
+  <tabstop>stop_p_0</tabstop>
+  <tabstop>stop_p_1</tabstop>
+  <tabstop>stop_p_2</tabstop>
+  <tabstop>stop_p_3</tabstop>
+  <tabstop>stop_p_4</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

@@ -1208,12 +1208,6 @@
   <tabstop>genClef</tabstop>
   <tabstop>genTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
-  <tabstop>genKeysigPitched</tabstop>
-  <tabstop>showLedgerLinesPitched</tabstop>
-  <tabstop>stemlessPitched</tabstop>
-  <tabstop>genKeysigPercussion</tabstop>
-  <tabstop>showLedgerLinesPercussion</tabstop>
-  <tabstop>stemlessPercussion</tabstop>
   <tabstop>upsideDown</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>fretFontName</tabstop>
@@ -1242,6 +1236,12 @@
   <tabstop>templateCombo</tabstop>
   <tabstop>templateReset</tabstop>
   <tabstop>addToTemplates</tabstop>
+  <tabstop>showLedgerLinesPercussion</tabstop>
+  <tabstop>stemlessPercussion</tabstop>
+  <tabstop>genKeysigPitched</tabstop>
+  <tabstop>showLedgerLinesPitched</tabstop>
+  <tabstop>stemlessPitched</tabstop>
+  <tabstop>genKeysigPercussion</tabstop>
  </tabstops>
  <resources/>
  <connections>
