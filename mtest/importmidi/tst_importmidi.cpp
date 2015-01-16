@@ -359,6 +359,7 @@ class TestImportMidi : public QObject, public MTest
       void percRemoveTies() { noTempoText("perc_remove_ties"); }
       void percNoGrandStaff() { noTempoText("perc_no_grand_staff"); }
       void percTriplet() { noTempoText("perc_triplet"); }
+      void percRespectBeat() { noTempoText("perc_respect_beat"); }
 
       // clef changes along the score
       void clefTied() { dontSimplify("clef_tied"); }
