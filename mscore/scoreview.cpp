@@ -4445,6 +4445,7 @@ void ScoreView::changeVoice(int voice)
       if (is->noteEntryMode()) {
             if (is->segment()) { // can be null for eg repeatMeasure
                   is->setSegment(is->segment()->measure()->first(Segment::Type::ChordRest));
+                  moveCursor();
                   score()->setUpdateAll(true);
                   score()->end();
                   mscore->setPos(is->segment()->tick());
