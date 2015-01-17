@@ -378,9 +378,21 @@ int Note::tpc2default(int p) const
 
 void Note::setTpcFromPitch()
       {
+      // works best if note is already added to score, otherwise we can't determine key
+      Interval v = staff()->part()->instr()->transpose();
       Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
+      // convert key to concert pitch
+      if (!concertPitch() && !v.isZero())
+            key = transposeKey(key, v);
+      // set concert pitch tpc
       _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
-      _tpc[1] = pitch2tpc(_pitch - transposition(), key, Prefer::NEAREST);
+      // set transposed tpc
+      if (v.isZero())
+            _tpc[1] = _tpc[0];
+      else {
+            v.flip();
+            _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+            }
       Q_ASSERT(tpcIsValid(_tpc[0]));
       Q_ASSERT(tpcIsValid(_tpc[1]));
       }
