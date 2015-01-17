@@ -350,12 +350,26 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         instr->updateVelocity(&velocity,channel, a->subtypeName());
                   }
 
-                  for (Chord* c : chord->graceNotes()) {
+                  QList<Chord*> gnb;
+                  chord->getGraceNotesBefore(&gnb);
+                  for (Chord* c : gnb) {
                         for (const Note* note : c->notes())
                               collectNote(events, channel, note, velocity, tickOffset);
                         }
+
                   foreach (const Note* note, chord->notes())
                         collectNote(events, channel, note, velocity, tickOffset);
+
+#if 0
+                  // TODO: add support for grace notes after - see createPlayEvents()
+                  QList<Chord*> gna;
+                  chord->getGraceNotesAfter(&gna);
+                  for (Chord* c : gna) {
+                        for (const Note* note : c->notes())
+                              collectNote(events, channel, note, velocity, tickOffset);
+                        }
+#endif
+
                   }
             }
 
@@ -909,26 +923,37 @@ void Score::createPlayEvents(Chord* chord)
             instr->updateGateTime(&gateTime, 0, "");
             }
 
-      int n = chord->graceNotes().size();
+      QList<Chord*> gnb;
+      int n = chord->getGraceNotesBefore(&gnb);
       int ontime = 0;
       if (n) {
             //
             //  render grace notes:
             //  simplified implementation:
             //  - grace notes start on the beat of the main note
-            //  - duration: acciacatura: 0.128 * duration of main note
-            //              appoggiatura: 0.5  * duration of main note
-            //  - the duration is divided by the number of grace notes
+            //  - duration: appoggiatura: 0.5  * duration of main note
+            //              acciacatura: min of 0.5 * duration or 65ms fixed (independent of duration or tempo)
+            //  - for appoggiaturas, the duration is divided by the number of grace notes
             //  - the grace note duration as notated does not matter
             //
-            Chord* graceChord = chord->graceNotes()[0];
-            ontime      = (graceChord->noteType() ==  NoteType::ACCIACCATURA) ? 128 : 500;
+            Chord* graceChord = gnb[0];
+            if (graceChord->noteType() ==  NoteType::ACCIACCATURA) {
+                  qreal ticksPerSecond = tempo(tick) * MScore::division;
+                  int graceTimeMS = 65 * n;     // value determined empirically (TODO: make instrument-specific, like articulations)
+                  // 1000 occurs below for two different reasons:
+                  // number of milliseconds per second, also unit for ontime
+                  qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
+                  ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
+                  }
+            else {
+                  ontime = 500;
+                  }
             int graceDuration = ontime / n;
 
             int on = 0;
             for (int i = 0; i < n; ++i) {
                   QList<NoteEventList> el;
-                  Chord* gc = chord->graceNotes().at(i);
+                  Chord* gc = gnb.at(i);
                   int nn = gc->notes().size();
                   for (int ii = 0; ii < nn; ++ii) {
                         NoteEventList nel;
@@ -945,6 +970,7 @@ void Score::createPlayEvents(Chord* chord)
                   on += graceDuration;
                   }
             }
+
       SwingParameters st = chord->staff()->swing(tick);
       int unit = st.swingUnit;
       int ratio = st.swingRatio;
