@@ -286,11 +286,11 @@ QString TempoText::accessibleInfo()
             QString dots;
 
             switch (t.dots()) {
-                  case 1: dots = tr("Dotted");
+                  case 1: dots = tr("Dotted %1").arg(t.durationTypeUserName());
                         break;
-                  case 2: dots = tr("Double dotted");
+                  case 2: dots = tr("Double dotted %1").arg(t.durationTypeUserName());
                         break;
-                  case 3: dots = tr("Triple dotted");
+                  case 3: dots = tr("Triple dotted %1").arg(t.durationTypeUserName());
                         break;
                   default:
                         dots = "";
@@ -300,7 +300,7 @@ QString TempoText::accessibleInfo()
             QString bpm = plainText().split(" = ").back();
 
             //return Element::accessibleInfo() + dots + " " + t.durationTypeUserName() + " " + tr("note = %1").arg(bpm);
-            return QString("%1: %2 %3 %4").arg(Element::accessibleInfo()).arg(dots).arg(t.durationTypeUserName()).arg(tr("note = %1").arg(bpm));
+            return QString("%1: %2 %3").arg(Element::accessibleInfo()).arg(dots).arg(tr("note = %1").arg(bpm));
             }
       else
             return Text::accessibleInfo();
