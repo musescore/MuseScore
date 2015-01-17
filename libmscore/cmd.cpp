@@ -437,6 +437,12 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       {
       Note* note = new Note(this);
       Chord* chord = new Chord(this);
+
+      // alow grace notes to be added to other grace notes
+      // by really adding to parent chord
+      if (ch->noteType() != NoteType::NORMAL)
+            ch = static_cast<Chord*>(ch->parent());
+
       chord->setTrack(ch->track());
       chord->setParent(ch);
       chord->add(note);
@@ -2371,6 +2377,22 @@ void Score::cmd(const QAction* a)
             }
       else if (cmd == "add-brackets")
             cmdAddBracket();
+      else if (cmd == "acciaccatura")
+            cmdAddGrace(NoteType::ACCIACCATURA, MScore::division / 2);
+      else if (cmd == "appoggiatura")
+            cmdAddGrace(NoteType::APPOGGIATURA, MScore::division / 2);
+      else if (cmd == "grace4")
+            cmdAddGrace(NoteType::GRACE4, MScore::division);
+      else if (cmd == "grace16")
+            cmdAddGrace(NoteType::GRACE16, MScore::division / 4);
+      else if (cmd == "grace32")
+            cmdAddGrace(NoteType::GRACE32, MScore::division / 8);
+      else if (cmd == "grace8after")
+            cmdAddGrace(NoteType::GRACE8_AFTER, MScore::division / 2);
+      else if (cmd == "grace16after")
+            cmdAddGrace(NoteType::GRACE16_AFTER, MScore::division / 4);
+      else if (cmd == "grace32after")
+            cmdAddGrace(NoteType::GRACE32_AFTER, MScore::division / 8);
       else if (cmd == "explode")
             cmdExplode();
       else if (cmd == "implode")
@@ -2434,6 +2456,22 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
             score->undo(new AddElement(c));
             }
       delete clef;
+      }
+
+//---------------------------------------------------------
+//   cmdAddGrace
+///   adds grace note of specified type to selected notes
+//---------------------------------------------------------
+
+void Score::cmdAddGrace (NoteType graceType, int duration) {
+      startCmd();
+      for (Element* e : selection().elements()) {
+            if (e->type() == Element::Type::NOTE) {
+                  Note* n = static_cast<Note*>(e);
+                  setGraceNote(n->chord(), n->pitch(), graceType, duration);
+                  }
+            }
+      endCmd();
       }
 
 //---------------------------------------------------------

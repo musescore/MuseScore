@@ -1261,14 +1261,14 @@ bool Note::acceptDrop(const DropData& data) const
          || type == Element::Type::CHORD
          || type == Element::Type::HARMONY
          || type == Element::Type::DYNAMIC
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
-      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
-      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
-      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
          || (noteType() == NoteType::NORMAL && type == Element::Type::BAGPIPE_EMBELLISHMENT)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
