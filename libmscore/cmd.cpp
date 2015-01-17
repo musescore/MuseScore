@@ -427,7 +427,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
 //---------------------------------------------------------
 //   setGraceNote
 ///   Create a grace note in front of a normal note.
-///   \arg chord is the normal note
+///   \arg ch is the chord of the normal note
 ///   \arg pitch is the pitch of the grace note
 ///   \arg is the grace note type
 ///   \len is the visual duration of the grace note (1/16 or 1/32)
@@ -442,7 +442,17 @@ void Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       chord->add(note);
 
       note->setPitch(pitch);
-      note->setTpcFromPitch();
+      // find corresponding note within chord and use its tpc information
+      for (Note* n : ch->notes()) {
+            if (n->pitch() == pitch) {
+                  note->setTpc1(n->tpc1());
+                  note->setTpc2(n->tpc2());
+                  break;
+                  }
+            }
+      // note with same pitch not found, derive tpc from pitch / key
+      if (!tpcIsValid(note->tpc1()) || !tpcIsValid(note->tpc2()))
+            note->setTpcFromPitch();
 
       TDuration d;
       d.setVal(len);
