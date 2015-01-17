@@ -1743,8 +1743,15 @@ bool Score::processMidiInput()
 Element* Score::move(const QString& cmd)
       {
       ChordRest* cr;
-      if (noteEntryMode())
-            cr = inputState().cr();
+      if (noteEntryMode()) {
+            // if selection exists and is grace note, use it
+            // otherwise use chord/rest at input position
+            cr = selection().cr();
+            if (cr && cr->isGrace())
+                  ;
+            else
+                  cr = inputState().cr();
+            }
       else if (selection().activeCR())
             cr = selection().activeCR();
       else
