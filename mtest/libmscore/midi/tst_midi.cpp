@@ -83,6 +83,7 @@ void TestMidi::events_data()
       QTest::newRow("testSwingTexts") <<  "testSwingTexts";
       // ornaments
       QTest::newRow("testMordents") <<  "testMordents";
+      QTest::newRow("testGraceBefore") <<  "testGraceBefore";
       }
 
 //---------------------------------------------------------
