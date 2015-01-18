@@ -596,9 +596,9 @@ void splitTuplet(
             std::multimap<ReducedFraction, MidiChord> &chords,
             std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets,
             const ReducedFraction &maxChordLength,
-            bool allowParallelTuplets)
+            bool allowParallelTuplets,
+            bool isThisAChord)
       {
-
       Q_ASSERT_X(isInTuplet, "MidiVoice::splitTuplet",
                  "Tuplet chord/note is not actually in tuplet");
 
@@ -630,8 +630,21 @@ void splitTuplet(
             insertNewTuplet(tuplet, tupletOnTime, newVoice, chords, tuplets, insertedTuplets);
             isInTuplet = true;
             }
-      if (needDeleteOldTuplet)      // delete after insert, because oldTuplet can be used
-            MidiTuplet::removeTuplet(oldTuplet, tuplets, maxChordLength, chords);
+      if (needDeleteOldTuplet) {     // delete after insert, because oldTuplet can be used
+            bool canRemoveTuplet = true;
+            if (isThisAChord) {
+                              // don't remove tuplet if chord notes have the same tuplet,
+                              // it will be removed on note split
+                  for (const auto &note: notes) {
+                        if (note.isInTuplet && note.tuplet == oldTuplet) {
+                              canRemoveTuplet = false;
+                              break;
+                              }
+                        }
+                  }
+            if (canRemoveTuplet)
+                  MidiTuplet::removeTuplet(oldTuplet, tuplets, maxChordLength, chords);
+            }
 
       Q_ASSERT_X(allowParallelTuplets || !needInsertTuplet || needDeleteOldTuplet,
                  "MidiVoice::splitTuplet",
@@ -673,14 +686,14 @@ bool updateChordTuplets(
             splitTuplet(chord.tuplet, chord.voice, onTime,
                         chord.notes, chord.isInTuplet,
                         insertedTuplets, chords,
-                        tuplets, maxChordLength, allowParallelTuplets);
+                        tuplets, maxChordLength, allowParallelTuplets, true);
             }
       for (auto &note: chord.notes) {
             if (note.isInTuplet) {
                   splitTuplet(note.tuplet, chord.voice, onTime,
                               {note}, note.isInTuplet,
                               insertedTuplets, chords,
-                              tuplets, maxChordLength, allowParallelTuplets);
+                              tuplets, maxChordLength, allowParallelTuplets, false);
                   }
             }
 
