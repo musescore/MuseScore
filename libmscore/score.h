@@ -420,6 +420,7 @@ class Score : public QObject {
       void cmdResetBeamMode();
 
       void cmdInsertClef(ClefType);
+      void cmdAddGrace(NoteType, int);
       void cmdExchangeVoice(int, int);
 
       void removeChordRest(ChordRest* cr, bool clearSegment);

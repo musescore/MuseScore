@@ -378,9 +378,21 @@ int Note::tpc2default(int p) const
 
 void Note::setTpcFromPitch()
       {
+      // works best if note is already added to score, otherwise we can't determine transposition or key
+      Interval v = staff() ? staff()->part()->instr()->transpose() : Interval();
       Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
+      // convert key to concert pitch
+      if (!concertPitch() && !v.isZero())
+            key = transposeKey(key, v);
+      // set concert pitch tpc
       _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
-      _tpc[1] = pitch2tpc(_pitch - transposition(), key, Prefer::NEAREST);
+      // set transposed tpc
+      if (v.isZero())
+            _tpc[1] = _tpc[0];
+      else {
+            v.flip();
+            _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+            }
       Q_ASSERT(tpcIsValid(_tpc[0]));
       Q_ASSERT(tpcIsValid(_tpc[1]));
       }
@@ -1249,14 +1261,14 @@ bool Note::acceptDrop(const DropData& data) const
          || type == Element::Type::CHORD
          || type == Element::Type::HARMONY
          || type == Element::Type::DYNAMIC
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
-      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
-      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
-      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
          || (noteType() == NoteType::NORMAL && type == Element::Type::BAGPIPE_EMBELLISHMENT)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
