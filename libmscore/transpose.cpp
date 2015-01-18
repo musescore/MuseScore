@@ -250,9 +250,11 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             if (mode == TransposeMode::BY_KEY) {
                   // calculate interval from "transpose by key"
                   Key oKey = st->key(startTick);
-                  int diff = st->part()->instr(startTick)->transpose().chromatic;
-                  if (diff)
-                        oKey = transposeKey(oKey, diff);
+                  if (!styleB(StyleIdx::concertPitch)) {
+                        int diff = st->part()->instr(startTick)->transpose().chromatic;
+                        if (diff)
+                              oKey = transposeKey(oKey, diff);
+                        }
                   interval = keydiff2Interval(oKey, trKey, direction);
                   }
             else {
