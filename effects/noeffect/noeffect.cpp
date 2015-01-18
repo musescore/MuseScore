@@ -39,7 +39,7 @@ NoEffectGui::NoEffectGui(Effect* e, QWidget* parent)
    : EffectGui(e, parent)
       {
       QLabel* l = new QLabel;
-      l->setText(tr("no plugin"));
+      l->setText(tr("No Plugin"));
       QLayout* la = new QVBoxLayout;
       la->addWidget(l);
       setLayout(la);

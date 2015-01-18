@@ -605,6 +605,9 @@
      </item>
      <item row="10" column="2">
       <widget class="QToolButton" name="resetFixed">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset Fix to line</string>
        </property>
@@ -615,6 +618,9 @@
      </item>
      <item row="11" column="2">
       <widget class="QToolButton" name="resetFixedLine">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
        <property name="accessibleName">
         <string>Reset Line</string>
        </property>

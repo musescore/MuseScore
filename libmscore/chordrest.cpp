@@ -1004,16 +1004,16 @@ QString ChordRest::durationUserName()
 
       switch (dots()) {
             case 1:
-                  dotString += " " + tr("Dotted");
+                  dotString += " " + tr("Dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             case 2:
-                  dotString += " " + tr("Double dotted");
+                  dotString += " " + tr("Double dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             case 3:
-                  dotString += " " + tr("Triple dotted");
+                  dotString += " " + tr("Triple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             }
-      return QString("%2%3 %4").arg(tupletType).arg(dotString).arg(durationType().durationTypeUserName()).trimmed();
+      return QString("%2%3").arg(tupletType).arg(dotString);
       }
 
 //---------------------------------------------------------
