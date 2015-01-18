@@ -120,6 +120,10 @@ bool areAllTupletsReferenced(
 
 bool areTupletReferencesValid(const std::multimap<ReducedFraction, MidiChord> &chords);
 
+bool isTupletRangeOk(
+            const std::pair<const ReducedFraction, MidiChord> &chord,
+            const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets);
+
 bool areTupletRangesOk(
             const std::multimap<ReducedFraction, MidiChord> &chords,
             const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets);
