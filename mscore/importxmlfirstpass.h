@@ -21,6 +21,13 @@ namespace Ms {
 
 typedef QMap<QString, VoiceDesc> VoiceList;
 
+class MusicXmlInstrList : public std::map<Fraction, QString> {
+public:
+      MusicXmlInstrList() {}
+      const QString instrument(const Fraction f) const;
+      void setInstrument(const QString instr, const Fraction f);
+};
+
 class MusicXmlPart {
 public:
       MusicXmlPart(QString id = "", QString name = "");
@@ -30,6 +37,7 @@ public:
       VoiceList voicelist;         // the voice map information TODO: make private
       Fraction measureDuration(int i) const;
       int nMeasures() const { return measureDurations.size(); }
+      MusicXmlInstrList _instrList; // TODO: make private
 private:
       QString id;
       QString name;
