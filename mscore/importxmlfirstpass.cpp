@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2013 Werner Schweer and others
+//  Copyright (C) 2013 - 2015 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -790,6 +790,16 @@ VoiceList MxmlReaderFirstPass::getVoiceList(const QString id) const
                   return parts.at(i).voicelist;
             }
       return VoiceList();
+      }
+
+
+MusicXmlInstrList MxmlReaderFirstPass::getInstrList(const QString id) const
+      {
+      for (int i = 0; i < nParts(); ++i) {
+            if (parts.at(i).getId() == id)
+                  return parts.at(i)._instrList;
+      }
+      return MusicXmlInstrList();
       }
 
 
