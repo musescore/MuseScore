@@ -732,6 +732,52 @@ bool areTupletNonTupletChordsDistinct(
       return true;
       }
 
+bool isTupletRangeOk(
+            const std::pair<const ReducedFraction, MidiChord> &chord,
+            const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
+      {
+      const MidiChord &c = chord.second;
+      const auto foundTuplets = findTupletsForTimeRange(
+                              c.voice, chord.first, ReducedFraction(0, 1), tuplets, false);
+      if (c.isInTuplet && foundTuplets.empty()) {
+            qDebug() << "Tuplet chord is actually outside tuplets, "
+                        "bar number (from 1):" << (c.barIndex + 1);
+            return false;
+            }
+      if (!c.isInTuplet && !foundTuplets.empty()) {
+                        // chord can touch the tuplet at the end and doesn't belong to it
+            for (const auto &t: foundTuplets) {
+                  if (chord.first != t->second.onTime + t->second.len) {
+                        qDebug() << "Non-tuplet chord is actually inside tuplet, "
+                                    "bar number (from 1):" << (c.barIndex + 1);
+                        return false;
+                        }
+                  }
+            }
+      for (const auto &note: c.notes) {
+            const auto foundTuplets = findTupletsForTimeRange(
+                              c.voice, note.offTime, ReducedFraction(0, 1), tuplets, false);
+            if (note.isInTuplet && foundTuplets.empty()) {
+                  qDebug() << "Tuplet note off time is actually outside tuplets, "
+                              "bar number (from 1):" << (c.barIndex + 1);
+                  return false;
+                  }
+            if (!note.isInTuplet && !foundTuplets.empty()) {
+                              // note off time can touch the tuplet
+                              // at the beg/end and doesn't belong to it
+                  for (const auto &t: foundTuplets) {
+                        if (note.offTime != t->second.onTime
+                                    && note.offTime != t->second.onTime + t->second.len) {
+                              qDebug() << "Non-tuplet note off time is actually inside tuplet, "
+                                          "bar number (from 1):" << (c.barIndex + 1);
+                              return false;
+                              }
+                        }
+                  }
+            }
+      return true;
+      }
+
 // should be called after quantization
 
 bool areTupletRangesOk(
@@ -739,45 +785,8 @@ bool areTupletRangesOk(
             const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
       {
       for (const auto &chord: chords) {
-            const MidiChord &c = chord.second;
-            const auto foundTuplets = findTupletsForTimeRange(
-                                    c.voice, chord.first, ReducedFraction(0, 1), tuplets, false);
-            if (c.isInTuplet && foundTuplets.empty()) {
-                  qDebug() << "Tuplet chord is actually outside tuplets, "
-                              "bar number (from 1):" << (c.barIndex + 1);
+            if (!isTupletRangeOk(chord, tuplets))
                   return false;
-                  }
-            if (!c.isInTuplet && !foundTuplets.empty()) {
-                              // chord can touch the tuplet at the end and doesn't belong to it
-                  for (const auto &t: foundTuplets) {
-                        if (chord.first != t->second.onTime + t->second.len) {
-                              qDebug() << "Non-tuplet chord is actually inside tuplet, "
-                                          "bar number (from 1):" << (c.barIndex + 1);
-                              return false;
-                              }
-                        }
-                  }
-            for (const auto &note: c.notes) {
-                  const auto foundTuplets = findTupletsForTimeRange(
-                                    c.voice, note.offTime, ReducedFraction(0, 1), tuplets, false);
-                  if (note.isInTuplet && foundTuplets.empty()) {
-                        qDebug() << "Tuplet note off time is actually outside tuplets, "
-                                    "bar number (from 1):" << (c.barIndex + 1);
-                        return false;
-                        }
-                  if (!note.isInTuplet && !foundTuplets.empty()) {
-                                    // note off time can touch the tuplet
-                                    // at the beg/end and doesn't belong to it
-                        for (const auto &t: foundTuplets) {
-                              if (note.offTime != t->second.onTime
-                                          && note.offTime != t->second.onTime + t->second.len) {
-                                    qDebug() << "Non-tuplet note off time is actually inside tuplet, "
-                                                "bar number (from 1):" << (c.barIndex + 1);
-                                    return false;
-                                    }
-                              }
-                        }
-                  }
             }
       return true;
       }

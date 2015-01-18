@@ -735,6 +735,11 @@ bool splitChordToVoice(
       MidiChord &chord = chordIt->second;
       auto &notes = chord.notes;
 
+      Q_ASSERT_X(MidiTuplet::isTupletRangeOk(*chordIt, tuplets),
+                 "MidiVoice::splitChordToVoice, before split",
+                 "Tuplet chord/note is outside tuplet "
+                 "or non-tuplet chord/note is inside tuplet before simplification");
+
       if (notesToMove.size() == notes.size()) {
                         // don't split chord, just move it to another voice
             const int oldVoice = chord.voice;   // remember for possible undo
@@ -783,6 +788,12 @@ bool splitChordToVoice(
                   splitDone = false;
                   }
             }
+
+      Q_ASSERT_X(MidiTuplet::isTupletRangeOk(*chordIt, tuplets),
+                 "MidiVoice::splitChordToVoice, after split",
+                 "Tuplet chord/note is outside tuplet "
+                 "or non-tuplet chord/note is inside tuplet before simplification");
+
       return splitDone;
       }
 
