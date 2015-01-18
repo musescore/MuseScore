@@ -1796,8 +1796,20 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "midi-bank")
                               domNotImplemented(e);
-                        else if (ee.tagName() == "midi-channel")
-                              part->setMidiChannel(ee.text().toInt() - 1);
+                        else if (ee.tagName() == "midi-channel") {
+                              int channel = ee.text().toInt();
+                              if (channel < 1) {
+                                    qDebug("MusicXml::xmlScorePart: incorrect midi-channel: %d", channel);
+                                    channel = 1;
+                                    }
+                              else if (channel > 16) {
+                                    qDebug("MusicXml::xmlScorePart: incorrect midi-channel: %d", channel);
+                                    channel = 16;
+                                    }
+                              if (drumsets[id].contains(instrId))
+                                    drumsets[id][instrId].midiChannel = channel - 1;
+                              part->setMidiChannel(channel - 1); // TODO: fix for multi-instrument parts
+                              }
                         else if (ee.tagName() == "midi-program") {
                               int program = ee.text().toInt();
                               qDebug("MusicXml::xmlScorePart: instrument id %s MIDI program %d",
@@ -1811,8 +1823,10 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                               else if (program > 128) {
                                     qDebug("MusicXml::xmlScorePart: incorrect midi-program: %d", program);
                                     program = 128;
-                              }
-                              part->setMidiProgram(program - 1);
+                                    }
+                              if (drumsets[id].contains(instrId))
+                                    drumsets[id][instrId].midiProgram = program - 1;
+                              part->setMidiProgram(program - 1); // TODO: fix for multi-instrument parts
                               }
                         else if (ee.tagName() == "midi-unpitched") {
                               qDebug("MusicXml::xmlScorePart: instrument id %s midi-unpitched %s",
@@ -1841,21 +1855,16 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
             else
                   domError(e);
             }
-      /*
-      score->parts().push_back(part);
-      Staff* staff = new Staff(score, part, 0);
-      part->staves()->push_back(staff);
-      score->staves().push_back(staff);
-      */
 
-      // dump drumset for this part
-      /*
+      // set the instruments for this part
+      // TODO: only if not a drumset ???
+      // TODO: make sure MIDI channel and program are set correctly for a drumset
+      // TODO: if done after reading <part>, the corresponding InstrumentChanges could probably be created in the same loop
       MusicXMLDrumsetIterator i(drumsets[id]);
       while (i.hasNext()) {
             i.next();
             qDebug("%s %s", qPrintable(i.key()), qPrintable(i.value().toString()));
             }
-       */
       }
 
 

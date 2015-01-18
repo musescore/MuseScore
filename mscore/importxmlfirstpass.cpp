@@ -591,6 +591,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                               QString pitch = "    ";
                               int staff = 0;          // correct default for missing staff
                               bool rest = false;
+                              QString instrId;
                               for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
                                     QString tag(eee.tagName());
                                     QString s(eee.text());
@@ -606,10 +607,27 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                           ;  // TODO pitch = parsePitch(eee);
                                     else if (tag == "rest")
                                           rest = true;
+                                    else if (tag == "instrument")
+                                          instrId = eee.attribute("id");
                                     }
                               if (rest)
                                     pitch = "rest";
                               if (!chord) {
+                                    Fraction t = loc_tick.reduced();
+                                    QString prevInstrId = parts[partNr]._instrList.instrument(t);
+                                    bool mustInsert = instrId != prevInstrId;
+                                    qDebug("tick %s (%d) staff %d voice '%s' previnst[%s]='%s' instrument '%s' insert %d",
+                                           qPrintable(loc_tick.print()),
+                                           loc_tick.ticks(),
+                                           staff + 1,
+                                           qPrintable(voice),
+                                           qPrintable(t.print()),
+                                           qPrintable(prevInstrId),
+                                           qPrintable(instrId),
+                                           mustInsert
+                                           );
+                                    if (mustInsert)
+                                          parts[partNr]._instrList.setInstrument(instrId, t);
                                     // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
                                     // Same fix is required in MusicXml::xmlNote
                                     // make sure staff is valid
@@ -692,15 +710,29 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
       // allocate MuseScore voice to MusicXML voices
       allocateVoices(parts[partNr].voicelist);
 
-      // debug: print results
-      /*
-      qDebug("voiceMapperStats: new staff");
-      for (VoiceList::const_iterator i = parts[partNr].voicelist.constBegin();
-           i != parts[partNr].voicelist.constEnd(); ++i) {
-            qDebug("voiceMapperStats: voice %s staff data %s",
-                   qPrintable(i.key()), qPrintable(i.value().toString()));
+      // fixup required in case the part starts with a foward, which has no instrument
+      // this would result in instrument at tick = 0 being undefined
+      MusicXmlInstrList& il = parts[partNr]._instrList;
+      if (il.size() > 0) {
+            auto pFirstInstr = il.begin();
+            QString firstInstr = (*pFirstInstr).second;
+            qDebug("move '%s' to tick 0", qPrintable(firstInstr));
+            il.erase(pFirstInstr);
+            il.setInstrument(firstInstr, Fraction(0, 1));
             }
-      */
+
+      // debug: print results
+      /**/
+      qDebug("initVoiceMapperAndMapVoices: new part");
+      for (auto it = parts[partNr].voicelist.constBegin(); it != parts[partNr].voicelist.constEnd(); ++it) {
+            qDebug("voiceMapperStats: voice %s staff data %s",
+                   qPrintable(it.key()), qPrintable(it.value().toString()));
+            }
+      for (auto it = parts[partNr]._instrList.cbegin(); it != parts[partNr]._instrList.cend(); ++it) {
+            Fraction f = (*it).first;
+            qDebug("instrument map: tick %s (%d) instr '%s'", qPrintable(f.print()), f.ticks(), qPrintable((*it).second));
+            }
+       /**/
       }
 
 
@@ -852,5 +884,34 @@ void MxmlReaderFirstPass::parseFile()
       qDebug("Parsing time elapsed: %d ms", t.elapsed());
       qDebug("MxmlReaderFirstPass::parseFile() end");
       }
-}
 
+//---------------------------------------------------------
+//   instrument
+//---------------------------------------------------------
+
+const QString MusicXmlInstrList::instrument(const Fraction f) const
+      {
+      if (empty())
+            return "";
+      auto i = upper_bound(f);
+      if (i == begin())
+            return "";
+      --i;
+      return i->second;
+      }
+
+//---------------------------------------------------------
+//   setInstrument
+//---------------------------------------------------------
+
+void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
+      {
+      // TODO determine how to handle multiple instrument changes at the same time
+      // current implementation keeps the first one
+      if (!insert({f, instr}).second)
+            qDebug("MusicXmlInstrList::setInstrument(instr '%s', tick %s (%d)) element already exists",
+                   qPrintable(instr), qPrintable(f.print()), f.ticks());
+            //(*this)[f] = instr;
+      }
+
+}

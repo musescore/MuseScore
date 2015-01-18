@@ -117,6 +117,40 @@ private:
       QMap<QString, NoteList> _noteLists; ///< The notelists for all the voices
       };
 
+#if 0
+//---------------------------------------------------------
+//   MusicXMLInstrument
+//---------------------------------------------------------
+
+/**
+ A single instrument in a MusicXML multi-instrument part.
+ */
+
+struct MusicXMLInstrument {
+      QString name;
+      int midiChannel
+      int midiProgram
+      tbd volume
+      tbd pan
+      
+      QString toString() const;
+      
+      MusicXMLInstrument()
+      : pitch(-1), name(), notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
+      MusicXMLInstrument(QString s)
+      : pitch(-1), name(s), notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
+      MusicXMLInstrument(int p, QString s, NoteHead::Group nh, int l, MScore::Direction d)
+      : pitch(p), name(s), notehead(nh), line(l), stemDirection(d) {}
+};
+
+/**
+ A set of instruments for a MusicXML part.
+ */
+
+typedef QMap<QString, MusicXMLInstrument> MusicXMLInstrs;
+typedef QMapIterator<QString, MusicXMLInstrument> MusicXMLInstrsIterator;
+#endif
+
 //---------------------------------------------------------
 //   MusicXMLDrumInstrument
 //---------------------------------------------------------
@@ -128,6 +162,8 @@ private:
 struct MusicXMLDrumInstrument {
       int pitch;
       QString name;
+      int midiChannel;
+      int midiProgram;
       NoteHead::Group notehead; ///< notehead symbol set
       int line;                 ///< place notehead onto this line
       MScore::Direction stemDirection;
@@ -135,11 +171,14 @@ struct MusicXMLDrumInstrument {
       QString toString() const;
 
       MusicXMLDrumInstrument()
-            : pitch(-1), name(), notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
+            : pitch(-1), name(), midiChannel(-1), midiProgram(-1),
+      notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
       MusicXMLDrumInstrument(QString s)
-            : pitch(-1), name(s), notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
+            : pitch(-1), name(s), midiChannel(-1), midiProgram(-1),
+      notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
       MusicXMLDrumInstrument(int p, QString s, NoteHead::Group nh, int l, MScore::Direction d)
-            : pitch(p), name(s), notehead(nh), line(l), stemDirection(d) {}
+            : pitch(p), name(s), midiChannel(-1), midiProgram(-1),
+      notehead(nh), line(l), stemDirection(d) {}
       };
 
 /**
