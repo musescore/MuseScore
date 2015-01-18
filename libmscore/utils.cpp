@@ -727,7 +727,15 @@ Note* searchTieNote(Note* note)
             return note2;
             }
 
+      // end of current note duration
+      // but err on the safe side in case there is roundoff in tick count
+      int endTick = chord->tick() + chord->actualTicks() - 1;
+
       while ((seg = seg->next1(Segment::Type::ChordRest))) {
+            // skip ahead to end of current note duration
+            // but just in case, stop if we find element in current track
+            if (seg->tick() < endTick  && !seg->element(chord->track()))
+                  continue;
             for (int track = strack; track < etrack; ++track) {
                   Chord* c = static_cast<Chord*>(seg->element(track));
                   if (c == 0 || c->type() != Element::Type::CHORD)
