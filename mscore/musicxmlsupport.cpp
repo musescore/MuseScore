@@ -136,7 +136,11 @@ bool VoiceOverlapDetector::stavesOverlap(const QString& voice) const
 
 QString MusicXMLDrumInstrument::toString() const
       {
-      return QString("pitch %1 name %2 notehead %3 line %4 stemDirection %5")
+      return QString("chan %1 prog %2 vol %3 pan %4 pitch %5 name %6 head %7 line %8 stemDir %9")
+             .arg(midiChannel)
+             .arg(midiProgram)
+             .arg(midiVolume)
+             .arg(midiPan)
              .arg(pitch)
              .arg(name)
              .arg(int(notehead))
