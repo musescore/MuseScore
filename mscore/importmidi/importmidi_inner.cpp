@@ -1,11 +1,86 @@
 #include "importmidi_inner.h"
 #include "importmidi_operations.h"
+#include "importmidi_chord.h"
 #include "mscore/preferences.h"
 #include "libmscore/durationtype.h"
 #include "midi/midifile.h"
 
 
 namespace Ms {
+
+MTrack::MTrack()
+      : program(0)
+      , staff(nullptr)
+      , mtrack(nullptr)
+      , hasKey(false)
+      , indexOfOperation(0)
+      , division(0)
+      , isDivisionInTps(false)
+      , hadInitialNotes(false)
+      {
+      }
+
+MTrack::MTrack(const MTrack &other)
+      : program(other.program)
+      , staff(other.staff)
+      , mtrack(other.mtrack)
+      , name(other.name)
+      , hasKey(other.hasKey)
+      , indexOfOperation(other.indexOfOperation)
+      , division(other.division)
+      , isDivisionInTps(other.isDivisionInTps)
+      , hadInitialNotes(other.hadInitialNotes)
+      , chords(other.chords)
+      {
+      copyAndCorrectTuplets();
+      }
+
+MTrack& MTrack::operator=(MTrack other)
+      {
+      std::swap(program, other.program);
+      std::swap(staff, other.staff);
+      std::swap(mtrack, other.mtrack);
+      std::swap(name, other.name);
+      std::swap(hasKey, other.hasKey);
+      std::swap(indexOfOperation, other.indexOfOperation);
+      std::swap(division, other.division);
+      std::swap(isDivisionInTps, other.isDivisionInTps);
+      std::swap(hadInitialNotes, other.hadInitialNotes);
+      std::swap(chords, other.chords);
+      copyAndCorrectTuplets();
+
+      return *this;
+      }
+
+void MTrack::copyAndCorrectTuplets()
+      {
+      for (auto &chord: chords) {
+            if (chord.second.isInTuplet)
+                  updateTuplet(chord.second.tuplet);
+            for (auto &note: chord.second.notes) {
+                  if (note.isInTuplet)
+                        updateTuplet(note.tuplet);
+                  }
+            }
+      }
+
+void MTrack::updateTuplet(
+            std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator &tupletIt)
+      {
+      auto foundTuplet = tuplets.end();
+      const auto foundTupletsRange = tuplets.equal_range(tupletIt->first);
+      for (auto it = foundTupletsRange.first; it != foundTupletsRange.second; ++it) {
+            if (it->second.voice == tupletIt->second.voice) {
+                  foundTuplet = it;
+                  break;
+                  }
+            }
+      if (foundTuplet != tuplets.end())
+            tupletIt = foundTuplet;
+      else
+            tupletIt = tuplets.insert({tupletIt->first, tupletIt->second});
+      }
+
 namespace Meter {
 
 ReducedFraction userTimeSigToFraction(
