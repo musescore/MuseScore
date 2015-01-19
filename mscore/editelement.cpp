@@ -149,15 +149,17 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
                   }
             return true;
             }
-      int i;
-      qreal a = grip[0].width() * 1.0;
-      for (i = 0; i < grips; ++i) {
-            if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
-                  curGrip = Grip(i);
-                  data.curGrip = Grip(i);
-                  updateGrips();
-                  score()->end();
-                  break;
+      int i = 0;
+      if (grips) {
+            qreal a = grip[0].width() * 1.0;
+            for (; i < grips; ++i) {
+                  if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
+                        curGrip = Grip(i);
+                        data.curGrip = Grip(i);
+                        updateGrips();
+                        score()->end();
+                        break;
+                        }
                   }
             }
       return i != grips;
