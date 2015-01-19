@@ -561,12 +561,9 @@ void Debugger::updateElement(Element* el)
 
       if (cs != el->score())
             updateList(el->score());
-      for (int i = 0;; ++i) {
-            QTreeWidgetItem* item = list->topLevelItem(i);
-            if (item == 0) {
-                  qDebug("Debugger::Element not found %s %p idx %d", el->name(), el, i);
-                  break;
-                  }
+      bool found = false;
+      for (QTreeWidgetItemIterator it(list); *it; ++it) {
+            QTreeWidgetItem* item = *it;
             if (item->type() == QTreeWidgetItem::Type)
                   continue;
             ElementItem* ei = static_cast<ElementItem*>(item);
@@ -574,13 +571,13 @@ void Debugger::updateElement(Element* el)
                   list->setItemExpanded(item, true);
                   list->setCurrentItem(item);
                   list->scrollToItem(item);
-                  break;
-                  }
-            if (searchElement(item, el)) {
-                  list->setItemExpanded(item, true);
+                  found = true;
                   break;
                   }
             }
+      if (!found)
+            qDebug("Debugger: element not found %s\n", el->name());
+
       setWindowTitle(QString("MuseScore: Debugger: ") + el->name());
 
       ShowElementBase* ew = elementViews[int(el->type())];
@@ -1463,7 +1460,7 @@ SpannerView::SpannerView()
       sp.setupUi(addWidget());
       connect(sp.segments, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(gotoElement(QTreeWidgetItem*)));
       connect(sp.startElement, SIGNAL(clicked()), SLOT(startClicked()));
-      connect(sp.endElement, SIGNAL(clicked()), SLOT(endClicked()));
+      connect(sp.endElement,   SIGNAL(clicked()), SLOT(endClicked()));
       }
 
 //---------------------------------------------------------
@@ -2011,6 +2008,8 @@ VoltaView::VoltaView()
       connect(tlb.continueText, SIGNAL(clicked()), SLOT(continueTextClicked()));
       connect(tlb.endText,      SIGNAL(clicked()), SLOT(endTextClicked()));
       connect(sp.segments,      SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(gotoElement(QTreeWidgetItem*)));
+      connect(sp.startElement,  SIGNAL(clicked()), SLOT(startClicked()));
+      connect(sp.endElement,    SIGNAL(clicked()), SLOT(endClicked()));
       }
 
 //---------------------------------------------------------
@@ -2050,30 +2049,12 @@ void VoltaView::setElement(Element* e)
       }
 
 //---------------------------------------------------------
-//   leftElementClicked
-//---------------------------------------------------------
-
-void VoltaView::leftElementClicked()
-      {
-//      emit elementChanged(static_cast<Volta*>(element())->startElement());
-      }
-
-//---------------------------------------------------------
-//   rightElementClicked
-//---------------------------------------------------------
-
-void VoltaView::rightElementClicked()
-      {
-//      emit elementChanged(static_cast<Volta*>(element())->endElement());
-      }
-
-//---------------------------------------------------------
 //   startClicked
 //---------------------------------------------------------
 
 void VoltaView::startClicked()
       {
-//      emit elementChanged(static_cast<Spanner*>(element())->startElement());
+      emit elementChanged(static_cast<Spanner*>(element())->startElement());
       }
 
 //---------------------------------------------------------
@@ -2082,9 +2063,8 @@ void VoltaView::startClicked()
 
 void VoltaView::endClicked()
       {
-//      emit elementChanged(static_cast<Spanner*>(element())->endElement());
+      emit elementChanged(static_cast<Spanner*>(element())->endElement());
       }
-
 
 //---------------------------------------------------------
 //   VoltaSegmentView
@@ -2094,6 +2074,16 @@ VoltaSegmentView::VoltaSegmentView()
    : ShowElementBase()
       {
       lb.setupUi(addWidget());
+      connect(lb.lineButton, SIGNAL(clicked()), SLOT(lineClicked()));
+      }
+
+//---------------------------------------------------------
+//   endClicked
+//---------------------------------------------------------
+
+void VoltaSegmentView::lineClicked()
+      {
+      emit elementChanged(static_cast<VoltaSegment*>(element())->volta());
       }
 
 //---------------------------------------------------------
@@ -2349,25 +2339,25 @@ void SlurSegmentView::setElement(Element* e)
       {
       SlurSegment* s = static_cast<SlurSegment*>(e);
       ShowElementBase::setElement(e);
-      ss.up1px->setValue(s->getUps(int(GripSlurSegment::START))->p.x());
-      ss.up1py->setValue(s->getUps(int(GripSlurSegment::START))->p.y());
-      ss.up1ox->setValue(s->getUps(int(GripSlurSegment::START))->off.x());
-      ss.up1oy->setValue(s->getUps(int(GripSlurSegment::START))->off.y());
+      ss.up1px->setValue(s->ups(Grip::START).p.x());
+      ss.up1py->setValue(s->ups(Grip::START).p.y());
+      ss.up1ox->setValue(s->ups(Grip::START).off.x());
+      ss.up1oy->setValue(s->ups(Grip::START).off.y());
 
-      ss.up2px->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->p.x());
-      ss.up2py->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->p.y());
-      ss.up2ox->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->off.x());
-      ss.up2oy->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->off.y());
+      ss.up2px->setValue(s->ups(Grip::BEZIER1).p.x());
+      ss.up2py->setValue(s->ups(Grip::BEZIER1).p.y());
+      ss.up2ox->setValue(s->ups(Grip::BEZIER1).off.x());
+      ss.up2oy->setValue(s->ups(Grip::BEZIER1).off.y());
 
-      ss.up3px->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->p.x());
-      ss.up3py->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->p.y());
-      ss.up3ox->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->off.x());
-      ss.up3oy->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->off.y());
+      ss.up3px->setValue(s->ups(Grip::BEZIER2).p.x());
+      ss.up3py->setValue(s->ups(Grip::BEZIER2).p.y());
+      ss.up3ox->setValue(s->ups(Grip::BEZIER2).off.x());
+      ss.up3oy->setValue(s->ups(Grip::BEZIER2).off.y());
 
-      ss.up4px->setValue(s->getUps(int(GripSlurSegment::END))->p.x());
-      ss.up4py->setValue(s->getUps(int(GripSlurSegment::END))->p.y());
-      ss.up4ox->setValue(s->getUps(int(GripSlurSegment::END))->off.x());
-      ss.up4oy->setValue(s->getUps(int(GripSlurSegment::END))->off.y());
+      ss.up4px->setValue(s->ups(Grip::END).p.x());
+      ss.up4py->setValue(s->ups(Grip::END).p.y());
+      ss.up4ox->setValue(s->ups(Grip::END).off.x());
+      ss.up4oy->setValue(s->ups(Grip::END).off.y());
 
       }
 

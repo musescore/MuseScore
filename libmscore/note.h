@@ -82,10 +82,10 @@ class NoteHead : public Symbol {
 
       NoteHead(Score* s) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&) = delete;
-      virtual NoteHead* clone() const    { return new NoteHead(*this); }
-      virtual Element::Type type() const { return Element::Type::NOTEHEAD; }
+      virtual NoteHead* clone() const override    { return new NoteHead(*this); }
+      virtual Element::Type type() const override { return Element::Type::NOTEHEAD; }
 
-      virtual void write(Xml& xml) const;
+      virtual void write(Xml& xml) const override;
 
       Group headGroup() const;
 
@@ -247,10 +247,10 @@ class Note : public Element {
       ~Note();
 
       Note& operator=(const Note&) = delete;
-      virtual Note* clone() const  { return new Note(*this, false); }
-      Element::Type type() const   { return Element::Type::NOTE; }
+      virtual Note* clone() const override  { return new Note(*this, false); }
+      Element::Type type() const override   { return Element::Type::NOTE; }
 
-      virtual qreal mag() const;
+      virtual qreal mag() const override;
 
       QPointF pagePos() const;      ///< position in page coordinates
       QPointF canvasPos() const;    ///< position in page coordinates
@@ -274,8 +274,8 @@ class Note : public Element {
       void setHeadGroup(NoteHead::Group val);
       void setHeadType(NoteHead::Type t);
 
-      virtual int subtype() const { return (int) _headGroup; }
-      virtual QString subtypeName() const;
+      virtual int subtype() const override { return (int) _headGroup; }
+      virtual QString subtypeName() const override;
 
       void setPitch(int val);
       void undoSetPitch(int val);
@@ -325,8 +325,8 @@ class Note : public Element {
       bool fretConflict() const       { return _fretConflict; }
       void setFretConflict(bool val)  { _fretConflict = val; }
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
 
       bool mirror() const             { return _mirror;  }
       void setMirror(bool val)        { _mirror = val;   }
@@ -421,13 +421,13 @@ class Note : public Element {
       void undoSetHeadGroup(NoteHead::Group);
       void undoSetHeadType(NoteHead::Type);
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
-      virtual void setScore(Score* s);
+      virtual void setScore(Score* s) override;
       void setDotY(MScore::Direction);
 
       void addBracket();

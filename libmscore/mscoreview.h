@@ -19,6 +19,7 @@ class Element;
 class Score;
 class Note;
 class Page;
+enum class Grip : char;
 
 //---------------------------------------------------------
 //   MuseScoreView
@@ -52,12 +53,12 @@ class MuseScoreView {
       virtual QCursor cursor() const = 0;
       virtual void setCursor(const QCursor&) = 0;
       virtual int gripCount() const = 0;
-      virtual const QRectF& getGrip(int) const = 0;
+      virtual const QRectF& getGrip(Grip) const = 0;
       virtual void setDropRectangle(const QRectF&) = 0;
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote) = 0;
       virtual void cmdAddHairpin(bool) = 0;
       virtual void startEdit() = 0;
-      virtual void startEdit(Element*, int startGrip) = 0;
+      virtual void startEdit(Element*, Grip startGrip) = 0;
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
       virtual void setDropTarget(const Element*) {}
 

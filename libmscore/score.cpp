@@ -1640,23 +1640,6 @@ MeasureBase* Score::firstMM() const
       return m;
       }
 
-#if 0
-//---------------------------------------------------------
-//   measureIdx
-//---------------------------------------------------------
-
-int Score::measureIdx(MeasureBase* m) const
-      {
-      int idx = 0;
-      for (MeasureBase* mb = _measures.first(); mb; mb = mb->nextMeasureMM()) {
-            if (mb == m)
-                  return idx;
-            ++idx;
-            }
-      return -1;
-      }
-#endif
-
 //---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
@@ -1691,7 +1674,7 @@ Measure* Score::lastMeasure() const
 Measure* Score::lastMeasureMM() const
       {
       Measure* m = lastMeasure();
-      Measure* m1 = m->mmRest1();
+      Measure* m1 = const_cast<Measure*>(m->mmRest1());
       if (m1)
            return m1;
       return m;

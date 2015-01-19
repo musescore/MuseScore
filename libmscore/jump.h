@@ -58,13 +58,13 @@ class Jump : public Text {
       Type jumpType() const;
       QString jumpTypeUserName() const;
 
-      virtual Jump* clone()          const { return new Jump(*this); }
-      virtual Element::Type type()   const { return Element::Type::JUMP; }
+      virtual Jump* clone()          const override { return new Jump(*this); }
+      virtual Element::Type type()   const override { return Element::Type::JUMP; }
 
       Measure* measure() const         { return (Measure*)parent(); }
 
-      virtual void read(XmlReader&);
-      virtual void write(Xml& xml)   const;
+      virtual void read(XmlReader&) override;
+      virtual void write(Xml& xml) const override;
 
       QString jumpTo()               const { return _jumpTo;     }
       QString playUntil()            const { return _playUntil;  }
@@ -76,11 +76,11 @@ class Jump : public Text {
       void undoSetPlayUntil(const QString& s);
       void undoSetContinueAt(const QString& s);
 
-      virtual bool systemFlag() const      { return true;        }
+      virtual bool systemFlag() const override      { return true;        }
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       Element* nextElement() override;
       Element* prevElement() override;

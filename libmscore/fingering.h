@@ -36,8 +36,8 @@ class Fingering : public Text {
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
       virtual void reset() override;
-      virtual int subtype() const         { return (int) textStyleType(); }
-      virtual QString subtypeName() const { return textStyle().name(); }
+      virtual int subtype() const override         { return (int) textStyleType(); }
+      virtual QString subtypeName() const override { return textStyle().name(); }
 
       virtual QString accessibleInfo() override;
       };

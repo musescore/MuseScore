@@ -1911,7 +1911,7 @@ void Beam::editDrag(const EditData& ed)
       int idx  = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       qreal dy = ed.delta.y();
       BeamFragment* f = fragments[editFragment];
-      if (ed.curGrip == 0)
+      if (ed.curGrip == Grip::START)
             f->py1[idx] += dy;
       f->py2[idx] += dy;
       _userModified[idx] = true;
@@ -1931,10 +1931,9 @@ void Beam::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Beam::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips = 2;
-      *defaultGrip = 1;
+      *defaultGrip = Grip::END;
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 

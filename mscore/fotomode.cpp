@@ -359,9 +359,10 @@ void ScoreView::startFotomode()
             // convert to absolute position
             _foto->setRect(rect.translated(view.topLeft()));
             }
-      for (int i = 0; i < MAX_GRIPS; ++i)
-            grip[i] = r;
-      curGrip = 0;
+      grip.resize(8);
+      for (QRectF& p : grip)
+            p = r;
+      curGrip = Grip::START;
       updateGrips();
       _score->addRefresh(_foto->abbox());
       _score->end();
@@ -473,8 +474,8 @@ bool ScoreView::fotoEditElementDragTransition(QMouseEvent* ev)
       int i;
       for (i = 0; i < grips; ++i) {
             if (grip[i].contains(data.startMove)) {
-                  curGrip = i;
-                  switch(curGrip) {
+                  curGrip = Grip(i);
+                  switch (int(curGrip)) {
                         case 0:
                         case 2:
                               setCursor(Qt::SizeFDiagCursor);

@@ -221,7 +221,7 @@ void MsScoreView::prevPage()
       setCurrentPage(_currentPage - 1);
       }
 
-const QRectF& MsScoreView::getGrip(int) const
+const QRectF& MsScoreView::getGrip(Grip) const
       {
       static const QRectF a;
       return a;

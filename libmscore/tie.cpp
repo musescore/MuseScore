@@ -53,8 +53,8 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       // pp5      drag
       // pp6      shoulder
       //
-      QPointF pp1 = ss->ups[int(GripSlurSegment::START)].p + ss->ups[int(GripSlurSegment::START)].off * _spatium;
-      QPointF pp2 = ss->ups[int(GripSlurSegment::END)].p   + ss->ups[int(GripSlurSegment::END)].off   * _spatium;
+      QPointF pp1 = ss->ups(Grip::START).p + ss->ups(Grip::START).off * _spatium;
+      QPointF pp2 = ss->ups(Grip::END).p   + ss->ups(Grip::END).off   * _spatium;
 
       QPointF p2 = pp2 - pp1;       // normalize to zero
       if (p2.x() == 0.0) {
@@ -92,13 +92,13 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       qreal w = (score()->styleS(StyleIdx::SlurMidWidth).val() - score()->styleS(StyleIdx::SlurEndWidth).val()) * _spatium;
       QPointF th(0.0, w);    // thickness of slur
 
-      QPointF p3o = p6o + t.map(ss->ups[int(GripSlurSegment::BEZIER1)].off * _spatium);
-      QPointF p4o = p6o + t.map(ss->ups[int(GripSlurSegment::BEZIER2)].off * _spatium);
+      QPointF p3o = p6o + t.map(ss->ups(Grip::BEZIER1).off * _spatium);
+      QPointF p4o = p6o + t.map(ss->ups(Grip::BEZIER2).off * _spatium);
 
       if(!p6o.isNull()) {
             QPointF p6i = t.inverted().map(p6o) / _spatium;
-            ss->ups[int(GripSlurSegment::BEZIER1)].off += p6i ;
-            ss->ups[int(GripSlurSegment::BEZIER2)].off += p6i;
+            ss->ups(Grip::BEZIER1).off += p6i ;
+            ss->ups(Grip::BEZIER2).off += p6i;
             }
 
       //-----------------------------------calculate p6
@@ -131,13 +131,13 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       t.reset();
       t.translate(pp1.x(), pp1.y());
       t.rotateRadians(sinb);
-      ss->path                 = t.map(ss->path);
-      ss->shapePath            = t.map(ss->shapePath);
-      ss->ups[int(GripSlurSegment::BEZIER1)].p  = t.map(p3);
-      ss->ups[int(GripSlurSegment::BEZIER2)].p  = t.map(p4);
-      ss->ups[int(GripSlurSegment::END)].p      = t.map(p2) - ss->ups[int(GripSlurSegment::END)].off * _spatium;
-      ss->ups[int(GripSlurSegment::DRAG)].p     = t.map(p5);
-      ss->ups[int(GripSlurSegment::SHOULDER)].p = t.map(p6);
+      ss->path                  = t.map(ss->path);
+      ss->shapePath             = t.map(ss->shapePath);
+      ss->ups(Grip::BEZIER1).p  = t.map(p3);
+      ss->ups(Grip::BEZIER2).p  = t.map(p4);
+      ss->ups(Grip::END).p      = t.map(p2) - ss->ups(Grip::END).off * _spatium;
+      ss->ups(Grip::DRAG).p     = t.map(p5);
+      ss->ups(Grip::SHOULDER).p = t.map(p6);
 
       QPointF staffOffset;
       if (ss->system() && ss->track() >= 0)
@@ -248,10 +248,10 @@ void Tie::read(XmlReader& e)
             // ignore manual adjustments to single-segment ties in older scores
             SlurSegment* ss = frontSegment();
             QPointF zeroP;
-            ss->ups[int(GripSlurSegment::START)].off     = zeroP;
-            ss->ups[int(GripSlurSegment::BEZIER1)].off   = zeroP;
-            ss->ups[int(GripSlurSegment::BEZIER2)].off   = zeroP;
-            ss->ups[int(GripSlurSegment::END)].off       = zeroP;
+            ss->ups(Grip::START).off     = zeroP;
+            ss->ups(Grip::BEZIER1).off   = zeroP;
+            ss->ups(Grip::BEZIER2).off   = zeroP;
+            ss->ups(Grip::END).off       = zeroP;
             ss->setUserOff(zeroP);
             ss->setUserOff2(zeroP);
             }

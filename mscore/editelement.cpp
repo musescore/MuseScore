@@ -51,7 +51,7 @@ void ScoreView::startEdit(Element* e)
 //   startEdit
 //---------------------------------------------------------
 
-void ScoreView::startEdit(Element* element, int startGrip)
+void ScoreView::startEdit(Element* element, Grip startGrip)
       {
       if (!element || !element->isEditable()) {
             qDebug("The element cannot be edited");
@@ -59,9 +59,9 @@ void ScoreView::startEdit(Element* element, int startGrip)
             }
       editObject = element;
       startEdit();
-      if (startGrip == -1)
+      if (startGrip == Grip::NO_GRIP)
             curGrip = defaultGrip;
-      else if (startGrip >= 0)
+      else
             curGrip = startGrip;
       }
 
@@ -79,7 +79,7 @@ void ScoreView::startEdit()
       if (!_score->undo()->active())
             _score->startCmd();
       editObject->startEdit(this, data.startMove);
-      curGrip = -1;
+      curGrip = Grip::NO_GRIP;
       updateGrips();
       _score->end();
       }
@@ -153,8 +153,8 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
       qreal a = grip[0].width() * 1.0;
       for (i = 0; i < grips; ++i) {
             if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
-                  curGrip = i;
-                  data.curGrip = i;
+                  curGrip = Grip(i);
+                  data.curGrip = Grip(i);
                   updateGrips();
                   score()->end();
                   break;

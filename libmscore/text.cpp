@@ -1573,7 +1573,7 @@ TextBlock& Text::curLine()
 //   edit
 //---------------------------------------------------------
 
-bool Text::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, const QString& _s)
+bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, const QString& _s)
       {
       QString s         = _s;
       bool ctrlPressed  = modifiers & Qt::ControlModifier;

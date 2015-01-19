@@ -94,7 +94,7 @@ private:
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
 
-      virtual void setYoff(qreal);
+      virtual void setYoff(qreal) override;
       virtual void reset() override;
       virtual bool systemFlag() const override  { return true;  }
       virtual QString accessibleInfo() override;

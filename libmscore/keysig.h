@@ -42,21 +42,21 @@ class KeySig : public Element {
    public:
       KeySig(Score* = 0);
       KeySig(const KeySig&);
-      virtual KeySig* clone() const       { return new KeySig(*this); }
-      virtual void draw(QPainter*) const;
-      virtual Element::Type type() const  { return Element::Type::KEYSIG; }
+      virtual KeySig* clone() const override       { return new KeySig(*this); }
+      virtual void draw(QPainter*) const override;
+      virtual Element::Type type() const override { return Element::Type::KEYSIG; }
       virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&);
-      virtual void layout();
-      virtual qreal mag() const;
+      virtual Element* drop(const DropData&) override;
+      virtual void layout() override;
+      virtual qreal mag() const override;
 
       Q_INVOKABLE void setKey(Key);
 
       Segment* segment() const            { return (Segment*)parent(); }
       Measure* measure() const            { return parent() ? (Measure*)parent()->parent() : nullptr; }
       Space space() const;
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
       //@ -7 (flats) -- +7 (sharps)
       Q_INVOKABLE Key key() const         { return _sig.key(); }
       bool isCustom() const               { return _sig.custom(); }

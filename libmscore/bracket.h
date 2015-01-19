@@ -42,9 +42,9 @@ class Bracket : public Element {
 
    public:
       Bracket(Score*);
-      virtual Bracket* clone() const   { return new Bracket(*this); }
+      virtual Bracket* clone() const override   { return new Bracket(*this); }
+      virtual Element::Type type() const override { return Element::Type::BRACKET;  }
 
-      virtual Element::Type type() const { return Element::Type::BRACKET;  }
       BracketType bracketType() const    { return _bracketType; }
       void setBracketType(BracketType t) { _bracketType = t;    }
 
@@ -60,25 +60,26 @@ class Bracket : public Element {
       void setSpan(int v)              { _span = v;                }
       System* system() const           { return (System*)parent(); }
 
-      virtual void setHeight(qreal);
-      virtual qreal width() const;
+      virtual void setHeight(qreal) override;
+      virtual qreal width() const override;
 
-      virtual void draw(QPainter*) const;
-      virtual void write(Xml& xml) const;
-      virtual void read(XmlReader&);
-      virtual void layout();
+      virtual void draw(QPainter*) const override;
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
+      virtual void layout() override;
 
-      virtual bool isEditable() const { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual bool edit(MuseScoreView*, int, int, Qt::KeyboardModifiers, const QString&);
-      virtual void endEdit();
-      virtual void editDrag(const EditData&);
-      virtual void endEditDrag();
-      virtual void updateGrips(int*, int*, QRectF*) const override;
-      virtual QPointF gripAnchor(int grip) const;
+      virtual bool isEditable() const override { return true; }
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual bool edit(MuseScoreView*, Grip, int, Qt::KeyboardModifiers, const QString&) override;
+      virtual void endEdit() override;
+      virtual void editDrag(const EditData&) override;
+      virtual void endEditDrag() override;
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
+      virtual int grips() const override { return 1; }
+      virtual QPointF gripAnchor(Grip) const override;
 
       virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&);
+      virtual Element* drop(const DropData&) override;
       };
 
 

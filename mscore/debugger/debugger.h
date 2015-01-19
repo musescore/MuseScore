@@ -496,8 +496,6 @@ class VoltaView : public ShowElementBase {
       void beginTextClicked();
       void continueTextClicked();
       void endTextClicked();
-      void leftElementClicked();
-      void rightElementClicked();
       void startClicked();
       void endClicked();
 
@@ -514,6 +512,9 @@ class VoltaSegmentView : public ShowElementBase {
       Q_OBJECT;
 
       Ui::LineSegmentBase lb;
+
+   private slots:
+            void lineClicked();
 
    public:
       VoltaSegmentView();

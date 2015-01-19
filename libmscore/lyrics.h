@@ -134,7 +134,7 @@ class LyricsLine : public SLine {
 
       virtual LyricsLine* clone() const override     { return new LyricsLine(*this); }
       virtual Element::Type type() const override     { return Element::Type::LYRICSLINE; }
-      virtual void layout();
+      virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
 
       Lyrics*     lyrics() const                      { return (Lyrics*)parent();   }

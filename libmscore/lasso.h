@@ -31,20 +31,23 @@ class Lasso : public Element {
 
    public:
       Lasso(Score*);
-      virtual Lasso* clone() const        { return new Lasso(*this); }
-      virtual Element::Type type() const  { return Element::Type::LASSO; }
-      virtual void draw(QPainter*) const;
-      virtual bool isEditable() const     { return true; }
-      virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, int*, QRectF*) const override;
+      virtual Lasso* clone() const override        { return new Lasso(*this); }
+      virtual Element::Type type() const override  { return Element::Type::LASSO; }
+      virtual void draw(QPainter*) const override;
+      virtual bool isEditable() const override     { return true; }
+      virtual void editDrag(const EditData&) override;
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
+      virtual int grips() const override { return 8; }
+
       QRectF rect() const                 { return _rect; }
       void setRect(const QRectF& r)       { _rect = r;    }
       void setSize(qreal w, qreal h)      { _rect.setWidth(w), _rect.setHeight(h); }
-      virtual void layout();
-      virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual void endEdit();
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
+
+      virtual void layout() override;
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual void endEdit() override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       };
 
 

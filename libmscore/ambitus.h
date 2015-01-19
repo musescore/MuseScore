@@ -47,10 +47,10 @@ class Ambitus : public Element {
    public:
 
       Ambitus(Score* s);
-      virtual Ambitus* clone() const                    { return new Ambitus(*this); }
+      virtual Ambitus* clone() const override         { return new Ambitus(*this); }
 
       // getters and setters
-      virtual Element::Type type() const              { return Element::Type::AMBITUS;    }
+      virtual Element::Type type() const override     { return Element::Type::AMBITUS;    }
       NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
       NoteHead::Type noteHeadType() const             { return _noteHeadType; }
       MScore::DirectionH direction() const                    { return _dir;          }
@@ -80,14 +80,14 @@ class Ambitus : public Element {
       void  updateRange();                // scan staff up to next section break and update range pitches
 
       // re-implemented virtual functions
-      virtual void      draw(QPainter*) const;
-      virtual void      layout();
-      virtual QPointF   pagePos() const;      ///< position in page coordinates
-      virtual void      read(XmlReader&);
-      virtual void      scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      virtual void      setTrack(int val);
-      virtual Space     space() const;
-      virtual void      write(Xml&) const;
+      virtual void      draw(QPainter*) const override;
+      virtual void      layout() override;
+      virtual QPointF   pagePos() const override;      ///< position in page coordinates
+      virtual void      read(XmlReader&) override;
+      virtual void      scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      virtual void      setTrack(int val) override;
+      virtual Space     space() const override;
+      virtual void      write(Xml&) const override;
       virtual QString   accessibleInfo() override;
       virtual QString   screenReaderInfo() override;
 

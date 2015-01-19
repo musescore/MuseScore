@@ -310,7 +310,7 @@ Palette* MuseScore::newBarLinePalette(bool basic)
       sp->setGrid(42, 38);
 
       // bar line styles
-      for (unsigned i = 0; i < barLineTableSize(); ++i) {
+      for (unsigned i = 0; i < sizeof(barLineTable)/sizeof(*barLineTable); ++i) {
             BarLine* b  = new BarLine(gscore);
             b->setBarLineType(barLineTable[i].type);
             sp->append(b, barLineTable[i].name);

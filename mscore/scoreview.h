@@ -51,6 +51,7 @@ class PositionCursor;
 class ContinuousPanel;
 class Tuplet;
 
+enum class Grip : char;
 enum class POS : char;
 enum class MagIdx : char;
 
@@ -120,7 +121,6 @@ class ScoreView : public QWidget, public MuseScoreView {
             NOTE_ENTRY, MAG, PLAY, ENTRY_PLAY, FOTOMODE,
             STATES
             };
-      static const int MAX_GRIPS = 8;
 
       OmrView* _omrView;
 
@@ -159,10 +159,10 @@ class ScoreView : public QWidget, public MuseScoreView {
       QPointF dragOffset;
 
       // editing mode
-      QRectF grip[MAX_GRIPS];       // edit "grips"
-      int curGrip;
+      QVector<QRectF> grip;         // edit "grips"
+      Grip curGrip;
       int grips;                    // number of used grips
-      int defaultGrip;              // grip to start editing
+      Grip defaultGrip;              // grip to start editing
       Element* editObject;          ///< Valid in edit mode
 
       //--input state:
@@ -313,10 +313,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       ScoreView(QWidget* parent = 0);
       ~ScoreView();
 
-      virtual void startEdit(Element*, int startGrip);
+      virtual void startEdit(Element*, Grip);
       void startEdit(Element*);
 
-//      void moveCursor(Segment*, int track);
       void moveCursor(int tick);
       int cursorTick() const;
       void setCursorOn(bool);
@@ -403,7 +402,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paintRect(bool printMode, QPainter& p, const QRectF& r, double mag);
       bool saveFotoAs(bool printMode, const QRectF&);
       void fotoDragDrop(QMouseEvent*);
-      const QRectF& getGrip(int n) const { return grip[n]; }
+      const QRectF& getGrip(Grip n) const { return grip[int(n)]; }
       int gripCount() const { return grips; }              // number of used grips
       void changeEditElement(Element*);
 

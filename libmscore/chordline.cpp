@@ -306,7 +306,7 @@ void ChordLine::editDrag(const EditData& ed)
 
             qreal x = e.x;
             qreal y = e.y;
-            if (ed.curGrip == i) {
+            if (ed.curGrip == Grip(i)) {
                   x += dx;
                   y += dy;
                   }
@@ -325,11 +325,11 @@ void ChordLine::editDrag(const EditData& ed)
                         qreal y2 = path.elementAt(i+1).y;
                         qreal x3 = path.elementAt(i+2).x;
                         qreal y3 = path.elementAt(i+2).y;
-                        if (i + 1 == ed.curGrip) {
+                        if (Grip(i + 1) == ed.curGrip) {
                               x2 += dx;
                               y2 += dy;
                               }
-                        else if (i + 2 == ed.curGrip) {
+                        else if (Grip(i + 2) == ed.curGrip) {
                               x3 += dx;
                               y3 += dy;
                               }
@@ -347,7 +347,7 @@ void ChordLine::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void ChordLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void ChordLine::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
       int n = path.elementCount();
       QPointF cp(pagePos());
@@ -365,17 +365,26 @@ void ChordLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
             else if (_chordLineType == ChordLineType::PLOP)
                    grip[0].translate(QPointF(-offset, -offset));
 
-            *grips = 1;
             // translate on the length and height - stops the grips from goint past boundries of slide
             grip[0].translate(cp + QPointF(path.elementAt(1).x * sp, path.elementAt(1).y * sp));
             }
       else  {
-            *grips = n;
-            *defaultGrip = n - 1;
+            *defaultGrip = Grip(n - 1);
             for (int i = 0; i < n; ++i)
                   grip[i].translate(cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp));
 
             }
+      }
+
+//---------------------------------------------------------
+//   grips
+//---------------------------------------------------------
+
+int ChordLine::grips() const
+      {
+      if (_straight)
+            return 1;
+      return path.elementCount();
       }
 
 //---------------------------------------------------------
