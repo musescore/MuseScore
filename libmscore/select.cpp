@@ -1052,10 +1052,15 @@ bool Selection::measureRange(Measure** m1, Measure** m2) const
       if (!isRange())
             return false;
       *m1 = startSegment()->measure();
-      *m2 = endSegment()->measure();
-      if (m1 == m2)
+      Segment* s2 = endSegment();
+      *m2 = s2 ? s2->measure() : score()->lastMeasure();
+      if (*m1 == *m2)
             return true;
-      if (*m2 && (*m2)->tick() == endSegment()->tick())
+      // if selection extends to last segment of a measure,
+      // then endSegment() will point to next measure
+      // this won't normally happen because end barlines are excluded from range selection
+      // but just in case, detect this and back up one measure
+      if (*m2 && s2 && (*m2)->tick() == s2->tick())
             *m2 = (*m2)->prevMeasure();
       return true;
       }
