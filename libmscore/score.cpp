@@ -1564,7 +1564,8 @@ void Score::removeElement(Element* element)
                   if (cr->beam())
                         cr->beam()->remove(cr);
                   for (Lyrics* lyr : cr->lyricsList())
-                        lyr->removeFromScore();
+                        if (lyr)                // lyrics list may be sparse
+                              lyr->removeFromScore();
                   // TODO: check for tuplet?
                   }
                   break;
