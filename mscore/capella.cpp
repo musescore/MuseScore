@@ -584,6 +584,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         Measure* m = score->getCreateMeasure(tick);
                         Segment* s = m->getSegment(Segment::Type::TimeSig, tick);
                         s->add(ts);
+                        m->setLen(f);
                         }
                         break;
                   case CapellaNoteObjectType::EXPL_BARLINE:
