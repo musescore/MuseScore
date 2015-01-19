@@ -117,23 +117,37 @@ std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
             const MidiChord &chord = chordEvent.second;
 
             for (const auto &note: chord.notes) {
-                  MidiChord newChord;
-                  newChord.voice = chord.voice;
+                  MidiChord newChord(chord);
+                  newChord.notes.clear();
                   newChord.notes.push_back(note);
                   MTrack &newTrack = getNewTrack(newTracks, drumTrack, note.pitch);
-                  newTrack.chords.insert({onTime, newChord});
 
-                  const auto tupletIt = MidiTuplet::findTupletContainingTime(
-                                    chord.voice, onTime, drumTrack.tuplets);
-                  if (tupletIt != drumTrack.tuplets.end()) {
-                        const auto newTupletIt = MidiTuplet::findTupletContainingTime(
-                                          newChord.voice, onTime, newTrack.tuplets);
+                  if (chord.isInTuplet) {
+                        auto newTupletIt = MidiTuplet::findTupletContainingTime(
+                                                newChord.voice, onTime, newTrack.tuplets);
                         if (newTupletIt == newTrack.tuplets.end()) {
-                              MidiTuplet::TupletData newTupletData = tupletIt->second;
+                              MidiTuplet::TupletData newTupletData = chord.tuplet->second;
                               newTupletData.voice = newChord.voice;
-                              newTrack.tuplets.insert({tupletIt->first, newTupletData});
+                              newTupletIt = newTrack.tuplets.insert({chord.tuplet->first,
+                                                                     newTupletData});
                               }
+                                    // hack to remove constness of iterator
+                        newChord.tuplet = newTrack.tuplets.erase(newTupletIt, newTupletIt);
                         }
+                  if (note.isInTuplet) {
+                        auto newTupletIt = MidiTuplet::findTupletContainingTime(
+                                          newChord.voice, note.offTime, newTrack.tuplets);
+                        if (newTupletIt == newTrack.tuplets.end()) {
+                              MidiTuplet::TupletData newTupletData = note.tuplet->second;
+                              newTupletData.voice = newChord.voice;
+                              newTupletIt = newTrack.tuplets.insert({note.tuplet->first,
+                                                                     newTupletData});
+                              }
+                                    // hack to remove constness of iterator
+                        newChord.notes.front().tuplet = newTrack.tuplets.erase(
+                                                            newTupletIt, newTupletIt);
+                        }
+                  newTrack.chords.insert({onTime, newChord});
                   }
             }
 
@@ -151,7 +165,7 @@ void splitDrumTracks(std::multimap<int, MTrack> &tracks)
             const auto &opers = preferences.midiImportOperations.data()->trackOpers;
             if (!opers.doStaffSplit.value(it->second.indexOfOperation))
                   continue;
-            const auto newTracks = splitDrumTrack(it->second);
+            const std::map<int, MTrack> newTracks = splitDrumTrack(it->second);
             const int trackIndex = it->first;
             it = tracks.erase(it);
             for (auto i = newTracks.rbegin(); i != newTracks.rend(); ++i)
