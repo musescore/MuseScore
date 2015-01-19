@@ -49,6 +49,12 @@ class Lyrics : public Text {
 
    public:
       enum class Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
+      // MELISMA FIRST UNDERSCORE:
+      // used as_ticks value to mark a melisma for which only the first chord has been spanned so far
+      // and to give the user a visible feedback that the undercore has been actually entered;
+      // it will be cleared to 0 by LyricsLine::layout(), so that it will not be carried over
+      // if the melisma is not extended beyond a signle chord
+      static const int  TEMP_MELISMA_TICKS      = 1;
 
    private:
       int _ticks;             ///< if > 0 then draw an underline to tick() + _ticks
