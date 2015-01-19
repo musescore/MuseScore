@@ -2764,6 +2764,8 @@ void Chord::reset()
 
 void Chord::setStemSlash(StemSlash* s)
       {
+      if (_stemSlash && _stemSlash->selected())
+            score()->selection().remove(_stemSlash);
       delete _stemSlash;
       _stemSlash = s;
       }
