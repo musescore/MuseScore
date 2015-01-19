@@ -297,7 +297,8 @@ void ScoreView::lyricsUnderscore()
                   }
             segment = segment->prev1(Segment::Type::ChordRest);
             // if the segment has a rest in this track, stop going back
-            if (segment && segment->elementAt(track)->type() != Element::Type::CHORD)
+            Element* e = segment ? segment->element(track) : 0;
+            if (e && e->type() != Element::Type::CHORD)
                   break;
             }
 
