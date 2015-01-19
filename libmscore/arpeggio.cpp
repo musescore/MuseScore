@@ -246,10 +246,9 @@ void Arpeggio::draw(QPainter* p) const
 //   updateGrips
 //---------------------------------------------------------
 
-void Arpeggio::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Arpeggio::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips   = 2;
-      *defaultGrip = 1;
+      *defaultGrip = Grip::END;
       QPointF p1(0.0, -_userLen1);
       QPointF p2(0.0, _height + _userLen2);
       grip[0].translate(pagePos() + p1);
@@ -263,9 +262,9 @@ void Arpeggio::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 void Arpeggio::editDrag(const EditData& ed)
       {
       qreal d = ed.delta.y();
-      if (ed.curGrip == 0)
+      if (ed.curGrip == Grip::START)
             _userLen1 -= d;
-      else if (ed.curGrip == 1)
+      else if (ed.curGrip == Grip::END)
             _userLen2 += d;
       layout();
       }
@@ -286,14 +285,14 @@ QLineF Arpeggio::dragAnchor() const
 //   gripAnchor
 //---------------------------------------------------------
 
-QPointF Arpeggio::gripAnchor(int n) const
+QPointF Arpeggio::gripAnchor(Grip n) const
       {
       Chord* c = chord();
       if (c == 0)
             return QPointF();
-      if (n == 0)
+      if (n == Grip::START)
             return c->upNote()->pagePos();
-      else if (n == 1) {
+      else if (n == Grip::END) {
             Note* dnote = c->downNote();
             int btrack  = track() + (_span - 1) * VOICES;
             ChordRest* bchord = static_cast<ChordRest*>(c->segment()->element(btrack));
@@ -318,9 +317,9 @@ void Arpeggio::startEdit(MuseScoreView*, const QPointF&)
 //   edit
 //---------------------------------------------------------
 
-bool Arpeggio::edit(MuseScoreView*, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
+bool Arpeggio::edit(MuseScoreView*, Grip curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
-      if (curGrip != 1 || !(modifiers & Qt::ShiftModifier))
+      if (curGrip != Grip::END || !(modifiers & Qt::ShiftModifier))
             return false;
 
       if (key == Qt::Key_Down) {

@@ -234,10 +234,9 @@ void Stem::read(XmlReader& e)
 //   updateGrips
 //---------------------------------------------------------
 
-void Stem::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Stem::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips   = 1;
-      *defaultGrip = 0;
+      *defaultGrip = Grip::START;
       grip[0].translate(pagePos() + line.p2());
       }
 

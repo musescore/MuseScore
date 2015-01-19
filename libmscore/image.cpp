@@ -500,7 +500,7 @@ void Image::editDrag(const EditData& ed)
             dx /= MScore::DPMM;
             dy /= MScore::DPMM;
             }
-      if (ed.curGrip == 0) {
+      if (ed.curGrip == Grip::START) {
             _size.setWidth(_size.width() + dx);
             if (_lockAspectRatio)
                   _size.setHeight(_size.width() / ratio);
@@ -517,10 +517,9 @@ void Image::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Image::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Image::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips = 2;
-      *defaultGrip = 1;
+      *defaultGrip = Grip(1);
       QRectF r(pageBoundingRect());
       grip[0].translate(QPointF(r.x() + r.width(), r.y() + r.height() * .5));
       grip[1].translate(QPointF(r.x() + r.width() * .5, r.y() + r.height()));

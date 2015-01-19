@@ -169,12 +169,12 @@ class FiguredBassItem : public Element {
       FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
 
       // standard re-implemented virtual functions
-      virtual FiguredBassItem*      clone() const     { return new FiguredBassItem(*this); }
-      virtual Element::Type         type() const      { return Element::Type::INVALID; }
-      virtual void      draw(QPainter* painter) const;
-      virtual void      layout();
-      virtual void      read(XmlReader&);
-      virtual void      write(Xml& xml) const;
+      virtual FiguredBassItem*      clone() const override     { return new FiguredBassItem(*this); }
+      virtual Element::Type         type() const override      { return Element::Type::INVALID; }
+      virtual void      draw(QPainter* painter) const override;
+      virtual void      layout() override;
+      virtual void      read(XmlReader&) override;
+      virtual void      write(Xml& xml) const override;
 
       // read / write MusicXML
 //      void              readMusicXML(XmlReader& de, bool paren, bool& extend);
@@ -217,9 +217,9 @@ class FiguredBassItem : public Element {
       QString           normalizedText() const;
       QString           displayText() const           { return _displayText;  }
 
-      virtual QVariant  getProperty(P_ID propertyId) const;
-      virtual bool      setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant  propertyDefault(P_ID) const;
+      virtual QVariant  getProperty(P_ID propertyId) const override;
+      virtual bool      setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant  propertyDefault(P_ID) const override;
 };
 
 //---------------------------------------------------------
@@ -277,17 +277,17 @@ class FiguredBass : public Text {
                               qreal * pSize, qreal * pLineHeight);
 
       // standard re-implemented virtual functions
-      virtual FiguredBass*    clone() const     { return new FiguredBass(*this); }
-      virtual Element::Type   type() const      { return Element::Type::FIGURED_BASS; }
-      virtual void      draw(QPainter* painter) const;
-//      virtual bool      edit(MuseScoreView*msv, int currGrip, int key, Qt::KeyboardModifiers modifiers, const QString& _s);
-      virtual void      endEdit();
-      virtual void      layout();
-      virtual void      read(XmlReader&);
-      virtual void      setSelected(bool f);
-      virtual void      setVisible(bool f);
-      virtual void      startEdit(MuseScoreView *msv, const QPointF &pt);
-      virtual void      write(Xml& xml) const;
+      virtual FiguredBass*    clone() const override     { return new FiguredBass(*this); }
+      virtual Element::Type   type() const override      { return Element::Type::FIGURED_BASS; }
+      virtual void      draw(QPainter* painter) const override;
+//      virtual bool      edit(MuseScoreView*msv, int currGrip, int key, Qt::KeyboardModifiers modifiers, const QString& _s) override;
+      virtual void      endEdit() override;
+      virtual void      layout() override;
+      virtual void      read(XmlReader&) override;
+      virtual void      setSelected(bool f) override;
+      virtual void      setVisible(bool f) override;
+      virtual void      startEdit(MuseScoreView *msv, const QPointF &pt) override;
+      virtual void      write(Xml& xml) const override;
 
       // read / write MusicXML
       bool              readMusicXML(XmlReader& de, int divisions, bool& extend);
@@ -321,9 +321,9 @@ class FiguredBass : public Text {
       qreal             additionalContLineX(qreal pagePosY) const;// returns the X coord (in page coord) of cont. line at pagePosY, if any
       FiguredBass *     nextFiguredBass() const;                  // returns next *adjacent* f.b. item, if any
 
-      virtual QVariant  getProperty(P_ID propertyId) const;
-      virtual bool      setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant  propertyDefault(P_ID) const;
+      virtual QVariant  getProperty(P_ID propertyId) const override;
+      virtual bool      setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant  propertyDefault(P_ID) const override;
 
       void appendItem(FiguredBassItem* item) {  items.push_back(item); }
       };

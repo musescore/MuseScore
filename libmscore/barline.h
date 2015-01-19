@@ -110,7 +110,8 @@ class BarLine : public Element {
       virtual void endEdit() override;
       virtual void editDrag(const EditData&) override;
       virtual void endEditDrag() override;
-      virtual void updateGrips(int*, int*, QRectF*) const override;
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
+      virtual int grips() const override { return 2; }
 
       int tick() const;
 
@@ -146,12 +147,27 @@ class BarLine : public Element {
       virtual QString accessibleExtraInfo() override;
       };
 
-typedef struct {
+//---------------------------------------------------------
+//   BarLineTableItem
+//---------------------------------------------------------
+
+struct BarLineTableItem {
       BarLineType type;
       const char* name;
-      } barLineTableItem;
-extern const barLineTableItem barLineTable[];
-unsigned int barLineTableSize();
+      };
+static const BarLineTableItem barLineTable[] {
+        { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal") },
+        { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed style") },
+        { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted style") },
+        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "End bar style") },
+        { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double bar style") },
+        { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat") },
+        { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat") },
+        { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-start repeat") },
+      };
+
+
+// unsigned int BarLineTableSize();
 
 }     // namespace Ms
 #endif

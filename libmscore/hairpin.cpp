@@ -102,10 +102,9 @@ void HairpinSegment::layout()
 //   updateGrips
 //---------------------------------------------------------
 
-void HairpinSegment::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void HairpinSegment::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips = 4;
-      *defaultGrip = 2;
+      *defaultGrip = Grip(2);
 
       QPointF pp(pagePos());
       qreal _spatium = spatium();
@@ -136,28 +135,26 @@ void HairpinSegment::updateGrips(int* grips, int* defaultGrip, QRectF* grip) con
       gripLineAperturePoint = doRotation.map( gripLineAperturePoint );
 // End calc position grip aperture
 
-      grip[int(GripLine::START)].translate( pp );
-      grip[int(GripLine::END)].translate( p + pp );
-      grip[int(GripLine::MIDDLE)].translate( p * .5 + pp );
-      grip[int(GripLine::APERTURE)].translate( gripLineAperturePoint + pp );
+      grip[int(Grip::START)].translate( pp );
+      grip[int(Grip::END)].translate( p + pp );
+      grip[int(Grip::MIDDLE)].translate( p * .5 + pp );
+      grip[int(Grip::APERTURE)].translate( gripLineAperturePoint + pp );
       }
+
 //---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
 void HairpinSegment::editDrag(const EditData& ed)
       {
-
-    if( ed.curGrip == int(GripLine::APERTURE) ){
-          qreal newHeight = hairpin()->hairpinHeight().val() + ed.delta.y()/spatium()/.5;
-          if( newHeight < 0.5 )
-              newHeight = 0.5;
-          hairpin()->setHairpinHeight(Spatium(newHeight));
-          score()->setLayoutAll(true);
-    }
-
-    LineSegment::editDrag( ed );
-
+      if (ed.curGrip == Grip::APERTURE) {
+            qreal newHeight = hairpin()->hairpinHeight().val() + ed.delta.y()/spatium()/.5;
+            if (newHeight < 0.5)
+                  newHeight = 0.5;
+            hairpin()->setHairpinHeight(Spatium(newHeight));
+            score()->setLayoutAll(true);
+            }
+      LineSegment::editDrag(ed);
       }
 
 //---------------------------------------------------------

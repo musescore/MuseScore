@@ -20,6 +20,7 @@ namespace Ms {
 class Element;
 class Score;
 class Note;
+enum class Grip : char;
 
 //---------------------------------------------------------
 //   ExampleView
@@ -65,12 +66,12 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual QCursor cursor() const;
       virtual void setCursor(const QCursor&);
       virtual int gripCount() const;
-      virtual const QRectF& getGrip(int) const;
+      virtual const QRectF& getGrip(Grip) const;
       virtual void setDropRectangle(const QRectF&);
       virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
       virtual void cmdAddHairpin(bool) {}
       virtual void startEdit();
-      virtual void startEdit(Element*, int startGrip);
+      virtual void startEdit(Element*, Grip);
       virtual Element* elementNear(QPointF);
       virtual void drawBackground(QPainter*, const QRectF&) const;
       };

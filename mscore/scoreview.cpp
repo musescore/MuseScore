@@ -671,8 +671,8 @@ ScoreView::ScoreView(QWidget* parent)
       _fgColor    = Qt::white;
       fgPixmap    = 0;
       bgPixmap    = 0;
-      curGrip     = -1;
-      defaultGrip = -1;
+      curGrip     = Grip::NO_GRIP;
+      defaultGrip = Grip::NO_GRIP;
       lasso       = new Lasso(_score);
       _foto       = new Lasso(_score);
 
@@ -1223,10 +1223,13 @@ void ScoreView::updateGrips()
       qreal w   = 8.0 / _matrix.m11();
       qreal h   = 8.0 / _matrix.m22();
       QRectF r(-w*.5, -h*.5, w, h);
-      for (int i = 0; i < MAX_GRIPS; ++i)
-            grip[i] = r;
 
-      editObject->updateGrips(&grips, &defaultGrip, grip);
+      grips = editObject->grips();
+      grip.resize(grips);
+      for (QRectF& gr : grip)
+            gr = r;
+
+      editObject->updateGrips(&defaultGrip, grip);
 
       // updateGrips returns grips in page coordinates,
       // transform to view coordinates:
@@ -1240,12 +1243,12 @@ void ScoreView::updateGrips()
             score()->addRefresh(grip[i].adjusted(-dx, -dy, dx, dy));
             }
 
-      if (curGrip == -1)
+      if (curGrip == Grip::NO_GRIP)
             curGrip = defaultGrip;
 
       QPointF anchor = editObject->gripAnchor(curGrip);
       if (!anchor.isNull())
-            setDropAnchor(QLineF(anchor + pageOffset, grip[curGrip].center()));
+            setDropAnchor(QLineF(anchor + pageOffset, grip[int(curGrip)].center()));
       else
             setDropTarget(0); // this also resets dropAnchor
       score()->addRefresh(editObject->canvasBoundingRect());
@@ -1689,13 +1692,13 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       if (grips) {
             if (grips == 6) {       // HACK: this are grips of a slur
                   QPolygonF polygon(grips+1);
-                  polygon[0] = QPointF(grip[int(GripSlurSegment::START)].center());
-                  polygon[1] = QPointF(grip[int(GripSlurSegment::BEZIER1)].center());
-                  polygon[2] = QPointF(grip[int(GripSlurSegment::SHOULDER)].center());
-                  polygon[3] = QPointF(grip[int(GripSlurSegment::BEZIER2)].center());
-                  polygon[4] = QPointF(grip[int(GripSlurSegment::END)].center());
-                  polygon[5] = QPointF(grip[int(GripSlurSegment::DRAG)].center());
-                  polygon[6] = QPointF(grip[int(GripSlurSegment::START)].center());
+                  polygon[0] = QPointF(grip[int(Grip::START)].center());
+                  polygon[1] = QPointF(grip[int(Grip::BEZIER1)].center());
+                  polygon[2] = QPointF(grip[int(Grip::SHOULDER)].center());
+                  polygon[3] = QPointF(grip[int(Grip::BEZIER2)].center());
+                  polygon[4] = QPointF(grip[int(Grip::END)].center());
+                  polygon[5] = QPointF(grip[int(Grip::DRAG)].center());
+                  polygon[6] = QPointF(grip[int(Grip::START)].center());
                   QPen pen(MScore::frameMarginColor, 0.0);
                   vp.setPen(pen);
                   vp.drawPolyline(polygon);
@@ -1703,7 +1706,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             QPen pen(MScore::defaultColor, 0.0);
             vp.setPen(pen);
             for (int i = 0; i < grips; ++i) {
-                  if (i == curGrip && hasFocus())
+                  if (Grip(i) == curGrip && hasFocus())
                         vp.setBrush(MScore::selectColor[0]);
                   else
                         vp.setBrush(Qt::NoBrush);
@@ -2409,7 +2412,7 @@ void ScoreView::editCut()
             QString s = text->selectedText();
             if (!s.isEmpty()) {
                   QApplication::clipboard()->setText(s, QClipboard::Clipboard);
-                  text->edit(this, 0, Qt::Key_Delete, 0, QString());
+                  text->edit(this, Grip::START, Qt::Key_Delete, 0, QString());
                   text->score()->update();
                   }
             }
@@ -3975,28 +3978,19 @@ bool ScoreView::event(QEvent* event)
       if (event->type() == QEvent::KeyPress && editObject) {
             QKeyEvent* ke = static_cast<QKeyEvent*>(event);
             if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
-                  if(editObject->isText()) {
+                  if (editObject->isText()) {
                         return true;
                         }
                   bool rv = true;
                   if (ke->key() == Qt::Key_Tab) {
-                        curGrip += 1;
-                        if (curGrip >= grips) {
-                              curGrip = 0;
-                              rv = false;
-                              }
+                        rv = editObject->nextGrip(&curGrip);
                         updateGrips();
                         _score->end();
-                        if (curGrip)
+                        if (rv)
                               return true;
                         }
-                  else if (ke->key() == Qt::Key_Backtab) {
-                        curGrip -= 1;
-                        if (curGrip < 0) {
-                              curGrip = grips -1;
-                              rv = false;
-                              }
-                        }
+                  else if (ke->key() == Qt::Key_Backtab)
+                        rv = editObject->prevGrip(&curGrip);
                   updateGrips();
                   _score->end();
                   if (rv)
@@ -4171,7 +4165,7 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
 
       if (cr1 == cr2) {
             SlurSegment* ss = slur->frontSegment();
-            ss->setSlurOffset(3, QPointF(3.0, 0.0));
+            ss->setSlurOffset(Grip::END, QPointF(3.0, 0.0));
             }
       const QList<SpannerSegment*>& el = slur->spannerSegments();
       if (noteEntryMode()) {
@@ -4347,7 +4341,7 @@ void ScoreView::cloneElement(Element* e)
 
 void ScoreView::changeEditElement(Element* e)
       {
-      int grip = curGrip;
+      Grip grip = curGrip;
       endEdit();
       startEdit(e, grip);
       }
@@ -4609,7 +4603,7 @@ void ScoreView::harmonyTab(bool back)
             }
 
       _score->select(harmony, SelectType::SINGLE, 0);
-      startEdit(harmony, -1);
+      startEdit(harmony, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(harmony, false);
@@ -4707,7 +4701,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
             }
 
       _score->select(harmony, SelectType::SINGLE, 0);
-      startEdit(harmony, -1);
+      startEdit(harmony, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(harmony, false);
@@ -4778,7 +4772,7 @@ void ScoreView::harmonyTicksTab(int ticks)
             }
 
       _score->select(harmony, SelectType::SINGLE, 0);
-      startEdit(harmony, -1);
+      startEdit(harmony, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(harmony, false);
@@ -5526,7 +5520,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
       if (bNew)
             _score->undoAddElement(fbNew);
       _score->select(fbNew, SelectType::SINGLE, 0);
-      startEdit(fbNew, -1);
+      startEdit(fbNew, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();
@@ -5582,7 +5576,7 @@ void ScoreView::figuredBassTicksTab(int ticks)
       if (bNew)
             _score->undoAddElement(fbNew);
       _score->select(fbNew, SelectType::SINGLE, 0);
-      startEdit(fbNew, -1);
+      startEdit(fbNew, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
       ((FiguredBass*)editObject)->moveCursorToEnd();

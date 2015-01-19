@@ -253,7 +253,7 @@ class Text : public Element {
 
       void startEdit(MuseScoreView*, const QPointF&);
       void endEdit();
-      bool edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QString&);
+      bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&);
 
       void setFormat(FormatId, QVariant);
 

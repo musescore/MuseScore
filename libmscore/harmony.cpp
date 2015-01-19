@@ -714,7 +714,7 @@ void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
 //   edit
 //---------------------------------------------------------
 
-bool Harmony::edit(MuseScoreView* view, int grip, int key, Qt::KeyboardModifiers mod, const QString& s)
+bool Harmony::edit(MuseScoreView* view, Grip grip, int key, Qt::KeyboardModifiers mod, const QString& s)
       {
       if (key == Qt::Key_Return)
             return true; // Harmony only single line
@@ -994,6 +994,7 @@ const ChordDescription* Harmony::generateDescription()
       return &*cl->insert(cd.id, cd);
       }
 
+#if 0
 //---------------------------------------------------------
 //   isEmpty
 //---------------------------------------------------------
@@ -1002,6 +1003,7 @@ bool Harmony::isEmpty() const
       {
       return textList.isEmpty() && Text::isEmpty();
       }
+#endif
 
 //---------------------------------------------------------
 //   textChanged

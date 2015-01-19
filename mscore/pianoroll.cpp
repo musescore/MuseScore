@@ -583,7 +583,7 @@ int PianorollEditor::gripCount() const
 //   getGrip
 //---------------------------------------------------------
 
-const QRectF& PianorollEditor::getGrip(int) const
+const QRectF& PianorollEditor::getGrip(Grip) const
       {
       static QRectF r;
       return r;
@@ -627,7 +627,7 @@ void PianorollEditor::startEdit()
 //   startEdit
 //---------------------------------------------------------
 
-void PianorollEditor::startEdit(Element*, int)
+void PianorollEditor::startEdit(Element*, Grip)
       {
       }
 

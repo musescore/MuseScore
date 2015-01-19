@@ -106,7 +106,7 @@ void Box::startEdit(MuseScoreView*, const QPointF&)
 //   edit
 //---------------------------------------------------------
 
-bool Box::edit(MuseScoreView*, int /*grip*/, int /*key*/, Qt::KeyboardModifiers, const QString&)
+bool Box::edit(MuseScoreView*, Grip, int /*key*/, Qt::KeyboardModifiers, const QString&)
       {
       return false;
       }
@@ -154,10 +154,9 @@ void Box::endEdit()
 //   updateGrips
 //---------------------------------------------------------
 
-void Box::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Box::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips = 1;
-      *defaultGrip = 0;
+      *defaultGrip = Grip::START;
       QRectF r(abbox());
       if (type() == Element::Type::HBOX)
             grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
@@ -726,7 +725,7 @@ void VBox::layout()
 //   getGrip
 //---------------------------------------------------------
 
-QPointF VBox::getGrip(int) const
+QPointF VBox::getGrip(Grip) const
       {
       return QPointF(0.0, boxHeight().val());
       }
@@ -735,7 +734,7 @@ QPointF VBox::getGrip(int) const
 //   setGrip
 //---------------------------------------------------------
 
-void VBox::setGrip(int, const QPointF& pt)
+void VBox::setGrip(Grip, const QPointF& pt)
       {
       setBoxHeight(Spatium(pt.y()));
       layout();

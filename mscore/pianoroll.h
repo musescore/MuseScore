@@ -33,6 +33,8 @@ class Ruler;
 class Seq;
 class WaveView;
 
+enum class Grip : char;
+
 //---------------------------------------------------------
 //   PianorollEditor
 //---------------------------------------------------------
@@ -94,13 +96,13 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual QCursor cursor() const;
       virtual void setCursor(const QCursor&);
       virtual int gripCount() const;
-      virtual const QRectF& getGrip(int) const;
+      virtual const QRectF& getGrip(Grip) const;
       virtual const QTransform& matrix() const;
       virtual void setDropRectangle(const QRectF&);
       virtual void cmdAddSlur(Note*, Note*);
       virtual void cmdAddHairpin(bool) {}
       virtual void startEdit();
-      virtual void startEdit(Element*, int);
+      virtual void startEdit(Element*, Grip);
       virtual Element* elementNear(QPointF);
       virtual void drawBackground(QPainter* /*p*/, const QRectF& /*r*/) const {}
 

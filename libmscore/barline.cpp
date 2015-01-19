@@ -51,17 +51,6 @@ static const char* barLineNames[] = {
       QT_TRANSLATE_NOOP("barline", "dotted")
       };
 
-const barLineTableItem barLineTable[] = {
-        { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal") },
-        { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed style") },
-        { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted style") },
-        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "End bar style") },
-        { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double bar style") },
-        { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat") },
-        { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat") },
-        { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-start repeat") },
-      };
-
 unsigned int barLineTableSize()
       {
       return sizeof(barLineTable)/sizeof(*barLineTable);
@@ -675,10 +664,9 @@ Element* BarLine::drop(const DropData& data)
 //   updateGrips
 //---------------------------------------------------------
 
-void BarLine::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void BarLine::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips   = 2;
-      *defaultGrip = 1;
+      *defaultGrip = Grip::END;
       qreal lw = point(score()->styleS(StyleIdx::barWidth));
       qreal y1, y2;
       getY(&y1, &y2);
@@ -777,7 +765,7 @@ void BarLine::editDrag(const EditData& ed)
       getY(&y1, &y2);
       y1 -= yoff1;                  // current positions of barline ends, ignoring any in-process dragging
       y2 -= yoff2;
-      if (ed.curGrip == 0) {
+      if (ed.curGrip == Grip::START) {
             // min offset for top grip is line -1
             // max offset is 1 line above bottom grip or 1 below last staff line, whichever comes first
             min = -y1 - lineDist;

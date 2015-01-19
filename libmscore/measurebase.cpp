@@ -63,7 +63,7 @@ void MeasureBase::setScore(Score* score)
       Element::setScore(score);
       if (_sectionBreak)
             _sectionBreak->setScore(score);
-      foreach(Element* e, _el)
+      foreach (Element* e, _el)
             e->setScore(score);
       }
 

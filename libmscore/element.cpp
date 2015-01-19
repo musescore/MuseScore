@@ -1296,7 +1296,7 @@ void Element::editDrag(const EditData& ed)
 //    return true if event is accepted
 //---------------------------------------------------------
 
-bool Element::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QString&)
+bool Element::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&)
       {
       if (key ==  Qt::Key_Home) {
             setUserOff(QPoint());
@@ -1477,7 +1477,7 @@ bool elementLessThan(const Element* const e1, const Element* const e2)
 //   getGrip
 //---------------------------------------------------------
 
-QPointF Element::getGrip(int) const
+QPointF Element::getGrip(Grip) const
       {
       qreal _spatium = score()->spatium();
       return QPointF(userOff().x() / _spatium, userOff().y() / _spatium);
@@ -1487,7 +1487,7 @@ QPointF Element::getGrip(int) const
 //   setGrip
 //---------------------------------------------------------
 
-void Element::setGrip(int, const QPointF& pt)
+void Element::setGrip(Grip, const QPointF& pt)
       {
       qreal _spatium = score()->spatium();
       setUserOff(QPointF(pt.x() * _spatium, pt.y() * _spatium));
@@ -2007,5 +2007,35 @@ Element* Element::prevElement()
 QString Element::accessibleInfo()
       {
       return userName();
+      }
+
+//---------------------------------------------------------
+//   nextGrip
+//---------------------------------------------------------
+
+bool Element::nextGrip(Grip* grip) const
+      {
+      int i = int(*grip) + 1;
+      if (i >= grips()) {
+            *grip = Grip(0);
+            return false;
+            }
+      *grip = Grip(i);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   prevGrip
+//---------------------------------------------------------
+
+bool Element::prevGrip(Grip* grip) const
+      {
+      int i = int(*grip) - 1;
+      if (i < 0) {
+            *grip = Grip(grips() - 1);
+            return false;
+            }
+      *grip = Grip(i);
+      return true;
       }
 }

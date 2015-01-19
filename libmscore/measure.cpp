@@ -2233,7 +2233,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "sysInitBarLineType") {
                   const QString& val(e.readElementText());
                   _systemInitialBarLineType = BarLineType::NORMAL;
-                  for (unsigned i = 0; i < barLineTableSize(); ++i) {
+                  for (unsigned i = 0; i < sizeof(barLineTable)/sizeof(*barLineTable); ++i) {
                         if (BarLine::barLineTypeName(BarLineType(i)) == val) {
                               _systemInitialBarLineType = BarLineType(i);
                               break;
@@ -4144,12 +4144,13 @@ Measure* Measure::mmRestLast() const
 //    by
 //---------------------------------------------------------
 
-Measure* Measure::mmRest1() const
+const Measure* Measure::mmRest1() const
       {
       if (_mmRest)
             return _mmRest;
       if (_mmRestCount != -1)
-            return const_cast<Measure*>(this);
+            // return const_cast<Measure*>(this);
+            return this;
       const Measure* m = this;
       while (m && !m->_mmRest)
             m = m->prevMeasure();
