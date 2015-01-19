@@ -2045,9 +2045,16 @@ void WedgeObj::read()
 void CapExplicitBarline::read()
       {
       unsigned char b = cap->readByte();
-      _type = BarLineType(b & 0x0f);
+      int type = b & 0x0f;
+      if (type == 0) _type = BarLineType::NORMAL;
+      else if (type == 1) _type = BarLineType::DOUBLE;
+      else if (type == 2) _type = BarLineType::END;
+      else if (type == 3) _type = BarLineType::END_REPEAT;
+      else if (type == 4) _type = BarLineType::START_REPEAT;
+      else if (type == 5) _type = BarLineType::END_START_REPEAT;
+      else if (type == 6) _type = BarLineType::BROKEN;
+      else _type = BarLineType::NORMAL; // default
       _barMode = b >> 4;         // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen
-      Q_ASSERT(_type <= BarLineType::END_START_REPEAT);
       Q_ASSERT(_barMode <= 2);
 
       qDebug("         Expl.Barline type %d mode %d", _type, _barMode);
