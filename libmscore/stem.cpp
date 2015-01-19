@@ -182,7 +182,6 @@ void Stem::draw(QPainter* painter) const
                   path.closeSubpath();
                   y += displ;
                   }
-//            setbbox(path.boundingRect());
             painter->setBrush(QBrush(curColor()));
             painter->setPen(Qt::NoPen);
             painter->drawPath(path);
