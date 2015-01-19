@@ -1714,10 +1714,10 @@ char* Capella::readString()
 
 QString Capella::readQString()
       {
-      char* buffer = readString();   // read Capella string
-      QString res(buffer);           // and copy into QString
-      res = res.remove(QChar('\r')); // remove the \r
-      delete [] buffer;              // delete memory allocated by readString
+      char* buffer = readString();               // read Capella string
+      QString res = QString::fromLatin1(buffer); // and copy into QString
+      res = res.remove(QChar('\r'));             // remove the \r
+      delete [] buffer;                          // delete memory allocated by readString
       return res;
       }
 
@@ -1783,9 +1783,9 @@ QFont Capella::readFont()
             /*uchar lfQuality        =*/ readByte();
             /*uchar lfPitchAndFamily =*/ readByte();
             /*QColor color           =*/ readColor();
-            char* face             = readString();
+            QString face             = readQString();
 
-            qDebug("Font <%s> size %d, weight %d", face, lfHeight, lfWeight);
+            qDebug("Font <%s> size %d, weight %d", qPrintable(face), lfHeight, lfWeight);
             QFont font(face);
             font.setPointSizeF(lfHeight / 1000.0);
             font.setItalic(lfItalic);
