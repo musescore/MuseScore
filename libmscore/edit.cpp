@@ -1511,8 +1511,11 @@ void Score::deleteItem(Element* el)
                   Rest* rest = static_cast<Rest*>(el);
                   if (rest->tuplet() && rest->tuplet()->elements().empty())
                         undoRemoveElement(rest->tuplet());
-                  if (el->voice() != 0)
+                  if (el->voice() != 0) {
                         undoRemoveElement(el);
+                        if (noteEntryMode())
+                              _is.moveToNextInputPos();
+                        }
                   }
                   break;
 

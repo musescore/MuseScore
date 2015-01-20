@@ -146,6 +146,8 @@ Element* Selection::element() const
 ChordRest* Selection::cr() const
       {
       Element* e = element();
+      if (!e)
+            return 0;
       if (e->type() == Element::Type::NOTE)
             e = e->parent();
       if (e->isChordRest())
