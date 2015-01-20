@@ -345,7 +345,9 @@ void ScoreView::lyricsUnderscore()
             lyrics->setNo(verse);
             lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             }
-      else
+      else if (lyrics->syllabic() == Lyrics::Syllabic::MIDDLE)
+            lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
+      else if (lyrics->syllabic() == Lyrics::Syllabic::END)
             lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
 
       if (oldLyrics) {
