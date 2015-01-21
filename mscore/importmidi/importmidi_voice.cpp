@@ -291,11 +291,12 @@ bool hasIntersectionWithTuplets(
                   std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
             const ReducedFraction &tupletOnTime)
       {
-      const auto foundTuplets = MidiTuplet::findTupletsForTimeRange(voice, onTime,
-                                                                    offTime - onTime, tuplets);
+      const auto foundTuplets = MidiTuplet::findTupletsForTimeRange(
+                                          voice, onTime, offTime - onTime, tuplets, true);
       for (const auto tupletIt: foundTuplets) {
             const auto ins = findInsertedTuplet(tupletIt->first, voice, insertedTuplets);
-            const bool belongsToInserted = (ins != insertedTuplets.end() && ins->first == tupletOnTime);
+            const bool belongsToInserted = (ins != insertedTuplets.end()
+                                            && ins->first == tupletOnTime);
             if (!belongsToInserted)
                   return true;
             }
