@@ -82,11 +82,9 @@ void removeUselessTuplets(std::vector<TupletInfo> &tuplets)
       {
       struct {
             bool operator()(const TupletInfo &t1, const TupletInfo &t2) {
-                  if (t1.tupletNumber < t2.tupletNumber)
-                        return true;
-                  if (t1.tupletNumber == t2.tupletNumber)
-                        return t1.len < t2.len;
-                  return false;
+                  if (t1.tupletNumber != t2.tupletNumber)
+                        return t1.tupletNumber < t2.tupletNumber;
+                  return t1.len < t2.len;
                   }
             } comparator;
       std::sort(tuplets.begin(), tuplets.end(), comparator);

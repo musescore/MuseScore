@@ -814,6 +814,9 @@ int findMaxPitchDiff(const std::pair<int, int> &minMaxPitch, const InstrumentTem
             diff = templ->minPitchP - minMaxPitch.first;
       if (minMaxPitch.second > templ->maxPitchP)
             diff = qMax(diff, minMaxPitch.second - templ->maxPitchP);
+
+      Q_ASSERT(diff >= 0);
+
       return diff;
       }
 
@@ -833,6 +836,8 @@ void sortInstrumentTemplates(
                         // so prefer particular drum instruments
             if (templ1->drumset && !templ2->drumset)
                   return true;
+            if (!templ1->drumset && templ2->drumset)
+                  return false;
             return templ1->genres.size() > templ2->genres.size();
             });
       }
