@@ -362,6 +362,7 @@ class TestImportMidi : public QObject, public MTest
       void percRespectBeat() { noTempoText("perc_respect_beat"); }
       void percTupletVoice() { noTempoText("perc_tuplet_voice"); }
       void percTupletSimplify() { noTempoText("perc_tuplet_simplify"); }
+      void percTupletSimplify2() { noTempoText("perc_tuplet_simplify2"); }
 
       // clef changes along the score
       void clefTied() { dontSimplify("clef_tied"); }
