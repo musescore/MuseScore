@@ -145,11 +145,10 @@ void Stem::draw(QPainter* painter) const
       Staff* st = staff();
       bool useTab = st && st->isTabStaff();
 
-      if (useTab && st->staffType()->slashStyle())
-            return;
       qreal lw = lineWidth();
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
+
       if (!useTab || !chord())
             return;
 

@@ -268,7 +268,7 @@ void Beam::layout1()
             slope = 0.0;
             _cross = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
-            foreach(ChordRest* cr, _elements) {
+            foreach (ChordRest* cr, _elements) {
                   if (cr->type() == Element::Type::CHORD) {
                         // set members maxDuration, c1, c2
                         if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
@@ -403,16 +403,24 @@ void Beam::layoutGraceNotes()
       //
       // determine beam stem direction
       //
-      if (_direction != MScore::Direction::AUTO)
-            _up = _direction == MScore::Direction::UP;
+      if (staff()->isTabStaff()) {
+            //TABULATURES: all beams (and related chords) are:
+            //    UP or DOWN according to TAB duration position
+            //    slope 0
+            _up   = !staff()->staffType()->stemsDown();
+            }
       else {
-            ChordRest* cr = _elements[0];
+            if (_direction != MScore::Direction::AUTO)
+                  _up = _direction == MScore::Direction::UP;
+            else {
+                  ChordRest* cr = _elements[0];
 
-            Measure* m = cr->measure();
-            if (m->hasVoices(cr->staffIdx()))
-                  _up = !(cr->voice() % 2);
-            else
-                  _up = true;
+                  Measure* m = cr->measure();
+                  if (m->hasVoices(cr->staffIdx()))
+                        _up = !(cr->voice() % 2);
+                  else
+                        _up = true;
+                  }
             }
 
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
@@ -1705,14 +1713,18 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             Chord* c = static_cast<Chord*>(cr);
             if (c->type() != Element::Type::CHORD)
                   continue;
+            c->layoutStem1();
             Stem* stem = c->stem();
+#if 0
             if (!stem) {
-                  // is this ever true?
-                  qDebug("create stem in layout beam");
+                  // is this ever true? -> yes
+qDebug("create stem in layout beam, track %d", c->track());
                   stem = new Stem(score());
-                  c->setStem(stem);
+                  stem->setParent(c);
+                  score()->undoAddElement(stem);
 //                  stem->rypos() = (c->up() ? c->downNote() : c->upNote())->rypos();
                   }
+#endif
             if (c->hook())
                   score()->undoRemoveElement(c->hook());
 
@@ -1739,7 +1751,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                            beamSegments.back()->x2());
                         }
                   }
-            stem->setLen(y2 - (by + _pagePos.y()));
+            if (stem)
+                  stem->setLen(y2 - (by + _pagePos.y()));
 
 #if 0       // TODO ??
             if (!tab) {
@@ -1756,20 +1769,23 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   }
 #endif
 
+
             //
             // layout stem slash for acciacatura
             //
             if ((c == crl.front()) && c->noteType() == NoteType::ACCIACCATURA) {
                   StemSlash* stemSlash = c->stemSlash();
-                  if (!stemSlash) {
-                        stemSlash = new StemSlash(score());
-                        c->add(stemSlash);
-                        }
-                  stemSlash->layout();
+                  // if (!stemSlash)
+                  //      c->add(new StemSlash(score()));
+                  if (stemSlash)
+                        stemSlash->layout();
                   }
-            else
-                  c->setStemSlash(0);
-
+#if 0
+            else {
+                  if (c->stemSlash())
+                        c->remove(c->stemSlash());
+                  }
+#endif
             Tremolo* tremolo = c->tremolo();
             if (tremolo)
                   tremolo->layout();
