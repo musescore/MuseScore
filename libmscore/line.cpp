@@ -511,8 +511,8 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           }
                                     }
                               }
-#if 0
-                        else if (type() == Element::Type::LYRICSLINE) {
+                        else if (type() == Element::Type::LYRICSLINE && static_cast<Lyrics*>(parent())->ticks() > 0) {
+                              // melisma line
                               // it is possible CR won't be in correct track
                               // prefer element in current track if available
                               if (cr->track() != track()) {
@@ -536,16 +536,9 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     x = maxRight; // cr->width()
                                     }
                              }
-#else
-                        // layout lyrics melisma (but not dashes) to right edge of CR
-                        else if (type() == Element::Type::LYRICSLINE && static_cast<const LyricsLine*>(this)->lyrics()->ticks() > 0) {
-                              if (cr)
-                                    x = cr->width();
-                              }
-                        // (also includes dash lyrics line)
-#endif
                         else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL
                                     || type() == Element::Type::TEXTLINE || type() == Element::Type::LYRICSLINE) {
+                              // (for LYRICSLINE, this is hyphen; melisma line is handled above)
                               // lay out to just before next CR or barline
                               if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
                                     qreal x2 = cr->x() + cr->space().rw();
@@ -560,7 +553,9 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                                 break;
                                                 }
                                           else if (seg->segmentType() == Segment::Type::EndBarLine) {
-                                                x2 = qMax(x2, seg->x() - sp);
+                                                // allow lyrics hyphen to extend to barline; other lines stop 1sp short
+                                                qreal gap = (type() == Element::Type::LYRICSLINE) ? 0.0 : sp;
+                                                x2 = qMax(x2, seg->x() - gap);
                                                 break;
                                                 }
                                           }
