@@ -234,7 +234,10 @@ void minimizeNumberOfRests(
                         const auto &tuplet = note.tuplet->second;
                         if (note.offTime == tuplet.onTime + tuplet.len)
                               continue;
-                        if (!isDrumTrack) {
+                        if (isDrumTrack) {
+                              endTime = tuplet.onTime + tuplet.len;
+                              }
+                        else {
                               endTime = barStart + Quantize::quantizeToLarge(
                                                       note.offTime - barStart,
                                                       tuplet.len / tuplet.tupletNumber);
