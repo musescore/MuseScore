@@ -933,12 +933,9 @@ void sortVoicesByPitch(const std::map<int, std::vector<
             bool operator()(const std::pair<int, int> &p1,
                             const std::pair<int, int> &p2) const
                   {
-                  if (p1.first > p2.first)
-                        return true;
-                  else if (p1.first < p2.first)
-                        return false;
-                  else
-                        return p1.second < p2.second;
+                  if (p1.first != p2.first)
+                        return p1.first > p2.first;
+                  return p1.second < p2.second;
                   }
             } comparator;
       std::sort(pitchVoices.begin(), pitchVoices.end(), comparator);
