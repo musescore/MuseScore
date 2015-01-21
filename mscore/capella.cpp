@@ -47,6 +47,7 @@
 #include "libmscore/dynamic.h"
 #include "libmscore/barline.h"
 #include "libmscore/volta.h"
+#include "libmscore/stafftext.h"
 
 extern QString rtf2html(const QString &);
 
@@ -75,6 +76,18 @@ static void addDynamic(Score* score, Segment* s, int track, const char* name)
       d->setDynamicType(name);
       d->setTrack(track);
       s->add(d);
+      }
+
+//---------------------------------------------------------
+//   addArticulationText
+//---------------------------------------------------------
+
+static void addArticulationText(Score* score, ChordRest* cr, int track, const QString& name)
+      {
+      Articulation* na = new Articulation(score);
+      na->setTrack(track);
+      na->setSubtype(name);
+      cr->add(na);
       }
 
 //---------------------------------------------------------
@@ -119,7 +132,7 @@ static void SetCapGraceDuration(Chord* chord,ChordObj* o)
 //   processBasicDrawObj
 //---------------------------------------------------------
 
-static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int track)
+static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int track, ChordRest* cr)
       {
       Score* score = s->score();
       foreach(BasicDrawObj* oo, objects) {
@@ -160,17 +173,6 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                           case 'j':
                                                 addDynamic(score, s, track, "mf");
                                                 break;
-                                          case 'l':         // ?
-                                                break;
-                                          case 't':   //    TRILL
-                                                addDynamic(score, s, track, "xxx");
-                                                break;
-                                          case 'u':   // fermata up
-                                          case 'v':   // 8va
-                                          case 'w':   // turn
-                                          case 'x':   // prall
-                                          case 'y':   // segno
-                                                break;
                                           case 'z':   // sfz
                                                 addDynamic(score, s, track, "sfz");
                                                 break;
@@ -180,14 +182,102 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                           case '|':
                                                 addDynamic(score, s, track, "fp");
                                                 break;
+                                          case 212:   // dynamic m
+                                                addDynamic(score, s, track, "m");
+                                                break;
+                                          case 213:   // dynamic r
+                                                addDynamic(score, s, track, "r");
+                                                break;
+                                          case 214:   // dynamic s
+                                                addDynamic(score, s, track, "s");
+                                                break;
+                                          case 215:   // dynamic z
+                                                addDynamic(score, s, track, "z");
+                                                break;
+                                          case 'k':   // fermata down
+                                                addArticulationText(score, cr, track, QString("dfermata"));
+                                                break;
+                                          case 'u':   // fermata up
+                                                addArticulationText(score, cr, track, QString("ufermata"));
+                                                break;
+                                          case 'd':   // da capo D.C.
+                                          case 'e':   // dal segno D.S.
+                                          case 'n':   // segno coda
+                                          case 'o':   // segno coda (smaller)
+                                          case 'y':   // segno
+                                          case '$':   // segno variation
+                                          case 'a':   // pedal Ped.
+                                          case 'b':   // pedal asterisk *
+                                          case 'v':   // 8va
+                                          case 186:   // 15ma
+                                          case 181:   // caesura
+                                                break;
                                           default:
-                                                qDebug("====unsupported capella code %x(%c)", code, code);
                                                 break;
                                           }
+                                    if (cr->type() == Element::Type::CHORD)
+                                          switch (code) {
+                                                case 't':   //  trill
+                                                      addArticulationText(score, cr, track, QString("trill"));
+                                                      break;
+                                                case 'l':   // (upper) prall
+                                                      addArticulationText(score, cr, track, QString("prall"));
+                                                      break;
+                                                case 'w':   // turn
+                                                      addArticulationText(score, cr, track, QString("turn"));
+                                                      break;
+                                                case 'x':   // (lower) mordent
+                                                      addArticulationText(score, cr, track, QString("mordent"));
+                                                      break;
+                                                case 'Y':   // down bow
+                                                      addArticulationText(score, cr, track, QString("downbow"));
+                                                      break;
+                                                case 'Z':   // up bow
+                                                      addArticulationText(score, cr, track, QString("upbow"));
+                                                      break;
+                                                case 182:   // plus sign
+                                                      addArticulationText(score, cr, track, QString("plusstop"));
+                                                      break;
+                                                case 183:   // ouvert sign
+                                                      addArticulationText(score, cr, track, QString("ouvert"));
+                                                      break;
+                                                case 184:   // snap pizzicato
+                                                      addArticulationText(score, cr, track, QString("snappizzicato"));
+                                                      break;
+                                                case 189:   // schleifer
+                                                      addArticulationText(score, cr, track, QString("schleifer"));
+                                                      break;
+                                                case 190:   // line prall
+                                                      addArticulationText(score, cr, track, QString("lineprall"));
+                                                      break;
+                                                case 191:   // prall prall
+                                                      addArticulationText(score, cr, track, QString("prallprall"));
+                                                      break;
+                                                case 192:   // down prall
+                                                      addArticulationText(score, cr, track, QString("downprall"));
+                                                      break;
+                                                case 193:   // up prall
+                                                      addArticulationText(score, cr, track, QString("upprall"));
+                                                      break;
+                                                case 194:   // prall mordent ?
+                                                      addArticulationText(score, cr, track, QString("prallmordent"));
+                                                      break;
+                                                case 209:   // reverse turn
+                                                case 211:   // alt. reverse turn
+                                                      addArticulationText(score, cr, track, QString("reverseturn"));
+                                                      break;
+                                                case 172:   // arpeggio (short)
+                                                case 173:   // arpeggio (long)
+                                                case 187:   // arpeggio (wiggle line, arrow up)
+                                                case 188:   // arpeggio (wiggle line, arrow down)
+                                                default:
+                                                      qDebug("====unsupported capella code %x(%c)", code, code);
+                                                      break;
+                                                }
                                     break;
                                     }
                               }
-                        Text* text = new Text(score);
+                        Text* text = new StaffText(score);
                         QFont f(st->font());
                         text->textStyle().setItalic(f.italic());
                         // text->setUnderline(f.underline());
@@ -345,7 +435,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               rest->setTrack(track);
                               rest->setVisible(!o->invisible);
                               s->add(rest);
-                              processBasicDrawObj(o->objects, s, track);
+                              processBasicDrawObj(o->objects, s, track, rest);
                               }
 
                         if (tuplet) {
@@ -517,7 +607,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               chord->add(l);
                               }
 
-                        processBasicDrawObj(o->objects, s, track);
+                        processBasicDrawObj(o->objects, s, track, chord);
 
                         if (tuplet) {
                               if (++nTuplet >= tupletCount) {
