@@ -1163,8 +1163,12 @@ void Score::layoutStage2()
       bool crossMeasure = styleB(StyleIdx::crossMeasureValues);
 
       for (int track = 0; track < tracks; ++track) {
-            if (!staff(track2staff(track))->show())
+            Staff* stf = staff(track2staff(track));
+
+            // dont compute beams for invisible staffs and tablature in slash style
+            if (!stf->show() || (stf->isTabStaff() && stf->staffType()->slashStyle()))
                   continue;
+
             ChordRest* a1    = 0;      // start of (potential) beam
             Beam* beam       = 0;      // current beam
             Measure* measure = 0;

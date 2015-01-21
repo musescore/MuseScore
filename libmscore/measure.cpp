@@ -299,27 +299,6 @@ struct AcEl {
       qreal x;
       };
 
-#if 0
-//---------------------------------------------------------
-//   layoutChords0
-//---------------------------------------------------------
-
-void Measure::layoutChords0(Segment* segment, int startTrack)
-      {
-      int staffIdx     = startTrack/VOICES;
-      Staff* staff     = score()->staff(staffIdx);
-      qreal staffMag  = staff->mag();
-
-      int endTrack = startTrack + VOICES;
-      for (int track = startTrack; track < endTrack; ++track) {
-            ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
-            if (!cr)
-                 continue;
-            layoutCR0(cr, staffMag);
-            }
-      }
-#endif
-
 //---------------------------------------------------------
 //   layoutCR0
 //---------------------------------------------------------

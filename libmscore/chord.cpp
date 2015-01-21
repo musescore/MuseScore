@@ -237,9 +237,9 @@ Chord::Chord(const Chord& c, bool link)
             add(new Stem(*(c._stem)));
       if (c._hook)
             add(new Hook(*(c._hook)));
-      if (c._stemSlash)
+      if (c._stemSlash) {
             add(new StemSlash(*(c._stemSlash)));
-
+            }
       if (c._glissando) {
             Glissando* g = new Glissando(*(c._glissando));
             add(g);
@@ -317,20 +317,6 @@ Chord::~Chord()
             ll = llNext;
             }
       qDeleteAll(_notes);
-      }
-
-//---------------------------------------------------------
-//   setStem
-//---------------------------------------------------------
-
-void Chord::setStem(Stem* s)
-      {
-      delete _stem;
-      _stem = s;
-      if (_stem) {
-            _stem->setParent(this);
-            _stem->setTrack(track());
-            }
       }
 
 //---------------------------------------------------------
@@ -476,6 +462,7 @@ void Chord::add(Element* e)
                   _glissando = static_cast<Glissando*>(e);
                   break;
             case Element::Type::STEM:
+                  Q_ASSERT(!_stem);
                   _stem = static_cast<Stem*>(e);
                   break;
             case Element::Type::HOOK:
@@ -485,6 +472,7 @@ void Chord::add(Element* e)
                   _el.push_back(e);
                   break;
             case Element::Type::STEM_SLASH:
+                  Q_ASSERT(!_stemSlash);
                   _stemSlash = static_cast<StemSlash*>(e);
                   break;
             case Element::Type::CHORD:
@@ -565,6 +553,10 @@ void Chord::remove(Element* e)
                   _hook = 0;
                   break;
             case Element::Type::STEM_SLASH:
+                  Q_ASSERT(_stemSlash);
+                  if (_stemSlash->selected() && score())
+                        score()->deselect(_stemSlash);
+                  delete _stemSlash;
                   _stemSlash = 0;
                   break;
             case Element::Type::CHORDLINE:
@@ -999,9 +991,9 @@ void Chord::read(XmlReader& e)
             else if (ChordRest::readProperties(e))
                   ;
             else if (tag == "Stem") {
-                  _stem = new Stem(score());
-                  _stem->read(e);
-                  add(_stem);
+                  Stem* s = new Stem(score());
+                  s->read(e);
+                  add(s);
                   }
             else if (tag == "Hook") {
                   _hook = new Hook(score());
@@ -1142,10 +1134,9 @@ qreal Chord::centerX() const
 
 void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      bool slash = _noStem || (measure() && measure()->slashStyle(staffIdx()));
-      if (_hook && !slash)
+      if (_hook)
             func(data, _hook );
-      if (_stem && !slash)
+      if (_stem)
             func(data, _stem);
       if (_stemSlash)
             func(data, _stemSlash);
@@ -1227,32 +1218,32 @@ void Chord::setScore(Score* s)
 
 void Chord::layoutStem1()
       {
-      bool hasStem = durationType().hasStem() && !(_noStem || measure()->slashStyle(staffIdx()));
-
-      if (hasStem) {
+      if (durationType().hasStem() && !(_noStem || measure()->slashStyle(staffIdx())
+         || (staff() && staff()->isTabStaff() && staff()->staffType()->slashStyle()))) {
             if (!_stem) {
                   Stem* stem = new Stem(score());
                   stem->setParent(this);
                   stem->setGenerated(true);
                   score()->undoAddElement(stem);
                   }
-            }
-      else if (_stem)
-            score()->undoRemoveElement(_stem);
-
-      if (hasStem && (_noteType == NoteType::ACCIACCATURA)) {
-            if (_stemSlash == 0) {
-                  StemSlash* slash = new StemSlash(score());
-                  add(slash);
-
-                  // slash->setParent(this);
-                  // slash->setGenerated(true);
-                  // score()->undoAddElement(slash);
+            if (_noteType == NoteType::ACCIACCATURA) {
+                  if (beam() && beam()->elements().front() == this) {
+                        if (!_stemSlash)
+                              add(new StemSlash(score()));
+                        }
+                  else {
+                        if (_stemSlash)
+                              remove(_stemSlash);
+                        }
                   }
             }
-      else if (_stemSlash)
-            // score()->undoRemoveElement(_stemSlash);
-            setStemSlash(0);
+      else {
+            if (_stem)
+                  score()->undoRemoveElement(_stem);
+            if (_stemSlash)
+                  remove(_stemSlash);
+            }
+
       }
 
 //---------------------------------------------------------
@@ -2126,8 +2117,11 @@ void Chord::layoutTablature()
       // if stem is required but missing, add it;
       // set stem position (stem length is set in Chord:layoutStem() )
       else {
-            if (_stem == 0)
-                  setStem(new Stem(score()));
+            if (_stem == 0) {
+                  Stem* stem = new Stem(score());
+                  stem->setParent(this);
+                  score()->undo(new AddElement(stem));
+                  }
             _stem->setPos(tab->chordStemPos(this) * _spatium);
             if (_hook) {
                   if (beam())
@@ -2139,10 +2133,6 @@ void Chord::layoutTablature()
                         }
                   }
             }
-      // unconditionally delete grace slashes
-      delete _stemSlash;
-      _stemSlash = 0;
-
       if (!tab->genDurations()            // if tab is not set for duration symbols
             || track2voice(track())       // or not in first voice
             || isGrace()) {               // or chord is a grace (no dur. symbols for graces
@@ -2756,18 +2746,6 @@ void Chord::reset()
       score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
       score()->createPlayEvents(this);
       ChordRest::reset();
-      }
-
-//---------------------------------------------------------
-//   setStemSlash
-//---------------------------------------------------------
-
-void Chord::setStemSlash(StemSlash* s)
-      {
-      if (_stemSlash && _stemSlash->selected())
-            score()->selection().remove(_stemSlash);
-      delete _stemSlash;
-      _stemSlash = s;
       }
 
 //---------------------------------------------------------

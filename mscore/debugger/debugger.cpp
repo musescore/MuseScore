@@ -280,6 +280,8 @@ static void addChord(ElementItem* sei, Chord* chord)
             new ElementItem(sei, chord->hook());
       if (chord->stem())
             new ElementItem(sei, chord->stem());
+      if (chord->stemSlash())
+            new ElementItem(sei, chord->stemSlash());
       if (chord->arpeggio())
             new ElementItem(sei, chord->arpeggio());
       if (chord->tremolo() && (chord->tremolo()->chord1() == chord))
@@ -287,16 +289,16 @@ static void addChord(ElementItem* sei, Chord* chord)
       if (chord->glissando())
             new ElementItem(sei, chord->glissando());
 
-      foreach(Articulation* a, chord->articulations())
+      for (Articulation* a : chord->articulations())
             new ElementItem(sei, a);
-      for(LedgerLine* h = chord->ledgerLines(); h; h = h->next())
+      for (LedgerLine* h = chord->ledgerLines(); h; h = h->next())
             new ElementItem(sei, h);
-      foreach(Note* note, chord->notes()) {
+      for (Note* note : chord->notes()) {
             ElementItem* ni = new ElementItem(sei, note);
             if (note->accidental()) {
                   new ElementItem(ni, note->accidental());
                   }
-            foreach (Element* f, note->el()) {
+            for (Element* f : note->el()) {
                   if (f->type() == Element::Type::SYMBOL || f->type() == Element::Type::IMAGE) {
                         BSymbol* bs = static_cast<BSymbol*>(f);
                         addSymbol(ni, bs);
@@ -312,31 +314,31 @@ static void addChord(ElementItem* sei, Chord* chord)
             if (note->tieFor()) {
                   Tie* tie = note->tieFor();
                   ElementItem* ti = new ElementItem(ni, tie);
-                  foreach (Element* el1, tie->spannerSegments())
+                  for (Element* el1 : tie->spannerSegments())
                         new ElementItem(ti, el1);
                   }
-            foreach (Spanner* s, note->spannerFor()) {
+            for (Spanner* s : note->spannerFor()) {
                   ElementItem* si = new ElementItem(ni, s);
-                  foreach(Element* ls, s->spannerSegments())
+                  for (Element* ls : s->spannerSegments())
                         new ElementItem(si, ls);
                   }
             }
-      foreach(Element* e, chord->el()) {
+      for (Element* e : chord->el()) {
             ElementItem* ei = new ElementItem(sei, e);
             if (e->type() == Element::Type::SLUR) {
                   Slur* gs = static_cast<Slur*>(e);
-                  foreach (SpannerSegment* sp, gs->spannerSegments())
+                  for (SpannerSegment* sp : gs->spannerSegments())
                         new ElementItem(ei, sp);
                   }
             }
-      foreach (Chord* c, chord->graceNotes()) {
+      for (Chord* c : chord->graceNotes()) {
             ElementItem* ssei = new ElementItem(sei, c);
             addChord(ssei, c);
             }
 
       if (chord->beam() && chord->beam()->elements().front() == chord)
             new ElementItem(sei, chord->beam());
-      foreach(Lyrics* lyrics, chord->lyricsList()) {
+      for (Lyrics* lyrics : chord->lyricsList()) {
             if (lyrics)
                   new ElementItem(sei, lyrics);
             }
