@@ -108,6 +108,8 @@ MTrack& getNewTrack(std::map<int, MTrack> &newTracks,
 
 std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
       {
+      Q_ASSERT(MidiTuplet::areAllTupletsDifferent(drumTrack.tuplets));
+
       std::map<int, MTrack> newTracks;         // <percussion note pitch, track>
       if (drumTrack.chords.empty())
             return newTracks;
@@ -124,7 +126,7 @@ std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
 
                   if (chord.isInTuplet) {
                         auto newTupletIt = MidiTuplet::findTupletContainingTime(
-                                                newChord.voice, onTime, newTrack.tuplets);
+                                                newChord.voice, onTime, newTrack.tuplets, true);
                         if (newTupletIt == newTrack.tuplets.end()) {
                               MidiTuplet::TupletData newTupletData = chord.tuplet->second;
                               newTupletData.voice = newChord.voice;
@@ -136,7 +138,7 @@ std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
                         }
                   if (note.isInTuplet) {
                         auto newTupletIt = MidiTuplet::findTupletContainingTime(
-                                          newChord.voice, note.offTime, newTrack.tuplets);
+                                          newChord.voice, note.offTime, newTrack.tuplets, false);
                         if (newTupletIt == newTrack.tuplets.end()) {
                               MidiTuplet::TupletData newTupletData = note.tuplet->second;
                               newTupletData.voice = newChord.voice;
@@ -152,7 +154,11 @@ std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
             }
 
       for (auto &track: newTracks)
+            {
+            Q_ASSERT(MidiTuplet::areAllTupletsDifferent(track.second.tuplets));
+
             MidiTuplet::removeEmptyTuplets(track.second);
+            }
 
       return newTracks;
       }
