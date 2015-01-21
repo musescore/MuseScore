@@ -177,8 +177,9 @@ void shortenDrumNote(
                                           // set note off time to be inside that tuplet
             const auto &tuplet = it->second.tuplet->second;
             const auto len = tuplet.len / tuplet.tupletNumber;
-            if (note.offTime - it->first > len) {
-                  note.offTime = it->first + len;
+            const auto newOffTime = qMin(it->first + len, tuplet.onTime + tuplet.len);
+            if (note.offTime > newOffTime) {
+                  note.offTime = newOffTime;
                   note.isInTuplet = true;
                   note.tuplet = it->second.tuplet;
                   note.offTimeQuant = len;
