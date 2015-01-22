@@ -48,6 +48,10 @@
 #include "libmscore/barline.h"
 #include "libmscore/volta.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/trill.h"
+#include "libmscore/arpeggio.h"
+#include "libmscore/breath.h"
+#include "libmscore/hairpin.h"
 
 extern QString rtf2html(const QString &);
 
@@ -210,7 +214,15 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                           case 'b':   // pedal asterisk *
                                           case 'v':   // 8va
                                           case 186:   // 15ma
+                                                break;
                                           case 181:   // caesura
+                                                {
+                                                Breath* b = new Breath(score);
+                                                b->setTrack(track);
+                                                b->setBreathType(3);
+                                                Segment* seg = s->measure()->getSegment(Segment::Type::Breath, s->tick());
+                                                seg->add(b);
+                                                }
                                                 break;
                                           default:
                                                 break;
@@ -268,8 +280,41 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                                       break;
                                                 case 172:   // arpeggio (short)
                                                 case 173:   // arpeggio (long)
+                                                      {
+                                                      Arpeggio* a = new Arpeggio(score);
+                                                      a->setArpeggioType(ArpeggioType::NORMAL);
+                                                      if ((static_cast<Chord*>(cr))->arpeggio()) { // there can be only one
+                                                            delete a;
+                                                            a = 0;
+                                                            }
+                                                      else
+                                                            cr->add(a);
+                                                      }
+                                                      break;
                                                 case 187:   // arpeggio (wiggle line, arrow up)
+                                                      {
+                                                      Arpeggio* a = new Arpeggio(score);
+                                                      a->setArpeggioType(ArpeggioType::UP);
+                                                      if ((static_cast<Chord*>(cr))->arpeggio()) { // there can be only one
+                                                            delete a;
+                                                            a = 0;
+                                                            }
+                                                      else
+                                                            cr->add(a);
+                                                      }
+                                                      break;
                                                 case 188:   // arpeggio (wiggle line, arrow down)
+                                                      {
+                                                      Arpeggio* a = new Arpeggio(score);
+                                                      a->setArpeggioType(ArpeggioType::DOWN);
+                                                      if ((static_cast<Chord*>(cr))->arpeggio()) { // there can be only one
+                                                            delete a;
+                                                            a = 0;
+                                                            }
+                                                      else
+                                                            cr->add(a);
+                                                      }
+                                                      break;
                                                 default:
                                                       qDebug("====unsupported capella code %x(%c)", code, code);
                                                       break;
@@ -311,26 +356,90 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
 //   return true on success (both begin and end found)
 //---------------------------------------------------------
 
-static bool findChordRests(BasicDrawObj const* const o, Score const* const score, const int track, const int tick,
-                           ChordRest*& cr1, ChordRest*& cr2)
+static bool findChordRests(BasicDrawObj const* const o, Score* score, const int track, const int tick,
+                           ChordRest*& cr1, ChordRest*& cr2, NoteObj* no, QList<NoteObj*> objects)
       {
       cr1 = 0;                         // ChordRest where BasicDrawObj o begins
       cr2 = 0;                         // ChordRest where BasicDrawObj o ends
 
       // find the ChordRests where o begins and ends
       int n = o->nNotes + 1;                                // # notes in BasicDrawObj (nNotes is # notes following the first note)
+      int graceNumber = 0;
+      int graceNumber1 = 0;
+      bool foundcr1 = false;
+      int tick2 = tick;
+      foreach(NoteObj* nobj, objects) {
+            BasicDurationalObj* d = 0;
+            if (nobj->type() == CapellaNoteObjectType::REST) {
+                  d = static_cast<BasicDurationalObj*>(static_cast<RestObj*>(nobj));
+                  graceNumber = 0;
+                  }
+            else if (nobj->type() == CapellaNoteObjectType::CHORD) {
+                  ChordObj* cho = static_cast<ChordObj*>(nobj);
+                  d = static_cast<BasicDurationalObj*>(cho);
+                  if (!(cho->invisible) && (cho->ticks() == 0)) // grace note
+                        ++graceNumber;
+                  else
+                        graceNumber = 0;
+                  }
+            if (!d)
+                  continue;
+            if (nobj == no) {
+                  foundcr1 = true;
+                  graceNumber1 = graceNumber;
+                  }
+            int ticks = 0;
+            if (foundcr1) {
+                  --n;   // found the object corresponding to cr1, count down to find the second one
+                  ticks = d->ticks();
+                  if (d->count)
+                        ticks = ticks*2/(d->count);     // ADJUST for tuplets different from triplets
+                  if (nobj->type() == CapellaNoteObjectType::REST) {
+                        RestObj* ro = static_cast<RestObj*>(nobj);
+                        if (ro->fullMeasures) {
+                              Measure* m = score->getCreateMeasure(tick2);
+                              int ft     = m->ticks();
+                              ticks = ft * ro->fullMeasures;
+                              }
+                        }
+                  if (n == 0)
+                        break;
+                  tick2 += ticks;
+                  }
+            }
+      // Now we have the tick (tick) and the level of grace note (graceNumber1, if "no" is a grace note) for the first ChordRest
+      // and the tick (tick2) and the level of grace note (graceNumber, if the target is a grace note) for the 2nd ChordRest
       for (Segment* seg = score->tick2segment(tick); seg; seg = seg->next1()) {
             if (seg->segmentType() != Segment::Type::ChordRest)
                   continue;
             ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
             if (cr) {
-                  --n;                                              // found a ChordRest, count down
-                  if (!cr1) cr1 = cr;                               // found first ChordRest
+                  if (graceNumber1 > 0) { // the spanner is starting from a grace note
+                        Chord* chord = static_cast<Chord*>(cr);
+                        foreach(Chord* cc, chord->graceNotes()) {
+                              --graceNumber1;
+                              if ((graceNumber1 == 0) && (!cr1))
+                                    cr1 = static_cast<ChordRest*>(cc); // found first ChordRest
+                              }
+                        }
+                  if (!cr1) cr1 = cr; // found first ChordRest
+                  break;
                   }
-            else
-                  qDebug("  %d empty seg", n);
-            if (n == 0) {
-                  cr2 = cr;                               // cr should be the second ChordRest
+            }
+      for (Segment* seg = score->tick2segment(tick2); seg; seg = seg->next1()) {
+            if (seg->segmentType() != Segment::Type::ChordRest)
+                  continue;
+            ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+            if (cr) {
+                  if ((graceNumber > 0) && (cr->type() == Element::Type::CHORD)) { // the spanner is ending on a grace note
+                        Chord* chord = static_cast<Chord*>(cr);
+                        foreach(Chord* cc, chord->graceNotes()) {
+                              --graceNumber;
+                              if ((graceNumber == 0) && (!cr2))
+                                    cr2 = static_cast<ChordRest*>(cc); // found 2nd ChordRest
+                              }
+                        }
+                  if (!cr2) cr2 = cr; // found 2nd ChordRest
                   break;
                   }
             }
@@ -757,7 +866,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               //        so->nDotDist, so->nDotWidth, so->nRefNote, so->nNotes);
                               ChordRest* cr1 = 0; // ChordRest where slur begins
                               ChordRest* cr2 = 0; // ChordRest where slur ends
-                              bool res = findChordRests(o, score, track, tick, cr1, cr2);
+                              bool res = findChordRests(o, score, track, tick, cr1, cr2, no, cvoice->objects);
 
                               if (res) {
                                     if (cr1 == cr2)
@@ -801,7 +910,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               VoltaObj* vo = static_cast<VoltaObj*>(o);
                               ChordRest* cr1 = 0; // ChordRest where volta begins
                               ChordRest* cr2 = 0; // ChordRest where volta ends
-                              bool res = findChordRests(o, score, track, tick, cr1, cr2);
+                              bool res = findChordRests(o, score, track, tick, cr1, cr2, no, cvoice->objects);
 
                               if (res) {
                                     Volta* volta = new Volta(score);
@@ -820,12 +929,64 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     }
                               }
                               break;
+                        case CapellaType::TRILL:
+                              {
+                              TrillObj* tro = static_cast<TrillObj*>(o);
+                              ChordRest* cr1 = 0; // ChordRest where trill line begins
+                              ChordRest* cr2 = 0; // ChordRest where trill line ends
+                              bool res = findChordRests(o, score, track, tick, cr1, cr2, no, cvoice->objects);
+                              if (res) {
+                                    if (cr1 == cr2)
+                                          qDebug("first and second anchor for trill line identical (tick %d track %d first %p second %p)",
+                                                 tick, track, cr1, cr2);
+                                    else {
+                                          Trill* trill = new Trill(score);
+                                          trill->setTrack(track);
+                                          trill->setTrack2(track);
+                                          trill->setTick(cr1->tick());
+                                          trill->setTick2(cr2->tick());
+                                          if (!(tro->trillSign))
+                                                trill->setTrillType("prallprall");
+                                          score->addElement(trill);
+                                          }
+                                    }
+                              }
+                              break;
+                        case CapellaType::WEDGE:
+                              {
+                              WedgeObj* wdgo = static_cast<WedgeObj*>(o);
+                              ChordRest* cr1 = 0; // ChordRest where hairpin begins
+                              ChordRest* cr2 = 0; // ChordRest where hairpin ends
+                              bool res = findChordRests(o, score, track, tick, cr1, cr2, no, cvoice->objects);
+                              if (res) {
+                                    if (cr1 == cr2)
+                                          qDebug("first and second anchor for hairpin identical (tick %d track %d first %p second %p)",
+                                                 tick, track, cr1, cr2);
+                                    else {
+                                          Hairpin* hp = new Hairpin(score);
+                                          if (wdgo->decresc)
+                                                hp->setHairpinType(Hairpin::Type::DECRESCENDO);
+                                          else
+                                                hp->setHairpinType(Hairpin::Type::CRESCENDO);
+                                          hp->setTick(cr1->tick());
+                                          hp->setTick2(cr2->tick());
+                                          hp->setTrack(track);
+                                          hp->setTrack2(track);
+                                          hp->setAnchor(Spanner::Anchor::SEGMENT);
+                                          score->addSpanner(hp);
+                                          score->updateHairpin(hp);
+                                          }
+                                    }
+                              }
+                              break;
                         default:
                               break;
                         }
                   }
-            // TODO: tick is wrong wg. tuplets
+            // TODO: tick is wrong wg. tuplets (rounding errors) ADJUST for tuplets different from triplets
             int ticks = d->ticks();
+            if (d->count)
+                  ticks = ticks*2/(d->count);
             if (no->type() == CapellaNoteObjectType::REST) {
                   RestObj* o = static_cast<RestObj*>(no);
                   if (o->fullMeasures) {
