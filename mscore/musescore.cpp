@@ -2090,6 +2090,8 @@ static bool processNonGui()
       if (converterMode) {
             QString fn(outFileName);
             Score* cs = mscore->currentScore();
+            if (!cs)
+                  return false;
             if (!styleFile.isEmpty()) {
                   QFile f(styleFile);
                   if (f.open(QIODevice::ReadOnly)) {
