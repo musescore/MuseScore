@@ -3558,6 +3558,7 @@ void Measure::layoutX(qreal stretch)
             }
 
       for (Segment* s = first(); s; s = s->next(), ++seg) {
+            qreal barLineWidth = 0.0;
             for (int track = 0; track < tracks; ++track) {
                   if (!score()->staff(track/VOICES)->show()) {
                         track += VOICES-1;
@@ -3664,13 +3665,29 @@ void Measure::layoutX(qreal stretch)
                               e->adjustReadPos();
                               }
                         }
-                  else if (t == Element::Type::AMBITUS)
-                        e->adjustReadPos();
+                  else if (t == Element::Type::BAR_LINE)
+                        barLineWidth = qMax(barLineWidth, e->width());
                   else {
-                        e->setPos(-e->bbox().x(), 0.0);
+                        if (t != Element::Type::AMBITUS)
+                              e->setPos(-e->bbox().x(), 0.0);
                         e->adjustReadPos();
                         }
                   }
+            // align bar lines
+            if (s->segmentType() == Segment::Type::EndBarLine)
+                  for (int track = 0; track < tracks; ++track)
+                        if (s->element(track)) {
+                              BarLine*    bl    = static_cast<BarLine*>(s->element(track));
+                              qreal       delta = barLineWidth - bl->width();
+                              // right-align end bar lines, end-repeat bar lines and bar lines in last system measure
+                              if (bl->barLineType() == BarLineType::END || bl->barLineType() == BarLineType::END_REPEAT
+                                    || this == system()->lastMeasure())
+                                    bl->rxpos() = delta;
+                              // centre-align all other bar lines except start-repeat
+                              else if (bl->barLineType() != BarLineType::START_REPEAT)
+                                    bl->rxpos() = delta * 0.5;
+                              // leave start-repeat left aligned
+                              }
             }
       }
 
