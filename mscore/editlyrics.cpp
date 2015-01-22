@@ -302,11 +302,13 @@ void ScoreView::lyricsUnderscore()
                   break;
             }
 
+      _score->startCmd();
+
       // one-chord melisma?
       // if still at melisma initial chord and there is a valid next chord (if not,
       // there will be no melisma anyway), set a temporary melisma duration
       if (oldLyrics == lyrics && nextSegment)
-            lyrics->setTicks(Lyrics::TEMP_MELISMA_TICKS);
+            lyrics->undoChangeProperty(P_ID::LYRIC_TICKS, Lyrics::TEMP_MELISMA_TICKS);
 
       if (nextSegment == 0) {
             if (oldLyrics) {
@@ -325,12 +327,13 @@ void ScoreView::lyricsUnderscore()
             mscore->changeState(STATE_NORMAL);
             if (oldLyrics)
                   _score->select(oldLyrics, SelectType::SINGLE, 0);
-            _score->update();
+            //_score->update();
+            _score->setLayoutAll(true);
+            _score->endCmd();
             return;
             }
 
       // if a place for a new lyrics has been found, create a lyrics there
-      _score->startCmd();
 
       const QList<Lyrics*>* ll = nextSegment->lyricsList(track);
       lyrics         = ll->value(verse);
@@ -342,7 +345,9 @@ void ScoreView::lyricsUnderscore()
             lyrics->setNo(verse);
             lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             }
-      else
+      else if (lyrics->syllabic() == Lyrics::Syllabic::MIDDLE)
+            lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
+      else if (lyrics->syllabic() == Lyrics::Syllabic::END)
             lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
 
       if (oldLyrics) {
@@ -368,7 +373,8 @@ void ScoreView::lyricsUnderscore()
       ((Lyrics*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->update();
+      //_score->update();
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
