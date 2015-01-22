@@ -87,6 +87,9 @@ class Hairpin : public SLine {
       Spatium _hairpinContHeight;
       PropertyStyle hairpinContHeightStyle;
 
+      static Spatium editHairpinHeight;
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual void endEdit() override;
 
    public:
       Hairpin(Score* s);
