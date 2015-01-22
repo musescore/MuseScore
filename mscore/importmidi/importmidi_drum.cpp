@@ -32,6 +32,40 @@ bool haveNonZeroVoices(const std::multimap<ReducedFraction, MidiChord> &chords)
 #endif
 
 
+void splitChord(
+            std::multimap<ReducedFraction, MidiChord>::iterator &chordIt,
+            const QSet<int> &notesToMove,
+            std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      MidiChord &chord = chordIt->second;
+      auto &notes = chord.notes;
+
+      if (notesToMove.size() == notes.size()) {  // just move chord to another voice
+            chord.voice = 1;
+            }
+      else {            // split chord
+            MidiChord newChord(chord);
+            newChord.notes.clear();
+            newChord.voice = 1;
+            QList<MidiNote> updatedOldNotes;
+
+            for (int i = 0; i != notes.size(); ++i) {
+                  if (notesToMove.contains(i))
+                        newChord.notes.append(notes[i]);
+                  else
+                        updatedOldNotes.append(notes[i]);
+                  }
+            notes = updatedOldNotes;
+
+            Q_ASSERT_X(!notes.isEmpty(),
+                       "MidiDrum::splitChord", "Old chord notes are empty");
+            Q_ASSERT_X(!newChord.notes.isEmpty(),
+                       "MidiDrum::splitChord", "New chord notes are empty");
+
+            chordIt = chords.insert({chordIt->first, newChord});
+            }
+      }
+
 void splitDrumVoices(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
@@ -53,9 +87,7 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                        "All voices of drum track should be zero here");
 
             for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
-                  const ReducedFraction onTime = chordIt->first;
-                  MidiChord &chord = chordIt->second;
-                  auto &notes = chord.notes;
+                  auto &notes = chordIt->second.notes;
                               // search for the drumset pitches with voice = 1
                   QSet<int> notesToMove;
                   for (int i = 0; i != notes.size(); ++i) {
@@ -66,31 +98,7 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                   if (notesToMove.isEmpty())
                         continue;
 
-                  if (notesToMove.size() == notes.size()) {  // just move chord to another voice
-                        chord.voice = 1;
-                        }
-                  else {            // split chord
-                        MidiChord newChord(chord);
-                        newChord.notes.clear();
-                        newChord.voice = 1;
-                        QList<MidiNote> updatedOldNotes;
-
-                        for (int i = 0; i != notes.size(); ++i) {
-                              if (notesToMove.contains(i))
-                                    newChord.notes.append(notes[i]);
-                              else
-                                    updatedOldNotes.append(notes[i]);
-                              }
-
-                        notes = updatedOldNotes;
-
-                        Q_ASSERT_X(!notes.isEmpty(),
-                                   "MidiDrum::splitDrumVoices", "Old chord notes are empty");
-                        Q_ASSERT_X(!newChord.notes.isEmpty(),
-                                   "MidiDrum::splitDrumVoices", "New chord notes are empty");
-
-                        chordIt = chords.insert({onTime, newChord});
-                        }
+                  splitChord(chordIt, notesToMove, chords);
                   }
             }
       }
