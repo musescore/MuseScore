@@ -416,6 +416,8 @@ class MStyle {
       void setSpatium(qreal v);
       ArticulationAnchor articulationAnchor(int id) const;
       void setArticulationAnchor(int id, ArticulationAnchor val);
+
+      static StyleValueType valueType(const StyleIdx t);
       };
 
 extern QVector<TextStyle> defaultTextStyles;
