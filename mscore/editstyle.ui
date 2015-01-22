@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>904</width>
-    <height>577</height>
+    <height>739</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -2218,6 +2218,13 @@
               </property>
               <property name="checked">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="scaleBarlines">
+              <property name="text">
+               <string>Scale Barlines to staff size</string>
               </property>
              </widget>
             </item>
