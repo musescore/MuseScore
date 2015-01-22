@@ -24,6 +24,8 @@
 
 namespace Ms {
 
+Spatium Hairpin::editHairpinHeight;
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -463,6 +465,7 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
             default:
                   return SLine::setProperty(id, v);
             }
+      score()->setLayoutAll(true);
       return true;
       }
 
@@ -569,6 +572,10 @@ void Hairpin::reset()
       SLine::reset();
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
 QString Hairpin::accessibleInfo()
       {
       QString rez = SLine::accessibleInfo();
@@ -584,5 +591,27 @@ QString Hairpin::accessibleInfo()
             }
       return rez;
       }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void Hairpin::startEdit(MuseScoreView* view, const QPointF& p)
+      {
+      editHairpinHeight = _hairpinHeight;
+      SLine::startEdit(view, p);
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void Hairpin::endEdit()
+      {
+      if (editHairpinHeight != _hairpinHeight)
+            score()->undoPropertyChanged(this, P_ID::HAIRPIN_HEIGHT, editHairpinHeight.val());
+      SLine::endEdit();
+      }
+
 }
 
