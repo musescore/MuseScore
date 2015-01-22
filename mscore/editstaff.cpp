@@ -273,7 +273,7 @@ void EditStaff::apply()
             emit instrumentChanged();
 
             if (v1 != v2)
-                  score->transpositionChanged(part);
+                  score->transpositionChanged(part, v2);
             }
 
       if (s != orgStaff->small()
