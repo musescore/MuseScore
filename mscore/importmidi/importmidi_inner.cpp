@@ -32,7 +32,7 @@ MTrack::MTrack(const MTrack &other)
       , hadInitialNotes(other.hadInitialNotes)
       , chords(other.chords)
       {
-      copyAndCorrectTuplets();
+      updateTupletsFromChords();
       }
 
 MTrack& MTrack::operator=(MTrack other)
@@ -47,12 +47,15 @@ MTrack& MTrack::operator=(MTrack other)
       std::swap(isDivisionInTps, other.isDivisionInTps);
       std::swap(hadInitialNotes, other.hadInitialNotes);
       std::swap(chords, other.chords);
-      copyAndCorrectTuplets();
+      updateTupletsFromChords();
 
       return *this;
       }
 
-void MTrack::copyAndCorrectTuplets()
+// chords of the MTrack are considered to be created/copied already;
+// tuplets here are extracted and inserted to the tuplet map of the MTrack
+// from tuplet iterators in chords/notes
+void MTrack::updateTupletsFromChords()
       {
       for (auto &chord: chords) {
             if (chord.second.isInTuplet)

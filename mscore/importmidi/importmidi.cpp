@@ -146,6 +146,70 @@ bool noTooShortNotes(const std::multimap<int, MTrack> &tracks)
 
 #endif
 
+std::vector<std::multimap<ReducedFraction, MidiChord> >
+separateDrumChordsTo2Voices(const std::multimap<ReducedFraction, MidiChord> &chords)
+      {
+      std::vector<std::multimap<ReducedFraction, MidiChord> > separatedChords(2);
+      for (const auto &chord: chords) {
+            const MidiChord &c = chord.second;
+
+            Q_ASSERT(c.voice == 0 || c.voice == 1);
+
+            separatedChords[c.voice].insert({chord.first, c});
+            }
+      return separatedChords;
+      }
+
+void setChordVoice(MidiChord &chord, int voice)
+      {
+      chord.voice = voice;
+      if (chord.isInTuplet)
+            chord.tuplet->second.voice = voice;
+      for (auto &note: chord.notes) {
+            if (note.isInTuplet)
+                  note.tuplet->second.voice = voice;
+            }
+      }
+
+void findAllTupletsForDrums(
+            MTrack &mtrack,
+            TimeSigMap *sigmap,
+            const ReducedFraction &basicQuant)
+      {
+      const size_t drumVoiceCount = 2;
+            // drum track has 2 voices (stem up and stem down),
+            // and tuplet detection is applicable for single voice drum tracks,
+            // so split track chords into 2 voice groups,
+            // detect tuplets and merge chords (and found tuplets) back;
+            // it's a small hack due to the fact that tuplet detection
+            // is designed to work before voice setting
+
+      std::vector<std::multimap<ReducedFraction, MidiChord> > chords(drumVoiceCount);
+      for (const auto &chord: mtrack.chords) {
+            const MidiChord &c = chord.second;
+
+            Q_ASSERT(c.voice == 0 || c.voice == 1);
+
+            chords[c.voice].insert({chord.first, c});
+            }
+
+      std::vector<std::multimap<ReducedFraction,
+                                MidiTuplet::TupletData> > tuplets(drumVoiceCount);
+      for (size_t voice = 0; voice < drumVoiceCount; ++voice) {
+            if (!chords[voice].empty())
+                  MidiTuplet::findAllTuplets(tuplets[voice], chords[voice], sigmap, basicQuant);
+            }
+      mtrack.chords.clear();
+      for (size_t voice = 0; voice < drumVoiceCount; ++voice) {
+            for (auto &chord: chords[voice]) {
+                        // correct voice because it can be changed during tuplet detection
+                  setChordVoice(chord.second, voice);
+                  mtrack.chords.insert({chord.first, chord.second});
+                  }
+            }
+      mtrack.updateTupletsFromChords();
+      // note: temporary local tuplets and chords are deleted here
+      }
 
 void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                        TimeSigMap *sigmap,
@@ -176,7 +240,11 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
                        "quantizeAllTracks", "Last tick is less than max note off time");
 
             MChord::setBarIndexes(mtrack.chords, basicQuant, lastTick, sigmap);
-            MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, basicQuant);
+
+            if (mtrack.mtrack->drumTrack())
+                  findAllTupletsForDrums(mtrack, sigmap, basicQuant);
+            else
+                  MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, basicQuant);
 
             Q_ASSERT_X(!doNotesOverlap(track.second),
                        "quantizeAllTracks",
@@ -1314,12 +1382,12 @@ void convertMidi(Score *score, const MidiFile *mf)
                  "convertMidi", "There are overlapping notes of the same voice that is incorrect");
 
       LRHand::splitIntoLeftRightHands(tracks);
+      MidiDrum::splitDrumVoices(tracks);
       quantizeAllTracks(tracks, sigmap, lastTick);
       MChord::removeOverlappingNotes(tracks);
 
       Q_ASSERT_X(!doNotesOverlap(tracks),
                  "convertMidi", "There are overlapping notes of the same voice that is incorrect");
-
       Q_ASSERT_X(noTooShortNotes(tracks),
                  "convertMidi", "There are notes of length < min allowed duration");
 
@@ -1327,7 +1395,6 @@ void convertMidi(Score *score, const MidiFile *mf)
       Simplify::simplifyDurationsNotDrums(tracks, sigmap);
       if (MidiVoice::separateVoices(tracks, sigmap))
             Simplify::simplifyDurationsNotDrums(tracks, sigmap);    // again
-      MidiDrum::splitDrumVoices(tracks);
       MidiDrum::splitDrumTracks(tracks);
       Simplify::simplifyDurationsForDrums(tracks, sigmap);
       MChord::splitUnequalChords(tracks);

@@ -97,9 +97,9 @@ class MTrack {
             toDurationList(const Measure *measure, int voice, const ReducedFraction &startTick,
                            const ReducedFraction &len, Meter::DurationType durationType);
       void createKeys(Key);
+      void updateTupletsFromChords();
 
    private:
-      void copyAndCorrectTuplets();
       void updateTuplet(std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator &);
       };
 
