@@ -1109,19 +1109,13 @@ void findAllTuplets(
             std::multimap<ReducedFraction, TupletData> &tuplets,
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
-            const ReducedFraction &lastTick,
             const ReducedFraction &basicQuant)
       {
-#ifdef NDEBUG
-      (void)lastTick;
-#endif
       if (chords.empty())
             return;
 
       Q_ASSERT_X(MChord::areNotesLongEnough(chords),
                  "MidiTuplet::findAllTuplets", "There are too short notes");
-      Q_ASSERT_X(MChord::isLastTickValid(lastTick, chords),
-                 "MidiTuplet::findAllTuplets", "Last tick is less than max note off time");
       Q_ASSERT_X(MChord::areBarIndexesSet(chords),
                  "MidiTuplet::findAllTuplets", "Not all bar indexes were set");
       Q_ASSERT_X(MChord::areBarIndexesSuccessive(chords),

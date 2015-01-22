@@ -172,8 +172,11 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
             const auto basicQuant = Quantize::quantValueToFraction(
                         opers.data()->trackOpers.quantValue.value(mtrack.indexOfOperation));
 
+            Q_ASSERT_X(MChord::isLastTickValid(lastTick, mtrack.chords),
+                       "quantizeAllTracks", "Last tick is less than max note off time");
+
             MChord::setBarIndexes(mtrack.chords, basicQuant, lastTick, sigmap);
-            MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, lastTick, basicQuant);
+            MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, basicQuant);
 
             Q_ASSERT_X(!doNotesOverlap(track.second),
                        "quantizeAllTracks",

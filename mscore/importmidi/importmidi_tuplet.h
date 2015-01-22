@@ -104,7 +104,6 @@ void findAllTuplets(
             std::multimap<ReducedFraction, TupletData> &tuplets,
             std::multimap<ReducedFraction, MidiChord> &chords,
             const TimeSigMap *sigmap,
-            const ReducedFraction &lastTick,
             const ReducedFraction &basicQuant);
 
 ReducedFraction findOnTimeBetweenChords(
