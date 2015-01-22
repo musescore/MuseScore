@@ -6,7 +6,6 @@
 #include "importmidi_chord.h"
 #include "importmidi_tuplet.h"
 #include "importmidi_operations.h"
-#include "importmidi_voice.h"
 #include "libmscore/score.h"
 #include "midi/midifile.h"
 
@@ -44,7 +43,6 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
             const Drumset* const drumset = mtrack.mtrack->drumTrack() ? smDrumset : 0;
             if (!drumset)
                   continue;
-            bool changed = false;
                               // all chords of drum track should have voice == 0
                               // because allowedVoices == V_1 (see MidiImportOperations)
                               // also, all chords should have different onTime values
@@ -55,36 +53,46 @@ void splitDrumVoices(std::multimap<int, MTrack> &tracks)
                        "MidiDrum::splitDrumVoices",
                        "All voices of drum track should be zero here");
 
-            std::multimap<ReducedFraction,
-                 std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> insertedTuplets;
-            const ReducedFraction maxChordLength = MChord::findMaxChordLength(chords);
-
             for (auto chordIt = chords.begin(); chordIt != chords.end(); ++chordIt) {
-                  const auto &notes = chordIt->second.notes;
+                  const ReducedFraction onTime = chordIt->first;
+                  MidiChord &chord = chordIt->second;
+                  auto &notes = chord.notes;
                               // search for the drumset pitches with voice = 1
                   QSet<int> notesToMove;
                   for (int i = 0; i != notes.size(); ++i) {
-                        if (drumset->isValid(notes[i].pitch)
-                                    && drumset->voice(notes[i].pitch) == 1) {
+                        const int pitch = notes[i].pitch;
+                        if (drumset->isValid(pitch) && drumset->voice(pitch) == 1)
                               notesToMove.insert(i);
-                              }
                         }
-                  if (MidiVoice::splitChordToVoice(chordIt, notesToMove, 1,
-                                                   chords, mtrack.tuplets,
-                                                   insertedTuplets, maxChordLength, true)) {
-                        changed = true;
+                  if (notesToMove.isEmpty())
+                        continue;
+
+                  if (notesToMove.size() == notes.size()) {  // just move chord to another voice
+                        chord.voice = 1;
+                        }
+                  else {            // split chord
+                        MidiChord newChord(chord);
+                        newChord.notes.clear();
+                        newChord.voice = 1;
+                        QList<MidiNote> updatedOldNotes;
+
+                        for (int i = 0; i != notes.size(); ++i) {
+                              if (notesToMove.contains(i))
+                                    newChord.notes.append(notes[i]);
+                              else
+                                    updatedOldNotes.append(notes[i]);
+                              }
+
+                        notes = updatedOldNotes;
+
+                        Q_ASSERT_X(!notes.isEmpty(),
+                                   "MidiDrum::splitDrumVoices", "Old chord notes are empty");
+                        Q_ASSERT_X(!newChord.notes.isEmpty(),
+                                   "MidiDrum::splitDrumVoices", "New chord notes are empty");
+
+                        chordIt = chords.insert({onTime, newChord});
                         }
                   }
-
-            if (changed)
-                  MidiTuplet::removeEmptyTuplets(mtrack);
-
-            Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
-                       "MidiDrum::splitDrumVoices",
-                       "Not all tuplets are referenced in chords or notes after drum split");
-            Q_ASSERT_X(MidiVoice::areVoicesSame(mtrack.chords),
-                       "MidiDrum::splitDrumVoices", "Different voices of chord and tuplet "
-                       "after drum split");
             }
       }
 
