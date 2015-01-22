@@ -590,5 +590,20 @@ QString TimeSig::accessibleInfo()
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(timeSigString);
       }
 
+//---------------------------------------------------------
+//   operator==
+//---------------------------------------------------------
+
+bool TimeSig::operator==(const TimeSig& ts) const
+      {
+      return (timeSigType() == ts.timeSigType())
+         && (sig().identical(ts.sig()))
+         && (stretch() == ts.stretch())
+         && (groups() == ts.groups())
+         && (customText == ts.customText)
+         && (!customText || (_numeratorString == ts._numeratorString && _denominatorString == ts._denominatorString))
+         ;
+      }
+
 }
 

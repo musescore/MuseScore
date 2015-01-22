@@ -542,10 +542,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //  ignore if there is already a timesig
             //  with same values
             //
-            if ((ots->timeSigType() == ts->timeSigType())
-               && (ots->sig().identical(ns))
-               && (ots->stretch() == ts->stretch())
-               && ots->groups() == ts->groups()) {
+            if (*ots == *ts) {
                   delete ts;
                   return;
                   }
@@ -564,6 +561,10 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
             ots->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ns));
             ots->undoChangeProperty(P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
+            if (ts->hasCustomText()) {
+                  ots->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
+                  ots->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
+                  }
             foreach (Score* score, scoreList()) {
                   Measure* fm = score->tick2measure(tick);
                   for (Measure* m = fm; m; m = m->nextMeasure()) {
@@ -580,6 +581,10 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                   TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
                   undoChangeProperty(nsig, P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
+                  if (ts->hasCustomText()) {
+                        nsig->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
+                        nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
+                        }
                   }
             }
       else {
@@ -618,6 +623,10 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               nsig->setParent(seg);
                               nsig->setSig(ns, ts->timeSigType());
                               nsig->setGroups(ts->groups());
+                              if (ts->hasCustomText()) {
+                                    nsig->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
+                                    nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
+                                    }
                               undoAddElement(nsig);
                               }
                         else {
