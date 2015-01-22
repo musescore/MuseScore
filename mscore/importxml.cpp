@@ -586,6 +586,8 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
       else {
             qDebug("importMusicXml() file '%s' is not a valid MusicXML file", qPrintable(name));
             MScore::lastError = QObject::tr("File '%1' is not a valid MusicXML file").arg(name);
+            if (MScore::noGui)
+                  return Score::FileError::FILE_NO_ERROR;   // might as well try anyhow in converter mode
             if (musicXMLValidationErrorDialog(MScore::lastError, messageHandler.getErrors()) != QMessageBox::Yes)
                   return Score::FileError::FILE_USER_ABORT;
             }
