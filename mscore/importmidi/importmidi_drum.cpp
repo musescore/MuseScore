@@ -4,7 +4,6 @@
 #include "libmscore/staff.h"
 #include "libmscore/drumset.h"
 #include "importmidi_chord.h"
-#include "importmidi_tuplet.h"
 #include "importmidi_operations.h"
 #include "libmscore/score.h"
 #include "midi/midifile.h"
@@ -104,20 +103,19 @@ MTrack& getNewTrack(std::map<int, MTrack> &newTracks,
       if (newTrackIt == newTracks.end()) {
             newTrackIt = newTracks.insert({pitch, drumTrack}).first;
             MTrack &newTrack = newTrackIt->second;
-                        // chords and tuplets are copied and then cleared -
+                        // chords are copied and then cleared -
                         // not very efficient way but it's more safe for possible
                         // future additions of new fields in MTrack
             newTrack.chords.clear();
-            newTrack.tuplets.clear();
             newTrack.name = smDrumset->name(pitch);
+
+            Q_ASSERT(newTrack.tuplets.empty());
             }
       return newTrackIt->second;
       }
 
 std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
       {
-      Q_ASSERT(MidiTuplet::areAllTupletsDifferent(drumTrack.tuplets));
-
       std::map<int, MTrack> newTracks;         // <percussion note pitch, track>
       if (drumTrack.chords.empty())
             return newTracks;
@@ -131,41 +129,8 @@ std::map<int, MTrack> splitDrumTrack(const MTrack &drumTrack)
                   newChord.notes.clear();
                   newChord.notes.push_back(note);
                   MTrack &newTrack = getNewTrack(newTracks, drumTrack, note.pitch);
-
-                  if (chord.isInTuplet) {
-                        auto newTupletIt = MidiTuplet::findTupletContainingTime(
-                                                newChord.voice, onTime, newTrack.tuplets, true);
-                        if (newTupletIt == newTrack.tuplets.end()) {
-                              MidiTuplet::TupletData newTupletData = chord.tuplet->second;
-                              newTupletData.voice = newChord.voice;
-                              newTupletIt = newTrack.tuplets.insert({chord.tuplet->first,
-                                                                     newTupletData});
-                              }
-                                    // hack to remove constness of iterator
-                        newChord.tuplet = newTrack.tuplets.erase(newTupletIt, newTupletIt);
-                        }
-                  if (note.isInTuplet) {
-                        auto newTupletIt = MidiTuplet::findTupletContainingTime(
-                                          newChord.voice, note.offTime, newTrack.tuplets, false);
-                        if (newTupletIt == newTrack.tuplets.end()) {
-                              MidiTuplet::TupletData newTupletData = note.tuplet->second;
-                              newTupletData.voice = newChord.voice;
-                              newTupletIt = newTrack.tuplets.insert({note.tuplet->first,
-                                                                     newTupletData});
-                              }
-                                    // hack to remove constness of iterator
-                        newChord.notes.front().tuplet = newTrack.tuplets.erase(
-                                                            newTupletIt, newTupletIt);
-                        }
                   newTrack.chords.insert({onTime, newChord});
                   }
-            }
-
-      for (auto &track: newTracks)
-            {
-            Q_ASSERT(MidiTuplet::areAllTupletsDifferent(track.second.tuplets));
-
-            MidiTuplet::removeEmptyTuplets(track.second);
             }
 
       return newTracks;
