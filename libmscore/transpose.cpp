@@ -212,9 +212,10 @@ int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegre
 
 //---------------------------------------------------------
 //   transpose
+//    return false on failure
 //---------------------------------------------------------
 
-void Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
+bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
       {
       int npitch;
       int ntpc1, ntpc2;
@@ -225,14 +226,18 @@ void Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
             }
       else
             ntpc2 = ntpc1;
+      if (npitch > 127)
+            return false;
       undoChangePitch(n, npitch, ntpc1, ntpc2);
+      return true;
       }
 
 //---------------------------------------------------------
 //   transpose
+//    return false on failure
 //---------------------------------------------------------
 
-void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKey,
+bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKey,
   int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
       {
       bool rangeSelection = selection().isRange();
@@ -285,8 +290,10 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         Note* note = static_cast<Note*>(e);
                         if (mode == TransposeMode::DIATONICALLY)
                               note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
-                        else
-                              transpose(note, interval, useDoubleSharpsFlats);
+                        else {
+                              if (!transpose(note, interval, useDoubleSharpsFlats))
+                                    return false;
+                              }
                         }
                   else if ((e->type() == Element::Type::HARMONY) && transposeChordNames) {
                         Harmony* h  = static_cast<Harmony*>(e);
@@ -321,7 +328,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               }
                         }
                   }
-            return;
+            return true;
             }
 
       //--------------------------
@@ -376,15 +383,19 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         for (Note* n : nl) {
                               if (mode == TransposeMode::DIATONICALLY)
                                     n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
-                              else
-                                    transpose(n, interval, useDoubleSharpsFlats);
+                              else {
+                                    if (!transpose(n, interval, useDoubleSharpsFlats))
+                                          return false;
+                                    }
                               }
                         for (Chord* g : chord->graceNotes()) {
                               for (Note* n : g->notes()) {
                                     if (mode == TransposeMode::DIATONICALLY)
                                           n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
-                                    else
-                                          transpose(n, interval, useDoubleSharpsFlats);
+                                    else {
+                                          if (!transpose(n, interval, useDoubleSharpsFlats))
+                                                return false;
+                                          }
                                     }
                               }
                         }
@@ -449,6 +460,7 @@ void Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         }
                   }
 //            }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -547,10 +559,16 @@ void Score::transposeSemitone(int step)
 
       cmdSelectAll();
       startCmd();
-      transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false);
-      deselectAll();
-      setLayoutAll(true);
-      endCmd();
+      if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
+            endCmd(true);
+            qDebug("Score::transposeSemitone: failed");
+            // TODO: popup message?
+            }
+      else {
+            deselectAll();
+            setLayoutAll(true);
+            endCmd(false);
+            }
       }
 
 //---------------------------------------------------------

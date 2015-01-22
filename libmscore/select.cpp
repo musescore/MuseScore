@@ -314,7 +314,6 @@ void Selection::clear()
 void Selection::remove(Element* el)
       {
       _el.removeOne(el);
-      qDebug("deselect1 %p <%s>", el, el->name());
       el->setSelected(false);
       updateState();
       }

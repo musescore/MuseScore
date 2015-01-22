@@ -503,8 +503,11 @@ class Score : public QObject {
       void cmdAddHairpin(bool);
       void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
-      void transpose(Note* n, Interval, bool useSharpsFlats);
+
+      bool transpose(Note* n, Interval, bool useSharpsFlats);
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
+      bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
+         bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
       bool appendScore(Score*);
 
@@ -944,8 +947,6 @@ class Score : public QObject {
       const QList<Layer>& layer() const     { return _layer;       }
       bool tagIsValid(uint tag) const       { return tag & _layer[_currentLayer].tags; }
 
-      void transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
-         bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
       void addViewer(MuseScoreView* v)      { viewer.append(v);    }
       void removeViewer(MuseScoreView* v)   { viewer.removeAll(v); }
       const QList<MuseScoreView*>& getViewer() const { return viewer;       }
