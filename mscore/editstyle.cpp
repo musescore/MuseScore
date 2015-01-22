@@ -47,6 +47,25 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs     = s;
 
+      styleWidgets = {
+            { StyleIdx::staffUpperBorder,        staffUpperBorder       },
+            { StyleIdx::staffUpperBorder,        staffLowerBorder       },
+            { StyleIdx::staffDistance,           staffDistance          },
+            { StyleIdx::akkoladeDistance,        akkoladeDistance       },
+            { StyleIdx::minSystemDistance,       minSystemDistance      },
+            { StyleIdx::maxSystemDistance,       maxSystemDistance      },
+            { StyleIdx::lyricsDistance,          lyricsDistance         },
+            { StyleIdx::lyricsMinBottomDistance, lyricsMinBottomDistance },
+            { StyleIdx::systemFrameDistance,     systemFrameDistance    },
+            { StyleIdx::frameSystemDistance,     frameSystemDistance    },
+            { StyleIdx::minMeasureWidth,         minMeasureWidth_2      },
+            { StyleIdx::barWidth,                barWidth               },
+            { StyleIdx::endBarWidth,             endBarWidth            },
+            { StyleIdx::endBarDistance,          endBarDistance         },
+            { StyleIdx::doubleBarWidth,          doubleBarWidth         },
+            { StyleIdx::doubleBarDistance,       doubleBarDistance      },
+            };
+
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
       buttonApplyToAllParts->setEnabled(cs->parentScore() != nullptr);
 
@@ -160,7 +179,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       while (i.hasNext()) {
             i.next();
             toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(i.key()).arg(i.value());
-      }
+            }
       toolTipHeaderFooter += QString("</table></body></html>");
       showHeader->setToolTip(toolTipHeaderFooter);
       showFooter->setToolTip(toolTipHeaderFooter);
@@ -196,7 +215,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       CR(resetHairpinContinueHeight, StyleIdx::hairpinContHeight);
 #undef CR
       connect(mapper, SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
-
+      resize(904, 577); // override designer values
       }
 
 //---------------------------------------------------------
@@ -273,24 +292,24 @@ void EditStyle::applyToAllParts()
 
 void EditStyle::getValues()
       {
-      lstyle.set(StyleIdx::staffUpperBorder,        Spatium(staffUpperBorder->value()));
-      lstyle.set(StyleIdx::staffLowerBorder,        Spatium(staffLowerBorder->value()));
-      lstyle.set(StyleIdx::staffDistance,           Spatium(staffDistance->value()));
-      lstyle.set(StyleIdx::akkoladeDistance,        Spatium(akkoladeDistance->value()));
-      lstyle.set(StyleIdx::minSystemDistance,       Spatium(minSystemDistance->value()));
-      lstyle.set(StyleIdx::maxSystemDistance,       Spatium(maxSystemDistance->value()));
-      lstyle.set(StyleIdx::lyricsDistance,          Spatium(lyricsDistance->value()));
-      lstyle.set(StyleIdx::lyricsMinBottomDistance, Spatium(lyricsMinBottomDistance->value()));
-      lstyle.set(StyleIdx::lyricsLineHeight,        Spatium(lyricsLineHeight->value() * .01));
-      lstyle.set(StyleIdx::systemFrameDistance,     Spatium(systemFrameDistance->value()));
-      lstyle.set(StyleIdx::frameSystemDistance,     Spatium(frameSystemDistance->value()));
-      lstyle.set(StyleIdx::minMeasureWidth,         Spatium(minMeasureWidth_2->value()));
+      for (const StyleWidget sw : styleWidgets) {
+            StyleValueType svt = MStyle::valueType(sw.idx);
+            switch (svt) {
+                  case StyleValueType::SPATIUM:
+                        lstyle.set(sw.idx, Spatium(qobject_cast<QDoubleSpinBox*>(sw.widget)->value()));
+                        break;
+                  case StyleValueType::DOUBLE:
+                  case StyleValueType::BOOL:
+                  case StyleValueType::INT:
+                  case StyleValueType::DIRECTION:
+                  case StyleValueType::STRING:
+                        break;
+                  };
+            }
 
-      lstyle.set(StyleIdx::barWidth,                Spatium(barWidth->value()));
-      lstyle.set(StyleIdx::endBarWidth,             Spatium(endBarWidth->value()));
-      lstyle.set(StyleIdx::endBarDistance,          Spatium(endBarDistance->value()));
-      lstyle.set(StyleIdx::doubleBarWidth,          Spatium(doubleBarWidth->value()));
-      lstyle.set(StyleIdx::doubleBarDistance,       Spatium(doubleBarDistance->value()));
+      //TODO: convert the rest:
+
+      lstyle.set(StyleIdx::lyricsLineHeight,        Spatium(lyricsLineHeight->value() * .01));
 
       lstyle.set(StyleIdx::repeatBarTips,           showRepeatBarTips->isChecked());
       lstyle.set(StyleIdx::startBarlineSingle,      showStartBarlineSingle->isChecked());
@@ -551,24 +570,24 @@ void EditStyle::setFooterText(StyleIdx idx, QTextEdit* te)
 
 void EditStyle::setValues()
       {
-      staffUpperBorder->setValue(lstyle.value(StyleIdx::staffUpperBorder).toDouble());
-      staffLowerBorder->setValue(lstyle.value(StyleIdx::staffLowerBorder).toDouble());
-      staffDistance->setValue(lstyle.value(StyleIdx::staffDistance).toDouble());
-      akkoladeDistance->setValue(lstyle.value(StyleIdx::akkoladeDistance).toDouble());
-      minSystemDistance->setValue(lstyle.value(StyleIdx::minSystemDistance).toDouble());
-      maxSystemDistance->setValue(lstyle.value(StyleIdx::maxSystemDistance).toDouble());
-      lyricsDistance->setValue(lstyle.value(StyleIdx::lyricsDistance).toDouble());
-      lyricsMinBottomDistance->setValue(lstyle.value(StyleIdx::lyricsMinBottomDistance).toDouble());
-      lyricsLineHeight->setValue(lstyle.value(StyleIdx::lyricsLineHeight).toDouble() * 100.0);
-      systemFrameDistance->setValue(lstyle.value(StyleIdx::systemFrameDistance).toDouble());
-      frameSystemDistance->setValue(lstyle.value(StyleIdx::frameSystemDistance).toDouble());
-      minMeasureWidth_2->setValue(lstyle.value(StyleIdx::minMeasureWidth).toDouble());
+      for (const StyleWidget sw : styleWidgets) {
+            StyleValueType svt = MStyle::valueType(sw.idx);
+            switch (svt) {
+                  case StyleValueType::SPATIUM:
+                        qobject_cast<QDoubleSpinBox*>(sw.widget)->setValue(lstyle.value(sw.idx).toDouble());
+                        break;
+                  case StyleValueType::DOUBLE:
+                  case StyleValueType::BOOL:
+                  case StyleValueType::INT:
+                  case StyleValueType::DIRECTION:
+                  case StyleValueType::STRING:
+                        break;
+                  };
+            }
 
-      barWidth->setValue(lstyle.value(StyleIdx::barWidth).toDouble());
-      endBarWidth->setValue(lstyle.value(StyleIdx::endBarWidth).toDouble());
-      endBarDistance->setValue(lstyle.value(StyleIdx::endBarDistance).toDouble());
-      doubleBarWidth->setValue(lstyle.value(StyleIdx::doubleBarWidth).toDouble());
-      doubleBarDistance->setValue(lstyle.value(StyleIdx::doubleBarDistance).toDouble());
+      //TODO: convert the rest:
+
+      lyricsLineHeight->setValue(lstyle.value(StyleIdx::lyricsLineHeight).toDouble() * 100.0);
 
       showRepeatBarTips->setChecked(lstyle.value(StyleIdx::repeatBarTips).toBool());
       showStartBarlineSingle->setChecked(lstyle.value(StyleIdx::startBarlineSingle).toBool());

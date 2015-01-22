@@ -242,6 +242,15 @@ class StyleTypes {
 
 static const StyleTypes styleTypes;
 
+//---------------------------------------------------------
+//   valueType
+//---------------------------------------------------------
+
+StyleValueType MStyle::valueType(const StyleIdx i)
+      {
+      return styleTypes.valueType(i);
+      }
+
 static const QString ff("FreeSerif");
 
 //---------------------------------------------------------

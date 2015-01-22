@@ -2224,7 +2224,7 @@
             <item>
              <widget class="QCheckBox" name="scaleBarlines">
               <property name="text">
-               <string>Scale Barlines to staff size</string>
+               <string>Scale barlines to staff size</string>
               </property>
              </widget>
             </item>
