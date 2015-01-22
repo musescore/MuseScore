@@ -1383,6 +1383,7 @@ void convertMidi(Score *score, const MidiFile *mf)
 
       LRHand::splitIntoLeftRightHands(tracks);
       MidiDrum::splitDrumVoices(tracks);
+      MidiDrum::splitDrumTracks(tracks);
       quantizeAllTracks(tracks, sigmap, lastTick);
       MChord::removeOverlappingNotes(tracks);
 
@@ -1395,7 +1396,6 @@ void convertMidi(Score *score, const MidiFile *mf)
       Simplify::simplifyDurationsNotDrums(tracks, sigmap);
       if (MidiVoice::separateVoices(tracks, sigmap))
             Simplify::simplifyDurationsNotDrums(tracks, sigmap);    // again
-      MidiDrum::splitDrumTracks(tracks);
       Simplify::simplifyDurationsForDrums(tracks, sigmap);
       MChord::splitUnequalChords(tracks);
                   // no more track insertion/reordering/deletion from now
