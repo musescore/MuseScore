@@ -318,8 +318,8 @@ void BarLine::draw(QPainter* painter) const
       if (y2-y1 < 0.1)
             return;
 
-      qreal _spatium = score()->spatium();
-      qreal lw = score()->styleS(StyleIdx::barWidth).val() * _spatium;
+//      qreal _spatium = spatium();
+      qreal lw = point(score()->styleS(StyleIdx::barWidth));
 
       QPen pen(curColor(), lw, Qt::SolidLine, Qt::FlatCap);
       painter->setPen(pen);
@@ -341,8 +341,8 @@ void BarLine::draw(QPainter* painter) const
 
             case BarLineType::END:
                   {
-                  qreal lw2 = score()->styleS(StyleIdx::endBarWidth).val() * _spatium;
-                  qreal d   = score()->styleS(StyleIdx::endBarDistance).val() * _spatium;
+                  qreal lw2 = point(score()->styleS(StyleIdx::endBarWidth));
+                  qreal d   = point(score()->styleS(StyleIdx::endBarDistance));
 
                   painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
                   pen.setWidthF(lw2);
@@ -895,7 +895,7 @@ void BarLine::endEditDrag()
 
 qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
       {
-      qreal _spatium = score->spatium();
+      qreal _spatium = score->spatium() * mag;
       qreal dw = score->styleS(StyleIdx::barWidth).val() * _spatium;
 
       qreal dotwidth = score->scoreFont()->width(SymId::repeatDot, mag);
