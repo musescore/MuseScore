@@ -1015,7 +1015,7 @@ class Score : public QObject {
       void setNoteHeadWidth( qreal n) { _noteHeadWidth = n; }
 
       QList<int> uniqueStaves() const;
-      void transpositionChanged(Part*);
+      void transpositionChanged(Part*, Interval);
 
       void moveUp(ChordRest*);
       void moveDown(ChordRest*);

@@ -631,10 +631,19 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
 //   transpositionChanged
 //---------------------------------------------------------
 
-void Score::transpositionChanged(Part* part)
+void Score::transpositionChanged(Part* part, Interval oldV)
       {
-      // TODO: grace notes
+      Interval v = part->instr()->transpose();
+      v.flip();
 
+      // transpose keys first
+      if (!styleB(StyleIdx::concertPitch)) {
+            Interval diffV(oldV.chromatic + v.chromatic);
+            int tickEnd = lastSegment() ? lastSegment()->tick() : 0;
+            transposeKeys(part->startTrack() / VOICES, part->endTrack() / VOICES, 0, tickEnd, diffV);
+            }
+
+      // now transpose notes
       for (Segment* s = firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
             for (Staff* st : *part->staves()) {
                   if (st->staffType()->group() == StaffGroup::PERCUSSION)
@@ -644,8 +653,14 @@ void Score::transpositionChanged(Part* part)
                   for (int track = t1; track < t2; ++track) {
                         Chord* c = static_cast<Chord*>(s->element(track));
                         if (c && c->type() == Element::Type::CHORD) {
+                              for (Chord* gc : c->graceNotes()) {
+                                    for (Note* n : gc->notes()) {
+                                          int tpc = transposeTpc(n->tpc1(), v, true);
+                                          n->undoSetTpc2(tpc);
+                                          }
+                                    }
                               for (Note* n : c->notes()) {
-                                    int tpc = n->tpc2default(n->pitch());
+                                    int tpc = transposeTpc(n->tpc1(), v, true);
                                     n->undoSetTpc2(tpc);
                                     }
                               }
