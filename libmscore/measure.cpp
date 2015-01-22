@@ -369,7 +369,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                               // compute accidental
                               //
                               int tpc  = note1->tpc();
-                              int line = absStep(tpc, note1->pitch());
+                              int line = absStep(tpc, note1->epitch());
 
                               if (note == note1)
                                     return tversatz.accidentalVal(line);
@@ -383,7 +383,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                         // compute accidental
                         //
                         int tpc  = note1->tpc();
-                        int line = absStep(tpc, note1->pitch());
+                        int line = absStep(tpc, note1->epitch());
 
                         if (note == note1)
                               return tversatz.accidentalVal(line);
@@ -426,7 +426,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
                               if (note->tieBack())
                                     continue;
                               int tpc  = note->tpc();
-                              int l    = absStep(tpc, note->pitch());
+                              int l    = absStep(tpc, note->epitch());
                               tversatz.setAccidentalVal(l, tpc2alter(tpc));
                               }
                         }
@@ -435,7 +435,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
                         if (note->tieBack())
                               continue;
                         int tpc    = note->tpc();
-                        int l      = absStep(tpc, note->pitch());
+                        int l      = absStep(tpc, note->epitch());
                         tversatz.setAccidentalVal(l, tpc2alter(tpc));
                         }
                   }
