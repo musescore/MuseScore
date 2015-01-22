@@ -518,6 +518,7 @@ void EditStyle::getValues()
 
       lstyle.set(StyleIdx::barreLineWidth,           barreLineWidth->value());
       lstyle.set(StyleIdx::fretMag,                  fretMag->value());
+      lstyle.set(StyleIdx::scaleBarlines,            scaleBarlines->isChecked());
       }
 
 //---------------------------------------------------------
@@ -816,6 +817,7 @@ void EditStyle::setValues()
 
       barreLineWidth->setValue(lstyle.value(StyleIdx::barreLineWidth).toDouble());
       fretMag->setValue(lstyle.value(StyleIdx::fretMag).toDouble());
+      scaleBarlines->setChecked(lstyle.value(StyleIdx::scaleBarlines).toBool());
       }
 
 //---------------------------------------------------------
