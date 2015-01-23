@@ -1001,19 +1001,23 @@ QString ChordRest::durationUserName()
                   }
             }
       QString dotString = "";
+      if(!tupletType.isEmpty())
+          dotString += " ";
 
       switch (dots()) {
             case 1:
-                  dotString += " " + tr("Dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+                  dotString += tr("Dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             case 2:
-                  dotString += " " + tr("Double dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+                  dotString += tr("Double dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             case 3:
-                  dotString += " " + tr("Triple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+                  dotString += tr("Triple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
+            default:
+                  dotString += durationType().durationTypeUserName();
             }
-      return QString("%2%3").arg(tupletType).arg(dotString);
+      return QString("%1%2").arg(tupletType).arg(dotString);
       }
 
 //---------------------------------------------------------
