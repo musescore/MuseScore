@@ -52,8 +52,9 @@ class Lyrics : public Text {
       // MELISMA FIRST UNDERSCORE:
       // used as_ticks value to mark a melisma for which only the first chord has been spanned so far
       // and to give the user a visible feedback that the undercore has been actually entered;
-      // it will be cleared to 0 by LyricsLine::layout(), so that it will not be carried over
-      // if the melisma is not extended beyond a signle chord
+      // it should be cleared to 0 at some point, so that it will not be carried over
+      // if the melisma is not extended beyond a single chord, but no suitable place to do this
+      // has been identified yet.
       static const int  TEMP_MELISMA_TICKS      = 1;
 
       // metrics for dashes and melisma; all in sp. units:
@@ -65,7 +66,7 @@ class Lyrics : public Text {
       static constexpr qreal  LYRICS_WORD_MIN_DISTANCE            = 0.33;     // min. distance between lyrics from different words
       // These values are used when USE_FONT_DASH_METRIC is not defined
 #if !defined(USE_FONT_DASH_METRIC)
-      static constexpr qreal  LYRICS_DASH_DEFAULT_LENGHT          = 0.80;     // in sp. units
+      static constexpr qreal  LYRICS_DASH_DEFAULT_LENGTH          = 0.80;     // in sp. units
       static constexpr qreal  LYRICS_DASH_DEFAULT_LINE_THICKNESS  = 0.15;     // in sp. units
       static constexpr qreal  LYRICS_DASH_Y_POS_RATIO             = 0.25;     // the fraction of lyrics font tot. height to
                                                                               // raise the dashes above text base line;
