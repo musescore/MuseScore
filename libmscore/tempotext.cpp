@@ -293,13 +293,12 @@ QString TempoText::accessibleInfo()
                   case 3: dots = tr("Triple dotted %1").arg(t.durationTypeUserName());
                         break;
                   default:
-                        dots = "";
+                        dots = t.durationTypeUserName();
                         break;
                   }
 
             QString bpm = plainText().split(" = ").back();
 
-            //return Element::accessibleInfo() + dots + " " + t.durationTypeUserName() + " " + tr("note = %1").arg(bpm);
             return QString("%1: %2 %3").arg(Element::accessibleInfo()).arg(dots).arg(tr("note = %1").arg(bpm));
             }
       else
