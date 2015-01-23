@@ -950,7 +950,8 @@ void ScoreView::setScore(Score* s)
             }
 
       _score = s;
-      _score->addViewer(this);
+      if (_score)
+            _score->addViewer(this);
 
       if (shadowNote == 0) {
             shadowNote = new ShadowNote(_score);
