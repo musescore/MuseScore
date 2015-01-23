@@ -129,14 +129,16 @@ void AbstractSlider::keyPressEvent(QKeyEvent* ev)
       double oval = _value;
 
       switch (ev->key()) {
-            case Qt::Key_Home:    _value = _minValue; break;
-            case Qt::Key_End:     _value = _maxValue; break;
+            case Qt::Key_Home:      _value = _minValue; break;
+            case Qt::Key_End:       _value = _maxValue; break;
             case Qt::Key_Up:
-            case Qt::Key_Left:    _value += lineStep(); break;
+            case Qt::Key_Left:      _value += lineStep(); break;
             case Qt::Key_Down:
-            case Qt::Key_Right:   _value -= lineStep(); break;
-            case Qt::Key_PageDown: _value -= pageStep(); break;
-            case Qt::Key_PageUp:   _value += pageStep(); break;
+            case Qt::Key_Right:     _value -= lineStep(); break;
+            case Qt::Key_PageDown:  _value -= pageStep(); break;
+            case Qt::Key_PageUp:    _value += pageStep(); break;
+            case Qt::Key_Delete:
+            case Qt::Key_Backspace: _value = ev->modifiers() & Qt::ShiftModifier ? dclickValue2() : dclickValue1(); break;
             default:
                   break;
             }
@@ -146,6 +148,19 @@ void AbstractSlider::keyPressEvent(QKeyEvent* ev)
             _value = _maxValue;
       if (oval != _value)
             valueChange();
+      }
+
+//---------------------------------------------------------
+//   mouseDoubleClickEvent
+//---------------------------------------------------------
+
+void AbstractSlider::mouseDoubleClickEvent(QMouseEvent* ev)
+      {
+      if (ev->button() == Qt::RightButton)
+            _value = _dclickValue2;
+      else
+            _value = _dclickValue1;
+      valueChange();
       }
 
 //---------------------------------------------------------

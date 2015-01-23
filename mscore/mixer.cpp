@@ -54,6 +54,7 @@ PartEdit::PartEdit(QWidget* parent)
 
 void PartEdit::setPart(Part* p, Channel* a)
       {
+      Channel dummy;
       channel = a;
       part    = p;
       QString s = part->partName();
@@ -63,9 +64,17 @@ void PartEdit::setPart(Part* p, Channel* a)
       mute->setChecked(a->mute);
       solo->setChecked(a->solo);
       volume->setValue(a->volume);
+      volume->setDclickValue1(dummy.volume);
+      volume->setDclickValue2(dummy.volume);
       reverb->setValue(a->reverb);
+      reverb->setDclickValue1(dummy.reverb);
+      reverb->setDclickValue2(dummy.reverb);
       chorus->setValue(a->chorus);
+      chorus->setDclickValue1(dummy.chorus);
+      chorus->setDclickValue2(dummy.chorus);
       pan->setValue(a->pan);
+      pan->setDclickValue1(0);
+      pan->setDclickValue2(0);
       for (int i = 0; i < patch->count(); ++i) {
             MidiPatch* p = (MidiPatch*)patch->itemData(i, Qt::UserRole).value<void*>();
             if (a->synti == p->synti && a->program == p->prog && a->bank == p->bank) {
