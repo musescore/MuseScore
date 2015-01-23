@@ -585,6 +585,7 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
       void readCapxLyrics(XmlReader& e);
       void readCapxNotes(XmlReader& e);
       void readCapxStem(XmlReader& e);
+      void readCapxArticulation(XmlReader& e);
       QList<Verse> verse;
       QList<CNote> notes;
       StemDir stemDir;

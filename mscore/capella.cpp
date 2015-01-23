@@ -214,6 +214,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                           case 'b':   // pedal asterisk *
                                           case 'v':   // 8va
                                           case 186:   // 15ma
+                                                qDebug("Import of Capella text articulation %x(%c) not yet implemented", code, code);
                                                 break;
                                           case 181:   // caesura
                                                 {
@@ -316,7 +317,6 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                                       }
                                                       break;
                                                 default:
-                                                      qDebug("====unsupported capella code %x(%c)", code, code);
                                                       break;
                                                 }
                                     break;
@@ -717,6 +717,17 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               }
 
                         processBasicDrawObj(o->objects, s, track, chord);
+                        switch (o->articulation) {
+                              case 1:   addArticulationText(score, chord, track, QString("staccato")); break;
+                              case 2:   addArticulationText(score, chord, track, QString("tenuto")); break;
+                              case 3:   addArticulationText(score, chord, track, QString("portato")); break;
+                              case 4:   addArticulationText(score, chord, track, QString("staccatissimo")); break;
+                              case 5:   addArticulationText(score, chord, track, QString("sforzato")); break;
+                              case 6:   addArticulationText(score, chord, track, QString("marcato")); break;
+                              case 7:   // "weak beat"
+                              case 8:   // "strong beat"
+                              default:  if(o->articulation) qDebug("Articulation # %d not implemented", o->articulation); break;
+                              }
 
                         if (tuplet) {
                               if (++nTuplet >= tupletCount) {
