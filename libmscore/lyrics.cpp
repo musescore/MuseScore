@@ -797,7 +797,7 @@ void LyricsLineSegment::layout()
             _dashLength = lyr->dashLength();
 #else
             rypos()     -= lyr->bbox().height() * Lyrics::LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
-            _dashLength = Lyrics::LYRICS_DASH_DEFAULT_LENGHT * sp;                    // and dash length
+            _dashLength = Lyrics::LYRICS_DASH_DEFAULT_LENGTH * sp;                    // and dash length
 #endif
             qreal len         = pos2().x();
             qreal minDashLen  = Lyrics::LYRICS_DASH_MIN_LENGTH * sp;
