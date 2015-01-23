@@ -85,7 +85,6 @@ Mixer::Mixer(QWidget* parent)
       {
       setWindowTitle(tr("MuseScore: Mixer"));
       setWidgetResizable(true);
-//      setWindowFlags(Qt::Dialog);
       setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 

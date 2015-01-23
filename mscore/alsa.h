@@ -53,9 +53,9 @@ class AlsaDriver {
 
       enum { MAXPFD = 8, MAXPLAY = 4 };
 
-      int setHwpar(snd_pcm_t* handle, snd_pcm_hw_params_t* hwpar);
-      int setSwpar(snd_pcm_t* handle, snd_pcm_sw_params_t* swpar);
-      int recover();
+      bool setHwpar(snd_pcm_t* handle, snd_pcm_hw_params_t* hwpar);
+      bool setSwpar(snd_pcm_t* handle, snd_pcm_sw_params_t* swpar);
+      bool recover();
 
       unsigned int           _rate;
       snd_pcm_uframes_t      _frsize;
