@@ -20,19 +20,7 @@
 
 namespace Ms {
 
-// all in sp. units:
-static const qreal      MELISMA_DEFAULT_LINE_THICKNESS      = 0.10;     // for melisma line only;
-static const qreal      MELISMA_DEFAULT_PAD                 = 0.10;     // the empty space before a melisma line
-static const qreal      LYRICS_DASH_DEFAULT_STEP            = 16.0;     // the max. distance between dashes
-static const qreal      LYRICS_DASH_DEFAULT_PAD             = 0.05;     // the min. empty space before and after a dash
-static const qreal      LYRICS_DASH_MIN_LENGTH              = 0.25;     // below this length, the dash is skipped
-// These values are used when USE_FONT_DASH_METRIC is not defined in lyrics.h
-static const qreal      LYRICS_DASH_DEFAULT_LENGHT          = 0.80;     // in sp. units
-static const qreal      LYRICS_DASH_DEFAULT_LINE_THICKNESS  = 0.15;     // in sp. units
-static const qreal      LYRICS_DASH_Y_POS_RATIO             = 0.25;     // the fraction of lyrics font tot. height to
-                                                                        // raise the dashes above text base line;
-                                                                        // this usually raises at about 2/3 of x-height
-// sone useful values:
+// some useful values:
 static const qreal      HALF                                = 0.5;
 static const qreal      TWICE                               = 2.0;
 
@@ -586,7 +574,7 @@ LyricsLine::LyricsLine(Score* s)
 
       setGenerated(true);           // no need to save it, as it can be re-generated
       setDiagonal(false);
-      setLineWidth(Spatium(LYRICS_DASH_DEFAULT_LINE_THICKNESS));
+      setLineWidth(Spatium(Lyrics::LYRICS_DASH_DEFAULT_LINE_THICKNESS));
       setAnchor(Spanner::Anchor::SEGMENT);
       _nextLyrics = nullptr;
       }
@@ -605,7 +593,7 @@ void LyricsLine::layout()
       {
       bool tempMelismaTicks = (lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
       if (lyrics()->ticks() > 0) {              // melisma
-            setLineWidth(Spatium(MELISMA_DEFAULT_LINE_THICKNESS));
+            setLineWidth(Spatium(Lyrics::MELISMA_DEFAULT_LINE_THICKNESS));
             // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
             if (tempMelismaTicks)
                   lyrics()->setTicks(0);
@@ -759,7 +747,7 @@ void LyricsLineSegment::layout()
                   qreal sysXp       = sys->pagePos().x();
                   qreal offsetX     = lyrXp - sysXp + lyrX - pos().x() - pos2().x();
                   //                    syst.rel. X pos.   | as a delta from current end pos.
-                  offsetX           -= LYRICS_DASH_DEFAULT_PAD * sp;    // add ending padding
+                  offsetX           -= Lyrics::LYRICS_DASH_DEFAULT_PAD * sp;    // add ending padding
                   rxpos2()          += offsetX;
                   }
             }
@@ -774,7 +762,7 @@ void LyricsLineSegment::layout()
             qreal offsetX     = lyrXp - sysXp + lyrX + lyrW - pos().x();
             //               syst.rel. X pos. | lyr.advance | as a delta from current pos.
             // add initial padding
-            offsetX           += (isEndMelisma ? MELISMA_DEFAULT_PAD : LYRICS_DASH_DEFAULT_PAD) * sp;
+            offsetX           += (isEndMelisma ? Lyrics::MELISMA_DEFAULT_PAD : Lyrics::LYRICS_DASH_DEFAULT_PAD) * sp;
             rxpos()           += offsetX;
             rxpos2()          -= offsetX;
             }
@@ -808,11 +796,11 @@ void LyricsLineSegment::layout()
             rypos()     += lyr->dashY();
             _dashLength = lyr->dashLength();
 #else
-            rypos()     -= lyr->bbox().height() * LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
-            _dashLength = LYRICS_DASH_DEFAULT_LENGHT * sp;                    // and dash length
+            rypos()     -= lyr->bbox().height() * Lyrics::LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
+            _dashLength = Lyrics::LYRICS_DASH_DEFAULT_LENGHT * sp;                    // and dash length
 #endif
             qreal len         = pos2().x();
-            qreal minDashLen  = LYRICS_DASH_MIN_LENGTH * sp;
+            qreal minDashLen  = Lyrics::LYRICS_DASH_MIN_LENGTH * sp;
             if (len < minDashLen) {                                           // if no room for a dash
                   if (endOfSystem) {                                          //   if at end of system
                         rxpos2()          = minDashLen;                       //     draw minimal dash
@@ -822,13 +810,13 @@ void LyricsLineSegment::layout()
                   else                                                        //   if within system
                         _numOfDashes = 0;                                     //     draw no dash
                   }
-            else if (len < (LYRICS_DASH_DEFAULT_STEP * TWICE * sp)) {         // if no room for two dashes
+            else if (len < (Lyrics::LYRICS_DASH_DEFAULT_STEP * TWICE * sp)) { // if no room for two dashes
                   _numOfDashes = 1;                                           //    draw one dash
                   if (_dashLength > len)                                      // if no room for a full dash
                         _dashLength = len;                                    //    shorten it
                   }
             else
-                  _numOfDashes = len / (LYRICS_DASH_DEFAULT_STEP * sp);       // draw several dashes
+                  _numOfDashes = len / (Lyrics::LYRICS_DASH_DEFAULT_STEP * sp);// draw several dashes
             }
 
       // set bounding box
