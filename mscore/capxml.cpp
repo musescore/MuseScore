@@ -256,6 +256,25 @@ void ChordObj::readCapxStem(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   ChordObj::readCapxArticulation -- read <articulation> element
+//---------------------------------------------------------
+
+void ChordObj::readCapxArticulation(XmlReader& e)
+      {
+      QString art = e.attribute("type");
+      if      (art == "staccato")        articulation = 1;
+      else if (art == "tenuto")          articulation = 2;
+      else if (art == "staccato tenuto") articulation = 3;
+      else if (art == "staccatissimo")   articulation = 4;
+      else if (art == "normalAccent")    articulation = 5;
+      else if (art == "strongAccent")    articulation = 6;
+      else if (art == "weakBeat")        articulation = 7;
+      else if (art == "strongBeat")      articulation = 8;
+      else                               articulation = 0;
+      e.readNext();
+      }
+
+//---------------------------------------------------------
 //   ChordObj::readCapx -- capx equivalent of ChordObj::read
 //---------------------------------------------------------
 
@@ -289,8 +308,7 @@ void ChordObj::readCapx(XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "articulation") {
-                  qDebug("ChordObj::readCapx: found articulation (skipping)");
-                  e.skipCurrentElement();
+                  readCapxArticulation(e);
                   }
             else if (tag == "lyric") {
                   readCapxLyrics(e);
