@@ -2483,7 +2483,6 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                         if (preferences.musicxmlImportBreaks
                             && (newSystem == "yes" || newPage == "yes")) {
                               LayoutBreak* lb = new LayoutBreak(score);
-                              lb->setTrack(staff * VOICES);
                               lb->setLayoutBreakType(
                                     newSystem == "yes" ? LayoutBreak::Type::LINE : LayoutBreak::Type::PAGE
                                     );
