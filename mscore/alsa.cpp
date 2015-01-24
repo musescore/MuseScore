@@ -140,7 +140,6 @@ AlsaDriver::~AlsaDriver()
 
 bool AlsaDriver::pcmStart()
       {
-      int err;
       snd_pcm_sframes_t n = snd_pcm_avail_update(_play_handle);
       if (unsigned(n) != _frsize * _nfrags) {
             qDebug("Alsa_driver: %ld != %ld full buffer not available at start.", n, _frsize * _nfrags);
@@ -154,8 +153,9 @@ bool AlsaDriver::pcmStart()
                   snd_pcm_mmap_commit(_play_handle, _play_offs, _frsize);
                   }
             }
-      if ((err = snd_pcm_start (_play_handle)) < 0) {
-            qDebug ("Alsa_driver: pcm_start(play): %s.", snd_strerror (err));
+      int err = snd_pcm_start(_play_handle);
+      if (err < 0) {
+            qDebug ("Alsa_driver: pcmStart: pcm_start: %s.", snd_strerror (err));
             return false;
             }
       return true;
@@ -526,29 +526,20 @@ char* AlsaDriver::clear_32le(char* dst, int step, int nfrm)
 
 void AlsaDriver::write(int n, float* l, float* r)
       {
-      bool first = true;
       for (;;) {
+            int err = snd_pcm_wait(_play_handle, -1);
+            if (err < 0) {
+                  recover();
+                  continue;
+                  }
             int avail = snd_pcm_avail_update(_play_handle);
             if (avail < 0) {
+                  qDebug("AlsaDriver::write: snd_pcm_avail_update() (%s)", snd_strerror(avail));
                   recover();
-                  first = true;
                   continue;
                   }
-            if (avail < n) {
-                  if (first) {
-                        first = false;
-                        snd_pcm_start(_play_handle);
-                        }
-                  else {
-                        int err = snd_pcm_wait(_play_handle, -1);
-                        if (err < 0) {
-                              recover();
-                              first = true;
-                              }
-                        }
-                  continue;
-                  }
-            break;
+            else if (avail >= n)
+                  break;
             }
       if (mmappedInterface) {
             playInit(n);
@@ -679,6 +670,7 @@ void AlsaAudio::alsaLoop()
             perror("MuseScore: set realtime scheduler failed");
 
       if (!alsa->pcmStart()) {
+            alsa->pcmStop();
             runAlsa = 0;
             return;
             }
