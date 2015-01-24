@@ -1230,6 +1230,7 @@ void ScoreView::updateGrips()
       for (QRectF& gr : grip)
             gr = r;
 
+      defaultGrip = Grip::NO_GRIP;  // will be set by updateGrips for elements with grips
       editObject->updateGrips(&defaultGrip, grip);
 
       // updateGrips returns grips in page coordinates,
