@@ -3044,13 +3044,13 @@ void Score::layoutLinear()
       Page* page = getEmptyPage();
       page->appendSystem(system);
 
-      for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
+      for (MeasureBase* mb = first(); mb; mb = mb->next()) {
             Element::Type t = curMeasure->type();
             if (t == Element::Type::VBOX || t == Element::Type::TBOX || t == Element::Type::FBOX) {
                   curMeasure = curMeasure->next();
                   continue;
                   }
-            if (styleB(StyleIdx::createMultiMeasureRests) && t == Element::Type::MEASURE) {
+            if (styleB(StyleIdx::createMultiMeasureRests) && mb->type() == Element::Type::MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
                   if (m->hasMMRest())
                         mb = m->mmRest();
