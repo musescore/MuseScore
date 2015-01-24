@@ -1176,7 +1176,21 @@ bool Score::read(XmlReader& e)
             int n = nstaves();
             if (idx + barLineSpan > n) {
                   qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
-                  st->setBarLineSpan(n - idx);
+                  // span until last staff
+                  barLineSpan = n - idx;
+                  st->setBarLineSpan(barLineSpan);
+                  }
+            else if (idx == 0 && barLineSpan == 0) {
+                  qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
+                  // span from the first staff until the start of the next span
+                  barLineSpan = 1;
+                  for (int i = 1; i < n; ++i) {
+                        if (staff(i)->barLineSpan() == 0)
+                              ++barLineSpan;
+                        else
+                              break;
+                        }
+                  st->setBarLineSpan(barLineSpan);
                   }
             // check spanFrom
             if(st->barLineFrom() < MIN_BARLINE_SPAN_FROMTO)
