@@ -518,6 +518,18 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             if (srcStaff->primaryStaff()) {
                   int span = srcStaff->barLineSpan();
                   int sIdx = srcStaff->idx();
+                  if (dstStaffIdx == 0 && span == 0) {
+                        // this is first staff of new score,
+                        // but it was somewhere within a barline span in the old score
+                        // so, find beginning of span
+                        for (int i = 0; i <= sIdx; ++i) {
+                              span = oscore->staff(i)->barLineSpan();
+                              if (i + span > sIdx) {
+                                    sIdx = i;
+                                    break;
+                                    }
+                              }
+                        }
                   int eIdx = sIdx + span;
                   for (int staffIdx = sIdx; staffIdx < eIdx; ++staffIdx) {
                         if (!map.contains(staffIdx))
