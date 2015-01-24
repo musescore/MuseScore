@@ -121,8 +121,10 @@ void ChordRest::undoUnlink()
       DurationElement::undoUnlink();
       for (Articulation* a : _articulations)
             a->undoUnlink();
-      for (Lyrics* l : _lyricsList)
-            l->undoUnlink();
+      for (Lyrics* l : _lyricsList) {
+            if (l)
+                  l->undoUnlink();
+            }
       }
 
 //---------------------------------------------------------
