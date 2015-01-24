@@ -1419,7 +1419,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
 
 void Score::changeAccidental(Note* note, Accidental::Type accidental)
       {
-      Chord* chord     = note->chord();
+      Chord* chord = note->chord();
       if (!chord)
             return;
       Segment* segment = chord->segment();
@@ -1428,12 +1428,12 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
       Measure* measure = segment->measure();
       if (!measure)
             return;
-      int tick         = segment->tick();
-      Staff* estaff    = staff(chord->staffIdx() + chord->staffMove());
+      int tick = segment->tick();
+      Staff* estaff = staff(chord->staffIdx() + chord->staffMove());
       if (!estaff)
             return;
-      ClefType clef    = estaff->clef(tick);
-      int step         = ClefInfo::pitchOffset(clef) - note->line();
+      ClefType clef = estaff->clef(tick);
+      int step      = ClefInfo::pitchOffset(clef) - note->line();
       while (step < 0)
             step += 7;
       step %= 7;
@@ -1492,7 +1492,10 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
                         undoRemoveElement(a);
                   }
             else if (forceAdd) {
-                  Accidental* a = new Accidental(this);
+                  Accidental* a = note->accidental();
+                  if (a)
+                        undoRemoveElement(a);
+                  a = new Accidental(this);
                   a->setParent(note);
                   a->setAccidentalType(accidental);
                   a->setRole(Accidental::Role::USER);
@@ -1500,7 +1503,6 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
                   }
             changeAccidental2(note, pitch, tpc);
             }
-
       }
 
 //---------------------------------------------------------
