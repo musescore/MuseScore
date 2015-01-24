@@ -1688,7 +1688,7 @@ static Breath* hasBreathMark(Chord* ch)
       Segment* s = ch->segment();
       s = s->next1();
       Breath* b = 0;
-      if (s->segmentType() == Segment::Type::Breath)
+      if (s && s->segmentType() == Segment::Type::Breath)
             b = static_cast<Breath*>(s->element(ch->track()));
       return b;
       }
