@@ -1226,16 +1226,12 @@ void Chord::layoutStem1()
                   stem->setGenerated(true);
                   score()->undoAddElement(stem);
                   }
-            if (_noteType == NoteType::ACCIACCATURA) {
-                  if (beam() && beam()->elements().front() == this) {
-                        if (!_stemSlash)
-                              add(new StemSlash(score()));
-                        }
-                  else {
-                        if (_stemSlash)
-                              remove(_stemSlash);
-                        }
+            if ((_noteType == NoteType::ACCIACCATURA) && !(beam() && beam()->elements().front() != this)) {
+                  if (!_stemSlash)
+                        add(new StemSlash(score()));
                   }
+            else if (_stemSlash)
+                  remove(_stemSlash);
             }
       else {
             if (_stem)
