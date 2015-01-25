@@ -3,7 +3,7 @@
 <score-partwise>
   <work>
     <work-number>MuseScore testfile</work-number>
-    <work-title>Multi Instrument Part</work-title>
+    <work-title>Multi Instrument Part 1</work-title>
     </work>
   <identification>
     <encoding>
@@ -21,11 +21,21 @@
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
       <score-instrument id="P1-I1">
+        <instrument-name>Piano</instrument-name>
+        </score-instrument>
+      <score-instrument id="P1-I2">
         <instrument-name>Flute</instrument-name>
         </score-instrument>
       <midi-device id="P1-I1" port="1"></midi-device>
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      <midi-device id="P1-I2" port="1"></midi-device>
+      <midi-instrument id="P1-I2">
+        <midi-channel>2</midi-channel>
         <midi-program>74</midi-program>
         <volume>78.7402</volume>
         <pan>0</pan>
@@ -43,6 +53,7 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
+        <instruments>2</instruments>
         <clef>
           <sign>G</sign>
           <line>2</line>
@@ -54,6 +65,7 @@
           <octave>5</octave>
           </pitch>
         <duration>4</duration>
+        <instrument id="P1-I1"/>
         <voice>1</voice>
         <type>whole</type>
         </note>
@@ -65,6 +77,7 @@
           <octave>5</octave>
           </pitch>
         <duration>4</duration>
+        <instrument id="P1-I1"/>
         <voice>1</voice>
         <type>whole</type>
         </note>
@@ -81,6 +94,7 @@
           <octave>5</octave>
           </pitch>
         <duration>4</duration>
+        <instrument id="P1-I2"/>
         <voice>1</voice>
         <type>whole</type>
         </note>
@@ -92,6 +106,7 @@
           <octave>5</octave>
           </pitch>
         <duration>4</duration>
+        <instrument id="P1-I2"/>
         <voice>1</voice>
         <type>whole</type>
         </note>

@@ -98,6 +98,8 @@ private slots:
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
       void manualBreaks() { mxmlIoTest("testManualBreaks"); }
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
+      void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
+      void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); }
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
