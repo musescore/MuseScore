@@ -30,6 +30,7 @@ void MuseScore::showStartcenter(bool val)
             startcenter->addAction(a);
             startcenter->readSettings(settings);
             connect(startcenter, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
+            connect(startcenter, SIGNAL(rejected()), a, SLOT(toggle()));
             }
       startcenter->setVisible(val);
       }
