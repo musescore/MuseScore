@@ -2009,6 +2009,33 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
                   }
             }
       }
+      
+//---------------------------------------------------------
+//   findDeleteWords
+//---------------------------------------------------------
+
+/**
+ Find a non-empty staff text in \a s at \a track (which originates as MusicXML <words>).
+ If found, delete it and return its text.
+ */
+
+static QString findDeleteStaffText(Segment* s, int track)
+      {
+      //qDebug("findDeleteWords(s %p track %d)", s, track);
+      foreach (Element* e, s->annotations()) {
+            //qDebug("findDeleteWords e %p type %hhd track %d", e, e->type(), e->track());
+            if (e->type() != Element::Type::STAFF_TEXT || e->track() < track || e->track() >= track+VOICES)
+                  continue;
+            Text* t = static_cast<Text*>(e);
+            //qDebug("findDeleteWords t %p text '%s'", t, qPrintable(t->text()));
+            QString res = t->text();
+            if (res != "") {
+                  s->remove(t);
+                  return res;
+                  }
+            }
+      return "";
+      }
 
 //---------------------------------------------------------
 //   xmlPart
@@ -2182,11 +2209,15 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                               instr.channel(0).volume = mxmlInstr.midiVolume;
                               instr.setTrackName(mxmlInstr.name);
                               InstrumentChange* ic = new InstrumentChange(score);
-                              ic->setTrack(track);
-                              // TODO: if there is already a text at this tick / track,
-                              // delete it and use its text here instead of "Instrument"
-                              ic->setText("Instrument");
                               ic->setInstrument(instr);
+                              ic->setTrack(track);
+                              // if there is already a staff text at this tick / track,
+                              // delete it and use its text here instead of "Instrument"
+                              QString text = findDeleteStaffText(segment, track);
+                              if (text == "")
+                                    ic->setText("Instrument");
+                              else
+                                    ic->setText(text);
                               segment->add(ic);
                               }
                         }
