@@ -2651,21 +2651,30 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "key-signatures",
          QT_TRANSLATE_NOOP("action","Key Signatures..."),
-         QT_TRANSLATE_NOOP("action","Show key signature palette")
+         QT_TRANSLATE_NOOP("action","Show key signature palette"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
          },
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "time-signatures",
          QT_TRANSLATE_NOOP("action","Time Signatures..."),
-         QT_TRANSLATE_NOOP("action","Show time signature palette")
+         QT_TRANSLATE_NOOP("action","Show time signature palette"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
          },
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "symbols",
          QT_TRANSLATE_NOOP("action","Symbols..."),
-         QT_TRANSLATE_NOOP("action","Show symbol palette")
+         QT_TRANSLATE_NOOP("action","Show symbol palette"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
          },
       {
          MsWidget::MAIN_WINDOW,

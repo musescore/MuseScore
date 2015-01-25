@@ -60,6 +60,18 @@ void MuseScore::showMasterPalette(const QString& s)
             connect(masterPalette, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             mscore->stackUnder(masterPalette);
             }
+      // when invoked via other actions, the main "masterpalette" action is not toggled automatically
+      if (!s.isEmpty()) {
+            // display if not already
+            if (!a->isChecked())
+                  a->setChecked(true);
+            else {
+                  // master palette is open; close only if command match current item
+                  if (s == masterPalette->selectedItem())
+                        a->setChecked(false);
+                  // otherwise switch tabs
+                  }
+            }
       masterPalette->setVisible(a->isChecked());
       if (!s.isEmpty())
             masterPalette->selectItem(s);
@@ -94,6 +106,15 @@ void MasterPalette::selectItem(const QString& s)
                   break;
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   selectedItem
+//---------------------------------------------------------
+
+QString MasterPalette::selectedItem()
+      {
+      return listWidget->currentItem()->text();
       }
 
 //---------------------------------------------------------
