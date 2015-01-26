@@ -363,6 +363,7 @@ enum class StyleIdx : unsigned char {
       barreLineWidth,
       fretMag,
       scaleBarlines,
+      barGraceDistance,
 
 
       STYLES

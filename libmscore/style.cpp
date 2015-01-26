@@ -224,7 +224,8 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::tupletNoteRightDistance,     StyleType("tupletNoteRightDistance", StyleValueType::SPATIUM) },
       { StyleIdx::barreLineWidth,              StyleType("barreLineWidth",          StyleValueType::DOUBLE)  },
       { StyleIdx::fretMag,                     StyleType("fretMag",                 StyleValueType::DOUBLE)  },
-      { StyleIdx::scaleBarlines,               StyleType("scaleBarlines",           StyleValueType::BOOL)    }
+      { StyleIdx::scaleBarlines,               StyleType("scaleBarlines",           StyleValueType::BOOL)    },
+      { StyleIdx::barGraceDistance,            StyleType("barGraceDistance",        StyleValueType::SPATIUM) }
       };
 
 class StyleTypes {
@@ -573,7 +574,8 @@ StyleData::StyleData()
             { StyleIdx::tupletNoteRightDistance,     QVariant(0.0) },
             { StyleIdx::barreLineWidth,              QVariant(1.0) },
             { StyleIdx::fretMag,                     QVariant(1.0) },
-            { StyleIdx::scaleBarlines,               QVariant(true) }
+            { StyleIdx::scaleBarlines,               QVariant(true) },
+            { StyleIdx::barGraceDistance,            QVariant(.6) },
             };
       for (unsigned i = 0; i < sizeof(values2)/sizeof(*values2); ++i)
             _values[int(values2[i].idx)] = values2[i].val;
