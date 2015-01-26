@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>476</width>
+    <width>738</width>
     <height>297</height>
    </rect>
   </property>
@@ -222,7 +222,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
+            <width>50</width>
             <height>16777215</height>
            </size>
           </property>
@@ -288,7 +288,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
+            <width>50</width>
             <height>16777215</height>
            </size>
           </property>
@@ -344,14 +344,14 @@
         <item>
          <widget class="QLineEdit" name="chordName">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="maximumSize">
            <size>
-            <width>80</width>
+            <width>16777215</width>
             <height>16777215</height>
            </size>
           </property>
@@ -359,19 +359,6 @@
            <bool>true</bool>
           </property>
          </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>

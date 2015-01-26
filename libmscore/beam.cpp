@@ -268,7 +268,7 @@ void Beam::layout1()
             slope = 0.0;
             _cross = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
-            foreach(ChordRest* cr, _elements) {
+            foreach (ChordRest* cr, _elements) {
                   if (cr->type() == Element::Type::CHORD) {
                         // set members maxDuration, c1, c2
                         if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
@@ -292,7 +292,7 @@ void Beam::layout1()
                               }
                         }
                   }
-            foreach(ChordRest* cr, _elements)
+            for (ChordRest* cr : _elements)
                   cr->setUp(_up);
             }
       else {
@@ -300,12 +300,15 @@ void Beam::layout1()
             minMove = 1000;
             maxMove = -1000;
             _isGrace = false;
+            qreal mag = 0.0;
 
             int mUp     = 0;
             int mDown   = 0;
             int upDnLimit = staff()->lines() - 1;           // was '4' hard-coded in following code
 
             foreach (ChordRest* cr, _elements) {
+                  qreal m = cr->small() ? score()->styleD(StyleIdx::smallNoteMag) : 1.0;
+                  mag = qMax(mag, m);
                   if (cr->type() == Element::Type::CHORD) {
                         c2 = static_cast<Chord*>(cr);
                         if (c1 == 0)
@@ -325,6 +328,7 @@ void Beam::layout1()
                   if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
                         maxDuration = cr->durationType();
                   }
+            setMag(mag);
             //
             // determine beam stem direction
             //
@@ -353,11 +357,11 @@ void Beam::layout1()
                   }
 
 
-            _cross   = minMove < maxMove;
+            _cross = minMove < maxMove;
             // int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
-            slope   = 0.0;
+            slope = 0.0;
 
-            foreach(ChordRest* cr, _elements)
+            for (ChordRest* cr : _elements)
                   cr->setUp(_up);
 
             }     // end of if/else(tablature)
@@ -381,6 +385,8 @@ void Beam::layoutGraceNotes()
       minMove = 1000;
       maxMove = -1000;
       _isGrace = true;
+      qreal graceMag   = score()->styleD(StyleIdx::graceNoteMag);
+      setMag(graceMag);
 
       foreach (ChordRest* cr, _elements) {
             c2 = static_cast<Chord*>(cr);
@@ -397,16 +403,24 @@ void Beam::layoutGraceNotes()
       //
       // determine beam stem direction
       //
-      if (_direction != MScore::Direction::AUTO)
-            _up = _direction == MScore::Direction::UP;
+      if (staff()->isTabStaff()) {
+            //TABULATURES: all beams (and related chords) are:
+            //    UP or DOWN according to TAB duration position
+            //    slope 0
+            _up   = !staff()->staffType()->stemsDown();
+            }
       else {
-            ChordRest* cr = _elements[0];
+            if (_direction != MScore::Direction::AUTO)
+                  _up = _direction == MScore::Direction::UP;
+            else {
+                  ChordRest* cr = _elements[0];
 
-            Measure* m = cr->measure();
-            if (m->hasVoices(cr->staffIdx()))
-                  _up = !(cr->voice() % 2);
-            else
-                  _up = true;
+                  Measure* m = cr->measure();
+                  if (m->hasVoices(cr->staffIdx()))
+                        _up = !(cr->voice() % 2);
+                  else
+                        _up = true;
+                  }
             }
 
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
@@ -1021,14 +1035,15 @@ static int adjust(qreal _spatium4, int slant, const QList<ChordRest*>& cl)
       int n = cl.size();
       const ChordRest* c1 = cl[0];
       const ChordRest* c2 = cl[n-1];
+      if (c1->staff() && c1->staff()->isTabStaff())
+            return 0;
 
       QPointF p1(c1->stemPosBeam());   // canvas coordinates
       qreal slope = (slant * _spatium4) / (c2->stemPosBeam().x() - p1.x());
       int ml = -1000;
       if (c1->up()) {
             for (int i = 1; i < n; ++i) {
-                  const ChordRest* c = cl[i];
-                  QPointF p3(c->stemPosBeam());
+                  QPointF p3(cl[i]->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
                   int l       = lrint((yUp - p3.y()) / (_spatium4));
                   ml          = qMax(ml, l);
@@ -1123,23 +1138,32 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
       const ChordRest* c1 = cl.front();
       const ChordRest* c2 = cl.back();
       qreal dx            = c2->pagePos().x() - c1->pagePos().x();
-      bool grace          = c1->isGrace();
       bool zeroSlant      = slopeZero(cl);
 
       int l1 = c1->line() * 2;
       int l2 = c2->line() * 2;
 
       Bm bm;
+
+      // shorten stem length if grace notes beam is under main notes beam.
+      // Value 4 estimated. Desired: to find a good formula.
+
+      int graceStemLengthCorrection;
+      if (_isGrace)
+            graceStemLengthCorrection = static_cast<const Chord*>(c1)->underBeam() ? 4 : 3;
+      else
+            graceStemLengthCorrection = 0;
+
       if (beamLevels == 1) {
             bm = beamMetric1(_up, l1 / 2, l2 / 2);
             if (hasNoSlope())
                   bm.s = 0.0;
 
-            if (grace && bm.l) {
+            if (bm.l) {
                   if (bm.l > 0)
-                        bm.l -= 3;
+                        bm.l -= graceStemLengthCorrection;
                   else
-                        bm.l += 3;
+                        bm.l += graceStemLengthCorrection;
                   }
 
             if (bm.l && !(zeroSlant && cl.size() > 2)) {
@@ -1375,13 +1399,11 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
                   bm.l += adjust(_spStaff4, bm.s, cl);
                   }
             }
-      // shorten stem length if grace notes beam is under main notes beam.
-      // Value 4 estimated. Desired: to find a good formula.
-      if (grace && static_cast<const Chord*>(c1)->underBeam()){
+      if (_isGrace && (beamLevels > 1) && bm.l) {
             if (bm.l > 0)
-                  bm.l -= 4;
+                  bm.l -= graceStemLengthCorrection;
             else
-                  bm.l += 4;
+                  bm.l += graceStemLengthCorrection;
             }
       if (dx == 0.0)
             slope = 0.0;
@@ -1417,23 +1439,15 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
       qreal _spatium   = spatium();
       QPointF _pagePos(pagePos());
-      qreal beamMinLen = point(score()->styleS(StyleIdx::beamMinLen));
-      qreal graceMag   = score()->styleD(StyleIdx::graceNoteMag);
+      qreal beamMinLen = point(score()->styleS(StyleIdx::beamMinLen)) * mag();
 
       if (beamLevels == 4)
             _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance)*4/3);
       else
             _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance));
 
+      _beamDist *= mag();
       _beamDist *= c1->staff()->mag();
-      if (_isGrace) {
-            _beamDist *= graceMag;
-            setMag(graceMag);
-            beamMinLen *= graceMag;
-            }
-      else
-            setMag(1.0);
-
       int n = crl.size();
 
       StaffType* tab = 0;
@@ -1568,9 +1582,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   ++i;
                   for (; i < n; ++i) {
                         ChordRest* c = crl[i];
+                        ChordRest* p = i ? crl[i - 1] : 0;
                         int l = c->durationType().hooks() - 1;
 
-                        Mode bm = Groups::endBeam(c);
+                        Mode bm = Groups::endBeam(c, p);
                         bool b32 = (beamLevel >= 1) && (bm == Mode::BEGIN32);
                         bool b64 = (beamLevel >= 2) && (bm == Mode::BEGIN64);
 
@@ -1655,7 +1670,6 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               // (allow some tolerance for tick rounding in tuplets
                               // without tuplet tolerance, could be simplified to:)
 
-//                            if (tickNext % tickMod == 0)
                               static const int BEAM_TUPLET_TOLERANCE = 6;
                               int mod = tickNext % tickMod;
                               if (mod <= BEAM_TUPLET_TOLERANCE || (tickMod - mod) <= BEAM_TUPLET_TOLERANCE)
@@ -1699,14 +1713,18 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
             Chord* c = static_cast<Chord*>(cr);
             if (c->type() != Element::Type::CHORD)
                   continue;
+            c->layoutStem1();
             Stem* stem = c->stem();
+#if 0
             if (!stem) {
-                  // is this ever true?
-                  qDebug("create stem in layout beam");
+                  // is this ever true? -> yes
+qDebug("create stem in layout beam, track %d", c->track());
                   stem = new Stem(score());
-                  c->setStem(stem);
+                  stem->setParent(c);
+                  score()->undoAddElement(stem);
 //                  stem->rypos() = (c->up() ? c->downNote() : c->upNote())->rypos();
                   }
+#endif
             if (c->hook())
                   score()->undoRemoveElement(c->hook());
 
@@ -1733,7 +1751,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                            beamSegments.back()->x2());
                         }
                   }
-            stem->setLen(y2 - (by + _pagePos.y()));
+            if (stem)
+                  stem->setLen(y2 - (by + _pagePos.y()));
 
 #if 0       // TODO ??
             if (!tab) {
@@ -1750,20 +1769,23 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   }
 #endif
 
+
             //
             // layout stem slash for acciacatura
             //
             if ((c == crl.front()) && c->noteType() == NoteType::ACCIACCATURA) {
                   StemSlash* stemSlash = c->stemSlash();
-                  if (!stemSlash) {
-                        stemSlash = new StemSlash(score());
-                        c->add(stemSlash);
-                        }
-                  stemSlash->layout();
+                  // if (!stemSlash)
+                  //      c->add(new StemSlash(score()));
+                  if (stemSlash)
+                        stemSlash->layout();
                   }
-            else
-                  c->setStemSlash(0);
-
+#if 0
+            else {
+                  if (c->stemSlash())
+                        c->remove(c->stemSlash());
+                  }
+#endif
             Tremolo* tremolo = c->tremolo();
             if (tremolo)
                   tremolo->layout();
@@ -1905,7 +1927,7 @@ void Beam::editDrag(const EditData& ed)
       int idx  = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       qreal dy = ed.delta.y();
       BeamFragment* f = fragments[editFragment];
-      if (ed.curGrip == 0)
+      if (ed.curGrip == Grip::START)
             f->py1[idx] += dy;
       f->py2[idx] += dy;
       _userModified[idx] = true;
@@ -1925,10 +1947,9 @@ void Beam::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Beam::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Beam::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips = 2;
-      *defaultGrip = 1;
+      *defaultGrip = Grip::END;
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       BeamFragment* f = fragments[editFragment];
 

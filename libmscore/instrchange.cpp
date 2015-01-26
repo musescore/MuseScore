@@ -62,5 +62,42 @@ void InstrumentChange::read(XmlReader& e)
             }
       }
 
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant InstrumentChange::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            default:
+                  return Text::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant InstrumentChange::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            default:
+                  return Text::propertyDefault(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool InstrumentChange::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            default:
+                  return Text::setProperty(propertyId, v);
+            }
+      return true;
+      }
+
 }
 

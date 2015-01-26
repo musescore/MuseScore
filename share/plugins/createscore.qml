@@ -2,13 +2,15 @@ import QtQuick 2.0
 import MuseScore 1.0
 
 MuseScore {
-      version:  "1.0"
+      version:  "2.0"
       description: "This demo plugin creates a new score."
       menuPath: "Plugins.createscore"
 
       onRun: {
             console.log("hello createscore");
-            var score = newScore("Test-Score", "Piano", 5);
+            var score = newScore("Test-Score", "piano", 5);
+            var numerator = 3;
+            var denominator = 4;
 
             score.addText("title", "==Test-Score==");
             score.addText("subtitle", "subtitle");
@@ -17,9 +19,13 @@ MuseScore {
             cursor.track = 0;
 
             cursor.rewind(0);
+            var ts = newElement(Element.TIMESIG);
+            ts.setSig(numerator, denominator);
+            cursor.add(ts);
+
+            cursor.rewind(0);
             cursor.setDuration(1, 4);
-            var note = cursor.addNote(60);
-            note.color = "#5040a1";
+            cursor.addNote(60);
 
             cursor.next();
             cursor.setDuration(3, 8);
@@ -28,10 +34,10 @@ MuseScore {
             cursor.next();
             cursor.setDuration(1, 4);
             cursor.addNote(68);
+
             cursor.next();
             cursor.addNote(72);
 
             Qt.quit();
             }
       }
-

@@ -182,31 +182,12 @@ void XmlReader::unknown() const
       }
 
 //---------------------------------------------------------
-//   findBeam
+//   addBeam
 //---------------------------------------------------------
 
-Beam* XmlReader::findBeam(int id) const
+void XmlReader::addBeam(Beam* s)
       {
-      int n = _beams.size();
-      for (int i = 0; i < n; ++i) {
-            if (_beams.at(i)->id() == id)
-                  return _beams.at(i);
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
-//   findTuplet
-//---------------------------------------------------------
-
-Tuplet* XmlReader::findTuplet(int id) const
-      {
-      int n = _tuplets.size();
-      for (int i = 0; i < n; ++i) {
-            if (_tuplets.at(i)->id() == id)
-                  return _tuplets.at(i);
-            }
-      return 0;
+      _beams.insert(s->id(), s);
       }
 
 //---------------------------------------------------------
@@ -215,15 +196,21 @@ Tuplet* XmlReader::findTuplet(int id) const
 
 void XmlReader::addTuplet(Tuplet* s)
       {
-#ifndef NDEBUG
-      Tuplet* t = findTuplet(s->id());
-      if (t) {
-            qDebug("Tuplet %d already read", s->id());
-            delete s;
-            return;
-            }
-#endif
-      _tuplets.append(s);
+      _tuplets.insert(s->id(), s);
+      }
+
+//---------------------------------------------------------
+//   readDouble
+//---------------------------------------------------------
+
+double XmlReader::readDouble(double min, double max)
+      {
+      double val = readElementText().toDouble();
+      if (val < min)
+            val = min;
+      else if (val > max)
+            val = max;
+      return val;
       }
 
 //---------------------------------------------------------
@@ -552,6 +539,30 @@ void Xml::tag(const char* name, const QWidget* g)
       tag(name, QRect(g->pos(), g->size()));
       }
 
+
+//---------------------------------------------------------
+//   toHtml
+//---------------------------------------------------------
+
+QString Xml::xmlString(ushort c)
+      {
+      switch(c) {
+            case '<':
+                  return QLatin1String("&lt;");
+            case '>':
+                  return QLatin1String("&gt;");
+            case '&':
+                  return QLatin1String("&amp;");
+            case '\"':
+                  return QLatin1String("&quot;");
+            default:
+                  // ignore invalid characters in xml 1.0
+                  if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D))
+                        return QString();
+                  return QString(QChar(c));
+            }
+      }
+
 //---------------------------------------------------------
 //   toHtml
 //---------------------------------------------------------
@@ -562,32 +573,7 @@ QString Xml::xmlString(const QString& s)
       escaped.reserve(s.size());
       for (int i = 0; i < s.size(); ++i) {
             ushort c = s.at(i).unicode();
-            switch(c) {
-                  case '<':
-                        escaped.append(QLatin1String("&lt;"));
-                        break;
-                  case '>':
-                        escaped.append(QLatin1String("&gt;"));
-                        break;
-                  case '&':
-                        escaped.append(QLatin1String("&amp;"));
-                        break;
-                  case '\"':
-                        escaped.append(QLatin1String("&quot;"));
-                        break;
-                  default:
-                        // ignore invalid characters in xml 1.0
-#if 0
-                        if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) ||
-                           (c > 0xD7FF && c < 0xE000) ||
-                           (c > 0xFFFD))
-                              break;
-#endif
-                        if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D))
-                              break;
-                        escaped += QChar(c);
-                        break;
-                  }
+            escaped += xmlString(c);
             }
       return escaped;
       }

@@ -1,0 +1,343 @@
+kQOAuth is a OAuth 1.0 library written for Qt in C++. The goals for the 
+library have been to provide easy integration to existing Qt applications
+utilizing Qt signals describing the OAuth process, and to provide a 
+convenient approach to OAuth authentication.
+
+kQOAuth has support for retrieving the user authorization from the service
+provider's website. kQOAuth will open the user's web browser to the 
+authorization page, give a local URL as the callback URL and setup a HTTP
+server on this address to listen for the reply from the service and then
+process it.
+
+BUILDING kQOAuth
+===============================
+- Make sure that you have Qt 4.7 or greater installed
+
+For OS X and Linux:
+- run "qmake"
+- run "make" to build
+- Run "sudo make install" to install
+- To run unit tests you need to set platform specific variable to point 
+  correct directory in order to make unit tests to find the library. Note
+  that it doesn't require kQOAuth to be installed in order to run unit tests.
+ * for Linux:  export LD_LIBRARY_PATH=/path/to/kQOAuth/lib/dir
+ * for OS X:  export DYLD_LIBRARY_PATH=/path/to/kQOAuth/lib/dir
+
+For Windows with the Visual Studio or Windows SDK Compiler
+- run "qmake CONFIG+=release"
+- run "nmake" to build
+- run "nmake install" to install
+
+
+COMPONENTS
+===============================
+Below I will present the two fundamental components necessary when using
+kQOAuth; KQOAuthManager and KQOAuthRequest.
+
+KQOAuthManager
+===============================
+
+Executes OAuth requests (KQOAuthRequest), parses the replies and emits Qt
+signals describing the process of the OAuth authentication. 
+
+KQOAuthManager will keep track of the state of the authorization process. 
+This means that the provided convenience methods can be used to achieve the
+necessary steps in OAuth authentication without explicitly constructing
+each request. 
+
+Methods
+-------------------------------
+
+* void executeRequest(KQOAuthRequest *request)
+    - request: The KQOAuthRequest to process. 
+
+    Takes as parameter a pointer to a KQOAuthRequest describing the request
+    that will be executed. The call will return as soon as the HTTP
+    request has been sent. 
+
+    When the service responded to this request the signal 
+    requestReady(QByteArray) is emitted. This will contain the raw data
+    that the service sent back as a response to the request.
+
+    If an error in the request was detected, this method will set the 
+    error code and emit the requestReady(QByteArray) signal with 
+    an empty QByteArray. The error code can be retrieved by calling lastError().
+
+*   void executeAuthorizedRequest(KQOAuthRequest *request, int id)
+    - request: The KQOAuthRequest to process. 
+    - id: An id that is unique to the request.
+    
+    This method is useful for situations where the reponses from a server 
+    have different processing requirements.
+
+    The arguments and behavior of this method is similar to executeRequest() 
+    with the addition of an id that is mapped to the request. When the service 
+    has responded, the signal authorizedRequestReady(QByteArray, int) is emitted 
+    where the int is the mapped id.
+
+* void setHandleUserAuthorization(bool set)
+    - set: A boolean value telling KQOAuthManager to process the user's 
+           authorization to protected resources.
+
+    If KQOAuth is to handle user authorization this method must be called
+    with argument set as 'true' before a request for the temporary token has 
+    been executed.
+ 
+* void getUserAuthorization(QUrl authorizationEndpoint);
+    - authorizationEndpoint: The URL to the service provider's authorization
+                             web page.
+
+    A convenience method to retrieve the user authorization to access the 
+    protected resources. This method will open user's web browser to the
+    service providers authorization page given as argument and setup a
+    a local HTTP server to process the response. 
+
+    This method must be called after temporaryTokenReceived(...) signal
+    is emitted.
+
+    When the user's authentication is processed, the signal 
+    authorizationReceived(...) is emitted.  
+
+* void getUserAccessTokens(QUrl accessTokenEndpoint);
+    - accessTokenEndpoint: The URL to the service provider which is used for 
+                           retrieving the access token.
+
+    A convenience method to retrieve the access token, which is used for
+    accessing the protected resources. 
+
+    This method must be called after the signal authorizationReceived(...)
+    is received. 
+
+    When the access token request is processed, the signal accessTokenReceived(...)
+    is emitted. After this signal the protected resources can be accessed.
+
+* void sendAuthorizedRequest(QUrl requestEndpoint, 
+                             const KQOAuthParameters &requestParameters);
+    - requestEndpoint: The URL to the service provider which can be used for 
+                       accessing protected resources.
+    - requestParameters: The parameters for this request which are service
+                       specific. KQOAuthParameters is a typecasted 
+                       QMultiMap<QString, QString> for parameter name and value.
+
+    A convenience method for accessing the protected resources. The 
+    parameters are given as KQOAuthParameters, which is a typecasted
+    QMultiMap<QString parameterName, QString parameterValue>. Please
+    consult your service provider for which parameters to use. 
+   
+* bool hasTemporaryToken()
+    Returns true if the temporary token has been received. Otherwise returns
+    false
+
+* bool isVerified()
+   Returns true if the user has successfully verified us to access the protected
+   resources. Otherwise returns false.
+
+* bool isAuthorized()
+   Returns true if we have access tokens to access the protected resources. 
+   Otherwise returns false.
+
+* KQOAuthError lastError()
+   Returns the most recent error code in the authentication process.
+
+    
+Signals
+-------------------------------
+* void requestReady(QByteArray networkReply)
+    - networkReply: The response as sent from the service the each request.
+
+    This signal is emitted after each request has been processed. It will
+    return all the request response parameters in the QMultiMap, where
+    the first parameter is the name and the second parameter is the value.
+
+* void authorizedRequestReady(QByteArray networkReply, int id);
+    - networkReply: The response as sent from the service the each request.
+    - id: The id that is mapped to the original request
+
+    This signal is emitted after each authorizedRequest has been processed.
+
+* void receivedToken(QString oauth_token, QString oauth_token_secret) 
+    - oauth_oken: Token value
+    - oauth_token_secret: Token secret value
+
+    This signal is emitted after a successful request for temporary tokens or
+    access tokens. The requested tokens are sent as parameters in this 
+    signal. 
+
+* void temporaryTokenReceived(QString oauth_token, QString oauth_token_secret)
+    - oauth_token: Temporary token value
+    - oauth_token_secret: Temporary token secret value
+
+    This signal is emitted after a successful request for temporary tokens. 
+    The tokens are sent as parameters to this signal.
+
+* void authorizationReceived(QString oauth_token, QString oauth_verifier)
+    - oauth_token: The temporary token that was used when requesting access.
+    - oauth_verifier: The oauth_verifier token received as a reply to the 
+                   request. This value is necessary when requesting access token.
+
+    This signal is emitted after the user has concluded the authorization request
+    step in the service provider's website. 
+
+    Note that setHandleUserAuthorization(true) must be called when requesting for
+    the temporary token.
+
+* void accessTokenReceived(QString oauth_token, QString oauth_token_secret)
+    - oauth_token: The access token value.
+    - oauth_token_secret: The access token secret value. 
+
+    This signal is emitted after a successful request for access tokens. The
+    requested tokens are sent as parameters in this signal. These tokens
+    are necessary when requesting for protected resources. 
+
+
+KQOAuthRequest
+====================================
+
+KQOAuthRequest is given to KQOAuthManager to execute the requested OAuth 
+request. It will also take care of parameter normalization, generating
+the needed authorization header, and most importantly, generate a
+OAuth signature. 
+
+Methods 
+------------------------------------
+
+* void initRequest(KQOAuthRequest::RequestType type, const QUrl &requestEndpoint)
+    - type: Initializes this request to be of type 'KQOAuthRequest::RequestType'.
+    - requestEndpoint: The URL to the service provider that can handle the
+          requests of type 'KQOAuthRequest::RequestType'.
+
+    Initializes the request to be of a certain type that will be sent to 
+    service provider's HTTP location. The request can be of type:
+       - TemporaryCredentials: Requesting the temporary credentials.
+       - AccessToken: Request the access tokens.
+       - AuthorizedRequest: When OAuth process is complete, we can access the
+             protected resources with this request.
+
+* void setConsumerKey(const QString &consumerKey)
+    Set the consumer key to 'consumerKey'. This is given by the service provider.
+
+* void setConsumerSecretKey(const QString &consumerSecretKey)
+    Set the consumer key secret to 'consumerSecretKey'. This is given by the
+    service provider. 
+
+* void setCallbackUrl(const QUrl &callbackUrl) 
+    If the request type is 'KQOAuthRequest::TemporaryCredentials', then this
+    is the callback URL for the request. This is needed when asking user
+    authorization. 
+
+* void setTokenSecret(const QString &tokenSecret)
+    If the request type is 'KQOAuthRequest::AccessToken' then this is the 
+    temporary token secret from the earlier request returned by the service
+    provider.
+
+* void setToken(const QString &token)
+    If the request type is 'KQOAuthRequest::AccessToken' then this is the 
+    temporary token from the earlier request returned by the service provider.
+
+* void setSignatureMethod(KQOAuthRequest::RequestSignatureMethod)
+    Sets the signature method to be used when signing the requests.
+
+    NOTE: Currently only KQOAuthRequest::::HMAC_SHA1 is supported!
+
+* void setHttpMethod(KQOAuthRequest::RequestHttpMethod)
+    Sets the HTTP method to be used for this request. 
+
+* void setAdditionalParameters(const KQOAuthParameters &additionalParams);
+    Sets any additional request specific parameters as specified by the 
+    service provider.
+
+* void setRequestBody(const KQOAuthParameters &requestParams);
+    Sets the request body for HTTP POST request as specified by the service
+    provider. 
+
+* bool isValid() const;
+    Returns true if this request is valid (has all the necessary parameters
+    required by the given request type).
+
+* QByteArray requestBody() const;
+    Returns the raw request body as sent to the service provider.
+
+* KQOAuthRequest::RequestType requestType() const;
+    Returns the current request type.
+
+* QUrl requestEndpoint() const;
+    Returns the current request endpoint (URL location).
+
+* void setContentType(const QString &contentType)
+    By default the POST requests are sent as "application/x-www-form-urlencoded". 
+   With this method, however, the content type of the POST request can be changed. 
+   If you want to override the content type, please look at setRawData().
+
+* QString contentType()
+   Returns the current content type.
+
+* void setRawData(const QByteArray &data);
+   If you send the POST request as anything else but "application/x-www-form-urlencoded"
+   it is assumed that you want to send some manually crafted data that kQOAuth
+   is not responsible of. 
+   Set that data here.
+
+* QByteArray rawData()
+   Returns the raw data you want to se send to the endpoint. 
+
+
+* QList<QByteArray> requestParameters();
+    Returns the request parameters of this request as a list of elements
+    sent to the service.
+
+ * void clearRequest();
+    Deletes all cached data from this request object.
+
+ * void setTimeout(int timeoutMilliseconds);
+    Sets the timeout for this request. If the timeout expires, the request will be aborted.
+
+
+SOURCE CODE
+============================
+
+The source code is available on Gitorious at:
+http://www.gitorious.org/kqoauth
+
+git clone git://gitorious.org/kqoauth/kqoauth.git
+
+
+EXAMPLE APPLICATION
+============================
+kQOAuth provides as an example application a command line Twitter client.
+Currently it only supports requesting the authorization and sending status
+updates, but this should be enough to show the basic usage of kQOAuth with
+the convenience APIs. 
+
+See example/twittercli/ for source code.
+ 
+
+LICENSE AND AUTHOR
+============================
+
+The library and the source code is licensed under the GNU Lesser General Public 
+License (LGPL). For more information, visit http://www.gnu.org/licenses/lgpl.html
+
+This library is written by Johan Paul (johan.paul@gmail.com)
+
+
+CONTRIBUTORS
+============================
+
+Keith Obenschain (obenschaink@gmail.com)
+
+
+ACKNOWLEDGEMENT
+============================
+
+Thank you to Dominik Kapusta for the original Qt OAuth library, QOAuth. I wanted
+to improve on this library to better suit my needs. 
+ 
+Visit his project at http://files.ayoy.net/qoauth/doc/
+
+
+SO, WHAT'S WITH THE NAME?
+============================
+
+The library is called kQOAuth. I wanted the library to reflect the fact that it
+is a Qt based library and since QOAuth was already taken, I added a 'k' in
+front of it. k is for Kypeli, not KDE.

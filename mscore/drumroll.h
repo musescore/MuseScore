@@ -27,6 +27,7 @@ namespace Awl {
       };
 
 #include "libmscore/pos.h"
+#include "libmscore/select.h"
 
 namespace Ms {
 
@@ -36,8 +37,6 @@ class DrumView;
 class Note;
 class Ruler;
 class Seq;
-
-enum class SelState : char;
 
 //---------------------------------------------------------
 //   DrumrollEditor

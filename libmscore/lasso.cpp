@@ -48,7 +48,7 @@ void Lasso::draw(QPainter* painter) const
 void Lasso::editDrag(const EditData& ed)
       {
       Qt::CursorShape cursorShape = ed.view->cursor().shape();
-      switch(ed.curGrip) {
+      switch (int(ed.curGrip)) {
             case 0:
                   cursorShape = Qt::SizeFDiagCursor;
                   _rect.setTopLeft(_rect.topLeft() + ed.delta);
@@ -89,10 +89,9 @@ void Lasso::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Lasso::updateGrips(int* n, int* defaultGrip, QRectF* r) const
+void Lasso::updateGrips(Grip* defaultGrip, QVector<QRectF>& r) const
       {
-      *n = 8;
-      *defaultGrip = 7;
+      *defaultGrip = Grip(7);
       r[0].translate(_rect.topLeft());
       r[1].translate(_rect.topRight());
       r[2].translate(_rect.bottomRight());

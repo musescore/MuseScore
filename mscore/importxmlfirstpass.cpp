@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2013 Werner Schweer and others
+//  Copyright (C) 2013 - 2015 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -84,8 +84,8 @@ static void aaadomError(const QDomElement e)
 //   local defines for debug output
 //---------------------------------------------------------
 
-// #define DEBUG_VOICE_MAPPER true
-// #define DEBUG_TICK true
+//#define DEBUG_VOICE_MAPPER true
+//#define DEBUG_TICK true
 
 //---------------------------------------------------------
 //   noteDurationAsFraction
@@ -108,13 +108,14 @@ static Fraction noteDurationAsFraction(const int divisions, QDomElement e, Fract
       bool rest = false;
       QString type;
       noteDurDesc = "";
+      duration = Fraction(0, 0); // duration is invalid until a valid value is determined
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "chord")
                   chord = true;
             else if (e.tagName() == "dot")
                   dots++;
             else if (e.tagName() == "duration") {
-                  duration = MxmlSupport::durationAsFraction(divisions, e);
+                  if (divisions > 0) duration = MxmlSupport::durationAsFraction(divisions, e);
                   }
             else if (e.tagName() == "grace")
                   grace = true;
@@ -174,10 +175,15 @@ static Fraction noteDurationAsFraction(const int divisions, QDomElement e, Fract
       qDebug("time-in-fraction: %s", qPrintable(noteDurDesc));
 #endif
 
-      if (rest && (type == "" || type == "whole"))
-            // accept typeless and "whole" measure rests
+      if (rest && type == "")
+            // typeless "whole" measure rests are determined by duration
+            return duration;
+            
+      if (rest && type == "whole" && duration.isValid())
+            // "whole" measure rests with valid duration are determined by duration
             return duration;
 
+      // else fall back to calculated duration
       return f;
       }
 
@@ -256,6 +262,10 @@ static void aaamoveTick(Fraction& tick, Fraction& maxtick,
                   }
             else
                   errorStr = "calculated and specified duration invalid";
+
+#ifdef DEBUG_TICK
+            if (errorStr != "") qDebug("error %s", qPrintable(errorStr));
+#endif
 
             if (tick > maxtick)
                   maxtick = tick;
@@ -574,61 +584,79 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                           }
                                     }
                               }
-                        // most of following tags can only be handled if duration is valid
-                        if (loc_divisions > 0) {
-                              if (ee.tagName() == "note") {
-                                    bool chord = false;
-                                    bool grace = false;
-                                    QString voice = "1";    // correct default for missing voice
-                                    QString pitch = "    ";
-                                    int staff = 0;          // correct default for missing staff
-                                    bool rest = false;
-                                    for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                                          QString tag(eee.tagName());
-                                          QString s(eee.text());
-                                          if (tag == "chord")
-                                                chord = true;
-                                          else if (tag == "grace")
-                                                grace = true;
-                                          else if (tag == "voice")
-                                                voice = s;
-                                          else if (tag == "staff")
-                                                staff = s.toInt() - 1;
-                                          else if (tag == "pitch")
-                                                ;  // TODO pitch = parsePitch(eee);
-                                          else if (tag == "rest")
-                                                rest = true;
+                        if (ee.tagName() == "note") {
+                              bool chord = false;
+                              bool grace = false;
+                              QString voice = "1";    // correct default for missing voice
+                              QString pitch = "    ";
+                              int staff = 0;          // correct default for missing staff
+                              bool rest = false;
+                              QString instrId;
+                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
+                                    QString tag(eee.tagName());
+                                    QString s(eee.text());
+                                    if (tag == "chord")
+                                          chord = true;
+                                    else if (tag == "grace")
+                                          grace = true;
+                                    else if (tag == "voice")
+                                          voice = s;
+                                    else if (tag == "staff")
+                                          staff = s.toInt() - 1;
+                                    else if (tag == "pitch")
+                                          ;  // TODO pitch = parsePitch(eee);
+                                    else if (tag == "rest")
+                                          rest = true;
+                                    else if (tag == "instrument")
+                                          instrId = eee.attribute("id");
+                                    }
+                              if (rest)
+                                    pitch = "rest";
+                              if (!chord) {
+                                    Fraction t = loc_tick.reduced();
+                                    QString prevInstrId = parts[partNr]._instrList.instrument(t);
+                                    bool mustInsert = instrId != prevInstrId;
+                                    qDebug("tick %s (%d) staff %d voice '%s' previnst[%s]='%s' instrument '%s' insert %d",
+                                           qPrintable(loc_tick.print()),
+                                           loc_tick.ticks(),
+                                           staff + 1,
+                                           qPrintable(voice),
+                                           qPrintable(t.print()),
+                                           qPrintable(prevInstrId),
+                                           qPrintable(instrId),
+                                           mustInsert
+                                           );
+                                    if (mustInsert)
+                                          parts[partNr]._instrList.setInstrument(instrId, t);
+                                    // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
+                                    // Same fix is required in MusicXml::xmlNote
+                                    // make sure staff is valid
+                                    int corrStaff = (staff >= 0 && staff < staves) ? staff : 0;
+                                    
+                                    // count the chords (only the first note in a chord is counted)
+                                    if (corrStaff < MAX_STAVES) {
+                                          if (!parts[partNr].voicelist.contains(voice)) {
+                                                VoiceDesc vs;
+                                                parts[partNr].voicelist.insert(voice, vs);
+                                                }
+                                          parts[partNr].voicelist[voice].incrChordRests(corrStaff);
                                           }
-                                    if (rest)
-                                          pitch = "rest";
-                                    if (!chord) {
-                                          // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
-                                          // Same fix is required in MusicXml::xmlNote
-                                          // make sure staff is valid
-                                          int corrStaff = (staff >= 0 && staff < staves) ? staff : 0;
-                                          
-                                          // count the chords (only the first note in a chord is counted)
-                                          if (corrStaff < MAX_STAVES) {
-                                                if (!parts[partNr].voicelist.contains(voice)) {
-                                                      VoiceDesc vs;
-                                                      parts[partNr].voicelist.insert(voice, vs);
-                                                      }
-                                                parts[partNr].voicelist[voice].incrChordRests(corrStaff);
-                                                }
-                                          // determine note length for voice overlap detection
-                                          if (!grace) {
-                                                Fraction startTick = loc_tick; // start tick for the last note
-                                                Fraction duration;
-                                                QString noteDurDesc;
-                                                QString errorStr;
-                                                aaamoveTick(loc_tick, loc_maxtick, loc_divisions, ee,
-                                                            duration, noteDurDesc, errorStr);
-                                                // TODO: migrate voice overlap detector to Fraction
-                                                vod.addNote(startTick.ticks(), loc_tick.ticks(), voice, corrStaff);
-                                                }
+                                    // determine note length for voice overlap detection
+                                    if (!grace) {
+                                          Fraction startTick = loc_tick; // start tick for the last note
+                                          Fraction duration;
+                                          QString noteDurDesc;
+                                          QString errorStr;
+                                          aaamoveTick(loc_tick, loc_maxtick, loc_divisions, ee,
+                                                      duration, noteDurDesc, errorStr);
+                                          // TODO: migrate voice overlap detector to Fraction
+                                          vod.addNote(startTick.ticks(), loc_tick.ticks(), voice, corrStaff);
                                           }
                                     }
-                              else if (ee.tagName() == "backup") {
+                              }
+                        // following tags can only be handled if duration is valid
+                        if (loc_divisions > 0) {
+                              if (ee.tagName() == "backup") {
                                     Fraction dummyFr;
                                     QString noteDurDesc;
                                     QString errorStr;
@@ -682,15 +710,29 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
       // allocate MuseScore voice to MusicXML voices
       allocateVoices(parts[partNr].voicelist);
 
-      // debug: print results
-      /*
-      qDebug("voiceMapperStats: new staff");
-      for (VoiceList::const_iterator i = parts[partNr].voicelist.constBegin();
-           i != parts[partNr].voicelist.constEnd(); ++i) {
-            qDebug("voiceMapperStats: voice %s staff data %s",
-                   qPrintable(i.key()), qPrintable(i.value().toString()));
+      // fixup required in case the part starts with a foward, which has no instrument
+      // this would result in instrument at tick = 0 being undefined
+      MusicXmlInstrList& il = parts[partNr]._instrList;
+      if (il.size() > 0) {
+            auto pFirstInstr = il.begin();
+            QString firstInstr = (*pFirstInstr).second;
+            qDebug("move '%s' to tick 0", qPrintable(firstInstr));
+            il.erase(pFirstInstr);
+            il.setInstrument(firstInstr, Fraction(0, 1));
             }
-      */
+
+      // debug: print results
+      /**/
+      qDebug("initVoiceMapperAndMapVoices: new part");
+      for (auto it = parts[partNr].voicelist.constBegin(); it != parts[partNr].voicelist.constEnd(); ++it) {
+            qDebug("voiceMapperStats: voice %s staff data %s",
+                   qPrintable(it.key()), qPrintable(it.value().toString()));
+            }
+      for (auto it = parts[partNr]._instrList.cbegin(); it != parts[partNr]._instrList.cend(); ++it) {
+            Fraction f = (*it).first;
+            qDebug("instrument map: tick %s (%d) instr '%s'", qPrintable(f.print()), f.ticks(), qPrintable((*it).second));
+            }
+       /**/
       }
 
 
@@ -748,6 +790,16 @@ VoiceList MxmlReaderFirstPass::getVoiceList(const QString id) const
                   return parts.at(i).voicelist;
             }
       return VoiceList();
+      }
+
+
+MusicXmlInstrList MxmlReaderFirstPass::getInstrList(const QString id) const
+      {
+      for (int i = 0; i < nParts(); ++i) {
+            if (parts.at(i).getId() == id)
+                  return parts.at(i)._instrList;
+      }
+      return MusicXmlInstrList();
       }
 
 
@@ -842,5 +894,34 @@ void MxmlReaderFirstPass::parseFile()
       qDebug("Parsing time elapsed: %d ms", t.elapsed());
       qDebug("MxmlReaderFirstPass::parseFile() end");
       }
-}
 
+//---------------------------------------------------------
+//   instrument
+//---------------------------------------------------------
+
+const QString MusicXmlInstrList::instrument(const Fraction f) const
+      {
+      if (empty())
+            return "";
+      auto i = upper_bound(f);
+      if (i == begin())
+            return "";
+      --i;
+      return i->second;
+      }
+
+//---------------------------------------------------------
+//   setInstrument
+//---------------------------------------------------------
+
+void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
+      {
+      // TODO determine how to handle multiple instrument changes at the same time
+      // current implementation keeps the first one
+      if (!insert({f, instr}).second)
+            qDebug("MusicXmlInstrList::setInstrument(instr '%s', tick %s (%d)) element already exists",
+                   qPrintable(instr), qPrintable(f.print()), f.ticks());
+            //(*this)[f] = instr;
+      }
+
+}

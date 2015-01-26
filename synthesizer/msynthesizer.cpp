@@ -31,7 +31,7 @@ extern QString dataPath;
 static SynthesizerState defaultState = {
       { "master", {
             { 0, "Zita1" },
-            { 2, "1.0"   },
+            { 2, "0.1"   },
             { 3, "440"   }
             },
             },
@@ -52,13 +52,6 @@ static SynthesizerState defaultState = {
 MasterSynthesizer::MasterSynthesizer()
    : QObject(0)
       {
-      lock1 = false;
-      lock2 = true;
-      _synthesizer.reserve(4);
-      _gain = 1.0;
-      _masterTuning = 440.0;
-      for (int i = 0; i < MAX_EFFECTS; ++i)
-            _effect[i] = 0;
       }
 
 //---------------------------------------------------------
@@ -263,9 +256,6 @@ void MasterSynthesizer::setSampleRate(float val)
 
 void MasterSynthesizer::process(unsigned n, float* p)
       {
-//      memset(effect1Buffer, 0, n * sizeof(float) * 2);
-//      memset(effect2Buffer, 0, n * sizeof(float) * 2);
-
       if (lock2)
             return;
       lock1 = true;
@@ -274,12 +264,13 @@ void MasterSynthesizer::process(unsigned n, float* p)
             return;
             }
       // avoid overflow
-      if( n > MAX_BUFFERSIZE / 2)
+      if (n > MAX_BUFFERSIZE / 2)
             return;
       for (Synthesizer* s : _synthesizer) {
             if (s->active())
                   s->process(n, p, effect1Buffer, effect2Buffer);
             }
+
       if (_effect[0] && _effect[1]) {
             memset(effect1Buffer, 0, n * sizeof(float) * 2);
             _effect[0]->process(n, p, effect1Buffer);
@@ -292,8 +283,9 @@ void MasterSynthesizer::process(unsigned n, float* p)
             else
                   _effect[1]->process(n, effect1Buffer, p);
             }
+      float g = _gain * _boost;
       for (unsigned i = 0; i < n * 2; ++i)
-            *p++ *= _gain;
+            *p++ *= g;
       lock1 = false;
       }
 
@@ -315,6 +307,8 @@ int MasterSynthesizer::indexOfEffect(int ab, const QString& name)
 
 int MasterSynthesizer::indexOfEffect(int ab)
       {
+      if (!_effect[ab])
+            return 0;
       return indexOfEffect(ab, _effect[ab]->name());
       }
 

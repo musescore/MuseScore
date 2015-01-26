@@ -75,8 +75,6 @@ xcode_pch(awl all)
 ADD_DEPENDENCIES(awl mops1)
 ADD_DEPENDENCIES(awl mops2)
 
-# if (NOT MINGW AND NOT APPLE)
-if (FALSE)
 QT4_WRAP_CPP (mocs2
       aslider.h
       knob.h
@@ -93,6 +91,7 @@ QT4_WRAP_CPP (mocs2
       pitchlabel.h
       awlplugin.h
       )
+
 
 add_library (
       awlplugin SHARED
@@ -126,11 +125,10 @@ set_target_properties(awlplugin
       )
 
 # dont install awlplugin on default
-# install( TARGETS awlplugin DESTINATION ${QT_PLUGINS_DIR}/designer/ )
+# install( TARGETS awlplugin DESTINATION ${designerPlugins}/plugins/designer/ )
 
 #add_executable(ltest ltest.cpp)
 #target_link_libraries (ltest awlplugin msynth al ${QT_LIBRARIES})
 
+set_target_properties(awlplugin PROPERTIES EXCLUDE_FROM_ALL 1)
 
-# endif (NOT MINGW AND NOT APPLE)
-endif (FALSE)

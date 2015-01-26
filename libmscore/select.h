@@ -141,6 +141,7 @@ class Selection {
       void remove(Element*);
       void clear();
       Element* element() const;
+      ChordRest* cr() const;
       Segment* firstChordRestSegment() const;
       ChordRest* firstChordRest(int track = -1) const;
       ChordRest* lastChordRest(int track = -1) const;

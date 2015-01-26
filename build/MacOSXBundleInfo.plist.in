@@ -291,6 +291,26 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Soundfont SF2</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sf2</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Soundfont SF3</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sf3</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
     
     <key>ATSApplicationFontsPath</key>

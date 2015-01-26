@@ -4,7 +4,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1"/>
         <source>Common instruments</source>
-        <translation>Gängige Instrumente</translation>
+        <translation>Gewöhnliche Instrumente</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
@@ -15,11 +15,6 @@
         <location filename="../instruments/instrumentsxml.h" line="3"/>
         <source>Orchestral instruments</source>
         <translation>Orchesterinstrumente</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4"/>
-        <source>Early Music</source>
-        <translation>Alte Musik</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
@@ -4082,13 +4077,13 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1141"/>
         <source>Contralto</source>
-        <translation>Kontra-Alt</translation>
+        <translation>Alt</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1143"/>
         <source>Contr.</source>
         <extracomment>Contralto</extracomment>
-        <translation>C.-A.</translation>
+        <translation>CA</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1144"/>
@@ -4099,7 +4094,7 @@ Tubo</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1146"/>
         <source>Ct.</source>
         <extracomment>Countertenor</extracomment>
-        <translation>Ct.</translation>
+        <translation>Count.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1147"/>
@@ -4155,7 +4150,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1160"/>
         <source>Piano</source>
-        <translation>Piano</translation>
+        <translation>Klavier</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1162"/>
@@ -4177,7 +4172,7 @@ Upright Piano</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1166"/>
         <source>Upright Piano</source>
-        <translation>Klavier</translation>
+        <translation>Pianino</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1169"/>
@@ -4932,6 +4927,11 @@ Acoustic Guitar</extracomment>
         <translation>Erzlaute</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="4"/>
+        <source>Early music</source>
+        <translation>Alte Musik</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="1411"/>
         <source>Theorbo</source>
         <translation>Theorbe</translation>
@@ -5144,13 +5144,13 @@ Tenor Mandola</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1474"/>
         <source>Viola</source>
-        <translation>Bratsche</translation>
+        <translation>Viola</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1476"/>
         <source>Vla.</source>
         <extracomment>Viola</extracomment>
-        <translation>Bra.</translation>
+        <translation>Vla.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1477"/>

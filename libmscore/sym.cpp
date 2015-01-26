@@ -28,7 +28,7 @@ static const int FALLBACK_FONT = 2;       // Bravura
 
 QVector<ScoreFont> ScoreFont::_scoreFonts = {
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"   ),
-      ScoreFont("Gonville",   "Gonville",    ":/fonts/gonville/", "Gonville.otf" ),
+      ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" ),
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"  )
       };
 
@@ -5190,6 +5190,11 @@ QPixmap ScoreFont::sym2pixmap(SymId id, qreal mag)
 
 void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPointF& pos) const
       {
+#if defined(Q_OS_WIN) && (QT_VERSION == QT_VERSION_CHECK(5,4,0))
+      if (dynamic_cast<QPrinter*>(painter->device()) &&
+          painter->device()->paintEngine()->type() == QPaintEngine::Pdf)
+            mag *= 4.333;
+#endif
       qreal imag = 1.0 / mag;
       painter->scale(mag, mag);
       painter->setFont(font());
@@ -5294,7 +5299,7 @@ void initScoreFonts()
       for (oldName i : oldNames)
             Sym::lonhash.insert(i.name, SymId(i.symId));
       QFont::insertSubstitution("MScore Text", "Bravura Text");
-      QFont::insertSubstitution("Gonville Text", "Bravura Text");
+      QFont::insertSubstitution("Gootville Text", "Bravura Text");
       QFont::insertSubstitution("ScoreFont", "Bravura Text");
       QFont::insertSubstitution("MuseJazz", "Bravura Text");
       }
@@ -5653,6 +5658,5 @@ const QRectF ScoreFont::bbox(const QString& s, qreal mag) const
 
 ScoreFont::~ScoreFont()
       {
-
       }
 }

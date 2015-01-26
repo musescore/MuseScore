@@ -10,27 +10,22 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __NOEFFECTGUI_H__
-#define __NOEFFECTGUI_H__
-
 #include "effects/effectgui.h"
 
 namespace Ms {
 
-class NoEffect;
-
 //---------------------------------------------------------
-//   gui
+//   NoEffectGui
 //---------------------------------------------------------
 
 class NoEffectGui : public EffectGui {
       Q_OBJECT
 
+      virtual void updateValues() {}
+
    public:
-      NoEffectGui(NoEffect*, QWidget* parent = 0);
+      NoEffectGui(Effect* e, QWidget* parent = 0);
       };
+
 }
-
-#endif
-
 

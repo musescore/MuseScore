@@ -54,15 +54,22 @@
 
 namespace Ms {
 
+// #define PAGE_DEBUG
+
+#ifdef PAGE_DEBUG
+#define PAGEDBG(...)  qDebug(__VA_ARGS__)
+#else
+#define PAGEDBG(...)  ;
+#endif
+
 //---------------------------------------------------------
 //   rebuildBspTree
 //---------------------------------------------------------
 
 void Score::rebuildBspTree()
       {
-      int n = _pages.size();
-      for (int i = 0; i < n; ++i)
-            _pages.at(i)->rebuildBspTree();
+      for (Page* page : _pages)
+            page->rebuildBspTree();
       }
 
 //---------------------------------------------------------
@@ -739,7 +746,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       for (int i = nNotes-1; i >= 0; --i) {
             Note* note     = notes[i];
             Accidental* ac = note->accidental();
-            if (ac) {
+            if (ac && !note->fixed()) {
                   ac->layout();
                   AcEl acel;
                   acel.note   = note;
@@ -1156,29 +1163,87 @@ void Score::layoutStage2()
       bool crossMeasure = styleB(StyleIdx::crossMeasureValues);
 
       for (int track = 0; track < tracks; ++track) {
-            if (!staff(track2staff(track))->show())
+            Staff* stf = staff(track2staff(track));
+
+            // dont compute beams for invisible staffs and tablature in slash style
+            if (!stf->show() || (stf->isTabStaff() && stf->staffType()->slashStyle()))
                   continue;
+
             ChordRest* a1    = 0;      // start of (potential) beam
             Beam* beam       = 0;      // current beam
             Measure* measure = 0;
 
-            Beam::Mode bm = Beam::Mode::AUTO;
+            Beam::Mode bm    = Beam::Mode::AUTO;
             Segment::Type st = Segment::Type::ChordRest;
+            ChordRest* prev  = 0;
+            bool checkBeats  = false;
+            Fraction stretch = 1;
+            QHash<int, TDuration> beatSubdivision;
+
             for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
                   ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
                   if (cr == 0)
                         continue;
+
+                  // handle grace notes and cross-measure beaming
                   if (cr->type() == Element::Type::CHORD) {
                         Chord* chord = static_cast<Chord*>(cr);
-                  beamGraceNotes(chord, false); // grace before
-                  beamGraceNotes(chord, true);  // grace after
+                        beamGraceNotes(chord, false); // grace before
+                        beamGraceNotes(chord, true);  // grace after
                         // set up for cross-measure values as soon as possible
                         // to have all computations (stems, hooks, ...) consistent with it
                         if (!chord->isGrace())
                               chord->crossMeasureSetup(crossMeasure);
                         }
 
-                  bm = Groups::endBeam(cr);
+                  // if this is a new measure, and it's simple meter (actually X/4),
+                  // then perform a prepass to determine the subdivision of each beat
+                  if (segment->measure() != measure) {
+                        Measure* m = segment->measure();
+                        TimeSig* ts = cr->staff()->timeSig(m->tick());
+                        beatSubdivision.clear();
+                        checkBeats = false;
+                        stretch = ts ? ts->stretch() : 1;
+                        if (ts && ts->denominator() == 4) {
+                              checkBeats = true;
+                              for (Segment* s = m->first(st); s; s = s->next(st)) {
+                                    ChordRest* mcr = static_cast<ChordRest*>(s->element(track));
+                                    if (mcr == 0)
+                                          continue;
+                                    int beat = ((mcr->rtick() * stretch.numerator()) / stretch.denominator()) / MScore::division;
+                                    if (beatSubdivision.contains(beat))
+                                          beatSubdivision[beat] = qMin(beatSubdivision[beat], mcr->durationType());
+                                    else
+                                          beatSubdivision[beat] = mcr->durationType();
+                                    }
+                              }
+                        }
+
+                  // get defaults from time signature properties
+                  bm = Groups::endBeam(cr, prev);
+
+                  // perform additional context-dependent checks
+                  if (bm == Beam::Mode::AUTO) {
+
+                        // check if we need to break beams according to minimum duration in current / previous beat
+                        if (checkBeats && cr->rtick()) {
+                              int tick = (cr->rtick() * stretch.numerator()) / stretch.denominator();
+                              // check if on the beat
+                              if (tick % MScore::division == 0) {
+                                    int beat = tick / MScore::division;
+                                    // get minimum duration for this & previous beat
+                                    TDuration minDuration = qMin(beatSubdivision[beat], beatSubdivision[beat - 1]);
+                                    // re-calculate beam as if this were the duration of current chordrest
+                                    TDuration saveDuration = cr->durationType();
+                                    cr->setDurationType(minDuration);
+                                    bm = Groups::endBeam(cr, prev);
+                                    cr->setDurationType(saveDuration);
+                                    }
+                              }
+
+                        }
+
+                  prev = cr;
 
                   // if chord has hooks and is 2nd element of a cross-measure value
                   // set beam mode to NONE (do not combine with following chord beam/hook, if any)
@@ -1216,7 +1281,7 @@ void Score::layoutStage2()
                         }
 
                   if (beam) {
-                        bool beamEnd = bm == Beam::Mode::BEGIN;
+                        bool beamEnd = (bm == Beam::Mode::BEGIN);
                         if (!beamEnd) {
                               cr->removeDeleteBeam(true);
                               beam->add(cr);
@@ -1292,6 +1357,7 @@ void Score::layoutStage3()
 void Score::doLayout()
       {
 // printf("doLayout %p cmd %d undo empty %d\n", this, undo()->active(), undo()->isEmpty());
+
       if (!undo()->active() && !undo()->isEmpty() && !undoRedo()) {
             qDebug("layout outside cmd and dirty undo");
             // _layoutAll = false;
@@ -1332,7 +1398,7 @@ void Score::doLayout()
 
       if (_staves.isEmpty() || first() == 0) {
             // score is empty
-            qDeleteAll(_pages);
+            // qDeleteAll(_pages);
             _pages.clear();
 
             Page* page = addPage();
@@ -1384,10 +1450,18 @@ void Score::doLayout()
                               for (Chord* cc : c->graceNotes()) {
                                     if (cc->beam() && cc->beam()->elements().front() == cc)
                                           cc->beam()->layout();
+                                    for (Note* n : cc->notes()) {
+                                          Tie* tie = n->tieFor();
+                                          if (tie)
+                                                tie->layout();
+                                          for (Spanner* sp : n->spannerFor())
+                                                sp->layout();
+                                          }
                                     for (Element* e : cc->el()) {
                                           if (e->type() == Element::Type::SLUR)
                                                 e->layout();
                                           }
+                                    cc->layoutArticulations();
                                     }
                               c->layoutStem();
                               c->layoutArpeggio2();
@@ -1424,6 +1498,9 @@ void Score::doLayout()
                         sp->layout();
                   }
             }
+      for (Spanner* s : _unmanagedSpanner)
+            s->layout();
+
       if (layoutMode() != LayoutMode::LINE) {
             layoutSystems2();
             layoutPages();    // create list of pages
@@ -1440,10 +1517,8 @@ void Score::doLayout()
 
       rebuildBspTree();
 
-      for (MuseScoreView* v : viewer) {
+      for (MuseScoreView* v : viewer)
             v->layoutChanged();
-            v->updateLoopCursors();
-            }
 
       _layoutAll = false;
 
@@ -1512,8 +1587,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             // we assume that keysigs and clefs are only in the first
             // track (voice 0) of a staff
 
-            KeySigEvent keyIdx;
-            keyIdx.setKey(staff->key(tick));
+            KeySigEvent keyIdx = staff->keySigEvent(tick);
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   // search only up to the first ChordRest
@@ -1525,8 +1599,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   switch (el->type()) {
                         case Element::Type::KEYSIG:
                               keysig = static_cast<KeySig*>(el);
-                              if (!keysig->isCustom())
-                                    keysig->changeKeySigEvent(keyIdx);
                               break;
                         case Element::Type::CLEF:
                               clef = static_cast<Clef*>(el);
@@ -1539,23 +1611,22 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             bool needKeysig =        // keep key sigs in TABs: TABs themselves should hide them
                isFirstSystem || styleB(StyleIdx::genKeysig);
 
-            if (needKeysig && !keysig && (keyIdx.key() != Key::C)) {
+            if (needKeysig && !keysig && ((keyIdx.key() != Key::C) || keyIdx.custom())) {
                   //
                   // create missing key signature
                   //
-                  keysig = keySigFactory(keyIdx);
-                  if (keysig) {
-                        keysig->setTrack(i * VOICES);
-                        keysig->setGenerated(true);
-                        Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
-                        keysig->setParent(seg);
-                        keysig->layout();
-                        undoAddElement(keysig);
-                        }
+                  keysig = new KeySig(this);
+                  keysig->setKeySigEvent(keyIdx);
+                  keysig->setTrack(i * VOICES);
+                  keysig->setGenerated(true);
+                  Segment* seg = m->undoGetSegment(Segment::Type::KeySig, tick);
+                  keysig->setParent(seg);
+                  keysig->layout();
+                  undo(new AddElement(keysig));
                   }
             else if (!needKeysig && keysig)
                   undoRemoveElement(keysig);
-            else if (keysig && !keysig->isCustom() && keysig->keySigEvent() != keyIdx)
+            else if (keysig && !(keysig->keySigEvent() == keyIdx))
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
 
             bool needClef = isFirstSystem || styleB(StyleIdx::genClef);
@@ -1635,7 +1706,7 @@ static bool validMMRestMeasure(Measure* m)
       auto l = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
       for (::Interval<Spanner*> isp : l) {
             Spanner* s = isp.value;
-            if (s->type() == Element::VOLTA && (s->tick() == m->tick() || s->tick2() == m->tick()))
+            if (s->type() == Element::Type::VOLTA && (s->tick() == m->tick() || s->tick2() == m->endTick()))
                   return false;
             }
 #endif
@@ -1691,6 +1762,14 @@ static bool breakMultiMeasureRest(Measure* m)
                               return true;
                         }
                   }
+            }
+
+      // break for end of volta
+      auto l = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
+      for (::Interval<Spanner*> isp : l) {
+            Spanner* s = isp.value;
+            if (s->type() == Element::Type::VOLTA && (s->tick2() == m->endTick()))
+                  return false;
             }
 
       for (Segment* s = m->first(); s; s = s->next()) {
@@ -1871,7 +1950,7 @@ void Score::createMMRests()
                                           undo(new AddElement(nks));
                                           }
                                     else {
-                                          if (nts->keySigEvent() != ts->keySigEvent()) {
+                                          if (!(nts->keySigEvent() == ts->keySigEvent())) {
                                                 undo(new ChangeKeySig(nts, ts->keySigEvent(), nts->showCourtesy()));
                                                 }
                                           }
@@ -1966,7 +2045,7 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
       Segment* ns       = nm->findSegment(Segment::Type::TimeSig, tick);
       bool showCourtesy = styleB(StyleIdx::genCourtesyTimesig);
 
-      qreal w;
+      qreal w = 0.0;
       if (showCourtesy && ns) {
             TimeSig* ts = static_cast<TimeSig*>(ns->element(0));
             if (ts && ts->showCourtesySig()) {
@@ -1983,8 +2062,6 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
                         }
                   }
             }
-      else
-            w = 0.0;
 
       // courtesy key signatures
 
@@ -2628,6 +2705,14 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
       bool needRelayout = false;
 
       foreach (System* system, sl) {
+            // set system initial bar line type here, as in System::layout...() methods
+            // it is either too early (in System::layout() measures are not added to the system yet)
+            // or too late (in System::layout2(), horizontal spacing has already been done
+            //    and bar line width will be ignored).
+            // We only set bar line type here; track and bar line span values are set in System::layout2()
+            if (system->barLine() && system->firstMeasure())
+                  system->barLine()->setBarLineType(system->firstMeasure()->systemInitialBarLineType());
+
             //
             //    add cautionary time/key signatures if needed
             //
@@ -2688,9 +2773,9 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         Staff* staff = _staves[staffIdx];
                         showCourtesySig = false;
 
-                        Key key1 = staff->key(tick - 1);
-                        Key key2 = staff->key(tick);
-                        if (styleB(StyleIdx::genCourtesyKeysig) && (key1 != key2)) {
+                        KeySigEvent key1 = staff->keySigEvent(tick - 1);
+                        KeySigEvent key2 = staff->keySigEvent(tick);
+                        if (styleB(StyleIdx::genCourtesyKeysig) && !(key1 == key2)) {
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
                               s = nm->findSegment(Segment::Type::KeySig, tick);
@@ -2708,16 +2793,14 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
                                     if (!ks) {
                                           ks = new KeySig(this);
-                                          ks->setKey(key2);
+                                          ks->setKeySigEvent(key2);
                                           ks->setTrack(track);
                                           ks->setGenerated(true);
                                           ks->setParent(s);
                                           undoAddElement(ks);
                                           }
-                                    else if (ks->key() != key2) {
-                                          KeySigEvent ke = ks->keySigEvent();
-                                          ke.setKey(key2);
-                                          undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                                    else if (!(ks->keySigEvent() == key2)) {
+                                          undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
                                           }
                                     // change bar line to qreal bar line
                                     // m->setEndBarLineType(BarLineType::DOUBLE, true); // this caused issue #12918
@@ -2961,13 +3044,13 @@ void Score::layoutLinear()
       Page* page = getEmptyPage();
       page->appendSystem(system);
 
-      for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
+      for (MeasureBase* mb = first(); mb; mb = mb->next()) {
             Element::Type t = curMeasure->type();
             if (t == Element::Type::VBOX || t == Element::Type::TBOX || t == Element::Type::FBOX) {
                   curMeasure = curMeasure->next();
                   continue;
                   }
-            if (styleB(StyleIdx::createMultiMeasureRests) && t == Element::Type::MEASURE) {
+            if (styleB(StyleIdx::createMultiMeasureRests) && mb->type() == Element::Type::MEASURE) {
                   Measure* m = static_cast<Measure*>(mb);
                   if (m->hasMMRest())
                         mb = m->mmRest();
@@ -2985,13 +3068,11 @@ void Score::layoutLinear()
       foreach (MeasureBase* mb, system->measures()) {
             qreal w = 0.0;
             if (mb->type() == Element::Type::MEASURE) {
-                  if(isFirstMeasure) {
+                  if (isFirstMeasure)
                         pos.rx() += system->leftMargin();
-                        isFirstMeasure = false;
-                        }
                   Measure* m = static_cast<Measure*>(mb);
                   Measure* nm = m->nextMeasure();
-                 if (m->repeatFlags() & Repeat::END) {
+                  if (m->repeatFlags() & Repeat::END) {
                         if (nm && (nm->repeatFlags() & Repeat::START))
                               m->setEndBarLineType(BarLineType::END_START_REPEAT, m->endBarLineGenerated());
                         else
@@ -3000,11 +3081,25 @@ void Score::layoutLinear()
                   else if (nm && (nm->repeatFlags() & Repeat::START))
                         m->setEndBarLineType(BarLineType::START_REPEAT, m->endBarLineGenerated());
                   m->createEndBarLines();
-                  w = m->minWidth1() * styleD(StyleIdx::linearStretch);
+                  if (isFirstMeasure) {
+                        // width with header
+                        qreal w2 = m->minWidth2();
+                        // width *completely* excluding header
+                        // minWidth1() includes the initial key / time signatures since they are considered non-generated
+                        Segment* s = m->first();
+                        while (s && s->segmentType() != Segment::Type::ChordRest)
+                              s = s->next();
+                        qreal w1 = s ? computeMinWidth(s, true) : m->minWidth1();
+                        w = (w2 - w1) + w1 * styleD(StyleIdx::linearStretch);
+                        }
+                  else {
+                        w = m->minWidth1() * styleD(StyleIdx::linearStretch);
+                        }
                   qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
                   if (w < minMeasureWidth)
                         w = minMeasureWidth;
                   m->layout(w);
+                  isFirstMeasure = false;
                   }
             else {
                   mb->layout();
@@ -3123,6 +3218,7 @@ struct PageContext {
       qreal tm() const { return sr.tm(); }
       };
 
+
 //---------------------------------------------------------
 //   layoutPages
 //    create list of pages
@@ -3144,7 +3240,9 @@ void Score::layoutPages()
 
       int nSystems = _systems.size();
 
+PAGEDBG("layoutPages");
       for (int i = 0; i < nSystems; ++i) {
+PAGEDBG("  system %d", i);
             //
             // collect system row
             //
@@ -3158,13 +3256,13 @@ void Score::layoutPages()
                         break;
                   ++i;
                   }
-            qreal tmargin = 0.0;    // top system margin
-            qreal bmargin;          // bottom system margin
+            qreal tmargin;    // top system margin
+            qreal bmargin;    // bottom system margin
 
             if (pC.sr.isVbox()) {
                   VBox* vbox = pC.sr.vbox();
                   bmargin  = vbox->bottomGap();
-                  tmargin += vbox->topGap();
+                  tmargin  = vbox->topGap();
                   if (pC.lastSystem) {
                        if (pC.lastSystem->isVbox())
                               tmargin += pC.lastSystem->vbox()->bottomGap();
@@ -3185,10 +3283,20 @@ void Score::layoutPages()
                   }
 
             tmargin = qMax(tmargin, pC.prevDist);
-
-
             qreal h = pC.sr.height();
+
+PAGEDBG("   y:%f + h:%f + tm:%f + qMax(bm:%f,%f)[=%f] > %f",
+    pC.y    / MScore::DPMM,
+    h       / MScore::DPMM,
+    tmargin / MScore::DPMM,
+    bmargin / MScore::DPMM,
+    slb     / MScore::DPMM,
+    (pC.y + h + tmargin + qMax(bmargin, slb)) / MScore::DPMM,
+    pC.ey   / MScore::DPMM
+    );
+
             if (pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {
+PAGEDBG("      == page break");
                   //
                   // prepare next page
                   //
@@ -3209,7 +3317,7 @@ void Score::layoutPages()
             pC.y   += tmargin;
             pC.prevDist = bmargin;
 
-            foreach(System* system, pC.sr.systems) {
+            for (System* system : pC.sr.systems) {
                   system->setPos(x, pC.y);
                   x += system->width();
                   pC.page->appendSystem(system);
@@ -3304,7 +3412,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                         tdd = restHeight;
                         td  = tdd / nn;
                         }
-                  if (s1->stretchDistance() + td > maxStretch) {
+                  if ((s1->stretchDistance() + td) > maxStretch) {
                         td = maxStretch - s1->stretchDistance();
                         tdd = td * nn;
                         }
@@ -3323,9 +3431,8 @@ void Score::layoutPage(const PageContext& pC, qreal d)
             }
 
       qreal y = 0.0;
-      n = page->systems()->size();
-      for (int i = 0; i < n; ++i) {
-            System* system = page->systems()->at(i);
+
+      for (System* system : *page->systems()) {
             system->move(0, y);
             if (system->addStretch())
                   y += system->stretchDistance();
@@ -3546,7 +3653,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
-                                                      if (note->accidental()) {
+                                                      if (note->accidental() && !note->fixed()) {
                                                             accidental = true;
                                                             // segment-relative
                                                             accidentalX = qMin(accidentalX, note->accidental()->x() + note->x() + c->x());
@@ -3586,13 +3693,20 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                               cr->layout();
 
                               // special case:
-                              // make extra space for ties continued from previous system
+                              // make extra space for ties or glissandi continued from previous system
 
                               if (firstMeasureInSystem && cr->type() == Element::Type::CHORD && cr->tick() == cr->measure()->tick()) {
                                     Chord* c = static_cast<Chord*>(cr);
-                                    for (Note* note : c->notes()) {
-                                          if (note->tieBack())
-                                                minDistance = qMax(minDistance, _spatium * 2);
+                                    if (c->glissando()) {
+                                          minDistance = qMax(minDistance, _spatium * 2);
+                                          }
+                                    else {
+                                          for (Note* note : c->notes()) {
+                                                if (note->tieBack()) {
+                                                      minDistance = qMax(minDistance, _spatium * 2);
+                                                      break;
+                                                      }
+                                                }
                                           }
                                     }
 
@@ -3626,6 +3740,13 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                           QRectF b(l->bbox().translated(l->pos()));
                                           llw = qMax(llw, -(b.left()+lx+cx));
                                           rrw = qMax(rrw, b.right()+rx+cx);
+                                          // hyphen will be drawn using actual (perhaps minimum) note distance
+                                          // but since we are adding padding in System::layoutLyrics(),
+                                          // make enough room for that here
+                                          // (TODO: make padding amount a style setting)
+                                          Lyrics::Syllabic ls = l->syllabic();
+                                          if (ls == Lyrics::Syllabic::BEGIN || ls == Lyrics::Syllabic::MIDDLE)
+                                                rrw += 0.2 * _spatium;
                                           }
                                     }
                               }

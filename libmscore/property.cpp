@@ -44,10 +44,12 @@ static const PropertyData propertyList[] = {
       { P_ID::SHOW_COURTESY,       false, "showCourtesy",  P_TYPE::INT   },
       { P_ID::LINE_TYPE,           false, "lineType",      P_TYPE::INT   },
       { P_ID::PITCH,               true,  "pitch",         P_TYPE::INT   },
-      { P_ID::TPC1,                false, "tpc",           P_TYPE::INT   },
-      { P_ID::TPC2,                false, "tpc2",          P_TYPE::INT   },
+      { P_ID::TPC1,                true,  "tpc",           P_TYPE::INT   },
+      { P_ID::TPC2,                true,  "tpc2",          P_TYPE::INT   },
 
       { P_ID::LINE,                false, "line",          P_TYPE::INT   },
+      { P_ID::FIXED,               false, "fixed",         P_TYPE::BOOL  },
+      { P_ID::FIXED_LINE,          false, "fixedLine",     P_TYPE::INT   },
       { P_ID::HEAD_TYPE,           false, "headType",      P_TYPE::INT   },
       { P_ID::HEAD_GROUP,          false, "head",          P_TYPE::INT },
       { P_ID::VELO_TYPE,           false, "veloType",      P_TYPE::VALUE_TYPE },
@@ -55,9 +57,9 @@ static const PropertyData propertyList[] = {
       { P_ID::ARTICULATION_ANCHOR, false, "anchor",        P_TYPE::INT },
       { P_ID::DIRECTION,           false, "direction",     P_TYPE::DIRECTION },
       { P_ID::STEM_DIRECTION,      true,  "StemDirection", P_TYPE::DIRECTION },
+
       { P_ID::NO_STEM,             false, "noStem",        P_TYPE::INT },
       { P_ID::SLUR_DIRECTION,      false, "slurDirection", P_TYPE::INT },
-
       { P_ID::LEADING_SPACE,       false, "leadingSpace",  P_TYPE::SPATIUM },
       { P_ID::TRAILING_SPACE,      false, "trailingSpace", P_TYPE::SPATIUM },
       { P_ID::DISTRIBUTE,          false, "distribute",    P_TYPE::BOOL },
@@ -66,21 +68,20 @@ static const PropertyData propertyList[] = {
       { P_ID::TUNING,              false, "tuning",        P_TYPE::REAL  },
       { P_ID::PAUSE,               false, "pause",         P_TYPE::REAL  },
       { P_ID::BARLINE_SPAN,        false, "barlineSpan",   P_TYPE::INT   },
+
       { P_ID::BARLINE_SPAN_FROM,   false, 0,               P_TYPE::INT   },
       { P_ID::BARLINE_SPAN_TO,     false, 0,               P_TYPE::INT   },
-
       { P_ID::USER_OFF,            false, "userOff",       P_TYPE::POINT },
-      { P_ID::FRET,                false, "fret",          P_TYPE::INT   },
-      { P_ID::STRING,              false, "string",        P_TYPE::INT   },
-      { P_ID::GHOST,               false, "ghost",         P_TYPE::BOOL  },
+      { P_ID::FRET,                true,  "fret",          P_TYPE::INT   },
+      { P_ID::STRING,              true,  "string",        P_TYPE::INT   },
+      { P_ID::GHOST,               true,  "ghost",         P_TYPE::BOOL  },
       { P_ID::PLAY,                false, "play",          P_TYPE::BOOL  },
       { P_ID::TIMESIG_NOMINAL,     false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_ACTUAL,      true,  0,               P_TYPE::FRACTION },
-
       { P_ID::NUMBER_TYPE,         false, "numberType",    P_TYPE::INT   },
+
       { P_ID::BRACKET_TYPE,        false, "bracketType",   P_TYPE::INT   },
       { P_ID::NORMAL_NOTES,        false, "normalNotes",   P_TYPE::INT   },
-
       { P_ID::ACTUAL_NOTES,        false, "actualNotes",   P_TYPE::INT   },
       { P_ID::P1,                  false, "p1",            P_TYPE::POINT },
       { P_ID::P2,                  false, "p2",            P_TYPE::POINT },
@@ -89,9 +90,9 @@ static const PropertyData propertyList[] = {
       { P_ID::BOX_HEIGHT,          false, "height",        P_TYPE::SPATIUM },
       { P_ID::BOX_WIDTH,           false, "width",         P_TYPE::SPATIUM },
       { P_ID::TOP_GAP,             false, "topGap",        P_TYPE::SP_REAL },
+
       { P_ID::BOTTOM_GAP,          false, "bottomGap",     P_TYPE::SP_REAL },
       { P_ID::LEFT_MARGIN,         false, "leftMargin",    P_TYPE::REAL    },
-
       { P_ID::RIGHT_MARGIN,        false, "rightMargin",   P_TYPE::REAL    },
       { P_ID::TOP_MARGIN,          false, "topMargin",     P_TYPE::REAL    },
       { P_ID::BOTTOM_MARGIN,       false, "bottomMargin",  P_TYPE::REAL    },
@@ -100,9 +101,9 @@ static const PropertyData propertyList[] = {
       { P_ID::SIZE,                false, "size",            P_TYPE::SIZE },
       { P_ID::SCALE,               false, 0,                 P_TYPE::SCALE  },
       { P_ID::LOCK_ASPECT_RATIO,   false, "lockAspectRatio", P_TYPE::BOOL },
+
       { P_ID::SIZE_IS_SPATIUM,     false, "sizeIsSpatium",   P_TYPE::BOOL },
       { P_ID::TEXT_STYLE,          false, "textStyle",       P_TYPE::TEXT_STYLE  },
-
       { P_ID::TEXT_STYLE_TYPE,     false, "textStyleType", P_TYPE::INT  },
       { P_ID::TEXT,                false, 0,               P_TYPE::STRING },
       { P_ID::HTML_TEXT,           false, 0,               P_TYPE::STRING },
@@ -111,9 +112,9 @@ static const PropertyData propertyList[] = {
       { P_ID::BEAM_MODE,           true, "BeamMode",       P_TYPE::BEAM_MODE  },
       { P_ID::BEAM_NO_SLOPE,       true, "noSlope",        P_TYPE::BOOL   },
       { P_ID::USER_LEN,            false, "userLen",       P_TYPE::REAL   },
+
       { P_ID::SPACE,               false, "space",         P_TYPE::SP_REAL},
       { P_ID::TEMPO,               true,  "tempo",         P_TYPE::TEMPO  },
-
       { P_ID::TEMPO_FOLLOW_TEXT,   true,  "followText",    P_TYPE::BOOL   },
       { P_ID::ACCIDENTAL_BRACKET,  false, "bracket",       P_TYPE::BOOL   },
       { P_ID::NUMERATOR_STRING,    false, "textN",         P_TYPE::STRING },
@@ -122,9 +123,9 @@ static const PropertyData propertyList[] = {
       { P_ID::FBPREFIX,            false, "prefix",        P_TYPE::INT    },
       { P_ID::FBDIGIT,             false, "digit",         P_TYPE::INT    },
       { P_ID::FBSUFFIX,            false, "suffix",        P_TYPE::INT    },
+
       { P_ID::FBCONTINUATIONLINE,  false, "continuationLine", P_TYPE::INT },
       { P_ID::FBPARENTHESIS1,      false, "",              P_TYPE::INT    },
-
       { P_ID::FBPARENTHESIS2,      false, "",              P_TYPE::INT    },
       { P_ID::FBPARENTHESIS3,      false, "",              P_TYPE::INT    },
       { P_ID::FBPARENTHESIS4,      false, "",              P_TYPE::INT    },
@@ -133,9 +134,9 @@ static const PropertyData propertyList[] = {
       { P_ID::OTTAVA_TYPE,         false, "",              P_TYPE::INT    },
       { P_ID::NUMBERS_ONLY,        false, "numbersOnly",   P_TYPE::BOOL   },
       { P_ID::TRILL_TYPE,          false, "",              P_TYPE::INT    },
+
       { P_ID::HAIRPIN_CIRCLEDTIP,  false, "hairpinCircledTip", P_TYPE::BOOL     },
       { P_ID::HAIRPIN_TYPE,        true,  "",              P_TYPE::INT     },
-
       { P_ID::HAIRPIN_HEIGHT,      false, "hairpinHeight",     P_TYPE::SPATIUM },
       { P_ID::HAIRPIN_CONT_HEIGHT, false, "hairpinContHeight", P_TYPE::SPATIUM },
       { P_ID::VELO_CHANGE,         true,  "veloChange",        P_TYPE::INT    },
@@ -144,9 +145,9 @@ static const PropertyData propertyList[] = {
       { P_ID::VELOCITY,            false, "velocity",      P_TYPE::INT    },
       { P_ID::JUMP_TO,             false, "jumpTo",        P_TYPE::STRING },
       { P_ID::PLAY_UNTIL,          false, "playUntil",     P_TYPE::STRING },
+
       { P_ID::CONTINUE_AT,         false, "continueAt",    P_TYPE::STRING },
       { P_ID::LABEL,               false, "label",         P_TYPE::STRING },
-
       { P_ID::MARKER_TYPE,         false, 0,               P_TYPE::INT    },
       { P_ID::ARP_USER_LEN1,       false, 0,               P_TYPE::REAL   },
       { P_ID::ARP_USER_LEN2,       false, 0,               P_TYPE::REAL   },
@@ -155,9 +156,9 @@ static const PropertyData propertyList[] = {
       { P_ID::END_BARLINE_VISIBLE, false, 0,               P_TYPE::BOOL   },
       { P_ID::END_BARLINE_COLOR,   false, 0,               P_TYPE::COLOR  },
       { P_ID::MEASURE_NUMBER_MODE, false, 0,               P_TYPE::INT    },
+
       { P_ID::GLISS_TYPE,          false, 0,               P_TYPE::INT    },
       { P_ID::GLISS_TEXT,          false, 0,               P_TYPE::STRING },
-
       { P_ID::GLISS_SHOW_TEXT,     false, 0,               P_TYPE::BOOL   },
       { P_ID::DIAGONAL,            false, 0,               P_TYPE::BOOL     },
       { P_ID::GROUPS,              false, 0,               P_TYPE::GROUPS   },
@@ -166,9 +167,9 @@ static const PropertyData propertyList[] = {
       { P_ID::LINE_WIDTH,          false, 0,               P_TYPE::SPATIUM  },
       { P_ID::LASSO_POS,           false, 0,               P_TYPE::POINT_MM },
       { P_ID::LASSO_SIZE,          false, 0,               P_TYPE::SIZE_MM  },
+
       { P_ID::TIME_STRETCH,        false, 0,               P_TYPE::REAL     },
       { P_ID::TIMESIG,             false, 0,               P_TYPE::FRACTION },
-
       { P_ID::TIMESIG_GLOBAL,      false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_TYPE,        true,  0,               P_TYPE::INT },
       { P_ID::SPANNER_TICK,        true,  "tick",          P_TYPE::INT      },
@@ -177,10 +178,10 @@ static const PropertyData propertyList[] = {
       { P_ID::USER_OFF2,           false, "userOff2",        P_TYPE::POINT   },
       { P_ID::BEGIN_TEXT_PLACE,    false, "beginTextPlace",  P_TYPE::INT     },
       { P_ID::CONTINUE_TEXT_PLACE, false, "continueTextPlace",  P_TYPE::INT     },
+
       { P_ID::END_TEXT_PLACE,      false, "endTextPlace",    P_TYPE::INT     },
       { P_ID::BEGIN_HOOK,          false, "beginHook",       P_TYPE::BOOL    },
       { P_ID::END_HOOK,            false, "endHook",         P_TYPE::BOOL    },
-
       { P_ID::BEGIN_HOOK_HEIGHT,   false, "beginHookHeight", P_TYPE::SPATIUM },
       { P_ID::END_HOOK_HEIGHT,     false, "endHookHeight",   P_TYPE::SPATIUM },
       { P_ID::BEGIN_HOOK_TYPE,     false, "beginHookType",   P_TYPE::INT     },
@@ -188,29 +189,29 @@ static const PropertyData propertyList[] = {
       { P_ID::BEGIN_TEXT,          true,  "beginText",       P_TYPE::STRING  },
       { P_ID::CONTINUE_TEXT,       true,  "continueText",    P_TYPE::STRING  },
       { P_ID::END_TEXT,            true,  "endText",         P_TYPE::STRING  },
+
       { P_ID::BEGIN_TEXT_STYLE,    false, "beginTextStyle",    P_TYPE::TEXT_STYLE },
       { P_ID::CONTINUE_TEXT_STYLE, false, "continueTextStyle", P_TYPE::TEXT_STYLE },
       { P_ID::END_TEXT_STYLE,      false, "endTextStyle",      P_TYPE::TEXT_STYLE },
-
       { P_ID::BREAK_MMR,           false, "breakMultiMeasureRest", P_TYPE::BOOL },
       { P_ID::REPEAT_COUNT,        true,  "endRepeat",             P_TYPE::INT  },
       { P_ID::USER_STRETCH,        false, "stretch",               P_TYPE::REAL },
       { P_ID::NO_OFFSET,           false, "noOffset",              P_TYPE::INT  },
       { P_ID::IRREGULAR,           true,  "irregular",             P_TYPE::BOOL },
-
       { P_ID::ANCHOR,              false,  "anchor",               P_TYPE::INT },
-
       { P_ID::SLUR_UOFF1,          false,  "o1",                   P_TYPE::POINT  },
+
       { P_ID::SLUR_UOFF2,          false,  "o2",                   P_TYPE::POINT  },
       { P_ID::SLUR_UOFF3,          false,  "o3",                   P_TYPE::POINT  },
       { P_ID::SLUR_UOFF4,          false,  "o4",                   P_TYPE::POINT  },
-
       { P_ID::STAFF_MOVE,          true,  "move",                  P_TYPE::INT },
       { P_ID::SYLLABIC,            true,  "syllabic",              P_TYPE::INT },
       { P_ID::LYRIC_TICKS,         true,  "ticks",                 P_TYPE::INT },
-
       { P_ID::VOLTA_ENDING,        true,  "endings",               P_TYPE::INT_LIST },
       { P_ID::LINE_VISIBLE,        true,  "lineVisible",           P_TYPE::BOOL },
+
+      { P_ID::SYSTEM_INITIAL_BARLINE_TYPE, false, "sysInitBarLineType", P_TYPE::INT },
+      { P_ID::MAG,                 false, "mag",                   P_TYPE::REAL },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };

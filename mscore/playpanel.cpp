@@ -28,11 +28,6 @@
 
 namespace Ms {
 
-#if 0 // yet(?) unused
-const int MIN_VOL = -60;
-const int MAX_VOL = 10;
-#endif
-
 static const int DEFAULT_POS_X  = 300;
 static const int DEFAULT_POS_Y  = 100;
 
@@ -48,6 +43,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       cs                 = 0;
       tempoSliderIsPressed = false;
       setupUi(this);
+      setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       QSettings settings;
@@ -62,6 +58,9 @@ PlayPanel::PlayPanel(QWidget* parent)
       loopButton->setDefaultAction(getAction("loop"));
       loopInButton->setDefaultAction(getAction("loop-in"));
       loopOutButton->setDefaultAction(getAction("loop-out"));
+
+      tempoSlider->setDclickValue1(100.0);
+      tempoSlider->setDclickValue2(100.0);
 
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
@@ -194,7 +193,6 @@ void PlayPanel::setTempo(double val)
 void PlayPanel::setRelTempo(qreal val)
       {
       val *= 100;
-      //relTempo->setText(QString("%1 %").arg(val, 3, 'f', 0));
       relTempoBox->setValue(val);
       tempoSlider->setValue(val);
       }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>647</width>
-    <height>664</height>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1021,6 +1021,34 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>styles</tabstop>
+  <tabstop>resetToStyle</tabstop>
+  <tabstop>fontSelect</tabstop>
+  <tabstop>fontSize</tabstop>
+  <tabstop>fontBold</tabstop>
+  <tabstop>fontItalic</tabstop>
+  <tabstop>fontUnderline</tabstop>
+  <tabstop>sizeIsSpatiumDependent</tabstop>
+  <tabstop>systemFlag</tabstop>
+  <tabstop>xOffset</tabstop>
+  <tabstop>yOffset</tabstop>
+  <tabstop>mmUnit</tabstop>
+  <tabstop>spatiumUnit</tabstop>
+  <tabstop>alignLeft</tabstop>
+  <tabstop>alignHCenter</tabstop>
+  <tabstop>alignRight</tabstop>
+  <tabstop>alignTop</tabstop>
+  <tabstop>alignVCenter</tabstop>
+  <tabstop>alignBaseline</tabstop>
+  <tabstop>alignBottom</tabstop>
+  <tabstop>frame</tabstop>
+  <tabstop>circleButton</tabstop>
+  <tabstop>boxButton</tabstop>
+  <tabstop>frameWidth</tabstop>
+  <tabstop>paddingWidth</tabstop>
+  <tabstop>frameRound</tabstop>
+ </tabstops>
  <resources>
   <include location="musescore.qrc"/>
  </resources>

@@ -103,25 +103,25 @@ class Accidental : public Element {
 
    public:
       Accidental(Score* s = 0);
-      virtual Accidental* clone() const     { return new Accidental(*this); }
-      virtual Element::Type type() const    { return Element::Type::ACCIDENTAL; }
+      virtual Accidental* clone() const override  { return new Accidental(*this); }
+      virtual Element::Type type() const override { return Element::Type::ACCIDENTAL; }
 
       const char* subtypeUserName() const;
       void setSubtype(const QString& s);
-      void setAccidentalType(Type t)        { _accidentalType = t;    }
-      Type accidentalType() const           { return _accidentalType; }
-      virtual int subtype() const           { return (int)_accidentalType; }
-      virtual QString subtypeName() const   { return QString(subtype2name(_accidentalType)); }
+      void setAccidentalType(Type t)               { _accidentalType = t;    }
+      Type accidentalType() const                  { return _accidentalType; }
+      virtual int subtype() const override         { return (int)_accidentalType; }
+      virtual QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
 
       virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&);
-      virtual void layout();
-      virtual void draw(QPainter*) const;
-      virtual bool isEditable() const                        { return true; }
-      virtual void startEdit(MuseScoreView*, const QPointF&) { setGenerated(false); }
+      virtual Element* drop(const DropData&) override;
+      virtual void layout() override;
+      virtual void draw(QPainter*) const override;
+      virtual bool isEditable() const override               { return true; }
+      virtual void startEdit(MuseScoreView*, const QPointF&) override { setGenerated(false); }
 
       SymId symbol() const;
-      Note* note() const                  { return (Note*)parent(); }
+      Note* note() const  { return (parent() && parent()->type() == Element::Type::NOTE) ? (Note*)parent() : 0; }
 
       bool hasBracket() const             { return _hasBracket;     }
       void setHasBracket(bool val)        { _hasBracket = val;      }
@@ -134,11 +134,11 @@ class Accidental : public Element {
       void setSmall(bool val)             { _small = val;           }
       void undoSetSmall(bool val);
 
-      virtual void read(XmlReader&);
-      virtual void write(Xml& xml) const;
+      virtual void read(XmlReader&) override;
+      virtual void write(Xml& xml) const override;
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
 
       static AccidentalVal subtype2value(Type);             // return effective pitch offset
       static const char* subtype2name(Type);

@@ -48,7 +48,42 @@
       <trackName>Grand Piano</trackName>
       <Instrument>
         <longName pos="0">Grand Piano</longName>
-        <trackName></trackName>
+        <shortName pos="0">Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="0"/>
           </Channel>
@@ -60,9 +95,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -77,13 +109,6 @@
             <subtype>staccato</subtype>
             </Articulation>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>114</velocity>
@@ -99,13 +124,6 @@
           <durationType>eighth</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>116</velocity>
@@ -117,13 +135,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>76</velocity>
@@ -135,13 +146,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>76</pitch>
             <tpc>18</tpc>
             <velocity>88</velocity>
@@ -165,13 +169,6 @@
           <durationType>16th</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>666</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>73</velocity>
@@ -191,13 +188,6 @@
           <durationType>half</durationType>
           <Note>
             <track>1</track>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>64</pitch>
             <tpc>18</tpc>
             <velocity>68</velocity>

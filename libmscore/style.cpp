@@ -144,8 +144,13 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::swingUnit,                   StyleType("swingUnit",               StyleValueType::STRING)  },
       { StyleIdx::useStandardNoteNames,        StyleType("useStandardNoteNames",    StyleValueType::BOOL) },
       { StyleIdx::useGermanNoteNames,          StyleType("useGermanNoteNames",      StyleValueType::BOOL) },
+      { StyleIdx::useFullGermanNoteNames,      StyleType("useFullGermanNoteNames",  StyleValueType::BOOL) },
       { StyleIdx::useSolfeggioNoteNames,       StyleType("useSolfeggioNoteNames",   StyleValueType::BOOL) },
+      { StyleIdx::useFrenchNoteNames,          StyleType("useFrenchNoteNames",      StyleValueType::BOOL) },
+      { StyleIdx::automaticCapitalization,     StyleType("automaticCapitalization", StyleValueType::BOOL) },
       { StyleIdx::lowerCaseMinorChords,        StyleType("lowerCaseMinorChords",    StyleValueType::BOOL) },
+      { StyleIdx::lowerCaseBassNotes,          StyleType("lowerCaseBassNotes",      StyleValueType::BOOL) },
+      { StyleIdx::allCapsNoteNames,            StyleType("allCapsNoteNames",        StyleValueType::BOOL) },
       { StyleIdx::chordStyle,                  StyleType("chordStyle",              StyleValueType::STRING) },
       { StyleIdx::chordsXmlFile,               StyleType("chordsXmlFile",           StyleValueType::BOOL) },
       { StyleIdx::chordDescriptionFile,        StyleType("chordDescriptionFile",    StyleValueType::STRING) },
@@ -216,7 +221,10 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::tupletStemLeftDistance,      StyleType("tupletStemLeftDistance",  StyleValueType::SPATIUM) },
       { StyleIdx::tupletStemRightDistance,     StyleType("tupletStemRightDistance", StyleValueType::SPATIUM) },
       { StyleIdx::tupletNoteLeftDistance,      StyleType("tupletNoteLeftDistance",  StyleValueType::SPATIUM) },
-      { StyleIdx::tupletNoteRightDistance,     StyleType("tupletNoteRightDistance", StyleValueType::SPATIUM) }
+      { StyleIdx::tupletNoteRightDistance,     StyleType("tupletNoteRightDistance", StyleValueType::SPATIUM) },
+      { StyleIdx::barreLineWidth,              StyleType("barreLineWidth",          StyleValueType::DOUBLE)  },
+      { StyleIdx::fretMag,                     StyleType("fretMag",                 StyleValueType::DOUBLE)  },
+      { StyleIdx::scaleBarlines,               StyleType("scaleBarlines",           StyleValueType::BOOL)    }
       };
 
 class StyleTypes {
@@ -233,6 +241,15 @@ class StyleTypes {
       };
 
 static const StyleTypes styleTypes;
+
+//---------------------------------------------------------
+//   valueType
+//---------------------------------------------------------
+
+StyleValueType MStyle::valueType(const StyleIdx i)
+      {
+      return styleTypes.valueType(i);
+      }
 
 static const QString ff("FreeSerif");
 
@@ -476,8 +493,13 @@ StyleData::StyleData()
             { StyleIdx::swingUnit,                   QVariant(QString("")) },
             { StyleIdx::useStandardNoteNames,        QVariant(true) },
             { StyleIdx::useGermanNoteNames,          QVariant(false) },
+            { StyleIdx::useFullGermanNoteNames,      QVariant(false) },
             { StyleIdx::useSolfeggioNoteNames,       QVariant(false) },
+            { StyleIdx::useFrenchNoteNames,          QVariant(false) },
+            { StyleIdx::automaticCapitalization,     QVariant(true) },
             { StyleIdx::lowerCaseMinorChords,        QVariant(false) },
+            { StyleIdx::lowerCaseBassNotes,          QVariant(false) },
+            { StyleIdx::allCapsNoteNames,            QVariant(false) },
             { StyleIdx::chordStyle,                  QVariant(QString("std")) },
             { StyleIdx::chordsXmlFile,               QVariant(false) },
             { StyleIdx::chordDescriptionFile,        QVariant(QString("chords_std.xml")) },
@@ -548,7 +570,10 @@ StyleData::StyleData()
             { StyleIdx::tupletStemLeftDistance,      QVariant(.5) },
             { StyleIdx::tupletStemRightDistance,     QVariant(.5) },
             { StyleIdx::tupletNoteLeftDistance,      QVariant(0.0) },
-            { StyleIdx::tupletNoteRightDistance,     QVariant(0.0)}
+            { StyleIdx::tupletNoteRightDistance,     QVariant(0.0) },
+            { StyleIdx::barreLineWidth,              QVariant(1.0) },
+            { StyleIdx::fretMag,                     QVariant(1.0) },
+            { StyleIdx::scaleBarlines,               QVariant(true) }
             };
       for (unsigned i = 0; i < sizeof(values2)/sizeof(*values2); ++i)
             _values[int(values2[i].idx)] = values2[i].val;
@@ -1182,7 +1207,8 @@ void StyleData::save(Xml& xml, bool optimize) const
             const ArticulationInfo& ai = Articulation::articulationList[i];
             xml.tag(ai.name + "Anchor", int(_articulationAnchor[i]));
             }
-      _pageFormat.write(xml);
+      if (!MScore::saveTemplateMode || (_pageFormat.name() != "A4" && _pageFormat.name() != "Letter"))
+            _pageFormat.write(xml);
       xml.tag("Spatium", _spatium / MScore::DPMM);
       xml.etag();
       }
@@ -1558,6 +1584,14 @@ bool StyleData::load(QFile* qf)
 //---------------------------------------------------------
 
 const PageFormat* MStyle::pageFormat() const
+      {
+      return d->pageFormat();
+      }
+
+//---------------------------------------------------------
+//   pageFormat
+//---------------------------------------------------------
+PageFormat* MStyle::pageFormat()
       {
       return d->pageFormat();
       }

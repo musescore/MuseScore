@@ -43,8 +43,8 @@ namespace Ms {
 
 extern void populateIconPalette(Palette* p, const IconAction* a);
 extern Palette* newKeySigPalette();
-extern Palette* newBarLinePalette();
-extern Palette* newLinesPalette();
+extern Palette* newBarLinePalette(bool);
+extern Palette* newLinesPalette(bool);
 extern Palette* newAccidentalsPalette();
 
 //---------------------------------------------------------
@@ -58,6 +58,7 @@ void MuseScore::showMasterPalette(const QString& s)
       if (masterPalette == 0) {
             masterPalette = new MasterPalette(this);
             connect(masterPalette, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
+            mscore->stackUnder(masterPalette);
             }
       masterPalette->setVisible(a->isChecked());
       if (!s.isEmpty())
@@ -117,15 +118,16 @@ MasterPalette::MasterPalette(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      addPalette(MuseScore::newGraceNotePalette());
+      addPalette(MuseScore::newGraceNotePalette(false));
       addPalette(MuseScore::newClefsPalette(false));
-      stack->addWidget(new KeyEditor);
+      keyEditor = new KeyEditor;
+      stack->addWidget(keyEditor);
 
       timeDialog = new TimeDialog;
       stack->addWidget(timeDialog);
 
-      addPalette(MuseScore::newBarLinePalette());
-      addPalette(MuseScore::newLinesPalette());
+      addPalette(MuseScore::newBarLinePalette(false));
+      addPalette(MuseScore::newLinesPalette(false));
       addPalette(MuseScore::newArpeggioPalette());
       addPalette(MuseScore::newBreathPalette());
       addPalette(MuseScore::newBracketsPalette());
@@ -133,7 +135,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       addPalette(MuseScore::newAccidentalsPalette(false));
 
-      addPalette(MuseScore::newDynamicsPalette(true));
+      addPalette(MuseScore::newDynamicsPalette(false, true));
       addPalette(MuseScore::newFingeringPalette());
       addPalette(MuseScore::newNoteHeadsPalette());
       addPalette(MuseScore::newTremoloPalette());
@@ -142,7 +144,7 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newTextPalette());
       addPalette(MuseScore::newBreaksPalette());
       addPalette(MuseScore::newBagpipeEmbellishmentPalette());
-      addPalette(MuseScore::newBeamPalette());
+      addPalette(MuseScore::newBeamPalette(false));
       addPalette(MuseScore::newFramePalette());
 
       stack->addWidget(new SymbolDialog);
@@ -156,6 +158,8 @@ void MasterPalette::closeEvent(QCloseEvent* ev)
       {
       if (timeDialog->dirty())
             timeDialog->save();
+      if (keyEditor->dirty())
+            keyEditor->save();
       emit closed(false);
       QWidget::closeEvent(ev);
       }

@@ -33,19 +33,20 @@ class Xml;
 class MasterSynthesizer : public QObject {
       Q_OBJECT
 
-      float _gain;
-      double _masterTuning;
+      float _gain             { 0.1   };     // -20dB
+      float _boost            { 10.0  };     // +20dB
+      double _masterTuning    { 440.0 };
 
    public:
       static const int MAX_BUFFERSIZE = 8192;
       static const int MAX_EFFECTS = 2;
 
    private:
-      std::atomic<bool> lock1;
-      std::atomic<bool> lock2;
+      std::atomic<bool> lock1      { false };
+      std::atomic<bool> lock2      { true  };
       std::vector<Synthesizer*> _synthesizer;
-      std::vector<Effect*> _effectList[2];
-      Effect* _effect[2];
+      std::vector<Effect*> _effectList[MAX_EFFECTS];
+      Effect* _effect[MAX_EFFECTS]  { nullptr, nullptr };
 
       float _sampleRate;
 
@@ -98,7 +99,9 @@ class MasterSynthesizer : public QObject {
       Effect* effect(int ab);
       int indexOfEffect(int ab);
 
-      float gain() const    { return _gain; }
+      float gain() const     { return _gain; }
+      float boost() const    { return _boost; }
+      void setBoost(float v) { _boost = v; }
       };
 
 }

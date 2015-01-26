@@ -23,6 +23,7 @@
 #include "preferences.h"
 #include "palette.h"
 #include "instrdialog.h"
+#include "scoreBrowser.h"
 
 #include "libmscore/instrtemplate.h"
 #include "libmscore/score.h"
@@ -166,7 +167,6 @@ NewWizardPage1::NewWizardPage1(QWidget* parent)
 
       w = new TitleWizard;
 
-      registerField("useTemplate", w->rb1, "checked");
       QGridLayout* grid = new QGridLayout;
       grid->addWidget(w, 0, 0);
       setLayout(grid);
@@ -180,9 +180,6 @@ void NewWizardPage1::initializePage()
       {
       w->title->setText("");
       w->subtitle->setText("");
-      // w->composer->text();
-      // w->poet->text();
-      // w->copyright->text();
       }
 
 //---------------------------------------------------------
@@ -265,36 +262,26 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
-      templateFileDialog = new QFileDialog;
-      templateFileDialog->setParent(this);
-      templateFileDialog->setModal(false);
-      templateFileDialog->setSizeGripEnabled(false);
-      templateFileDialog->setFileMode(QFileDialog::ExistingFile);
-      templateFileDialog->setOption(QFileDialog::DontUseNativeDialog, true);
-      templateFileDialog->setWindowTitle(tr("MuseScore: Select Template"));
-      QString filter = tr("MuseScore Template Files (*.mscz *.mscx)");
-      templateFileDialog->setNameFilter(filter);
-      templateFileDialog->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
-
-      QFileInfo myTemplates(preferences.myTemplatesPath);
-      if (myTemplates.isRelative())
-            myTemplates.setFile(QDir::home(), preferences.myTemplatesPath);
-      QList<QUrl> urls;
-      urls.append(QUrl::fromLocalFile(mscoreGlobalShare + "templates"));
-      urls.append(QUrl::fromLocalFile(myTemplates.absoluteFilePath()));
-      templateFileDialog->setSidebarUrls(urls);
-
-      QSettings settings;
-      templateFileDialog->restoreState(settings.value("templateFileDialog").toByteArray());
-      templateFileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-      templateFileDialog->setDirectory(mscoreGlobalShare + "templates");
+      templateFileBrowser = new ScoreBrowser;
+      templateFileBrowser->setStripNumbers(true);
+      QDir dir(mscoreGlobalShare + "/templates");
+      QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
+      if(fil.isEmpty()){
+          fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
+          }
+      
+      QDir myTemplatesDir(preferences.myTemplatesPath);
+      fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
+      
+      templateFileBrowser->setScores(fil);
+      templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 
       QLayout* layout = new QVBoxLayout;
-      layout->addWidget(templateFileDialog);
+      layout->addWidget(templateFileBrowser);
       setLayout(layout);
 
-      connect(templateFileDialog, SIGNAL(currentChanged(const QString&)), SLOT(templateChanged(const QString&)));
-      connect(templateFileDialog, SIGNAL(accepted()), SLOT(fileAccepted()));
+      connect(templateFileBrowser, SIGNAL(scoreSelected(const QString&)), SLOT(templateChanged(const QString&)));
+      connect(templateFileBrowser, SIGNAL(scoreActivated(const QString&)), SLOT(fileAccepted(const QString&)));
       }
 
 //---------------------------------------------------------
@@ -303,21 +290,8 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
 
 void NewWizardPage4::initializePage()
       {
-      // modify dialog
-      // possibly this is not portable as we make some assumptions on the
-      // implementation of QFileDialog
-
-      templateFileDialog->show();
-      QList<QPushButton*>widgets = templateFileDialog->findChildren<QPushButton*>();
-      foreach(QPushButton* w, widgets) {
-            w->setEnabled(false);
-            w->setVisible(false);
-            }
+      templateFileBrowser->show();
       path.clear();
-      if (templateFileDialog->selectedFiles().size() > 0) {
-            path = templateFileDialog->selectedFiles()[0];
-            emit completeChanged();
-            }
       }
 
 //---------------------------------------------------------
@@ -333,9 +307,10 @@ bool NewWizardPage4::isComplete() const
 //   fileAccepted
 //---------------------------------------------------------
 
-void NewWizardPage4::fileAccepted()
+void NewWizardPage4::fileAccepted(const QString& s)
       {
-      templateFileDialog->show();
+      path = s;
+      templateFileBrowser->show();
       wizard()->next();
       }
 
@@ -355,12 +330,8 @@ void NewWizardPage4::templateChanged(const QString& s)
 
 QString NewWizardPage4::templatePath() const
       {
-      bool useTemplate = field("useTemplate").toBool();
-      if (useTemplate)
-            return path;
-      return QString();
+      return path;
       }
-
 
 //---------------------------------------------------------
 //   NewWizardPage5
@@ -379,6 +350,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       b1->setAccessibleName(title());
       sp = MuseScore::newKeySigPalette();
       sp->setSelectable(true);
+      sp->setDisableDoubleClick(true);
       sp->setSelected(14);
       PaletteScrollArea* sa = new PaletteScrollArea(sp);
       QVBoxLayout* l1 = new QVBoxLayout;
@@ -431,6 +403,7 @@ NewWizard::NewWizard(QWidget* parent)
       setPixmap(QWizard::LogoPixmap, QPixmap(":/data/mscore.png"));
       setPixmap(QWizard::WatermarkPixmap, QPixmap());
       setWindowTitle(tr("MuseScore: Create New Score"));
+
       setOption(QWizard::NoCancelButton, false);
       setOption(QWizard::CancelButtonOnLeft, true);
       setOption(QWizard::HaveFinishButtonOnEarlyPages, true);
@@ -444,8 +417,8 @@ NewWizard::NewWizard(QWidget* parent)
       p5 = new NewWizardPage5;
 
       setPage(int(Page::Type), p1);
-      setPage(int(Page::Instruments), p2);
       setPage(int(Page::Template), p4);
+      setPage(int(Page::Instruments), p2);
       setPage(int(Page::Timesig), p3);
       setPage(int(Page::Keysig), p5);
       p2->setFinalPage(true);
@@ -463,13 +436,16 @@ int NewWizard::nextId() const
       {
       switch(Page(currentId())) {
             case Page::Type:
-                  return useTemplate() ? int(Page::Template) : int(Page::Instruments);
+                  return int(Page::Template);
+            case Page::Template: {
+                  if (emptyScore())
+                        return int(Page::Instruments);
+                  return int(Page::Keysig);
+                  }
             case Page::Instruments:
                   return int(Page::Keysig);
             case Page::Keysig:
                   return int(Page::Timesig);
-            case Page::Template:
-                  return int(Page::Keysig);
             case Page::Timesig:
             default:
                   return int(Page::Invalid);
@@ -477,13 +453,14 @@ int NewWizard::nextId() const
       }
 
 //---------------------------------------------------------
-//   useTemplate
+//   emptyScore
 //---------------------------------------------------------
 
-bool NewWizard::useTemplate() const
+bool NewWizard::emptyScore() const
       {
-      return field("useTemplate").toBool();
+      QString p = p4->templatePath();
+      QFileInfo fi(p);
+      return fi.baseName() == "00-Blank";
       }
-
 }
 

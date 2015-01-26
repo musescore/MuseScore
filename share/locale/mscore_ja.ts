@@ -116,16 +116,8 @@ p, li { white-space: pre-wrap; }
         <translation>MuseScore:アルバムマネージャー</translation>
     </message>
     <message>
-        <source>Album Name</source>
-        <translation>アルバム名</translation>
-    </message>
-    <message>
         <source>Add Score</source>
         <translation>スコアの追加</translation>
-    </message>
-    <message>
-        <source>Remove Current Score</source>
-        <translation>指定のスコアを削除</translation>
     </message>
     <message>
         <source>Remove Score</source>
@@ -140,16 +132,8 @@ p, li { white-space: pre-wrap; }
         <translation>上</translation>
     </message>
     <message>
-        <source>Create New Album</source>
-        <translation>新しいアルバムの作成</translation>
-    </message>
-    <message>
         <source>New</source>
         <translation>新規</translation>
-    </message>
-    <message>
-        <source>Load an Existing Album</source>
-        <translation>既存のアルバムの読み込み</translation>
     </message>
     <message>
         <source>Load</source>
@@ -174,6 +158,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Move current score up in list</source>
         <translation>現在のスコアをリストの上に移動</translation>
+    </message>
+    <message>
+        <source>Album name</source>
+        <translation>アルバムの名前</translation>
+    </message>
+    <message>
+        <source>Remove current score</source>
+        <translation>現在のアルバムを削除</translation>
+    </message>
+    <message>
+        <source>Create new album</source>
+        <translation>新しいアルバム</translation>
+    </message>
+    <message>
+        <source>Load an existing album</source>
+        <translation>既存のアルバムを読み込む</translation>
     </message>
 </context>
 <context>
@@ -243,6 +243,17 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>BarLineBase</name>
+    <message>
+        <source>custom subtype</source>
+        <translation>ユーザー定義種類</translation>
+    </message>
+    <message>
+        <source>custom span</source>
+        <translation>ユーザー定義スパン</translation>
+    </message>
+</context>
+<context>
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
@@ -278,71 +289,38 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>BoxPropertiesBase</name>
+    <name>BreaksDialog</name>
     <message>
-        <source>MuseScore: Frame Properties</source>
-        <translation>MuseScore: フレームのプロパティ</translation>
+        <source>MuseScore: Add/Remove Line Breaks</source>
+        <translation>MuseScore: 改行の追加/削除</translation>
     </message>
     <message>
-        <source>Gaps</source>
-        <translation>隙間</translation>
+        <source>Break lines every</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>sp</source>
-        <extracomment>spatium unit</extracomment>
-        <translation>sp</translation>
+        <source>Number of measures</source>
+        <translation>小節数</translation>
     </message>
     <message>
-        <source>Inner Margins</source>
-        <translation>内部余白</translation>
+        <source>measures</source>
+        <translation>小節</translation>
     </message>
     <message>
-        <source>mm</source>
-        <translation>mm</translation>
+        <source>Add line breaks at end of each system</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Size</source>
-        <translation>サイズ</translation>
+        <source>Remove current line breaks</source>
+        <translation>現在の「折り返し」を削除</translation>
     </message>
     <message>
-        <source>Left:</source>
-        <translation>左:</translation>
-    </message>
-    <message>
-        <source>Right:</source>
-        <translation>右:</translation>
-    </message>
-    <message>
-        <source>Bottom:</source>
-        <translation>下:</translation>
-    </message>
-    <message>
-        <source>Top:</source>
-        <translation>上:</translation>
-    </message>
-    <message>
-        <source>Width:</source>
-        <translation>幅:</translation>
-    </message>
-    <message>
-        <source>Height:</source>
-        <translation>高さ:</translation>
-    </message>
-    <message>
-        <source>Top/Left:</source>
-        <translation>上/左:</translation>
-    </message>
-    <message>
-        <source>Bottom/Right:</source>
-        <translation>下/右:</translation>
+        <source>Break lines every X measures</source>
+        <translation>X 小節ごとに改行する</translation>
     </message>
 </context>
 <context>
     <name>ChordStyleEditor</name>
-    <message>
-        <source>Id</source>
-        <translation>リード</translation>
-    </message>
     <message>
         <source>Name</source>
         <translation>名称</translation>
@@ -363,91 +341,60 @@ p, li { white-space: pre-wrap; }
         <source>Load</source>
         <translation>読み込み</translation>
     </message>
-</context>
-<context>
-    <name>DrumrollEditor</name>
     <message>
-        <source>toolbar 1</source>
-        <translation>ツールバー 1</translation>
-    </message>
-    <message>
-        <source>toolbar 3</source>
-        <translation>ツールバー 3</translation>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>カーソル:</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>ベロシティ:</translation>
-    </message>
-    <message>
-        <source>offset</source>
-        <translation>オフセット</translation>
-    </message>
-    <message>
-        <source>user</source>
-        <translation>ユーザー設定</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>音高:</translation>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; 譜表: %2</translation>
+        <source>ID</source>
+        <translation>ID</translation>
     </message>
 </context>
 <context>
     <name>EditDrumset</name>
     <message>
-        <source>normal</source>
+        <source>Normal</source>
         <translation>標準</translation>
     </message>
     <message>
-        <source>cross</source>
-        <translation>×符頭</translation>
+        <source>Cross</source>
+        <translation>クロス符頭</translation>
     </message>
     <message>
-        <source>diamond</source>
+        <source>Diamond</source>
         <translation>菱形符頭</translation>
     </message>
     <message>
-        <source>triangle</source>
-        <translation>三角符頭</translation>
+        <source>Triangle</source>
+        <translation>トライアングル</translation>
     </message>
     <message>
-        <source>mi</source>
-        <translation>シェイプ・ノート：　ミ</translation>
+        <source>Mi</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>slash</source>
+        <source>Slash</source>
         <translation>スラッシュ符頭</translation>
     </message>
     <message>
-        <source>xcircle</source>
-        <translation>○付き×符頭</translation>
+        <source>XCircle</source>
+        <translation>ｘ サークル符頭</translation>
     </message>
     <message>
-        <source>do</source>
-        <translation>シェイプ・ノート：　ド</translation>
+        <source>Do</source>
+        <translation>ド</translation>
     </message>
     <message>
-        <source>re</source>
-        <translation>シェイプ・ノート：　レ</translation>
+        <source>Re</source>
+        <translation>レ</translation>
     </message>
     <message>
-        <source>fa</source>
-        <translation>シェイプ・ノート：　ファ</translation>
+        <source>Fa</source>
+        <translation>ファ</translation>
     </message>
     <message>
-        <source>la</source>
-        <translation>シェイプ・ノート：　ラ</translation>
+        <source>La</source>
+        <translation>ラ</translation>
     </message>
     <message>
-        <source>ti</source>
-        <translation>シェイプ・ノート：　シ</translation>
+        <source>Ti</source>
+        <translation>シ</translation>
     </message>
 </context>
 <context>
@@ -478,7 +425,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Shortcut</source>
-        <translation>ショートカット</translation>
+        <translation>ショートカットキー</translation>
     </message>
     <message>
         <source>Name</source>
@@ -514,7 +461,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Shortcut:</source>
-        <translation>ショートカット:</translation>
+        <translation>ショートカットキー:</translation>
     </message>
     <message>
         <source>A</source>
@@ -588,10 +535,6 @@ p, li { white-space: pre-wrap; }
         <translation>名称:</translation>
     </message>
     <message>
-        <source>Short Name:</source>
-        <translation>略称:</translation>
-    </message>
-    <message>
         <source>Pitch:</source>
         <translation>音高:</translation>
     </message>
@@ -600,12 +543,16 @@ p, li { white-space: pre-wrap; }
         <translation>移調:</translation>
     </message>
     <message>
-        <source>MIDI Program:</source>
-        <translation>MIDIの音色:</translation>
-    </message>
-    <message>
         <source>Staves:</source>
         <translation>譜表数:</translation>
+    </message>
+    <message>
+        <source>Short name:</source>
+        <translation>略称</translation>
+    </message>
+    <message>
+        <source>MIDI program:</source>
+        <translation>MIDIの音色:</translation>
     </message>
 </context>
 <context>
@@ -1190,28 +1137,28 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>EditRaster</name>
     <message>
-        <source>MuseScore: Edit Raster</source>
-        <translation>MuseScore: ラスターの編集</translation>
-    </message>
-    <message>
-        <source>Edit Raster</source>
-        <translation>ラスターの編集</translation>
-    </message>
-    <message>
-        <source>horizontal Raster:</source>
-        <translation>水平方向のラスタ:</translation>
-    </message>
-    <message>
         <source>1 / </source>
         <translation>1 / </translation>
     </message>
     <message>
-        <source>vertical  Raster:</source>
-        <translation>垂直方向のラスター:</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>sp</translation>
+    </message>
+    <message>
+        <source>MuseScore: Edit Grid</source>
+        <translation>MuseScore: グリッドの編集</translation>
+    </message>
+    <message>
+        <source>Edit Grid</source>
+        <translation>グリッドの編集</translation>
+    </message>
+    <message>
+        <source>Horizontal grid:</source>
+        <translation>水平グリッド:</translation>
+    </message>
+    <message>
+        <source>Vertical  grid:</source>
+        <translation>垂直グリッド:</translation>
     </message>
 </context>
 <context>
@@ -1417,10 +1364,6 @@ p, li { white-space: pre-wrap; }
         <translation>拍子記号の表示</translation>
     </message>
     <message>
-        <source>Advanced style properties...</source>
-        <translation>高度なスタイルのプロパティ...</translation>
-    </message>
-    <message>
         <source>Style group:</source>
         <translation>スタイルグループ:</translation>
     </message>
@@ -1459,6 +1402,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>%</source>
         <translation>%</translation>
+    </message>
+    <message>
+        <source>Advanced Style Properties...</source>
+        <translation>高度なスタイルのプロパティ...</translation>
     </message>
 </context>
 <context>
@@ -1636,10 +1583,6 @@ p, li { white-space: pre-wrap; }
         <translation>テンプレート:</translation>
     </message>
     <message>
-        <source>&lt; Reset to template</source>
-        <translation>&lt; テンプレートの設定にリセット</translation>
-    </message>
-    <message>
         <source>Show key signature</source>
         <translation>調号の表示</translation>
     </message>
@@ -1650,6 +1593,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Show Key signature</source>
         <translation>調号の表示</translation>
+    </message>
+    <message>
+        <source>&lt; Reset to Template</source>
+        <translation>&lt; テンプレートの設定にリセット</translation>
     </message>
 </context>
 <context>
@@ -1791,7 +1738,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
-        <translation>最初の段で空の譜表を非表示にしない</translation>
+        <translation>最初の段では空の譜表を非表示にしない</translation>
     </message>
     <message>
         <source>Display note values across measure bar (EXPERIMENTAL, early music only!)</source>
@@ -1878,20 +1825,8 @@ space unit</extracomment>
         <translation>最終段を右端まで延長する閾値:</translation>
     </message>
     <message>
-        <source>Header text</source>
-        <translation>ヘッダーテキスト</translation>
-    </message>
-    <message>
-        <source>show header also on first page</source>
-        <translation>最初のページにもヘッターを表示</translation>
-    </message>
-    <message>
         <source>Show first</source>
         <translation>最初のページに表示</translation>
-    </message>
-    <message>
-        <source>use odd even page header</source>
-        <translation>奇数偶数ページのヘッダーを使用する</translation>
     </message>
     <message>
         <source>Odd/Even</source>
@@ -1914,44 +1849,12 @@ space unit</extracomment>
         <translation>偶数</translation>
     </message>
     <message>
-        <source>edit even page header</source>
-        <translation>偶数ページのヘッダーを編集</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <source>Odd</source>
         <translation>奇数</translation>
-    </message>
-    <message>
-        <source>add odd page header</source>
-        <translation>奇数ページのヘッダーを追加</translation>
-    </message>
-    <message>
-        <source>Footer text</source>
-        <translation>フッターテキスト</translation>
-    </message>
-    <message>
-        <source>show footer also on first page</source>
-        <translation>最初のページにもフッターを表示</translation>
-    </message>
-    <message>
-        <source>use odd even page footer</source>
-        <translation>奇数偶数ページのフッターを使用する</translation>
-    </message>
-    <message>
-        <source>edit odd page header</source>
-        <translation>奇数ページのヘッダーを編集</translation>
-    </message>
-    <message>
-        <source>edit even page footer</source>
-        <translation>偶数ページのフッターを編集</translation>
-    </message>
-    <message>
-        <source>Measure numbers</source>
-        <translation>小節番号</translation>
     </message>
     <message>
         <source>All staves</source>
@@ -1968,22 +1871,6 @@ space unit</extracomment>
     <message>
         <source>Brace distance:</source>
         <translation>ブレイス括弧の距離:</translation>
-    </message>
-    <message>
-        <source>Fix number of measures/system:</source>
-        <translation>段あたりの小節数を固定</translation>
-    </message>
-    <message>
-        <source>Fix measure width</source>
-        <translation>小節幅の調整</translation>
-    </message>
-    <message>
-        <source>System bracket width:</source>
-        <translation>段と括弧の幅:</translation>
-    </message>
-    <message>
-        <source>Brace width:</source>
-        <translation>ブレイス括弧の幅:</translation>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
@@ -2027,7 +1914,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff line thickness:</source>
-        <translation>譜線の幅:</translation>
+        <translation>譜線の太さ:</translation>
     </message>
     <message>
         <source>Barline to accidental distance:</source>
@@ -2047,11 +1934,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline thickness:</source>
-        <translation>縦線の幅:</translation>
+        <translation>縦線の太さ:</translation>
     </message>
     <message>
         <source>End barline thickness:</source>
-        <translation>終止線の幅:</translation>
+        <translation>終止線の太さ:</translation>
     </message>
     <message>
         <source>End barline distance:</source>
@@ -2059,7 +1946,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Double barline thickness:</source>
-        <translation>複縦線の幅:</translation>
+        <translation>複縦線の太さ:</translation>
     </message>
     <message>
         <source>Double barline distance:</source>
@@ -2095,7 +1982,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Ledger line thickness:</source>
-        <translation>加線の幅:</translation>
+        <translation>加線の太さ:</translation>
     </message>
     <message>
         <source>Ledger line length:</source>
@@ -2103,15 +1990,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Stem thickness:</source>
-        <translation>符幹の幅:</translation>
+        <translation>符幹の太さ:</translation>
     </message>
     <message>
         <source>Dot size:</source>
         <translation>付点のサイズ:</translation>
-    </message>
-    <message>
-        <source>Default TAB clef</source>
-        <translation>既定のTAB記号</translation>
     </message>
     <message>
         <source>Distance to note:</source>
@@ -2119,7 +2002,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line thickness:</source>
-        <translation>線の幅:</translation>
+        <translation>線の太さ:</translation>
     </message>
     <message>
         <source>Hook length:</source>
@@ -2127,7 +2010,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Beam thickness:</source>
-        <translation>連桁の幅</translation>
+        <translation>連桁の太さ</translation>
     </message>
     <message>
         <source>Beam distance (in beam thickness units):</source>
@@ -2151,7 +2034,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted line thickness:</source>
-        <translation>点線の幅:</translation>
+        <translation>点線の太さ:</translation>
     </message>
     <message>
         <source>Small staff size:</source>
@@ -2178,16 +2061,8 @@ space unit</extracomment>
         <translation>高さ</translation>
     </message>
     <message>
-        <source>Line break height:</source>
-        <translation>折り返し記号の高さ:</translation>
-    </message>
-    <message>
         <source>Default vertical position:</source>
         <translation>垂直位置の既定値:</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>Volta</source>
@@ -2198,36 +2073,12 @@ space unit</extracomment>
         <translation>符尾の高さ:</translation>
     </message>
     <message>
-        <source>Solid</source>
-        <translation>実線</translation>
-    </message>
-    <message>
-        <source>Dash</source>
-        <translation>破線</translation>
-    </message>
-    <message>
-        <source>Dot</source>
-        <translation>点線</translation>
-    </message>
-    <message>
-        <source>DashDot</source>
-        <translation>一点鎖線</translation>
-    </message>
-    <message>
-        <source>DashDotDot</source>
-        <translation>二点鎖線</translation>
-    </message>
-    <message>
         <source>Line style:</source>
         <translation>線のスタイル:</translation>
     </message>
     <message>
         <source>Ottava</source>
         <translation>オッターヴァ</translation>
-    </message>
-    <message>
-        <source>numbers only</source>
-        <translation>数字のみ</translation>
     </message>
     <message>
         <source>Pedal Line</source>
@@ -2256,10 +2107,6 @@ space unit</extracomment>
     <message>
         <source>Load chords.xml</source>
         <translation>chords.xmlの読み込み</translation>
-    </message>
-    <message>
-        <source>Root / bass spelling</source>
-        <translation>ルート/バスのスペル</translation>
     </message>
     <message>
         <source>German</source>
@@ -2355,26 +2202,6 @@ space unit</extracomment>
         <translation>臨時記号</translation>
     </message>
     <message>
-        <source>Naturals in key signatures</source>
-        <translation>調号におけるナチュラル</translation>
-    </message>
-    <message>
-        <source>Only for change to C Maj / A min</source>
-        <translation>ハ長調(C major)/イ短調(A minor) のみへ変更</translation>
-    </message>
-    <message>
-        <source>Before change to less sharps / flats</source>
-        <translation>シャープ/フラットなしに変更前</translation>
-    </message>
-    <message>
-        <source>After change to less sharps / flats (but before change sharps &lt;=&gt; flats)</source>
-        <translation>シャープ/フラットなしに変更後(先にシャープ&lt;=&gt;フラットを変更)</translation>
-    </message>
-    <message>
-        <source>Vertical distance from the notes</source>
-        <translation>音符からの垂直距離</translation>
-    </message>
-    <message>
         <source>Maximum slope:</source>
         <translation>最大斜度:</translation>
     </message>
@@ -2385,10 +2212,6 @@ space unit</extracomment>
     <message>
         <source>Avoid the staves</source>
         <translation>譜表を避ける</translation>
-    </message>
-    <message>
-        <source>Horizontal distance from the notes</source>
-        <translation>音符からの水平距離</translation>
     </message>
     <message>
         <source>Distance before the stem of the first note:</source>
@@ -2427,14 +2250,6 @@ space unit</extracomment>
         <translation>符頭からの垂直距離:</translation>
     </message>
     <message>
-        <source>Create multimeasure rests</source>
-        <translation>長休符の作成</translation>
-    </message>
-    <message>
-        <source>Multimeasure rest margin:</source>
-        <translation>長休符の余白:</translation>
-    </message>
-    <message>
         <source>Capo fret position:</source>
         <translation>カポのフレット位置:</translation>
     </message>
@@ -2449,14 +2264,6 @@ space unit</extracomment>
     <message>
         <source>A, B♭, B, C, C♯, ...</source>
         <translation>A, B♭, B, C, C♯, ...</translation>
-    </message>
-    <message>
-        <source>A, B, H, C, Cis, ...</source>
-        <translation>A, B, H, C, Cis, ...</translation>
-    </message>
-    <message>
-        <source>La, Si♭, Si, Do, Do♯, ...</source>
-        <translation>La, Si♭, Si, Do, Do♯, ...</translation>
     </message>
     <message>
         <source>Chord Symbols, Fretboard Diagrams</source>
@@ -2541,6 +2348,162 @@ space unit</extracomment>
     <message>
         <source>Bravura Text</source>
         <translation>Bravura Text</translation>
+    </message>
+    <message>
+        <source>Gonville Text</source>
+        <translation>Gonvilleのテキスト</translation>
+    </message>
+    <message>
+        <source>Show header also on first page</source>
+        <translation>最初のページにもヘッターを表示</translation>
+    </message>
+    <message>
+        <source>Show footer also on first page</source>
+        <translation>最初のページにもフッターを表示</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Use odd/even page header</source>
+        <translation>奇数偶数ページのヘッダーを使用する</translation>
+    </message>
+    <message>
+        <source>Use odd/even page footer</source>
+        <translation>奇数偶数ページのフッターを使用する</translation>
+    </message>
+    <message>
+        <source>Fixed number of measures/system:</source>
+        <translation>段あたりの小節数を固定</translation>
+    </message>
+    <message>
+        <source>Fixed measure width</source>
+        <translation>小節幅を固定</translation>
+    </message>
+    <message>
+        <source>System bracket thickness:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Brace thickness:</source>
+        <translation>ブレイス括弧の太さ:</translation>
+    </message>
+    <message>
+        <source>Continue height:</source>
+        <translation>連続部の高さ:</translation>
+    </message>
+    <message>
+        <source>Continuous</source>
+        <translation>接続</translation>
+    </message>
+    <message>
+        <source>Dashed</source>
+        <translation>破線</translation>
+    </message>
+    <message>
+        <source>Dotted</source>
+        <translation>点線</translation>
+    </message>
+    <message>
+        <source>Dash-dotted</source>
+        <translation>破線 点線</translation>
+    </message>
+    <message>
+        <source>Dash-dot-dotted</source>
+        <translation>破線 点線 点線</translation>
+    </message>
+    <message>
+        <source>Numbers only</source>
+        <translation>数字のみ</translation>
+    </message>
+    <message>
+        <source>Header Text</source>
+        <translation>ヘッダテキスト</translation>
+    </message>
+    <message>
+        <source>Footer Text</source>
+        <translation>フッタテキスト</translation>
+    </message>
+    <message>
+        <source>Measure Numbers</source>
+        <translation>小節番号</translation>
+    </message>
+    <message>
+        <source>Default TAB Clef</source>
+        <translation>既定のTAB記号</translation>
+    </message>
+    <message>
+        <source>Naturals in Key Signatures</source>
+        <translation>調号におけるナチュラル</translation>
+    </message>
+    <message>
+        <source>Vertical Distance from the Notes</source>
+        <translation>音符からの垂直距離</translation>
+    </message>
+    <message>
+        <source>Horizontal Distance from the Notes</source>
+        <translation>音符からの水平距離</translation>
+    </message>
+    <message>
+        <source>Only for a change to C Maj / A min</source>
+        <translation>ハ長調(Cメジャー)/イ短調(Aマイナー) のみへ変更</translation>
+    </message>
+    <message>
+        <source>Create multimeasure rests</source>
+        <translation>長休符の作成</translation>
+    </message>
+    <message>
+        <source>Multimeasure rest margin:</source>
+        <translation>長休符の余白:</translation>
+    </message>
+    <message>
+        <source>Before key signature if changing to fewer sharps or flats</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>A, B♭, H, C, C♯, ...</source>
+        <translation>A, B♭, H, C, C♯, ...</translation>
+    </message>
+    <message>
+        <source>A, B, H, C, Cis</source>
+        <translation>A, B, H, C, Cis</translation>
+    </message>
+    <message>
+        <source>Full German</source>
+        <translation>すべてドイツ語</translation>
+    </message>
+    <message>
+        <source>Do, Do♯, Re♭, Re, ...</source>
+        <translation>Do, Do♯, Re♭, Re, ...</translation>
+    </message>
+    <message>
+        <source>Do, Do♯, Ré♭, Ré, ...</source>
+        <translation>Do, Do♯, Ré♭, Ré, ...</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lower case bass notes</source>
+        <translation>根音を小文字に</translation>
+    </message>
+    <message>
+        <source>All caps note names</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note Spelling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Automatic Capitalization</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -2642,7 +2605,7 @@ space unit</extracomment>
 <context>
     <name>GreendotButton</name>
     <message>
-        <source>record</source>
+        <source>Record</source>
         <translation>録音</translation>
     </message>
 </context>
@@ -2684,6 +2647,14 @@ space unit</extracomment>
         <source>Apply</source>
         <translation>適用</translation>
     </message>
+    <message>
+        <source>Cancel not applied MIDI import operations</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
 </context>
 <context>
     <name>InsertMeasuresDialogBase</name>
@@ -2715,10 +2686,6 @@ space unit</extracomment>
         <translation>臨時記号</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -2734,80 +2701,24 @@ space unit</extracomment>
         <source>Reset Small value</source>
         <translation>小さい値をリセット</translation>
     </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
 </context>
 <context>
     <name>InspectorAmbitus</name>
     <message>
         <source>Part Range</source>
-        <translation>パートの範囲</translation>
+        <translation>パートの音域</translation>
     </message>
     <message>
         <source>Head group</source>
         <translation>符頭の分類</translation>
     </message>
     <message>
-        <source>normal</source>
-        <translation>標準</translation>
-    </message>
-    <message>
-        <source>cross</source>
-        <translation>×符頭</translation>
-    </message>
-    <message>
-        <source>diamond</source>
-        <translation>菱形符頭</translation>
-    </message>
-    <message>
-        <source>triangle</source>
-        <translation>三角符頭</translation>
-    </message>
-    <message>
-        <source>slash</source>
-        <translation>スラッシュ符頭</translation>
-    </message>
-    <message>
-        <source>xcircle</source>
-        <translation>○付き×符頭</translation>
-    </message>
-    <message>
-        <source>do</source>
-        <translation>シェイプ・ノート：　ド</translation>
-    </message>
-    <message>
-        <source>re</source>
-        <translation>シェイプ・ノート：　レ</translation>
-    </message>
-    <message>
-        <source>mi</source>
-        <translation>シェイプ・ノート：　ミ</translation>
-    </message>
-    <message>
-        <source>fa</source>
-        <translation>シェイプ・ノート：　ファ</translation>
-    </message>
-    <message>
-        <source>sol</source>
-        <translation>シェイプ・ノート：  ソ</translation>
-    </message>
-    <message>
-        <source>la</source>
-        <translation>シェイプ・ノート：　ラ</translation>
-    </message>
-    <message>
-        <source>ti</source>
-        <translation>シェイプ・ノート：　シ</translation>
-    </message>
-    <message>
-        <source>alt. brevis</source>
-        <translation>代替ブレヴィス</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>...</source>
@@ -2815,11 +2726,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bottom note</source>
-        <translation>ボトムノート</translation>
-    </message>
-    <message>
-        <source>[undefined]</source>
-        <translation>[未定義]</translation>
+        <translation>最低音</translation>
     </message>
     <message>
         <source>C♭♭</source>
@@ -2963,19 +2870,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Oct </source>
-        <translation>Oct</translation>
+        <translation>オクターブ</translation>
     </message>
     <message>
         <source>Has line</source>
-        <translation>符幹の有り</translation>
-    </message>
-    <message>
-        <source>Line width</source>
-        <translation>線の幅</translation>
+        <translation>線あり</translation>
     </message>
     <message>
         <source>Top note</source>
-        <translation>トップノート</translation>
+        <translation>最高音</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3011,31 +2914,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Upright</source>
-        <translation>アップライト</translation>
+        <translation>直立</translation>
     </message>
     <message>
         <source>Leaning Left</source>
-        <translation>左寄せ</translation>
+        <translation>左傾斜</translation>
     </message>
     <message>
         <source>Leaning Right</source>
-        <translation>右寄せ</translation>
+        <translation>右傾斜</translation>
     </message>
     <message>
         <source>Ambitus Inspector</source>
         <translation>音域 インスペクタ</translation>
     </message>
     <message>
-        <source>Reset Line width value</source>
-        <translation>線幅をリセット</translation>
-    </message>
-    <message>
         <source>Oct</source>
-        <translation>Oct</translation>
+        <translation>オクターブ</translation>
     </message>
     <message>
         <source>Reset Has line value</source>
-        <translation>符幹の有無のリセット</translation>
+        <translation>線の有無をリセット</translation>
     </message>
     <message>
         <source>Reset Head group value</source>
@@ -3052,6 +2951,78 @@ space unit</extracomment>
     <message>
         <source>Reset Head type value</source>
         <translation>符頭のタイプをリセット</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation>標準</translation>
+    </message>
+    <message>
+        <source>Cross</source>
+        <translation>クロス符頭</translation>
+    </message>
+    <message>
+        <source>Diamond</source>
+        <translation>菱形符頭</translation>
+    </message>
+    <message>
+        <source>Triangle</source>
+        <translation>トライアングル</translation>
+    </message>
+    <message>
+        <source>Slash</source>
+        <translation>スラッシュ符頭</translation>
+    </message>
+    <message>
+        <source>XCircle</source>
+        <translation>ｘ サークル符頭</translation>
+    </message>
+    <message>
+        <source>Do</source>
+        <translation>ド</translation>
+    </message>
+    <message>
+        <source>Re</source>
+        <translation>レ</translation>
+    </message>
+    <message>
+        <source>Mi</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fa</source>
+        <translation>ファ</translation>
+    </message>
+    <message>
+        <source>Sol</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>La</source>
+        <translation>ラ</translation>
+    </message>
+    <message>
+        <source>Ti</source>
+        <translation>シ</translation>
+    </message>
+    <message>
+        <source>Alt. Brevis</source>
+        <translation>代替ブレヴィス</translation>
+    </message>
+    <message>
+        <source>Line thickness</source>
+        <translation>線の太さ</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Reset Line thickness value</source>
+        <translation>線の太さを初期値に戻す</translation>
+    </message>
+    <message>
+        <source>[Undefined]</source>
+        <translation>[未定義]</translation>
     </message>
 </context>
 <context>
@@ -3132,10 +3103,6 @@ space unit</extracomment>
         <translation>縦線</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -3203,6 +3170,10 @@ space unit</extracomment>
         <source>Reset Span type value</source>
         <translation>スパンタイプのリセット</translation>
     </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
 </context>
 <context>
     <name>InspectorBeam</name>
@@ -3223,14 +3194,6 @@ space unit</extracomment>
         <translation>下</translation>
     </message>
     <message>
-        <source>Grow Right</source>
-        <translation>右増分</translation>
-    </message>
-    <message>
-        <source>Grow Left</source>
-        <translation>左増分</translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation>方向</translation>
     </message>
@@ -3245,14 +3208,6 @@ space unit</extracomment>
     <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Local Relayout</source>
-        <translation>音符の再配置</translation>
-    </message>
-    <message>
-        <source>User Position</source>
-        <translation>位置指定</translation>
     </message>
     <message>
         <source>Horizontal</source>
@@ -3275,14 +3230,6 @@ space unit</extracomment>
         <translation>右の垂直位置基準</translation>
     </message>
     <message>
-        <source>Reset Grow Right value</source>
-        <translation>右増分のリセット</translation>
-    </message>
-    <message>
-        <source>Reset Grow Left value</source>
-        <translation>左増分のリセット</translation>
-    </message>
-    <message>
         <source>Reset User position value</source>
         <translation>位置指定のリセット</translation>
     </message>
@@ -3293,6 +3240,38 @@ space unit</extracomment>
     <message>
         <source>Reset Horizontal value</source>
         <translation>水平位置のリセット</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>左</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>右</translation>
+    </message>
+    <message>
+        <source>Grow right</source>
+        <translation>右増分</translation>
+    </message>
+    <message>
+        <source>Grow left</source>
+        <translation>左増分</translation>
+    </message>
+    <message>
+        <source>Reset Grow right value</source>
+        <translation>右増分のリセット</translation>
+    </message>
+    <message>
+        <source>Reset Grow left value</source>
+        <translation>左増分のリセット</translation>
+    </message>
+    <message>
+        <source>Local relayout</source>
+        <translation>音符の再配置</translation>
+    </message>
+    <message>
+        <source>User position</source>
+        <translation>位置指定</translation>
     </message>
 </context>
 <context>
@@ -3329,10 +3308,6 @@ space unit</extracomment>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>Horizontal offset</source>
@@ -3374,16 +3349,16 @@ space unit</extracomment>
         <source>Reset Stemless value</source>
         <translation>符幹なしのリセット</translation>
     </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
 </context>
 <context>
     <name>InspectorClef</name>
     <message>
         <source>Clef</source>
         <translation>音部記号</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>...</source>
@@ -3401,6 +3376,10 @@ space unit</extracomment>
         <source>Reset Show courtesy value</source>
         <translation>拍子のリセット</translation>
     </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
 </context>
 <context>
     <name>InspectorDynamic</name>
@@ -3411,10 +3390,6 @@ space unit</extracomment>
     <message>
         <source>Dynamic Range</source>
         <translation>強弱の範囲</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>...</source>
@@ -3447,6 +3422,14 @@ space unit</extracomment>
     <message>
         <source>Reset Dynamic range value</source>
         <translation>強弱の範囲をリセット</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Dynamic range</source>
+        <translation>強弱の範囲</translation>
     </message>
 </context>
 <context>
@@ -3502,6 +3485,17 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorEmpty</name>
+    <message>
+        <source>Empty Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Nothing selected</source>
+        <translation>選択なし</translation>
+    </message>
+</context>
+<context>
     <name>InspectorGlissando</name>
     <message>
         <source>Glissando</source>
@@ -3520,18 +3514,6 @@ space unit</extracomment>
         <translation>...</translation>
     </message>
     <message>
-        <source>straight</source>
-        <translation>ストレート</translation>
-    </message>
-    <message>
-        <source>wavy</source>
-        <translation>波状</translation>
-    </message>
-    <message>
-        <source>Show Text</source>
-        <translation>テキストを表示</translation>
-    </message>
-    <message>
         <source>Glissando Inspector</source>
         <translation>グリッサンド インスペクタ</translation>
     </message>
@@ -3544,8 +3526,20 @@ space unit</extracomment>
         <translation>タイプのリセット</translation>
     </message>
     <message>
-        <source>Reset Show Text value</source>
+        <source>Straight</source>
+        <translation>ストレート</translation>
+    </message>
+    <message>
+        <source>Wavy</source>
+        <translation>波状</translation>
+    </message>
+    <message>
+        <source>Reset Show text value</source>
         <translation>表示テキストのリセット</translation>
+    </message>
+    <message>
+        <source>Show text</source>
+        <translation>テキストを表示</translation>
     </message>
 </context>
 <context>
@@ -3591,18 +3585,6 @@ space unit</extracomment>
         <translation>幅</translation>
     </message>
     <message>
-        <source>Left Gap</source>
-        <translation>左の隙間</translation>
-    </message>
-    <message>
-        <source>Right Gap</source>
-        <translation>右の隙間</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -3611,11 +3593,23 @@ space unit</extracomment>
         <translation>水平フレーム インスペクタ</translation>
     </message>
     <message>
-        <source>Reset Left Gap value</source>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Right gap</source>
+        <translation>右外側余白</translation>
+    </message>
+    <message>
+        <source>Left gap</source>
+        <translation>左外側余白</translation>
+    </message>
+    <message>
+        <source>Reset Left gap value</source>
         <translation>左の隙間のリセット</translation>
     </message>
     <message>
-        <source>Reset Right Gap value</source>
+        <source>Reset Right gap value</source>
         <translation>右の隙間のリセット</translation>
     </message>
 </context>
@@ -3630,24 +3624,12 @@ space unit</extracomment>
         <translation>高さ</translation>
     </message>
     <message>
-        <source>crescendo</source>
-        <translation>クレシェンド</translation>
-    </message>
-    <message>
-        <source>decrescendo</source>
-        <translation>デクレシェンド</translation>
-    </message>
-    <message>
         <source>Type</source>
         <translation>タイプ</translation>
     </message>
     <message>
         <source>Dynamic range</source>
         <translation>強弱の範囲</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>...</source>
@@ -3702,12 +3684,24 @@ space unit</extracomment>
         <translation>高さのリセット</translation>
     </message>
     <message>
-        <source>Reset continue Height value</source>
-        <translation>連続部の高さをリセット</translation>
-    </message>
-    <message>
         <source>Reset Circled tip value</source>
         <translation>丸つき属性のリセット</translation>
+    </message>
+    <message>
+        <source>Crescendo</source>
+        <translation>クレシェンド</translation>
+    </message>
+    <message>
+        <source>Decrescendo</source>
+        <translation>デクレシェンド</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Reset Continue height value</source>
+        <translation>連続部の高さをリセット</translation>
     </message>
 </context>
 <context>
@@ -3715,10 +3709,6 @@ space unit</extracomment>
     <message>
         <source>Image</source>
         <translation>イメージ</translation>
-    </message>
-    <message>
-        <source>Scale to Frame Size</source>
-        <translation>スケールをフレームサイズに合わせる</translation>
     </message>
     <message>
         <source>...</source>
@@ -3733,23 +3723,11 @@ space unit</extracomment>
         <translation>スケール</translation>
     </message>
     <message>
-        <source>Lock Aspect Ratio</source>
-        <translation>縦横比を固定</translation>
-    </message>
-    <message>
-        <source>Size in Spatium Units</source>
-        <translation>sp単位でのサイズ</translation>
-    </message>
-    <message>
         <source>Image Inspector</source>
         <translation>イメージ インスペクタ</translation>
     </message>
     <message>
         <source>Scale to frame size</source>
-        <translation>スケールをフレームサイズに合わせる</translation>
-    </message>
-    <message>
-        <source>Reset Scale to Frame Size value</source>
         <translation>スケールをフレームサイズに合わせる</translation>
     </message>
     <message>
@@ -3769,12 +3747,28 @@ space unit</extracomment>
         <translation>高さ</translation>
     </message>
     <message>
-        <source>Reset Lock Aspect Ratio value</source>
+        <source>Reset Scale to frame size value</source>
+        <translation>スケールをフレームサイズに合わせる</translation>
+    </message>
+    <message>
+        <source>Reset Lock aspect ratio value</source>
         <translation>ロックされたアスペクト比をリセット</translation>
     </message>
     <message>
-        <source>Reset Size in Spatium Units value</source>
-        <translation>サイズをsp単位でリセット</translation>
+        <source>Lock aspect ratio</source>
+        <translation>縦横比を固定</translation>
+    </message>
+    <message>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>標準5線譜上の2線間の距離</translation>
+    </message>
+    <message>
+        <source>Size in staff space units</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Size in staff space units value</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3823,10 +3817,6 @@ space unit</extracomment>
         <translation>調号</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -3841,6 +3831,10 @@ space unit</extracomment>
     <message>
         <source>Reset Show courtesy value</source>
         <translation>拍子のリセット</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
     </message>
 </context>
 <context>
@@ -3889,45 +3883,17 @@ space unit</extracomment>
         <translation>線</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <source>sp</source>
-        <extracomment>Spatium unit</extracomment>
+        <extracomment>Staff space unit</extracomment>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>Solid</source>
-        <translation>実線</translation>
-    </message>
-    <message>
-        <source>Dash</source>
-        <translation>破線</translation>
-    </message>
-    <message>
-        <source>Dot</source>
-        <translation>点線</translation>
-    </message>
-    <message>
-        <source>DashDot</source>
-        <translation>一点鎖線</translation>
-    </message>
-    <message>
-        <source>DashDotDot</source>
-        <translation>二点鎖線</translation>
     </message>
     <message>
         <source>Line color</source>
         <translation>線の色</translation>
-    </message>
-    <message>
-        <source>Line width</source>
-        <translation>線の幅</translation>
     </message>
     <message>
         <source>Line style</source>
@@ -3950,12 +3916,48 @@ space unit</extracomment>
         <translation>斜線属性のリセット</translation>
     </message>
     <message>
-        <source>Reset Line width value</source>
-        <translation>線幅をリセット</translation>
-    </message>
-    <message>
         <source>Reset Line style value</source>
         <translation>線のスタイルをリセット</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Line thickness</source>
+        <translation>線の太さ</translation>
+    </message>
+    <message>
+        <source>Continuous</source>
+        <translation>接続</translation>
+    </message>
+    <message>
+        <source>Dashed</source>
+        <translation>破線</translation>
+    </message>
+    <message>
+        <source>Dotted</source>
+        <translation>点線</translation>
+    </message>
+    <message>
+        <source>Dash-dotted</source>
+        <translation>破線 点線</translation>
+    </message>
+    <message>
+        <source>Dash-dot-dotted</source>
+        <translation>破線 点線 点線</translation>
+    </message>
+    <message>
+        <source>Reset Line thickness value</source>
+        <translation>線の太さを初期値に戻す</translation>
+    </message>
+    <message>
+        <source>Reset Line visible value</source>
+        <translation>線の可視属性をリセット</translation>
+    </message>
+    <message>
+        <source>Line visible</source>
+        <translation>線の表示</translation>
     </message>
 </context>
 <context>
@@ -3977,16 +3979,8 @@ space unit</extracomment>
         <translation>セーニョ</translation>
     </message>
     <message>
-        <source>Segno Variation</source>
-        <translation>セーニョのバリエーション</translation>
-    </message>
-    <message>
         <source>Coda</source>
         <translation>コーダ</translation>
-    </message>
-    <message>
-        <source>Coda Variation</source>
-        <translation>コーダのバリエーション</translation>
     </message>
     <message>
         <source>Codetta</source>
@@ -3999,10 +3993,6 @@ space unit</extracomment>
     <message>
         <source>To Coda</source>
         <translation>To Coda</translation>
-    </message>
-    <message>
-        <source>User defined</source>
-        <translation>ユーザー定義</translation>
     </message>
     <message>
         <source>Marker type</source>
@@ -4023,6 +4013,18 @@ space unit</extracomment>
     <message>
         <source>Marker Type</source>
         <translation>マーカーのタイプ</translation>
+    </message>
+    <message>
+        <source>Segno variation</source>
+        <translation>セーニョのバリエーション</translation>
+    </message>
+    <message>
+        <source>Varied coda</source>
+        <translation>変格コーダ</translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation>ユーザー定義</translation>
     </message>
 </context>
 <context>
@@ -4060,10 +4062,6 @@ space unit</extracomment>
         <translation>下</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4089,7 +4087,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>User</source>
-        <translation>ユーザー設定</translation>
+        <translation>ユーザ設定</translation>
     </message>
     <message>
         <source>Head type</source>
@@ -4122,14 +4120,6 @@ space unit</extracomment>
     <message>
         <source>Note Inspector</source>
         <translation>音符 インスペクタ</translation>
-    </message>
-    <message>
-        <source>Dot Position</source>
-        <translation>付点の位置</translation>
-    </message>
-    <message>
-        <source>Reset Dot Position Value</source>
-        <translation>付点位置のリセット</translation>
     </message>
     <message>
         <source>Reset Mirror head value</source>
@@ -4171,6 +4161,30 @@ space unit</extracomment>
         <source>Reset Play value</source>
         <translation>再生のリセット</translation>
     </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Reset Dot position value</source>
+        <translation>付点位置のリセット</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation>線</translation>
+    </message>
+    <message>
+        <source>Fix to line</source>
+        <translation>線に整列</translation>
+    </message>
+    <message>
+        <source>Reset Fix to line</source>
+        <translation>線への整列をリセット</translation>
+    </message>
+    <message>
+        <source>Reset Line</source>
+        <translation>線のリセット</translation>
+    </message>
 </context>
 <context>
     <name>InspectorOttava</name>
@@ -4181,10 +4195,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>タイプ</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>...</source>
@@ -4219,14 +4229,6 @@ space unit</extracomment>
         <translation>22mb</translation>
     </message>
     <message>
-        <source>above</source>
-        <translation>上</translation>
-    </message>
-    <message>
-        <source>below</source>
-        <translation>下</translation>
-    </message>
-    <message>
         <source>Numbers only</source>
         <translation>数字のみ</translation>
     </message>
@@ -4243,7 +4245,19 @@ space unit</extracomment>
         <translation>配置のリセット</translation>
     </message>
     <message>
-        <source>Reset numbers only value</source>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Above</source>
+        <translation>上部</translation>
+    </message>
+    <message>
+        <source>Below</source>
+        <translation>下</translation>
+    </message>
+    <message>
+        <source>Reset Numbers only value</source>
         <translation>数字のみ属性のリセット</translation>
     </message>
 </context>
@@ -4252,10 +4266,6 @@ space unit</extracomment>
     <message>
         <source>Rest</source>
         <translation>休符</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>...</source>
@@ -4273,6 +4283,10 @@ space unit</extracomment>
         <source>Reset Small value</source>
         <translation>小さい値をリセット</translation>
     </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
 </context>
 <context>
     <name>InspectorSegment</name>
@@ -4284,10 +4298,6 @@ space unit</extracomment>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>...</source>
@@ -4313,28 +4323,16 @@ space unit</extracomment>
         <source>Reset Trailing space value</source>
         <translation>後の間隔をリセット</translation>
     </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
 </context>
 <context>
     <name>InspectorSlur</name>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>solid</source>
-        <translation>実線</translation>
-    </message>
-    <message>
-        <source>dotted</source>
-        <translation>点線</translation>
-    </message>
-    <message>
-        <source>dashed</source>
-        <translation>破線</translation>
     </message>
     <message>
         <source>Line type:</source>
@@ -4355,6 +4353,22 @@ space unit</extracomment>
     <message>
         <source>Line type</source>
         <translation>線のタイプ</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Continuous</source>
+        <translation>接続</translation>
+    </message>
+    <message>
+        <source>Dotted</source>
+        <translation>点線</translation>
+    </message>
+    <message>
+        <source>Dashed</source>
+        <translation>破線</translation>
     </message>
 </context>
 <context>
@@ -4392,10 +4406,6 @@ space unit</extracomment>
         <translation>速度標語</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4416,12 +4426,16 @@ space unit</extracomment>
         <translation>速度標語 インスペクタ</translation>
     </message>
     <message>
-        <source>Reset follow text value</source>
-        <translation>テキスト準拠のリセット</translation>
-    </message>
-    <message>
         <source>Reset Tempo value</source>
         <translation>テンポのリセット</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Reset Follow text value</source>
+        <translation>テキスト準拠のリセット</translation>
     </message>
 </context>
 <context>
@@ -4435,10 +4449,6 @@ space unit</extracomment>
         <translation>スタイル</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4449,6 +4459,10 @@ space unit</extracomment>
     <message>
         <source>Reset Style value</source>
         <translation>スタイルのリセット</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
     </message>
 </context>
 <context>
@@ -4469,10 +4483,6 @@ space unit</extracomment>
         <translation>拍子記号</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4488,6 +4498,10 @@ space unit</extracomment>
         <source>Reset Show courtesy value</source>
         <translation>拍子のリセット</translation>
     </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
 </context>
 <context>
     <name>InspectorTrill</name>
@@ -4498,30 +4512,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>タイプ</translation>
-    </message>
-    <message>
-        <source>trill line</source>
-        <translation>トリル線</translation>
-    </message>
-    <message>
-        <source>up prall</source>
-        <translation>上プラル</translation>
-    </message>
-    <message>
-        <source>down prall</source>
-        <translation>下プラル</translation>
-    </message>
-    <message>
-        <source>prall prall</source>
-        <translation>プラル・プラル</translation>
-    </message>
-    <message>
-        <source>wavy line</source>
-        <translation>波線</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>...</source>
@@ -4535,16 +4525,36 @@ space unit</extracomment>
         <source>Reset Trill type</source>
         <translation>トリルのタイプをリセット</translation>
     </message>
+    <message>
+        <source>Trill Line</source>
+        <translation>トリル線</translation>
+    </message>
+    <message>
+        <source>Up Prall</source>
+        <translation>上プラル</translation>
+    </message>
+    <message>
+        <source>Down Prall</source>
+        <translation>下プラル</translation>
+    </message>
+    <message>
+        <source>Prall Prall</source>
+        <translation>プラル・プラル</translation>
+    </message>
+    <message>
+        <source>Wavy Line</source>
+        <translation>波線</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
 </context>
 <context>
     <name>InspectorTuplet</name>
     <message>
         <source>Tuplet</source>
         <translation>連符</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
     </message>
     <message>
         <source>...</source>
@@ -4561,14 +4571,6 @@ space unit</extracomment>
     <message>
         <source>Nothing</source>
         <translation>表示しない</translation>
-    </message>
-    <message>
-        <source>Number Type</source>
-        <translation>数字のタイプ</translation>
-    </message>
-    <message>
-        <source>Bracket Type</source>
-        <translation>括弧のタイプ</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -4599,16 +4601,28 @@ space unit</extracomment>
         <translation>連符 インスペクタ</translation>
     </message>
     <message>
-        <source>Reset Number Type value</source>
-        <translation>数字のタイプをリセット</translation>
+        <source>Reset Direction value</source>
+        <translation>方向のリセット</translation>
     </message>
     <message>
-        <source>Reset Bracket Type value</source>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Reset Number type value</source>
+        <translation>数字の種類をリセット</translation>
+    </message>
+    <message>
+        <source>Reset Bracket type value</source>
         <translation>括弧のタイプをリセット</translation>
     </message>
     <message>
-        <source>Reset Direction value</source>
-        <translation>方向のリセット</translation>
+        <source>Number type</source>
+        <translation>数字のタイプ</translation>
+    </message>
+    <message>
+        <source>Bracket type</source>
+        <translation>括弧のタイプ</translation>
     </message>
 </context>
 <context>
@@ -4618,20 +4632,8 @@ space unit</extracomment>
         <translation>垂直フレーム</translation>
     </message>
     <message>
-        <source>Right Margin</source>
-        <translation>右余白</translation>
-    </message>
-    <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Bottom Margin</source>
-        <translation>下余白</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4643,51 +4645,63 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>Top Gap</source>
-        <translation>上の隙間</translation>
-    </message>
-    <message>
         <source>Height</source>
         <translation>高さ</translation>
-    </message>
-    <message>
-        <source>Top Margin</source>
-        <translation>上余白</translation>
-    </message>
-    <message>
-        <source>Left Margin</source>
-        <translation>左余白</translation>
-    </message>
-    <message>
-        <source>Bottom Gap</source>
-        <translation>下の隙間</translation>
     </message>
     <message>
         <source>Vertical Frame Inspector</source>
         <translation>垂直フレーム インスペクタ</translation>
     </message>
     <message>
-        <source>Reset Top Gap value</source>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>右余白</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
         <translation>上の隙間のリセット</translation>
     </message>
     <message>
-        <source>Reset Bottom Gap value</source>
+        <source>Reset Bottom gap value</source>
         <translation>下の隙間のリセット</translation>
     </message>
     <message>
-        <source>Reset Left Margin value</source>
+        <source>Bottom margin</source>
+        <translation>下余白</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>左余白</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>上外側余白</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>下外側余白</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>上余白</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
         <translation>左余白のリセット</translation>
     </message>
     <message>
-        <source>Reset Right Margin value</source>
+        <source>Reset Right margin value</source>
         <translation>右余白のリセット</translation>
     </message>
     <message>
-        <source>Reset Top Margin value</source>
+        <source>Reset Top margin value</source>
         <translation>上余白のリセット</translation>
     </message>
     <message>
-        <source>Reset Bottom Margin value</source>
+        <source>Reset Bottom margin value</source>
         <translation>下余白のリセット</translation>
     </message>
 </context>
@@ -4710,10 +4724,6 @@ space unit</extracomment>
         <translation>タイプ</translation>
     </message>
     <message>
-        <source>reset value</source>
-        <translation>値のリセット</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -4724,6 +4734,10 @@ space unit</extracomment>
     <message>
         <source>Reset Type value</source>
         <translation>タイプのリセット</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>値のリセット</translation>
     </message>
 </context>
 <context>
@@ -4879,10 +4893,6 @@ space unit</extracomment>
         <translation>連動</translation>
     </message>
     <message>
-        <source>Staff Linked to Previous</source>
-        <translation>先の譜表と連動</translation>
-    </message>
-    <message>
         <source>Staff type</source>
         <translation>譜表のタイプ</translation>
     </message>
@@ -4902,6 +4912,10 @@ space unit</extracomment>
         <source>Partitur List</source>
         <translation>パートリスト</translation>
     </message>
+    <message>
+        <source>Staff linked to previous</source>
+        <translation>先の譜表と連動</translation>
+    </message>
 </context>
 <context>
     <name>KeyEdit</name>
@@ -4914,12 +4928,12 @@ space unit</extracomment>
         <translation>クリア</translation>
     </message>
     <message>
-        <source>add time signature to palette</source>
-        <translation>パレットに拍子記号を加える</translation>
-    </message>
-    <message>
         <source>Add</source>
         <translation>追加</translation>
+    </message>
+    <message>
+        <source>Add time signature to palette</source>
+        <translation>パレットに拍子記号を加える</translation>
     </message>
 </context>
 <context>
@@ -5146,6 +5160,21 @@ space unit</extracomment>
     <message>
         <source>Text:</source>
         <translation>テキスト:</translation>
+    </message>
+</context>
+<context>
+    <name>LoginDialog</name>
+    <message>
+        <source>Log in to MuseScore</source>
+        <translation>MuseScoreにログイン</translation>
+    </message>
+    <message>
+        <source>Username or email</source>
+        <translation>ユーザ名またはメールアドレス</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>パスワード</translation>
     </message>
 </context>
 <context>
@@ -5482,6 +5511,19 @@ Would you like to locate %2 now?</source>
     </message>
 </context>
 <context>
+    <name>MeasureProperties</name>
+    <message>
+        <source>MuseScore</source>
+        <translation>MuseScore</translation>
+    </message>
+    <message>
+        <source>cannot change measure length:
+tuplet would cross measure</source>
+        <translation>小節の長さを変更できません:
+連符が小節をまたいでしまいます。</translation>
+    </message>
+</context>
+<context>
     <name>MeasurePropertiesBase</name>
     <message>
         <source>MuseScore: Measure Properties</source>
@@ -5560,36 +5602,8 @@ Would you like to locate %2 now?</source>
         <translation>その他</translation>
     </message>
     <message>
-        <source>do not count</source>
-        <translation>カウントしない</translation>
-    </message>
-    <message>
         <source>Exclude from measure count</source>
         <translation>小節カウントから除外</translation>
-    </message>
-    <message>
-        <source>AUTO</source>
-        <translation>自動</translation>
-    </message>
-    <message>
-        <source>always show</source>
-        <translation>常に表示</translation>
-    </message>
-    <message>
-        <source>always hide</source>
-        <translation>常に非表示</translation>
-    </message>
-    <message>
-        <source>goto previous measure</source>
-        <translation>直前の小節へ</translation>
-    </message>
-    <message>
-        <source>goto next measure</source>
-        <translation>次の小節へ</translation>
-    </message>
-    <message>
-        <source>Break multimeasure rest</source>
-        <translation>多重小節休み区切り</translation>
     </message>
     <message>
         <source>Repeat count:</source>
@@ -5614,6 +5628,34 @@ Would you like to locate %2 now?</source>
     <message>
         <source>Add to measure number:</source>
         <translation>小節番号の増減:</translation>
+    </message>
+    <message>
+        <source>Do not count</source>
+        <translation>カウントしない</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>自動</translation>
+    </message>
+    <message>
+        <source>Always Show</source>
+        <translation>常に見せる</translation>
+    </message>
+    <message>
+        <source>Always Hide</source>
+        <translation>常に隠す</translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation>直前の小節へ</translation>
+    </message>
+    <message>
+        <source>Go to next measure</source>
+        <translation>次の小節へ</translation>
+    </message>
+    <message>
+        <source>Break multimeasure rest</source>
+        <translation>多重小節休み区切り</translation>
     </message>
 </context>
 <context>
@@ -5707,19 +5749,19 @@ Would you like to locate %2 now?</source>
 <context>
     <name>Ms</name>
     <message>
-        <source>fall</source>
+        <source>Fall</source>
         <translation>フォール</translation>
     </message>
     <message>
-        <source>doit</source>
+        <source>Doit</source>
         <translation>ドゥイット</translation>
     </message>
     <message>
-        <source>plop</source>
+        <source>Plop</source>
         <translation>プロップ</translation>
     </message>
     <message>
-        <source>scoop</source>
+        <source>Scoop</source>
         <translation>スクープ</translation>
     </message>
 </context>
@@ -5748,24 +5790,24 @@ Would you like to locate %2 now?</source>
 <context>
     <name>Ms::AlbumManager</name>
     <message>
-        <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation>MuseScore ファイル (*.mscz *.mscx);;</translation>
-    </message>
-    <message>
-        <source>All Files (*)</source>
-        <translation>すべてのファイル (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Add Score</source>
         <translation>MuseScore: スコアの追加</translation>
     </message>
     <message>
-        <source>MuseScore Album Files (*.album);;</source>
-        <translation>MuseScore アルバムファイル (*.album);;</translation>
-    </message>
-    <message>
         <source>MuseScore: Load Album</source>
         <translation>MuseScore: アルバムの読み込み</translation>
+    </message>
+    <message>
+        <source>MuseScore Files (*.mscz *.mscx)</source>
+        <translation>MuseScore ファイル (*.mscz *.mscx)</translation>
+    </message>
+    <message>
+        <source>MuseScore Album Files (*.album)</source>
+        <translation>MuseScore アルバムファイル (*.album)</translation>
+    </message>
+    <message>
+        <source>Error while creating score from album.</source>
+        <translation>アルバムからスコアを作成する過程でエラーが発生しました。</translation>
     </message>
 </context>
 <context>
@@ -5786,11 +5828,11 @@ Would you like to locate %2 now?</source>
     <name>Ms::BarLine</name>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 %2 の開始</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 %2 の終了</translation>
     </message>
 </context>
 <context>
@@ -5855,16 +5897,12 @@ Would you like to locate %2 now?</source>
         <translation>9連符</translation>
     </message>
     <message>
-        <source>Duration</source>
-        <translation>拍数</translation>
-    </message>
-    <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 %2 の開始</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 %2 の終了</translation>
     </message>
 </context>
 <context>
@@ -5887,6 +5925,41 @@ Would you like to locate %2 now?</source>
     <message>
         <source>Drums</source>
         <translation>ドラム</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::DrumrollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation>ツールバー 1</translation>
+    </message>
+    <message>
+        <source>Toolbar 3</source>
+        <translation>ツールバー 3</translation>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>カーソル:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>ベロシティ:</translation>
+    </message>
+    <message>
+        <source>offset</source>
+        <translation>オフセット</translation>
+    </message>
+    <message>
+        <source>user</source>
+        <translation>ユーザ設定</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>音高:</translation>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; 譜表: %2</translation>
     </message>
 </context>
 <context>
@@ -5917,17 +5990,6 @@ failed: </source>
     </message>
 </context>
 <context>
-    <name>Ms::EditStaff</name>
-    <message>
-        <source>Edit Short Name</source>
-        <translation>略称の編集</translation>
-    </message>
-    <message>
-        <source>Edit Long Name</source>
-        <translation>譜表名の編集</translation>
-    </message>
-</context>
-<context>
     <name>Ms::EditStringData</name>
     <message>
         <source>Open</source>
@@ -5949,10 +6011,6 @@ failed: </source>
     <message>
         <source>Anchor</source>
         <translation>アンカー</translation>
-    </message>
-    <message>
-        <source>Edit HTML Text</source>
-        <translation>HTMLテキストの編集</translation>
     </message>
     <message>
         <source>Above Staff</source>
@@ -6016,7 +6074,7 @@ failed: </source>
     </message>
     <message>
         <source>the $ sign itself</source>
-        <translation type="unfinished"/>
+        <translation>セーニョ記号そのもの</translation>
     </message>
     <message>
         <source>meta data tag</source>
@@ -6029,6 +6087,18 @@ failed: </source>
     <message>
         <source>Apply to all Parts</source>
         <translation>全要素に適用</translation>
+    </message>
+    <message>
+        <source>last modification time</source>
+        <translation>最終更新時刻</translation>
+    </message>
+    <message>
+        <source>last modification date</source>
+        <translation>最終更新日</translation>
+    </message>
+    <message>
+        <source>page number, if there is more than one page</source>
+        <translation>もし 1 ページ以上あるのであれば，そのページ番号</translation>
     </message>
 </context>
 <context>
@@ -6061,7 +6131,7 @@ failed: </source>
     </message>
     <message>
         <source>Custom</source>
-        <translation>カスタム</translation>
+        <translation>ユーザ定義</translation>
     </message>
 </context>
 <context>
@@ -6094,13 +6164,6 @@ failed: </source>
     </message>
 </context>
 <context>
-    <name>Ms::InspectorEmpty</name>
-    <message>
-        <source>Select an element to display its properties</source>
-        <translation>プロパティを表示する要素を選択</translation>
-    </message>
-</context>
-<context>
     <name>Ms::InspectorNote</name>
     <message>
         <source>Select</source>
@@ -6130,16 +6193,27 @@ failed: </source>
         <source>Beam</source>
         <translation>連桁</translation>
     </message>
+    <message>
+        <source>Tuplet</source>
+        <translation>連符</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::InspectorRest</name>
+    <message>
+        <source>Select</source>
+        <translation>選択</translation>
+    </message>
+    <message>
+        <source>Tuplet</source>
+        <translation>連符</translation>
+    </message>
 </context>
 <context>
     <name>Ms::InstrumentsDialog</name>
     <message>
         <source>MuseScore: Save Instrument List</source>
         <translation>MuseScore: 楽器リストの保存</translation>
-    </message>
-    <message>
-        <source>MuseScore Instruments (*.xml);;</source>
-        <translation>MuseScore 楽器 (*.xml);;</translation>
     </message>
     <message>
         <source>Write Style failed: </source>
@@ -6154,10 +6228,6 @@ failed: </source>
         <translation>MuseScore: 楽器リストの読み込み</translation>
     </message>
     <message>
-        <source>MuseScore Instruments (*.xml);;All files (*)</source>
-        <translation>MuseScore 楽器 (*.xml);;すべてのファイル (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Open Instruments File</source>
         <translation>MuseScore: 楽器ファイルを開く</translation>
     </message>
@@ -6168,6 +6238,10 @@ failed: </source>
         <translation>楽器ファイルを開く
 %1
 失敗:</translation>
+    </message>
+    <message>
+        <source>MuseScore Instruments (*.xml)</source>
+        <translation>MuseScore 楽器 (*.xml)</translation>
     </message>
 </context>
 <context>
@@ -6181,20 +6255,20 @@ failed: </source>
         <translation>譜表数</translation>
     </message>
     <message>
-        <source>Visib.</source>
-        <translation>表示</translation>
-    </message>
-    <message>
         <source>Clef</source>
         <translation>音部記号</translation>
     </message>
     <message>
-        <source>Link.</source>
-        <translation>リンク</translation>
-    </message>
-    <message>
         <source>Staff type</source>
         <translation>譜表のタイプ</translation>
+    </message>
+    <message>
+        <source>Visible</source>
+        <translation>表示</translation>
+    </message>
+    <message>
+        <source>Linked</source>
+        <translation>連動</translation>
     </message>
 </context>
 <context>
@@ -6220,6 +6294,76 @@ failed: </source>
     <message>
         <source>layer tag</source>
         <translation>レイヤータグ</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::LoginDialog</name>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;%1&quot;&gt;アカウントの作成&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;%1&quot;&gt;パスワードをお忘れですか？&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>Login error</source>
+        <translation>ログインエラー</translation>
+    </message>
+    <message>
+        <source>Please fill in your username and password</source>
+        <translation>ユーザ名とパスパードを入力してください</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::LoginManager</name>
+    <message>
+        <source>Network error</source>
+        <translation>ネットワークエラー</translation>
+    </message>
+    <message>
+        <source>Please check your internet connection</source>
+        <translation>インターネット接続を確認して下さい</translation>
+    </message>
+    <message>
+        <source>Unsuccessful login. Please try again.</source>
+        <translation>ログインに失敗しました。もう一度やり直してください。</translation>
+    </message>
+    <message>
+        <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
+        <translation>申し訳ありません。メールアドレスやユーザ名、パスワードをお確かめの上やり直してください。パスワードを忘れてしまった方は&lt;a href=&quot;%1&quot;&gt;こちら&lt;/a&gt;をご覧ください。</translation>
+    </message>
+    <message>
+        <source>This account has been blocked.</source>
+        <translation>このアカウントはブロックされています。</translation>
+    </message>
+    <message>
+        <source>Your account has not been activated yet. Please check your mailbox to activate your account or &lt;a href=&quot;%1&quot;&gt;request a new activation email&lt;/a&gt;.</source>
+        <translation>あなたのアカウントはまだアクティベートされていません。メールを再度ご確認いただだきアクティベートを行うか、 &lt;a href=&quot;%1&quot;&gt;こちら&lt;/a&gt;から新しいアクティベーションメールを送信して手続きしてください。</translation>
+    </message>
+    <message>
+        <source>Error while getting user info. Please try again</source>
+        <translation>ユーザ情報取得中にエラーが発生しました。もう一度やり直してください。</translation>
+    </message>
+    <message>
+        <source>Error while getting user info: %1</source>
+        <translation>ユーザ情報取得中にエラーが発生しました: %1</translation>
+    </message>
+    <message>
+        <source>An error occurred during the file transfer. Please try again</source>
+        <translation>ファイル転送中にエラーが発生しました。もう一度やり直してください。</translation>
+    </message>
+    <message>
+        <source>Cannot upload: %1</source>
+        <translation>アップロードできません: %1</translation>
+    </message>
+    <message>
+        <source>Please upgrade</source>
+        <translation>アップグレードしでください</translation>
+    </message>
+    <message>
+        <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
+        <translation>この機能を使用するには新しいバージョンのMuseScoreが必要です。まず、&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;アップグレード&lt;/a&gt;してください。</translation>
     </message>
 </context>
 <context>
@@ -6265,7 +6409,7 @@ failed: </source>
         <translation>MuseScore: タグ名入力</translation>
     </message>
     <message>
-        <source>New Tag Name:</source>
+        <source>New tag name:</source>
         <translation>新しいタグ:</translation>
     </message>
 </context>
@@ -6341,20 +6485,8 @@ before closing?</source>
         <translation>Bagpipe Music Writer ファイル &lt;※実験的&gt; (*.bww);;</translation>
     </message>
     <message>
-        <source>All Files (*)</source>
-        <translation>すべてのファイル (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Load Score</source>
         <translation>MuseScore: スコアの読み込み</translation>
-    </message>
-    <message>
-        <source>Compressed MuseScore File (*.mscz)</source>
-        <translation>MuseScore 圧縮ファイル(*.mscz)</translation>
-    </message>
-    <message>
-        <source>MuseScore File (*.mscx)</source>
-        <translation>MuseScore　ファイル(*.mscx)</translation>
     </message>
     <message>
         <source>MuseScore: Save Score</source>
@@ -6373,20 +6505,12 @@ before closing?</source>
         <translation>MuseScore: スタイルの読み込み</translation>
     </message>
     <message>
-        <source>MuseScore Styles (*.mss);;All Files (*)</source>
-        <translation>MuseScore スタイル (*.mss);;すべてのファイル(*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Style</source>
         <translation>MuseScore: スタイルを保存</translation>
     </message>
     <message>
         <source>MuseScore Style File (*.mss)</source>
         <translation>MuseScore スタイルファイル(*.mss)</translation>
-    </message>
-    <message>
-        <source>;;All Files (*)</source>
-        <translation>;;すべてのファイル (*)</translation>
     </message>
     <message>
         <source>PDF Scan File (*.pdf);;All (*)</source>
@@ -6413,10 +6537,6 @@ before closing?</source>
         <translation>MuseScore: パレットの読み込み</translation>
     </message>
     <message>
-        <source>MuseScore Palette (*.mpal);;All Files (*)</source>
-        <translation>MuseScore パレット (*.mpal);;すべてのファイル (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Palette</source>
         <translation>MuseScore: パレットの保存</translation>
     </message>
@@ -6427,10 +6547,6 @@ before closing?</source>
     <message>
         <source>MuseScore: Load Plugin</source>
         <translation>MuseScore: プラグインの読み込み</translation>
-    </message>
-    <message>
-        <source>MuseScore Plugin (*.qml);;All Files (*)</source>
-        <translation>MuseScore プラグイン (*.qml);;すべてのファイル (*)</translation>
     </message>
     <message>
         <source>MuseScore: Save Plugin</source>
@@ -6445,28 +6561,12 @@ before closing?</source>
         <translation>MuseScore: ドラムセット読み込み</translation>
     </message>
     <message>
-        <source>MuseScore Drumset (*.drm);;All Files (*)</source>
-        <translation>MuseScore ドラムセット (*.drm);;すべてのファイル (*)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Drumset</source>
         <translation>MuseScore: ドラムセット保存</translation>
     </message>
     <message>
         <source>MuseScore Drumset File (*.drm)</source>
         <translation>MuseScore ドラムセットファイル (*.drm)</translation>
-    </message>
-    <message>
-        <source>Uncompressed MuseScore Format (*.mscx)</source>
-        <translation>MuseScore 非圧縮フォーマット(*.mscx)</translation>
-    </message>
-    <message>
-        <source>MusicXML Format (*.xml)</source>
-        <translation>MusicXML フォーマット (*.xml)</translation>
-    </message>
-    <message>
-        <source>Compressed MusicXML Format (*.mxl)</source>
-        <translation>MusicXML 圧縮フォーマット (*.mxl)</translation>
     </message>
     <message>
         <source>Standard MIDI File (*.mid)</source>
@@ -6541,14 +6641,6 @@ Do you want to replace it?
         <translation>パートのエクスポートに成功しました</translation>
     </message>
     <message>
-        <source>MuseScore Format (*.mscz)</source>
-        <translation>MuseScore フォーマット(*.mscz)</translation>
-    </message>
-    <message>
-        <source>MuseScore Format (*.mscx)</source>
-        <translation>MuseScore フォーマット (*.mscx)</translation>
-    </message>
-    <message>
         <source>MuseScore: Save a Copy</source>
         <translation>MuseScore: コピーを保存</translation>
     </message>
@@ -6559,10 +6651,6 @@ Do you want to replace it?
     <message>
         <source>MuseScore: Save Selected</source>
         <translation>MuseScore: 選択された部分の保存</translation>
-    </message>
-    <message>
-        <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable vector graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png);;All Files (*)</source>
-        <translation>サポートされているすべての形式 (*.svg *.jpg *.jpeg *.png);;SVG (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png);;All Files (*)</translation>
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
@@ -6633,10 +6721,6 @@ Do you want to replace it?
         <translation>グリッサンド</translation>
     </message>
     <message>
-        <source>Tempo Text</source>
-        <translation>テンポテキスト</translation>
-    </message>
-    <message>
         <source>Staff Text</source>
         <translation>譜表テキスト</translation>
     </message>
@@ -6645,24 +6729,8 @@ Do you want to replace it?
         <translation>段テキスト</translation>
     </message>
     <message>
-        <source>Rehearsal Mark</source>
-        <translation>リハーサルマーク</translation>
-    </message>
-    <message>
         <source>Instrument</source>
         <translation>楽器</translation>
-    </message>
-    <message>
-        <source>Instrument Change</source>
-        <translation>楽器変更</translation>
-    </message>
-    <message>
-        <source>1.</source>
-        <translation>1.</translation>
-    </message>
-    <message>
-        <source>Lyrics Verse Number</source>
-        <translation>歌詞節番号</translation>
     </message>
     <message>
         <source>4/4 common time</source>
@@ -6671,22 +6739,6 @@ Do you want to replace it?
     <message>
         <source>2/2 alla breve</source>
         <translation>2/2 カットタイム</translation>
-    </message>
-    <message>
-        <source>set visible</source>
-        <translation>表示する</translation>
-    </message>
-    <message>
-        <source>set invisible</source>
-        <translation>非表示にする</translation>
-    </message>
-    <message>
-        <source>change staff type</source>
-        <translation>譜表のタイプを変更</translation>
-    </message>
-    <message>
-        <source>change instrument</source>
-        <translation>楽器を変更</translation>
     </message>
     <message>
         <source>&amp;Add</source>
@@ -6712,11 +6764,7 @@ Do you want to replace it?
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>小節が選択されていません:
-小節を選択してから再実行してください。</translation>
-    </message>
-    <message>
-        <source>switch layer</source>
-        <translation>レイヤー切替</translation>
+小節を選択してからもう一度やり直してください。</translation>
     </message>
     <message>
         <source>synthesizer</source>
@@ -6725,10 +6773,6 @@ Please select a measure and try again</source>
     <message>
         <source>audio track</source>
         <translation>オーディオトラック</translation>
-    </message>
-    <message>
-        <source>switch play mode</source>
-        <translation>再生モード切替</translation>
     </message>
     <message>
         <source>File Operations</source>
@@ -6875,14 +6919,6 @@ Restore session?</source>
 状態を元に戻しますか？</translation>
     </message>
     <message>
-        <source>MuseScore: Transpose</source>
-        <translation>MuseScore: 移調</translation>
-    </message>
-    <message>
-        <source>There is nothing selected. Transpose whole score?</source>
-        <translation>何も選択されていません。スコア全体を移調しますか？</translation>
-    </message>
-    <message>
         <source>Go To: </source>
         <translation>移動先の小節番号: </translation>
     </message>
@@ -6907,22 +6943,10 @@ Restore session?</source>
         <translation>MuseScore: ワークスペース名の読み取り</translation>
     </message>
     <message>
-        <source>Workspace Name:</source>
-        <translation>ワークスペース名:</translation>
-    </message>
-    <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; はすでに存在しています。
 別の名前を選択してください:</translation>
-    </message>
-    <message>
-        <source>Fretboard Diagram</source>
-        <translation>フレットボードダイアグラム</translation>
-    </message>
-    <message>
-        <source>measure:beat:tick</source>
-        <translation>小節:拍:ティック</translation>
     </message>
     <message>
         <source>Ogg Audio File (*.ogg);;All (*)</source>
@@ -6979,11 +7003,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Confirm Replace</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>MuseScore: Load Error</source>
-        <translation>MuseScore: 読み込みエラー</translation>
+        <translation>上書きの確認</translation>
     </message>
     <message>
         <source>Error reading language file %s at line %d column %d: %s
@@ -7014,10 +7034,6 @@ please choose a different name:</source>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
         <translation>サポートされているすべての形式 (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
-    </message>
-    <message>
-        <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>Zoom</source>
@@ -7056,12 +7072,120 @@ please choose a different name:</source>
         <translation>記号</translation>
     </message>
     <message>
-        <source>Open failed: Unknown file extension or broken file</source>
-        <translation>オープン失敗: 未対応のファイル形式かファイルが壊れています</translation>
-    </message>
-    <message>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>この連符を作成できません:音価が短すぎます</translation>
+    </message>
+    <message>
+        <source>MuseScore File (*.mscz)</source>
+        <translation>MuseScore ファイル (*.mscz)</translation>
+    </message>
+    <message>
+        <source>Uncompressed MuseScore File (*.mscx)</source>
+        <translation>MuseScore 非圧縮ファイル(*.mscx)</translation>
+    </message>
+    <message>
+        <source>MusicXML File (*.xml)</source>
+        <translation>MusicXML ファイル (*.xml)</translation>
+    </message>
+    <message>
+        <source>Compressed MusicXML File (*.mxl)</source>
+        <translation>MusicXML 圧縮ファイル (*.mxl)</translation>
+    </message>
+    <message>
+        <source>Show MIDI import panel</source>
+        <translation>MIDIインポートパネルを表示する</translation>
+    </message>
+    <message>
+        <source>Tempo text</source>
+        <translation>テンポテキスト</translation>
+    </message>
+    <message>
+        <source>Staff text</source>
+        <translation>譜表テキスト</translation>
+    </message>
+    <message>
+        <source>System text</source>
+        <translation>譜表テキスト</translation>
+    </message>
+    <message>
+        <source>Rehearsal mark</source>
+        <translation>リハーサルマーク</translation>
+    </message>
+    <message>
+        <source>Instrument change</source>
+        <translation>楽器変更</translation>
+    </message>
+    <message>
+        <source>Set visible</source>
+        <translation>表示する</translation>
+    </message>
+    <message>
+        <source>Set invisible</source>
+        <translation>非表示にする</translation>
+    </message>
+    <message>
+        <source>Change staff type</source>
+        <translation>譜表の種類を変更</translation>
+    </message>
+    <message>
+        <source>Change instrument</source>
+        <translation>楽器を変更</translation>
+    </message>
+    <message>
+        <source>Fretboard diagram</source>
+        <translation>フレットボードダイアグラム</translation>
+    </message>
+    <message>
+        <source>Measure:Beat:Tick</source>
+        <translation>小節:拍:ティック</translation>
+    </message>
+    <message>
+        <source>Switch layer</source>
+        <translation>レイヤー切替</translation>
+    </message>
+    <message>
+        <source>Switch play mode</source>
+        <translation>再生モード切替</translation>
+    </message>
+    <message>
+        <source>Workspace name:</source>
+        <translation>ワークスペース名:</translation>
+    </message>
+    <message>
+        <source>Score_and_Parts</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
+        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</translation>
+    </message>
+    <message>
+        <source>MuseScore Styles (*.mss)</source>
+        <translation>MuseScore スタイル(*.mss)</translation>
+    </message>
+    <message>
+        <source>MuseScore Plugin (*.qml)</source>
+        <translation>MuseScore Plugin(*.qml)</translation>
+    </message>
+    <message>
+        <source>MuseScore Drumset (*.drm)</source>
+        <translation>MuseScore ドラムセット (*.drm)</translation>
+    </message>
+    <message>
+        <source>RH Guitar Fingering %1</source>
+        <translation>右手ギターフィンガリング %1</translation>
+    </message>
+    <message>
+        <source>LH Guitar Fingering %1</source>
+        <translation>左手ギターフィンガリング %1</translation>
+    </message>
+    <message>
+        <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</source>
+        <translation>サポートされているすべての形式 (*.svg *.jpg *.jpeg *.png);;SVG (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</translation>
+    </message>
+    <message>
+        <source>&amp;Tools</source>
+        <translation>ツール(&amp;T)</translation>
     </message>
 </context>
 <context>
@@ -7133,14 +7257,6 @@ please choose a different name:</source>
         <source>Select Template File:</source>
         <translation>テンプレートファイルを選択:</translation>
     </message>
-    <message>
-        <source>MuseScore: Select Template</source>
-        <translation>MuseScore: テンプレートの選択</translation>
-    </message>
-    <message>
-        <source>MuseScore Template Files (*.mscz *.mscx)</source>
-        <translation>MuseScore テンプレートファイル (*.mscz *.mscx)</translation>
-    </message>
 </context>
 <context>
     <name>Ms::NewWizardPage5</name>
@@ -7172,10 +7288,6 @@ please choose a different name:</source>
 <context>
     <name>Ms::Note</name>
     <message>
-        <source>Pitch: %1</source>
-        <translation>音高:%1</translation>
-    </message>
-    <message>
         <source>Appoggiatura</source>
         <translation>前打音</translation>
     </message>
@@ -7205,10 +7317,22 @@ please choose a different name:</source>
     </message>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 %2 の開始</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
+        <translation>%1 %2 の終了</translation>
+    </message>
+    <message>
+        <source>%1; Pitch: %2; Duration: %3%4</source>
+        <translation>%1; 音高: %2; 拍数: %3%4</translation>
+    </message>
+    <message>
+        <source>Beat Slash</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Rhythm Slash</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7222,16 +7346,39 @@ please choose a different name:</source>
 <context>
     <name>Ms::Palette</name>
     <message>
-        <source>Show More...</source>
-        <translation>詳細...</translation>
-    </message>
-    <message>
         <source>Clear</source>
         <translation>クリア</translation>
     </message>
     <message>
         <source>Properties...</source>
         <translation>プロパティ...</translation>
+    </message>
+    <message>
+        <source>More Elements...</source>
+        <translation>その他の要素...</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::PaletteBox</name>
+    <message>
+        <source>Palettes</source>
+        <translation>パレット</translation>
+    </message>
+    <message>
+        <source>Select workspace</source>
+        <translation>ワークスペースの選択</translation>
+    </message>
+    <message>
+        <source>+</source>
+        <translation>+</translation>
+    </message>
+    <message>
+        <source>Add new workspace</source>
+        <translation>新規ワークスペースの追加</translation>
+    </message>
+    <message>
+        <source>new Palette</source>
+        <translation>新しいパレット</translation>
     </message>
 </context>
 <context>
@@ -7279,8 +7426,59 @@ please choose a different name:</source>
 <context>
     <name>Ms::PianoTools</name>
     <message>
-        <source>Piano</source>
-        <translation>ピアノ</translation>
+        <source>Piano Keyboard</source>
+        <translation>ピアノ キーボード</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::PianorollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation>ツールバー 1</translation>
+    </message>
+    <message>
+        <source>Wave</source>
+        <translation>波形</translation>
+    </message>
+    <message>
+        <source>Show wave display</source>
+        <translation>波形画面を表示</translation>
+    </message>
+    <message>
+        <source>Toolbar 2</source>
+        <translation>ツールバー 2</translation>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>カーソル:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>ベロシティ:</translation>
+    </message>
+    <message>
+        <source>Offset</source>
+        <translation>オフセット</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>ユーザ設定</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>音高:</translation>
+    </message>
+    <message>
+        <source>OnTime:</source>
+        <translation>オンタイム:</translation>
+    </message>
+    <message>
+        <source>Len:</source>
+        <translation>音価:</translation>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; 譜表: %2</translation>
     </message>
 </context>
 <context>
@@ -7314,6 +7512,14 @@ please choose a different name:</source>
 Save before closing?</source>
         <translation>プラグイン &quot;%1&quot; は変更されています。
 閉じる前に保存しますか？</translation>
+    </message>
+    <message>
+        <source>MuseScore: Save Plugin</source>
+        <translation>MuseScore: プラグインの保存</translation>
+    </message>
+    <message>
+        <source>cannot determine file type</source>
+        <translation>未知のファイル形式</translation>
     </message>
 </context>
 <context>
@@ -7351,16 +7557,12 @@ Save before closing?</source>
         <translation>開始するスコアの選択</translation>
     </message>
     <message>
-        <source>MuseScore Files (*.mscz *.mscx *.msc);;All (*)</source>
-        <translation>MuseScore ファイル(*.mscz *.mscx *.msc);;すべてのファイル(*)</translation>
-    </message>
-    <message>
         <source>MuseScore Shortcuts</source>
-        <translation>MuseScore ショートカット</translation>
+        <translation>MuseScore ショートカットキー</translation>
     </message>
     <message>
         <source>Print Shortcuts</source>
-        <translation>ショートカットの印刷</translation>
+        <translation>ショートカットキーの印刷</translation>
     </message>
     <message>
         <source>Choose Default Style for Imports</source>
@@ -7396,11 +7598,15 @@ Save before closing?</source>
     </message>
     <message>
         <source>Action: %1; Shortcut: %2</source>
-        <translation>動作: %1; ショートカットキー: %2</translation>
+        <translation>アクション: %1; ショートカットキー: %2</translation>
     </message>
     <message>
         <source>No shortcut defined</source>
-        <translation>ショートカットが未定義</translation>
+        <translation>ショートカットキーが未定義</translation>
+    </message>
+    <message>
+        <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
+        <translation>MuseScore ファイル(*.mscz *.mscx);;すべてのファイル(*)</translation>
     </message>
 </context>
 <context>
@@ -7439,6 +7645,10 @@ Save before closing?</source>
     <message>
         <source>Voice: %1</source>
         <translation>声部:%1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; 拍数: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -7610,10 +7820,6 @@ failed: %2</source>
         <translation>追加</translation>
     </message>
     <message>
-        <source>Frame Properties...</source>
-        <translation>フレームのプロパティ...</translation>
-    </message>
-    <message>
         <source>Volta Properties...</source>
         <translation>反復のプロパティ...</translation>
     </message>
@@ -7732,7 +7938,7 @@ first create some staves</source>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>小節が選択されていません:
-小節を選択してから再実行してください。</translation>
+小節を選択してからもう一度やり直してください。</translation>
     </message>
     <message>
         <source>Fretboard Diagram Properties...</source>
@@ -7794,7 +8000,7 @@ Please select a measure and try again</source>
         <source>No chord/rest selected:
 Please select a chord/rest and try again</source>
         <translation>音符/休符が選択されていません:
-音符/休符を選択してから再実行してください。</translation>
+音符/休符を選択してからもう一度やり直してください。</translation>
     </message>
     <message>
         <source>Cannot split measure here:
@@ -7806,7 +8012,11 @@ Cannot split tuplet</source>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>小節が選択されていません:
-結合する小節の範囲を選択してから再実行してください。</translation>
+結合する小節の範囲を選択してからもう一度やり直してください。</translation>
+    </message>
+    <message>
+        <source>Auto-resize to page</source>
+        <translation>ページに合わせてサイズを調整自動</translation>
     </message>
 </context>
 <context>
@@ -7835,15 +8045,15 @@ Please select a range of measures to join and try again</source>
     <name>Ms::ShortcutCaptureDialog</name>
     <message>
         <source>Shortcut conflicts with </source>
-        <translation>ショートカットが重複しています： </translation>
+        <translation>ショートカットキーが重複しています： </translation>
     </message>
     <message>
         <source>Shortcut conflicts with</source>
-        <translation>ショートカットが重複</translation>
+        <translation>ショートカットキーが重複</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation>新しいショートカット</translation>
+        <translation>新しいショートカットキー</translation>
     </message>
 </context>
 <context>
@@ -7895,65 +8105,38 @@ Please select a range of measures to join and try again</source>
     </message>
 </context>
 <context>
-    <name>Ms::Text</name>
-    <message>
-        <source>Title</source>
-        <translation>タイトル</translation>
-    </message>
-    <message>
-        <source>Subtitle</source>
-        <translation>サブタイトル</translation>
-    </message>
-    <message>
-        <source>Composer</source>
-        <translation>作曲者</translation>
-    </message>
-    <message>
-        <source>Translator</source>
-        <translation>翻訳者</translation>
-    </message>
-    <message>
-        <source>Measure number</source>
-        <translation>小節番号</translation>
-    </message>
-    <message>
-        <source>Lyricist</source>
-        <translation>作詞者</translation>
-    </message>
-</context>
-<context>
     <name>Ms::TextEditor</name>
     <message>
-        <source>bold</source>
+        <source>Bold</source>
         <translation>太字</translation>
     </message>
     <message>
-        <source>italic</source>
+        <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <source>underline</source>
+        <source>Underline</source>
         <translation>下線</translation>
     </message>
     <message>
-        <source>align left</source>
-        <translation>左揃え</translation>
+        <source>Align left</source>
+        <translation>左寄せ</translation>
     </message>
     <message>
-        <source>align center</source>
-        <translation>中央揃え</translation>
+        <source>Align center</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>align right</source>
+        <source>Align right</source>
         <translation>右揃え</translation>
     </message>
     <message>
-        <source>subscript</source>
-        <translation>下付文字</translation>
+        <source>Subscript</source>
+        <translation>下付き文字</translation>
     </message>
     <message>
-        <source>superscript</source>
-        <translation>上付文字</translation>
+        <source>Superscript</source>
+        <translation>上付き文字</translation>
     </message>
 </context>
 <context>
@@ -7983,10 +8166,6 @@ Please select a range of measures to join and try again</source>
         <translation>MuseScore: スタイル名の読み取り</translation>
     </message>
     <message>
-        <source>Text Style Name:</source>
-        <translation>テキストスタイル名:</translation>
-    </message>
-    <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; はすでに存在しています。
@@ -7995,6 +8174,10 @@ please choose a different name:</source>
     <message>
         <source>Apply to all Parts</source>
         <translation>全要素に適用</translation>
+    </message>
+    <message>
+        <source>Text style name:</source>
+        <translation>テキストスタイル名:</translation>
     </message>
 </context>
 <context>
@@ -8008,24 +8191,24 @@ please choose a different name:</source>
         <translation>テキスト編集</translation>
     </message>
     <message>
-        <source>bold</source>
+        <source>Bold</source>
         <translation>太字</translation>
     </message>
     <message>
-        <source>italic</source>
+        <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <source>underline</source>
+        <source>Underline</source>
         <translation>下線</translation>
     </message>
     <message>
-        <source>subscript</source>
-        <translation>サブスクリプト</translation>
+        <source>Subscript</source>
+        <translation>下付き文字</translation>
     </message>
     <message>
-        <source>superscript</source>
-        <translation>上付文字</translation>
+        <source>Superscript</source>
+        <translation>上付き文字</translation>
     </message>
 </context>
 <context>
@@ -8063,6 +8246,76 @@ please choose a different name:</source>
     <message>
         <source>No Update Available</source>
         <translation>アップデートの利用はできません</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::UploadScoreDialog</name>
+    <message>
+        <source>All Rights reserved</source>
+        <translation>All Rights reserved</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution</source>
+        <translation>クリエイティブ・コモンズ　帰属</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Share Alike</source>
+        <translation>クリエイティブ・コモンズ　帰属　継承</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution No Derivative Works</source>
+        <translation>クリエイティブ・コモンズ　帰属　改変禁止</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Noncommercial</source>
+        <translation>クリエイティブ・コモンズ　帰属　非営利</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Noncommercial Share Alike</source>
+        <translation>クリエイティブ・コモンズ　帰属　非営利　継承</translation>
+    </message>
+    <message>
+        <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
+        <translation>クリエイティブ・コモンズ　帰属　非営利　改変禁止</translation>
+    </message>
+    <message>
+        <source>Public Domain</source>
+        <translation>パブリックドメイン</translation>
+    </message>
+    <message>
+        <source>Creative Commons Zero</source>
+        <translation>CC0(クリエイティブ・コモンズ・ゼロ)</translation>
+    </message>
+    <message>
+        <source>Missing title</source>
+        <translation>タイトルがありません</translation>
+    </message>
+    <message>
+        <source>Please provide a title</source>
+        <translation>タイトルを入力してください</translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation>成功</translation>
+    </message>
+    <message>
+        <source>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</source>
+        <translation>完了しました！&lt;a href=&quot;%1&quot;&gt;スコアを見る&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>エラー</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Workspace</name>
+    <message>
+        <source>Advanced</source>
+        <translation>アドバンス</translation>
+    </message>
+    <message>
+        <source>Basic</source>
+        <translation>基本</translation>
     </message>
 </context>
 <context>
@@ -8162,14 +8415,6 @@ please choose a different name:</source>
         <translation>コピーライト:</translation>
     </message>
     <message>
-        <source>Create new score from template</source>
-        <translation>楽譜をテンプレートから作成</translation>
-    </message>
-    <message>
-        <source>Create new score from scratch</source>
-        <translation>新しいスコアを最初から作成</translation>
-    </message>
-    <message>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
@@ -8249,7 +8494,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Mark slices</source>
-        <translation type="unfinished"/>
+        <translation>スライスのマーク</translation>
     </message>
     <message>
         <source>Mark barlines</source>
@@ -8260,8 +8505,12 @@ please choose a different name:</source>
         <translation>線の表示</translation>
     </message>
     <message>
-        <source>Spatium:</source>
-        <translation>スペース:</translation>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>標準5線譜上の2線間の距離</translation>
+    </message>
+    <message>
+        <source>Staff space:</source>
+        <translation>譜表スペース:</translation>
     </message>
 </context>
 <context>
@@ -8289,14 +8538,6 @@ please choose a different name:</source>
     <message>
         <source>Scaling</source>
         <translation>スケール</translation>
-    </message>
-    <message>
-        <source>Distance between two lines on a normal staff</source>
-        <translation>譜表上の2線間の距離</translation>
-    </message>
-    <message>
-        <source>Space:</source>
-        <translation>スペース:</translation>
     </message>
     <message>
         <source>mm</source>
@@ -8346,6 +8587,14 @@ please choose a different name:</source>
         <source>Apply to all Parts</source>
         <translation>全要素に適用</translation>
     </message>
+    <message>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>標準5線譜上の2線間の距離</translation>
+    </message>
+    <message>
+        <source>Staff space:</source>
+        <translation>譜表スペース:</translation>
+    </message>
 </context>
 <context>
     <name>Palette</name>
@@ -8372,18 +8621,6 @@ please choose a different name:</source>
     <message>
         <source>Normal</source>
         <translation>標準</translation>
-    </message>
-    <message>
-        <source>Start Repeat</source>
-        <translation>反復開始</translation>
-    </message>
-    <message>
-        <source>End Repeat</source>
-        <translation>反復終了</translation>
-    </message>
-    <message>
-        <source>End-Start Repeat</source>
-        <translation>反復(終了-開始)</translation>
     </message>
     <message>
         <source>Repeats</source>
@@ -8550,14 +8787,6 @@ failed: </source>
         <translation>点線</translation>
     </message>
     <message>
-        <source>End Bar style</source>
-        <translation>終止線</translation>
-    </message>
-    <message>
-        <source>Double Bar style</source>
-        <translation>複縦線</translation>
-    </message>
-    <message>
         <source>Tick 1 span</source>
         <translation>ティック 1スパン</translation>
     </message>
@@ -8573,16 +8802,25 @@ failed: </source>
         <source>Short 2 span</source>
         <translation>ショート 2スパン</translation>
     </message>
-</context>
-<context>
-    <name>PaletteBox</name>
     <message>
-        <source>Palettes</source>
-        <translation>パレット</translation>
+        <source>End bar style</source>
+        <translation>終止線スタイル</translation>
     </message>
     <message>
-        <source>new Palette</source>
-        <translation>新しいパレット</translation>
+        <source>Double bar style</source>
+        <translation>複縦線スタイル</translation>
+    </message>
+    <message>
+        <source>Start repeat</source>
+        <translation>反復開始</translation>
+    </message>
+    <message>
+        <source>End repeat</source>
+        <translation>反復終了</translation>
+    </message>
+    <message>
+        <source>End-start repeat</source>
+        <translation>反復(終了-開始)</translation>
     </message>
 </context>
 <context>
@@ -8635,20 +8873,12 @@ failed: </source>
         <translation>名称</translation>
     </message>
     <message>
-        <source>Cell Size:</source>
-        <translation>セルのサイズ:</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
         <source>Scale:</source>
         <translation>スケール:</translation>
-    </message>
-    <message>
-        <source>Show Grid</source>
-        <translation>グリッドを表示</translation>
     </message>
     <message>
         <source>Width:</source>
@@ -8659,27 +8889,27 @@ failed: </source>
         <translation>高さ:</translation>
     </message>
     <message>
-        <source>Show &apos;more Elements&apos;</source>
-        <translation>さらに要素を表示する</translation>
+        <source>Cell size:</source>
+        <translation>セルのサイズ:</translation>
     </message>
     <message>
-        <source>Element Offset:</source>
-        <translation>要素オフセット:</translation>
+        <source>Element offset:</source>
+        <translation>要素オフセット</translation>
+    </message>
+    <message>
+        <source>Show grid</source>
+        <translation>グリッドを表示</translation>
+    </message>
+    <message>
+        <source>Show &apos;More Elements...&apos;</source>
+        <translation>さらに要素を表示する...&apos;</translation>
     </message>
 </context>
 <context>
     <name>PartEditBase</name>
     <message>
-        <source>Part Name</source>
-        <translation>パートの名称</translation>
-    </message>
-    <message>
         <source>Volume</source>
         <translation>音量</translation>
-    </message>
-    <message>
-        <source>Panorama Position</source>
-        <translation>パンポット</translation>
     </message>
     <message>
         <source>Reverb</source>
@@ -8722,12 +8952,20 @@ failed: </source>
         <translation>音色:</translation>
     </message>
     <message>
-        <source>MIDI Sound</source>
-        <translation>MIDI音色</translation>
-    </message>
-    <message>
         <source>MIDI sound for part</source>
         <translation>パートのMIDIサウンド</translation>
+    </message>
+    <message>
+        <source>Part name</source>
+        <translation>パート名</translation>
+    </message>
+    <message>
+        <source>Panorama position</source>
+        <translation>パンポット</translation>
+    </message>
+    <message>
+        <source>MIDI sound</source>
+        <translation>MIDI音色</translation>
     </message>
 </context>
 <context>
@@ -8746,65 +8984,10 @@ failed: </source>
     </message>
 </context>
 <context>
-    <name>PianorollEditor</name>
-    <message>
-        <source>toolbar 1</source>
-        <translation>ツールバー 1</translation>
-    </message>
-    <message>
-        <source>Wave</source>
-        <translation>波形</translation>
-    </message>
-    <message>
-        <source>show wave display</source>
-        <translation>波形画面を表示</translation>
-    </message>
-    <message>
-        <source>toolbar 2</source>
-        <translation>ツールバー 2</translation>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>カーソル:</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>ベロシティ:</translation>
-    </message>
-    <message>
-        <source>offset</source>
-        <translation>オフセット</translation>
-    </message>
-    <message>
-        <source>user</source>
-        <translation>ユーザー設定</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>音高:</translation>
-    </message>
-    <message>
-        <source>OnTime:</source>
-        <translation>オンタイム:</translation>
-    </message>
-    <message>
-        <source>Len:</source>
-        <translation>音価:</translation>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; 譜表: %2</translation>
-    </message>
-</context>
-<context>
     <name>PlayPanelBase</name>
     <message>
         <source>MuseScore: Play Panel</source>
         <translation>MuseScore: 再生パネル</translation>
-    </message>
-    <message>
-        <source>measure.beat</source>
-        <translation>小節.拍</translation>
     </message>
     <message>
         <source>001.01</source>
@@ -8843,6 +9026,10 @@ failed: </source>
         <source>Tempo</source>
         <extracomment>short text for tempo slider</extracomment>
         <translation>テンポ</translation>
+    </message>
+    <message>
+        <source>Measure.Beat</source>
+        <translation>小節.拍</translation>
     </message>
 </context>
 <context>
@@ -8897,10 +9084,10 @@ failed: </source>
     </message>
     <message>
         <source>R</source>
-        <translation type="unfinished"/>
+        <translation>R</translation>
     </message>
     <message>
-        <source>reload current plugin source</source>
+        <source>Reload current plugin source</source>
         <translation>現在のプラグインフォルダを再読み込み</translation>
     </message>
 </context>
@@ -8912,7 +9099,7 @@ failed: </source>
     </message>
     <message>
         <source>Define Shortcut</source>
-        <translation>ショートカットの定義</translation>
+        <translation>ショートカットキーの定義</translation>
     </message>
     <message>
         <source>Path:</source>
@@ -8923,16 +9110,12 @@ failed: </source>
         <translation>バージョン: </translation>
     </message>
     <message>
-        <source>Load</source>
-        <translation>読み込み</translation>
-    </message>
-    <message>
         <source>Name:</source>
         <translation>名称:</translation>
     </message>
     <message>
         <source>Shortcut:</source>
-        <translation>ショートカット:</translation>
+        <translation>ショートカットキー:</translation>
     </message>
 </context>
 <context>
@@ -8970,36 +9153,12 @@ failed: </source>
         <translation>分おき</translation>
     </message>
     <message>
-        <source>Windows</source>
-        <translation>ウィンドウ</translation>
-    </message>
-    <message>
-        <source>Show Play Panel</source>
-        <translation>再生パネルを表示する</translation>
-    </message>
-    <message>
-        <source>Show Navigator</source>
-        <translation>ナビゲーターを表示する</translation>
-    </message>
-    <message>
-        <source>Show MuseScore Connect</source>
-        <translation>MuseScoreコネクトを表示する</translation>
-    </message>
-    <message>
         <source>OSC remote control</source>
         <translation>OSCリモートコントロール</translation>
     </message>
     <message>
         <source>Style</source>
         <translation>スタイル</translation>
-    </message>
-    <message>
-        <source>dark</source>
-        <translation>ダーク</translation>
-    </message>
-    <message>
-        <source>light</source>
-        <translation>ライト</translation>
     </message>
     <message>
         <source>Icon size:</source>
@@ -9059,19 +9218,7 @@ failed: </source>
     </message>
     <message>
         <source>Color notes outside of usable pitch range</source>
-        <translation>使用可能な音程の範囲外の音符に色をつける</translation>
-    </message>
-    <message>
-        <source>enable MIDI remote control</source>
-        <translation>MIDIリモートコントロールを有効にする</translation>
-    </message>
-    <message>
-        <source>is active</source>
-        <translation>有効</translation>
-    </message>
-    <message>
-        <source>record</source>
-        <translation>録音</translation>
+        <translation>使用可能な音域外の音符に色をつける</translation>
     </message>
     <message>
         <source>16th note</source>
@@ -9307,7 +9454,7 @@ failed: </source>
     </message>
     <message>
         <source>Shortcuts</source>
-        <translation>ショートカット</translation>
+        <translation>ショートカットキー</translation>
     </message>
     <message>
         <source>Action</source>
@@ -9315,11 +9462,11 @@ failed: </source>
     </message>
     <message>
         <source>Shortcut</source>
-        <translation>ショートカット</translation>
+        <translation>ショートカットキー</translation>
     </message>
     <message>
         <source>Reset Shortcut to Default</source>
-        <translation>ショートカットを標準にリセット</translation>
+        <translation>ショートカットキーを標準にリセット</translation>
     </message>
     <message>
         <source>Define...</source>
@@ -9496,10 +9643,6 @@ failed: </source>
     <message>
         <source>Default zoom:</source>
         <translation>既定の倍率:</translation>
-    </message>
-    <message>
-        <source>Ports:</source>
-        <translation>ポート:</translation>
     </message>
     <message>
         <source>Resolution DPI:</source>
@@ -9927,10 +10070,6 @@ failed: </source>
         <translation>I/O タブ</translation>
     </message>
     <message>
-        <source>Pulse Audio</source>
-        <translation>Pulse Audio</translation>
-    </message>
-    <message>
         <source>Port Audio</source>
         <translation>Port Audio</translation>
     </message>
@@ -9983,14 +10122,6 @@ failed: </source>
         <translation>サンプルレートの選択</translation>
     </message>
     <message>
-        <source>Ports</source>
-        <translation>ポート</translation>
-    </message>
-    <message>
-        <source>Choose number of ports</source>
-        <translation>ポート番号の選択</translation>
-    </message>
-    <message>
         <source>Import Tab</source>
         <translation>インポートタブ</translation>
     </message>
@@ -10040,15 +10171,15 @@ failed: </source>
     </message>
     <message>
         <source>Shortcuts Tab</source>
-        <translation>ショートカットタブ</translation>
+        <translation>ショートカッキータブ</translation>
     </message>
     <message>
         <source>Shortcuts table</source>
-        <translation>ショートカットテーブル</translation>
+        <translation>ショートカットキーテーブル</translation>
     </message>
     <message>
         <source>Reset Shortcut to default</source>
-        <translation>ショートカットを標準設定にリセット</translation>
+        <translation>ショートカットキーを標準設定にリセット</translation>
     </message>
     <message>
         <source>Define</source>
@@ -10100,7 +10231,7 @@ failed: </source>
     </message>
     <message>
         <source>Here you can configure shortcuts for actions</source>
-        <translation>ここで動作のショートカットキーを設定できます</translation>
+        <translation>ここでアクションのためのショートカットキーを設定できます</translation>
     </message>
     <message>
         <source>Resets the shortcuts to their default assignment</source>
@@ -10108,19 +10239,75 @@ failed: </source>
     </message>
     <message>
         <source>Clears the shortcut assignment for the selected action</source>
-        <translation>選択したアクションのショートカットの割当てをクリア</translation>
+        <translation>選択したアクションのショートカットキーの割当てをクリア</translation>
     </message>
     <message>
         <source>Opens a dialog for defining a new shortcut for the selected action</source>
-        <translation>選択したアクションの新しいショートカットを定義</translation>
+        <translation>選択したアクションの新しいショートカットキーを定義</translation>
     </message>
     <message>
         <source>Print the shortcuts list</source>
-        <translation>ショートカットリストの印刷</translation>
+        <translation>ショートカットキーリストの印刷</translation>
     </message>
     <message>
         <source>Update translations</source>
         <translation>翻訳の更新</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>ダーク</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>ライト</translation>
+    </message>
+    <message>
+        <source>Enable MIDI remote control</source>
+        <translation>MIDIリモートコントロールを有効にする</translation>
+    </message>
+    <message>
+        <source>Is active</source>
+        <translation>有効</translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation>録音</translation>
+    </message>
+    <message>
+        <source>Default scale for new score views</source>
+        <translation>新しいスコアの標準倍率</translation>
+    </message>
+    <message>
+        <source>Show play panel</source>
+        <translation>再生パネルを表示する</translation>
+    </message>
+    <message>
+        <source>Show navigator</source>
+        <translation>ナビゲーターを表示する</translation>
+    </message>
+    <message>
+        <source>OSC Remote Control</source>
+        <translation>OSCリモートコントロール</translation>
+    </message>
+    <message>
+        <source>MIDI Remote Control</source>
+        <translation>MIDI リモートコントロール</translation>
+    </message>
+    <message>
+        <source>Show start center</source>
+        <translation>スタートセンターを表示する</translation>
+    </message>
+    <message>
+        <source>Undo is active</source>
+        <translation>取り消し有効</translation>
+    </message>
+    <message>
+        <source>Undo record</source>
+        <translation>録音を取り消す</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation>元に戻す</translation>
     </message>
 </context>
 <context>
@@ -10346,7 +10533,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>Custom</source>
-        <translation>カスタム</translation>
+        <translation>ユーザー定義</translation>
     </message>
     <message>
         <source>Long</source>
@@ -10442,10 +10629,6 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
 <context>
     <name>QWidget</name>
     <message>
-        <source>Compressed MuseScore File (*.mscz);;</source>
-        <translation>MuseScore 圧縮ファイル(*.mscz);;</translation>
-    </message>
-    <message>
         <source>MuseScore: Save Album into Score</source>
         <translation>MuseScore: スコアにアルバムを保存</translation>
     </message>
@@ -10460,10 +10643,6 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>MuseScore: Save Album</source>
         <translation>MuseScore: アルバムの保存</translation>
-    </message>
-    <message>
-        <source>MuseScore Files (*.album);;</source>
-        <translation>MuseScore アルバムファイル (*.album);;</translation>
     </message>
     <message>
         <source>Write Album failed: </source>
@@ -10521,11 +10700,45 @@ failed: </source>
         <source>MuseScore: Open Album File</source>
         <translation>MuseScore: アルバムファイルを開く</translation>
     </message>
+    <message>
+        <source>MuseScore File (*.mscz)</source>
+        <translation>MuseScore ファイル (*.mscz)</translation>
+    </message>
+    <message>
+        <source>MuseScore Files (*.album)</source>
+        <translation>MuseScore アルバムファイル (*.album)</translation>
+    </message>
+    <message>
+        <source>Soundfont installed</source>
+        <translation>Soundfontはインストールされました</translation>
+    </message>
+    <message>
+        <source>Install Soundfont</source>
+        <translation>Soundfontのインストール</translation>
+    </message>
+    <message>
+        <source>Do you want to install the soundfont %1?</source>
+        <translation>Soundfont %1 をインストールしますか？</translation>
+    </message>
+    <message>
+        <source>Overwrite?</source>
+        <translation>上書きしますか？</translation>
+    </message>
+    <message>
+        <source>Soundfont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1 already exists.
+Do you want to overwrite it?</source>
+        <translation>%1 はすでに存在しています。
+上書きしてよろしいですか？</translation>
+    </message>
 </context>
 <context>
     <name>RecordButton</name>
     <message>
-        <source>record</source>
+        <source>Record</source>
         <translation>録音</translation>
     </message>
 </context>
@@ -10561,6 +10774,36 @@ failed: </source>
     </message>
 </context>
 <context>
+    <name>ScoreBrowser</name>
+    <message>
+        <source>Form</source>
+        <translation>形</translation>
+    </message>
+</context>
+<context>
+    <name>ScorePreview</name>
+    <message>
+        <source>Form</source>
+        <translation>形</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation>サイズ:</translation>
+    </message>
+    <message>
+        <source>Created: </source>
+        <translation>作成:</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation>名称:</translation>
+    </message>
+    <message>
+        <source>Nothing selected</source>
+        <translation>選択なし</translation>
+    </message>
+</context>
+<context>
     <name>SectionBreakProperties</name>
     <message>
         <source>MuseScore: Section Break Properties</source>
@@ -10575,11 +10818,11 @@ failed: </source>
         <translation>秒</translation>
     </message>
     <message>
-        <source>start new section with long instrument names</source>
+        <source>Start new section with long instrument names</source>
         <translation>楽器名を省略せず新しいセクションを開始</translation>
     </message>
     <message>
-        <source>start new section with measure number one</source>
+        <source>Start new section with measure number one</source>
         <translation>小節番号をリセットして新しいセクションを開始</translation>
     </message>
 </context>
@@ -10590,51 +10833,51 @@ failed: </source>
         <translation>MuseScore: 選択</translation>
     </message>
     <message>
-        <source>Element Type:</source>
-        <translation>要素のタイプ:</translation>
-    </message>
-    <message>
-        <source>same staff</source>
-        <translation>同一の譜表</translation>
-    </message>
-    <message>
-        <source>same voice</source>
-        <translation>同一の声部</translation>
-    </message>
-    <message>
-        <source>same system</source>
-        <translation>同一の段</translation>
-    </message>
-    <message>
         <source>Action</source>
-        <translation>動作</translation>
-    </message>
-    <message>
-        <source>replace selection</source>
-        <translation>選択を置き換える</translation>
-    </message>
-    <message>
-        <source>add to selection</source>
-        <translation>選択を追加する</translation>
-    </message>
-    <message>
-        <source>search in selection</source>
-        <translation>選択を検索</translation>
-    </message>
-    <message>
-        <source>subtract from selection</source>
-        <translation>選択を解除する</translation>
-    </message>
-    <message>
-        <source>same subtype:</source>
-        <translation>同じ種類</translation>
+        <translation>アクション</translation>
     </message>
     <message>
         <source>Select</source>
         <translation>選択</translation>
     </message>
     <message>
-        <source>in selection</source>
+        <source>Element type:</source>
+        <translation>要素の種類:</translation>
+    </message>
+    <message>
+        <source>Same staff</source>
+        <translation>同一の譜表</translation>
+    </message>
+    <message>
+        <source>Same voice</source>
+        <translation>同一の声部</translation>
+    </message>
+    <message>
+        <source>Same subtype:</source>
+        <translation>同じ種類</translation>
+    </message>
+    <message>
+        <source>Same system</source>
+        <translation>同一の段</translation>
+    </message>
+    <message>
+        <source>Replace selection</source>
+        <translation>選択を置き換える</translation>
+    </message>
+    <message>
+        <source>Add to selection</source>
+        <translation>選択を追加する</translation>
+    </message>
+    <message>
+        <source>Search in selection</source>
+        <translation>選択を検索</translation>
+    </message>
+    <message>
+        <source>Subtract from selection</source>
+        <translation>選択を解除する</translation>
+    </message>
+    <message>
+        <source>In selection</source>
         <translation>選択範囲内</translation>
     </message>
 </context>
@@ -10679,11 +10922,11 @@ failed: </source>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <source>Old shortcuts:</source>
-        <translation>古いショートカット:</translation>
+        <translation>古いショートカットキー:</translation>
     </message>
     <message>
         <source>New shortcut:</source>
-        <translation>新しいショートカット:</translation>
+        <translation>新しいショートカットキー:</translation>
     </message>
     <message>
         <source>Type to set shortcut</source>
@@ -10716,11 +10959,11 @@ failed: </source>
     </message>
     <message>
         <source>Old shortcuts</source>
-        <translation>古いショートカット</translation>
+        <translation>古いショートカットキー</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation>新しいショートカット</translation>
+        <translation>新しいショートカットキー</translation>
     </message>
     <message>
         <source>Type to set shortcut</source>
@@ -11090,20 +11333,20 @@ altera</translation>
         <translation>オフ</translation>
     </message>
     <message>
-        <source>Eighth Note</source>
-        <translation>8分音符</translation>
-    </message>
-    <message>
-        <source>Sixteenth Note</source>
-        <translation>16分音符</translation>
-    </message>
-    <message>
         <source>Select swing ratio:</source>
         <translation>スウィングの比率:</translation>
     </message>
     <message>
         <source>%</source>
         <translation>%</translation>
+    </message>
+    <message>
+        <source>Eighth note</source>
+        <translation>8分音符</translation>
+    </message>
+    <message>
+        <source>Sixteenth note</source>
+        <translation>16分音符</translation>
     </message>
 </context>
 <context>
@@ -11141,14 +11384,25 @@ altera</translation>
     </message>
 </context>
 <context>
-    <name>SymbolDialogBase</name>
+    <name>Startcenter</name>
     <message>
-        <source>System Flag</source>
-        <translation>五線のアンカーポイント</translation>
+        <source>Start Center</source>
+        <translation>スタートセンター</translation>
     </message>
+    <message>
+        <source>&lt;a href=&quot;#&quot;&gt;Open an existing score&lt;/a&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>SymbolDialogBase</name>
     <message>
         <source>Font:</source>
         <translation>フォント:</translation>
+    </message>
+    <message>
+        <source>System flag</source>
+        <translation>五線のアンカーポイント</translation>
     </message>
 </context>
 <context>
@@ -11210,6 +11464,14 @@ altera</translation>
         <source>Master tuning:</source>
         <translation>マスターチューニング:</translation>
     </message>
+    <message>
+        <source>Save to score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Load from score</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TextPaletteBase</name>
@@ -11222,12 +11484,12 @@ altera</translation>
         <translation>コードページ:</translation>
     </message>
     <message>
-        <source>common</source>
-        <translation>一般</translation>
+        <source>Common</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>all</source>
-        <translation>すべて</translation>
+        <source>All</source>
+        <translation>全て</translation>
     </message>
 </context>
 <context>
@@ -11245,64 +11507,12 @@ altera</translation>
         <translation>フォント:</translation>
     </message>
     <message>
-        <source>font face</source>
-        <translation>フォント</translation>
-    </message>
-    <message>
         <source>Size:</source>
         <translation>サイズ:</translation>
     </message>
     <message>
-        <source>font point size</source>
-        <translation>フォントサイズ</translation>
-    </message>
-    <message>
-        <source>bold</source>
-        <translation>太字</translation>
-    </message>
-    <message>
-        <source>italic</source>
-        <translation>斜体</translation>
-    </message>
-    <message>
-        <source>underline</source>
-        <translation>下線</translation>
-    </message>
-    <message>
-        <source>align left edge of text to reference point</source>
-        <translation>左揃え</translation>
-    </message>
-    <message>
-        <source>center text on reference point</source>
-        <translation>中央揃え</translation>
-    </message>
-    <message>
-        <source>align right edge of text to reference point</source>
-        <translation>右揃え</translation>
-    </message>
-    <message>
-        <source>align top edge of text to reference point</source>
-        <translation>垂直位置の上揃え</translation>
-    </message>
-    <message>
-        <source>center text vertical to reference point</source>
-        <translation>テキストの垂直位置を基準点中心にする</translation>
-    </message>
-    <message>
-        <source>center text vertical to text baseline</source>
-        <translation>テキストの垂直位置をテキストのベースライン中心にする</translation>
-    </message>
-    <message>
-        <source>align bottom edge of text to reference point</source>
-        <translation>垂直位置の下揃え</translation>
-    </message>
-    <message>
         <source>Color:</source>
         <translation>色:</translation>
-    </message>
-    <message>
-        <source>text color</source>
-        <translation>テキストの色</translation>
     </message>
     <message>
         <source>System flag</source>
@@ -11318,94 +11528,41 @@ altera</translation>
         <translation>水平:</translation>
     </message>
     <message>
-        <source>horizontal offset to reference point</source>
-        <translation>基準点に対して水平に移動します</translation>
-    </message>
-    <message>
         <source>Vertical:</source>
         <extracomment>coordinate</extracomment>
         <translation>垂直:</translation>
-    </message>
-    <message>
-        <source>vertical offset to reference point</source>
-        <translation>基準点に対して垂直に移動します</translation>
     </message>
     <message>
         <source>Unit:</source>
         <translation>単位:</translation>
     </message>
     <message>
-        <source>offset is absolute</source>
-        <translation>絶対位置を基準とします</translation>
-    </message>
-    <message>
         <source>mm</source>
         <translation>mm</translation>
-    </message>
-    <message>
-        <source>offset in Space units</source>
-        <translation>スペース(sp)単位を基準とします</translation>
-    </message>
-    <message>
-        <source>Space</source>
-        <extracomment>spatium unit</extracomment>
-        <translation>sp</translation>
-    </message>
-    <message>
-        <source>enable text frame</source>
-        <translation>テキストフレーム有効</translation>
     </message>
     <message>
         <source>Frame</source>
         <translation>フレーム</translation>
     </message>
     <message>
-        <source>draw circled frame</source>
-        <translation>丸で囲む</translation>
-    </message>
-    <message>
         <source>Circle</source>
         <translation>円形</translation>
-    </message>
-    <message>
-        <source>draw boxed frame</source>
-        <translation>四角で囲む</translation>
     </message>
     <message>
         <source>Box</source>
         <translation>四角</translation>
     </message>
     <message>
-        <source>frame line width</source>
-        <translation>枠線の幅</translation>
-    </message>
-    <message>
         <source>sp</source>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>frame inner margin</source>
-        <translation>枠の内部余白</translation>
-    </message>
-    <message>
-        <source>corner round</source>
-        <translation>角丸め</translation>
     </message>
     <message>
         <source>Foreground color:</source>
         <translation>前景色:</translation>
     </message>
     <message>
-        <source>frame color</source>
-        <translation>枠の色</translation>
-    </message>
-    <message>
         <source>Background color:</source>
         <translation>背景色:</translation>
-    </message>
-    <message>
-        <source>Size follows Space unit</source>
-        <translation>サイズはスペース(sp)単位</translation>
     </message>
     <message>
         <source>Alignment</source>
@@ -11416,10 +11573,6 @@ altera</translation>
         <translation>スタイルの設定にリセット</translation>
     </message>
     <message>
-        <source>Border width:</source>
-        <translation>枠線の幅:</translation>
-    </message>
-    <message>
         <source>Text margin:</source>
         <translation>テキストの余白:</translation>
     </message>
@@ -11428,8 +11581,121 @@ altera</translation>
         <translation>枠線の半径:</translation>
     </message>
     <message>
-        <source>text background color</source>
-        <translation>テキストの背景色</translation>
+        <source>Font face</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Font point size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>太字</translation>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation>斜体</translation>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation>下線</translation>
+    </message>
+    <message>
+        <source>Text color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Horizontal offset to reference point</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Vertical offset to reference point</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Offset is absolute</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Align left edge of text to reference point</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Center text on reference point</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Align top edge of text to reference point</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Align right edge of text to reference point</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Center text vertical to text baseline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Center text vertical to reference point</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Align bottom edge of text to reference point</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable text frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Draw circled frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Draw boxed frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Border thickness:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Frame line thickness</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Frame inner margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Corner round</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text background color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Frame color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Distance between two lines on a standard 5-line staff</source>
+        <translation>標準5線譜上の2線間の距離</translation>
+    </message>
+    <message>
+        <source>Offset in staff space units</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Staff space</source>
+        <extracomment>spatium unit</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Size follows &apos;Staff space&apos; setting</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -11571,12 +11837,16 @@ altera</translation>
         <translation>楽器の変更</translation>
     </message>
     <message>
-        <source>Lyrics Verse</source>
-        <translation>歌詞節</translation>
-    </message>
-    <message>
         <source>Figured Bass</source>
         <translation>数字付低音</translation>
+    </message>
+    <message>
+        <source>LH Guitar Fingering</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>RH Guitar Fingering</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -11644,12 +11914,12 @@ altera</translation>
         <translation>テキスト:</translation>
     </message>
     <message>
-        <source>add time signature to palette</source>
-        <translation>パレットに拍子記号を追加</translation>
-    </message>
-    <message>
         <source>Add</source>
         <translation>追加</translation>
+    </message>
+    <message>
+        <source>Add time signature to palette</source>
+        <translation>パレットに拍子記号を加える</translation>
     </message>
 </context>
 <context>
@@ -11930,27 +12200,27 @@ altera</translation>
     </message>
     <message>
         <source>Second</source>
-        <translation>二度</translation>
+        <translation>2度</translation>
     </message>
     <message>
         <source>Third</source>
-        <translation>三度</translation>
+        <translation>3度</translation>
     </message>
     <message>
         <source>Fourth</source>
-        <translation>四度</translation>
+        <translation>4度</translation>
     </message>
     <message>
         <source>Fifth</source>
-        <translation>五度</translation>
+        <translation>5度</translation>
     </message>
     <message>
         <source>Sixth</source>
-        <translation>六度</translation>
+        <translation>6度</translation>
     </message>
     <message>
         <source>Seventh</source>
-        <translation>七度</translation>
+        <translation>7度</translation>
     </message>
     <message>
         <source>Keep degree alterations</source>
@@ -11961,32 +12231,8 @@ altera</translation>
         <translation>オプション</translation>
     </message>
     <message>
-        <source>Single sharps and flats only</source>
-        <translation>ダブルシャープ、ダブルフラットを使用しない（＃,♭のみ使用）</translation>
-    </message>
-    <message>
-        <source>Use double sharps and flats</source>
-        <translation>ダブルシャープ、ダブルフラットを使う</translation>
-    </message>
-    <message>
         <source>Transpose chord symbols</source>
         <translation>コード記号の移調</translation>
-    </message>
-    <message>
-        <source>Transpose chromatically</source>
-        <translation>半音階移調</translation>
-    </message>
-    <message>
-        <source>By key</source>
-        <translation>調で</translation>
-    </message>
-    <message>
-        <source>Transpose diatonically</source>
-        <translation>全音階移調</translation>
-    </message>
-    <message>
-        <source>By interval</source>
-        <translation>音程で</translation>
     </message>
     <message>
         <source>C♭ major / A♭ minor</source>
@@ -12032,40 +12278,64 @@ altera</translation>
         <source>C♯ major / A♯ minor</source>
         <translation>嬰ハ長調(C# major)/嬰イ短調(A# minor)</translation>
     </message>
+    <message>
+        <source>Single Sharps and Flats Only</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use Double Sharps and Flats</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Transpose Chromatically</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>By Key</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>By Interval</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Transpose Diatonically</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Tremolo</name>
     <message>
         <source>Eighth through stem</source>
-        <translation>符尾 8分</translation>
+        <translation>8分音符で反復</translation>
     </message>
     <message>
         <source>16th through stem</source>
-        <translation>符尾 16分</translation>
+        <translation>16分音符で反復</translation>
     </message>
     <message>
         <source>32nd through stem</source>
-        <translation>符尾 32分</translation>
+        <translation>32分音符で反復</translation>
     </message>
     <message>
         <source>64th through stem</source>
-        <translation>符尾 64分</translation>
+        <translation>64分音符で反復</translation>
     </message>
     <message>
         <source>Eighth between notes</source>
-        <translation>音符の間 8分</translation>
+        <translation>8分音符で交互に演奏</translation>
     </message>
     <message>
         <source>16th between notes</source>
-        <translation>音符の間 16分</translation>
+        <translation> 16分音符で交互に演奏</translation>
     </message>
     <message>
         <source>32nd between notes</source>
-        <translation>音符の間 32分</translation>
+        <translation>32分音符で交互に演奏</translation>
     </message>
     <message>
         <source>64th between notes</source>
-        <translation>音符の間 64分</translation>
+        <translation>64分音符で交互に演奏</translation>
     </message>
 </context>
 <context>
@@ -12087,10 +12357,6 @@ altera</translation>
         <translation>ドライブ</translation>
     </message>
     <message>
-        <source>Release(up)</source>
-        <translation>リリース(up)</translation>
-    </message>
-    <message>
         <source>Inverted Dip</source>
         <translation>インバート ディップ</translation>
     </message>
@@ -12099,12 +12365,23 @@ altera</translation>
         <translation>リターン</translation>
     </message>
     <message>
-        <source>Release(down)</source>
-        <translation>リリース(down)</translation>
-    </message>
-    <message>
         <source>MuseScore: Tremolo Bar Properties</source>
         <translation>MuseScore: トレモロ・バーのプロパティ</translation>
+    </message>
+    <message>
+        <source>Release(Up)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Release(Down)</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>TupletBase</name>
+    <message>
+        <source>Tuplet</source>
+        <translation>連符</translation>
     </message>
 </context>
 <context>
@@ -12148,6 +12425,85 @@ altera</translation>
     <message>
         <source>Auto bracket</source>
         <translation>自動</translation>
+    </message>
+</context>
+<context>
+    <name>UploadScoreDialog</name>
+    <message>
+        <source>Score Information</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>You&apos;re logged in as</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>USERNAME</source>
+        <translation>ユーザ名</translation>
+    </message>
+    <message>
+        <source>Sign out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sign out on exit</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation>タイトル</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation>定義</translation>
+    </message>
+    <message>
+        <source>Who can access this score?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Anyone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Just you</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>License</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;What does this mean?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tags</source>
+        <translation>タグ</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use a comma to separate the tags&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Respect the &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;community guidelines&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Only make your scores accessible to anyone with permission from the right holders.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Update the existing score </source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -12297,112 +12653,112 @@ failed: </source>
 <context>
     <name>accidental</name>
     <message>
-        <source>none</source>
-        <translation>なし</translation>
+        <source>None</source>
+        <translation>None</translation>
     </message>
     <message>
-        <source>sharp</source>
+        <source>Sharp</source>
         <translation>シャープ</translation>
     </message>
     <message>
-        <source>flat</source>
+        <source>Flat</source>
         <translation>フラット</translation>
     </message>
     <message>
-        <source>double sharp</source>
+        <source>Double sharp</source>
         <translation>ダブルシャープ</translation>
     </message>
     <message>
-        <source>double flat</source>
+        <source>Double flat</source>
         <translation>ダブルフラット</translation>
     </message>
     <message>
-        <source>natural</source>
+        <source>Natural</source>
         <translation>ナチュラル</translation>
     </message>
     <message>
-        <source>flat-slash</source>
-        <translation>フラット　スラッシュ</translation>
+        <source>Flat-slash</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>flat-slash2</source>
-        <translation>フラット　スラッシュ2</translation>
+        <source>Flat-slash2</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>mirrored-flat2</source>
-        <translation>反転フラット2</translation>
+        <source>Mirrored-flat2</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>mirrored-flat</source>
-        <translation>反転フラット</translation>
+        <source>Mirrored-flat</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>mirrored-flat-slash</source>
-        <translation>反転フラット　スラッシュ</translation>
+        <source>Mirrored-flat-slash</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>flat-flat-slash</source>
-        <translation>ダブルフラット　スラッシュ</translation>
+        <source>Flat-flat-slash</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>sharp-slash</source>
-        <translation>シャープ - スラッシュ</translation>
+        <source>Sharp-slash</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>sharp-slash2</source>
-        <translation>シャープ - スラッシュ2</translation>
+        <source>Sharp-slash2</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>sharp-slash3</source>
-        <translation>シャープ - スラッシュ3</translation>
+        <source>Sharp-slash3</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>sharp-slash4</source>
-        <translation>シャープ - スラッシュ4</translation>
+        <source>Sharp-slash4</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>sharp arrow up</source>
-        <translation>上矢印付きシャープ</translation>
+        <source>Sharp arrow up</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>sharp arrow down</source>
-        <translation>下矢印付きシャープ</translation>
+        <source>Sharp arrow down</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>sharp arrow both</source>
-        <translation>上下矢印付きシャープ</translation>
+        <source>Sharp arrow both</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>flat arrow up</source>
-        <translation>上矢印付きフラット</translation>
+        <source>Flat arrow up</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>flat arrow down</source>
-        <translation>下矢印付きフラット</translation>
+        <source>Flat arrow down</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>flat arrow both</source>
-        <translation>上下矢印付きフラット</translation>
+        <source>Flat arrow both</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>natural arrow up</source>
-        <translation>上矢印付きナチュラル</translation>
+        <source>Natural arrow up</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>natural arrow down</source>
-        <translation>下矢印付きナチュラル</translation>
+        <source>Natural arrow down</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>natural arrow both</source>
-        <translation>上下矢印付きナチュラル</translation>
+        <source>Natural arrow both</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>sori</source>
-        <translation>1/2半音＃(sori)</translation>
+        <source>Sori</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>koron</source>
-        <translation>1/2半音♭(koron)</translation>
+        <source>Koron</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -12977,7 +13333,7 @@ failed: </source>
     </message>
     <message>
         <source>Up Octave</source>
-        <translation>音高を１オクターブ上げる</translation>
+        <translation>音高をオクターブ上げる</translation>
     </message>
     <message>
         <source>Pitch up octave</source>
@@ -13592,18 +13948,6 @@ failed: </source>
         <translation>ミキサー</translation>
     </message>
     <message>
-        <source>Transport</source>
-        <translation>移調</translation>
-    </message>
-    <message>
-        <source>Transport toolbar</source>
-        <translation>再生ツールバー</translation>
-    </message>
-    <message>
-        <source>Note input toolbar</source>
-        <translation>音符入力ツールバー</translation>
-    </message>
-    <message>
         <source>Status Bar</source>
         <translation>ステータスバー</translation>
     </message>
@@ -14068,28 +14412,12 @@ failed: </source>
         <translation>フルスクリーン</translation>
     </message>
     <message>
-        <source>Enable horizontal raster</source>
-        <translation>水平ラスターを有効にする</translation>
-    </message>
-    <message>
-        <source>Enable vertical raster</source>
-        <translation>垂直ラスターを有効にする</translation>
-    </message>
-    <message>
-        <source>Configure raster</source>
-        <translation>ラスターの設定</translation>
-    </message>
-    <message>
         <source>Re-Pitch Mode</source>
         <translation>音高変更モード</translation>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
         <translation>リズムを変えずに音高を変更</translation>
-    </message>
-    <message>
-        <source>Stack down</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Piano Keyboard</source>
@@ -14138,10 +14466,6 @@ failed: </source>
     <message>
         <source>Previous Score</source>
         <translation>前のスコア</translation>
-    </message>
-    <message>
-        <source>MuseScore Connect</source>
-        <translation>MuseScoreコネクト</translation>
     </message>
     <message>
         <source>Plugin Creator</source>
@@ -14269,7 +14593,7 @@ failed: </source>
     </message>
     <message>
         <source>Note anchored Textline</source>
-        <translation>音符に固定されたテキストライン</translation>
+        <translation>音符基準のテキストライン</translation>
     </message>
     <message>
         <source>Lock Score</source>
@@ -14549,7 +14873,7 @@ failed: </source>
     </message>
     <message>
         <source>Add quarter grace note</source>
-        <translation>4分装飾音符の追加</translation>
+        <translation>4分後打音の追加</translation>
     </message>
     <message>
         <source>Chord Symbols...</source>
@@ -14578,10 +14902,6 @@ failed: </source>
     <message>
         <source>Respell Pitches</source>
         <translation>臨時記号の自動補正</translation>
-    </message>
-    <message>
-        <source>Toggle create multimeasure rest</source>
-        <translation>長休符の作成と消去</translation>
     </message>
     <message>
         <source>bold face</source>
@@ -14657,7 +14977,7 @@ failed: </source>
     </message>
     <message>
         <source>Add 16th grace note after</source>
-        <translation>後に16分装飾音符を追加</translation>
+        <translation>16分後打音を追加</translation>
     </message>
     <message>
         <source>Grace: 32nd after</source>
@@ -14665,7 +14985,7 @@ failed: </source>
     </message>
     <message>
         <source>Add 32nd grace note after</source>
-        <translation>後に32分装飾音符を追加</translation>
+        <translation>32分後打音を追加</translation>
     </message>
     <message>
         <source>All Similar Elements in Range Selection</source>
@@ -14689,7 +15009,7 @@ failed: </source>
     </message>
     <message>
         <source>Add Eighth grace note after</source>
-        <translation>後に8分装飾音符を追加</translation>
+        <translation>8分後打音を追加</translation>
     </message>
     <message>
         <source>Beam 16th sub</source>
@@ -14787,6 +15107,94 @@ failed: </source>
         <source>Add less stretch to selected measures</source>
         <translation>選択された複数小節の間隔を狭くする</translation>
     </message>
+    <message>
+        <source>Enable snap to horizontal grid</source>
+        <translation>水平グリッドにスナップする</translation>
+    </message>
+    <message>
+        <source>Enable snap to vertical grid</source>
+        <translation>垂直グリッドにスナップする</translation>
+    </message>
+    <message>
+        <source>Configure grid</source>
+        <translation>グリッドの設定</translation>
+    </message>
+    <message>
+        <source>Insert one measure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Insert horizontal frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Insert text frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Insert vertical frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Part Name</source>
+        <translation>パートの名称</translation>
+    </message>
+    <message>
+        <source>Add part name</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save Online...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File save online</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save score on MuseScore.com</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Explode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Explode contents of top selected staff into staves below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Implode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Implode contents of selected staves into top selected staff</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fill With Slashes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle Rhythmic Slash Notation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add/Remove Line Breaks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start Center</source>
+        <translation>スタートセンター</translation>
+    </message>
+    <message>
+        <source>Toggle create multimeasure rest</source>
+        <translation>長休符の作成と消去</translation>
+    </message>
+    <message>
+        <source>Resequence Rehearsal Marks</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -14804,172 +15212,8 @@ Tuplet would cross measure</source>
 <context>
     <name>articulation</name>
     <message>
-        <source>fermata</source>
-        <translation>フェルマータ</translation>
-    </message>
-    <message>
-        <source>thumb</source>
-        <translation>親指</translation>
-    </message>
-    <message>
-        <source>sforzato</source>
-        <translation>スフォルツァンド</translation>
-    </message>
-    <message>
-        <source>staccato</source>
-        <translation>スタッカート</translation>
-    </message>
-    <message>
-        <source>staccatissimo</source>
-        <translation>スタッカーティッシモ</translation>
-    </message>
-    <message>
-        <source>tenuto</source>
-        <translation>テヌート</translation>
-    </message>
-    <message>
-        <source>portato</source>
-        <translation>ポルタート</translation>
-    </message>
-    <message>
-        <source>marcato</source>
-        <translation>マルカート</translation>
-    </message>
-    <message>
-        <source>turn</source>
-        <translation>ターン</translation>
-    </message>
-    <message>
-        <source>trill</source>
-        <translation>トリル</translation>
-    </message>
-    <message>
-        <source>prall</source>
-        <translation>プラル</translation>
-    </message>
-    <message>
-        <source>mordent</source>
-        <translation>モルデント</translation>
-    </message>
-    <message>
-        <source>schleifer</source>
-        <translation>シュライファー</translation>
-    </message>
-    <message>
-        <source>tapping</source>
-        <translation>タッピング</translation>
-    </message>
-    <message>
-        <source>slapping</source>
-        <translation>スラッピング</translation>
-    </message>
-    <message>
-        <source>popping</source>
-        <translation>ポッピング</translation>
-    </message>
-    <message>
         <source>Bend</source>
         <translation>ベンド</translation>
-    </message>
-    <message>
-        <source>Tremolo Bar</source>
-        <translation>トレモロバー</translation>
-    </message>
-    <message>
-        <source>ouvert</source>
-        <translation>オープン</translation>
-    </message>
-    <message>
-        <source>short fermata</source>
-        <translation>三角フェルマータ(短い)</translation>
-    </message>
-    <message>
-        <source>long fermata</source>
-        <translation>方形フェルマータ(長い)</translation>
-    </message>
-    <message>
-        <source>very long fermata</source>
-        <translation>方形フェルマータ(とても長い)</translation>
-    </message>
-    <message>
-        <source>up bow</source>
-        <translation>上げ弓</translation>
-    </message>
-    <message>
-        <source>down bow</source>
-        <translation>下げ弓</translation>
-    </message>
-    <message>
-        <source>reverse turn</source>
-        <translation>逆ターン</translation>
-    </message>
-    <message>
-        <source>prall prall</source>
-        <translation>プラル・プラル</translation>
-    </message>
-    <message>
-        <source>prall mordent</source>
-        <translation>プラル・モルデント</translation>
-    </message>
-    <message>
-        <source>up prall</source>
-        <translation>上プラル</translation>
-    </message>
-    <message>
-        <source>down prall</source>
-        <translation>下プラル</translation>
-    </message>
-    <message>
-        <source>up mordent</source>
-        <translation>上モルデント</translation>
-    </message>
-    <message>
-        <source>down mordent</source>
-        <translation>下モルデント</translation>
-    </message>
-    <message>
-        <source>prall down</source>
-        <translation>プラル下</translation>
-    </message>
-    <message>
-        <source>prall up</source>
-        <translation>プラル上</translation>
-    </message>
-    <message>
-        <source>line prall</source>
-        <translation>ライン・プラル</translation>
-    </message>
-    <message>
-        <source>snap pizzicato</source>
-        <translation>スナップ・ピチカート</translation>
-    </message>
-    <message>
-        <source>stopped/pizzicato left hand</source>
-        <translation>ゲシュトップ奏法</translation>
-    </message>
-    <message>
-        <source>fade in</source>
-        <translation>フェードイン</translation>
-    </message>
-    <message>
-        <source>fade out</source>
-        <translation>フェードアウト</translation>
-    </message>
-    <message>
-        <source>volume swell</source>
-        <translation>バイオリン奏法(エレキギター)</translation>
-    </message>
-    <message>
-        <source>wiggle sawtooth</source>
-        <translation>ウィグル・ノコギリ波</translation>
-    </message>
-    <message>
-        <source>wiggle sawtooth wide</source>
-        <translation>ウィグル・ノコギリ波ワイド</translation>
-    </message>
-    <message>
-        <source>wiggle vibrato large faster</source>
-        <translation>ウィグル・高速大ビブラート</translation>
     </message>
     <message>
         <source>Slide out down</source>
@@ -14988,8 +15232,188 @@ Tuplet would cross measure</source>
         <translation>スライド イン アバブ</translation>
     </message>
     <message>
-        <source>wiggle vibrato large slowest</source>
-        <translation>ウィグル・低速大ビブラート</translation>
+        <source>Fermata</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Short fermata</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Long fermata</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Very long fermata</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sforzato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Staccato</source>
+        <translation>スタッカート</translation>
+    </message>
+    <message>
+        <source>Staccatissimo</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tenuto</source>
+        <translation>テヌート</translation>
+    </message>
+    <message>
+        <source>Portato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Marcato</source>
+        <translation>マルカート</translation>
+    </message>
+    <message>
+        <source>Fade in</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fade out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Volume swell</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wiggle sawtooth</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wiggle sawtooth wide</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wiggle vibrato large faster</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wiggle vibrato large slowest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ouvert</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Stopped/Pizzicato left hand</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Up bow</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Down bow</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reverse turn</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Turn</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Trill</source>
+        <translation>トリル</translation>
+    </message>
+    <message>
+        <source>Prall</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Mordent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Prall prall</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Prall mordent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Up prall</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Down prall</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Up mordent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Down mordent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Prall down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Prall up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Line prall</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Schleifer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Snap pizzicato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tapping</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Slapping</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Popping</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Thumb pos.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lute thumb fing.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lute 1 fing.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lute 2 fing.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lute 3 fing.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tremolo bar</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -16401,7 +16825,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Stem Slash</source>
-        <translation type="unfinished"/>
+        <translation>符幹のスラッシュ</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -16481,7 +16905,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"/>
+        <translation>隠れ音符</translation>
     </message>
     <message>
         <source>Rubber Band</source>
@@ -16489,7 +16913,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
-        <translation type="unfinished"/>
+        <translation>TAB譜音価記号</translation>
     </message>
     <message>
         <source>Font Symbol</source>
@@ -16685,10 +17109,6 @@ Tuplet would cross measure</source>
         <translation>セーニョ</translation>
     </message>
     <message>
-        <source>Segno Variation</source>
-        <translation>セーニョのバリエーション</translation>
-    </message>
-    <message>
         <source>Coda</source>
         <translation>コーダ</translation>
     </message>
@@ -16710,65 +17130,69 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Custom</source>
-        <translation>カスタム</translation>
+        <translation>ユーザー定義</translation>
+    </message>
+    <message>
+        <source>Segno variation</source>
+        <translation>セーニョのバリエーション</translation>
     </message>
 </context>
 <context>
     <name>noteheadnames</name>
     <message>
-        <source>normal</source>
+        <source>Normal</source>
         <translation>標準</translation>
     </message>
     <message>
-        <source>cross</source>
-        <translation>×符頭</translation>
+        <source>Cross</source>
+        <translation>クロス符頭</translation>
     </message>
     <message>
-        <source>diamond</source>
+        <source>Diamond</source>
         <translation>菱形符頭</translation>
     </message>
     <message>
-        <source>triangle</source>
-        <translation>三角符頭</translation>
+        <source>Triangle</source>
+        <translation>トライアングル</translation>
     </message>
     <message>
-        <source>mi</source>
-        <translation>シェイプ・ノート：　ミ</translation>
+        <source>Mi</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>slash</source>
+        <source>Slash</source>
         <translation>スラッシュ符頭</translation>
     </message>
     <message>
-        <source>xcircle</source>
-        <translation>○付き×符頭</translation>
+        <source>XCircle</source>
+        <translation>ｘ サークル符頭</translation>
     </message>
     <message>
-        <source>do</source>
-        <translation>シェイプ・ノート：　ド</translation>
+        <source>Do</source>
+        <translation>ド</translation>
     </message>
     <message>
-        <source>re</source>
-        <translation>シェイプ・ノート：　レ</translation>
+        <source>Re</source>
+        <translation>レ</translation>
     </message>
     <message>
-        <source>fa</source>
-        <translation>シェイプ・ノート：　ファ</translation>
+        <source>Fa</source>
+        <translation>ファ</translation>
     </message>
     <message>
-        <source>la</source>
-        <translation>シェイプ・ノート：　ラ</translation>
+        <source>La</source>
+        <translation>ラ</translation>
     </message>
     <message>
-        <source>ti</source>
-        <translation>シェイプ・ノート：　シ</translation>
+        <source>Ti</source>
+        <translation>シ</translation>
     </message>
     <message>
-        <source>sol</source>
-        <translation>シェイプ・ノート：  ソ</translation>
+        <source>Sol</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>alt. brevis</source>
+        <source>Alt. Brevis</source>
         <translation>代替ブレヴィス</translation>
     </message>
 </context>
@@ -16782,32 +17206,32 @@ Tuplet would cross measure</source>
 <context>
     <name>preferences</name>
     <message>
-        <source>Every day</source>
-        <translation>毎日</translation>
-    </message>
-    <message>
-        <source>Every 3 days</source>
-        <translation>3日毎</translation>
-    </message>
-    <message>
-        <source>Every week</source>
-        <translation>1週間毎</translation>
-    </message>
-    <message>
-        <source>Every 2 weeks</source>
-        <translation>2週間毎</translation>
-    </message>
-    <message>
-        <source>Every month</source>
-        <translation>1ヶ月毎</translation>
-    </message>
-    <message>
-        <source>Every 2 months</source>
-        <translation>2ヶ月毎</translation>
-    </message>
-    <message>
         <source>Never</source>
         <translation>確認しない</translation>
+    </message>
+    <message>
+        <source>Every Day</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Every 3 Days</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Every Week</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Every 2 Weeks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Every Month</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Every 2 Months</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

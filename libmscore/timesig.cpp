@@ -484,6 +484,8 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::SHOW_COURTESY:
+                  if (generated())
+                        return false;
                   setShowCourtesySig(v.toBool());
                   break;
             case P_ID::NUMERATOR_STRING:
@@ -528,7 +530,8 @@ QVariant TimeSig::propertyDefault(P_ID id) const
             case P_ID::TIMESIG:            return QVariant::fromValue(Fraction(4,4));
             case P_ID::TIMESIG_GLOBAL:     return QVariant::fromValue(Fraction(1,1));
             case P_ID::TIMESIG_TYPE:       return int(TimeSigType::NORMAL);
-            default:                   return Element::propertyDefault(id);
+            default:
+                  return Element::propertyDefault(id);
             }
       }
 
@@ -585,6 +588,21 @@ QString TimeSig::accessibleInfo()
                   timeSigString = tr("%1/%2 time").arg(QString::number(numerator())).arg(QString::number(denominator()));
             }
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(timeSigString);
+      }
+
+//---------------------------------------------------------
+//   operator==
+//---------------------------------------------------------
+
+bool TimeSig::operator==(const TimeSig& ts) const
+      {
+      return (timeSigType() == ts.timeSigType())
+         && (sig().identical(ts.sig()))
+         && (stretch() == ts.stretch())
+         && (groups() == ts.groups())
+         && (customText == ts.customText)
+         && (!customText || (_numeratorString == ts._numeratorString && _denominatorString == ts._denominatorString))
+         ;
       }
 
 }

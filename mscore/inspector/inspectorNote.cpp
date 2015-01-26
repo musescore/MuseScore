@@ -79,6 +79,8 @@ InspectorNote::InspectorNote(QWidget* parent)
             { P_ID::TUNING,         0, 0, n.tuning,        n.resetTuning        },
             { P_ID::VELO_TYPE,      0, 0, n.velocityType,  n.resetVelocityType  },
             { P_ID::VELO_OFFSET,    0, 0, n.velocity,      n.resetVelocity      },
+            { P_ID::FIXED,          0, 0, n.fixed,         n.resetFixed         },
+            { P_ID::FIXED_LINE,     0, 0, n.fixedLine,     n.resetFixedLine     },
 
             { P_ID::USER_OFF,       0, 1, c.offsetX,       c.resetX             },
             { P_ID::USER_OFF,       1, 1, c.offsetY,       c.resetY             },

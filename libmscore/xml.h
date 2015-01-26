@@ -52,8 +52,8 @@ class XmlReader : public XmlStreamReader {
       int _trackOffset      { 0       };
       bool _pasteMode       { false   };        // modifies read behaviour on paste operation
       Measure* _lastMeasure { nullptr };
-      QList<Beam*>    _beams;
-      QList<Tuplet*>  _tuplets;
+      QHash<int, Beam*>    _beams;
+      QHash<int, Tuplet*>  _tuplets;
       QList<SpannerValues> _spannerValues;
       QList<std::pair<int,Spanner*>> _spanner;
       QList<StaffType> _staffTypes;
@@ -82,6 +82,7 @@ class XmlReader : public XmlStreamReader {
       int readInt()         { return readElementText().toInt();    }
       int readInt(bool* ok) { return readElementText().toInt(ok);  }
       double readDouble()   { return readElementText().toDouble(); }
+      double readDouble(double min, double max);
       bool readBool()       { return readElementText().toInt() != 0; }
       QPointF readPoint();
       QSizeF readSize();
@@ -104,17 +105,15 @@ class XmlReader : public XmlStreamReader {
       bool pasteMode() const       { return _pasteMode; }
       void setPasteMode(bool v)    { _pasteMode = v;    }
 
+      void addBeam(Beam* s);
+      Beam* findBeam(int id) const { return _beams.value(id);   }
+
       void addTuplet(Tuplet* s);
-      void addBeam(Beam* s)        { _beams.append(s); }
+      Tuplet* findTuplet(int id) const { return _tuplets.value(id); }
+      QHash<int, Tuplet*>& tuplets()   { return _tuplets; }
 
       void setLastMeasure(Measure* m) { _lastMeasure = m;    }
       Measure* lastMeasure() const    { return _lastMeasure; }
-
-      Beam* findBeam(int) const;
-      Tuplet* findTuplet(int) const;
-
-      QList<Tuplet*>& tuplets()                      { return _tuplets; }
-      QList<Beam*>& beams()                          { return _beams; }
 
       void removeSpanner(const Spanner*);
       void addSpanner(int id, Spanner*);
@@ -195,6 +194,7 @@ class Xml : public QTextStream {
       bool canWriteVoice(int track) const;
 
       static QString xmlString(const QString&);
+      static QString xmlString(ushort c);
       };
 
 extern PlaceText readPlacement(XmlReader&);

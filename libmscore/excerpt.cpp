@@ -49,7 +49,7 @@ namespace Ms {
 
 void Excerpt::read(XmlReader& e)
       {
-      const QList<Part*>& pl = _score->parts();
+      const QList<Part*>& pl = _oscore->parts();
       QString name;
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
@@ -75,7 +75,7 @@ void Excerpt::read(XmlReader& e)
 
 bool Excerpt::operator!=(const Excerpt& e) const
       {
-      if (e._score != _score)
+      if (e._oscore != _oscore)
             return true;
       if (e._title != _title)
             return true;
@@ -97,12 +97,13 @@ static void localSetScore(void* score, Element* element)
 //   createExcerpt
 //---------------------------------------------------------
 
-void createExcerpt(Score* score, Excerpt* excerpt)
+void createExcerpt(Excerpt* excerpt)
       {
+      Score* oscore = excerpt->oscore();
+      Score* score  = excerpt->partScore();
+
       QList<Part*>& parts = excerpt->parts();
       QList<int> srcStaves;
-
-      Score* oscore = parts.front()->score();
 
       // clone layer:
       for (int i = 0; i < 32; ++i) {
@@ -157,6 +158,7 @@ void createExcerpt(Score* score, Excerpt* excerpt)
             txt->setText(partLabel);
             txt->setTrack(0);
             measure->add(txt);
+            score->setMetaTag("partName", partLabel);
             }
 
       //
@@ -181,15 +183,18 @@ void createExcerpt(Score* score, Excerpt* excerpt)
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
 
-                  score->transposeKeys(staffIdx, staffIdx+1, 0, score->lastSegment()->tick(), interval);
+                  int endTick = 0;
+                  if (score->lastSegment())
+                        endTick = score->lastSegment()->tick();
+                  score->transposeKeys(staffIdx, staffIdx+1, 0, endTick, interval);
 
                   for (auto segment = score->firstSegment(Segment::Type::ChordRest); segment; segment = segment->next1(Segment::Type::ChordRest)) {
                         for (auto e : segment->annotations()) {
                               if ((e->type() != Element::Type::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                                     continue;
                               Harmony* h  = static_cast<Harmony*>(e);
-                              int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, false);
-                              int baseTpc = Ms::transposeTpc(h->baseTpc(), interval, false);
+                              int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, true);
+                              int baseTpc = Ms::transposeTpc(h->baseTpc(), interval, true);
                               score->undoTransposeHarmony(h, rootTpc, baseTpc);
                               }
                         }
@@ -288,6 +293,26 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
       }
 
 //---------------------------------------------------------
+//   mapTrack
+//---------------------------------------------------------
+
+static int mapTrack(int srcTrack, const QList<int>& map)
+      {
+      if (srcTrack == -1)
+            return -1;
+      int track = -1;
+      int st = 0;
+      foreach(int staff, map) {
+            if (staff == srcTrack / VOICES) {
+                  track = (st * VOICES) + srcTrack % VOICES;
+                  break;
+                  }
+            ++st;
+            }
+      return track;
+      }
+
+//---------------------------------------------------------
 //   cloneStaves
 //---------------------------------------------------------
 
@@ -327,15 +352,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   int tracks = oscore->nstaves() * VOICES;
                   for (int srcTrack = 0; srcTrack < tracks; ++srcTrack) {
                         TupletMap tupletMap;    // tuplets cannot cross measure boundaries
-                        int track = -1;
-                        int st = 0;
-                        foreach(int staff, map) {
-                              if (staff == srcTrack/VOICES) {
-                                    track = (st * VOICES) + srcTrack % VOICES;
-                                    break;
-                                    }
-                              ++st;
-                              }
+
+                        int track = mapTrack(srcTrack, map);
+
                         Tremolo* tremolo = 0;
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns = nullptr; //create segment later, on demand
@@ -461,12 +480,31 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE)
                               continue;
                         }
+                  int track = -1;
+                  if (e->track() != -1) {
+                        // try to map track
+                        track = mapTrack(e->track(), map);
+                        if (track == -1) {
+                              // even if track not in excerpt, we need to clone system elements
+                              if (e->systemFlag())
+                                    track = 0;
+                              else
+                                    continue;
+                              }
+                        }
+
                   Element* ne;
-                  if (e->type() == Element::Type::TEXT || e->type() == Element::Type::LAYOUT_BREAK) // link the title, subtitle etc...
+                  // link text - title, subtitle, also repeats (eg, coda/segno)
+                  // measure numbers are not stored in this list, but they should not be cloned anyhow
+                  // layout breaks other than section were skipped above,
+                  // but section breaks do need to be cloned & linked
+                  // other measure-attached elements (?) are cloned but not linked
+                  if (e->isText() || e->type() == Element::Type::LAYOUT_BREAK)
                         ne = e->linkedClone();
                   else
                         ne = e->clone();
                   ne->setScore(score);
+                  ne->setTrack(track);
                   nmb->add(ne);
                   }
             nmbl->add(nmb);
@@ -500,9 +538,10 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             int dstTrack  = -1;
             int dstTrack2 = -1;
             int           st = 0;
-            //always export voltas to first staff in part
-            if (s->type() == Element::Type::VOLTA)
+            if (s->type() == Element::Type::VOLTA) {
+                  //always export voltas to first staff in part
                   dstTrack = s->voice();
+                  }
             else {            //export other spanner if staffidx matches
                   for (int index : map) {
                         if (index == staffIdx) {

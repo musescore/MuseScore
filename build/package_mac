@@ -3,7 +3,6 @@ APPNAME=mscore
 LONG_NAME=MuseScore
 LONGER_NAME="MuseScore 2"
 
-
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.png
 APP_PATH=applebuild/${APPNAME}.app
@@ -50,7 +49,7 @@ EOF
 rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
 #tip: increase the size if error on copy or macdeployqt
-hdiutil create -size 220m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
+hdiutil create -size 300m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
  
 # Mount the disk image
 hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME}
@@ -99,10 +98,24 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/PlugIns/sqldrivers
 
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/Enginio.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtBluetooth.*
-rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebSockets.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtNfc.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtLocation.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtPurchasing.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtQuickParticles.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngine.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.*
 
-mv ${VOLUME}/${APPNAME}.app  "${VOLUME}/${LONGER_NAME}.app"
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/Enginio
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtBluetooth
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtNfc
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtLocation
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPositioning
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPurchasing
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtQuick/Particles*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/Qt/WebSockets
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtWebEngine
+
+mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 
 # copy in background image
 mkdir -p ${VOLUME}/Pictures
@@ -113,6 +126,11 @@ cp  ${BACKGROUND} ${VOLUME}/Pictures/background.png
 ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
+
+#codesign
+codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+codesign -v "${VOLUME}/${LONGER_NAME}.app"
+spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
  
 # Unmount the disk image
 hdiutil detach $DEV

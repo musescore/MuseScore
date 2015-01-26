@@ -517,7 +517,7 @@ void InstrumentTemplate::read(XmlReader& e)
             a.program      = 0;
             a.bank         = 0;
             a.volume       = 100;
-            a.pan         = 60;
+            a.pan          = 64; // actually 63.5 for center
             channel.append(a);
             }
       if (useDrumset != DrumsetKind::NONE) {

@@ -27,6 +27,9 @@
 #include "tuplet.h"
 #include "utils.h"
 #include "xml.h"
+#include "image.h"
+#include "repeat.h"
+#include "chord.h"
 
 namespace Ms {
 
@@ -76,7 +79,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
       int dstTick = dst->tick();
       bool done = false;
       bool pasted = false;
-      int tickLen, staves;
+      int tickLen, staves = 0;
       while (e.readNextStartElement()) {
             if (done)
                   break;
@@ -256,8 +259,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Interval interval = partDest->instr()->transpose();
                               if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
-                                    int rootTpc = transposeTpc(harmony->rootTpc(), interval, false);
-                                    int baseTpc = transposeTpc(harmony->baseTpc(), interval, false);
+                                    int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
+                                    int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
                                     undoTransposeHarmony(harmony, rootTpc, baseTpc);
                                     }
 
@@ -423,7 +426,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                   bool firstpart = true;
                   while (rest) {
                         measure = tick2measure(tick);
-                        Chord* c2 = static_cast<Chord*>(c->clone());
+                        Chord* c2 = firstpart ? c : static_cast<Chord*>(c->clone());
                         int mlen = measure->tick() + measure->ticks() - tick;
                         int len = mlen > rest ? rest : mlen;
                         QList<TDuration> dl = toDurationList(Fraction::fromTicks(len), true);
@@ -455,13 +458,14 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         tick += c->actualTicks();
                         }
                   }
-            else {
+            else if (cr->type() == Element::Type::REST) {
                   // split Rest
                   Rest* r       = static_cast<Rest*>(cr);
                   Fraction rest = r->duration();
 
+                  bool firstpart = true;
                   while (!rest.isZero()) {
-                        Rest* r2      = static_cast<Rest*>(r->clone());
+                        Rest* r2      = firstpart ? r : static_cast<Rest*>(r->clone());
                         measure       = tick2measure(tick);
                         Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
                         Fraction len  = rest > mlen ? mlen : rest;
@@ -472,8 +476,32 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         undoAddCR(r2, measure, tick);
                         rest -= d.fraction();
                         tick += r2->actualTicks();
+                        firstpart = false;
                         }
-                  delete r;
+                  }
+            else if (cr->type() == Element::Type::REPEAT_MEASURE) {
+                  RepeatMeasure* rm = static_cast<RepeatMeasure*>(cr);
+                  QList<TDuration> list = toDurationList(rm->actualDuration(), true);
+                  for (auto dur : list) {
+                        Rest* r = new Rest(this, dur);
+                        r->setTrack(cr->track());
+                        Fraction rest = r->duration();
+                        while (!rest.isZero()) {
+                              Rest* r2      = static_cast<Rest*>(r->clone());
+                              measure       = tick2measure(tick);
+                              Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
+                              Fraction len  = rest > mlen ? mlen : rest;
+                              QList<TDuration> dl = toDurationList(len, false);
+                              TDuration d = dl[0];
+                              r2->setDuration(d.fraction());
+                              r2->setDurationType(d);
+                              undoAddCR(r2, measure, tick);
+                              rest -= d.fraction();
+                              tick += r2->actualTicks();
+                              }
+                        delete r;
+                        }
+                  delete cr;
                   }
             }
       else {
@@ -551,8 +579,8 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               Interval interval = partDest->instr()->transpose();
                               if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
-                                    int rootTpc = transposeTpc(el->rootTpc(), interval, false);
-                                    int baseTpc = transposeTpc(el->baseTpc(), interval, false);
+                                    int rootTpc = transposeTpc(el->rootTpc(), interval, true);
+                                    int baseTpc = transposeTpc(el->baseTpc(), interval, true);
                                     undoTransposeHarmony(el, rootTpc, baseTpc);
                                     }
                               el->setParent(harmSegm);
@@ -807,6 +835,36 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   XmlReader e(data);
                   pasteSymbols(e, cr);
                   }
+            }
+      else if (ms->hasImage()) {
+            QImage im = qvariant_cast<QImage>(ms->imageData());
+            QByteArray ba;
+            QBuffer buffer(&ba);
+            buffer.open(QIODevice::WriteOnly);
+            im.save(&buffer, "PNG");
+
+            Image* image = new Image(this);
+            image->setImageType(ImageType::RASTER);
+            image->loadFromData("dragdrop", ba);
+
+            QList<Element*> els;
+            if (_selection.isSingle())
+                  els.append(_selection.element());
+            else
+                  els.append(_selection.elements());
+
+            for (Element* target : els) {
+                  Element* nel = image->clone();
+                  addRefresh(target->abbox());   // layout() ?!
+                  DropData ddata;
+                  ddata.view       = view;
+                  ddata.element    = nel;
+                  // ddata.duration   = duration;
+                  target->drop(ddata);
+                  if (_selection.element())
+                        addRefresh(_selection.element()->abbox());
+                  }
+            delete image;
             }
       else {
             qDebug("cannot paste selState %d staffList %hhd",

@@ -23,14 +23,14 @@
 #include "synthesizer/msynthesizer.h"
 #include "mscore/musescoreCore.h"
 #include "mscore/shortcut.h"
-#include "mscore/importmidi_operations.h"
+#include "mscore/importmidi/importmidi_operations.h"
 #include "libmscore/xml.h"
 #include "libmscore/excerpt.h"
 
 inline void initMyResources() {
       Q_INIT_RESOURCE(mtest);
       Q_INIT_RESOURCE(musescorefonts_MScore);
-      Q_INIT_RESOURCE(musescorefonts_Gonville);
+      Q_INIT_RESOURCE(musescorefonts_Gootville);
       Q_INIT_RESOURCE(musescorefonts_Bravura);
       Q_INIT_RESOURCE(musescorefonts_MuseJazz);
       Q_INIT_RESOURCE(musescorefonts_FreeSerif);
@@ -59,7 +59,7 @@ MuseScoreCore* mscoreCore;
 MasterSynthesizer* synti;
 QString dataPath;
 QIcon* icons[0];
-Shortcut Shortcut::sc[1] = { Shortcut() };
+//Shortcut Shortcut::_sc[1] = { Shortcut() };
 QString mscoreGlobalShare;
 
 //---------------------------------------------------------
@@ -164,7 +164,7 @@ Score* MTest::readCreatedScore(const QString& name)
             }
       score->updateNotes();
       for (Excerpt* e : score->excerpts())
-            e->score()->updateNotes();
+            e->partScore()->updateNotes();
       return score;
       }
 

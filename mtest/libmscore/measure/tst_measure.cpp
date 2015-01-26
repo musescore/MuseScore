@@ -74,7 +74,7 @@ void TestMeasure::insertMeasureMiddle()
       Score* score = readScore(DIR + "measure-1.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
-            e->score()->doLayout();
+            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
@@ -93,7 +93,7 @@ void TestMeasure::insertMeasureBegin()
       Score* score = readScore(DIR + "measure-1.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
-            e->score()->doLayout();
+            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure();
       score->startCmd();
@@ -112,7 +112,7 @@ void TestMeasure::insertMeasureEnd()
       Score* score = readScore(DIR + "measure-1.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
-            e->score()->doLayout();
+            e->partScore()->doLayout();
 
       score->startCmd();
       score->insertMeasure(Element::Type::MEASURE, 0);
@@ -209,7 +209,7 @@ void TestMeasure::spanner_a()
       Score* score = readScore(DIR + "measure-3.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
-            e->score()->doLayout();
+            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
@@ -232,7 +232,7 @@ void TestMeasure::spanner_b()
       Score* score = readScore(DIR + "measure-4.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
-            e->score()->doLayout();
+            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure();
       score->startCmd();
@@ -254,7 +254,7 @@ void TestMeasure::spanner_A()
       Score* score = readScore(DIR + "measure-6.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
-            e->score()->doLayout();
+            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure();
       score->startCmd();
@@ -278,7 +278,7 @@ void TestMeasure::spanner_B()
       Score* score = readScore(DIR + "measure-7.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
-            e->score()->doLayout();
+            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
@@ -302,7 +302,7 @@ void TestMeasure::spanner_C()
       Score* score = readScore(DIR + "measure-8.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
-            e->score()->doLayout();
+            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();
@@ -326,7 +326,7 @@ void TestMeasure::spanner_D()
       Score* score = readScore(DIR + "measure-9.mscx");
       score->doLayout();
       foreach(Excerpt* e, score->excerpts())
-            e->score()->doLayout();
+            e->partScore()->doLayout();
 
       Measure* m = score->firstMeasure()->nextMeasure();
       score->startCmd();

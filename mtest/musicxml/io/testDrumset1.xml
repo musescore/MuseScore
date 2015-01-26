@@ -10,6 +10,11 @@
     <encoding>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
+      <supports element="accidental" type="yes"/>
+      <supports element="beam" type="yes"/>
+      <supports element="print" attribute="new-page" type="no"/>
+      <supports element="print" attribute="new-system" type="no"/>
+      <supports element="stem" type="yes"/>
       </encoding>
     </identification>
   <part-list>
@@ -105,7 +110,6 @@
         <divisions>1</divisions>
         <key>
           <fifths>0</fifths>
-          <mode>major</mode>
           </key>
         <time>
           <beats>4</beats>

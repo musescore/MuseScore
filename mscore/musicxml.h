@@ -179,6 +179,9 @@ class MusicXml {
       SlurDesc slur[MAX_NUMBER_LEVEL];
       TextLine* bracket[MAX_BRACKETS];
       TextLine* dashes[MAX_DASHES];
+      Ottava* ottavas[MAX_NUMBER_LEVEL];        ///< Current ottavas
+      Hairpin* hairpins[MAX_NUMBER_LEVEL];      ///< Current hairpins
+      Trill* trills[MAX_NUMBER_LEVEL];          ///< Current trills
 
       Tie* tie;
       Volta* lastVolta;
@@ -201,12 +204,9 @@ class MusicXml {
       MusicXmlPartGroupList partGroupList;
       MusicXmlSpannerMap spanners;
 
-      Ottava* ottava;                            ///< Current ottava
-      Trill* trill;                              ///< Current trill
       Pedal* pedal;                              ///< Current pedal
       Pedal* pedalContinue;                      ///< Current pedal type="change" requiring fixup
       Harmony* harmony;                          ///< Current harmony
-      Hairpin* hairpin;                          ///< Current hairpin (obsoletes wedgelist)
       Chord* tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
       bool figBassExtend;                        ///< Current figured bass extend

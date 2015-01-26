@@ -167,6 +167,7 @@
         <Chord>
           <lid>15</lid>
           <durationType>16th</durationType>
+          <Beam>1</Beam>
           <Note>
             <lid>16</lid>
             <endSpanner id="2"/>
@@ -370,6 +371,7 @@
           <Chord>
             <lid>15</lid>
             <durationType>16th</durationType>
+            <Beam>2</Beam>
             <Note>
               <lid>16</lid>
               <endSpanner id="3"/>
@@ -461,6 +463,7 @@
           <Chord>
             <lid>15</lid>
             <durationType>16th</durationType>
+            <Beam>3</Beam>
             <Note>
               <lid>16</lid>
               <endSpanner id="4"/>

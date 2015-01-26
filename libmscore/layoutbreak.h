@@ -47,25 +47,26 @@ class LayoutBreak : public Element {
       bool _startWithLongNames;
       bool _startWithMeasureOne;
 
-      virtual void draw(QPainter*) const;
+      virtual void draw(QPainter*) const override;
       void layout0();
-      virtual void spatiumChanged(qreal oldValue, qreal newValue);
+      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
 
    public:
       LayoutBreak(Score* = 0);
-      virtual LayoutBreak* clone() const { return new LayoutBreak(*this); }
+      virtual LayoutBreak* clone() const override { return new LayoutBreak(*this); }
 
-      virtual Element::Type type() const { return Element::Type::LAYOUT_BREAK; }
-      virtual bool systemFlag() const    { return true;  }
+      virtual Element::Type type() const override { return Element::Type::LAYOUT_BREAK; }
+      virtual bool systemFlag() const override    { return true;  }
 
       void setLayoutBreakType(Type);
       Type layoutBreakType() const  { return _layoutBreakType; }
       void undoSetLayoutBreakType(Type);
 
       virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&);
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
+      virtual Element* drop(const DropData&) override;
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
+
       Measure* measure() const            { return (Measure*)parent();   }
       qreal pause() const                 { return _pause;               }
       void setPause(qreal v)              { _pause = v;                  }
@@ -74,9 +75,9 @@ class LayoutBreak : public Element {
       bool startWithMeasureOne() const    { return _startWithMeasureOne; }
       void setStartWithMeasureOne(bool v) { _startWithMeasureOne = v;    }
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       };
 
 

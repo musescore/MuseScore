@@ -85,8 +85,9 @@ Mixer::Mixer(QWidget* parent)
       {
       setWindowTitle(tr("MuseScore: Mixer"));
       setWidgetResizable(true);
-      setWindowFlags(Qt::Dialog);
+      setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
       QWidget* area = new QWidget(this);
       vb = new QVBoxLayout;
       vb->setMargin(0);
@@ -185,6 +186,7 @@ void MuseScore::showMixer(bool val)
       QAction* a = getAction("toggle-mixer");
       if (mixer == 0) {
             mixer = new Mixer(this);
+            mscore->stackUnder(mixer);
             if (synthControl)
                   connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));

@@ -19,6 +19,7 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "system.h"
 #include "style.h"
 #include "sym.h"
 #include "xml.h"
@@ -60,18 +61,18 @@ void Glissando::layout()
       if (chord == 0)
             return;
       Note* anchor2   = chord->upNote();
-      Segment* s = chord->segment();
-      s = s->prev1();
-      while (s) {
-            if ((s->segmentType() & (Segment::Type::ChordRest)) && s->element(track()))
+      Segment* s2 = chord->segment();
+      Segment* s1 = s2->prev1();
+      while (s1) {
+            if ((s1->segmentType() & (Segment::Type::ChordRest)) && s1->element(track()))
                   break;
-            s = s->prev1();
+            s1 = s1->prev1();
             }
-      if (s == 0) {
+      if (s1 == 0) {
             qDebug("no segment for first note of glissando found");
             return;
             }
-      ChordRest* cr = static_cast<ChordRest*>(s->element(track()));
+      ChordRest* cr = static_cast<ChordRest*>(s1->element(track()));
       if (cr == 0 || cr->type() != Element::Type::CHORD) {
             qDebug("no first note for glissando found, track %d", track());
             return;
@@ -82,18 +83,44 @@ void Glissando::layout()
       setPos(0.0, 0.0);
       adjustReadPos();
 
-      QPointF cp1    = anchor1->pagePos();
-      QPointF cp2    = anchor2->pagePos();
+      // since line will be drawn relative to end note,
+      // calculate offsets for start note coordinates relative to end note
+      qreal x1off = 0.0;
+      qreal y1off = 0.0;
+      QPointF cp1 = anchor1->pagePos();
+      QPointF cp2 = anchor2->pagePos();
+
+      // layout of glissandi happens before we have staff positions within the system
+      // so these "page" positions are not accurate across different staves
+      // cheap partial fix for cross-staff glissandi: adjust vertical position according to difference in staffMove
+      int moveDiff   = anchor2->chord()->staffMove() - anchor1->chord()->staffMove();
+      if (moveDiff)
+            y1off = moveDiff * 4.0 * _spatium;
+
+      // now calculate offsets
+      if (s1->system() == s2->system()) {
+            // normal case - start and end note in same system
+            x1off = cp2.x() - cp1.x();
+            if (!moveDiff)
+                  y1off = cp2.y() - cp1.y();
+            }
+      else {
+            // cheap partial fix for cross system glissandi: just draw a short line into end note
+            // TODO: draw line coming out of start note on previous system
+            x1off = 4.0 * _spatium;
+            if (!moveDiff)
+                  y1off = anchor2->pos().y() - anchor1->pos().y();
+            }
 
       // line starting point
       int dots = static_cast<Chord*>(cr)->dots();
       LedgerLine * ledLin = static_cast<Chord*>(cr)->ledgerLines();
       // if dots, from right of last dot (assume a standard dot with of 1/4 sp)
       // if no dots, from right of ledger line, if any; from right of note head, if no ledger line
-      qreal x1 = (dots ? anchor1->dot(dots-1)->pos().x() + anchor1->dot(dots-1)->width()
+      qreal x1 = (dots && anchor1->dot(dots-1) ? anchor1->dot(dots-1)->pos().x() + anchor1->dot(dots-1)->width()
                   : (ledLin ? ledLin->pos().x() + ledLin->width() : anchor1->headWidth()) )
-            - (cp2.x() - cp1.x());              // make relative to end note
-      qreal y1 = anchor1->pos().y();
+            - x1off;                            // make relative to end note
+      qreal y1 = anchor2->y() - y1off;
       // line end point: left of note head
       qreal x2 = anchor2->pos().x();
       qreal y2 = anchor2->pos().y();
@@ -121,7 +148,7 @@ void Glissando::layout()
             }
 
       // shorten line to avoid end note ledger line
-      ledLin=anchor2->chord()->ledgerLines();
+      ledLin = anchor2->chord()->ledgerLines();
       if (ledLin)
             x2 = ledLin->pos().x();
       // shorten line so it doesn't go through end note accidental or arpeggio

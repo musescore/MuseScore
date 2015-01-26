@@ -20,6 +20,11 @@ class QPainter;
 namespace Ms {
 
 class ChordRest;
+class Segment;
+class Measure;
+class System;
+class Page;
+
 enum class SymId;
 
 //---------------------------------------------------------
@@ -78,36 +83,37 @@ class Articulation : public Element {
       Articulation(Score*);
       Articulation &operator=(const Articulation&) = delete;
 
-      virtual Articulation* clone() const   { return new Articulation(*this); }
-      virtual Element::Type type() const    { return Element::Type::ARTICULATION; }
+      virtual Articulation* clone() const override   { return new Articulation(*this); }
+      virtual Element::Type type() const override    { return Element::Type::ARTICULATION; }
 
-      virtual qreal mag() const;
+      virtual qreal mag() const override;
 
       void setArticulationType(ArticulationType);
       ArticulationType articulationType() const { return _articulationType; }
-      virtual int subtype() const { return int(_articulationType); }
+
+      virtual int subtype() const override { return int(_articulationType); }
       void setSubtype(const QString& s);
       QString subtypeName() const;
 
-      virtual void layout();
+      virtual void layout() override;
 
-      virtual void read(XmlReader&);
-      virtual void write(Xml& xml) const;
+      virtual void read(XmlReader&) override;
+      virtual void write(Xml& xml) const override;
 
-      virtual void reset();
-      virtual QLineF dragAnchor() const;
+      virtual void reset() override;
+      virtual QLineF dragAnchor() const override;
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
 
       QString subtypeUserName() const;
 
-      virtual QPointF pagePos() const;      ///< position in page coordinates
-      virtual QPointF canvasPos() const;
+      virtual QPointF pagePos() const override;      ///< position in page coordinates
+      virtual QPointF canvasPos() const override;
 
       bool up() const                       { return _up; }
       void setUp(bool val)                  { _up = val;  }
@@ -115,6 +121,11 @@ class Articulation : public Element {
       MScore::Direction direction() const   { return _direction; }
 
       ChordRest* chordRest() const;
+      Segment* segment() const;
+      Measure* measure() const;
+      System* system() const;
+      Page* page() const;
+      void canvasBoundingRectChanged();
 
       static ArticulationInfo articulationList[];
 

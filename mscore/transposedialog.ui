@@ -496,22 +496,21 @@
   <tabstop>chromaticBox</tabstop>
   <tabstop>transposeByKey</tabstop>
   <tabstop>closestKey</tabstop>
+  <tabstop>keyList</tabstop>
   <tabstop>upKey</tabstop>
   <tabstop>downKey</tabstop>
-  <tabstop>keyList</tabstop>
-  <tabstop>transposeByInterval</tabstop>
   <tabstop>upInterval</tabstop>
+  <tabstop>transposeByInterval</tabstop>
+  <tabstop>intervalList</tabstop>
   <tabstop>downInterval</tabstop>
   <tabstop>transposeKeys</tabstop>
-  <tabstop>intervalList</tabstop>
-  <tabstop>upDiatonic</tabstop>
   <tabstop>diatonicBox</tabstop>
+  <tabstop>upDiatonic</tabstop>
+  <tabstop>degreeList</tabstop>
   <tabstop>downDiatonic</tabstop>
   <tabstop>keepDegreeAlterations</tabstop>
-  <tabstop>degreeList</tabstop>
   <tabstop>transposeChordNames</tabstop>
   <tabstop>accidentalOptions</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>

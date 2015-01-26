@@ -29,8 +29,6 @@ class SpannerMap : std::multimap<int, Spanner*> {
       mutable IntervalTree<Spanner*> tree;
       std::vector< ::Interval<Spanner*> > results;
 
-      void update() const;
-
    public:
       SpannerMap();
       const std::vector< ::Interval<Spanner*> >& findContained(int start, int stop);
@@ -42,6 +40,8 @@ class SpannerMap : std::multimap<int, Spanner*> {
       std::multimap<int,Spanner*>::const_iterator cend() const  { return std::multimap<int, Spanner*>::cend(); }
       void addSpanner(Spanner* s);
       bool removeSpanner(Spanner* s);
+      void update() const;
+      void setDirty() const { dirty = true; }   // must be called if a spanner changes start/length
       };
 
 }     // namespace Ms

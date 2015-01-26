@@ -135,10 +135,10 @@ void RepeatList::update()
       int utick = 0;
       qreal t  = 0;
 
-      foreach(RepeatSegment* s, *this) {
+      for(RepeatSegment* s : *this) {
             s->utick      = utick;
             s->utime      = t;
-            qreal ct     = tl->tick2time(s->tick);
+            qreal ct      = tl->tick2time(s->tick);
             s->timeOffset = t - ct;
             utick        += s->len;
             t            += tl->tick2time(s->tick + s->len) - ct;
@@ -175,7 +175,7 @@ int RepeatList::utick2tick(int tick) const
 
 int RepeatList::tick2utick(int tick) const
       {
-      foreach (const RepeatSegment* s, *this) {
+      for (const RepeatSegment* s : *this) {
             if (tick >= s->tick && tick < (s->tick + s->len))
                   return s->utick + (tick - s->tick);
             }
@@ -230,12 +230,12 @@ void RepeatList::dump() const
       qDebug("==Dump Repeat List:==");
       foreach(const RepeatSegment* s, *this) {
             qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
-               s->utick / 480,
-               s->utick / 480 / 4,
-               s->tick / 480,
-               s->tick / 480 / 4,
-               s->len / 480,
-               s->len / 480 / 4,
+               s->utick / MScore::division,
+               s->utick / MScore::division / 4,
+               s->tick / MScore::division,
+               s->tick / MScore::division / 4,
+               s->len / MScore::division,
+               s->len / MScore::division / 4,
                s->utime, s->timeOffset);
             }
 #endif

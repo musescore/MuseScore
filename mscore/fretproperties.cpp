@@ -99,8 +99,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
       double fretDist   = _spatium * .8;
       int _strings      = diagram->strings();
       int _frets        = diagram->frets();
-//      char* _dots       = diagram->dots();
-//      char* _marker     = diagram->marker();
+      int _barre        = diagram->barre();
 
       double w  = (_strings - 1) * stringDist;
       double xo = (width() - w) * .5;
@@ -151,6 +150,24 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
                   double y = -fretDist * .1;
                   p.drawText(QRectF(x, y, 0.0, 0.0),
                      Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QChar(diagram->marker(i)));
+                  }
+            }
+      if (_barre) {
+            int string = -1;
+            for (int i = 0; i < _strings; ++i) {
+                  if (diagram->dot(i) == _barre) {
+                        string = i;
+                        break;
+                        }
+                  }
+            if (string != -1) {
+                  qreal x1   = stringDist * string;
+                  qreal x2   = stringDist * (_strings-1);
+                  qreal y    = fretDist * (_barre-1) + fretDist * .5;
+                  pen.setWidthF(stringDist * .6 * .7);      // dont use style barreLineWidth
+                  pen.setCapStyle(Qt::RoundCap);
+                  p.setPen(pen);
+                  p.drawLine(QLineF(x1, y, x2, y));
                   }
             }
       if ((cfret > 0) && (cfret <= _frets) && (cstring >= 0) && (cstring < _strings)) {
@@ -237,10 +254,25 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
             if (diagram->dot(string) == fret) {
                   diagram->setDot(string, 0);
                   diagram->setMarker(string, 'O');
+                  bool removeBarre = true;
+                  if (ev->modifiers() & Qt::ShiftModifier) {
+                        for (int i = 0; i < _strings; ++i) {
+                              if (diagram->dot(i)) {
+                                    removeBarre = false;
+                                    break;
+                                    }
+                              }
+                        }
+                  if (removeBarre)
+                        diagram->setBarre(0);
                   }
             else {
                   diagram->setDot(string, fret);
                   diagram->setMarker(string, 0);
+                  if (ev->modifiers() & Qt::ShiftModifier)
+                        diagram->setBarre(diagram->barre() == fret ? 0 : fret);
+                  else
+                        diagram->setBarre(0);
                   }
             }
       update();

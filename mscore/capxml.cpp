@@ -862,6 +862,7 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
             else if (tag == "sound") {
                   sl->sound = e.intAttribute("instr", 0);
                   sl->volume = e.intAttribute("volume", 0);
+                  sl->transp = e.intAttribute("transpose", 0);
                   e.readNext();
                   }
             else

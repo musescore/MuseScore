@@ -106,36 +106,14 @@ static void xmlSetPitch(Ms::Note* n, char step, int alter, int octave)
 //   TODO: remove duplicate code
 //---------------------------------------------------------
 
-#if 0
-static void addSymbolToText(const SymCode& s, QTextCursor* cur)
-      {
-      QTextCharFormat oFormat = cur->charFormat();
-      if (s.fontId >= 0) {
-            QTextCharFormat oFormat = cur->charFormat();
-            QTextCharFormat nFormat(oFormat);
-            nFormat.setFontFamily(fontId2font(s.fontId).family());
-            cur->setCharFormat(nFormat);
-            cur->insertText(QChar(s.code));
-            cur->setCharFormat(oFormat);
-            }
-      else
-            cur->insertText(QChar(s.code));
-      }
-#endif
-
 static void setTempo(Ms::Score* score, int tempo)
       {
       Ms::TempoText* tt = new Ms::TempoText(score);
       tt->setTempo(double(tempo)/60.0);
       tt->setTrack(0);
-#if 0 // TODO WS
-      Ms::QTextCursor* c = tt->startCursorEdit();
-      c->movePosition(QTextCursor::EndOfLine);
-      addSymbolToText(SymCode(0xe105, 1), c);
-      c->insertText(" = ");
-      c->insertText(QString("%1").arg(tempo));
-      tt->endEdit();
-#endif
+      QString tempoText = Ms::TempoText::duration2tempoTextString(Ms::TDuration::DurationType::V_QUARTER);
+      tempoText += QString(" = %1").arg(tempo);
+      tt->setText(tempoText);
       Ms::Measure* measure = score->firstMeasure();
       Ms::Segment* segment = measure->getSegment(Ms::Segment::Type::ChordRest, 0);
       segment->add(tt);
@@ -261,7 +239,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
                   ending = 2;
                   }
             volta->setTick(currentMeasure->tick());
-            currentMeasure->add(volta);
+            score->addElement(volta);
             lastVolta = volta;
             }
 
@@ -287,6 +265,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
             timesig->setTrack(0);
             s = currentMeasure->getSegment(timesig, tick);
             s->add(timesig);
+            qDebug("tempo %d", tempo);
             }
       }
 
@@ -307,8 +286,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
                         lastVolta->setVoltaType(Ms::Volta::Type::CLOSED);
                   else
                         lastVolta->setVoltaType(Ms::Volta::Type::OPEN);
-                  lastVolta->setTick2(currentMeasure->tick());
-//                  currentMeasure->addSpannerBack(lastVolta);
+                  lastVolta->setTick2(tick);
                   lastVolta = 0;
                   }
             else {
@@ -467,6 +445,8 @@ void MsScWriter::header(const QString title, const QString type,
 
       Ms::Part* part = score->staff(0)->part();
       part->setLongName(instrumentName());
+      part->setPartName(instrumentName());
+      part->instr()->setTrackName(instrumentName());
       part->setMidiProgram(midiProgram() - 1);
       }
 

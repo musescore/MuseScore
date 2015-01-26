@@ -164,12 +164,9 @@ void Score::write(Xml& xml, bool selectionOnly)
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {
             i.next();
-            if (!MScore::testMode  || (i.key() != "platform" && i.key() != "creationDate"))
+            if ((!MScore::testMode  && !MScore::saveTemplateMode) || (i.key() != "platform" && i.key() != "creationDate"))
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
             }
-
-      foreach(KeySig* ks, customKeysigs)
-            ks->write(xml);
 
       if (!selectionOnly) {
             xml.stag("PageList");
@@ -221,9 +218,9 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
       xml.curTrack = -1;
       if (!selectionOnly) {
-            foreach(Excerpt* excerpt, _excerpts) {
-                  if (excerpt->score() != this)
-                        excerpt->score()->write(xml, false);       // recursion
+            for (const Excerpt* excerpt : _excerpts) {
+                  if (excerpt->partScore() != this)
+                        excerpt->partScore()->write(xml, false);       // recursion
                   }
             }
       if (parentScore())
@@ -293,7 +290,7 @@ void Score::readStaff(XmlReader& e)
                         measures()->add(mb);
                         }
                   else if (tag == "tick")
-                        e.initTick(e.readInt());
+                        e.initTick(fileDivision(e.readInt()));
                   else
                         e.unknown();
                   }
@@ -323,7 +320,7 @@ void Score::readStaff(XmlReader& e)
                               }
                         }
                   else if (tag == "tick")
-                        e.initTick(e.readInt());
+                        e.initTick(fileDivision(e.readInt()));
                   else
                         e.unknown();
                   }
@@ -465,6 +462,31 @@ void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
       }
 
 //---------------------------------------------------------
+//   createThumbnail
+//---------------------------------------------------------
+
+QImage Score::createThumbnail()
+      {
+      Page* page = pages().at(0);
+      QRectF fr  = page->abbox();
+      qreal mag  = 256.0 / qMax(fr.width(), fr.height());
+      int w      = int(fr.width() * mag);
+      int h      = int(fr.height() * mag);
+
+      QImage pm(w, h, QImage::Format_ARGB32_Premultiplied);
+      pm.setDotsPerMeterX(lrint((mag * 1000) / INCH));
+      pm.setDotsPerMeterY(lrint((mag * 1000) / INCH));
+      pm.fill(0xffffffff);
+      QPainter p(&pm);
+      p.setRenderHint(QPainter::Antialiasing, true);
+      p.setRenderHint(QPainter::TextAntialiasing, true);
+      p.scale(mag, mag);
+      print(&p, 0);
+      p.end();
+      return pm;
+      }
+
+//---------------------------------------------------------
 //   saveCompressedFile
 //    file is already opened
 //---------------------------------------------------------
@@ -497,12 +519,24 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
 
       // save images
       //uz.addDirectory("Pictures");
-      foreach(ImageStoreItem* ip, imageStore) {
+      foreach (ImageStoreItem* ip, imageStore) {
             if (!ip->isUsed(this))
                   continue;
             QString path = QString("Pictures/") + ip->hashName();
             uz.addFile(path, ip->buffer());
             }
+
+      // create thumbnail
+      QImage pm = createThumbnail();
+
+      QByteArray ba;
+      QBuffer b(&ba);
+      if (!b.open(QIODevice::WriteOnly))
+            qDebug("open buffer failed");
+      if (!pm.save(&b, "PNG"))
+            qDebug("save failed");
+      uz.addFile("Thumbnails/thumbnail.png", ba);
+
 #ifdef OMR
       //
       // save OMR page images
@@ -924,11 +958,8 @@ bool Score::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "Staff")
                   readStaff(e);
-            else if (tag == "KeySig") {
-                  KeySig* ks = new KeySig(this);
-                  ks->read(e);
-                  customKeysigs.append(ks);
-                  }
+            else if (tag == "KeySig")           // obsolete
+                  e.skipCurrentElement();
             else if (tag == "StaffType") {      // obsolete
 #if 0
                   int idx           = e.intAttribute("idx");
@@ -1213,7 +1244,11 @@ void Score::print(QPainter* painter, int pageNo)
 
 QByteArray Score::readCompressedToBuffer()
       {
-      MQZipReader uz(filePath());
+      MQZipReader uz(info.filePath());
+      if (!uz.exists()) {
+            qDebug("Score::readCompressedToBuffer: cannot read zip file");
+            return QByteArray();
+            }
       QList<QString> images;
       QString rootfile = readRootFile(&uz, images);
 
@@ -1226,7 +1261,7 @@ QByteArray Score::readCompressedToBuffer()
             }
 
       if (rootfile.isEmpty()) {
-            qDebug("=can't find rootfile in: %s", qPrintable(filePath()));
+            qDebug("=can't find rootfile in: %s", qPrintable(info.filePath()));
             return QByteArray();
             }
       return uz.fileData(rootfile);
@@ -1245,7 +1280,7 @@ QByteArray Score::readToBuffer()
             ba = readCompressedToBuffer();
             }
       if (cs.toLower() == "msc" || cs.toLower() == "mscx") {
-            QFile f(filePath());
+            QFile f(info.filePath());
             if (f.open(QIODevice::ReadOnly)) {
                   ba = f.readAll();
                   f.close();
@@ -1339,6 +1374,10 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                         for (auto i = spanner().begin(); i != endIt; ++i) {
                               Spanner* s = i->second;
                               if (s->generated() || !xml.canWrite(s))
+                                    continue;
+
+                              // don't write voltas to clipboard
+                              if (clip && s->type() == Element::Type::VOLTA)
                                     continue;
 
                               if (s->track() == track) {

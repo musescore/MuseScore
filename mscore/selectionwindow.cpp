@@ -132,4 +132,9 @@ void SelectionWindow::setScore(Score* score)
       updateFilteredElements();
       }
 
+QSize SelectionWindow::sizeHint() const
+      {
+      return QSize(170 * guiScaling, 170 * guiScaling);
+      }
+
 }

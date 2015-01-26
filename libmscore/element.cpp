@@ -16,73 +16,73 @@
 */
 
 #include "element.h"
-#include "style.h"
-#include "xml.h"
-#include "score.h"
-#include "staff.h"
-#include "utils.h"
-#include "sym.h"
-#include "symbol.h"
-#include "clef.h"
-#include "volta.h"
-#include "ottava.h"
-#include "textline.h"
-#include "trill.h"
-#include "pedal.h"
-#include "hairpin.h"
-#include "keysig.h"
-#include "timesig.h"
-#include "barline.h"
-#include "arpeggio.h"
-#include "breath.h"
-#include "bracket.h"
-#include "chordrest.h"
 #include "accidental.h"
-#include "dynamic.h"
-#include "text.h"
-#include "note.h"
-#include "tremolo.h"
-#include "layoutbreak.h"
-#include "repeat.h"
-#include "page.h"
-#include "system.h"
-#include "stafftext.h"
-#include "glissando.h"
+#include "ambitus.h"
+#include "arpeggio.h"
 #include "articulation.h"
-#include "chord.h"
-#include "spacer.h"
-#include "tempotext.h"
-#include "harmony.h"
-#include "lyrics.h"
-#include "rest.h"
-#include "slur.h"
-#include "measure.h"
-#include "fret.h"
-#include "staffstate.h"
-#include "fingering.h"
+#include "bagpembell.h"
+#include "barline.h"
 #include "bend.h"
-#include "tremolobar.h"
-#include "chordline.h"
-#include "undo.h"
-#include "segment.h"
 #include "box.h"
+#include "bracket.h"
+#include "breath.h"
+#include "chord.h"
+#include "chordline.h"
+#include "chordrest.h"
+#include "clef.h"
+#include "dynamic.h"
+#include "figuredbass.h"
+#include "fingering.h"
+#include "fret.h"
+#include "glissando.h"
+#include "hairpin.h"
+#include "harmony.h"
+#include "icon.h"
+#include "image.h"
+#include "iname.h"
 #include "instrchange.h"
+#include "jump.h"
+#include "keysig.h"
+#include "layoutbreak.h"
+#include "lyrics.h"
+#include "marker.h"
+#include "measure.h"
+#include "mscore.h"
+#include "notedot.h"
+#include "note.h"
+#include "noteline.h"
+#include "ossia.h"
+#include "ottava.h"
+#include "page.h"
+#include "pedal.h"
+#include "rehearsalmark.h"
+#include "repeat.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "slur.h"
+#include "spacer.h"
+#include "staff.h"
+#include "staffstate.h"
+#include "stafftext.h"
 #include "stafftype.h"
 #include "stem.h"
-#include "iname.h"
-#include "mscore.h"
-#include "icon.h"
-#include "ossia.h"
-#include "figuredbass.h"
-#include "rehearsalmark.h"
-#include "notedot.h"
+#include "style.h"
+#include "symbol.h"
+#include "sym.h"
+#include "system.h"
+#include "tempotext.h"
 #include "textframe.h"
-#include "image.h"
-#include "marker.h"
-#include "jump.h"
-#include "noteline.h"
-#include "bagpembell.h"
-#include "ambitus.h"
+#include "text.h"
+#include "textline.h"
+#include "timesig.h"
+#include "tremolobar.h"
+#include "tremolo.h"
+#include "trill.h"
+#include "undo.h"
+#include "utils.h"
+#include "volta.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -143,6 +143,7 @@ static const ElementName elementNames[] = {
       ElementName("TextLineSegment",      QT_TRANSLATE_NOOP("elementName", "Text Line Segment")),
       ElementName("VoltaSegment",         QT_TRANSLATE_NOOP("elementName", "Volta Segment")),
       ElementName("PedalSegment",         QT_TRANSLATE_NOOP("elementName", "Pedal Segment")),
+      ElementName("LyricsLineSegment",    QT_TRANSLATE_NOOP("elementName", "Melisma Line Segment")),
       ElementName("LayoutBreak",          QT_TRANSLATE_NOOP("elementName", "Layout Break")),
       ElementName("Spacer",               QT_TRANSLATE_NOOP("elementName", "Spacer")),
       ElementName("StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State")),
@@ -164,6 +165,7 @@ static const ElementName elementNames[] = {
       ElementName("Trill",                QT_TRANSLATE_NOOP("elementName", "Trill")),
       ElementName("TextLine",             QT_TRANSLATE_NOOP("elementName", "Text Line")),
       ElementName("NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note Line")),
+      ElementName("LyricsLine",           QT_TRANSLATE_NOOP("elementName", "Melisma Line")),
       ElementName("Segment",              QT_TRANSLATE_NOOP("elementName", "Segment")),
       ElementName("System",               QT_TRANSLATE_NOOP("elementName", "System")),
       ElementName("Compound",             QT_TRANSLATE_NOOP("elementName", "Compound")),
@@ -1294,7 +1296,7 @@ void Element::editDrag(const EditData& ed)
 //    return true if event is accepted
 //---------------------------------------------------------
 
-bool Element::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers, const QString&)
+bool Element::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString&)
       {
       if (key ==  Qt::Key_Home) {
             setUserOff(QPoint());
@@ -1333,6 +1335,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::OTTAVA:            return new Ottava(score);
             case Element::Type::TEXTLINE:          return new TextLine(score);
             case Element::Type::NOTELINE:          return new NoteLine(score);
+            case Element::Type::LYRICSLINE:        return new LyricsLine(score);
             case Element::Type::TRILL:             return new Trill(score);
             case Element::Type::PEDAL:             return new Pedal(score);
             case Element::Type::HAIRPIN:           return new Hairpin(score);
@@ -1404,6 +1407,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::TRILL_SEGMENT:
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
+            case Element::Type::LYRICSLINE_SEGMENT:
             case Element::Type::LEDGER_LINE:
             case Element::Type::STAFF_LINES:
             case Element::Type::SELECTION:
@@ -1473,7 +1477,7 @@ bool elementLessThan(const Element* const e1, const Element* const e2)
 //   getGrip
 //---------------------------------------------------------
 
-QPointF Element::getGrip(int) const
+QPointF Element::getGrip(Grip) const
       {
       qreal _spatium = score()->spatium();
       return QPointF(userOff().x() / _spatium, userOff().y() / _spatium);
@@ -1483,7 +1487,7 @@ QPointF Element::getGrip(int) const
 //   setGrip
 //---------------------------------------------------------
 
-void Element::setGrip(int, const QPointF& pt)
+void Element::setGrip(Grip, const QPointF& pt)
       {
       qreal _spatium = score()->spatium();
       setUserOff(QPointF(pt.x() * _spatium, pt.y() * _spatium));
@@ -1664,6 +1668,36 @@ bool Element::isText() const
          || type() == Element::Type::TEMPO_TEXT
          || type() == Element::Type::INSTRUMENT_NAME
          ;
+      }
+
+//---------------------------------------------------------
+//   isPrintable
+//---------------------------------------------------------
+
+bool Element::isPrintable() const
+      {
+      switch (type()) {
+            case Element::Type::PAGE:
+            case Element::Type::SYSTEM:
+            case Element::Type::MEASURE:
+            case Element::Type::SEGMENT:
+            case Element::Type::VBOX:
+            case Element::Type::HBOX:
+            case Element::Type::TBOX:
+            case Element::Type::FBOX:
+            case Element::Type::SPACER:
+            case Element::Type::SHADOW_NOTE:
+            case Element::Type::LASSO:
+            case Element::Type::RUBBERBAND:
+            case Element::Type::ELEMENT_LIST:
+            case Element::Type::STAFF_LIST:
+            case Element::Type::MEASURE_LIST:
+            case Element::Type::SELECTION:
+            case Element::Type::LAYOUT:
+                  return false;
+            default:
+                  return true;
+            }
       }
 
 //---------------------------------------------------------
@@ -1973,5 +2007,35 @@ Element* Element::prevElement()
 QString Element::accessibleInfo()
       {
       return userName();
+      }
+
+//---------------------------------------------------------
+//   nextGrip
+//---------------------------------------------------------
+
+bool Element::nextGrip(Grip* grip) const
+      {
+      int i = int(*grip) + 1;
+      if (i >= grips()) {
+            *grip = Grip(0);
+            return false;
+            }
+      *grip = Grip(i);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   prevGrip
+//---------------------------------------------------------
+
+bool Element::prevGrip(Grip* grip) const
+      {
+      int i = int(*grip) - 1;
+      if (i < 0) {
+            *grip = Grip(grips() - 1);
+            return false;
+            }
+      *grip = Grip(i);
+      return true;
       }
 }

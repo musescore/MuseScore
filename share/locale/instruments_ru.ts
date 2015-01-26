@@ -4,27 +4,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1"/>
         <source>Common instruments</source>
-        <translation type="unfinished"/>
+        <translation>Общие инструменты</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
         <source>Jazz instruments</source>
-        <translation type="unfinished"/>
+        <translation>Джазовые инструменты</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
         <source>Orchestral instruments</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4"/>
-        <source>Early Music</source>
-        <translation type="unfinished"/>
+        <translation>Оркестровые инструменты</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Ethnic instruments</source>
-        <translation type="unfinished"/>
+        <translation>Этнические инструменты</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6"/>
@@ -34,7 +29,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="7"/>
         <source>Piccolo</source>
-        <translation type="unfinished"/>
+        <translation>Флейта-пикколо</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
@@ -45,7 +40,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="10"/>
         <source>Flute</source>
-        <translation type="unfinished"/>
+        <translation>Флейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
@@ -89,7 +84,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="22"/>
         <source>Alto Flute</source>
-        <translation type="unfinished"/>
+        <translation>Альтовая флейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="24"/>
@@ -100,7 +95,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="25"/>
         <source>Bass Flute</source>
-        <translation type="unfinished"/>
+        <translation>Басовая флейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="27"/>
@@ -144,7 +139,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="37"/>
         <source>Hyperbass Flute</source>
-        <translation type="unfinished"/>
+        <translation>Гипербасовая флейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="39"/>
@@ -269,7 +264,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="73"/>
         <source>Irish Flute</source>
-        <translation type="unfinished"/>
+        <translation>Ирландская флейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
@@ -335,7 +330,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
         <source>Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Окарина</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
@@ -445,7 +440,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="121"/>
         <source>Pan Flute</source>
-        <translation type="unfinished"/>
+        <translation>Флейта Пана</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="123"/>
@@ -502,7 +497,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="139"/>
         <source>Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Блокфлейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
@@ -513,7 +508,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="142"/>
         <source>Garklein Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Блокфлейта гаркляйн </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="144"/>
@@ -524,7 +519,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
         <source>Sopranino Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Блокфлейта сопранино</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="147"/>
@@ -535,7 +530,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="148"/>
         <source>Soprano Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Блокфлейта сопрано</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="150"/>
@@ -546,7 +541,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="151"/>
         <source>Alto Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Альтовая блокфлейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="153"/>
@@ -557,7 +552,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="154"/>
         <source>Tenor Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Теноровая блокфлейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="156"/>
@@ -568,7 +563,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="157"/>
         <source>Bass Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Басовая блокфлейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="159"/>
@@ -579,7 +574,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="160"/>
         <source>Contrabass Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Контрабасовая блокфлейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="162"/>
@@ -590,7 +585,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="163"/>
         <source>Greatbass Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Гроссбасовая блокфлейта</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="165"/>
@@ -636,7 +631,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="178"/>
         <source>Piccolo Oboe</source>
-        <translation type="unfinished"/>
+        <translation>Гобой-пикколо</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="180"/>
@@ -647,7 +642,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="181"/>
         <source>Oboe</source>
-        <translation type="unfinished"/>
+        <translation>Гобой</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="183"/>
@@ -658,7 +653,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="184"/>
         <source>Baroque Oboe</source>
-        <translation type="unfinished"/>
+        <translation>Барочный гобой</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="186"/>
@@ -669,7 +664,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
         <source>Oboe d&apos;amore</source>
-        <translation type="unfinished"/>
+        <translation>Гобой д’амур</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="189"/>
@@ -680,7 +675,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="190"/>
         <source>Oboe da caccia</source>
-        <translation type="unfinished"/>
+        <translation>Гобой да качча</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="192"/>
@@ -702,7 +697,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="196"/>
         <source>Baritone Oboe</source>
-        <translation type="unfinished"/>
+        <translation>Баритоновый габой</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="198"/>
@@ -4155,7 +4150,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1160"/>
         <source>Piano</source>
-        <translation type="unfinished"/>
+        <translation>Фортепиано</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1162"/>
@@ -4172,12 +4167,12 @@ Upright Piano</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1163"/>
         <source>Grand Piano</source>
-        <translation type="unfinished"/>
+        <translation>Рояль</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1166"/>
         <source>Upright Piano</source>
-        <translation type="unfinished"/>
+        <translation>Пианино</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1169"/>
@@ -4226,7 +4221,7 @@ Upright Piano</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1181"/>
         <source>Virginal</source>
-        <translation type="unfinished"/>
+        <translation>Вёрджинел</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1183"/>
@@ -4237,7 +4232,7 @@ Upright Piano</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1184"/>
         <source>Celesta</source>
-        <translation type="unfinished"/>
+        <translation>Челеста</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1186"/>
@@ -4339,7 +4334,7 @@ Pipe Organ</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1215"/>
         <source>Electronic Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Электронные инструменты</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1216"/>
@@ -4929,6 +4924,11 @@ Acoustic Guitar</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1408"/>
         <source>Archlute</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4"/>
+        <source>Early music</source>
         <translation type="unfinished"/>
     </message>
     <message>

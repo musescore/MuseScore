@@ -48,6 +48,8 @@ Slider::Slider(Qt::Orientation orientation, QWidget* parent)
 
 void Slider::init()
       {
+      _dclickValue1 = 0.0;
+      _dclickValue2 = 0.0;
       if (orient == Qt::Vertical)
       	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
       else
@@ -56,6 +58,20 @@ void Slider::init()
       points  = 0;
       updateKnob();
       }
+
+//---------------------------------------------------------
+//   mouseDoubleClickEvent
+//---------------------------------------------------------
+
+void Slider::mouseDoubleClickEvent(QMouseEvent* ev)
+      {
+      if (ev->button() == Qt::RightButton)
+            _value = _dclickValue2;
+      else
+            _value = _dclickValue1;
+      valueChange();
+      }
+
 
 //---------------------------------------------------------
 //   sizeHint

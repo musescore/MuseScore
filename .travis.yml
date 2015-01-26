@@ -21,6 +21,9 @@ before_install:
   - "export PATH=`pwd`/qt5/bin:$PATH"
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
 before_script:
+  # get some memory back
+  - "sudo service mysql stop"
+  - "sudo /etc/init.d/postgresql stop"
   #compatibility between ruby travis artefact and GO one
   - "export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID"
   - "export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY"

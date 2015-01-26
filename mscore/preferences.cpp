@@ -37,7 +37,6 @@
 #include "file.h"
 #include "libmscore/mscore.h"
 #include "shortcut.h"
-// #include "plugins.h"
 #include "zerberus/zerberus.h"
 #include "fluid/fluid.h"
 #include "pathlistdialog.h"
@@ -106,10 +105,13 @@ void Preferences::init()
       enableMidiInput    = true;
       playNotes          = true;
 
-      showNavigator      = true;
+      showNavigator      = false;
       showPlayPanel      = false;
-      showWebPanel       = true;
+      showSplashScreen   = true;
+      showStartcenter    = true;
+
       showStatusBar      = true;
+
 //      playPanelPos       = QPoint(100, 300);
 
       useAlsaAudio       = false;
@@ -130,7 +132,6 @@ void Preferences::init()
       usePortaudioAudio = true;
 #endif
 
-      midiPorts          = 2;
       rememberLastConnections = true;
 
       alsaDevice         = "default";
@@ -142,10 +143,8 @@ void Preferences::init()
 
       antialiasedDrawing       = true;
       sessionStart             = SessionStart::SCORE;
-      startScore               = ":/data/My_First_Score.mscx";
+      startScore               = ":/data/My_First_Score.mscz";
       defaultStyleFile         = "";
-      showSplashScreen         = true;
-      showStartcenter          = false;
 
       useMidiRemote      = false;
       for (int i = 0; i < MIDI_REMOTES; ++i)
@@ -250,7 +249,9 @@ void Preferences::write()
 
       s.setValue("showNavigator",      showNavigator);
       s.setValue("showPlayPanel",      showPlayPanel);
-      s.setValue("showWebPanel",       showWebPanel);
+      s.setValue("showSplashScreen",   showSplashScreen);
+      s.setValue("showStartcenter1",    showStartcenter);
+
       s.setValue("showStatusBar",      showStatusBar);
 
       s.setValue("useAlsaAudio",       useAlsaAudio);
@@ -260,7 +261,6 @@ void Preferences::write()
       s.setValue("jackTimebaseMaster", jackTimebaseMaster);
       s.setValue("usePortaudioAudio",  usePortaudioAudio);
       s.setValue("usePulseAudio",      usePulseAudio);
-      s.setValue("midiPorts",          midiPorts);
       s.setValue("rememberLastMidiConnections", rememberLastConnections);
 
       s.setValue("alsaDevice",         alsaDevice);
@@ -281,8 +281,6 @@ void Preferences::write()
             }
       s.setValue("startScore",         startScore);
       s.setValue("defaultStyle",       defaultStyleFile);
-      s.setValue("showSplashScreen",   showSplashScreen);
-      s.setValue("showStartcenter",    showStartcenter);
 
       s.setValue("midiExpandRepeats",  midiExpandRepeats);
       s.setValue("playRepeats",        MScore::playRepeats);
@@ -398,10 +396,12 @@ void Preferences::read()
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
       playNotes               = s.value("playNotes", playNotes).toBool();
 
-      showNavigator   = s.value("showNavigator", showNavigator).toBool();
+      showNavigator            = s.value("showNavigator", showNavigator).toBool();
+      showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
+      showStartcenter          = s.value("showStartcenter1", showStartcenter).toBool();
+      showPlayPanel            = s.value("showPlayPanel", showPlayPanel).toBool();
+
       showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
-      showPlayPanel   = s.value("showPlayPanel", showPlayPanel).toBool();
-      showWebPanel    = s.value("showWebPanel", showWebPanel).toBool();
 
       useAlsaAudio       = s.value("useAlsaAudio", useAlsaAudio).toBool();
       useJackAudio       = s.value("useJackAudio", useJackAudio).toBool();
@@ -423,13 +423,10 @@ void Preferences::read()
 
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
 
-      showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
-      showStartcenter          = s.value("showStartcenter", showStartcenter).toBool();
       midiExpandRepeats        = s.value("midiExpandRepeats", midiExpandRepeats).toBool();
       MScore::playRepeats      = s.value("playRepeats", MScore::playRepeats).toBool();
       MScore::panPlayback      = s.value("panPlayback", MScore::panPlayback).toBool();
       alternateNoteEntryMethod = s.value("alternateNoteEntry", alternateNoteEntryMethod).toBool();
-      midiPorts                = s.value("midiPorts", midiPorts).toInt();
       rememberLastConnections  = s.value("rememberLastMidiConnections", rememberLastConnections).toBool();
       proximity                = s.value("proximity", proximity).toInt();
       autoSave                 = s.value("autoSave", autoSave).toBool();
@@ -661,6 +658,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       recordButtons->addButton(rcr10,        RMIDI_DOT);
       recordButtons->addButton(rcr11,        RMIDI_DOTDOT);
       recordButtons->addButton(rcr12,        RMIDI_TIE);
+      recordButtons->addButton(recordUndo,   RMIDI_UNDO);
       recordButtons->addButton(recordEditMode, RMIDI_NOTE_EDIT_MODE);
 
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
@@ -744,6 +742,7 @@ void PreferenceDialog::updateRemote()
       rca10->setChecked(preferences.midiRemote[RMIDI_DOT].type         != -1);
       rca11->setChecked(preferences.midiRemote[RMIDI_DOTDOT].type      != -1);
       rca12->setChecked(preferences.midiRemote[RMIDI_TIE].type        != -1);
+      recordUndoActive->setChecked(preferences.midiRemote[RMIDI_UNDO].type != -1);
       editModeActive->setChecked(preferences.midiRemote[RMIDI_NOTE_EDIT_MODE].type != -1);
 
       int id = mscore->midiRecordId();
@@ -762,6 +761,7 @@ void PreferenceDialog::updateRemote()
       rcr10->setChecked(id      == RMIDI_DOT);
       rcr11->setChecked(id      == RMIDI_DOTDOT);
       rcr12->setChecked(id      == RMIDI_TIE);
+      recordUndo->setChecked(id == RMIDI_UNDO);
       recordEditMode->setChecked(id == RMIDI_NOTE_EDIT_MODE);
       }
 
@@ -815,7 +815,8 @@ void PreferenceDialog::updateValues()
 
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
-      webPanelShow->setChecked(prefs.showWebPanel);
+      showSplashScreen->setChecked(prefs.showSplashScreen);
+      showStartcenter->setChecked(prefs.showStartcenter);
 
       alsaDriver->setChecked(prefs.useAlsaAudio);
       jackDriver->setChecked(prefs.useJackAudio || prefs.useJackMidi);
@@ -842,8 +843,6 @@ void PreferenceDialog::updateValues()
             case SessionStart::SCORE:  scoreSession->setChecked(true); break;
             }
       sessionScore->setText(prefs.startScore);
-      showSplashScreen->setChecked(prefs.showSplashScreen);
-      showStartcenter->setChecked(prefs.showStartcenter);
       expandRepeats->setChecked(prefs.midiExpandRepeats);
       instrumentList1->setText(prefs.instrumentList1);
       instrumentList2->setText(prefs.instrumentList2);
@@ -857,7 +856,6 @@ void PreferenceDialog::updateValues()
             case MusicxmlExportBreaks::NO:      exportNoBreaks->setChecked(true); break;
             }
 
-      midiPorts->setValue(prefs.midiPorts);
       rememberLastMidiConnections->setChecked(prefs.rememberLastConnections);
       proximity->setValue(prefs.proximity);
       autoSave->setChecked(prefs.autoSave);
@@ -1047,8 +1045,8 @@ void PreferenceDialog::updateSCListView()
             newItem->setText(1, s->keysToString());
             newItem->setData(0, Qt::UserRole, s->key());
             QString accessibleInfo = tr("Action: %1; Shortcut: %2")
-                        .arg(newItem->text(0)).arg(newItem->text(1).isEmpty()
-                                          ? tr("No shortcut defined") : newItem->text(1));
+               .arg(newItem->text(0)).arg(newItem->text(1).isEmpty()
+                  ? tr("No shortcut defined") : newItem->text(1));
             newItem->setData(0, Qt::AccessibleTextRole, accessibleInfo);
             newItem->setData(1, Qt::AccessibleTextRole, accessibleInfo);
             if (enableExperimental
@@ -1277,12 +1275,13 @@ void PreferenceDialog::apply()
 
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
-      prefs.showWebPanel       = webPanelShow->isChecked();
+      prefs.showSplashScreen   = showSplashScreen->isChecked();
+      prefs.showStartcenter    = showStartcenter->isChecked();
+
       prefs.antialiasedDrawing = drawAntialiased->isChecked();
 
       prefs.useJackTransport   = jackDriver->isChecked() && useJackTransport->isChecked();
       prefs.jackTimebaseMaster = becomeTimebaseMaster->isChecked();
-      prefs.midiPorts          = midiPorts->value();
       prefs.rememberLastConnections = rememberLastMidiConnections->isChecked();
 
       bool wasJack = (prefs.useJackMidi || prefs.useJackAudio);
@@ -1371,8 +1370,6 @@ void PreferenceDialog::apply()
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
 
-      prefs.showSplashScreen   = showSplashScreen->isChecked();
-      prefs.showStartcenter    = showStartcenter->isChecked();
       prefs.midiExpandRepeats  = expandRepeats->isChecked();
       prefs.instrumentList1    = instrumentList1->text();
       prefs.instrumentList2    = instrumentList2->text();
@@ -1464,7 +1461,7 @@ void PreferenceDialog::apply()
 
       genIcons();
 
-      mscore->setIconSize(QSize(prefs.iconWidth, prefs.iconHeight));
+      mscore->setIconSize(QSize(prefs.iconWidth * guiScaling, prefs.iconHeight * guiScaling));
 
       preferences = prefs;
       emit preferencesChanged();
@@ -1813,6 +1810,7 @@ void Preferences::writePluginList()
 //    pluginList
 //---------------------------------------------------------
 
+#ifdef SCRIPT_INTERFACE
 static void updatePluginList(QList<QString>& pluginPathList, const QString& pluginPath,
    QList<PluginDescription>& pluginList)
       {
@@ -1844,9 +1842,11 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
                   updatePluginList(pluginPathList, path, pluginList);
             }
       }
+#endif
 
 void Preferences::updatePluginList()
       {
+#ifdef SCRIPT_INTERFACE
       QList<QString> pluginPathList;
       pluginPathList.append(dataPath + "/plugins");
       pluginPathList.append(mscoreGlobalShare + "plugins");
@@ -1865,6 +1865,7 @@ void Preferences::updatePluginList()
             else
                   ++i;
             }
+#endif
       }
 
 //---------------------------------------------------------

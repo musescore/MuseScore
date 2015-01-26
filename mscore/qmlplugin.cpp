@@ -10,6 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "config.h"
+#ifdef SCRIPT_INTERFACE
+
 #include "qmlplugin.h"
 #include "shortcut.h"
 #include "musescoreCore.h"
@@ -122,7 +125,7 @@ Score* QmlPlugin::newScore(const QString& name, const QString& part, int measure
 
 void QmlPlugin::cmd(const QString& s)
       {
-      Shortcut* sc = Shortcut::getShortcut(s);
+      Shortcut* sc = Shortcut::getShortcut(qPrintable(s));
       if (sc)
             msc->cmd(sc->action());
       else
@@ -138,4 +141,5 @@ MsProcess* QmlPlugin::newQProcess()
       return 0; // TODO: new MsProcess(this);
       }
 }
+#endif
 

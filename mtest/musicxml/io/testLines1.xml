@@ -11,16 +11,21 @@
     <encoding>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
+      <supports element="accidental" type="yes"/>
+      <supports element="beam" type="yes"/>
+      <supports element="print" attribute="new-page" type="no"/>
+      <supports element="print" attribute="new-system" type="no"/>
+      <supports element="stem" type="yes"/>
       </encoding>
     </identification>
   <part-list>
     <score-part id="P1">
       <part-name>Guitar</part-name>
-      <score-instrument id="P1-I3">
+      <score-instrument id="P1-I1">
         <instrument-name>Guitar</instrument-name>
         </score-instrument>
-      <midi-device id="P1-I3" port="1"></midi-device>
-      <midi-instrument id="P1-I3">
+      <midi-device id="P1-I1" port="1"></midi-device>
+      <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
         <volume>78.7402</volume>
@@ -34,7 +39,6 @@
         <divisions>1</divisions>
         <key>
           <fifths>0</fifths>
-          <mode>major</mode>
           </key>
         <time symbol="common">
           <beats>4</beats>
@@ -57,7 +61,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <octave-shift type="down" size="8"/>
+          <octave-shift type="down" size="8" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -82,7 +86,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <octave-shift type="stop" size="8"/>
+          <octave-shift type="stop" size="8" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -109,7 +113,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <octave-shift type="up" size="8"/>
+          <octave-shift type="up" size="8" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -134,7 +138,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <octave-shift type="stop" size="8"/>
+          <octave-shift type="stop" size="8" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -161,7 +165,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <octave-shift type="up" size="15"/>
+          <octave-shift type="up" size="15" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -196,7 +200,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <octave-shift type="stop" size="15"/>
+          <octave-shift type="stop" size="15" number="1"/>
           </direction-type>
         </direction>
       </measure>
@@ -213,7 +217,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <octave-shift type="down" size="15"/>
+          <octave-shift type="down" size="15" number="1"/>
           </direction-type>
         </direction>
       <note>
@@ -248,7 +252,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <octave-shift type="stop" size="15"/>
+          <octave-shift type="stop" size="15" number="1"/>
           </direction-type>
         </direction>
       </measure>
@@ -317,7 +321,7 @@
         <notations>
           <ornaments>
             <trill-mark/>
-            <wavy-line type="start"/>
+            <wavy-line type="start" number="1"/>
             </ornaments>
           </notations>
         </note>
@@ -342,7 +346,7 @@
         <stem>down</stem>
         <notations>
           <ornaments>
-            <wavy-line type="stop"/>
+            <wavy-line type="stop" number="1"/>
             </ornaments>
           </notations>
         </note>

@@ -34,25 +34,25 @@ SET(CPACK_NSIS_COMPRESSOR "/FINAL /SOLID lzma")
 
 IF(MINGW)
 
-    SET(CPACK_PACKAGE_INSTALL_DIRECTORY "MuseScore 2")
-    SET(CPACK_PACKAGE_NAME    "MuseScore")
+    SET(CPACK_PACKAGE_INSTALL_DIRECTORY ${MUSESCORE_NAME_VERSION})
+    SET(CPACK_PACKAGE_NAME    ${MUSESCORE_NAME})
     # There is a bug in NSI that does not handle full unix paths properly. Make
     # sure there is at least one set of four (4) backlasshes.
     SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/build/packaging\\\\installer_head_nsis.bmp")
-    SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\mscore.exe,0")
-    SET(CPACK_NSIS_DISPLAY_NAME "MuseScore ${MUSESCORE_VERSION_FULL}")
+    SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${MSCORE_OUTPUT_NAME}.exe,0")
+    SET(CPACK_NSIS_DISPLAY_NAME "${MUSESCORE_NAME} ${MUSESCORE_VERSION_FULL}")
     SET(CPACK_NSIS_HELP_LINK "http://www.musescore.org/")
     SET(CPACK_NSIS_URL_INFO_ABOUT "http://www.musescore.org/")
     SET(CPACK_NSIS_CONTACT "info@musescore.org")
     SET(CPACK_NSIS_MODIFY_PATH OFF)
-    SET(CPACK_STRIP_FILES "mscore.exe")
+    SET(CPACK_STRIP_FILES "${MSCORE_OUTPUT_NAME}.exe")
 
     # File types association:
     SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
 
     SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-        \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\mscore.exe\\\"
-        \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\mscore.exe\\\"
+        \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_OUTPUT_NAME}.exe\\\"
+        \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_OUTPUT_NAME}.exe\\\"
     ")
     SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
         \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
@@ -61,28 +61,29 @@ IF(MINGW)
 
   file(TO_CMAKE_PATH $ENV{PROGRAMFILES} PROGRAMFILES)
   SET(CPACK_WIX_ROOT "${PROGRAMFILES}/WiX Toolset v3.8")
-  SET(CPACK_WIX_PRODUCT_GUID "813E140C-60A8-4E3D-A1C6-668AC0FBBBCD")
+  SET(CPACK_WIX_PRODUCT_GUID "6D698D22-1EAE-4092-8DD5-EE556BE6C71D")
   SET(CPACK_WIX_UPGRADE_GUID "6CF17D7E-4CF1-42CF-A23A-B52F7E883D51")
   SET(CPACK_WIX_LICENSE_RTF   "${PROJECT_SOURCE_DIR}/LICENSE.rtf")
   SET(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/mscore/data/mscore.ico")
   SET(CPACK_WIX_UI_BANNER "${PROJECT_SOURCE_DIR}/build/packaging/installer_banner_wix.bmp")
   SET(CPACK_WIX_UI_DIALOG "${PROJECT_SOURCE_DIR}/build/packaging/installer_background_wix.bmp")
-  SET(CPACK_WIX_PROGRAM_MENU_FOLDER "MuseScore 2")
-  SET(CPACK_CREATE_DESKTOP_LINKS "MuseScore 2")
+  SET(CPACK_WIX_PROGRAM_MENU_FOLDER "${MUSESCORE_NAME_VERSION}")
+  SET(CPACK_CREATE_DESKTOP_LINKS "${MUSESCORE_NAME_VERSION}")
   SET(CPACK_WIX_EXTENSIONS "WixUtilExtension")
 
-  set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/packaging" ${CMAKE_MODULE_PATH}) # Use custom version of NSIS.InstallOptions.ini
+  SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/packaging" ${CMAKE_MODULE_PATH}) # Use custom version of NSIS.InstallOptions.ini
+  SET(CPACK_PACKAGE_EXECUTABLES   "${MUSESCORE_NAME}" "${MUSESCORE_NAME_VERSION}") # exe name, label
+  SET(CPACK_CREATE_DESKTOP_LINKS "${MUSESCORE_NAME}" "${MUSESCORE_NAME_VERSION}") #exe name, label
 
-    
+  SET(CPACK_PACKAGE_FILE_NAME     "${MUSESCORE_NAME}-${MUSESCORE_VERSION_FULL}${git_date_string}")
 ELSE(MINGW)
     SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/mscore/data/mscore.bmp")
-    SET(CPACK_STRIP_FILES "mscore")
+    SET(CPACK_STRIP_FILES "${MSCORE_OUTPUT_NAME}")
     SET(CPACK_SOURCE_STRIP_FILES "")
+    SET(CPACK_PACKAGE_EXECUTABLES   "mscore" "MuseScore")
+    SET(CPACK_SOURCE_PACKAGE_FILE_NAME "mscore")
+    SET(CPACK_PACKAGE_FILE_NAME     "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${MUSESCORE_VERSION_FULL}${git_date_string}")
 ENDIF(MINGW)
-
-SET(CPACK_SOURCE_PACKAGE_FILE_NAME "mscore")
-SET(CPACK_PACKAGE_FILE_NAME     "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${MUSESCORE_VERSION_FULL}${git_date_string}")
-SET(CPACK_PACKAGE_EXECUTABLES   "mscore" "MuseScore")
 
 set(CPACK_DEBIAN_PACKAGE_NAME         "mscore")
 set(CPACK_DEBIAN_PACKAGE_VERSION      "${MUSESCORE_VERSION_FULL}${git_date_string}")

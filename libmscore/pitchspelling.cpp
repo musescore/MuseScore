@@ -225,11 +225,11 @@ int tpc2alterByKey(int tpc, Key key) {
 //    return note name
 //---------------------------------------------------------
 
-QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool explicitAccidental)
+QString tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, bool explicitAccidental)
       {
       QString s;
       QString acc;
-      tpc2name(tpc, spelling, lowerCase, s, acc, explicitAccidental);
+      tpc2name(tpc, noteSpelling, noteCase, s, acc, explicitAccidental);
       return s + (explicitAccidental ? " " : "") + acc;
       }
 
@@ -237,22 +237,47 @@ QString tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, bool explic
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QString& acc, bool explicitAccidental)
+void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, QString& acc, bool explicitAccidental)
       {
       int n;
-      tpc2name(tpc, spelling, lowerCase, s, n);
+      tpc2name(tpc, noteSpelling, noteCase, s, n);
       switch (n) {
-            case -2: acc = explicitAccidental ? QObject::tr("double flat") : "bb" ; break;
+            case -2:
+                  if (explicitAccidental) {
+                        acc = QObject::tr("double flat");
+                        }
+                  else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
+                        switch (tpc) {
+                              case TPC_A_BB: acc = "sas"; break;
+                              case TPC_E_BB: acc = "ses"; break;
+                              default: acc = "eses";
+                              }
+                        }
+                  else {
+                        acc = "bb";
+                        }
+                  break;
             case -1:
-                  if (spelling != NoteSpellingType::GERMAN)
-                        acc = explicitAccidental ? QObject::tr("flat") : "b";
+                  if (explicitAccidental)
+                        acc = QObject::tr("flat");
+                  else if (noteSpelling == NoteSpellingType::GERMAN_PURE)
+                        acc = (tpc == TPC_A_B || tpc == TPC_E_B) ? "s" : "es";
                   else
-                        // render flats as "es" except for A and E, which get "s"
-                        acc = (tpc == 10 || tpc == 11) ? "s" : "es";
+                        acc = "b";
                   break;
             case  0: acc = ""; break;
-            case  1: acc = (spelling != NoteSpellingType::GERMAN) ? (explicitAccidental ? QObject::tr("sharp") : "#") : "is"; break;
-            case  2: acc = explicitAccidental ? QObject::tr("double sharp") : "##"; break;
+            case  1:
+                  if (explicitAccidental)
+                        acc = QObject::tr("sharp");
+                  else
+                        acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "is" : "#";
+                  break;
+            case  2:
+                  if (explicitAccidental)
+                        acc = QObject::tr("double sharp");
+                  else
+                        acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "isis" : "##";
+                  break;
             default:
                   qDebug("tpc2name(%d): acc %d", tpc, n);
                   acc = "";
@@ -264,27 +289,44 @@ void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, QS
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType spelling, bool lowerCase, QString& s, int& acc)
+void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, int& acc)
       {
       const char names[]  = "FCGDAEB";
       const char gnames[] = "FCGDAEH";
-      const QString inames[] = { "Fa", "Do", "Sol", "Re", "La", "Mi", "Si" };
+      const QString snames[] = { "Fa", "Do", "Sol", "Re", "La", "Mi", "Si" };
 
       acc = ((tpc+1) / 7) - 2;
       int idx = (tpc + 1) % 7;
-      switch (spelling) {
+      switch (noteSpelling) {
             case NoteSpellingType::GERMAN:
+            case NoteSpellingType::GERMAN_PURE:
                   s = gnames[idx];
                   if (s == "H" && acc == -1) {
                         s = "B";
-                        acc = 0;
+                        if (noteSpelling == NoteSpellingType::GERMAN_PURE)
+                              acc = 0;
                         }
                   break;
-            case NoteSpellingType::SOLFEGGIO:   s = inames[idx]; break;
-            default:          s = names[idx]; break;
+            case NoteSpellingType::SOLFEGGIO:
+                  s = snames[idx];
+                  break;
+            case NoteSpellingType::FRENCH:
+                  s = snames[idx];
+                  if (s == "Re")
+                        s = "Ré";
+                  break;
+            default:
+                  s = names[idx];
+                  break;
             }
-      if (lowerCase)
-            s = s.toLower();
+      switch (noteCase) {
+            case NoteCaseType::LOWER: s = s.toLower(); break;
+            case NoteCaseType::UPPER: s = s.toUpper(); break;
+            case NoteCaseType::CAPITAL:
+            case NoteCaseType::AUTO:
+            default:
+                  break;
+            }
       }
 
 //---------------------------------------------------------

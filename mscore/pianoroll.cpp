@@ -15,9 +15,7 @@
 #include "piano.h"
 #include "ruler.h"
 #include "pianoview.h"
-#include "libmscore/score.h"
 #include "libmscore/staff.h"
-#include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
 #include "awl/pitchlabel.h"
@@ -248,7 +246,7 @@ void PianorollEditor::setStaff(Staff* st)
             }
       staff = st;
       if (staff) {
-            setWindowTitle(QString(tr("MuseScore: <%1> Staff: %2")).arg(_score->name()).arg(st->idx()));
+            setWindowTitle(tr("MuseScore: <%1> Staff: %2").arg(_score->name()).arg(st->idx()));
             TempoMap* tl = _score->tempomap();
             TimeSigMap*  sl = _score->sigmap();
             for (int i = 0; i < 3; ++i)
@@ -585,7 +583,7 @@ int PianorollEditor::gripCount() const
 //   getGrip
 //---------------------------------------------------------
 
-const QRectF& PianorollEditor::getGrip(int) const
+const QRectF& PianorollEditor::getGrip(Grip) const
       {
       static QRectF r;
       return r;
@@ -629,7 +627,7 @@ void PianorollEditor::startEdit()
 //   startEdit
 //---------------------------------------------------------
 
-void PianorollEditor::startEdit(Element*, int)
+void PianorollEditor::startEdit(Element*, Grip)
       {
       }
 

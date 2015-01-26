@@ -50,9 +50,9 @@ SlurSegment::SlurSegment(Score* score)
 SlurSegment::SlurSegment(const SlurSegment& b)
    : SpannerSegment(b)
       {
-      for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i) {
-            ups[i] = b.ups[i];
-            ups[i].p = QPointF();
+      for (int i = 0; i < int(Grip::GRIPS); ++i) {
+            _ups[i]   = b._ups[i];
+            _ups[i].p = QPointF();
             }
       path = b.path;
       autoAdjustOffset = QPointF();
@@ -65,8 +65,8 @@ SlurSegment::SlurSegment(const SlurSegment& b)
 void SlurSegment::move(const QPointF& s)
       {
       Element::move(s);
-      for (int k = 0; k < int(GripSlurSegment::GRIPS); ++k)
-            ups[k].p += s;
+      for (int k = 0; k < int(Grip::GRIPS); ++k)
+            _ups[k].p += s;
       }
 
 //---------------------------------------------------------
@@ -109,14 +109,13 @@ void SlurSegment::draw(QPainter* painter) const
 //    return grip rectangles in page coordinates
 //---------------------------------------------------------
 
-void SlurSegment::updateGrips(int* n, int* defaultGrip, QRectF* r) const
+void SlurSegment::updateGrips(Grip* defaultGrip, QVector<QRectF>& r) const
       {
-      *n = int(GripSlurSegment::GRIPS);
-      *defaultGrip = int(GripSlurSegment::END);
+      *defaultGrip = Grip::END;
       QPointF p(pagePos());
       p -= QPointF(0.0, system()->staff(staffIdx())->y());   // ??
-      for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i)
-            r[i].translate(ups[i].p + ups[i].off * spatium() + p);
+      for (int i = 0; i < int(Grip::GRIPS); ++i)
+            r[i].translate(_ups[i].p + _ups[i].off * spatium() + p);
       }
 
 //---------------------------------------------------------
@@ -148,7 +147,7 @@ static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
 //    return true if event is accepted
 //---------------------------------------------------------
 
-bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
+bool SlurSegment::edit(MuseScoreView* viewer, Grip curGrip, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
       Slur* sl = static_cast<Slur*>(slurTie());
 
@@ -158,7 +157,7 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
             return true;
             }
       if (key == Qt::Key_Home) {
-            ups[curGrip].off = QPointF();
+            ups(curGrip).off = QPointF();
             sl->layout();
             return true;
             }
@@ -167,14 +166,14 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
 
       if (!((modifiers & Qt::ShiftModifier)
          && ((spannerSegmentType() == SpannerSegmentType::SINGLE)
-              || (spannerSegmentType() == SpannerSegmentType::BEGIN && curGrip == int(GripSlurSegment::START))
-              || (spannerSegmentType() == SpannerSegmentType::END && curGrip == int(GripSlurSegment::END))
+              || (spannerSegmentType() == SpannerSegmentType::BEGIN && curGrip == Grip::START)
+              || (spannerSegmentType() == SpannerSegmentType::END && curGrip == Grip::END)
             )))
             return false;
 
       ChordRest* cr = 0;
-      ChordRest* e  = curGrip == int(GripSlurSegment::START) ? sl->startCR() : sl->endCR();
-      ChordRest* e1 = curGrip == int(GripSlurSegment::START) ? sl->endCR() : sl->startCR();
+      ChordRest* e  = curGrip == Grip::START ? sl->startCR() : sl->endCR();
+      ChordRest* e1 = curGrip == Grip::START ? sl->endCR() : sl->startCR();
 
       if (key == Qt::Key_Left)
             cr = prevChordRest(e);
@@ -201,11 +200,11 @@ bool SlurSegment::edit(MuseScoreView* viewer, int curGrip, int key, Qt::Keyboard
 //   changeAnchor
 //---------------------------------------------------------
 
-void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* element)
+void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* element)
       {
-      if (curGrip == int(GripSlurSegment::START)) {
+      if (curGrip == Grip::START) {
             spanner()->setStartElement(element);
-            switch(spanner()->anchor()) {
+            switch (spanner()->anchor()) {
                   case Spanner::Anchor::NOTE: {
                         Tie* tie = static_cast<Tie*>(spanner());
                         tie->startNote()->setTieFor(0);
@@ -216,7 +215,6 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   case Spanner::Anchor::CHORD:
                         spanner()->setTick(static_cast<Chord*>(element)->tick());
                         spanner()->setTrack(element->track());
-                        spanner()->setStartElement(element);
                         break;
                   case Spanner::Anchor::SEGMENT:
                   case Spanner::Anchor::MEASURE:
@@ -226,7 +224,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
             }
       else {
             spanner()->setEndElement(element);
-            switch(spanner()->anchor()) {
+            switch (spanner()->anchor()) {
                   case Spanner::Anchor::NOTE: {
                         Tie* tie = static_cast<Tie*>(spanner());
                         tie->endNote()->setTieBack(0);
@@ -237,7 +235,6 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
                   case Spanner::Anchor::CHORD:
                         spanner()->setTick2(static_cast<Chord*>(element)->tick());
                         spanner()->setTrack2(element->track());
-                        spanner()->setEndElement(element);
                         break;
 
                   case Spanner::Anchor::SEGMENT:
@@ -248,12 +245,12 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
             }
 
       int segments  = spanner()->spannerSegments().size();
-      ups[curGrip].off = QPointF();
+      ups(curGrip).off = QPointF();
       spanner()->layout();
       if (spanner()->spannerSegments().size() != segments) {
             QList<SpannerSegment*>& ss = spanner()->spannerSegments();
 
-            SlurSegment* newSegment = static_cast<SlurSegment*>(curGrip == int(GripSlurSegment::END) ? ss.back() : ss.front());
+            SlurSegment* newSegment = static_cast<SlurSegment*>(curGrip == Grip::END ? ss.back() : ss.front());
             score()->endCmd();
             score()->startCmd();
             viewer->startEdit(newSegment, curGrip);
@@ -265,7 +262,7 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, int curGrip, Element* elem
 //   gripAnchor
 //---------------------------------------------------------
 
-QPointF SlurSegment::gripAnchor(int grip) const
+QPointF SlurSegment::gripAnchor(Grip grip) const
       {
       SlurPos spos;
       slurTie()->slurPos(&spos);
@@ -275,30 +272,30 @@ QPointF SlurSegment::gripAnchor(int grip) const
       QPointF p2(spos.p2 + spos.system2->pagePos());
       switch (spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
-                  if (grip == int(GripSlurSegment::START))
+                  if (grip == Grip::START)
                         return p1;
-                  else if (grip == int(GripSlurSegment::END))
+                  else if (grip == Grip::END)
                         return p2;
                   break;
 
             case SpannerSegmentType::BEGIN:
-                  if (grip == int(GripSlurSegment::START))
+                  if (grip == Grip::START)
                         return p1;
-                  else if (grip == int(GripSlurSegment::END))
+                  else if (grip == Grip::END)
                         return system()->abbox().topRight();
                   break;
 
             case SpannerSegmentType::MIDDLE:
-                  if (grip == int(GripSlurSegment::START))
+                  if (grip == Grip::START)
                         return sp;
-                  else if (grip == int(GripSlurSegment::END))
+                  else if (grip == Grip::END)
                         return system()->abbox().topRight();
                   break;
 
             case SpannerSegmentType::END:
-                  if (grip == int(GripSlurSegment::START))
+                  if (grip == Grip::START)
                         return sp;
-                  else if (grip == int(GripSlurSegment::END))
+                  else if (grip == Grip::END)
                         return p2;
                   break;
             }
@@ -309,14 +306,14 @@ QPointF SlurSegment::gripAnchor(int grip) const
 //   getGrip
 //---------------------------------------------------------
 
-QPointF SlurSegment::getGrip(int n) const
+QPointF SlurSegment::getGrip(Grip n) const
       {
-      switch((GripSlurSegment)n) {
-            case GripSlurSegment::START:
-            case GripSlurSegment::END:
-                  return (ups[n].p - gripAnchor(n)) / spatium() + ups[n].off;
+      switch (n) {
+            case Grip::START:
+            case Grip::END:
+                  return (ups(n).p - gripAnchor(n)) / spatium() + ups(n).off;
             default:
-                  return ups[n].off;
+                  return ups(n).off;
             }
       }
 
@@ -324,15 +321,15 @@ QPointF SlurSegment::getGrip(int n) const
 //   setGrip
 //---------------------------------------------------------
 
-void SlurSegment::setGrip(int n, const QPointF& pt)
+void SlurSegment::setGrip(Grip n, const QPointF& pt)
       {
-      switch((GripSlurSegment)n) {
-            case GripSlurSegment::START:
-            case GripSlurSegment::END:
-                  ups[n].off = ((pt * spatium()) - (ups[n].p - gripAnchor(n))) / spatium();
+      switch (n) {
+            case Grip::START:
+            case Grip::END:
+                  ups(n).off = ((pt * spatium()) - (ups(n).p - gripAnchor(n))) / spatium();
                   break;
             default:
-                  ups[n].off = pt;
+                  ups(n).off = pt;
                   break;
             }
       slurTie()->layout();
@@ -345,26 +342,26 @@ void SlurSegment::setGrip(int n, const QPointF& pt)
 void SlurSegment::editDrag(const EditData& ed)
       {
       qreal _spatium = spatium();
-      ups[ed.curGrip].off += (ed.delta / _spatium);
+      ups(ed.curGrip).off += (ed.delta / _spatium);
 
-      if (ed.curGrip == int(GripSlurSegment::START) || ed.curGrip == int(GripSlurSegment::END)) {
+      if (ed.curGrip == Grip::START || ed.curGrip == Grip::END) {
             slurTie()->computeBezier(this);
             //
             // move anchor for slurs/ties
             //
             SpannerSegmentType st = spannerSegmentType();
             if (
-               (ed.curGrip == int(GripSlurSegment::START)  && (st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::BEGIN))
-               || (ed.curGrip == int(GripSlurSegment::END) && (st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::END))
+               (ed.curGrip == Grip::START  && (st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::BEGIN))
+               || (ed.curGrip == Grip::END && (st == SpannerSegmentType::SINGLE || st == SpannerSegmentType::END))
                ) {
                   Spanner* spanner = slurTie();
                   Qt::KeyboardModifiers km = qApp->keyboardModifiers();
                   Note* note = static_cast<Note*>(ed.view->elementNear(ed.pos));
                   if (note && note->type() == Element::Type::NOTE &&
-                     ((ed.curGrip == int(GripSlurSegment::END) && note->chord()->tick() > slurTie()->tick())
-                      || (ed.curGrip == int(GripSlurSegment::START) && note->chord()->tick() < slurTie()->tick2()))
+                     ((ed.curGrip == Grip::END && note->chord()->tick() > slurTie()->tick())
+                      || (ed.curGrip == Grip::START && note->chord()->tick() < slurTie()->tick2()))
                      ) {
-                        if (ed.curGrip == int(GripSlurSegment::END) && spanner->type() == Element::Type::TIE) {
+                        if (ed.curGrip == Grip::END && spanner->type() == Element::Type::TIE) {
                               Tie* tie = static_cast<Tie*>(spanner);
                               if (tie->startNote()->pitch() == note->pitch()) {
                                     ed.view->setDropTarget(note);
@@ -379,8 +376,8 @@ void SlurSegment::editDrag(const EditData& ed)
                               ed.view->setDropTarget(note);
                               if (c != spanner->endCR()) {
                                     changeAnchor(ed.view, ed.curGrip, c);
-                                    QPointF p1 = ed.pos - ups[ed.curGrip].p - canvasPos();
-                                    ups[ed.curGrip].off = p1 / _spatium;
+//                                    QPointF p1 = ed.pos - ups(ed.curGrip).p - canvasPos();
+//                                    ups(ed.curGrip).off = p1 / _spatium;
                                     slurTie()->layout();
                                     }
                               }
@@ -389,14 +386,14 @@ void SlurSegment::editDrag(const EditData& ed)
                         ed.view->setDropTarget(0);
                   }
             }
-      else if (ed.curGrip == int(GripSlurSegment::BEZIER1) || ed.curGrip == int(GripSlurSegment::BEZIER2))
+      else if (ed.curGrip == Grip::BEZIER1 || ed.curGrip == Grip::BEZIER2)
             slurTie()->computeBezier(this);
-      else if (ed.curGrip == int(GripSlurSegment::SHOULDER)) {
-            ups[ed.curGrip].off = QPointF();
+      else if (ed.curGrip == Grip::SHOULDER) {
+            ups(ed.curGrip).off = QPointF();
             slurTie()->computeBezier(this, ed.delta);
             }
-      else if (ed.curGrip == int(GripSlurSegment::DRAG)) {
-            ups[int(GripSlurSegment::DRAG)].off = QPointF();
+      else if (ed.curGrip == Grip::DRAG) {
+            ups(Grip::DRAG).off = QPointF();
             setUserOff(userOff() + ed.delta);
             }
 
@@ -416,10 +413,10 @@ void SlurSegment::editDrag(const EditData& ed)
 
 void SlurSegment::write(Xml& xml, int no) const
       {
-      if (ups[int(GripSlurSegment::START)].off.isNull()
-         && ups[int(GripSlurSegment::END)].off.isNull()
-         && ups[int(GripSlurSegment::BEZIER1)].off.isNull()
-         && ups[int(GripSlurSegment::BEZIER2)].off.isNull()
+      if (ups(Grip::START).off.isNull()
+         && ups(Grip::END).off.isNull()
+         && ups(Grip::BEZIER1).off.isNull()
+         && ups(Grip::BEZIER2).off.isNull()
          && userOff().isNull()
          && visible()
          && (color() == Qt::black)
@@ -445,13 +442,13 @@ void SlurSegment::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "o1")
-                  ups[int(GripSlurSegment::START)].off = e.readPoint();
+                  ups(Grip::START).off = e.readPoint();
             else if (tag == "o2")
-                  ups[int(GripSlurSegment::BEZIER1)].off = e.readPoint();
+                  ups(Grip::BEZIER1).off = e.readPoint();
             else if (tag == "o3")
-                  ups[int(GripSlurSegment::BEZIER2)].off = e.readPoint();
+                  ups(Grip::BEZIER2).off = e.readPoint();
             else if (tag == "o4")
-                  ups[int(GripSlurSegment::END)].off = e.readPoint();
+                  ups(Grip::END).off = e.readPoint();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -470,8 +467,8 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       //
       // p1 and p2 are the end points of the slur
       //
-      QPointF pp1 = ss->ups[int(GripSlurSegment::START)].p + ss->ups[int(GripSlurSegment::START)].off * _spatium;
-      QPointF pp2 = ss->ups[int(GripSlurSegment::END)].p   + ss->ups[int(GripSlurSegment::END)].off   * _spatium;
+      QPointF pp1 = ss->ups(Grip::START).p + ss->ups(Grip::START).off * _spatium;
+      QPointF pp2 = ss->ups(Grip::END).p   + ss->ups(Grip::END).off   * _spatium;
 
       QPointF p2 = pp2 - pp1;
       if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
@@ -526,13 +523,13 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
             w *= .5;
       QPointF th(0.0, w);    // thickness of slur
 
-      QPointF p3o = p6o + t.map(ss->ups[int(GripSlurSegment::BEZIER1)].off * _spatium);
-      QPointF p4o = p6o + t.map(ss->ups[int(GripSlurSegment::BEZIER2)].off * _spatium);
+      QPointF p3o = p6o + t.map(ss->ups(Grip::BEZIER1).off * _spatium);
+      QPointF p4o = p6o + t.map(ss->ups(Grip::BEZIER2).off * _spatium);
 
       if (!p6o.isNull()) {
             QPointF p6i = t.inverted().map(p6o) / _spatium;
-            ss->ups[int(GripSlurSegment::BEZIER1)].off += p6i ;
-            ss->ups[int(GripSlurSegment::BEZIER2)].off += p6i;
+            ss->ups(Grip::BEZIER1).off += p6i ;
+            ss->ups(Grip::BEZIER2).off += p6i;
             }
 
       //-----------------------------------calculate p6
@@ -568,11 +565,11 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
       t.rotateRadians(sinb);
       ss->path                 = t.map(ss->path);
       ss->shapePath            = t.map(ss->shapePath);
-      ss->ups[int(GripSlurSegment::BEZIER1)].p  = t.map(p3);
-      ss->ups[int(GripSlurSegment::BEZIER2)].p  = t.map(p4);
-      ss->ups[int(GripSlurSegment::END)].p      = t.map(p2) - ss->ups[int(GripSlurSegment::END)].off * _spatium;
-      ss->ups[int(GripSlurSegment::DRAG)].p     = t.map(p5);
-      ss->ups[int(GripSlurSegment::SHOULDER)].p = t.map(p6);
+      ss->ups(Grip::BEZIER1).p  = t.map(p3);
+      ss->ups(Grip::BEZIER2).p  = t.map(p4);
+      ss->ups(Grip::END).p      = t.map(p2) - ss->ups(Grip::END).off * _spatium;
+      ss->ups(Grip::DRAG).p     = t.map(p5);
+      ss->ups(Grip::SHOULDER).p = t.map(p6);
 
       QPointF staffOffset;
       if (ss->system() && ss->track() >= 0)
@@ -589,8 +586,8 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
 
 void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
       {
-      ups[int(GripSlurSegment::START)].p = p1;
-      ups[int(GripSlurSegment::END)].p   = p2;
+      ups(Grip::START).p = p1;
+      ups(Grip::END).p   = p2;
       slurTie()->computeBezier(this);
       QRectF bbox = path.boundingRect();
 
@@ -619,10 +616,9 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
       if (bbox.height() < minDistance * 2 * sp && st) {
             // slur/tie is fairly flat
             bool up = slurTie()->up();
-            qreal staffY = system()->staff(staffIdx())->y();
             qreal ld = st->lineDistance() * sp;
-            qreal topY = (bbox.top() - staffY) / ld;
-            qreal bottomY = (bbox.bottom() - staffY) / ld;
+            qreal topY = bbox.top() / ld;
+            qreal bottomY = bbox.bottom() / ld;
             int lineY = up ? qRound(topY) : qRound(bottomY);
             if (lineY >= 0 && lineY < st->lines() * st->lineDistance()) {
                   // on staff
@@ -661,8 +657,8 @@ void SlurSegment::setAutoAdjust(const QPointF& offset)
       if (!diff.isNull()) {
             path.translate(diff);
             shapePath.translate(diff);
-            for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i)
-                  ups[i].p += diff;
+            for (int i = 0; i < int(Grip::GRIPS); ++i)
+                  _ups[i].p += diff;
             autoAdjustOffset = offset;
             }
       }
@@ -673,8 +669,8 @@ void SlurSegment::setAutoAdjust(const QPointF& offset)
 
 bool SlurSegment::isEdited() const
       {
-      for (int i = 0; i < int(GripSlurSegment::GRIPS); ++i) {
-            if (!ups[i].off.isNull())
+      for (int i = 0; i < int(Grip::GRIPS); ++i) {
+            if (!_ups[i].off.isNull())
                   return true;
             }
       return false;
@@ -720,12 +716,16 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
       const QList<Articulation*>& al = c->articulations();
       if (al.size() >= 2) {
             Articulation* a = al.at(1);
-            if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
+            if (a->up() == c->up())
+                  return yo;
+            else if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       else if (al.size() >= 1) {
             Articulation* a = al.at(0);
-            if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
+            if (a->up() == c->up())
+                  return yo;
+            else if (a->articulationType() == ArticulationType::Tenuto || a->articulationType() == ArticulationType::Staccato)
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       return yo;
@@ -1139,13 +1139,13 @@ QVariant SlurSegment::getProperty(P_ID propertyId) const
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->getProperty(propertyId);
             case P_ID::SLUR_UOFF1:
-                  return ups[int(GripSlurSegment::START)].off;
+                  return ups(Grip::START).off;
             case P_ID::SLUR_UOFF2:
-                  return ups[int(GripSlurSegment::BEZIER1)].off;
+                  return ups(Grip::BEZIER1).off;
             case P_ID::SLUR_UOFF3:
-                  return ups[int(GripSlurSegment::BEZIER2)].off;
+                  return ups(Grip::BEZIER2).off;
             case P_ID::SLUR_UOFF4:
-                  return ups[int(GripSlurSegment::END)].off;
+                  return ups(Grip::END).off;
             default:
                   return SpannerSegment::getProperty(propertyId);
             }
@@ -1162,16 +1162,16 @@ bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->setProperty(propertyId, v);
             case P_ID::SLUR_UOFF1:
-                  ups[int(GripSlurSegment::START)].off = v.toPointF();
+                  ups(Grip::START).off = v.toPointF();
                   break;
             case P_ID::SLUR_UOFF2:
-                  ups[int(GripSlurSegment::BEZIER1)].off = v.toPointF();
+                  ups(Grip::BEZIER1).off = v.toPointF();
                   break;
             case P_ID::SLUR_UOFF3:
-                  ups[int(GripSlurSegment::BEZIER2)].off = v.toPointF();
+                  ups(Grip::BEZIER2).off = v.toPointF();
                   break;
             case P_ID::SLUR_UOFF4:
-                  ups[int(GripSlurSegment::END)].off = v.toPointF();
+                  ups(Grip::END).off = v.toPointF();
                   break;
             default:
                   return SpannerSegment::setProperty(propertyId, v);

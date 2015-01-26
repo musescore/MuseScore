@@ -57,6 +57,7 @@ const int xgOnMsgLen = sizeof(xgOnMsg);
 MidiFile::MidiFile()
       {
       fp               = 0;
+      _isDivisionInTps = false;
       _format          = 1;
       _midiType        = MidiType::UNKNOWN;
       _noRunningStatus = false;
@@ -221,10 +222,40 @@ bool MidiFile::read(QIODevice* in)
 
       _format     = readShort();
       int ntracks = readShort();
-      _division   = readShort();
 
-      if (_division < 0)
-            _division = (-(_division/256)) * (_division & 0xff);
+      // ================ Read MIDI division =================
+      //
+      //                        2 bytes
+      //  +-------+---+-------------------+-----------------+
+      //  |  bit  |15 | 14              8 | 7             0 |
+      //  +-------+---+-------------------------------------+
+      //  |       | 0 |       ticks per quarter note        |
+      //  | value +---+-------------------------------------+
+      //  |       | 1 |  -frames/second   |   ticks/frame   |
+      //  +-------+---+-------------------+-----------------+
+
+      char firstByte;
+      fp->getChar(&firstByte);
+      char secondByte;
+      fp->getChar(&secondByte);
+      const char topBit = (firstByte & 0x80) >> 7;
+
+      if (topBit == 0) {            // ticks per beat
+            _isDivisionInTps = false;
+            _division = (firstByte << 8) | (secondByte & 0xff);
+            }
+      else {                        // ticks per second = fps * ticks per frame
+            _isDivisionInTps = true;
+            const int framesPerSecond = -firstByte;
+            const int ticksPerFrame = secondByte;
+            if (framesPerSecond == 29)
+                  _division = qRound(29.97 * ticksPerFrame);
+            else
+                  _division = framesPerSecond * ticksPerFrame;
+            }
+
+      // =====================================================
+
       if (len > 6)
             skip(len-6); // skip the excess
 

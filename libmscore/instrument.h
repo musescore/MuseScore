@@ -146,6 +146,8 @@ class Instrument {
       void setMaxPitchA(int v);
       Interval transpose() const;
       void setTranspose(const Interval& v);
+      QString instrumentId() const;
+      void setInstrumentId(const QString& instrumentId);
 
       void setDrumset(Drumset* ds);       // drumset is now owned by Instrument
       Drumset* drumset() const;

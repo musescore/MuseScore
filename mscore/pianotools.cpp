@@ -292,7 +292,7 @@ PianoTools::PianoTools(QWidget* parent)
    : QDockWidget(parent)
       {
       setObjectName("piano");
-      setWindowTitle(tr("Piano"));
+      setWindowTitle(tr("Piano Keyboard"));
       setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
 
       HPiano* piano = new HPiano;

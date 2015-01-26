@@ -70,9 +70,25 @@ namespace Ms {
 class Xml;
 class XmlReader;
 
-enum ShortcutFlags : char {
-      A_SCORE = 0x1, A_CMD = 0x2
+//---------------------------------------------------------
+//   ShortcutFlags
+//---------------------------------------------------------
+
+enum class ShortcutFlags : char {
+      NONE        = 0,
+      A_SCORE     = 1,
+      A_CMD       = 1 << 1,
+      A_CHECKABLE = 1 << 2,
+      A_CHECKED   = 1 << 3
       };
+
+constexpr ShortcutFlags operator| (ShortcutFlags t1, ShortcutFlags t2) {
+      return static_cast<ShortcutFlags>(static_cast<int>(t1) | static_cast<int>(t2));
+      }
+
+constexpr bool operator& (ShortcutFlags t1, ShortcutFlags t2) {
+      return static_cast<int>(t1) & static_cast<int>(t2);
+      }
 
 static const int KEYSEQ_SIZE = 4;
 
@@ -82,80 +98,43 @@ static const int KEYSEQ_SIZE = 4;
 //---------------------------------------------------------
 
 class Shortcut {
-      QString _key;           //! xml tag name for configuration file
-      QString _descr;         //! descriptor, shown in editor
-      QString _text;          //! text as shown on buttons or menus
-      QString _help;          //! ballon help
-      int _state = 0;         //! shortcut is valid in this Mscore state
-                              //! (or'd list of states)
-      int _flags = 0;
+      MsWidget _assignedWidget;   //! the widget where the action will be assigned
+      int _state { 0 };           //! shortcut is valid in this Mscore state
+      QByteArray _key;            //! xml tag name for configuration file
+      QByteArray _descr;          //! descriptor, shown in editor
+      QByteArray _text;           //! text as shown on buttons or menus
+      QByteArray _help;           //! ballon help
+                                  //! (or'd list of states)
+
+      Icons _icon                            { Icons::Invalid_ICON };
+      Qt::ShortcutContext _context           { Qt::WindowShortcut };
+      ShortcutFlags _flags                   { ShortcutFlags::NONE };
 
       QList<QKeySequence> _keys;     //! shortcut list
 
       QKeySequence::StandardKey _standardKey { QKeySequence::UnknownKey };
-      Qt::ShortcutContext _context           { Qt::WindowShortcut };
-      Icons _icon                            { Icons::Invalid_ICON };
       mutable QAction* _action               { 0 };             //! cached action
-      MsWidget _assignedWidget;             //! the widget where the action will be assigned
 
-      static Shortcut sc[];
-      static QMap<QString, Shortcut*> _shortcuts;
+      static Shortcut _sc[];
+      static QHash<QByteArray, Shortcut*> _shortcuts;
 
    public:
 
       Shortcut() {}
       Shortcut(
          Ms::MsWidget assignedWidget,
-         int state, int flags,
-         const char* name,
-         Qt::ShortcutContext cont,
-         const char* d,
-         const char* txt = 0,
-         const char* h = 0,
-         Icons i = Icons::Invalid_ICON);
-      Shortcut(
-         Ms::MsWidget assignedWidget,
-         int state, int flags,
-         const char* name,
-         const char* d,
-         const char* txt = 0,
-         const char* h = 0,
-         Icons i = Icons::Invalid_ICON);
-      Shortcut(
-         Ms::MsWidget assignedWidget,
-         int state, int flags,
-         const char* name,
-         const char* d,
-         Icons i);
-      Shortcut(
-         Ms::MsWidget assignedWidget,
-         int state, int flags,
-         const char* name,
-         const char* d,
-         const char* txt,
-         Icons i);
-      Shortcut(
-         Ms::MsWidget assignedWidget,
-         int state, int flags,
-         const char* name,
-         Qt::ShortcutContext cont,
-         const char* d,
-         Icons i);
-      Shortcut(
-         Ms::MsWidget assignedWidget,
-         int state, int flags,
-         const char* name,
-         Qt::ShortcutContext cont,
-         const char* d,
-         const char* txt,
-         Icons i);
-
-      Shortcut(const Shortcut& c);
-      ~Shortcut() {}
+         int state,
+         const char* key,
+         const char* d    = 0,
+         const char* txt  = 0,
+         const char* h    = 0,
+         Icons i          = Icons::Invalid_ICON,
+         Qt::ShortcutContext cont = Qt::WindowShortcut,
+         ShortcutFlags f = ShortcutFlags::NONE
+         );
 
       QAction* action() const;
-
-      QString key() const { return _key; }
+      const QByteArray& key() const { return _key; }
       QString descr() const;
       QString text() const;
       QString help() const;
@@ -164,12 +143,15 @@ class Shortcut {
       void reset();           //! reset to buildin
       void addShortcut(const QKeySequence&);
       int state() const                        { return _state; }
-      int flags() const                        { return _flags; }
+      bool needsScore() const                  { return _flags & ShortcutFlags::A_SCORE; }
+      bool isCmd() const                       { return _flags & ShortcutFlags::A_CMD; }
+      bool isCheckable() const                 { return _flags & ShortcutFlags::A_CHECKABLE; }
+      bool isChecked() const                   { return _flags & ShortcutFlags::A_CHECKED; }
       Icons icon() const                       { return _icon;  }
       const QList<QKeySequence>& keys() const  { return _keys;  }
       QKeySequence::StandardKey standardKey() const { return _standardKey; }
-      void setKeys(const QList<QKeySequence>& ks);
       void setStandardKey(QKeySequence::StandardKey k) {  _standardKey = k; }
+      void setKeys(const QList<QKeySequence>& ks);
 
       bool compareKeys(const Shortcut&) const;
       QString keysToString() const;
@@ -183,8 +165,8 @@ class Shortcut {
       static void save();
       static void resetToDefault();
       static bool dirty;
-      static Shortcut* getShortcut(const QString& key);
-      static const QMap<QString, Shortcut*>& shortcuts() { return _shortcuts; }
+      static Shortcut* getShortcut(const char* key);
+      static const QHash<QByteArray, Shortcut*>& shortcuts() { return _shortcuts; }
       static QActionGroup* getActionGroupForWidget(MsWidget w);
       static QActionGroup* getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext);
 

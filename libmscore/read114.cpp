@@ -129,7 +129,9 @@ static const StyleVal2 style114[] = {
       { StyleIdx::genCourtesyKeysig,            QVariant(true) },
       { StyleIdx::useStandardNoteNames,         QVariant(true) },
       { StyleIdx::useGermanNoteNames,           QVariant(false) },
+      { StyleIdx::useFullGermanNoteNames,       QVariant(false) },
       { StyleIdx::useSolfeggioNoteNames,        QVariant(false) },
+      { StyleIdx::useFrenchNoteNames,           QVariant(false) },
       { StyleIdx::chordDescriptionFile,         QVariant(QString("stdchords.xml")) },
       { StyleIdx::chordStyle,                   QVariant(QString("custom")) },
       { StyleIdx::chordsXmlFile,                QVariant(true) },
@@ -308,6 +310,37 @@ void Part::read114(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   convertOldTextStyleNames
+//---------------------------------------------------------
+
+QString convertOldTextStyleNames(const QString& s)
+      {
+      QString rs(s);
+      // convert 1.2 text styles
+      if (s == "Chordname")
+            rs = "Chord Symbol";
+      else if (s == "Lyrics odd lines")
+            rs = "Lyrics Odd Lines";
+      else if (s == "Lyrics even lines")
+            rs = "Lyrics Even Lines";
+      else if (s == "InstrumentsLong")
+            rs = "Instrument Name (Long)";
+      else if (s == "InstrumentsShort")
+            rs = "Instrument Name (Short)";
+      else if (s == "InstrumentsExcerpt")
+            rs = "Instrument Name (Part)";
+      else if (s == "Poet")
+            rs = "Lyricist";
+      else if (s == "Technik")
+            rs = "Technique";
+      else if (s == "TextLine")
+            rs = "Text Line";
+      else if (s == "Tuplets")
+            rs = "Tuplet";
+      return rs;
+      }
+
+//---------------------------------------------------------
 //   read114
 //    import old version <= 1.3 files
 //---------------------------------------------------------
@@ -330,10 +363,11 @@ Score::FileError Score::read114(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "Staff")
                   readStaff(e);
-            else if (tag == "KeySig") {
+            else if (tag == "KeySig") {               // not supported
                   KeySig* ks = new KeySig(this);
                   ks->read(e);
-                  customKeysigs.append(ks);
+                  // customKeysigs.append(ks);
+                  delete ks;
                   }
             else if (tag == "siglist")
                   _sigmap->read(e, _fileDivision);
@@ -408,26 +442,7 @@ Score::FileError Score::read114(XmlReader& e)
                         s.setPaddingWidth(Spatium(s.paddingWidthMM() / spMM));
 \
                   // convert 1.2 text styles
-                  if (s.name() == "Chordname")
-                        s.setName("Chord Symbol");
-                  else if (s.name() == "Lyrics odd lines")
-                        s.setName("Lyrics Odd Lines");
-                  else if (s.name() == "Lyrics even lines")
-                        s.setName("Lyrics Even Lines");
-                  else if (s.name() == "InstrumentsLong")
-                        s.setName("Instrument Name (Long)");
-                  else if (s.name() == "InstrumentsShort")
-                        s.setName("Instrument Name (Short)");
-                  else if (s.name() == "InstrumentsExcerpt")
-                        s.setName("Instrument Name (Part)");
-                  else if (s.name() == "Poet")
-                        s.setName("Lyricist");
-                  else if (s.name() == "Technik")
-                        s.setName("Technique");
-                  else if (s.name() == "TextLine")
-                        s.setName("Text Line");
-                  else if (s.name() == "Tuplets")
-                        s.setName("Tuplet");
+                  s.setName(convertOldTextStyleNames(s.name()));
 
                   if (s.name() == "Lyrics Odd Lines" || s.name() == "Lyrics Even Lines")
                         s.setAlign((s.align() & ~ Align(AlignmentFlags::VMASK)) | AlignmentFlags::BASELINE);
@@ -565,7 +580,7 @@ Score::FileError Score::read114(XmlReader& e)
                         qDebug("read114: Key tick %d", tick);
                         continue;
                         }
-                  if (tick == 0 && i->second == Key::C)
+                  if (tick == 0 && i->second.key() == Key::C)
                         continue;
                   Measure* m = tick2measure(tick);
                   if (!m)           //empty score
@@ -574,15 +589,13 @@ Score::FileError Score::read114(XmlReader& e)
                   if (seg->element(track))
                         static_cast<KeySig*>(seg->element(track))->setGenerated(false);
                   else {
-                        KeySigEvent ke;
-                        ke.setKey(i->second);
-                        KeySig* ks = keySigFactory(ke);
-                        if (ks) {
-                              ks->setParent(seg);
-                              ks->setTrack(track);
-                              ks->setGenerated(false);
-                              seg->add(ks);
-                              }
+                        KeySigEvent ke = i->second;
+                        KeySig* ks = new KeySig(this);
+                        ks->setKeySigEvent(ke);
+                        ks->setParent(seg);
+                        ks->setTrack(track);
+                        ks->setGenerated(false);
+                        seg->add(ks);
                         }
                   }
             }
@@ -742,6 +755,7 @@ Score::FileError Score::read114(XmlReader& e)
             }
 
       // create excerpts
+
       foreach (Excerpt* excerpt, _excerpts) {
             if (excerpt->parts().isEmpty()) {         // ignore empty parts
                   _excerpts.removeOne(excerpt);
@@ -749,10 +763,10 @@ Score::FileError Score::read114(XmlReader& e)
                   }
             if (!excerpt->parts().isEmpty()) {
                   Score* nscore = new Score(this);
-                  excerpt->setScore(nscore);
+                  excerpt->setPartScore(nscore);
                   nscore->setName(excerpt->title());
                   nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-                  Ms::createExcerpt(nscore, excerpt);
+                  Ms::createExcerpt(excerpt);
                   }
             }
 

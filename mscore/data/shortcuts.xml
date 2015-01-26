@@ -717,7 +717,7 @@
     <seq>Ctrl+Shift+I</seq>
     </SC>
   <SC>
-    <key>toogle-piano</key>
+    <key>toggle-piano</key>
     <seq>P</seq>
     </SC>
   <SC>
@@ -727,10 +727,6 @@
   <SC>
     <key>previous-score</key>
     <std>21</std>
-    </SC>
-  <SC>
-    <key>musescore-connect</key>
-    <seq>F7</seq>
     </SC>
   <SC>
     <key>inspector</key>

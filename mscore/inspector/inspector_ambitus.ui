@@ -838,6 +838,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="updateRange">
+         <property name="focusPolicy">
+          <enum>Qt::TabFocus</enum>
+         </property>
          <property name="accessibleName">
           <string>Update range</string>
          </property>

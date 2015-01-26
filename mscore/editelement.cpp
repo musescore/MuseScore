@@ -51,7 +51,7 @@ void ScoreView::startEdit(Element* e)
 //   startEdit
 //---------------------------------------------------------
 
-void ScoreView::startEdit(Element* element, int startGrip)
+void ScoreView::startEdit(Element* element, Grip startGrip)
       {
       if (!element || !element->isEditable()) {
             qDebug("The element cannot be edited");
@@ -59,9 +59,9 @@ void ScoreView::startEdit(Element* element, int startGrip)
             }
       editObject = element;
       startEdit();
-      if (startGrip == -1)
+      if (startGrip == Grip::NO_GRIP)
             curGrip = defaultGrip;
-      else if (startGrip >= 0)
+      else
             curGrip = startGrip;
       }
 
@@ -79,7 +79,7 @@ void ScoreView::startEdit()
       if (!_score->undo()->active())
             _score->startCmd();
       editObject->startEdit(this, data.startMove);
-      curGrip = -1;
+      curGrip = Grip::NO_GRIP;
       updateGrips();
       _score->end();
       }
@@ -99,8 +99,6 @@ void ScoreView::endEdit()
             score()->addRefresh(grip[i]);
 
       editObject->endEdit();
-      if (mscore->inspector())
-            mscore->inspector()->setElement(0);
 
       _score->addRefresh(editObject->canvasBoundingRect());
 
@@ -115,7 +113,6 @@ void ScoreView::endEdit()
             Text* text = static_cast<Text*>(editObject);
             if (text->isEmpty())
                   _score->undoRemoveElement(text);
-            editObject = nullptr;
             }
 
       _score->endCmd();
@@ -126,8 +123,10 @@ void ScoreView::endEdit()
             _score->select(curElement);
             _score->end();
             }
-      editObject     = nullptr;
-      grips          = 0;
+      mscore->updateInspector();
+
+      editObject = nullptr;
+      grips      = 0;
       }
 
 //---------------------------------------------------------
@@ -150,15 +149,17 @@ bool ScoreView::editElementDragTransition(QMouseEvent* ev)
                   }
             return true;
             }
-      int i;
-      qreal a = grip[0].width() * 1.0;
-      for (i = 0; i < grips; ++i) {
-            if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
-                  curGrip = i;
-                  data.curGrip = i;
-                  updateGrips();
-                  score()->end();
-                  break;
+      int i = 0;
+      if (grips) {
+            qreal a = grip[0].width() * 1.0;
+            for (; i < grips; ++i) {
+                  if (grip[i].adjusted(-a, -a, a, a).contains(data.startMove)) {
+                        curGrip = Grip(i);
+                        data.curGrip = Grip(i);
+                        updateGrips();
+                        score()->end();
+                        break;
+                        }
                   }
             }
       return i != grips;

@@ -12,7 +12,6 @@
 
 #include "effectgui.h"
 #include "effect.h"
-#include <QQmlContext>
 
 namespace Ms {
 
@@ -20,35 +19,15 @@ namespace Ms {
 //   EffectGui
 //---------------------------------------------------------
 
-EffectGui::EffectGui(Effect* e)
-   : QQuickView()
+EffectGui::EffectGui(Effect* e, QWidget* parent)
+   : QWidget(parent)
       {
       _effect = e;
-      setResizeMode(QQuickView::SizeViewToRootObject);
-//      setFocusPolicy(Qt::StrongFocus);
-      }
-
-//---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void EffectGui::init(QUrl& url)
-      {
-      if (_effect) {
-            rootContext()->setContextProperty("myEffect", _effect);
-            setSource(url);
-
-            if (rootObject()) {
-                  connect(rootObject(), SIGNAL(valueChanged(QString, qreal)),
-                     SLOT(valueChanged(QString, qreal)));
-                  }
-            else
-                  qDebug("no root object for %s", qPrintable(_effect->name()));
-            }
       }
 
 //---------------------------------------------------------
 //   valueChanged
+//    a value in the gui was changed
 //---------------------------------------------------------
 
 void EffectGui::valueChanged(const QString& msg, qreal val)
@@ -59,17 +38,5 @@ void EffectGui::valueChanged(const QString& msg, qreal val)
             }
       }
 
-//---------------------------------------------------------
-//   updateValues
-//---------------------------------------------------------
-
-void EffectGui::updateValues()
-      {
-      if (rootObject()) {
-            if (!QMetaObject::invokeMethod(rootObject(), "updateValues")) {
-                  qDebug("EffectGui::updateValues: failed");
-                  }
-            }
-      }
 }
 

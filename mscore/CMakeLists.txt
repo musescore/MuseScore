@@ -29,9 +29,9 @@ include_directories(
       )
 
 if (SCRIPT_INTERFACE)
-      set (SCRIPT_FILES mscorePlugins pluginCreator.cpp qmledit.cpp)
-      set (SCRIPT_MOCS pluginCreator.h qmledit.h)
-      set (SCRIPT_UI   pluginCreator.ui)
+      set (SCRIPT_FILES mscorePlugins pluginCreator.cpp qmledit.cpp pluginManager.cpp)
+      set (SCRIPT_MOCS pluginCreator.h qmledit.h pluginManager.h)
+      set (SCRIPT_UI   pluginCreator.ui pluginManager.ui)
 endif (SCRIPT_INTERFACE)
 
 QT4_WRAP_UI (ui_headers
@@ -44,9 +44,13 @@ QT4_WRAP_UI (ui_headers
       glissandoprop.ui articulation.ui metaedit.ui palette.ui select.ui
       synthcontrol.ui splitstaff.ui cellproperties.ui keyedit.ui selectinstr.ui
       fretdprops.ui editstafftype.ui sectionbreak.ui  bend.ui tremolobar.ui textproperties.ui
-      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui album.ui layer.ui
-      omrpanel.ui startdialog.ui masterpalette.ui pluginManager.ui harmonyedit.ui pathlistdialog.ui
-      note_groups.ui importmidi_panel.ui resourceManager.ui stafftypetemplates.ui
+      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui textstyle.ui albummanager.ui layer.ui
+      omrpanel.ui startdialog.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
+      note_groups.ui resourceManager.ui stafftypetemplates.ui
+      startcenter.ui scorePreview.ui scoreBrowser.ui
+      logindialog.ui uploadscoredialog.ui breaksdialog.ui
+
+      importmidi/importmidi_panel.ui
 
       debugger/barline.ui
       debugger/harmony.ui
@@ -115,6 +119,7 @@ QT4_WRAP_UI (ui_headers
       inspector/inspector_text.ui
       inspector/inspector_ambitus.ui
       inspector/inspector_empty.ui
+      inspector/inspector_fret.ui
       ${SCRIPT_UI}
       )
 
@@ -141,20 +146,22 @@ QT4_WRAP_CPP (mocs
       prefsdialog.h sectionbreakprop.h bendproperties.h
       bendcanvas.h tremolobarprop.h tremolobarcanvas.h
       drumtools.h texteditor.h texttools.h pianotools.h editpitch.h
-      editstringdata.h editraster.h mediadialog.h chordview.h album.h layer.h
-      webpage.h
+      editstringdata.h editraster.h mediadialog.h chordview.h albummanager.h layer.h
+      # webpage.h
       inspector/inspector.h inspector/inspectorBase.h inspector/inspectorBeam.h masterpalette.h
       inspector/inspectorGroupElement.h inspector/inspectorImage.h waveview.h helpBrowser.h
       inspector/inspectorLasso.h inspector/inspectorVolta.h inspector/inspectorOttava.h
       inspector/inspectorTrill.h
-      inspector/inspectorHairpin.h qmlplugin.h palettebox.h workspace.h pluginManager.h
+      inspector/inspectorHairpin.h qmlplugin.h palettebox.h workspace.h
       inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
       inspector/inspectorNote.h inspector/inspectorAmbitus.h
+      inspector/inspectorFret.h
       paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
-      importmidi_panel.h importmidi_delegate.h importmidi_view.h
+      importmidi/importmidi_panel.h importmidi/importmidi_delegate.h importmidi/importmidi_view.h
       debugger/debugger.h
       resourceManager.h downloadUtils.h accessibletoolbutton.h scoreaccessibility.h
-      startcenter.h
+      startcenter.h scoreBrowser.h scorePreview.h
+      logindialog.h loginmanager.h uploadscoredialog.h breaksdialog.h
       ${OMR_MOCS}
       ${SCRIPT_MOCS}
       )
@@ -164,7 +171,7 @@ if (APPLE)
 else (APPLE)
       QT5_ADD_RESOURCES (qrc_files musescore.qrc
             musescorefonts-MScore.qrc
-            musescorefonts-Gonville.qrc
+            musescorefonts-Gootville.qrc
             musescorefonts-Bravura.qrc
             musescorefonts-MuseJazz.qrc
             musescorefonts-FreeSerif.qrc
@@ -206,7 +213,7 @@ endif (${CMAKE_SYSTEM} MATCHES "GNU-0.3")
 
 if (${CMAKE_SYSTEM} MATCHES "kFreeBSD")
       # include some cmake support file
-      INCLUDE (Platform/kFreeBSD) 
+      INCLUDE (Platform/kFreeBSD)
       set ( USE_ALSA 0 )
       set ( USE_PORTMIDI 0 )
 endif (${CMAKE_SYSTEM} MATCHES "kFreeBSD")
@@ -245,9 +252,9 @@ add_executable ( ${ExecutableName}
       ${resource_file}
       ${INCS}
 
-      actions.cpp scoreview.cpp editinstrument.cpp editstyle.cpp
+      scoreview.cpp editinstrument.cpp editstyle.cpp
       icons.cpp importbww.cpp instrdialog.cpp instrwidget.cpp
-      debugger/debugger.cpp menus.cpp importmidi.cpp
+      debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
       seq.cpp textpalette.cpp
@@ -265,7 +272,9 @@ add_executable ( ${ExecutableName}
       selinstrument.cpp texteditor.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp exportmp3.cpp chordview.cpp
-      album.cpp webpage.cpp textstyle.cpp
+      album.cpp albummanager.cpp
+      # webpage.cpp
+      textstyle.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp glissandoproperties.cpp
       articulationprop.cpp textprop.cpp
@@ -275,26 +284,34 @@ add_executable ( ${ExecutableName}
       inspector/inspector.cpp dragelement.cpp svggenerator.cpp
       inspector/inspectorBase.cpp inspector/inspectorBeam.cpp masterpalette.cpp
       inspector/inspectorGroupElement.cpp dragdrop.cpp inspector/inspectorImage.cpp
+      inspector/inspectorFret.cpp
       waveview.cpp helpBrowser.cpp inspector/inspectorLasso.cpp
       editelement.cpp inspector/inspectorVolta.cpp inspector/inspectorOttava.cpp
       inspector/inspectorTrill.cpp
       inspector/inspectorHairpin.cpp qmlplugin.cpp editlyrics.cpp
       musicxmlfonthandler.cpp musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
-      savePositions.cpp pluginManager.cpp inspector/inspectorJump.cpp inspector/inspectorMarker.cpp
+      savePositions.cpp inspector/inspectorJump.cpp inspector/inspectorMarker.cpp
       inspector/inspectorGlissando.cpp inspector/inspectorNote.cpp inspector/inspectorAmbitus.cpp
       paletteBoxButton.cpp driver.cpp exportmidi.cpp noteGroups.cpp
-      pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp
-      importmidi_panel.cpp importmidi_operations.cpp miconengine.cpp
-      importmidi_model.cpp importmidi_delegate.cpp
-      importmidi_meter.cpp importmidi_quant.cpp importmidi_tuplet.cpp importmidi_chord.cpp
-      importmidi_swing.cpp importmidi_fraction.cpp importmidi_drum.cpp
-      importmidi_clef.cpp importmidi_lrhand.cpp importmidi_lyrics.cpp
-      importmidi_inner.cpp importmidi_tie.cpp importmidi_tuplet_voice.cpp importmidi_beat.cpp
-      importmidi_tuplet_detect.cpp  importmidi_tuplet_filter.cpp importmidi_tuplet_tonotes.cpp
-      importmidi_simplify.cpp importmidi_voice.cpp importmidi_view.cpp importmidi_key.cpp
+      pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp miconengine.cpp
+      importmidi/importmidi.cpp
+      importmidi/importmidi_panel.cpp importmidi/importmidi_operations.cpp
+      importmidi/importmidi_model.cpp importmidi/importmidi_delegate.cpp
+      importmidi/importmidi_meter.cpp importmidi/importmidi_quant.cpp
+      importmidi/importmidi_tuplet.cpp importmidi/importmidi_chord.cpp
+      importmidi/importmidi_swing.cpp importmidi/importmidi_fraction.cpp
+      importmidi/importmidi_drum.cpp importmidi/importmidi_clef.cpp
+      importmidi/importmidi_lrhand.cpp importmidi/importmidi_lyrics.cpp
+      importmidi/importmidi_inner.cpp importmidi/importmidi_tie.cpp
+      importmidi/importmidi_tuplet_voice.cpp importmidi/importmidi_beat.cpp
+      importmidi/importmidi_tuplet_detect.cpp importmidi/importmidi_tuplet_filter.cpp
+      importmidi/importmidi_tuplet_tonotes.cpp importmidi/importmidi_simplify.cpp
+      importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
+      importmidi/importmidi_tempo.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
-      startcenter.cpp
+      startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
+      logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp
 
       ${OMR_FILES}
       ${AUDIO}
@@ -321,7 +338,13 @@ target_link_libraries(mscore
       xmlstream
       qzip
       beatroot
+      kqoauth
+      qtwaitingspinner
       )
+
+if (MINGW)
+      set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME})
+endif (MINGW)
 
 #if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
 #called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
@@ -416,17 +439,21 @@ if (MINGW)
       ${CROSS}/lib/libogg.dll
       ${CROSS}/lib/libvorbis.dll
       ${CROSS}/lib/libvorbisfile.dll
+      ${CROSS}/opt/bin/ssleay32.dll
+      ${CROSS}/opt/bin/libeay32.dll
       ${CROSSQT}/bin/Qt5Core.dll
       ${CROSSQT}/bin/Qt5Widgets.dll
       ${CROSSQT}/bin/Qt5Gui.dll
       ${CROSSQT}/bin/Qt5Xml.dll
       ${CROSSQT}/bin/Qt5Svg.dll
       ${CROSSQT}/bin/Qt5Network.dll
+      ${CROSSQT}/bin/Qt5WebChannel.dll
       ${CROSSQT}/bin/Qt5WebKit.dll
       ${CROSSQT}/bin/Qt5WebKitWidgets.dll
       ${CROSSQT}/bin/Qt5XmlPatterns.dll
       ${CROSSQT}/bin/Qt5Qml.dll
       ${CROSSQT}/bin/Qt5Quick.dll
+      ${CROSSQT}/bin/Qt5QuickWidgets.dll
       ${CROSSQT}/bin/Qt5Script.dll
       ${CROSSQT}/bin/Qt5Sql.dll
       ${CROSSQT}/bin/Qt5Positioning.dll
@@ -435,9 +462,9 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5Sensors.dll
       ${CROSSQT}/bin/Qt5Multimedia.dll
       ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
-      ${CROSSQT}/bin/icuin52.dll
-      ${CROSSQT}/bin/icuuc52.dll
-      ${CROSSQT}/bin/icudt52.dll
+      ${CROSSQT}/bin/icuin53.dll
+      ${CROSSQT}/bin/icuuc53.dll
+      ${CROSSQT}/bin/icudt53.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
@@ -459,10 +486,6 @@ if (MINGW)
     install(FILES
       ${CROSSQT}/plugins/printsupport/windowsprintersupport.dll
       DESTINATION bin/printsupport)
-
-    install(FILES
-      ${CROSSQT}/plugins/accessible/qtaccessiblewidgets.dll
-      DESTINATION bin/accessible)
 
     install(DIRECTORY
       ${CROSSQT}/qml
@@ -537,11 +560,11 @@ endif (MINGW)
 
 if (APPLE)
      install (FILES
-      ../fonts/gonville/Gonville.otf
-      ../fonts/gonville/GonvilleText.otf
+      ../fonts/gootville/Gootville.otf
+      ../fonts/gootville/GootvilleText.otf
       ../fonts/mscore/mscore.ttf
       ../fonts/mscore/MScoreText.ttf
-      ../fonts/MuseJazz-Mac.ttf
+      ../fonts/MuseJazz.ttf
       ../fonts/FreeSerif.ttf
       ../fonts/FreeSerifBold.ttf
       ../fonts/FreeSans.ttf

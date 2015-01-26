@@ -270,8 +270,13 @@ enum class StyleIdx : unsigned char {
 
       useStandardNoteNames,
       useGermanNoteNames,
+      useFullGermanNoteNames,
       useSolfeggioNoteNames,
+      useFrenchNoteNames,
+      automaticCapitalization,
       lowerCaseMinorChords,
+      lowerCaseBassNotes,
+      allCapsNoteNames,
       chordStyle,
       chordsXmlFile,
       chordDescriptionFile,
@@ -355,6 +360,11 @@ enum class StyleIdx : unsigned char {
       tupletNoteLeftDistance,
       tupletNoteRightDistance,
 
+      barreLineWidth,
+      fretMag,
+      scaleBarlines,
+
+
       STYLES
       };
 
@@ -399,12 +409,15 @@ class MStyle {
       bool load(QFile* qf);
       void load(XmlReader& e);
       void save(Xml& xml, bool optimize);
+      PageFormat* pageFormat();
       const PageFormat* pageFormat() const;
       void setPageFormat(const PageFormat& pf);
       qreal spatium() const;
       void setSpatium(qreal v);
       ArticulationAnchor articulationAnchor(int id) const;
       void setArticulationAnchor(int id, ArticulationAnchor val);
+
+      static StyleValueType valueType(const StyleIdx t);
       };
 
 extern QVector<TextStyle> defaultTextStyles;

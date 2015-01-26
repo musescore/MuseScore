@@ -142,7 +142,7 @@
               <subtype>sharp</subtype>
               </Accidental>
             <pitch>38</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>6</string>
@@ -153,7 +153,7 @@
               <subtype>sharp</subtype>
               </Accidental>
             <pitch>50</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>5</fret>
             <string>4</string>
@@ -164,7 +164,7 @@
               <subtype>sharp</subtype>
               </Accidental>
             <pitch>55</pitch>
-            <tpc>15</tpc>
+            <tpc>27</tpc>
             <tpc2>21</tpc2>
             <fret>5</fret>
             <string>3</string>
@@ -186,7 +186,7 @@
               <subtype>sharp</subtype>
               </Accidental>
             <pitch>62</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>1</string>
@@ -204,7 +204,7 @@
           <Note>
             <lid>19</lid>
             <pitch>38</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>6</string>
@@ -250,7 +250,7 @@
           <Note>
             <lid>24</lid>
             <pitch>62</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>1</string>
@@ -263,7 +263,7 @@
           <Note>
             <lid>26</lid>
             <pitch>38</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>6</string>
@@ -303,7 +303,7 @@
           <Note>
             <lid>31</lid>
             <pitch>62</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>1</string>
@@ -316,7 +316,7 @@
           <Note>
             <lid>33</lid>
             <pitch>38</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>6</string>
@@ -356,7 +356,7 @@
           <Note>
             <lid>38</lid>
             <pitch>62</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>1</string>
@@ -373,7 +373,7 @@
           <Note>
             <lid>40</lid>
             <pitch>38</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>6</string>
@@ -413,7 +413,7 @@
           <Note>
             <lid>45</lid>
             <pitch>62</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>1</string>
@@ -426,7 +426,7 @@
           <Note>
             <lid>47</lid>
             <pitch>38</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>6</string>
@@ -466,7 +466,7 @@
           <Note>
             <lid>52</lid>
             <pitch>62</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>1</string>
@@ -479,7 +479,7 @@
           <Note>
             <lid>54</lid>
             <pitch>38</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>6</string>
@@ -519,7 +519,7 @@
           <Note>
             <lid>59</lid>
             <pitch>62</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>1</string>
@@ -532,7 +532,7 @@
           <Note>
             <lid>61</lid>
             <pitch>38</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>6</string>
@@ -572,7 +572,7 @@
           <Note>
             <lid>66</lid>
             <pitch>62</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>3</fret>
             <string>1</string>
@@ -639,7 +639,7 @@
           <Note>
             <lid>72</lid>
             <pitch>50</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>5</fret>
             <string>4</string>
@@ -695,7 +695,7 @@
           <Note>
             <lid>79</lid>
             <pitch>50</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>5</fret>
             <string>4</string>
@@ -748,7 +748,7 @@
           <Note>
             <lid>86</lid>
             <pitch>50</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>5</fret>
             <string>4</string>
@@ -801,7 +801,7 @@
           <Note>
             <lid>93</lid>
             <pitch>50</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>5</fret>
             <string>4</string>
@@ -858,7 +858,7 @@
           <Note>
             <lid>100</lid>
             <pitch>50</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>5</fret>
             <string>4</string>
@@ -911,7 +911,7 @@
           <Note>
             <lid>107</lid>
             <pitch>50</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>5</fret>
             <string>4</string>
@@ -964,7 +964,7 @@
           <Note>
             <lid>114</lid>
             <pitch>50</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>5</fret>
             <string>4</string>
@@ -1017,7 +1017,7 @@
           <Note>
             <lid>121</lid>
             <pitch>50</pitch>
-            <tpc>16</tpc>
+            <tpc>28</tpc>
             <tpc2>22</tpc2>
             <fret>5</fret>
             <string>4</string>
@@ -1216,7 +1216,7 @@
                 <subtype>sharp</subtype>
                 </Accidental>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -1227,7 +1227,7 @@
                 <subtype>sharp</subtype>
                 </Accidental>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -1238,7 +1238,7 @@
                 <subtype>sharp</subtype>
                 </Accidental>
               <pitch>55</pitch>
-              <tpc>15</tpc>
+              <tpc>27</tpc>
               <tpc2>21</tpc2>
               <fret>5</fret>
               <string>3</string>
@@ -1260,7 +1260,7 @@
                 <subtype>sharp</subtype>
                 </Accidental>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -1278,7 +1278,7 @@
             <Note>
               <lid>19</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -1324,7 +1324,7 @@
             <Note>
               <lid>24</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -1337,7 +1337,7 @@
             <Note>
               <lid>26</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -1377,7 +1377,7 @@
             <Note>
               <lid>31</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -1390,7 +1390,7 @@
             <Note>
               <lid>33</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -1430,7 +1430,7 @@
             <Note>
               <lid>38</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -1447,7 +1447,7 @@
             <Note>
               <lid>40</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -1487,7 +1487,7 @@
             <Note>
               <lid>45</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -1500,7 +1500,7 @@
             <Note>
               <lid>47</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -1540,7 +1540,7 @@
             <Note>
               <lid>52</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -1553,7 +1553,7 @@
             <Note>
               <lid>54</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -1593,7 +1593,7 @@
             <Note>
               <lid>59</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -1606,7 +1606,7 @@
             <Note>
               <lid>61</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -1646,7 +1646,7 @@
             <Note>
               <lid>66</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -1713,7 +1713,7 @@
             <Note>
               <lid>72</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -1769,7 +1769,7 @@
             <Note>
               <lid>79</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -1822,7 +1822,7 @@
             <Note>
               <lid>86</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -1875,7 +1875,7 @@
             <Note>
               <lid>93</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -1932,7 +1932,7 @@
             <Note>
               <lid>100</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -1985,7 +1985,7 @@
             <Note>
               <lid>107</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2038,7 +2038,7 @@
             <Note>
               <lid>114</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2091,7 +2091,7 @@
             <Note>
               <lid>121</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2158,7 +2158,7 @@
             <Note>
               <lid>12</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -2166,7 +2166,7 @@
             <Note>
               <lid>13</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2174,7 +2174,7 @@
             <Note>
               <lid>14</lid>
               <pitch>55</pitch>
-              <tpc>15</tpc>
+              <tpc>27</tpc>
               <tpc2>21</tpc2>
               <fret>5</fret>
               <string>3</string>
@@ -2190,7 +2190,7 @@
             <Note>
               <lid>16</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -2203,7 +2203,7 @@
             <Note>
               <lid>19</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -2243,7 +2243,7 @@
             <Note>
               <lid>24</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -2256,7 +2256,7 @@
             <Note>
               <lid>26</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -2296,7 +2296,7 @@
             <Note>
               <lid>31</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -2309,7 +2309,7 @@
             <Note>
               <lid>33</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -2349,7 +2349,7 @@
             <Note>
               <lid>38</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -2366,7 +2366,7 @@
             <Note>
               <lid>40</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -2406,7 +2406,7 @@
             <Note>
               <lid>45</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -2419,7 +2419,7 @@
             <Note>
               <lid>47</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -2459,7 +2459,7 @@
             <Note>
               <lid>52</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -2472,7 +2472,7 @@
             <Note>
               <lid>54</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -2512,7 +2512,7 @@
             <Note>
               <lid>59</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -2525,7 +2525,7 @@
             <Note>
               <lid>61</lid>
               <pitch>38</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>6</string>
@@ -2565,7 +2565,7 @@
             <Note>
               <lid>66</lid>
               <pitch>62</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>3</fret>
               <string>1</string>
@@ -2598,7 +2598,7 @@
             <Note>
               <lid>72</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2651,7 +2651,7 @@
             <Note>
               <lid>79</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2704,7 +2704,7 @@
             <Note>
               <lid>86</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2757,7 +2757,7 @@
             <Note>
               <lid>93</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2814,7 +2814,7 @@
             <Note>
               <lid>100</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2867,7 +2867,7 @@
             <Note>
               <lid>107</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2920,7 +2920,7 @@
             <Note>
               <lid>114</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>
@@ -2973,7 +2973,7 @@
             <Note>
               <lid>121</lid>
               <pitch>50</pitch>
-              <tpc>16</tpc>
+              <tpc>28</tpc>
               <tpc2>22</tpc2>
               <fret>5</fret>
               <string>4</string>

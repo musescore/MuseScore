@@ -29,6 +29,7 @@ class InstrumentData : public QSharedData {
 
       char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
       Interval _transpose;
+      QString _instrumentId;
 
       DrumsetKind _useDrumset;
       Drumset*    _drumset;
@@ -59,6 +60,8 @@ class InstrumentData : public QSharedData {
       void setMaxPitchA(int v)                               { _maxPitchA = v;     }
       Interval transpose() const                             { return _transpose; }
       void setTranspose(const Interval& v)                   { _transpose = v; }
+      QString instrumentId()                                 { return _instrumentId; }
+      void setInstrumentId(const QString& instrumentId)      { _instrumentId = instrumentId; }
 
       void setDrumset(Drumset* ds);       // drumset is now owned by Instrument
       Drumset* drumset() const                               { return _drumset;    }

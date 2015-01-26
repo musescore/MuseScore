@@ -21,8 +21,6 @@
 #ifndef __ALBUM_H__
 #define __ALBUM_H__
 
-#include "ui_album.h"
-
 namespace Ms {
 
 class Score;
@@ -56,9 +54,9 @@ class Album {
    public:
       Album();
       void print();
-      void createScore();
+      bool createScore(const QString& fn);
       bool read(const QString& path);
-      void write();
+      void write(Xml& xml);
       bool dirty() const             { return _dirty; }
       QString name() const           { return _name;  }
       QString path() const           { return _path;  }
@@ -71,36 +69,6 @@ class Album {
       AlbumItem* item(int idx)       { return _scores[idx]; }
       void setDirty(bool val)        { _dirty = val;        }
       };
-
-//---------------------------------------------------------
-//   AlbumManager
-//---------------------------------------------------------
-
-class AlbumManager : public QDialog, public Ui::AlbumManager {
-      Q_OBJECT
-      Album* album;
-
-      void setAlbum(Album*);
-      virtual void closeEvent(QCloseEvent*);
-
-   private slots:
-      void addClicked();
-      void loadClicked();
-      void printClicked();
-      void createScoreClicked();
-      void upClicked();
-      void downClicked();
-      void removeClicked();
-      void createNewClicked();
-      void albumNameChanged(const QString&);
-      void currentScoreChanged(int);
-      void itemChanged(QListWidgetItem*);   // score name in list is edited
-      void buttonBoxClicked(QAbstractButton*);
-
-   public:
-      AlbumManager(QWidget* parent = 0);
-      };
 }
-
 #endif
 

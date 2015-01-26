@@ -44,36 +44,47 @@ static inline bool operator!= (Key a, Key b) { return int(a) != int(b); }
 static inline Key  operator+= (Key& a, const Key& b) { return a = Key(int(a) + int(b)); }
 static inline Key  operator-= (Key& a, const Key& b) { return a = Key(int(a) - int(b)); }
 
+enum class SymId;
+
+//---------------------------------------------------------
+//   KeySym
+//    position of one symbol in KeySig
+//---------------------------------------------------------
+
+struct KeySym {
+      SymId sym;
+      QPointF spos;     // position in spatium units
+      QPointF pos;      // actual pixel position on screen (set by layout)
+      };
+
 //---------------------------------------------------------
 //   KeySigEvent
 //---------------------------------------------------------
 
 class KeySigEvent {
-      Key _key            { Key::C };          // -7 -> +7
-      int _customType     { 0 };
+      Key _key            { Key::INVALID };          // -7 -> +7
       bool _custom        { false };
-      bool _invalid       { true };
+      QList<KeySym> _keySymbols;
 
       void enforceLimits();
 
    public:
       KeySigEvent() {}
-      KeySigEvent(Key);
+      KeySigEvent(const KeySigEvent&);
 
-      bool isValid() const { return !_invalid; }
       bool operator==(const KeySigEvent& e) const;
-      bool operator!=(const KeySigEvent& e) const;
 
       void setKey(Key v);
-      void setCustomType(int v);
       void print() const;
 
-      Key key() const            { return _key; }
-      int customType() const     { return _customType;     }
-      bool custom() const        { return _custom;         }
-      bool invalid() const       { return _invalid;        }
+      Key key() const            { return _key;                    }
+      bool custom() const        { return _custom;                 }
+      void setCustom(bool val)   { _custom = val; _key = Key::C;   }
+      bool isValid() const       { return _key != Key::INVALID;    }
       void initFromSubtype(int);    // for backward compatibility
       void initLineList(char*);
+      QList<KeySym>& keySymbols()             { return _keySymbols; }
+      const QList<KeySym>& keySymbols() const { return _keySymbols; }
       };
 
 //---------------------------------------------------------

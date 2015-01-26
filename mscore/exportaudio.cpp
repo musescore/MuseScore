@@ -36,17 +36,17 @@ namespace Ms {
 //   saveAudio
 //---------------------------------------------------------
 
-bool MuseScore::saveAudio(Score* score, const QString& name, const QString& ext)
+bool MuseScore::saveAudio(Score* score, const QString& name)
       {
       int format;
-      if (ext == "wav")
+      if (name.endsWith(".wav"))
             format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
-      else if (ext == "ogg")
+      else if (name.endsWith(".ogg"))
             format = SF_FORMAT_OGG | SF_FORMAT_VORBIS;
-      else if (ext == "flac")
+      else if (name.endsWith("flac"))
             format = SF_FORMAT_FLAC | SF_FORMAT_PCM_16;
       else {
-            qDebug("unknown audio file type <%s>", qPrintable(ext));
+            qDebug("unknown audio file type <%s>", qPrintable(name));
             return false;
             }
 

@@ -29,7 +29,6 @@ namespace Ms {
 class SimpleButton : public QToolButton {
       Q_OBJECT
 
-      int _id;
       virtual QSize minimumSizeHint() const { return QSize(0, 0); }
 
    public:

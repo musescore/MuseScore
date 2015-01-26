@@ -296,8 +296,10 @@ void Accidental::layout()
       el.clear();
 
       QRectF r;
-      if (staff() && staff()->isTabStaff()) {      //in TAB, accidentals are not shown
-            setbbox(QRectF());
+      // don't show accidentals for tab or slash notation
+      if ((staff() && staff()->isTabStaff())
+          || (note() && note()->fixed())) {
+            setbbox(r);
             return;
             }
 
@@ -308,9 +310,9 @@ void Accidental::layout()
 
       m = magS();
       if (_hasBracket) {
-            SymElement e(SymId::noteheadParenthesisLeft, 0.0);
+            SymElement e(SymId::accidentalParensLeft, 0.0);
             el.append(e);
-            r |= symBbox(SymId::noteheadParenthesisLeft);
+            r |= symBbox(SymId::accidentalParensLeft);
             }
 
       SymId s = symbol();
@@ -321,9 +323,9 @@ void Accidental::layout()
 
       if (_hasBracket) {
             x = r.x()+r.width();
-            SymElement e(SymId::noteheadParenthesisRight, x);
+            SymElement e(SymId::accidentalParensRight, x);
             el.append(e);
-            r |= symBbox(SymId::noteheadParenthesisRight).translated(x, 0.0);
+            r |= symBbox(SymId::accidentalParensRight).translated(x, 0.0);
             }
       setbbox(r);
       }
@@ -385,8 +387,11 @@ Accidental::Type Accidental::name2subtype(const QString& tag)
 
 void Accidental::draw(QPainter* painter) const
       {
-      if (staff() && staff()->isTabStaff())        //in TAB, accidentals are not shown
+      // don't show accidentals for tab or slash notation
+      if ((staff() && staff()->isTabStaff())
+          || (note() && note()->fixed())) {
             return;
+            }
       painter->setPen(curColor());
       foreach(const SymElement& e, el)
             score()->scoreFont()->draw(e.sym, painter, magS(), QPointF(e.x, 0.0));
@@ -481,7 +486,7 @@ bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
 
 QString Accidental::accessibleInfo()
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("accidental", Accidental::subtype2name(accidentalType())));
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("accidental", Accidental::subtypeUserName()));
       }
 
 }

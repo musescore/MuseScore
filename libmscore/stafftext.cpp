@@ -116,7 +116,7 @@ void StaffText::read(XmlReader& e)
                   }
             else if (tag == "aeolus") {
                   int group = e.intAttribute("group", -1);
-                  if (group >= 0 && group <= 4)
+                  if (group >= 0 && group < 4)
                         aeolusStops[group] = e.readInt();
                   else
                         e.readNext();

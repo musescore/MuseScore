@@ -148,6 +148,15 @@ void Palette::setReadOnly(bool val)
       }
 
 //---------------------------------------------------------
+//   setMag
+//---------------------------------------------------------
+
+void Palette::setMag(qreal val)
+      {
+      extraMag = val * guiScaling;
+      }
+
+//---------------------------------------------------------
 //   contextMenuEvent
 //---------------------------------------------------------
 
@@ -215,8 +224,8 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
 
 void Palette::setGrid(int hh, int vv)
       {
-      hgrid = hh;
-      vgrid = vv;
+      hgrid = hh * guiScaling;
+      vgrid = vv * guiScaling;
       QSize s(hgrid, vgrid);
       setSizeIncrement(s);
       setBaseSize(s);
@@ -289,6 +298,8 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 
 void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       {
+      if (_disableDoubleClick)
+            return;
       int i = idx(ev->pos());
       if (i == -1)
             return;
@@ -296,7 +307,6 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       if (score == 0)
             return;
       const Selection& sel = score->selection();
-
       if (sel.isNone())
             return;
 
@@ -305,8 +315,8 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             element = cells[i]->element;
       if (element == 0)
             return;
-      ScoreView* viewer = mscore->currentScoreView();
 
+      ScoreView* viewer = mscore->currentScoreView();
       if (viewer->mscoreState() != STATE_EDIT
          && viewer->mscoreState() != STATE_LYRICS_EDIT
          && viewer->mscoreState() != STATE_HARMONY_FIGBASS_EDIT
@@ -314,8 +324,28 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             score->startCmd();
             }
       if (sel.isList()) {
-            foreach(Element* e, sel.elements())
-                  applyDrop(score, viewer, e, element);
+            if (viewer->mscoreState() == STATE_NOTE_ENTRY_DRUM && element->type() == Element::Type::CHORD) {
+                  // use input position rather than selection if possible
+                  Element* e = score->inputState().cr();
+                  if (!e)
+                        e = sel.elements().first();
+                  if (e) {
+                        // get note if selection was full chord
+                        if (e->type() == Element::Type::CHORD)
+                              e = static_cast<Chord*>(e)->upNote();
+                        // use voice of element being added to (otherwise we can might corrupt the measure)
+                        element->setTrack(e->voice());
+                        applyDrop(score, viewer, e, element);
+                        // continue in same track
+                        score->inputState().setTrack(e->track());
+                        }
+                  else
+                        qDebug("nowhere to place drum note");
+                  }
+            else {
+                  foreach(Element* e, sel.elements())
+                        applyDrop(score, viewer, e, element);
+                  }
             }
       else if (sel.isRange()) {
             // TODO: check for other element types:
@@ -331,6 +361,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   int track2 = sel.staffEnd() * VOICES;
                   Segment* startSegment = sel.startSegment();
                   Segment* endSegment = sel.endSegment(); //keep it, it could change during the loop
+                  bool stop = false;
                   for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                         for (int track = track1; track < track2; ++track) {
                               Element* e = s->element(track);
@@ -338,15 +369,22 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                                     continue;
                               if (e->type() == Element::Type::CHORD) {
                                     Chord* chord = static_cast<Chord*>(e);
-                                    foreach(Note* n, chord->notes())
+                                    foreach(Note* n, chord->notes()) {
                                           applyDrop(score, viewer, n, element);
+                                          if (element->type() == Element::Type::SLUR || element->type() == Element::Type::HAIRPIN) {
+                                                stop = true;
+                                                break;
+                                                }
+                                          }
                                     }
                               else {
                                     // do not apply articulation to barline in a range selection
                                     if(e->type() != Element::Type::BAR_LINE || element->type() != Element::Type::ARTICULATION)
                                           applyDrop(score, viewer, e, element);
                                     }
+                              if (stop) break;
                               }
+                        if (stop) break;
                         }
                   }
             }
@@ -691,7 +729,9 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
                   if (idx != selectedIdx) {
                         // show voice colors for notes
                         if (el->type() == Element::Type::CHORD) {
-                              el->setSelected(true);
+                              Chord* c = static_cast<Chord*>(el);
+                              for (Note* n : c->notes())
+                                    n->setSelected(true);
                               color = el->curColor();
                               }
                         else
@@ -856,6 +896,9 @@ void Palette::dropEvent(QDropEvent* event)
                               SlurTie* st = static_cast<SlurTie*>(e);
                               st->setTrack(0);
                               }
+//                        else if (e->type() == Element::Type::KEYSIG) {
+//                              KeySig* k = static_cast<KeySig*>(e);
+//                              }
                         }
                   }
             }
@@ -907,10 +950,10 @@ void Palette::dropEvent(QDropEvent* event)
 void Palette::write(Xml& xml) const
       {
       xml.stag(QString("Palette name=\"%1\"").arg(Xml::xmlString(_name)));
-      xml.tag("gridWidth", hgrid);
-      xml.tag("gridHeight", vgrid);
+      xml.tag("gridWidth", hgrid / guiScaling);
+      xml.tag("gridHeight", vgrid / guiScaling);
       if (extraMag != 1.0)
-            xml.tag("mag", extraMag);
+            xml.tag("mag", extraMag / guiScaling);
       if (_drawGrid)
             xml.tag("grid", _drawGrid);
 
@@ -987,8 +1030,10 @@ bool Palette::read(const QString& p)
             path += ".mpal";
 
       MQZipReader f(path);
-      if (!f.exists())
+      if (!f.exists()) {
+            qDebug("palette <%s> not found", qPrintable(path));
             return false;
+            }
       clear();
 
       QByteArray ba = f.fileData("META-INF/container.xml");
@@ -1150,11 +1195,11 @@ void Palette::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& t(e.name());
             if (t == "gridWidth")
-                  hgrid = e.readDouble();
+                  hgrid = e.readDouble() * guiScaling;
             else if (t == "gridHeight")
-                  vgrid = e.readDouble();
+                  vgrid = e.readDouble() * guiScaling;
             else if (t == "mag")
-                  extraMag = e.readDouble();
+                  extraMag = e.readDouble() * guiScaling;
             else if (t == "grid")
                   _drawGrid = e.readInt();
             else if (t == "moreElements")
@@ -1297,12 +1342,12 @@ PaletteProperties::PaletteProperties(Palette* p, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       name->setText(palette->name());
-      cellWidth->setValue(palette->gridWidth());
-      cellHeight->setValue(palette->gridHeight());
+      cellWidth->setValue(palette->gridWidth() / guiScaling);
+      cellHeight->setValue(palette->gridHeight() / guiScaling);
       showGrid->setChecked(palette->drawGrid());
       moreElements->setChecked(palette->moreElements());
       elementOffset->setValue(palette->yOffset());
-      mag->setValue(palette->mag());
+      mag->setValue(palette->mag() / guiScaling);
       }
 
 //---------------------------------------------------------

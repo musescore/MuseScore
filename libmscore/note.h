@@ -82,10 +82,10 @@ class NoteHead : public Symbol {
 
       NoteHead(Score* s) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&) = delete;
-      virtual NoteHead* clone() const    { return new NoteHead(*this); }
-      virtual Element::Type type() const { return Element::Type::NOTEHEAD; }
+      virtual NoteHead* clone() const override    { return new NoteHead(*this); }
+      virtual Element::Type type() const override { return Element::Type::NOTEHEAD; }
 
-      virtual void write(Xml& xml) const;
+      virtual void write(Xml& xml) const override;
 
       Group headGroup() const;
 
@@ -168,7 +168,7 @@ class Note : public Element {
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
       Q_PROPERTY(Ms::Accidental* accidental              READ accidental)
       Q_PROPERTY(Ms::Accidental::Type accidentalType     READ accidentalType   WRITE setAccidentalType)
-      Q_PROPERTY(QQmlListProperty<Ms::NoteDot> dots      READ qmlDots)
+      Q_PROPERTY(int dots      READ qmlDots)
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
       Q_PROPERTY(Ms::Tie* tieBack                        READ tieBack)
       Q_ENUMS(ValueType)
@@ -202,6 +202,9 @@ class Note : public Element {
       bool _small;
       bool _play;             // note is not played if false
       mutable bool _mark;     // for use in sequencer
+      bool _fixed;            // for slash notation
+      int _fixedLine;         // fixed line number if _fixed == true
+
 
       MScore::DirectionH _userMirror;     ///< user override of mirror
       MScore::Direction _userDotPosition; ///< user override of dot position
@@ -213,7 +216,6 @@ class Note : public Element {
       short int _veloOffset; ///< velocity user offset in percent, or absolute velocity for this note
 
       qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
-
 
       Accidental* _accidental;
 
@@ -245,10 +247,10 @@ class Note : public Element {
       ~Note();
 
       Note& operator=(const Note&) = delete;
-      virtual Note* clone() const  { return new Note(*this, false); }
-      Element::Type type() const   { return Element::Type::NOTE; }
+      virtual Note* clone() const override  { return new Note(*this, false); }
+      Element::Type type() const override   { return Element::Type::NOTE; }
 
-      virtual qreal mag() const;
+      virtual qreal mag() const override;
 
       QPointF pagePos() const;      ///< position in page coordinates
       QPointF canvasPos() const;    ///< position in page coordinates
@@ -272,8 +274,8 @@ class Note : public Element {
       void setHeadGroup(NoteHead::Group val);
       void setHeadType(NoteHead::Type t);
 
-      virtual int subtype() const { return (int) _headGroup; }
-      virtual QString subtypeName() const;
+      virtual int subtype() const override { return (int) _headGroup; }
+      virtual QString subtypeName() const override;
 
       void setPitch(int val);
       void undoSetPitch(int val);
@@ -285,6 +287,10 @@ class Note : public Element {
       void setTuning(qreal v)             { _tuning = v;      }
       void undoSetTpc(int v);
       int transposition() const;
+      bool fixed() const                  { return _fixed;     }
+      void setFixed(bool v)               { _fixed = v;        }
+      int fixedLine() const               { return _fixedLine; }
+      void setFixedLine(int v)            { _fixedLine = v;    }
 
       int tpc() const;
       int tpc1() const            { return _tpc[0]; }     // non transposed tpc
@@ -307,7 +313,7 @@ class Note : public Element {
       Accidental::Type accidentalType() const { return _accidental ? _accidental->accidentalType() : Accidental::Type::NONE; }
       void setAccidentalType(Accidental::Type type);
 
-      int line() const                { return _line + _lineOffset;   }
+      int line() const;
       void setLine(int n);
 
       int fret() const                { return _fret;   }
@@ -319,8 +325,8 @@ class Note : public Element {
       bool fretConflict() const       { return _fretConflict; }
       void setFretConflict(bool val)  { _fretConflict = val; }
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
 
       bool mirror() const             { return _mirror;  }
       void setMirror(bool val)        { _mirror = val;   }
@@ -380,10 +386,10 @@ class Note : public Element {
 
       int customizeVelocity(int velo) const;
       NoteDot* dot(int n)                       { return _dots[n];           }
-      QQmlListProperty<Ms::NoteDot> qmlDots();
+      int qmlDots();
       void updateAccidental(AccidentalState*);
       void updateLine();
-      void setNval(const NoteVal&);
+      void setNval(const NoteVal&, int tick = -1);
       NoteEventList& playEvents()                { return _playEvents; }
       const NoteEventList& playEvents() const    { return _playEvents; }
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
@@ -415,13 +421,13 @@ class Note : public Element {
       void undoSetHeadGroup(NoteHead::Group);
       void undoSetHeadType(NoteHead::Type);
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }
-      virtual void setScore(Score* s);
+      virtual void setScore(Score* s) override;
       void setDotY(MScore::Direction);
 
       void addBracket();

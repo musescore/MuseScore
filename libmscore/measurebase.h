@@ -67,7 +67,7 @@ class MeasureBase : public Element {
       ~MeasureBase();
       MeasureBase(const MeasureBase&);
       virtual MeasureBase* clone() const = 0;
-      virtual void setScore(Score* s);
+      virtual void setScore(Score* s) override;
 
       MeasureBase* next() const              { return _next;   }
       MeasureBase* nextMM() const;

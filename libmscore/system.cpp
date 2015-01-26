@@ -400,9 +400,8 @@ void System::layout2()
       if (_barLine) {
             _barLine->setTrack(firstStaffIdx * VOICES);
             _barLine->setSpan(lastStaffIdx - firstStaffIdx + 1);
-            if (score()->staff(0)->lines() == 1)
+            if (score()->staff(firstStaffIdx)->lines() == 1)
                   _barLine->setSpanFrom(BARLINE_SPAN_1LINESTAFF_FROM);
-
             int spanTo = (score()->staff(lastStaffIdx)->lines() == 1) ?
                               BARLINE_SPAN_1LINESTAFF_TO :
                               (score()->staff(lastStaffIdx)->lines()-1)*2;
@@ -658,6 +657,7 @@ void System::add(Element* el)
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
+            case Element::Type::LYRICSLINE_SEGMENT:
                   {
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
 #ifndef NDEBUG
@@ -714,6 +714,7 @@ void System::remove(Element* el)
             case Element::Type::VOLTA_SEGMENT:
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
+            case Element::Type::LYRICSLINE_SEGMENT:
                   if (!_spannerSegments.removeOne(static_cast<SpannerSegment*>(el))) {
                         qDebug("System::remove: %p(%s) not found, score %p", el, el->name(), score());
                         Q_ASSERT(score() == el->score());
@@ -833,6 +834,8 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 //   searchNextLyrics
 //---------------------------------------------------------
 
+/* Lyrics line segments are now Spanner's belonging to System's: System already takes care of them
+
 static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse)
       {
       Lyrics* l = 0;
@@ -887,7 +890,8 @@ void System::layoutLyrics(Lyrics* l, Segment* s, int staffIdx)
             int sysIdx1 = systems->indexOf(s1);
             int sysIdx2 = systems->indexOf(s2);
 
-            qreal  x1 = l->bbox().right();      // lyrics width
+            qreal x1 = l->bbox().right();       // lyrics width
+            x1 += 0.2 * _spatium;               // padding
             QPointF p1(x1, 0);                  // melisma y is at base line
 
             int segIdx = 0;
@@ -993,7 +997,10 @@ qDebug("Lyrics: melisma end segment not implemented");
             }
 
       qreal gap = x2 - x1;
-      len       = gap;
+      // leave 0.1sp padding on each side
+      // space for this is allocated in layoutX() and computeMinWidth(),
+      // so that hyphens are not shortened too much
+      len       = gap - 0.2 * _spatium * lmag * staffMag;
       if (len > maxl)
             len = maxl;
       qreal xo = (gap - len) * .5;
@@ -1003,7 +1010,7 @@ qDebug("Lyrics: melisma end segment not implemented");
       line->setLen(Spatium(len / _spatium));
       line->layout();
       }
-
+*/
 //---------------------------------------------------------
 //   scanElements
 //    collect all visible elements
@@ -1054,7 +1061,7 @@ void System::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         }
                   v = v1 || v2; // hide spanner if both chords are hidden
                   }
-            if (all || (score()->staff(staffIdx)->show() && v) || (spanner->type() == Element::Type::VOLTA))
+            if (all || (score()->staff(staffIdx)->show() && _staves[staffIdx]->show() && v) || (spanner->type() == Element::Type::VOLTA))
                   ss->scanElements(data, func, all);
             }
       }

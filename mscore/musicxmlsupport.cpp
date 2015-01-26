@@ -24,6 +24,7 @@
 
 #include "globals.h"
 #include "musicxmlsupport.h"
+#include "libmscore/sym.h"
 
 namespace Ms {
 
@@ -135,7 +136,11 @@ bool VoiceOverlapDetector::stavesOverlap(const QString& voice) const
 
 QString MusicXMLDrumInstrument::toString() const
       {
-      return QString("pitch %1 name %2 notehead %3 line %4 stemDirection %5")
+      return QString("chan %1 prog %2 vol %3 pan %4 pitch %5 name %6 head %7 line %8 stemDir %9")
+             .arg(midiChannel)
+             .arg(midiProgram)
+             .arg(midiVolume)
+             .arg(midiPan)
              .arg(pitch)
              .arg(name)
              .arg(int(notehead))
@@ -360,5 +365,177 @@ Fraction MxmlSupport::calculateFraction(QString type, int dots, int normalNotes,
             }
       return f;
       }
-}
 
+//---------------------------------------------------------
+//   accSymId2MxmlString
+//---------------------------------------------------------
+
+QString accSymId2MxmlString(const SymId id)
+      {
+      QString s;
+      switch (id) {
+            case SymId::accidentalNatural:               s = "natural";              break;
+            case SymId::accidentalFlat:                  s = "flat";                 break;
+            case SymId::accidentalSharp:                 s = "sharp";                break;
+            case SymId::accidentalDoubleSharp:           s = "double-sharp";         break;
+            case SymId::accidentalDoubleFlat:            s = "flat-flat";            break;
+            case SymId::accidentalQuarterToneFlatStein:  s = "quarter-flat";         break;
+            case SymId::accidentalQuarterToneSharpStein: s = "quarter-sharp";        break;
+            case SymId::accidentalKucukMucennebSharp:    s = "slash-quarter-sharp";  break;
+            case SymId::accidentalBuyukMucennebSharp:    s = "slash-sharp";          break;
+            case SymId::accidentalBakiyeFlat:            s = "slash-flat";           break;
+            case SymId::accidentalBuyukMucennebFlat:     s = "double-slash-flat";    break;
+                  /* TODO
+            case Accidental::Type::FLAT_ARROW_UP:      s = "flat-up";              break;
+            case Accidental::Type::NATURAL_ARROW_DOWN: s = "natural-down";         break;
+            case Accidental::Type::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
+            case Accidental::Type::NATURAL_ARROW_UP:   s = "natural-up";           break;
+            case Accidental::Type::MIRRORED_FLAT2:     s = "three-quarters-flat";  break;
+            case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
+            case Accidental::Type::FLAT_ARROW_DOWN:    s = "flat-down";            break;
+            case Accidental::Type::SHARP_SLASH4:       s = "three-quarters-sharp"; break;
+            case Accidental::Type::SHARP_ARROW_UP:     s = "sharp-up";             break;
+            case Accidental::Type::SORI:               s = "sori";                 break;
+            case Accidental::Type::KORON:              s = "koron";                break;
+                   */
+            default:
+                  qDebug("accSymId2MxmlString: unknown accidental %d", static_cast<int>(id));
+            }
+      return s;
+      }
+      
+//---------------------------------------------------------
+//   mxmlString2accSymId
+//---------------------------------------------------------
+
+SymId mxmlString2accSymId(const QString mxmlName)
+      {
+      QMap<QString, SymId> map; // map MusicXML accidental name to MuseScore enum SymId
+      map["natural"] = SymId::accidentalDoubleSharp;
+      map["flat"] = SymId::accidentalFlat;
+      map["sharp"] = SymId::accidentalSharp;
+      map["double-sharp"] = SymId::accidentalDoubleSharp;
+      map["sharp-sharp"] = SymId::accidentalDoubleSharp;
+      map["flat-flat"] = SymId::accidentalDoubleFlat;
+
+      //map["double-flat"] = SymId::accidentalDoubleFlat;
+      //map["natural-flat"] = Accidental::Type::FLAT;
+      
+      map["quarter-flat"] = SymId::accidentalQuarterToneFlatStein;
+      map["quarter-sharp"] = SymId::accidentalQuarterToneSharpStein;
+      //map["three-quarters-flat"] = Accidental::Type::MIRRORED_FLAT2;
+      //map["three-quarters-sharp"] = Accidental::Type::SHARP_SLASH4;
+      
+      //map["sharp-down"] = Accidental::Type::SHARP_ARROW_DOWN;
+      //map["sharp-up"] = Accidental::Type::SHARP_ARROW_UP;
+      //map["natural-down"] = Accidental::Type::NATURAL_ARROW_DOWN;
+      //map["natural-up"] = Accidental::Type::NATURAL_ARROW_UP;
+      //map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
+      //map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
+      
+      map["slash-quarter-sharp"] = SymId::accidentalKucukMucennebSharp;
+      map["slash-sharp"] = SymId::accidentalBuyukMucennebSharp;
+      map["slash-flat"] = SymId::accidentalBakiyeFlat;
+      map["double-slash-flat"] = SymId::accidentalBuyukMucennebFlat;
+      
+      //map["sori"] = Accidental::Type::SORI;
+      //map["koron"] = Accidental::Type::KORON;
+      
+      //map["natural-sharp"] = Accidental::Type::SHARP;
+      
+      if (map.contains(mxmlName))
+            return map.value(mxmlName);
+      else
+            qDebug("mxmlString2accSymId: unknown accidental '%s'", qPrintable(mxmlName));
+
+      // default
+      return SymId::noSym;
+      }
+
+//---------------------------------------------------------
+//   accidentalType2MxmlString
+//---------------------------------------------------------
+      
+QString accidentalType2MxmlString(const Accidental::Type type)
+      {
+      QString s;
+      switch (type) {
+            case Accidental::Type::SHARP:              s = "sharp";                break;
+            case Accidental::Type::FLAT:               s = "flat";                 break;
+            case Accidental::Type::SHARP2:             s = "double-sharp";         break;
+            case Accidental::Type::FLAT2:              s = "flat-flat";            break;
+            case Accidental::Type::NATURAL:            s = "natural";              break;
+            case Accidental::Type::FLAT_SLASH:         s = "slash-flat";           break;
+            case Accidental::Type::MIRRORED_FLAT:      s = "quarter-flat";         break;
+            case Accidental::Type::FLAT_ARROW_UP:      s = "flat-up";              break;
+            case Accidental::Type::NATURAL_ARROW_DOWN: s = "natural-down";         break;
+            case Accidental::Type::SHARP_SLASH:        s = "quarter-sharp";        break;
+            case Accidental::Type::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
+            case Accidental::Type::NATURAL_ARROW_UP:   s = "natural-up";           break;
+            case Accidental::Type::MIRRORED_FLAT2:     s = "three-quarters-flat";  break;
+            case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
+            case Accidental::Type::FLAT_ARROW_DOWN:    s = "flat-down";            break;
+            case Accidental::Type::SHARP_SLASH4:       s = "three-quarters-sharp"; break;
+            case Accidental::Type::SHARP_ARROW_UP:     s = "sharp-up";             break;
+            case Accidental::Type::SHARP_SLASH3:       s = "slash-quarter-sharp";  break;
+            case Accidental::Type::FLAT_SLASH2:        s = "double-slash-flat";    break;
+            case Accidental::Type::SHARP_SLASH2:       s = "slash-sharp";          break;
+            case Accidental::Type::SORI:               s = "sori";                 break;
+            case Accidental::Type::KORON:              s = "koron";                break;
+            default:
+                  qDebug("accidentalType2MxmlString: unknown accidental %d", static_cast<int>(type));
+            }
+      return s;
+      }
+      
+//---------------------------------------------------------
+//   mxmlString2accidentalType
+//---------------------------------------------------------
+
+/**
+ Convert a MusicXML accidental name to a MuseScore enum Accidental::Type.
+ */
+
+Accidental::Type mxmlString2accidentalType(const QString mxmlName)
+      {
+      QMap<QString, Accidental::Type> map; // map MusicXML accidental name to MuseScore enum Accidental::Type
+      map["natural"] = Accidental::Type::NATURAL;
+      map["flat"] = Accidental::Type::FLAT;
+      map["sharp"] = Accidental::Type::SHARP;
+      map["double-sharp"] = Accidental::Type::SHARP2;
+      map["sharp-sharp"] = Accidental::Type::SHARP2;
+      map["flat-flat"] = Accidental::Type::FLAT2;
+      map["double-flat"] = Accidental::Type::FLAT2;
+      map["natural-flat"] = Accidental::Type::FLAT;
+      
+      map["quarter-flat"] = Accidental::Type::MIRRORED_FLAT;
+      map["quarter-sharp"] = Accidental::Type::SHARP_SLASH;
+      map["three-quarters-flat"] = Accidental::Type::MIRRORED_FLAT2;
+      map["three-quarters-sharp"] = Accidental::Type::SHARP_SLASH4;
+      
+      map["sharp-down"] = Accidental::Type::SHARP_ARROW_DOWN;
+      map["sharp-up"] = Accidental::Type::SHARP_ARROW_UP;
+      map["natural-down"] = Accidental::Type::NATURAL_ARROW_DOWN;
+      map["natural-up"] = Accidental::Type::NATURAL_ARROW_UP;
+      map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
+      map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
+      
+      map["slash-quarter-sharp"] = Accidental::Type::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
+      map["slash-sharp"] = Accidental::Type::SHARP_SLASH2; // SHARP_SLASH; ?
+      map["slash-flat"] = Accidental::Type::FLAT_SLASH;
+      map["double-slash-flat"] = Accidental::Type::FLAT_SLASH2;
+      
+      map["sori"] = Accidental::Type::SORI;
+      map["koron"] = Accidental::Type::KORON;
+      
+      map["natural-sharp"] = Accidental::Type::SHARP;
+      
+      if (map.contains(mxmlName))
+            return map.value(mxmlName);
+      else
+            qDebug("mxmlString2accidentalType: unknown accidental '%s'", qPrintable(mxmlName));
+      // default: return Accidental::Type::NONE
+      return Accidental::Type::NONE;
+      }
+
+}

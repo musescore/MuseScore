@@ -168,6 +168,7 @@ class InspectorTimeSig : public InspectorBase {
 
    public:
       InspectorTimeSig(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -183,6 +184,7 @@ class InspectorKeySig : public InspectorBase {
 
    public:
       InspectorKeySig(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -338,6 +340,7 @@ class InspectorEmpty : public InspectorBase {
 
    public:
       InspectorEmpty(QWidget* parent);
+      virtual QSize sizeHint() const;
       };
 
 } // namespace Ms

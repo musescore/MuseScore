@@ -222,7 +222,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   // Find maximum width for the current KeySignature
                   //
                   KeySig* newKs = new KeySig(_score);
-                  KeySigEvent currentKeySigEvent = currentStaff->key(_currentMeasureTick);
+                  KeySigEvent currentKeySigEvent = currentStaff->keySigEvent(_currentMeasureTick);
                   newKs->setKeySigEvent(currentKeySigEvent);
                   // The Parent and the Track must be set to have the key signature layout adjusted to different clefs
                   // This also adds naturals to the key signature (if set in the score style)
@@ -353,7 +353,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
 
            if (e->type() == Element::Type::STAFF_LINES) {
                   Staff* currentStaff = _score->staff(e->staffIdx());
-                  Segment* parent = _score->tick2segment(_currentMeasureTick);
+                  Segment* parent = _score->tick2segmentMM(_currentMeasureTick);
 
                   //
                   // Get barline height (used to center instrument name
@@ -436,7 +436,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   // Draw the current KeySignature
                   //
                   KeySig* newKs = new KeySig(_score);
-                  KeySigEvent currentKeySigEvent = currentStaff->key(_currentMeasureTick);
+                  KeySigEvent currentKeySigEvent = currentStaff->keySigEvent(_currentMeasureTick);
                   newKs->setKeySigEvent(currentKeySigEvent);
 
                   // The Parent and the track must be set to have the key signature layout adjusted to different clefs

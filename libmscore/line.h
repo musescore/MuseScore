@@ -24,8 +24,6 @@ class SLine;
 class System;
 class MuseScoreView;
 
-enum class GripLine : char { START, MIDDLE, END, APERTURE };
-
 //---------------------------------------------------------
 //   LineStyle
 //---------------------------------------------------------
@@ -54,16 +52,16 @@ class LineSegment : public SpannerSegment {
    protected:
       virtual bool isEditable() const override { return true; }
       virtual void editDrag(const EditData&) override;
-      virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s) override;
-      virtual void updateGrips(int*, int*, QRectF*) const override;
-      virtual void setGrip(int grip, const QPointF& p) override;
-      virtual QPointF getGrip(int) const override;
-      virtual QPointF gripAnchor(int) const override;
+      virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString& s) override;
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
+      virtual int grips() const override              { return 3; }
+      virtual void setGrip(Grip, const QPointF& p) override;
+      virtual QPointF getGrip(Grip) const override;
+      virtual QPointF gripAnchor(Grip) const override;
 
    public:
       LineSegment(Score* s) : SpannerSegment(s) {}
       LineSegment(const LineSegment&);
-      virtual LineSegment* clone() const = 0;
       virtual void draw(QPainter*) const = 0;
       SLine* line() const                         { return (SLine*)spanner(); }
       virtual void spatiumChanged(qreal, qreal) override;
@@ -92,7 +90,7 @@ class SLine : public Spanner {
       bool _diagonal;
 
    protected:
-      virtual QPointF linePos(GripLine grip, System** system) const;
+      virtual QPointF linePos(Grip, System** system) const;
 
    public:
       SLine(Score* s);

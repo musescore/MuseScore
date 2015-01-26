@@ -99,8 +99,10 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
       _space        = cr._space;
 
       for (Lyrics* l : cr._lyricsList) {        // make deep copy
-            if (l == 0)
+            if (l == 0) {
+                  _lyricsList.append(0);
                   continue;
+                  }
             Lyrics* nl = new Lyrics(*l);
             if (link)
                   nl->linkTo(l);
@@ -119,8 +121,10 @@ void ChordRest::undoUnlink()
       DurationElement::undoUnlink();
       for (Articulation* a : _articulations)
             a->undoUnlink();
-      for (Lyrics* l : _lyricsList)
-            l->undoUnlink();
+      for (Lyrics* l : _lyricsList) {
+            if (l)
+                  l->undoUnlink();
+            }
       }
 
 //---------------------------------------------------------
@@ -602,7 +606,9 @@ void ChordRest::layoutArticulations()
                         y          = chordTopY + stem->stemLen();
                         if (chord->beam())
                               y += score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
-                        x          = stem->pos().x();
+                        // aligning horizontally to stem makes sense only for staccato
+                        // and only if no other articulations on this side
+                        //x = stem->pos().x();
                         int line   = lrint((y+0.5*_spatium) / _spatium);
                         if (line <= 4)    // align between staff lines
                               y = line * _spatium + _spatium * .5;
@@ -626,7 +632,9 @@ void ChordRest::layoutArticulations()
                         y          = chordBotY + stem->stemLen();
                         if (chord->beam())
                               y -= score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
-                        x          = stem->pos().x();
+                        // aligning horizontally to stem makes sense only for staccato
+                        // and only if no other articulations on this side
+                        //x = stem->pos().x();
                         int line   = lrint((y-0.5*_spatium) / _spatium);
                         if (line >= 0)    // align between staff lines
                               y = line * _spatium - _spatium * .5;
@@ -783,11 +791,24 @@ Element* ChordRest::drop(const DropData& data)
                   if (tick() == m->tick())
                         return m->drop(data);
 
-                  Segment* seg = m->undoGetSegment(Segment::Type::BarLine, tick());
-                  bl->setParent(seg);
-                  score()->undoAddElement(bl);
+                  BarLine* obl = 0;
+                  for (Staff* st  : staff()->staffList()) {
+                        Score* score = st->score();
+                        Measure* measure = score->tick2measure(m->tick());
+                        Segment* seg = measure->undoGetSegment(Segment::Type::BarLine, tick());
+                        BarLine* l;
+                        if (obl == 0)
+                              obl = l = bl->clone();
+                        else
+                              l = static_cast<BarLine*>(obl->linkedClone());
+                        l->setTrack(st->idx() * VOICES);
+                        l->setScore(score);
+                        l->setParent(seg);
+                        score->undoAddElement(l);
+                        }
                   }
-                  return e;
+                  delete e;
+                  return 0;
 
             case Element::Type::CLEF:
                   score()->cmdInsertClef(static_cast<Clef*>(e), this);
@@ -849,6 +870,8 @@ Element* ChordRest::drop(const DropData& data)
                   TextStyleType st = f->textStyleType();
                   if (st >= TextStyleType::DEFAULT)
                         f->setTextStyleType(st);
+                  if (e->type() == Element::Type::REHEARSAL_MARK)
+                        f->setText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
                   }
                   score()->undoAddElement(e);
                   return e;
@@ -980,19 +1003,23 @@ QString ChordRest::durationUserName()
                   }
             }
       QString dotString = "";
+      if(!tupletType.isEmpty())
+          dotString += " ";
 
       switch (dots()) {
             case 1:
-                  dotString += " " + tr("Dotted");
+                  dotString += tr("Dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             case 2:
-                  dotString += " " + tr("Double dotted");
+                  dotString += tr("Double dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
             case 3:
-                  dotString += " " + tr("Triple dotted");
+                  dotString += tr("Triple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
                   break;
+            default:
+                  dotString += durationType().durationTypeUserName();
             }
-      return QString("%2%3 %4").arg(tupletType).arg(dotString).arg(durationType().durationTypeUserName()).trimmed();
+      return QString("%1%2").arg(tupletType).arg(dotString);
       }
 
 //---------------------------------------------------------
@@ -1091,6 +1118,7 @@ void ChordRest::remove(Element* e)
                   for (int i = 0; i < _lyricsList.size(); ++i) {
                         if (_lyricsList[i] != e)
                               continue;
+                        _lyricsList[i]->removeFromScore();
                         _lyricsList[i] = 0;
                         while (!_lyricsList.isEmpty() && _lyricsList.back() == 0)
                               _lyricsList.takeLast();

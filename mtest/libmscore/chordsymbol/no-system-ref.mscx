@@ -272,6 +272,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <metaTag name="partName">Flute</metaTag>
       <PageList>
         <Page>
           <System>
@@ -410,6 +411,7 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
+      <metaTag name="partName">Alto Saxophone</metaTag>
       <PageList>
         <Page>
           <System>

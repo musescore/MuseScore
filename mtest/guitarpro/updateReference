@@ -16,6 +16,7 @@ cp   $MSCORE/ghost_note.gp3.mscx ghost_note.gp3-ref.mscx
 cp   $MSCORE/volta.gp5.mscx volta.gp5-ref.mscx
 cp   $MSCORE/volta.gp4.mscx volta.gp4-ref.mscx
 cp   $MSCORE/volta.gp3.mscx volta.gp3-ref.mscx
+cp   $MSCORE/copyright.gpx.mscx copyright.gpx-ref.mscx
 cp   $MSCORE/copyright.gp5.mscx copyright.gp5-ref.mscx
 cp   $MSCORE/copyright.gp4.mscx copyright.gp4-ref.mscx
 cp   $MSCORE/copyright.gp3.mscx copyright.gp3-ref.mscx
@@ -105,5 +106,5 @@ cp   $MSCORE/volume-swell.gpx.mscx volume-swell.gpx-ref.mscx
 cp   $MSCORE/tremolo-bar.gpx.mscx tremolo-bar.gpx-ref.mscx
 cp   $MSCORE/free-time.gpx.mscx free-time.gpx-ref.mscx
 cp   $MSCORE/repeated-bars.gpx.mscx repeated-bars.gpx-ref.mscx
-cp   $MSCORE/dotted-gliss.gp3.mscx doted-gliss-ref.mscx
+cp   $MSCORE/dotted-gliss.gp3.mscx dotted-gliss.gp3-ref.mscx
 cp   $MSCORE/high-pitch.gp3.mscx high-pitch.gp3-ref.mscx

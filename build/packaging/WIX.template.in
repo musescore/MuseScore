@@ -3,17 +3,19 @@
 <?include "cpack_variables.wxi"?>
 
 <?define ShortVersion="$(var.CPACK_PACKAGE_VERSION)" ?>
-<?define ProdName="$(var.CPACK_PACKAGE_NAME) 2" ?>
-<?define ShortProdName="$(var.CPACK_PACKAGE_NAME)2" ?>
-<?define ExeId="CM_FP_bin.mscore.exe" ?>
+<?define VShortVersion="2" ?>
+<?define ProdName="$(var.CPACK_PACKAGE_NAME) $(var.VShortVersion)" ?>
+<?define ShortProdName="$(var.CPACK_PACKAGE_NAME)$(var.VShortVersion)" ?>
+<?define ExeName="$(var.CPACK_PACKAGE_NAME).exe" ?>
+<?define ExeKey="$(var.ShortProdName).exe" ?>
+<?define ExeId="CM_FP_bin.$(var.CPACK_PACKAGE_NAME).exe" ?>
 <?define RegistryRoot="HKMU" ?> <!--HKCU / HKLM-->
-
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
     RequiredVersion="3.6.3303.0">
 
     <Product Id="$(var.CPACK_WIX_PRODUCT_GUID)"
-        Name="$(var.CPACK_PACKAGE_NAME)"
+        Name="$(var.ProdName)"
         Language="1033"
         Version="$(var.CPACK_PACKAGE_VERSION)"
         Manufacturer="$(var.CPACK_PACKAGE_VENDOR)"
@@ -42,8 +44,11 @@
         <?ifdef CPACK_WIX_UI_DIALOG?>
         <WixVariable Id="WixUIDialogBmp" Value="$(var.CPACK_WIX_UI_DIALOG)"/>
         <?endif?>
+        
+        <Property Id='ARPCONTACT'>http://musescore.org</Property>
+        <Property Id='ARPHELPLINK'>http://musescore.org</Property>
+        <Property Id='ARPURLINFOABOUT'>http://musescore.org</Property>
 
-    
         <!-- Add to checkbox to launch program after install ²-->
         <UI>
             <UIRef Id='WixUI_InstallDir'/>
@@ -52,9 +57,9 @@
                 Event="DoAction" 
                 Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
         </UI>
-        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch MuseScore"/>
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.ProdName)"/>
         <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1"/>
-        <Property Id="WixShellExecTarget" Value="[#CM_FP_bin.mscore.exe]" />
+        <Property Id="WixShellExecTarget" Value="[#CM_FP_bin.$(var.CPACK_PACKAGE_NAME).exe]" />
         <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
 
 
@@ -63,9 +68,9 @@
             <!-- File association-->
             <!-- Capabilities keys for Vista/7 "Set Program Access and Defaults" -->
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities" Name="ApplicationDescription" Value="$(var.ProdName)" Type="string" KeyPath="yes"/>
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities" Name="ApplicationIcon" Value="[INSTALL_ROOT]bin\mscore.exe,0" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities" Name="ApplicationIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),0" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities" Name="ApplicationName" Value="$(var.ProdName)" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\DefaultIcon" Value="[INSTALL_ROOT]bin\mscore.exe,1" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\DefaultIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),1" Type="string" />
             
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscz" Value="MuseScore.mscz" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscx" Value="MuseScore.mscx" Type="string" />
@@ -74,35 +79,37 @@
             
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\MIMEAssociations" Name="application/x-musescore" Value="MuseScore.mscz" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\MIMEAssociations" Name="application/x-musescore+xml" Value="MuseScore.mscx" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\shell\open\command" Value="&quot;[INSTALL_ROOT]bin\mscore.exe&quot; &quot;%1&quot;" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\RegisteredApplications" Name="$(var.ProdName)" Value="SOFTWARE\$(var.ShortProdName)\Capabilities" Type="string" />
 
             <!-- App Paths to support Start,Run -> "myapp" -->
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mscore2.exe" Value="[INSTALL_ROOT]bin\mscore.exe" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mscore2.exe" Name="Path" Value="[INSTALL_ROOT]bin" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.ExeKey)" Value="[INSTALL_ROOT]bin\$(var.ExeName)" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.ExeKey)" Name="Path" Value="[INSTALL_ROOT]bin" Type="string" />
 
             <!-- Extend to the "open with" list + Win7 jump menu pinning  -->
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".mscz" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".mscx" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".mxl" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".xml" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".cap" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".bww" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".mid" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".midi" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".kar" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".ove" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".sgu" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".mgu" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".md" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".gp3" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".gp4" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".gp5" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\SupportedTypes" Name=".gpx" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mscz" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mscx" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mxl" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".xml" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".cap" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".bww" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mid" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".midi" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".kar" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".ove" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".sgu" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mgu" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".md" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gp3" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gp4" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gp5" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gpx" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".sf2" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".sf3" Value="" Type="string" />
             
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe" Name="FriendlyAppName" Value="$(var.ProdName)" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\shell\open" Name="FriendlyAppName" Value="$(var.ProdName)" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\mscore2.exe\shell\open\command" Value="&quot;[INSTALL_ROOT]bin\mscore.exe&quot; &quot;%1&quot;" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)" Name="FriendlyAppName" Value="$(var.ProdName)" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\shell\open" Name="FriendlyAppName" Value="$(var.ProdName)" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
 
             <!-- MyApp.Document ProgIDs -->
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscz" Value="Compressed MuseScore File" Type="string"/>

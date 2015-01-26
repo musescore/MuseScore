@@ -81,6 +81,8 @@ class TimeSig : public Element {
 
       TimeSigType timeSigType() const    { return _timeSigType; }
 
+      bool operator==(const TimeSig&) const;
+
       virtual qreal mag() const override;
       void draw(QPainter*) const;
       void write(Xml& xml) const;
@@ -124,6 +126,9 @@ class TimeSig : public Element {
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant&);
       QVariant propertyDefault(P_ID id) const;
+
+      bool hasCustomText() const { return customText; }
+
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 
       void setNeedLayout(bool nl) { _needLayout = nl; }

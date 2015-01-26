@@ -20,7 +20,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1403170689
-ModificationTime: 1413789183
+ModificationTime: 1416931484
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
@@ -63,7 +63,7 @@ NameList: Adobe Glyph List
 DisplaySize: -72
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 59640 10 8
+WinInfo: 57930 10 8
 BeginPrivate: 7
 BlueValues 21 [0 0 256 257 478 478]
 OtherBlues 11 [-141 -141]
@@ -73,7 +73,7 @@ StdVW 4 [38]
 StemSnapH 26 [24 30 34 40 44 55 80 102]
 StemSnapV 20 [32 38 44 50 59 100]
 EndPrivate
-BeginChars: 65539 282
+BeginChars: 65539 284
 
 StartChar: .notdef
 Encoding: 65536 -1 0
@@ -2768,26 +2768,24 @@ EndChar
 
 StartChar: uniE11D
 Encoding: 57629 57629 57
-Width: 152
+Width: 116
 GlyphClass: 2
 Flags: W
-VStem: 102 52<-126.266 128.29>
+VStem: 64 52<-126.266 128.29>
 LayerCount: 2
 Fore
-Refer: 27 57507 N 1 0 0 1 0 0 2
-Validated: 1
+Refer: 27 57507 N 1 0 0 1 -38 0 2
 EndChar
 
 StartChar: uniE11E
 Encoding: 57630 57630 58
-Width: 0
+Width: 116
 GlyphClass: 2
 Flags: W
-VStem: -154 52<-126.266 128.29>
+VStem: 0 52<-126.266 128.29>
 LayerCount: 2
 Fore
-Refer: 26 57506 N 1 0 0 1 -180 0 2
-Validated: 1
+Refer: 26 57506 N 1 0 0 1 -26 0 2
 EndChar
 
 StartChar: uniE11F
@@ -12934,6 +12932,28 @@ SplineSet
  66 228 84 241 107 252 c 0
  129 263 153 268 179 268 c 0
 EndSplineSet
+Validated: 1
+EndChar
+
+StartChar: uniE26A
+Encoding: 57962 57962 282
+Width: 116
+Flags: W
+VStem: 0 52<-126.266 128.29>
+LayerCount: 2
+Fore
+Refer: 26 57506 N 1 0 0 1 -26 0 2
+Validated: 1
+EndChar
+
+StartChar: uniE26B
+Encoding: 57963 57963 283
+Width: 116
+Flags: W
+VStem: 64 52<-126.266 128.29>
+LayerCount: 2
+Fore
+Refer: 27 57507 N 1 0 0 1 -38 0 2
 Validated: 1
 EndChar
 EndChars

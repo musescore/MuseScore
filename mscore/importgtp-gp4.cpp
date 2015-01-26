@@ -194,6 +194,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             qDebug("          Time independend note len, len %d t %d", a, b);
             }
       if (noteBits & 0x2) {               // note is dotted
+            //readUChar();
             }
 
       // set dynamic information on note if different from previous note

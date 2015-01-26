@@ -46,6 +46,8 @@ enum class P_ID : unsigned char {
       TPC2,
 
       LINE,
+      FIXED,
+      FIXED_LINE,
       HEAD_TYPE,
       HEAD_GROUP,
       VELO_TYPE,
@@ -53,9 +55,9 @@ enum class P_ID : unsigned char {
       ARTICULATION_ANCHOR,
       DIRECTION,
       STEM_DIRECTION,
+
       NO_STEM,
       SLUR_DIRECTION,
-
       LEADING_SPACE,
       TRAILING_SPACE,
       DISTRIBUTE,
@@ -64,9 +66,9 @@ enum class P_ID : unsigned char {
       TUNING,
       PAUSE,
       BARLINE_SPAN,
+
       BARLINE_SPAN_FROM,
       BARLINE_SPAN_TO,
-
       USER_OFF,
       FRET,
       STRING,
@@ -75,9 +77,9 @@ enum class P_ID : unsigned char {
       TIMESIG_NOMINAL,
       TIMESIG_ACTUAL,
       NUMBER_TYPE,
+
       BRACKET_TYPE,
       NORMAL_NOTES,
-
       ACTUAL_NOTES,
       P1,
       P2,
@@ -86,9 +88,9 @@ enum class P_ID : unsigned char {
       BOX_HEIGHT,
       BOX_WIDTH,
       TOP_GAP,
+
       BOTTOM_GAP,
       LEFT_MARGIN,
-
       RIGHT_MARGIN,
       TOP_MARGIN,
       BOTTOM_MARGIN,
@@ -97,9 +99,9 @@ enum class P_ID : unsigned char {
       SIZE,
       SCALE,
       LOCK_ASPECT_RATIO,
+
       SIZE_IS_SPATIUM,
       TEXT_STYLE,
-
       TEXT_STYLE_TYPE,
       TEXT,
       HTML_TEXT,
@@ -108,9 +110,9 @@ enum class P_ID : unsigned char {
       BEAM_MODE,
       BEAM_NO_SLOPE,
       USER_LEN,       // used for stems
+
       SPACE,          // used for spacer
       TEMPO,
-
       TEMPO_FOLLOW_TEXT,
       ACCIDENTAL_BRACKET,
       NUMERATOR_STRING,
@@ -119,9 +121,9 @@ enum class P_ID : unsigned char {
       FBPREFIX,             // used for FiguredBassItem
       FBDIGIT,              //    "           "
       FBSUFFIX,             //    "           "
+
       FBCONTINUATIONLINE,   //    "           "
       FBPARENTHESIS1,       //    "           "
-
       FBPARENTHESIS2,       //    "           "
       FBPARENTHESIS3,       //    "           "
       FBPARENTHESIS4,       //    "           "
@@ -130,9 +132,9 @@ enum class P_ID : unsigned char {
       OTTAVA_TYPE,
       NUMBERS_ONLY,
       TRILL_TYPE,
+
       HAIRPIN_CIRCLEDTIP,
       HAIRPIN_TYPE,
-
       HAIRPIN_HEIGHT,
       HAIRPIN_CONT_HEIGHT,
       VELO_CHANGE,
@@ -141,9 +143,9 @@ enum class P_ID : unsigned char {
       VELOCITY,
       JUMP_TO,
       PLAY_UNTIL,
+
       CONTINUE_AT,
       LABEL,
-
       MARKER_TYPE,
       ARP_USER_LEN1,
       ARP_USER_LEN2,
@@ -152,9 +154,9 @@ enum class P_ID : unsigned char {
       END_BARLINE_VISIBLE,
       END_BARLINE_COLOR,
       MEASURE_NUMBER_MODE,
+
       GLISS_TYPE,
       GLISS_TEXT,
-
       GLISS_SHOW_TEXT,
       DIAGONAL,
       GROUPS,
@@ -163,9 +165,9 @@ enum class P_ID : unsigned char {
       LINE_WIDTH,
       LASSO_POS,
       LASSO_SIZE,
+
       TIME_STRETCH,
       TIMESIG,
-
       TIMESIG_GLOBAL,
       TIMESIG_TYPE,
       SPANNER_TICK,
@@ -174,10 +176,10 @@ enum class P_ID : unsigned char {
       USER_OFF2,
       BEGIN_TEXT_PLACE,
       CONTINUE_TEXT_PLACE,
+
       END_TEXT_PLACE,
       BEGIN_HOOK,
       END_HOOK,
-
       BEGIN_HOOK_HEIGHT,
       END_HOOK_HEIGHT,
       BEGIN_HOOK_TYPE,
@@ -185,29 +187,29 @@ enum class P_ID : unsigned char {
       BEGIN_TEXT,
       CONTINUE_TEXT,
       END_TEXT,
+
       BEGIN_TEXT_STYLE,
       CONTINUE_TEXT_STYLE,
       END_TEXT_STYLE,
-
       BREAK_MMR,
       REPEAT_COUNT,
       USER_STRETCH,
       NO_OFFSET,
       IRREGULAR,
-
       ANCHOR,
-
       SLUR_UOFF1,
+
       SLUR_UOFF2,
       SLUR_UOFF3,
       SLUR_UOFF4,
-
       STAFF_MOVE,
       SYLLABIC,
       LYRIC_TICKS,
-
       VOLTA_ENDING,
       LINE_VISIBLE,
+      SYSTEM_INITIAL_BARLINE_TYPE,
+
+      MAG,
 
       END
       };

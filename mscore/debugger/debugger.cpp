@@ -280,6 +280,8 @@ static void addChord(ElementItem* sei, Chord* chord)
             new ElementItem(sei, chord->hook());
       if (chord->stem())
             new ElementItem(sei, chord->stem());
+      if (chord->stemSlash())
+            new ElementItem(sei, chord->stemSlash());
       if (chord->arpeggio())
             new ElementItem(sei, chord->arpeggio());
       if (chord->tremolo() && (chord->tremolo()->chord1() == chord))
@@ -287,16 +289,16 @@ static void addChord(ElementItem* sei, Chord* chord)
       if (chord->glissando())
             new ElementItem(sei, chord->glissando());
 
-      foreach(Articulation* a, chord->articulations())
+      for (Articulation* a : chord->articulations())
             new ElementItem(sei, a);
-      for(LedgerLine* h = chord->ledgerLines(); h; h = h->next())
+      for (LedgerLine* h = chord->ledgerLines(); h; h = h->next())
             new ElementItem(sei, h);
-      foreach(Note* note, chord->notes()) {
+      for (Note* note : chord->notes()) {
             ElementItem* ni = new ElementItem(sei, note);
             if (note->accidental()) {
                   new ElementItem(ni, note->accidental());
                   }
-            foreach (Element* f, note->el()) {
+            for (Element* f : note->el()) {
                   if (f->type() == Element::Type::SYMBOL || f->type() == Element::Type::IMAGE) {
                         BSymbol* bs = static_cast<BSymbol*>(f);
                         addSymbol(ni, bs);
@@ -312,31 +314,31 @@ static void addChord(ElementItem* sei, Chord* chord)
             if (note->tieFor()) {
                   Tie* tie = note->tieFor();
                   ElementItem* ti = new ElementItem(ni, tie);
-                  foreach (Element* el1, tie->spannerSegments())
+                  for (Element* el1 : tie->spannerSegments())
                         new ElementItem(ti, el1);
                   }
-            foreach (Spanner* s, note->spannerFor()) {
+            for (Spanner* s : note->spannerFor()) {
                   ElementItem* si = new ElementItem(ni, s);
-                  foreach(Element* ls, s->spannerSegments())
+                  for (Element* ls : s->spannerSegments())
                         new ElementItem(si, ls);
                   }
             }
-      foreach(Element* e, chord->el()) {
+      for (Element* e : chord->el()) {
             ElementItem* ei = new ElementItem(sei, e);
             if (e->type() == Element::Type::SLUR) {
                   Slur* gs = static_cast<Slur*>(e);
-                  foreach (SpannerSegment* sp, gs->spannerSegments())
+                  for (SpannerSegment* sp : gs->spannerSegments())
                         new ElementItem(ei, sp);
                   }
             }
-      foreach (Chord* c, chord->graceNotes()) {
+      for (Chord* c : chord->graceNotes()) {
             ElementItem* ssei = new ElementItem(sei, c);
             addChord(ssei, c);
             }
 
       if (chord->beam() && chord->beam()->elements().front() == chord)
             new ElementItem(sei, chord->beam());
-      foreach(Lyrics* lyrics, chord->lyricsList()) {
+      for (Lyrics* lyrics : chord->lyricsList()) {
             if (lyrics)
                   new ElementItem(sei, lyrics);
             }
@@ -561,12 +563,9 @@ void Debugger::updateElement(Element* el)
 
       if (cs != el->score())
             updateList(el->score());
-      for (int i = 0;; ++i) {
-            QTreeWidgetItem* item = list->topLevelItem(i);
-            if (item == 0) {
-                  qDebug("Debugger::Element not found %s %p idx %d", el->name(), el, i);
-                  break;
-                  }
+      bool found = false;
+      for (QTreeWidgetItemIterator it(list); *it; ++it) {
+            QTreeWidgetItem* item = *it;
             if (item->type() == QTreeWidgetItem::Type)
                   continue;
             ElementItem* ei = static_cast<ElementItem*>(item);
@@ -574,13 +573,13 @@ void Debugger::updateElement(Element* el)
                   list->setItemExpanded(item, true);
                   list->setCurrentItem(item);
                   list->scrollToItem(item);
-                  break;
-                  }
-            if (searchElement(item, el)) {
-                  list->setItemExpanded(item, true);
+                  found = true;
                   break;
                   }
             }
+      if (!found)
+            qDebug("Debugger: element not found %s\n", el->name());
+
       setWindowTitle(QString("MuseScore: Debugger: ") + el->name());
 
       ShowElementBase* ew = elementViews[int(el->type())];
@@ -848,7 +847,7 @@ void SegmentView::setElement(Element* e)
             if (ll) {
                   foreach(Lyrics* l, *ll) {
                         QString s;
-                        s.setNum(long(l), 16);
+                        s.setNum(qptrdiff(l), 16);
                         QListWidgetItem* item = new QListWidgetItem(s, 0, long(l));
                         sb.lyrics->addItem(item);
                         }
@@ -860,7 +859,7 @@ void SegmentView::setElement(Element* e)
       sb.annotations->clear();
       foreach(Element* sp, s->annotations()) {
             QString s;
-            s.setNum(long(sp), 16);
+            s.setNum(qptrdiff(sp), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)sp));
             sb.annotations->addItem(item);
@@ -947,7 +946,7 @@ void ChordDebug::setElement(Element* e)
       crb.attributes->clear();
       foreach(Articulation* a, chord->articulations()) {
             QString s;
-            s.setNum(long(a), 16);
+            s.setNum(qptrdiff(a), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)a));
             crb.attributes->addItem(item);
@@ -955,7 +954,7 @@ void ChordDebug::setElement(Element* e)
       crb.lyrics->clear();
       foreach(Lyrics* lyrics, chord->lyricsList()) {
             QString s;
-            s.setNum(long(lyrics), 16);
+            s.setNum(qptrdiff(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)lyrics));
             crb.lyrics->addItem(item);
@@ -963,7 +962,7 @@ void ChordDebug::setElement(Element* e)
       cb.helplineList->clear();
       for (LedgerLine* h = chord->ledgerLines(); h; h = h->next()) {
             QString s;
-            s.setNum(long(h), 16);
+            s.setNum(qptrdiff(h), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)h));
             cb.helplineList->addItem(item);
@@ -971,7 +970,7 @@ void ChordDebug::setElement(Element* e)
       cb.notes->clear();
       foreach(Element* n, chord->notes()) {
             QString s;
-            s.setNum(long(n), 16);
+            s.setNum(qptrdiff(n), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)n));
             cb.notes->addItem(item);
@@ -979,7 +978,7 @@ void ChordDebug::setElement(Element* e)
       cb.graceChords1->clear();
       for (Element* c : chord->graceNotes()) {
             QString s;
-            s.setNum(long(c), 16);
+            s.setNum(qptrdiff(c), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)c));
             cb.graceChords1->addItem(item);
@@ -987,7 +986,7 @@ void ChordDebug::setElement(Element* e)
       cb.elements->clear();
       for (Element* c : chord->el()) {
             QString s;
-            s.setNum(long(c), 16);
+            s.setNum(qptrdiff(c), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)c));
             cb.elements->addItem(item);
@@ -1129,7 +1128,7 @@ void ShowNoteWidget::setElement(Element* e)
       nb.fingering->clear();
       for (Element* text : note->el()) {
             QString s;
-            s.setNum(long(text), 16);
+            s.setNum(qptrdiff(text), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)text));
             nb.fingering->addItem(item);
@@ -1246,7 +1245,7 @@ void RestView::setElement(Element* e)
       crb.attributes->clear();
       foreach(Articulation* a, rest->articulations()) {
             QString s;
-            s.setNum(long(a), 16);
+            s.setNum(qptrdiff(a), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)a));
             crb.attributes->addItem(item);
@@ -1254,7 +1253,7 @@ void RestView::setElement(Element* e)
       crb.lyrics->clear();
       foreach(Lyrics* lyrics, rest->lyricsList()) {
             QString s;
-            s.setNum(long(lyrics), 16);
+            s.setNum(qptrdiff(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)lyrics));
             crb.lyrics->addItem(item);
@@ -1463,7 +1462,7 @@ SpannerView::SpannerView()
       sp.setupUi(addWidget());
       connect(sp.segments, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(gotoElement(QTreeWidgetItem*)));
       connect(sp.startElement, SIGNAL(clicked()), SLOT(startClicked()));
-      connect(sp.endElement, SIGNAL(clicked()), SLOT(endClicked()));
+      connect(sp.endElement,   SIGNAL(clicked()), SLOT(endClicked()));
       }
 
 //---------------------------------------------------------
@@ -1765,8 +1764,8 @@ void ShowElementBase::setElement(Element* e)
       {
       el = e;
 
-      eb.address->setText(QString("%1").arg((unsigned long)e, 0, 16));
-      eb.score->setText(QString("%1").arg((unsigned long)(e->score()), 0, 16));
+      eb.address->setText(QString("%1").arg((quintptr)e, 0, 16));
+      eb.score->setText(QString("%1").arg((quintptr)(e->score()), 0, 16));
 
       eb.selected->setChecked(e->selected());
       eb.selectable->setChecked(e->selectable());
@@ -2011,6 +2010,8 @@ VoltaView::VoltaView()
       connect(tlb.continueText, SIGNAL(clicked()), SLOT(continueTextClicked()));
       connect(tlb.endText,      SIGNAL(clicked()), SLOT(endTextClicked()));
       connect(sp.segments,      SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(gotoElement(QTreeWidgetItem*)));
+      connect(sp.startElement,  SIGNAL(clicked()), SLOT(startClicked()));
+      connect(sp.endElement,    SIGNAL(clicked()), SLOT(endClicked()));
       }
 
 //---------------------------------------------------------
@@ -2032,7 +2033,7 @@ void VoltaView::setElement(Element* e)
       const QList<SpannerSegment*>& el = volta->spannerSegments();
       foreach(const SpannerSegment* e, el) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, QString("%1").arg((unsigned long)e, 8, 16));
+            item->setText(0, QString("%1").arg((quintptr)e, 8, 16));
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)e));
             sp.segments->addTopLevelItem(item);
             }
@@ -2050,30 +2051,12 @@ void VoltaView::setElement(Element* e)
       }
 
 //---------------------------------------------------------
-//   leftElementClicked
-//---------------------------------------------------------
-
-void VoltaView::leftElementClicked()
-      {
-//      emit elementChanged(static_cast<Volta*>(element())->startElement());
-      }
-
-//---------------------------------------------------------
-//   rightElementClicked
-//---------------------------------------------------------
-
-void VoltaView::rightElementClicked()
-      {
-//      emit elementChanged(static_cast<Volta*>(element())->endElement());
-      }
-
-//---------------------------------------------------------
 //   startClicked
 //---------------------------------------------------------
 
 void VoltaView::startClicked()
       {
-//      emit elementChanged(static_cast<Spanner*>(element())->startElement());
+      emit elementChanged(static_cast<Spanner*>(element())->startElement());
       }
 
 //---------------------------------------------------------
@@ -2082,9 +2065,8 @@ void VoltaView::startClicked()
 
 void VoltaView::endClicked()
       {
-//      emit elementChanged(static_cast<Spanner*>(element())->endElement());
+      emit elementChanged(static_cast<Spanner*>(element())->endElement());
       }
-
 
 //---------------------------------------------------------
 //   VoltaSegmentView
@@ -2094,6 +2076,16 @@ VoltaSegmentView::VoltaSegmentView()
    : ShowElementBase()
       {
       lb.setupUi(addWidget());
+      connect(lb.lineButton, SIGNAL(clicked()), SLOT(lineClicked()));
+      }
+
+//---------------------------------------------------------
+//   endClicked
+//---------------------------------------------------------
+
+void VoltaSegmentView::lineClicked()
+      {
+      emit elementChanged(static_cast<VoltaSegment*>(element())->volta());
       }
 
 //---------------------------------------------------------
@@ -2236,7 +2228,7 @@ void BeamView::setElement(Element* e)
       bb.elements->clear();
       foreach (ChordRest* cr, b->elements()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, QString("%1").arg((unsigned long)cr, 8, 16));
+            item->setText(0, QString("%1").arg((quintptr)cr, 8, 16));
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)cr));
             item->setText(1, cr->name());
             item->setText(2, QString("%1").arg(cr->segment()->tick()));
@@ -2349,25 +2341,25 @@ void SlurSegmentView::setElement(Element* e)
       {
       SlurSegment* s = static_cast<SlurSegment*>(e);
       ShowElementBase::setElement(e);
-      ss.up1px->setValue(s->getUps(int(GripSlurSegment::START))->p.x());
-      ss.up1py->setValue(s->getUps(int(GripSlurSegment::START))->p.y());
-      ss.up1ox->setValue(s->getUps(int(GripSlurSegment::START))->off.x());
-      ss.up1oy->setValue(s->getUps(int(GripSlurSegment::START))->off.y());
+      ss.up1px->setValue(s->ups(Grip::START).p.x());
+      ss.up1py->setValue(s->ups(Grip::START).p.y());
+      ss.up1ox->setValue(s->ups(Grip::START).off.x());
+      ss.up1oy->setValue(s->ups(Grip::START).off.y());
 
-      ss.up2px->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->p.x());
-      ss.up2py->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->p.y());
-      ss.up2ox->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->off.x());
-      ss.up2oy->setValue(s->getUps(int(GripSlurSegment::BEZIER1))->off.y());
+      ss.up2px->setValue(s->ups(Grip::BEZIER1).p.x());
+      ss.up2py->setValue(s->ups(Grip::BEZIER1).p.y());
+      ss.up2ox->setValue(s->ups(Grip::BEZIER1).off.x());
+      ss.up2oy->setValue(s->ups(Grip::BEZIER1).off.y());
 
-      ss.up3px->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->p.x());
-      ss.up3py->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->p.y());
-      ss.up3ox->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->off.x());
-      ss.up3oy->setValue(s->getUps(int(GripSlurSegment::BEZIER2))->off.y());
+      ss.up3px->setValue(s->ups(Grip::BEZIER2).p.x());
+      ss.up3py->setValue(s->ups(Grip::BEZIER2).p.y());
+      ss.up3ox->setValue(s->ups(Grip::BEZIER2).off.x());
+      ss.up3oy->setValue(s->ups(Grip::BEZIER2).off.y());
 
-      ss.up4px->setValue(s->getUps(int(GripSlurSegment::END))->p.x());
-      ss.up4py->setValue(s->getUps(int(GripSlurSegment::END))->p.y());
-      ss.up4ox->setValue(s->getUps(int(GripSlurSegment::END))->off.x());
-      ss.up4oy->setValue(s->getUps(int(GripSlurSegment::END))->off.y());
+      ss.up4px->setValue(s->ups(Grip::END).p.x());
+      ss.up4py->setValue(s->ups(Grip::END).p.y());
+      ss.up4ox->setValue(s->ups(Grip::END).off.x());
+      ss.up4oy->setValue(s->ups(Grip::END).off.y());
 
       }
 
@@ -2470,9 +2462,8 @@ void KeySigView::setElement(Element* e)
       KeySigEvent ev = ks->keySigEvent();
       keysig.showCourtesySig->setChecked(ks->showCourtesy());
       keysig.accidentalType->setValue(int(ev.key()));
-      keysig.customType->setValue(ev.customType());
       keysig.custom->setChecked(ev.custom());
-      keysig.invalid->setChecked(ev.invalid());
+      keysig.invalid->setChecked(!ev.isValid());
       }
 
 //---------------------------------------------------------

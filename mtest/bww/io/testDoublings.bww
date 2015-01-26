@@ -1,0 +1,71 @@
+"Grace notes and embellishments",(T,L,0,0,Times New Roman,16,700,0,0,18,0,0,0)
+
+"Testfile",(Y,C,0,0,Times New Roman,14,400,0,0,18,0,0,0)
+
+"Leon Vinken",(M,R,0,0,Times New Roman,14,400,0,0,18,0,0,0)
+
+"Part of bbw2mxml",(F,R,0,0,Times New Roman,10,400,0,0,18,0,0,0)
+
+TuneTempo,90
+
+
+& sharpf sharpc 16_4	
+ag LG_4	bg LA_4	cg LA_4	dg LA_4	eg LA_4	fg LA_4	gg LA_4	tg LA_4	!t
+
+& sharpf sharpc	
+E_4	dblg LG_4	dbla LA_4	dbb B_4	dbc C_4	dbd D_4	dbe E_4	dbf F_4	dbhg HG_4	dbha HA_4	!t
+HG_4	tdblg LG_4	tdbla LA_4	tdbb B_4	tdbc C_4	tdbd D_4	tdbe E_4	tdbf F_4	!t
+HA_4	hdblg LG_4	hdbla LA_4	hdbb B_4	hdbc C_4	hdbd D_4	hdbe E_4	hdbf F_4	!t
+
+& sharpf sharpc	
+B_4	strlg B_4	E_4	strla E_4	C_4	strb C_4	D_4	strc D_4	E_4	strd E_4	F_4	stre F_4	HG_4	strf HG_4	HA_4	strhg HA_4	!t
+
+& sharpf sharpc	
+E_4	gstla LA_4	gstb B_4	gstc C_4	gstd D_4	lgstd D_4	gste E_4	gstf F_4	!t
+F_4	tstla LA_4	tstb B_4	tstc C_4	tstd D_4	ltstd D_4	tste E_4	tstf F_4	tsthg HG_4	!t
+HA_4	hstla LA_4	hstb B_4	hstc C_4	hstd D_4	lhstd D_4	hste E_4	hstf F_4	hsthg HG_4	!t
+
+& sharpf sharpc	
+LA_4	grp E_4	LG_4	hgrp E_4	D_4	grpb E_4	D_4	grpb LA_4	!t
+
+& sharpf sharpc	
+E_4	ggrpla LA_4	ggrpb B_4	ggrpc C_4	ggrpd D_4	ggrpdb D_4	ggrpe E_4	ggrpf F_4	!t
+F_4	tgrpla LA_4	tgrpb B_4	tgrpc C_4	tgrpd D_4	tgrpdb D_4	tgrpe E_4	tgrpf F_4	tgrphg HG_4	!t
+HA_4	hgrpla LA_4	hgrpb B_4	hgrpc C_4	hgrpd D_4	hgrpdb D_4	hgrpe E_4	hgrpf F_4	hgrphg HG_4	hgrpha HA_4	!t
+
+& sharpf sharpc	
+C_4	tar LA_4	D_4	tarb LA_4	LG_4	htar LA_4	C_4	bubly B_4	LG_4	hbubly B_4	!t
+
+& sharpf sharpc	
+LA_4	brl LA_4	HA_4	abr LA_4	E_4	gbr LA_4	HG_4	tbr LA_4	!t
+
+& sharpf sharpc	
+LA_4	thrd D_4	LA_4	hvthrd D_4	LG_4	hthrd D_4	LG_4	hhvthrd D_4	!t
+
+& sharpf sharpc	
+E_4	pella LA_4	pelb B_4	pelc C_4	peld D_4	lpeld D_4	pele E_4	pelf F_4	!t
+HG_4	tpella LA_4	tpelb B_4	tpelc C_4	tpeld D_4	ltpeld D_4	tpele E_4	tpelf F_4	tpelhg HG_4	!t
+HA_4	hpella LA_4	hpelb B_4	hpelc C_4	hpeld D_4	lhpeld D_4	hpele E_4	hpelf F_4	hpelhg HG_4	!t
+
+& sharpf sharpc	
+LA_4	st2la LA_4	B_4	st2b B_4	C_4	st2c C_4	D_4	st2d D_4	D_4	lst2d D_4	E_4	st2e E_4	F_4	st2f F_4	HG_4	st2hg HG_4	HA_4	st2ha HA_4	!t
+
+& sharpf sharpc	
+E_4	gst2la LA_4	gst2b B_4	gst2c C_4	gst2d D_4	lgst2d D_4	gst2e E_4	gst2f F_4	!t
+HG_4	tst2la LA_4	tst2b B_4	tst2c C_4	tst2d D_4	ltst2d D_4	tst2e E_4	tst2f F_4	tst2hg HG_4	!t
+HA_4	hst2la LA_4	hst2b B_4	hst2c C_4	hst2d D_4	lhst2d D_4	hst2e E_4	hst2f F_4	hst2hg HG_4	hst2ha HA_4	!t
+
+& sharpf sharpc	
+LA_4	st3la LA_4	B_4	st3b B_4	C_4	st3c C_4	D_4	st3d D_4	D_4	lst3d D_4	E_4	st3e E_4	F_4	st3f F_4	HG_4	st3hg HG_4	HA_4	st3ha HA_4	!t
+
+& sharpf sharpc	
+E_4	gst3la LA_4	gst3b B_4	gst3c C_4	gst3d D_4	lgst3d D_4	gst3e E_4	gst3f F_4	!t
+HG_4	tst3la LA_4	tst3b B_4	tst3c C_4	tst3d D_4	ltst3d D_4	tst3e E_4	tst3f F_4	tst3hg HG_4	!t
+HA_4	hst3la LA_4	hst3b B_4	hst3c C_4	hst3d D_4	lhst3d D_4	hst3e E_4	hst3f F_4	hst3hg HG_4	hst3ha HA_4	!t
+
+dlg LA_4	dla B_4	db C_4	dc D_4	elg LA_4	ela B_4	eb C_4	ec D_4	ed E_4	!t
+flg LA_4	fla B_4	fb C_4	fc D_4	fd E_4	fe F_4	!t
+glg LA_4	gla B_4	gb C_4	gc D_4	gd E_4	ge F_4	gf HG_4	!t
+tlg LA_4	tla B_4	tb C_4	tc D_4	td E_4	te F_4	tf HG_4	thg HA_4	!t
+
+!I

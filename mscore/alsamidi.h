@@ -56,6 +56,7 @@ class AlsaMidiDriver : public MidiDriver {
       virtual void getOutputPollFd(struct pollfd**, int* n);
       virtual void read();
       virtual void write(const Event&);
+      virtual void updateInPortCount(int);
       };
 
 }

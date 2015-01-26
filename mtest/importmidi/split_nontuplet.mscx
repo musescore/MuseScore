@@ -50,11 +50,47 @@
       <Staff id="2">
         <StaffType group="pitched">
           </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Grand Piano</trackName>
       <Instrument>
         <longName pos="0">Grand Piano</longName>
-        <trackName></trackName>
+        <shortName pos="0">Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="0"/>
           </Channel>
@@ -66,9 +102,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -83,13 +116,6 @@
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>666</len>
-                </Event>
-              </Events>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>
@@ -100,13 +126,6 @@
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>666</len>
-                </Event>
-              </Events>
             <pitch>71</pitch>
             <tpc>19</tpc>
             <velocity>80</velocity>
@@ -117,13 +136,6 @@
           <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>666</len>
-                </Event>
-              </Events>
             <pitch>67</pitch>
             <tpc>15</tpc>
             <velocity>80</velocity>
@@ -137,13 +149,6 @@
           <dots>1</dots>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>77</pitch>
             <tpc>13</tpc>
             <velocity>80</velocity>
@@ -164,9 +169,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -178,26 +180,12 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>69</pitch>
             <tpc>17</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>72</pitch>
             <tpc>14</tpc>
             <velocity>80</velocity>

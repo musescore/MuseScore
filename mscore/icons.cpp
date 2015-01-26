@@ -78,6 +78,7 @@ static const char* iconNames[] = {
       "default.svg",
       "fbeam1.svg",
       "fbeam2.svg",
+      "document.svg",
       "document-open.svg",
       "document-new.svg",
       "document-save.svg",
@@ -114,7 +115,6 @@ static const char* iconNames[] = {
       "list-ordered.svg",
       "format-indent-more.svg",
       "format-indent-less.svg",
-      "panel-community.svg",
       "media-playback-loop.svg",
       "media-playback-loop-in.svg",
       "media-playback-loop-out.svg",
@@ -145,7 +145,9 @@ static const char* iconNames[] = {
       "timesig_prolatio11.svg",
       "edit.svg",
       "edit-reset.svg",
-      "window-close.svg"
+      "window-close.svg",
+      "arrow_up.svg",
+      "arrow_down.svg"
       };
 
 void genIcons()

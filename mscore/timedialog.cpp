@@ -64,7 +64,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
       _dirty = false;
 
-      if (useFactorySettings || !sp->read(dataPath + "/" + "timesigs")) {
+      if (useFactorySettings || !sp->read(dataPath + "/timesigs")) {
             Fraction sig(4,4);
             groups->setSig(sig, Groups::endings(sig));
             }
@@ -104,8 +104,8 @@ void TimeDialog::save()
       {
       QDir dir;
       dir.mkpath(dataPath);
-      sp->write(dataPath + "/" + "timesigs");
-      qDebug("TimeDialog::save(): %s", qPrintable(dataPath+"/" + "timesigs"));
+      sp->write(dataPath + "/timesigs");
+      qDebug("TimeDialog::save(): %s", qPrintable(dataPath+"/timesigs"));
       }
 
 //---------------------------------------------------------

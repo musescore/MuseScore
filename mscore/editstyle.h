@@ -30,6 +30,15 @@ namespace Ms {
 class Score;
 
 //---------------------------------------------------------
+//   StyleWidget
+//---------------------------------------------------------
+
+struct StyleWidget {
+      StyleIdx idx;
+      QWidget* widget;
+      };
+
+//---------------------------------------------------------
 //   EditStyle
 //---------------------------------------------------------
 
@@ -41,6 +50,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       MStyle lstyle;    // local copy of style
 
       QButtonGroup* stemGroups[VOICES];
+
+      QVector<StyleWidget> styleWidgets;
 
       void getValues();
       void setValues();

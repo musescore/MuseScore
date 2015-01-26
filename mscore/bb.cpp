@@ -531,7 +531,9 @@ Score::FileError importBB(Score* score, const QString& name)
 
       foreach(Staff* staff, score->staves()) {
             int tick = 0;
-            staff->setKey(tick, Key(bb.key()));
+            KeySigEvent ke;
+            ke.setKey(Key(bb.key()));
+            staff->setKey(tick, ke);
             KeySig* keysig = new KeySig(score);
             keysig->setTrack((score->staffIdx(staff->part()) + staff->rstaff()) * VOICES);
             keysig->setKey(Key(bb.key()));

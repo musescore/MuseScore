@@ -270,12 +270,12 @@ void Pedal::styleChanged()
 //    return System() coordinates
 //---------------------------------------------------------
 
-QPointF Pedal::linePos(GripLine grip, System** sys) const
+QPointF Pedal::linePos(Grip grip, System** sys) const
       {
       qreal x;
       qreal nhw = score()->noteHeadWidth();
       System* s = nullptr;
-      if (grip == GripLine::START) {
+      if (grip == Grip::START) {
             ChordRest* c = static_cast<ChordRest*>(startElement());
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();

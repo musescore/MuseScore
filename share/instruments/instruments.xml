@@ -3412,6 +3412,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+                  <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="fiscorn">
@@ -5425,7 +5426,7 @@
                         <head>0</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>High WooBlock</name>
+                        <name>High Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -5433,7 +5434,7 @@
                         <head>0</head>
                         <line>1</line>
                         <voice>0</voice>
-                        <name>Low WooBlock</name>
+                        <name>Low Wood Block</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
                   </Drum>
@@ -5650,11 +5651,11 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
-                  <Drum pitch="76">
+                  <Drum pitch="85">
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>High WooBlock</name>
+                        <name>Castanets</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -5793,7 +5794,7 @@
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Low WooBlock</name>
+                        <name>Low Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -5815,7 +5816,7 @@
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>High WoodBlock</name>
+                        <name>High Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -7043,7 +7044,7 @@
                   <clef staff="3">F8vb</clef>
                   <barlineSpan staff="3">1</barlineSpan>
                   <Channel>
-                        <program value="75"/>
+                        <program value="19"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
@@ -7981,6 +7982,16 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
             </Instrument>
+            <Instrument id="banjo-tablature">
+                  <trackName>Banjo [Tablature]</trackName>
+                  <init>banjo</init>
+                  <description>Banjo (Tablature)</description>
+                  <musicXMLid>pluck.banjo</musicXMLid>
+                  <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
+<!--                  <clef>TAB</clef> -->
+                  <genre>common</genre>
+                  <genre>jazz</genre>
+            </Instrument>
             <Instrument id="tenor-banjo">
                   <longName>Tenor Banjo</longName>
                   <shortName>T. Bj.</shortName>
@@ -8004,7 +8015,7 @@
             <Instrument id="balalaika">
                   <longName>Balalaika</longName>
                   <shortName>Bal.</shortName>
-                  <trackName> Balalaika</trackName>
+                  <trackName>Balalaika</trackName>
                   <description>Balalaika in fact the prima but a generic for simplicity</description>
                   <musicXMLid>pluck.balalaika</musicXMLid>
                   <StringData>
@@ -8148,6 +8159,12 @@
                   <trackName>Bouzouki (3-course)</trackName>
                   <description>Bouzouki (3-course)</description>
                   <musicXMLid>pluck.bouzouki</musicXMLid>
+                  <StringData>
+                        <frets>27</frets>
+                        <string>50</string>
+                        <string>57</string>
+                        <string>62</string>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>38-89</aPitchRange>
@@ -8163,6 +8180,13 @@
                   <trackName>Bouzouki (4-course)</trackName>
                   <description>Bouzouki (4-course)</description>
                   <musicXMLid>pluck.bouzouki</musicXMLid>
+                  <StringData>
+                        <frets>27</frets>
+                        <string>48</string>
+                        <string>53</string>
+                        <string>57</string>
+                        <string>62</string>
+                  </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-89</aPitchRange>
@@ -8677,6 +8701,14 @@
                         <program value="24"/>
                   </Channel>
             </Instrument>
+            <Instrument id="mandolin-tablature">
+                  <trackName>Mandolin [Tablature]</trackName>
+                  <init>mandolin</init>
+                  <description>Mandolin (Tablature)</description>
+                  <musicXMLid>pluck.mandolin</musicXMLid>
+                  <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
+<!--                  <clef>TAB</clef> -->
+            </Instrument>
             <Instrument id="mandola">
                   <longName>Mandola</longName>
                   <shortName>Mda.</shortName>
@@ -8904,7 +8936,7 @@
                   <genre>common</genre>
             </Instrument>
             <Instrument id="acoustic-bass">
-                  <!-- Same instrument as the orchestral contrabass, but used dy default plucked, rather than bowed
+                  <!-- Same instrument as the orchestral contrabass, but used by default plucked, rather than bowed
                   can't init from it, as it has not been read yet. -->
                   <longName>Acoustic Bass</longName>
                   <shortName>Bass</shortName>
@@ -8923,6 +8955,12 @@
                   <pPitchRange>23-67</pPitchRange>
                   <Channel>
                         <program value="32"/>
+                  </Channel>
+                  <Channel name="arco">
+                        <program value="43"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>

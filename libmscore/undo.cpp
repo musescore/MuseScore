@@ -255,7 +255,7 @@ void UndoStack::push(UndoCommand* cmd)
             return;
             }
 #ifdef DEBUG_UNDO
-      if (strcmp(cmd->name(), "ChangeProperty") == 0) {
+      if (!strcmp(cmd->name(), "ChangeProperty")) {
             ChangeProperty* cp = static_cast<ChangeProperty*>(cmd);
             qDebug("UndoStack::push <%s> %p id %d", cmd->name(), cmd, int(cp->getId()));
             }
@@ -466,11 +466,10 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 //   undoChangeKeySig
 //---------------------------------------------------------
 
-void Score::undoChangeKeySig(Staff* ostaff, int tick, Key key)
+void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
       {
       KeySig* lks = 0;
       foreach (Staff* staff, ostaff->staffList()) {
-
             if (staff->isDrumStaff())
                   continue;
 
@@ -485,30 +484,27 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, Key key)
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
-            int diff = -staff->part()->instr()->transpose().chromatic;
-            Key nkey;
-            if (diff && !score->styleB(StyleIdx::concertPitch))
-                  nkey = transposeKey(key, diff);
-            else
-                  nkey = key;
-
+            Interval interval = staff->part()->instr()->transpose();
+            KeySigEvent nkey = key;
+            bool concertPitch = score->styleB(StyleIdx::concertPitch);
+            if (interval.chromatic && !concertPitch && !nkey.custom()) {
+                  interval.flip();
+                  nkey.setKey(transposeKey(key.key(), interval));
+                  }
             if (ks) {
                   ks->undoChangeProperty(P_ID::GENERATED, false);
-                  KeySigEvent kse = ks->keySigEvent();
-                  kse.setKey(nkey);
-                  undo(new ChangeKeySig(ks, kse, ks->showCourtesy()));
+                  undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
                   }
             else {
                   KeySig* nks = new KeySig(score);
                   nks->setParent(s);
                   nks->setTrack(track);
-                  nks->setKey(nkey);
+                  nks->setKeySigEvent(nkey);
                   undo(new AddElement(nks));
                   if (lks)
                         lks->linkTo(nks);
                   else
                         lks = nks;
-                  cmdUpdateNotes();
                   }
             }
       }
@@ -625,6 +621,33 @@ static Element* findLinkedVoiceElement(Element* e, Staff* nstaff)
       }
 
 //---------------------------------------------------------
+//   findLinkedChord
+//---------------------------------------------------------
+
+static Chord* findLinkedChord(Chord* c, Staff* nstaff)
+      {
+      Segment* s  = c->segment();
+      Measure* nm = nstaff->score()->tick2measure(s->tick());
+      Segment* ns = nm->findSegment(s->segmentType(), s->tick());
+      Element* ne = ns->element(nstaff->idx() * VOICES + c->voice());
+      if (ne->type() != Element::Type::CHORD)
+            return 0;
+      Chord* nc   = static_cast<Chord*>(ne);
+      if (c->isGrace()) {
+            Chord* pc = static_cast<Chord*>(c->parent());
+            int index = 0;
+            for (Chord* gc : pc->graceNotes()) {
+                  if (c == gc)
+                        break;
+                  index++;
+                  }
+            if (index < nc->graceNotes().length())
+                  nc = nc->graceNotes().at(index);
+            }
+      return nc;
+      }
+
+//---------------------------------------------------------
 //   undoChangeChordRestLen
 //---------------------------------------------------------
 
@@ -636,7 +659,11 @@ void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
             foreach(Staff* staff, linkedStaves->staves()) {
                   if (staff == cr->staff())
                         continue;
-                  ChordRest* ncr = static_cast<ChordRest*>(findLinkedVoiceElement(cr, staff));
+                  ChordRest *ncr;
+                  if (cr->isGrace())
+                        ncr = findLinkedChord(static_cast<Chord*>(cr), staff);
+                  else
+                        ncr = static_cast<ChordRest*>(findLinkedVoiceElement(cr, staff));
                   undo(new ChangeChordRestLen(ncr, d));
                   }
             }
@@ -1042,7 +1069,12 @@ void Score::undoAddElement(Element* element)
                   int ntrack       = staffIdx * VOICES + a->voice();
                   na->setTrack(ntrack);
                   if (a->parent()->isChordRest()) {
-                        ChordRest* ncr = static_cast<ChordRest*>(seg->element(ntrack));
+                        ChordRest* cr = a->chordRest();
+                        ChordRest* ncr;
+                        if (cr->isGrace())
+                              ncr = findLinkedChord(static_cast<Chord*>(cr), score->staff(staffIdx));
+                        else
+                              ncr = static_cast<ChordRest*>(seg->element(ntrack));
                         na->setParent(ncr);
                         }
                   else {
@@ -1094,8 +1126,8 @@ void Score::undoAddElement(Element* element)
                               if (!interval.isZero()) {
                                     if (!score->styleB(StyleIdx::concertPitch))
                                           interval.flip();
-                                    int rootTpc = transposeTpc(h->rootTpc(), interval, false);
-                                    int baseTpc = transposeTpc(h->baseTpc(), interval, false);
+                                    int rootTpc = transposeTpc(h->rootTpc(), interval, true);
+                                    int baseTpc = transposeTpc(h->baseTpc(), interval, true);
                                     score->undoTransposeHarmony(h, rootTpc, baseTpc);
                                     }
                               }
@@ -1160,10 +1192,13 @@ void Score::undoAddElement(Element* element)
                   ntremolo->setParent(c1);
                   undo(new AddElement(ntremolo));
                   }
-            else if (
-               (element->type() == Element::Type::TREMOLO && !static_cast<Tremolo*>(element)->twoNotes())
-               || (element->type() == Element::Type::ARPEGGIO))
-                  {
+            else if (element->type() == Element::Type::TREMOLO && !static_cast<Tremolo*>(element)->twoNotes()) {
+                  Chord* cr = static_cast<Chord*>(element->parent());
+                  Chord* c1 = findLinkedChord(cr, score->staff(staffIdx));
+                  ne->setParent(c1);
+                  undo(new AddElement(ne));
+                  }
+            else if (element->type() == Element::Type::ARPEGGIO) {
                   ChordRest* cr = static_cast<ChordRest*>(element->parent());
                   Segment* s    = cr->segment();
                   Measure* m    = s->measure();
@@ -1179,31 +1214,21 @@ void Score::undoAddElement(Element* element)
                   Note* n2       = tie->endNote();
                   Chord* cr1     = n1->chord();
                   Chord* cr2     = n2 ? n2->chord() : 0;
-                  Segment* s1    = cr1->segment();
-                  Segment* s2    = cr2 ? cr2->segment() : 0;
-                  Measure* nm1   = score->tick2measure(s1->tick());
-                  Measure* nm2   = s2 ? score->tick2measure(s2->tick()) : 0;
-                  Segment* ns1;
-                  Segment* ns2;
-                  ns1 = nm1->findSegment(s1->segmentType(), s1->tick());
-                  ns2 = nm2 ? nm2->findSegment(s2->segmentType(), s2->tick()) : 0;
-                  Chord* c1 = static_cast<Chord*>(ns1->element(staffIdx * VOICES + cr1->voice()));
+
+                  // find corresponding notes in linked staff
+                  // accounting for grace notes and cross-staff notation
                   int sm = 0;
                   if (cr1->staffIdx() != cr2->staffIdx())
                         sm = cr1->staffMove() + cr2->staffMove();
+                  Chord* c1 = findLinkedChord(cr1, score->staff(staffIdx));
+                  Chord* c2 = findLinkedChord(cr2, score->staff(staffIdx + sm));
+                  Note* nn1 = c1->findNote(n1->pitch());
+                  Note* nn2 = c2 ? c2->findNote(n2->pitch()) : 0;
 
-                  Chord* c2 = 0;
-                  if (ns2) {
-                        Element* e = ns2->element((staffIdx + sm) * VOICES + cr2->voice());
-                        if (e->type() == Element::Type::CHORD)
-                              c2 = static_cast<Chord*>(e);
-                        }
-
-                  Note* nn1      = c1->findNote(n1->pitch());
-                  Note* nn2      = c2 ? c2->findNote(n2->pitch()) : 0;
-                  Tie* ntie      = static_cast<Tie*>(ne);
+                  // create tie
+                  Tie* ntie = static_cast<Tie*>(ne);
                   QList<SpannerSegment*>& segments = ntie->spannerSegments();
-                  foreach(SpannerSegment* segment, segments)
+                  foreach (SpannerSegment* segment, segments)
                         delete segment;
                   segments.clear();
                   ntie->setTrack(c1->track());
@@ -1389,6 +1414,15 @@ void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
 //   undoChangePageFormat
 //---------------------------------------------------------
 
+void Score::undoChangePageFormat(PageFormat* p)
+      {
+      undoChangePageFormat(p, spatium(), pageNumberOffset());
+      }
+
+//---------------------------------------------------------
+//   undoChangePageFormat
+//---------------------------------------------------------
+
 void Score::undoChangePageFormat(PageFormat* p, qreal v, int pageOffset)
       {
       undo(new ChangePageFormat(this, p, v, pageOffset));
@@ -1479,10 +1513,18 @@ void AddElement::endUndoRedo(bool isUndo) const
                   undoRemoveTuplet(static_cast<ChordRest*>(element));
             else
                   undoAddTuplet(static_cast<ChordRest*>(element));
+            if (element->type() == Element::Type::CHORD) {
+                  Measure* m = static_cast<Chord*>(element)->measure();
+                  m->cmdUpdateNotes(element->staffIdx());
+                  }
             }
       else if (element->type() == Element::Type::NOTE) {
             Measure* m = static_cast<Note*>(element)->chord()->measure();
             m->cmdUpdateNotes(element->staffIdx());
+            }
+      else if (element->type() == Element::Type::KEYSIG) {
+            if (element->score()->undo()->active())
+                  element->score()->cmdUpdateNotes();
             }
       }
 
@@ -1529,7 +1571,6 @@ const char* AddElement::name() const
       return buffer;
       }
 #endif
-
 
 //---------------------------------------------------------
 //   RemoveElement
@@ -1698,6 +1739,7 @@ void ChangeConcertPitch::flip()
       int oval = int(score->styleB(StyleIdx::concertPitch));
       score->style()->set(StyleIdx::concertPitch, val);
       score->setLayoutAll(true);
+      score->cmdUpdateNotes();
       val = oval;
       }
 
@@ -1982,7 +2024,7 @@ void ChangeElement::flip()
       if (newElement->type() == Element::Type::KEYSIG) {
             KeySig* ks = static_cast<KeySig*>(newElement);
             if (!ks->generated())
-                  ks->staff()->setKey(ks->tick(), ks->key());
+                  ks->staff()->setKey(ks->tick(), ks->keySigEvent());
             }
       else if (newElement->type() == Element::Type::DYNAMIC)
             newElement->score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
@@ -2058,9 +2100,10 @@ void ChangeKeySig::flip()
       keysig->measure()->setDirty();
 
       int tick = keysig->segment()->tick();
+
       // update keys if keysig was not generated
       if (!keysig->generated())
-            keysig->staff()->setKey(tick, ks.key());
+            keysig->staff()->setKey(tick, ks);
 
       showCourtesy = sc;
       ks           = oe;
@@ -2243,7 +2286,7 @@ void TransposeHarmony::flip()
       int rootTpc1 = harmony->rootTpc();
       harmony->setBaseTpc(baseTpc);
       harmony->setRootTpc(rootTpc);
-      harmony->render();
+      harmony->setText(harmony->harmonyName());
       rootTpc = rootTpc1;
       baseTpc = baseTpc1;
       }
@@ -2500,7 +2543,7 @@ void ChangePageFormat::flip()
 //---------------------------------------------------------
 
 ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible,
-   qreal _userDist, QColor _color, bool _neverHide, bool _showIfEmpty, qreal _mag)
+   qreal _userDist, QColor _color, bool _neverHide, bool _showIfEmpty, qreal _mag, bool hide)
       {
       staff       = _staff;
       small       = _small;
@@ -2510,6 +2553,7 @@ ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible,
       neverHide   = _neverHide;
       showIfEmpty = _showIfEmpty;
       mag         = _mag;
+      hideSystemBarLine = hide;
       }
 
 //---------------------------------------------------------
@@ -2539,6 +2583,7 @@ void ChangeStaff::flip()
       bool oldNeverHide   = staff->neverHide();
       bool oldShowIfEmpty = staff->showIfEmpty();
       qreal oldMag        = staff->userMag();
+      bool hide           = staff->hideSystemBarLine();
 
       staff->setSmall(small);
       staff->setInvisible(invisible);
@@ -2547,6 +2592,7 @@ void ChangeStaff::flip()
       staff->setNeverHide(neverHide);
       staff->setShowIfEmpty(showIfEmpty);
       staff->setUserMag(mag);
+      staff->setHideSystemBarLine(hideSystemBarLine);
 
       small       = oldSmall;
       invisible   = oldInvisible;
@@ -2555,6 +2601,7 @@ void ChangeStaff::flip()
       neverHide   = oldNeverHide;
       showIfEmpty = oldShowIfEmpty;
       mag         = oldMag;
+      hideSystemBarLine = hide;
 
       Score* score = staff->score();
       if (invisibleChanged) {
@@ -3366,67 +3413,6 @@ void ChangeInstrument::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeBoxProperties
-//---------------------------------------------------------
-
-ChangeBoxProperties::ChangeBoxProperties(Box* box,
-   qreal marginLeft, qreal marginTop, qreal marginRight, qreal marginBottom,
-   Spatium height, Spatium width, qreal tg, qreal bg)
-      {
-      _box              = box;
-      _marginLeft       = marginLeft;
-      _marginTop        = marginTop;
-      _marginRight      = marginRight;
-      _marginBottom     = marginBottom;
-      _height           = height;
-      _width            = width;
-      _topGap           = tg;
-      _bottomGap        = bg;
-      }
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeBoxProperties::flip()
-      {
-      // flip margins
-      qreal marginLeft       = _box->leftMargin();
-      qreal marginTop        = _box->topMargin();
-      qreal marginRight      = _box->rightMargin();
-      qreal marginBottom     = _box->bottomMargin();
-      qreal tg               = _box->topGap();
-      qreal bg               = _box->bottomGap();
-
-      _box->setLeftMargin  (_marginLeft);
-      _box->setRightMargin (_marginRight);
-      _box->setTopMargin   (_marginTop);
-      _box->setBottomMargin(_marginBottom);
-      _box->setTopGap      (_topGap);
-      _box->setBottomGap   (_bottomGap);
-
-      _marginLeft       = marginLeft;
-      _marginTop        = marginTop;
-      _marginRight      = marginRight;
-      _marginBottom     = marginBottom;
-      _topGap           = tg;
-      _bottomGap        = bg;
-
-      // according to box type, flip either height or width (or none)
-      Spatium val;
-      if (_box->type() == Element::Type::VBOX) {
-            val = _box->boxHeight();
-            _box->setBoxHeight(_height);
-            _height = val;
-            }
-      if (_box->type() == Element::Type::HBOX) {
-            val = _box->boxWidth();
-            _box->setBoxWidth(_width);
-            _width = val;
-            }
-      }
-
-//---------------------------------------------------------
 //   flip
 //---------------------------------------------------------
 
@@ -3835,6 +3821,29 @@ void ChangeStartEndSpanner::flip()
       spanner->setEndElement(end);
       start = s;
       end   = e;
+      }
+
+//---------------------------------------------------------
+//   ChangeLayoutMode::flip
+//---------------------------------------------------------
+
+void ChangeLayoutMode::flip()
+      {
+      LayoutMode lm = score->layoutMode();
+      score->setLayoutMode(layoutMode);
+      layoutMode = lm;
+      score->setLayoutAll(true);
+      }
+
+//---------------------------------------------------------
+//   ChangeMetaTags::flip
+//---------------------------------------------------------
+
+void ChangeMetaTags::flip()
+      {
+      QMap<QString,QString> t = score->metaTags();
+      score->setMetaTags(metaTags);
+      metaTags = t;
       }
 
 }

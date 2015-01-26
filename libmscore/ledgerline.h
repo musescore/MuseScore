@@ -36,12 +36,12 @@ class LedgerLine : public Line {
    public:
       LedgerLine(Score*);
       LedgerLine &operator=(const LedgerLine&) = delete;
-      virtual LedgerLine* clone() const { return new LedgerLine(*this); }
-      virtual Element::Type type() const{ return Element::Type::LEDGER_LINE; }
-      virtual QPointF pagePos() const;      ///< position in page coordinates
+      virtual LedgerLine* clone() const override { return new LedgerLine(*this); }
+      virtual Element::Type type() const override { return Element::Type::LEDGER_LINE; }
+      virtual QPointF pagePos() const override;      ///< position in page coordinates
       Chord* chord() const { return (Chord*)parent(); }
-      virtual void layout();
-      virtual void draw(QPainter*) const;
+      virtual void layout() override;
+      virtual void draw(QPainter*) const override;
       qreal measureXPos() const;
       LedgerLine* next() const    { return _next; }
       void setNext(LedgerLine* l) { _next = l;    }

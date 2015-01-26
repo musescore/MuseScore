@@ -21,7 +21,6 @@
 #ifndef __NEWWIZARD_H__
 #define __NEWWIZARD_H__
 
-// #include "ui_instrwizard.h"
 #include "ui_timesigwizard.h"
 #include "ui_newwizard.h"
 
@@ -35,43 +34,7 @@ class Score;
 class Palette;
 class StaffListItem;
 class InstrumentsWidget;
-
-#if 0
-//---------------------------------------------------------
-//   InstrumentWizard
-//---------------------------------------------------------
-
-class InstrumentWizard : public QWidget, private Ui::InstrumentWizard {
-      Q_OBJECT
-
-   private slots:
-      void on_addButton_clicked();
-      void on_partiturList_itemSelectionChanged();
-      void on_instrumentList_itemSelectionChanged();
-      void on_instrumentList_itemActivated(QTreeWidgetItem* item, int);
-      void on_removeButton_clicked();
-      void on_upButton_clicked();
-      void on_downButton_clicked();
-      void on_linkedButton_clicked();
-      StaffListItem* on_belowButton_clicked();
-      void buildTemplateList();
-      void expandOrCollapse(const QModelIndex &);
-
-      void on_search_textChanged(const QString &searchPhrase);
-      void on_clearSearch_clicked();
-
-      void on_instrumentGenreFilter_currentIndexChanged(int);
-      void filterInstrumentsByGenre(QTreeWidget *, QString);
-
-   signals:
-      void completeChanged(bool);
-
-   public:
-      InstrumentWizard(QWidget* parent = 0);
-      void createInstruments(Score*);
-      void init();
-      };
-#endif
+class ScoreBrowser;
 
 //---------------------------------------------------------
 //   TimesigWizard
@@ -168,12 +131,12 @@ class NewWizardPage3 : public QWizardPage {
 class NewWizardPage4 : public QWizardPage {
       Q_OBJECT
 
-      QFileDialog* templateFileDialog;
+      ScoreBrowser* templateFileBrowser;
       QString path;
 
    private slots:
       void templateChanged(const QString&);
-      void fileAccepted();
+      void fileAccepted(const QString&);
 
    public:
       NewWizardPage4(QWidget* parent = 0);
@@ -220,10 +183,9 @@ class NewWizard : public QWizard {
       friend class QWizardPage;
       virtual int nextId() const;
 
-      enum class Page : signed char { Invalid = -1, Type, Instruments, Template, Keysig, Timesig};
+      enum class Page : signed char      { Invalid = -1, Type, Instruments, Template, Keysig, Timesig};
 
       QString templatePath() const       { return p4->templatePath(); }
-      bool useTemplate() const;
       int measures() const               { return p3->measures();    }
       Fraction timesig() const           { return p3->timesig();     }
       void createInstruments(Score* s)   { p2->createInstruments(s); }
@@ -232,11 +194,12 @@ class NewWizard : public QWizard {
       QString composer() const           { return p1->composer();    }
       QString poet() const               { return p1->poet();        }
       QString copyright() const          { return p1->copyright();   }
-      KeySigEvent keysig() const          { return p5->keysig();      }
+      KeySigEvent keysig() const         { return p5->keysig();      }
       bool pickupMeasure(int* z, int* n) const { return p3->pickupMeasure(z, n); }
       TimeSigType timesigType() const     { return p3->timesigType();       }
-      double tempo() const                { return p5->tempo(); }
+      double tempo() const                { return p5->tempo();       }
       bool createTempo() const            { return p5->createTempo(); }
+      bool emptyScore() const;
       };
 
 

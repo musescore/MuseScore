@@ -490,7 +490,6 @@ Chord* Spanner::endChord()
             if (_endElement->type() != Element::Type::CHORD)
                   _endElement = nullptr;
             }
-      Q_ASSERT(_endElement->type() == Element::Type::CHORD);
       return static_cast<Chord*>(_endElement);
       }
 
@@ -536,6 +535,26 @@ Segment* Spanner::startSegment() const
 Segment* Spanner::endSegment() const
       {
       return score()->tick2leftSegment(tick2());
+      }
+
+//---------------------------------------------------------
+//   startMeasure
+//---------------------------------------------------------
+
+Measure* Spanner::startMeasure() const
+      {
+      Q_ASSERT(!_endElement || _endElement->type() == Element::Type::MEASURE);
+      return static_cast<Measure*>(_startElement);
+      }
+
+//---------------------------------------------------------
+//   endMeasure
+//---------------------------------------------------------
+
+Measure* Spanner::endMeasure() const
+      {
+      Q_ASSERT(!_endElement || _endElement->type() == Element::Type::MEASURE);
+      return static_cast<Measure*>(_endElement);
       }
 
 //---------------------------------------------------------
@@ -619,6 +638,39 @@ Element* Spanner::prevElement()
       if (s)
             return s->lastElement(staffIdx());
       return score()->lastElement();
+      }
+
+//---------------------------------------------------------
+//   setTick
+//---------------------------------------------------------
+
+void Spanner::setTick(int v)
+      {
+      _tick = v;
+      if (_score)
+            _score->spannerMap().setDirty();
+      }
+
+//---------------------------------------------------------
+//   setTick2
+//---------------------------------------------------------
+
+void Spanner::setTick2(int v)
+      {
+      _ticks = v - _tick;
+      if (_score)
+            _score->spannerMap().setDirty();
+      }
+
+//---------------------------------------------------------
+//   setTicks
+//---------------------------------------------------------
+
+void Spanner::setTicks(int v)
+      {
+      _ticks = v;
+      if (_score)
+            _score->spannerMap().setDirty();
       }
 
 }

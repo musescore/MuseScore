@@ -15,8 +15,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "2.01"
-static const int MSCVERSION = 201;
+#define MSC_VERSION     "2.04"
+static const int MSCVERSION = 204;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -47,6 +47,9 @@ static const int MSCVERSION = 201;
 //          TextStyle: frameWidth, paddingWidth are now in Spatium units (instead of mm)
 //    2.00  (Version 2.0)
 //    2.01  save SlurSegment position relative to staff
+//    2.02  save instrumentId, note slashes
+//    2.03  save Box topGap, bottomGap in spatium units
+//    2.04  added hideSystemBarLine flag to Staff
 
 
 
@@ -394,6 +397,7 @@ class MScore : public QObject {
       static qreal DPMM;
       static bool debugMode;
       static bool testMode;
+      static bool saveTemplateMode;
       static bool noGui;
 
       static bool noExcerpts;

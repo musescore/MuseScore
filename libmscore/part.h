@@ -47,6 +47,8 @@ class Part : public QObject {
       Q_PROPERTY(bool mute READ mute WRITE setMute)
       Q_PROPERTY(int endTrack READ endTrack)
       Q_PROPERTY(int startTrack READ startTrack)
+      Q_PROPERTY(int midiProgram READ midiProgram)
+      Q_PROPERTY(QString instrumentId READ instrumentId)
 
       Score* _score;
 
@@ -78,6 +80,7 @@ class Part : public QObject {
       QString longName(int tick = 0) const;
       QString shortName(int tick = 0) const;
       QString instrumentName(int tick = 0) const;
+      QString instrumentId(int tick = 0) const;
 
       const QList<StaffName>& longNames(int tick = 0) const  { return instr(tick)->longNames();  }
       const QList<StaffName>& shortNames(int tick = 0) const { return instr(tick)->shortNames(); }

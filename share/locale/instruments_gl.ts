@@ -17,11 +17,6 @@
         <translation>Instrumentos orquestrais</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4"/>
-        <source>Early Music</source>
-        <translation>Música Antiga</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Ethnic instruments</source>
         <translation>Instrumentos étnicos</translation>
@@ -1787,7 +1782,7 @@ Harmonium</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="503"/>
         <source>20 Hole Chordet Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Harmónica de 20 furados de Chordet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="506"/>
@@ -3002,13 +2997,13 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="841"/>
         <source>Almglocken</source>
-        <translation type="unfinished"/>
+        <translation>Chocallo (Almglocken)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="843"/>
         <source>Agl.</source>
         <extracomment>Almglocken</extracomment>
-        <translation type="unfinished"/>
+        <translation>Agl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="844"/>
@@ -3112,13 +3107,13 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="871"/>
         <source>Guitar Steel Drums</source>
-        <translation type="unfinished"/>
+        <translation>Tambores de aceiro</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="873"/>
         <source>Gtr. St. Dr.</source>
         <extracomment>Guitar Steel Drums</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tmb. ac.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="874"/>
@@ -3544,13 +3539,13 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="992"/>
         <source>Bell Plate</source>
-        <translation type="unfinished"/>
+        <translation>Placa campá</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="994"/>
         <source>Be. Pla.</source>
         <extracomment>Bell Plate</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pl. Ca.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="995"/>
@@ -3582,35 +3577,35 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1004"/>
         <source>Automobile Brake Drums</source>
-        <translation type="unfinished"/>
+        <translation>Freos de tambor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1006"/>
         <source>Aut. Brk. Dr.</source>
         <extracomment>Automobile Brake Drums</extracomment>
-        <translation type="unfinished"/>
+        <translation>Fr. tmb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1007"/>
         <source>Iron Pipes</source>
-        <translation type="unfinished"/>
+        <translation>Tubos de ferro</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1009"/>
         <source>Ir. Pi.</source>
         <extracomment>Iron Pipes</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tb. fe.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1010"/>
         <source>Chains</source>
-        <translation type="unfinished"/>
+        <translation>Cadeas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1012"/>
         <source>Chn.</source>
         <extracomment>Chains</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cad.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1013"/>
@@ -3714,13 +3709,13 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1040"/>
         <source>Cowbell</source>
-        <translation type="unfinished"/>
+        <translation>Choca</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1042"/>
         <source>Cwb.</source>
         <extracomment>Cowbell</extracomment>
-        <translation type="unfinished"/>
+        <translation>Chc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1043"/>
@@ -3923,13 +3918,13 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1097"/>
         <source>Finger Snap</source>
-        <translation type="unfinished"/>
+        <translation>Estalo de dedos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1099"/>
         <source>Fi. Sna.</source>
         <extracomment>Finger Snap</extracomment>
-        <translation type="unfinished"/>
+        <translation>Est. d.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1100"/>
@@ -3945,24 +3940,24 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1103"/>
         <source>Slap</source>
-        <translation type="unfinished"/>
+        <translation>Palmada</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1105"/>
         <source>Sla.</source>
         <extracomment>Slap</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1106"/>
         <source>Stamp</source>
-        <translation type="unfinished"/>
+        <translation>Pateada</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1108"/>
         <source>Sta.</source>
         <extracomment>Stamp</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pat.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1109"/>
@@ -4318,7 +4313,7 @@ Pipe Organ</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1205"/>
         <location filename="../instruments/instrumentsxml.h" line="1208"/>
         <source>Pipe Organ</source>
-        <translation type="unfinished"/>
+        <translation>Órgano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1209"/>
@@ -4328,13 +4323,13 @@ Pipe Organ</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1212"/>
         <source>Reed Organ</source>
-        <translation type="unfinished"/>
+        <translation>Órgano de palleta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1214"/>
         <source>Rd. Org.</source>
         <extracomment>Reed Organ</extracomment>
-        <translation type="unfinished"/>
+        <translation>Org. Pal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1215"/>
@@ -4930,6 +4925,11 @@ Acoustic Guitar</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1408"/>
         <source>Archlute</source>
         <translation>Arquilaúde</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4"/>
+        <source>Early music</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1411"/>

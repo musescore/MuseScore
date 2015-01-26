@@ -16,7 +16,6 @@
 #include "musescore.h"
 #include "preferences.h"
 #include "libmscore/xml.h"
-#include "paletteBoxButton.h"
 #include "workspace.h"
 
 namespace Ms {
@@ -34,13 +33,15 @@ PaletteBox::PaletteBox(QWidget* parent)
       QWidget* w = new QWidget(this);
       QVBoxLayout* vl = new QVBoxLayout(w);
       QHBoxLayout* hl = new QHBoxLayout;
-      vl->addLayout(hl);
+      hl->setContentsMargins(5,5,5,0);
 
       workspaceList = new QComboBox;
       workspaceList->setToolTip(tr("Select workspace"));
       updateWorkspaces();
       hl->addWidget(workspaceList);
       QToolButton* nb = new QToolButton;
+      
+      nb->setMinimumHeight(27);
       nb->setText(tr("+"));
       nb->setToolTip(tr("Add new workspace"));
       hl->addWidget(nb);
@@ -56,6 +57,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       sa->setWidgetResizable(true);
       sa->setFrameShape(QFrame::NoFrame);
       vl->addWidget(sa);
+      vl->addLayout(hl);
       // setWidget(sa);
 
       QWidget* paletteList = new QWidget;
@@ -336,5 +338,15 @@ void PaletteBox::displayMore(const QString& s)
       {
       mscore->showMasterPalette(s);
       }
+
+//---------------------------------------------------------
+//   sizeHint
+//---------------------------------------------------------
+
+QSize PaletteBoxScrollArea::sizeHint() const
+      {
+      return QSize(170 * guiScaling, 170 * guiScaling);
+      }
+
 }
 

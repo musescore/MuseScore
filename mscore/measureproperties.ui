@@ -489,6 +489,19 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>staves</tabstop>
+  <tabstop>actualZ</tabstop>
+  <tabstop>actualN</tabstop>
+  <tabstop>irregular</tabstop>
+  <tabstop>breakMultiMeasureRest</tabstop>
+  <tabstop>measureNumberMode</tabstop>
+  <tabstop>layoutStretch</tabstop>
+  <tabstop>measureNumberOffset</tabstop>
+  <tabstop>count</tabstop>
+  <tabstop>previousButton</tabstop>
+  <tabstop>nextButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

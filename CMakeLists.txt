@@ -78,7 +78,7 @@ if (APPLE)
 
       # Adjust and uncomment this variable, if you target a different version
       # of MacOSX.
-      # set(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
+      # set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk)
 
       set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)      #min version required
       set(HAS_AUDIOFILE TRUE)            # requires libsndfile
@@ -122,10 +122,12 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 
 # The Mscore version number.
+SET (MUSESCORE_NAME "MuseScore")
 SET(MUSESCORE_VERSION_MAJOR  "2")
 SET(MUSESCORE_VERSION_MINOR  "0")
 SET(MUSESCORE_VERSION_PATCH  "0")
 SET(MUSESCORE_VERSION       "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
+SET(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}")
 #
 # version schema x.x.x is hardcoded in source
 #
@@ -380,7 +382,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 subdirs(
       mscore  awl bww2mxml share midi audiofile fluid mstyle libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
-      thirdparty/xmlstream thirdparty/qzip
+      thirdparty/xmlstream thirdparty/qzip thirdparty/kQOAuth thirdparty/qtwaitingspinner
       )
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 #with xcode, we need to have all the targets in the same project
@@ -392,6 +394,7 @@ endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 add_subdirectory(miditools EXCLUDE_FROM_ALL)
 add_subdirectory(fonttools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
+add_subdirectory(demos)
 
 if (USE_PORTMIDI)
       subdirs (thirdparty/portmidi)

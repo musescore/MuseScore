@@ -33,6 +33,7 @@ class TestKeySig : public QObject, public MTest
    private slots:
       void initTestCase();
       void keysig();
+      void concertPitch();
       };
 
 //---------------------------------------------------------
@@ -68,17 +69,19 @@ void TestKeySig::keysig()
       Measure* m2 = score->firstMeasure()->nextMeasure();
 
       // add a key signature (D major) in measure 2
-      KeySigEvent ke2(Key::D);
+      KeySigEvent ke2;
+      ke2.setKey(Key::D);
       score->startCmd();
-      score->undoChangeKeySig(score->staff(0), m2->tick(), Key(2));
+      score->undoChangeKeySig(score->staff(0), m2->tick(), ke2);
       score->cmdUpdateNotes();
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
       // change key signature in measure 2 to E flat major
-      KeySigEvent ke_3(Key(-3));
+      KeySigEvent ke_3;
+      ke_3.setKey(Key(-3));
       score->startCmd();
-      score->undoChangeKeySig(score->staff(0), m2->tick(), Key(-3));
+      score->undoChangeKeySig(score->staff(0), m2->tick(), ke_3);
       score->cmdUpdateNotes();
       score->endCmd();
       QVERIFY(saveCompareScore(score, writeFile2, reference2));
@@ -107,6 +110,15 @@ void TestKeySig::keysig()
       QVERIFY(saveCompareScore(score, writeFile6, reference6));
 
       delete score;
+      }
+
+void TestKeySig::concertPitch()
+      {
+      Score* score = readScore(DIR + "concert-pitch.mscx");
+      score->cmdConcertPitchChanged(true, true);
+      QVERIFY(saveCompareScore(score, "concert-pitch-01-test.mscx", DIR + "concert-pitch-01-ref.mscx"));
+      score->cmdConcertPitchChanged(false, true);
+      QVERIFY(saveCompareScore(score, "concert-pitch-02-test.mscx", DIR + "concert-pitch-02-ref.mscx"));
       }
 
 QTEST_MAIN(TestKeySig)

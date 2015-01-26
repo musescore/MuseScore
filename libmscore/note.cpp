@@ -55,6 +55,7 @@
 #include "spanner.h"
 #include "glissando.h"
 #include "bagpembell.h"
+#include "hairpin.h"
 
 namespace Ms {
 
@@ -207,6 +208,8 @@ Note::Note(Score* s)
       _tpc[1]            = Tpc::TPC_INVALID;
       _headGroup         = NoteHead::Group::HEAD_NORMAL;
       _headType          = NoteHead::Type::HEAD_AUTO;
+      _fixed             = false;
+      _fixedLine         = 0;
 
       _subchannel        = 0;
 
@@ -257,6 +260,8 @@ Note::Note(const Note& n, bool link)
       _userMirror        = n._userMirror;
       _small             = n._small;
       _userDotPosition   = n._userDotPosition;
+      _fixed             = n._fixed;
+      _fixedLine         = n._fixedLine;
       _accidental        = 0;
 
       if (n._accidental)
@@ -373,9 +378,21 @@ int Note::tpc2default(int p) const
 
 void Note::setTpcFromPitch()
       {
+      // works best if note is already added to score, otherwise we can't determine transposition or key
+      Interval v = staff() ? staff()->part()->instr()->transpose() : Interval();
       Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
+      // convert key to concert pitch
+      if (!concertPitch() && !v.isZero())
+            key = transposeKey(key, v);
+      // set concert pitch tpc
       _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
-      _tpc[1] = pitch2tpc(_pitch - transposition(), key, Prefer::NEAREST);
+      // set transposed tpc
+      if (v.isZero())
+            _tpc[1] = _tpc[0];
+      else {
+            v.flip();
+            _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+            }
       Q_ASSERT(tpcIsValid(_tpc[0]));
       Q_ASSERT(tpcIsValid(_tpc[1]));
       }
@@ -419,7 +436,7 @@ int Note::tpc() const
 
 QString Note::tpcUserName(bool explicitAccidental)
       {
-      QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, false, explicitAccidental);
+      QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
       QString octaveName = QString::number((pitch() / 12) - 1);
       return pitchName + (explicitAccidental ? " " : "") + octaveName;
       }
@@ -438,10 +455,10 @@ int Note::transposeTpc(int tpc)
             return tpc;
       if (concertPitch()) {
             v.flip();
-            return Ms::transposeTpc(tpc, v, false);
+            return Ms::transposeTpc(tpc, v, true);
             }
       else
-            return Ms::transposeTpc(tpc, v, false);
+            return Ms::transposeTpc(tpc, v, true);
       }
 
 //---------------------------------------------------------
@@ -492,7 +509,11 @@ qreal Note::tabHeadWidth(StaffType* tab) const
             int size = lrint(tab->fretFontSize() * MScore::DPI / PPI);
             f.setPixelSize(size);
             QFontMetricsF fm(f);
-            QString s = tab->fretString(_fret, _ghost);
+            QString s;
+            if (fixed())
+                s = "/";
+            else
+                s = tab->fretString(_fret, _ghost);
             val  = fm.width(s) * mags;
             }
       else
@@ -705,7 +726,11 @@ void Note::draw(QPainter* painter) const
             StaffType* tab = staff()->staffType();
             if (tieBack() && tab->slashStyle())
                   return;
-            QString s = tab->fretString(_fret, _ghost);
+            QString s;
+            if (fixed())
+                  s = "/";
+            else
+                  s = tab->fretString(_fret, _ghost);
 
             // draw background, if required
             if (!tab->linesThrough() || fretConflict()) {
@@ -812,6 +837,8 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_ID::GHOST);
       writeProperty(xml, P_ID::HEAD_TYPE);
       writeProperty(xml, P_ID::VELO_TYPE);
+      writeProperty(xml, P_ID::FIXED);
+      writeProperty(xml, P_ID::FIXED_LINE);
 
       foreach (Spanner* e, _spannerFor)
             e->write(xml);
@@ -853,6 +880,10 @@ void Note::read(XmlReader& e)
                   setProperty(P_ID::MIRROR_HEAD, Ms::getProperty(P_ID::MIRROR_HEAD, e));
             else if (tag == "dotPosition")
                   setProperty(P_ID::DOT_POSITION, Ms::getProperty(P_ID::DOT_POSITION, e));
+            else if (tag == "fixed")
+                  setFixed(e.readBool());
+            else if (tag == "fixedLine")
+                  setFixedLine(e.readInt());
             else if (tag == "onTimeType") { //obsolete
                   if (e.readElementText() == "offset")
                         _onTimeType = 2;
@@ -1109,13 +1140,13 @@ void Note::read(XmlReader& e)
                   if (v.isZero())
                         _tpc[1] = _tpc[0];
                   else
-                        _tpc[1] = Ms::transposeTpc(_tpc[0], v, false);
+                        _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
                   }
             else {
                   if (v.isZero())
                         _tpc[0] = _tpc[1];
                   else
-                        _tpc[0] = Ms::transposeTpc(_tpc[1], v, false);
+                        _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
                   }
             }
       }
@@ -1187,8 +1218,8 @@ void Note::endDrag()
                   Interval interval = staff->part()->instr()->transpose();
                   nPitch += interval.chromatic;
                   }
-            int tpc1   = pitch2tpc(nPitch, key, Prefer::NEAREST);
-            int tpc2   = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
+            int tpc1 = pitch2tpc(nPitch, key, Prefer::NEAREST);
+            int tpc2 = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
             // undefined for non-tablature staves
             Note* n = this;
             while (n->tieBack())
@@ -1230,14 +1261,14 @@ bool Note::acceptDrop(const DropData& data) const
          || type == Element::Type::CHORD
          || type == Element::Type::HARMONY
          || type == Element::Type::DYNAMIC
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
-      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
-      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
-      || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
-         || (noteType() == NoteType::NORMAL && type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::ACCIACCATURA)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::APPOGGIATURA)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE4)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE8_AFTER)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE16_AFTER)
+         || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::GRACE32_AFTER)
          || (noteType() == NoteType::NORMAL && type == Element::Type::BAGPIPE_EMBELLISHMENT)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
@@ -1251,6 +1282,7 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == Element::Type::BAR_LINE)
          || (type == Element::Type::GLISSANDO)
          || (type == Element::Type::SLUR)
+         || (type == Element::Type::HAIRPIN)
          || (type == Element::Type::STAFF_TEXT)
          || (type == Element::Type::TEMPO_TEXT)
          || (type == Element::Type::BEND && (staff()->isTabStaff()))
@@ -1291,6 +1323,15 @@ Element* Note::drop(const DropData& data)
             case Element::Type::SLUR:
                   delete e;
                   data.view->cmdAddSlur(this, 0);
+                  return 0;
+
+            case Element::Type::HAIRPIN:
+                  {
+                  Hairpin* hairpin = static_cast<Hairpin*>(e);
+                  bool decresc = (hairpin->hairpinType() == Hairpin::Type::DECRESCENDO);
+                  delete e;
+                  data.view->cmdAddHairpin(decresc);
+                  }
                   return 0;
 
             case Element::Type::LYRICS:
@@ -1623,20 +1664,28 @@ void Note::layout2()
             if (!score()->tagIsValid(e->tag()))
                   continue;
             e->setMag(mag());
-            if (e->type() == Element::Type::SYMBOL && static_cast<Symbol*>(e)->sym() == SymId::noteheadParenthesisRight) {
+            if (e->type() == Element::Type::SYMBOL) {
                   qreal w = headWidth();
-                  if (staff()->isTabStaff()) {
-                        StaffType* tab = staff()->staffType();
-                        w = tabHeadWidth(tab);
-                        }
+                  Symbol* sym = static_cast<Symbol*>(e);
                   QPointF rp = e->readPos();
                   e->layout();
-                  e->rxpos() += w;
-                  // adjustReadPos() was called too early in layout(), adjust:
-                  if (!rp.isNull()) {
-                        e->setUserOff(QPointF());
-                        e->setReadPos(rp);
-                        e->adjustReadPos();
+                  if (sym->sym() == SymId::noteheadParenthesisRight) {
+                        if (staff()->isTabStaff()) {
+                              StaffType* tab = staff()->staffType();
+                              w = tabHeadWidth(tab);
+                              }
+                        e->rxpos() += w;
+                        }
+                  else if (sym->sym() == SymId::noteheadParenthesisLeft) {
+                        e->rxpos() -= symWidth(SymId::noteheadParenthesisLeft);
+                        }
+                  if (sym->sym() == SymId::noteheadParenthesisLeft || sym->sym() == SymId::noteheadParenthesisRight) {
+                        // adjustReadPos() was called too early in layout(), adjust:
+                        if (!rp.isNull()) {
+                              e->setUserOff(QPointF());
+                              e->setReadPos(rp);
+                              e->adjustReadPos();
+                              }
                         }
                   }
             else
@@ -1877,8 +1926,16 @@ void Note::setSmall(bool val)
       _small = val;
       }
 
+int Note::line() const
+      {
+      if (_fixed)
+            return _fixedLine;
+      else
+            return _line + _lineOffset;
+      }
+
 //---------------------------------------------------------
-//   setLine
+//   setAccidentalType
 //---------------------------------------------------------
 
 void Note::setAccidentalType(Accidental::Type type)
@@ -2053,9 +2110,14 @@ void Note::updateAccidental(AccidentalState* as)
 
 void Note::updateRelLine(int relLine, bool undoable)
       {
-      int idx = staffIdx() + chord()->staffMove();
-      if (idx < 0 && chord()->staffMove())                    // can happen if a staff is removed
-            chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
+      if (staff() && chord()->staffMove()) {
+            // check that destination staff makes sense (might have been deleted)
+            int idx = staffIdx() + chord()->staffMove();
+            int minStaff = staff()->part()->startTrack() / VOICES;
+            int maxStaff = staff()->part()->endTrack() / VOICES;
+            if (idx < minStaff || idx >= maxStaff || score()->staff(idx)->staffGroup() != staff()->staffGroup())
+                  chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
+            }
 
       Staff* s = score()->staff(staffIdx() + chord()->staffMove());
       ClefType clef = s->clef(chord()->tick());
@@ -2083,7 +2145,7 @@ void Note::updateLine()
 //    set note properties from NoteVal
 //---------------------------------------------------------
 
-void Note::setNval(const NoteVal& nval)
+void Note::setNval(const NoteVal& nval, int tick)
       {
       setPitch(nval.pitch);
       _fret   = nval.fret;
@@ -2092,17 +2154,21 @@ void Note::setNval(const NoteVal& nval)
       _tpc[0] = nval.tpc1;
       _tpc[1] = nval.tpc2;
 
+      Interval v = staff()->part()->instr()->transpose();
       if (nval.tpc1 == Tpc::TPC_INVALID) {
-            Key key = staff()->key(chord()->tick());
+            if (tick == -1)
+                  tick = chord()->tick();
+            Key key = staff()->key(tick);
+            if (!concertPitch() && !v.isZero())
+                  key = transposeKey(key, v);
             _tpc[0] = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
             }
       if (nval.tpc2 == Tpc::TPC_INVALID) {
-            Interval v = staff()->part()->instr()->transpose();
             if (v.isZero())
                   _tpc[1] = _tpc[0];
             else {
                   v.flip();
-                  _tpc[1] = Ms::transposeTpc(_tpc[0], v, false);
+                  _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
                   }
             }
 
@@ -2148,6 +2214,10 @@ QVariant Note::getProperty(P_ID propertyId) const
                   return play();
             case P_ID::LINE:
                   return _line;
+            case P_ID::FIXED:
+                  return fixed();
+            case P_ID::FIXED_LINE:
+                  return fixedLine();
             default:
                   break;
             }
@@ -2160,22 +2230,23 @@ QVariant Note::getProperty(P_ID propertyId) const
 
 bool Note::setProperty(P_ID propertyId, const QVariant& v)
       {
+      Measure* m = chord() ? chord()->measure() : nullptr;
       switch(propertyId) {
             case P_ID::PITCH:
                   setPitch(v.toInt());
-                  if (chord()->measure())
-                        chord()->measure()->cmdUpdateNotes(chord()->staffIdx());
+                  if (m)
+                        m->cmdUpdateNotes(chord()->staffIdx());
                   score()->setPlaylistDirty(true);
                   break;
             case P_ID::TPC1:
                   _tpc[0] = v.toInt();
-                  if (chord()->measure())
-                        chord()->measure()->cmdUpdateNotes(chord()->staffIdx());
+                  if (m)
+                        m->cmdUpdateNotes(chord()->staffIdx());
                   break;
             case P_ID::TPC2:
                   _tpc[1] = v.toInt();
-                  if (chord()->measure())
-                        chord()->measure()->cmdUpdateNotes(chord()->staffIdx());
+                  if (m)
+                        m->cmdUpdateNotes(chord()->staffIdx());
                   break;
             case P_ID::LINE:
                   _line = v.toInt();
@@ -2228,6 +2299,12 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::PLAY:
                   setPlay(v.toBool());
                   score()->setPlaylistDirty(true);
+                  break;
+            case P_ID::FIXED:
+                  setFixed(v.toBool());
+                  break;
+            case P_ID::FIXED_LINE:
+                  setFixedLine(v.toInt());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -2384,6 +2461,10 @@ QVariant Note::propertyDefault(P_ID propertyId) const
                   return int (ValueType::OFFSET_VAL);
             case P_ID::PLAY:
                   return true;
+            case P_ID::FIXED:
+                  return false;
+            case P_ID::FIXED_LINE:
+                  return 0;
             default:
                   break;
             }
@@ -2429,7 +2510,14 @@ QString Note::accessibleInfo()
       {
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      return tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(tpcUserName(false)).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+      QString pitchName;
+      if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
+            pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
+      else if (staff()->isDrumStaff())
+            pitchName = qApp->translate("drumset", staff()->part()->instr()->drumset()->name(pitch()).toUtf8().constData());
+      else
+            pitchName = tpcUserName(false);
+      return tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -2440,7 +2528,14 @@ QString Note::screenReaderInfo()
       {
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(tpcUserName(true)).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+      QString pitchName;
+      if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
+            pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
+      else if (staff()->isDrumStaff())
+            pitchName = qApp->translate("drumset", staff()->part()->instr()->drumset()->name(pitch()).toUtf8().constData());
+      else
+            pitchName = tpcUserName(true);
+      return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -2497,16 +2592,16 @@ NoteVal Note::noteVal() const
 
 //---------------------------------------------------------
 //   qmlDots
-//    returns dots as a list property for plugins
+//    returns number of dots for plugins
 //---------------------------------------------------------
 
-QQmlListProperty<Ms::NoteDot> Note::qmlDots()
+int Note::qmlDots()
       {
       QList<NoteDot*> list;
       for (NoteDot* dot : _dots)
             if (dot != nullptr)
                   list.append(dot);
-      return QQmlListProperty<Ms::NoteDot>(this, list);
+      return list.size();
       }
 
 const char* NoteHead::groupToGroupName(NoteHead::Group group)

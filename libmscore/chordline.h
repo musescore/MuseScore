@@ -42,6 +42,7 @@ class ChordLine : public Element {
       bool modified;
       float _lengthX;
       float _lengthY;
+      const int _initialLength = 2;
 
    public:
       ChordLine(Score*);
@@ -63,7 +64,8 @@ class ChordLine : public Element {
       virtual void draw(QPainter*) const;
 
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, int*, QRectF*) const override;
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
+      virtual int grips() const override;
 
       virtual QString accessibleInfo() override;
       };

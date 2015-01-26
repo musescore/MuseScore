@@ -17,11 +17,6 @@
         <translation>Instruments orquesta</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="4"/>
-        <source>Early Music</source>
-        <translation>Musica Antiga</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Ethnic instruments</source>
         <translation>Insturments etnics</translation>
@@ -3681,7 +3676,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1031"/>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Plat chinés</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1033"/>
@@ -3703,7 +3698,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1037"/>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Plat Splash</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1039"/>
@@ -3714,7 +3709,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1040"/>
         <source>Cowbell</source>
-        <translation type="unfinished"/>
+        <translation>Cowbell</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1042"/>
@@ -3725,7 +3720,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1043"/>
         <source>Claves</source>
-        <translation type="unfinished"/>
+        <translation>Claus</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1045"/>
@@ -3934,7 +3929,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1100"/>
         <source>Hand Clap</source>
-        <translation type="unfinished"/>
+        <translation>Aplauso</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1102"/>
@@ -4929,6 +4924,11 @@ Acoustic Guitar</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1408"/>
         <source>Archlute</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4"/>
+        <source>Early music</source>
         <translation type="unfinished"/>
     </message>
     <message>

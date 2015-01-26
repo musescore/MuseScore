@@ -23,7 +23,7 @@
 
 #include "globals.h"
 #include "shortcut.h"
-#include "mscore/importmidi_operations.h"
+#include "mscore/importmidi/importmidi_operations.h"
 
 namespace Ms {
 
@@ -48,6 +48,7 @@ enum {
       RMIDI_DOT,
       RMIDI_DOTDOT,
       RMIDI_TIE,
+      RMIDI_UNDO,
       RMIDI_NOTE_EDIT_MODE,
       MIDI_REMOTES
       };
@@ -91,7 +92,6 @@ struct Preferences {
       bool playNotes;         // play notes on click
       bool showNavigator;
       bool showPlayPanel;
-      bool showWebPanel;
       bool showStatusBar;
 
       bool useAlsaAudio;
@@ -101,7 +101,6 @@ struct Preferences {
       bool useJackMidi;
       bool useJackTransport;
       bool jackTimebaseMaster;
-      int midiPorts;
       bool rememberLastConnections;
 
       QString alsaDevice;

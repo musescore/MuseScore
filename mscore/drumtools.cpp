@@ -66,6 +66,7 @@ DrumTools::DrumTools(QWidget* parent)
       drumPalette->setSelectable(true);
       drumPalette->setGrid(28, 60);
       PaletteScrollArea* sa = new PaletteScrollArea(drumPalette);
+      sa->setFocusPolicy(Qt::NoFocus);
       layout->addWidget(sa);
 
       setWidget(w);
@@ -126,7 +127,7 @@ void DrumTools::updateDrumset()
             chord->add(note);
             Stem* stem = new Stem(gscore);
             stem->setLen((up ? -3.0 : 3.0) * _spatium);
-            chord->setStem(stem);
+            chord->add(stem);
             stem->setPos(chord->stemPos());
             int sc = drumset->shortcut(pitch);
             QString shortcut;
@@ -168,14 +169,15 @@ void DrumTools::editDrumset()
 void DrumTools::drumNoteSelected(int val)
       {
       Element* element = drumPalette->element(val);
-      if(element && element->type() == Element::Type::CHORD) {
+      if (element && element->type() == Element::Type::CHORD) {
             Chord* ch        = static_cast<Chord*>(element);
             Note* note       = ch->downNote();
             int ticks        = MScore::defaultPlayDuration;
             int pitch        = note->pitch();
             seq->startNote(staff->part()->instr()->channel(0).channel, pitch, 80, ticks, 0.0);
 
-            _score->inputState().setTrack(element->track());
+            int track = (_score->inputState().track() / VOICES) * VOICES + element->track();
+            _score->inputState().setTrack(track);
             _score->inputState().setDrumNote(pitch);
 
             getAction("voice-1")->setChecked(element->voice() == 0);
@@ -184,5 +186,22 @@ void DrumTools::drumNoteSelected(int val)
             getAction("voice-4")->setChecked(element->voice() == 3);
             }
       }
+
+int DrumTools::selectedDrumNote()
+      {
+      int idx = drumPalette->getSelectedIdx();
+      if (idx < 0)
+            return -1;
+      Element* element = drumPalette->element(idx);
+      if (element && element->type() == Element::Type::CHORD) {
+            Chord* ch  = static_cast<Chord*>(element);
+            Note* note = ch->downNote();
+            return note->pitch();
+            }
+      else {
+            return -1;
+            }
+      }
+
 }
 

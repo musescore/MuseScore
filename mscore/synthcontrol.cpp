@@ -30,8 +30,6 @@ namespace Ms {
 extern MasterSynthesizer* synti;
 extern bool useFactorySettings;
 
-static std::vector<const char*> effectNames = { "None", "Freeverb", "Zita1" };
-
 //---------------------------------------------------------
 //   SynthControl
 //---------------------------------------------------------
@@ -42,6 +40,7 @@ SynthControl::SynthControl(QWidget* parent)
       setupUi(this);
       _score = 0;
 
+      setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       int idx = 0;
@@ -59,15 +58,21 @@ SynthControl::SynthControl(QWidget* parent)
       effectA->clear();
       for (Effect* e : synti->effectList(0)) {
             effectA->addItem(tr(e->name()));
-            effectStackA->addWidget(QWidget::createWindowContainer(e->gui()));
-            connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
+            EffectGui* gui = e->gui();
+            if (gui) {
+                  effectStackA->addWidget(gui);
+                  connect(gui, SIGNAL(valueChanged()), SLOT(setDirty()));
+                  }
             }
 
       effectB->clear();
       for (Effect* e : synti->effectList(1)) {
             effectB->addItem(tr(e->name()));
-            effectStackB->addWidget(QWidget::createWindowContainer(e->gui()));
-            connect(e->gui(), SIGNAL(valueChanged()), SLOT(setDirty()));
+            EffectGui* gui = e->gui();
+            if (gui) {
+                  effectStackB->addWidget(gui);
+                  connect(gui, SIGNAL(valueChanged()), SLOT(setDirty()));
+                  }
             }
       if (!useFactorySettings) {
             QSettings settings;
@@ -76,6 +81,8 @@ SynthControl::SynthControl(QWidget* parent)
             move(settings.value("pos", QPoint(10, 10)).toPoint());
             settings.endGroup();
             }
+      metronome->setDefaultAction(getAction("metronome"));
+      mgain->setValue(seq->metronomeGain());
 
       updateGui();
 
@@ -87,6 +94,7 @@ SynthControl::SynthControl(QWidget* parent)
       connect(effectA,      SIGNAL(currentIndexChanged(int)), SLOT(effectAChanged(int)));
       connect(effectB,      SIGNAL(currentIndexChanged(int)), SLOT(effectBChanged(int)));
       connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(gainChanged(double,int)));
+      connect(mgain,        SIGNAL(valueChanged(double,int)), SLOT(metronomeGainChanged(double,int)));
       connect(masterTuning, SIGNAL(valueChanged(double)),     SLOT(masterTuningChanged(double)));
       connect(changeTuningButton, SIGNAL(clicked()),          SLOT(changeMasterTuning()));
       connect(loadButton,   SIGNAL(clicked()),                SLOT(loadButtonClicked()));
@@ -124,12 +132,14 @@ void MuseScore::showSynthControl(bool val)
       QAction* a = getAction("synth-control");
       if (synthControl == 0) {
             synthControl = new SynthControl(this);
+            mscore->stackUnder(synthControl);
             synthControl->setScore(cs);
-            connect(synti, SIGNAL(gainChanged(float)), synthControl, SLOT(setGain(float)));
+            connect(synti,        SIGNAL(gainChanged(float)), synthControl, SLOT(setGain(float)));
             connect(synthControl, SIGNAL(gainChanged(float)), synti, SLOT(setGain(float)));
             connect(synthControl, SIGNAL(closed(bool)), a,     SLOT(setChecked(bool)));
             if (mixer)
                   connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
+            connect(synthControl, SIGNAL(metronomeGainChanged(float)), seq, SLOT(setMetronomeGain(float)));
             }
       synthControl->setVisible(val);
       }
@@ -141,6 +151,15 @@ void MuseScore::showSynthControl(bool val)
 void SynthControl::gainChanged(double val, int)
       {
       emit gainChanged(val);
+      }
+
+//---------------------------------------------------------
+//   metronomeGainChanged
+//---------------------------------------------------------
+
+void SynthControl::metronomeGainChanged(double val, int)
+      {
+      emit metronomeGainChanged(val);
       }
 
 //---------------------------------------------------------
@@ -315,8 +334,10 @@ void SynthControl::updateGui()
       int idx = synti->indexOfEffect(0);
       effectA->setCurrentIndex(idx);
       effectStackA->setCurrentIndex(idx);
-      synti->effect(0)->gui()->updateValues();
-      synti->effect(1)->gui()->updateValues();
+      if (synti->effect(0) && synti->effect(0)->gui())
+            synti->effect(0)->gui()->updateValues();
+      if (synti->effect(1) && synti->effect(1)->gui())
+            synti->effect(1)->gui()->updateValues();
 
       idx = synti->indexOfEffect(1);
       effectB->setCurrentIndex(idx);

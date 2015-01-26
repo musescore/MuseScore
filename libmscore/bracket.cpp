@@ -252,10 +252,9 @@ void Bracket::startEdit(MuseScoreView*, const QPointF&)
 //   updateGrips
 //---------------------------------------------------------
 
-void Bracket::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Bracket::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips = 1;
-      *defaultGrip = 0;
+      *defaultGrip = Grip::START;
       grip[0].translate(QPointF(0.0, h2 * 2) + pagePos());
       }
 
@@ -263,7 +262,7 @@ void Bracket::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
 //   gripAnchor
 //---------------------------------------------------------
 
-QPointF Bracket::gripAnchor(int) const
+QPointF Bracket::gripAnchor(Grip) const
       {
       return QPointF();
       }
@@ -361,7 +360,7 @@ Element* Bracket::drop(const DropData& data)
 //    return true if event is accepted
 //---------------------------------------------------------
 
-bool Bracket::edit(MuseScoreView*, int, int key, Qt::KeyboardModifiers modifiers, const QString&)
+bool Bracket::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, const QString&)
       {
       if (!(modifiers & Qt::ShiftModifier))
             return false;

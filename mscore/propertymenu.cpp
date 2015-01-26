@@ -546,6 +546,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   for (Element* e : fd->linkList()) {
                         FretDiagram* f = static_cast<FretDiagram*>(nFret->clone());
                         f->setScore(e->score());
+                        f->setTrack(e->track());
                         e->score()->undoChangeElement(e, f);
                         }
                   }

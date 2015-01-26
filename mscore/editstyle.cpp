@@ -47,6 +47,25 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       cs     = s;
 
+      styleWidgets = {
+            { StyleIdx::staffUpperBorder,        staffUpperBorder       },
+            { StyleIdx::staffUpperBorder,        staffLowerBorder       },
+            { StyleIdx::staffDistance,           staffDistance          },
+            { StyleIdx::akkoladeDistance,        akkoladeDistance       },
+            { StyleIdx::minSystemDistance,       minSystemDistance      },
+            { StyleIdx::maxSystemDistance,       maxSystemDistance      },
+            { StyleIdx::lyricsDistance,          lyricsDistance         },
+            { StyleIdx::lyricsMinBottomDistance, lyricsMinBottomDistance },
+            { StyleIdx::systemFrameDistance,     systemFrameDistance    },
+            { StyleIdx::frameSystemDistance,     frameSystemDistance    },
+            { StyleIdx::minMeasureWidth,         minMeasureWidth_2      },
+            { StyleIdx::barWidth,                barWidth               },
+            { StyleIdx::endBarWidth,             endBarWidth            },
+            { StyleIdx::endBarDistance,          endBarDistance         },
+            { StyleIdx::doubleBarWidth,          doubleBarWidth         },
+            { StyleIdx::doubleBarDistance,       doubleBarDistance      },
+            };
+
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
       buttonApplyToAllParts->setEnabled(cs->parentScore() != nullptr);
 
@@ -160,7 +179,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       while (i.hasNext()) {
             i.next();
             toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(i.key()).arg(i.value());
-      }
+            }
       toolTipHeaderFooter += QString("</table></body></html>");
       showHeader->setToolTip(toolTipHeaderFooter);
       showFooter->setToolTip(toolTipHeaderFooter);
@@ -196,7 +215,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       CR(resetHairpinContinueHeight, StyleIdx::hairpinContHeight);
 #undef CR
       connect(mapper, SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
-
+      resize(904, 577); // override designer values
       }
 
 //---------------------------------------------------------
@@ -261,10 +280,9 @@ void EditStyle::apply()
 void EditStyle::applyToAllParts()
       {
       getValues();
-      QList<Excerpt*>& el = cs->rootScore()->excerpts();
-      for (Excerpt* e : el) {
-            e->score()->undo(new ChangeStyle(e->score(), lstyle));
-            e->score()->update();
+      for (Excerpt* e : cs->rootScore()->excerpts()) {
+            e->partScore()->undo(new ChangeStyle(e->partScore(), lstyle));
+            e->partScore()->update();
             }
       }
 
@@ -274,24 +292,24 @@ void EditStyle::applyToAllParts()
 
 void EditStyle::getValues()
       {
-      lstyle.set(StyleIdx::staffUpperBorder,        Spatium(staffUpperBorder->value()));
-      lstyle.set(StyleIdx::staffLowerBorder,        Spatium(staffLowerBorder->value()));
-      lstyle.set(StyleIdx::staffDistance,           Spatium(staffDistance->value()));
-      lstyle.set(StyleIdx::akkoladeDistance,        Spatium(akkoladeDistance->value()));
-      lstyle.set(StyleIdx::minSystemDistance,       Spatium(minSystemDistance->value()));
-      lstyle.set(StyleIdx::maxSystemDistance,       Spatium(maxSystemDistance->value()));
-      lstyle.set(StyleIdx::lyricsDistance,          Spatium(lyricsDistance->value()));
-      lstyle.set(StyleIdx::lyricsMinBottomDistance, Spatium(lyricsMinBottomDistance->value()));
-      lstyle.set(StyleIdx::lyricsLineHeight,        Spatium(lyricsLineHeight->value() * .01));
-      lstyle.set(StyleIdx::systemFrameDistance,     Spatium(systemFrameDistance->value()));
-      lstyle.set(StyleIdx::frameSystemDistance,     Spatium(frameSystemDistance->value()));
-      lstyle.set(StyleIdx::minMeasureWidth,         Spatium(minMeasureWidth_2->value()));
+      for (const StyleWidget sw : styleWidgets) {
+            StyleValueType svt = MStyle::valueType(sw.idx);
+            switch (svt) {
+                  case StyleValueType::SPATIUM:
+                        lstyle.set(sw.idx, Spatium(qobject_cast<QDoubleSpinBox*>(sw.widget)->value()));
+                        break;
+                  case StyleValueType::DOUBLE:
+                  case StyleValueType::BOOL:
+                  case StyleValueType::INT:
+                  case StyleValueType::DIRECTION:
+                  case StyleValueType::STRING:
+                        break;
+                  };
+            }
 
-      lstyle.set(StyleIdx::barWidth,                Spatium(barWidth->value()));
-      lstyle.set(StyleIdx::endBarWidth,             Spatium(endBarWidth->value()));
-      lstyle.set(StyleIdx::endBarDistance,          Spatium(endBarDistance->value()));
-      lstyle.set(StyleIdx::doubleBarWidth,          Spatium(doubleBarWidth->value()));
-      lstyle.set(StyleIdx::doubleBarDistance,       Spatium(doubleBarDistance->value()));
+      //TODO: convert the rest:
+
+      lstyle.set(StyleIdx::lyricsLineHeight,        Spatium(lyricsLineHeight->value() * .01));
 
       lstyle.set(StyleIdx::repeatBarTips,           showRepeatBarTips->isChecked());
       lstyle.set(StyleIdx::startBarlineSingle,      showStartBarlineSingle->isChecked());
@@ -362,8 +380,13 @@ void EditStyle::getValues()
 
       lstyle.set(StyleIdx::useStandardNoteNames,    useStandardNoteNames->isChecked());
       lstyle.set(StyleIdx::useGermanNoteNames,      useGermanNoteNames->isChecked());
+      lstyle.set(StyleIdx::useFullGermanNoteNames,  useFullGermanNoteNames->isChecked());
       lstyle.set(StyleIdx::useSolfeggioNoteNames,   useSolfeggioNoteNames->isChecked());
+      lstyle.set(StyleIdx::useFrenchNoteNames,      useFrenchNoteNames->isChecked());
+      lstyle.set(StyleIdx::automaticCapitalization, automaticCapitalization->isChecked());
       lstyle.set(StyleIdx::lowerCaseMinorChords,    lowerCaseMinorChords->isChecked());
+      lstyle.set(StyleIdx::lowerCaseBassNotes,      lowerCaseBassNotes->isChecked());
+      lstyle.set(StyleIdx::allCapsNoteNames,        allCapsNoteNames->isChecked());
 
       lstyle.set(StyleIdx::concertPitch,            concertPitch->isChecked());
       lstyle.set(StyleIdx::createMultiMeasureRests, multiMeasureRests->isChecked());
@@ -421,24 +444,24 @@ void EditStyle::getValues()
       Text t(cs);
       t.setTextStyleType(TextStyleType::HEADER);
 
-      lstyle.set(StyleIdx::evenHeaderL, t.convertFromHtml(evenHeaderL->toHtml()));
-      lstyle.set(StyleIdx::evenHeaderC, t.convertFromHtml(evenHeaderC->toHtml()));
-      lstyle.set(StyleIdx::evenHeaderR, t.convertFromHtml(evenHeaderR->toHtml()));
-      lstyle.set(StyleIdx::oddHeaderL,  t.convertFromHtml(oddHeaderL->toHtml()));
-      lstyle.set(StyleIdx::oddHeaderC,  t.convertFromHtml(oddHeaderC->toHtml()));
-      lstyle.set(StyleIdx::oddHeaderR,  t.convertFromHtml(oddHeaderR->toHtml()));
+      lstyle.set(StyleIdx::evenHeaderL, evenHeaderL->toPlainText());
+      lstyle.set(StyleIdx::evenHeaderC, evenHeaderC->toPlainText());
+      lstyle.set(StyleIdx::evenHeaderR, evenHeaderR->toPlainText());
+      lstyle.set(StyleIdx::oddHeaderL,  oddHeaderL->toPlainText());
+      lstyle.set(StyleIdx::oddHeaderC,  oddHeaderC->toPlainText());
+      lstyle.set(StyleIdx::oddHeaderR,  oddHeaderR->toPlainText());
 
       lstyle.set(StyleIdx::showFooter,      showFooter->isChecked());
       lstyle.set(StyleIdx::footerFirstPage, showFooterFirstPage->isChecked());
       lstyle.set(StyleIdx::footerOddEven,   footerOddEven->isChecked());
 
       t.setTextStyleType(TextStyleType::FOOTER);
-      lstyle.set(StyleIdx::evenFooterL, t.convertFromHtml(evenFooterL->toHtml()));
-      lstyle.set(StyleIdx::evenFooterC, t.convertFromHtml(evenFooterC->toHtml()));
-      lstyle.set(StyleIdx::evenFooterR, t.convertFromHtml(evenFooterR->toHtml()));
-      lstyle.set(StyleIdx::oddFooterL,  t.convertFromHtml(oddFooterL->toHtml()));
-      lstyle.set(StyleIdx::oddFooterC,  t.convertFromHtml(oddFooterC->toHtml()));
-      lstyle.set(StyleIdx::oddFooterR,  t.convertFromHtml(oddFooterR->toHtml()));
+      lstyle.set(StyleIdx::evenFooterL, evenFooterL->toPlainText());
+      lstyle.set(StyleIdx::evenFooterC, evenFooterC->toPlainText());
+      lstyle.set(StyleIdx::evenFooterR, evenFooterR->toPlainText());
+      lstyle.set(StyleIdx::oddFooterL,  oddFooterL->toPlainText());
+      lstyle.set(StyleIdx::oddFooterC,  oddFooterC->toPlainText());
+      lstyle.set(StyleIdx::oddFooterR,  oddFooterR->toPlainText());
 
       // figured bass
       int         idx = comboFBFont->currentIndex();
@@ -511,6 +534,10 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::tupletStemRightDistance,  Spatium(tupletStemRightDistance->value()));
       lstyle.set(StyleIdx::tupletNoteLeftDistance,   Spatium(tupletNoteLeftDistance->value()));
       lstyle.set(StyleIdx::tupletNoteRightDistance,  Spatium(tupletNoteRightDistance->value()));
+
+      lstyle.set(StyleIdx::barreLineWidth,           barreLineWidth->value());
+      lstyle.set(StyleIdx::fretMag,                  fretMag->value());
+      lstyle.set(StyleIdx::scaleBarlines,            scaleBarlines->isChecked());
       }
 
 //---------------------------------------------------------
@@ -543,24 +570,24 @@ void EditStyle::setFooterText(StyleIdx idx, QTextEdit* te)
 
 void EditStyle::setValues()
       {
-      staffUpperBorder->setValue(lstyle.value(StyleIdx::staffUpperBorder).toDouble());
-      staffLowerBorder->setValue(lstyle.value(StyleIdx::staffLowerBorder).toDouble());
-      staffDistance->setValue(lstyle.value(StyleIdx::staffDistance).toDouble());
-      akkoladeDistance->setValue(lstyle.value(StyleIdx::akkoladeDistance).toDouble());
-      minSystemDistance->setValue(lstyle.value(StyleIdx::minSystemDistance).toDouble());
-      maxSystemDistance->setValue(lstyle.value(StyleIdx::maxSystemDistance).toDouble());
-      lyricsDistance->setValue(lstyle.value(StyleIdx::lyricsDistance).toDouble());
-      lyricsMinBottomDistance->setValue(lstyle.value(StyleIdx::lyricsMinBottomDistance).toDouble());
-      lyricsLineHeight->setValue(lstyle.value(StyleIdx::lyricsLineHeight).toDouble() * 100.0);
-      systemFrameDistance->setValue(lstyle.value(StyleIdx::systemFrameDistance).toDouble());
-      frameSystemDistance->setValue(lstyle.value(StyleIdx::frameSystemDistance).toDouble());
-      minMeasureWidth_2->setValue(lstyle.value(StyleIdx::minMeasureWidth).toDouble());
+      for (const StyleWidget sw : styleWidgets) {
+            StyleValueType svt = MStyle::valueType(sw.idx);
+            switch (svt) {
+                  case StyleValueType::SPATIUM:
+                        qobject_cast<QDoubleSpinBox*>(sw.widget)->setValue(lstyle.value(sw.idx).toDouble());
+                        break;
+                  case StyleValueType::DOUBLE:
+                  case StyleValueType::BOOL:
+                  case StyleValueType::INT:
+                  case StyleValueType::DIRECTION:
+                  case StyleValueType::STRING:
+                        break;
+                  };
+            }
 
-      barWidth->setValue(lstyle.value(StyleIdx::barWidth).toDouble());
-      endBarWidth->setValue(lstyle.value(StyleIdx::endBarWidth).toDouble());
-      endBarDistance->setValue(lstyle.value(StyleIdx::endBarDistance).toDouble());
-      doubleBarWidth->setValue(lstyle.value(StyleIdx::doubleBarWidth).toDouble());
-      doubleBarDistance->setValue(lstyle.value(StyleIdx::doubleBarDistance).toDouble());
+      //TODO: convert the rest:
+
+      lyricsLineHeight->setValue(lstyle.value(StyleIdx::lyricsLineHeight).toDouble() * 100.0);
 
       showRepeatBarTips->setChecked(lstyle.value(StyleIdx::repeatBarTips).toBool());
       showStartBarlineSingle->setChecked(lstyle.value(StyleIdx::startBarlineSingle).toBool());
@@ -641,8 +668,13 @@ void EditStyle::setValues()
             }
       useStandardNoteNames->setChecked(lstyle.value(StyleIdx::useStandardNoteNames).toBool());
       useGermanNoteNames->setChecked(lstyle.value(StyleIdx::useGermanNoteNames).toBool());
+      useFullGermanNoteNames->setChecked(lstyle.value(StyleIdx::useFullGermanNoteNames).toBool());
       useSolfeggioNoteNames->setChecked(lstyle.value(StyleIdx::useSolfeggioNoteNames).toBool());
+      useFrenchNoteNames->setChecked(lstyle.value(StyleIdx::useFrenchNoteNames).toBool());
+      automaticCapitalization->setChecked(lstyle.value(StyleIdx::automaticCapitalization).toBool());
       lowerCaseMinorChords->setChecked(lstyle.value(StyleIdx::lowerCaseMinorChords).toBool());
+      lowerCaseBassNotes->setChecked(lstyle.value(StyleIdx::lowerCaseBassNotes).toBool());
+      allCapsNoteNames->setChecked(lstyle.value(StyleIdx::allCapsNoteNames).toBool());
       concertPitch->setChecked(lstyle.value(StyleIdx::concertPitch).toBool());
 
       multiMeasureRests->setChecked(lstyle.value(StyleIdx::createMultiMeasureRests).toBool());
@@ -728,7 +760,7 @@ void EditStyle::setValues()
             }
       musicalTextFont->clear();
       musicalTextFont->addItem("Emmentaler Text", "MScore Text");
-      musicalTextFont->addItem("Gonville Text", "Gonville Text");
+      musicalTextFont->addItem("Gonville Text", "Gootville Text");
       musicalTextFont->addItem("Bravura Text", "Bravura Text");
       musicalTextFont->addItem("MuseJazz", "MuseJazz");
       QString tfont(lstyle.value(StyleIdx::MusicalTextFont).toString());
@@ -801,6 +833,10 @@ void EditStyle::setValues()
       tupletStemRightDistance->setValue(lstyle.value(StyleIdx::tupletStemRightDistance).toDouble());
       tupletNoteLeftDistance->setValue(lstyle.value(StyleIdx::tupletNoteLeftDistance).toDouble());
       tupletNoteRightDistance->setValue(lstyle.value(StyleIdx::tupletNoteRightDistance).toDouble());
+
+      barreLineWidth->setValue(lstyle.value(StyleIdx::barreLineWidth).toDouble());
+      fretMag->setValue(lstyle.value(StyleIdx::fretMag).toDouble());
+      scaleBarlines->setChecked(lstyle.value(StyleIdx::scaleBarlines).toBool());
       }
 
 //---------------------------------------------------------

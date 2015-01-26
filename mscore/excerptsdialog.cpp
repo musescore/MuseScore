@@ -131,9 +131,9 @@ void ExcerptsDialog::deleteClicked()
             return;
       Excerpt* ex = static_cast<ExcerptItem*>(cur)->excerpt();
 
-      if (ex->score()) {
+      if (ex->partScore()) {
             score->startCmd();
-            score->undo(new RemoveExcerpt(ex->score()));
+            score->undo(new RemoveExcerpt(ex->partScore()));
             score->endCmd();
             }
       int row = excerptList->row(cur);
@@ -170,7 +170,7 @@ QString ExcerptsDialog::createName(const QString& partName)
 void ExcerptsDialog::newClicked()
       {
       QString name = createName("Part");
-      Excerpt* e   = new Excerpt(0);
+      Excerpt* e   = new Excerpt(score);
       e->setTitle(name);
       ExcerptItem* ei = new ExcerptItem(e);
       excerptList->addItem(ei);
@@ -187,7 +187,7 @@ void ExcerptsDialog::newAllClicked()
       int n = partList->count();
       ExcerptItem* ei = 0;
       for (int i = 0; i < n; ++i) {
-            Excerpt* e   = new Excerpt(0);
+            Excerpt* e   = new Excerpt(score);
             PartItem* pi = static_cast<PartItem*>(partList->item(i));
             e->parts().append(pi->part());
             QString name = createName(pi->part()->partName());
@@ -219,7 +219,7 @@ void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
                   int idx = pl.indexOf(pi->part());
                   pi->setCheckState(idx != -1 ? Qt::Checked : Qt::Unchecked);
                   }
-            b = e->score() == 0;
+            b = e->partScore() == 0;
             }
       else {
             title->setText("");
@@ -279,20 +279,20 @@ void ExcerptsDialog::partClicked(QListWidgetItem* item)
 void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       {
       Excerpt* e = static_cast<ExcerptItem*>(cur)->excerpt();
-      if (e->score())
+      if (e->partScore())
             return;
       if (e->parts().isEmpty())
             return;
 
-      Score* nscore = new Score(e->parts().front()->score());
-      e->setScore(nscore);
+      Score* nscore = new Score(e->oscore());
+      e->setPartScore(nscore);
 
       nscore->setName(e->title()); // needed before AddExcerpt
       nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       score->startCmd();
       score->undo(new AddExcerpt(nscore));
-      Ms::createExcerpt(nscore, e);
+      Ms::createExcerpt(e);
       score->endCmd();
 
       partList->setEnabled(false);

@@ -23,9 +23,6 @@
 
 namespace Ms {
 
-static const int DEFAULT_STRINGS = 6;
-static const int DEFAULT_FRETS = 5;
-
 //    parent() is Segment or Box
 //
 
@@ -37,18 +34,9 @@ FretDiagram::FretDiagram(Score* score)
    : Element(score)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SELECTABLE);
-      _strings    = DEFAULT_STRINGS;
-      _frets      = DEFAULT_FRETS;
-      _maxFrets   = 24;
-      maxStrings  = 0;
-      _dots       = 0;
-      _marker     = 0;
-      _fingering  = 0;
-      _fretOffset = 0;
       font.setFamily("FreeSans");
       int size = lrint(4.0 * MScore::DPI * mag()/ PPI);
       font.setPixelSize(size);
-      _harmony = 0;
       }
 
 FretDiagram::FretDiagram(const FretDiagram& f)
@@ -59,10 +47,9 @@ FretDiagram::FretDiagram(const FretDiagram& f)
       _fretOffset = f._fretOffset;
       _maxFrets   = f._maxFrets;
       maxStrings  = f.maxStrings;
-      _dots       = 0;
-      _marker     = 0;
-      _fingering  = 0;
       font        = f.font;
+      _barre      = f._barre;
+      _userMag    = f._userMag;
 
       if (f._dots) {
             _dots = new char[_strings];
@@ -93,7 +80,6 @@ FretDiagram::~FretDiagram()
       delete[] _fingering;
       }
 
-#if 1
 //---------------------------------------------------------
 //   pagePos
 //---------------------------------------------------------
@@ -113,7 +99,6 @@ QPointF FretDiagram::pagePos() const
       else
             return Element::pagePos();
       }
-#endif
 
 //---------------------------------------------------------
 //   dragAnchor
@@ -203,7 +188,7 @@ void FretDiagram::setStrings(int n)
 
 void FretDiagram::init(StringData* stringData, Chord* chord)
       {
-      if (stringData == 0)
+      if (!stringData)
             setStrings(6);
       else
             setStrings(stringData->strings());
@@ -228,7 +213,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 
 void FretDiagram::draw(QPainter* painter) const
       {
-      qreal _spatium = spatium();
+      qreal _spatium = spatium() * _userMag * score()->styleD(StyleIdx::fretMag);
       QPen pen(curColor());
       pen.setWidthF(lw2);
       pen.setCapStyle(Qt::FlatCap);
@@ -250,9 +235,10 @@ void FretDiagram::draw(QPainter* painter) const
             }
       painter->setFont(font);
       QFontMetricsF fm(font);
+      qreal dotd = stringDist * .6;
+
       for (int i = 0; i < _strings; ++i) {
             if (_dots && _dots[i]) {
-                  qreal dotd = stringDist * .6;
                   int fret = _dots[i] - 1;
                   qreal x = stringDist * i - dotd * .5;
                   qreal y = fretDist * fret + fretDist * .5 - dotd * .5;
@@ -263,6 +249,24 @@ void FretDiagram::draw(QPainter* painter) const
                   qreal y = -fretDist * .3 - fm.ascent();
                   painter->drawText(QRectF(x, y, .0,.0),
                      Qt::AlignHCenter|Qt::TextDontClip, QChar(_marker[i]));
+                  }
+            }
+      if (_barre) {
+            int string = -1;
+            for (int i = 0; i < _strings; ++i) {
+                  if (_dots[i] == _barre) {
+                        string = i;
+                        break;
+                        }
+                  }
+            if (string != -1) {
+                  qreal x1   = stringDist * string;
+                  qreal x2   = stringDist * (_strings-1);
+                  qreal y    = fretDist * (_barre-1) + fretDist * .5;
+                  pen.setWidthF((dotd + lw2 * .5) * score()->styleD(StyleIdx::barreLineWidth));
+                  pen.setCapStyle(Qt::RoundCap);
+                  painter->setPen(pen);
+                  painter->drawLine(QLineF(x1, y, x2, y));
                   }
             }
       if (_fretOffset > 0) {
@@ -288,7 +292,7 @@ void FretDiagram::draw(QPainter* painter) const
 
 void FretDiagram::layout()
       {
-      qreal _spatium  = spatium();
+      qreal _spatium = spatium() * _userMag * score()->styleD(StyleIdx::fretMag);
       lw1             = _spatium * 0.08;
       lw2             = _fretOffset ? lw1 : _spatium * 0.2;
       stringDist      = _spatium * .7;
@@ -351,6 +355,9 @@ void FretDiagram::write(Xml& xml) const
                   xml.etag();
                   }
             }
+      if (_barre)
+            xml.tag("barre", _barre);
+      writeProperty(xml, P_ID::MAG);
       if (_harmony)
             _harmony->write(xml);
       xml.etag();
@@ -384,6 +391,10 @@ void FretDiagram::read(XmlReader& e)
                               e.unknown();
                         }
                   }
+            else if (tag == "barre")
+                  setBarre(e.readInt());
+            else if (tag == "mag")
+                  _userMag = e.readDouble(0.1, 10.0);
             else if (tag == "Harmony") {
                   Harmony* h = new Harmony(score());
                   h->read(e);
@@ -598,6 +609,48 @@ void FretDiagram::writeMusicXML(Xml& xml) const
                   xml.tag("root-alter", alter);
             */
             xml.etag();
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant FretDiagram::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::MAG:            return userMag();
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant FretDiagram::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::MAG:            return 1.0;
+            default:
+                  return Element::propertyDefault(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool FretDiagram::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::MAG:
+                  setUserMag(v.toDouble());
+                  break;
+            default:
+                  return Element::setProperty(propertyId, v);
+            }
+      return true;
       }
 
 }

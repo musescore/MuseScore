@@ -60,7 +60,7 @@ class TimeSigMap : public std::map<int, SigEvent > {
       void normalize();
 
    public:
-      TimeSigMap();
+      TimeSigMap() {}
 
       void add(int tick, const Fraction&);
       void add(int tick, const SigEvent& ev);

@@ -138,7 +138,7 @@ void Rest::draw(QPainter* painter) const
 
 //---------------------------------------------------------
 //   setUserOff, overriden from Element
-//    - raster vertical position in spatium units
+//    (- raster vertical position in spatium units) -> no
 //    - half rests and whole rests outside the staff are
 //      replaced by special symbols with ledger lines
 //---------------------------------------------------------
@@ -157,7 +157,8 @@ void Rest::setUserOff(const QPointF& o)
       else if (_sym == SymId::restHalfLegerLine && (line > -3 && line < 3))
             _sym = SymId::restHalf;
 
-      Element::setUserOff(QPointF(o.x(), qreal(line) * _spatium));
+//      Element::setUserOff(QPointF(o.x(), qreal(line) * _spatium));
+      Element::setUserOff(o);
       }
 
 //---------------------------------------------------------
@@ -333,7 +334,7 @@ void Rest::layout()
 
       for (Element* e : _el)
             e->layout();
-      if (parent() && measure() && measure()->isMMRest()) {
+      if (measure() && measure()->isMMRest()) {
             _space.setRw(point(score()->styleS(StyleIdx::minMMRestWidth)));
 
             static const qreal verticalLineWidth = .2;
@@ -640,6 +641,35 @@ qreal Rest::stemPosX() const
             return bbox().right();
       else
             return bbox().left();
+      }
+
+//---------------------------------------------------------
+//   accent
+//---------------------------------------------------------
+
+bool Rest::accent()
+      {
+      return (voice() >= 2 && small());
+      }
+
+//---------------------------------------------------------
+//   setAccent
+//---------------------------------------------------------
+
+void Rest::setAccent(bool flag)
+      {
+      undoChangeProperty(P_ID::SMALL, flag);
+      if (voice() % 2 == 0) {
+            if (flag) {
+                  qreal yOffset = -(bbox().bottom());
+                  if (durationType() >= TDuration::DurationType::V_HALF)
+                        yOffset -= staff()->spatium() * 0.5;
+                  undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, yOffset));
+                  }
+            else {
+                  undoChangeProperty(P_ID::USER_OFF, QPointF());
+                  }
+            }
       }
 
 //---------------------------------------------------------

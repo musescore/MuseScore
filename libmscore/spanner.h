@@ -66,6 +66,8 @@ class SpannerSegment : public Element {
       void setPos2(const QPointF& p)        { _p2 = p;                }
       QPointF pos2() const                  { return _p2 + _userOff2; }
       const QPointF& ipos2() const          { return _p2;             }
+      qreal& rxpos2()                       { return _p2.rx();        }
+      qreal& rypos2()                       { return _p2.ry();        }
 
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
@@ -131,11 +133,13 @@ class Spanner : public Element {
       virtual void setScore(Score* s) override;
 
       int tick() const         { return _tick;          }
-      void setTick(int v)      { _tick = v;             }
       int tick2() const        { return _tick + _ticks; }
-      void setTick2(int v)     { _ticks = v - _tick;    }
       int ticks() const        { return _ticks;         }
-      void setTicks(int v)     { _ticks = v;            }
+
+      void setTick(int v);
+      void setTick2(int v);
+      void setTicks(int v);
+
       int track2() const       { return _track2;        }
       void setTrack2(int v)    { _track2 = v;           }
 
@@ -162,6 +166,9 @@ class Spanner : public Element {
 
       Element* startElement() const    { return _startElement; }
       Element* endElement() const      { return _endElement;   }
+
+      Measure* startMeasure() const;
+      Measure* endMeasure() const;
 
       void setStartElement(Element* e);
       void setEndElement(Element* e);

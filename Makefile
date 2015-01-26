@@ -89,7 +89,7 @@ version:
 	@echo ${VERSION}
 
 install: release
-	cd build.release; make install
+	cd build.release; make install/strip
 
 installdebug: debug
 	cd build.debug; make install

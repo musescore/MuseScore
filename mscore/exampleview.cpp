@@ -91,7 +91,7 @@ int ExampleView::gripCount() const
       return 0;
       }
 
-const QRectF& ExampleView::getGrip(int) const
+const QRectF& ExampleView::getGrip(Grip) const
       {
       static QRectF r;
       return r;
@@ -109,7 +109,7 @@ void ExampleView::startEdit()
       {
       }
 
-void ExampleView::startEdit(Element*, int /*startGrip*/)
+void ExampleView::startEdit(Element*, Grip /*startGrip*/)
       {
       }
 
@@ -330,6 +330,16 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
                   }
             }
       }
+
+//---------------------------------------------------------
+//   sizeHint
+//---------------------------------------------------------
+
+QSize ExampleView::sizeHint() const
+      {
+      return QSize(1000 * guiScaling, 80 * guiScaling);
+      }
+
 
 }
 

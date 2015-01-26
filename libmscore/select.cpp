@@ -78,11 +78,9 @@ int Selection::tickStart() const
       switch (_state) {
             case SelState::RANGE:
                   return _startSegment->tick();
-                  break;
             case SelState::LIST: {
                   ChordRest* cr = firstChordRest();
                   return (cr) ? cr->tick() : -1;
-                  break;
                   }
             default:
                   return -1;
@@ -140,6 +138,21 @@ bool Selection::isEndActive() const {
 Element* Selection::element() const
       {
       return _el.size() == 1 ? _el[0] : 0;
+      }
+//---------------------------------------------------------
+//   cr
+//---------------------------------------------------------
+
+ChordRest* Selection::cr() const
+      {
+      Element* e = element();
+      if (!e)
+            return 0;
+      if (e->type() == Element::Type::NOTE)
+            e = e->parent();
+      if (e->isChordRest())
+            return static_cast<ChordRest*>(e);
+      return 0;
       }
 
 //---------------------------------------------------------
@@ -209,13 +222,12 @@ ChordRest* Selection::lastChordRest(int track) const
             Element* el = _el[0];
             if (el && el->type() == Element::Type::NOTE)
                   return static_cast<ChordRest*>(el->parent());
-            else if (el->type() == Element::Type::CHORD || el->type() == Element::Type::REST)
+            else if (el->type() == Element::Type::CHORD || el->type() == Element::Type::REST || el->type() == Element::Type::REPEAT_MEASURE)
                   return static_cast<ChordRest*>(el);
             return 0;
             }
       ChordRest* cr = 0;
-      for (auto i = _el.begin(); i != _el.end(); ++i) {
-            Element* el = *i;
+      for (auto el : _el) {
             if (el->type() == Element::Type::NOTE)
                   el = ((Note*)el)->chord();
             if (el->isChordRest() && static_cast<ChordRest*>(el)->segment()->segmentType() == Segment::Type::ChordRest) {
@@ -259,15 +271,31 @@ void Selection::deselectAll()
       }
 
 //---------------------------------------------------------
+//   changeSelection
+//---------------------------------------------------------
+
+static QRectF changeSelection(Element* e, bool b)
+      {
+      QRectF r = e->canvasBoundingRect();
+      e->setSelected(b);
+      r |= e->canvasBoundingRect();
+      return r;
+      }
+
+//---------------------------------------------------------
 //   clear
 //---------------------------------------------------------
 
 void Selection::clear()
       {
-      foreach(Element* e, _el) {
-            _score->addRefresh(e->canvasBoundingRect());
-            e->setSelected(false);
-            _score->addRefresh(e->canvasBoundingRect());
+      for (Element* e : _el) {
+            if (e->isSpanner()) {   // TODO: only visible elements should be selectable?
+                  Spanner* sp = static_cast<Spanner*>(e);
+                  for (auto s : sp->spannerSegments())
+                        e->score()->addRefresh(changeSelection(s, false));
+                  }
+            else
+                  e->score()->addRefresh(changeSelection(e, false));
             }
       _el.clear();
       _startSegment  = 0;
@@ -428,6 +456,13 @@ void Selection::updateSelectedElements()
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
                   if (s->segmentType() == Segment::Type::EndBarLine)  // do not select end bar line
                         continue;
+                  foreach(Element* e, s->annotations()) {
+                        if (e->track() != st)
+                              continue;
+                        if (e->systemFlag()) //exclude system text
+                              continue;
+                        appendFiltered(e);
+                        }
                   Element* e = s->element(st);
                   if (!e)
                         continue;
@@ -453,13 +488,6 @@ void Selection::updateSelectedElements()
                   else {
                         appendFiltered(e);
                         }
-                  foreach(Element* e, s->annotations()) {
-                        if (e->track() < startTrack || e->track() >= endTrack)
-                              continue;
-                        if (e->systemFlag()) //exclude system text
-                              continue;
-                        appendFiltered(e);
-                        }
                   }
             }
       int stick = startSegment()->tick();
@@ -470,9 +498,12 @@ void Selection::updateSelectedElements()
             // ignore spanners belonging to other tracks
             if (sp->track() < startTrack || sp->track() >= endTrack)
                   continue;
+            // ignore voltas
+            if (sp->type() == Element::Type::VOLTA)
+                  continue;
             if (sp->type() == Element::Type::SLUR) {
                 if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick))
-                      if (canSelect(sp->startChord()) && canSelect(sp->endChord()))
+                      if (canSelect(sp->startCR()) && canSelect(sp->endCR()))
                         appendFiltered(sp); // slur with start or end in range selection
             }
             else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick))
@@ -504,7 +535,7 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffSt
 
 void Selection::update()
       {
-      foreach (Element* e, _el)
+      for (Element* e : _el)
             e->setSelected(true);
       updateState();
       }
@@ -1022,10 +1053,15 @@ bool Selection::measureRange(Measure** m1, Measure** m2) const
       if (!isRange())
             return false;
       *m1 = startSegment()->measure();
-      *m2 = endSegment()->measure();
-      if (m1 == m2)
+      Segment* s2 = endSegment();
+      *m2 = s2 ? s2->measure() : score()->lastMeasure();
+      if (*m1 == *m2)
             return true;
-      if (*m2 && (*m2)->tick() == endSegment()->tick())
+      // if selection extends to last segment of a measure,
+      // then endSegment() will point to next measure
+      // this won't normally happen because end barlines are excluded from range selection
+      // but just in case, detect this and back up one measure
+      if (*m2 && s2 && (*m2)->tick() == s2->tick())
             *m2 = (*m2)->prevMeasure();
       return true;
       }

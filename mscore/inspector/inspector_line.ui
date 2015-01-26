@@ -233,6 +233,9 @@
      </item>
      <item row="0" column="0" colspan="2">
       <widget class="QCheckBox" name="lineVisible">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="text">
         <string>Line visible</string>
        </property>

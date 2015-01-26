@@ -34,6 +34,7 @@ class TrackList : public QList<Element*>
       {
       Fraction _duration;
       ScoreRange* _range;
+      int _track;
 
       Tuplet* writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const;
       void append(Element*);
@@ -41,9 +42,12 @@ class TrackList : public QList<Element*>
    public:
       TrackList(ScoreRange* r) { _range = r; }
       ~TrackList();
-      void read(int track, const Segment* fs, const Segment* ls);
+
+      int track() const        { return _track; }
+      void setTrack(int val)   { _track = val; }
+      void read(const Segment* fs, const Segment* ls);
       bool canWrite(const Fraction& f) const;
-      bool write(int track, Measure*) const;
+      bool write(Measure*) const;
       Fraction duration() const  { return _duration; }
       ScoreRange* range() const { return _range; }
       void appendGap(const Fraction&);

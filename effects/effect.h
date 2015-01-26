@@ -42,7 +42,7 @@ class Effect : public QObject {
       Q_OBJECT
 
    protected:
-      EffectGui* _gui;
+      EffectGui* _gui { nullptr };
 
    public slots:
       virtual void setValue(const QString& name, double value);
@@ -50,7 +50,7 @@ class Effect : public QObject {
       virtual void setNValue(int idx, double value) = 0;
 
    public:
-      Effect() : QObject() { _gui = 0; }
+      Effect() : QObject() { }
       virtual ~Effect() {}
       virtual void process(int frames, float*, float*) = 0;
       virtual const char* name() const = 0;

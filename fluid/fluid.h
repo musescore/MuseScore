@@ -317,7 +317,6 @@ class Fluid : public Synthesizer {
 
       unsigned int sfont_id;
 
-      double _gain;                       // master gain
       QList<Channel*> channel;            // the channels
 
       unsigned int noteid;                // the id is incremented for every new note. it's used for noteoff's

@@ -1485,6 +1485,7 @@ void GuitarPro1::readNote(int string, Note* note)
             qDebug("Time independend note len, len %d t %d", a, b);
             }
       if (noteBits & 0x2) {               // note is dotted
+            //readUChar();
             }
 
       // set dynamic information on note if different from previous note
@@ -2341,7 +2342,8 @@ Score::FileError importGTP(Score* score, const QString& name)
             pscore->appendPart(p);
 
             pscore->setName(part->partName());
-            Excerpt* excerpt = new Excerpt(pscore);
+            Excerpt* excerpt = new Excerpt(score);
+            excerpt->setPartScore(pscore);
             excerpt->setTitle(part->partName());
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);

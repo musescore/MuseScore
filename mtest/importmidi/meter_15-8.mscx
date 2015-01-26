@@ -44,11 +44,54 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
+        <defaultClef>F8vb</defaultClef>
         </Staff>
       <trackName>Fingered Bass</trackName>
       <Instrument>
         <longName pos="0">Fingered Bass</longName>
-        <trackName></trackName>
+        <shortName pos="0">El. B.</shortName>
+        <trackName>Electric Bass</trackName>
+        <minPitchP>28</minPitchP>
+        <maxPitchP>65</maxPitchP>
+        <minPitchA>28</minPitchA>
+        <maxPitchA>65</maxPitchA>
+        <instrumentId>pluck.bass.electric</instrumentId>
+        <clef>F8vb</clef>
+        <StringData>
+          <frets>24</frets>
+          <string>28</string>
+          <string>33</string>
+          <string>38</string>
+          <string>43</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="33"/>
           </Channel>
@@ -56,10 +99,6 @@
       </Part>
     <Staff id="1">
       <Measure number="1">
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
         <KeySig>
           <accidental>-2</accidental>
           </KeySig>
@@ -72,13 +111,6 @@
           <dots>1</dots>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>39</pitch>
             <tpc>11</tpc>
             <velocity>80</velocity>
@@ -95,15 +127,8 @@
           <dots>1</dots>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>44</pitch>
-            <tpc>22</tpc>
+            <tpc>10</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
@@ -118,13 +143,6 @@
           <dots>1</dots>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>42</pitch>
             <tpc>20</tpc>
             <velocity>80</velocity>
@@ -141,13 +159,6 @@
           <dots>1</dots>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>41</pitch>
             <tpc>13</tpc>
             <velocity>80</velocity>
@@ -163,13 +174,6 @@
         <Chord>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>41</pitch>
             <tpc>13</tpc>
             <velocity>80</velocity>
@@ -182,13 +186,6 @@
         <Chord>
           <durationType>eighth</durationType>
           <Note>
-            <Events>
-              <Event>
-                <pitch>0</pitch>
-                <ontime>0</ontime>
-                <len>1000</len>
-                </Event>
-              </Events>
             <pitch>34</pitch>
             <tpc>12</tpc>
             <velocity>80</velocity>

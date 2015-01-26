@@ -34,12 +34,12 @@ class Bend : public Element {
 
    public:
       Bend(Score* s);
-      virtual Bend* clone() const        { return new Bend(*this); }
-      virtual Element::Type type() const { return Element::Type::BEND; }
-      virtual void layout();
-      virtual void draw(QPainter*) const;
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader& e);
+      virtual Bend* clone() const override        { return new Bend(*this); }
+      virtual Element::Type type() const override { return Element::Type::BEND; }
+      virtual void layout() override;
+      virtual void draw(QPainter*) const override;
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader& e) override;
       QList<PitchValue>& points()                { return _points; }
       const QList<PitchValue>& points() const    { return _points; }
       void setPoints(const QList<PitchValue>& p) { _points = p;    }

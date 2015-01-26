@@ -36,6 +36,7 @@ Tuplet::Tuplet(Score* s)
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _numberType   = Tuplet::NumberType::SHOW_NUMBER;
       _bracketType  = Tuplet::BracketType::AUTO_BRACKET;
+      _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
@@ -72,11 +73,6 @@ Tuplet::Tuplet(const Tuplet& t)
 
 Tuplet::~Tuplet()
       {
-      //
-      // delete all references
-      //
-      foreach(DurationElement* e, _elements)
-            e->setTuplet(0);
       delete _number;
       }
 
@@ -759,7 +755,7 @@ bool Tuplet::isEditable() const
 
 void Tuplet::editDrag(const EditData& ed)
       {
-      if (ed.curGrip == 0)
+      if (ed.curGrip == Grip::START)
             _p1 += ed.delta;
       else
             _p2 += ed.delta;
@@ -772,10 +768,9 @@ void Tuplet::editDrag(const EditData& ed)
 //   updateGrips
 //---------------------------------------------------------
 
-void Tuplet::updateGrips(int* grips, int* defaultGrip, QRectF*grip) const
+void Tuplet::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips = 2;
-      *defaultGrip = 1;
+      *defaultGrip = Grip::END;
       grip[0].translate(pagePos() + p1);
       grip[1].translate(pagePos() + p2);
       }
@@ -930,7 +925,7 @@ QVariant Tuplet::propertyDefault(P_ID id) const
                   return int(Tuplet::BracketType::AUTO_BRACKET);
             case P_ID::NORMAL_NOTES:
             case P_ID::ACTUAL_NOTES:
-                  return 1;
+                  return 0;
             case P_ID::P1:
             case P_ID::P2:
                   return QPointF();

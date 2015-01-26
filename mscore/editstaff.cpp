@@ -52,7 +52,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
-      
+
       const QIcon &editIcon = *icons[int(Icons::edit_ICON)];
       minPitchASelect->setIcon(editIcon);
       maxPitchASelect->setIcon(editIcon);
@@ -72,6 +72,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       staff->setNeverHide(orgStaff->neverHide());
       staff->setShowIfEmpty(orgStaff->showIfEmpty());
       staff->setUserMag(orgStaff->userMag());
+      staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
 
       // hide string data controls if instrument has no strings
       stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
@@ -83,6 +84,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       partName->setText(part->partName());
       neverHide->setChecked(staff->neverHide());
       showIfEmpty->setChecked(staff->showIfEmpty());
+      hideSystemBarLine->setChecked(staff->hideSystemBarLine());
       mag->setValue(staff->userMag() * 100.0);
       updateStaffType();
       updateInstrument();
@@ -90,8 +92,6 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
       connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
       connect(changeStaffType,      SIGNAL(clicked()),            SLOT(showStaffTypeDialog()));
-//      connect(editShortName,        SIGNAL(clicked()),            SLOT(editShortNameClicked()));
-//      connect(editLongName,         SIGNAL(clicked()),            SLOT(editLongNameClicked()));
       connect(minPitchASelect,      SIGNAL(clicked()),            SLOT(minPitchAClicked()));
       connect(maxPitchASelect,      SIGNAL(clicked()),            SLOT(maxPitchAClicked()));
       connect(minPitchPSelect,      SIGNAL(clicked()),            SLOT(minPitchPClicked()));
@@ -224,6 +224,17 @@ void EditStaff::apply()
       Score* score  = orgStaff->score();
       Part* part    = orgStaff->part();
 
+      QString sn = shortName->toPlainText();
+      QString ln = longName->toPlainText();
+      if (!Text::validateText(sn) || !Text::validateText(ln)) {
+            QMessageBox msgBox;
+            msgBox.setText(tr("The instrument name is invalid."));
+            msgBox.exec();
+            return;
+            }
+      shortName->setPlainText(sn);  // show the fixed text
+      longName->setPlainText(ln);
+
       int intervalIdx = iList->currentIndex();
       bool upFlag     = up->isChecked();
 
@@ -239,11 +250,10 @@ void EditStaff::apply()
       instrument.setMaxPitchA(_maxPitchA);
       instrument.setMinPitchP(_minPitchP);
       instrument.setMaxPitchP(_maxPitchP);
-      Text text(0);
-//      instrument.setShortName(text.convertFromHtml(shortName->toHtml()));
-      instrument.setShortName(shortName->toPlainText());
-//      instrument.setLongName(text.convertFromHtml(longName->toHtml()));
-      instrument.setLongName(longName->toPlainText());
+
+//      Text text(0);
+      instrument.setShortName(sn);
+      instrument.setLongName(ln);
 
       bool s         = small->isChecked();
       bool inv       = invisible->isChecked();
@@ -251,6 +261,7 @@ void EditStaff::apply()
       QColor col     = color->color();
       bool nhide     = neverHide->isChecked();
       bool ifEmpty   = showIfEmpty->isChecked();
+      bool hideSystemBL = hideSystemBarLine->isChecked();
       qreal scale    = mag->value() / 100.0;
 
       QString newPartName = partName->text().simplified();
@@ -262,7 +273,7 @@ void EditStaff::apply()
             emit instrumentChanged();
 
             if (v1 != v2)
-                  score->transpositionChanged(part);
+                  score->transpositionChanged(part, v2);
             }
 
       if (s != orgStaff->small()
@@ -272,8 +283,9 @@ void EditStaff::apply()
          || nhide != orgStaff->neverHide()
          || ifEmpty != orgStaff->showIfEmpty()
          || scale != orgStaff->userMag()
+         || hideSystemBL != orgStaff->hideSystemBarLine()
          ) {
-            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide, ifEmpty, scale));
+            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide, ifEmpty, scale, hideSystemBL));
             }
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {

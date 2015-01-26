@@ -39,9 +39,6 @@ namespace Awl {
 class VolSlider : public Slider {
       Q_OBJECT
 
-   protected:
-      virtual void mouseDoubleClickEvent(QMouseEvent*);
-
    public slots:
       virtual void setValue(double v);
 

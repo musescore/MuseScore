@@ -90,7 +90,7 @@ ChordRest* nextChordRest(ChordRest* cr)
       int track = cr->track();
       Segment::Type st = Segment::Type::ChordRest;
 
-      for (Segment* seg = cr->segment()->next1(st); seg; seg = seg->next1(st)) {
+      for (Segment* seg = cr->segment()->next1MM(st); seg; seg = seg->next1MM(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
                   if (e->type() == Element::Type::CHORD) {
@@ -165,7 +165,7 @@ ChordRest* prevChordRest(ChordRest* cr)
 
       int track = cr->track();
       Segment::Type st = Segment::Type::ChordRest;
-      for (Segment* seg = cr->segment()->prev1(st); seg; seg = seg->prev1(st)) {
+      for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
                   if (e->type() == Element::Type::CHORD) {
@@ -426,12 +426,17 @@ ChordRest* Score::prevTrack(ChordRest* cr)
 //   nextMeasure
 //---------------------------------------------------------
 
-ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior)
+ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRest)
       {
       if (!element)
             return 0;
 
-      Measure* measure = element->measure()->nextMeasure();
+      Measure* measure = 0;
+      if (mmRest)
+            measure = element->measure()->nextMeasureMM();
+      else
+            measure = element->measure()->nextMeasure();
+
       if (measure == 0)
             return 0;
 
@@ -473,16 +478,16 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior)
 //   prevMeasure
 //---------------------------------------------------------
 
-ChordRest* Score::prevMeasure(ChordRest* element)
+ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
       {
       if (!element)
             return 0;
 
-      MeasureBase* mb = element->measure()->prev();
-      while (mb && mb->type() != Element::Type::MEASURE)
-            mb = mb->prev();
-
-      Measure* measure = static_cast<Measure*>(mb);
+      Measure* measure =  0;
+      if (mmRest)
+            measure = element->measure()->prevMeasureMM();
+      else
+            measure = element->measure()->prevMeasure();
 
       int startTick = element->measure()->first()->nextChordRest(element->track())->tick();
       bool last = false;

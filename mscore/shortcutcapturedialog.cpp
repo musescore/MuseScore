@@ -113,6 +113,14 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
             return;
 
       k += e->modifiers();
+      // remove shift-modifier for keys that don't need it: letters and special keys
+      if((k & Qt::ShiftModifier) && ((e->key() < 0x41) || (e->key() > 0x5a) || (e->key() >= 0x01000000)))
+      {
+      qDebug() << k;
+      	k -= Qt::ShiftModifier;
+      qDebug() << k;
+      }
+
       switch(key.count()) {
             case 0: key = QKeySequence(k); break;
             case 1: key = QKeySequence(key[0], k); break;

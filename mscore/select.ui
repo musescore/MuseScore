@@ -162,6 +162,19 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>type</tabstop>
+  <tabstop>sameSubtype</tabstop>
+  <tabstop>subtype</tabstop>
+  <tabstop>sameStaff</tabstop>
+  <tabstop>inSelection</tabstop>
+  <tabstop>sameVoice</tabstop>
+  <tabstop>sameSystem</tabstop>
+  <tabstop>replace</tabstop>
+  <tabstop>add</tabstop>
+  <tabstop>fromSelection</tabstop>
+  <tabstop>subtract</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

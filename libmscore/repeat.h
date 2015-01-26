@@ -38,6 +38,7 @@ class RepeatMeasure : public Rest {
       virtual void draw(QPainter*) const;
       virtual void layout();
       virtual Fraction duration() const;
+      Fraction actualDuration() const { return Rest::duration(); }
 
       virtual QString accessibleInfo();
       };

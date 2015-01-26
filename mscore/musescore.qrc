@@ -1,7 +1,5 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
+<RCC>
     <qresource prefix="/">
-        <file alias="/startcenter.qml">data/startcenter.qml</file>
         <file>data/shortcuts.xml</file>
         <file>data/paper1.png</file>
         <file>data/paper2.png</file>
@@ -11,15 +9,17 @@
         <file>data/icons/edit.svg</file>
         <file alias="fonts/mscore/glyphnames.json">../fonts/mscore/glyphnames.json</file>
         <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
-        <file alias="fonts/gonville/glyphnames.json">../fonts/gonville/glyphnames.json</file>
-        <file alias="fonts/gonville/metadata.json">../fonts/gonville/metadata.json</file>
+        <file alias="fonts/gootville/glyphnames.json">../fonts/gootville/glyphnames.json</file>
+        <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>
         <file alias="fonts/bravura/glyphnames.json">../fonts/bravura/glyphnames.json</file>
         <file alias="fonts/bravura/metadata.json">../fonts/bravura/metadata.json</file>
         <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
         <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
         <file alias="data/instruments.xml">../share/instruments/instruments.xml</file>
-        <file>data/splash.jpg</file>
-        <file>data/My_First_Score.mscx</file>
+        <file>data/splash.png</file>
+        <file alias="data/My_First_Score.mscz">../share/templates/My_First_Score.mscz</file>
+        <file alias="data/Create_New_Score.mscz">../share/templates/Create_New_Score.mscz</file>
+        <file alias="data/Empty_Score.mscz">../share/templates/01-General/00-Blank.mscz</file>
         <file>data/tab_sample.mscx</file>
         <file>data/style.qss</file>
         <file>data/mscore.png</file>
@@ -71,6 +71,7 @@
         <file>schema/xml.xsd</file>
         <file>data/icons/align-vertical-bottom.svg</file>
         <file>data/icons/align-vertical-top.svg</file>
+        <file>data/icons/document.svg</file>
         <file>data/icons/document-new.svg</file>
         <file>data/icons/document-open.svg</file>
         <file>data/icons/document-print.svg</file>
@@ -107,7 +108,6 @@
         <file>data/icons/note-natural.svg</file>
         <file>data/icons/note-sharp.svg</file>
         <file>data/icons/note-tie.svg</file>
-        <file>data/icons/panel-community.svg</file>
         <file>data/icons/rest.svg</file>
         <file>data/icons/stem-flip.svg</file>
         <file>data/icons/insert-symbol.svg</file>
@@ -152,5 +152,7 @@
         <file>data/icons/dialog-information.svg</file>
         <file>data/icons/dialog-question.svg</file>
         <file>data/icons/dialog-warning.svg</file>
+        <file>data/icons/arrow_down.svg</file>
+        <file>data/icons/arrow_up.svg</file>
     </qresource>
 </RCC>

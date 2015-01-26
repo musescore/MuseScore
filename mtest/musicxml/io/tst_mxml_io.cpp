@@ -101,6 +101,8 @@ private slots:
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
       void multipleNotations() { mxmlIoTestRef("testMultipleNotations"); }
+      void nonStandardKeySig1() { mxmlIoTest("testNonStandardKeySig1"); }
+      void nonStandardKeySig2() { mxmlIoTest("testNonStandardKeySig2"); }
       void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }
       void noteAttributes1() { mxmlIoTest("testNoteAttributes1"); }
       void noteAttributes2() { mxmlIoTestRef("testNoteAttributes2"); }
@@ -110,10 +112,12 @@ private slots:
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
+      void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
       void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
+      void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
@@ -122,6 +126,7 @@ private slots:
       void tablature2() { mxmlIoTest("testTablature2"); }
       void tablature3() { mxmlIoTest("testTablature3"); }
       void tempo1() { mxmlIoTest("testTempo1"); }
+      void tempo2() { mxmlIoTestRef("testTempo2"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
       void tremolo() { mxmlIoTest("testTremolo"); }
@@ -129,6 +134,7 @@ private slots:
       void tuplets2() { mxmlIoTestRef("testTuplets2"); }
       void tuplets3() { mxmlIoTestRef("testTuplets3"); }
       void tuplets4() { mxmlIoTest("testTuplets4"); }
+      void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); }
       void unusualDurations() { mxmlIoTestRef("testUnusualDurations"); }
       void voiceMapper1() { mxmlIoTestRef("testVoiceMapper1"); }
       void voiceMapper2() { mxmlIoTestRef("testVoiceMapper2"); }

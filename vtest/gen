@@ -12,6 +12,12 @@ if [ -n "$VTEST_MSCORE" ]; then
       MSCORE="$VTEST_MSCORE"
 fi
 
+case "$MSCORE" in
+      /*) ;;
+      ~*) ;;
+      *) MSCORE="../$MSCORE" ;;
+esac
+
 if [ -n "$VTEST_BROWSER" ]; then
       BROWSER="$VTEST_BROWSER"
 fi
@@ -32,15 +38,17 @@ else
        emmentaler-text-1 gonville-text-1 bravura-text-1 musejazz-text-1\
        emmentaler-text-2 gonville-text-2 bravura-text-2 musejazz-text-2\
        emmentaler-text-3 gonville-text-3 bravura-text-3 musejazz-text-3\
-       frametext ottava slurs-1 slurs-2 hairpins-1 pedal-1 line-1 line-2 line-3 line-4\
+       frametext ottava slurs-1 slurs-2 slurs-3 hairpins-1 pedal-1 line-1 line-2 line-3 line-4 gliss-1 gliss-2\
        chord-layout-1 chord-layout-2 chord-layout-3 chord-layout-4 chord-layout-5\
        chord-layout-6 chord-layout-7 chord-layout-8 chord-layout-9 chord-layout-10\
        chord-layout-11 chord-layout-12 chord-layout-13 chord-layout-14 cross-1\
        accidental-1 accidental-2 accidental-3 accidental-4 accidental-5\
        accidental-6 accidental-7 accidental-8 accidental-9\
-       tie-1 tie-2 tie-3 grace-1 grace-2 grace-3 harmony-1 harmony-2 harmony-3 harmony-4 beams-1 beams-2\
-       user-offset-1 user-offset-2 chord-space-1 tablature-1 image-1\
-       lyrics-1 lyrics-2 lyrics-3 voice-1"
+       tie-1 tie-2 tie-3 grace-1 grace-2 grace-3 grace-4\
+       harmony-1 harmony-2 harmony-3 harmony-4 harmony-5 harmony-6 harmony-7 harmony-8 harmony-9 harmony-10 harmony-11\
+       beams-1 beams-2 beams-3 beams-4 beams-5 beams-6 beams-7 beams-8 beams-9\
+       user-offset-1 user-offset-2 chord-space-1 chord-space-2 tablature-1 image-1\
+       lyrics-1 lyrics-2 lyrics-3 lyrics-4 voice-1 slash-1 slash-2 system-1 system-2"
 fi
 
 DPI=130
@@ -53,7 +61,7 @@ cd html
 for src in $SRC; do
       echo process ../$src
       cp ../$src-ref.png .
-      ../$MSCORE ../$src.mscz -r $DPI -o $src.png > /dev/null 2>&1
+      $MSCORE ../$src.mscz -r $DPI -o $src.png > /dev/null 2>&1
       compare $src-1.png $src-ref.png $src-diff.png
       done
 

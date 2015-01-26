@@ -34,6 +34,7 @@ class TestTimesig : public QObject, public MTest
       void timesig01();
       void timesig02();
       void timesig03();
+      void timesig04();
       };
 
 //---------------------------------------------------------
@@ -99,6 +100,27 @@ void TestTimesig::timesig03()
       score->doLayout();
 
       QVERIFY(saveCompareScore(score, "timesig-03.mscx", DIR + "timesig-03-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   timesig04
+///   add a 6/4 time signature in the second measure
+///   which already contains a quarter note
+//---------------------------------------------------------
+
+void TestTimesig::timesig04()
+      {
+      Score* score = readScore(DIR + "timesig-04.mscx");
+      QVERIFY(score);
+      Measure* m = score->firstMeasure()->nextMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(6, 4), TimeSigType::NORMAL);
+
+      score->cmdAddTimeSig(m, 0, ts, false);
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, "timesig-04.mscx", DIR + "timesig-04-ref.mscx"));
       delete score;
       }
 

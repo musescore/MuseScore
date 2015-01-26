@@ -71,6 +71,11 @@ void TempoText::read(XmlReader& e)
 //                  styleChanged();
 //                  }
             }
+      // check sanity
+      if (text().isEmpty()) {
+            setText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
+            setVisible(false);
+            }
       }
 
 //---------------------------------------------------------
@@ -97,7 +102,7 @@ static const TempoPattern tp[] = {
       TempoPattern("<sym>unicodeNoteQuarterUp</sym>",                                   1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
       TempoPattern("<sym>unicodeNote8thUp</sym>",                                       1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
       };
-      
+
 //---------------------------------------------------------
 //   findTempoDuration
 //    find the duration part (note + dot) of a tempo text in string s
@@ -110,19 +115,18 @@ int TempoText::findTempoDuration(const QString& s, int& len, TDuration& dur)
       len = 0;
       dur = TDuration();
 
-      for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
-            QRegExp re(tp[i].pattern);
+      for (const auto& i : tp) {
+            QRegExp re(i.pattern);
             int pos = re.indexIn(s);
             if (pos != -1) {
                   len = re.matchedLength();
-                  dur = tp[i].d;
+                  dur = i.d;
                   return pos;
                   }
             }
-
       return -1;
       }
-      
+
 //---------------------------------------------------------
 //   duration2tempoTextString
 //    find the tempoText string representation for duration
@@ -231,10 +235,11 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
 QVariant TempoText::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case P_ID::TEMPO:             return 120;
+            case P_ID::TEMPO:             return 2.0;
             case P_ID::TEMPO_FOLLOW_TEXT: return false;
             case P_ID::PLACEMENT:         return int(Element::Placement::ABOVE);
-            default:                  return Text::propertyDefault(id);
+            default:
+                  return Text::propertyDefault(id);
             }
       }
 
@@ -268,6 +273,10 @@ void TempoText::layout()
       adjustReadPos();
       }
 
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
 QString TempoText::accessibleInfo()
       {
       TDuration t;
@@ -277,21 +286,20 @@ QString TempoText::accessibleInfo()
             QString dots;
 
             switch (t.dots()) {
-                  case 1: dots = tr("Dotted");
+                  case 1: dots = tr("Dotted %1").arg(t.durationTypeUserName());
                         break;
-                  case 2: dots = tr("Double dotted");
+                  case 2: dots = tr("Double dotted %1").arg(t.durationTypeUserName());
                         break;
-                  case 3: dots = tr("Triple dotted");
+                  case 3: dots = tr("Triple dotted %1").arg(t.durationTypeUserName());
                         break;
                   default:
-                        dots = "";
+                        dots = t.durationTypeUserName();
                         break;
                   }
 
             QString bpm = plainText().split(" = ").back();
 
-            //return Element::accessibleInfo() + dots + " " + t.durationTypeUserName() + " " + tr("note = %1").arg(bpm);
-            return QString("%1: %2 %3 %4").arg(Element::accessibleInfo()).arg(dots).arg(t.durationTypeUserName()).arg(tr("note = %1").arg(bpm));
+            return QString("%1: %2 %3").arg(Element::accessibleInfo()).arg(dots).arg(tr("note = %1").arg(bpm));
             }
       else
             return Text::accessibleInfo();

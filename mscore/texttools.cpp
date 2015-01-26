@@ -58,7 +58,7 @@ TextTools::TextTools(QWidget* parent)
       setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
 
       QToolBar* tb = new QToolBar(tr("Text Edit"));
-      tb->setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
+      tb->setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
 
       showKeyboard = getAction("show-keys");
       showKeyboard->setCheckable(true);

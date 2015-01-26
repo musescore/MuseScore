@@ -20,6 +20,7 @@ namespace Ms {
 
 class Palette;
 class TimeDialog;
+class KeyEditor;
 
 //---------------------------------------------------------
 //   MasterPalette
@@ -30,6 +31,8 @@ class MasterPalette : public QWidget, Ui::MasterPalette
       Q_OBJECT
 
       TimeDialog* timeDialog;
+      KeyEditor* keyEditor;
+
       virtual void closeEvent(QCloseEvent*);
       Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
       void addPalette(Palette* sp);

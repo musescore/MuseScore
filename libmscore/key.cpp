@@ -23,11 +23,11 @@ namespace Ms {
 //   KeySigEvent
 //---------------------------------------------------------
 
-KeySigEvent::KeySigEvent(Key k)
+KeySigEvent::KeySigEvent(const KeySigEvent& k)
       {
-      Q_ASSERT(int(k) >= -7 && int(k) <= 7);
-      _key = k;
-      _invalid = false;
+      _key        = k._key;
+      _custom     = k._custom;
+      _keySymbols = k._keySymbols;
       }
 
 //---------------------------------------------------------
@@ -52,29 +52,17 @@ void KeySigEvent::enforceLimits()
       }
 
 //---------------------------------------------------------
-//   setCustomType
-//---------------------------------------------------------
-
-void KeySigEvent::setCustomType(int v)
-      {
-      _key         = Key::C;
-      _customType  = v;
-      _custom      = true;
-      _invalid     = false;
-      }
-
-//---------------------------------------------------------
 //   print
 //---------------------------------------------------------
 
 void KeySigEvent::print() const
       {
       qDebug("<KeySigEvent: ");
-      if (_invalid)
+      if (!isValid())
             qDebug("invalid>");
       else {
-            if (_custom)
-                  qDebug("custom %d>", _customType);
+            if (custom())
+                  qDebug("custom>");
             else
                   qDebug("accidental %d>", int(_key));
             }
@@ -88,7 +76,6 @@ void KeySigEvent::setKey(Key v)
       {
       _key      = v;
       _custom   = false;
-      _invalid  = false;
       enforceLimits();
       }
 
@@ -98,26 +85,19 @@ void KeySigEvent::setKey(Key v)
 
 bool KeySigEvent::operator==(const KeySigEvent& e) const
       {
-      if ((e._invalid != _invalid) || (e._custom != _custom))
+      if (e._custom != _custom)
             return false;
-      if (_custom)
-            return e._customType == _customType;
-      else
-            return e._key == _key;
-      }
-
-//---------------------------------------------------------
-//   KeySigEvent::operator!=
-//---------------------------------------------------------
-
-bool KeySigEvent::operator!=(const KeySigEvent& e) const
-      {
-      if ((e._invalid != _invalid) || (e._custom != _custom))
+      if (_custom) {
+            if (e._keySymbols.size() != _keySymbols.size())
+                  return false;
+            for (int i = 0; i < _keySymbols.size(); ++i) {
+                  if (e._keySymbols[i].sym != _keySymbols[i].sym)
+                        return false;
+                  // TODO: position matters
+                  }
             return true;
-      if (_custom)
-            return e._customType != _customType;
-      else
-            return e._key != _key;
+            }
+      return e._key == _key;
       }
 
 //---------------------------------------------------------
@@ -182,9 +162,10 @@ void KeySigEvent::initFromSubtype(int st)
       U a;
       a.subtype       = st;
       _key            = Key(a._key);
-      _customType     = a._customType;
+//      _customType     = a._customType;
       _custom         = a._custom;
-      _invalid        = a._invalid;
+      if (a._invalid)
+            _key = Key::INVALID;
       enforceLimits();
       }
 

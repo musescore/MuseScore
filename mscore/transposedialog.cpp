@@ -92,6 +92,17 @@ void TransposeDialog::enableTransposeByKey(bool val)
       }
 
 //---------------------------------------------------------
+//   enableTransposeChordNames
+//---------------------------------------------------------
+
+void TransposeDialog::enableTransposeChordNames(bool val)
+      {
+      transposeChordNames->setEnabled(val);
+      transposeChordNames->setChecked(!val);
+      transposeChordNames->setChecked(val);
+      }
+
+//---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
 

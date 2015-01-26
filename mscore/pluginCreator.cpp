@@ -10,9 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+
 #include "pluginCreator.h"
 #include "musescore.h"
-// #include "plugins.h"
 #include "qmlplugin.h"
 #include "icons.h"
 #include "helpBrowser.h"
@@ -42,7 +42,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       manualDock  = 0;
       helpBrowser = 0;
 
-      setIconSize(QSize(preferences.iconWidth, preferences.iconHeight));
+      setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
 
       setupUi(this);
 
@@ -323,6 +323,7 @@ void PluginCreator::runClicked()
                   addDockWidget(area, dock);
                   connect(dock, SIGNAL(destroyed()), SLOT(closePlugin()));
                   dock->widget()->setAttribute(Qt::WA_DeleteOnClose);
+                  dock->show();
                   }
             view->show();
             view->raise();

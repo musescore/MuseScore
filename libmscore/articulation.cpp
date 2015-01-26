@@ -446,6 +446,41 @@ ChordRest* Articulation::chordRest() const
       return 0;
       }
 
+Segment* Articulation::segment() const
+      {
+      ChordRest* cr = chordRest();
+      return static_cast<Segment*>(cr ? cr->parent() : 0);
+      }
+
+Measure* Articulation::measure() const
+      {
+      Segment* s = segment();
+      return static_cast<Measure*>(s ? s->parent() : 0);
+      }
+
+System* Articulation::system() const
+      {
+      Measure* m = measure();
+      return static_cast<System*>(m ? m->parent() : 0);
+      }
+
+Page* Articulation::page() const
+      {
+      System* s = system();
+      return static_cast<Page*>(s ? s->parent() : 0);
+      }
+
+//---------------------------------------------------------
+//   canvasBoundingRectChanged
+//---------------------------------------------------------
+
+void Articulation::canvasBoundingRectChanged()
+      {
+      Page* p = page();
+      if (p)
+            p->rebuildBspTree();
+      }
+
 //---------------------------------------------------------
 //   subtypeUserName
 //---------------------------------------------------------
@@ -549,7 +584,6 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
-      score()->addRefresh(canvasBoundingRect());
 
       // layout:
       if (chordRest())
@@ -558,7 +592,8 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
             static_cast<BarLine*>(parent())->layout();
 
       score()->addRefresh(canvasBoundingRect());
-      score()->setLayoutAll(false);       //DEBUG
+      score()->setLayoutAll(false);       // DEBUG
+      canvasBoundingRectChanged();        // rebuild bsp tree
       return true;
       }
 

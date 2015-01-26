@@ -1,7 +1,0 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-   <qresource>
-      <file alias="/noeffect/noeffect.qml">noeffect.qml</file>
-      </qresource>
-   </RCC>
-

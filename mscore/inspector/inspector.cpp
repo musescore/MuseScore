@@ -26,6 +26,7 @@
 #include "inspectorGlissando.h"
 #include "inspectorNote.h"
 #include "inspectorAmbitus.h"
+#include "inspectorFret.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -233,6 +234,9 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::Type::AMBITUS:
                               ie = new InspectorAmbitus(this);
                               break;
+                        case Element::Type::FRET_DIAGRAM:
+                              ie = new InspectorFret(this);
+                              break;
                         default:
                               if (_element->isText())
                                     ie = new InspectorText(this);
@@ -252,25 +256,20 @@ void Inspector::setElements(const QList<Element*>& l)
             for (int i = 0; i < widgets.size(); i++) {
                   QWidget* currentWidget = widgets.at(i);
                   switch (currentWidget->focusPolicy()) {
-                        case Qt::TabFocus:
-#if defined(Q_OS_MAC)
-                              currentWidget->setFocusPolicy(Qt::StrongFocus);
-#endif
                         case Qt::WheelFocus:
                         case Qt::StrongFocus:
-#if defined(Q_OS_MAC)
-//leave them like they are
-#else
-                              if (currentWidget->parent()->inherits("QAbstractSpinBox") ||
+                              if (currentWidget->inherits("QComboBox")                  ||
+                                  currentWidget->parent()->inherits("QAbstractSpinBox") ||
                                   currentWidget->inherits("QAbstractSpinBox")           ||
                                   currentWidget->inherits("QLineEdit")) ; //leave it like it is
                               else
                                    currentWidget->setFocusPolicy(Qt::TabFocus);
-#endif
                               break;
                         case Qt::NoFocus:
                         case Qt::ClickFocus:
                                     currentWidget->setFocusPolicy(Qt::NoFocus);
+                              break;
+                        case Qt::TabFocus:
                               break;
                         }
                   }
@@ -439,6 +438,8 @@ InspectorRest::InspectorRest(QWidget* parent)
       hbox->addWidget(tuplet);
       _layout->addLayout(hbox);
 
+      e.offsetY->setSingleStep(1.0);        // step in spatium units
+
       connect(tuplet,   SIGNAL(clicked()),     SLOT(tupletClicked()));
       }
 
@@ -497,6 +498,16 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
       mapSignals();
       }
 
+//   InspectorTimeSig::setElement
+
+void InspectorTimeSig::setElement()
+      {
+      InspectorBase::setElement();
+      TimeSig* ts = static_cast<TimeSig*>(inspector->element());
+      if (ts->generated())
+            t.showCourtesy->setEnabled(false);
+      }
+
 //---------------------------------------------------------
 //   InspectorKeySig
 //---------------------------------------------------------
@@ -519,6 +530,16 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
 //            { P_ID::SHOW_NATURALS,  0, 0, k.showNaturals,  k.resetShowNaturals  }
             };
       mapSignals();
+      }
+
+//   InspectorKeySig::setElement
+
+void InspectorKeySig::setElement()
+      {
+      InspectorBase::setElement();
+      KeySig* ks = static_cast<KeySig*>(inspector->element());
+      if (ks->generated())
+            k.showCourtesy->setEnabled(false);
       }
 
 //---------------------------------------------------------
@@ -594,7 +615,7 @@ void InspectorClef::setElement()
       InspectorBase::setElement();
 
       // try to locate the 'other clef' of a courtesy / main pair
-      Clef * clef = static_cast<Clef*>(inspector->element());
+      Clef* clef = static_cast<Clef*>(inspector->element());
       // if not in a clef-segment-measure hierachy, do nothing
       if (!clef->parent() || clef->parent()->type() != Element::Type::SEGMENT)
             return;
@@ -798,6 +819,15 @@ InspectorEmpty::InspectorEmpty(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   sizeHint
+//---------------------------------------------------------
+
+QSize InspectorEmpty::sizeHint() const
+      {
+      return QSize(255 * guiScaling, 170 * guiScaling);
+      }
+
+//---------------------------------------------------------
 //   InspectorBarLine
 //---------------------------------------------------------
 
@@ -915,7 +945,7 @@ void InspectorBarLine::spanTypeChanged(int idx)
       Score*      score = bl->score();
       score->startCmd();
 
-      int spanStaves, spanFrom, spanTo;
+      int spanStaves, spanFrom = 0, spanTo = 0;
       // the amount to adjust To value of short types, if staff num. of lines != 5
       int shortDelta = bl->staff() ? (bl->staff()->lines() - 5)*2 : 0;
       spanStaves = 1;               // in most cases, num. of spanned staves is 1

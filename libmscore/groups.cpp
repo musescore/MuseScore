@@ -66,25 +66,39 @@ static std::vector<NoteGroup> noteGroups {
 //   endBeam
 //---------------------------------------------------------
 
-Beam::Mode Groups::endBeam(ChordRest* cr)
+Beam::Mode Groups::endBeam(ChordRest* cr, ChordRest* prev)
       {
       if (cr->isGrace() || cr->beamMode() != Beam::Mode::AUTO)
             return cr->beamMode();
       Q_ASSERT(cr->staff());
 
-      if (cr->tuplet() && !cr->tuplet()->elements().isEmpty()) {
-            if (cr->tuplet()->elements().front() == cr)     // end beam at new tuplet
-                  return Beam::Mode::BEGIN;
-            if (cr->tuplet()->elements().back() == cr)      // end beam at tuplet end
-                  return Beam::Mode::END;
-            return Beam::Mode::AUTO;
-            }
-
       TDuration d = cr->durationType();
       const Groups& g = cr->staff()->group(cr->tick());
       Fraction stretch = cr->staff()->timeStretch(cr->tick());
       int tick = (cr->rtick() * stretch.numerator()) / stretch.denominator();
-      return g.beamMode(tick, d.type());
+
+      Beam::Mode val = g.beamMode(tick, d.type());
+
+      // context-dependent checks
+      if (val == Beam::Mode::AUTO && tick) {
+            // if current or previous cr is in tuplet (but not both in same tuplet):
+            // consider it as if this were next shorter duration
+            if (prev && (cr->tuplet() != prev->tuplet()) && (d == prev->durationType())) {
+                  if (d >= TDuration::DurationType::V_EIGHTH)
+                        val = g.beamMode(tick, TDuration::DurationType::V_16TH);
+                  else if (d == TDuration::DurationType::V_16TH)
+                        val = g.beamMode(tick, TDuration::DurationType::V_32ND);
+                  else
+                        val = g.beamMode(tick, TDuration::DurationType::V_64TH);
+                  }
+            // if there is a hole between previous and current cr, break beam
+            // exclude tuplets from this check; tick calculations can be unreliable
+            // and they seem to be handled well anyhow
+            if (cr->voice() && prev && !prev->tuplet() && prev->tick() + prev->actualTicks() < cr->tick())
+                  val = Beam::Mode::BEGIN;
+            }
+
+      return val;
       }
 
 //---------------------------------------------------------

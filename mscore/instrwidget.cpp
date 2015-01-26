@@ -607,6 +607,18 @@ void InstrumentsWidget::on_removeButton_clicked()
             else {
                   ((StaffListItem*)item)->setOp(ListItemOp::I_DELETE);
                   item->setHidden(true);
+
+                  // check if a staff is linked to this staff
+
+                  int idx = parent->indexOfChild(item);
+                  StaffListItem* sli = static_cast<StaffListItem*>(parent->child(idx+1));
+                  if (sli) {
+                        StaffListItem* sli2 = static_cast<StaffListItem*>(parent->child(idx+2));
+                        if (sli->linked() && !(sli2 && sli2->linked())) {
+                              sli->setLinked(false);
+                              partiturList->update();
+                              }
+                        }
                   }
             static_cast<PartListItem*>(parent)->updateClefs();
             }

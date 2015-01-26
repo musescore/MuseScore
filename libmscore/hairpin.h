@@ -25,7 +25,6 @@ namespace Ms {
 class Score;
 class Hairpin;
 
-
 //---------------------------------------------------------
 //   @@ HairpinSegment
 //---------------------------------------------------------
@@ -45,7 +44,8 @@ class HairpinSegment : public LineSegment {
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
       virtual Element::Type type() const override    { return Element::Type::HAIRPIN_SEGMENT; }
       virtual void draw(QPainter*) const override;
-      virtual void updateGrips(int*, int*, QRectF*) const override;
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
+      virtual int grips() const override { return 4; }
       virtual void editDrag(const EditData&) override;
       virtual void layout() override;
       virtual QVariant getProperty(P_ID id) const override;
@@ -87,6 +87,9 @@ class Hairpin : public SLine {
       Spatium _hairpinContHeight;
       PropertyStyle hairpinContHeightStyle;
 
+      static Spatium editHairpinHeight;
+      virtual void startEdit(MuseScoreView*, const QPointF&) override;
+      virtual void endEdit() override;
 
    public:
       Hairpin(Score* s);

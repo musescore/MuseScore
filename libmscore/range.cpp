@@ -132,16 +132,16 @@ void TrackList::appendGap(const Fraction& d)
 //   read
 //---------------------------------------------------------
 
-void TrackList::read(int track, const Segment* fs, const Segment* es)
+void TrackList::read(const Segment* fs, const Segment* es)
       {
       int tick = fs->tick();
       int gap  = 0;
       const Segment* s;
       for (s = fs; s && (s != es); s = s->next1()) {
-            Element* e = s->element(track);
+            Element* e = s->element(_track);
             if (!e || e->generated()) {
                   foreach(Element* ee, s->annotations()) {
-                        if (ee->track() == track)
+                        if (ee->track() == _track)
                               _range->annotations.push_back({ s->tick(), ee->clone() });
                         }
                   continue;
@@ -171,7 +171,7 @@ void TrackList::read(int track, const Segment* fs, const Segment* es)
                         tick += gap;
                         }
                   append(de);
-                  tick += de->duration().ticks();;
+                  tick += de->duration().ticks();
                   }
             else if (e->type() == Element::Type::BAR_LINE) {
                   BarLine* bl = static_cast<BarLine*>(e);
@@ -306,10 +306,10 @@ void TrackList::dump() const
 
 //---------------------------------------------------------
 //   write
-//    rewrite notes into measure list m
+//    rewrite notes into measure list measure
 //---------------------------------------------------------
 
-bool TrackList::write(int track, Measure* measure) const
+bool TrackList::write(Measure* measure) const
       {
       Fraction pos;
       Measure* m       = measure;
@@ -341,11 +341,11 @@ bool TrackList::write(int track, Measure* measure) const
                               // handle full measure rest
                               //
                               segment = m->getSegment(e, m->tick() + pos.ticks());
-                              if ((track % VOICES) == 0) {
+                              if ((_track % VOICES) == 0) {
                                     // write only for voice 1
                                     Rest* r = new Rest(score, TDuration::DurationType::V_MEASURE);
                                     r->setDuration(m->len());
-                                    r->setTrack(track);
+                                    r->setTrack(_track);
                                     segment->add(r);
                                     }
                               duration -= m->len();
@@ -355,19 +355,22 @@ bool TrackList::write(int track, Measure* measure) const
                         else {
                               Fraction d = qMin(rest, duration);
                               if (e->type() == Element::Type::REST || e->type() == Element::Type::REPEAT_MEASURE) {
-                                    segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
-                                    Rest* r = new Rest(score, TDuration(d));
-                                    r->setTrack(track);
-                                    segment->add(r);
-                                    duration -= d;
-                                    rest     -= d;
-                                    pos      += d;
+                                    for (TDuration k : toDurationList(d, false)) {
+                                          Rest* r = new Rest(score, k);
+                                          Fraction dd(k.fraction());
+                                          r->setTrack(_track);
+                                          segment = m->getSegment(Segment::Type::ChordRest, m->tick() + pos.ticks());
+                                          segment->add(r);
+                                          duration -= dd;
+                                          rest     -= dd;
+                                          pos      += dd;
+                                          }
                                     }
                               else if (e->type() == Element::Type::CHORD) {
                                     segment = m->getSegment(e, m->tick() + pos.ticks());
                                     Chord* c = static_cast<Chord*>(e)->clone();
                                     c->setScore(score);
-                                    c->setTrack(track);
+                                    c->setTrack(_track);
                                     c->setDuration(d);
                                     c->setDurationType(TDuration(d));
                                     segment->add(c);
@@ -400,7 +403,7 @@ bool TrackList::write(int track, Measure* measure) const
                               else {
                                     if (!duration.isZero()) {
                                           qDebug("Tracklist::write: premature end of measure list in track %d, rest %d/%d",
-                                             track, duration.numerator(), duration.denominator());
+                                             _track, duration.numerator(), duration.denominator());
                                           ++i;
                                           qDebug("%d elements missing", n-i);
                                           for (; i < n; ++i) {
@@ -437,7 +440,7 @@ bool TrackList::write(int track, Measure* measure) const
                   segment = m->getSegment(e, m->tick() + ((e->type() == Element::Type::KEYSIG) ? 0 : pos.ticks()));
                   Element* ne = e->clone();
                   ne->setScore(score);
-                  ne->setTrack(track);
+                  ne->setTrack(_track);
                   segment->add(ne);
                   }
             }
@@ -447,7 +450,7 @@ bool TrackList::write(int track, Measure* measure) const
       //
 
       for (Segment* s = measure->first(); s; s = s->next1()) {
-            Chord* chord = static_cast<Chord*>(s->element(track));
+            Chord* chord = static_cast<Chord*>(s->element(_track));
             if (chord == 0 || chord->type() != Element::Type::CHORD)
                   continue;
             foreach (Note* n, chord->notes()) {
@@ -498,8 +501,12 @@ void ScoreRange::read(Segment* first, Segment* last)
       {
       _first = first;
       _last  = last;
+      Score* score = first->score();
+      QList<int> sl = score->uniqueStaves();
+
       int startTrack = 0;
-      int endTrack = first->score()->nstaves() * VOICES;
+      int endTrack = score->nstaves() * VOICES;
+
       spanner.clear();
       for (auto i : first->score()->spanner()) {
             Spanner* s = i.second;
@@ -511,10 +518,15 @@ void ScoreRange::read(Segment* first, Segment* last)
                   spanner.push_back(ns);
                   }
             }
-      for (int track = startTrack; track < endTrack; ++track) {
-            TrackList* dl = new TrackList(this);
-            dl->read(track, first, last);
-            tracks.append(dl);
+      for (int staffIdx : sl) {
+            int sTrack = staffIdx * VOICES;
+            int eTrack = sTrack + VOICES;
+            for (int track = sTrack; track < eTrack; ++track) {
+                  TrackList* dl = new TrackList(this);
+                  dl->setTrack(track);
+                  dl->read(first, last);
+                  tracks.append(dl);
+                  }
             }
       }
 
@@ -524,11 +536,10 @@ void ScoreRange::read(Segment* first, Segment* last)
 
 bool ScoreRange::write(Score* score, int tick) const
       {
-      int track = 0;
       for (TrackList* dl : tracks) {
-            if (!dl->write(track, score->tick2measure(tick)))
+            int track = dl->track();
+            if (!dl->write(score->tick2measure(tick)))
                   return false;
-
             if ((track % VOICES) == 0) {
                   int staffIdx = track / VOICES;
                   Staff* ostaff = score->staff(staffIdx);
@@ -541,7 +552,6 @@ bool ScoreRange::write(Score* score, int tick) const
                               }
                         }
                   }
-
             ++track;
             }
       for (Spanner* s : spanner) {

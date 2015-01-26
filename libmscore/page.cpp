@@ -479,13 +479,15 @@ void Page::doRebuildBspTree()
 
       int n = el.size();
       if (score()->layoutMode() == LayoutMode::LINE) {
-            if (_systems.isEmpty())
-                  return;
-            if (_systems.front()->measures().isEmpty())
-                  return;
-            qreal h = _systems.front()->height();
-            MeasureBase* mb = _systems.front()->measures().back();
-            qreal w = mb->x() + mb->width();
+            qreal w = 0.0;
+            qreal h = 0.0;
+            if (!_systems.isEmpty()) {
+                  h = _systems.front()->height();
+                  if (!_systems.front()->measures().isEmpty()) {
+                        MeasureBase* mb = _systems.front()->measures().back();
+                        w = mb->x() + mb->width();
+                        }
+                  }
             bspTree.initialize(QRectF(0.0, 0.0, w, h), n);
             }
       else
@@ -548,7 +550,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += _score->rootScore()->name();
                               break;
                         case 'F':
-                              d += _score->rootScore()->absoluteFilePath();
+                              d += _score->rootScore()->fileInfo()->absoluteFilePath();
                               break;
                         case 'd':
                               d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
@@ -852,6 +854,37 @@ qreal Page::rm() const
       {
       const PageFormat* pf = _score->pageFormat();
       return ((!pf->twosided() || isOdd()) ? pf->oddRightMargin() : pf->evenRightMargin()) * MScore::DPI;
+      }
+
+//---------------------------------------------------------
+//   tbbox
+//    calculates and returns smallest rectangle containing all (visible) page elements
+//---------------------------------------------------------
+
+QRectF Page::tbbox()
+      {
+      qreal x1 = width();
+      qreal x2 = 0.0;
+      qreal y1 = height();
+      qreal y2 = 0.0;
+      const QList<const Element*> el = elements();
+      for (const Element* e : el) {
+            if (e == this || !e->isPrintable())
+                  continue;
+            QRectF ebbox = e->pageBoundingRect();
+            if (ebbox.left() < x1)
+                  x1 = ebbox.left();
+            if (ebbox.right() > x2)
+                  x2 = ebbox.right();
+            if (ebbox.top() < y1)
+                  y1 = ebbox.top();
+            if (ebbox.bottom() > y2)
+                  y2 = ebbox.bottom();
+            }
+      if (x1 < x2 && y1 < y2)
+            return QRectF(x1, y1, x2 - x1, y2 - y1);
+      else
+            return abbox();
       }
 
 }

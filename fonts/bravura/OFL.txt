@@ -1,4 +1,4 @@
-Copyright (c) 2013, Steinberg Media Technologies GmbH (http://www.steinberg.net/),
+Copyright © 2015, Steinberg Media Technologies GmbH (http://www.steinberg.net/),
 with Reserved Font Name "Bravura".
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.

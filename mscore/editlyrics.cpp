@@ -12,9 +12,10 @@
 
 #include "musescore.h"
 #include "scoreview.h"
+#include "libmscore/chordrest.h"
+#include "libmscore/lyrics.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
-#include "libmscore/lyrics.h"
 
 namespace Ms {
 
@@ -52,7 +53,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             }
 
       _score->select(lyrics, SelectType::SINGLE, 0);
-      startEdit(lyrics, -1);
+      startEdit(lyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(lyrics, false);
       if (end)
@@ -133,6 +134,8 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
       if (oldLyrics && !moveOnly) {
             switch(lyrics->syllabic()) {
+                  // as we arrived at the destination lyrics by a [Space], it can be
+                  // the beginning of a multi-syllable, but cannot have syllabic dashes before
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::BEGIN:
                         break;
@@ -143,6 +146,8 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                         lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
                         break;
                   }
+            // as we moved away from the previous lyrics by a [Space], it can be
+            // the end of a multi-syllable, but cannot have syllabic dashes after
             switch(oldLyrics->syllabic()) {
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::END:
@@ -154,13 +159,15 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                         oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
                         break;
                   }
+            // for the same reason, it cannot have a melisma
+            oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
             }
 
       if (newLyrics)
           _score->undoAddElement(lyrics);
 
       _score->select(lyrics, SelectType::SINGLE, 0);
-      startEdit(lyrics, -1);
+      startEdit(lyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(lyrics, false);
@@ -247,7 +254,7 @@ void ScoreView::lyricsMinus()
           _score->undoAddElement(lyrics);
 
       _score->select(lyrics, SelectType::SINGLE, 0);
-      startEdit(lyrics, -1);
+      startEdit(lyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(lyrics, false);
@@ -289,7 +296,19 @@ void ScoreView::lyricsUnderscore()
                         break;
                   }
             segment = segment->prev1(Segment::Type::ChordRest);
+            // if the segment has a rest in this track, stop going back
+            Element* e = segment ? segment->element(track) : 0;
+            if (e && e->type() != Element::Type::CHORD)
+                  break;
             }
+
+      _score->startCmd();
+
+      // one-chord melisma?
+      // if still at melisma initial chord and there is a valid next chord (if not,
+      // there will be no melisma anyway), set a temporary melisma duration
+      if (oldLyrics == lyrics && nextSegment)
+            lyrics->undoChangeProperty(P_ID::LYRIC_TICKS, Lyrics::TEMP_MELISMA_TICKS);
 
       if (nextSegment == 0) {
             if (oldLyrics) {
@@ -304,9 +323,17 @@ void ScoreView::lyricsUnderscore()
                   if (oldLyrics->segment()->tick() < endTick)
                         oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - oldLyrics->segment()->tick());
                   }
+            // leave edit mode, select something (just for user feedback) and update to show extended melisam
+            mscore->changeState(STATE_NORMAL);
+            if (oldLyrics)
+                  _score->select(oldLyrics, SelectType::SINGLE, 0);
+            //_score->update();
+            _score->setLayoutAll(true);
+            _score->endCmd();
             return;
             }
-      _score->startCmd();
+
+      // if a place for a new lyrics has been found, create a lyrics there
 
       const QList<Lyrics*>* ll = nextSegment->lyricsList(track);
       lyrics         = ll->value(verse);
@@ -318,7 +345,9 @@ void ScoreView::lyricsUnderscore()
             lyrics->setNo(verse);
             lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             }
-      else
+      else if (lyrics->syllabic() == Lyrics::Syllabic::MIDDLE)
+            lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
+      else if (lyrics->syllabic() == Lyrics::Syllabic::END)
             lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
 
       if (oldLyrics) {
@@ -337,14 +366,15 @@ void ScoreView::lyricsUnderscore()
             _score->undoAddElement(lyrics);
 
       _score->select(lyrics, SelectType::SINGLE, 0);
-      startEdit(lyrics, -1);
+      startEdit(lyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(lyrics, false);
       ((Lyrics*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
-      _score->update();
+      //_score->update();
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -368,7 +398,7 @@ void ScoreView::lyricsReturn()
       lyrics->setNo(oldLyrics->no() + 1);
       _score->undoAddElement(lyrics);
       _score->select(lyrics, SelectType::SINGLE, 0);
-      startEdit(lyrics, -1);
+      startEdit(lyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(lyrics, false);

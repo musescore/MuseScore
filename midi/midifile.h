@@ -71,6 +71,7 @@ class MidiFile {
       QIODevice* fp;
       QList<MidiTrack> _tracks;
       int _division;
+      bool _isDivisionInTps;       ///< ticks per second, alternative - ticks per beat
       int _format;               ///< midi file format (0-2)
       bool _noRunningStatus;     ///< do not use running status on output
       MidiType _midiType;
@@ -120,6 +121,7 @@ class MidiFile {
       void setFormat(int fmt)       { _format = fmt;    }
 
       int division() const          { return _division; }
+      bool isDivisionInTps() const  { return _isDivisionInTps; }
       void setDivision(int val)     { _division = val;  }
       void separateChannel();
       };

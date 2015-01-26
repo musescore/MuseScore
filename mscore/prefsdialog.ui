@@ -181,46 +181,6 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QCheckBox" name="showSplashScreen">
-            <property name="accessibleName">
-             <string>Show splash screen</string>
-            </property>
-            <property name="text">
-             <string>Show splash screen</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="lastSession">
-            <property name="accessibleName">
-             <string>Continue last session</string>
-            </property>
-            <property name="text">
-             <string>Continue last session</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QRadioButton" name="newSession">
-            <property name="accessibleName">
-             <string>Start with new score</string>
-            </property>
-            <property name="text">
-             <string>Start with new score</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QCheckBox" name="showStartcenter">
-            <property name="text">
-             <string>Show startcenter</string>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="spacing">
@@ -267,107 +227,47 @@
             </item>
            </layout>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QGroupBox" name="autoSave">
-         <property name="accessibleName">
-          <string>Auto Save</string>
-         </property>
-         <property name="title">
-          <string>Auto Save</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QHBoxLayout">
-          <property name="spacing">
-           <number>9</number>
-          </property>
-          <property name="leftMargin">
-           <number>9</number>
-          </property>
-          <property name="topMargin">
-           <number>9</number>
-          </property>
-          <property name="rightMargin">
-           <number>9</number>
-          </property>
-          <property name="bottomMargin">
-           <number>9</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="label_25">
-            <property name="text">
-             <string>Save every:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="autoSaveTime">
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="showSplashScreen">
             <property name="accessibleName">
-             <string>Select delay (in minutes) between auto saves</string>
+             <string>Show splash screen</string>
             </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="value">
-             <number>2</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_27">
             <property name="text">
-             <string>minutes</string>
+             <string>Show splash screen</string>
             </property>
            </widget>
           </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="showStartcenter">
+            <property name="text">
+             <string>Show start center</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>Windows</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-         <layout class="QGridLayout">
-          <property name="leftMargin">
-           <number>3</number>
-          </property>
-          <property name="topMargin">
-           <number>3</number>
-          </property>
-          <property name="rightMargin">
-           <number>3</number>
-          </property>
-          <property name="bottomMargin">
-           <number>3</number>
-          </property>
-          <property name="spacing">
-           <number>3</number>
-          </property>
           <item row="1" column="0">
+           <widget class="QRadioButton" name="lastSession">
+            <property name="accessibleName">
+             <string>Continue last session</string>
+            </property>
+            <property name="text">
+             <string>Continue last session</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="newSession">
+            <property name="accessibleName">
+             <string>Start with new score</string>
+            </property>
+            <property name="text">
+             <string>Start with new score</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
            <widget class="QCheckBox" name="playPanelShow">
             <property name="accessibleName">
              <string>Show play panel</string>
@@ -377,7 +277,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="5" column="1">
            <widget class="QCheckBox" name="navigatorShow">
             <property name="accessibleName">
              <string>Show navigator</string>
@@ -386,76 +286,6 @@
              <string>Show navigator</string>
             </property>
            </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="webPanelShow">
-            <property name="accessibleName">
-             <string>Show MuseScore Connect</string>
-            </property>
-            <property name="text">
-             <string>Show MuseScore Connect</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QGroupBox" name="oscServer">
-         <property name="accessibleName">
-          <string>OSC remote control</string>
-         </property>
-         <property name="title">
-          <string>OSC Remote Control</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_9">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string extracomment="The UDP port number on which the MuseScore OSC server will listen on">Port number:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="oscPort">
-            <property name="accessibleName">
-             <string>Port number</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>65535</number>
-            </property>
-            <property name="value">
-             <number>5282</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_15">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
@@ -759,6 +589,139 @@
              <string/>
             </property>
            </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QGroupBox" name="autoSave">
+         <property name="accessibleName">
+          <string>Auto Save</string>
+         </property>
+         <property name="title">
+          <string>Auto Save</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout">
+          <property name="spacing">
+           <number>9</number>
+          </property>
+          <property name="leftMargin">
+           <number>9</number>
+          </property>
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <property name="rightMargin">
+           <number>9</number>
+          </property>
+          <property name="bottomMargin">
+           <number>9</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Save every:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="autoSaveTime">
+            <property name="accessibleName">
+             <string>Select delay (in minutes) between auto saves</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>2</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>minutes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QGroupBox" name="oscServer">
+         <property name="accessibleName">
+          <string>OSC remote control</string>
+         </property>
+         <property name="title">
+          <string>OSC Remote Control</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string extracomment="The UDP port number on which the MuseScore OSC server will listen on">Port number:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="oscPort">
+            <property name="accessibleName">
+             <string>Port number</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>65535</number>
+            </property>
+            <property name="value">
+             <number>5282</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_15">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -1997,6 +1960,42 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="9">
+           <widget class="Ms::GreendotButton" name="recordUndoActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Undo is active</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="10">
+           <widget class="Ms::RecordButton" name="recordUndo">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Undo record</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="8">
+           <widget class="QLabel" name="label_53">
+            <property name="text">
+             <string>Undo</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="12" colspan="3">
            <widget class="QPushButton" name="midiRemoteControlClear">
             <property name="accessibleName">
@@ -2019,7 +2018,7 @@
       <attribute name="title">
        <string>Score</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout6">
+      <layout class="QGridLayout" name="gridLayout61">
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_19">
          <property name="title">
@@ -2285,8 +2284,11 @@
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
         <widget class="QGroupBox" name="pulseaudioDriver">
-         <property name="accessibleName">
-          <string>Pulse Audio</string>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
          <property name="title">
           <string>PulseAudio</string>
@@ -2634,8 +2636,43 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout71">
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="becomeTimebaseMaster">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Timebase Master</string>
+            </property>
+            <property name="text">
+             <string>Timebase Master</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="useJackTransport">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Use JACK Transport</string>
+            </property>
+            <property name="text">
+             <string>Use JACK Transport</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="useJackAudio">
+            <property name="accessibleName">
+             <string>Use JACK Audio</string>
+            </property>
             <property name="text">
              <string>Use JACK Audio</string>
             </property>
@@ -2644,87 +2681,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="useJackMidi">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Use JACK MIDI</string>
-            </property>
-            <property name="text">
-             <string>Use JACK MIDI</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <spacer name="horizontalSpacer_20">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>5</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label_22">
-            <property name="text">
-             <string>Ports:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QSpinBox" name="midiPorts">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Ports</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Choose number of ports</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>8</number>
-            </property>
-            <property name="value">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4" colspan="3">
-           <spacer name="horizontalSpacer_19">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>606</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="2" column="0" colspan="4">
+          <item row="0" column="3">
            <widget class="QCheckBox" name="rememberLastMidiConnections">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2743,39 +2700,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="4">
-           <widget class="QCheckBox" name="useJackTransport">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Use JACK Transport</string>
-            </property>
-            <property name="text">
-             <string>Use JACK Transport</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="5">
-           <widget class="QCheckBox" name="becomeTimebaseMaster">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Timebase Master</string>
-            </property>
-            <property name="text">
-             <string>Timebase Master</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="6">
+          <item row="1" column="3">
            <spacer name="horizontalSpacer_8">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -2787,6 +2712,22 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="useJackMidi">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Use JACK MIDI</string>
+            </property>
+            <property name="text">
+             <string>Use JACK MIDI</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -3592,6 +3533,9 @@
   <tabstop>sessionScore</tabstop>
   <tabstop>startWithButton</tabstop>
   <tabstop>showSplashScreen</tabstop>
+  <tabstop>showStartcenter</tabstop>
+  <tabstop>playPanelShow</tabstop>
+  <tabstop>navigatorShow</tabstop>
   <tabstop>myScores</tabstop>
   <tabstop>myScoresButton</tabstop>
   <tabstop>myStyles</tabstop>
@@ -3616,9 +3560,8 @@
   <tabstop>autoSaveTime</tabstop>
   <tabstop>oscServer</tabstop>
   <tabstop>oscPort</tabstop>
-  <tabstop>playPanelShow</tabstop>
-  <tabstop>navigatorShow</tabstop>
-  <tabstop>webPanelShow</tabstop>
+  <tabstop>resetToDefault</tabstop>
+  <tabstop>buttonBox</tabstop>
   <tabstop>bgColorButton</tabstop>
   <tabstop>bgWallpaperButton</tabstop>
   <tabstop>bgColorLabel</tabstop>
@@ -3660,6 +3603,8 @@
   <tabstop>rcr7</tabstop>
   <tabstop>rca8</tabstop>
   <tabstop>rcr8</tabstop>
+  <tabstop>recordUndoActive</tabstop>
+  <tabstop>recordUndo</tabstop>
   <tabstop>rca9</tabstop>
   <tabstop>rcr9</tabstop>
   <tabstop>rca10</tabstop>
@@ -3691,7 +3636,6 @@
   <tabstop>jackDriver</tabstop>
   <tabstop>useJackAudio</tabstop>
   <tabstop>useJackMidi</tabstop>
-  <tabstop>midiPorts</tabstop>
   <tabstop>rememberLastMidiConnections</tabstop>
   <tabstop>useJackTransport</tabstop>
   <tabstop>becomeTimebaseMaster</tabstop>
@@ -3718,8 +3662,6 @@
   <tabstop>defineShortcut</tabstop>
   <tabstop>printShortcuts</tabstop>
   <tabstop>checkUpdateStartup</tabstop>
-  <tabstop>resetToDefault</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections/>

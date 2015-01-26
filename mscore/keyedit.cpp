@@ -313,9 +313,9 @@ KeyEditor::KeyEditor(QWidget* parent)
             sp->setCellReadOnly(i, true);
 
       if (!useFactorySettings) {
-            QFile f(dataPath + "/" + "keysigs.xml");
-            if (f.exists() && sp->read(&f))
-                  return;
+            QString path = dataPath + "/keysigs";
+            if (!sp->read(path))
+                  qDebug("KeyEditor: read <%s> failed", qPrintable(dataPath + "/keysigs.mpal"));
             }
       }
 
@@ -325,28 +325,29 @@ KeyEditor::KeyEditor(QWidget* parent)
 
 void KeyEditor::addClicked()
       {
-      QList<KeySym> symbols;
-
       double extraMag = 2.0;
       const QList<Accidental*> al = canvas->getAccidentals();
       double spatium = 2.0 * PALETTE_SPATIUM / extraMag;
       double xoff = 10000000.0;
-      foreach(Accidental* a, al) {
+
+      for (Accidental* a : al) {
             QPointF pos = a->ipos();
             if (pos.x() < xoff)
                   xoff = pos.x();
             }
-      foreach(Accidental* a, al) {
+
+      KeySigEvent e;
+      e.setCustom(true);
+      for (Accidental* a : al) {
             KeySym s;
             s.sym = a->symbol();
             QPointF pos = a->ipos();
             pos.rx() -= xoff;
             s.spos = pos / spatium;
-            symbols.append(s);
+            e.keySymbols().append(s);
             }
-
       KeySig* ks = new KeySig(gscore);
-      ks->setCustom(symbols);
+      ks->setKeySigEvent(e);
       sp->append(ks, "custom");
       _dirty = true;
       }
@@ -368,7 +369,7 @@ void KeyEditor::save()
       {
       QDir dir;
       dir.mkpath(dataPath);
-      sp->write(dataPath + "/" + "keysigs.xml");
+      sp->write(dataPath + "/keysigs");
       }
 
 //---------------------------------------------------------

@@ -207,6 +207,7 @@ class PitchEditPlugin : public QObject, public AwlPlugin {
 
 class AwlPlugins : public QObject, public QDesignerCustomWidgetCollectionInterface {
       Q_OBJECT
+      Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QDesignerCustomWidgetCollectionInterface")
       Q_INTERFACES(QDesignerCustomWidgetCollectionInterface)
 
    public:

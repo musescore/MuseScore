@@ -30,17 +30,17 @@ class NoEffect : public Effect
    public:
       NoEffect() {}
 
-      virtual void init(float) {}
-      virtual void process(int, float*, float*);
+      virtual void init(float) override {}
+      virtual void process(int, float*, float*) override;
 
-      virtual void setValue(int, double) {}
-      virtual void setNValue(int, double) {}
-      virtual double value(int) const { return 0.0; }
-      virtual double nvalue(int) const { return 0.0; }
+      virtual void setValue(int, double) override {}
+      virtual void setNValue(int, double) override {}
+      virtual double value(int) const override { return 0.0; }
+      virtual double nvalue(int) const override { return 0.0; }
 
-      virtual const char* name() const { return "NoEffect"; }
-      virtual EffectGui* gui();
-      virtual const std::vector<ParDescr>& parDescr() const;
+      virtual const char* name() const override { return "NoEffect"; }
+      virtual EffectGui* gui() override;
+      virtual const std::vector<ParDescr>& parDescr() const override;
       };
 }
 

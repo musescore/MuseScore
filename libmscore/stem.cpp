@@ -145,11 +145,10 @@ void Stem::draw(QPainter* painter) const
       Staff* st = staff();
       bool useTab = st && st->isTabStaff();
 
-      if (useTab && st->staffType()->slashStyle())
-            return;
       qreal lw = lineWidth();
       painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
       painter->drawLine(line);
+
       if (!useTab || !chord())
             return;
 
@@ -182,7 +181,6 @@ void Stem::draw(QPainter* painter) const
                   path.closeSubpath();
                   y += displ;
                   }
-//            setbbox(path.boundingRect());
             painter->setBrush(QBrush(curColor()));
             painter->setPen(Qt::NoPen);
             painter->drawPath(path);
@@ -234,10 +232,9 @@ void Stem::read(XmlReader& e)
 //   updateGrips
 //---------------------------------------------------------
 
-void Stem::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Stem::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips   = 1;
-      *defaultGrip = 0;
+      *defaultGrip = Grip::START;
       grip[0].translate(pagePos() + line.p2());
       }
 

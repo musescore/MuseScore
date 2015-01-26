@@ -79,7 +79,7 @@ void InstrumentsDialog::on_saveButton_clicked()
          this,
          tr("MuseScore: Save Instrument List"),
          ".",
-         tr("MuseScore Instruments (*.xml);;")
+         tr("MuseScore Instruments (*.xml)")
          );
       if (name.isEmpty())
             return;
@@ -215,14 +215,14 @@ void MuseScore::editInstrList()
             int interval = firstStaff->part()->instr()->transpose().chromatic;
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                   int tick = i->first;
-                  Key oKey = i->second;
-                  tmpKeymap[tick] = transposeKey(oKey, interval);
+                  Key oKey = i->second.key();
+                  tmpKeymap[tick].setKey(transposeKey(oKey, interval));
                   }
             }
       // create initial keyevent for transposing instrument if necessary
       auto i = tmpKeymap.begin();
       if (i == tmpKeymap.end() || i->first != 0)
-            tmpKeymap[0] = Key::C;
+            tmpKeymap[0].setKey(Key::C);
 
       //
       // process modified partitur list
@@ -260,10 +260,9 @@ void MuseScore::editInstrList()
                   rootScore->undo(new InsertPart(part, staffIdx));
 
                   pli->part = part;
-                  QTreeWidgetItem* ci = 0;
                   QList<Staff*> linked;
-                  for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
-                        StaffListItem* sli = static_cast<StaffListItem*>(ci);
+                  for (int cidx = 0; pli->child(cidx); ++cidx) {
+                        StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         Staff* staff       = new Staff(rootScore);
                         staff->setPart(part);
                         sli->setStaff(staff);
@@ -294,9 +293,8 @@ void MuseScore::editInstrList()
                   if (part->show() != pli->visible()) {
                         part->score()->undo()->push(new ChangePartProperty(part, 0, pli->visible()));
                         }
-                  QTreeWidgetItem* ci = 0;
-                  for (int cidx = 0; (ci = pli->child(cidx)); ++cidx) {
-                        StaffListItem* sli = (StaffListItem*)ci;
+                  for (int cidx = 0; pli->child(cidx); ++cidx) {
+                        StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         if (sli->op() == ListItemOp::I_DELETE) {
                               rootScore->systems()->clear();
                               Staff* staff = sli->staff();
@@ -310,12 +308,17 @@ void MuseScore::editInstrList()
                               sli->setStaff(staff);
                               staff->setDefaultClefType(sli->defaultClefType());
 
-                              Key nKey = part->staves()->empty() ? Key::C : part->staff(0)->key(0);
-                              staff->setKey(0, nKey);
+                              KeySigEvent ke;
+                              if (part->staves()->empty())
+                                    ke.setKey(Key::C);
+                              else
+                                    ke = part->staff(0)->keySigEvent(0);
 
-                              rootScore->undoInsertStaff(staff, rstaff, !sli->linked());
+                              staff->setKey(0, ke);
+
                               Staff* linkedStaff = 0;
                               if (sli->linked()) {
+
                                     if (rstaff > 0)
                                           linkedStaff = part->staves()->front();
                                     else {
@@ -327,6 +330,17 @@ void MuseScore::editInstrList()
                                                 }
                                           }
                                     }
+                              if (linkedStaff) {
+                                    // do not create a link if linkedStaff will be removed,
+                                    for (int k = 0; pli->child(k); ++k) {
+                                          StaffListItem* i = static_cast<StaffListItem*>(pli->child(k));
+                                          if (i->op() == ListItemOp::I_DELETE && i->staff() == linkedStaff) {
+                                                linkedStaff = 0;
+                                                break;
+                                                }
+                                          }
+                                    }
+                              rootScore->undoInsertStaff(staff, rstaff, linkedStaff == 0);
                               if (linkedStaff)
                                     cloneStaff(linkedStaff, staff);
                               else {
@@ -420,8 +434,8 @@ void MuseScore::editInstrList()
 
       QList<Score*> toDelete;
       for (Excerpt* excpt : rootScore->excerpts()) {
-            if (excpt->score()->staves().size() == 0)
-                  toDelete.append(excpt->score());
+            if (excpt->partScore()->staves().size() == 0)
+                  toDelete.append(excpt->partScore());
             }
       for(Score* s: toDelete)
             rootScore->undo(new RemoveExcerpt(s));

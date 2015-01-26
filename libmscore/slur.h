@@ -29,11 +29,6 @@ class MuseScoreView;
 class ChordRest;
 struct SlurPos;
 
-enum class GripSlurSegment : char {
-      START, BEZIER1, SHOULDER, BEZIER2, DRAG, END,
-      GRIPS
-      };
-
 //---------------------------------------------------------
 //   SlurPos
 //---------------------------------------------------------
@@ -71,14 +66,14 @@ class SlurSegment : public SpannerSegment {
       Q_OBJECT
 
    protected:
-      struct UP ups[int(GripSlurSegment::GRIPS)];
+      struct UP _ups[int(Grip::GRIPS)];
 
       QPainterPath path;
       QPainterPath shapePath;
       QPointF autoAdjustOffset;
 
       void computeBezier();
-      void changeAnchor(MuseScoreView*, int curGrip, Element*);
+      void changeAnchor(MuseScoreView*, Grip, Element*);
       void setAutoAdjust(const QPointF& offset);
       void setAutoAdjust(qreal x, qreal y)      { setAutoAdjust(QPointF(x, y)); }
       QPointF getAutoAdjust() const             { return autoAdjustOffset; }
@@ -98,11 +93,13 @@ class SlurSegment : public SpannerSegment {
       bool isEdited() const;
       virtual bool isEditable() const { return true; }
       virtual void editDrag(const EditData&);
-      virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);
-      virtual void updateGrips(int*, int*, QRectF*) const override;
-      virtual QPointF gripAnchor(int grip) const;
-      virtual QPointF getGrip(int) const;
-      virtual void setGrip(int, const QPointF&);
+      virtual bool edit(MuseScoreView*, Grip grip, int key, Qt::KeyboardModifiers, const QString& s);
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
+      virtual int grips() const override { return int(Grip::GRIPS); }
+      virtual QPointF gripAnchor(Grip grip) const;
+
+      QPointF getGrip(Grip) const override;
+      void setGrip(Grip, const QPointF&) override;
 
       virtual void move(qreal xd, qreal yd) { move(QPointF(xd, yd)); }
       virtual void move(const QPointF& s);
@@ -116,9 +113,9 @@ class SlurSegment : public SpannerSegment {
       void write(Xml& xml, int no) const;
       void read(XmlReader&);
       virtual void reset();
-      void setSlurOffset(int i, const QPointF& val) { ups[i].off = val;  }
-      QPointF slurOffset(int i) const               { return ups[i].off; }
-      const struct UP* getUps(int idx) const        { return &ups[idx]; }
+      void setSlurOffset(Grip i, const QPointF& val) { _ups[int(i)].off = val;  }
+      const struct UP& ups(Grip i) const             { return _ups[int(i)]; }
+      struct UP& ups(Grip i)                         { return _ups[int(i)]; }
 
       friend class Tie;
       friend class Slur;

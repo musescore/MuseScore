@@ -8,11 +8,7 @@ namespace Ms {
 AccessibleToolButton::AccessibleToolButton(QWidget* parent, QAction* defaultQAction ): QToolButton(parent)
       {
       this->setDefaultAction(defaultQAction);
-#if defined(Q_OS_MAC)
-      this->setFocusPolicy(Qt::StrongFocus);
-#else
       this->setFocusPolicy(Qt::TabFocus);
-#endif
 
       this->setAccessibleName(defaultQAction->text());
       this->setAccessibleDescription(defaultQAction->toolTip());

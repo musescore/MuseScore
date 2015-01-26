@@ -13,10 +13,9 @@
 #include "effects/effect.h"
 #include "effects/effectgui.h"
 #include "noeffect.h"
+#include "noeffectgui.h"
 
 namespace Ms {
-
-static const std::vector<ParDescr> noeffectPd;
 
 //---------------------------------------------------------
 //   gui
@@ -24,10 +23,26 @@ static const std::vector<ParDescr> noeffectPd;
 
 EffectGui* NoEffect::gui()
       {
-      EffectGui* eg = new EffectGui(this);
-      QUrl url("qrc:/noeffect/noeffect.qml");
-      eg->init(url);
-      return eg;
+      if (!_gui) {
+            _gui = new NoEffectGui(this);
+            _gui->setGeometry(0, 0, 644, 79);
+            _gui->show();
+            }
+      return _gui;
+      }
+
+//---------------------------------------------------------
+//   NoEffectGui
+//---------------------------------------------------------
+
+NoEffectGui::NoEffectGui(Effect* e, QWidget* parent)
+   : EffectGui(e, parent)
+      {
+      QLabel* l = new QLabel;
+      l->setText(tr("No Plugin"));
+      QLayout* la = new QVBoxLayout;
+      la->addWidget(l);
+      setLayout(la);
       }
 
 //---------------------------------------------------------
@@ -36,8 +51,13 @@ EffectGui* NoEffect::gui()
 
 const std::vector<ParDescr>& NoEffect::parDescr() const
       {
+      static const std::vector<ParDescr> noeffectPd;
       return noeffectPd;
       }
+
+//---------------------------------------------------------
+//   process
+//---------------------------------------------------------
 
 void NoEffect::process(int n, float* src, float* dst)
       {

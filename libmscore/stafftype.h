@@ -162,7 +162,7 @@ class StaffType {
       bool  _showRests    = false;        // whether to draw rests or not
       bool  _stemsDown    = true;         // stems are drawn downward (stem-and-beam durations only)
       bool  _stemsThrough = true;         // stems are drawn through the staff rather than beside it (stem-and-beam durations only)
-      bool  _upsideDown   = false;        // whether lines are drwan with highest string at top (false) or at bottom (true)
+      bool  _upsideDown   = false;        // whether lines are drawn with highest string at top (false) or at bottom (true)
       bool  _useNumbers   = true;         // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
 
       // internally managed variables
@@ -249,10 +249,10 @@ class StaffType {
       static const StaffType* preset(StaffTypes idx);
       static const StaffType* presetFromXmlName(QString& xmlName);
 
-      void setGenKeysig(bool val)              { _genKeysig = val;        }
-      bool genKeysig() const                   { return _genKeysig;       }
-      void setShowLedgerLines(bool val)        { _showLedgerLines = val;  }
-      bool showLedgerLines() const             { return _showLedgerLines; }
+      void setGenKeysig(bool val)              { _genKeysig = val;          }
+      bool genKeysig() const                   { return _genKeysig;         }
+      void setShowLedgerLines(bool val)        { _showLedgerLines = val;    }
+      bool showLedgerLines() const             { return _showLedgerLines;   }
 
       QString fretString(int fret, bool ghost) const;   // returns a string with the text for fret
       QString durationString(TDuration::DurationType type, int dots) const;

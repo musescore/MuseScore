@@ -39,11 +39,22 @@ class TextStyle;
 class Element;
 enum class SymId;
 
+//---------------------------------------------------------
+//   Grip
+//---------------------------------------------------------
+
+enum class Grip : char {
+      NO_GRIP = -1,
+      START = 0, END = 1,                         // arpeggio etc.
+          MIDDLE = 2, APERTURE = 3,               // Line
+      /*START, END , */
+          BEZIER1 = 2, SHOULDER = 3, BEZIER2 = 4, DRAG = 5, // Slur
+      GRIPS = 6                     // number of grips for slur
+      };
 
 //---------------------------------------------------------
 //   ElementFlag
 //---------------------------------------------------------
-
 
 enum class ElementFlag : char {
       DROP_TARGET  = 0x2,
@@ -115,7 +126,7 @@ struct DropData {
 
 struct EditData {
       MuseScoreView* view;
-      int curGrip;
+      Grip curGrip;
       QPointF startMove;
       QPointF pos;
       QPointF lastPos;
@@ -124,13 +135,15 @@ struct EditData {
       bool vRaster;
       };
 
+//---------------------------------------------------------
+//   ElementName
+//---------------------------------------------------------
 
 struct ElementName {
       const char* name;
       const char* userName;
       ElementName(const char* _name, const char* _userName) : name(_name), userName(_userName) {}
       };
-
 
 //-------------------------------------------------------------------
 //    @@ Element
@@ -242,6 +255,7 @@ class Element : public QObject {
             TEXTLINE_SEGMENT,
             VOLTA_SEGMENT,
             PEDAL_SEGMENT,
+            LYRICSLINE_SEGMENT,
             LAYOUT_BREAK,
             SPACER,
             STAFF_STATE,
@@ -263,6 +277,7 @@ class Element : public QObject {
             TRILL,
             TEXTLINE,
             NOTELINE,
+            LYRICSLINE,
             SEGMENT,
             SYSTEM,
             COMPOUND,
@@ -419,14 +434,17 @@ class Element : public QObject {
 
       virtual bool isEditable() const         { return !_generated; }
       virtual void startEdit(MuseScoreView*, const QPointF&);
-      virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s);
+      virtual bool edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers, const QString& s);
       virtual void editDrag(const EditData&);
       virtual void endEditDrag()                               {}
       virtual void endEdit()                                   {}
-      virtual void updateGrips(int* grips, int*, QRectF*) const      { *grips = 0;      }
-      virtual QPointF gripAnchor(int) const   { return QPointF(); }
-      virtual void setGrip(int, const QPointF&);
-      virtual QPointF getGrip(int) const;
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const      { }
+      virtual bool nextGrip(Grip*) const;
+      virtual int grips() const                { return 0; }
+      virtual bool prevGrip(Grip*) const;
+      virtual QPointF gripAnchor(Grip) const   { return QPointF(); }
+      virtual void setGrip(Grip, const QPointF&);
+      virtual QPointF getGrip(Grip) const;
 
       int track() const                       { return _track; }
       virtual void setTrack(int val)          { _track = val;  }
@@ -500,6 +518,7 @@ class Element : public QObject {
       qreal magS() const;
 
       bool isText() const;
+      bool isPrintable() const;
       virtual bool isSpanner() const           { return false; }
       virtual bool isSpannerSegment() const    { return false; }
 

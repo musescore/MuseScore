@@ -45,7 +45,6 @@ class KeyEditor : public QWidget, Ui::KeyEdit {
       void clearClicked();
       void setDirty() { _dirty = true; }
 
-
    public:
       KeyEditor(QWidget* parent = 0);
       bool dirty() const { return _dirty; }

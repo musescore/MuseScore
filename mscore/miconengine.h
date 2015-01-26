@@ -39,8 +39,6 @@ class MIconEngine : public QIconEngine
 
       QString key() const;
       QIconEngine *clone() const;
-      bool read(QDataStream &/*in*/) { return false; }
-      bool write(QDataStream &/*out*/) const { return false; }
 
    private:
       QSharedDataPointer<MIconEnginePrivate> d;

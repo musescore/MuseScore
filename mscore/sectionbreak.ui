@@ -112,6 +112,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>_pause</tabstop>
+  <tabstop>_startWithLongNames</tabstop>
+  <tabstop>_startWithMeasureOne</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

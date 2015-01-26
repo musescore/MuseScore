@@ -49,16 +49,16 @@ class Glissando : public Element {
       Glissando(Score* s);
       Glissando(const Glissando&);
 
-      virtual Glissando* clone() const       { return new Glissando(*this); }
-      virtual Element::Type type() const     { return Element::Type::GLISSANDO; }
+      virtual Glissando* clone() const override       { return new Glissando(*this); }
+      virtual Element::Type type() const override     { return Element::Type::GLISSANDO; }
       Type glissandoType() const             { return _glissandoType; }
       void setGlissandoType(Type v)          { _glissandoType = v;    }
-      virtual Space space() const;
+      virtual Space space() const override;
 
-      virtual void draw(QPainter*) const;
-      virtual void layout();
-      virtual void write(Xml&) const;
-      virtual void read(XmlReader&);
+      virtual void draw(QPainter*) const override;
+      virtual void layout() override;
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
 
       void setSize(const QSizeF&);        // used for palette
 
@@ -71,9 +71,9 @@ class Glissando : public Element {
       void undoSetText(const QString&);
       void undoSetShowText(bool);
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       };
 
 

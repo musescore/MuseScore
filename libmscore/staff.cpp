@@ -160,7 +160,7 @@ QString Staff::partName() const
 Staff::Staff(Score* s)
       {
       _score     = s;
-      _barLineTo = (lines()-1)*2;
+      _barLineTo = (lines() - 1) * 2;
       }
 
 //---------------------------------------------------------
@@ -272,6 +272,8 @@ TimeSig* Staff::timeSig(int tick) const
       auto i = timesigs.upper_bound(tick);
       if (i != timesigs.begin())
             --i;
+      else if (tick < i->first)
+            return 0;
       return (i == timesigs.end()) ? 0 : i->second;
       }
 
@@ -312,12 +314,21 @@ void Staff::removeTimeSig(TimeSig* timesig)
       }
 
 //---------------------------------------------------------
+//   clearTimeSig
+//---------------------------------------------------------
+
+void Staff::clearTimeSig()
+      {
+      timesigs.clear();
+      }
+
+//---------------------------------------------------------
 //   Staff::key
 //
 //    locates the key sig currently in effect at tick
 //---------------------------------------------------------
 
-Key Staff::key(int tick) const
+KeySigEvent Staff::keySigEvent(int tick) const
       {
       return _keys.key(tick);
       }
@@ -326,7 +337,7 @@ Key Staff::key(int tick) const
 //   setKey
 //---------------------------------------------------------
 
-void Staff::setKey(int tick, Key k)
+void Staff::setKey(int tick, KeySigEvent k)
       {
       _keys.setKey(tick, k);
       }
@@ -344,7 +355,7 @@ void Staff::removeKey(int tick)
 //   prevkey
 //---------------------------------------------------------
 
-Key Staff::prevKey(int tick) const
+KeySigEvent Staff::prevKey(int tick) const
       {
       return _keys.prevKey(tick);
       }
@@ -420,6 +431,8 @@ void Staff::write(Xml& xml) const
             xml.tag("neverHide", neverHide());
       if (showIfEmpty())
             xml.tag("showIfSystemEmpty", showIfEmpty());
+      if (_hideSystemBarLine)
+            xml.tag("hideSystemBarLine", _hideSystemBarLine);
 
       foreach(const BracketItem& i, _brackets)
             xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
@@ -498,6 +511,8 @@ void Staff::read(XmlReader& e)
                   setNeverHide(e.readInt());
             else if (tag == "showIfSystemEmpty")
                   setShowIfEmpty(e.readInt());
+            else if (tag == "hideSystemBarLine")
+                  _hideSystemBarLine = e.readInt();
             else if (tag == "keylist")
                   _keys.read(e, _score);
             else if (tag == "bracket") {
@@ -511,13 +526,16 @@ void Staff::read(XmlReader& e)
 // WARNING: following statement assumes number of staff lines to be correctly set
                   // must read <StaffType> before reading the <barLineSpan>
                   int defaultSpan = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
-                  _barLineFrom = e.attribute("from", QString::number(defaultSpan)).toInt();
+                  _barLineFrom = e.intAttribute("from", defaultSpan);
+
                   // the proper default SpanTo depends upon the barLineSpan
                   // as we do not know it yet, set a generic (UNKNOWN) default
                   defaultSpan = UNKNOWN_BARLINE_TO;
                   _barLineTo = e.intAttribute("to", defaultSpan);
+
                   // ready to read the main value...
                   _barLineSpan = e.readInt();
+
                   //...and to adjust the SpanTo value if the source did not provide an explicit value
                   // if no bar line or single staff span, set _barLineTo to this staff height
                   // if span to another staff (yet to be read), leave as unknown
@@ -527,13 +545,8 @@ void Staff::read(XmlReader& e)
                   }
             else if (tag == "distOffset")
                   _userDist = e.readDouble() * spatium();
-            else if (tag == "mag") {
-                  _userMag = e.readDouble();
-                  if (_userMag < 0.1)
-                        _userMag = 0.1;
-                  else if (_userMag > 10.0)
-                        _userMag = 10;
-                  }
+            else if (tag == "mag")
+                  _userMag = e.readDouble(0.1, 10.0);
             else if (tag == "linkedTo") {
                   int v = e.readInt() - 1;
                   //
@@ -598,7 +611,7 @@ qreal Staff::mag() const
 SwingParameters Staff::swing(int tick) const
       {
       SwingParameters sp;
-      int swingUnit;
+      int swingUnit = 0;
       QString unit = score()->styleSt(StyleIdx::swingUnit);
       int swingRatio = score()->styleI(StyleIdx::swingRatio);
       if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
@@ -927,9 +940,10 @@ void Staff::insertTime(int tick, int len)
       // we would need to move the key signature from this measure to the first inserted measure
       // but either way, at the begining of the staff, we need to keep the original key,
       // so we use upper_bound() in that case, and the initial key signature is moved in insertMeasure()
+
       KeyList kl2;
       for (auto i = tick ? _keys.lower_bound(tick) : _keys.upper_bound(tick); i != _keys.end();) {
-            Key kse = i->second;
+            KeySigEvent kse = i->second;
             int k   = i->first;
             _keys.erase(i++);
             kl2[k + len] = kse;
@@ -943,6 +957,7 @@ void Staff::insertTime(int tick, int len)
       // if we wish to make this work like key signatures (see above),
       // we would need to move the clef from the previous measure to the last inserted measure
       // and be sure to continue to handle the initial clef well
+
       ClefList cl2;
       for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
@@ -994,5 +1009,6 @@ bool Staff::isTop() const
       {
       return _part->staves()->front() == this;
       }
+
 }
 

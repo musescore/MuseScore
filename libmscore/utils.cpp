@@ -624,7 +624,7 @@ int diatonicUpDown(Key k, int pitch, int steps)
       {
       static int ptab[15][7] = {
 //             c  c#   d  d#    e   f  f#   g  g#  a  a#   b
-            { -1,      1,       3,  5,      6,     8,      10 },     // Ces
+            { -1,      1,       3,  4,      6,     8,      10 },     // Ces
             { -1,      1,       3,  5,      6,     8,      10 },     // Ges
             {  0,      1,       3,  5,      6,     8,      10 },     // Des
             {  0,      1,       3,  5,      7,     8,      10 },     // As
@@ -647,31 +647,53 @@ int diatonicUpDown(Key k, int pitch, int steps)
       int step   = pitch % 12;
       int octave = pitch / 12;
 
-      for (int i = 0; i < 7; ++i) {
-            if (ptab[key][i] == step) {
-                  if (steps > 0) {
-                        while (steps--) {
-                              ++i;
-                              if (i == 7) {
-                                    ++octave;
-                                    i = 0;
-                                    }
-                              }
-                        }
-                  else {
-                        while (++steps <= 0) {
-                              --i;
-                              if (i < 0) {
-                                    i = 6;
-                                    --octave;
-                                    }
-                              }
-                        }
-                  step = ptab[key][i];
+      // loop through the diatonic steps of the key looking for the given note
+      // or the gap where it would fit
+      int i = 0;
+      while (i < 7) {
+            if (ptab[key][i] >= step)
                   break;
+            ++i;
+            }
+
+      // neither step nor gap found
+      // reset to beginning
+      if (i == 7) {
+            ++octave;
+            i = 0;
+            }
+      // if given step not found (gap found instead), and we are stepping up
+      // then we've already accounted for one step
+      if (ptab[key][i] > step && steps > 0)
+            --steps;
+
+      // now start counting diatonic steps up or down
+      if (steps > 0) {
+            // count up
+            while (steps--) {
+                  ++i;
+                  if (i == 7) {
+                        // hit last step; reset to beginning
+                        ++octave;
+                        i = 0;
+                        }
                   }
             }
-      pitch = octave  * 12 + step;
+      else if (steps < 0) {
+            // count down
+            while (steps++) {
+                  --i;
+                  if (i < 0) {
+                        // hit first step; reset to end
+                        --octave;
+                        i = 6;
+                        }
+                  }
+            }
+
+      // convert step to pitch
+      step = ptab[key][i];
+      pitch = octave * 12 + step;
       if (pitch < 0)
             pitch = 0;
       if (pitch > 127)
@@ -693,7 +715,27 @@ Note* searchTieNote(Note* note)
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
 
+      if (chord->isGraceBefore()) {
+            chord = static_cast<Chord*>(chord->parent());
+            note2 = chord->findNote(note->pitch());
+            return note2;
+            }
+      QList<Chord*> gna;
+      if (chord->getGraceNotesAfter(&gna)) {
+            chord = gna[0];
+            note2 = chord->findNote(note->pitch());
+            return note2;
+            }
+
+      // end of current note duration
+      // but err on the safe side in case there is roundoff in tick count
+      int endTick = chord->tick() + chord->actualTicks() - 1;
+
       while ((seg = seg->next1(Segment::Type::ChordRest))) {
+            // skip ahead to end of current note duration
+            // but just in case, stop if we find element in current track
+            if (seg->tick() < endTick  && !seg->element(chord->track()))
+                  continue;
             for (int track = strack; track < etrack; ++track) {
                   Chord* c = static_cast<Chord*>(seg->element(track));
                   if (c == 0 || c->type() != Element::Type::CHORD)

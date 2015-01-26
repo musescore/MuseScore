@@ -11,7 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-if (SCRIPT_INTERFACE)
+# if (SCRIPT_INTERFACE)
    QT4_WRAP_CPP (libqtMocs
       accidental.h arpeggio.h articulation.h barline.h beam.h bend.h
       box.h bracket.h breath.h bsymbol.h chord.h chordline.h chordrest.h
@@ -27,7 +27,7 @@ if (SCRIPT_INTERFACE)
       bagpembell.h ambitus.h plugins.h
       )
       set (LIB_SCRIPT_FILES plugins.cpp)
-endif (SCRIPT_INTERFACE)
+# endif (SCRIPT_INTERFACE)
 
 add_custom_command(
    OUTPUT ${PROJECT_BINARY_DIR}/all.h
@@ -82,19 +82,19 @@ add_library (
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp keylist.cpp
       )
-if (SCRIPT_INTERFACE)
+# if (SCRIPT_INTERFACE)
    set_target_properties (
       libmscore
       PROPERTIES
          COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch"
       )
-else (SCRIPT_INTERFACE)
-   set_target_properties (
-      libmscore
-      PROPERTIES
-         COMPILE_FLAGS "-g ${PCH_INCLUDE} -include libmscore/noscript.h -Wall -Wextra -Winvalid-pch"
-      )
-endif (SCRIPT_INTERFACE)
+# else (SCRIPT_INTERFACE)
+#   set_target_properties (
+#      libmscore
+#      PROPERTIES
+#         COMPILE_FLAGS "-g ${PCH_INCLUDE} -include libmscore/noscript.h -Wall -Wextra -Winvalid-pch"
+#      )
+# endif (SCRIPT_INTERFACE)
 
 xcode_pch(libmscore all)
 

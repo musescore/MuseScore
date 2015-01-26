@@ -106,7 +106,7 @@ void Box::startEdit(MuseScoreView*, const QPointF&)
 //   edit
 //---------------------------------------------------------
 
-bool Box::edit(MuseScoreView*, int /*grip*/, int /*key*/, Qt::KeyboardModifiers, const QString&)
+bool Box::edit(MuseScoreView*, Grip, int /*key*/, Qt::KeyboardModifiers, const QString&)
       {
       return false;
       }
@@ -154,10 +154,9 @@ void Box::endEdit()
 //   updateGrips
 //---------------------------------------------------------
 
-void Box::updateGrips(int* grips, int* defaultGrip, QRectF* grip) const
+void Box::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *grips = 1;
-      *defaultGrip = 0;
+      *defaultGrip = Grip::START;
       QRectF r(abbox());
       if (type() == Element::Type::HBOX)
             grip[0].translate(QPointF(r.right(), r.top() + r.height() * .5));
@@ -184,8 +183,11 @@ void Box::writeProperties(Xml& xml) const
       {
       writeProperty(xml, P_ID::BOX_HEIGHT);
       writeProperty(xml, P_ID::BOX_WIDTH);
-      writeProperty(xml, P_ID::TOP_GAP);
-      writeProperty(xml, P_ID::BOTTOM_GAP);
+
+      if (getProperty(P_ID::TOP_GAP) != propertyDefault(P_ID::TOP_GAP))
+            xml.tag("topGap", _topGap / spatium());
+      if (getProperty(P_ID::BOTTOM_GAP) != propertyDefault(P_ID::BOTTOM_GAP))
+            xml.tag("bottomGap", _bottomGap / spatium());
       writeProperty(xml, P_ID::LEFT_MARGIN);
       writeProperty(xml, P_ID::RIGHT_MARGIN);
       writeProperty(xml, P_ID::TOP_MARGIN);
@@ -211,10 +213,16 @@ void Box::read(XmlReader& e)
                   _boxHeight = Spatium(e.readDouble());
             else if (tag == "width")
                   _boxWidth = Spatium(e.readDouble());
-            else if (tag == "topGap")
-                  _topGap = e.readDouble();
-            else if (tag == "bottomGap")
-                  _bottomGap = e.readDouble();
+            else if (tag == "topGap") {                     // this value is not device independent for
+                  _topGap = e.readDouble();                 // versions < 2.03
+                  if (score()->mscVersion() >= 203)
+                        _topGap *= score()->spatium();
+                  }
+            else if (tag == "bottomGap") {                  // this value is not device independent for
+                  _bottomGap = e.readDouble();              // versions < 2.03
+                  if (score()->mscVersion() >= 203)
+                        _bottomGap *= score()->spatium();
+                  }
             else if (tag == "leftMargin")
                   _leftMargin = e.readDouble();
             else if (tag == "rightMargin")
@@ -717,7 +725,7 @@ void VBox::layout()
 //   getGrip
 //---------------------------------------------------------
 
-QPointF VBox::getGrip(int) const
+QPointF VBox::getGrip(Grip) const
       {
       return QPointF(0.0, boxHeight().val());
       }
@@ -726,7 +734,7 @@ QPointF VBox::getGrip(int) const
 //   setGrip
 //---------------------------------------------------------
 
-void VBox::setGrip(int, const QPointF& pt)
+void VBox::setGrip(Grip, const QPointF& pt)
       {
       setBoxHeight(Spatium(pt.y()));
       layout();

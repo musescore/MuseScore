@@ -142,18 +142,41 @@ void PageSettings::updateValues()
 
       blockSignals(true);
 
-      const char* suffix = mm ? "mm" : "in";
+      const char* suffix;
+      double singleStepSize;
+      double singleStepScale;
+      if (mm) {
+            suffix = "mm";
+            singleStepSize = 1.0;
+            singleStepScale = 0.2;
+            }
+      else {
+            suffix = "in";
+            singleStepSize = 0.05;
+            singleStepScale = 0.005;
+            }
       oddPageTopMargin->setSuffix(suffix);
+      oddPageTopMargin->setSingleStep(singleStepSize);
       oddPageBottomMargin->setSuffix(suffix);
+      oddPageBottomMargin->setSingleStep(singleStepSize);
       oddPageLeftMargin->setSuffix(suffix);
+      oddPageLeftMargin->setSingleStep(singleStepSize);
       oddPageRightMargin->setSuffix(suffix);
+      oddPageRightMargin->setSingleStep(singleStepSize);
       evenPageTopMargin->setSuffix(suffix);
+      evenPageTopMargin->setSingleStep(singleStepSize);
       evenPageBottomMargin->setSuffix(suffix);
+      evenPageBottomMargin->setSingleStep(singleStepSize);
       evenPageLeftMargin->setSuffix(suffix);
+      evenPageLeftMargin->setSingleStep(singleStepSize);
       evenPageRightMargin->setSuffix(suffix);
+      evenPageRightMargin->setSingleStep(singleStepSize);
       spatiumEntry->setSuffix(suffix);
+      spatiumEntry->setSingleStep(singleStepScale);
       pageWidth->setSuffix(suffix);
+      pageWidth->setSingleStep(singleStepSize);
       pageHeight->setSuffix(suffix);
+      pageHeight->setSingleStep(singleStepSize);
 
       const PageFormat* pf = sc->pageFormat();
       int index = 0;
@@ -322,9 +345,8 @@ void PageSettings::applyToScore(Score* s)
 
 void PageSettings::applyToAllParts()
       {
-      QList<Excerpt*>& el = cs->rootScore()->excerpts();
-      for (Excerpt* e : el)
-            applyToScore(e->score());
+      for (Excerpt* e : cs->rootScore()->excerpts())
+            applyToScore(e->partScore());
       mscore->endCmd();
       }
 

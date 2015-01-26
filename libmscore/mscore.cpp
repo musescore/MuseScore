@@ -48,14 +48,16 @@
 #include "stafftext.h"
 #include "mscoreview.h"
 #include "plugins.h"
+#include "chord.h"
 
 namespace Ms {
 
-qreal MScore::PDPI = 1200;
-qreal MScore::DPI  = 1200;
+qreal MScore::PDPI;
+qreal MScore::DPI;
 qreal MScore::DPMM;
 bool  MScore::debugMode;
 bool  MScore::testMode = false;
+bool  MScore::saveTemplateMode = false;
 bool  MScore::noGui = false;
 
 MStyle* MScore::_defaultStyle;
@@ -81,7 +83,7 @@ int     MScore::defaultPlayDuration;
 // QString MScore::partStyle;
 QString MScore::lastError;
 bool    MScore::layoutDebug = false;
-int     MScore::division    = 480;   // pulses per quarter note (PPQ) // ticks per beat
+int     MScore::division    = 480; // 3840;   // pulses per quarter note (PPQ) // ticks per beat
 int     MScore::sampleRate  = 44100;
 int     MScore::mtcType;
 
@@ -190,7 +192,7 @@ void MScore::init()
             ":/fonts/mscoreTab.ttf",
             ":/fonts/mscore-BC.ttf",
             ":/fonts/bravura/BravuraText.otf",
-            ":/fonts/gonville/GonvilleText.otf",
+            ":/fonts/gootville/GootvilleText.otf",
             ":/fonts/mscore/MScoreText.ttf",
             };
 

@@ -237,9 +237,9 @@ Chord::Chord(const Chord& c, bool link)
             add(new Stem(*(c._stem)));
       if (c._hook)
             add(new Hook(*(c._hook)));
-      if (c._stemSlash)
+      if (c._stemSlash) {
             add(new StemSlash(*(c._stemSlash)));
-
+            }
       if (c._glissando) {
             Glissando* g = new Glissando(*(c._glissando));
             add(g);
@@ -320,20 +320,6 @@ Chord::~Chord()
       }
 
 //---------------------------------------------------------
-//   setStem
-//---------------------------------------------------------
-
-void Chord::setStem(Stem* s)
-      {
-      delete _stem;
-      _stem = s;
-      if (_stem) {
-            _stem->setParent(this);
-            _stem->setTrack(track());
-            }
-      }
-
-//---------------------------------------------------------
 //   stemPosX
 //    return Chord coordinates
 //---------------------------------------------------------
@@ -388,9 +374,9 @@ QPointF Chord::stemPos() const
 QPointF Chord::stemPosBeam() const
       {
       qreal _spatium = spatium();
-      if (staff() && staff()->isTabStaff())
-            return staff()->staffType()->chordStemPosBeam(this) * _spatium + pagePos();
       QPointF p(pagePos());
+      if (staff() && staff()->isTabStaff())
+            return staff()->staffType()->chordStemPosBeam(this) * _spatium + p;
       if (_up) {
             qreal nhw = score()->noteHeadWidth();
             if (_noteType != NoteType::NORMAL)
@@ -407,12 +393,13 @@ QPointF Chord::stemPosBeam() const
 //   setSelected
 //---------------------------------------------------------
 
-void Chord::setSelected(bool f)
+void Chord::setSelected(bool)
       {
-      Element::setSelected(f);
+/*      Element::setSelected(f);
       int n = _notes.size();
       for (int i = 0; i < n; ++i)
             _notes.at(i)->setSelected(f);
+      */
       }
 
 //---------------------------------------------------------
@@ -475,6 +462,7 @@ void Chord::add(Element* e)
                   _glissando = static_cast<Glissando*>(e);
                   break;
             case Element::Type::STEM:
+                  Q_ASSERT(!_stem);
                   _stem = static_cast<Stem*>(e);
                   break;
             case Element::Type::HOOK:
@@ -484,6 +472,7 @@ void Chord::add(Element* e)
                   _el.push_back(e);
                   break;
             case Element::Type::STEM_SLASH:
+                  Q_ASSERT(!_stemSlash);
                   _stemSlash = static_cast<StemSlash*>(e);
                   break;
             case Element::Type::CHORD:
@@ -564,6 +553,10 @@ void Chord::remove(Element* e)
                   _hook = 0;
                   break;
             case Element::Type::STEM_SLASH:
+                  Q_ASSERT(_stemSlash);
+                  if (_stemSlash->selected() && score())
+                        score()->deselect(_stemSlash);
+                  delete _stemSlash;
                   _stemSlash = 0;
                   break;
             case Element::Type::CHORDLINE:
@@ -998,9 +991,9 @@ void Chord::read(XmlReader& e)
             else if (ChordRest::readProperties(e))
                   ;
             else if (tag == "Stem") {
-                  _stem = new Stem(score());
-                  _stem->read(e);
-                  add(_stem);
+                  Stem* s = new Stem(score());
+                  s->read(e);
+                  add(s);
                   }
             else if (tag == "Hook") {
                   _hook = new Hook(score());
@@ -1141,10 +1134,9 @@ qreal Chord::centerX() const
 
 void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      bool slash = _noStem || (measure() && measure()->slashStyle(staffIdx()));
-      if (_hook && !slash)
+      if (_hook)
             func(data, _hook );
-      if (_stem && !slash)
+      if (_stem)
             func(data, _stem);
       if (_stemSlash)
             func(data, _stemSlash);
@@ -1226,32 +1218,28 @@ void Chord::setScore(Score* s)
 
 void Chord::layoutStem1()
       {
-      bool hasStem = durationType().hasStem() && !(_noStem || measure()->slashStyle(staffIdx()));
-
-      if (hasStem) {
+      if (durationType().hasStem() && !(_noStem || measure()->slashStyle(staffIdx())
+         || (staff() && staff()->isTabStaff() && staff()->staffType()->slashStyle()))) {
             if (!_stem) {
                   Stem* stem = new Stem(score());
                   stem->setParent(this);
                   stem->setGenerated(true);
                   score()->undoAddElement(stem);
                   }
-            }
-      else if (_stem)
-            score()->undoRemoveElement(_stem);
-
-      if (hasStem && (_noteType == NoteType::ACCIACCATURA)) {
-            if (_stemSlash == 0) {
-                  StemSlash* slash = new StemSlash(score());
-                  add(slash);
-
-                  // slash->setParent(this);
-                  // slash->setGenerated(true);
-                  // score()->undoAddElement(slash);
+            if ((_noteType == NoteType::ACCIACCATURA) && !(beam() && beam()->elements().front() != this)) {
+                  if (!_stemSlash)
+                        add(new StemSlash(score()));
                   }
+            else if (_stemSlash)
+                  remove(_stemSlash);
             }
-      else if (_stemSlash)
-            // score()->undoRemoveElement(_stemSlash);
-            setStemSlash(0);
+      else {
+            if (_stem)
+                  score()->undoRemoveElement(_stem);
+            if (_stemSlash)
+                  remove(_stemSlash);
+            }
+
       }
 
 //---------------------------------------------------------
@@ -1585,7 +1573,7 @@ void Chord::updateNotes(AccidentalState* as)
       if (drumset) {
             for (Note* note : nl) {
                   int pitch = note->pitch();
-                  if (drumset->isValid(pitch)) {
+                  if (drumset->isValid(pitch) && !note->fixed()) {
                         note->setHeadGroup(drumset->noteHead(pitch));
                         note->setLine(drumset->line(pitch));
                         }
@@ -1628,9 +1616,11 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       int gnb = getGraceNotesBefore(&graceNotesBefore);
       if (gnb) {
             for (Chord* ch : graceNotesBefore) {
-                  QList<Note*> notes(ch->notes());  // we need a copy!
-                  for (Note* note : notes)
-                        note->updateAccidental(as);
+                  if (staffGroup != StaffGroup::PERCUSSION) {
+                        QList<Note*> notes(ch->notes());  // we need a copy!
+                        for (Note* note : notes)
+                              note->updateAccidental(as);
+                        }
                   ch->sortNotes();
                   }
             }
@@ -1655,7 +1645,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         if (!drumset->isValid(pitch)) {
                               // qDebug("unmapped drum note %d", pitch);
                               }
-                        else {
+                        else if (!note->fixed()) {
                               note->setHeadGroup(drumset->noteHead(pitch));
                               note->setLine(drumset->line(pitch));
                               continue;
@@ -1663,13 +1653,16 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                         }
                   }
             }
+
       QList<Chord*> graceNotesAfter;
       int gna = getGraceNotesAfter(&graceNotesAfter);
       if (gna) {
             for (Chord* ch : graceNotesAfter) {
-                  QList<Note*> notes(ch->notes());  // we need a copy!
-                  for (Note* note : notes)
-                        note->updateAccidental(as);
+                  if (staffGroup != StaffGroup::PERCUSSION) {
+                        QList<Note*> notes(ch->notes());  // we need a copy!
+                        for (Note* note : notes)
+                              note->updateAccidental(as);
+                        }
                   ch->sortNotes();
                   }
             }
@@ -1770,7 +1763,7 @@ void Chord::layoutPitched()
             lhead = qMax(lhead, -x1);
 
             Accidental* accidental = note->accidental();
-            if (accidental) {
+            if (accidental && !note->fixed()) {
                   // convert x position of accidental to segment coordinate system
                   qreal x = accidental->pos().x() + note->pos().x() + chordX;
                   // distance from accidental to note already taken into account
@@ -1901,8 +1894,30 @@ void Chord::layoutPitched()
                   else if (rtick()) {
                         // if this is not first chord of measure, get previous chord
                         Segment* s = segment()->prev(Segment::Type::ChordRest);
-                        if (s && s->element(track()) && s->element(track())->type() == Element::Type::CHORD)
-                              pc = static_cast<Chord*>(s->element(track()));
+                        if (s) {
+                              // prefer chord in same voice
+                              // but if nothing there, look at other voices
+                              // note this still leaves the possibility
+                              // that this voice does not have conflict but another voice does
+                              Element* e = s->element(track());
+                              if (e && e->type() == Element::Type::CHORD)
+                                    pc = static_cast<Chord*>(e);
+                              else {
+                                    int startTrack = staffIdx() * VOICES;
+                                    int endTrack = startTrack + VOICES;
+                                    for (int t = startTrack; t < endTrack; ++t) {
+                                          if (t == track())  // already checked current voice
+                                                continue;
+                                          e = s->element(t);
+                                          if (e && e->type() == Element::Type::CHORD) {
+                                                pc = static_cast<Chord*>(e);
+                                                // prefer chord with ledger lines
+                                                if (pc->ledgerLines())
+                                                      break;
+                                                }
+                                          }
+                                    }
+                              }
                         }
                   if (pc && !pc->graceNotes().isEmpty()) {
                         // if previous chord has grace notes after, find last one
@@ -2070,7 +2085,10 @@ void Chord::layoutTablature()
                   headWidth = fretWidth;
             // centre fret string on stem
             qreal x = stemX - fretWidth*0.5;
-            note->setPos(x, tab->physStringToVisual(note->string()) * lineDist);
+            if (note->fixed())
+                  note->setPos(x, note->line() * lineDist / 2);
+            else
+                  note->setPos(x, tab->physStringToVisual(note->string()) * lineDist);
             }
       // horiz. spacing: leave half width at each side of the (potential) stem
       qreal halfHeadWidth = headWidth * 0.5;
@@ -2095,8 +2113,11 @@ void Chord::layoutTablature()
       // if stem is required but missing, add it;
       // set stem position (stem length is set in Chord:layoutStem() )
       else {
-            if (_stem == 0)
-                  setStem(new Stem(score()));
+            if (_stem == 0) {
+                  Stem* stem = new Stem(score());
+                  stem->setParent(this);
+                  score()->undo(new AddElement(stem));
+                  }
             _stem->setPos(tab->chordStemPos(this) * _spatium);
             if (_hook) {
                   if (beam())
@@ -2108,10 +2129,6 @@ void Chord::layoutTablature()
                         }
                   }
             }
-      // unconditionally delete grace slashes
-      delete _stemSlash;
-      _stemSlash = 0;
-
       if (!tab->genDurations()            // if tab is not set for duration symbols
             || track2voice(track())       // or not in first voice
             || isGrace()) {               // or chord is a grace (no dur. symbols for graces
@@ -2521,6 +2538,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
       // TENUTO and STACCATO: always near the note head (or stem end if beyond a stem)
       if ((st == ArticulationType::Tenuto || st == ArticulationType::Staccato || st == ArticulationType::Sforzatoaccent) && (aa != ArticulationAnchor::TOP_STAFF && aa != ArticulationAnchor::BOTTOM_STAFF)) {
             bool bottom;                        // true: artic. is below chord | false: artic. is above chord
+            bool alignToStem = false;
             // if there area voices, articulation is on stem side
             if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
                   bottom = !up();
@@ -2551,6 +2569,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         qreal dy = (score()->styleS(StyleIdx::beamWidth).val() + 1) * _spatium2;
                         pos.ry() += bottom ? dy : - dy;
                         }
+                  alignToStem = (st == ArticulationType::Staccato && articulations().size() == 1);
                   }
             else {                              // if articulation is not beyond a stem
                   int line;
@@ -2576,7 +2595,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         }
                   pos.ry() += line * _spStaff2;                         // convert staff position to sp distance
                   }
-            if (!staff()->isTabStaff()) {
+            if (!staff()->isTabStaff() && !alignToStem) {
                   if (up())
                         pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
                   else
@@ -2726,13 +2745,92 @@ void Chord::reset()
       }
 
 //---------------------------------------------------------
-//   setStemSlash
+//   slash
 //---------------------------------------------------------
 
-void Chord::setStemSlash(StemSlash* s)
+bool Chord::slash()
       {
-      delete _stemSlash;
-      _stemSlash = s;
+      Note* n = upNote();
+      return n->fixed();
+      }
+
+//---------------------------------------------------------
+//   setSlash
+//---------------------------------------------------------
+
+void Chord::setSlash(bool flag, bool stemless)
+      {
+      int line = 0;
+      NoteHead::Group head = NoteHead::Group::HEAD_SLASH;
+
+      if (!flag) {
+            // restore to normal
+            undoChangeProperty(P_ID::NO_STEM, false);
+            undoChangeProperty(P_ID::SMALL, false);
+            undoChangeProperty(P_ID::USER_OFF, QPointF());
+            for (Note* n : _notes) {
+                  n->undoChangeProperty(P_ID::HEAD_GROUP, int(NoteHead::Group::HEAD_NORMAL));
+                  n->undoChangeProperty(P_ID::FIXED, false);
+                  n->undoChangeProperty(P_ID::FIXED_LINE, 0);
+                  n->undoChangeProperty(P_ID::PLAY, true);
+                  n->undoChangeProperty(P_ID::VISIBLE, true);
+                  if (staff()->isDrumStaff()) {
+                        Drumset* ds = staff()->part()->instr()->drumset();
+                        int pitch = n->pitch();
+                        if (ds && ds->isValid(pitch)) {
+                              undoChangeProperty(P_ID::STEM_DIRECTION, static_cast<int>(ds->stemDirection(pitch)));
+                              n->undoChangeProperty(P_ID::HEAD_GROUP, static_cast<int>(ds->noteHead(pitch)));
+                              }
+                        }
+                  }
+            return;
+            }
+
+      // set stem to auto (mostly important for rhythmic notation on drum staves)
+      undoChangeProperty(P_ID::STEM_DIRECTION, static_cast<int>(MScore::Direction::AUTO));
+
+      // make stemless if asked
+      if (stemless)
+            undoChangeProperty(P_ID::NO_STEM, true);
+
+      // voice-dependent attributes - line, size, offset, head
+      if (track() % VOICES < 2) {
+            // use middle line
+            line = staff()->lines() - 1;
+            }
+      else {
+            // set small
+            undoChangeProperty(P_ID::SMALL, true);
+            // set outside the staff
+            qreal y = 0.0;
+            if (track() % 2) {
+                  line = staff()->lines() * 2 - 1;
+                  y = 0.5 * spatium();
+                  }
+            else {
+                  line = -1;
+                  if (!staff()->isDrumStaff())
+                  y = -0.5 * spatium();
+                  }
+            // for non-drum staves, add an additional offset
+            // for drum staves, no offset, but use normal head
+            if (!staff()->isDrumStaff())
+                  undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, y));
+            else
+                  head = NoteHead::Group::HEAD_NORMAL;
+            }
+
+      int ns = _notes.size();
+      for (int i = 0; i < ns; ++i) {
+            Note* n = _notes[i];
+            n->undoChangeProperty(P_ID::HEAD_GROUP, static_cast<int>(head));
+            n->undoChangeProperty(P_ID::FIXED, true);
+            n->undoChangeProperty(P_ID::FIXED_LINE, line);
+            n->undoChangeProperty(P_ID::PLAY, false);
+            // hide all but first notehead
+            if (i)
+                  n->undoChangeProperty(P_ID::VISIBLE, false);
+            }
       }
 
 //---------------------------------------------------------

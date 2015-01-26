@@ -60,6 +60,36 @@ JackAudio::~JackAudio()
       }
 
 //---------------------------------------------------------
+//   updateOutPortCount
+//   Add/remove JACK MIDI Out ports
+//---------------------------------------------------------
+
+void JackAudio::updateOutPortCount(int maxport)
+      {
+      if (!preferences.useJackMidi || maxport == midiOutputPorts.size())
+            return;
+      if (MScore::debugMode)
+            qDebug()<<"JACK number of ports:"<<midiOutputPorts.size()<<", change to:"<<maxport;
+
+      bool oldremember = preferences.rememberLastConnections;
+      preferences.rememberLastConnections = true;
+
+      if (maxport > midiOutputPorts.size()) {
+            for (int i = midiOutputPorts.size(); i < maxport; ++i)
+                  registerPort(QString("mscore-midi-%1").arg(i+1), false, true);
+            restoreMidiConnections();
+            }
+      else if (maxport < midiOutputPorts.size()) {
+            rememberMidiConnections();
+            for(int i = midiOutputPorts.size() - 1; i >= maxport; --i) {
+                  unregisterPort(midiOutputPorts[i]);
+                  midiOutputPorts.removeAt(i);
+                  }
+            }
+      preferences.rememberLastConnections = oldremember;
+      }
+
+//---------------------------------------------------------
 //   registerPort
 //---------------------------------------------------------
 
@@ -148,10 +178,12 @@ void JackAudio::connect(const char* src, const char* dst)
             qDebug("JackAudio::connect: unknown jack ports");
             return;
             }
+      qDebug("JackAudio::connect <%s> <%s>", src, dst);
       int rv = jack_connect(client, src, dst);
       if (rv)
             qDebug("jack connect port <%s> - <%s> failed: %d", src, dst, rv);
       }
+
 //---------------------------------------------------------
 //   disconnect
 //---------------------------------------------------------
@@ -442,8 +474,7 @@ bool JackAudio::init(bool hot)
             }
 
       if (preferences.useJackMidi) {
-            for (int i = 0; i < preferences.midiPorts; ++i)
-                  registerPort(QString("mscore-midi-%1").arg(i+1), false, true);
+            registerPort(QString("mscore-midi-1"), false, true);
             registerPort(QString("mscore-midiin-1"), true, true);
             }
       return true;
@@ -746,8 +777,8 @@ void JackAudio::rememberAudioConnections()
 
 void JackAudio::restoreAudioConnections()
       {
-      foreach(jack_port_t* p, ports)
-            jack_port_disconnect(client,p);
+      for (auto p : ports)
+            jack_port_disconnect(client, p);
 
       QList<QString> portList = inputPorts();
       QList<QString>::iterator pi = portList.begin();
@@ -760,8 +791,8 @@ void JackAudio::restoreAudioConnections()
       if (!preferences.rememberLastConnections || n == 0) {
             if (MScore::debugMode)
                   qDebug("Connecting to system ports...");
-            for (int i = 0; i<ports.size(); i++) {
-                  const char* src = jack_port_name(ports[i]);
+            for (auto p : ports) {
+                  const char* src = jack_port_name(p);
                   if (pi != portList.end()) {
                         connect(src, qPrintable(*pi));
                         ++pi;
@@ -908,25 +939,11 @@ void JackAudio::hotPlug()
 
       // Midi connections
       if (preferences.useJackMidi) {
-            if (midiOutputPorts.size()<preferences.midiPorts) {
-                  for (int i = midiOutputPorts.size(); i < preferences.midiPorts; ++i)
-                        registerPort(QString("mscore-midi-%1").arg(i+1), false, true);
-                  }
-            else if (midiOutputPorts.size()>preferences.midiPorts) {
-                  for(int i = midiOutputPorts.size()-1; i>=preferences.midiPorts; --i) {
-                        unregisterPort(midiOutputPorts[i]);
-                        midiOutputPorts.removeAt(i);
-                        }
-                  }
-
             if (midiInputPorts.size() == 0)
                   registerPort(QString("mscore-midiin-1"), true, true);
             }
       else { // No midi
-            foreach(jack_port_t* mp, midiOutputPorts) {
-                  unregisterPort(mp);
-                  midiOutputPorts.removeOne(mp);
-                  }
+            updateOutPortCount(0);
             if (midiInputPorts.size() != 0) {
                   unregisterPort(midiInputPorts[0]);
                   midiInputPorts.removeOne(midiInputPorts[0]);

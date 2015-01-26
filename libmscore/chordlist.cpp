@@ -104,7 +104,7 @@ QString HChord::name(int tpc) const
       static const HChord C0(0,3,6,9);
       static const HChord C1(0,3);
 
-      QString buf = tpc2name(tpc, NoteSpellingType::STANDARD, false);
+      QString buf = tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, false);
       HChord c(*this);
 
       int key = tpc2pitch(tpc);
@@ -1573,8 +1573,22 @@ void ChordList::read(XmlReader& e)
                               code       = e.attribute("code");
                               symClass   = e.attribute("class");
                               if (code != "") {
-                                    cs.code = code.toInt(0, 0);
-                                    cs.value = QString(cs.code);
+                                    bool ok = true;
+                                    int val = code.toInt(&ok, 0);
+                                    if (!ok) {
+                                          cs.code = 0;
+                                          cs.value = code;
+                                          }
+                                    else if (val & 0xffff0000) {
+                                          cs.code = 0;
+                                          QChar high = QChar(QChar::highSurrogate(val));
+                                          QChar low = QChar(QChar::lowSurrogate(val));
+                                          cs.value = QString("%1%2").arg(high).arg(low);
+                                          }
+                                    else {
+                                          cs.code = val;
+                                          cs.value = QString(cs.code);
+                                          }
                                     }
                               else
                                     cs.code = 0;

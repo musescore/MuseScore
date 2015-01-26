@@ -97,10 +97,10 @@ bool Portaudio::init(bool)
             idx = Pa_GetDefaultOutputDevice();
 
       const PaDeviceInfo* di = Pa_GetDeviceInfo(idx);
-      
+
       if (di == nullptr)
             di = Pa_GetDeviceInfo(Pa_GetDefaultOutputDevice());
-            
+
       _sampleRate = int(di->defaultSampleRate);
 
       /* Open an audio I/O stream. */

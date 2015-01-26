@@ -645,7 +645,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       // Retrieve preferences
 //      int highrate = 48000;
 //      int lowrate = 8000;
-      int bitrate = 0;
+      int bitrate = 64;
 //      int brate = 128;
 //      int rmode = MODE_CBR;
 //      int vmode = ROUTINE_FAST;
@@ -658,7 +658,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       exporter.setMode(MODE_CBR);
       exporter.setBitrate(bitrate);
-      exporter.setChannel(CHANNEL_STEREO);
+      exporter.setChannel(CHANNEL_JOINT);
+      exporter.setQuality(QUALITY_5, ROUTINE_STANDARD);
 
       int inSamples = exporter.initializeStream(channels, sampleRate);
       if (inSamples < 0) {
@@ -829,7 +830,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       hideProgressBar();
       delete synti;
-      delete bufferOut;
+      delete[] bufferOut;
       file.close();
       MScore::sampleRate = oldSampleRate;
       return true;

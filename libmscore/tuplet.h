@@ -75,7 +75,8 @@ class Tuplet : public DurationElement {
 
       virtual bool isEditable() const;
       virtual void editDrag(const EditData&);
-      virtual void updateGrips(int*, int*, QRectF*) const override;
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
+      virtual int grips() const override { return 2; }
 
       virtual void setSelected(bool f);
 
@@ -91,7 +92,7 @@ class Tuplet : public DurationElement {
       void setRatio(const Fraction& r) { _ratio = r;            }
 
       const QList<DurationElement*>& elements() const { return _elements; }
-      void clear()                  { _elements.clear(); }
+      void clear()                                    { _elements.clear(); }
 
       virtual void layout();
       Text* number() const { return _number; }

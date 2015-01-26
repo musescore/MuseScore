@@ -776,11 +776,13 @@ void OveToMScore::convertSignatures(){
                                     int keyValue = keyPtr->getKey();
                                     Measure* measure = score_->tick2measure(tick);
                                     if(measure){
-                                          score_->staff(staffCount+j)->setKey(tick, Key(keyValue));
+                                          KeySigEvent ke;
+                                          ke.setKey(Key(keyValue));
+                                          score_->staff(staffCount+j)->setKey(tick, ke);
 
                                           KeySig* keysig = new KeySig(score_);
                                           keysig->setTrack((staffCount+j) * VOICES);
-                                          keysig->setKey(Key(keyValue));
+                                          keysig->setKeySigEvent(ke);
 
                                           Segment* s = measure->getSegment(keysig, tick);
                                           s->add(keysig);
@@ -1484,6 +1486,10 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               int absLine = (int) clefMiddleTone + clefMiddleOctave * OCTAVE + oveNote->getLine();
                               int tone = absLine % OCTAVE;
                               int alter = accidentalToAlter(oveNote->getAccidental());
+                              NoteVal nv(pitch);
+                              note->setTrack(cr->track());
+                              note->setNval(nv, cr->tick());
+                              // note->setTpcFromPitch();
                               note->setTpc(step2tpc(tone, AccidentalVal(alter)));
 
                               note->setHeadGroup(getHeadGroup(oveNote->getHeadType()));

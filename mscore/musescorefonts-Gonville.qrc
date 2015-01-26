@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="fonts/gonville/Gonville.otf">../fonts/gonville/Gonville.otf</file>
-        <file alias="fonts/gonville/GonvilleText.otf">../fonts/gonville/GonvilleText.otf</file>
-	    </qresource>
-</RCC>

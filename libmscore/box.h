@@ -51,10 +51,11 @@ class Box : public MeasureBase {
       virtual void draw(QPainter*) const override;
       virtual bool isEditable() const override { return true; }
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
-      virtual bool edit(MuseScoreView*, int grip, int key, Qt::KeyboardModifiers, const QString& s) override;
+      virtual bool edit(MuseScoreView*, Grip grip, int key, Qt::KeyboardModifiers, const QString& s) override;
       virtual void editDrag(const EditData&) override;
       virtual void endEdit() override;
-      virtual void updateGrips(int*, int*, QRectF*) const override;
+      virtual void updateGrips(Grip*, QVector<QRectF>&) const override;
+      virtual int grips() const override { return 1; }
       virtual void layout() override;
       virtual void write(Xml&) const override;
       virtual void write(Xml& xml, int, bool) const override { write(xml); }
@@ -99,15 +100,15 @@ class HBox : public Box {
    public:
       HBox(Score* score);
       ~HBox() {}
-      virtual HBox* clone() const        { return new HBox(*this); }
-      virtual Element::Type type() const { return Element::Type::HBOX;       }
+      virtual HBox* clone() const override        { return new HBox(*this); }
+      virtual Element::Type type() const override { return Element::Type::HBOX;       }
 
-      virtual void layout();
+      virtual void layout() override;
 
       virtual QRectF drag(EditData*) override;
-      virtual void endEditDrag();
+      virtual void endEditDrag() override;
       void layout2();
-      virtual bool isMovable() const;
+      virtual bool isMovable() const override;
       };
 
 //---------------------------------------------------------
@@ -121,13 +122,13 @@ class VBox : public Box {
    public:
       VBox(Score* score);
       ~VBox() {}
-      virtual VBox* clone() const        { return new VBox(*this); }
-      virtual Element::Type type() const { return Element::Type::VBOX;       }
+      virtual VBox* clone() const override        { return new VBox(*this); }
+      virtual Element::Type type() const override { return Element::Type::VBOX;       }
 
-      virtual void layout();
+      virtual void layout() override;
 
-      virtual QPointF getGrip(int) const;
-      virtual void setGrip(int, const QPointF&);
+      virtual QPointF getGrip(Grip) const override;
+      virtual void setGrip(Grip, const QPointF&) override;
       };
 
 //---------------------------------------------------------
@@ -141,10 +142,10 @@ class FBox : public VBox {
    public:
       FBox(Score* score) : VBox(score) {}
       ~FBox() {}
-      virtual FBox* clone() const        { return new FBox(*this); }
-      virtual Element::Type type() const { return Element::Type::FBOX;       }
+      virtual FBox* clone() const override        { return new FBox(*this); }
+      virtual Element::Type type() const override { return Element::Type::FBOX;       }
 
-      virtual void layout();
+      virtual void layout() override;
       void add(Element*);
       };
 

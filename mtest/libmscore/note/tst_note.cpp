@@ -17,7 +17,13 @@
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
+#include "libmscore/measure.h"
+#include "libmscore/segment.h"
+#include "libmscore/tremolo.h"
+#include "libmscore/articulation.h"
 #include "mtest/testutils.h"
+
+#define DIR QString("libmscore/note/")
 
 using namespace Ms;
 
@@ -32,6 +38,10 @@ class TestNote : public QObject, public MTest
    private slots:
       void initTestCase();
       void note();
+      void grace();
+      void tpc();
+      void tpcTranspose();
+      void tpcTranspose2();
       };
 
 //---------------------------------------------------------
@@ -293,6 +303,142 @@ void TestNote::note()
       n = static_cast<Note*>(writeReadElement(note));
       QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
       delete n;
+
+      }
+
+//---------------------------------------------------------
+///   grace
+///   read/write test of grace notes
+//---------------------------------------------------------
+
+void TestNote::grace()
+      {
+      Score* score = readScore(DIR + "grace.mscx");
+      score->doLayout();
+      Chord* chord = score->firstMeasure()->findChord(0, 0);
+      Note* note = chord->upNote();
+
+      // create
+      score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, MScore::division/2);
+      Chord* gc = chord->graceNotes().first();
+      Note* gn = gc->notes().first();
+//      Note* n = static_cast<Note*>(writeReadElement(gn));
+//      QCOMPARE(n->noteType(), NoteType::APPOGGIATURA);
+//      delete n;
+
+      // tie
+      score->select(gn);
+      score->cmdAddTie();
+//      n = static_cast<Note*>(writeReadElement(gn));
+//      QVERIFY(n->tieFor() != 0);
+//      delete n;
+
+      // tremolo
+      score->startCmd();
+      Tremolo* tr = new Tremolo(score);
+      tr->setTremoloType(TremoloType::R16);
+      tr->setParent(gc);
+      tr->setTrack(gc->track());
+      score->undoAddElement(tr);
+      score->endCmd();
+//      Chord* c = static_cast<Chord*>(writeReadElement(gc));
+//      QVERIFY(c->tremolo() != 0);
+//      delete c;
+
+      // articulation
+      score->startCmd();
+      Articulation* ar = new Articulation(score);
+      ar->setArticulationType(ArticulationType::Sforzatoaccent);
+      ar->setParent(gc);
+      ar->setTrack(gc->track());
+      score->undoAddElement(ar);
+      score->endCmd();
+//      c = static_cast<Chord*>(writeReadElement(gc));
+//      QVERIFY(c->articulations().size() == 1);
+//      delete c;
+
+      QVERIFY(saveCompareScore(score, "grace-test.mscx", DIR + "grace-ref.mscx"));
+
+      }
+
+//---------------------------------------------------------
+///   tpc
+///   test of note tpc values
+//---------------------------------------------------------
+
+void TestNote::tpc()
+      {
+      Score* score = readScore(DIR + "tpc.mscx");
+      score->doLayout();
+
+      score->inputState().setTrack(0);
+      score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
+      score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+      score->inputState().setNoteEntryMode(true);
+      int octave = 5 * 7;
+      score->cmdAddPitch(octave + 1, false);
+      score->cmdAddPitch(octave + 2, false);
+      score->cmdAddPitch(octave + 3, false);
+      score->cmdAddPitch(octave + 4, false);
+      score->cmdAddPitch(octave + 5, false);
+      score->cmdAddPitch(octave + 6, false);
+      score->cmdAddPitch(octave + 7, false);
+      score->cmdAddPitch(octave + 8, false);
+
+      score->cmdConcertPitchChanged(true, true);
+
+      QVERIFY(saveCompareScore(score, "tpc-test.mscx", DIR + "tpc-ref.mscx"));
+
+      }
+
+//---------------------------------------------------------
+///   tpcTranspose
+///   test of note tpc values & transposition
+//---------------------------------------------------------
+
+void TestNote::tpcTranspose()
+      {
+      Score* score = readScore(DIR + "tpc-transpose.mscx");
+      score->doLayout();
+
+      score->startCmd();
+      Measure* m = score->firstMeasure();
+      score->select(m, SelectType::SINGLE, 0);
+      score->changeAccidental(Accidental::Type::FLAT);
+      score->endCmd();
+
+      score->startCmd();
+      m = m->nextMeasure();
+      score->select(m, SelectType::SINGLE, 0);
+      score->upDown(false, UpDownMode::CHROMATIC);
+      score->endCmd();
+
+      score->cmdConcertPitchChanged(true, true);
+
+      QVERIFY(saveCompareScore(score, "tpc-transpose-test.mscx", DIR + "tpc-transpose-ref.mscx"));
+
+      }
+
+//---------------------------------------------------------
+///   tpcTranspose2
+///   more tests of note tpc values & transposition
+//---------------------------------------------------------
+
+void TestNote::tpcTranspose2() {
+      Score* score = readScore(DIR + "tpc-transpose2.mscx");
+      score->doLayout();
+
+      score->inputState().setTrack(0);
+      score->inputState().setSegment(score->tick2segment(0, false, Segment::Type::ChordRest));
+      score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+      score->inputState().setNoteEntryMode(true);
+      int octave = 5 * 7;
+      score->cmdAddPitch(octave + 3, false);
+
+      score->cmdConcertPitchChanged(true, true);
+
+      QVERIFY(saveCompareScore(score, "tpc-transpose2-test.mscx", DIR + "tpc-transpose2-ref.mscx"));
+
       }
 
 QTEST_MAIN(TestNote)

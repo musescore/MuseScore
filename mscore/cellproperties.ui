@@ -135,6 +135,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>name</tabstop>
+  <tabstop>xoffset</tabstop>
+  <tabstop>yoffset</tabstop>
+  <tabstop>scale</tabstop>
+  <tabstop>drawStaff</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

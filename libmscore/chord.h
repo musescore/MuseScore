@@ -143,13 +143,13 @@ class Chord : public ChordRest {
       Note* findNote(int pitch) const;
 
       Stem* stem() const                     { return _stem; }
-      void setStem(Stem* s);
       Arpeggio* arpeggio() const             { return _arpeggio;  }
       Tremolo* tremolo() const               { return _tremolo;   }
       void setTremolo(Tremolo* t)            { _tremolo = t;      }
       Glissando* glissando() const           { return _glissando; }
       StemSlash* stemSlash() const           { return _stemSlash; }
-      void setStemSlash(StemSlash* s);
+      bool slash();
+      void setSlash(bool flag, bool stemless);
 
       const QList<Chord*>& graceNotes() const { return _graceNotes; }
       QList<Chord*>& graceNotes()             { return _graceNotes; }
@@ -202,9 +202,9 @@ class Chord : public ChordRest {
 
       virtual void crossMeasureSetup(bool on);
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       virtual void reset();
 
@@ -212,7 +212,6 @@ class Chord : public ChordRest {
       virtual Measure* measure() const;
 
       void sortNotes();
-
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;

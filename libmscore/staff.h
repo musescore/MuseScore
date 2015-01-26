@@ -113,6 +113,8 @@ class Staff : public QObject {
       bool _invisible    { false };
       bool _neverHide    { false };    ///< always show this staff, even if empty and hideEmptyStaves is true
       bool _showIfEmpty  { false };    ///< show this staff if system is empty and hideEmptyStaves is true
+      bool _hideSystemBarLine  { false }; // no system barline if not preceeded by staff with barline
+
       QColor _color      { MScore::defaultColor };
       qreal _userDist    { 0.0   };        ///< user edited extra distance
       qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
@@ -160,17 +162,18 @@ class Staff : public QObject {
 
       void addTimeSig(TimeSig*);
       void removeTimeSig(TimeSig*);
-      void clearTimeSig()            { timesigs.clear(); }
+      void clearTimeSig();
       Fraction timeStretch(int tick) const;
       TimeSig* timeSig(int tick) const;
       const Groups& group(int tick) const;
 
-      KeyList* keyList()               { return &_keys;      }
-      Key key(int tick) const;
+      KeyList* keyList()               { return &_keys;                  }
+      Key key(int tick) const          { return keySigEvent(tick).key(); }
+      KeySigEvent keySigEvent(int tick) const;
       int nextKeyTick(int tick) const;
       int currentKeyTick(int tick) const;
-      Key prevKey(int tick) const;
-      void setKey(int tick, Key);
+      KeySigEvent prevKey(int tick) const;
+      void setKey(int tick, KeySigEvent);
       void removeKey(int tick);
 
       bool show() const;
@@ -183,6 +186,9 @@ class Staff : public QObject {
       void setNeverHide(bool val)    { _neverHide = val;    }
       bool showIfEmpty() const       { return _showIfEmpty; }
       void setShowIfEmpty(bool val)  { _showIfEmpty = val;  }
+
+      void setHideSystemBarLine(bool val) { _hideSystemBarLine = val;  }
+      bool hideSystemBarLine() const      { return _hideSystemBarLine; }
 
       void setSlashStyle(bool val);
       int lines() const;

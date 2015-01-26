@@ -38,12 +38,12 @@ class BSymbol : public Element, public ElementLayout {
 
       BSymbol &operator=(const BSymbol&) = delete;
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual bool acceptDrop(const DropData&) const override;
-      virtual Element* drop(const DropData&);
-      virtual void layout();
+      virtual Element* drop(const DropData&) override;
+      virtual void layout() override;
       virtual QRectF drag(EditData*) override;
 
       void writeProperties(Xml& xml) const;
@@ -51,11 +51,11 @@ class BSymbol : public Element, public ElementLayout {
 
       const QList<Element*>& leafs() const { return _leafs; }
       QList<Element*>& leafs()             { return _leafs; }
-      virtual QPointF pagePos() const;
-      virtual QPointF canvasPos() const;
-      virtual QLineF dragAnchor() const;
+      virtual QPointF pagePos() const override;
+      virtual QPointF canvasPos() const override;
+      virtual QLineF dragAnchor() const override;
       Segment* segment() const            { return (Segment*)parent(); }
-      virtual int z() const               { return _z; }
+      virtual int z() const override      { return _z; }
       void setZ(int val)                  { _z = val;  }
       bool systemFlag() const             { return _systemFlag; }
       void setSystemFlag(bool val)        { _systemFlag = val;  }

@@ -83,20 +83,20 @@ class System : public Element {
       QList<MeasureBase*> ml;
       QList<SysStaff*> _staves;
       QList<Bracket*> _brackets;
+      QList<SpannerSegment*> _spannerSegments;
 
       BarLine* _barLine;      ///< Left hand bar, connects staves in system.
       qreal _leftMargin;      ///< left margin for instrument name, brackets etc.
+
+      qreal _stretchDistance;
+      qreal _distance;
+
       bool _pageBreak;
       bool _firstSystem;      ///< used to decide between long and short instrument
                               ///< names; set by score()->doLayout()
       bool _vbox;             ///< contains only one VBox in ml
       bool _sameLine;
       bool _addStretch;
-
-      QList<SpannerSegment*> _spannerSegments;
-
-      qreal _stretchDistance;
-      qreal _distance;
 
       void setDistanceUp(int n, qreal v)   { _staves[n]->setDistanceUp(v); }
       void setDistanceDown(int n, qreal v) { _staves[n]->setDistanceDown(v); }
@@ -166,7 +166,7 @@ class System : public Element {
       VBox* vbox() const          { return (VBox*)ml[0];       }
       void setVbox(bool v)        { _vbox = v;          }
 
-      void layoutLyrics(Lyrics*, Segment*, int staffIdx);
+//      void layoutLyrics(Lyrics*, Segment*, int staffIdx);
 
       bool addStretch() const     { return _addStretch; }
       void setAddStretch(bool v)  { _addStretch = v; }

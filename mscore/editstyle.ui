@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>904</width>
-    <height>577</height>
+    <height>739</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -683,7 +683,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Vertical-frame upper margin</string>
+             <string>Vertical frame upper margin</string>
             </property>
             <property name="text">
              <string>Vertical frame top margin:</string>
@@ -721,7 +721,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Vertical-frame lower margin</string>
+             <string>Vertical frame lower margin</string>
             </property>
             <property name="text">
              <string>Vertical frame bottom margin:</string>
@@ -2218,6 +2218,13 @@
               </property>
               <property name="checked">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="scaleBarlines">
+              <property name="text">
+               <string>Scale barlines to staff size</string>
               </property>
              </widget>
             </item>
@@ -4126,6 +4133,9 @@
              <string>Appearance</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
               <widget class="QRadioButton" name="chordsStandard">
                <property name="text">
@@ -4165,6 +4175,12 @@
           </item>
           <item>
            <widget class="QGroupBox" name="chordDescriptionGroup">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="title">
              <string/>
             </property>
@@ -4175,6 +4191,12 @@
              <bool>false</bool>
             </property>
             <layout class="QGridLayout" name="chordDescriptionLayout">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item row="0" column="2">
               <widget class="QToolButton" name="chordDescriptionFileButton">
                <property name="text">
@@ -4187,6 +4209,12 @@
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="label_54">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string>Chord symbols style file:</string>
                </property>
@@ -4208,7 +4236,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_23">
             <property name="title">
-             <string>Root / Bass Spelling</string>
+             <string>Note Spelling</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_37">
              <item>
@@ -4226,7 +4254,7 @@
                <item>
                 <widget class="QRadioButton" name="useGermanNoteNames">
                  <property name="toolTip">
-                  <string>A, B, H, C, Cis, ...</string>
+                  <string>A, B♭, H, C, C♯, ...</string>
                  </property>
                  <property name="text">
                   <string>German</string>
@@ -4234,12 +4262,32 @@
                 </widget>
                </item>
                <item>
+                <widget class="QRadioButton" name="useFullGermanNoteNames">
+                 <property name="toolTip">
+                  <string>A, B, H, C, Cis</string>
+                 </property>
+                 <property name="text">
+                  <string>Full German</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QRadioButton" name="useSolfeggioNoteNames">
                  <property name="toolTip">
-                  <string>La, Si♭, Si, Do, Do♯, ...</string>
+                  <string>Do, Do♯, Re♭, Re, ...</string>
                  </property>
                  <property name="text">
                   <string>Solfeggio</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="useFrenchNoteNames">
+                 <property name="toolTip">
+                  <string>Do, Do♯, Ré♭, Ré, ...</string>
+                 </property>
+                 <property name="text">
+                  <string>French</string>
                  </property>
                 </widget>
                </item>
@@ -4259,10 +4307,49 @@
               </layout>
              </item>
              <item>
-              <widget class="QCheckBox" name="lowerCaseMinorChords">
-               <property name="text">
-                <string>Lower case minor chords</string>
+              <widget class="QGroupBox" name="automaticCapitalization">
+               <property name="title">
+                <string>Automatic Capitalization</string>
                </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <item>
+                 <widget class="QCheckBox" name="lowerCaseMinorChords">
+                  <property name="text">
+                   <string>Lower case minor chords</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="lowerCaseBassNotes">
+                  <property name="text">
+                   <string>Lower case bass notes</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="allCapsNoteNames">
+                  <property name="text">
+                   <string>All caps note names</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_17">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
@@ -4274,6 +4361,9 @@
              <string>Positioning</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_15">
+             <property name="verticalSpacing">
+              <number>3</number>
+             </property>
              <item row="0" column="0">
               <widget class="QLabel" name="label_17">
                <property name="text">
@@ -4460,16 +4550,9 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_131">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_602">
-            <property name="text">
-             <string>Default vertical position:</string>
-            </property>
-            <property name="buddy">
-             <cstring>fretY</cstring>
-            </property>
-           </widget>
-          </item>
+          <property name="verticalSpacing">
+           <number>3</number>
+          </property>
           <item row="0" column="1">
            <widget class="QDoubleSpinBox" name="fretY">
             <property name="suffix">
@@ -4499,6 +4582,16 @@
             </property>
             <property name="buddy">
              <cstring>fretNumMag</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_602">
+            <property name="text">
+             <string>Default vertical position:</string>
+            </property>
+            <property name="buddy">
+             <cstring>fretY</cstring>
             </property>
            </widget>
           </item>
@@ -4557,6 +4650,49 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Barré line thickness:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="barreLineWidth">
+            <property name="minimum">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Scale:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" colspan="2">
+           <widget class="QDoubleSpinBox" name="fretMag">
+            <property name="minimum">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.200000000000000</double>
+            </property>
+            <property name="value">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -5037,21 +5173,21 @@
           <item>
            <widget class="QRadioButton" name="radioKeySigNatNone">
             <property name="text">
-             <string>Only for change to C Maj / A min</string>
+             <string>Only for a change to C Maj / A min</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="radioKeySigNatBefore">
             <property name="text">
-             <string>Before change to less sharps / flats</string>
+             <string>Before key signature if changing to fewer sharps or flats</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="radioKeySigNatAfter">
             <property name="text">
-             <string>After change to less sharps / flats (but before change sharps &lt;=&gt; flats)</string>
+             <string>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</string>
             </property>
            </widget>
           </item>
@@ -5486,6 +5622,7 @@
  <tabstops>
   <tabstop>pageList</tabstop>
   <tabstop>musicalSymbolFont</tabstop>
+  <tabstop>musicalTextFont</tabstop>
   <tabstop>concertPitch</tabstop>
   <tabstop>multiMeasureRests</tabstop>
   <tabstop>minEmptyMeasures</tabstop>
@@ -5494,6 +5631,10 @@
   <tabstop>dontHideStavesInFirstSystem</tabstop>
   <tabstop>crossMeasureValues</tabstop>
   <tabstop>hideInstrumentNameIfOneInstrument</tabstop>
+  <tabstop>SwingOff</tabstop>
+  <tabstop>swingEighth</tabstop>
+  <tabstop>swingSixteenth</tabstop>
+  <tabstop>swingBox</tabstop>
   <tabstop>staffUpperBorder</tabstop>
   <tabstop>staffLowerBorder</tabstop>
   <tabstop>staffDistance</tabstop>
@@ -5609,14 +5750,14 @@
   <tabstop>resetVoltaLineStyle</tabstop>
   <tabstop>ottavaY</tabstop>
   <tabstop>resetOttavaY</tabstop>
+  <tabstop>ottavaNumbersOnly</tabstop>
+  <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>ottavaHook</tabstop>
   <tabstop>resetOttavaHook</tabstop>
   <tabstop>ottavaLineWidth</tabstop>
   <tabstop>resetOttavaLineWidth</tabstop>
   <tabstop>ottavaLineStyle</tabstop>
   <tabstop>resetOttavaLineStyle</tabstop>
-  <tabstop>ottavaNumbersOnly</tabstop>
-  <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>pedalY</tabstop>
   <tabstop>pedalLineWidth</tabstop>
   <tabstop>pedalLineStyle</tabstop>
@@ -5629,17 +5770,24 @@
   <tabstop>chordsXmlFile</tabstop>
   <tabstop>useStandardNoteNames</tabstop>
   <tabstop>useGermanNoteNames</tabstop>
+  <tabstop>useFullGermanNoteNames</tabstop>
   <tabstop>useSolfeggioNoteNames</tabstop>
+  <tabstop>useFrenchNoteNames</tabstop>
+  <tabstop>automaticCapitalization</tabstop>
   <tabstop>lowerCaseMinorChords</tabstop>
+  <tabstop>lowerCaseBassNotes</tabstop>
+  <tabstop>allCapsNoteNames</tabstop>
   <tabstop>harmonyY</tabstop>
   <tabstop>harmonyFretDist</tabstop>
   <tabstop>minHarmonyDistance</tabstop>
   <tabstop>maxHarmonyBarDistance</tabstop>
   <tabstop>capoPosition</tabstop>
   <tabstop>fretY</tabstop>
+  <tabstop>fretMag</tabstop>
   <tabstop>fretNumMag</tabstop>
   <tabstop>radioFretNumLeft</tabstop>
   <tabstop>radioFretNumRight</tabstop>
+  <tabstop>barreLineWidth</tabstop>
   <tabstop>comboFBFont</tabstop>
   <tabstop>doubleSpinFBSize</tabstop>
   <tabstop>doubleSpinFBVertPos</tabstop>
@@ -5665,7 +5813,6 @@
   <tabstop>tupletNoteLeftDistance</tabstop>
   <tabstop>tupletStemRightDistance</tabstop>
   <tabstop>tupletNoteRightDistance</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>

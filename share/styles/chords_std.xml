@@ -40,22 +40,24 @@
     <sym code="0x0394" name="triangle"/>
     <sym code="0x03bf" name="circle"/>
     <sym code="0x00f8" name="oslash"/>
-    <sym code="0x266f" name="#"/>
+
     <sym code="0x266d" name="b"/>
+    <sym code="0x266e" name="natural"/>
+    <sym code="0x266f" name="#"/>
+
+    <sym code="0x1d12a" name="##"/>
+    <sym code="0x1d12b" name="bb"/>
 
 <!-- this allows "b" to render as a literal when when encountered as a note name -->
     <sym value="b" class="note" name="b"/>
 
-<!-- edit the "value" attribute of these to get an accent on the "e" for French spelling -->
-    <sym value="Re" class="note" name="Re"/>
-    <sym value="re" class="note" name="re"/>
-
-<!-- add "code" attributes to these, matching those for "b" and "#" above
-    (0x266d / 0x266f) to get German chords to render with flat and sharp -->
+<!-- add "code" attributes (as for "b" and "#" above) to get these to render as flat and sharp signs -->
     <sym class="accidental" name="es"/>
     <sym class="accidental" name="is"/>
 <!-- this is to render the "s" in "As" and "Es" in German -->
     <sym class="accidental" name="s"/>
+<!-- change value of "code" attribute to "0x200b" (zero width space) to force Bb to render as B in German -->
+    <sym class="german_B" code="0x266d" name="b"/>
 
     </font>
 
