@@ -140,6 +140,8 @@ class TimeSig : public Element {
       Fraction globalSig() const           { return (_sig * _stretch).reduced();  }
       void setGlobalSig(const Fraction& f) { _stretch = (_sig / f).reduced(); }
 
+      bool isLocal() const                 { return _stretch != Fraction(1,1); }
+
       virtual Element* nextElement();
       virtual Element* prevElement();
       virtual QString accessibleInfo() override;

@@ -1136,7 +1136,8 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                               break;
                               }
                         }
-                  if (ots) {
+                  // do no replicate local time signatures
+                  if (ots && !ots->isLocal()) {
                         TimeSig* timesig = new TimeSig(*ots);
                         timesig->setTrack(staffIdx * VOICES);
                         timesig->setParent(ts);
