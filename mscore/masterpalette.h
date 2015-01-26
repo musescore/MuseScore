@@ -43,6 +43,7 @@ class MasterPalette : public QWidget, Ui::MasterPalette
    public:
       MasterPalette(QWidget* parent = 0);
       void selectItem(const QString& s);
+      QString selectedItem();
       };
 
 } // namespace Ms
