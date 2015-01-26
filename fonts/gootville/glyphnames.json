@@ -1538,7 +1538,7 @@
     }, 
     "accidentalQuarterToneSharpBusotti": {
         "codepoint": "U+E472", 
-        "description": "Quarter tone sharp (Busotti)"
+        "description": "Quarter tone sharp (Bussotti)"
     }, 
     "accidentalQuarterToneSharpNaturalArrowUp": {
         "alternateCodepoint": "U+1D12E", 
@@ -1660,11 +1660,11 @@
     }, 
     "accidentalTavenerFlat": {
         "codepoint": "U+E477", 
-        "description": "Byzantine-style slashed flat (Tavener)"
+        "description": "Byzantine-style Bakiye flat (Tavener)"
     }, 
     "accidentalTavenerSharp": {
         "codepoint": "U+E476", 
-        "description": "Byzantine-style slashed sharp (Tavener)"
+        "description": "Byzantine-style Bu\u0308yu\u0308k mu\u0308cenneb sharp (Tavener)"
     }, 
     "accidentalThreeQuarterTonesFlatArrowDown": {
         "alternateCodepoint": "U+1D12D", 
@@ -1702,7 +1702,7 @@
     }, 
     "accidentalThreeQuarterTonesSharpBusotti": {
         "codepoint": "U+E474", 
-        "description": "Three quarter tones sharp (Busotti)"
+        "description": "Three quarter tones sharp (Bussotti)"
     }, 
     "accidentalThreeQuarterTonesSharpStein": {
         "codepoint": "U+E283", 
@@ -1828,10 +1828,18 @@
         "codepoint": "U+E471", 
         "description": "Two-third-tones sharp (Xenakis)"
     }, 
+    "analyticsChoralmelodie": {
+        "codepoint": "U+E86A", 
+        "description": "Choralmelodie (Berg)"
+    }, 
     "analyticsEndStimme": {
         "alternateCodepoint": "U+1D1A8", 
         "codepoint": "U+E863", 
         "description": "End of stimme"
+    }, 
+    "analyticsHauptrhythmus": {
+        "codepoint": "U+E86B", 
+        "description": "Hauptrhythmus (Berg)"
     }, 
     "analyticsHauptstimme": {
         "alternateCodepoint": "U+1D1A6", 
@@ -2417,6 +2425,18 @@
     "brassLiftShort": {
         "codepoint": "U+E5D1", 
         "description": "Lift, short"
+    }, 
+    "brassLiftSmoothLong": {
+        "codepoint": "U+E5EE", 
+        "description": "Smooth lift, long"
+    }, 
+    "brassLiftSmoothMedium": {
+        "codepoint": "U+E5ED", 
+        "description": "Smooth lift, medium"
+    }, 
+    "brassLiftSmoothShort": {
+        "codepoint": "U+E5EC", 
+        "description": "Smooth lift, short"
     }, 
     "brassMuteClosed": {
         "codepoint": "U+E5E5", 
@@ -4247,6 +4267,14 @@
     "harpPedalRaised": {
         "codepoint": "U+E680", 
         "description": "Harp pedal raised (flat)"
+    }, 
+    "harpSalzedoAeolianAscending": {
+        "codepoint": "U+E695", 
+        "description": "Ascending aeolian chords (Salzedo)"
+    }, 
+    "harpSalzedoAeolianDescending": {
+        "codepoint": "U+E696", 
+        "description": "Descending aeolian chords (Salzedo)"
     }, 
     "harpSalzedoFluidicSoundsLeft": {
         "codepoint": "U+E68D", 
@@ -6893,6 +6921,14 @@
         "codepoint": "U+E0A7", 
         "description": "X notehead whole"
     }, 
+    "octaveBassa": {
+        "codepoint": "U+E51F", 
+        "description": "Bassa"
+    }, 
+    "octaveLoco": {
+        "codepoint": "U+EC90", 
+        "description": "Loco"
+    }, 
     "octaveParensLeft": {
         "codepoint": "U+E51A", 
         "description": "Left parenthesis for octave signs"
@@ -7278,6 +7314,10 @@
     "ottavaBassaBa": {
         "codepoint": "U+E513", 
         "description": "Ottava bassa (ba)"
+    }, 
+    "ottavaBassaVb": {
+        "codepoint": "U+E51C", 
+        "description": "Ottava bassa (8vb)"
     }, 
     "pendereckiTremolo": {
         "codepoint": "U+E22B", 
@@ -8433,6 +8473,10 @@
         "codepoint": "U+E516", 
         "description": "Quindicesima bassa"
     }, 
+    "quindicesimaBassaMb": {
+        "codepoint": "U+E51D", 
+        "description": "Quindicesima bassa (mb)"
+    }, 
     "repeat1Bar": {
         "alternateCodepoint": "U+1D10E", 
         "codepoint": "U+E500", 
@@ -8635,11 +8679,19 @@
     }, 
     "smnSharp": {
         "codepoint": "U+EC50", 
-        "description": "Sharp"
+        "description": "Sharp stem up"
+    }, 
+    "smnSharpDown": {
+        "codepoint": "U+EC59", 
+        "description": "Sharp stem down"
     }, 
     "smnSharpWhite": {
         "codepoint": "U+EC51", 
-        "description": "Sharp (white)"
+        "description": "Sharp (white) stem up"
+    }, 
+    "smnSharpWhiteDown": {
+        "codepoint": "U+EC5A", 
+        "description": "Sharp (white) stem down"
     }, 
     "splitBarDivider": {
         "codepoint": "U+E00A", 
@@ -9092,6 +9144,22 @@
         "codepoint": "U+E089", 
         "description": "Time signature 9"
     }, 
+    "timeSigBracketLeft": {
+        "codepoint": "U+EC80", 
+        "description": "Left bracket for whole time signature"
+    }, 
+    "timeSigBracketLeftSmall": {
+        "codepoint": "U+EC82", 
+        "description": "Left bracket for numerator only"
+    }, 
+    "timeSigBracketRight": {
+        "codepoint": "U+EC81", 
+        "description": "Right bracket for whole time signature"
+    }, 
+    "timeSigBracketRightSmall": {
+        "codepoint": "U+EC83", 
+        "description": "Right bracket for numerator only"
+    }, 
     "timeSigCombDenominator": {
         "codepoint": "U+E09F", 
         "description": "Control character for denominator digit"
@@ -9108,6 +9176,10 @@
         "alternateCodepoint": "U+1D134", 
         "codepoint": "U+E08A", 
         "description": "Common time"
+    }, 
+    "timeSigCut2": {
+        "codepoint": "U+EC85", 
+        "description": "Cut time (Bach)"
     }, 
     "timeSigCutCommon": {
         "alternateCodepoint": "U+1D135", 
@@ -9177,6 +9249,10 @@
     "timeSigPlusSmall": {
         "codepoint": "U+E08D", 
         "description": "Time signature + (for numerators)"
+    }, 
+    "timeSigSlash": {
+        "codepoint": "U+EC84", 
+        "description": "Time signature slash separator"
     }, 
     "timeSigX": {
         "codepoint": "U+E09C", 
@@ -9326,6 +9402,10 @@
     "ventiduesimaBassa": {
         "codepoint": "U+E519", 
         "description": "Ventiduesima bassa"
+    }, 
+    "ventiduesimaBassaMb": {
+        "codepoint": "U+E51E", 
+        "description": "Ventiduesima bassa (mb)"
     }, 
     "vocalMouthClosed": {
         "codepoint": "U+E640", 
@@ -9689,7 +9769,7 @@
     }, 
     "windFlatEmbouchure": {
         "codepoint": "U+E5FB", 
-        "description": "Sharper embouchure"
+        "description": "Flatter embouchure"
     }, 
     "windHalfClosedHole1": {
         "codepoint": "U+E5F6", 
@@ -9745,7 +9825,7 @@
     }, 
     "windSharpEmbouchure": {
         "codepoint": "U+E5FC", 
-        "description": "Flatter embouchure"
+        "description": "Sharper embouchure"
     }, 
     "windStrongAirPressure": {
         "codepoint": "U+E603", 

@@ -73,7 +73,9 @@
             "analyticsThemeRetrogradeInversion", 
             "analyticsThemeInversion", 
             "analyticsTheme1", 
-            "analyticsInversion1"
+            "analyticsInversion1", 
+            "analyticsChoralmelodie", 
+            "analyticsHauptrhythmus"
         ], 
         "range_end": "U+E86F", 
         "range_start": "U+E860"
@@ -478,7 +480,10 @@
             "brassHarmonMuteClosed", 
             "brassHarmonMuteStemHalfLeft", 
             "brassHarmonMuteStemHalfRight", 
-            "brassHarmonMuteStemOpen"
+            "brassHarmonMuteStemOpen", 
+            "brassLiftSmoothShort", 
+            "brassLiftSmoothMedium", 
+            "brassLiftSmoothLong"
         ], 
         "range_end": "U+E5EF", 
         "range_start": "U+E5D0"
@@ -1240,7 +1245,9 @@
             "harpTuningKeyHandle", 
             "harpTuningKeyShank", 
             "harpTuningKeyGlissando", 
-            "harpStringNoiseStem"
+            "harpStringNoiseStem", 
+            "harpSalzedoAeolianAscending", 
+            "harpSalzedoAeolianDescending"
         ], 
         "range_end": "U+E69F", 
         "range_start": "U+E680"
@@ -1806,7 +1813,7 @@
             "metricModulationArrowLeft", 
             "metricModulationArrowRight"
         ], 
-        "range_end": "U+EC6F", 
+        "range_end": "U+EC7F", 
         "range_start": "U+EC60"
     }, 
     "multiSegmentLines": {
@@ -2180,10 +2187,22 @@
             "ventiduesimaAlta", 
             "ventiduesimaBassa", 
             "octaveParensLeft", 
-            "octaveParensRight"
+            "octaveParensRight", 
+            "ottavaBassaVb", 
+            "quindicesimaBassaMb", 
+            "ventiduesimaBassaMb", 
+            "octaveBassa"
         ], 
         "range_end": "U+E51F", 
         "range_start": "U+E510"
+    }, 
+    "octavesSupplement": {
+        "description": "Octaves supplement", 
+        "glyphs": [
+            "octaveLoco"
+        ], 
+        "range_end": "U+EC9F", 
+        "range_start": "U+EC90"
     }, 
     "olympianSagittalExtensionExtremePrecisionAccidentalDiacritics": {
         "description": "Olympian Sagittal extension (extreme precision) accidental diacritics", 
@@ -2621,7 +2640,9 @@
             "smnHistoryDoubleSharp", 
             "smnHistoryFlat", 
             "smnHistoryDoubleFlat", 
-            "smnNatural"
+            "smnNatural", 
+            "smnSharpDown", 
+            "smnSharpWhiteDown"
         ], 
         "range_end": "U+EC5F", 
         "range_start": "U+EC50"
@@ -2896,6 +2917,19 @@
         ], 
         "range_end": "U+E09F", 
         "range_start": "U+E080"
+    }, 
+    "timeSignaturesSupplement": {
+        "description": "Time signatures supplement", 
+        "glyphs": [
+            "timeSigBracketLeft", 
+            "timeSigBracketRight", 
+            "timeSigBracketLeftSmall", 
+            "timeSigBracketRightSmall", 
+            "timeSigSlash", 
+            "timeSigCut2"
+        ], 
+        "range_end": "U+EC8F", 
+        "range_start": "U+EC80"
     }, 
     "tremolos": {
         "description": "Tremolos", 
