@@ -64,6 +64,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             { StyleIdx::endBarDistance,          endBarDistance         },
             { StyleIdx::doubleBarWidth,          doubleBarWidth         },
             { StyleIdx::doubleBarDistance,       doubleBarDistance      },
+            { StyleIdx::barGraceDistance,        barGraceDistance       },
             };
 
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);

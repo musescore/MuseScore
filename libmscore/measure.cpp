@@ -3192,7 +3192,7 @@ void Measure::layoutX(qreal stretch)
                                                 sp = qMax(bad, bnd - diff);
                                                 }
                                           else if (grace)
-                                                sp = score()->styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
+                                                sp = score()->styleS(StyleIdx::barGraceDistance).val() * _spatium;
                                           else
                                                 sp = bnd;
                                           if (pt & Segment::Type::TimeSig)
