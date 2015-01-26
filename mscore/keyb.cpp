@@ -284,7 +284,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       ed.view    = this;
       ed.hRaster = mscore->hRaster();
       ed.vRaster = mscore->vRaster();
-      if (curGrip != Grip::NO_GRIP)
+      if (curGrip != Grip::NO_GRIP && int(curGrip) < grips)
             ed.pos = grip[int(curGrip)].center() + delta;
       editObject->editDrag(ed);
       updateGrips();

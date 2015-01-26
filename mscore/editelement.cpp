@@ -127,6 +127,7 @@ void ScoreView::endEdit()
 
       editObject = nullptr;
       grips      = 0;
+      curGrip    = Grip::NO_GRIP;
       }
 
 //---------------------------------------------------------
