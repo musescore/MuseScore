@@ -1549,6 +1549,41 @@ void Chord::layout2()
                         }
                   }
             }
+
+      //
+      // position after-chord grace notes
+      // room for them has been reserved in Chord::layout()
+      //
+
+      QList<Chord*> graceNotesAfter;
+      int gna = getGraceNotesAfter(&graceNotesAfter);
+      if (gna) {
+            qreal minNoteDist = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium
+                  * score()->styleD(StyleIdx::graceNoteMag);
+            // position grace notes from the rightmost to the leftmost
+            // get segment (of whatever type) at the end of this chord; if none, get measure last segment
+            Segment* s = measure()->tick2segment(segment()->tick() + actualTicks(), Segment::Type::All);
+            if (s == nullptr)
+                  s = measure()->last();
+            if (s == segment())           // if our segment is the last, no adjacent segment found
+                  s = nullptr;
+            // start from the right (if next segment found, x of it relative to this chord;
+            // chord right space otherwise)
+            qreal xOff =  (s != nullptr) ? s->pos().x() - (segment()->pos().x() + pos().x()) : space().rw();
+            // final distance: if near to another chord, leave minNoteDist at right of last grace
+            // else leave note-to-barline distance;
+            xOff -= (s != nullptr && s->segmentType() != Segment::Type::ChordRest)
+                  ? score()->styleS(StyleIdx::noteBarDistance).val() * _spatium
+                  : minNoteDist;
+            // scan grace note list from the end
+            for (int i = gna-1; i >= 0; i--) {
+                  Chord* g = graceNotesAfter.value(i);
+                  xOff -= g->space().rw();                  // move to left by grace note left space (incl. grace own width)
+                  g->rxpos() = xOff;
+                  xOff -= minNoteDist + g->space().lw();    // move to left by grace note right space and inter-grace distance
+                  }
+            }
+
       }
 
 //---------------------------------------------------------
@@ -1995,34 +2030,20 @@ void Chord::layoutPitched()
       if (gnb){
               qreal xl = -(_space.lw() + minNoteDistance) - chordX;
               for (int i = gnb-1; i >= 0; --i) {
-                    Chord* c = graceNotesBefore.value(i);
-                    xl -= c->space().rw()/* * 1.2*/;
-                    c->setPos(xl, 0);
-                    xl -= c->space().lw() + minNoteDistance * graceMag;
+                    Chord* g = graceNotesBefore.value(i);
+                    xl -= g->space().rw()/* * 1.2*/;
+                    g->setPos(xl, 0);
+                    xl -= g->space().lw() + minNoteDistance * graceMag;
                     }
               if (-xl > _space.lw())
                     _space.setLw(-xl);
               }
        if (gna){
-           // get factor for start distance after main note. Values found by testing.
-           qreal fc;
-           switch (durationType().type()) {
-                 case TDuration::DurationType::V_LONG:    fc = 3.8; break;
-                 case TDuration::DurationType::V_BREVE:   fc = 3.8; break;
-                 case TDuration::DurationType::V_WHOLE:   fc = 3.8; break;
-                 case TDuration::DurationType::V_HALF:    fc = 3.6; break;
-                 case TDuration::DurationType::V_QUARTER: fc = 2.1; break;
-                 case TDuration::DurationType::V_EIGHTH:  fc = 1.4; break;
-                 case TDuration::DurationType::V_16TH:    fc = 1.2; break;
-                 default: fc = 1;
-                 }
-           qreal xr = fc * (_space.rw() + minNoteDistance);
-           for (int i = 0; i <= gna - 1; i++) {
-                 Chord* c = graceNotesAfter.value(i);
-                 xr += c->space().lw() * (i == 0 ? 1.3 : 1);
-                 c->setPos(xr, 0);
-                 xr += c->space().rw() + minNoteDistance * graceMag;
-                 }
+            qreal xr = _space.rw();
+            for (int i = 0; i <= gna - 1; i++) {
+                  Chord* g = graceNotesAfter.value(i);
+                  xr += g->space().lw() + g->space().rw() + minNoteDistance * graceMag;
+                  }
            if (xr > _space.rw())
                  _space.setRw(xr);
            }
