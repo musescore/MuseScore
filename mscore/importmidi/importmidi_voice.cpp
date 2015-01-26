@@ -291,11 +291,12 @@ bool hasIntersectionWithTuplets(
                   std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator> &insertedTuplets,
             const ReducedFraction &tupletOnTime)
       {
-      const auto foundTuplets = MidiTuplet::findTupletsForTimeRange(voice, onTime,
-                                                                    offTime - onTime, tuplets);
+      const auto foundTuplets = MidiTuplet::findTupletsForTimeRange(
+                                          voice, onTime, offTime - onTime, tuplets, true);
       for (const auto tupletIt: foundTuplets) {
             const auto ins = findInsertedTuplet(tupletIt->first, voice, insertedTuplets);
-            const bool belongsToInserted = (ins != insertedTuplets.end() && ins->first == tupletOnTime);
+            const bool belongsToInserted = (ins != insertedTuplets.end()
+                                            && ins->first == tupletOnTime);
             if (!belongsToInserted)
                   return true;
             }
@@ -596,9 +597,9 @@ void splitTuplet(
             std::multimap<ReducedFraction, MidiChord> &chords,
             std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets,
             const ReducedFraction &maxChordLength,
-            bool allowParallelTuplets)
+            bool allowParallelTuplets,
+            bool isThisAChord)
       {
-
       Q_ASSERT_X(isInTuplet, "MidiVoice::splitTuplet",
                  "Tuplet chord/note is not actually in tuplet");
 
@@ -630,8 +631,21 @@ void splitTuplet(
             insertNewTuplet(tuplet, tupletOnTime, newVoice, chords, tuplets, insertedTuplets);
             isInTuplet = true;
             }
-      if (needDeleteOldTuplet)      // delete after insert, because oldTuplet can be used
-            MidiTuplet::removeTuplet(oldTuplet, tuplets, maxChordLength, chords);
+      if (needDeleteOldTuplet) {     // delete after insert, because oldTuplet can be used
+            bool canRemoveTuplet = true;
+            if (isThisAChord) {
+                              // don't remove tuplet if chord notes have the same tuplet,
+                              // it will be removed on note split
+                  for (const auto &note: notes) {
+                        if (note.isInTuplet && note.tuplet == oldTuplet) {
+                              canRemoveTuplet = false;
+                              break;
+                              }
+                        }
+                  }
+            if (canRemoveTuplet)
+                  MidiTuplet::removeTuplet(oldTuplet, tuplets, maxChordLength, chords);
+            }
 
       Q_ASSERT_X(allowParallelTuplets || !needInsertTuplet || needDeleteOldTuplet,
                  "MidiVoice::splitTuplet",
@@ -673,14 +687,14 @@ bool updateChordTuplets(
             splitTuplet(chord.tuplet, chord.voice, onTime,
                         chord.notes, chord.isInTuplet,
                         insertedTuplets, chords,
-                        tuplets, maxChordLength, allowParallelTuplets);
+                        tuplets, maxChordLength, allowParallelTuplets, true);
             }
       for (auto &note: chord.notes) {
             if (note.isInTuplet) {
                   splitTuplet(note.tuplet, chord.voice, onTime,
                               {note}, note.isInTuplet,
                               insertedTuplets, chords,
-                              tuplets, maxChordLength, allowParallelTuplets);
+                              tuplets, maxChordLength, allowParallelTuplets, false);
                   }
             }
 
@@ -735,6 +749,11 @@ bool splitChordToVoice(
       MidiChord &chord = chordIt->second;
       auto &notes = chord.notes;
 
+      Q_ASSERT_X(MidiTuplet::isTupletRangeOk(*chordIt, tuplets),
+                 "MidiVoice::splitChordToVoice, before split",
+                 "Tuplet chord/note is outside tuplet "
+                 "or non-tuplet chord/note is inside tuplet before simplification");
+
       if (notesToMove.size() == notes.size()) {
                         // don't split chord, just move it to another voice
             const int oldVoice = chord.voice;   // remember for possible undo
@@ -783,6 +802,12 @@ bool splitChordToVoice(
                   splitDone = false;
                   }
             }
+
+      Q_ASSERT_X(MidiTuplet::isTupletRangeOk(*chordIt, tuplets),
+                 "MidiVoice::splitChordToVoice, after split",
+                 "Tuplet chord/note is outside tuplet "
+                 "or non-tuplet chord/note is inside tuplet before simplification");
+
       return splitDone;
       }
 
@@ -908,12 +933,9 @@ void sortVoicesByPitch(const std::map<int, std::vector<
             bool operator()(const std::pair<int, int> &p1,
                             const std::pair<int, int> &p2) const
                   {
-                  if (p1.first > p2.first)
-                        return true;
-                  else if (p1.first < p2.first)
-                        return false;
-                  else
-                        return p1.second < p2.second;
+                  if (p1.first != p2.first)
+                        return p1.first > p2.first;
+                  return p1.second < p2.second;
                   }
             } comparator;
       std::sort(pitchVoices.begin(), pitchVoices.end(), comparator);

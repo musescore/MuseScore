@@ -1178,7 +1178,7 @@ void quantizeOffTimes(
                               : quantizeOffTimeForNonTuplet(note.offTime, chordIt,
                                                             quantizedChords, basicQuant);
                   note.offTime = result.first;
-                  note.quant = result.second;
+                  note.offTimeQuant = result.second;
 #ifdef QT_DEBUG
                   checkOffTime(note, chordIt, quantizedChords);
 #endif
