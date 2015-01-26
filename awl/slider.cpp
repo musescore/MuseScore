@@ -60,20 +60,6 @@ void Slider::init()
       }
 
 //---------------------------------------------------------
-//   mouseDoubleClickEvent
-//---------------------------------------------------------
-
-void Slider::mouseDoubleClickEvent(QMouseEvent* ev)
-      {
-      if (ev->button() == Qt::RightButton)
-            _value = _dclickValue2;
-      else
-            _value = _dclickValue1;
-      valueChange();
-      }
-
-
-//---------------------------------------------------------
 //   sizeHint
 //---------------------------------------------------------
 
