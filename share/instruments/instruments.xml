@@ -9050,6 +9050,31 @@
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings</name>
+            <Instrument id="erhu">
+                  <longName>Erhu</longName>
+                  <shortName>Eh.</shortName>
+                  <description>Erhu</description>
+                  <musicXMLid>strings.erhu</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>62</string>
+                        <string>69</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>62-93</aPitchRange>
+                  <pPitchRange>62-105</pPitchRange>
+                  <Channel>
+                        <program value="40"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
+                  <genre>ethnic</genre>
+            </Instrument>
             <Instrument id="string-section">
                   <longName>String Section</longName>
                   <shortName>Str.</shortName>
