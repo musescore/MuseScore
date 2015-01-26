@@ -408,7 +408,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
 
 void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose)
       {
-// qDebug("pasteChordRest %s at %d", cr->name(), tick);
+// qDebug("pasteChordRest %s at %d, len %d/%d", cr->name(), tick, cr->duration().numerator(), cr->duration().denominator() );
       if (cr->type() == Element::Type::CHORD)
             transposeChord(static_cast<Chord*>(cr), srcTranspose);
 
@@ -505,6 +505,8 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                   }
             }
       else {
+            if (cr->durationType().type() == TDuration::DurationType::V_MEASURE)
+                  cr->setDurationType(TDuration(cr->duration()));
             undoAddCR(cr, measure, tick);
             }
       }
