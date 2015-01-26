@@ -357,6 +357,12 @@ class TestImportMidi : public QObject, public MTest
       // percussion
       void percDrums() { noTempoText("perc_drums"); }
       void percRemoveTies() { noTempoText("perc_remove_ties"); }
+      void percNoGrandStaff() { noTempoText("perc_no_grand_staff"); }
+      void percTriplet() { noTempoText("perc_triplet"); }
+      void percRespectBeat() { noTempoText("perc_respect_beat"); }
+      void percTupletVoice() { noTempoText("perc_tuplet_voice"); }
+      void percTupletSimplify() { noTempoText("perc_tuplet_simplify"); }
+      void percTupletSimplify2() { noTempoText("perc_tuplet_simplify2"); }
 
       // clef changes along the score
       void clefTied() { dontSimplify("clef_tied"); }

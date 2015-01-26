@@ -12,9 +12,11 @@ extern Preferences preferences;
 
 namespace LRHand {
 
-bool needToSplit(const std::multimap<ReducedFraction, MidiChord> &chords, int midiProgram)
+bool needToSplit(const std::multimap<ReducedFraction, MidiChord> &chords,
+                 int midiProgram,
+                 bool isDrumTrack)
       {
-      if (!MChord::isGrandStaffProgram(midiProgram))
+      if (isDrumTrack || !MChord::isGrandStaffProgram(midiProgram))
             return false;
 
       const int octave = 12;

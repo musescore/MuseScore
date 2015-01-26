@@ -67,16 +67,20 @@ class TDuration;
 class Measure;
 
 class MTrack {
-   public:
-      int program = 0;
-      Staff* staff = nullptr;
-      const MidiTrack* mtrack = nullptr;
+   public:              // chords store tuplet iterators, so we need to copy class explicitly
+      MTrack();
+      MTrack(const MTrack &other);
+      MTrack& operator=(MTrack other);
+
+      int program;
+      Staff* staff;
+      const MidiTrack* mtrack;
       QString name;
-      bool hasKey = false;
-      int indexOfOperation = 0;
-      int division = 0;
-      bool isDivisionInTps = false;       // ticks per second
-      bool hadInitialNotes = false;
+      bool hasKey;
+      int indexOfOperation;
+      int division;
+      bool isDivisionInTps;       // ticks per second
+      bool hadInitialNotes;
 
       std::multimap<ReducedFraction, MidiChord> chords;
       std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
@@ -93,6 +97,10 @@ class MTrack {
             toDurationList(const Measure *measure, int voice, const ReducedFraction &startTick,
                            const ReducedFraction &len, Meter::DurationType durationType);
       void createKeys(Key);
+      void updateTupletsFromChords();
+
+   private:
+      void updateTuplet(std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator &);
       };
 
 namespace MidiTuplet {
