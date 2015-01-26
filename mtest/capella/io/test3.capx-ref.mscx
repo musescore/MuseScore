@@ -75,7 +75,7 @@
           <transposingClefType>G</transposingClefType>
           </Clef>
         <KeySig>
-          <accidental>0</accidental>
+          <accidental>-1</accidental>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -129,6 +129,9 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
+            <Accidental>
+              <subtype>natural</subtype>
+              </Accidental>
             <pitch>59</pitch>
             <tpc>19</tpc>
             </Note>
@@ -180,9 +183,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -193,6 +193,9 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
+            <Accidental>
+              <subtype>natural</subtype>
+              </Accidental>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -250,6 +253,9 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
+            <Accidental>
+              <subtype>natural</subtype>
+              </Accidental>
             <pitch>83</pitch>
             <tpc>19</tpc>
             </Note>
