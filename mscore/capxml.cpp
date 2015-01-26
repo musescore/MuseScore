@@ -256,6 +256,25 @@ void ChordObj::readCapxStem(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   ChordObj::readCapxArticulation -- read <articulation> element
+//---------------------------------------------------------
+
+void ChordObj::readCapxArticulation(XmlReader& e)
+      {
+      QString art = e.attribute("type");
+      if      (art == "staccato")        articulation = 1;
+      else if (art == "tenuto")          articulation = 2;
+      else if (art == "staccato tenuto") articulation = 3;
+      else if (art == "staccatissimo")   articulation = 4;
+      else if (art == "normalAccent")    articulation = 5;
+      else if (art == "strongAccent")    articulation = 6;
+      else if (art == "weakBeat")        articulation = 7;
+      else if (art == "strongBeat")      articulation = 8;
+      else                               articulation = 0;
+      e.readNext();
+      }
+
+//---------------------------------------------------------
 //   ChordObj::readCapx -- capx equivalent of ChordObj::read
 //---------------------------------------------------------
 
@@ -289,8 +308,7 @@ void ChordObj::readCapx(XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "articulation") {
-                  qDebug("ChordObj::readCapx: found articulation (skipping)");
-                  e.skipCurrentElement();
+                  readCapxArticulation(e);
                   }
             else if (tag == "lyric") {
                   readCapxLyrics(e);
@@ -494,6 +512,37 @@ void VoltaObj::readCapx(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   TrillObj::readCapx -- capx equivalent of TrillObj::read
+//---------------------------------------------------------
+
+void TrillObj::readCapx(XmlReader& e)
+      {
+      double x0d  = e.doubleAttribute("x1", 0.0);
+      double x1d  = e.doubleAttribute("x2", 0.0);
+      double yd   = e.doubleAttribute("y", 0.0);
+      trillSign   = e.attribute("tr", "true") == "true";
+      x0 = (int)round(x0d * 32.0);
+      x1 = (int)round(x1d * 32.0);
+      y  = (int)round(yd * 32.0);
+      // color       -> skipped
+      qDebug("TrillObj::read x0 %d x1 %d y %d trillSign %d", x0, x1, y, trillSign);
+      e.readNext();
+      }
+
+//---------------------------------------------------------
+//   WedgeObj::readCapx -- capx equivalent of WedgeObj::read
+//---------------------------------------------------------
+
+void WedgeObj::readCapx(XmlReader& e)
+      {
+      // TODO: read LineObj properties
+      decresc          = e.attribute("decrescendo", "false") == "true";
+      double dheight   = e.doubleAttribute("span", 1.0);
+      height = (int)round(dheight * 32.0);
+      e.readNext();
+      }
+
+//---------------------------------------------------------
 //   readCapxDrawObjectArray -- capx equivalent of readDrawObjectArray()
 //---------------------------------------------------------
 
@@ -561,8 +610,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                               e.skipCurrentElement();
                               }
                         else if (tag == "wedge") {
-                              qDebug("readCapxDrawObjectArray: found wedge (skipping)");
-                              e.skipCurrentElement();
+                              WedgeObj* o = new WedgeObj(this);
+                              bdo = o; // save o to handle the "basic" tag (which sometimes follows)
+                              o->readCapx(e);
+                              ol.append(o);
                               }
                         else if (tag == "notelines") {
                               qDebug("readCapxDrawObjectArray: found notelines (skipping)");
@@ -575,8 +626,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                               ol.append(o);
                               }
                         else if (tag == "trill") {
-                              qDebug("readCapxDrawObjectArray: found trill (skipping)");
-                              e.skipCurrentElement();
+                              TrillObj* o = new TrillObj(this);
+                              bdo = o; // save o to handle the "basic" tag (which sometimes follows)
+                              o->readCapx(e);
+                              ol.append(o);
                               }
                         else if (tag == "transposable") {
                               qDebug("readCapxDrawObjectArray: found transposable (skipping)");
