@@ -921,21 +921,6 @@ std::vector<InstrumentTemplate *> findSuitableInstruments(const MTrack &track)
 
       const std::pair<int, int> minMaxPitch = findMinMaxPitch(track);
       sortInstrumentTemplates(templates, minMaxPitch);
-                  // instruments here are sorted primarily by valid pitch range difference,
-                  // so first nonzero difference means that current
-                  // and all successive instruments are unsuitable;
-                  // but if all instruments are unsuitable then leave them all in list
-      for (auto it = templates.begin(); it != templates.end(); ++it) {
-            const int diff = findMaxPitchDiff(minMaxPitch, *it);
-            if (diff > 0) {
-                  if (it != templates.begin())
-                        templates.erase(it, templates.end());
-                  else              // add empty template option
-                        templates.push_back(nullptr);
-                  break;
-                  }
-            }
-
       return templates;
       }
 
