@@ -4898,13 +4898,15 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   }
             }
       else {
+            static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
+
             // if adding notes, add above the upNote of the current chord
             Element* el = score()->selection().element();
             if (addFlag && el && el->type() == Element::Type::NOTE) {
                   Chord* chord = static_cast<Note*>(el)->chord();
                   Note* n = chord->upNote();
                   octave = n->epitch() / 12;
-                  if (note < n->epitch() / (octave * 7))
+                  if (tab[note] < n->epitch() % 12)
                         octave++;
                   }
             else {
@@ -4938,7 +4940,6 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                         octave = curPitch / 12;
                         }
 
-                  static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
                   int delta = octave * 12 + tab[note] - curPitch;
                   if (delta > 6)
                         --octave;
