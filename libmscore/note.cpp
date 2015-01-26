@@ -2294,6 +2294,8 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                         if (_dots[i])
                               _dots[i]->setVisible(visible());
                         }
+                  if (m)
+                        m->checkMultiVoices(chord()->staffIdx());
                   break;
                   }
             case P_ID::PLAY:

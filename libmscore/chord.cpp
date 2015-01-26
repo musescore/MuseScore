@@ -434,6 +434,8 @@ void Chord::add(Element* e)
                         if (note->tieFor()->endNote())
                               note->tieFor()->endNote()->setTieBack(note->tieFor());
                         }
+                  if (voice() && measure() && note->visible())
+                        measure()->mstaff(staffIdx())->hasVoices = true;
                   }
                   break;
             case Element::Type::ARPEGGIO:
@@ -516,6 +518,8 @@ void Chord::remove(Element* e)
                         }
                   else
                         qDebug("Chord::remove() note %p not found!", e);
+                  if (voice() && measure() && note->visible())
+                        measure()->checkMultiVoices(staffIdx());
                   }
                   break;
 

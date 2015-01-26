@@ -497,8 +497,24 @@ void Segment::add(Element* el)
             case Element::Type::CHORD:
             case Element::Type::REST:
                   Q_ASSERT(_segmentType == Type::ChordRest);
-                  if (track % VOICES)
-                        measure()->mstaff(track / VOICES)->hasVoices = true;
+                  if (track % VOICES) {
+                        bool v;
+                        if (el->type() == Element::Type::CHORD) {
+                              v = false;
+                              // consider chord visible if any note is visible
+                              Chord* c = static_cast<Chord*>(el);
+                              for (Note* n : c->notes()) {
+                                    if (n->visible()) {
+                                          v = true;
+                                          break;
+                                          }
+                                    }
+                              }
+                        else
+                              v = el->visible();
+                        if (v)
+                              measure()->mstaff(track / VOICES)->hasVoices = true;
+                        }
 
                   // fall through
 

@@ -2718,8 +2718,9 @@ void Measure::exchangeVoice(int v1, int v2, int staffIdx)
             int dtrack = staffIdx * VOICES + v2;
             s->swapElements(strack, dtrack);
             }
-      MStaff* ms = mstaff(staffIdx);
-      ms->hasVoices = true;
+      // MStaff* ms = mstaff(staffIdx);
+      // ms->hasVoices = true;
+      checkMultiVoices(staffIdx);   // probably true, but check for invisible notes & rests
       }
 
 //---------------------------------------------------------
@@ -2737,9 +2738,26 @@ void Measure::checkMultiVoices(int staffIdx)
             if (s->segmentType() != Segment::Type::ChordRest)
                   continue;
             for (int track = strack; track < etrack; ++track) {
-                  if (s->element(track)) {
-                        staves[staffIdx]->hasVoices = true;
-                        return;
+                  Element* e = s->element(track);
+                  if (e) {
+                        bool v;
+                        if (e->type() == Element::Type::CHORD) {
+                              v = false;
+                              // consider chord visible if any note is visible
+                              Chord* c = static_cast<Chord*>(e);
+                              for (Note* n : c->notes()) {
+                                    if (n->visible()) {
+                                          v = true;
+                                          break;
+                                          }
+                                    }
+                              }
+                        else
+                              v = e->visible();
+                        if (v) {
+                              staves[staffIdx]->hasVoices = true;
+                              return;
+                              }
                         }
                   }
             }

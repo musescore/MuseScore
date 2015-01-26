@@ -1184,7 +1184,12 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::SMALL:      setSmall(v.toBool()); break;
             case P_ID::BEAM_MODE:  setBeamMode(Beam::Mode(v.toInt())); break;
             case P_ID::STAFF_MOVE: setStaffMove(v.toInt()); break;
-            default:               return DurationElement::setProperty(propertyId, v);
+            case P_ID::VISIBLE:
+                  setVisible(v.toBool());
+                  measure()->checkMultiVoices(staffIdx());
+                  break;
+            default:
+                  return DurationElement::setProperty(propertyId, v);
             }
       score()->setLayoutAll(true);
       return true;
