@@ -310,27 +310,36 @@ void Lyrics::layout1()
       // TODO: provide a way to disable this
       //
       bool hasNumber = false; // _verseNumber;
-      qreal adjust = 0.0;
+      qreal centerAdjust = 0.0;
+      qreal leftAdjust = 0.0;
       QString s = plainText(true);
       // find:
       // 1) string of numbers and non-word characters at start of syllable
       // 2) at least one other character (indicating start of actual lyric)
-      QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
-      QRegularExpressionMatch leadingMatch = leadingPattern.match(s);
-      if (leadingMatch.hasMatch()) {
-            // leading string
-            QString s1 = leadingMatch.captured(1);
+      // 3) string of non-word characters at end of syllable
+      //QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
+      QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)");
+      QRegularExpressionMatch punctuationMatch = punctuationPattern.match(s);
+      if (punctuationMatch.hasMatch()) {
+            // leading and trailing punctuation
+            QString lp = punctuationMatch.captured(1);
+            QString tp = punctuationMatch.captured(3);
             // actual lyric
-            //QString s2 = leadingMatch.captured(2);
+            //QString actualLyric = punctuationMatch.captured(2);
             Text leading(*this);
-            leading.setPlainText(s1);
+            leading.setPlainText(lp);
             leading.layout1();
-            adjust = leading.width();
-            if (!s1.isEmpty() && s1[0].isDigit())
+            Text trailing(*this);
+            trailing.setPlainText(tp);
+            trailing.layout1();
+            leftAdjust = leading.width();
+            centerAdjust = leading.width() - trailing.width();
+            if (!lp.isEmpty() && lp[0].isDigit())
                   hasNumber = true;
             }
 
-      if (textStyle().align() & AlignmentFlags::HCENTER) {
+      Align ta = textStyle().align();
+      if (ta & AlignmentFlags::HCENTER) {
             //
             // center under notehead, not origin
             // however, lyrics that are melismas or have verse numbers will be forced to left alignment
@@ -343,13 +352,13 @@ void Lyrics::layout1()
                   maxWidth = cr->width();       // TODO: exclude ledger line for multivoice rest?
             qreal nominalWidth = symWidth(SymId::noteheadBlack);
             if (!isMelisma() && !hasNumber)     // center under notehead
-                  x +=  nominalWidth * .5 - cr->x() - adjust * 0.5;
+                  x +=  nominalWidth * .5 - cr->x() - centerAdjust * 0.5;
             else                                // force left alignment
-                  x += (width() + nominalWidth - maxWidth) * .5 - cr->x() - adjust;
+                  x += (width() + nominalWidth - maxWidth) * .5 - cr->x() - leftAdjust;
             }
-      else {
+      else if (!(ta & AlignmentFlags::RIGHT)) {
             // even for left aligned syllables, ignore leading verse numbers and/or punctuation
-            x -= adjust;
+            x -= leftAdjust;
             }
 
       rxpos() += x;
