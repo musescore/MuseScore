@@ -480,6 +480,7 @@ class SimpleTextObj : public BasicDrawObj {
       QString text() const { return _text; }
       QFont font() const { return _font; }
       QPointF pos() const { return relPos; }
+      unsigned char textalign() const { return align; }
       };
 
 //---------------------------------------------------------
