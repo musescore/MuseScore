@@ -839,10 +839,10 @@ void MusicXml::doCredits()
              pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), MScore::DPMM, MScore::DPI);
        */
       // page width, height and odd top margin in tenths
-      const double pw  = pf->width() * 10 * MScore::DPI / score->spatium();
+      //const double pw  = pf->width() * 10 * MScore::DPI / score->spatium();
       const double ph  = pf->height() * 10 * MScore::DPI / score->spatium();
-      const double tm  = pf->oddTopMargin() * 10 * MScore::DPI / score->spatium();
-      const double tov = ph - tm;
+      //const double tm  = pf->oddTopMargin() * 10 * MScore::DPI / score->spatium();
+      //const double tov = ph - tm;
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
