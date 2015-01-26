@@ -1688,7 +1688,7 @@ static Breath* hasBreathMark(Chord* ch)
       Segment* s = ch->segment();
       s = s->next1();
       Breath* b = 0;
-      if (s->segmentType() == Segment::Type::Breath)
+      if (s && s->segmentType() == Segment::Type::Breath)
             b = static_cast<Breath*>(s->element(ch->track()));
       return b;
       }
@@ -4214,6 +4214,26 @@ static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList* il, const 
                   im.insert(pinstr, im.size());
             }
       }
+      
+//---------------------------------------------------------
+//  initReverseInstrMap
+//---------------------------------------------------------
+
+typedef QMap<int, const Instrument*> MxmlReverseInstrumentMap;
+
+/**
+ Initialize the number t Instrument* map for a Part
+ Used to iterate in sequence over instrument numbers for a multi-instrument part
+ */
+
+static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrumentMap& im)
+      {
+      rim.clear();
+      foreach (const Instrument* i, im.keys()) {
+            int instNr = im.value(i);
+            rim.insert(instNr, i);
+            }
+      }
 
 //---------------------------------------------------------
 //  write
@@ -4341,14 +4361,13 @@ void ExportMusicXml::write(QIODevice* dev)
                         }
                   }
             else {
-                  foreach (const Instrument* i, instrMap.keys()) {
-                        int instNr = instrMap.value(i);
-                        scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(i->trackName()));
-                        }
-                  foreach (const Instrument* i, instrMap.keys()) {
-                        int instNr = instrMap.value(i);
+                  MxmlReverseInstrumentMap rim;
+                  initReverseInstrMap(rim, instrMap);
+                  foreach(int instNr, rim.keys())
+                        scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
+                  foreach(int instNr, rim.keys()) {
                         xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(part->midiPort() + 1), "");
-                        midiInstrument(xml, idx + 1, instNr + 1, i, _score);
+                        midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), _score);
                         }
                   }
 
