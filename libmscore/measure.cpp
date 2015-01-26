@@ -700,11 +700,11 @@ ChordRest* Measure::findChordRest(int tick, int track)
 //   tick2segment
 //---------------------------------------------------------
 
-Segment* Measure::tick2segment(int tick) const
+Segment* Measure::tick2segment(int tick, Segment::Type st) const
       {
       for (Segment* s = first(); s; s = s->next()) {
             if (s->tick() == tick) {
-                  if (s->segmentType() == Segment::Type::ChordRest)
+                  if ( (s->segmentType() & st) != 0)
                         return s;
                   }
             if (s->tick() > tick)
