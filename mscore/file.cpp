@@ -2803,7 +2803,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                   note_row(&qts,last_tick,last_pos,&notes,&ongoing);
                }
                      
-               qts << 'B ' << end_pos << endl;
+               qts << "B " << end_pos << endl;
             }
 
 
