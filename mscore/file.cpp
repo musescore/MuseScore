@@ -2656,8 +2656,8 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
 
       QBuffer metabuf, * svgbuf=NULL;
       metabuf.open(QIODevice::ReadWrite);
-      //QTextStream qts(&metabuf);
-      QTextStream qts(stdout, QIODevice::WriteOnly);
+      QTextStream qts(&metabuf);
+      //QTextStream qts(stdout, QIODevice::WriteOnly);
 
 
       score->setPrinting(true);
@@ -2677,8 +2677,9 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
  
 
             svgname = fi.baseName()+QString::number(count++)+".svg";
-            qts << "F " << svgname << endl;
+            qts << "F " << svgname << w*mag << ',' << h*mag << endl;
 
+            // Staff vertical positions
             for(int i=0;i<sys->staves()->size();i++) {
                QRectF bbox = sys->bboxStaff(i);
                qts << "S " << (top_margin+bbox.top())/h << "," << (top_margin+bbox.bottom())/h << endl;
@@ -2802,7 +2803,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                   note_row(&qts,last_tick,last_pos,&notes,&ongoing);
                }
                      
-               qts << 'B' << end_pos << endl;
+               qts << 'B ' << end_pos << endl;
             }
 
 
