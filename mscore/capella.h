@@ -422,8 +422,10 @@ class GuitarObj : public BasicDrawObj {
 
 class TrillObj : public BasicDrawObj {
    public:
-      TrillObj(Capella* c) : BasicDrawObj(CapellaType::TRILL, c) {}
+      TrillObj(Capella* c) : BasicDrawObj(CapellaType::TRILL, c), x0(0),
+           x1(0), y(0), trillSign(true) {}
       void read();
+      void readCapx(XmlReader& e);
 
       int x0, x1, y;
       QColor color;
@@ -500,8 +502,10 @@ class BracketObj : public LineObj {
 class WedgeObj : public LineObj {
 
    public:
-      WedgeObj(Capella* c) : LineObj(CapellaType::WEDGE, c) {}
+      WedgeObj(Capella* c) : LineObj(CapellaType::WEDGE, c), height(32),
+           decresc(false) {}
       void read();
+      void readCapx(XmlReader& e);
 
       int height;
       bool decresc;
@@ -581,6 +585,7 @@ class ChordObj : public BasicDurationalObj, public NoteObj {
       void readCapxLyrics(XmlReader& e);
       void readCapxNotes(XmlReader& e);
       void readCapxStem(XmlReader& e);
+      void readCapxArticulation(XmlReader& e);
       QList<Verse> verse;
       QList<CNote> notes;
       StemDir stemDir;
