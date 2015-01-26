@@ -2677,7 +2677,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
  
 
             svgname = fi.baseName()+QString::number(count++)+".svg";
-            qts << "F " << svgname << w*mag << ',' << h*mag << endl;
+            qts << "F " << svgname << ' ' << w*mag << ',' << h*mag << endl;
 
             // Staff vertical positions
             for(int i=0;i<sys->staves()->size();i++) {
