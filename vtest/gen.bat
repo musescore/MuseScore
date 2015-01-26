@@ -23,7 +23,7 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  harmony-1,harmony-2,harmony-3,harmony-4,harmony-5,harmony-6,harmony-7,harmony-8,harmony-9,harmony-10,harmony-11, ^
  beams-1,beams-2,beams-3,beams-4,beams-5,beams-6,beams-7,beams-8,beams-9, ^
  user-offset-1,user-offset-2,chord-space-1,chord-space-2,tablature-1,image-1, ^
- lyrics-1,lyrics-2,lyrics-3,lyrics-4,voice-1,slash-1,slash-2,system-1,system-2
+ lyrics-1,lyrics-2,lyrics-3,lyrics-4,voice-1,voice-2,slash-1,slash-2,system-1,system-2
 
 set MSCORE=..\win32install\bin\musescore.exe
 set DPI=130
