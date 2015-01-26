@@ -77,7 +77,7 @@
           <transposingClefType>G</transposingClefType>
           </Clef>
         <KeySig>
-          <accidental>0</accidental>
+          <accidental>3</accidental>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -92,9 +92,6 @@
           <durationType>eighth</durationType>
           <Beam>1</Beam>
           <Note>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
             <pitch>61</pitch>
             <tpc>21</tpc>
             </Note>

@@ -911,7 +911,9 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     MeasureBase* mb = new VBox(score);
                                     mb->setTick(0);
                                     score->addMeasure(mb, measure);
+                                    measure = mb;
                                     }
+                              s->setParent(measure);
                               s->setTextStyleType(TextStyleType::TITLE);
                               measure->add(s);
                               }

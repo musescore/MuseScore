@@ -77,19 +77,19 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Text>
-          <pos x="14.2045" y="-8.52273"/>
-          <style></style>
+        <StaffText>
+          <pos x="14.2045" y="-12.5227"/>
+          <valign>baseline</valign>
           <size>24</size>
           <bold>1</bold>
           <text>Test text 1</text>
-          </Text>
-        <Text>
-          <pos x="14.2045" y="-5.68182"/>
-          <style></style>
+          </StaffText>
+        <StaffText>
+          <pos x="14.2045" y="-9.68182"/>
+          <valign>baseline</valign>
           <bold>1</bold>
           <text>This is the subtitle</text>
-          </Text>
+          </StaffText>
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
@@ -201,13 +201,13 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
-        <Text>
-          <pos x="2.84091" y="-3.40909"/>
-          <style></style>
+        <StaffText>
+          <pos x="2.84091" y="-7.40909"/>
+          <valign>baseline</valign>
           <bold>1</bold>
           <text>MuseScore testfile
 Leon Vinken</text>
-          </Text>
+          </StaffText>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
