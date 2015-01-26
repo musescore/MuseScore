@@ -54,10 +54,15 @@ class AbstractSlider : public QWidget {
       Q_PROPERTY(double pageStep READ pageStep WRITE setPageStep)
       Q_PROPERTY(bool   log      READ log      WRITE setLog)
 
+      Q_PROPERTY(double dclickValue1 READ dclickValue1 WRITE setDclickValue1)
+      Q_PROPERTY(double dclickValue2 READ dclickValue2 WRITE setDclickValue2)
+
    protected:
       int _id;
       double _value;
       double _minValue, _maxValue, _lineStep, _pageStep;
+      double _dclickValue1;
+      double _dclickValue2;
       bool _center;
       bool _invert;
       int _scaleWidth;        //! scale line width
@@ -67,6 +72,7 @@ class AbstractSlider : public QWidget {
 
       virtual void wheelEvent(QWheelEvent*);
       virtual void keyPressEvent(QKeyEvent*);
+      virtual void mouseDoubleClickEvent(QMouseEvent*);
       virtual void valueChange();
 
    signals:
@@ -123,6 +129,10 @@ class AbstractSlider : public QWidget {
       void setLineStep(double v) { _lineStep = v;    }
       double pageStep() const    { return _pageStep; }
       void setPageStep(double f) { _pageStep = f;    }
+      double dclickValue1() const      { return _dclickValue1; }
+      double dclickValue2() const      { return _dclickValue2; }
+      void setDclickValue1(double val) { _dclickValue1 = val;  }
+      void setDclickValue2(double val) { _dclickValue2 = val;  }
       void setEnabled(bool val);
       };
 
