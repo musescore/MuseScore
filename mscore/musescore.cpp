@@ -2480,7 +2480,7 @@ void MuseScore::changeState(ScoreState val)
 
       switch(val) {
             case STATE_DISABLED:
-                  showModeText(tr("no score"));
+                  showModeText(tr("No score"));
                   if (debugger)
                         debugger->hide();
                   showPianoKeyboard(false);
@@ -2489,11 +2489,11 @@ void MuseScore::changeState(ScoreState val)
                   _modeText->hide();
                   break;
             case STATE_NOTE_ENTRY_PITCHED:
-                  showModeText(tr("NOTE entry mode"));
+                  showModeText(tr("Note entry mode"));
                   break;
             case STATE_NOTE_ENTRY_DRUM:
                   {
-                  showModeText(tr("DRUM entry mode"));
+                  showModeText(tr("Drum entry mode"));
                   InputState& is = cs->inputState();
                   showDrumTools(is.drumset(), cs->staff(is.track() / VOICES));
                   if (_drumTools)
@@ -2504,26 +2504,26 @@ void MuseScore::changeState(ScoreState val)
                   showModeText(tr("TAB entry mode"));
                   break;
             case STATE_EDIT:
-                  showModeText(tr("edit mode"));
+                  showModeText(tr("Edit mode"));
                   break;
             case STATE_TEXT_EDIT:
-                  showModeText(tr("text edit mode"));
+                  showModeText(tr("Text edit mode"));
                   break;
             case STATE_LYRICS_EDIT:
-                  showModeText(tr("lyrics edit mode"));
+                  showModeText(tr("Lyrics edit mode"));
                   break;
             case STATE_HARMONY_FIGBASS_EDIT:
-                  showModeText(tr("chord symbol/figured bass edit mode"));
+                  showModeText(tr("Chord symbol/figured bass edit mode"));
                   break;
             case STATE_PLAY:
-                  showModeText(tr("play"));
+                  showModeText(tr("Play"));
                   break;
             case STATE_FOTO:
-                  showModeText(tr("screenshot mode"));
+                  showModeText(tr("Screenshot mode"));
                   updateInspector();
                   break;
             case STATE_LOCK:
-                  showModeText(tr("score locked"));
+                  showModeText(tr("Score locked"));
                   break;
             default:
                   qFatal("MuseScore::changeState: illegal state %d", val);
