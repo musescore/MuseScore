@@ -36,7 +36,7 @@ add_library (
       poslabel.cpp
       utils.cpp
       denomspinbox.cpp
-      aslider.h awlplugin.h colorlabel.h denomspinbox.h fastlog.h
+      aslider.h colorlabel.h denomspinbox.h fastlog.h
       knob.h midipanknob.h mslider.h panknob.h pitchedit.h pitchlabel.h
       poslabel.h slider.h utils.h volknob.h volslider.h
       )
