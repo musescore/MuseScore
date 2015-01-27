@@ -2167,7 +2167,9 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       Part*  p  = s->part();
       Staff* ns = new Staff(this);
       ns->setPart(p);
-      undoInsertStaff(ns, staffIdx+1, false);
+      // convert staffIdx from score-relative to part-relative
+      int staffIdxPart = staffIdx - p->staff(0)->idx();
+      undoInsertStaff(ns, staffIdxPart + 1, false);
 
       Clef* clef = new Clef(this);
       clef->setClefType(ClefType::F);
