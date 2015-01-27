@@ -890,6 +890,32 @@ std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &
                               }
                         }
                   }
+            else if (program >= 80 && program <= 103) {
+                  for (const InstrumentGroup *group: instrumentGroups) {
+                        if (group->id == "electronic-instruments") {
+                              for (const InstrumentTemplate *templ: group->instrumentTemplates) {
+                                    if (templ->id == "effect-synth") {       // generic synth
+                                          suitableTemplates.push_back(templ);
+                                          break;
+                                          }
+                                    }
+                              break;
+                              }
+                        }
+                  }
+            else if (program >= 112 && program <= 127) {
+                  for (const InstrumentGroup *group: instrumentGroups) {
+                        if (group->id == "unpitched-percussion") {
+                              for (const InstrumentTemplate *templ: group->instrumentTemplates) {
+                                    if (templ->id == "snare-drum") {         // 1-line percussion staff
+                                          suitableTemplates.push_back(templ);
+                                          break;
+                                          }
+                                    }
+                              break;
+                              }
+                        }
+                  }
             else {          // find instrument with maximum MIDI program
                             // that is less than the track MIDI program, i.e. suitable instrument
                   int maxLessProgram = -1;
