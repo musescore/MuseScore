@@ -974,6 +974,15 @@ int findMaxPitchDiff(const std::pair<int, int> &minMaxPitch, const InstrumentTem
       return diff;
       }
 
+bool hasCommonGenre(QList<InstrumentGenre *> genres)
+      {
+      for (InstrumentGenre *genre: genres) {
+            if (genre->id == "common")
+                  return true;
+            }
+      return false;
+      }
+
 void sortInstrumentTemplates(
             std::vector<const InstrumentTemplate *> &templates,
             const std::pair<int, int> &minMaxPitch)
@@ -991,6 +1000,13 @@ void sortInstrumentTemplates(
             if (templ1->drumset && !templ2->drumset)
                   return true;
             if (!templ1->drumset && templ2->drumset)
+                  return false;
+                        // prefer instruments with the "common" genre
+            const bool hasCommon1 = hasCommonGenre(templ1->genres);
+            const bool hasCommon2 = hasCommonGenre(templ2->genres);
+            if (hasCommon1 && !hasCommon2)
+                  return true;
+            if (!hasCommon1 && hasCommon2)
                   return false;
             return templ1->genres.size() > templ2->genres.size();
             });
