@@ -25,10 +25,6 @@ include_directories(
       ${PROJECT_BINARY_DIR}
       )
 
-QT4_WRAP_CPP (mocs
-      omrview.h
-      )
-
 if (OCR)
       set (OCR_SRC ocr.cpp)
 endif (OCR)
@@ -37,7 +33,6 @@ add_library (
       omr STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
-      ${mocs}
       omrview.cpp pdf.cpp omrpage.cpp
       skew.cpp utils.cpp
       omr.cpp pattern.cpp importpdf.cpp

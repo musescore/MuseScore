@@ -30,13 +30,11 @@ if (SOUNDFONT3)
       set(SF3_SRC sfont3.cpp)
 endif (SOUNDFONT3)
 
-QT4_WRAP_CPP(fluidMocs fluidgui.h)
-QT4_WRAP_UI (fluidUi fluid_gui.ui)
+QT5_WRAP_UI (fluidUi fluid_gui.ui)
 
 add_library (fluid STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
-      ${fluidMocs}
       ${fluidUi}
       fluidgui.cpp
       dsp.cpp fluid.cpp voice.cpp chan.cpp sfont.cpp

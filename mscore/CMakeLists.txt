@@ -33,7 +33,7 @@ if (SCRIPT_INTERFACE)
       set (SCRIPT_UI   pluginCreator.ui pluginManager.ui)
 endif (SCRIPT_INTERFACE)
 
-QT4_WRAP_UI (ui_headers
+QT5_WRAP_UI (ui_headers
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui measureproperties.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
@@ -123,7 +123,7 @@ QT4_WRAP_UI (ui_headers
       )
 
 if (APPLE)
-      QT4_ADD_RESOURCES (qrc_files musescore.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc)
 else (APPLE)
       QT5_ADD_RESOURCES (qrc_files musescore.qrc
             musescorefonts-MScore.qrc
