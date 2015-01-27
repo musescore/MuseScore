@@ -131,7 +131,7 @@ void MuseScore::unregisterPlugin(PluginDescription* plugin)
       if (np.suffix() != "qml")
             return;
       QString baseName = np.baseName();
-      
+
       bool found = false;
       foreach(QString s, plugins) {
             QFileInfo fi(s);
@@ -146,15 +146,15 @@ void MuseScore::unregisterPlugin(PluginDescription* plugin)
             return;
             }
       plugins.removeAll(pluginPath);
-            
+
 
       removeMenuEntry(plugin);
       QAction* a = plugin->shortcut.action();
       pluginActions.removeAll(a);
-      
+
       disconnect(a, SIGNAL(triggered()), pluginMapper, SLOT(map()));
       pluginMapper->removeMappings(a);
-      
+
       }
 
 //---------------------------------------------------------
@@ -251,12 +251,12 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
             }
       }
 
-      
+
 void MuseScore::removeMenuEntry(PluginDescription* plugin)
       {
       if (!pluginMapper)
             return;
-            
+
       QString menu = plugin->menuPath;
       QStringList ml;
       QString s;
@@ -282,13 +282,13 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
             }
       if (!s.isEmpty())
             ml += s;
-      
+
       if(ml.isEmpty())
             return;
-            
+
       int n            = ml.size();
       QWidget* curMenu = menuBar();
-      
+
       for(int i = 0; i < n-1; ++i) {
             QString m  = ml[i];
             QList<QObject*> ol = curMenu->children();
@@ -308,7 +308,7 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
       QMenu* cm = static_cast<QMenu*>(curMenu);
       cm->removeAction(a);
       for(int i = n-2; i >= 0; --i) {
-            
+
             QMenu* menu = qobject_cast<QMenu*>(cm->parent());
             if (cm->isEmpty())
                   if(cm->isEmpty()) {

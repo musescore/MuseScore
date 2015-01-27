@@ -184,7 +184,7 @@ QColor ColorUtils::tint(const QColor& base, const QColor& color, qreal amount) {
             return color;
 #ifdef Q_OS_MAC
       if (isnan(amount))
-#else      
+#else
       if (std::isnan(amount))
 #endif
             return base;
@@ -216,7 +216,7 @@ QColor ColorUtils::mix(const QColor& c1, const QColor& c2, qreal bias) {
             return c2;
 #ifdef Q_OS_MAC
       if (isnan(bias))
-#else      
+#else
       if (std::isnan(bias))
 #endif
             return c1;

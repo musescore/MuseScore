@@ -24,7 +24,7 @@ void MuseScore::showLoginDialog()
       {
       if (loginDialog == nullptr) {
             loginDialog = new LoginDialog(loginManager());
-            
+
             }
       loginDialog->setVisible(true);
       }
@@ -89,6 +89,6 @@ void LoginDialog::onLoginSuccess()
       emit loginSuccessful();
       setVisible(false);
       }
-      
+
 }
 

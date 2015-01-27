@@ -1,6 +1,6 @@
 /*
   Copyright (C) 2003-2008 Fons Adriaensen <fons@kokkinizita.net>
-    
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -97,7 +97,7 @@ static LADSPA_Handle instant3 (const struct _LADSPA_Descriptor *desc, unsigned l
 
 
 
-static const LADSPA_PortDescriptor pdesc12 [Ladspa_CS_chorus1::NPORT] = 
+static const LADSPA_PortDescriptor pdesc12 [Ladspa_CS_chorus1::NPORT] =
 {
     LADSPA_PORT_INPUT  | LADSPA_PORT_AUDIO,
     LADSPA_PORT_OUTPUT | LADSPA_PORT_AUDIO,
@@ -108,7 +108,7 @@ static const LADSPA_PortDescriptor pdesc12 [Ladspa_CS_chorus1::NPORT] =
     LADSPA_PORT_INPUT  | LADSPA_PORT_CONTROL
 };
 
-static const char * const pname12  [Ladspa_CS_chorus1::NPORT] = 
+static const char * const pname12  [Ladspa_CS_chorus1::NPORT] =
 {
     "Input",
     "Output",
@@ -119,7 +119,7 @@ static const char * const pname12  [Ladspa_CS_chorus1::NPORT] =
     "Mod Amplitude 2 (ms)"
 };
 
-static const LADSPA_PortRangeHint phint12 [Ladspa_CS_chorus1::NPORT] = 
+static const LADSPA_PortRangeHint phint12 [Ladspa_CS_chorus1::NPORT] =
 {
     { 0, 0, 0 },
     { 0, 0, 0 },
@@ -131,7 +131,7 @@ static const LADSPA_PortRangeHint phint12 [Ladspa_CS_chorus1::NPORT] =
 };
 
 
-static const LADSPA_PortDescriptor pdesc3 [Ladspa_CS_chorus3::NPORT] = 
+static const LADSPA_PortDescriptor pdesc3 [Ladspa_CS_chorus3::NPORT] =
 {
     LADSPA_PORT_INPUT  | LADSPA_PORT_AUDIO,
     LADSPA_PORT_OUTPUT | LADSPA_PORT_AUDIO,
@@ -144,7 +144,7 @@ static const LADSPA_PortDescriptor pdesc3 [Ladspa_CS_chorus3::NPORT] =
     LADSPA_PORT_INPUT  | LADSPA_PORT_CONTROL
 };
 
-static const char * const pname3  [Ladspa_CS_chorus3::NPORT] = 
+static const char * const pname3  [Ladspa_CS_chorus3::NPORT] =
 {
     "Input",
     "Output1",
@@ -157,7 +157,7 @@ static const char * const pname3  [Ladspa_CS_chorus3::NPORT] =
     "Mod Amplitude 2 (ms)"
 };
 
-static const LADSPA_PortRangeHint phint3 [Ladspa_CS_chorus3::NPORT] = 
+static const LADSPA_PortRangeHint phint3 [Ladspa_CS_chorus3::NPORT] =
 {
     { 0, 0, 0 },
     { 0, 0, 0 },
@@ -193,7 +193,7 @@ static const LADSPA_Descriptor moddescr [NMODS] =
 	setadding,
 	deactivate,
 	cleanup
-    },  
+    },
     {
 	1945,
 	label2,
@@ -235,7 +235,7 @@ static const LADSPA_Descriptor moddescr [NMODS] =
 	setadding,
 	deactivate,
 	cleanup
-    }  
+    }
 };
 
 extern "C" const LADSPA_Descriptor *ladspa_descriptor (unsigned long i)

@@ -193,7 +193,7 @@ private:
 extern void domError(const QDomElement&);
 extern void domNotImplemented(const QDomElement&);
 
-      
+
 extern QString accSymId2MxmlString(const SymId id);
 extern QString accidentalType2MxmlString(const Accidental::Type type);
 extern Accidental::Type mxmlString2accidentalType(const QString mxmlName);

@@ -44,7 +44,7 @@ void ResourceManager::displayPlugins()
 void ResourceManager::displayLanguages()
       {
       tabs->setTabText(0,tr("Languages"));
-      
+
       // Download details.json
       DownloadUtils *js = new DownloadUtils(this);
       js->setTarget(baseAddr + "languages/details.json");
@@ -90,20 +90,20 @@ void ResourceManager::displayLanguages()
             temp = updateButtons[row];
             buttonMap[temp] = "languages/" + filename;
             buttonHashMap[temp] = hashValue;
-            
+
             languagesTable->setIndexWidget(languagesTable->model()->index(row, col++), temp);
-            
+
             // get hash mscore and instruments
             QJsonObject mscoreObject = value.value("mscore").toObject();
             QString hashMscore = mscoreObject.value("hash").toString();
             QString filenameMscore = mscoreObject.value("file_name").toString();
-            
+
             bool verifyMScore = verifyLanguageFile(filenameMscore, hashMscore);
 
             QJsonObject instrumentsObject = value.value("instruments").toObject();
             QString hashInstruments = instrumentsObject.value("hash").toString();
             QString filenameInstruments = instrumentsObject.value("file_name").toString();
-            
+
             bool verifyInstruments = verifyLanguageFile(filenameInstruments, hashInstruments);
 
             if (verifyMScore && verifyInstruments) { // compare local file with distant hash

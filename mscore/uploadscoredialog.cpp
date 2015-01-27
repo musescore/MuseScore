@@ -26,7 +26,7 @@ void MuseScore::showUploadScoreDialog()
       if (uploadScoreDialog == nullptr) {
             uploadScoreDialog = new UploadScoreDialog(_loginManager);
             }
-      
+
       if (currentScore()) {
             uploadScoreDialog->setTitle(currentScore()->title());
             _loginManager->tryLogin();
@@ -61,7 +61,7 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
       connect(_loginManager, SIGNAL(tryLoginSuccess()), this, SLOT(display()));
       connect(btnSignout, SIGNAL(pressed()), this, SLOT(logout()));
       }
-      
+
 //---------------------------------------------------------
 //   buttonBoxClicked
 //---------------------------------------------------------
@@ -112,7 +112,7 @@ void UploadScoreDialog::uploadSuccess(const QString& url)
                tr("Success"),
                tr("Finished! <a href=\"%1\">Go to my score</a>.").arg(url),
                QMessageBox::Ok, QMessageBox::NoButton);
-      
+
       }
 
 //---------------------------------------------------------

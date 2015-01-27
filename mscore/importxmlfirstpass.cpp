@@ -178,7 +178,7 @@ static Fraction noteDurationAsFraction(const int divisions, QDomElement e, Fract
       if (rest && type == "")
             // typeless "whole" measure rests are determined by duration
             return duration;
-            
+
       if (rest && type == "whole" && duration.isValid())
             // "whole" measure rests with valid duration are determined by duration
             return duration;
@@ -634,7 +634,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                     // Same fix is required in MusicXml::xmlNote
                                     // make sure staff is valid
                                     int corrStaff = (staff >= 0 && staff < staves) ? staff : 0;
-                                    
+
                                     // count the chords (only the first note in a chord is counted)
                                     if (corrStaff < MAX_STAVES) {
                                           if (!parts[partNr].voicelist.contains(voice)) {
