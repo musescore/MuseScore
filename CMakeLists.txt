@@ -47,6 +47,8 @@ include (CreatePrecompiledHeader)
 # for debugging the make system uncomment next line:
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 
+set (CMAKE_AUTOMOC TRUE)
+
 set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
 
 set(USE_SSE           TRUE)

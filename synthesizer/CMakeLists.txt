@@ -18,15 +18,9 @@ else (APPLE)
       set(INCS "")
 endif (APPLE)
 
-QT4_WRAP_CPP(synthesizerMocs
-      synthesizergui.h
-      msynthesizer.h
-      )
-
 add_library (synthesizer STATIC
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
-      ${synthesizerMocs}
       msynthesizer.cpp
       event.cpp
       synthesizergui.cpp

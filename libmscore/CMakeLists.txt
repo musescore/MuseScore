@@ -12,20 +12,6 @@
 #=============================================================================
 
 # if (SCRIPT_INTERFACE)
-   QT4_WRAP_CPP (libqtMocs
-      accidental.h arpeggio.h articulation.h barline.h beam.h bend.h
-      box.h bracket.h breath.h bsymbol.h chord.h chordline.h chordrest.h
-      clef.h duration.h dynamic.h element.h figuredbass.h fingering.h fret.h
-      glissando.h hairpin.h harmony.h hook.h icon.h image.h instrchange.h
-      keysig.h lasso.h layoutbreak.h line.h lyrics.h measurebase.h measure.h
-      notedot.h note.h ossia.h ottava.h page.h pedal.h rehearsalmark.h repeat.h
-      rest.h segment.h shadownote.h slur.h tie.h spacer.h spanner.h
-      stafftext.h stem.h symbol.h system.h tempotext.h textframe.h text.h
-      textline.h timesig.h tremolobar.h tremolo.h trill.h tuplet.h volta.h
-      score.h cursor.h page.h part.h staff.h mscore.h staffstate.h marker.h
-      jump.h stemslash.h ledgerline.h noteline.h
-      bagpembell.h ambitus.h plugins.h
-      )
       set (LIB_SCRIPT_FILES plugins.cpp)
 # endif (SCRIPT_INTERFACE)
 
@@ -46,7 +32,6 @@ endif (APPLE)
 add_library (
       libmscore STATIC
       ${PROJECT_BINARY_DIR}/all.h
-      ${libqtMocs}
       ${INCS}
       ${LIB_SCRIPT_FILES}
       segmentlist.cpp fingering.cpp accidental.cpp arpeggio.cpp
