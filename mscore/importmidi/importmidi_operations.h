@@ -132,8 +132,9 @@ struct Opers
       TrackOp<int> channel = TrackOp<int>(int());
       TrackOp<std::string> staffName = TrackOp<std::string>(std::string());       // will be converted to unicode later
       TrackOp<QString> midiInstrName = TrackOp<QString>(QString());
-      TrackOp<std::vector<InstrumentTemplate *> > msInstrList
-            = TrackOp<std::vector<InstrumentTemplate *> >(std::vector<InstrumentTemplate *>());
+      TrackOp<std::vector<const InstrumentTemplate *> > msInstrList
+                        = TrackOp<std::vector<const InstrumentTemplate *> >(
+                                              std::vector<const InstrumentTemplate *>());
       TrackOp<bool> isDrumTrack = TrackOp<bool>(false);
 
                   // operations for all tracks
