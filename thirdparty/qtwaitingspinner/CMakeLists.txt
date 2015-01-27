@@ -19,16 +19,11 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
-QT4_WRAP_CPP (qtwaitingspinner_mocs
-      QtWaitingSpinner.h
-      )
-
 add_library(qtwaitingspinner STATIC
    QtWaitingSpinner.cpp
    ${PROJECT_BINARY_DIR}/all.h
    ${PCH}
    ${INCS}
-   ${qtwaitingspinner_mocs}
    )
 
 set_target_properties (

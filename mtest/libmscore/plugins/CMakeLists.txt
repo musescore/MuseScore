@@ -13,9 +13,5 @@
 
 set(TARGET tst_plugins)
 
-#// QT4_WRAP_CPP (mocs
-#//      ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.h
-#//      )
-
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 

@@ -26,25 +26,15 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
-
-QT4_WRAP_CPP (kqoauth_mocs
-      kqoauthauthreplyserver.h
-      kqoauthauthreplyserver_p.h
-      kqoauthmanager.h
-      kqoauthrequest.h
-      kqoauthrequest_xauth.h
-      )
-
 add_library(kqoauth STATIC
-   kqoauthauthreplyserver.cpp 
-   kqoauthrequest.cpp    
+   kqoauthauthreplyserver.cpp
+   kqoauthrequest.cpp
    kqoauthrequest_xauth.cpp
-   kqoauthmanager.cpp       
+   kqoauthmanager.cpp
    kqoauthutils.cpp
    ${PROJECT_BINARY_DIR}/all.h
    ${PCH}
    ${INCS}
-   ${kqoauth_mocs}
    )
 
 set_target_properties (

@@ -20,17 +20,8 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
-if (APPLE)
-        file(GLOB_RECURSE INCS "*.h")
-else (APPLE)
-        set(INCS "")
-endif (APPLE)
-
 add_library (
       awl STATIC
-      ${PROJECT_BINARY_DIR}/all.h
-      ${PCH}
-      ${INCS}
       aslider.cpp
       knob.cpp
       panknob.cpp
@@ -43,9 +34,11 @@ add_library (
       pitchedit.cpp
       pitchlabel.cpp
       poslabel.cpp
-#      posedit.cpp
       utils.cpp
       denomspinbox.cpp
+      aslider.h awlplugin.h colorlabel.h denomspinbox.h fastlog.h
+      knob.h midipanknob.h mslider.h panknob.h pitchedit.h pitchlabel.h
+      poslabel.h slider.h utils.h volknob.h volslider.h
       )
 set_target_properties (
       awl
@@ -55,8 +48,7 @@ set_target_properties (
 
 xcode_pch(awl all)
 
-ADD_DEPENDENCIES(awl mops1)
-ADD_DEPENDENCIES(awl mops2)
+ADD_DEPENDENCIES(awl mops1 mops2)
 
 add_library (
       awlplugin SHARED
