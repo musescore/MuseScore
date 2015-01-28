@@ -42,15 +42,16 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <StaffType group="percussion">
-          <name>perc5Line</name>
-          <keysig>0</keysig>
+        <StaffType group="pitched">
           </StaffType>
+        <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Percussion</trackName>
       <Instrument>
         <longName pos="0">Percussion</longName>
-        <trackName></trackName>
+        <shortName pos="0">Drs.</shortName>
+        <trackName>Drumset</trackName>
+        <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="35">
           <head>0</head>
@@ -234,6 +235,35 @@
           <name>Low Conga</name>
           <stem>1</stem>
           </Drum>
+        <clef>PERC</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
           <program value="51"/>
@@ -242,10 +272,6 @@
       </Part>
     <Staff id="1">
       <Measure number="1">
-        <Clef>
-          <concertClefType>PERC</concertClefType>
-          <transposingClefType>PERC</transposingClefType>
-          </Clef>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
