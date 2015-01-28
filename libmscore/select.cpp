@@ -1102,10 +1102,8 @@ QList<Note*> Selection::uniqueNotes(int track) const
       {
       QList<Note*> l;
 
-      for (Note* note : noteList(track)) {
-            while (note->tieBack())
-                  note = note->tieBack()->startNote();
-            for (; note; note = note->tieFor() ? note->tieFor()->endNote() : 0) {
+      for (Note* nn : noteList(track)) {
+            for (Note* note : nn->tiedNotes()) {
                   bool alreadyThere = false;
                   for (Note* n : l) {
                         if ((n->links() && n->links()->contains(note)) || n == note) {

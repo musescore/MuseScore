@@ -826,17 +826,60 @@ bool hasNotDefinedDrumPitch(const std::set<int> &trackPitches, const std::set<in
       return hasNotDefinedPitch;
       }
 
-std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
+const InstrumentTemplate* findInstrument(const QString &groupId, const QString &instrId)
       {
-      std::vector<InstrumentTemplate *> suitableTemplates;
+      const InstrumentTemplate* instr = nullptr;
+
+      for (const InstrumentGroup *group: instrumentGroups) {
+            if (group->id == groupId) {
+                  for (const InstrumentTemplate *templ: group->instrumentTemplates) {
+                        if (templ->id == instrId) {
+                              instr = templ;
+                              break;
+                              }
+                        }
+                  break;
+                  }
+            }
+      return instr;
+      }
+
+// find instrument with maximum MIDI program
+// that is less than the track MIDI program, i.e. suitable instrument
+const InstrumentTemplate* findClosestInstrument(const MTrack &track)
+      {
+      int maxLessProgram = -1;
+
+      for (const InstrumentGroup *group: instrumentGroups) {
+            for (const InstrumentTemplate *templ: group->instrumentTemplates) {
+                  if (templ->staffGroup == StaffGroup::TAB)
+                        continue;
+                  const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
+                  if (track.mtrack->drumTrack() != isDrumTemplate)
+                        continue;
+                  for (const auto &channel: templ->channel) {
+                        if (channel.program < track.program
+                                    && channel.program > maxLessProgram) {
+                              maxLessProgram = channel.program;
+                              return templ;
+                              }
+                        }
+                  }
+            }
+      return nullptr;
+      }
+
+std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
+      {
+      std::vector<const InstrumentTemplate *> suitableTemplates;
       const int program = track.program;
 
       std::set<int> trackPitches;
       if (track.mtrack->drumTrack())
             trackPitches = findAllPitches(track);
 
-      for (const auto &group: instrumentGroups) {
-            for (const auto &templ: group->instrumentTemplates) {
+      for (const InstrumentGroup *group: instrumentGroups) {
+            for (const InstrumentTemplate *templ: group->instrumentTemplates) {
                   if (templ->staffGroup == StaffGroup::TAB)
                         continue;
                   const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
@@ -859,6 +902,50 @@ std::vector<InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
                         }
                   }
             }
+
+      if (suitableTemplates.empty()) {
+                  // Ms instruments with the desired MIDI program were not found
+                  // so we will find the most matching instrument
+
+            if (program == 55) {         // GM "Orchestra Hit" sound
+                  auto instr = findInstrument("electronic-instruments", "brass-synthesizer");
+                  if (instr)
+                        suitableTemplates.push_back(instr);
+                  }
+            else if (program == 110) {        // GM "Fiddle" sound
+                  auto instr = findInstrument("strings", "violin");
+                  if (instr)
+                        suitableTemplates.push_back(instr);
+                  }
+            else if (program >= 80 && program <= 103) {
+                  auto instr = findInstrument("electronic-instruments", "effect-synth");
+                  if (instr)
+                        suitableTemplates.push_back(instr);       // generic synth
+                  }
+            else if (program >= 112 && program <= 127) {
+                  auto instr = findInstrument("unpitched-percussion", "snare-drum");
+                  if (instr)
+                        suitableTemplates.push_back(instr);       // 1-line percussion staff
+                  }
+            else if (program == 36 || program == 37) {
+                              // slightly improve slap bass match:
+                              // match to the instruments with program 33
+                              // instead of 35 according to the algorithm below
+                  auto instr = findInstrument("plucked-strings", "electric-bass");
+                  if (instr)
+                        suitableTemplates.push_back(instr);
+                  instr = findInstrument("plucked-strings", "5-string-electric-bass");
+                  if (instr)
+                        suitableTemplates.push_back(instr);
+                  }
+            else {          // find instrument with maximum MIDI program
+                            // that is less than the track MIDI program, i.e. suitable instrument
+                  auto instr = findClosestInstrument(track);
+                  if (instr)
+                        suitableTemplates.push_back(instr);
+                  }
+            }
+
       return suitableTemplates;
       }
 
@@ -891,8 +978,17 @@ int findMaxPitchDiff(const std::pair<int, int> &minMaxPitch, const InstrumentTem
       return diff;
       }
 
+bool hasCommonGenre(QList<InstrumentGenre *> genres)
+      {
+      for (InstrumentGenre *genre: genres) {
+            if (genre->id == "common")
+                  return true;
+            }
+      return false;
+      }
+
 void sortInstrumentTemplates(
-            std::vector<InstrumentTemplate *> &templates,
+            std::vector<const InstrumentTemplate *> &templates,
             const std::pair<int, int> &minMaxPitch)
       {
       std::sort(templates.begin(), templates.end(),
@@ -909,32 +1005,29 @@ void sortInstrumentTemplates(
                   return true;
             if (!templ1->drumset && templ2->drumset)
                   return false;
+                        // prefer instruments with the "common" genre
+            const bool hasCommon1 = hasCommonGenre(templ1->genres);
+            const bool hasCommon2 = hasCommonGenre(templ2->genres);
+            if (hasCommon1 && !hasCommon2)
+                  return true;
+            if (!hasCommon1 && hasCommon2)
+                  return false;
             return templ1->genres.size() > templ2->genres.size();
             });
       }
 
-std::vector<InstrumentTemplate *> findSuitableInstruments(const MTrack &track)
+std::vector<const InstrumentTemplate *> findSuitableInstruments(const MTrack &track)
       {
-      std::vector<InstrumentTemplate *> templates = findInstrumentsForProgram(track);
+      std::vector<const InstrumentTemplate *> templates = findInstrumentsForProgram(track);
       if (templates.empty())
             return templates;
 
       const std::pair<int, int> minMaxPitch = findMinMaxPitch(track);
       sortInstrumentTemplates(templates, minMaxPitch);
-                  // instruments here are sorted primarily by valid pitch range difference,
-                  // so first nonzero difference means that current
-                  // and all successive instruments are unsuitable;
-                  // but if all instruments are unsuitable then leave them all in list
-      for (auto it = templates.begin(); it != templates.end(); ++it) {
-            const int diff = findMaxPitchDiff(minMaxPitch, *it);
-            if (diff > 0) {
-                  if (it != templates.begin())
-                        templates.erase(it, templates.end());
-                  else              // add empty template option
-                        templates.push_back(nullptr);
-                  break;
-                  }
-            }
+
+      // add empty instrument to show no-instrument option
+      if (!templates.empty())
+            templates.push_back(nullptr);
 
       return templates;
       }

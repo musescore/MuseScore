@@ -30,11 +30,10 @@ include_directories(
 
 if (SCRIPT_INTERFACE)
       set (SCRIPT_FILES mscorePlugins pluginCreator.cpp qmledit.cpp pluginManager.cpp)
-      set (SCRIPT_MOCS pluginCreator.h qmledit.h pluginManager.h)
       set (SCRIPT_UI   pluginCreator.ui pluginManager.ui)
 endif (SCRIPT_INTERFACE)
 
-QT4_WRAP_UI (ui_headers
+QT5_WRAP_UI (ui_headers
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui measureproperties.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
@@ -123,51 +122,8 @@ QT4_WRAP_UI (ui_headers
       ${SCRIPT_UI}
       )
 
-if (OMR)
-      set(OMR_MOCS omrpanel.h)
-endif (OMR)
-
-
-QT4_WRAP_CPP (mocs
-      scoreview.h editinstrument.h editstyle.h instrdialog.h instrwidget.h
-      musescore.h navigator.h pagesettings.h palette.h mixer.h playpanel.h
-      measureproperties.h seq.h textpalette.h textstyle.h selectionwindow.h
-      timedialog.h symboldialog.h shortcutcapturedialog.h simplebutton.h
-      greendotbutton.h recordbutton.h editdrumset.h editstaff.h selinstrument.h
-      voltaproperties.h timesigproperties.h newwizard.h
-      transposedialog.h lineproperties.h
-      excerptsdialog.h stafftextproperties.h glissandoproperties.h
-      articulationprop.h metaedit.h magbox.h
-      textprop.h textproperties.h tupletdialog.h
-      selectdialog.h synthcontrol.h drumroll.h pianoroll.h
-      piano.h ruler.h file.h
-      pianoview.h drumview.h splitstaff.h scoretab.h keyedit.h keycanvas.h harmonyedit.h
-      harmonycanvas.h updatechecker.h fretproperties.h fretcanvas.h editstafftype.h
-      prefsdialog.h sectionbreakprop.h bendproperties.h
-      bendcanvas.h tremolobarprop.h tremolobarcanvas.h
-      drumtools.h texteditor.h texttools.h pianotools.h editpitch.h
-      editstringdata.h editraster.h mediadialog.h chordview.h albummanager.h layer.h
-      # webpage.h
-      inspector/inspector.h inspector/inspectorBase.h inspector/inspectorBeam.h masterpalette.h
-      inspector/inspectorGroupElement.h inspector/inspectorImage.h waveview.h helpBrowser.h
-      inspector/inspectorLasso.h inspector/inspectorVolta.h inspector/inspectorOttava.h
-      inspector/inspectorTrill.h
-      inspector/inspectorHairpin.h qmlplugin.h palettebox.h workspace.h
-      inspector/inspectorJump.h inspector/inspectorMarker.h inspector/inspectorGlissando.h
-      inspector/inspectorNote.h inspector/inspectorAmbitus.h
-      inspector/inspectorFret.h
-      paletteBoxButton.h pathlistdialog.h exampleview.h noteGroups.h inspector/inspectorTextLine.h
-      importmidi/importmidi_panel.h importmidi/importmidi_delegate.h importmidi/importmidi_view.h
-      debugger/debugger.h
-      resourceManager.h downloadUtils.h accessibletoolbutton.h scoreaccessibility.h
-      startcenter.h scoreBrowser.h scorePreview.h
-      logindialog.h loginmanager.h uploadscoredialog.h breaksdialog.h
-      ${OMR_MOCS}
-      ${SCRIPT_MOCS}
-      )
-
 if (APPLE)
-      QT4_ADD_RESOURCES (qrc_files musescore.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc)
 else (APPLE)
       QT5_ADD_RESOURCES (qrc_files musescore.qrc
             musescorefonts-MScore.qrc
@@ -242,16 +198,14 @@ else (APPLE)
 endif (APPLE)
 
 add_executable ( ${ExecutableName}
-#      mops.cpp                            # HACK! first file disappears during linking as CMake generates
-#                                          # something like:    gcc ... -L mops.o ...
       ${qrc_files}
       ${ui_headers}
-      ${mocs}
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
       ${resource_file}
       ${INCS}
 
+      recordbutton.h greendotbutton prefsdialog.h
       scoreview.cpp editinstrument.cpp editstyle.cpp
       icons.cpp importbww.cpp instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
@@ -260,7 +214,6 @@ add_executable ( ${ExecutableName}
       seq.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
       simplebutton.cpp musedata.cpp
-      # exportly.cpp
       editdrumset.cpp editstaff.cpp voltaproperties.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       excerptsdialog.cpp metaedit.cpp magbox.cpp
@@ -273,7 +226,6 @@ add_executable ( ${ExecutableName}
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
       workspace.cpp exportmp3.cpp chordview.cpp
       album.cpp albummanager.cpp
-      # webpage.cpp
       textstyle.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
       tupletdialog.cpp glissandoproperties.cpp
@@ -318,9 +270,8 @@ add_executable ( ${ExecutableName}
       ${SCRIPT_FILES}
       musescoreCore.h
       driver.h
+      tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
       )
-
-#qt5_use_modules(${ExecutableName} Gui Widgets Network)
 
 target_link_libraries(mscore
       awl

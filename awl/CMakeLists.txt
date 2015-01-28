@@ -20,34 +20,8 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
-QT4_WRAP_CPP (mocs
-      aslider.h
-      knob.h
-      panknob.h
-      volknob.h
-      midipanknob.h
-      colorlabel.h
-      slider.h
-      volslider.h
-      mslider.h
-      pitchedit.h
-      pitchlabel.h
-      poslabel.h
-      denomspinbox.h
-      )
-
-if (APPLE)
-        file(GLOB_RECURSE INCS "*.h")
-else (APPLE)
-        set(INCS "")
-endif (APPLE)
-
 add_library (
       awl STATIC
-      ${PROJECT_BINARY_DIR}/all.h
-      ${PCH}
-      ${mocs}
-      ${INCS}
       aslider.cpp
       knob.cpp
       panknob.cpp
@@ -60,9 +34,11 @@ add_library (
       pitchedit.cpp
       pitchlabel.cpp
       poslabel.cpp
-#      posedit.cpp
       utils.cpp
       denomspinbox.cpp
+      aslider.h colorlabel.h denomspinbox.h fastlog.h
+      knob.h midipanknob.h mslider.h panknob.h pitchedit.h pitchlabel.h
+      poslabel.h slider.h utils.h volknob.h volslider.h
       )
 set_target_properties (
       awl
@@ -72,31 +48,11 @@ set_target_properties (
 
 xcode_pch(awl all)
 
-ADD_DEPENDENCIES(awl mops1)
-ADD_DEPENDENCIES(awl mops2)
-
-QT4_WRAP_CPP (mocs2
-      aslider.h
-      knob.h
-      panknob.h
-      volknob.h
-      midipanknob.h
-      awlplugin.h
-      colorlabel.h
-      slider.h
-      volslider.h
-      mslider.h
-      denomspinbox.h
-      pitchedit.h
-      pitchlabel.h
-      awlplugin.h
-      )
-
+ADD_DEPENDENCIES(awl mops1 mops2)
 
 add_library (
       awlplugin SHARED
       ${PROJECT_BINARY_DIR}/all.h
-      ${mocs2}
       awlplugin.cpp
       aslider.cpp
       knob.cpp

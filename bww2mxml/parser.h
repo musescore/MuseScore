@@ -104,8 +104,8 @@ namespace Bww {
     int tempo;                          ///< Tune tempo read from the header
     int beat;                           ///< Beat type, read from the clef line
     int beats;                          ///< Number of beats, read from the clef line
-    bool inMeasure;                     ///< State: writing the notes in a measure
-    int measureNr;                      ///< Current measure number
+    //bool inMeasure;                     ///< State: writing the notes in a measure
+    //int measureNr;                      ///< Current measure number
     bool tieStart;                      ///< Tie start pending
     bool inTie;                         ///< In a tie
     bool tripletStart;                  ///< Triplet start pending

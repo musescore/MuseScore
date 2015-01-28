@@ -312,16 +312,16 @@
                   <genre>ethnic</genre>
             </Instrument>
             <Instrument id="fife">
-                  <longName>Fife</longName>
-                  <shortName>Fife</shortName>
-                  <description>Fife</description>
+                  <longName>B♭ Fife</longName>
+                  <shortName>B♭ Fife</shortName>
+                  <description>B♭ Fife (A♭ transposing instrument)</description>
                   <musicXMLid>wind.flutes.fife</musicXMLid>
                   <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>74-103</aPitchRange>
                   <pPitchRange>74-109</pPitchRange>
-                  <transposeDiatonic>3</transposeDiatonic>
-                  <transposeChromatic>4</transposeChromatic>
+                  <transposeDiatonic>5</transposeDiatonic>
+                  <transposeChromatic>8</transposeChromatic>
                   <Channel>
                         <program value="72"/>
                   </Channel>
@@ -2117,7 +2117,7 @@
                   <aPitchRange>51-82</aPitchRange>
                   <pPitchRange>51-82</pPitchRange>
                   <transposeDiatonic>-4</transposeDiatonic>
-                  <transposeChromatic>-8</transposeChromatic>
+                  <transposeChromatic>-7</transposeChromatic>
                   <Channel>
                         <program value="65"/>
                   </Channel>
@@ -4146,7 +4146,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>79-108</aPitchRange>
                   <pPitchRange>79-108</pPitchRange>
-                  <transposeDiatonic>15</transposeDiatonic>
+                  <transposeDiatonic>14</transposeDiatonic>
                   <transposeChromatic>24</transposeChromatic>
                   <Channel>
                         <program value="9"/>
@@ -4191,7 +4191,7 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>84-108</aPitchRange>
                   <pPitchRange>84-108</pPitchRange>
-                  <transposeDiatonic>15</transposeDiatonic>
+                  <transposeDiatonic>14</transposeDiatonic>
                   <transposeChromatic>24</transposeChromatic>
                   <Channel>
                         <program value="10"/>
@@ -9050,6 +9050,31 @@
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings</name>
+            <Instrument id="erhu">
+                  <longName>Erhu</longName>
+                  <shortName>Eh.</shortName>
+                  <description>Erhu</description>
+                  <musicXMLid>strings.erhu</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>62</string>
+                        <string>69</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>62-93</aPitchRange>
+                  <pPitchRange>62-105</pPitchRange>
+                  <Channel>
+                        <program value="40"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
+                  <genre>ethnic</genre>
+            </Instrument>
             <Instrument id="string-section">
                   <longName>String Section</longName>
                   <shortName>Str.</shortName>

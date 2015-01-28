@@ -560,12 +560,8 @@ QPointF Note::attach() const
 
 int Note::playTicks() const
       {
-      const Note* note = this;
-      while (note->tieBack())
-            note = note->tieBack()->startNote();
-      int stick = note->chord()->tick();
-      while (note->tieFor() && note->tieFor()->endNote())
-            note = note->tieFor()->endNote();
+      int stick = firstTiedNote()->chord()->tick();
+      const Note* note = lastTiedNote();
       return note->chord()->tick() + note->chord()->actualTicks() - stick;
       }
 
@@ -1221,10 +1217,7 @@ void Note::endDrag()
             int tpc1 = pitch2tpc(nPitch, key, Prefer::NEAREST);
             int tpc2 = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
             // undefined for non-tablature staves
-            Note* n = this;
-            while (n->tieBack())
-                  n = n->tieBack()->startNote();
-            for (; n; n = n->tieFor() ? n->tieFor()->endNote() : 0) {
+            for (Note* n : tiedNotes()) {
                   if (n->pitch() != nPitch)
                         n->undoChangeProperty(P_ID::PITCH, nPitch);
                   if (n->_tpc[0] != tpc1)
@@ -2631,6 +2624,10 @@ Element* Note::nextElement()
       return notes.at(idx - 1);
       }
 
+//---------------------------------------------------------
+//   prevElement
+//---------------------------------------------------------
+
 Element* Note::prevElement()
       {
       if (chord()->isGrace())
@@ -2642,6 +2639,63 @@ Element* Note::prevElement()
             return chord()->prevElement();
 
       return notes.at(idx + 1);
+      }
+
+//---------------------------------------------------------
+//   lastTiedNote
+//---------------------------------------------------------
+
+Note* Note::lastTiedNote() const
+      {
+      QList<Note*> notes;
+      Note* note = const_cast<Note*>(this);
+      notes.append(note);
+      while (note->tieFor()) {
+            if (notes.contains(note->tieFor()->endNote()))
+                  break;
+            note = note->tieFor()->endNote();
+            notes.append(note);
+            }
+      return note;
+      }
+
+//---------------------------------------------------------
+//   firstTiedNote
+//    if note has ties, return last note in chain
+//    - handle recursion in connected notes
+//---------------------------------------------------------
+
+Note* Note::firstTiedNote() const
+      {
+      QList<Note*> notes;
+      Note* note = const_cast<Note*>(this);
+      notes.append(note);
+      while (note->tieBack()) {
+            if (notes.contains(note->tieBack()->startNote()))
+                  break;
+            note = note->tieBack()->startNote();
+            notes.append(note);
+            }
+      return note;
+      }
+
+//---------------------------------------------------------
+//   tiedNotes
+//---------------------------------------------------------
+
+QList<Note*> Note::tiedNotes() const
+      {
+      QList<Note*> notes;
+      Note* note = firstTiedNote();
+
+      notes.append(note);
+      while (note->tieFor()) {
+            if (notes.contains(note->tieFor()->endNote()))
+                  break;
+            note = note->tieFor()->endNote();
+            notes.append(note);
+            }
+      return notes;
       }
 
 }

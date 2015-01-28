@@ -27,11 +27,9 @@ else (APPLE)
 endif (APPLE)
 
 
-QT4_WRAP_CPP(aeolusMocs aeolusgui.h)
-QT4_WRAP_UI (aeolusUi aeolus_gui.ui)
+QT5_WRAP_UI (aeolusUi aeolus_gui.ui)
 
 add_library (aeolus STATIC
-      ${aeolusMocs}
       ${aeolusUi}
       aeolus.cpp audio.cpp model.cpp addsynth.cpp scales.cpp
       asection.cpp division.cpp rankwave.cpp

@@ -20,12 +20,6 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
-QT4_WRAP_CPP (mocs
-      qoscclient.h
-      qoscserver.h
-      qosctypes.h
-      )
-
 if (APPLE)
         file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
@@ -35,7 +29,6 @@ endif (APPLE)
 add_library(ofqf STATIC
    ${PROJECT_BINARY_DIR}/all.h
    ${PCH}
-   ${mocs}
    ${INCS}
    qoscclient.cpp qoscserver.cpp qosctypes.cpp
    )

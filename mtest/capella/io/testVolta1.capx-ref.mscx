@@ -80,15 +80,23 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <StaffText>
-          <pos x="14.2045" y="-12.5227"/>
+          <pos x="25" y="-13"/>
+          <halign>center</halign>
           <valign>baseline</valign>
+          <xoffset>0</xoffset>
+          <yoffset>2</yoffset>
+          <family>Arial</family>
           <size>24</size>
           <bold>1</bold>
           <text>Volta 1</text>
           </StaffText>
         <StaffText>
-          <pos x="14.2045" y="-9.68182"/>
+          <pos x="25" y="-8"/>
+          <halign>center</halign>
           <valign>baseline</valign>
+          <xoffset>0</xoffset>
+          <yoffset>2</yoffset>
+          <family>Arial</family>
           <bold>1</bold>
           <text>MuseScore testfile</text>
           </StaffText>
@@ -141,8 +149,12 @@
           <pause>3</pause>
           </LayoutBreak>
         <StaffText>
-          <pos x="2.84091" y="-7.40909"/>
+          <pos x="5" y="-4"/>
+          <halign>center</halign>
           <valign>baseline</valign>
+          <xoffset>0</xoffset>
+          <yoffset>2</yoffset>
+          <family>Arial</family>
           <bold>1</bold>
           <text>Leon Vinken</text>
           </StaffText>
