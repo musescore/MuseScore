@@ -1418,6 +1418,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       changeState(view->mscoreState());
 
       view->setFocus(Qt::OtherFocusReason);
+      setFocusProxy(view);
 
       getAction("file-save")->setEnabled(cs->isSavable());
       getAction("file-part-export")->setEnabled(cs->rootScore()->excerpts().size() > 0);
@@ -2268,18 +2269,44 @@ bool MuseScoreApplication::event(QEvent *event)
       }
 
 //---------------------------------------------------------
-//   eventFilter (mac only)
+//   eventFilter
 //---------------------------------------------------------
 
 bool MuseScore::eventFilter(QObject *obj, QEvent *event)
       {
       switch(event->type()) {
+#ifdef Q_OS_MAC
             case QEvent::FileOpen:
                   // open files requested to be loaded by OS X
                   // this event is generated when a file is dragged onto the MuseScore icon
                   // in the dock when MuseScore is already running
                   handleMessage(static_cast<QFileOpenEvent *>(event)->file());
                   return true;
+#endif
+            case QEvent::KeyPress:
+                  {
+                  QKeyEvent* e = static_cast<QKeyEvent*>(event);
+                  if(obj->isWidgetType() && e->key() == Qt::Key_Escape && e->modifiers() == Qt::NoModifier) {
+                        if (isActiveWindow()) {
+                              if(currentScoreView())
+                                    currentScoreView()->setFocus();
+                              else
+                                    mscore->setFocus();
+                              return true;
+                              }
+
+                        QWidget* w = static_cast<QWidget*>(obj);
+                        if(getPaletteBox()->isAncestorOf(w) ||
+                           inspector()->isAncestorOf(w)) {
+                              activateWindow();
+                              if(currentScoreView())
+                                    currentScoreView()->setFocus();
+                              else
+                                    mscore->setFocus();
+                              return true;
+                              }
+                        }
+                  }
             default:
                   return QMainWindow::eventFilter(obj, event);
             }
@@ -4874,9 +4901,8 @@ int main(int argc, char* av[])
       //read languages list
       mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
 
-#ifdef Q_OS_MAC
       QApplication::instance()->installEventFilter(mscore);
-#endif
+
       mscore->setRevision(revision);
 
       int files = 0;
