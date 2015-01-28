@@ -333,16 +333,24 @@ void Lyrics::layout1()
             // however, lyrics that are melismas or have verse numbers will be forced to left alignment
             // TODO: provide a way to disable the automatic left alignment
             //
+#if 0
+            // using this value below forces left-aligned lyrics to align with left edge of whole notes
+            // but that means they won't align with left-aligned lyrics on quarter notes
             qreal maxWidth;
             if (cr->type() == Element::Type::CHORD)
                   maxWidth = static_cast<Chord*>(cr)->maxHeadWidth();
             else
                   maxWidth = cr->width();       // TODO: exclude ledger line for multivoice rest?
+#endif
             qreal nominalWidth = symWidth(SymId::noteheadBlack);
             if (!isMelisma() && !hasNumber)     // center under notehead
-                  x +=  nominalWidth * .5 - cr->x() - centerAdjust * 0.5;
+                  x += nominalWidth * .5 - cr->x() - centerAdjust * 0.5;
             else                                // force left alignment
+#if 1
+                  x += width() * .5 - cr->x() - leftAdjust;
+#else
                   x += (width() + nominalWidth - maxWidth) * .5 - cr->x() - leftAdjust;
+#endif
             }
       else if (!(ta & AlignmentFlags::RIGHT)) {
             // even for left aligned syllables, ignore leading verse numbers and/or punctuation
