@@ -15,7 +15,7 @@ On Transifex
 https://www.transifex.com/organization/musescore/team/1397/
 or request it https://www.transifex.com/projects/p/musescore/
 
-In MuseScore source 
+In MuseScore source
 ------
 * Add the language in share/locale/languages.xml
 

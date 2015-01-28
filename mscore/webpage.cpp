@@ -142,7 +142,7 @@ Slot connected to the sslErrors signal of QNetworkAccessManager
 When this slot is called, call ignoreSslErrors method of QNetworkReply
 */
 void MyWebView::ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors)
-      {      
+      {
       foreach (const QSslError &error, sslErrors)
             qDebug("Ignore SSL error: %d %s", error.error(), qPrintable(error.errorString()));
       reply->ignoreSslErrors(sslErrors);
@@ -236,7 +236,7 @@ WebPageDockWidget::WebPageDockWidget(MuseScore* /*mscore*/, QWidget* parent)
       connect(web, SIGNAL(loadFinished(bool)), web, SLOT(stopBusy(bool)));
       web->setBusy();
       web->load(QNetworkRequest(webUrl()));
-      
+
       setWidget(web);
 
       //removing every widget from the tabbing order until suport for

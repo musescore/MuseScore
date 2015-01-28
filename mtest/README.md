@@ -2,7 +2,7 @@ Building the tests
 ==================
 
 Adapt for your own platform
-    
+
     make debug
     make debug install
     cd build.debug/mtest
@@ -25,7 +25,7 @@ To see how the CI environment is doing it check `.travis.yml` and `build/run_tes
 Test case conventions
 ====================
 
-Tests are grouped in directories by feature (like libmscore or mxl). 
+Tests are grouped in directories by feature (like libmscore or mxl).
 In these directories, each subdirectory represents a test suite for a particular sub feature.
 
 The name of a test suite directory should be descriptive. The CPP file for the tests should use the same name as the directory, for example `tst_foo.cpp` in directory `foo`. It's good practice to include a README file in a test suite directory.
@@ -58,7 +58,7 @@ Create a test case for all elements and all properties in each element. See `lib
 
 Action tests
 ----------------
-See `libmscore/join` or `libmscore/split` for example 
+See `libmscore/join` or `libmscore/split` for example
 
 * Read a score file
 * Apply an action

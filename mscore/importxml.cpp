@@ -314,7 +314,7 @@ static void moveTick(const int mtick, int& tick, int& maxtick, Fraction& typFr, 
             qDebug("moveTick: invalid divisions %d", divisions);
             return;
             }
-            
+
       if (e.tagName() == "forward") {
             for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                   if (ee.tagName() == "duration") {
@@ -751,7 +751,7 @@ void MusicXml::import(Score* s)
                   domError(e);
             }
       }
-      
+
 //---------------------------------------------------------
 //   initPartState
 //---------------------------------------------------------
@@ -806,7 +806,7 @@ static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
             vbx->add(text);
             }
       }
-      
+
 static void addText2(VBox* vbx, Score* s, QString strTxt, TextStyleType stl, Align v, double yoffs)
 {
       if (!strTxt.isEmpty()) {
@@ -989,7 +989,7 @@ void MusicXml::doCredits()
 
       // use metadata if no workable credit-words found
       if (!creditWordsUsed) {
-            
+
             QString strTitle;
             QString strSubTitle;
             QString strComposer;
@@ -1012,7 +1012,7 @@ void MusicXml::doCredits()
             if (!metaComposer.isEmpty()) strComposer = metaComposer;
             if (!metaPoet.isEmpty()) strPoet = metaPoet;
             if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
-            
+
             addText(vbox, score, strTitle,      TextStyleType::TITLE);
             addText(vbox, score, strSubTitle,   TextStyleType::SUBTITLE);
             addText(vbox, score, strComposer,   TextStyleType::COMPOSER);
@@ -1024,7 +1024,7 @@ void MusicXml::doCredits()
             vbox->setTick(0);
             score->measures()->add(vbox);
             }
-            
+
       // if no <rights> element was read and some text was found in the footer
       // set the rights metadata to the value found
       // TODO: remove formatting
@@ -1145,7 +1145,7 @@ void MusicXml::readPageFormat(PageFormat* pf, QDomElement de, qreal conversion)
       qreal w2 = size.width() - pf->evenLeftMargin() - _evenRightMargin;
       pf->setPrintableWidth(qMax(w1, w2));     // silently adjust right margins
       }
-      
+
 //---------------------------------------------------------
 //   text2syms
 //---------------------------------------------------------
@@ -1162,11 +1162,11 @@ static QString text2syms(const QString& t)
       // first create a map from symbol (Unicode) text to symId
       // note that this takes about 1 msec on a Core i5,
       // caching does not gain much
-            
+
       ScoreFont* sf = ScoreFont::fallbackFont();
       QMap<QString, SymId> map;
       int maxStringSize = 0;        // maximum string size found
-            
+
       for (int i = int(SymId::noSym); i < int(SymId::lastSym); ++i) {
             SymId id((SymId(i)));
             QString string(sf->toString(id));
@@ -1178,11 +1178,11 @@ static QString text2syms(const QString& t)
             }
       //qDebug("text2syms map count %d maxsz %d filling time elapsed: %d ms",
       //       map.size(), maxStringSize, time.elapsed());
-      
+
       // then look for matches
       QString in = t;
       QString res;
-            
+
       while (in != "") {
             // try to find the largest match possible
             int maxMatch = qMin(in.size(), maxStringSize);
@@ -1212,7 +1212,7 @@ static QString text2syms(const QString& t)
       //qDebug("text2syms total time elapsed: %d ms, res '%s'", time.elapsed(), qPrintable(res));
       return res;
       }
-      
+
 //---------------------------------------------------------
 //   nextPartOfFormattedString
 //---------------------------------------------------------
@@ -1220,7 +1220,7 @@ static QString text2syms(const QString& t)
 /**
  Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
  */
-      
+
 static QString nextPartOfFormattedString(QDomElement e)
       {
       QString txt        = e.text();
@@ -1272,7 +1272,7 @@ static QString nextPartOfFormattedString(QDomElement e)
       //qDebug("importedtext '%s'", qPrintable(importedtext));
       return importedtext;
       }
-      
+
 //---------------------------------------------------------
 //   updateStyles
 //---------------------------------------------------------
@@ -2009,7 +2009,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
                   }
             }
       }
-      
+
 //---------------------------------------------------------
 //   findDeleteWords
 //---------------------------------------------------------
@@ -2145,7 +2145,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             }
       }
        */
-            
+
       // set the parts first instrument
       if (drumsets[id].size() > 0) {
             QString instrId = pass1.getInstrList(id).instrument(Fraction(0, 1));
@@ -2978,7 +2978,7 @@ static SLine* checkSpannerOverlap(SLine* cur_sp, SLine* new_sp, QString type)
       else
             return new_sp;
       }
-      
+
 //---------------------------------------------------------
 //   handleSpannerStart
 //---------------------------------------------------------
@@ -2993,7 +2993,7 @@ static void handleSpannerStart(SLine* new_sp, QString /* type */, int track, QSt
       spanners[new_sp] = QPair<int, int>(tick, -1);
       //qDebug("%s %p inserted at first tick %d", qPrintable(type), new_sp, tick);
       }
-      
+
 //---------------------------------------------------------
 //   handleSpannerStop
 //---------------------------------------------------------
@@ -3009,7 +3009,7 @@ static void handleSpannerStop(SLine* cur_sp, QString type, int track2, int tick,
       spanners[cur_sp].second = tick;
       //qDebug("pedal %p second tick %d", cur_sp, tick);
       }
-      
+
 //---------------------------------------------------------
 //   matchRepeat
 //---------------------------------------------------------
@@ -3039,7 +3039,7 @@ static QString matchRepeat(const QString& lowerTxt)
       if (toCoda.exactMatch(lowerTxt)) repeat = "toCoda";
       return repeat;
       }
-      
+
 //---------------------------------------------------------
 //   findJump
 //---------------------------------------------------------
@@ -3359,7 +3359,7 @@ void MusicXml::direction(Measure* measure, int staff, QDomElement e)
             // note: no floating point comparisons with 0 ...
             if (tpo < 0.1 && tpoMetro > 0.1)
                   tpo = tpoMetro;
-            
+
             Text* t;
             if (tpo > 0.1) {
                   tpo /= 60;
@@ -3692,7 +3692,7 @@ static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement 
             i->setStringData(*t);
             }
       }
-      
+
 //---------------------------------------------------------
 //   isAppr
 //---------------------------------------------------------
@@ -3706,7 +3706,7 @@ static bool isAppr(const double v, const double ref, const double epsilon)
       {
       return v > ref - epsilon && v < ref + epsilon;
       }
-      
+
 //---------------------------------------------------------
 //   microtonalGuess
 //---------------------------------------------------------
@@ -3782,7 +3782,7 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
                   }
             }
       }
-      
+
 //---------------------------------------------------------
 //   flushAlteredTone
 //---------------------------------------------------------
@@ -3815,7 +3815,7 @@ static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QStr
       alt  = "";
       acc  = "";
       }
-      
+
 //---------------------------------------------------------
 //   xmlAttributes
 //---------------------------------------------------------

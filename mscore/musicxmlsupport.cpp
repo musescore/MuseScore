@@ -403,7 +403,7 @@ QString accSymId2MxmlString(const SymId id)
             }
       return s;
       }
-      
+
 //---------------------------------------------------------
 //   mxmlString2accSymId
 //---------------------------------------------------------
@@ -420,29 +420,29 @@ SymId mxmlString2accSymId(const QString mxmlName)
 
       //map["double-flat"] = SymId::accidentalDoubleFlat;
       //map["natural-flat"] = Accidental::Type::FLAT;
-      
+
       map["quarter-flat"] = SymId::accidentalQuarterToneFlatStein;
       map["quarter-sharp"] = SymId::accidentalQuarterToneSharpStein;
       //map["three-quarters-flat"] = Accidental::Type::MIRRORED_FLAT2;
       //map["three-quarters-sharp"] = Accidental::Type::SHARP_SLASH4;
-      
+
       //map["sharp-down"] = Accidental::Type::SHARP_ARROW_DOWN;
       //map["sharp-up"] = Accidental::Type::SHARP_ARROW_UP;
       //map["natural-down"] = Accidental::Type::NATURAL_ARROW_DOWN;
       //map["natural-up"] = Accidental::Type::NATURAL_ARROW_UP;
       //map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
       //map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
-      
+
       map["slash-quarter-sharp"] = SymId::accidentalKucukMucennebSharp;
       map["slash-sharp"] = SymId::accidentalBuyukMucennebSharp;
       map["slash-flat"] = SymId::accidentalBakiyeFlat;
       map["double-slash-flat"] = SymId::accidentalBuyukMucennebFlat;
-      
+
       //map["sori"] = Accidental::Type::SORI;
       //map["koron"] = Accidental::Type::KORON;
-      
+
       //map["natural-sharp"] = Accidental::Type::SHARP;
-      
+
       if (map.contains(mxmlName))
             return map.value(mxmlName);
       else
@@ -455,7 +455,7 @@ SymId mxmlString2accSymId(const QString mxmlName)
 //---------------------------------------------------------
 //   accidentalType2MxmlString
 //---------------------------------------------------------
-      
+
 QString accidentalType2MxmlString(const Accidental::Type type)
       {
       QString s;
@@ -487,7 +487,7 @@ QString accidentalType2MxmlString(const Accidental::Type type)
             }
       return s;
       }
-      
+
 //---------------------------------------------------------
 //   mxmlString2accidentalType
 //---------------------------------------------------------
@@ -507,29 +507,29 @@ Accidental::Type mxmlString2accidentalType(const QString mxmlName)
       map["flat-flat"] = Accidental::Type::FLAT2;
       map["double-flat"] = Accidental::Type::FLAT2;
       map["natural-flat"] = Accidental::Type::FLAT;
-      
+
       map["quarter-flat"] = Accidental::Type::MIRRORED_FLAT;
       map["quarter-sharp"] = Accidental::Type::SHARP_SLASH;
       map["three-quarters-flat"] = Accidental::Type::MIRRORED_FLAT2;
       map["three-quarters-sharp"] = Accidental::Type::SHARP_SLASH4;
-      
+
       map["sharp-down"] = Accidental::Type::SHARP_ARROW_DOWN;
       map["sharp-up"] = Accidental::Type::SHARP_ARROW_UP;
       map["natural-down"] = Accidental::Type::NATURAL_ARROW_DOWN;
       map["natural-up"] = Accidental::Type::NATURAL_ARROW_UP;
       map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
       map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
-      
+
       map["slash-quarter-sharp"] = Accidental::Type::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
       map["slash-sharp"] = Accidental::Type::SHARP_SLASH2; // SHARP_SLASH; ?
       map["slash-flat"] = Accidental::Type::FLAT_SLASH;
       map["double-slash-flat"] = Accidental::Type::FLAT_SLASH2;
-      
+
       map["sori"] = Accidental::Type::SORI;
       map["koron"] = Accidental::Type::KORON;
-      
+
       map["natural-sharp"] = Accidental::Type::SHARP;
-      
+
       if (map.contains(mxmlName))
             return map.value(mxmlName);
       else

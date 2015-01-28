@@ -62,7 +62,7 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
             }
       sameSubtype->setEnabled(e->subtype() != -1);
       subtype->setEnabled(e->subtype() != -1);
-      inSelection->setEnabled(e->score()->selection().isRange());    
+      inSelection->setEnabled(e->score()->selection().isRange());
       }
 
 //---------------------------------------------------------

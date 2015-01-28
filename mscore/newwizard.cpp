@@ -269,10 +269,10 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       if(fil.isEmpty()){
           fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
           }
-      
+
       QDir myTemplatesDir(preferences.myTemplatesPath);
       fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
-      
+
       templateFileBrowser->setScores(fil);
       templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 

@@ -1530,7 +1530,7 @@ TileSet* StyleHelper::slope(const QColor& color, qreal shade, int size) const {
             TileSet* slabTileSet = slab(color, shade, size);
             slabTileSet->render(QRect(0, 0, size * 4, size * 4), &p,
                                 TileSet::Left | TileSet::Right | TileSet::Top | TileSet::Bottom);
-            
+
             //slabTileSet->render(QRect(0, 0, size * 4, size * 5), &p,
             //                    TileSet::Left | TileSet::Right | TileSet::Top);
 

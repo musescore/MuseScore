@@ -40,7 +40,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       updateWorkspaces();
       hl->addWidget(workspaceList);
       QToolButton* nb = new QToolButton;
-      
+
       nb->setMinimumHeight(27);
       nb->setText(tr("+"));
       nb->setToolTip(tr("Add new workspace"));

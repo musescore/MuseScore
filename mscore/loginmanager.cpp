@@ -43,7 +43,7 @@ LoginManager::LoginManager(QObject* parent)
       ba[24] = 0x42; ba[25] = 0x73; ba[26] = 0x4b; ba[27] = 0x67;
       ba[28] = 0x4a; ba[29] = 0x7a; ba[30] = 0x4c; ba[31] = 0x44;
       _consumerKey = QString(ba);
-      ba[0] = 0x35; ba[1] = 0x39; ba[2] = 0x33; ba[3] = 0x61; 
+      ba[0] = 0x35; ba[1] = 0x39; ba[2] = 0x33; ba[3] = 0x61;
       ba[4] = 0x57; ba[5] = 0x6f; ba[6] = 0x51; ba[7] = 0x73;
       ba[8] = 0x77; ba[9] = 0x73; ba[10] = 0x50; ba[11] = 0x44;
       ba[12] = 0x56; ba[13] = 0x48; ba[14] = 0x37; ba[15] = 0x4c;
@@ -154,7 +154,7 @@ void LoginManager::login(QString login, QString password)
       {
       if(login == "" || password == "")
            return;
-      
+
       connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
                 this, SLOT(onAccessTokenRequestReady(QByteArray)), Qt::UniqueConnection);
 
@@ -187,7 +187,7 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
       {
       //qDebug() << "onAccessTokenRequestReady" << ba;
       if (_oauthManager->lastError() == KQOAuthManager::RequestUnauthorized) { // 401/406
-            
+
             QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
             QJsonArray array = jsonResponse.array();
             QString message = tr("Unsuccessful login. Please try again.");
@@ -234,7 +234,7 @@ void LoginManager::getUser()
       oauthRequest->setConsumerSecretKey(_consumerSecret);
       oauthRequest->setToken(_accessToken);
       oauthRequest->setTokenSecret(_accessTokenSecret);
-      
+
       connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
             this, SLOT(onGetUserRequestReady(QByteArray)));
 

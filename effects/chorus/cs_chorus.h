@@ -1,6 +1,6 @@
 /*
   Copyright (C) 2003-2008 Fons Adriaensen <fons@kokkinizita.net>
-   
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -30,10 +30,10 @@ public:
     enum { INPUT, OUTPUT, DELAY, FREQ1, TMOD1, FREQ2, TMOD2, NPORT };
 
     Ladspa_CS_chorus1 (unsigned long fsam);
-    virtual void setport (unsigned long port, LADSPA_Data *data);  
-    virtual void active  (bool act);  
+    virtual void setport (unsigned long port, LADSPA_Data *data);
+    virtual void active  (bool act);
     virtual void runproc (unsigned long len, bool add);
-    virtual ~Ladspa_CS_chorus1 (void);  
+    virtual ~Ladspa_CS_chorus1 (void);
 
 private:
 
@@ -42,7 +42,7 @@ private:
     unsigned long  _wi;
     unsigned long  _gi;
     float     _ri [3];
-    float     _dr [3];  
+    float     _dr [3];
     float     _x1, _y1;
     float     _x2, _y2;
     float    *_line;
@@ -56,10 +56,10 @@ public:
     enum { INPUT, OUTPUT, DELAY, FREQ1, TMOD1, FREQ2, TMOD2, NPORT };
 
     Ladspa_CS_chorus2 (unsigned long fsam);
-    virtual void setport (unsigned long port, LADSPA_Data *data);  
-    virtual void active  (bool act);  
+    virtual void setport (unsigned long port, LADSPA_Data *data);
+    virtual void active  (bool act);
     virtual void runproc (unsigned long len, bool add);
-    virtual ~Ladspa_CS_chorus2 (void);  
+    virtual ~Ladspa_CS_chorus2 (void);
 
 private:
 
@@ -68,7 +68,7 @@ private:
     unsigned long  _wi;
     unsigned long  _gi;
     float     _ri [3];
-    float     _dr [3];  
+    float     _dr [3];
     float     _x1, _y1;
     float     _x2, _y2;
     float     _a, _b;
@@ -83,10 +83,10 @@ public:
     enum { INPUT, OUTPUT1, OUTPUT2, OUTPUT3, DELAY, FREQ1, TMOD1, FREQ2, TMOD2, NPORT };
 
     Ladspa_CS_chorus3 (unsigned long fsam);
-    virtual void setport (unsigned long port, LADSPA_Data *data);  
-    virtual void active  (bool act);  
+    virtual void setport (unsigned long port, LADSPA_Data *data);
+    virtual void active  (bool act);
     virtual void runproc (unsigned long len, bool add);
-    virtual ~Ladspa_CS_chorus3 (void);  
+    virtual ~Ladspa_CS_chorus3 (void);
 
 private:
 
@@ -95,7 +95,7 @@ private:
     unsigned long  _wi;
     unsigned long  _gi;
     float     _ri [3];
-    float     _dr [3];  
+    float     _dr [3];
     float     _x1, _y1;
     float     _x2, _y2;
     float     _a, _b;

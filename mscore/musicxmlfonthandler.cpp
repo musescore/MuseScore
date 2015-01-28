@@ -110,7 +110,7 @@ QString MScoreTextToMXML::toPlainText(const QString& text)
       //qDebug("MScoreTextToMXML::toPlainText('%s') res '%s'", qPrintable(text), qPrintable(res));
       return res;
       }
-      
+
 //---------------------------------------------------------
 //   toPlainTextPlusSymbols
 //    convert to plain text plus <sym>[name]</sym> encoded symbols
@@ -237,7 +237,7 @@ bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const
 
       return true;
       }
-      
+
 //---------------------------------------------------------
 //   writeTextFragments
 //---------------------------------------------------------

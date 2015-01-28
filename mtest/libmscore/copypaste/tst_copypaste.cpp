@@ -59,7 +59,7 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste2Voice6();
       void copyPasteOnlySecondVoice();
       void copypaste19() { copypaste("19"); }       // chord symbols
-      
+
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 

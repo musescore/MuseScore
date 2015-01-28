@@ -459,7 +459,7 @@ static void symMetrics(const char* name, const Sym& headsym)
              headsym.getAttach().y());
       }
 */
-      
+
 //---------------------------------------------------------
 //   mag
 //      return fixed magnification

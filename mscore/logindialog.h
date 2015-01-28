@@ -25,12 +25,12 @@ namespace Ms {
 class LoginDialog : public QDialog, public Ui::LoginDialog
       {
       Q_OBJECT
-      
+
       LoginManager* _loginManager;
 
    signals:
       void loginSuccessful();
-      
+
    private slots:
       void buttonBoxClicked(QAbstractButton* button);
       void onLoginSuccess();

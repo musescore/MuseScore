@@ -7,7 +7,7 @@ def addMessage(f, text, comment=''):
     if (comment):
         f.write("//: " + comment.encode('utf8') + "\n")
     f.write('QT_TRANSLATE_NOOP("InstrumentsXML", "' + text.encode('utf8') + '"),\n')
-    
+
 
 
 f = open('instrumentsxml.h','w')
@@ -43,4 +43,4 @@ for child in root:
                 addMessage(f, trackName.text)
                 previousLongName = ""
 
-f.close() 
+f.close()

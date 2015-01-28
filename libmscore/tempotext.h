@@ -53,7 +53,7 @@ class TempoText : public Text  {
 
       virtual void textChanged() override;
       virtual void layout();
-      
+
       static int findTempoDuration(const QString& s, int& len, TDuration& dur);
       static QString duration2tempoTextString(const TDuration dur);
 
