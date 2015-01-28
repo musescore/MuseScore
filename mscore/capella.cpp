@@ -324,6 +324,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                               }
                         Text* text = new StaffText(score);
                         QFont f(st->font());
+                        text->textStyle().setFamily(f.family());
                         text->textStyle().setItalic(f.italic());
                         // text->setUnderline(f.underline());
                         text->textStyle().setBold(f.bold());
@@ -331,13 +332,21 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
 
                         text->setText(st->text());
                         QPointF p(st->pos());
-                        p = p / 32.0 * MScore::DPMM;
+                        p = p / 32.0 * score->spatium();
                         // text->setUserOff(st->pos());
                         text->setUserOff(p);
                         // qDebug("setText %s (%f %f)(%f %f) <%s>",
                         //            qPrintable(st->font().family()),
                         //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));
-                        text->textStyle().setAlign(AlignmentFlags::LEFT | AlignmentFlags::BASELINE);
+                        Align textalign = AlignmentFlags::LEFT;
+                        switch (st->textalign()) {
+                              case 0:   textalign = AlignmentFlags::LEFT;    break;
+                              case 1:   textalign = AlignmentFlags::HCENTER; break;
+                              case 2:   textalign = AlignmentFlags::RIGHT;   break;
+                              default:                                       break;
+                              }
+                        text->textStyle().setAlign(textalign | AlignmentFlags::BASELINE);
+                        text->textStyle().setYoff(2.0);
                         text->setTrack(track);
                         s->add(text);
                         }

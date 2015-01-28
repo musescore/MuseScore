@@ -455,7 +455,12 @@ void SimpleTextObj::readCapx(XmlReader& e)
       {
       double x = e.doubleAttribute("x");
       double y = e.doubleAttribute("y");
-      QString align = e.attribute("align", "left");
+      QString stralign = e.attribute("align", "left");
+      align = 0;
+      if (stralign == "center")
+            align = 1;
+      else if (stralign == "right")
+            align = 2;
       relPos = QPointF(x, y);
       relPos *= 32.0;
       // qDebug("x %g y %g align %s", x, y, qPrintable(align));
