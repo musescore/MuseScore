@@ -1117,6 +1117,7 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
             default:
                   return Spanner::setProperty(propertyId, v);
             }
+      score()->setLayoutAll(true);
       return true;
       }
 
