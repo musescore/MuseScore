@@ -844,6 +844,31 @@ const InstrumentTemplate* findInstrument(const QString &groupId, const QString &
       return instr;
       }
 
+// find instrument with maximum MIDI program
+// that is less than the track MIDI program, i.e. suitable instrument
+const InstrumentTemplate* findClosestInstrument(const MTrack &track)
+      {
+      int maxLessProgram = -1;
+
+      for (const InstrumentGroup *group: instrumentGroups) {
+            for (const InstrumentTemplate *templ: group->instrumentTemplates) {
+                  if (templ->staffGroup == StaffGroup::TAB)
+                        continue;
+                  const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
+                  if (track.mtrack->drumTrack() != isDrumTemplate)
+                        continue;
+                  for (const auto &channel: templ->channel) {
+                        if (channel.program < track.program
+                                    && channel.program > maxLessProgram) {
+                              maxLessProgram = channel.program;
+                              return templ;
+                              }
+                        }
+                  }
+            }
+      return nullptr;
+      }
+
 std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
       {
       std::vector<const InstrumentTemplate *> suitableTemplates;
@@ -904,27 +929,9 @@ std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &
                   }
             else {          // find instrument with maximum MIDI program
                             // that is less than the track MIDI program, i.e. suitable instrument
-                  int maxLessProgram = -1;
-                  const InstrumentTemplate *suitableInstr = nullptr;
-
-                  for (const InstrumentGroup *group: instrumentGroups) {
-                        for (const InstrumentTemplate *templ: group->instrumentTemplates) {
-                              if (templ->staffGroup == StaffGroup::TAB)
-                                    continue;
-                              const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
-                              if (track.mtrack->drumTrack() != isDrumTemplate)
-                                    continue;
-                              for (const auto &channel: templ->channel) {
-                                    if (channel.program < program
-                                                && channel.program > maxLessProgram) {
-                                          maxLessProgram = channel.program;
-                                          suitableInstr = templ;
-                                          }
-                                    }
-                              }
-                        }
-                  if (suitableInstr)
-                        suitableTemplates.push_back(suitableInstr);
+                  auto instr = findClosestInstrument(track);
+                  if (instr)
+                        suitableTemplates.push_back(instr);
                   }
             }
 
