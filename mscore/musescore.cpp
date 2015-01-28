@@ -3839,8 +3839,10 @@ void MuseScore::endCmd()
                   excerptsChanged(cs->rootScore());
                   cs->rootScore()->setExcerptsChanged(false);
                   }
-            if (!noSeq && (seq && seq->isRunning()) && cs->instrumentsChanged()) {
-                  seq->initInstruments();
+            if (cs->instrumentsChanged()) {
+                  if (!noSeq && (seq && seq->isRunning()))
+                        seq->initInstruments();
+                  emit instrumentChanged();
                   cs->setInstrumentsChanged(false);
                   }
             if (cs->selectionChanged()) {
