@@ -826,6 +826,24 @@ bool hasNotDefinedDrumPitch(const std::set<int> &trackPitches, const std::set<in
       return hasNotDefinedPitch;
       }
 
+const InstrumentTemplate* findInstrument(const QString &groupId, const QString &instrId)
+      {
+      const InstrumentTemplate* instr = nullptr;
+
+      for (const InstrumentGroup *group: instrumentGroups) {
+            if (group->id == groupId) {
+                  for (const InstrumentTemplate *templ: group->instrumentTemplates) {
+                        if (templ->id == instrId) {
+                              instr = templ;
+                              break;
+                              }
+                        }
+                  break;
+                  }
+            }
+      return instr;
+      }
+
 std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
       {
       std::vector<const InstrumentTemplate *> suitableTemplates;
@@ -865,56 +883,24 @@ std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &
                   // so we will find the most matching instrument
 
             if (program == 55) {         // GM "Orchestra Hit" sound
-                  for (const InstrumentGroup *group: instrumentGroups) {
-                        if (group->id == "electronic-instruments") {
-                              for (const InstrumentTemplate *templ: group->instrumentTemplates) {
-                                    if (templ->id == "brass-synthesizer") {
-                                          suitableTemplates.push_back(templ);
-                                          break;
-                                          }
-                                    }
-                              break;
-                              }
-                        }
+                  auto instr = findInstrument("electronic-instruments", "brass-synthesizer");
+                  if (instr)
+                        suitableTemplates.push_back(instr);
                   }
             else if (program == 110) {        // GM "Fiddle" sound
-                  for (const InstrumentGroup *group: instrumentGroups) {
-                        if (group->id == "strings") {
-                              for (const InstrumentTemplate *templ: group->instrumentTemplates) {
-                                    if (templ->id == "violin") {
-                                          suitableTemplates.push_back(templ);
-                                          break;
-                                          }
-                                    }
-                              break;
-                              }
-                        }
+                  auto instr = findInstrument("strings", "violin");
+                  if (instr)
+                        suitableTemplates.push_back(instr);
                   }
             else if (program >= 80 && program <= 103) {
-                  for (const InstrumentGroup *group: instrumentGroups) {
-                        if (group->id == "electronic-instruments") {
-                              for (const InstrumentTemplate *templ: group->instrumentTemplates) {
-                                    if (templ->id == "effect-synth") {       // generic synth
-                                          suitableTemplates.push_back(templ);
-                                          break;
-                                          }
-                                    }
-                              break;
-                              }
-                        }
+                  auto instr = findInstrument("electronic-instruments", "effect-synth");
+                  if (instr)
+                        suitableTemplates.push_back(instr);       // generic synth
                   }
             else if (program >= 112 && program <= 127) {
-                  for (const InstrumentGroup *group: instrumentGroups) {
-                        if (group->id == "unpitched-percussion") {
-                              for (const InstrumentTemplate *templ: group->instrumentTemplates) {
-                                    if (templ->id == "snare-drum") {         // 1-line percussion staff
-                                          suitableTemplates.push_back(templ);
-                                          break;
-                                          }
-                                    }
-                              break;
-                              }
-                        }
+                  auto instr = findInstrument("unpitched-percussion", "snare-drum");
+                  if (instr)
+                        suitableTemplates.push_back(instr);       // 1-line percussion staff
                   }
             else {          // find instrument with maximum MIDI program
                             // that is less than the track MIDI program, i.e. suitable instrument
