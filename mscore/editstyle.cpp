@@ -49,7 +49,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       styleWidgets = {
             { StyleIdx::staffUpperBorder,        staffUpperBorder       },
-            { StyleIdx::staffUpperBorder,        staffLowerBorder       },
+            { StyleIdx::staffLowerBorder,        staffLowerBorder       },
             { StyleIdx::staffDistance,           staffDistance          },
             { StyleIdx::akkoladeDistance,        akkoladeDistance       },
             { StyleIdx::minSystemDistance,       minSystemDistance      },
