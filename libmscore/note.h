@@ -337,10 +337,13 @@ class Note : public Element {
       bool play() const               { return _play;    }
       void setPlay(bool val)          { _play = val;     }
 
-      Ms::Tie* tieFor() const       { return _tieFor;  }
-      Ms::Tie* tieBack() const      { return _tieBack; }
+      Ms::Tie* tieFor() const         { return _tieFor;  }
+      Ms::Tie* tieBack() const        { return _tieBack; }
       void setTieFor(Tie* t)          { _tieFor = t;     }
       void setTieBack(Tie* t)         { _tieBack = t;    }
+      Note* firstTiedNote() const;
+      Note* lastTiedNote() const;
+      QList<Note*> tiedNotes() const;
 
       Chord* chord() const            { return (Chord*)parent(); }
       void setChord(Chord* a)         { setParent((Element*)a);  }

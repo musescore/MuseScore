@@ -207,9 +207,12 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
             switch (spanner()->anchor()) {
                   case Spanner::Anchor::NOTE: {
                         Tie* tie = static_cast<Tie*>(spanner());
-                        tie->startNote()->setTieFor(0);
-                        tie->setStartNote(static_cast<Note*>(element));
-                        static_cast<Note*>(element)->setTieFor(tie);
+                        Note* note = static_cast<Note*>(element);
+                        if (note->chord()->tick() <= tie->endNote()->chord()->tick()) {
+                              tie->startNote()->setTieFor(0);
+                              tie->setStartNote(note);
+                              note->setTieFor(tie);
+                              }
                         break;
                         }
                   case Spanner::Anchor::CHORD:
@@ -227,9 +230,13 @@ void SlurSegment::changeAnchor(MuseScoreView* viewer, Grip curGrip, Element* ele
             switch (spanner()->anchor()) {
                   case Spanner::Anchor::NOTE: {
                         Tie* tie = static_cast<Tie*>(spanner());
-                        tie->endNote()->setTieBack(0);
-                        tie->setEndNote(static_cast<Note*>(element));
-                        static_cast<Note*>(element)->setTieBack(tie);
+                        Note* note = static_cast<Note*>(element);
+                        // do not allow backward ties
+                        if (note->chord()->tick() >= tie->startNote()->chord()->tick()) {
+                              tie->endNote()->setTieBack(0);
+                              tie->setEndNote(note);
+                              note->setTieBack(tie);
+                              }
                         break;
                         }
                   case Spanner::Anchor::CHORD:
@@ -363,7 +370,8 @@ void SlurSegment::editDrag(const EditData& ed)
                      ) {
                         if (ed.curGrip == Grip::END && spanner->type() == Element::Type::TIE) {
                               Tie* tie = static_cast<Tie*>(spanner);
-                              if (tie->startNote()->pitch() == note->pitch()) {
+                              if (tie->startNote()->pitch() == note->pitch()
+                                 && tie->startNote()->chord()->tick() <= note->chord()->tick()) {
                                     ed.view->setDropTarget(note);
                                     if (note != tie->endNote()) {
                                           changeAnchor(ed.view, ed.curGrip, note);
