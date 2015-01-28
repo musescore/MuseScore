@@ -927,6 +927,17 @@ std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &
                   if (instr)
                         suitableTemplates.push_back(instr);       // 1-line percussion staff
                   }
+            else if (program == 36 || program == 37) {
+                              // slightly improve slap bass match:
+                              // match to the instruments with program 33
+                              // instead of 35 according to the algorithm below
+                  auto instr = findInstrument("plucked-strings", "electric-bass");
+                  if (instr)
+                        suitableTemplates.push_back(instr);
+                  instr = findInstrument("plucked-strings", "5-string-electric-bass");
+                  if (instr)
+                        suitableTemplates.push_back(instr);
+                  }
             else {          // find instrument with maximum MIDI program
                             // that is less than the track MIDI program, i.e. suitable instrument
                   auto instr = findClosestInstrument(track);
