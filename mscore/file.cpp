@@ -1905,20 +1905,10 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       double mag = printerDev.logicalDpiX() / MScore::DPI;
       p.scale(mag, mag);
 
-      //
-      // start pageOffset with configured offset of
-      // first score
-      //
-      int pageOffset = 0;
-      if (firstScore)
-            pageOffset = firstScore->pageNumberOffset();
       bool firstPage = true;
       for (Score* s : cs) {
             s->setPrinting(true);
-            //
-            // here we ignore the configured page offset
-            //
-            int oldPageOffset = s->pageNumberOffset();
+            int pageOffset = s->pageNumberOffset();
             s->setPageNumberOffset(pageOffset);
             bool oldFirstPageNumber = s->style(StyleIdx::footerFirstPage).toBool();
             s->style()->set(StyleIdx::footerFirstPage, true);
@@ -1936,11 +1926,9 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
                   firstPage = false;
                   s->print(&p, n);
                   }
-            pageOffset += pages;
 
             //reset score
             s->setPrinting(false);
-            s->setPageNumberOffset(oldPageOffset);
             s->style()->set(StyleIdx::footerFirstPage, oldFirstPageNumber);
             s->doLayout();
             }
