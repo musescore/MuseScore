@@ -599,10 +599,13 @@ Palette* MuseScore::newBreathPalette()
                   continue;
             Breath* a = new Breath(gscore);
             a->setBreathType(i);
-            if (i < 2)
+            if (i < 2) {
                   sp->append(a, tr("Breath"));
-            else
+                  }
+            else {
                   sp->append(a, tr("Caesura"));
+                  a->setPause(2.0);
+                  }
             }
       return sp;
       }

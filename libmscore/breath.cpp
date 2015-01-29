@@ -35,6 +35,7 @@ Breath::Breath(Score* s)
   : Element(s)
       {
       _breathType = 0;
+      _pause = 0.0;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
@@ -57,6 +58,7 @@ void Breath::write(Xml& xml) const
             return;
       xml.stag("Breath");
       xml.tag("subtype", _breathType);
+      writeProperty(xml, P_ID::PAUSE);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -68,8 +70,11 @@ void Breath::write(Xml& xml) const
 void Breath::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            if (e.name() == "subtype")
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")
                   _breathType = e.readInt();
+            else if (tag == "pause")
+                  _pause = e.readDouble();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -107,6 +112,55 @@ QPointF Breath::pagePos() const
       if (system)
             yp += system->staff(staffIdx())->y() + system->y();
       return QPointF(pageX(), yp);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Breath::getProperty(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_ID::PAUSE:
+                  return _pause;
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Breath::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_ID::PAUSE:
+                  setPause(v.toDouble());
+                  score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
+                  break;
+            default:
+                  if (!Element::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      setGenerated(false);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Breath::propertyDefault(P_ID id) const
+      {
+      switch(id) {
+            case P_ID::PAUSE:
+                  return 0.0;
+            default:
+                  return Element::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------

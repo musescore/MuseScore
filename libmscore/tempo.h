@@ -17,14 +17,17 @@ namespace Ms {
 
 class Xml;
 
-enum class TempoType : char { INVALID, FIX, RAMP };
+enum class TempoType : char { INVALID = 0x0, PAUSE = 0x1, FIX = 0x2, RAMP = 0x4};
+
+typedef QFlags<TempoType> TempoTypes;
+Q_DECLARE_OPERATORS_FOR_FLAGS(TempoTypes);
 
 //---------------------------------------------------------
 //   Tempo Event
 //---------------------------------------------------------
 
 struct TEvent {
-      TempoType type;
+      TempoTypes type;
       qreal tempo;     // beats per second
       qreal pause;     // pause in seconds
       qreal time;      // precomputed time for tick in sec
@@ -32,7 +35,7 @@ struct TEvent {
       TEvent();
       TEvent(const TEvent& e);
       TEvent(qreal bps, qreal seconds, TempoType t);
-      bool valid() const { return type != TempoType::INVALID; }
+      bool valid() const;
       };
 
 //---------------------------------------------------------

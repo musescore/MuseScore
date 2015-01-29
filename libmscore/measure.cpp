@@ -1419,7 +1419,7 @@ qDebug("drop staffList");
                               }
                         break;
                         }
-                  lb->setTrack(-1);       // this are system elements
+                  lb->setTrack(-1);       // these are system elements
                   lb->setParent(this);
                   score()->undoAddElement(lb);
                   return lb;
