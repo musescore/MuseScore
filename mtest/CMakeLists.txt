@@ -73,6 +73,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_key.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tempo.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_model.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_instrument.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
