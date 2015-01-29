@@ -327,7 +327,8 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
                               // qDebug("unmapped drum note %d", pitch);
                               }
                         else if (!note->fixed()) {
-                              note->setHeadGroup(drumset->noteHead(pitch));
+                              note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                              // note->setHeadGroup(drumset->noteHead(pitch));
                               note->setLine(drumset->line(pitch));
                               continue;
                               }
