@@ -1439,7 +1439,9 @@ void Score::addElement(Element* element)
                   break;
 
             case Element::Type::CHORD:
-                  createPlayEvents(static_cast<Chord*>(element));
+                  setPlaylistDirty(true);
+                  // create playlist does not work here bc. tremolos may not be complete
+                  // createPlayEvents(static_cast<Chord*>(element));
                   break;
 
             case Element::Type::NOTE: {

@@ -2974,7 +2974,7 @@ TremoloChordType Chord::tremoloChordType() const
                   else if (_tremolo->chord2() == this)
                         return TremoloChordType::TremoloSecondNote;
                   else
-                        qDebug("Chord::tremoloChordType(): inconsistency");
+                        qDebug("Chord::tremoloChordType(): inconsistency %p - %p", _tremolo->chord1(), _tremolo->chord2());
                   }
             }
       return TremoloChordType::TremoloSingle;

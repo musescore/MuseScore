@@ -126,10 +126,10 @@ void Score::endCmd(bool rollback)
             const InputState& is = s->inputState();
             if (is.noteEntryMode() && is.segment())
                   s->setPlayPos(is.segment()->tick());
-            if (_playlistDirty) {
-                  emit playlistChanged();
-                  _playlistDirty = false;
-                  }
+            }
+      if (_playlistDirty) {
+            emit playlistChanged();
+            _playlistDirty = false;
             }
 
       if (MScore::debugMode)
