@@ -2028,6 +2028,10 @@ void ChangeElement::flip()
             }
       else if (newElement->type() == Element::Type::DYNAMIC)
             newElement->score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
+      else if (newElement->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(newElement)->layoutBreakType() == LayoutBreak::Type::SECTION)
+            newElement->score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
+      else if (newElement->type() == Element::Type::BREATH)
+            newElement->score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
       else if (newElement->type() == Element::Type::TEMPO_TEXT) {
             TempoText* t = static_cast<TempoText*>(oldElement);
             score->setTempo(t->segment(), t->tempo());

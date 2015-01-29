@@ -602,9 +602,15 @@ void Segment::remove(Element* el)
                   // fall through
 
             case Element::Type::BAR_LINE:
-            case Element::Type::BREATH:
             case Element::Type::AMBITUS:
                   _elist[track] = 0;
+                  break;
+
+            case Element::Type::BREATH:
+                  _elist[track] = 0;
+                  score()->setPause(tick(), 0);
+                  score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
+                  score()->setLayoutAll(true);
                   break;
 
             default:
