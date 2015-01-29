@@ -541,7 +541,11 @@ QString Page::replaceTextMacros(const QString& s) const
                         case 'N': // on page 1 only if there are multiple pages
                               if ( (_score->npages() + _score->pageNumberOffset()) > 1 ) // FALLTHROUGH
                         case 'P': // on all pages
-                              d += QString("%1").arg(_no + 1 + _score->pageNumberOffset());
+                              {
+                              int no = _no + 1 + _score->pageNumberOffset();
+                              if (no > 0 )
+                                    d += QString("%1").arg(no);
+                              }
                               break;
                         case 'n':
                               d += QString("%1").arg(_score->npages() + _score->pageNumberOffset());
