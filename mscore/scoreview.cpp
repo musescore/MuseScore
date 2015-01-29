@@ -2421,18 +2421,28 @@ void ScoreView::editCut()
       }
 
 //---------------------------------------------------------
+//   checkCopyOrCut
+//---------------------------------------------------------
+
+bool ScoreView::checkCopyOrCut()
+      {
+      if (!_score->selection().canCopy()) {
+            QMessageBox::information(0, "MuseScore",
+               tr("Please select the complete tuplet/tremolo and retry the command"),
+               QMessageBox::Ok, QMessageBox::NoButton);
+            return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   normalCopy
 //---------------------------------------------------------
 
 void ScoreView::normalCopy()
       {
-      if (!_score->selection().canCopy()) {
-            qDebug("cannot copy selection: intersects a tuplet");
-            QMessageBox::information(0, "MuseScore",
-                  tr("Please select the complete tuplet and retry the copy operation"),
-                  QMessageBox::Ok, QMessageBox::NoButton);
+      if (!checkCopyOrCut())
             return;
-            }
       QString mimeType = _score->selection().mimeType();
       if (!mimeType.isEmpty()) {
             QMimeData* mimeData = new QMimeData;
@@ -2449,13 +2459,8 @@ void ScoreView::normalCopy()
 
 void ScoreView::normalCut()
       {
-      if (!_score->selection().canCopy()) {
-            qDebug("cannot copy selection: intersects a tuplet");
-            QMessageBox::information(0, "MuseScore",
-                  tr("Please select the complete tuplet and retry the cut operation"),
-                  QMessageBox::Ok, QMessageBox::NoButton);
+      if (!checkCopyOrCut())
             return;
-            }
       _score->startCmd();
       normalCopy();
       _score->cmdDeleteSelection();
