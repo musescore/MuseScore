@@ -119,9 +119,11 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       qreal maxUpMag = 0.0;
       qreal maxDownMag = 0.0;
 
-      // dots can affect layout of notes as well as vice versa
+      // dots and hooks can affect layout of notes as well as vice versa
       int upDots = 0;
       int downDots = 0;
+      bool upHooks = false;
+      bool downHooks = false;
 
       for (int track = startTrack; track < endTrack; ++track) {
             Element* e = segment->element(track);
@@ -138,12 +140,16 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         upStemNotes.append(chord->notes());
                         upDots = qMax(upDots, chord->dots());
                         maxUpMag = qMax(maxUpMag, chord->mag());
+                        if (!upHooks)
+                              upHooks = chord->hook();
                         }
                   else {
                         ++downVoices;
                         downStemNotes.append(chord->notes());
                         downDots = qMax(downDots, chord->dots());
                         maxDownMag = qMax(maxDownMag, chord->mag());
+                        if (!downHooks)
+                              downHooks = chord->hook();
                         }
                   }
             }
@@ -385,11 +391,16 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         upOffset = maxDownWidth + 0.3 * sp;
                   else if (conflictSecondUpHigher)
                         upOffset = maxDownWidth + 0.2 * sp;
+                  else if ((downHooks && !upHooks) && !(upDots && !downDots))
+                        downOffset = maxUpWidth + 0.3 * sp;
                   else if (conflictSecondDownHigher) {
                         if (downDots && !upDots)
                               downOffset = maxUpWidth + 0.3 * sp;
-                        else
+                        else {
                               upOffset = maxDownWidth - 0.2 * sp;
+                              if (downHooks)
+                                    upOffset += 0.3 * sp;
+                              }
                         }
                   else {
                         // no direct conflict, so parts can overlap (downstem on left)
@@ -402,6 +413,12 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         else
                               downDots = 0; // no need to adjust for dots in this case
                         upOffset = qMax(clearLeft, clearRight);
+                        if (downHooks) {
+                              // we will need more space to avoid collision with hook
+                              // but we won't need as much dot adjustment
+                              upOffset = qMax(upOffset, maxDownWidth + 0.1 * sp);
+                              dotAdjustThreshold = maxUpWidth - 0.3 * sp;
+                              }
                         // if downstem chord is small, don't center
                         // and we might not need as much dot adjustment either
                         if (centerDown > 0.0) {
