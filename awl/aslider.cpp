@@ -40,6 +40,7 @@ AbstractSlider::AbstractSlider(QWidget* parent)
       _invert     = false;
       _scaleWidth = 4;
       _log        = false;
+      _useActualValue = false;
       setFocusPolicy(Qt::StrongFocus);
       }
 
@@ -203,6 +204,21 @@ double AbstractSlider::value() const
       }
 
 //---------------------------------------------------------
+//   userValue (between 0 and 100)
+//---------------------------------------------------------
+
+QString AbstractSlider::userValue() const
+      {
+      double result;
+      if (_useActualValue)
+            result = value();
+      else
+            result = (_value - minValue())/ ((maxValue() - minValue())/100);
+
+      return QString::number(result, 'f', 2);
+      }
+
+//---------------------------------------------------------
 //   minLogValue
 //---------------------------------------------------------
 
@@ -278,7 +294,7 @@ QString AccessibleAbstractSlider::text(QAccessible::Text t) const
             case QAccessible::Name:
                   return slider->accessibleName();
             case QAccessible::Value:
-                  return QString::number(slider->value());
+                  return slider->userValue();
             case QAccessible::Description:
                   return slider->accessibleDescription();
             default:
@@ -287,9 +303,9 @@ QString AccessibleAbstractSlider::text(QAccessible::Text t) const
       return QString();
       }
 
-void AccessibleAbstractSlider::valueChanged(double value, int)
+void AccessibleAbstractSlider::valueChanged(double, int)
       {
-      QAccessibleValueChangeEvent ev(slider, value);
+      QAccessibleValueChangeEvent ev(slider, slider->userValue());
       QAccessible::updateAccessibility(&ev);
       }
 
