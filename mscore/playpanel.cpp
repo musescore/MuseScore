@@ -63,6 +63,7 @@ PlayPanel::PlayPanel(QWidget* parent)
 
       tempoSlider->setDclickValue1(100.0);
       tempoSlider->setDclickValue2(100.0);
+      tempoSlider->setUseActualValue(true);
 
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
