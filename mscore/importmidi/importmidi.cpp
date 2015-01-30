@@ -61,6 +61,7 @@
 #include "importmidi_operations.h"
 #include "importmidi_key.h"
 #include "importmidi_instrument.h"
+#include "importmidi_chordname.h"
 
 #include <set>
 
@@ -347,7 +348,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
                   cs->setMetaTag("copyright", QString((const char*)(mm.edata())));
                   break;
             case META_TIME_SIGNATURE:
-                  break;                  // added earlier
+                  break;                        // added earlier
             case META_PORT_CHANGE:
                   // TODO
                   break;
@@ -577,8 +578,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
                   }
             startChordTick += len;
             }
-      fillGapWithRests(score, voice, startChordTick,
-                       nextChordTick - startChordTick, track);
+      fillGapWithRests(score, voice, startChordTick, nextChordTick - startChordTick, track);
       }
 
 void MTrack::createKeys(Key k)
@@ -1096,6 +1096,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       MidiLyrics::setLyricsToScore(trackList);
       MidiTempo::setTempo(tracks, score);
       MidiKey::setMainKeySig(trackList);
+      MidiChordName::setChordNames(trackList);
       }
 
 void loadMidiData(MidiFile &mf)
