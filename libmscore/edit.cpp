@@ -2517,6 +2517,7 @@ void Score::checkSpanner(int startTick, int endTick)
                         if (s->tick2() > lastTick)
                               s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());
                         }
+                  s->computeEndElement();
                   }
             }
       for (auto s : sl)       // actually remove scheduled spanners

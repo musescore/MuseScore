@@ -106,7 +106,7 @@ void HairpinSegment::layout()
 
 void HairpinSegment::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       {
-      *defaultGrip = Grip(2);
+      *defaultGrip = Grip::END;
 
       QPointF pp(pagePos());
       qreal _spatium = spatium();
