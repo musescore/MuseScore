@@ -90,7 +90,7 @@
       <item row="1" column="1">
        <widget class="QSpinBox" name="endTick">
         <property name="maximum">
-         <number>99999</number>
+         <number>16000000</number>
         </property>
        </widget>
       </item>
