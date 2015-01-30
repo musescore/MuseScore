@@ -1,6 +1,6 @@
 /*
   Copyright (C) 2003-2008 Fons Adriaensen <fons@kokkinizita.net>
-    
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -54,7 +54,7 @@ public:
     Rngen& operator=(const Rngen&); // disabled, not to be used
 
 private:
-  
+
     uint32_t  _a [55];
     int       _i;
     bool      _md;

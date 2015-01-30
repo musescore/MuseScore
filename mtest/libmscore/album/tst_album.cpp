@@ -49,17 +49,17 @@ void TestAlbum::album01()
       {
       Album* album = new Album();
       album->setName("test");
-      
+
       AlbumItem* item = new AlbumItem;
       item->path = root + "/" + DIR + "album01-01.mscx";
       album->append(item);
-      
+
       item = new AlbumItem;
       item->path = root + "/" + DIR + "album01-02.mscx";
       album->append(item);
-      
+
       album->createScore("album01.mscx");
-      
+
       QVERIFY(compareFiles("album01.mscx", DIR + "album01-ref.mscx"));
       }
 

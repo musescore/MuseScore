@@ -457,7 +457,7 @@ void MuseScore::updateNewWizard()
       if (newWizard != 0)
             newWizard = new NewWizard(this);
       }
-    
+
 //---------------------------------------------------------
 //   newFile
 //    create new score

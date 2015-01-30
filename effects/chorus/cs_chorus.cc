@@ -1,6 +1,6 @@
 /*
   Copyright (C) 2003-2008 Fons Adriaensen <fons@kokkinizita.net>
-    
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -26,7 +26,7 @@
 Ladspa_CS_chorus1::Ladspa_CS_chorus1 (unsigned long fsam) : LadspaPlugin (fsam)
 {
     _size = (unsigned long)(ceil (30 * fsam / 1000.0)) + 64;
-    _size = (_size >> 6) << 6; 
+    _size = (_size >> 6) << 6;
     _line = new float [_size + 1];
 }
 
@@ -64,9 +64,9 @@ void Ladspa_CS_chorus1::runproc (unsigned long len, bool add)
     int   j;
     float *p0, *p1;
     float t, x, y;
-    p0 = _port [INPUT];    
-    p1 = _port [OUTPUT];    
-    
+    p0 = _port [INPUT];
+    p1 = _port [OUTPUT];
+
     wi = _wi;
     do
     {
@@ -75,14 +75,14 @@ void Ladspa_CS_chorus1::runproc (unsigned long len, bool add)
 	    _gi = 64;
 
             t = 402.12f * _port [FREQ1][0] / _fsam;
-            x = _x1 - t * _y1; 
+            x = _x1 - t * _y1;
             y = _y1 + t * _x1;
             t = sqrtf (x * x + y * y);
             _x1 = x / t;
             _y1 = y / t;
 
             t = 402.12f * _port [FREQ2][0] / _fsam;
-            x = _x2 - t * _y2; 
+            x = _x2 - t * _y2;
             y = _y2 + t * _x2;
             t = sqrtf (x * x + y * y);
             _x2 = x / t;
@@ -90,7 +90,7 @@ void Ladspa_CS_chorus1::runproc (unsigned long len, bool add)
 
             x = _port [TMOD1][0] * _x1 + _port [TMOD2][0] * _x2;
             y = _port [TMOD1][0] * _y1 + _port [TMOD2][0] * _y2;
-            
+
             _dr [0] = x;
             _dr [1] = -0.500f * x + 0.866f * y;
             _dr [2] = -0.500f * x - 0.866f * y;
@@ -108,7 +108,7 @@ void Ladspa_CS_chorus1::runproc (unsigned long len, bool add)
         k = (_gi < len) ? _gi : len;
         _gi -= k;
         len -= k;
-   
+
         while (k--)
 	{
             _line [++wi] = *p0++;
@@ -140,7 +140,7 @@ void Ladspa_CS_chorus1::runproc (unsigned long len, bool add)
 Ladspa_CS_chorus2::Ladspa_CS_chorus2 (unsigned long fsam) : LadspaPlugin (fsam)
 {
     _size = (unsigned long)(ceil (30 * fsam / 500.0)) + 192;
-    _size = (_size >> 6) << 6; 
+    _size = (_size >> 6) << 6;
     _line = new float [_size + 1];
 }
 
@@ -180,9 +180,9 @@ void Ladspa_CS_chorus2::runproc (unsigned long len, bool add)
     float *p0, *p1;
     float a, b, t, x, y;
 
-    p0 = _port [INPUT];    
-    p1 = _port [OUTPUT];    
-    
+    p0 = _port [INPUT];
+    p1 = _port [OUTPUT];
+
     wi = _wi;
     a = _a;
     b = _b;
@@ -193,14 +193,14 @@ void Ladspa_CS_chorus2::runproc (unsigned long len, bool add)
 	    _gi = 64;
 
             t = 402.12f * _port [FREQ1][0] / _fsam;
-            x = _x1 - t * _y1; 
+            x = _x1 - t * _y1;
             y = _y1 + t * _x1;
             t = sqrtf (x * x + y * y);
             _x1 = x / t;
             _y1 = y / t;
 
             t = 402.12f * _port [FREQ2][0] / _fsam;
-            x = _x2 - t * _y2; 
+            x = _x2 - t * _y2;
             y = _y2 + t * _x2;
             t = sqrtf (x * x + y * y);
             _x2 = x / t;
@@ -208,7 +208,7 @@ void Ladspa_CS_chorus2::runproc (unsigned long len, bool add)
 
             x = _port [TMOD1][0] * _x1 + _port [TMOD2][0] * _x2;
             y = _port [TMOD1][0] * _y1 + _port [TMOD2][0] * _y2;
-            
+
             _dr [0] = x;
             _dr [1] = -0.500f * x + 0.866f * y;
             _dr [2] = -0.500f * x - 0.866f * y;
@@ -226,7 +226,7 @@ void Ladspa_CS_chorus2::runproc (unsigned long len, bool add)
         k = (_gi < len) ? _gi : len;
         _gi -= k;
         len -= k;
-       
+
         while (k--)
 	{
             x = *p0++ + 0.52f * a - 0.25f * b;
@@ -268,7 +268,7 @@ void Ladspa_CS_chorus2::runproc (unsigned long len, bool add)
 Ladspa_CS_chorus3::Ladspa_CS_chorus3 (unsigned long fsam) : LadspaPlugin (fsam)
 {
     _size = (unsigned long)(ceil (30 * fsam / 500.0)) + 192;
-    _size = (_size >> 6) << 6; 
+    _size = (_size >> 6) << 6;
     _line = new float [_size + 1];
 }
 
@@ -308,11 +308,11 @@ void Ladspa_CS_chorus3::runproc (unsigned long len, bool add)
     float *p0, *p1, *p2, *p3;
     float a, b, t, x, y;
 
-    p0 = _port [INPUT];    
-    p1 = _port [OUTPUT1];    
-    p2 = _port [OUTPUT2];    
-    p3 = _port [OUTPUT3];    
-    
+    p0 = _port [INPUT];
+    p1 = _port [OUTPUT1];
+    p2 = _port [OUTPUT2];
+    p3 = _port [OUTPUT3];
+
     wi = _wi;
     a = _a;
     b = _b;
@@ -323,14 +323,14 @@ void Ladspa_CS_chorus3::runproc (unsigned long len, bool add)
 	    _gi = 64;
 
             t = 402.12f * _port [FREQ1][0] / _fsam;
-            x = _x1 - t * _y1; 
+            x = _x1 - t * _y1;
             y = _y1 + t * _x1;
             t = sqrtf (x * x + y * y);
             _x1 = x / t;
             _y1 = y / t;
 
             t = 402.12f * _port [FREQ2][0] / _fsam;
-            x = _x2 - t * _y2; 
+            x = _x2 - t * _y2;
             y = _y2 + t * _x2;
             t = sqrtf (x * x + y * y);
             _x2 = x / t;
@@ -338,7 +338,7 @@ void Ladspa_CS_chorus3::runproc (unsigned long len, bool add)
 
             x = _port [TMOD1][0] * _x1 + _port [TMOD2][0] * _x2;
             y = _port [TMOD1][0] * _y1 + _port [TMOD2][0] * _y2;
-            
+
             _dr [0] = x;
             _dr [1] = -0.500f * x + 0.866f * y;
             _dr [2] = -0.500f * x - 0.866f * y;
@@ -356,7 +356,7 @@ void Ladspa_CS_chorus3::runproc (unsigned long len, bool add)
         k = (_gi < len) ? _gi : len;
         _gi -= k;
         len -= k;
-       
+
         while (k--)
 	{
             x = *p0++ + 0.52f * a - 0.25f * b;

@@ -27,7 +27,7 @@ I hereby release Fluid under the MIT license, as described in COPYING.
 
 Thanks to Toby Smithe for helping to get Fluid included in Ubuntu.
 
-This package, of course, is the original Release 3 of Fluid.  
+This package, of course, is the original Release 3 of Fluid.
 
 
 Fluid was constructed in part from samples found in the public domain that I
@@ -41,12 +41,12 @@ Chris Gillman
 Alex Taubr
 Chris Prola
 Andrew Klenk
-Winfried Hubbe 
+Winfried Hubbe
 Dylan
 Tim
 Gort
-Uros Katic 
-Ethan Winer (http://www.ethanwiner.com) 
+Uros Katic
+Ethan Winer (http://www.ethanwiner.com)
 
 
 It's obviously been a few years since the project, but its nice to see that
@@ -59,7 +59,7 @@ Who knows, maybe I'll kick start this project again? ;)
 COPYING
 ---
 
-Mono version:  Copyright (c) 2014 Michael Cowgill 
+Mono version:  Copyright (c) 2014 Michael Cowgill
 Copyright (c) 2000-2002, 2008 Frank Wen <getfrank@gmail.com>
 
 Permission is hereby granted, free of charge, to any person

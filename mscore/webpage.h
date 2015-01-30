@@ -91,7 +91,7 @@ class MyWebView: public QWebView
 #ifndef QT_NO_OPENSSL
       void ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors);
 #endif
-     
+
    public:
       MyWebView(QWidget *parent = 0);
       ~MyWebView();

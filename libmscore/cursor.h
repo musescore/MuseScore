@@ -36,7 +36,7 @@ class Measure;
 //   @P measure   Ms::Measure*  current measure, read only
 //   @P tick      int           midi tick position, read only
 //   @P time      double        time at tick position, read only
-//   @P keySignature int        key signature of current staff at tick pos. (read only) 
+//   @P keySignature int        key signature of current staff at tick pos. (read only)
 //   @P score     Ms::Score*    associated score
 //---------------------------------------------------------
 

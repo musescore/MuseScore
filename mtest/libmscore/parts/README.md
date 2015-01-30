@@ -12,7 +12,7 @@ _{1}_ which element is tested
 
 {2} action - which action is tested for the given element
 
-* _empty string_ =  no parts created 
+* _empty string_ =  no parts created
 * `parts` == parts created
 * _actions for elements_ == (add, uadd, uradd, del, udel, urdel) for elements
 * _actions for all_ == ()
