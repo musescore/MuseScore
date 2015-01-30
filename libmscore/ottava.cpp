@@ -230,7 +230,7 @@ void Ottava::endEdit()
             Staff* s = staff();
             s->updateOttava();
             score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
-            score()->setPlaylistDirty(true);
+            score()->setPlaylistDirty();
             }
       TextLine::endEdit();
       }

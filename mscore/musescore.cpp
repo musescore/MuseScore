@@ -3238,7 +3238,6 @@ bool MuseScore::restoreSession(bool always)
                         else if (tag == "Score") {
                               QString name;
                               bool created = false;
-                              bool dirty = false;
                               while (e.readNextStartElement()) {
                                     const QStringRef& tag(e.name());
                                     if (tag == "name")
@@ -3246,7 +3245,7 @@ bool MuseScore::restoreSession(bool always)
                                     else if (tag == "created")
                                           created = e.readInt();
                                     else if (tag == "dirty")
-                                          dirty = e.readInt();
+                                          /*int dirty =*/ e.readInt();
                                     else if (tag == "path") {
                                           Score* score = readScore(e.readElementText());
                                           if (score) {
@@ -3254,11 +3253,9 @@ bool MuseScore::restoreSession(bool always)
                                                       score->setName(name);
                                                 if (cleanExit) {
                                                       // override if last session did a clean exit
-                                                      dirty = false;
                                                       created = false;
                                                       }
                                                 appendScore(score);
-                                                score->setDirty(dirty);
                                                 score->setCreated(created);
                                                 }
                                           }
@@ -3579,7 +3576,6 @@ void MuseScore::networkFinished(QNetworkReply* reply)
             return;
             }
       score->setCreated(true);
-      score->setDirty(true);
       setCurrentScoreView(appendScore(score));
       }
 
@@ -3827,7 +3823,6 @@ void MuseScore::endCmd()
             setPos(cs->inputState().tick());
             updateInputState(cs);
             updateUndoRedo();
-            cs->setDirty(!cs->undo()->isClean());
             dirtyChanged(cs);
             Element* e = cs->selection().element();
             if (e && cs->playNote()) {

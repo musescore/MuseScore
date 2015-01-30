@@ -364,7 +364,7 @@ class Score : public QObject {
       bool _printing;   ///< True if we are drawing to a printer
       bool _playlistDirty;
       bool _autosaveDirty;
-      bool _dirty;      ///< Score data was modified.
+//      bool _dirty;      ///< Score data was modified.
       bool _saved;      ///< True if project was already saved; only on first
                         ///< save a backup file will be created, subsequent
                         ///< saves will not overwrite the backup file.
@@ -486,7 +486,7 @@ class Score : public QObject {
       ~Score();
 
       Score* clone();
-      void setDirty(bool val);
+//      void setDirty(bool val);
 
       void rebuildBspTree();
       bool noStaves() const         { return _staves.empty(); }
@@ -710,8 +710,8 @@ class Score : public QObject {
       void setPrinting(bool val)     { _printing = val;      }
       void setAutosaveDirty(bool v)  { _autosaveDirty = v;    }
       bool autosaveDirty() const     { return _autosaveDirty; }
-      bool playlistDirty()            { return _playlistDirty; }
-      void setPlaylistDirty(bool val) { _playlistDirty = val; }
+      bool playlistDirty()           { return _playlistDirty; }
+      void setPlaylistDirty()        { _playlistDirty = true; }
 
       void spell();
       void spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment);

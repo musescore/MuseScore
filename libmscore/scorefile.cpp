@@ -359,7 +359,6 @@ bool Score::saveFile()
                   return false;
                   }
             undo()->setClean();
-            setDirty(false);
             info.refresh();
             update();
             return true;
@@ -438,7 +437,6 @@ bool Score::saveFile()
          | QFile::ReadGroup | QFile::ReadOther);
 
       undo()->setClean();
-      setDirty(false);
       setSaved(true);
       info.refresh();
       update();
