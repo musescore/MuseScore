@@ -248,6 +248,7 @@ void ScoreView::lyricsMinus()
                         oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::MIDDLE));
                         break;
                   }
+            oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
             }
 
       if (newLyrics)
@@ -413,33 +414,8 @@ void ScoreView::lyricsReturn()
 void ScoreView::lyricsEndEdit()
       {
       Lyrics* lyrics = static_cast<Lyrics*>(editObject);
-      int endTick    = lyrics->segment()->tick();
-
-      // search previous lyric:
-      int verse = lyrics->no();
-      int track = lyrics->track();
-
-      // search previous lyric
-      Lyrics* oldLyrics = 0;
-      Segment* segment  = lyrics->segment();
-      while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(track);
-            if (nll) {
-                  oldLyrics = nll->value(verse);
-                  if (oldLyrics)
-                        break;
-                  }
-            segment = segment->prev1(Segment::Type::ChordRest);
-            }
-
       if (lyrics->isEmpty())
             lyrics->parent()->remove(lyrics);
-      else {
-            if (oldLyrics && oldLyrics->syllabic() == Lyrics::Syllabic::END) {
-                  if (oldLyrics->endTick() >= endTick)
-                        oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
-                  }
-            }
       }
 
 }
