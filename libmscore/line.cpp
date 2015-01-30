@@ -515,7 +515,9 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               // melisma line
                               // it is possible CR won't be in correct track
                               // prefer element in current track if available
-                              if (cr->track() != track()) {
+                              if (!cr)
+                                    qDebug("no end for lyricsline segment - start %d, ticks %d", tick(), ticks());
+                              else if (cr->track() != track()) {
                                     Element* e = cr->segment()->element(track());
                                     if (e)
                                           cr = static_cast<ChordRest*>(e);
