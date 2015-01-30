@@ -205,7 +205,7 @@ void createExcerpt(Excerpt* excerpt)
       //
       // layout score
       //
-      score->setPlaylistDirty(true);
+      score->setPlaylistDirty();
       score->rebuildMidiMapping();
       score->updateChannel();
 

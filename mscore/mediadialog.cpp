@@ -101,7 +101,6 @@ void MediaDialog::addScanPressed()
             return;
             }
       score->setOmr(omr);
-      score->setDirty(true);
       mscore->currentScoreView()->showOmr(true);
       }
 
@@ -113,7 +112,6 @@ void MediaDialog::removeScanPressed()
       {
       mscore->currentScoreView()->showOmr(false);
       score->removeOmr();
-      score->setDirty(true);
       scanFile->setText(QString());
       addScan->setEnabled(true);
       removeScan->setEnabled(false);
@@ -138,7 +136,6 @@ void MediaDialog::addAudioPressed()
       audio->setPath(path);
       audio->setData(ba);
       score->setAudio(audio);
-      score->setDirty(true);
       mscore->updatePlayMode();
 
 #if 0
@@ -211,7 +208,6 @@ void MediaDialog::addAudioPressed()
 void MediaDialog::removeAudioPressed()
       {
       score->removeAudio();
-      score->setDirty(true);
       audioFile->setText(QString());
       addAudio->setEnabled(true);
       removeAudio->setEnabled(false);

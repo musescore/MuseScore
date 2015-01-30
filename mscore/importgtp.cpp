@@ -2371,7 +2371,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             //
             // layout score
             //
-            pscore->setPlaylistDirty(true);
+            pscore->setPlaylistDirty();
             pscore->rebuildMidiMapping();
             pscore->updateChannel();
             pscore->updateNotes();

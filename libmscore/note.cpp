@@ -312,7 +312,7 @@ void Note::setPitch(int val)
       Q_ASSERT(val >= 0 && val <= 127);
       if (_pitch != val) {
             _pitch = val;
-            score()->setPlaylistDirty(true);
+            score()->setPlaylistDirty();
             }
       }
 
@@ -2229,7 +2229,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   setPitch(v.toInt());
                   if (m)
                         m->cmdUpdateNotes(chord()->staffIdx());
-                  score()->setPlaylistDirty(true);
+                  score()->setPlaylistDirty();
                   break;
             case P_ID::TPC1:
                   _tpc[0] = v.toInt();
@@ -2258,11 +2258,11 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::VELO_OFFSET:
                   setVeloOffset(v.toInt());
-                  score()->setPlaylistDirty(true);
+                  score()->setPlaylistDirty();
                   break;
             case P_ID::TUNING:
                   setTuning(v.toDouble());
-                  score()->setPlaylistDirty(true);
+                  score()->setPlaylistDirty();
                   break;
             case P_ID::FRET:
                   setFret(v.toInt());
@@ -2278,7 +2278,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::VELO_TYPE:
                   setVeloType(ValueType(v.toInt()));
-                  score()->setPlaylistDirty(true);
+                  score()->setPlaylistDirty();
                   break;
             case P_ID::VISIBLE: {                     // P_ID::VISIBLE requires reflecting property on dots
                   setVisible(v.toBool());
@@ -2291,7 +2291,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   }
             case P_ID::PLAY:
                   setPlay(v.toBool());
-                  score()->setPlaylistDirty(true);
+                  score()->setPlaylistDirty();
                   break;
             case P_ID::FIXED:
                   setFixed(v.toBool());
