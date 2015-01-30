@@ -434,7 +434,7 @@ void StaffTextProperties::saveValues()
             }
       staffText->score()->updateChannel();
       staffText->score()->updateSwing();
-      staffText->score()->setPlaylistDirty(true);
+      staffText->score()->setPlaylistDirty();
       }
 }
 

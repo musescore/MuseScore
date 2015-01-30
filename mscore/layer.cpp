@@ -207,7 +207,6 @@ void LayerManager:: accept()
                   l.tags |= 1;
             layer.append(l);
             }
-      score->setDirty(true);
       score->setLayoutAll(true);
       score->endCmd();
       if (enableExperimental)

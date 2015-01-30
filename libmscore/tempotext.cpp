@@ -165,7 +165,7 @@ void TempoText::textChanged()
                               _tempo = qreal(sl[1].toInt()) * tp[i].f;
                               if(segment())
                                     score()->setTempo(segment(), _tempo);
-                              score()->setPlaylistDirty(true);
+                              score()->setPlaylistDirty();
                               }
                         break;
                         }

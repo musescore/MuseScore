@@ -2627,7 +2627,7 @@ void ChangeStaff::flip()
             }
       staff->score()->setLayoutAll(true);
       staff->score()->rebuildMidiMapping();
-      staff->score()->setPlaylistDirty(true);
+      staff->score()->setPlaylistDirty();
 
       score->scanElements(0, notifyTimeSigs);
       }
@@ -2676,7 +2676,7 @@ void ChangePart::flip()
       Score* score = part->score();
       score->rebuildMidiMapping();
       score->setInstrumentsChanged(true);
-      score->setPlaylistDirty(true);
+      score->setPlaylistDirty();
 
 //      Interval oint = oi.transpose();
 //      Interval nint = part->instr()->transpose();
@@ -3711,7 +3711,7 @@ void InsertTime::undo()
 
 void ChangeNoteEvent::flip()
       {
-      note->score()->setPlaylistDirty(true);
+      note->score()->setPlaylistDirty();
       NoteEvent e = *oldEvent;
       *oldEvent   = newEvent;
       newEvent    = e;
