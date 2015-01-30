@@ -457,7 +457,7 @@ void MuseScore::updateNewWizard()
       if (newWizard != 0)
             newWizard = new NewWizard(this);
       }
-    
+
 //---------------------------------------------------------
 //   newFile
 //    create new score
@@ -2070,7 +2070,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
 
       score->setLayoutAll(true);
       for (Score* s : score->scoreList()) {
-            s->setPlaylistDirty(true);
+            s->setPlaylistDirty();
             s->rebuildMidiMapping();
             s->updateChannel();
             s->updateNotes();

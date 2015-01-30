@@ -232,7 +232,6 @@ void TextStyleDialog::newClicked()
       textNames->addItem(s);
       textNames->item(count)->setData(Qt::UserRole, listIdx);
       textNames->setCurrentRow(count);
-      cs->setDirty(true);
       mscore->endCmd();
       }
 }

@@ -307,9 +307,8 @@ void Score::init()
       _showVBox               = true;
 
       _printing               = false;
-      _playlistDirty          = false;
-      _autosaveDirty          = false;
-      _dirty                  = false;
+      _playlistDirty          = true;
+      _autosaveDirty          = true;
       _saved                  = false;
       _pos[int(POS::CURRENT)] = 0;
       _pos[int(POS::LEFT)]    = 0;
@@ -361,7 +360,6 @@ Score::Score(const MStyle* s)
 //    _links
 //    _staffTypes
 //    _metaTags
-//    _dirty
 //
 
 Score::Score(Score* parent)
@@ -737,29 +735,12 @@ void Score::setShowPageborders(bool v)
       }
 
 //---------------------------------------------------------
-//   setDirty
-//---------------------------------------------------------
-
-void Score::setDirty(bool val)
-      {
-      Score* s = rootScore();
-      if (s->dirty() != val) {
-            s->_dirty = val;
-            s->_playlistDirty = true;
-            }
-      if (s->dirty()) {
-            s->_playlistDirty = true;
-            s->_autosaveDirty = true;
-            }
-      }
-
-//---------------------------------------------------------
 //   dirty
 //---------------------------------------------------------
 
 bool Score::dirty() const
       {
-      return rootScore()->_dirty;
+      return !undo()->isClean();
       }
 
 //---------------------------------------------------------
@@ -1456,7 +1437,7 @@ void Score::addElement(Element* element)
                   break;
 
             case Element::Type::CHORD:
-                  setPlaylistDirty(true);
+                  setPlaylistDirty();
                   // create playlist does not work here bc. tremolos may not be complete
                   // createPlayEvents(static_cast<Chord*>(element));
                   break;
@@ -2067,7 +2048,6 @@ Score* Score::clone()
 void Score::setSynthesizerState(const SynthesizerState& s)
       {
       // TODO: make undoable
-      _dirty = true;
       _synthesizerState = s;
       }
 

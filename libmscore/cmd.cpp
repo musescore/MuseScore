@@ -137,10 +137,13 @@ void Score::endCmd(bool rollback)
       if (rollback)
             undo()->current()->unwind();
       bool noUndo = (undo()->current()->childCount() <= 1);       // nothing to undo?
-      if (!noUndo)
-            setDirty(true);
       undo()->endMacro(noUndo);
       end();      // DEBUG
+
+      if (dirty()) {
+            rootScore()->_playlistDirty = true;  // TODO: flag individual operations
+            rootScore()->_autosaveDirty = true;
+            }
       }
 
 //---------------------------------------------------------
