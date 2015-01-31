@@ -110,13 +110,18 @@ QString readChordName(const MidiEvent &e)
       if (e.len() >= 5)
             chordName += readChordType(data[4]);
 
-      QString bassChord;
-      if (e.len() >= 6)
-            bassChord += readChordRoot(data[5]);
-      if (e.len() >= 7)
-            bassChord += readChordType(data[6]);
-      if (!bassChord.isEmpty())
-            chordName += "/" + bassChord;
+      if (e.len() >= 6) {
+            const QString chordRoot = readChordRoot(data[5]);
+            if (!chordRoot.isEmpty()) {
+                  QString chordType;
+                  if (e.len() >= 7)
+                        chordType = readChordType(data[6]);
+                  if (chordRoot + chordType == chordName)
+                        chordName += "/" + chordRoot;
+                  else
+                        chordName += "/" + chordRoot + chordType;
+                  }
+            }
 
       return chordName;
       }
