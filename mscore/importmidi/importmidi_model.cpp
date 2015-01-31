@@ -681,7 +681,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                                           "MIDI import operations", "Show\nchord names"); }
                   bool isEditable(int trackIndex) const override
                         {
-                        return _opers.hasChordNames.value(trackIndex);
+                        return trackIndex == -1 || _opers.hasChordNames.value(trackIndex);
                         }
                   QVariant value(int trackIndex) const override
                         {
