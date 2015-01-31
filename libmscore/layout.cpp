@@ -2511,9 +2511,13 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                                     clef->setSmall(small);
                                     m->setDirty();
                                     }
+#if 0
                               //
                               // if measure is not the first in the system, the clef at
                               // measure start has to be moved to the end of the previous measure
+                              // TODO: DEBUG - is this code needed?
+                              // clefs should now be placed in correct measure when adding them (cmdInsertClef)
+                              // and it is good to support clefs at beginning of measures, for use in cues
                               //
                               if (s->firstMeasure() != m && seg->tick() == m->tick()) {
                                     undoRemoveElement(el);
@@ -2525,6 +2529,7 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                                     m->setDirty();
                                     pm->setDirty();
                                     }
+#endif
                               }
                         }
                   }

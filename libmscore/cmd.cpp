@@ -2433,20 +2433,37 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
             Score* score  = cr->score();
 
             //
-            // create a clef segment before cr if it does not exist
+            // create a clef segment before cr if needed
             //
             Segment* s  = cr->segment();
             Segment* cs = s->prev();
             int tick    = s->tick();
-            if (!cs || cs->segmentType() != Segment::Type::Clef) {
+            bool createSegment = true;
+#if 1
+            // re-use a preceding clef segment containing no clef or a non-generated one,
+            // but still allow addition of a "mid-measure" change even at the start of a measure/system
+            // this is useful for cues, for example
+            if (cs && cs->segmentType() == Segment::Type::Clef) {
+                  Element* e = cs->element(cr->staffIdx() * VOICES);
+                  if (!e || !e->generated())
+                        createSegment = false;
+                  }
+#else
+            // automatically convert a clef added on first chordrest of measure
+            // into a "regular" clef change at end of previous bar
+            // this defeats the ability to have a "mid-measure" clef change at the start of a bar for cues
+            Measure* m = s->measure();
+            if (s == m->first(Segment::Type::ChordRest)) {
+                  if (m->prevMeasure())
+                        m = m->prevMeasure();
+                  cs = m->undoGetSegment(Segment::Type::Clef, tick);
+                  createSegment = false;
+                  }
+#endif
+            if (createSegment) {
                   cs = new Segment(cr->measure(), Segment::Type::Clef, tick);
                   cs->setNext(s);
                   score->undo(new AddElement(cs));
-                  }
-            else if (cs == cr->measure()->first() && cr->measure()->prevMeasure()) {
-                  // move to end of previous measure
-                  Measure* m = cr->measure()->prevMeasure();
-                  cs = m->undoGetSegment(Segment::Type::Clef, tick);
                   }
             Clef* c = static_cast<Clef*>(gclef ? gclef->linkedClone() : clef->clone());
             gclef = c;
