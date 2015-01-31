@@ -441,7 +441,40 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                             tie->setEndNote(nn);
                                                             }
                                                       else {
-                                                            qDebug("cloneStave: cannot find tie");
+                                                            qDebug("cloneStaves: cannot find tie");
+                                                            }
+                                                      }
+                                                // add back spanners (going back from end to start spanner element
+                                                // makes sure the 'other' spanner anchor element is already set up)
+                                                // 'on' is the old spanner end note and 'nn' is the new spanner end note
+                                                for (Spanner* oldSp : on->spannerBack()) {
+                                                      // determining the new spanner start element:
+                                                      Note* oldStart    = static_cast<Note*>(oldSp->startElement());
+                                                      Note* newStart    = nullptr;
+                                                      // determine the track offset from the spanner end to the spanner start
+                                                      int   newTrack    = nn->track() + (on->track() - oldStart->track());
+                                                      // look in notes linked to oldStart for a note with the same
+                                                      // score as new score and required track offset
+                                                      for (Element* newEl : oldStart->linkList())
+                                                            if (newEl->score() == score
+                                                                        && newEl->track() == newTrack) {
+                                                                  newStart = static_cast<Note*>(newEl);
+                                                                  break;
+                                                            }
+                                                      if (newStart != nullptr) {
+                                                            Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
+                                                            newSp->setScore(score);
+                                                            newSp->setParent(newStart);
+                                                            newSp->setStartElement(newStart);
+                                                            newSp->setEndElement(nn);
+                                                            newSp->setTick(newStart->chord()->tick());
+                                                            newSp->setTick2(nch->tick());
+                                                            newSp->setTrack(newTrack);
+                                                            newSp->setTrack2(nn->track());
+                                                            score->addElement(newSp);
+                                                            }
+                                                      else {
+                                                            qDebug("cloneStaves: cannot find spanner start note");
                                                             }
                                                       }
                                                 }
@@ -685,6 +718,39 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                       }
                                                 else {
                                                       qDebug("cloneStave: cannot find tie");
+                                                      }
+                                                }
+                                          // add back spanners (going back from end to start spanner element
+                                          // makes sure the 'other' spanner anchor element is already set up)
+                                          // 'on' is the old spanner end note and 'nn' is the new spanner end note
+                                          for (Spanner* oldSp : on->spannerBack()) {
+                                                // determining the new spanner start element:
+                                                Note* oldStart    = static_cast<Note*>(oldSp->startElement());
+                                                Note* newStart    = nullptr;
+                                                // determine the track offset from the spanner end to the spanner start
+                                                int   newTrack    = nn->track() + (on->track() - oldStart->track());
+                                                // look in notes linked to oldStart for a note with the same
+                                                // score as new score and required track offset
+                                                for (Element* newEl : oldStart->linkList())
+                                                      if (newEl->score() == score
+                                                                  && newEl->track() == newTrack) {
+                                                            newStart = static_cast<Note*>(newEl);
+                                                            break;
+                                                      }
+                                                if (newStart != nullptr) {
+                                                      Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
+                                                      newSp->setScore(score);
+                                                      newSp->setParent(newStart);
+                                                      newSp->setStartElement(newStart);
+                                                      newSp->setEndElement(nn);
+                                                      newSp->setTick(newStart->chord()->tick());
+                                                      newSp->setTick2(nch->tick());
+                                                      newSp->setTrack(newTrack);
+                                                      newSp->setTrack2(nn->track());
+                                                      score->addElement(newSp);
+                                                      }
+                                                else {
+                                                      qDebug("cloneStave: cannot find spanner start note");
                                                       }
                                                 }
                                           }
