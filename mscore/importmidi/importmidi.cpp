@@ -1025,8 +1025,12 @@ void convertMidi(Score *score, const MidiFile *mf)
       auto *sigmap = score->sigmap();
 
       auto tracks = createMTrackList(lastTick, sigmap, mf);
-      cleanUpMidiEvents(tracks);
+
       auto &opers = preferences.midiImportOperations;
+      if (opers.data()->processingsOfOpenedFile == 0)         // for newly opened MIDI file
+            MidiChordName::findChordNames(tracks);
+
+      cleanUpMidiEvents(tracks);
 
       if (opers.data()->processingsOfOpenedFile == 0) {       // for newly opened MIDI file
             opers.data()->trackCount = 0;

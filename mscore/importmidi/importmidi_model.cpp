@@ -44,7 +44,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         int trackCount,
                         const QString &midiFile,
                         bool hasHumanBeats,
-                        bool hasTempoText)
+                        bool hasTempoText,
+                        bool hasChordNames)
       {
       beginResetModel();
       _trackOpers = opers;
@@ -665,13 +666,6 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             }
 
       //-----------------------------------------------------------------------
-      bool hasChordNames = false;
-      for (int i = 0; i != _trackCount; ++i) {
-            if (_trackOpers.hasChordNames.value(i)) {
-                  hasChordNames = true;
-                  break;
-                  }
-            }
       if (hasChordNames) {
             struct ShowChordNames : Column {
                   ShowChordNames(MidiOperations::Opers &opers) : Column(opers)
@@ -679,21 +673,14 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         }
                   QString headerName() const override { return QCoreApplication::translate(
                                           "MIDI import operations", "Show\nchord names"); }
-                  bool isEditable(int trackIndex) const override
+                  bool isForAllTracksOnly() const override { return true; }
+                  QVariant value(int /*trackIndex*/) const override
                         {
-                        return trackIndex == -1 || _opers.hasChordNames.value(trackIndex);
+                        return _opers.showChordNames.value();
                         }
-                  QVariant value(int trackIndex) const override
+                  void setValue(const QVariant &value, int /*trackIndex*/) override
                         {
-                        return _opers.showChordNames.value(trackIndex);
-                        }
-                  void setValue(const QVariant &value, int trackIndex) override
-                        {
-                        _opers.showChordNames.setValue(trackIndex, value.toBool());
-                        }
-                  bool isVisible(int trackIndex) const override
-                        {
-                        return isEditable(trackIndex);
+                        _opers.showChordNames.setValue(value.toBool());
                         }
                   };
             _columns.push_back(std::unique_ptr<Column>(new ShowChordNames(_trackOpers)));
