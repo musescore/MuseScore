@@ -1175,7 +1175,8 @@ void TestImportMidi::testGuiTracksModel()
                   opers.data()->trackCount,
                   midiFileFullPath,
                   !opers.data()->humanBeatData.beatSet.empty(),
-                  opers.data()->hasTempoText);
+                  opers.data()->hasTempoText,
+                  !opers.data()->chordNames.empty());
 
       QVERIFY(model.trackCount() == 1);
 

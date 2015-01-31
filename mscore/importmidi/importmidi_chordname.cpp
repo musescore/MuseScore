@@ -126,59 +126,81 @@ QString readChordName(const MidiEvent &e)
       return chordName;
       }
 
-QString findChordName(const QList<MidiNote> &notes, const std::multimap<int, MidiEvent>& events)
+QString findChordName(
+            const QList<MidiNote> &notes,
+            const std::multimap<ReducedFraction, QString> &chordNames)
       {
       for (const MidiNote &note: notes) {
-            const auto range = events.equal_range(note.origOnTime.ticks());
+            const auto range = chordNames.equal_range(note.origOnTime);
             if (range.second == range.first)
                   continue;
+                        // found chord names (usually only one)
+            QString chordName;
             for (auto it = range.first; it != range.second; ++it) {
-                  const MidiEvent &e = it->second;
-                  const QString chordName = readChordName(e);
-                  if (!chordName.isEmpty())
-                        return chordName;
+                  if (it != range.first)
+                        chordName += "\n" + it->second;
+                  else
+                        chordName += it->second;
                   }
+            return chordName;
             }
       return "";
+      }
+
+void findChordNames(const std::multimap<int, MTrack> &tracks)
+      {
+      auto &data = *preferences.midiImportOperations.data();
+
+      for (const auto &track: tracks) {
+            for (const auto &event: track.second.mtrack->events()) {
+                  const MidiEvent &e = event.second;
+                  const QString chordName = readChordName(e);
+                  if (!chordName.isEmpty()) {
+                        const auto time = ReducedFraction::fromTicks(event.first);
+                        data.chordNames.insert({time, chordName});
+                        }
+                  }
+            }
       }
 
 // all notes should be already placed to the score
 
 void setChordNames(QList<MTrack> &tracks)
       {
-      auto &data = *preferences.midiImportOperations.data();
+      const auto &data = *preferences.midiImportOperations.data();
+      if (data.chordNames.empty() || !data.trackOpers.showChordNames.value())
+            return;
+
+            // chords here can have on time very different from the original one
+            // before quantization, so we look for original on times
+            // that are stored in notes
+      std::set<ReducedFraction> usedTimes;      // don't use one tick for chord name twice
 
       for (MTrack &track: tracks) {
-            if (data.processingsOfOpenedFile > 0
-                        && (!data.trackOpers.showChordNames.value(track.indexOfOperation)
-                            || !data.trackOpers.hasChordNames.value(track.indexOfOperation))) {
-                  continue;
-                  }
             for (const auto &chord: track.chords) {
+                  if (usedTimes.find(chord.first) != usedTimes.end())
+                        continue;
+
                   const MidiChord &c = chord.second;
-                  const QString chordName = findChordName(c.notes, track.mtrack->events());
+                  const QString chordName = findChordName(c.notes, data.chordNames);
 
                   if (chordName.isEmpty())
                         continue;
-                                    // to show chord names column in the MIDI import panel
-                  if (data.processingsOfOpenedFile == 0)
-                        data.trackOpers.hasChordNames.setValue(track.indexOfOperation, true);
 
-                  if (data.trackOpers.showChordNames.value(track.indexOfOperation)) {
-                        Staff *staff = track.staff;
-                        Score *score = staff->score();
-                        const ReducedFraction &onTime = chord.first;
+                  Staff *staff = track.staff;
+                  Score *score = staff->score();
+                  const ReducedFraction &onTime = chord.first;
+                  usedTimes.insert(onTime);
 
-                        Measure* measure = score->tick2measure(onTime.ticks());
-                        Segment* seg = measure->getSegment(Segment::Type::ChordRest,
-                                                           onTime.ticks());
-                        const int t = staff->idx() * VOICES;
+                  Measure* measure = score->tick2measure(onTime.ticks());
+                  Segment* seg = measure->getSegment(Segment::Type::ChordRest,
+                                                     onTime.ticks());
+                  const int t = staff->idx() * VOICES;
 
-                        Harmony* h = new Harmony(score);
-                        h->setHarmony(chordName);
-                        h->setTrack(t);
-                        seg->add(h);
-                        }
+                  Harmony* h = new Harmony(score);
+                  h->setHarmony(chordName);
+                  h->setTrack(t);
+                  seg->add(h);
                   }
             }
       }
