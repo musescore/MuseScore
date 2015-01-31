@@ -98,14 +98,15 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
 
       endEdit();
 
-      // search previous lyric
-      Lyrics* oldLyrics = 0;
+      // look for the lyrics we are moving from; may be the current lyrics or a previous one
+      // if we are skipping several chords with spaces
+      Lyrics* fromLyrics = 0;
       if (!back) {
             while (segment) {
                   const QList<Lyrics*>* nll = segment->lyricsList(track);
                   if (nll) {
-                        oldLyrics = nll->value(verse);
-                        if (oldLyrics)
+                        fromLyrics = nll->value(verse);
+                        if (fromLyrics)
                               break;
                         }
                   segment = segment->prev1(Segment::Type::ChordRest);
@@ -117,60 +118,60 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             qDebug("no next lyrics list: %s", nextSegment->element(track)->name());
             return;
             }
-      lyrics = ll->value(verse);
+      Lyrics* toLyrics = ll->value(verse);
 
       bool newLyrics = false;
-      if (!lyrics) {
-            lyrics = new Lyrics(_score);
-            lyrics->setTrack(track);
+      if (!toLyrics) {
+            toLyrics = new Lyrics(_score);
+            toLyrics->setTrack(track);
             ChordRest* cr = static_cast<ChordRest*>(nextSegment->element(track));
-            lyrics->setParent(cr);
-            lyrics->setNo(verse);
-            lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
+            toLyrics->setParent(cr);
+            toLyrics->setNo(verse);
+            toLyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             newLyrics = true;
             }
 
       _score->startCmd();
 
-      if (oldLyrics && !moveOnly) {
-            switch(lyrics->syllabic()) {
-                  // as we arrived at the destination lyrics by a [Space], it can be
-                  // the beginning of a multi-syllable, but cannot have syllabic dashes before
+      if (fromLyrics && !moveOnly) {
+            switch(toLyrics->syllabic()) {
+                  // as we arrived at toLyrics by a [Space], it can be the beginning
+                  // of a multi-syllable, but cannot have syllabic dashes before
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::BEGIN:
                         break;
                   case Lyrics::Syllabic::END:
-                        lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
+                        toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
                         break;
                   case Lyrics::Syllabic::MIDDLE:
-                        lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
+                        toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
                         break;
                   }
-            // as we moved away from the previous lyrics by a [Space], it can be
+            // as we moved away from fromLyrics by a [Space], it can be
             // the end of a multi-syllable, but cannot have syllabic dashes after
-            switch(oldLyrics->syllabic()) {
+            switch(fromLyrics->syllabic()) {
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::END:
                         break;
                   case Lyrics::Syllabic::BEGIN:
-                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
+                        fromLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
                         break;
                   case Lyrics::Syllabic::MIDDLE:
-                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
+                        fromLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
                         break;
                   }
             // for the same reason, it cannot have a melisma
-            oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
+            fromLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
             }
 
       if (newLyrics)
-          _score->undoAddElement(lyrics);
+          _score->undoAddElement(toLyrics);
 
-      _score->select(lyrics, SelectType::SINGLE, 0);
-      startEdit(lyrics, Grip::NO_GRIP);
+      _score->select(toLyrics, SelectType::SINGLE, 0);
+      startEdit(toLyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
-      adjustCanvasPosition(lyrics, false);
+      adjustCanvasPosition(toLyrics, false);
       if (end)
             ((Lyrics*)editObject)->moveCursorToEnd();
       else
@@ -203,61 +204,67 @@ void ScoreView::lyricsMinus()
       if (nextSegment == 0)
             return;
 
-      // search previous lyric
-      Lyrics* oldLyrics = 0;
+      // look for the lyrics we are moving from; may be the current lyrics or a previous one
+      // we are extending with several dashes
+      Lyrics* fromLyrics = 0;
       while (segment) {
             const QList<Lyrics*>* nll = segment->lyricsList(track);
             if (!nll) {
                   segment = segment->prev1(Segment::Type::ChordRest);
                   continue;
                   }
-            oldLyrics = nll->value(verse);
-            if (oldLyrics)
+            fromLyrics = nll->value(verse);
+            if (fromLyrics)
                   break;
             segment = segment->prev1(Segment::Type::ChordRest);
             }
 
       _score->startCmd();
 
-      const QList<Lyrics*>* ll = nextSegment->lyricsList(track);
-      lyrics         = ll->value(verse);
-      bool newLyrics = (lyrics == 0);
-      if (!lyrics) {
-            lyrics = new Lyrics(_score);
-            lyrics->setTrack(track);
-            lyrics->setParent(nextSegment->element(track));
-            lyrics->setNo(verse);
-            lyrics->setSyllabic(Lyrics::Syllabic::END);
+      const QList<Lyrics*>*   ll          = nextSegment->lyricsList(track);
+      Lyrics*                 toLyrics    = ll->value(verse);
+      bool newLyrics = (toLyrics == 0);
+      if (!toLyrics) {
+            toLyrics = new Lyrics(_score);
+            toLyrics->setTrack(track);
+            toLyrics->setParent(nextSegment->element(track));
+            toLyrics->setNo(verse);
+            toLyrics->setSyllabic(Lyrics::Syllabic::END);
             }
       else {
-            if (lyrics->syllabic() == Lyrics::Syllabic::BEGIN)
-                  lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::MIDDLE));
-            else if (lyrics->syllabic() == Lyrics::Syllabic::SINGLE)
-                  lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
+            // as we arrived at toLyrics by a dash, it cannot be initial or isolated
+            if (toLyrics->syllabic() == Lyrics::Syllabic::BEGIN)
+                  toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::MIDDLE));
+            else if (toLyrics->syllabic() == Lyrics::Syllabic::SINGLE)
+                  toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
             }
 
-      if (oldLyrics) {
-            switch(oldLyrics->syllabic()) {
+      if (fromLyrics) {
+            // as we moved away from fromLyrics by a dash,
+            // it can have syll. dashes before and after but cannot be isolated or terminal
+            switch(fromLyrics->syllabic()) {
                   case Lyrics::Syllabic::BEGIN:
                   case Lyrics::Syllabic::MIDDLE:
                         break;
                   case Lyrics::Syllabic::SINGLE:
-                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
+                        fromLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
                         break;
                   case Lyrics::Syllabic::END:
-                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::MIDDLE));
+                        fromLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::MIDDLE));
                         break;
                   }
+            // for the same reason, it cannot have a melisma
+            fromLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
             }
 
       if (newLyrics)
-          _score->undoAddElement(lyrics);
+          _score->undoAddElement(toLyrics);
 
-      _score->select(lyrics, SelectType::SINGLE, 0);
-      startEdit(lyrics, Grip::NO_GRIP);
+      _score->select(toLyrics, SelectType::SINGLE, 0);
+      startEdit(toLyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
-      adjustCanvasPosition(lyrics, false);
+      adjustCanvasPosition(toLyrics, false);
       ((Lyrics*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
@@ -274,7 +281,7 @@ void ScoreView::lyricsUnderscore()
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
-      int endTick      = segment->tick();
+      int endTick      = segment->tick(); // a previous melisma cannot extend beyond this point
 
       endEdit();
 
@@ -286,13 +293,14 @@ void ScoreView::lyricsUnderscore()
                   break;
             }
 
-      // search previous lyric
-      Lyrics* oldLyrics = 0;
+      // look for the lyrics we are moving from; may be the current lyrics or a previous one
+      // we are extending with several underscores
+      Lyrics* fromLyrics = 0;
       while (segment) {
             const QList<Lyrics*>* nll = segment->lyricsList(track);
             if (nll) {
-                  oldLyrics = nll->value(verse);
-                  if (oldLyrics)
+                  fromLyrics = nll->value(verse);
+                  if (fromLyrics)
                         break;
                   }
             segment = segment->prev1(Segment::Type::ChordRest);
@@ -307,26 +315,26 @@ void ScoreView::lyricsUnderscore()
       // one-chord melisma?
       // if still at melisma initial chord and there is a valid next chord (if not,
       // there will be no melisma anyway), set a temporary melisma duration
-      if (oldLyrics == lyrics && nextSegment)
+      if (fromLyrics == lyrics && nextSegment)
             lyrics->undoChangeProperty(P_ID::LYRIC_TICKS, Lyrics::TEMP_MELISMA_TICKS);
 
       if (nextSegment == 0) {
-            if (oldLyrics) {
-                  switch(oldLyrics->syllabic()) {
+            if (fromLyrics) {
+                  switch(fromLyrics->syllabic()) {
                         case Lyrics::Syllabic::SINGLE:
                         case Lyrics::Syllabic::END:
                               break;
                         default:
-                              oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
+                              fromLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
                               break;
                         }
-                  if (oldLyrics->segment()->tick() < endTick)
-                        oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - oldLyrics->segment()->tick());
+                  if (fromLyrics->segment()->tick() < endTick)
+                        fromLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
                   }
             // leave edit mode, select something (just for user feedback) and update to show extended melisam
             mscore->changeState(STATE_NORMAL);
-            if (oldLyrics)
-                  _score->select(oldLyrics, SelectType::SINGLE, 0);
+            if (fromLyrics)
+                  _score->select(fromLyrics, SelectType::SINGLE, 0);
             //_score->update();
             _score->setLayoutAll(true);
             _score->endCmd();
@@ -335,41 +343,45 @@ void ScoreView::lyricsUnderscore()
 
       // if a place for a new lyrics has been found, create a lyrics there
 
-      const QList<Lyrics*>* ll = nextSegment->lyricsList(track);
-      lyrics         = ll->value(verse);
-      bool newLyrics = (lyrics == 0);
-      if (!lyrics) {
-            lyrics = new Lyrics(_score);
-            lyrics->setTrack(track);
-            lyrics->setParent(nextSegment->element(track));
-            lyrics->setNo(verse);
-            lyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
+      const QList<Lyrics*>*   ll          = nextSegment->lyricsList(track);
+      Lyrics*                 toLyrics    = ll->value(verse);
+      bool newLyrics = (toLyrics == 0);
+      if (!toLyrics) {
+            toLyrics = new Lyrics(_score);
+            toLyrics->setTrack(track);
+            toLyrics->setParent(nextSegment->element(track));
+            toLyrics->setNo(verse);
+            toLyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             }
-      else if (lyrics->syllabic() == Lyrics::Syllabic::MIDDLE)
-            lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
-      else if (lyrics->syllabic() == Lyrics::Syllabic::END)
-            lyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
+      // as we arrived at toLyrics by an underscore, it cannot have syllabic dashes before
+      else if (toLyrics->syllabic() == Lyrics::Syllabic::MIDDLE)
+            toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::BEGIN));
+      else if (toLyrics->syllabic() == Lyrics::Syllabic::END)
+            toLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::SINGLE));
 
-      if (oldLyrics) {
-            switch(oldLyrics->syllabic()) {
+      if (fromLyrics) {
+            // as we moved away from fromLyrics by an underscore,
+            // it can be isolated or terminal but cannot have dashes after
+            switch(fromLyrics->syllabic()) {
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::END:
                         break;
                   default:
-                        oldLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
+                        fromLyrics->undoChangeProperty(P_ID::SYLLABIC, int(Lyrics::Syllabic::END));
                         break;
                   }
-            if (oldLyrics->segment()->tick() < endTick)
-                  oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - oldLyrics->segment()->tick());
+            // for the same reason, if it has a melisma, this cannot extend beyond toLyrics
+            if (fromLyrics->segment()->tick() < endTick)
+                  fromLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
             }
       if (newLyrics)
-            _score->undoAddElement(lyrics);
+            _score->undoAddElement(toLyrics);
 
-      _score->select(lyrics, SelectType::SINGLE, 0);
-      startEdit(lyrics, Grip::NO_GRIP);
+      _score->select(toLyrics, SelectType::SINGLE, 0);
+      startEdit(toLyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
 
-      adjustCanvasPosition(lyrics, false);
+      adjustCanvasPosition(toLyrics, false);
       ((Lyrics*)editObject)->moveCursorToEnd();
 
       _score->setLayoutAll(true);
@@ -413,31 +425,33 @@ void ScoreView::lyricsReturn()
 void ScoreView::lyricsEndEdit()
       {
       Lyrics* lyrics = static_cast<Lyrics*>(editObject);
-      int endTick    = lyrics->segment()->tick();
 
-      // search previous lyric:
-      int verse = lyrics->no();
-      int track = lyrics->track();
-
-      // search previous lyric
-      Lyrics* oldLyrics = 0;
-      Segment* segment  = lyrics->segment();
-      while (segment) {
-            const QList<Lyrics*>* nll = segment->lyricsList(track);
-            if (nll) {
-                  oldLyrics = nll->value(verse);
-                  if (oldLyrics)
-                        break;
-                  }
-            segment = segment->prev1(Segment::Type::ChordRest);
-            }
-
+      // if no text, just remove this lyrics
       if (lyrics->isEmpty())
             lyrics->parent()->remove(lyrics);
+      // if not empty, make sure this new lyrics does not fall in the middle
+      // of an existing melisma from a previous lyrics; in case, shorten it
       else {
-            if (oldLyrics && oldLyrics->syllabic() == Lyrics::Syllabic::END) {
-                  if (oldLyrics->endTick() >= endTick)
-                        oldLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, 0);
+            int verse   = lyrics->no();
+            int track   = lyrics->track();
+
+            // search previous lyric
+            Lyrics*     prevLyrics  = 0;
+            Segment*    prevSegment = lyrics->segment()->prev1(Segment::Type::ChordRest);
+            Segment*    segment     = prevSegment;
+            while (segment) {
+                  const QList<Lyrics*>* nll = segment->lyricsList(track);
+                  if (nll) {
+                        prevLyrics = nll->value(verse);
+                        if (prevLyrics)
+                              break;
+                        }
+                  segment = segment->prev1(Segment::Type::ChordRest);
+                  }
+            if (prevLyrics && prevLyrics->syllabic() == Lyrics::Syllabic::END) {
+                  int endTick = prevSegment->tick();      // a prev. melisma should not go beyond this segment
+                  if (prevLyrics->endTick() >= endTick)
+                        prevLyrics->undoChangeProperty(P_ID::LYRIC_TICKS, endTick - prevLyrics->segment()->tick());
                   }
             }
       }
