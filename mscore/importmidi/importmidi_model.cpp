@@ -665,6 +665,41 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             }
 
       //-----------------------------------------------------------------------
+      bool hasChordNames = false;
+      for (int i = 0; i != _trackCount; ++i) {
+            if (_trackOpers.hasChordNames.value(i)) {
+                  hasChordNames = true;
+                  break;
+                  }
+            }
+      if (hasChordNames) {
+            struct ShowChordNames : Column {
+                  ShowChordNames(MidiOperations::Opers &opers) : Column(opers)
+                        {
+                        }
+                  QString headerName() const override { return QCoreApplication::translate(
+                                          "MIDI import operations", "Show\nchord names"); }
+                  bool isEditable(int trackIndex) const override
+                        {
+                        return _opers.hasChordNames.value(trackIndex);
+                        }
+                  QVariant value(int trackIndex) const override
+                        {
+                        return _opers.showChordNames.value(trackIndex);
+                        }
+                  void setValue(const QVariant &value, int trackIndex) override
+                        {
+                        _opers.showChordNames.setValue(trackIndex, value.toBool());
+                        }
+                  bool isVisible(int trackIndex) const override
+                        {
+                        return isEditable(trackIndex);
+                        }
+                  };
+            _columns.push_back(std::unique_ptr<Column>(new ShowChordNames(_trackOpers)));
+            }
+
+      //-----------------------------------------------------------------------
       struct PickupBar : Column {
             PickupBar(MidiOperations::Opers &opers) : Column(opers)
                   {

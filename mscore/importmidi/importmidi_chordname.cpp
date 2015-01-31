@@ -7,6 +7,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/harmony.h"
 #include "midi/midifile.h"
+#include "mscore/preferences.h"
 
 
 // From XF Format Specifications V 2.01 (January 13, 1999, YAMAHA CORPORATION)
@@ -140,25 +141,39 @@ QString findChordName(const QList<MidiNote> &notes, const std::multimap<int, Mid
 
 void setChordNames(QList<MTrack> &tracks)
       {
+      auto &data = *preferences.midiImportOperations.data();
+
       for (MTrack &track: tracks) {
+            if (data.processingsOfOpenedFile > 0
+                        && (!data.trackOpers.showChordNames.value(track.indexOfOperation)
+                            || !data.trackOpers.hasChordNames.value(track.indexOfOperation))) {
+                  continue;
+                  }
             for (const auto &chord: track.chords) {
                   const MidiChord &c = chord.second;
                   const QString chordName = findChordName(c.notes, track.mtrack->events());
+
                   if (chordName.isEmpty())
                         continue;
+                                    // to show chord names column in the MIDI import panel
+                  if (data.processingsOfOpenedFile == 0)
+                        data.trackOpers.hasChordNames.setValue(track.indexOfOperation, true);
 
-                  Staff *staff = track.staff;
-                  Score *score = staff->score();
-                  const ReducedFraction &onTime = chord.first;
+                  if (data.trackOpers.showChordNames.value(track.indexOfOperation)) {
+                        Staff *staff = track.staff;
+                        Score *score = staff->score();
+                        const ReducedFraction &onTime = chord.first;
 
-                  Measure* measure = score->tick2measure(onTime.ticks());
-                  Segment* seg = measure->getSegment(Segment::Type::ChordRest, onTime.ticks());
-                  const int t = staff->idx() * VOICES;
+                        Measure* measure = score->tick2measure(onTime.ticks());
+                        Segment* seg = measure->getSegment(Segment::Type::ChordRest,
+                                                           onTime.ticks());
+                        const int t = staff->idx() * VOICES;
 
-                  Harmony* h = new Harmony(score);
-                  h->setHarmony(chordName);
-                  h->setTrack(t);
-                  seg->add(h);
+                        Harmony* h = new Harmony(score);
+                        h->setHarmony(chordName);
+                        h->setTrack(t);
+                        seg->add(h);
+                        }
                   }
             }
       }

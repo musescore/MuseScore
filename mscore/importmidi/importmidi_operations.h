@@ -166,6 +166,8 @@ struct Opers
       TrackOp<bool> removeDrumRests = TrackOp<bool>(true);
       TrackOp<int> lyricTrackIndex = TrackOp<int>(-1);         // empty lyric
       TrackOp<int> msInstrIndex = TrackOp<int>(-1);            // for empty instrument list
+      TrackOp<bool> showChordNames = TrackOp<bool>(true);
+      TrackOp<bool> hasChordNames = TrackOp<bool>(false);
       };
 
 struct HumanBeatData
