@@ -139,6 +139,13 @@
             <tpc>16</tpc>
             <fret>15</fret>
             <string>1</string>
+            <Glissando id="2">
+              <subtype>0</subtype>
+              <lid>17</lid>
+              <diagonal>1</diagonal>
+              <lineWidth>0.15</lineWidth>
+              <anchor>3</anchor>
+              </Glissando>
             </Note>
           </Chord>
         <Dynamic>
@@ -158,11 +165,8 @@
             <tpc>20</tpc>
             <fret>7</fret>
             <string>1</string>
+            <endSpanner id="2"/>
             </Note>
-          <Glissando>
-            <subtype>0</subtype>
-            <lid>17</lid>
-            </Glissando>
           </Chord>
         <BarLine>
           <subtype>end</subtype>
@@ -330,6 +334,13 @@
               <tpc>16</tpc>
               <fret>15</fret>
               <string>1</string>
+              <Glissando id="3">
+                <subtype>0</subtype>
+                <lid>17</lid>
+                <diagonal>1</diagonal>
+                <lineWidth>0.15</lineWidth>
+                <anchor>3</anchor>
+                </Glissando>
               </Note>
             </Chord>
           <Dynamic>
@@ -349,11 +360,8 @@
               <tpc>20</tpc>
               <fret>7</fret>
               <string>1</string>
+              <endSpanner id="3"/>
               </Note>
-            <Glissando>
-              <subtype>0</subtype>
-              <lid>17</lid>
-              </Glissando>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
@@ -397,6 +405,13 @@
               <tpc>16</tpc>
               <fret>15</fret>
               <string>1</string>
+              <Glissando id="4">
+                <subtype>0</subtype>
+                <lid>17</lid>
+                <diagonal>1</diagonal>
+                <lineWidth>0.15</lineWidth>
+                <anchor>3</anchor>
+                </Glissando>
               </Note>
             </Chord>
           <Chord>
@@ -408,11 +423,8 @@
               <tpc>20</tpc>
               <fret>7</fret>
               <string>1</string>
+              <endSpanner id="4"/>
               </Note>
-            <Glissando>
-              <subtype>0</subtype>
-              <lid>17</lid>
-              </Glissando>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
