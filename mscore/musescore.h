@@ -468,7 +468,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void cmd(QAction* a);
       void dirtyChanged(Score*);
       void setPos(int tick);
-      void searchTextChanged(const QString& s);
       void pluginTriggered(int);
       void handleMessage(const QString& message);
       void setCurrentScoreView(ScoreView*);

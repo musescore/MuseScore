@@ -5309,74 +5309,41 @@ void ScoreView::selectMeasure(int n)
       }
 
 //---------------------------------------------------------
-//   search
-//---------------------------------------------------------
-
-void ScoreView::search(const QString& s)
-      {
-      bool ok;
-
-      int n = s.toInt(&ok);
-      if (ok && n >= 0)
-            searchMeasure(n);
-      else {
-            if (s.size() >= 2 && s[0].toLower() == 'p' && s[1].isNumber()) {
-                  n = s.mid(1).toInt(&ok);
-                  if (ok && n >= 0)
-                        searchPage(n);
-                  }
-            else {
-                  //search rehearsal marks
-                  QString ss = s.toLower();
-                  bool found = false;
-                  for (Segment* seg = score()->firstSegment(); seg; seg = seg->next1(Segment::Type::ChordRest)) {
-                        for (Element* e : seg->annotations()){
-                              if (e->type() == Element::Type::REHEARSAL_MARK) {
-                                    RehearsalMark* rm = static_cast<RehearsalMark*>(e);
-                                    QString rms = rm->text().toLower();
-                                    if (rms.startsWith(ss)) {
-                                          gotoMeasure(seg->measure());
-                                          found = true;
-                                          break;
-                                          }
-                                    }
-                              }
-                        if (found)
-                              break;
-                        }
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   searchPage
 //---------------------------------------------------------
 
-void ScoreView::searchPage(int n)
+bool ScoreView::searchPage(int n)
       {
+      bool result = true;
       n -= score()->pageNumberOffset();
-      if (n <= 0)
+      if (n <= 0) {
             n = 1;
+            result = false;
+            }
       n--;
-      if (n >= _score->npages())
+      if (n >= _score->npages()) {
+            result = false;
             n = _score->npages() - 1;
+            }
       const Page* page = _score->pages()[n];
       foreach (System* s, *page->systems()) {
             if (s->firstMeasure()) {
                   gotoMeasure(s->firstMeasure());
-                  return;
+                  break;
                   }
             }
+      return result;
       }
 
 //---------------------------------------------------------
 //   searchMeasure
 //---------------------------------------------------------
 
-void ScoreView::searchMeasure(int n)
+bool ScoreView::searchMeasure(int n)
       {
       if (n <= 0)
-            return;
+            return false;
+      bool result = true;
       --n;
       int i = 0;
       Measure* measure;
@@ -5387,9 +5354,39 @@ void ScoreView::searchMeasure(int n)
                   break;
             i += nn;
             }
-      if (!measure)
+      if (!measure) {
             measure = score()->lastMeasureMM();
+            result = false;
+            }
       gotoMeasure(measure);
+      return result;
+      }
+
+//---------------------------------------------------------
+//   searchRehearsalMark
+//---------------------------------------------------------
+
+bool ScoreView::searchRehearsalMark(const QString& s)
+      {
+      //search rehearsal marks
+      QString ss = s.toLower();
+      bool found = false;
+      for (Segment* seg = score()->firstSegment(); seg; seg = seg->next1(Segment::Type::ChordRest)) {
+            for (Element* e : seg->annotations()){
+                  if (e->type() == Element::Type::REHEARSAL_MARK) {
+                        RehearsalMark* rm = static_cast<RehearsalMark*>(e);
+                        QString rms = rm->text().toLower();
+                        if (rms.startsWith(ss)) {
+                              gotoMeasure(seg->measure());
+                              found = true;
+                              break;
+                              }
+                        }
+                  }
+            if (found)
+                  break;
+            }
+      return found;
       }
 
 //---------------------------------------------------------
