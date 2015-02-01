@@ -1969,7 +1969,7 @@ void Score::cmdMirrorNoteHead()
             if (e->type() == Element::Type::NOTE) {
                   Note* note = static_cast<Note*>(e);
                   if (note->staff() && note->staff()->isTabStaff())
-                        note->score()->undoChangeProperty(e, P_ID::GHOST, true);
+                        note->score()->undoChangeProperty(e, P_ID::GHOST, !note->ghost());
                   else {
                         MScore::DirectionH d = note->userMirror();
                         if (d == MScore::DirectionH::AUTO)
