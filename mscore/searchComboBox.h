@@ -31,7 +31,8 @@ signals:
 class AccessibleSearchBox : public  QObject, QAccessibleWidget {
       Q_OBJECT
       SearchComboBox* searchBox;
-      QAccessible::Role role() const Q_DECL_OVERRIDE { return QAccessible::ComboBox; }
+      //JAWS compatibility - no idea why yet. Adjustments needs to be made to the JawsScript.
+      //QAccessible::Role role() const Q_DECL_OVERRIDE { return QAccessible::ComboBox; }
       QString text(QAccessible::Text t) const Q_DECL_OVERRIDE;
 public:
       AccessibleSearchBox(SearchComboBox* comboBox);
