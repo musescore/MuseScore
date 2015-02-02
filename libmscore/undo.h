@@ -659,12 +659,12 @@ class ChangeConcertPitch : public UndoCommand {
 class EditText : public UndoCommand {
       Text* text;
       QString oldText;
-      int undoLevel;
+      //int undoLevel;
 
       void undoRedo();
 
    public:
-      EditText(Text* t, const QString& ot, int l) : text(t), oldText(ot), undoLevel(l) {}
+      EditText(Text* t, const QString& ot, int /*l*/) : text(t), oldText(ot)/*, undoLevel(l)*/ {}
       virtual void undo();
       virtual void redo();
       UNDO_NAME("EditText")
@@ -1043,13 +1043,13 @@ class ChangeTremoloBar : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeNoteEvents : public UndoCommand {
-      Chord* chord;
+      //Chord* chord;
       QList<NoteEvent*> events;
 
       void flip();
 
    public:
-      ChangeNoteEvents(Chord* n, const QList<NoteEvent*>& l) : chord(n), events(l) {}
+      ChangeNoteEvents(Chord* /*n*/, const QList<NoteEvent*>& l) : /*chord(n),*/ events(l) {}
       UNDO_NAME("ChangeNoteEvents")
       };
 
