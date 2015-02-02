@@ -234,7 +234,7 @@
        <item>
         <widget class="QSpinBox" name="pageOffsetEntry">
          <property name="minimum">
-          <number>1</number>
+          <number>-99</number>
          </property>
          <property name="maximum">
           <number>999</number>
