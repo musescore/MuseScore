@@ -142,6 +142,7 @@ struct Opers
       Op<bool> searchPickupMeasure = Op<bool>(true);
       Op<bool> measureCount2xLess = Op<bool>(false);
       Op<bool> showTempoText = Op<bool>(true);
+      Op<bool> showChordNames = Op<bool>(true);
       Op<TimeSigNumerator> timeSigNumerator = Op<TimeSigNumerator>(TimeSigNumerator::_4);
       Op<TimeSigDenominator> timeSigDenominator = Op<TimeSigDenominator>(TimeSigDenominator::_4);
 
@@ -196,6 +197,7 @@ struct FileData
                   // QList of lyric tracks - there can be multiple lyric tracks,
                   // lyric track count != MIDI track count in general
       QList<std::multimap<ReducedFraction, std::string>> lyricTracks;
+      std::multimap<ReducedFraction, QString> chordNames;
       HumanBeatData humanBeatData;
       };
 

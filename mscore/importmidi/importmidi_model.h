@@ -19,7 +19,8 @@ class TracksModel : public QAbstractTableModel
                  int trackCount,
                  const QString &midiFile,
                  bool hasHumanBeats,
-                 bool hasTempoText);
+                 bool hasTempoText,
+                 bool hasChordNames);
       void clear();
       void updateCharset();
       void notifyAllApplied();
