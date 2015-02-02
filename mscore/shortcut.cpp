@@ -963,7 +963,7 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CMD
          },
       {
-         MsWidget::MAIN_WINDOW,
+         MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
             | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY | STATE_FOTO,
          "escape",
