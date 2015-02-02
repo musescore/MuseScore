@@ -1682,13 +1682,13 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         break;
 
                   case Qt::Key_Left:
-                        if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
+                        if (!movePosition(ctrlPressed ? QTextCursor::WordLeft : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
                               return false;
                         s.clear();
                         break;
 
                   case Qt::Key_Right:
-                        if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
+                        if (!movePosition(ctrlPressed ? QTextCursor::NextWord : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
                               return false;
                         s.clear();
                         break;
