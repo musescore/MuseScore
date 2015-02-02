@@ -702,5 +702,7 @@ extern bool saveXml(Score*, const QString& name);
 
 struct PluginDescription;
 extern void collectPluginMetaInformation(PluginDescription*);
+extern QString getSharePath();
+
 } // namespace Ms
 #endif
