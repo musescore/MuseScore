@@ -59,7 +59,8 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                           opers.data()->trackCount,
                           _midiFile,
                           !opers.data()->humanBeatData.beatSet.empty(),
-                          opers.data()->hasTempoText);
+                          opers.data()->hasTempoText,
+                          !opers.data()->chordNames.empty());
             saveTableViewState();
             }
       else {            // switch to already opened MIDI file
@@ -68,7 +69,8 @@ void ImportMidiPanel::setMidiFile(const QString &fileName)
                           opers.data()->trackCount,
                           _midiFile,
                           !opers.data()->humanBeatData.beatSet.empty(),
-                          opers.data()->hasTempoText);
+                          opers.data()->hasTempoText,
+                          !opers.data()->chordNames.empty());
             restoreTableViewState();
             }
 
@@ -224,7 +226,8 @@ void ImportMidiPanel::cancelChanges()
                     opers.data()->trackCount,
                     _midiFile,
                     !opers.data()->humanBeatData.beatSet.empty(),
-                    opers.data()->hasTempoText);
+                    opers.data()->hasTempoText,
+                    !opers.data()->chordNames.empty());
 
       restoreTableViewState();
       _ui->comboBoxCharset->setCurrentText(opers.data()->charset);
