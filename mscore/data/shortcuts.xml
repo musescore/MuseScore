@@ -984,6 +984,14 @@
     <seq>Ctrl+b</seq>
     </SC>
   <SC>
+    <key>text-word-left</key>
+    <seq>Ctrl+Left</seq>
+    </SC>
+  <SC>
+    <key>text-word-right</key>
+    <seq>Ctrl+Right</seq>
+    </SC>
+  <SC>
     <key>text-i</key>
     <seq>Ctrl+i</seq>
     </SC>

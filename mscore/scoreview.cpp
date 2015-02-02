@@ -3119,6 +3119,10 @@ void ScoreView::cmd(const QAction* a)
             cmdAddFret(13);
       else if(cmd == "fret-14")
             cmdAddFret(14);
+      else if (cmd == "text-word-left")
+            static_cast<Text*>(editObject)->movePosition(QTextCursor::WordLeft);
+      else if (cmd == "text-word-right")
+            static_cast<Text*>(editObject)->movePosition(QTextCursor::NextWord);
       else
             _score->cmd(a);
       if (_score->processMidiInput())
