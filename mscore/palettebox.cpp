@@ -143,7 +143,7 @@ void PaletteBox::addPalette(Palette* w)
       b->setId(slotIdx);
 
       vbox->insertWidget(slotIdx, b);
-      vbox->insertWidget(slotIdx+1, w, 1000);
+      vbox->insertWidget(slotIdx+1, w, paletteStretch);
 
       connect(b, SIGNAL(paletteCmd(PaletteCommand,int)), SLOT(paletteCmd(PaletteCommand,int)));
       connect(b, SIGNAL(closeAll()), SLOT(closeAll()));
@@ -161,7 +161,7 @@ Palette* PaletteBox::newPalette(const QString& name, int slot)
       p->setName(name);
       PaletteBoxButton* b = new PaletteBoxButton(p);
       vbox->insertWidget(slot, b);
-      vbox->insertWidget(slot+1, p, 1000);
+      vbox->insertWidget(slot+1, p, paletteStretch);
       connect(b, SIGNAL(paletteCmd(PaletteCommand, int)), SLOT(paletteCmd(PaletteCommand, int)));
       connect(p, SIGNAL(changed()), Workspace::currentWorkspace, SLOT(setDirty()));
       for (int i = 0; i < (vbox->count() - 1) / 2; ++i)
@@ -239,7 +239,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                         QLayoutItem* i2 = vbox->itemAt(slot+1);
                         vbox->removeItem(i1);
                         vbox->removeItem(i2);
-                        vbox->insertWidget(slot-2, i2->widget());
+                        vbox->insertWidget(slot-2, i2->widget(), paletteStretch);
                         vbox->insertWidget(slot-2, i1->widget());
                         delete i1;
                         delete i2;
@@ -255,7 +255,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                         QLayoutItem* i2 = vbox->itemAt(slot+1);
                         vbox->removeItem(i1);
                         vbox->removeItem(i2);
-                        vbox->insertWidget(slot+2, i2->widget());
+                        vbox->insertWidget(slot+2, i2->widget(), paletteStretch);
                         vbox->insertWidget(slot+2, i1->widget());
                         delete i1;
                         delete i2;
