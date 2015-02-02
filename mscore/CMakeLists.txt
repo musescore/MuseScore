@@ -263,7 +263,7 @@ add_executable ( ${ExecutableName}
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
       startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
-      logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp
+      logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp searchComboBox.cpp
 
       ${OMR_FILES}
       ${AUDIO}
