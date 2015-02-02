@@ -30,6 +30,7 @@ class Breath : public Element {
       Q_OBJECT
 
       int _breathType;
+      qreal _pause;
       static const int breathSymbols = 4;
       static SymId symList[breathSymbols];
 
@@ -40,6 +41,8 @@ class Breath : public Element {
 
       int breathType() const           { return _breathType; }
       void setBreathType(int v)        { _breathType = v; }
+      qreal pause() const              { return _pause; }
+      void setPause(qreal v)           { _pause = v; }
 
       Segment* segment() const         { return (Segment*)parent(); }
       virtual Space space() const override;
@@ -49,6 +52,10 @@ class Breath : public Element {
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
       virtual QPointF pagePos() const override;      ///< position in page coordinates
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;
