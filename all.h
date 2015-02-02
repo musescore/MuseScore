@@ -157,5 +157,9 @@
 #include <QQuickPaintedItem>
 #include <QQuickView>
 #include <QQuickWidget>
+
+#include <QHelpEngine>
+#include <QWidgetAction>
+#include <QHelpIndexModel>
 #endif
 

@@ -27,6 +27,7 @@ if (Qt5Core_FOUND)
         WebKitWidgets
         OpenGL
         LinguistTools
+        Help
       )
     foreach(_component ${_components})
       find_package(Qt5${_component})
