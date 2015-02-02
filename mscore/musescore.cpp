@@ -101,6 +101,7 @@
 #include "searchComboBox.h"
 
 #include "startcenter.h"
+#include "help.h"
 
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
@@ -194,7 +195,7 @@ void InsertMeasuresDialog::accept()
 //   getSharePath
 //---------------------------------------------------------
 
-static QString getSharePath()
+QString getSharePath()
       {
 #ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
@@ -586,6 +587,7 @@ MuseScore::MuseScore()
             entryTools->addWidget(tb);
             }
 
+
       //---------------------
       //    Menus
       //---------------------
@@ -887,6 +889,9 @@ MuseScore::MuseScore()
       mb->addSeparator();
       QMenu* menuHelp = mb->addMenu(tr("&Help"));
       menuHelp->setObjectName("Help");
+
+      HelpQuery* hw = new HelpQuery(menuHelp);
+      menuHelp->addAction(hw);
 
       if (enableExperimental)
             menuHelp->addAction(getAction("local-help"));

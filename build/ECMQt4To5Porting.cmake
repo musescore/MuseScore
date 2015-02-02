@@ -171,6 +171,7 @@ set(_qt_modules
   WebKitWidgets
   Sql
   OpenGL
+  Help
 )
 
 foreach(_module ${_qt_modules})
