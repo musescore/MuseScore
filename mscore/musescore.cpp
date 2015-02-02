@@ -509,6 +509,7 @@ MuseScore::MuseScore()
       mag->setAccessibleName(tr("Zoom"));
       mag->setFixedHeight(preferences.iconHeight + 10);  // hack
       connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
+      connect(mag->lineEdit(), SIGNAL(editingFinished()), SLOT(magTextChanged()));
       fileTools->addWidget(mag);
       viewModeCombo = new QComboBox(this);
 #if defined(Q_OS_MAC)
@@ -2861,6 +2862,32 @@ void MuseScore::magChanged(int idx)
       {
       if (cv)
             cv->setMag((MagIdx)idx, mag->getMag(cv));
+      }
+
+//---------------------------------------------------------
+//   magTextChanged
+//---------------------------------------------------------
+
+void MuseScore::magTextChanged()
+      {
+      qDebug(mag->currentText().toLatin1().data());
+      if (!cv || mag->currentText().isEmpty())
+            return;
+
+      QString s = mag->currentText();
+      if (s.right(1) == "%")
+            s = s.left(s.length()-1);
+
+      bool ok;
+      qreal magVal = s.toFloat(&ok);
+      if (ok) {
+            mag->setMag((double)(magVal/100.0));
+            cv->setMag(MagIdx::MAG_FREE, magVal/100.0);
+            }
+
+      //prevent the list from growing
+      if (mag->count()-1 > (int)MagIdx::MAG_FREE)
+            mag->removeItem(mag->count()-1);
       }
 
 //---------------------------------------------------------
