@@ -433,6 +433,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void cmdAppendMeasures();
       void cmdInsertMeasures();
       void magChanged(int);
+      void magTextChanged();
       void showPageSettings();
       void removeTab(int);
       void removeTab();
