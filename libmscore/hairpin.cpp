@@ -455,7 +455,6 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
                   SLine::setProperty(id, v);
                   break;
             case P_ID::HAIRPIN_HEIGHT:
-                  hairpinHeightStyle = PropertyStyle::UNSTYLED;
                   _hairpinHeight = Spatium(v.toDouble());
                   break;
             case P_ID::HAIRPIN_CONT_HEIGHT:

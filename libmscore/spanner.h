@@ -85,6 +85,7 @@ class SpannerSegment : public Element {
       virtual Element* prevElement() override;
       virtual bool isSpannerSegment() const override { return true; }
       virtual QString accessibleInfo() override;
+      virtual void styleChanged() override;
       };
 
 //----------------------------------------------------------------------------------
