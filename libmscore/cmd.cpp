@@ -1938,13 +1938,13 @@ Element* Score::selectMove(const QString& cmd)
             el = measure->last()->nextChordRest(cr->track(), true);
             }
       else if (cmd == "select-begin-score") {
-            Measure* measure = first()->system()->firstMeasure();
+            Measure* measure = firstMeasureMM();
             if (!measure)
                   return 0;
             el = measure->first()->nextChordRest(cr->track());
             }
       else if (cmd == "select-end-score") {
-            Measure* measure = last()->system()->lastMeasure();
+            Measure* measure = lastMeasureMM();
             if (!measure)
                   return 0;
             el = measure->last()->nextChordRest(cr->track(), true);
