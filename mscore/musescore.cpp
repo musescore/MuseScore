@@ -98,6 +98,7 @@
 #include "fluid/fluid.h"
 #include "qmlplugin.h"
 #include "accessibletoolbutton.h"
+#include "searchComboBox.h"
 
 #include "startcenter.h"
 
@@ -4374,17 +4375,6 @@ void MuseScore::updateDrumTools()
       }
 
 //---------------------------------------------------------
-//   searchTextChanged
-//---------------------------------------------------------
-
-void MuseScore::searchTextChanged(const QString& s)
-      {
-      if (cv == 0)
-            return;
-      cv->search(s);
-      }
-
-//---------------------------------------------------------
 //   endSearch
 //---------------------------------------------------------
 
@@ -4417,9 +4407,7 @@ void MuseScore::showSearchDialog()
 
             searchDialogLayout->addWidget(new QLabel(tr("Go To: ")));
 
-            searchCombo = new QComboBox;
-            searchCombo->setEditable(true);
-            searchCombo->setInsertPolicy(QComboBox::InsertAtTop);
+            searchCombo = new SearchComboBox;
             searchDialogLayout->addWidget(searchCombo);
 
             searchDialogLayout->addStretch(10);
@@ -4429,9 +4417,6 @@ void MuseScore::showSearchDialog()
 
             // does not work: connect(searchCombo->lineEdit(), SIGNAL(returnPressed()), SLOT(endSearch()));
             connect(searchCombo->lineEdit(), SIGNAL(editingFinished()), SLOT(endSearch()));
-
-            connect(searchCombo, SIGNAL(editTextChanged(const QString&)),
-               SLOT(searchTextChanged(const QString&)));
             }
 
       searchCombo->clearEditText();
@@ -4504,7 +4489,7 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
-
+      QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
       Q_INIT_RESOURCE(zita);
 
 #ifndef Q_OS_MAC
