@@ -2898,7 +2898,6 @@ void MuseScore::magChanged(int idx)
 
 void MuseScore::magTextChanged()
       {
-      qDebug(mag->currentText().toLatin1().data());
       if (!cv || mag->currentText().isEmpty())
             return;
 

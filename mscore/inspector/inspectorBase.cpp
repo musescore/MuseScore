@@ -31,7 +31,6 @@ InspectorBase::InspectorBase(QWidget* parent)
       setAccessibleName(tr("Inspector"));
       resetMapper  = new QSignalMapper(this);
       valueMapper  = new QSignalMapper(this);
-      blockSignals = false;
 
       inspector = static_cast<Inspector*>(parent);
       _layout    = new QVBoxLayout;
@@ -71,7 +70,7 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
       else
             qFatal("not supported widget %s", w->metaObject()->className());
 
-      switch(propertyType(ii.t)) {
+      switch (propertyType(ii.t)) {
             case P_TYPE::POINT:
             case P_TYPE::SP_REAL:
                   v = v.toDouble() * inspector->element()->score()->spatium();
@@ -222,12 +221,12 @@ void InspectorBase::setElement()
                         val = QVariant(f.denominator());
                   }
 
-	    if (ii.r)
-		    ii.r->setIcon(*icons[int(Icons::reset_ICON)]);
+	      if (ii.r)
+		      ii.r->setIcon(*icons[int(Icons::reset_ICON)]);
 
-            blockSignals = true;
+            ii.w->blockSignals(true);
             setValue(ii, val);
-            blockSignals = false;
+            ii.w->blockSignals(false);
             checkDifferentValues(ii);
             }
       postInit();
@@ -276,7 +275,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            ii.w->setStyleSheet( valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
+            ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
             }
 
       //deal with reset if only one element, or if values are the same
@@ -285,7 +284,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
             bool reset;
             if (styledValue == PropertyStyle::STYLED) {
                   // does not work for QComboBox:
-                  ii.w->setStyleSheet("* { color: gray }");
+                  ii.w->setStyleSheet("* { color: gray; foreground: gray; }");
                   reset = false;
                   }
             else if (styledValue == PropertyStyle::UNSTYLED) {
@@ -309,13 +308,11 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
 
 void InspectorBase::valueChanged(int idx, bool reset)
       {
-      if (blockSignals)
-            return;
-
       const InspectorItem& ii = iList[idx];
       P_ID id       = ii.t;
       P_TYPE pt     = propertyType(id);
       QVariant val2 = getValue(ii);
+
       Score* score  = inspector->element()->score();
 
       score->startCmd();
@@ -332,6 +329,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
                   ps = PropertyStyle::UNSTYLED;
 
             QVariant val1 = e->getProperty(id);
+
             if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
                   qreal v   = val2.toDouble();
                   QSizeF sz = val1.toSizeF();
@@ -402,8 +400,8 @@ void InspectorBase::resetClicked(int i)
       if (!def.isValid())
             return;
       QWidget* w   = ii.w;
+      w->blockSignals(true);
 
-      blockSignals = true;
       if (qobject_cast<QDoubleSpinBox*>(w))
             static_cast<QDoubleSpinBox*>(w)->setValue(def.toDouble());
       else if (qobject_cast<QSpinBox*>(w))
@@ -429,7 +427,7 @@ void InspectorBase::resetClicked(int i)
             static_cast<Awl::ColorLabel*>(w)->setColor(def.value<QColor>());
       else
             qFatal("not supported widget %s", w->metaObject()->className());
-      blockSignals = false;
+      w->blockSignals(false);
 
       valueChanged(i, true);
       }
@@ -468,6 +466,15 @@ void InspectorBase::mapSignals()
             }
       connect(resetMapper, SIGNAL(mapped(int)), SLOT(resetClicked(int)));
       connect(valueMapper, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
+      }
+
+//---------------------------------------------------------
+//   valueChanged
+//---------------------------------------------------------
+
+void InspectorBase::valueChanged(int idx)
+      {
+      valueChanged(idx, false);
       }
 
 //---------------------------------------------------------
