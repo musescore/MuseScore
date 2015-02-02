@@ -160,6 +160,7 @@ SET(QT_USE_QTDESIGNER    TRUE)
 SET(QT_USE_QTWEBKIT      TRUE)
 SET(QT_USE_QTXMLPATTERNS TRUE)
 SET(QT_USE_QTDECLARATIVE TRUE)
+SET(QT_USE_QTHELP        TRUE)
 
 #find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
 
@@ -385,6 +386,7 @@ subdirs(
       mscore  awl bww2mxml share midi audiofile fluid mstyle libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
       thirdparty/xmlstream thirdparty/qzip thirdparty/kQOAuth thirdparty/qtwaitingspinner
+      rdoc
       )
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 #with xcode, we need to have all the targets in the same project
