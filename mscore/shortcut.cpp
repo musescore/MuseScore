@@ -3122,6 +3122,28 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
+         STATE_TEXT_EDIT,
+         "text-word-left",
+         QT_TRANSLATE_NOOP("action","move word left"),
+         QT_TRANSLATE_NOOP("action","move word left"),
+         QT_TRANSLATE_NOOP("action","move word left"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_TEXT_EDIT,
+         "text-word-right",
+         QT_TRANSLATE_NOOP("action","move word right"),
+         QT_TRANSLATE_NOOP("action","move word right"),
+         QT_TRANSLATE_NOOP("action","move word right"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE
+         },
+      {
+         MsWidget::SCORE_TAB,
          STATE_NORMAL,
          "explode",
          QT_TRANSLATE_NOOP("action","Explode"),
