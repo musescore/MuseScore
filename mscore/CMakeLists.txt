@@ -259,7 +259,7 @@ add_executable ( ${ExecutableName}
       importmidi/importmidi_tuplet_detect.cpp importmidi/importmidi_tuplet_filter.cpp
       importmidi/importmidi_tuplet_tonotes.cpp importmidi/importmidi_simplify.cpp
       importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
-      importmidi/importmidi_tempo.cpp
+      importmidi/importmidi_tempo.cpp importmidi/importmidi_instrument.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
       startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
