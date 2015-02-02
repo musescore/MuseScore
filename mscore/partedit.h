@@ -18,6 +18,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#if 0
+
 #ifndef __ILEDIT_H__
 #define __ILEDIT_H__
 
@@ -90,4 +92,4 @@ class InstrumentListEditor : public QScrollArea
 
 } // namespace Ms
 #endif
-
+#endif

@@ -8,7 +8,7 @@
   modified for MuseScore Werner Schweer, 2009
 */
 
-
+#if 0
 
 #ifndef _REV_H
 #define _REV_H
@@ -105,4 +105,4 @@ class Freeverb : public Effect {
       };
 
 #endif
-
+#endif
