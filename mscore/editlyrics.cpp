@@ -56,10 +56,14 @@ void ScoreView::lyricsUpDown(bool up, bool end)
       startEdit(lyrics, Grip::NO_GRIP);
       mscore->changeState(mscoreState());
       adjustCanvasPosition(lyrics, false);
-      if (end)
-            ((Lyrics*)editObject)->moveCursorToEnd();
-      else
-            ((Lyrics*)editObject)->moveCursorToStart();
+      if (end) {
+            ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+            ((Lyrics*)editObject)->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+            }
+      else {
+            ((Lyrics*)editObject)->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+            ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+            }
 
       _score->setLayoutAll(true);
       _score->update();
@@ -172,11 +176,14 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
-      if (end)
-            ((Lyrics*)editObject)->moveCursorToEnd();
-      else
-            ((Lyrics*)editObject)->moveCursorToStart();
-
+      if (end) {
+            ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+            ((Lyrics*)editObject)->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+            }
+      else {
+            ((Lyrics*)editObject)->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+            ((Lyrics*)editObject)->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+            }
       _score->setLayoutAll(true);
       _score->update();
       }
@@ -265,7 +272,7 @@ void ScoreView::lyricsMinus()
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
-      ((Lyrics*)editObject)->moveCursorToEnd();
+      ((Lyrics*)editObject)->selectAll();
 
       _score->setLayoutAll(true);
       _score->update();
@@ -382,7 +389,7 @@ void ScoreView::lyricsUnderscore()
       mscore->changeState(mscoreState());
 
       adjustCanvasPosition(toLyrics, false);
-      ((Lyrics*)editObject)->moveCursorToEnd();
+      ((Lyrics*)editObject)->selectAll();
 
       _score->setLayoutAll(true);
       //_score->update();
