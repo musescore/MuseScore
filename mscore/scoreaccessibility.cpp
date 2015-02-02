@@ -180,6 +180,7 @@ void ScoreAccessibility::updateAccessibilityInfo()
       if ( (qApp->focusWidget() != w) &&
            !mscore->inspector()->isAncestorOf(qApp->focusWidget()) &&
            !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) ) {
+            mscore->activateWindow();
             w->setFocus();
             }
       QObject* obj = static_cast<QObject*>(w);
