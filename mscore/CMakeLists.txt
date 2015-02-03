@@ -269,7 +269,6 @@ add_executable ( ${ExecutableName}
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
-      musescoreCore.h
       driver.h
       tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
       )
