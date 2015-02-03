@@ -2545,6 +2545,7 @@ QString Note::accessibleExtraInfo()
             }
       if (!el().isEmpty()) {
             foreach (Element* e, el()) {
+                  if (!score()->selectionFilter().canSelect(e)) continue;
                   rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
             }
@@ -2556,11 +2557,13 @@ QString Note::accessibleExtraInfo()
 
       if (!spannerFor().isEmpty()) {
             foreach (Spanner* s, spannerFor()) {
+                  if (!score()->selectionFilter().canSelect(s)) continue;
                   rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
       if (!spannerBack().isEmpty()) {
             foreach (Spanner* s, spannerBack()) {
+                  if (!score()->selectionFilter().canSelect(s)) continue;
                   rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
