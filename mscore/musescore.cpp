@@ -2299,7 +2299,8 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
 
                         QWidget* w = static_cast<QWidget*>(obj);
                         if(getPaletteBox()->isAncestorOf(w) ||
-                           inspector()->isAncestorOf(w)) {
+                           inspector()->isAncestorOf(w) ||
+                           (selectionWindow && selectionWindow->isAncestorOf(w))) {
                               activateWindow();
                               if(currentScoreView())
                                     currentScoreView()->setFocus();
