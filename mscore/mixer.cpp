@@ -223,7 +223,6 @@ void PartEdit::patchChanged(int n)
             score->startCmd();
             score->undo(new ChangePatch(channel, p));
             score->endCmd();
-            mscore->endCmd();
             }
       }
 

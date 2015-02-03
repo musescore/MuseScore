@@ -15,7 +15,7 @@
 
 #include "qmlplugin.h"
 #include "shortcut.h"
-#include "musescoreCore.h"
+#include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 
 #include <QQmlEngine>
@@ -101,10 +101,8 @@ Ms::Element* QmlPlugin::newElement(int t)
 
 Score* QmlPlugin::newScore(const QString& name, const QString& part, int measures)
       {
-      if (msc->currentScore()) {
+      if (msc->currentScore())
             msc->currentScore()->endCmd();
-            msc->endCmd();
-            }
       Score* score = new Score(MScore::defaultStyle());
       score->setName(name);
       score->appendPart(part);

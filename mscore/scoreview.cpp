@@ -1076,7 +1076,6 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
             _score->startCmd();
             elementPropertyAction(cmd, obj);
             _score->endCmd();
-            mscore->endCmd();
             }
       }
 
@@ -1187,7 +1186,6 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       if (_score->undo()->active()) {
             _score->setLayoutAll(true);
             _score->endCmd();
-            mscore->endCmd();
             }
       }
 
@@ -2465,7 +2463,6 @@ void ScoreView::normalCut()
       normalCopy();
       _score->cmdDeleteSelection();
       _score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -2508,7 +2505,6 @@ void ScoreView::normalPaste()
            }
 
       _score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -2973,21 +2969,18 @@ void ScoreView::cmd(const QAction* a)
             foreach(Element* e, _score->selection().elements())
                   _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
             _score->endCmd();
-            mscore->endCmd();
             }
       else if (cmd == "set-visible") {
             _score->startCmd();
             foreach(Element* e, _score->selection().elements())
                   _score->undo(new ChangeProperty(e, P_ID::VISIBLE, true));
             _score->endCmd();
-            mscore->endCmd();
             }
       else if (cmd == "unset-visible") {
             _score->startCmd();
             foreach(Element* e, _score->selection().elements())
                   _score->undo(new ChangeProperty(e, P_ID::VISIBLE, false));
             _score->endCmd();
-            mscore->endCmd();
             }
 
       else if (cmd == "add-remove-breaks") {
@@ -3320,7 +3313,6 @@ void ScoreView::noteEntryButton(QMouseEvent* ev)
       _score->startCmd();
       _score->putNote(p, ev->modifiers() & Qt::ShiftModifier);
       _score->endCmd();
-      mscore->endCmd();
       ChordRest* cr = _score->inputState().cr();
       if (cr)
             adjustCanvasPosition(cr, false);
@@ -4140,7 +4132,6 @@ void ScoreView::cmdAddNoteLine()
       _score->startCmd();
       _score->undoAddElement(tl);
       _score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -5151,32 +5142,6 @@ void ScoreView::appendMeasures(int n, Element::Type type)
       }
 
 //---------------------------------------------------------
-//   checkSelectionStateForInsertMeasure
-//---------------------------------------------------------
-
-MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
-      {
-      MeasureBase* mb = 0;
-      if (_score->selection().isRange()) {
-            mb = _score->selection().startSegment()->measure();
-            return mb;
-            }
-
-      mb = _score->selection().findMeasure();
-      if (mb)
-            return mb;
-
-      Element* e = _score->selection().element();
-      if (e) {
-            if (e->type() == Element::Type::VBOX || e->type() == Element::Type::TBOX)
-                  return static_cast<MeasureBase*>(e);
-            }
-      QMessageBox::warning(0, "MuseScore",
-            tr("No measure selected:\n" "Please select a measure and try again"));
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   cmdInsertMeasures
 //---------------------------------------------------------
 
@@ -5220,6 +5185,32 @@ void ScoreView::cmdInsertMeasure(Element::Type type)
       }
 
 //---------------------------------------------------------
+//   checkSelectionStateForInsertMeasure
+//---------------------------------------------------------
+
+MeasureBase* ScoreView::checkSelectionStateForInsertMeasure()
+      {
+      MeasureBase* mb = 0;
+      if (_score->selection().isRange()) {
+            mb = _score->selection().startSegment()->measure();
+            return mb;
+            }
+
+      mb = _score->selection().findMeasure();
+      if (mb)
+            return mb;
+
+      Element* e = _score->selection().element();
+      if (e) {
+            if (e->type() == Element::Type::VBOX || e->type() == Element::Type::TBOX)
+                  return static_cast<MeasureBase*>(e);
+            }
+      QMessageBox::warning(0, "MuseScore",
+            tr("No measure selected:\n" "Please select a measure and try again"));
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   cmdRepeatSelection
 //---------------------------------------------------------
 
@@ -5240,7 +5231,6 @@ void ScoreView::cmdRepeatSelection()
                               addTo = true;
                               }
                         _score->endCmd();
-                        mscore->endCmd();
                         }
                   }
             return;

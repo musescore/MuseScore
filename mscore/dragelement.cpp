@@ -145,7 +145,6 @@ void ScoreView::endDrag()
       dragElement = 0;
       setDropTarget(0); // this also resets dropAnchor
       _score->endCmd();
-      mscore->endCmd();
       }
 }
 

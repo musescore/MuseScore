@@ -130,7 +130,7 @@ class InspectorRest : public InspectorBase {
 
    public:
       InspectorRest(QWidget* parent);
-      virtual void setElement();
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -148,7 +148,7 @@ class InspectorClef : public InspectorBase {
       Clef* otherClef;        // the courtesy clef for a main clef or viceversa
                               // used to keep in sync ShowCourtesy setting of both clefs
    protected slots:
-      virtual void valueChanged(int idx);
+      virtual void valueChanged(int idx) override;
 
    public:
       InspectorClef(QWidget* parent);
@@ -244,7 +244,7 @@ class InspectorTempoText : public InspectorBase {
    public:
       InspectorTempoText(QWidget* parent);
       virtual void setElement() override;
-      virtual void postInit();
+      virtual void postInit() override;
       };
 
 //---------------------------------------------------------
@@ -340,7 +340,7 @@ class InspectorEmpty : public InspectorBase {
 
    public:
       InspectorEmpty(QWidget* parent);
-      virtual QSize sizeHint() const;
+      virtual QSize sizeHint() const override;
       };
 
 } // namespace Ms

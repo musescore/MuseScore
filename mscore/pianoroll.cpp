@@ -720,7 +720,6 @@ void PianorollEditor::onTimeChanged(int val)
       _score->startCmd();
       _score->undo(new ChangeNoteEvent(note, event, ne));
       _score->endCmd();
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------
@@ -746,7 +745,6 @@ void PianorollEditor::tickLenChanged(int val)
       _score->startCmd();
       _score->undo(new ChangeNoteEvent(note, event, ne));
       _score->endCmd();
-      mscore->endCmd();
       }
 
 }

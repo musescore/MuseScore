@@ -17,6 +17,7 @@
 
 #include <assert.h>
 
+#include "musescoreCore.h"
 #include "score.h"
 #include "utils.h"
 #include "key.h"
@@ -144,6 +145,7 @@ void Score::endCmd(bool rollback)
             rootScore()->_playlistDirty = true;  // TODO: flag individual operations
             rootScore()->_autosaveDirty = true;
             }
+      MuseScoreCore::mscoreCore->endCmd();
       }
 
 //---------------------------------------------------------
