@@ -28,9 +28,10 @@ class MuseScoreCore
       QList<Score*> scoreList;
 
    public:
-      MuseScoreCore()                    {}
-      Score* currentScore() const        { return cs; }
-      void setCurrentScore(Score* score) { cs = score; }
+      static MuseScoreCore* mscoreCore;
+      MuseScoreCore()                    { mscoreCore = this; }
+      Score* currentScore() const        { return cs;     }
+      void setCurrentScore(Score* score) { cs = score;    }
 
       bool saveAs(Score*, bool /*saveCopy*/, const QString& /*path*/, const QString& /*ext*/) { return false; }
       virtual void cmd(QAction* /*a*/) {}

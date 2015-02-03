@@ -54,7 +54,7 @@ class InspectorNote : public InspectorBase {
 
    public:
       InspectorNote(QWidget* parent);
-      virtual void setElement();
+      virtual void setElement() override;
       };
 
 

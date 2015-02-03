@@ -33,7 +33,7 @@ class InspectorImage : public InspectorBase {
       void updateSizeFromScale(const QSizeF&);
 
    protected slots:
-      virtual void valueChanged(int idx);
+      virtual void valueChanged(int idx) override;
 
    public:
       InspectorImage(QWidget* parent);

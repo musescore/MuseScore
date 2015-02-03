@@ -154,16 +154,16 @@ extern TextPalette* textPalette;
 
 void MuseScore::cmdInsertMeasures()
       {
-    if (cs) {
-        if (cs->selection().isNone() && !cs->selection().findMeasure()) {
-            QMessageBox::warning(0, "MuseScore",
-                 tr("No measure selected:\n" "Please select a measure and try again"));
+      if (cs) {
+            if (cs->selection().isNone() && !cs->selection().findMeasure()) {
+                  QMessageBox::warning(0, "MuseScore",
+                        tr("No measure selected:\n" "Please select a measure and try again"));
+                  }
+            else {
+                  insertMeasuresDialog = new InsertMeasuresDialog;
+                  insertMeasuresDialog->show();
+                  }
             }
-        else {
-            insertMeasuresDialog = new InsertMeasuresDialog;
-            insertMeasuresDialog->show();
-            }
-        }
       }
 
 //---------------------------------------------------------
@@ -3867,8 +3867,9 @@ void MuseScore::cmd(QAction* a)
 
 //---------------------------------------------------------
 //   endCmd
-//    called after every command action (including every
-//    mouse action)
+//    Called after every command action (including every
+//    mouse action).
+//    Updates the UI after a possible score change.
 //---------------------------------------------------------
 
 void MuseScore::endCmd()
@@ -4121,7 +4122,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                            tr("MuseScore: Load Style"), MScore::lastError);
                         }
                   cs->endCmd();
-                  endCmd();
                   }
             }
       else if (cmd == "edit-style") {
@@ -4361,7 +4361,6 @@ void MuseScore::switchLayoutMode(int val)
             cv->pageTop();
             if (m && m != cs->firstMeasure())
                   cv->adjustCanvasPosition(m, false);
-            endCmd();
             }
       }
 

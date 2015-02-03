@@ -32,7 +32,7 @@
 #include "updatechecker.h"
 #include "loginmanager.h"
 #include "uploadscoredialog.h"
-#include "musescoreCore.h"
+#include "libmscore/musescoreCore.h"
 
 namespace Ms {
 
@@ -589,7 +589,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       Q_INVOKABLE void openExternalLink(const QString&);
 
-      void endCmd();
+      virtual void endCmd() override;
       void printFile();
       bool exportFile();
       bool exportParts();

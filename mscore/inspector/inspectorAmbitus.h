@@ -33,12 +33,10 @@ class InspectorAmbitus : public InspectorBase {
 
    public:
       InspectorAmbitus(QWidget* parent);
-//      virtual void setElement();
 
    protected slots:
       void updateRange();
-      virtual void valueChanged(int idx);
-
+      virtual void valueChanged(int idx) override;
       };
 
 

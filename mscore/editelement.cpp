@@ -116,7 +116,6 @@ void ScoreView::endEdit()
             }
 
       _score->endCmd();
-      mscore->endCmd();
 
       if (dragElement && (dragElement != editObject)) {
             curElement = dragElement;
