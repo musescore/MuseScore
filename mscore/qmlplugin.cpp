@@ -22,7 +22,7 @@
 
 namespace Ms {
 
-extern MuseScoreCore* mscoreCore;
+// extern MuseScoreCore* mscoreCore;
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -31,7 +31,7 @@ extern MuseScoreCore* mscoreCore;
 QmlPlugin::QmlPlugin(QQuickItem* parent)
    : QQuickItem(parent)
       {
-      msc = mscoreCore;
+      msc = MuseScoreCore::mscoreCore;
       }
 
 QmlPlugin::~QmlPlugin()
