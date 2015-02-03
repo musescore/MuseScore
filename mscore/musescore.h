@@ -622,6 +622,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Navigator* navigator() const;
       NScrollArea* navigatorScrollArea() const { return _navigator; }
       QWidget*   searchDialog() const;
+      SelectionWindow* getSelectionWindow() const { return selectionWindow; }
       void updateLayer();
       void updatePlayMode();
       bool loop() const              { return loopAction->isChecked(); }
