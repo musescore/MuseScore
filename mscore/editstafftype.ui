@@ -378,7 +378,7 @@
                </sizepolicy>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="tab">
                <attribute name="title">
@@ -745,12 +745,15 @@
                     <widget class="QLabel" name="durSymLabel">
                      <property name="minimumSize">
                       <size>
-                       <width>120</width>
+                       <width>115</width>
                        <height>0</height>
                       </size>
                      </property>
                      <property name="text">
                       <string>Shown as:</string>
+                     </property>
+                     <property name="textFormat">
+                      <enum>Qt::PlainText</enum>
                      </property>
                      <property name="buddy">
                       <cstring>noteValuesNone</cstring>
@@ -761,7 +764,7 @@
                     <widget class="QRadioButton" name="noteValuesNone">
                      <property name="minimumSize">
                       <size>
-                       <width>110</width>
+                       <width>100</width>
                        <height>0</height>
                       </size>
                      </property>
@@ -814,6 +817,108 @@
                   <property name="frameShadow">
                    <enum>QFrame::Plain</enum>
                   </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_5_2">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="valuesRepeatLabel">
+                     <property name="minimumSize">
+                      <size>
+                       <width>115</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Repeat:</string>
+                     </property>
+                     <property name="textFormat">
+                      <enum>Qt::PlainText</enum>
+                     </property>
+                     <property name="buddy">
+                      <cstring>noteValuesNone</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="valuesRepeatNever">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Never</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="valuesRepeatSystem">
+                     <property name="minimumSize">
+                      <size>
+                       <width>120</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>At new system</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="valuesRepeatMeasure">
+                     <property name="minimumSize">
+                      <size>
+                       <width>110</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>At new meas.</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="valuesRepeatAlways">
+                     <property name="text">
+                      <string>Always</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_13_2">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frame_6">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Plain</enum>
+                  </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_17">
                    <property name="leftMargin">
                     <number>0</number>
@@ -831,12 +936,15 @@
                     <widget class="QLabel" name="stemStyleLabel">
                      <property name="minimumSize">
                       <size>
-                       <width>120</width>
+                       <width>115</width>
                        <height>0</height>
                       </size>
                      </property>
                      <property name="text">
                       <string>Stem style:</string>
+                     </property>
+                     <property name="textFormat">
+                      <enum>Qt::PlainText</enum>
                      </property>
                      <property name="buddy">
                       <cstring>stemBesideRadio</cstring>
@@ -847,7 +955,7 @@
                     <widget class="QRadioButton" name="stemBesideRadio">
                      <property name="minimumSize">
                       <size>
-                       <width>110</width>
+                       <width>100</width>
                        <height>0</height>
                       </size>
                      </property>
@@ -880,7 +988,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QFrame" name="frame_6">
+                 <widget class="QFrame" name="frame_7">
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
                   </property>
@@ -904,12 +1012,15 @@
                     <widget class="QLabel" name="stemPosLabel">
                      <property name="minimumSize">
                       <size>
-                       <width>120</width>
+                       <width>115</width>
                        <height>0</height>
                       </size>
                      </property>
                      <property name="text">
                       <string>Stem position:</string>
+                     </property>
+                     <property name="textFormat">
+                      <enum>Qt::PlainText</enum>
                      </property>
                      <property name="buddy">
                       <cstring>stemAboveRadio</cstring>
@@ -920,7 +1031,7 @@
                     <widget class="QRadioButton" name="stemAboveRadio">
                      <property name="minimumSize">
                       <size>
-                       <width>110</width>
+                       <width>100</width>
                        <height>0</height>
                       </size>
                      </property>
@@ -953,7 +1064,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QFrame" name="frame_7">
+                 <widget class="QFrame" name="frame_8">
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
                   </property>
@@ -977,12 +1088,15 @@
                     <widget class="QLabel" name="minimLabels">
                      <property name="minimumSize">
                       <size>
-                       <width>120</width>
+                       <width>115</width>
                        <height>0</height>
                       </size>
                      </property>
                      <property name="text">
                       <string>Half notes:</string>
+                     </property>
+                     <property name="textFormat">
+                      <enum>Qt::PlainText</enum>
                      </property>
                      <property name="buddy">
                       <cstring>minimNoneRadio</cstring>
@@ -996,7 +1110,7 @@
                      </property>
                      <property name="minimumSize">
                       <size>
-                       <width>110</width>
+                       <width>100</width>
                        <height>0</height>
                       </size>
                      </property>
