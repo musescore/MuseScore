@@ -520,7 +520,10 @@ void Score::fixTicks()
                                           // find start tick of next note
                                           // currently, breaths are always added in voice 0
                                           Segment* next = s->nextCR(i);
-                                          tick = qMax(tick, next->tick());
+                                          if (next)
+                                                tick = qMax(tick, next->tick());
+                                          else
+                                                tick = lastSegment()->tick();
                                           }
                                     }
                               if (length != 0.0)
