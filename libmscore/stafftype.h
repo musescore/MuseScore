@@ -100,6 +100,13 @@ enum class TablatureMinimStyle : char {
       SLASHED                         // draw half notes with stem with two slashes
       };
 
+enum class TablatureSymbolRepeat : char {
+      NEVER = 0,                    // never repeat the same duration symbol
+      SYSTEM,                       // repeat at the begining of a new system
+      MEASURE,                      // repeat at the beginning of a new measure
+      ALWAYS                        // always repeat
+      };
+
 struct TablatureDurationFont {
       QString family;                 // the family of the physical font to use
       QString displayName;            // the name to display to the user
@@ -148,7 +155,7 @@ class StaffType {
       bool _genKeysig       = true;       // create key signature at beginning of system
       bool _showLedgerLines = true;
 
-      // configurable properties
+      // TAB: configurable properties
       qreal _durationFontSize = 15.0;     // the size (in points) for the duration symbol font
       qreal _durationFontUserY = 0.0;     // the vertical offset (spatium units) for the duration symb. font
                                           // user configurable
@@ -158,6 +165,7 @@ class StaffType {
       bool  _genDurations = false;        // whether duration symbols are drawn or not
       bool  _linesThrough = false;        // whether lines for strings and stems may pass through fret marks or not
       TablatureMinimStyle _minimStyle = TablatureMinimStyle::NONE;    // how to draw minim stems (stem-and-beam durations only)
+      TablatureSymbolRepeat _symRepeat = TablatureSymbolRepeat::NEVER;// if and when to repeat the same duration symbol
       bool  _onLines      = true;         // whether fret marks are drawn on the string lines or between them
       bool  _showRests    = false;        // whether to draw rests or not
       bool  _stemsDown    = true;         // stems are drawn downward (stem-and-beam durations only)
@@ -165,7 +173,7 @@ class StaffType {
       bool  _upsideDown   = false;        // whether lines are drawn with highest string at top (false) or at bottom (true)
       bool  _useNumbers   = true;         // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
 
-      // internally managed variables
+      // TAB: internally managed variables
       qreal _durationBoxH = 0.0;
       qreal _durationBoxY = 0.0;          // the height and the y rect.coord. (relative to staff top line)
                                           // of a box bounding all duration symbols (raster units) internally computed:
@@ -207,7 +215,7 @@ class StaffType {
       StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, qreal lineDist, bool genClef,
                   bool showBarLines, bool stemless, bool genTimesig,
                   const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
-                  const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
+                  const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY, TablatureSymbolRepeat symRepeat,
                   bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
                   bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers);
 
@@ -284,7 +292,8 @@ class StaffType {
       qreal fretFontYOffset()             { setFretMetrics(); return _fretYOffset + _fretFontUserY * MScore::DPI*SPATIUM20; }
       bool  genDurations() const          { return _genDurations;       }
       bool  linesThrough() const          { return _linesThrough;       }
-      TablatureMinimStyle minimStyle () const   { return _minimStyle;   }
+      TablatureMinimStyle minimStyle() const    { return _minimStyle;   }
+      TablatureSymbolRepeat symRepeat() const   { return _symRepeat;    }
       bool  onLines() const               { return _onLines;            }
       bool  showRests() const             { return _showRests;          }
       bool  stemsDown() const             { return _stemsDown;          }
@@ -301,7 +310,8 @@ class StaffType {
       void  setFretFontUserY(qreal val)   { _fretFontUserY = val;       }
       void  setGenDurations(bool val)     { _genDurations = val;        }
       void  setLinesThrough(bool val)     { _linesThrough = val;        }
-      void  setMinimStyle(TablatureMinimStyle val)    { _minimStyle = val;    }
+      void  setMinimStyle(TablatureMinimStyle val)          { _minimStyle = val;    }
+      void  setSymbolRepeat(TablatureSymbolRepeat val)      { _symRepeat  = val;    }
       void  setOnLines(bool);
       void  setShowRests(bool val)        { _showRests = val;           }
       void  setStemsDown(bool val)        { _stemsDown = val;           }
