@@ -3030,23 +3030,26 @@ QString Chord::accessibleExtraInfo()
 
       if (!isGrace()) {
             foreach (Chord* c, graceNotes()) {
+                  if (!score()->selectionFilter().canSelect(c)) continue;
                   foreach (Note* n, c->notes()) {
                         rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
                         }
                   }
             }
 
-      if (arpeggio())
+      if (arpeggio() && score()->selectionFilter().canSelect(arpeggio()))
             rez = QString("%1 %2").arg(rez).arg(arpeggio()->screenReaderInfo());
 
-      if (tremolo())
+      if (tremolo() && score()->selectionFilter().canSelect(tremolo()))
             rez = QString("%1 %2").arg(rez).arg(tremolo()->screenReaderInfo());
 
-      if (glissando())
+      if (glissando() && score()->selectionFilter().canSelect(glissando()))
             rez = QString("%1 %2").arg(rez).arg(glissando()->screenReaderInfo());
 
-      foreach (Element* e, el())
+      foreach (Element* e, el()) {
+            if (!score()->selectionFilter().canSelect(e)) continue;
             rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+            }
 
       return QString("%1 %2").arg(rez).arg(ChordRest::accessibleExtraInfo());
       }
