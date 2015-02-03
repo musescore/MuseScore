@@ -1196,16 +1196,19 @@ QString Segment::accessibleExtraInfo()
       {
       QString rez = "";
       if (!this->annotations().empty()) {
-            rez = rez + tr("Annotations: ");
+            QString temp = "";
             foreach (Element* a, this->annotations()) {
+                  if (!score()->selectionFilter().canSelect(a)) continue;
                   switch(a->type()) {
                         case Element::Type::DYNAMIC:
                               //they are added in the chordrest, because they are for only one staff
                                break;
                         default:
-                               rez = rez + " " + a->accessibleInfo();
+                               temp = temp + " " + a->accessibleInfo();
                         }
                   }
+            if(!temp.isEmpty())
+                  rez = rez + tr("Annotations:") + temp;
             }
 
       QString startSpanners = "";
@@ -1215,6 +1218,7 @@ QString Segment::accessibleExtraInfo()
       for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
             ::Interval<Spanner*> interval = *i;
             Spanner* s = interval.value;
+            if (!score()->selectionFilter().canSelect(s)) continue;
             if (this->segmentType() == Segment::Type::EndBarLine       ||
                this->segmentType() == Segment::Type::BarLine           ||
                this->segmentType() == Segment::Type::StartRepeatBarLine) {

@@ -1301,17 +1301,21 @@ Element* ChordRest::prevElement()
 QString ChordRest::accessibleExtraInfo()
       {
       QString rez = "";
-      foreach (Articulation* a, articulations())
+      foreach (Articulation* a, articulations()) {
+            if (!score()->selectionFilter().canSelect(a)) continue;
             rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
+            }
 
       foreach (Element* l, lyricsList()) {
             if (!l)
                   continue;
+            if (!score()->selectionFilter().canSelect(l)) continue;
             rez = QString("%1 %2").arg(rez).arg(l->screenReaderInfo());
             }
 
       if (segment()) {
             foreach (Element* e, segment()->annotations()) {
+                  if (!score()->selectionFilter().canSelect(e)) continue;
                   if (e->staffIdx() == staffIdx() )
                         rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
@@ -1321,6 +1325,7 @@ QString ChordRest::accessibleExtraInfo()
             for (auto i = spanners.begin(); i < spanners.end(); i++) {
                   const ::Interval<Spanner*> interval = *i;
                   Spanner* s = interval.value;
+                  if (!score()->selectionFilter().canSelect(s)) continue;
                   if (s->type() == Element::Type::VOLTA || //voltas are added for barlines
                       s->type() == Element::Type::TIE    ) //ties are added in notes
                         continue;
