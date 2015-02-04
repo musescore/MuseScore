@@ -524,7 +524,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
       {
       Score* score = staff->score();
       const int track = staff->idx() * VOICES + voice;
-      Drumset* drumset = staff->part()->instr()->drumset();
+      const Drumset* drumset = staff->part()->instr()->drumset();
       const DrumsetKind useDrumset = staff->part()->instr()->useDrumset();
 
       const auto& opers = preferences.midiImportOperations.data()->trackOpers;

@@ -552,7 +552,7 @@ Score::FileError importBB(Score* score, const QString& name)
 int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int track)
       {
       Staff* cstaff          = score->staff(track/VOICES);
-      Drumset* drumset       = cstaff->part()->instr()->drumset();
+      const Drumset* drumset = cstaff->part()->instr()->drumset();
       DrumsetKind useDrumset = cstaff->part()->instr()->useDrumset();
       int tick               = notes->at(0)->mc.ontime();
 

@@ -282,13 +282,13 @@ void InstrumentData::read(XmlReader& e)
             else if (tag == "Drum") {
                   // if we see on of this tags, a custom drumset will
                   // be created
-                  if (_drumset == 0)
+                  if (!_drumset)
                         _drumset = new Drumset(*smDrumset);
                   if (!customDrumset) {
-                        _drumset->clear();
+                        const_cast<Drumset*>(_drumset)->clear();
                         customDrumset = true;
                         }
-                  _drumset->load(e);
+                  const_cast<Drumset*>(_drumset)->load(e);
                   }
             // support tag "Tablature" for a while for compatibility with existent 2.0 scores
             else if (tag == "Tablature" || tag == "StringData")
@@ -717,13 +717,10 @@ void InstrumentData::setUseDrumset(DrumsetKind val)
 //   setDrumset
 //---------------------------------------------------------
 
-void InstrumentData::setDrumset(Drumset* ds)
+void InstrumentData::setDrumset(const Drumset* ds)
       {
       delete _drumset;
-      if (ds)
-            _drumset = new Drumset(*ds);
-      else
-            _drumset = 0;
+      _drumset = ds ? new Drumset(*ds) : nullptr;
       }
 
 //---------------------------------------------------------
@@ -994,7 +991,7 @@ void Instrument::setInstrumentId(const QString &instrumentId)
 //   setDrumset
 //---------------------------------------------------------
 
-void Instrument::setDrumset(Drumset* ds)
+void Instrument::setDrumset(const Drumset* ds)
       {
       d->setDrumset(ds);
       }
@@ -1003,7 +1000,7 @@ void Instrument::setDrumset(Drumset* ds)
 //   drumset
 //---------------------------------------------------------
 
-Drumset* Instrument::drumset() const
+const Drumset* Instrument::drumset() const
       {
       return d->drumset();
       }

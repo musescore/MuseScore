@@ -149,8 +149,8 @@ class Instrument {
       QString instrumentId() const;
       void setInstrumentId(const QString& instrumentId);
 
-      void setDrumset(Drumset* ds);       // drumset is now owned by Instrument
-      Drumset* drumset() const;
+      void setDrumset(const Drumset* ds);
+      const Drumset* drumset() const;
       DrumsetKind useDrumset() const;
       void setUseDrumset(DrumsetKind val);
       void setAmateurPitchRange(int a, int b);

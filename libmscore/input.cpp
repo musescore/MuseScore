@@ -27,7 +27,7 @@ class DrumSet;
 //   drumset
 //---------------------------------------------------------
 
-Drumset* InputState::drumset() const
+const Drumset* InputState::drumset() const
       {
       if (_segment == 0 || _track == -1)
             return 0;
