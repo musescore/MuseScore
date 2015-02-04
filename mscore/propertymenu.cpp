@@ -449,7 +449,15 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "st-props") {
             StaffTextProperties rp(static_cast<StaffText*>(e));
-            rp.exec();
+            if (rp.exec()) {
+                  Score* score = e->score();
+                  StaffText* nt = rp.staffText()->clone();
+                  nt->setScore(score);
+                  score->undoChangeElement(e, nt);
+                  score->updateChannel();
+                  score->updateSwing();
+                  score->setPlaylistDirty();
+                  }
             }
       else if (cmd == "text-style") {
             Text* t = static_cast<Text*>(e);
