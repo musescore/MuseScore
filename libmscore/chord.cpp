@@ -29,7 +29,7 @@
 #include "arpeggio.h"
 #include "score.h"
 #include "tremolo.h"
-#include "glissando.h"        // for GLISS_STARTOFSYSTEM_WIDTH
+#include "glissando.h"
 #include "staff.h"
 #include "part.h"
 #include "utils.h"
@@ -191,7 +191,6 @@ Chord::Chord(Score* s)
       _stemDirection    = MScore::Direction::AUTO;
       _arpeggio         = 0;
       _tremolo          = 0;
-//      _glissando        = 0;
       _endsGlissando    = false;
       _noteType         = NoteType::NORMAL;
       _stemSlash        = 0;
@@ -222,7 +221,6 @@ Chord::Chord(const Chord& c, bool link)
 
       _stem          = 0;
       _hook          = 0;
-//      _glissando     = 0;
       _endsGlissando = false;
       _arpeggio      = 0;
       _stemSlash     = 0;
@@ -309,7 +307,6 @@ Chord::~Chord()
                   _tremolo->chord2()->setTremolo(0);
             delete _tremolo;
             }
-//      delete _glissando;
       delete _stemSlash;
       delete _stem;
       delete _hook;
@@ -463,7 +460,6 @@ void Chord::add(Element* e)
                   }
                   break;
             case Element::Type::GLISSANDO:
-//                  _glissando = static_cast<Glissando*>(e);
                   _endsGlissando = true;
                   break;
             case Element::Type::STEM:
@@ -546,8 +542,7 @@ void Chord::remove(Element* e)
                   }
                   break;
             case Element::Type::GLISSANDO:
-//                  _glissando = 0;
-            _endsGlissando = false;
+                  _endsGlissando = false;
                   break;
             case Element::Type::STEM:
                   _stem = 0;
@@ -965,8 +960,6 @@ void Chord::write(Xml& xml) const
             n->write(xml);
       if (_arpeggio)
             _arpeggio->write(xml);
-//      if (_glissando)
-//            _glissando->write(xml);
       if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote)
             _tremolo->write(xml);
       for (Element* e : _el)
@@ -1162,8 +1155,6 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _arpeggio);
       if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote))
             func(data, _tremolo);
-//      if (_glissando)
-//            _glissando->scanElements(data, func, all);
       if (staff() && staff()->showLedgerLines())
             for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
                   func(data, ll);
@@ -1194,8 +1185,6 @@ void Chord::processSiblings(std::function<void(Element*)> func)
             func(_arpeggio);
       if (_tremolo)
             func(_tremolo);
-//      if (_glissando)
-//            func(_glissando);
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
             func(ll);
       for (int i = 0; i < _notes.size(); ++i)
@@ -1516,9 +1505,6 @@ void Chord::layout2()
       for (Chord* c : _graceNotes)
             c->layout2();
 
-      // not here: moved to spanner managment within Note class
-//      if (glissando())
-//            glissando()->layout();
       qreal _spatium = spatium();
 
       //
@@ -1871,17 +1857,7 @@ void Chord::layoutPitched()
       if (_endsGlissando) {
             if (rtick())                        // if not at beginning of measure
                   lll += _spatium * 0.5 + minTieLength;
-/*            else {                              // if at beginning of measure
-                  Segment* seg = segment();     // and measure at beginning of system...
-                  Measure* currMeas = seg->measure();
-                  Measure* frstMeas = seg->system()->firstMeasure();
-                  // if current measure is first system measure OR
-                  // we have a current measure but the system contains no measure
-                  // (= we are still laying out the first measure of the system)
-                  if (currMeas == frstMeas || (currMeas != nullptr && frstMeas == nullptr))
-                        if (lll < _spatium * GLISS_STARTOFSYSTEM_WIDTH)
-                              lll = _spatium * GLISS_STARTOFSYSTEM_WIDTH;    // add more left space
-                  } */
+            // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
 
       if (dots()) {
@@ -2196,10 +2172,11 @@ void Chord::layoutTablature()
             // know the y position of the next staves
             }
 
+      // allocate enough room for glissandi
       if (_endsGlissando) {
-            lll += _spatium * 0.5;
-            if (rtick())
-                  lll += score()->styleS(StyleIdx::MinTieLength).val() * _spatium;
+            if (rtick())                        // if not at beginning of measure
+                  lll += (0.5 + score()->styleS(StyleIdx::MinTieLength).val()) * _spatium;
+            // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
 
       if (dots()) {
