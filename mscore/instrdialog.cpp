@@ -290,9 +290,8 @@ void MuseScore::editInstrList()
                   }
             else {
                   part = pli->part;
-                  if (part->show() != pli->visible()) {
-                        part->score()->undo()->push(new ChangePartProperty(part, 0, pli->visible()));
-                        }
+                  if (part->show() != pli->visible())
+                        part->undoChangeProperty(P_ID::VISIBLE, pli->visible());
                   for (int cidx = 0; pli->child(cidx); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         if (sli->op() == ListItemOp::I_DELETE) {

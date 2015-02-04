@@ -383,8 +383,14 @@ void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st, PropertyS
             }
       else {
             if (e->getProperty(t) != st)
-                  undo(new ChangeProperty(e, t, st, ps));
+                  undo(new ChangeProperty(e, t, st));
             }
+      }
+
+void Score::undoChangeProperty(ScoreElement* e, P_ID t, const QVariant& st)
+      {
+      if (e->getProperty(t) != st)
+            undo(new ChangeProperty(e, t, st));
       }
 
 //---------------------------------------------------------
@@ -412,6 +418,12 @@ void Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
                   undo()->push1(new ChangeProperty(e, t, st));
                   }
             }
+      }
+
+void Score::undoPropertyChanged(ScoreElement* e, P_ID t, const QVariant& st)
+      {
+      if (e->getProperty(t) != st)
+            undo()->push1(new ChangeProperty(e, t, st));
       }
 
 //---------------------------------------------------------
@@ -2547,16 +2559,14 @@ void ChangePageFormat::flip()
 //---------------------------------------------------------
 
 ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible,
-   qreal _userDist, QColor _color, bool _neverHide, bool _showIfEmpty, qreal _mag, bool hide)
+   qreal _userDist, bool _neverHide, bool _showIfEmpty, bool hide)
       {
       staff       = _staff;
       small       = _small;
       invisible   = _invisible;
       userDist    = _userDist;
-      color       = _color;
       neverHide   = _neverHide;
       showIfEmpty = _showIfEmpty;
-      mag         = _mag;
       hideSystemBarLine = hide;
       }
 
@@ -2583,28 +2593,22 @@ void ChangeStaff::flip()
       int oldSmall        = staff->small();
       bool oldInvisible   = staff->invisible();
       qreal oldUserDist   = staff->userDist();
-      QColor oldColor     = staff->color();
       bool oldNeverHide   = staff->neverHide();
       bool oldShowIfEmpty = staff->showIfEmpty();
-      qreal oldMag        = staff->userMag();
       bool hide           = staff->hideSystemBarLine();
 
       staff->setSmall(small);
       staff->setInvisible(invisible);
       staff->setUserDist(userDist);
-      staff->setColor(color);
       staff->setNeverHide(neverHide);
       staff->setShowIfEmpty(showIfEmpty);
-      staff->setUserMag(mag);
       staff->setHideSystemBarLine(hideSystemBarLine);
 
       small       = oldSmall;
       invisible   = oldInvisible;
       userDist    = oldUserDist;
-      color       = oldColor;
       neverHide   = oldNeverHide;
       showIfEmpty = oldShowIfEmpty;
-      mag         = oldMag;
       hideSystemBarLine = hide;
 
       Score* score = staff->score();
@@ -3505,17 +3509,6 @@ void ChangeStaffUserDist::flip()
       }
 
 //---------------------------------------------------------
-//   ChangePartProperty::flip
-//---------------------------------------------------------
-
-void ChangePartProperty::flip()
-      {
-      QVariant v = part->getProperty(id);
-      part->setProperty(id, property);
-      property = v;
-      }
-
-//---------------------------------------------------------
 //   ChangeProperty::flip
 //---------------------------------------------------------
 
@@ -3532,7 +3525,7 @@ void ChangeProperty::flip()
             ;
 #endif
       if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS)
-            element->score()->removeSpanner(static_cast<Spanner*>(element));
+            static_cast<Element*>(element)->score()->removeSpanner(static_cast<Spanner*>(element));
 
       QVariant v       = element->getProperty(id);
       PropertyStyle ps = element->propertyStyle(id);
@@ -3542,7 +3535,7 @@ void ChangeProperty::flip()
             element->setProperty(id, property);
 
       if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS)
-            element->score()->addSpanner(static_cast<Spanner*>(element));
+            static_cast<Element*>(element)->score()->addSpanner(static_cast<Spanner*>(element));
       property = v;
       propertyStyle = ps;
       }

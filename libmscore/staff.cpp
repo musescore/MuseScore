@@ -158,8 +158,8 @@ QString Staff::partName() const
 //---------------------------------------------------------
 
 Staff::Staff(Score* s)
+  : ScoreElement(s)
       {
-      _score     = s;
       _barLineTo = (lines() - 1) * 2;
       }
 
@@ -459,10 +459,9 @@ void Staff::write(Xml& xml) const
             }
       if (_userDist != 0.0)
             xml.tag("distOffset", _userDist / spatium());
-      if (_userMag != 1.0)
-            xml.tag("mag", _userMag);
-      if (color() != Qt::black)
-            xml.tag("color", color());
+
+      writeProperty(xml, P_ID::MAG);
+      writeProperty(xml, P_ID::COLOR);
       xml.etag();
       }
 
@@ -1010,5 +1009,58 @@ bool Staff::isTop() const
       return _part->staves()->front() == this;
       }
 
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Staff::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::MAG:
+                  return userMag();
+            case P_ID::COLOR:
+                  return color();
+            default:
+                  qDebug("Staff::setProperty: unhandled id");
+                  return QVariant();
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Staff::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_ID::MAG:
+                  setUserMag(v.toDouble());
+                  break;
+            case P_ID::COLOR:
+                  setColor(v.value<QColor>());
+                  break;
+            default:
+                  qDebug("Staff::setProperty: unhandled id");
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Staff::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::MAG:
+                  return 1.0;
+            case P_ID::COLOR:
+                  return QColor(Qt::black);
+            default:
+                  return QVariant();
+            }
+      }
 }
 
