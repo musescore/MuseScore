@@ -291,8 +291,10 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   ii.w->setStyleSheet("");
                   reset = true;
                   }
-            else
+            else {
                   reset = !isDefault(ii);
+                  ii.w->setStyleSheet("");
+                  }
             if (ii.r)
                   ii.r->setEnabled(reset);
             }

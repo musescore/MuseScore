@@ -100,7 +100,28 @@ void ScoreView::doDragElement(QMouseEvent* ev)
             return;
             }
 
+      // special case when dragging notes:
+      //    you usually dont want dragging stems & hooks
+      //    which would offset stems
+
+      bool dragNotes = false;
       for (Element* e : _score->selection().elements()) {
+            if (e->type() == Element::Type::NOTE) {
+                  dragNotes = true;
+                  break;
+                  }
+            }
+
+      QList<Element*> el;
+      for (Element* e : _score->selection().elements()) {
+            if (dragNotes) {
+                  if (e->type() == Element::Type::STEM || e->type() == Element::Type::HOOK)
+                        continue;
+                  }
+            el.append(e);
+            }
+
+      for (Element* e : el) {
             QRectF r = e->drag(&data);
             _score->addRefresh(r);
             }
