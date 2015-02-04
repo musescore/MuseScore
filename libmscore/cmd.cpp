@@ -1176,7 +1176,7 @@ void Score::upDown(bool up, UpDownMode mode)
             switch (oNote->staff()->staffType()->group()) {
                   case StaffGroup::PERCUSSION:
                         {
-                        Drumset* ds = part->instr()->drumset();
+                        const Drumset* ds = part->instr()->drumset();
                         if (ds)
                               newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
                         }

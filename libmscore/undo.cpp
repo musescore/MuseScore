@@ -3850,4 +3850,15 @@ void ChangeMetaTags::flip()
       metaTags = t;
       }
 
+//---------------------------------------------------------
+//   ChangeDrumset::flip
+//---------------------------------------------------------
+
+void ChangeDrumset::flip()
+      {
+      Drumset d = *instrument->drumset();
+      instrument->setDrumset(&drumset);
+      drumset = d;
+      }
+
 }

@@ -512,7 +512,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool noScore() const { return scoreList.isEmpty(); }
 
       TextTools* textTools();
-      void showDrumTools(Drumset*, Staff*);
+      void showDrumTools(const Drumset*, Staff*);
       void updateDrumTools();
       void showPluginCreator(QAction*);
       void showPluginManager();

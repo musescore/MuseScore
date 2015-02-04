@@ -1625,7 +1625,7 @@ static void tupletStartStop(ChordRest* cr, Notations& notations, Xml& xml)
             xml.tagE("tuplet type=\"stop\"");
             }
       }
-      
+
 //---------------------------------------------------------
 //   findTrill -- get index of trill in trill table
 //   return -1 if not found
@@ -2226,7 +2226,7 @@ static void writeBeam(Xml& xml, ChordRest* cr, Beam* b)
                   xml.tag(QString("beam number=\"%1\"").arg(i), s);
             }
       }
-      
+
 //---------------------------------------------------------
 //   instrId
 //---------------------------------------------------------
@@ -3126,7 +3126,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       xml.etag();
       directionETag(xml, staff);
       }
-      
+
 //---------------------------------------------------------
 //   findHairpin -- get index of hairpin in hairpin table
 //   return -1 if not found
@@ -3147,7 +3147,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       {
       directionTag(xml, attr, hp);
       xml.stag("direction-type");
-            
+
       int n = findHairpin(hp);
       if (n >= 0)
             hairpins[n] = 0;
@@ -3179,7 +3179,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       xml.etag();
       directionETag(xml, staff);
       }
-      
+
 //---------------------------------------------------------
 //   findOttava -- get index of ottava in ottava table
 //   return -1 if not found
@@ -3203,7 +3203,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       Ottava::Type st = ot->ottavaType();
       directionTag(xml, attr, ot);
       xml.stag("direction-type");
-            
+
       int n = findOttava(ot);
       if (n >= 0)
             ottavas[n] = 0;
@@ -4043,7 +4043,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                         }
                   }
             }
-            
+
       //ClefType ct = rest->staff()->clef(rest->tick());
 
       // write the key signatues
@@ -4163,7 +4163,7 @@ static int findPartGroupNumber(int* partGroupEnd)
       qDebug("no free part group number");
       return MAX_PART_GROUPS;
       }
-      
+
 //---------------------------------------------------------
 //  scoreInstrument
 //---------------------------------------------------------
@@ -4195,7 +4195,7 @@ static void midiInstrument(Xml& xml, const int partNr, const int instrNr,
       xml.tag("pan", int(((instr->channel(0).pan - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
       xml.etag();
       }
-      
+
 //---------------------------------------------------------
 //  initInstrMap
 //---------------------------------------------------------
@@ -4214,7 +4214,7 @@ static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList* il, const 
                   im.insert(pinstr, im.size());
             }
       }
-      
+
 //---------------------------------------------------------
 //  initReverseInstrMap
 //---------------------------------------------------------
@@ -4346,7 +4346,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
             if (part->instr()->useDrumset() != DrumsetKind::NONE) {
-                  Drumset* drumset = part->instr()->drumset();
+                  const Drumset* drumset = part->instr()->drumset();
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
                         if (di.notehead != NoteHead::Group::HEAD_INVALID)

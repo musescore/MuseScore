@@ -305,7 +305,7 @@ struct AcEl {
 
 void Measure::layoutCR0(ChordRest* cr, qreal mm)
       {
-      Drumset* drumset = 0;
+      const Drumset* drumset = 0;
       if (cr->staff()->part()->instr()->useDrumset() != DrumsetKind::NONE)
             drumset = cr->staff()->part()->instr()->drumset();
 

@@ -1159,7 +1159,10 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             }
       else if (cmd == "edit-drumset") {
             EditDrumset drumsetEdit(staff->part()->instr()->drumset(), this);
-            drumsetEdit.exec();
+            if (drumsetEdit.exec()) {
+                  _score->undo(new ChangeDrumset(staff->part()->instr(), drumsetEdit.drumset()));
+                  mscore->updateDrumTools();
+                  }
             }
       else if (cmd == "drumroll") {
             _score->endCmd();
@@ -1604,7 +1607,7 @@ void ScoreView::setShadowNote(const QPointF& p)
       NoteHead::Type noteHead       = is.duration().headType();
 
       if (instr->useDrumset() != DrumsetKind::NONE) {
-            Drumset* ds  = instr->drumset();
+            const Drumset* ds  = instr->drumset();
             int pitch    = is.drumNote();
             if (pitch >= 0 && ds->isValid(pitch)) {
                   line     = ds->line(pitch);
@@ -4863,7 +4866,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
             qDebug("cannot enter notes here (no chord rest at current position)");
             return;
             }
-      Drumset* ds = is.drumset();
+      const Drumset* ds = is.drumset();
       int octave = 4;
       if (ds) {
             char note1 = "CDEFGAB"[note];

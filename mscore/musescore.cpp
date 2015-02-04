@@ -4369,7 +4369,7 @@ void MuseScore::switchLayoutMode(int val)
 //   showDrumTools
 //---------------------------------------------------------
 
-void MuseScore::showDrumTools(Drumset* drumset, Staff* staff)
+void MuseScore::showDrumTools(const Drumset* drumset, Staff* staff)
       {
       if (drumset) {
             if (!_drumTools) {

@@ -753,8 +753,8 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
             case StaffGroup::PERCUSSION: {
                   if (_is.rest())
                         break;
-                  Drumset* ds   = instr->drumset();
-                  nval.pitch    = _is.drumNote();
+                  const Drumset* ds = instr->drumset();
+                  nval.pitch        = _is.drumNote();
                   if (nval.pitch < 0) {
                         error = true;
                         return nval;
@@ -831,11 +831,11 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       MScore::Direction stemDirection = MScore::Direction::AUTO;
       int track               = _is.track();
       if (_is.drumNote() != -1) {
-            nval.pitch    = _is.drumNote();
-            Drumset* ds   = _is.drumset();
-            nval.headGroup  = ds->noteHead(nval.pitch);
-            stemDirection = ds->stemDirection(nval.pitch);
-            track         = ds->voice(nval.pitch) + (_is.track() / VOICES) * VOICES;
+            nval.pitch        = _is.drumNote();
+            const Drumset* ds = _is.drumset();
+            nval.headGroup    = ds->noteHead(nval.pitch);
+            stemDirection     = ds->stemDirection(nval.pitch);
+            track             = ds->voice(nval.pitch) + (_is.track() / VOICES) * VOICES;
             _is.setTrack(track);
             expandVoice();
             }
@@ -990,8 +990,8 @@ void Score::putNote(const Position& p, bool replace)
       const Instrument* instr = st->part()->instr(s->tick());
       switch (st->staffType()->group()) {
             case StaffGroup::PERCUSSION: {
-                  Drumset* ds = instr->drumset();
-                  stemDirection = ds->stemDirection(nval.pitch);
+                  const Drumset* ds = instr->drumset();
+                  stemDirection     = ds->stemDirection(nval.pitch);
                   break;
                   }
             case StaffGroup::TAB: {

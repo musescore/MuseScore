@@ -37,6 +37,7 @@
 #include "stafftype.h"
 #include "cleflist.h"
 #include "note.h"
+#include "drumset.h"
 
 namespace Ms {
 
@@ -1437,6 +1438,21 @@ class ChangeMetaTags : public UndoCommand {
    public:
       ChangeMetaTags(Score* s, const QMap<QString,QString>& m) : score(s), metaTags(m) {}
       UNDO_NAME("ChangeMetaTags")
+      };
+
+//---------------------------------------------------------
+//   ChangeDrumset
+//---------------------------------------------------------
+
+class ChangeDrumset : public UndoCommand {
+      Instrument* instrument;
+      Drumset drumset;
+
+      void flip();
+
+   public:
+      ChangeDrumset(Instrument* i, const Drumset* d) : instrument(i), drumset(*d) {}
+      UNDO_NAME("ChangeDrumset")
       };
 
 
