@@ -716,18 +716,15 @@ class ChangeStaff : public UndoCommand {
       bool   small;
       bool   invisible;
       qreal  userDist;
-      QColor color;
       bool   neverHide;
       bool   showIfEmpty;
       bool   hideSystemBarLine;
-      qreal  mag;
-
 
       void flip();
 
    public:
-      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color, bool _neverHide,
-         bool _showIfEmpty, qreal _mag, bool hide);
+      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, bool _neverHide,
+         bool _showIfEmpty, bool hide);
       UNDO_NAME("ChangeStaff")
       };
 
@@ -761,24 +758,6 @@ class ChangePart : public UndoCommand {
       ChangePart(Part*, const Instrument&, const QString& name);
       UNDO_NAME("ChangePart")
       };
-
-//---------------------------------------------------------
-//   ChangePartProperty
-//---------------------------------------------------------
-
-class ChangePartProperty : public UndoCommand {
-      Part* part;
-      int id;
-      QVariant property;
-
-      void flip();
-
-   public:
-      ChangePartProperty(Part* e, int i, const QVariant& v)
-         : part(e), id(i), property(v) {}
-      UNDO_NAME("ChangePartProperty")
-      };
-
 
 //---------------------------------------------------------
 //   ChangeTextStyle
@@ -1154,7 +1133,7 @@ class ChangeStaffUserDist : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeProperty : public UndoCommand {
-      Element* element;
+      ScoreElement* element;
       P_ID id;
       QVariant property;
       PropertyStyle propertyStyle;
@@ -1162,7 +1141,7 @@ class ChangeProperty : public UndoCommand {
       void flip();
 
    public:
-      ChangeProperty(Element* e, P_ID i, const QVariant& v, PropertyStyle ps = PropertyStyle::NOSTYLE)
+      ChangeProperty(ScoreElement* e, P_ID i, const QVariant& v, PropertyStyle ps = PropertyStyle::NOSTYLE)
          : element(e), id(i), property(v), propertyStyle(ps) {}
       P_ID getId() const  { return id; }
       UNDO_NAME("ChangeProperty")

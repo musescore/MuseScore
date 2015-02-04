@@ -14,9 +14,9 @@
 #define __ELEMENT_H__
 
 #include "mscore.h"
-#include "property.h"
 #include "spatium.h"
 #include "fraction.h"
+#include "scoreElement.h"
 
 class QPainter;
 
@@ -166,7 +166,7 @@ struct ElementName {
 //    @P bbox       QRectF                  Bounding box relative to pos and userOff, read only
 //-------------------------------------------------------------------
 
-class Element : public QObject {
+class Element : public QObject, public ScoreElement {
       Q_OBJECT
       Q_ENUMS(Type)
       Q_ENUMS(Placement)
@@ -320,8 +320,8 @@ class Element : public QObject {
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
    protected:
-      Score* _score;
       QPointF _startDragPosition;   ///< used during drag
+
    public:
       Element(Score* s = 0);
       Element(const Element&);
@@ -337,8 +337,6 @@ class Element : public QObject {
       int lid() const                         { return _links ? _links->lid() : 0; }
       const LinkedElements* links() const     { return _links;      }
       void setLinks(LinkedElements* le)       { _links = le;        }
-      Score* score() const                    { return _score;      }
-      virtual void setScore(Score* s)         { _score = s;         }
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
       Element* findMeasure();
@@ -421,7 +419,6 @@ class Element : public QObject {
 
       virtual void draw(QPainter*) const {}
 
-      void writeProperty(Xml& xml, P_ID id) const;
       virtual void writeProperties(Xml& xml) const;
       virtual bool readProperties(XmlReader&);
 
@@ -562,18 +559,9 @@ class Element : public QObject {
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
 
-      virtual QVariant getProperty(P_ID) const;
-      virtual bool setProperty(P_ID, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
-      virtual void resetProperty(P_ID id)          {
-            QVariant v = propertyDefault(id);
-            if (v.isValid())
-                  setProperty(id, v);
-            }
-      virtual PropertyStyle propertyStyle(P_ID) const { return PropertyStyle::NOSTYLE; }
-
-      void undoChangeProperty(P_ID, const QVariant&);
-      void undoPushProperty(P_ID);
+      virtual QVariant getProperty(P_ID) const override;
+      virtual bool setProperty(P_ID, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       virtual void styleChanged() {}
 

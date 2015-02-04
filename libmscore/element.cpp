@@ -300,7 +300,7 @@ Element::~Element()
 //---------------------------------------------------------
 
 Element::Element(Score* s) :
-   QObject(0)
+   QObject(0), ScoreElement(s)
       {
       _selected      = false;
       _generated     = false;
@@ -311,12 +311,11 @@ Element::Element(Score* s) :
       _color         = MScore::defaultColor;
       _mag           = 1.0;
       _tag           = 1;
-      _score         = s;
       itemDiscovered = false;
       }
 
 Element::Element(const Element& e)
-   : QObject(0)
+   : QObject(0), ScoreElement(e)
       {
       _parent     = e._parent;
       _selected   = e._selected;
@@ -330,7 +329,6 @@ Element::Element(const Element& e)
       _pos        = e._pos;
       _userOff    = e._userOff;
       _readPos    = e._readPos;
-      _score      = e._score;
       _bbox       = e._bbox;
       _tag        = e._tag;
       itemDiscovered = false;
@@ -713,10 +711,8 @@ void Element::writeProperties(Xml& xml) const
                         }
                   }
             }
-      if (color() != Qt::black)
-            xml.tag("color", color());
-      if (!visible())
-            xml.tag("visible", visible());
+      writeProperty(xml, P_ID::COLOR);
+      writeProperty(xml, P_ID::VISIBLE);
       writeProperty(xml, P_ID::PLACEMENT);
       }
 
@@ -804,15 +800,6 @@ bool Element::readProperties(XmlReader& e)
       else
             return false;
       return true;
-      }
-
-//---------------------------------------------------------
-//   writeProperty
-//---------------------------------------------------------
-
-void Element::writeProperty(Xml& xml, P_ID id) const
-      {
-      xml.tag(id, getProperty(id), propertyDefault(id));
       }
 
 //---------------------------------------------------------
@@ -1599,25 +1586,6 @@ QVariant Element::propertyDefault(P_ID id) const
                   break;
             }
       return QVariant();
-      }
-
-//---------------------------------------------------------
-//   undoChangeProperty
-//---------------------------------------------------------
-
-void Element::undoChangeProperty(P_ID id, const QVariant& val)
-      {
-      score()->undoChangeProperty(this, id, val);
-      }
-
-//---------------------------------------------------------
-//   undoPushProperty
-//---------------------------------------------------------
-
-void Element::undoPushProperty(P_ID id)
-      {
-      QVariant val = getProperty(id);
-      score()->undo()->push1(new ChangeProperty(this, id, val));
       }
 
 //---------------------------------------------------------
