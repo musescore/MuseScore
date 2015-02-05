@@ -700,7 +700,8 @@ void GuitarPro::createMeasures()
       {
       int tick = 0;
       Fraction ts;
-      for (int i = 0; i < measures; ++i) {
+//      for (int i = 0; i < measures; ++i) {
+      for (int i = 0; i < bars.size(); ++i) {   // ?? (ws)
             Fraction nts = bars[i].timesig;
             Measure* m = new Measure(score);
             m->setTick(tick);

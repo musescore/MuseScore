@@ -284,7 +284,8 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
             bool reset;
             if (styledValue == PropertyStyle::STYLED) {
                   // does not work for QComboBox:
-                  ii.w->setStyleSheet("* { color: gray; foreground: gray; }");
+                  // ii.w->setStyleSheet("* { color: gray; foreground: gray; }");
+                  ii.w->setStyleSheet("* { color: gray; }");
                   reset = false;
                   }
             else if (styledValue == PropertyStyle::UNSTYLED) {
