@@ -454,8 +454,14 @@ void Spanner::computeStartElement()
 void Spanner::computeEndElement()
       {
       switch (_anchor) {
-            case Anchor::SEGMENT:
+            case Anchor::SEGMENT: {
                   _endElement = score()->findCRinStaff(tick2() - 1, track2());
+                  int nticks = endCR()->tick() + endCR()->actualTicks() - _tick;
+                  if (_ticks != nticks) {
+                        qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
+                        setTicks(nticks);
+                        }
+                  }
                   break;
 
             case Anchor::MEASURE:
