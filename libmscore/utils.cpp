@@ -716,23 +716,39 @@ Note* searchTieNote(Note* note)
       int etrack   = strack + part->staves()->size() * VOICES;
 
       if (chord->isGraceBefore()) {
+            // grace before
+            // try to tie to note in parent chord
             chord = static_cast<Chord*>(chord->parent());
             note2 = chord->findNote(note->pitch());
-            return note2;
+            if (note2)
+                  return note2;
             }
-      QList<Chord*> gna;
-      if (chord->getGraceNotesAfter(&gna)) {
-            chord = gna[0];
-            note2 = chord->findNote(note->pitch());
-            return note2;
+      else if (chord->isGraceAfter()) {
+            // grace after
+            // we will try to tie to note in next normal chord, below
+            // meanwhile, set chord to parent chord so the endTick calculation will make sense
+            chord = static_cast<Chord*>(chord->parent());
             }
+      else {
+            // normal chord
+            // try to tie to grace note after if present
+            QList<Chord*> gna;
+            if (chord->getGraceNotesAfter(&gna)) {
+                  Chord* gc = gna[0];
+                  note2 = gc->findNote(note->pitch());
+                  if (note2)
+                        return note2;
+                  }
+            }
+      // at this point, chord is a regular chord, not a grace chord
+      // and we are looking for a note in the *next* chord (grace or regular)
 
-      // end of current note duration
+      // calculate end of current note duration
       // but err on the safe side in case there is roundoff in tick count
       int endTick = chord->tick() + chord->actualTicks() - 1;
 
       while ((seg = seg->next1(Segment::Type::ChordRest))) {
-            // skip ahead to end of current note duration
+            // skip ahead to end of current note duration as calculated above
             // but just in case, stop if we find element in current track
             if (seg->tick() < endTick  && !seg->element(chord->track()))
                   continue;
@@ -740,6 +756,14 @@ Note* searchTieNote(Note* note)
                   Chord* c = static_cast<Chord*>(seg->element(track));
                   if (c == 0 || c->type() != Element::Type::CHORD)
                         continue;
+                  // if there are grace notes before, try to tie to first one
+                  QList<Chord*> gnb;
+                  if (c->getGraceNotesBefore(&gnb)) {
+                        Chord* gc = gnb[0];
+                        note2 = gc->findNote(note->pitch());
+                        if (note2)
+                              return note2;
+                        }
                   int staffIdx = c->staffIdx() + c->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
                         continue;
