@@ -2474,7 +2474,7 @@ void ScoreView::normalCut()
 
 void ScoreView::editPaste()
       {
-      if (editObject->isText()) {
+      if (editObject && editObject->isText()) {
             if (editObject->type() == Element::Type::LYRICS)
                   static_cast<Lyrics*>(editObject)->paste(this);
             else
