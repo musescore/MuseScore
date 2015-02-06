@@ -80,6 +80,28 @@ void TextCursor::initFromStyle(const TextStyle& s)
       }
 
 //---------------------------------------------------------
+//   columns
+//---------------------------------------------------------
+
+int TextCursor::columns() const
+      {
+      return _text->textBlock(_line).columns();
+      }
+
+//---------------------------------------------------------
+//   currentCharacter
+//---------------------------------------------------------
+
+QChar Text::currentCharacter() const
+      {
+      const TextBlock& t = _layout[_cursor.line()];
+      QString s = t.text(_cursor.column(), _cursor.column());
+      if (s.isEmpty())
+            return QChar();
+      return s[0];
+      }
+
+//---------------------------------------------------------
 //   TextFragment
 //---------------------------------------------------------
 
@@ -1478,6 +1500,7 @@ QString Text::plainText(bool noSym) const
 void Text::startEdit(MuseScoreView*, const QPointF& pt)
       {
       setEditMode(true);
+      _cursor.setText(this);
       _cursor.setLine(0);
       _cursor.setColumn(0);
       _cursor.clearSelection();
@@ -1659,13 +1682,13 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         break;
 
                   case Qt::Key_Left:
-                        if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
+                        if (!movePosition(ctrlPressed ? QTextCursor::WordLeft : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
                               return false;
                         s.clear();
                         break;
 
                   case Qt::Key_Right:
-                        if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
+                        if (!movePosition(ctrlPressed ? QTextCursor::NextWord : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
                               return false;
                         s.clear();
                         break;
@@ -1950,6 +1973,31 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
                   case QTextCursor::EndOfLine:
                         _cursor.setColumn(curLine().columns());
                         break;
+
+                  case QTextCursor::WordLeft:
+                        if (_cursor.column() > 0) {
+                              _cursor.setColumn(_cursor.column()-1);
+                              while (_cursor.column() > 0 && currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()-1);
+                              while (_cursor.column() > 0 && !currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()-1);
+                              if (currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()+1);
+                              }
+                        break;
+
+                  case QTextCursor::NextWord: {
+                        int cols =  _cursor.columns();
+                        if (_cursor.column() < cols) {
+                              _cursor.setColumn(_cursor.column() + 1);
+                              while (_cursor.column() < cols && !currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()+1);
+                              while (_cursor.column() < cols && currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()+1);
+                              }
+                        }
+                        break;
+
                   default:
                         qDebug("Text::movePosition: not implemented");
                         return false;
@@ -1958,6 +2006,7 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
       if (mode == QTextCursor::MoveAnchor)
             _cursor.clearSelection();
       updateCursorFormat(&_cursor);
+      score()->addRefresh(canvasBoundingRect());
       return true;
       }
 
@@ -2771,6 +2820,10 @@ QString Text::accessibleInfo()
       return  QString("%1: %2").arg(rez).arg(s);
       }
 
+//---------------------------------------------------------
+//   subtype
+//---------------------------------------------------------
+
 int Text::subtype() const
       {
       switch (textStyleType()) {
@@ -2784,6 +2837,10 @@ int Text::subtype() const
             default: return -1;
             }
       }
+
+//---------------------------------------------------------
+//   subtypeName
+//---------------------------------------------------------
 
 QString Text::subtypeName() const
       {

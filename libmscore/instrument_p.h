@@ -32,7 +32,7 @@ class InstrumentData : public QSharedData {
       QString _instrumentId;
 
       DrumsetKind _useDrumset;
-      Drumset*    _drumset;
+      const Drumset*    _drumset;
       StringData  _stringData;
 
       QList<NamedEventList>   _midiActions;
@@ -63,8 +63,8 @@ class InstrumentData : public QSharedData {
       QString instrumentId()                                 { return _instrumentId; }
       void setInstrumentId(const QString& instrumentId)      { _instrumentId = instrumentId; }
 
-      void setDrumset(Drumset* ds);       // drumset is now owned by Instrument
-      Drumset* drumset() const                               { return _drumset;    }
+      void setDrumset(const Drumset* ds);
+      const Drumset* drumset() const                         { return _drumset;    }
       DrumsetKind useDrumset() const                         { return _useDrumset; }
       void setUseDrumset(DrumsetKind val);
       void setAmateurPitchRange(int a, int b)                { _minPitchA = a; _maxPitchA = b; }

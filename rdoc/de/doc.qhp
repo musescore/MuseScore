@@ -2,13 +2,12 @@
 <QtHelpProject version="1.0">
     <namespace>musescore.com.musescore.2.0</namespace>
     <virtualFolder>doc</virtualFolder>
-    <customFilter name="MuseScore 2.0">
+    <customFilter name="de">
         <filterAttribute>MuseScore</filterAttribute>
-        <filterAttribute>2.0</filterAttribute>
     </customFilter>
+
     <filterSection>
         <filterAttribute>MuseScore</filterAttribute>
-        <filterAttribute>2.0</filterAttribute>
         <toc>
             <section title="My Application Manual" ref="index.html">
                 <section title="Chapter 1" ref="doc.html#chapter1"/>
@@ -17,15 +16,16 @@
             </section>
         </toc>
         <keywords>
-            <keyword name="foo" id="MuseScore::foo" ref="doc.html#foo"/>
+            <keyword id="manual" ref="doc.html"/>
             <keyword name="bar" ref="doc.html#bar"/>
             <keyword id="MuseScore::foobar" ref="doc.html#foobar"/>
             <keyword id="mops" ref="doc.html#foobar"/>
             <keyword id="klops" ref="doc.html#foobar"/>
         </keywords>
         <files>
-            <file>classic.css</file>
-            <file>*.html</file>
+            <file>../classic.css</file>
+            <file>doc.html</file>
         </files>
     </filterSection>
+
 </QtHelpProject>

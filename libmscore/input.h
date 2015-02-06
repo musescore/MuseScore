@@ -66,7 +66,7 @@ class InputState {
       Segment* lastSegment() const        { return _lastSegment;        }
       void setLastSegment(Segment* s)     { _lastSegment = s;           }
 
-      Drumset* drumset() const;
+      const Drumset* drumset() const;
 
       int drumNote() const                { return _drumNote;       }
       void setDrumNote(int v)             { _drumNote = v;          }

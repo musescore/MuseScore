@@ -53,26 +53,32 @@ void InspectorBeam::valueChanged(int idx)
       {
       if (iList[idx].t == P_ID::USER_MODIFIED) {
             bool val = getValue(iList[idx]).toBool();
-            iList[8].w->setEnabled(!val);
-            iList[10].w->setEnabled(val);
-            iList[11].w->setEnabled(val);
+            b.noSlope->setEnabled(!val);
+            b.y1->setEnabled(val);
+            b.y2->setEnabled(val);
+            }
+      else if (iList[idx].t == P_ID::BEAM_NO_SLOPE) {
+            bool val = getValue(iList[idx]).toBool();
+            b.userPosition->setEnabled(!val);
+            b.y1->setEnabled(!val);
+            b.y2->setEnabled(!val);
             }
       InspectorBase::valueChanged(idx);
       }
 
-void InspectorBeam::setValue(const InspectorItem& ii, const QVariant& val)
+void InspectorBeam::setValue(const InspectorItem& ii, QVariant val)
       {
       if (ii.w == b.userPosition) {
             bool enable = val.toBool();
-            iList[8].w->setEnabled(!enable);
-            iList[10].w->setEnabled(enable);
-            iList[11].w->setEnabled(enable);
+            b.noSlope->setEnabled(!enable);
+            b.y1->setEnabled(enable);
+            b.y2->setEnabled(enable);
             }
       else if (ii.w == b.noSlope) {
             bool enable = !val.toBool();
-            iList[9].w->setEnabled(enable);
-            iList[10].w->setEnabled(enable);
-            iList[11].w->setEnabled(enable);
+            b.userPosition->setEnabled(enable);
+            b.y1->setEnabled(enable);
+            b.y2->setEnabled(enable);
             }
       InspectorBase::setValue(ii, val);
       }

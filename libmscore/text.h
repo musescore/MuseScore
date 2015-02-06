@@ -21,6 +21,7 @@ namespace Ms {
 
 class MuseScoreView;
 struct SymCode;
+class Text;
 
 enum class CharFormatType : char { TEXT, SYMBOL };
 enum class VerticalAlignment : char { AlignNormal, AlignSuperScript, AlignSubScript };
@@ -68,6 +69,7 @@ class CharFormat {
 //---------------------------------------------------------
 
 class TextCursor {
+      Text*      _text;
       CharFormat _format;
       int _line          { 0 };
       int _column        { 0 };
@@ -91,6 +93,8 @@ class TextCursor {
       void setColumn(int val)       { _column = val; }
       void setSelectLine(int val)   { _selectLine = val; }
       void setSelectColumn(int val) { _selectColumn = val; }
+      void setText(Text* t)         { _text = t; }
+      int columns() const;
       void initFromStyle(const TextStyle& s);
       };
 
@@ -202,6 +206,7 @@ class Text : public Element {
       void changeSelectionFormat(FormatId id, QVariant val);
       void setEditMode(bool val)              { _editMode = val;  }
       void editInsertText(const QString&);
+      QChar currentCharacter() const;
 
    protected:
       QColor textColor() const;
@@ -209,6 +214,7 @@ class Text : public Element {
       void layoutFrame();
       void layoutEdit();
       void createLayout();
+      const TextBlock& textBlock(int line) { return _layout[line]; }
 
    public:
       Text(Score* = 0);
@@ -316,6 +322,8 @@ class Text : public Element {
       static bool validateText(QString& s);
       bool inHexState() const { return hexState >= 0; }
       void endHexState();
+
+      friend class TextCursor;
       };
 
 

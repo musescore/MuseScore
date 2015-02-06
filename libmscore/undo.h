@@ -37,6 +37,7 @@
 #include "stafftype.h"
 #include "cleflist.h"
 #include "note.h"
+#include "drumset.h"
 
 namespace Ms {
 
@@ -659,12 +660,12 @@ class ChangeConcertPitch : public UndoCommand {
 class EditText : public UndoCommand {
       Text* text;
       QString oldText;
-      int undoLevel;
+      //int undoLevel;
 
       void undoRedo();
 
    public:
-      EditText(Text* t, const QString& ot, int l) : text(t), oldText(ot), undoLevel(l) {}
+      EditText(Text* t, const QString& ot, int /*l*/) : text(t), oldText(ot)/*, undoLevel(l)*/ {}
       virtual void undo();
       virtual void redo();
       UNDO_NAME("EditText")
@@ -715,18 +716,15 @@ class ChangeStaff : public UndoCommand {
       bool   small;
       bool   invisible;
       qreal  userDist;
-      QColor color;
       bool   neverHide;
       bool   showIfEmpty;
       bool   hideSystemBarLine;
-      qreal  mag;
-
 
       void flip();
 
    public:
-      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color, bool _neverHide,
-         bool _showIfEmpty, qreal _mag, bool hide);
+      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, bool _neverHide,
+         bool _showIfEmpty, bool hide);
       UNDO_NAME("ChangeStaff")
       };
 
@@ -760,24 +758,6 @@ class ChangePart : public UndoCommand {
       ChangePart(Part*, const Instrument&, const QString& name);
       UNDO_NAME("ChangePart")
       };
-
-//---------------------------------------------------------
-//   ChangePartProperty
-//---------------------------------------------------------
-
-class ChangePartProperty : public UndoCommand {
-      Part* part;
-      int id;
-      QVariant property;
-
-      void flip();
-
-   public:
-      ChangePartProperty(Part* e, int i, const QVariant& v)
-         : part(e), id(i), property(v) {}
-      UNDO_NAME("ChangePartProperty")
-      };
-
 
 //---------------------------------------------------------
 //   ChangeTextStyle
@@ -1043,13 +1023,13 @@ class ChangeTremoloBar : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeNoteEvents : public UndoCommand {
-      Chord* chord;
+      //Chord* chord;
       QList<NoteEvent*> events;
 
       void flip();
 
    public:
-      ChangeNoteEvents(Chord* n, const QList<NoteEvent*>& l) : chord(n), events(l) {}
+      ChangeNoteEvents(Chord* /*n*/, const QList<NoteEvent*>& l) : /*chord(n),*/ events(l) {}
       UNDO_NAME("ChangeNoteEvents")
       };
 
@@ -1153,7 +1133,7 @@ class ChangeStaffUserDist : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeProperty : public UndoCommand {
-      Element* element;
+      ScoreElement* element;
       P_ID id;
       QVariant property;
       PropertyStyle propertyStyle;
@@ -1161,7 +1141,7 @@ class ChangeProperty : public UndoCommand {
       void flip();
 
    public:
-      ChangeProperty(Element* e, P_ID i, const QVariant& v, PropertyStyle ps = PropertyStyle::NOSTYLE)
+      ChangeProperty(ScoreElement* e, P_ID i, const QVariant& v, PropertyStyle ps = PropertyStyle::NOSTYLE)
          : element(e), id(i), property(v), propertyStyle(ps) {}
       P_ID getId() const  { return id; }
       UNDO_NAME("ChangeProperty")
@@ -1437,6 +1417,21 @@ class ChangeMetaTags : public UndoCommand {
    public:
       ChangeMetaTags(Score* s, const QMap<QString,QString>& m) : score(s), metaTags(m) {}
       UNDO_NAME("ChangeMetaTags")
+      };
+
+//---------------------------------------------------------
+//   ChangeDrumset
+//---------------------------------------------------------
+
+class ChangeDrumset : public UndoCommand {
+      Instrument* instrument;
+      Drumset drumset;
+
+      void flip();
+
+   public:
+      ChangeDrumset(Instrument* i, const Drumset* d) : instrument(i), drumset(*d) {}
+      UNDO_NAME("ChangeDrumset")
       };
 
 

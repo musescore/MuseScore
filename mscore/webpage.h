@@ -18,6 +18,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#if 0
+
 #ifndef __WEBPAGE_H__
 #define __WEBPAGE_H__
 
@@ -158,4 +160,4 @@ Q_DECLARE_METATYPE(WebScoreView);
 #endif
 }
 #endif
-
+#endif

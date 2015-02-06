@@ -100,7 +100,7 @@ void Score::write(Xml& xml, bool selectionOnly)
                               startCmd();
                               unhide = true;
                               }
-                        undo(new ChangePartProperty(part, 0, true));
+                        part->undoChangeProperty(P_ID::VISIBLE, true);
                         hiddenParts.append(part);
                         }
                   }

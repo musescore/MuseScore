@@ -406,6 +406,7 @@ class MScore : public QObject {
 #ifdef SCRIPT_INTERFACE
       static QQmlEngine* qml();
 #endif
+      virtual void endCmd() { };
       };
 
 //---------------------------------------------------------

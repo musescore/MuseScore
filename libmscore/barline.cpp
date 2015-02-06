@@ -1349,10 +1349,13 @@ QString BarLine::accessibleExtraInfo()
             Segment* seg = static_cast<Segment*>(parent());
             QString rez = "";
 
-            foreach (Element* e, *el())
+            foreach (Element* e, *el()) {
+                  if (!score()->selectionFilter().canSelect(e)) continue;
                   rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                  }
 
             foreach (Element* e, seg->annotations()) {
+                  if (!score()->selectionFilter().canSelect(e)) continue;
                   if (e->track() == track())
                         rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
@@ -1361,6 +1364,7 @@ QString BarLine::accessibleExtraInfo()
             if (m) {
                   //jumps
                   foreach (Element* e, *m->el()) {
+                        if (!score()->selectionFilter().canSelect(e)) continue;
                         if (e->type() == Element::Type::JUMP)
                               rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                         if (e->type() == Element::Type::MARKER) {
@@ -1374,6 +1378,7 @@ QString BarLine::accessibleExtraInfo()
                   Measure* nextM = m->nextMeasureMM();
                   if (nextM) {
                         foreach (Element* e, *nextM->el()) {
+                              if (!score()->selectionFilter().canSelect(e)) continue;
                               if (e->type() == Element::Type::MARKER)
                                     if (static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)
                                           continue; //added above^
@@ -1388,6 +1393,7 @@ QString BarLine::accessibleExtraInfo()
             for (auto i = spanners.begin(); i < spanners.end(); i++) {
                   ::Interval<Spanner*> interval = *i;
                   Spanner* s = interval.value;
+                  if (!score()->selectionFilter().canSelect(s)) continue;
                   if (s->type() == Element::Type::VOLTA) {
                         if (s->tick() == tick)
                               rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());

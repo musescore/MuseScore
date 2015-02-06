@@ -33,7 +33,6 @@ namespace Ms {
 class EditDrumset : public QDialog, private Ui::EditDrumsetBase {
       Q_OBJECT
 
-      Drumset* oDrumset;
       Drumset  nDrumset;
 
       void apply();
@@ -51,7 +50,8 @@ class EditDrumset : public QDialog, private Ui::EditDrumsetBase {
       void save();
 
    public:
-      EditDrumset(Drumset* ds, QWidget* parent = 0);
+      EditDrumset(const Drumset* ds, QWidget* parent = 0);
+      const Drumset* drumset() const { return &nDrumset; }
       };
 
 

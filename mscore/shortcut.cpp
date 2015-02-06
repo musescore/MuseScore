@@ -37,7 +37,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Show local handbook"), // Appears if you use Help > What's This?
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
-         ShortcutFlags::NONE
+         ShortcutFlags::NONE | ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::MAIN_WINDOW,
@@ -963,7 +963,7 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CMD
          },
       {
-         MsWidget::MAIN_WINDOW,
+         MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
             | STATE_HARMONY_FIGBASS_EDIT | STATE_PLAY | STATE_FOTO,
          "escape",
@@ -3119,6 +3119,28 @@ Shortcut Shortcut::_sc[] = {
          STATE_TEXT_EDIT,
          "text-u",
          QT_TRANSLATE_NOOP("action","underline")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_TEXT_EDIT,
+         "text-word-left",
+         QT_TRANSLATE_NOOP("action","move word left"),
+         QT_TRANSLATE_NOOP("action","move word left"),
+         QT_TRANSLATE_NOOP("action","move word left"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_TEXT_EDIT,
+         "text-word-right",
+         QT_TRANSLATE_NOOP("action","move word right"),
+         QT_TRANSLATE_NOOP("action","move word right"),
+         QT_TRANSLATE_NOOP("action","move word right"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE
          },
       {
          MsWidget::SCORE_TAB,

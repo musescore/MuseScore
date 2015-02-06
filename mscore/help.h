@@ -15,6 +15,8 @@
 
 namespace Ms {
 
+class HelpEngine;
+
 //---------------------------------------------------------
 //   HelpQuery
 //---------------------------------------------------------
@@ -35,7 +37,11 @@ class HelpQuery : public QWidgetAction {
       HelpQuery(QWidget* parent);
       };
 
+extern QHelpEngine* helpEngine;
+
 }     // end namespace Ms
+
+
 #endif
 
 

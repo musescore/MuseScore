@@ -36,7 +36,7 @@ class InstrumentTemplate;
 //   @P startTrack int      (read only)
 //---------------------------------------------------------
 
-class Part : public QObject {
+class Part : public QObject, public ScoreElement {
       Q_OBJECT
 
       Q_PROPERTY(QString partName READ partName WRITE setPartName)
@@ -49,8 +49,6 @@ class Part : public QObject {
       Q_PROPERTY(int startTrack READ startTrack)
       Q_PROPERTY(int midiProgram READ midiProgram)
       Q_PROPERTY(QString instrumentId READ instrumentId)
-
-      Score* _score;
 
       QString _partName;           ///< used in tracklist (mixer)
       InstrumentList _instrList;
@@ -113,7 +111,6 @@ class Part : public QObject {
       void removeStaff(Staff*);
       bool show() const                        { return _show;  }
       void setShow(bool val)                   { _show = val;   }
-      Score* score() const                     { return _score; }
 
       Instrument* instr(int tick = 0);
       const Instrument* instr(int tick = 0) const;
@@ -124,8 +121,8 @@ class Part : public QObject {
       void setPartName(const QString& s)       { _partName = s; }
       InstrumentList* instrList()              { return &_instrList;       }
 
-      QVariant getProperty(int id) const;
-      void setProperty(int id, const QVariant& property);
+      QVariant getProperty(P_ID) const override;
+      bool setProperty(P_ID, const QVariant&) override;
       };
 
 

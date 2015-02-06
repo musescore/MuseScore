@@ -45,7 +45,7 @@ include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
 # for debugging the make system uncomment next line:
-# set(CMAKE_VERBOSE_MAKEFILE ON)
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set (CMAKE_AUTOMOC TRUE)
 

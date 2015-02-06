@@ -58,9 +58,9 @@ class Volta : public TextLine {
       Q_PROPERTY(Ms::Volta::Type voltaType READ voltaType WRITE undoSetVoltaType)
       Q_ENUMS(Type)
 
-private:
       QList<int> _endings;
       PropertyStyle lineWidthStyle;
+      PropertyStyle lineStyleStyle;
 
    public:
       enum class Type : char {

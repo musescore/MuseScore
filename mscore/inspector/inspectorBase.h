@@ -42,13 +42,13 @@ class InspectorBase : public QWidget {
 
       QSignalMapper* resetMapper;
       QSignalMapper* valueMapper;
-      bool blockSignals;
 
       bool dirty() const;
       void checkDifferentValues(const InspectorItem&);
 
    protected slots:
-      virtual void valueChanged(int idx, bool reset = false);
+      virtual void valueChanged(int idx, bool reset);
+      virtual void valueChanged(int idx);
       void resetClicked(int);
 
    protected:

@@ -44,7 +44,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         int trackCount,
                         const QString &midiFile,
                         bool hasHumanBeats,
-                        bool hasTempoText)
+                        bool hasTempoText,
+                        bool hasChordNames)
       {
       beginResetModel();
       _trackOpers = opers;
@@ -662,6 +663,27 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         }
                   };
             _columns.push_back(std::unique_ptr<Column>(new ShowTempoText(_trackOpers)));
+            }
+
+      //-----------------------------------------------------------------------
+      if (hasChordNames) {
+            struct ShowChordNames : Column {
+                  ShowChordNames(MidiOperations::Opers &opers) : Column(opers)
+                        {
+                        }
+                  QString headerName() const override { return QCoreApplication::translate(
+                                          "MIDI import operations", "Show\nchord names"); }
+                  bool isForAllTracksOnly() const override { return true; }
+                  QVariant value(int /*trackIndex*/) const override
+                        {
+                        return _opers.showChordNames.value();
+                        }
+                  void setValue(const QVariant &value, int /*trackIndex*/) override
+                        {
+                        _opers.showChordNames.setValue(value.toBool());
+                        }
+                  };
+            _columns.push_back(std::unique_ptr<Column>(new ShowChordNames(_trackOpers)));
             }
 
       //-----------------------------------------------------------------------

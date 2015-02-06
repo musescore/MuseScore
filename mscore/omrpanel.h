@@ -11,6 +11,8 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#ifdef OMR
+
 #ifndef __OMRPANEL_H__
 #define __OMRPANEL_H__
 
@@ -56,4 +58,4 @@ class OmrPanel : public QDockWidget {
 
 } // namespace Ms
 #endif
-
+#endif

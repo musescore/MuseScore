@@ -1,6 +1,5 @@
 #include "importmidi_delegate.h"
 
-
 namespace Ms {
 
 TimeSigEditor::TimeSigEditor(const QStringList &values, QWidget *parent)
@@ -379,7 +378,7 @@ void OperationsDelegate::setEditorData(QWidget *editor,
                   lw->setMinimumWidth(lw->sizeHintForColumn(0) + extraWidth);
 
                               // to prevent possible hiding bottom part of the list
-                  const int h = lw->count() * lw->visualItemRect(lw->currentItem()).height() + extraHeight;
+                  int h = lw->count() * lw->visualItemRect(lw->currentItem()).height() + extraHeight;
                   const int y = (lw->parentWidget() && (lw->parentWidget()->rect().bottom() < lw->y() + h))
                               ? lw->parentWidget()->rect().bottom() - h - extraHeight : lw->y();
                   lw->setGeometry(lw->x(), y, lw->width(), h);
@@ -389,7 +388,12 @@ void OperationsDelegate::setEditorData(QWidget *editor,
                               // to app window and map coordinates accordingly to leave lw in place
                   const auto globalCoord = lw->parentWidget()->mapToGlobal(lw->geometry().topLeft());
                   lw->setParent(appWindow);
-                  const auto newLocalCoord = appWindow->mapFromGlobal(globalCoord);
+                  auto newLocalCoord = appWindow->mapFromGlobal(globalCoord);
+                              // prevent possible hiding top part of the list (show scroll bar instead)
+                  if (newLocalCoord.y() < 0) {
+                        h += newLocalCoord.y();
+                        newLocalCoord.setY(0);
+                        }
                   lw->setGeometry(newLocalCoord.x(), newLocalCoord.y(), lw->width(), h);
                   }
             else if (mv) {

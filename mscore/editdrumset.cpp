@@ -56,10 +56,9 @@ const char* noteHeadNames[int(NoteHead::Group::HEAD_GROUPS)] = {
 //   EditDrumset
 //---------------------------------------------------------
 
-EditDrumset::EditDrumset(Drumset* ds, QWidget* parent)
+EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
    : QDialog(parent)
       {
-      oDrumset = ds;
       nDrumset = *ds;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -205,8 +204,6 @@ void EditDrumset::bboxClicked(QAbstractButton* button)
 void EditDrumset::apply()
       {
       valueChanged();  //save last changes in name
-      *oDrumset = nDrumset;
-      mscore->updateDrumTools();
       }
 
 //---------------------------------------------------------

@@ -32,7 +32,7 @@
 #include "updatechecker.h"
 #include "loginmanager.h"
 #include "uploadscoredialog.h"
-#include "musescoreCore.h"
+#include "libmscore/musescoreCore.h"
 
 namespace Ms {
 
@@ -90,6 +90,7 @@ class Driver;
 class Seq;
 class ImportMidiPanel;
 class Startcenter;
+class HelpBrowser;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -287,6 +288,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QLabel* _modeText;
       QLabel* _positionLabel;
       NewWizard* newWizard           { 0 };
+      HelpBrowser* helpBrowser       { 0 };
+      QDockWidget* manualDock        { 0 };
 
       PaletteBox* paletteBox         { 0 };
       Inspector* _inspector          { 0 };
@@ -397,7 +400,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showSynthControl(bool);
       void showSelectionWindow(bool);
       void showSearchDialog();
-      void helpBrowser(const QUrl&) const;
       void splitWindow(bool horizontal);
       void removeSessionFile();
       void editChordStyle();
@@ -433,6 +435,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void cmdAppendMeasures();
       void cmdInsertMeasures();
       void magChanged(int);
+      void magTextChanged();
       void showPageSettings();
       void removeTab(int);
       void removeTab();
@@ -468,7 +471,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void cmd(QAction* a);
       void dirtyChanged(Score*);
       void setPos(int tick);
-      void searchTextChanged(const QString& s);
       void pluginTriggered(int);
       void handleMessage(const QString& message);
       void setCurrentScoreView(ScoreView*);
@@ -512,7 +514,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool noScore() const { return scoreList.isEmpty(); }
 
       TextTools* textTools();
-      void showDrumTools(Drumset*, Staff*);
+      void showDrumTools(const Drumset*, Staff*);
       void updateDrumTools();
       void showPluginCreator(QAction*);
       void showPluginManager();
@@ -589,7 +591,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       Q_INVOKABLE void openExternalLink(const QString&);
 
-      void endCmd();
+      virtual void endCmd() override;
       void printFile();
       bool exportFile();
       bool exportParts();
@@ -622,6 +624,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Navigator* navigator() const;
       NScrollArea* navigatorScrollArea() const { return _navigator; }
       QWidget*   searchDialog() const;
+      SelectionWindow* getSelectionWindow() const { return selectionWindow; }
       void updateLayer();
       void updatePlayMode();
       bool loop() const              { return loopAction->isChecked(); }
@@ -663,7 +666,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PluginCreator* pluginCreator()   { return _pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
       void showMessage(const QString& s, int timeout);
-      void helpBrowser(const QString = QString()) const;
+      void showHelp(QString);
+      void showHelp(const QUrl&);
 
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);

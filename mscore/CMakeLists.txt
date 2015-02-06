@@ -259,17 +259,18 @@ add_executable ( ${ExecutableName}
       importmidi/importmidi_tuplet_detect.cpp importmidi/importmidi_tuplet_filter.cpp
       importmidi/importmidi_tuplet_tonotes.cpp importmidi/importmidi_simplify.cpp
       importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
-      importmidi/importmidi_tempo.cpp
+      importmidi/importmidi_tempo.cpp importmidi/importmidi_instrument.cpp
+      importmidi/importmidi_chordname.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
       startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
+      logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp searchComboBox.cpp
       logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp
       help.cpp help.h
 
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
-      musescoreCore.h
       driver.h
       tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
       )

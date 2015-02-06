@@ -251,7 +251,6 @@ void EditStaff::apply()
       instrument.setMinPitchP(_minPitchP);
       instrument.setMaxPitchP(_maxPitchP);
 
-//      Text text(0);
       instrument.setShortName(sn);
       instrument.setLongName(ln);
 
@@ -275,17 +274,17 @@ void EditStaff::apply()
             if (v1 != v2)
                   score->transpositionChanged(part, v2);
             }
+      orgStaff->undoChangeProperty(P_ID::MAG, scale);
+      orgStaff->undoChangeProperty(P_ID::COLOR, col);
 
       if (s != orgStaff->small()
          || inv != orgStaff->invisible()
          || userDist != orgStaff->userDist()
-         || col != orgStaff->color()
          || nhide != orgStaff->neverHide()
          || ifEmpty != orgStaff->showIfEmpty()
-         || scale != orgStaff->userMag()
          || hideSystemBL != orgStaff->hideSystemBarLine()
          ) {
-            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide, ifEmpty, scale, hideSystemBL));
+            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), nhide, ifEmpty, hideSystemBL));
             }
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {

@@ -171,14 +171,9 @@ Ottava::Ottava(Score* s)
    : TextLine(s)
       {
       _numbersOnly        = score()->styleB(StyleIdx::ottavaNumbersOnly);
-      numbersOnlyStyle    = PropertyStyle::STYLED;
-      beginTextStyle      = PropertyStyle::STYLED;
-      continueTextStyle   = PropertyStyle::STYLED;
       setOttavaType(Type::OTTAVA_8VA);
       setLineWidth(score()->styleS(StyleIdx::ottavaLineWidth));
-      lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::ottavaLineStyle)));
-      lineStyleStyle = PropertyStyle::STYLED;
       setFlag(ElementFlag::ON_STAFF, true);
       }
 

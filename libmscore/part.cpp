@@ -31,8 +31,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 Part::Part(Score* s)
+   : ScoreElement(s)
       {
-      _score = s;
       _show  = true;
       setInstrument(Instrument(), 0);     // default instrument
       }
@@ -351,31 +351,33 @@ void Part::setShortName(const QString& s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Part::getProperty(int id) const
+QVariant Part::getProperty(P_ID id) const
       {
-      if (id)
-            return QVariant();
-      else
+      if (id == P_ID::VISIBLE)
             return QVariant(_show);
+      else
+            return QVariant();
       }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-void Part::setProperty(int id, const QVariant& property)
+bool Part::setProperty(P_ID id, const QVariant& property)
       {
-      if (id)
-            qDebug("Part::setProperty: unknown id %d", id);
-      else
+      if (id == P_ID::VISIBLE) {
             setShow(property.toBool());
             for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
                   m->setDirty();
                   if (m->mmRest())
                         m->mmRest()->setDirty();
                   break;
+                  }
             }
+      else
+            qDebug("Part::setProperty: unknown id %d", int(id));
       score()->setLayoutAll(true);
+      return true;
       }
 
 //---------------------------------------------------------
