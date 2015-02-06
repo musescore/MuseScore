@@ -773,11 +773,20 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::BREATH:
                   {
                   Breath* b = static_cast<Breath*>(e);
-                  b->setTrack(staffIdx() * VOICES);
+                  int track = staffIdx() * VOICES;
+                  b->setTrack(track);
+
+                  // find start tick of next note in staff
+#if 0
+                  int bt = tick() + actualTicks();    // this could make sense if we allowed breath marks in voice > 1
+#else
+                  Segment* next = segment()->nextCR(track);
+                  int bt = next ? next->tick() : score()->lastSegment()->tick();
+#endif
 
                   // TODO: insert automatically in all staves?
 
-                  Segment* seg = m->undoGetSegment(Segment::Type::Breath, tick());
+                  Segment* seg = m->undoGetSegment(Segment::Type::Breath, bt);
                   b->setParent(seg);
                   score()->undoAddElement(b);
                   }

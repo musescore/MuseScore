@@ -1685,12 +1685,9 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
 
 static Breath* hasBreathMark(Chord* ch)
       {
-      Segment* s = ch->segment();
-      s = s->next1();
-      Breath* b = 0;
-      if (s && s->segmentType() == Segment::Type::Breath)
-            b = static_cast<Breath*>(s->element(ch->track()));
-      return b;
+      int tick = ch->tick() + ch->actualTicks();
+      Segment* s = ch->measure()->findSegment(Segment::Type::Breath, tick);
+      return s ? static_cast<Breath*>(s->element(ch->track())) : 0;
       }
 
 //---------------------------------------------------------
@@ -4698,12 +4695,9 @@ void ExportMusicXml::write(QIODevice* dev)
                                     continue;
 
                               // generate backup or forward to the start time of the element
-                              // but not for breath, which has the same start time as the
-                              // previous note, while tick is already at the end of that note
                               if (tick != seg->tick()) {
                                     attr.doAttr(xml, false);
-                                    if (el->type() != Element::Type::BREATH)
-                                          moveToTick(seg->tick());
+                                    moveToTick(seg->tick());
                                     }
 
                               // handle annotations and spanners (directions attached to this note or rest)
