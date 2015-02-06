@@ -50,7 +50,7 @@ HelpBrowser::HelpBrowser(QWidget* parent)
       QToolButton* next = new QToolButton;
       next->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
       bl->addWidget(next);
-      connect(next, SIGNAL(clicked()), view, SLOT(forward())
+      connect(next, SIGNAL(clicked()), view, SLOT(forward()));
       connect(view, SIGNAL(forwardAvailable(bool)), next, SLOT(setEnabled(bool)));
 
       bl->addStretch(10);
