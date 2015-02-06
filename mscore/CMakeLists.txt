@@ -418,6 +418,7 @@ if (MINGW)
       ${CROSSQT}/bin/icuuc53.dll
       ${CROSSQT}/bin/icudt53.dll
       ${CROSSQT}/bin/Qt5Help.dll
+      ${CROSSQT}/bin/Qt5CLucene.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
