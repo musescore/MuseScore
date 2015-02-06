@@ -996,6 +996,8 @@ static bool checkStart(Element* e)
             if (chord->tremolo() && chord->tremolo()->twoNotes())
                   rv = chord->tremolo()->chord2() == chord;
             }
+      else
+            rv = false;
       return rv;
       }
 
@@ -1028,6 +1030,8 @@ static bool checkEnd(Element* e)
             if (chord->tremolo() && chord->tremolo()->twoNotes())
                   rv = chord->tremolo()->chord1() == chord;
             }
+      else
+            rv = false;
       return rv;
       }
 
