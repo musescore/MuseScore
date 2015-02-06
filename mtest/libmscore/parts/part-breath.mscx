@@ -160,11 +160,9 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <tick>480</tick>
         <Breath>
           <subtype>0</subtype>
           </Breath>
-        <tick>960</tick>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -392,11 +390,9 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>480</tick>
         <Breath>
           <subtype>0</subtype>
           </Breath>
-        <tick>960</tick>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
