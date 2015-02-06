@@ -1,7 +1,6 @@
 #=============================================================================
 #  MuseScore
 #  Music Composition & Notation
-#  $Id:$
 #
 #  Copyright (C) 2011 Werner Schweer
 #
@@ -13,13 +12,17 @@
 
 add_custom_target(referenceDocumentation
       ALL
-      DEPENDS doc.html doc.qhp
+      DEPENDS en/doc.html de/doc.html en/doc.qhp de/doc.qhp
       )
 
 add_custom_command(TARGET referenceDocumentation
       POST_BUILD
-      COMMAND qcollectiongenerator ${PROJECT_SOURCE_DIR}/rdoc/doc.qhcp -o doc.qhc
+      COMMAND qcollectiongenerator ${PROJECT_SOURCE_DIR}/rdoc/en/doc.qhcp -o doc_en.qhc
+      COMMAND qcollectiongenerator ${PROJECT_SOURCE_DIR}/rdoc/de/doc.qhcp -o doc_de.qhc
       )
 
-install(FILES ${PROJECT_BINARY_DIR}/rdoc/doc.qhc DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual)
+install(FILES
+      ${PROJECT_BINARY_DIR}/rdoc/doc_en.qhc
+      ${PROJECT_BINARY_DIR}/rdoc/doc_de.qhc
+  DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}manual)
 

@@ -893,8 +893,7 @@ MuseScore::MuseScore()
       HelpQuery* hw = new HelpQuery(menuHelp);
       menuHelp->addAction(hw);
 
-      if (enableExperimental)
-            menuHelp->addAction(getAction("local-help"));
+      menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
 
       menuHelp->addSeparator();
@@ -1011,34 +1010,45 @@ QString MuseScore::getLocaleISOCode() const
       }
 
 //---------------------------------------------------------
-//   helpBrowser
+//   showHelp
 //    show local help
 //---------------------------------------------------------
 
-void MuseScore::helpBrowser(QString tag) const
+void MuseScore::showHelp(const QUrl& url)
       {
-      QString lang = getLocaleISOCode();
+      qDebug("showHelp <%s>", qPrintable(url.toString()));
 
-      if (lang == "en_US")    // HACK
-            lang = "en";
+      if (!helpEngine)
+            return;
 
-      if (MScore::debugMode)
-            qDebug("open handbook for language <%s>", qPrintable(lang));
+      QAction* a = getAction("local-help");
+      a->blockSignals(true);
+      a->setChecked(true);
+      a->blockSignals(false);
 
-      QString path(mscoreGlobalShare + "manual/reference-" + lang + ".pdf");
-      if (!QFile::exists(path))
-            path = mscoreGlobalShare + "manual/reference-en" + ".pdf";
-      qDebug("helpBrowser::load <%s>", qPrintable(path));
-      QUrl url(QUrl::fromLocalFile(path));
-      if (!tag.isEmpty())
-            url.setFragment(tag);
-      if (enableExperimental)
-            helpBrowser(url);
+      if (!helpBrowser) {
+            helpBrowser = new HelpBrowser;
+            manualDock = new QDockWidget(tr("Manual"), 0);
+            manualDock->setObjectName("Manual");
+
+            manualDock->setWidget(helpBrowser);
+            Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
+            addDockWidget(area, manualDock);
+            }
+      manualDock->show();
+      helpBrowser->setContent(url);
       }
 
-void MuseScore::helpBrowser(const QUrl& url) const
+void MuseScore::showHelp(QString s)
       {
-      QDesktopServices::openUrl(url);
+      if (s.isEmpty())
+            s = "manual";
+      qDebug("showHelp <%s>", qPrintable(s));
+      QMap<QString,QUrl>list = helpEngine->linksForIdentifier(s);
+      if (!list.isEmpty())
+            showHelp(*list.begin());
+      else
+            qDebug("help for <%s> not found", qPrintable(s));
       }
 
 //---------------------------------------------------------
@@ -1080,7 +1090,7 @@ void MuseScore::helpBrowser1() const
 
       //track visits. see: http://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
       help += QString("?utm_source=software&utm_medium=menu&utm_content=r%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
-      helpBrowser(QUrl(help));
+      QDesktopServices::openUrl(QUrl(help));
       }
 
 //---------------------------------------------------------
@@ -4061,8 +4071,15 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
 //            transportTools->setVisible(!transportTools->isVisible());
 //      else if (cmd == "toggle-noteinput")
 //            entryTools->setVisible(!entryTools->isVisible());
-      else if (cmd == "local-help")
-            helpBrowser();
+      else if (cmd == "local-help") {
+            if (!a->isChecked()) {
+                  if (manualDock)
+                        manualDock->hide();
+                  a->setChecked(false);
+                  }
+            else
+                  showHelp("manual");
+            }
       else if (cmd == "follow")
             preferences.followSong = a->isChecked();
       else if (cmd == "split-h")
