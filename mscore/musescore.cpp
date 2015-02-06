@@ -892,6 +892,7 @@ MuseScore::MuseScore()
 
       HelpQuery* hw = new HelpQuery(menuHelp);
       menuHelp->addAction(hw);
+      connect(menuHelp, SIGNAL(aboutToShow()), hw, SLOT(setFocus()));
 
       menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));

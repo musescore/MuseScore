@@ -16,14 +16,13 @@
             </section>
         </toc>
         <keywords>
-            <keyword id="manual" ref="doc.html"/>
+            <keyword name="Manual" id="manual" ref="doc.html"/>
             <keyword name="bar" ref="doc.html#bar"/>
             <keyword id="MuseScore::foobar" ref="doc.html#foobar"/>
             <keyword id="mops" ref="doc.html#foobar"/>
             <keyword id="klops" ref="doc.html#foobar"/>
         </keywords>
         <files>
-            <file>../classic.css</file>
             <file>doc.html</file>
         </files>
     </filterSection>

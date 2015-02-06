@@ -27,11 +27,16 @@ class HelpQuery : public QWidgetAction {
       QWidget* w;
       QLineEdit* entry;
       QList<QAction*> actions;
+      QSignalMapper* mapper;
+
       bool emptyState;
 
    private slots:
       void textChanged(const QString&);
-      void actionTriggered(QAction*);
+      void actionTriggered(QObject*);
+
+   public slots:
+      void setFocus() { entry->setFocus(); }
 
    public:
       HelpQuery(QWidget* parent);
@@ -43,6 +48,3 @@ extern QHelpEngine* helpEngine;
 
 
 #endif
-
-
-

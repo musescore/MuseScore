@@ -177,11 +177,10 @@ QValidator::State MagValidator::validate(QString& input, int& /*pos*/) const
 
 void MagBox::setMag(double val)
       {
-      blockSignals(true);
+      const QSignalBlocker blocker(this);
       setCurrentIndex(int(MagIdx::MAG_FREE));
       freeMag = val;
       setItemText(int(MagIdx::MAG_FREE), QString("%1%").arg(freeMag * 100));
-      blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -190,9 +189,8 @@ void MagBox::setMag(double val)
 
 void MagBox::setMagIdx(MagIdx idx)
       {
-      blockSignals(true);
+      const QSignalBlocker blocker(this);
       setCurrentIndex(int(idx));
-      blockSignals(false);
       }
 }
 
