@@ -412,11 +412,12 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5PrintSupport.dll
       ${CROSSQT}/bin/Qt5OpenGL.dll
       ${CROSSQT}/bin/Qt5Sensors.dll
-      ${CROSSQT}/bin/Qt5Multimedia.dll
+      ${CROSSQT}/bin/Qt5Multimedia.dll      
       ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
       ${CROSSQT}/bin/icuin53.dll
       ${CROSSQT}/bin/icuuc53.dll
       ${CROSSQT}/bin/icudt53.dll
+      ${CROSSQT}/bin/Qt5Help.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
@@ -438,6 +439,10 @@ if (MINGW)
     install(FILES
       ${CROSSQT}/plugins/printsupport/windowsprintersupport.dll
       DESTINATION bin/printsupport)
+
+    install(FILES
+      ${CROSSQT}/plugins/sqldrivers/qsqlite.dll
+      DESTINATION bin/sqldrivers)
 
     install(DIRECTORY
       ${CROSSQT}/qml
