@@ -434,6 +434,8 @@ void Chord::add(Element* e)
                         if (note->tieFor()->endNote())
                               note->tieFor()->endNote()->setTieBack(note->tieFor());
                         }
+                  if (voice() && measure() && note->visible())
+                        measure()->mstaff(staffIdx())->hasVoices = true;
                   }
                   break;
             case Element::Type::ARPEGGIO:
@@ -516,6 +518,8 @@ void Chord::remove(Element* e)
                         }
                   else
                         qDebug("Chord::remove() note %p not found!", e);
+                  if (voice() && measure() && note->visible())
+                        measure()->checkMultiVoices(staffIdx());
                   }
                   break;
 
@@ -1600,7 +1604,7 @@ void Chord::updateNotes(AccidentalState* as)
                   c->updateNotes(as);
             }
 
-      Drumset* drumset = 0;
+      const Drumset* drumset = 0;
       if (staff()->part()->instr()->useDrumset() != DrumsetKind::NONE)
             drumset = staff()->part()->instr()->drumset();
 
@@ -1674,7 +1678,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                   }
             else if (staffGroup == StaffGroup::PERCUSSION) {
                   const Instrument* instrument = staff()->part()->instr();
-                  Drumset* drumset = instrument->drumset();
+                  const Drumset* drumset = instrument->drumset();
                   int pitch = note->pitch();
                   if (drumset) {
                         if (!drumset->isValid(pitch)) {
@@ -2797,7 +2801,7 @@ void Chord::setSlash(bool flag, bool stemless)
                   n->undoChangeProperty(P_ID::PLAY, true);
                   n->undoChangeProperty(P_ID::VISIBLE, true);
                   if (staff()->isDrumStaff()) {
-                        Drumset* ds = staff()->part()->instr()->drumset();
+                        const Drumset* ds = staff()->part()->instr()->drumset();
                         int pitch = n->pitch();
                         if (ds && ds->isValid(pitch)) {
                               undoChangeProperty(P_ID::STEM_DIRECTION, static_cast<int>(ds->stemDirection(pitch)));
@@ -3026,23 +3030,26 @@ QString Chord::accessibleExtraInfo()
 
       if (!isGrace()) {
             foreach (Chord* c, graceNotes()) {
+                  if (!score()->selectionFilter().canSelect(c)) continue;
                   foreach (Note* n, c->notes()) {
                         rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
                         }
                   }
             }
 
-      if (arpeggio())
+      if (arpeggio() && score()->selectionFilter().canSelect(arpeggio()))
             rez = QString("%1 %2").arg(rez).arg(arpeggio()->screenReaderInfo());
 
-      if (tremolo())
+      if (tremolo() && score()->selectionFilter().canSelect(tremolo()))
             rez = QString("%1 %2").arg(rez).arg(tremolo()->screenReaderInfo());
 
-      if (glissando())
+      if (glissando() && score()->selectionFilter().canSelect(glissando()))
             rez = QString("%1 %2").arg(rez).arg(glissando()->screenReaderInfo());
 
-      foreach (Element* e, el())
+      foreach (Element* e, el()) {
+            if (!score()->selectionFilter().canSelect(e)) continue;
             rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+            }
 
       return QString("%1 %2").arg(rez).arg(ChordRest::accessibleExtraInfo());
       }

@@ -497,8 +497,24 @@ void Segment::add(Element* el)
             case Element::Type::CHORD:
             case Element::Type::REST:
                   Q_ASSERT(_segmentType == Type::ChordRest);
-                  if (track % VOICES)
-                        measure()->mstaff(track / VOICES)->hasVoices = true;
+                  if (track % VOICES) {
+                        bool v;
+                        if (el->type() == Element::Type::CHORD) {
+                              v = false;
+                              // consider chord visible if any note is visible
+                              Chord* c = static_cast<Chord*>(el);
+                              for (Note* n : c->notes()) {
+                                    if (n->visible()) {
+                                          v = true;
+                                          break;
+                                          }
+                                    }
+                              }
+                        else
+                              v = el->visible();
+                        if (v)
+                              measure()->mstaff(track / VOICES)->hasVoices = true;
+                        }
 
                   // fall through
 
@@ -602,9 +618,15 @@ void Segment::remove(Element* el)
                   // fall through
 
             case Element::Type::BAR_LINE:
-            case Element::Type::BREATH:
             case Element::Type::AMBITUS:
                   _elist[track] = 0;
+                  break;
+
+            case Element::Type::BREATH:
+                  _elist[track] = 0;
+                  score()->setPause(tick(), 0);
+                  score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
+                  score()->setLayoutAll(true);
                   break;
 
             default:
@@ -1174,16 +1196,19 @@ QString Segment::accessibleExtraInfo()
       {
       QString rez = "";
       if (!this->annotations().empty()) {
-            rez = rez + tr("Annotations: ");
+            QString temp = "";
             foreach (Element* a, this->annotations()) {
+                  if (!score()->selectionFilter().canSelect(a)) continue;
                   switch(a->type()) {
                         case Element::Type::DYNAMIC:
                               //they are added in the chordrest, because they are for only one staff
                                break;
                         default:
-                               rez = rez + " " + a->accessibleInfo();
+                               temp = temp + " " + a->accessibleInfo();
                         }
                   }
+            if(!temp.isEmpty())
+                  rez = rez + tr("Annotations:") + temp;
             }
 
       QString startSpanners = "";
@@ -1193,6 +1218,7 @@ QString Segment::accessibleExtraInfo()
       for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
             ::Interval<Spanner*> interval = *i;
             Spanner* s = interval.value;
+            if (!score()->selectionFilter().canSelect(s)) continue;
             if (this->segmentType() == Segment::Type::EndBarLine       ||
                this->segmentType() == Segment::Type::BarLine           ||
                this->segmentType() == Segment::Type::StartRepeatBarLine) {

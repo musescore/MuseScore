@@ -68,6 +68,7 @@
 #include "cursor.h"
 #include "sym.h"
 #include "rehearsalmark.h"
+#include "breath.h"
 
 namespace Ms {
 
@@ -499,7 +500,7 @@ void Score::fixTicks()
                   //
                   //  implement section break rest
                   //
-                  if (m->sectionBreak())
+                  if (m->sectionBreak() && m->pause() != 0.0)
                         setPause(m->tick() + m->ticks(), m->pause());
 
                   //
@@ -507,8 +508,27 @@ void Score::fixTicks()
                   //
 
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->segmentType() == Segment::Type::Breath)
-                              setPause(s->tick(), .1);
+                        if (s->segmentType() == Segment::Type::Breath) {
+                              qreal length = 0.0;
+                              int tick = s->tick();
+                              // find breath elements
+                              for (int i = 0, n = ntracks(); i < n; ++i) {
+                                    Element* e = s->element(i);
+                                    if (e && e->type() == Element::Type::BREATH) {
+                                          Breath* b = static_cast<Breath*>(e);
+                                          length = qMax(length, b->pause());
+                                          // find start tick of next note
+                                          // currently, breaths are always added in voice 0
+                                          Segment* next = s->nextCR(i);
+                                          if (next)
+                                                tick = qMax(tick, next->tick());
+                                          else
+                                                tick = lastSegment()->tick();
+                                          }
+                                    }
+                              if (length != 0.0)
+                                    setPause(tick, length);
+                              }
                         else if (s->segmentType() == Segment::Type::TimeSig) {
                               for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                                     TimeSig* ts = static_cast<TimeSig*>(s->element(staffIdx * VOICES));
@@ -1440,6 +1460,13 @@ void Score::addElement(Element* element)
                          createPlayEvents(static_cast<Chord*>(cr));
                   }
                   break;
+            case Element::Type::BREATH:
+                  addLayoutFlags(LayoutFlag::FIX_TICKS);
+                  break;
+            case Element::Type::LAYOUT_BREAK:
+                  if (static_cast<LayoutBreak*>(element)->layoutBreakType() == LayoutBreak::Type::SECTION)
+                        addLayoutFlags(LayoutFlag::FIX_TICKS);
+                  break;
             default:
                   break;
             }
@@ -1658,9 +1685,11 @@ Measure* Score::lastMeasure() const
 Measure* Score::lastMeasureMM() const
       {
       Measure* m = lastMeasure();
-      Measure* m1 = const_cast<Measure*>(m->mmRest1());
-      if (m1)
-           return m1;
+      if (m && styleB(StyleIdx::createMultiMeasureRests)) {
+            Measure* m1 = const_cast<Measure*>(m->mmRest1());
+            if (m1)
+                  return m1;
+            }
       return m;
       }
 

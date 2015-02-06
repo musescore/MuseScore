@@ -32,6 +32,7 @@ class PaletteBox : public QDockWidget {
       QVBoxLayout* vbox;
       Palette* newPalette(const QString& name, int slot);
       QComboBox* workspaceList;
+      const int paletteStretch = 1000;
 
    private slots:
       void paletteCmd(PaletteCommand, int);

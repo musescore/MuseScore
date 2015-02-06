@@ -142,7 +142,7 @@ void DrumTools::updateDrumset()
 //   setDrumset
 //---------------------------------------------------------
 
-void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
+void DrumTools::setDrumset(Score* s, Staff* st, const Drumset* ds)
       {
       if (s == _score && staff == st && drumset == ds)
             return;
@@ -159,7 +159,10 @@ void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
 void DrumTools::editDrumset()
       {
       EditDrumset eds(drumset, this);
-      eds.exec();
+      if (eds.exec()) {
+            staff->part()->instr()->setDrumset(eds.drumset());
+            mscore->updateDrumTools();
+            }
       }
 
 //---------------------------------------------------------

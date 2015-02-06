@@ -7,6 +7,7 @@
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "inspector/inspector.h"
+#include "selectionwindow.h"
 
 namespace Ms{
 AccessibleScoreView::AccessibleScoreView(ScoreView* scView) : QAccessibleWidget(scView){
@@ -179,7 +180,9 @@ void ScoreAccessibility::updateAccessibilityInfo()
       //when this method is called
       if ( (qApp->focusWidget() != w) &&
            !mscore->inspector()->isAncestorOf(qApp->focusWidget()) &&
-           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) ) {
+           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getSelectionWindow() && mscore->getSelectionWindow()->isAncestorOf(qApp->focusWidget()))) {
+            mscore->activateWindow();
             w->setFocus();
             }
       QObject* obj = static_cast<QObject*>(w);

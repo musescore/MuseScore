@@ -534,6 +534,12 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
       QString bars = masterBar.lastChildElement("Bars").toElement().text();
       //work out the number of measures (add 1 as couning from 0, and divide by number of parts)
       int numMeasures = (bars.split(" ").last().toInt() + 1) / score->parts().length();
+
+      if (numMeasures > bars.size()) {
+            qDebug("GuitarPro6:findNumMeasures: bars %d < numMeasures %d\n", bars.size(), numMeasures);
+            // HACK (ws)
+            numMeasures = bars.size();
+            }
       return numMeasures;
       }
 

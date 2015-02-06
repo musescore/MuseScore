@@ -251,7 +251,7 @@ void Part::read114(XmlReader& e)
                         else if (program == 42)                   // cello and other bass string instr.
                               instrument->setStringData(StringData(24, 4, g_celloStrings));
                         }
-                  Drumset* d = instr(0)->drumset();
+                  Drumset* d = const_cast<Drumset*>(instr(0)->drumset());
                   Staff*   st = staff(0);
                   if (d && st && st->lines() != 5) {
                         int n = 0;

@@ -15,7 +15,7 @@
 
 namespace Ms {
 
-static QHelpEngineCore* help;
+QHelpEngine* helpEngine;
 
 //---------------------------------------------------------
 //   HelpQuery
@@ -24,14 +24,18 @@ static QHelpEngineCore* help;
 HelpQuery::HelpQuery(QWidget* parent)
    : QWidgetAction(parent)
       {
-      if (!help) {
-            QString s = getSharePath() + "manual/doc.qhc";
-            printf("====<%s>\n", qPrintable(s));
-            help = new QHelpEngineCore(s);
-            if (!help->setupData()) {
-                  delete help;
-                  help = 0;
-                  printf("cannot setup data for help engine\n");
+      if (!helpEngine) {
+            QString lang = mscore->getLocaleISOCode();
+            if (lang == "en_US")    // HACK
+                  lang = "en";
+
+            QString s = getSharePath() + "manual/doc_" + lang + ".qhc";
+            qDebug("init Help from: <%s>", qPrintable(s));
+            helpEngine = new QHelpEngine(s, this);
+            if (!helpEngine->setupData()) {
+                  qDebug("cannot setup data for help engine: %s", qPrintable(helpEngine->error()));
+                  delete helpEngine;
+                  helpEngine = 0;
                   }
             }
 
@@ -88,18 +92,14 @@ void HelpQuery::textChanged(const QString& s)
             if (a != this)
                   menu->removeAction(a);
             }
-      for (const QChar& c : s) {
-            QAction* action = new QAction(QString(c), this);
-            action->setData(QString(c));
-            menu->addAction(action);
-            }
       emptyState = false;
 
-
-      QMap<QString,QUrl>list = help->linksForIdentifier(s);
-      printf("=====links %d\n", list.size());
-      for (const QUrl& s : list)
-            printf("   %s\n", qPrintable(s.toString()));
+      QMap<QString,QUrl>list = helpEngine->linksForIdentifier(s);
+      for (const QUrl& s : list) {
+            QAction* action = new QAction(s.toString(), this);
+            action->setData(s);
+            menu->addAction(action);
+            }
       }
 
 //---------------------------------------------------------
@@ -110,7 +110,9 @@ void HelpQuery::actionTriggered(QAction* action)
       {
       if (action->data().isNull())
             return;
-      printf("action <%s>\n", qPrintable(action->data().toString()));
+      QUrl url = action->data().toUrl();
+      printf("actionTriggered <%s>\n", qPrintable(url.toString()));
+      mscore->showHelp(url);
       }
 
 

@@ -334,7 +334,6 @@
           </KeySig>
         <Ottava id="7">
           <subtype>8va</subtype>
-          <lineWidth>0.1</lineWidth>
           </Ottava>
         <Chord>
           <durationType>quarter</durationType>

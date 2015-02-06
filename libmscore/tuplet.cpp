@@ -210,8 +210,8 @@ void Tuplet::layout()
       qreal noteRight = score()->styleS(StyleIdx::tupletNoteRightDistance).val() * _spatium;
 
       qreal l1 = _spatium;          // bracket tip height
-      qreal l2l = vHeadDistance;     // left bracket vertical distance
-      qreal l2r = vHeadDistance;     // right bracket vertical distance right
+      qreal l2l = vHeadDistance;    // left bracket vertical distance
+      qreal l2r = vHeadDistance;    // right bracket vertical distance right
 
       if (_isUp)
             vHeadDistance = -vHeadDistance;
@@ -225,6 +225,14 @@ void Tuplet::layout()
 
       qreal xx1 = p1.x(); // use to center the number on the beam
 
+      // follow beam angle if one beam extends over entire tuplet
+      bool followBeam = false;
+      qreal beamAdjust = 0.0;
+      if (cr1->beam() && cr1->beam() == cr2->beam()) {
+            followBeam = true;
+            beamAdjust = point(score()->styleS(StyleIdx::beamWidth)) * 0.5 * mag();
+            }
+
       if (_isUp) {
             if (cr1->type() == Element::Type::CHORD) {
                   const Chord* chord1 = static_cast<const Chord*>(cr1);
@@ -233,7 +241,9 @@ void Tuplet::layout()
                         xx1 = stem->abbox().x();
                   if (chord1->up()) {
                         if (stem) {
-                              if (chord1->beam())
+                              if (followBeam)
+                                    p1.ry() = stem->abbox().y() - beamAdjust;
+                              else if (chord1->beam())
                                     p1.ry() = chord1->beam()->abbox().y();
                               else
                                     p1.ry() = stem->abbox().y();
@@ -245,7 +255,7 @@ void Tuplet::layout()
                         }
                   else if (!chord1->up()) {
                         p1.ry() = chord1->upNote()->abbox().top();
-                        if(stem)
+                        if (stem)
                               p1.rx() = cr1->pagePos().x() - stemLeft;
                         }
                   }
@@ -254,7 +264,9 @@ void Tuplet::layout()
                   const Chord* chord2 = static_cast<const Chord*>(cr2);
                   Stem* stem = chord2->stem();
                   if (stem && chord2->up()) {
-                        if(chord2->beam())
+                        if (followBeam)
+                              p2.ry() = stem->abbox().top() - beamAdjust;
+                        else if (chord2->beam())
                               p2.ry() = chord2->beam()->abbox().top();
                         else
                               p2.ry() = stem->abbox().top();
@@ -283,7 +295,7 @@ void Tuplet::layout()
                   }
 
             // outOfStaff
-            if(outOfStaff) {
+            if (outOfStaff) {
                   qreal min = cr1->measure()->staffabbox(cr1->staffIdx()).y();
                   if (min < p1.y()) {
                         p1.ry() = min;
@@ -296,7 +308,7 @@ void Tuplet::layout()
                         }
                   }
 
-            //check that slope is no more than 30°
+            // check that slope is no more than max
             qreal d = (p2.y() - p1.y())/(p2.x() - p1.x());
             if (d  < -maxSlope) {
                   // move p1 y up
@@ -317,7 +329,7 @@ void Tuplet::layout()
                               const Chord* chord = static_cast<const Chord*>(e);
                               const Stem* stem = chord->stem();
                               if (stem) {
-                                    QRectF r(chord->up() ? stem->abbox() : chord->abbox());
+                                    QRectF r(chord->up() ? stem->abbox() : chord->upNote()->abbox());
                                     qreal y3 = r.top();
                                     qreal x3 = r.x() + r.width() * .5;
                                     qreal y0 = p1.y() + (x3 - p1.x()) * d;
@@ -338,15 +350,17 @@ void Tuplet::layout()
                   if (stem)
                         xx1 = stem->abbox().x();
                   if (!chord1->up()) {
-                        if(stem) {
-                              if(chord1->beam())
+                        if (stem) {
+                              if (followBeam)
+                                    p1.ry() = stem->abbox().bottom() + beamAdjust;
+                              else if (chord1->beam())
                                     p1.ry() = chord1->beam()->abbox().bottom();
                               else
                                     p1.ry() = stem->abbox().bottom();
                               l2l = vStemDistance;
                               p1.rx() = cr1->pagePos().x() - stemLeft;
                               }
-                        else{
+                        else {
                               p1.ry() = chord1->downNote()->abbox().bottom(); // whole note
                               }
                         }
@@ -355,14 +369,15 @@ void Tuplet::layout()
                         }
                   }
 
-
             if (cr2->type() == Element::Type::CHORD) {
                   const Chord* chord2 = static_cast<const Chord*>(cr2);
                   Stem* stem = chord2->stem();
                   if (stem && !chord2->up()) {
                         // if (chord2->beam())
                         //      p2.setX(stem->abbox().x());
-                        if(chord2->beam())
+                        if (followBeam)
+                              p2.ry() = stem->abbox().bottom() + beamAdjust;
+                        if (chord2->beam())
                               p2.ry() = chord2->beam()->abbox().bottom();
                         else
                               p2.ry() = stem->abbox().bottom();
@@ -391,7 +406,7 @@ void Tuplet::layout()
                         p1.setY(p2.y());
                   }
             // outOfStaff
-            if(outOfStaff) {
+            if (outOfStaff) {
                   qreal max = cr1->measure()->staffabbox(cr1->staffIdx()).bottom();
                   if (max > p1.y()) {
                         p1.ry() = max;
@@ -403,7 +418,7 @@ void Tuplet::layout()
                         l2r = vStemDistance;
                         }
                   }
-            //check that slope is no more than 30°
+            // check that slope is no more than max
             qreal d = (p2.y() - p1.y())/(p2.x() - p1.x());
             if (d  < -maxSlope) {
                   // move p1 y up
@@ -424,7 +439,7 @@ void Tuplet::layout()
                               const Chord* chord = static_cast<const Chord*>(e);
                               const Stem* stem = chord->stem();
                               if (stem) {
-                                    QRectF r(chord->up() ? chord->abbox() : stem->abbox());
+                                    QRectF r(chord->up() ? chord->downNote()->abbox() : stem->abbox());
                                     qreal y3 = r.bottom();
                                     qreal x3 = r.x() + r.width() * .5;
                                     qreal y0 = p1.y() + (x3 - p1.x()) * d;

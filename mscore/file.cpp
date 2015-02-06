@@ -218,7 +218,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
 
 bool MuseScore::checkDirty(Score* s)
       {
-      if (s->dirty()) {
+      if (s->dirty() || s->created()) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
                tr("Save changes to the score \"%1\"\n"
                "before closing?").arg(s->name()),
@@ -398,14 +398,13 @@ bool MuseScore::saveFile(Score* score)
                   return false;
                   }
             addRecentScore(score);
-            score->setCreated(false);
             writeSessionFile(false);
             }
       else if (!score->saveFile()) {
             QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
             return false;
             }
-
+      score->setCreated(false);
       setWindowTitle("MuseScore: " + score->name());
       int idx = scoreList.indexOf(score);
       tab1->setTabText(idx, score->name());

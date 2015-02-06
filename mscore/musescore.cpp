@@ -98,6 +98,7 @@
 #include "fluid/fluid.h"
 #include "qmlplugin.h"
 #include "accessibletoolbutton.h"
+#include "searchComboBox.h"
 
 #include "startcenter.h"
 #include "help.h"
@@ -154,16 +155,16 @@ extern TextPalette* textPalette;
 
 void MuseScore::cmdInsertMeasures()
       {
-    if (cs) {
-        if (cs->selection().isNone() && !cs->selection().findMeasure()) {
-            QMessageBox::warning(0, "MuseScore",
-                 tr("No measure selected:\n" "Please select a measure and try again"));
+      if (cs) {
+            if (cs->selection().isNone() && !cs->selection().findMeasure()) {
+                  QMessageBox::warning(0, "MuseScore",
+                        tr("No measure selected:\n" "Please select a measure and try again"));
+                  }
+            else {
+                  insertMeasuresDialog = new InsertMeasuresDialog;
+                  insertMeasuresDialog->show();
+                  }
             }
-        else {
-            insertMeasuresDialog = new InsertMeasuresDialog;
-            insertMeasuresDialog->show();
-            }
-        }
       }
 
 //---------------------------------------------------------
@@ -510,6 +511,7 @@ MuseScore::MuseScore()
       mag->setAccessibleName(tr("Zoom"));
       mag->setFixedHeight(preferences.iconHeight + 10);  // hack
       connect(mag, SIGNAL(magChanged(int)), SLOT(magChanged(int)));
+      connect(mag->lineEdit(), SIGNAL(editingFinished()), SLOT(magTextChanged()));
       fileTools->addWidget(mag);
       viewModeCombo = new QComboBox(this);
 #if defined(Q_OS_MAC)
@@ -891,8 +893,7 @@ MuseScore::MuseScore()
       HelpQuery* hw = new HelpQuery(menuHelp);
       menuHelp->addAction(hw);
 
-      if (enableExperimental)
-            menuHelp->addAction(getAction("local-help"));
+      menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
 
       menuHelp->addSeparator();
@@ -1009,34 +1010,42 @@ QString MuseScore::getLocaleISOCode() const
       }
 
 //---------------------------------------------------------
-//   helpBrowser
+//   showHelp
 //    show local help
 //---------------------------------------------------------
 
-void MuseScore::helpBrowser(QString tag) const
+void MuseScore::showHelp(const QUrl& url)
       {
-      QString lang = getLocaleISOCode();
+      qDebug("showHelp <%s>", qPrintable(url.toString()));
 
-      if (lang == "en_US")    // HACK
-            lang = "en";
+      if (!helpEngine)
+            return;
 
-      if (MScore::debugMode)
-            qDebug("open handbook for language <%s>", qPrintable(lang));
+      QAction* a = getAction("local-help");
+      a->blockSignals(true);
+      a->setChecked(true);
+      a->blockSignals(false);
 
-      QString path(mscoreGlobalShare + "manual/reference-" + lang + ".pdf");
-      if (!QFile::exists(path))
-            path = mscoreGlobalShare + "manual/reference-en" + ".pdf";
-      qDebug("helpBrowser::load <%s>", qPrintable(path));
-      QUrl url(QUrl::fromLocalFile(path));
-      if (!tag.isEmpty())
-            url.setFragment(tag);
-      if (enableExperimental)
-            helpBrowser(url);
+      if (!helpBrowser) {
+            helpBrowser = new HelpBrowser;
+            manualDock = new QDockWidget(tr("Manual"), 0);
+            manualDock->setObjectName("Manual");
+
+            manualDock->setWidget(helpBrowser);
+            Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
+            addDockWidget(area, manualDock);
+            }
+      manualDock->show();
+      helpBrowser->setContent(url);
       }
 
-void MuseScore::helpBrowser(const QUrl& url) const
+void MuseScore::showHelp(QString s)
       {
-      QDesktopServices::openUrl(url);
+      if (s.isEmpty())
+            s = "manual";
+      QMap<QString,QUrl>list = helpEngine->linksForIdentifier(s);
+      if (!list.isEmpty())
+            showHelp(*list.begin());
       }
 
 //---------------------------------------------------------
@@ -1078,7 +1087,7 @@ void MuseScore::helpBrowser1() const
 
       //track visits. see: http://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
       help += QString("?utm_source=software&utm_medium=menu&utm_content=r%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
-      helpBrowser(QUrl(help));
+      QDesktopServices::openUrl(QUrl(help));
       }
 
 //---------------------------------------------------------
@@ -1423,6 +1432,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       changeState(view->mscoreState());
 
       view->setFocus(Qt::OtherFocusReason);
+      setFocusProxy(view);
 
       getAction("file-save")->setEnabled(cs->isSavable());
       getAction("file-part-export")->setEnabled(cs->rootScore()->excerpts().size() > 0);
@@ -2273,18 +2283,45 @@ bool MuseScoreApplication::event(QEvent *event)
       }
 
 //---------------------------------------------------------
-//   eventFilter (mac only)
+//   eventFilter
 //---------------------------------------------------------
 
 bool MuseScore::eventFilter(QObject *obj, QEvent *event)
       {
       switch(event->type()) {
+#ifdef Q_OS_MAC
             case QEvent::FileOpen:
                   // open files requested to be loaded by OS X
                   // this event is generated when a file is dragged onto the MuseScore icon
                   // in the dock when MuseScore is already running
                   handleMessage(static_cast<QFileOpenEvent *>(event)->file());
                   return true;
+#endif
+            case QEvent::KeyPress:
+                  {
+                  QKeyEvent* e = static_cast<QKeyEvent*>(event);
+                  if(obj->isWidgetType() && e->key() == Qt::Key_Escape && e->modifiers() == Qt::NoModifier) {
+                        if (isActiveWindow()) {
+                              if(currentScoreView())
+                                    currentScoreView()->setFocus();
+                              else
+                                    mscore->setFocus();
+                              return true;
+                              }
+
+                        QWidget* w = static_cast<QWidget*>(obj);
+                        if(getPaletteBox()->isAncestorOf(w) ||
+                           inspector()->isAncestorOf(w) ||
+                           (selectionWindow && selectionWindow->isAncestorOf(w))) {
+                              activateWindow();
+                              if(currentScoreView())
+                                    currentScoreView()->setFocus();
+                              else
+                                    mscore->setFocus();
+                              return true;
+                              }
+                        }
+                  }
             default:
                   return QMainWindow::eventFilter(obj, event);
             }
@@ -2866,6 +2903,31 @@ void MuseScore::magChanged(int idx)
       {
       if (cv)
             cv->setMag((MagIdx)idx, mag->getMag(cv));
+      }
+
+//---------------------------------------------------------
+//   magTextChanged
+//---------------------------------------------------------
+
+void MuseScore::magTextChanged()
+      {
+      if (!cv || mag->currentText().isEmpty())
+            return;
+
+      QString s = mag->currentText();
+      if (s.right(1) == "%")
+            s = s.left(s.length()-1);
+
+      bool ok;
+      qreal magVal = s.toFloat(&ok);
+      if (ok) {
+            mag->setMag((double)(magVal/100.0));
+            cv->setMag(MagIdx::MAG_FREE, magVal/100.0);
+            }
+
+      //prevent the list from growing
+      if (mag->count()-1 > (int)MagIdx::MAG_FREE)
+            mag->removeItem(mag->count()-1);
       }
 
 //---------------------------------------------------------
@@ -3818,8 +3880,9 @@ void MuseScore::cmd(QAction* a)
 
 //---------------------------------------------------------
 //   endCmd
-//    called after every command action (including every
-//    mouse action)
+//    Called after every command action (including every
+//    mouse action).
+//    Updates the UI after a possible score change.
 //---------------------------------------------------------
 
 void MuseScore::endCmd()
@@ -4005,8 +4068,16 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
 //            transportTools->setVisible(!transportTools->isVisible());
 //      else if (cmd == "toggle-noteinput")
 //            entryTools->setVisible(!entryTools->isVisible());
-      else if (cmd == "local-help")
-            helpBrowser();
+      else if (cmd == "local-help") {
+printf("cmd local help, checked %d\n", a->isChecked());
+            if (!a->isChecked()) {
+                  if (manualDock)
+                        manualDock->hide();
+                  a->setChecked(false);
+                  }
+            else
+                  showHelp("manual");
+            }
       else if (cmd == "follow")
             preferences.followSong = a->isChecked();
       else if (cmd == "split-h")
@@ -4072,7 +4143,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                            tr("MuseScore: Load Style"), MScore::lastError);
                         }
                   cs->endCmd();
-                  endCmd();
                   }
             }
       else if (cmd == "edit-style") {
@@ -4312,7 +4382,6 @@ void MuseScore::switchLayoutMode(int val)
             cv->pageTop();
             if (m && m != cs->firstMeasure())
                   cv->adjustCanvasPosition(m, false);
-            endCmd();
             }
       }
 
@@ -4320,7 +4389,7 @@ void MuseScore::switchLayoutMode(int val)
 //   showDrumTools
 //---------------------------------------------------------
 
-void MuseScore::showDrumTools(Drumset* drumset, Staff* staff)
+void MuseScore::showDrumTools(const Drumset* drumset, Staff* staff)
       {
       if (drumset) {
             if (!_drumTools) {
@@ -4344,17 +4413,6 @@ void MuseScore::updateDrumTools()
       {
       if (_drumTools)
             _drumTools->updateDrumset();
-      }
-
-//---------------------------------------------------------
-//   searchTextChanged
-//---------------------------------------------------------
-
-void MuseScore::searchTextChanged(const QString& s)
-      {
-      if (cv == 0)
-            return;
-      cv->search(s);
       }
 
 //---------------------------------------------------------
@@ -4390,9 +4448,7 @@ void MuseScore::showSearchDialog()
 
             searchDialogLayout->addWidget(new QLabel(tr("Go To: ")));
 
-            searchCombo = new QComboBox;
-            searchCombo->setEditable(true);
-            searchCombo->setInsertPolicy(QComboBox::InsertAtTop);
+            searchCombo = new SearchComboBox;
             searchDialogLayout->addWidget(searchCombo);
 
             searchDialogLayout->addStretch(10);
@@ -4402,9 +4458,6 @@ void MuseScore::showSearchDialog()
 
             // does not work: connect(searchCombo->lineEdit(), SIGNAL(returnPressed()), SLOT(endSearch()));
             connect(searchCombo->lineEdit(), SIGNAL(editingFinished()), SLOT(endSearch()));
-
-            connect(searchCombo, SIGNAL(editTextChanged(const QString&)),
-               SLOT(searchTextChanged(const QString&)));
             }
 
       searchCombo->clearEditText();
@@ -4477,7 +4530,7 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
-
+      QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
       Q_INIT_RESOURCE(zita);
 
 #ifndef Q_OS_MAC
@@ -4874,9 +4927,8 @@ int main(int argc, char* av[])
       //read languages list
       mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
 
-#ifdef Q_OS_MAC
       QApplication::instance()->installEventFilter(mscore);
-#endif
+
       mscore->setRevision(revision);
 
       int files = 0;

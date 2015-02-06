@@ -63,7 +63,7 @@ class Ottava : public TextLine {
       Q_ENUMS(Type)
 
    public:
-      enum class Type : char {
+      enum Type : char {
             OTTAVA_8VA,
             OTTAVA_8VB,
             OTTAVA_15MA,
@@ -75,11 +75,11 @@ class Ottava : public TextLine {
    private:
       Type _ottavaType;
       bool _numbersOnly;
-      PropertyStyle numbersOnlyStyle;
-      PropertyStyle lineWidthStyle;
-      PropertyStyle lineStyleStyle;
-      PropertyStyle beginTextStyle;
-      PropertyStyle continueTextStyle;
+      PropertyStyle numbersOnlyStyle  { PropertyStyle::STYLED };
+      PropertyStyle lineWidthStyle    { PropertyStyle::STYLED };
+      PropertyStyle lineStyleStyle    { PropertyStyle::STYLED };
+      PropertyStyle beginTextStyle    { PropertyStyle::STYLED };
+      PropertyStyle continueTextStyle { PropertyStyle::STYLED };
 
       int _pitchShift;
 

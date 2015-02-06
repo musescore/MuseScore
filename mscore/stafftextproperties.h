@@ -35,7 +35,7 @@ class StaffText;
 class StaffTextProperties : public QDialog, public Ui::StaffTextProperties {
       Q_OBJECT
 
-      StaffText* staffText;
+      StaffText* _staffText;
       QToolButton* vb[4][4];
       QComboBox* channelCombo[4];
       QPushButton* stops[4][16];
@@ -50,7 +50,10 @@ class StaffTextProperties : public QDialog, public Ui::StaffTextProperties {
       void setSwingControls(bool);
 
    public:
-      StaffTextProperties(StaffText*, QWidget* parent = 0);
+      StaffTextProperties(const StaffText*, QWidget* parent = 0);
+      ~StaffTextProperties();
+
+      const StaffText* staffText() const { return _staffText; }
       };
 }
 

@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "config.h"
+#include "musescoreCore.h"
 #include "style.h"
 #include "mscore.h"
 #include "sequencer.h"
@@ -95,6 +96,7 @@ QQmlEngine* MScore::_qml = 0;
 #endif
 
 Sequencer* MScore::seq = 0;
+MuseScoreCore* MuseScoreCore::mscoreCore;
 
 extern void initDrumset();
 extern void initScoreFonts();

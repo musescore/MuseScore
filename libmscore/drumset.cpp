@@ -23,7 +23,7 @@ Drumset* gpDrumset;           // guitar pro drumset
 //   save
 //---------------------------------------------------------
 
-void Drumset::save(Xml& xml)
+void Drumset::save(Xml& xml) const
       {
       for (int i = 0; i < 128; ++i) {
             if (!isValid(i))
@@ -111,7 +111,7 @@ void Drumset::clear()
 //   nextPitch
 //---------------------------------------------------------
 
-int Drumset::nextPitch(int ii)
+int Drumset::nextPitch(int ii) const
       {
       for (int i = ii + 1; i < 127; ++i) {
             if (isValid(i))
@@ -128,7 +128,7 @@ int Drumset::nextPitch(int ii)
 //   prevPitch
 //---------------------------------------------------------
 
-int Drumset::prevPitch(int ii)
+int Drumset::prevPitch(int ii) const
       {
       for (int i = ii - 1; i >= 0; --i) {
             if (isValid(i))

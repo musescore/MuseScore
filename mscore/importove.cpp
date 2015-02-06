@@ -1351,7 +1351,7 @@ bool isRestDefaultLine(OVE::Note* rest, OVE::NoteType noteType) {
 
 Drumset* getDrumset(Score* score, int part) {
       Part* p = score->parts().at(part);
-      return p->instr()->drumset();
+      return const_cast<Drumset*>(p->instr()->drumset());   //TODO: remove cast
       }
 
 void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track){

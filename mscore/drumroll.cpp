@@ -424,7 +424,6 @@ void DrumrollEditor::cmd(QAction* a)
             }
 
       gv->setStaff(staff, locator);
-      score()->endCmd();
       }
 }
 

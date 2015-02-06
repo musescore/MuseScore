@@ -27,9 +27,6 @@ enum class PropertyStyle : char {
 
 //------------------------------------------------------------------------
 //   Element Properties
-//    accessible through
-//    virtual QVariant Element::getProperty(int propertyId)
-//    virtual void Element::setProperty(int propertyId, const QVariant&)
 //------------------------------------------------------------------------
 
 enum class P_ID : unsigned char {

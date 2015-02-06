@@ -8160,15 +8160,15 @@
                   <description>Bouzouki (3-course)</description>
                   <musicXMLid>pluck.bouzouki</musicXMLid>
                   <StringData>
-                        <frets>27</frets>
+                        <frets>26</frets>
                         <string>50</string>
                         <string>57</string>
                         <string>62</string>
                   </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>38-89</aPitchRange>
-                  <pPitchRange>38-89</pPitchRange>
+                  <aPitchRange>50-89</aPitchRange>
+                  <pPitchRange>50-90</pPitchRange>
                   <Channel>
                         <program value="24"/>
                   </Channel>
@@ -8181,7 +8181,7 @@
                   <description>Bouzouki (4-course)</description>
                   <musicXMLid>pluck.bouzouki</musicXMLid>
                   <StringData>
-                        <frets>27</frets>
+                        <frets>26</frets>
                         <string>48</string>
                         <string>53</string>
                         <string>57</string>
@@ -8189,8 +8189,8 @@
                   </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>36-89</aPitchRange>
-                  <pPitchRange>36-89</pPitchRange>
+                  <aPitchRange>48-88</aPitchRange>
+                  <pPitchRange>48-90</pPitchRange>
                   <Channel>
                         <program value="24"/>
                   </Channel>
@@ -8523,6 +8523,7 @@
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
+                        <string>38</string>
                         <string>43</string>
                         <string>48</string>
                         <string>53</string>
@@ -8547,6 +8548,8 @@
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
+                        <string>38</string>
+                        <string>41</string>
                         <string>43</string>
                         <string>48</string>
                         <string>53</string>
@@ -8571,6 +8574,9 @@
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
+                        <string open="1">36</string>
+                        <string>38</string>
+                        <string>41</string>
                         <string>43</string>
                         <string>48</string>
                         <string>53</string>
@@ -8580,8 +8586,8 @@
                   </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>38-79</aPitchRange>
-                  <pPitchRange>38-79</pPitchRange>
+                  <aPitchRange>36-79</aPitchRange>
+                  <pPitchRange>36-79</pPitchRange>
                   <Channel>
                         <program value="25"/>
                   </Channel>
@@ -8595,6 +8601,10 @@
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
+                        <string open="1">36</string>
+                        <string open="1">38</string>
+                        <string>40</string>
+                        <string>41</string>
                         <string>43</string>
                         <string>48</string>
                         <string>53</string>
@@ -8619,6 +8629,13 @@
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
+                        <string open="1">33</string>
+                        <string open="1">35</string>
+                        <string open="1">36</string>
+                        <string open="1">38</string>
+                        <string open="1">40</string>
+                        <string>41</string>
+                        <string>43</string>
                         <string>45</string>
                         <string>50</string>
                         <string>53</string>
@@ -8642,6 +8659,14 @@
                   <musicXMLid>pluck.archlute</musicXMLid>
                   <StringData>
                         <frets>13</frets>
+                        <string open="1">29</string>
+                        <string open="1">31</string>
+                        <string open="1">33</string>
+                        <string open="1">34</string>
+                        <string open="1">36</string>
+                        <string open="1">38</string>
+                        <string>39</string>
+                        <string>41</string>
                         <string>43</string>
                         <string>48</string>
                         <string>53</string>
@@ -8651,20 +8676,28 @@
                   </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>33-77</aPitchRange>
-                  <pPitchRange>33-77</pPitchRange>
+                  <aPitchRange>29-77</aPitchRange>
+                  <pPitchRange>29-77</pPitchRange>
                   <Channel>
                         <program value="25"/>
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
-            <Instrument id="theorbo-15-course">
+            <Instrument id="theorbo-14-course">
                   <longName>Theorbo</longName>
                   <shortName>Thb.</shortName>
-                  <description>Theorbo (15-course)</description>
+                  <description>Theorbo (14-course)</description>
                   <musicXMLid>pluck.theorbo</musicXMLid>
                   <StringData>
                         <frets>13</frets>
+                        <string open="1">31</string>
+                        <string open="1">33</string>
+                        <string open="1">35</string>
+                        <string open="1">36</string>
+                        <string open="1">38</string>
+                        <string open="1">40</string>
+                        <string open="1">41</string>
+                        <string open="1">43</string>
                         <string>45</string>
                         <string>49</string>
                         <string>55</string>
@@ -8674,8 +8707,8 @@
                   </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>33-71</aPitchRange>
-                  <pPitchRange>33-71</pPitchRange>
+                  <aPitchRange>31-71</aPitchRange>
+                  <pPitchRange>31-71</pPitchRange>
                   <Channel>
                         <program value="25"/>
                   </Channel>

@@ -252,7 +252,6 @@ void SynthControl::saveButtonClicked()
       _score->startCmd();
       _score->undo()->push(new ChangeSynthesizerState(_score, synti->state()));
       _score->endCmd();
-      mscore->endCmd();
 
       loadButton->setEnabled(false);
       saveButton->setEnabled(false);
