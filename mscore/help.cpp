@@ -111,8 +111,10 @@ void HelpQuery::actionTriggered(QAction* action)
       if (action->data().isNull())
             return;
       QUrl url = action->data().toUrl();
-      printf("actionTriggered <%s>\n", qPrintable(url.toString()));
-      mscore->showHelp(url);
+      if (url.isValid()) {
+            printf("actionTriggered <%s>\n", qPrintable(url.toString()));
+            mscore->showHelp(url);
+            }
       }
 
 

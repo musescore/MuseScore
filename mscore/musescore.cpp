@@ -1043,9 +1043,12 @@ void MuseScore::showHelp(QString s)
       {
       if (s.isEmpty())
             s = "manual";
+      qDebug("showHelp <%s>", qPrintable(s));
       QMap<QString,QUrl>list = helpEngine->linksForIdentifier(s);
       if (!list.isEmpty())
             showHelp(*list.begin());
+      else
+            qDebug("help for <%s> not found", qPrintable(s));
       }
 
 //---------------------------------------------------------
@@ -4069,7 +4072,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
 //      else if (cmd == "toggle-noteinput")
 //            entryTools->setVisible(!entryTools->isVisible());
       else if (cmd == "local-help") {
-printf("cmd local help, checked %d\n", a->isChecked());
             if (!a->isChecked()) {
                   if (manualDock)
                         manualDock->hide();
