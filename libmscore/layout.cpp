@@ -3694,7 +3694,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                           sp = qMax(bad, bnd - diff);
                                           }
                                     else if (grace)
-                                          sp = styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
+                                          sp = styleS(StyleIdx::barGraceDistance).val() * _spatium;
                                     else
                                           sp = bnd;
                                     if (pt & Segment::Type::TimeSig)
