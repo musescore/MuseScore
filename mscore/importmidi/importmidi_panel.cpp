@@ -7,6 +7,7 @@
 #include "importmidi_inner.h"
 #include "mscore/preferences.h"
 #include "musescore.h"
+#include "libmscore/score.h"
 
 
 namespace Ms {
@@ -207,6 +208,8 @@ void ImportMidiPanel::applyMidiImport()
       _model->notifyAllApplied();
       opers.data()->trackOpers = _model->trackOpers();
       setReorderedIndexes();
+            // prevent from showing save request dialog on every 'apply MIDI import' call
+      mscore->currentScore()->setCreated(false);
 
       mscore->openScore(_midiFile);
       saveTableViewState();
