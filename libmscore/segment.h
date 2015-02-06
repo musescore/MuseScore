@@ -78,8 +78,8 @@ public:
          ChordRest          = 0x40,
          Breath             = 0x80,
          EndBarLine         = 0x100,
-         TimeSigAnnounce    = 0x200,
-         KeySigAnnounce     = 0x400,
+         KeySigAnnounce     = 0x200,
+         TimeSigAnnounce    = 0x400,
          All                = -1
          };
 
