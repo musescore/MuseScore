@@ -12,8 +12,10 @@
 
 #include "helpBrowser.h"
 #include "icons.h"
+#include "help.h"
 
 namespace Ms {
+
 
 //---------------------------------------------------------
 //   HelpBrowser
@@ -22,7 +24,7 @@ namespace Ms {
 HelpBrowser::HelpBrowser(QWidget* parent)
    : QWidget(parent)
       {
-      view    = new WebView;
+      view    = new HelpView(helpEngine);
       toolbar = new QWidget;
       toolbar->setSizePolicy(QSizePolicy::Expanding,
       QSizePolicy::Fixed);
@@ -40,23 +42,25 @@ HelpBrowser::HelpBrowser(QWidget* parent)
       bl->addStretch(2);
 
       QToolButton* previous = new QToolButton;
-      previous->setDefaultAction(view->pageAction(QWebPage::Back));
       previous->setIcon(QIcon(*icons[int(Icons::goPrevious_ICON)]));
       bl->addWidget(previous);
+      connect(previous, SIGNAL(clicked()), view, SLOT(backward()));
+      connect(view, SIGNAL(backwardAvailable(bool)), previous, SLOT(setEnabled(bool)));
 
       QToolButton* next = new QToolButton;
-      next->setDefaultAction(view->pageAction(QWebPage::Forward));
       next->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
       bl->addWidget(next);
+      connect(next, SIGNAL(clicked()), view, SLOT(forward()));
+      connect(view, SIGNAL(forwardAvailable(bool)), next, SLOT(setEnabled(bool)));
 
       bl->addStretch(10);
 
-      QToolButton* reload = new QToolButton;
-      QAction * reloadAction = view->pageAction(QWebPage::Reload);
+//      QToolButton* reload = new QToolButton;
+//      QAction * reloadAction = view->pageAction(QWebPage::Reload);
       //for an unknown reason setting icon on the QToolButton doesn't work here...
-      reloadAction->setIcon(QIcon(*icons[int(Icons::viewRefresh_ICON)]));
-      reload->setDefaultAction(reloadAction);
-      bl->addWidget(reload);
+//      reloadAction->setIcon(QIcon(*icons[int(Icons::viewRefresh_ICON)]));
+//      reload->setDefaultAction(reloadAction);
+//      bl->addWidget(reload);
 
       toolbar->setLayout(bl);
       }
@@ -68,13 +72,14 @@ HelpBrowser::HelpBrowser(QWidget* parent)
 void HelpBrowser::setContent(const QString& path)
       {
       homePath = QUrl::fromLocalFile(path);
-      view->setUrl(homePath);
+      view->setSource(homePath);
       }
 
 void HelpBrowser::setContent(const QUrl& url)
       {
       homePath = url;
-      view->setUrl(url);
+      printf("HelpBroser::setContent: <%s>\n", qPrintable(url.toString()));
+      view->setSource(url);
       }
 
 //---------------------------------------------------------
@@ -83,37 +88,19 @@ void HelpBrowser::setContent(const QUrl& url)
 
 void HelpBrowser::homeClicked()
       {
-      view->setUrl(homePath);
+      view->setSource(homePath);
       }
 
 //---------------------------------------------------------
-//   wheelEvent
+//   loadResource
 //---------------------------------------------------------
 
-void WebView::wheelEvent(QWheelEvent* event)
+QVariant HelpView::loadResource(int type, const QUrl& name)
       {
-      static int deltaSum = 0;
-      deltaSum += event->delta();
-      int step = deltaSum / 120;
-      deltaSum %= 120;
-
-      if (event->modifiers() & Qt::ControlModifier) {
-            qreal _mag = zoomFactor();
-
-            if (step > 0) {
-                  for (int i = 0; i < step; ++i)
-                        _mag *= 1.1;
-                  }
-            else {
-                  for (int i = 0; i < -step; ++i)
-                        _mag /= 1.1;
-                  }
-            setZoomFactor(_mag);
-            event->accept();
-            }
-      else
-            event->ignore();
-      QWebView::wheelEvent(event);
+      if (name.scheme() == "qthelp")
+            return QVariant(helpEngine->fileData(name));
+      return QTextBrowser::loadResource(type, name);
       }
+
 }
 

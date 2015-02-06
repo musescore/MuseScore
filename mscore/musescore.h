@@ -90,6 +90,7 @@ class Driver;
 class Seq;
 class ImportMidiPanel;
 class Startcenter;
+class HelpBrowser;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -287,6 +288,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QLabel* _modeText;
       QLabel* _positionLabel;
       NewWizard* newWizard           { 0 };
+      HelpBrowser* helpBrowser       { 0 };
+      QDockWidget* manualDock        { 0 };
 
       PaletteBox* paletteBox         { 0 };
       Inspector* _inspector          { 0 };
@@ -397,7 +400,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showSynthControl(bool);
       void showSelectionWindow(bool);
       void showSearchDialog();
-      void helpBrowser(const QUrl&) const;
       void splitWindow(bool horizontal);
       void removeSessionFile();
       void editChordStyle();
@@ -664,7 +666,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PluginCreator* pluginCreator()   { return _pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
       void showMessage(const QString& s, int timeout);
-      void helpBrowser(const QString = QString()) const;
+      void showHelp(QString);
+      void showHelp(const QUrl&);
 
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);

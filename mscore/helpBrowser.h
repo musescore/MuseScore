@@ -16,15 +16,16 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   WebView
+//   HelpView
 //---------------------------------------------------------
 
-class WebView : public QWebView {
+class HelpView : public QTextBrowser {
       Q_OBJECT
-      virtual void wheelEvent(QWheelEvent*);
+      QHelpEngine* helpEngine;
 
    public:
-      WebView(QWidget* parent = 0) :QWebView(parent) {}
+      HelpView(QHelpEngine* he, QWidget* parent = 0) : QTextBrowser(parent), helpEngine(he) {}
+      QVariant loadResource(int type, const QUrl& name);
       };
 
 //---------------------------------------------------------
@@ -33,7 +34,7 @@ class WebView : public QWebView {
 
 class HelpBrowser : public QWidget {
       Q_OBJECT
-      WebView* view;
+      HelpView* view;
       QWidget* toolbar;
       QUrl homePath;
 

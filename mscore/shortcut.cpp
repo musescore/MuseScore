@@ -37,7 +37,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Show local handbook"), // Appears if you use Help > What's This?
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
-         ShortcutFlags::NONE
+         ShortcutFlags::NONE | ShortcutFlags::A_CHECKABLE
          },
       {
          MsWidget::MAIN_WINDOW,
