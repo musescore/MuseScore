@@ -103,9 +103,14 @@ ScoreListWidget* ScoreBrowser::createScoreList()
 ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
       {
       ScoreInfo si(fi);
-      QPixmap pm = mscore->extractThumbnail(fi.filePath());
-      if (pm.isNull())
-            pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
+
+      QPixmap pm;
+      if (!QPixmapCache::find(fi.filePath(), &pm)) {
+            pm = mscore->extractThumbnail(fi.filePath());
+            if (pm.isNull())
+                  pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
+            QPixmapCache::insert(fi.filePath(), pm);
+            }
       // add border
       QPainter p(&pm);
       p.setPen(QColor(0,0,0,128));
@@ -150,7 +155,7 @@ void ScoreBrowser::setScores(const QFileInfoList& s)
       for (const QFileInfo& fi : s) {
             if (fi.isFile()) {
                   QString s = fi.filePath();
-                  if(entries.contains(s))
+                  if (entries.contains(s))
                       continue;
                   if (s.endsWith(".mscz") || s.endsWith(".mscx")) {
                         if (!sl)
@@ -175,13 +180,13 @@ void ScoreBrowser::setScores(const QFileInfoList& s)
                   sl = createScoreList();
                   unsigned count = 0; //nbr of entries added
                   for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)){
-                        if(entries.contains(fi.filePath()))
+                        if (entries.contains(fi.filePath()))
                             continue;
                         sl->addItem(genScoreItem(fi, sl));
                         count++;
                         entries.insert(fi.filePath());
                         }
-                  if(count==0){
+                  if (count == 0) {
                         delete label;
                         delete sl;
                         }
