@@ -1267,6 +1267,9 @@ void Score::undoAddElement(Element* element)
                   Breath* breath   = static_cast<Breath*>(element);
                   int tick         = breath->segment()->tick();
                   Measure* m       = score->tick2measure(tick);
+                  // breath appears before barline
+                  if (m->tick() == tick)
+                        m = m->prevMeasure();
                   Segment* seg     = m->undoGetSegment(Segment::Type::Breath, tick);
                   Breath* nbreath  = static_cast<Breath*>(ne);
                   int ntrack       = staffIdx * VOICES + nbreath->voice();

@@ -165,12 +165,10 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <tick>480</tick>
         <Breath>
           <subtype>0</subtype>
           <lid>118</lid>
           </Breath>
-        <tick>960</tick>
         <Chord>
           <lid>10</lid>
           <durationType>quarter</durationType>
@@ -804,12 +802,10 @@
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <tick>480</tick>
           <Breath>
             <subtype>0</subtype>
             <lid>118</lid>
             </Breath>
-          <tick>960</tick>
           <Chord>
             <lid>10</lid>
             <durationType>quarter</durationType>
