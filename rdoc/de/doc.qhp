@@ -23,7 +23,6 @@
             <keyword id="klops" ref="doc.html#foobar"/>
         </keywords>
         <files>
-            <file>../classic.css</file>
             <file>doc.html</file>
         </files>
     </filterSection>

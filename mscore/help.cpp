@@ -39,6 +39,8 @@ HelpQuery::HelpQuery(QWidget* parent)
                   }
             }
 
+      mapper = new QSignalMapper(this);
+
       w = new QWidget(parent);
       QHBoxLayout* layout = new QHBoxLayout;
 
@@ -60,8 +62,7 @@ HelpQuery::HelpQuery(QWidget* parent)
 
       connect(button, SIGNAL(clicked()), entry, SLOT(clear()));
       connect(entry, SIGNAL(textChanged(const QString&)), SLOT(textChanged(const QString&)));
-      QMenu* menu = static_cast<QMenu*>(parent);
-      connect(menu, SIGNAL(triggered(QAction*)), SLOT(actionTriggered(QAction*)));
+      connect(mapper, SIGNAL(mapped(QObject*)), SLOT(actionTriggered(QObject*)));
       }
 
 //---------------------------------------------------------
@@ -93,12 +94,14 @@ void HelpQuery::textChanged(const QString& s)
                   menu->removeAction(a);
             }
       emptyState = false;
-
       QMap<QString,QUrl>list = helpEngine->linksForIdentifier(s);
-      for (const QUrl& s : list) {
-            QAction* action = new QAction(s.toString(), this);
-            action->setData(s);
+      for (auto i = list.begin(); i != list.end(); ++i) {
+            QAction* action = new QAction(i.key(), this);
+            action->setData(i.value());
+            printf("add action <%s> <%s>\n", qPrintable(i.key()), qPrintable(i.value().toString()));
             menu->addAction(action);
+            connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+            mapper->setMapping(action, action);
             }
       }
 
@@ -106,15 +109,17 @@ void HelpQuery::textChanged(const QString& s)
 //   actionTriggered
 //---------------------------------------------------------
 
-void HelpQuery::actionTriggered(QAction* action)
+void HelpQuery::actionTriggered(QObject* obj)
       {
+      QAction* action = static_cast<QAction*>(obj);
       if (action->data().isNull())
             return;
       QUrl url = action->data().toUrl();
-      if (url.isValid()) {
-            printf("actionTriggered <%s>\n", qPrintable(url.toString()));
+      if (url.isValid())
             mscore->showHelp(url);
-            }
+      else
+            qDebug("actionTriggered: bad url");
+      entry->clear();
       }
 
 
