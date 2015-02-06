@@ -53,6 +53,7 @@ set (QT_mingw_LIBRARIES
     Qt5Quick
     Qt5QuickWidgets
     Qt5Qml
+    Qt5Help
     )
 
 #    Qt3Support4
