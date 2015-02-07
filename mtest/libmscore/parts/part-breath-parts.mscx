@@ -170,12 +170,10 @@
             <tpc>16</tpc>
             </Note>
           </Chord>
-        <tick>480</tick>
         <Breath>
           <subtype>0</subtype>
           <lid>10</lid>
           </Breath>
-        <tick>960</tick>
         <Chord>
           <lid>11</lid>
           <durationType>quarter</durationType>
@@ -444,12 +442,10 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>480</tick>
         <Breath>
           <subtype>0</subtype>
           <lid>84</lid>
           </Breath>
-        <tick>960</tick>
         <Chord>
           <lid>85</lid>
           <durationType>quarter</durationType>
@@ -822,12 +818,10 @@
               <tpc>16</tpc>
               </Note>
             </Chord>
-          <tick>480</tick>
           <Breath>
             <subtype>0</subtype>
             <lid>10</lid>
             </Breath>
-          <tick>960</tick>
           <Chord>
             <lid>11</lid>
             <durationType>quarter</durationType>
@@ -1197,12 +1191,10 @@
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <tick>480</tick>
           <Breath>
             <subtype>0</subtype>
             <lid>84</lid>
             </Breath>
-          <tick>960</tick>
           <Chord>
             <lid>85</lid>
             <durationType>quarter</durationType>
