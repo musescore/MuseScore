@@ -233,7 +233,7 @@ void Part::read114(XmlReader& e)
                   staff->read114(e);
                   }
             else if (tag == "Instrument") {
-                  Instrument* instrument = instr(0);
+                  Instrument* instrument = instr();
                   instrument->read(e);
                   // add string data from MIDI program number, if possible
                   if (instrument->stringData()->strings() == 0
@@ -251,7 +251,7 @@ void Part::read114(XmlReader& e)
                         else if (program == 42)                   // cello and other bass string instr.
                               instrument->setStringData(StringData(24, 4, g_celloStrings));
                         }
-                  Drumset* d = const_cast<Drumset*>(instr(0)->drumset());
+                  Drumset* d = const_cast<Drumset*>(instr()->drumset());
                   Staff*   st = staff(0);
                   if (d && st && st->lines() != 5) {
                         int n = 0;
@@ -264,13 +264,13 @@ void Part::read114(XmlReader& e)
             else if (tag == "name") {
                   Text* t = new Text(score());
                   t->read(e);
-                  instr(0)->setLongName(t->text());
+                  instr()->setLongName(t->text());
                   delete t;
                   }
             else if (tag == "shortName") {
                   Text* t = new Text(score());
                   t->read(e);
-                  instr(0)->setShortName(t->text());
+                  instr()->setShortName(t->text());
                   delete t;
                   }
             else if (tag == "trackName")
@@ -281,9 +281,9 @@ void Part::read114(XmlReader& e)
                   e.unknown();
             }
       if (_partName.isEmpty())
-            _partName = instr(0)->trackName();
+            _partName = instr()->trackName();
 
-      if (instr(0)->useDrumset() != DrumsetKind::NONE) {
+      if (instr()->useDrumset() != DrumsetKind::NONE) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
                   int bf    = staff->barLineFrom();
@@ -306,7 +306,7 @@ void Part::read114(XmlReader& e)
       articulations.append(MidiArticulation("staccato", "", 100, 50));
       articulations.append(MidiArticulation("tenuto", "", 100, 100));
       articulations.append(MidiArticulation("sforzato", "", 120, 100));
-      instr(0)->setArticulation(articulations);
+      instr()->setArticulation(articulations);
       }
 
 //---------------------------------------------------------

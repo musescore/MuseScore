@@ -34,7 +34,7 @@ Part::Part(Score* s)
    : ScoreElement(s)
       {
       _show  = true;
-      setInstrument(Instrument(), 0);     // default instrument
+      setInstrument(Instrument());     // default instrument
       }
 
 //---------------------------------------------------------
@@ -45,7 +45,7 @@ void Part::initFromInstrTemplate(const InstrumentTemplate* t)
       {
       _partName = t->trackName;
       Instrument instr = Instrument::fromTemplate(t);
-      setInstrument(instr, 0);
+      setInstrument(instr);
       }
 
 //---------------------------------------------------------
@@ -73,11 +73,11 @@ void Part::read(XmlReader& e)
                   staff->read(e);
                   }
             else if (tag == "Instrument")
-                  instr(0)->read(e);
+                  instr()->read(e);
             else if (tag == "name")
-                  instr(0)->setLongName(e.readElementText());
+                  instr()->setLongName(e.readElementText());
             else if (tag == "shortName")
-                  instr(0)->setShortName(e.readElementText());
+                  instr()->setShortName(e.readElementText());
             else if (tag == "trackName")
                   _partName = e.readElementText();
             else if (tag == "show")
@@ -86,7 +86,7 @@ void Part::read(XmlReader& e)
                   e.unknown();
             }
       if (_partName.isEmpty())
-            _partName = instr(0)->trackName();
+            _partName = instr()->trackName();
       }
 
 //---------------------------------------------------------
@@ -101,7 +101,7 @@ void Part::write(Xml& xml) const
       if (!_show)
             xml.tag("show", _show);
       xml.tag("trackName", _partName);
-      instr(0)->write(xml);
+      instr()->write(xml);
       xml.etag();
       }
 
@@ -176,56 +176,56 @@ void Part::removeStaff(Staff* staff)
 
 void Part::setMidiProgram(int program, int bank)
       {
-      Channel c = instr(0)->channel(0);
+      Channel c = instr()->channel(0);
       c.program = program;
       c.bank    = bank;
       c.updateInitList();
-      instr(0)->setChannel(0, c);
+      instr()->setChannel(0, c);
       }
 
 int Part::volume() const
       {
-      return instr(0)->channel(0).volume;
+      return instr()->channel(0).volume;
       }
 
 void Part::setVolume(int volume)
       {
-      instr(0)->channel(0).volume = volume;
+      instr()->channel(0).volume = volume;
       }
 
 bool Part::mute() const
-{
-      return instr(0)->channel(0).mute;
-}
+      {
+      return instr()->channel(0).mute;
+      }
 
 void Part::setMute(bool mute)
-{
-      instr(0)->channel(0).mute = mute;
-}
+      {
+      instr()->channel(0).mute = mute;
+      }
 
 int Part::reverb() const
       {
-      return instr(0)->channel(0).reverb;
+      return instr()->channel(0).reverb;
       }
 
 int Part::chorus() const
       {
-      return instr(0)->channel(0).chorus;
+      return instr()->channel(0).chorus;
       }
 
 int Part::pan() const
       {
-      return instr(0)->channel(0).pan;
+      return instr()->channel(0).pan;
       }
 
 void Part::setPan(int pan)
       {
-      instr(0)->channel(0).pan = pan;
+      instr()->channel(0).pan = pan;
       }
 
 int Part::midiProgram() const
       {
-      return instr(0)->channel(0).program;
+      return instr()->channel(0).program;
       }
 
 //---------------------------------------------------------
@@ -234,7 +234,7 @@ int Part::midiProgram() const
 
 int Part::midiChannel() const
       {
-      return score()->midiChannel(instr(0)->channel(0).channel);
+      return score()->midiChannel(instr()->channel(0).channel);
       }
 
 //---------------------------------------------------------
@@ -243,7 +243,7 @@ int Part::midiChannel() const
 
 int Part::midiPort() const
       {
-      return score()->midiPort(instr(0)->channel(0).channel);
+      return score()->midiPort(instr()->channel(0).channel);
       }
 
 //---------------------------------------------------------
@@ -335,7 +335,7 @@ QString Part::shortName(int tick) const
 
 void Part::setLongName(const QString& s)
       {
-      instr(0)->setLongName(s);
+      instr()->setLongName(s);
       }
 
 //---------------------------------------------------------
@@ -344,7 +344,7 @@ void Part::setLongName(const QString& s)
 
 void Part::setShortName(const QString& s)
       {
-      instr(0)->setShortName(s);
+      instr()->setShortName(s);
       }
 
 //---------------------------------------------------------
