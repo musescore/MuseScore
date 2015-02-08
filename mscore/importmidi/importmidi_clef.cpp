@@ -425,17 +425,17 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       {
       const auto &opers = preferences.midiImportOperations.data()->trackOpers;
       const auto &trackInstrList = opers.msInstrList.value(indexOfOperation);
+      const int msInstrIndex = opers.msInstrIndex.value(indexOfOperation);
+      const bool hasInstrument = !trackInstrList.empty() && trackInstrList[msInstrIndex];
 
-      if (isDrumTrack && trackInstrList.empty()) {
+      if (isDrumTrack && !hasInstrument) {
             createClef(ClefType::PERC, staff, 0);
             return;
             }
 
       const int strack = staff->idx() * VOICES;
       bool mainClefWasSet = false;
-      const int msInstrIndex = opers.msInstrIndex.value(indexOfOperation);
-      const bool canChangeClef = trackInstrList.empty() || !trackInstrList[msInstrIndex]
-                                  || hasGFclefs(trackInstrList[msInstrIndex]);
+      const bool canChangeClef = !hasInstrument || hasGFclefs(trackInstrList[msInstrIndex]);
 
       if (opers.changeClef.value(indexOfOperation) && canChangeClef) {
             MidiTie::TieStateMachine tieTracker;
