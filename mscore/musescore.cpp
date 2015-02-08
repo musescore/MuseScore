@@ -3898,7 +3898,7 @@ void MuseScore::endCmd()
             dirtyChanged(cs);
             Element* e = cs->selection().element();
             if (e && (cs->playNote() || cs->playChord())) {
-                  if (cs->playChord() &&  e->type() == Element::Type::NOTE)
+                  if (cs->playChord() && preferences.playChordOnAddNote &&  e->type() == Element::Type::NOTE)
                         play(static_cast<Note*>(e)->chord());
                   else
                         play(e);
