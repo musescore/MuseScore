@@ -231,7 +231,11 @@ std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &
                         suitableTemplates.push_back(instr);
                   }
             else if (program >= 80 && program <= 103) {
-                  auto instr = findInstrument("electronic-instruments", "effect-synth");
+                  const InstrumentTemplate *instr = nullptr;
+                  if (track.mtrack->drumTrack())
+                        instr = findInstrument("electronic-instruments", "percussion-synthesizer");
+                  else
+                        instr = findInstrument("electronic-instruments", "effect-synth");
                   if (instr)
                         suitableTemplates.push_back(instr);       // generic synth
                   }
