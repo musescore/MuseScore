@@ -249,6 +249,12 @@ Palette* MuseScore::newKeySigPalette()
       KeySig* k = new KeySig(gscore);
       k->setKey(Key::C);
       sp->append(k, qApp->translate("MuseScore", keyNames[14]));
+      // atonal key signature
+      KeySigEvent nke;
+      nke.setCustom(true);
+      KeySig* nk = new KeySig(gscore);
+      nk->setKeySigEvent(nke);
+      sp->append(nk, qApp->translate("MuseScore", keyNames[15]));
       return sp;
       }
 

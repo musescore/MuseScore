@@ -612,7 +612,7 @@ void MuseScore::newFile()
                               // transpose key
                               //
                               KeySigEvent nKey = ks;
-                              if (part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
+                              if (!nKey.custom() && part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
                                     int diff = -part->instr()->transpose().chromatic;
                                     nKey.setKey(transposeKey(nKey.key(), diff));
                                     }
