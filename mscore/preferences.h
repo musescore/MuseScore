@@ -90,6 +90,7 @@ struct Preferences {
       QColor dropColor;
       bool enableMidiInput;
       bool playNotes;         // play notes on click
+      bool playChordOnAddNote;
       bool showNavigator;
       bool showPlayPanel;
       bool showStatusBar;
