@@ -42,11 +42,12 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <StaffType group="pitched">
+        <StaffType group="percussion">
+          <name>perc1Line</name>
           <lines>1</lines>
+          <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <barLineSpan from="0" to="8">1</barLineSpan>
         </Staff>
       <trackName>Percussion</trackName>
       <Instrument>
@@ -100,7 +101,9 @@
       </Part>
     <Part>
       <Staff id="2">
-        <StaffType group="pitched">
+        <StaffType group="percussion">
+          <name>perc5Line</name>
+          <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
