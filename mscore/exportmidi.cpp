@@ -251,8 +251,9 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
                         char channel = part->score()->midiChannel(ch.channel);
 
                         if (staff->isTop()) {
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_RESET_ALL_CTRL, 0));
                               // set pitch bend sensitivity to 12 semitones:
-                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
+                              /*track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
                               track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
                               track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 12));
 
@@ -263,7 +264,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
                               // deactivate rpn
                               track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 127));
-                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 127));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 127));*/
 
                               if (ch.program != -1)
                                     track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PROGRAM, ch.program));
