@@ -393,35 +393,35 @@ void GuitarPro6::readTracks(QDomNode* track)
                         // use an array as a map instead?
                         if (!ref.compare("e-gtr6")) {
                               *instr = instr->fromTemplate(Ms::searchTemplate("electric-guitar"));
-                              part->setInstrument(*instr, 0);
+                              part->setInstrument(*instr);
                               }
                         else if (!ref.compare("tnr-s")) {
                               *instr = instr->fromTemplate(Ms::searchTemplate("voice"));
-                              part->setInstrument(*instr, 0);
+                              part->setInstrument(*instr);
                               }
                         else if (!ref.compare("s-gtr6")) {
                               *instr = instr->fromTemplate(Ms::searchTemplate("guitar-steel"));
-                              part->setInstrument(*instr, 0);
+                              part->setInstrument(*instr);
                               }
                         else if (!ref.compare("snt-lead-ss")) {
                               *instr = instr->fromTemplate(Ms::searchTemplate("poly-synth"));
-                              part->setInstrument(*instr, 0);
+                              part->setInstrument(*instr);
                               }
                         else if (!ref.compare("f-bass5")) {
                               *instr = instr->fromTemplate(Ms::searchTemplate("bass-guitar"));
-                              part->setInstrument(*instr, 0);
+                              part->setInstrument(*instr);
                               }
                         else if (!ref.compare("snt-bass-ss")) {
                               *instr = instr->fromTemplate(Ms::searchTemplate("metallic-synth"));
-                              part->setInstrument(*instr, 0);
+                              part->setInstrument(*instr);
                               }
                         else if (!ref.compare("mrcs")) {
                               *instr = instr->fromTemplate(Ms::searchTemplate("maracas"));
-                              part->setInstrument(*instr, 0);
+                              part->setInstrument(*instr);
                              }
                         else if (!ref.compare("drmkt")) {
                               *instr = instr->fromTemplate(Ms::searchTemplate("drumset"));
-                              part->setInstrument(*instr, 0);
+                              part->setInstrument(*instr);
                               }
                         }
                   else if (nodeName == "Properties") {
