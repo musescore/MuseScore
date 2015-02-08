@@ -4010,6 +4010,11 @@ bool ScoreView::event(QEvent* event)
       else if (event->type() == QEvent::Gesture) {
             return gestureEvent(static_cast<QGestureEvent*>(event));
             }
+      else if (event->type() == QEvent::MouseButtonPress && qApp->focusWidget() != this) {
+            QMouseEvent* me = static_cast<QMouseEvent*>(event);
+            if (me->button() == Qt::LeftButton)
+                  this->setFocus();
+            }
       return QWidget::event(event);
       }
 
