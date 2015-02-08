@@ -72,25 +72,15 @@ extern Preferences preferences;
 extern void updateNoteLines(Segment*, int track);
 
 
-void cleanUpMidiEvents(std::multimap<int, MTrack> &tracks)
+void lengthenTooShortNotes(std::multimap<int, MTrack> &tracks)
       {
       for (auto &track: tracks) {
             MTrack &mtrack = track.second;
-
-            for (auto chordIt = mtrack.chords.begin(); chordIt != mtrack.chords.end(); ) {
-                  MidiChord &ch = chordIt->second;
-                  for (auto noteIt = ch.notes.begin(); noteIt != ch.notes.end(); ) {
-                        if (noteIt->offTime - chordIt->first < MChord::minAllowedDuration()) {
-                              noteIt = ch.notes.erase(noteIt);
-                              continue;
-                              }
-                        ++noteIt;
+            for (auto &chord: mtrack.chords) {
+                  for (auto &note: chord.second.notes) {
+                        if (note.offTime - chord.first < MChord::minAllowedDuration())
+                              note.offTime = chord.first + MChord::minAllowedDuration();
                         }
-                  if (ch.notes.isEmpty()) {
-                        chordIt = mtrack.chords.erase(chordIt);
-                        continue;
-                        }
-                  ++chordIt;
                   }
             }
       }
@@ -1030,7 +1020,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       if (opers.data()->processingsOfOpenedFile == 0)         // for newly opened MIDI file
             MidiChordName::findChordNames(tracks);
 
-      cleanUpMidiEvents(tracks);
+      lengthenTooShortNotes(tracks);
 
       if (opers.data()->processingsOfOpenedFile == 0) {       // for newly opened MIDI file
             opers.data()->trackCount = 0;
