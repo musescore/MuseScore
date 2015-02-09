@@ -93,17 +93,22 @@ bool doNotesOverlap(const MTrack &track)
       const auto &chords = track.chords;
       for (auto i1 = chords.begin(); i1 != chords.end(); ++i1) {
             const auto &chord1 = i1->second;
-            for (const auto &note1: chord1.notes) {
+            for (auto noteIt1 = chord1.notes.begin();
+                      noteIt1 != chord1.notes.end(); ++noteIt1) {
+                  for (auto noteIt2 = std::next(noteIt1);
+                            noteIt2 != chord1.notes.end(); ++noteIt2) {
+                        if (noteIt2->pitch == noteIt1->pitch)
+                              return true;
+                        }
                   for (auto i2 = std::next(i1); i2 != chords.end(); ++i2) {
-                        if (i2->first >= note1.offTime)
+                        if (i2->first >= noteIt1->offTime)
                               break;
                         const auto &chord2 = i2->second;
                         if (chord1.voice != chord2.voice)
                               continue;
                         for (const auto &note2: chord2.notes) {
-                              if (note2.pitch != note1.pitch)
-                                    continue;
-                              return true;
+                              if (note2.pitch == noteIt1->pitch)
+                                    return true;
                               }
                         }
                   }
