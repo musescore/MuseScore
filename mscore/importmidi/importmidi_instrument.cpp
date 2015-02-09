@@ -231,7 +231,11 @@ std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &
                         suitableTemplates.push_back(instr);
                   }
             else if (program >= 80 && program <= 103) {
-                  auto instr = findInstrument("electronic-instruments", "effect-synth");
+                  const InstrumentTemplate *instr = nullptr;
+                  if (track.mtrack->drumTrack())
+                        instr = findInstrument("electronic-instruments", "percussion-synthesizer");
+                  else
+                        instr = findInstrument("electronic-instruments", "effect-synth");
                   if (instr)
                         suitableTemplates.push_back(instr);       // generic synth
                   }
@@ -391,10 +395,12 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                   part->setStaves(1);
 
             if (part->nstaves() == 1) {
-                  if (!instr && track.mtrack->drumTrack()) {
+                  if (track.mtrack->drumTrack()) {
                         part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
-                        part->instr()->setDrumset(smDrumset);
-                        part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
+                        if (!instr) {
+                              part->instr()->setDrumset(smDrumset);
+                              part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
+                              }
                         }
                   }
             else {
@@ -411,6 +417,8 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
             if (instr) {
                   for (int i = 0; i != part->nstaves(); ++i) {
+                        if (instr->staffTypePreset)
+                              part->staff(i)->setStaffType(instr->staffTypePreset);
                         part->staff(i)->setLines(instr->staffLines[i]);
                         part->staff(i)->setSmall(instr->smallStaff[i]);
                         part->staff(i)->setDefaultClefType(instr->clefTypes[i]);
