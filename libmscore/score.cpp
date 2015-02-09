@@ -2933,7 +2933,8 @@ void Score::selectRange(Element* e, int staffIdx)
 
       _selection.setActiveTrack(activeTrack);
 
-      if (_selection.startSegment())
+      // doing this in note entry mode can clear selection
+      if (_selection.startSegment() && !noteEntryMode())
             setPlayPos(_selection.startSegment()->tick());
 
       _selection.updateSelectedElements();
