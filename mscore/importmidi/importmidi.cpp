@@ -989,27 +989,30 @@ void setLeftRightHandSplit(const std::multimap<int, MTrack> &tracks)
 
 ReducedFraction findFirstChordTick(const QList<MTrack> &tracks)
       {
-      ReducedFraction minTick(-1, 1);
+      ReducedFraction firstTick(0, 1);
       for (const auto &track: tracks) {
             for (const auto &chord: track.chords) {
-                  if (minTick == ReducedFraction(-1, 1) || chord.first < minTick)
-                        minTick = chord.first;
+
+                  Q_ASSERT(chord.first >= ReducedFraction(0, 1));
+
+                  if (firstTick == ReducedFraction(0, 1) || chord.first < firstTick)
+                        firstTick = chord.first;
                   }
             }
-      return minTick;
+      return firstTick;
       }
 
 ReducedFraction findLastChordTick(const std::multimap<int, MTrack> &tracks)
       {
-      ReducedFraction maxTick(-1, 1);
+      ReducedFraction lastTick(0, 1);
       for (const auto &track: tracks) {
             for (const auto &chord: track.second.chords) {
                   const auto offTime = MChord::maxNoteOffTime(chord.second.notes);
-                  if (offTime > maxTick)
-                        maxTick = offTime;
+                  if (offTime > lastTick)
+                        lastTick = offTime;
                   }
             }
-      return maxTick;
+      return lastTick;
       }
 
 void convertMidi(Score *score, const MidiFile *mf)
