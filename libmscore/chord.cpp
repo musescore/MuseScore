@@ -2175,7 +2175,12 @@ void Chord::layoutTablature()
             // OR previous CR is a rest
             // set a duration symbol (trying to re-use existing symbols where existing to minimize
             // symbol creation and deletion)
-            if (prevCR == 0 || prevCR->durationType().type() != durationType().type()
+            TablatureSymbolRepeat symRepeat = tab->symRepeat();
+            if (prevCR == 0
+                  || symRepeat == TablatureSymbolRepeat::ALWAYS
+                  || (symRepeat == TablatureSymbolRepeat::MEASURE && measure() != prevCR->measure())
+                  || (symRepeat == TablatureSymbolRepeat::SYSTEM && measure()->system() != prevCR->measure()->system())
+                  || prevCR->durationType().type() != durationType().type()
                   || prevCR->dots() != dots()
                   || prevCR->type() == Element::Type::REST) {
                   // symbol needed; if not exist, create; if exists, update duration
