@@ -1184,48 +1184,51 @@ void Note::endDrag()
       dragMode     = false;
       if (_lineOffset == 0)
             return;
-      int staffIdx = chord()->staffIdx() + chord()->staffMove();
-      Staff* staff = score()->staff(staffIdx);
-      if (staff->isTabStaff()) {
-            // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
-            // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
-            int nString = _string + (staff->staffType()->upsideDown() ? -_lineOffset : _lineOffset);
-            _lineOffset = 0;
-            // get a fret number for same pitch on new string
-            const StringData* strData = staff->part()->instr()->stringData();
-            int nFret       = strData->fret(_pitch, nString);
-            if (nFret < 0)                      // no fret?
-                  return;                       // no party!
-            score()->undoChangeProperty(this, P_ID::FRET, nFret);
-            score()->undoChangeProperty(this, P_ID::STRING, nString);
-            strData->fretChords(chord());
-            }
-      else {
-            // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
-            int nLine   = _line + _lineOffset;
-            _lineOffset = 0;
-            // get note context
-            int tick      = chord()->tick();
-            ClefType clef = staff->clef(tick);
-            Key key       = staff->key(tick);
-            // determine new pitch of dragged note
-            int nPitch = line2pitch(nLine, clef, key);
-            if (!concertPitch()) {
-                  Interval interval = staff->part()->instr()->transpose();
-                  nPitch += interval.chromatic;
+      for (Element* e : linkList()) {
+            Note* n = static_cast<Note*>(e);
+            int staffIdx = n->chord()->staffIdx() + chord()->staffMove();
+            Staff* staff = n->score()->staff(staffIdx);
+
+            if (staff->isTabStaff()) {
+                  // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
+                  // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
+                  int nString = _string + (staff->staffType()->upsideDown() ? -n->_lineOffset : n->_lineOffset);
+                  // get a fret number for same pitch on new string
+                  const StringData* strData = staff->part()->instr()->stringData();
+                  int nFret       = strData->fret(_pitch, nString);
+                  if (nFret < 0)                      // no fret?
+                        return;                       // no party!
+                  score()->undoChangeProperty(this, P_ID::FRET, nFret);
+                  score()->undoChangeProperty(this, P_ID::STRING, nString);
+                  strData->fretChords(chord());
                   }
-            int tpc1 = pitch2tpc(nPitch, key, Prefer::NEAREST);
-            int tpc2 = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
-            // undefined for non-tablature staves
-            for (Note* n : tiedNotes()) {
-                  if (n->pitch() != nPitch)
-                        n->undoChangeProperty(P_ID::PITCH, nPitch);
-                  if (n->_tpc[0] != tpc1)
-                        n->undoChangeProperty(P_ID::TPC1, tpc1);
-                  if (n->_tpc[1] != tpc2)
-                        n->undoChangeProperty(P_ID::TPC2, tpc2);
+            else {
+                  // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
+                  int nLine   = n->_line + _lineOffset;
+                  // get note context
+                  int tick      = n->chord()->tick();
+                  ClefType clef = staff->clef(tick);
+                  Key key       = staff->key(tick);
+                  // determine new pitch of dragged note
+                  int nPitch = line2pitch(nLine, clef, key);
+                  if (!n->concertPitch()) {
+                        Interval interval = staff->part()->instr()->transpose();
+                        nPitch += interval.chromatic;
+                        }
+                  int tpc1 = pitch2tpc(nPitch, key, Prefer::NEAREST);
+                  int tpc2 = pitch2tpc(nPitch - transposition(), key, Prefer::NEAREST);
+                  // undefined for non-tablature staves
+                  for (Note* nn : n->tiedNotes()) {
+                        if (nn->pitch() != nPitch)
+                              nn->undoChangeProperty(P_ID::PITCH, nPitch);
+                        if (nn->_tpc[0] != tpc1)
+                              nn->undoChangeProperty(P_ID::TPC1, tpc1);
+                        if (nn->_tpc[1] != tpc2)
+                              nn->undoChangeProperty(P_ID::TPC2, tpc2);
+                        }
                   }
             }
+      _lineOffset = 0;
       score()->select(this, SelectType::SINGLE, 0);
       }
 
