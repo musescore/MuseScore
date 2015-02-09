@@ -103,6 +103,28 @@ ReducedFraction maxNoteLen(const std::pair<const ReducedFraction, MidiChord> &ch
       return maxOffTime - chord.first;
       }
 
+void removeOverlappingNotes(QList<MidiNote> &notes)
+      {
+      QLinkedList<MidiNote> tempNotes;
+      for (const auto &note: notes)
+            tempNotes.append(note);
+
+      for (auto noteIt1 = tempNotes.begin(); noteIt1 != tempNotes.end(); ++noteIt1) {
+            for (auto noteIt2 = std::next(noteIt1); noteIt2 != tempNotes.end(); ) {
+                  if (noteIt2->pitch == noteIt1->pitch) {
+                        if (noteIt2->offTime > noteIt1->offTime)      // set max len before erase
+                              noteIt1->offTime = noteIt2->offTime;
+                        noteIt2 = tempNotes.erase(noteIt2);
+                        continue;
+                        }
+                  ++noteIt2;
+                  }
+            }
+      notes.clear();
+      for (const auto &note: tempNotes)
+            notes.append(note);
+      }
+
 // remove overlapping notes with the same pitch
 
 void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
@@ -117,8 +139,10 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                         "or non-tuplet chord/note is inside tuplet before overlaps remove");
 
             for (auto i1 = chords.begin(); i1 != chords.end(); ) {
-                  auto &chord1 = i1->second;
                   const auto &onTime1 = i1->first;
+                  auto &chord1 = i1->second;
+                  removeOverlappingNotes(chord1.notes);
+
                   for (auto note1It = chord1.notes.begin(); note1It != chord1.notes.end(); ) {
                         auto &note1 = *note1It;
 
