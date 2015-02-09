@@ -978,7 +978,7 @@ static bool checkStart(Element* e)
       if (e == 0 || !e->isChordRest())
             return false;
       ChordRest* cr = static_cast<ChordRest*>(e);
-      bool rv;
+      bool rv = false;
       if (cr->tuplet()) {
             rv = true;
             Tuplet* tuplet = cr->tuplet();
@@ -1012,7 +1012,7 @@ static bool checkEnd(Element* e)
       if (e == 0 || !e->isChordRest())
             return false;
       ChordRest* cr = static_cast<ChordRest*>(e);
-      bool rv;
+      bool rv = false;
       if (cr->tuplet()) {
             rv = true;
             Tuplet* tuplet = cr->tuplet();
