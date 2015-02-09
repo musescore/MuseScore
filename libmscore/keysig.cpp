@@ -37,7 +37,8 @@ const char* keyNames[] = {
       QT_TRANSLATE_NOOP("MuseScore", "Bb major, G minor"),
       QT_TRANSLATE_NOOP("MuseScore", "C# major, A# minor"),
       QT_TRANSLATE_NOOP("MuseScore", "F major, D minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "C major, A minor")
+      QT_TRANSLATE_NOOP("MuseScore", "C major, A minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "Open key signature")
       };
 
 //---------------------------------------------------------
@@ -251,6 +252,11 @@ void KeySig::draw(QPainter* p) const
       p->setPen(curColor());
       for (const KeySym& ks: _sig.keySymbols())
             drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));
+      if (!parent() && isCustom() && _sig.keySymbols().isEmpty()) {
+            // atonal key signature - draw something for palette
+            p->setPen(Qt::gray);
+            drawSymbol(SymId::timeSigX, p, QPointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
+            }
       }
 
 //---------------------------------------------------------
@@ -545,8 +551,12 @@ Element* KeySig::prevElement()
 QString KeySig::accessibleInfo()
       {
       QString keySigType;
-      if (isCustom())
-            return tr("%1: Custom").arg(Element::accessibleInfo());
+      if (isCustom()) {
+            if (keySigEvent().keySymbols().isEmpty())
+                  return tr("%1: Open").arg(Element::accessibleInfo());
+            else
+                  return tr("%1: Custom").arg(Element::accessibleInfo());
+            }
 
       if (key() == Key::C)
             return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("MuseScore", keyNames[14]));
