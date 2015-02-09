@@ -34,9 +34,10 @@ class HelpQuery : public QWidgetAction {
    private slots:
       void textChanged(const QString&);
       void actionTriggered(QObject*);
+      void returnPressed();
 
    public slots:
-      void setFocus() { entry->setFocus(); }
+      void setFocus();
 
    public:
       HelpQuery(QWidget* parent);

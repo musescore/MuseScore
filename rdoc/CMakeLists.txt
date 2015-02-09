@@ -21,7 +21,6 @@ add_custom_command(TARGET referenceDocumentation
       COMMAND Qt5::qcollectiongenerator ${PROJECT_SOURCE_DIR}/rdoc/de/doc.qhcp -o doc_de.qhc
       )
 
-
 install(FILES
       ${PROJECT_BINARY_DIR}/rdoc/doc_en.qhc
       ${PROJECT_BINARY_DIR}/rdoc/doc_de.qhc

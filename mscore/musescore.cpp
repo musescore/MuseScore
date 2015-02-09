@@ -1042,14 +1042,17 @@ void MuseScore::showHelp(const QUrl& url)
 
 void MuseScore::showHelp(QString s)
       {
-      if (s.isEmpty())
-            s = "manual";
+      s = s.toLower();
       qDebug("showHelp <%s>", qPrintable(s));
       QMap<QString,QUrl>list = helpEngine->linksForIdentifier(s);
       if (!list.isEmpty())
             showHelp(*list.begin());
-      else
+      else {
             qDebug("help for <%s> not found", qPrintable(s));
+            QMap<QString,QUrl>list = helpEngine->linksForIdentifier("manual");
+            if (!list.isEmpty())
+                  showHelp(*list.begin());
+            }
       }
 
 //---------------------------------------------------------
