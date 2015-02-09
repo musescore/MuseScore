@@ -74,6 +74,8 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       staff->setUserMag(orgStaff->userMag());
       staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
 
+      instrumentClefChanged.first = false;
+
       // hide string data controls if instrument has no strings
       stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
       // set dlg controls
@@ -254,6 +256,9 @@ void EditStaff::apply()
       instrument.setShortName(sn);
       instrument.setLongName(ln);
 
+      if(instrumentClefChanged.first)
+            score->undoChangeClef(orgStaff,score->firstSegment(),instrumentClefChanged.second);
+
       bool s         = small->isChecked();
       bool inv       = invisible->isChecked();
       qreal userDist = spinExtraDistance->value();
@@ -384,6 +389,13 @@ void EditStaff::showInstrumentDialog()
       if (si.exec()) {
             instrument = Instrument::fromTemplate(si.instrTemplate());
             updateInstrument();
+            bool concertPitch = staff->score()->styleB(StyleIdx::concertPitch);
+            if (concertPitch)
+                  instrumentClefChanged.second = si.instrTemplate()->clefTypes[0]._concertClef;
+            else
+                  instrumentClefChanged.second = si.instrTemplate()->clefTypes[0]._transposingClef;
+
+            instrumentClefChanged.first = true;
             }
       }
 
