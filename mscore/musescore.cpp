@@ -890,9 +890,11 @@ MuseScore::MuseScore()
       QMenu* menuHelp = mb->addMenu(tr("&Help"));
       menuHelp->setObjectName("Help");
 
+#ifndef Q_OS_MAC
       HelpQuery* hw = new HelpQuery(menuHelp);
       menuHelp->addAction(hw);
       connect(menuHelp, SIGNAL(aboutToShow()), hw, SLOT(setFocus()));
+#endif
 
       menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
