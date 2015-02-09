@@ -38,7 +38,7 @@ const char* keyNames[] = {
       QT_TRANSLATE_NOOP("MuseScore", "C# major, A# minor"),
       QT_TRANSLATE_NOOP("MuseScore", "F major, D minor"),
       QT_TRANSLATE_NOOP("MuseScore", "C major, A minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "Open key signature")
+      QT_TRANSLATE_NOOP("MuseScore", "Open/Atonal")
       };
 
 //---------------------------------------------------------
@@ -553,7 +553,7 @@ QString KeySig::accessibleInfo()
       QString keySigType;
       if (isCustom()) {
             if (keySigEvent().keySymbols().isEmpty())
-                  return tr("%1: Open").arg(Element::accessibleInfo());
+                  return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("MuseScore", keyNames[15]));
             else
                   return tr("%1: Custom").arg(Element::accessibleInfo());
             }
