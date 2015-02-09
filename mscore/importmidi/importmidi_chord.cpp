@@ -112,6 +112,7 @@ void removeOverlappingNotes(QList<MidiNote> &notes)
       for (auto noteIt1 = tempNotes.begin(); noteIt1 != tempNotes.end(); ++noteIt1) {
             for (auto noteIt2 = std::next(noteIt1); noteIt2 != tempNotes.end(); ) {
                   if (noteIt2->pitch == noteIt1->pitch) {
+                                    // overlapping notes found
                         if (noteIt2->offTime > noteIt1->offTime)      // set max len before erase
                               noteIt1->offTime = noteIt2->offTime;
                         noteIt2 = tempNotes.erase(noteIt2);
@@ -156,13 +157,8 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                               for (auto &note2: chord2.notes) {
                                     if (note2.pitch != note1.pitch)
                                           continue;
-
-                                    qDebug("Midi import: overlapping events: %d+%d %d+%d",
-                                           onTime1.ticks(), note1.offTime.ticks(),
-                                           onTime2.ticks(), note2.offTime.ticks());
-
+                                                // overlapping notes found
                                     note1.offTime = onTime2;
-
                                     if (!note1.isInTuplet && chord2.isInTuplet) {
                                           if (note1.offTime > chord2.tuplet->second.onTime) {
                                                 note1.isInTuplet = true;
