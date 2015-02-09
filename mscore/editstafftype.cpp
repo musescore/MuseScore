@@ -102,14 +102,18 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(showLedgerLinesPercussion,  SIGNAL(toggled(bool)),  SLOT(updatePreview()));
       connect(stemlessPercussion,         SIGNAL(toggled(bool)),  SLOT(updatePreview()));
 
-      connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
       connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
+      connect(valuesRepeatNever,  SIGNAL(toggled(bool)),          SLOT(updatePreview()));
+      connect(valuesRepeatSystem, SIGNAL(toggled(bool)),          SLOT(updatePreview()));
+      connect(valuesRepeatMeasure,SIGNAL(toggled(bool)),          SLOT(updatePreview()));
+      connect(valuesRepeatAlways, SIGNAL(toggled(bool)),          SLOT(updatePreview()));
       connect(stemBesideRadio,SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(stemThroughRadio,SIGNAL(toggled(bool)),             SLOT(tabStemThroughToggled(bool)));
       connect(stemAboveRadio, SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(stemBelowRadio, SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-      connect(minimShortRadio,SIGNAL(toggled(bool)),              SLOT(tabMinimShortToggled(bool)));
-      connect(minimSlashedRadio,SIGNAL(toggled(bool)),            SLOT(updatePreview()));
+      connect(minimShortRadio,    SIGNAL(toggled(bool)),          SLOT(tabMinimShortToggled(bool)));
+      connect(minimSlashedRadio,  SIGNAL(toggled(bool)),          SLOT(updatePreview()));
       connect(showRests,      SIGNAL(toggled(bool)),              SLOT(updatePreview()));
       connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(durFontNameChanged(int)));
       connect(durFontSize,    SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
@@ -202,6 +206,11 @@ void EditStaffType::setValues()
                   minimNoneRadio->setChecked(minimStyle == TablatureMinimStyle::NONE);
                   minimShortRadio->setChecked(minimStyle == TablatureMinimStyle::SHORTER);
                   minimSlashedRadio->setChecked(minimStyle == TablatureMinimStyle::SLASHED);
+                  TablatureSymbolRepeat symRepeat = staffType.symRepeat();
+                  valuesRepeatNever->setChecked(symRepeat == TablatureSymbolRepeat::NEVER);
+                  valuesRepeatSystem->setChecked(symRepeat == TablatureSymbolRepeat::SYSTEM);
+                  valuesRepeatMeasure->setChecked(symRepeat == TablatureSymbolRepeat::MEASURE);
+                  valuesRepeatAlways->setChecked(symRepeat == TablatureSymbolRepeat::ALWAYS);
                   if (staffType.genDurations()) {
                         noteValuesNone->setChecked(false);
                         noteValuesSymb->setChecked(true);
@@ -348,6 +357,9 @@ void EditStaffType::setFromDlg()
       staffType.setLinesThrough(linesThroughRadio->isChecked());
       staffType.setMinimStyle(minimNoneRadio->isChecked() ? TablatureMinimStyle::NONE :
             (minimShortRadio->isChecked() ? TablatureMinimStyle::SHORTER : TablatureMinimStyle::SLASHED));
+      staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? TablatureSymbolRepeat::NEVER :
+            (valuesRepeatSystem->isChecked() ? TablatureSymbolRepeat::SYSTEM :
+                  valuesRepeatMeasure->isChecked() ? TablatureSymbolRepeat::MEASURE : TablatureSymbolRepeat::ALWAYS));
       staffType.setOnLines(onLinesRadio->isChecked());
       staffType.setShowRests(showRests->isChecked());
       staffType.setUpsideDown(upsideDown->isChecked());
@@ -392,6 +404,10 @@ void EditStaffType::blockSignals(bool block)
       onLinesRadio->blockSignals(block);
 
       upsideDown->blockSignals(block);
+      valuesRepeatNever->blockSignals(block);
+      valuesRepeatSystem->blockSignals(block);
+      valuesRepeatMeasure->blockSignals(block);
+      valuesRepeatAlways->blockSignals(block);
       stemAboveRadio->blockSignals(block);
       stemBelowRadio->blockSignals(block);
       stemBesideRadio->blockSignals(block);
@@ -413,6 +429,10 @@ void EditStaffType::blockSignals(bool block)
 
 void EditStaffType::tabStemsCompatibility(bool checked)
       {
+      valuesRepeatNever->setEnabled(noteValuesSymb->isChecked());
+      valuesRepeatSystem->setEnabled(noteValuesSymb->isChecked());
+      valuesRepeatMeasure->setEnabled(noteValuesSymb->isChecked());
+      valuesRepeatAlways->setEnabled(noteValuesSymb->isChecked());
       stemAboveRadio->setEnabled(checked && !stemThroughRadio->isChecked());
       stemBelowRadio->setEnabled(checked && !stemThroughRadio->isChecked());
       stemBesideRadio->setEnabled(checked);
