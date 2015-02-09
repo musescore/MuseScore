@@ -720,12 +720,15 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
       Measure* m1   = oscore->tick2measure(stick);
       Measure* m2   = oscore->tick2measure(etick);
 
+      if (m2->tick() < etick) // end of score
+            m2 = 0;
+
       TieMap tieMap;
 
       int srcStaffIdx = oscore->staffIdx(srcStaff);
       int dstStaffIdx = score->staffIdx(dstStaff);
 
-      for (Measure* m = m1; m != m2; m = m->nextMeasure()) {
+      for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
             Measure* nm = score->tick2measure(m->tick());
             int sTrack = srcStaffIdx * VOICES;
             int eTrack = sTrack + VOICES;
