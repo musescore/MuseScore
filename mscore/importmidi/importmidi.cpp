@@ -991,13 +991,14 @@ ReducedFraction findFirstChordTick(const QList<MTrack> &tracks)
       {
       ReducedFraction firstTick(0, 1);
       for (const auto &track: tracks) {
-            for (const auto &chord: track.chords) {
+            if (track.chords.empty())
+                  continue;
+            const auto &chordTick = track.chords.begin()->first;
 
-                  Q_ASSERT(chord.first >= ReducedFraction(0, 1));
+            Q_ASSERT(chordTick >= ReducedFraction(0, 1));
 
-                  if (firstTick == ReducedFraction(0, 1) || chord.first < firstTick)
-                        firstTick = chord.first;
-                  }
+            if (firstTick == ReducedFraction(0, 1) || chordTick < firstTick)
+                  firstTick = chordTick;
             }
       return firstTick;
       }
