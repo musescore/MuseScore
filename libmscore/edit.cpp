@@ -590,6 +590,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       else {
             Score* score = rootScore();
             Measure* fm  = score->tick2measure(tick);
+
+            printf("add Timesig fm mmRest %p  count %d\n", fm->mmRest(), fm->mmRestCount());
+
             //
             // rewrite all measures up to the next time signature
             //

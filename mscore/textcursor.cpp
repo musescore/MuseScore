@@ -121,7 +121,7 @@ void PositionCursor::move(int tick)
       // set mark height for whole system
       //
       Score* score = _sv->score();
-      Measure* measure = score->tick2measure(tick);
+      Measure* measure = score->tick2measureMM(tick);
       if (measure == 0)
             return;
       qreal x;
