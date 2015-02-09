@@ -340,8 +340,7 @@ void scaleOffTimes(
             const std::set<ReducedFraction> &beats,
             const std::set<ReducedFraction>::const_iterator &onTimeBeatEndIt,
             const ReducedFraction &newOnTimeBeatStart,
-            const ReducedFraction &newBeatLen,
-            ReducedFraction &lastTick)
+            const ReducedFraction &newBeatLen)
       {
       for (auto &note: notes) {
             int beatCount = 0;      // beat count between note on time and off time
@@ -365,8 +364,6 @@ void scaleOffTimes(
                                                 newOffTimeInBeat, MChord::minAllowedDuration());
                         const auto desiredBeatStart = newOnTimeBeatStart + newBeatLen * beatCount;
                         note.offTime = desiredBeatStart + newOffTimeInBeat;
-                        if (note.offTime > lastTick)
-                              lastTick = note.offTime;
                         break;
                         }
 
@@ -376,7 +373,7 @@ void scaleOffTimes(
             }
       }
 
-void adjustChordsToBeats(std::multimap<int, MTrack> &tracks, ReducedFraction &lastTick)
+void adjustChordsToBeats(std::multimap<int, MTrack> &tracks)
       {
       const auto &opers = preferences.midiImportOperations;
       std::set<ReducedFraction> beats = opers.data()->humanBeatData.beatSet;  // copy
@@ -390,7 +387,6 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks, ReducedFraction &la
             Q_ASSERT_X(beats.size() > 1, "MidiBeat::adjustChordsToBeats", "Human beat count < 2");
 
             const auto newBeatLen = ReducedFraction::fromTicks(MScore::division);
-            ReducedFraction newLastTick;
 
             for (auto trackIt = tracks.begin(); trackIt != tracks.end(); ++trackIt) {
                   auto &chords = trackIt->second.chords;
@@ -417,7 +413,7 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks, ReducedFraction &la
                               newOnTimeInBeat = Quantize::quantizeValue(
                                                  newOnTimeInBeat, MChord::minAllowedDuration());
                               scaleOffTimes(chordIt->second.notes, beats, it,
-                                            newBeatStart, newBeatLen, newLastTick);
+                                            newBeatStart, newBeatLen);
                               const auto newOnTime = newBeatStart + newOnTimeInBeat;
                               for (auto &note: chordIt->second.notes) {
                                     if (note.offTime - newOnTime < MChord::minAllowedDuration())
@@ -438,13 +434,6 @@ void adjustChordsToBeats(std::multimap<int, MTrack> &tracks, ReducedFraction &la
                   Q_ASSERT_X(MChord::areNotesLongEnough(chords),
                              "MidiBeat::adjustChordsToBeats", "There are too short notes");
                   }
-
-            if (newLastTick > ReducedFraction(0, 1))
-                  lastTick = newLastTick;
-
-            Q_ASSERT_X(MChord::isLastTickValid(lastTick, tracks),
-                       "MidiBeat::adjustChordsToBeats",
-                       "Last tick is less than max note off time");
             }
       }
 

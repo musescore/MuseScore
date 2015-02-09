@@ -676,9 +676,7 @@ QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
       return trackList;
       }
 
-std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
-                                            TimeSigMap *sigmap,
-                                            const MidiFile *mf)
+std::multimap<int, MTrack> createMTrackList(TimeSigMap *sigmap, const MidiFile *mf)
       {
       sigmap->clear();
       sigmap->add(0, Fraction(4, 4));   // default time signature
@@ -712,9 +710,6 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                         const int pitch = e.pitch();
                         const auto len = toMuseScoreTicks(e.len(), track.division,
                                                           track.isDivisionInTps);
-                        if (tick + len > lastTick)
-                              lastTick = tick + len;
-
                         MidiNote n;
                         n.pitch           = pitch;
                         n.velo            = e.velo();
@@ -728,8 +723,6 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                         }
                   else if (e.type() == ME_PROGRAM)
                         track.program = e.dataB();
-                  if (tick > lastTick)
-                        lastTick = tick;
                   }
             if (hasNotes) {
                   ++trackIndex;
@@ -753,9 +746,6 @@ std::multimap<int, MTrack> createMTrackList(ReducedFraction &lastTick,
                   tracks.insert({-1, track});
                   }
             }
-
-      Q_ASSERT_X(MChord::isLastTickValid(lastTick, tracks),
-                 "createMTrackList", "Last tick is less than max note off time");
 
       return tracks;
       }
@@ -1009,12 +999,24 @@ ReducedFraction findFirstChordTick(const QList<MTrack> &tracks)
       return minTick;
       }
 
+ReducedFraction findLastChordTick(const std::multimap<int, MTrack> &tracks)
+      {
+      ReducedFraction maxTick(-1, 1);
+      for (const auto &track: tracks) {
+            for (const auto &chord: track.second.chords) {
+                  const auto offTime = MChord::maxNoteOffTime(chord.second.notes);
+                  if (offTime > maxTick)
+                        maxTick = offTime;
+                  }
+            }
+      return maxTick;
+      }
+
 void convertMidi(Score *score, const MidiFile *mf)
       {
-      ReducedFraction lastTick;
       auto *sigmap = score->sigmap();
 
-      auto tracks = createMTrackList(lastTick, sigmap, mf);
+      auto tracks = createMTrackList(sigmap, mf);
 
       auto &opers = preferences.midiImportOperations;
       if (opers.data()->processingsOfOpenedFile == 0)         // for newly opened MIDI file
@@ -1044,7 +1046,7 @@ void convertMidi(Score *score, const MidiFile *mf)
                  "convertMidi", "Null time signature for human-performed MIDI file");
 
       MChord::collectChords(tracks, {2, 1}, {1, 2});
-      MidiBeat::adjustChordsToBeats(tracks, lastTick);
+      MidiBeat::adjustChordsToBeats(tracks);
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
 
                   // for newly opened MIDI file
@@ -1061,6 +1063,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       LRHand::splitIntoLeftRightHands(tracks);
       MidiDrum::splitDrumVoices(tracks);
       MidiDrum::splitDrumTracks(tracks);
+      ReducedFraction lastTick = findLastChordTick(tracks);
       quantizeAllTracks(tracks, sigmap, lastTick);
       MChord::removeOverlappingNotes(tracks);
 
