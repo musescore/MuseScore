@@ -5085,7 +5085,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
             // b->setTrack(trk + voice); TODO check next line
             b->setTrack(track);
             b->setBreathType(breath);
-            Segment* seg = measure->getSegment(Segment::Type::Breath, tick);
+            Segment* seg = measure->getSegment(Segment::Type::Breath, tick + ticks);
             seg->add(b);
             }
 

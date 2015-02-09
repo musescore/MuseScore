@@ -817,16 +817,17 @@ void Measure::add(Element* el)
                         ;
                   if (s) {
                         if (st == Segment::Type::ChordRest) {
+                              // add ChordRest segment after all other segments with same tick
+                              // except EndBarLine
                               while (s && s->segmentType() != st && s->tick() == t) {
-                                    if (s->segmentType() == Segment::Type::EndBarLine
-                                                || s->segmentType() == Segment::Type::Breath // place chord _before_ breath
-                                                ) {
+                                    if (s->segmentType() == Segment::Type::EndBarLine) {
                                           break;
                                           }
                                     s = s->next();
                                     }
                               }
                         else {
+                              // use order of segments in segment.h
                               if (s && s->tick() == t) {
                                     while (s && s->segmentType() <= st) {
                                           if (s->next() && s->next()->tick() != t)
@@ -834,11 +835,6 @@ void Measure::add(Element* el)
                                           s = s->next();
                                           }
                                     }
-                              //
-                              // place breath _after_ chord
-                              //
-                              if (s && st == Segment::Type::Breath)
-                                    s = s->next();
                               }
                         }
                   seg->setParent(this);
@@ -1941,10 +1937,25 @@ void Measure::read(XmlReader& e, int staffIdx)
                   breath->setTrack(e.track());
                   int tick = e.tick();
                   breath->read(e);
-                  if (e.tick() < tick)
-                        tick = e.tick();  // use our own tick if we explicitly reset to earlier position
-                  else
-                        tick = lastTick;  // otherwise use last tick (of previous tick, chord, or rest tag)
+                  if (score()->mscVersion() < 205) {
+                        // older scores placed the breath segment right after the chord to which it applies
+                        // rather than before the next chordrest segment with an element for the staff
+                        // result would be layout too far left if there are other segments due to notes in other staves
+                        // we need to find tick of chord to which this applies, and add its duration
+                        int prevTick;
+                        if (e.tick() < tick)
+                              prevTick = e.tick();    // use our own tick if we explicitly reset to earlier position
+                        else
+                              prevTick = lastTick;    // otherwise use tick of previous tick/chord/rest tag
+                        // find segment
+                        Segment* prev = findSegment(Segment::Type::ChordRest, prevTick);
+                        if (prev) {
+                              // find chordrest
+                              ChordRest* lastCR = static_cast<ChordRest*>(prev->element(e.track()));
+                              if (lastCR)
+                                    tick = prevTick + lastCR->actualTicks();
+                              }
+                        }
                   segment = getSegment(Segment::Type::Breath, tick);
                   segment->add(breath);
                   }

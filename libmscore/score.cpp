@@ -512,19 +512,12 @@ void Score::fixTicks()
                         if (s->segmentType() == Segment::Type::Breath) {
                               qreal length = 0.0;
                               int tick = s->tick();
-                              // find breath elements
+                              // find longest pause
                               for (int i = 0, n = ntracks(); i < n; ++i) {
                                     Element* e = s->element(i);
                                     if (e && e->type() == Element::Type::BREATH) {
                                           Breath* b = static_cast<Breath*>(e);
                                           length = qMax(length, b->pause());
-                                          // find start tick of next note
-                                          // currently, breaths are always added in voice 0
-                                          Segment* next = s->nextCR(i);
-                                          if (next)
-                                                tick = qMax(tick, next->tick());
-                                          else
-                                                tick = lastSegment()->tick();
                                           }
                                     }
                               if (length != 0.0)
