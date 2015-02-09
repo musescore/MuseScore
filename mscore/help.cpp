@@ -62,15 +62,27 @@ HelpQuery::HelpQuery(QWidget* parent)
 
       connect(button, SIGNAL(clicked()), entry, SLOT(clear()));
       connect(entry, SIGNAL(textChanged(const QString&)), SLOT(textChanged(const QString&)));
+      connect(entry, SIGNAL(returnPressed()), SLOT(returnPressed()));
       connect(mapper, SIGNAL(mapped(QObject*)), SLOT(actionTriggered(QObject*)));
+      }
+
+//---------------------------------------------------------
+//   setFocus
+//---------------------------------------------------------
+
+void HelpQuery::setFocus()
+      {
+      entry->clear();
+      entry->setFocus();
       }
 
 //---------------------------------------------------------
 //   textChanged
 //---------------------------------------------------------
 
-void HelpQuery::textChanged(const QString& s)
+void HelpQuery::textChanged(const QString& ss)
       {
+      QString s = ss.toLower();
       QWidget* menu = static_cast<QWidget*>(parent());
       if (s.isEmpty()) {
             if (!emptyState) {   // restore old menu entries
@@ -95,13 +107,17 @@ void HelpQuery::textChanged(const QString& s)
             }
       emptyState = false;
       QMap<QString,QUrl>list = helpEngine->linksForIdentifier(s);
+//      QMap<QString,QUrl>list = helpEngine->indexModel()->linksForKeyword(s);
+      int k = 0;
       for (auto i = list.begin(); i != list.end(); ++i) {
             QAction* action = new QAction(i.key(), this);
             action->setData(i.value());
-            printf("add action <%s> <%s>\n", qPrintable(i.key()), qPrintable(i.value().toString()));
+// printf("add action <%s> <%s>\n", qPrintable(i.key()), qPrintable(i.value().toString()));
             menu->addAction(action);
             connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
             mapper->setMapping(action, action);
+            if (++k > 10)
+                  break;
             }
       }
 
@@ -122,6 +138,18 @@ void HelpQuery::actionTriggered(QObject* obj)
       entry->clear();
       }
 
+//---------------------------------------------------------
+//   return pressed
+//---------------------------------------------------------
+
+void HelpQuery::returnPressed()
+      {
+      QMap<QString,QUrl>list = helpEngine->linksForIdentifier(entry->text().toLower());
+      if (!list.isEmpty()) {
+            mscore->showHelp(list.begin().value());
+            }
+      entry->clear();
+      }
 
 }  // end namespace Ms
 

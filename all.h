@@ -160,6 +160,7 @@
 
 #include <QHelpEngine>
 #include <QWidgetAction>
+#include <QHelpIndexModel>
 #include <QTextBrowser>
 #endif
 
