@@ -397,10 +397,11 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns)
       for (Score* s : scoreList()) {
             Measure* m1 = s->tick2measure(fm->tick());
             Measure* m2 = s->tick2measure(lm->tick());
+
             s->undoRemoveMeasures(m1, m2);
 
-            Measure* nlm = 0;
             Measure* nfm = 0;
+            Measure* nlm = 0;
             int tick     = 0;
             bool endBarGenerated = m1->endBarLineGenerated();
             for (int i = 0; i < nm; ++i) {
@@ -590,8 +591,6 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       else {
             Score* score = rootScore();
             Measure* fm  = score->tick2measure(tick);
-
-            printf("add Timesig fm mmRest %p  count %d\n", fm->mmRest(), fm->mmRestCount());
 
             //
             // rewrite all measures up to the next time signature
