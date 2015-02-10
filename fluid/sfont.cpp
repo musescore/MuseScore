@@ -49,9 +49,10 @@ SFVersion::SFVersion()
 
 SFont::SFont(Fluid* f)
       {
-      synth      = f;
-      samplepos  = 0;
-      samplesize = 0;
+      synth       = f;
+      samplepos   = 0;
+      samplesize  = 0;
+      _bankOffset = 0;
       }
 
 SFont::~SFont()
@@ -97,7 +98,8 @@ bool SFont::read(const QString& s)
 
 Preset* SFont::get_preset(int bank, int num)
       {
-      foreach(Preset* p, presets) {
+      bank -= _bankOffset;
+      for (Preset* p : presets) {
             if ((p->get_banknum() == bank) && (p->get_num() == num))
                   return p;
             }
@@ -755,7 +757,7 @@ bool SFont::load()
             fixup_igen();
             }
       catch (QString s) {
-            printf("fluid: error loading sound font: %s\n", qPrintable(s));
+            qDebug("fluid: error loading sound font: %s", qPrintable(s));
             f.close();
             return false;
             }

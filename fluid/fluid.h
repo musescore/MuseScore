@@ -296,7 +296,6 @@ enum {
 
 class Fluid : public Synthesizer {
       QList<SFont*> sfonts;               // the loaded soundfonts
-      QList<BankOffset*> bank_offsets;    // the offsets of the soundfont banks
       QList<MidiPatch*> patches;
 
       QList<Voice*> freeVoices;           // unused synthesis processes
@@ -324,10 +323,8 @@ class Fluid : public Synthesizer {
       SFont* get_sfont_by_name(const QString& name);
       SFont* get_sfont_by_id(int id);
       SFont* get_sfont(int idx) const     { return sfonts[idx];   }
-      void remove_sfont(SFont* sf);
-      int add_sfont(SFont* sf);
-      bool sfunload(int id, bool reset_presets);
-      int sfload(const QString& filename, bool reset_presets);
+      bool sfunload(int id);
+      int sfload(const QString& filename);
 
    public:
       Fluid();
@@ -359,16 +356,11 @@ class Fluid : public Synthesizer {
        *  unloaded or reloaded. */
       void update_presets();
 
-      BankOffset* get_bank_offset0(int sfont_id) const;
-      void remove_bank_offset(int sfont_id);
-
       int get_cc(int chan, int num) const { return channel[chan]->cc[num]; }
 
       void system_reset();
       void program_change(int chan, int prognum);
 
-      int get_bank_offset(int sfont_id);
-      int set_bank_offset(int sfont_id, int offset);
       void set_gen2(int chan, int param, float value, int absolute, int normalized);
       float get_gen(int chan, int param);
       void set_gen(int chan, int param, float value);
@@ -387,15 +379,11 @@ class Fluid : public Synthesizer {
 
       virtual void process(unsigned len, float* out, float* effect1, float* effect2);
 
-      void program_reset();
-
-      bool program_select2(int chan, char* sfont_name, unsigned bank_num, unsigned preset_num);
       bool program_select(int chan, unsigned sfont_id, unsigned bank_num, unsigned preset_num);
       void get_program(int chan, unsigned* sfont_id, unsigned* bank_num, unsigned* preset_num);
-      void sfont_select(int chan, unsigned int sfont_id)    { channel[chan]->setSfontnum(sfont_id); }
-      void bank_select(int chan, unsigned int bank)         { channel[chan]->setBanknum(bank); }
+//      void sfont_select(int chan, unsigned int sfont_id)    { channel[chan]->setSfontnum(sfont_id); }
+//      void bank_select(int chan, unsigned int bank)         { channel[chan]->setBanknum(bank); }
 
-      Preset* get_preset(char* sfont_name, unsigned banknum, unsigned prognum);
       void get_pitch_wheel_sens(int chan, int* pval);
       void pitch_wheel_sens(int chan, int val);
       void get_pitch_bend(int chan, int* ppitch_bend);
