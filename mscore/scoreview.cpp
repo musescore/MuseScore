@@ -1454,13 +1454,25 @@ void ScoreView::moveCursor()
             int         maxTrack = minTrack + VOICES;
             // get the physical string corresponding to current visual string
             strg = staff->staffType()->visualStringToPhys(strg);
-            for (int track = minTrack; track < maxTrack; track++) {
-                  Element* e = seg->element(track);
+            for (int t = minTrack; t < maxTrack; t++) {
+                  Element* e = seg->element(t);
                   if (e != nullptr && e->type() == Element::Type::CHORD)
                         for (Note* n : static_cast<Chord*>(e)->notes())
                               // if note found on this string, make it current
                               if (n->string() == strg) {
-                                    _score->select(n);
+                                    if (!n->selected()) {
+                                          _score->select(n);
+                                          // restore input state after selection
+                                          _score->inputState().setTrack(track);
+                                          }
+#if 0
+                                    // if using this code, we can delete the setTrack() call above
+                                    // the code below forces input state & cursor to match current note
+                                    _score->inputState().setTrack(t);
+                                    QColor c(MScore::selectColor[t % VOICES]);
+                                    c.setAlpha(50);
+                                    _cursor->setColor(c);
+#endif
                                     done = true;
                                     break;
                                     }
