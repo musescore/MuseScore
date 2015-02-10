@@ -4914,7 +4914,9 @@ int main(int argc, char* av[])
       genIcons();
 
       if (!MScore::noGui) {
+#ifndef Q_OS_MAC
             qApp->setWindowIcon(*icons[int(Icons::window_ICON)]);
+#endif
             Workspace::initWorkspace();
             }
 
