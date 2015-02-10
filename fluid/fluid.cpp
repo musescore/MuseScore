@@ -114,8 +114,6 @@ Fluid::~Fluid()
             delete v;
       foreach(SFont* sf, sfonts)
             delete sf;
-      foreach(BankOffset* bankOffset, bank_offsets)
-            delete bankOffset;
       foreach(Channel* c, channel)
             delete c;
       }
@@ -307,20 +305,9 @@ Preset* Fluid::get_preset(unsigned int sfontnum, unsigned banknum, unsigned prog
       {
       SFont* sf = get_sfont_by_id(sfontnum);
       if (sf) {
-            int offset     = get_bank_offset(sfontnum);
-            Preset* preset = sf->get_preset(banknum - offset, prognum);
+            Preset* preset = sf->get_preset(banknum, prognum);
             if (preset != 0)
                   return preset;
-            }
-      return 0;
-      }
-
-Preset* Fluid::get_preset(char* sfont_name, unsigned banknum, unsigned prognum)
-      {
-      SFont* sf = get_sfont_by_name(sfont_name);
-      if (sf) {
-            int offset = get_bank_offset(sf->id());
-            return sf->get_preset(banknum - offset, prognum);
             }
       return 0;
       }
@@ -331,14 +318,12 @@ Preset* Fluid::get_preset(char* sfont_name, unsigned banknum, unsigned prognum)
 
 Preset* Fluid::find_preset(unsigned banknum, unsigned prognum)
       {
-      Preset* preset = 0;
-      foreach(SFont* sf, sfonts) {
-            int offset = get_bank_offset(sf->id());
-            preset = sf->get_preset(banknum - offset, prognum);
+      for (SFont* sf : sfonts) {
+            Preset* preset = sf->get_preset(banknum, prognum);
             if (preset)
-                  break;
+                  return preset;
             }
-      return preset;
+      return 0;
       }
 
 //---------------------------------------------------------
@@ -352,6 +337,10 @@ void Fluid::program_change(int chan, int prognum)
       c->setPrognum(prognum);
 
       Preset* preset = find_preset(banknum, prognum);
+      if (!preset) {
+            qDebug("Fluid::program_change: preset %d %d not found", banknum, prognum);
+            preset = find_preset(0, 0);
+            }
 
       unsigned sfont_id = preset? preset->sfont->id() : 0;
       c->setSfontnum(sfont_id);
@@ -390,55 +379,14 @@ bool Fluid::program_select(int chan, unsigned sfont_id, unsigned bank_num, unsig
       return true;
       }
 
-/*
- * fluid_synth_program_select2
- */
-bool Fluid::program_select2(int chan, char* sfont_name, unsigned bank_num, unsigned preset_num)
-      {
-      Channel* c = channel[chan];
-      SFont* sf = get_sfont_by_name(sfont_name);
-      if (sf == 0) {
-            qDebug("Could not find SoundFont %s", sfont_name);
-            return false;
-            }
-      int offset     = get_bank_offset(sf->id());
-      Preset* preset = sf->get_preset(bank_num - offset, preset_num);
-      if (preset == 0) {
-            qDebug("There is no preset with bank number %d and preset number %d in SoundFont %s",
-               bank_num, preset_num, sfont_name);
-            return false;
-            }
+//---------------------------------------------------------
+//   update_presets
+//---------------------------------------------------------
 
-      /* inform the channel of the new bank and program number */
-      c->setSfontnum(sf->id());
-      c->setBanknum(bank_num);
-      c->setPrognum(preset_num);
-      c->setPreset(preset);
-      return true;
-      }
-
-/*
- * fluid_synth_update_presets
- */
 void Fluid::update_presets()
       {
-      foreach(Channel* c, channel)
+      for (Channel* c : channel)
             c->setPreset(get_preset(c->getSfontnum(), c->getBanknum(), c->getPrognum()));
-      }
-
-/*
- * fluid_synth_program_reset
- *
- * Resend a bank select and a program change for every channel. This
- * function is called mainly after a SoundFont has been loaded,
- * unloaded or reloaded.  */
-
-void Fluid::program_reset()
-      {
-      /* try to set the correct presets */
-      int n = channel.size();
-      for (int i = 0; i < n; i++)
-            program_change(i, channel[i]->getPrognum());
       }
 
 //---------------------------------------------------------
@@ -613,23 +561,30 @@ void Fluid::start_voice(Voice* voice)
 
 void Fluid::updatePatchList()
       {
-      foreach(MidiPatch* p, patches)
-            delete p;
+      qDeleteAll(patches);
       patches.clear();
 
-      foreach(const SFont* sf, sfonts) {
-            BankOffset* bo = get_bank_offset0(sf->id());
-            int bankOffset = bo ? bo->offset : 0;
-            foreach (Preset* p, sf->getPresets()) {
+      int bankOffset = 0;
+      for (SFont* sf : sfonts) {
+            sf->setBankOffset(bankOffset);
+            int banks = 0;
+            for (Preset* p : sf->getPresets()) {
                   MidiPatch* patch = new MidiPatch;
                   patch->drum = (p->get_banknum() == 128);
                   patch->synti = name();
+                  if (p->get_banknum() > banks)
+                        banks = p->get_banknum();
                   patch->bank = p->get_banknum() + bankOffset;
                   patch->prog = p->get_num();
                   patch->name = p->get_name();
                   patches.append(patch);
                   }
+            bankOffset += (banks + 1);
             }
+      /* try to set the correct presets */
+      int n = channel.size();
+      for (int i = 0; i < n; i++)
+            program_change(i, channel[i]->getPrognum());
       }
 
 //---------------------------------------------------------
@@ -662,7 +617,7 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
       foreach(Channel* c, channel)
             c->reset();
       foreach (SFont* sf, sfonts)
-            sfunload(sf->id(), true);
+            sfunload(sf->id());
       bool ok = true;
 
 
@@ -684,7 +639,7 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
                   ok = false;
                   }
             else {
-                  if (sfload(path, true) == -1) {
+                  if (sfload(path) == -1) {
                         qDebug("loading sf failed: <%s>", qPrintable(path));
                         ok = false;
                         }
@@ -702,7 +657,7 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
 bool Fluid::addSoundFont(const QString& s)
       {
       mutex.lock();
-      bool rv = (sfload(s, true) == -1) ? false : true;
+      bool rv = (sfload(s) == -1) ? false : true;
       mutex.unlock();
       return rv;
       }
@@ -718,7 +673,7 @@ bool Fluid::removeSoundFont(const QString& s)
       foreach(Voice* v, activeVoices)
             v->off();
       SFont* sf = get_sfont_by_name(s);
-      sfunload(sf->id(), true);
+      sfunload(sf->id());
       mutex.unlock();
       return true;
       }
@@ -727,7 +682,7 @@ bool Fluid::removeSoundFont(const QString& s)
 //   sfload
 //---------------------------------------------------------
 
-int Fluid::sfload(const QString& filename, bool reset_presets)
+int Fluid::sfload(const QString& filename)
       {
       if (filename.isEmpty())
             return -1;
@@ -752,8 +707,6 @@ int Fluid::sfload(const QString& filename, bool reset_presets)
       sfonts.prepend(sf);
 
       /* reset the presets for all channels */
-      if (reset_presets)
-            program_reset();
 
       updatePatchList();
       return sf->id();
@@ -763,7 +716,7 @@ int Fluid::sfload(const QString& filename, bool reset_presets)
 //   sfunload
 //---------------------------------------------------------
 
-bool Fluid::sfunload(int id, bool reset_presets)
+bool Fluid::sfunload(int id)
       {
       SFont* sf = get_sfont_by_id(id);
 
@@ -773,44 +726,10 @@ bool Fluid::sfunload(int id, bool reset_presets)
             }
 
       sfonts.removeAll(sf);   // remove the SoundFont from the list
-
-      /* reset the presets for all channels */
-      if (reset_presets)
-            program_reset();
-      else
-            update_presets();
-      delete sf;
       updatePatchList();
+
+      delete sf;
       return true;
-      }
-
-//---------------------------------------------------------
-//   add_sfont
-//---------------------------------------------------------
-
-int Fluid::add_sfont(SFont* sf)
-      {
-	sf->setId(++sfont_id);
-
-	/* insert the sfont as the first one on the list */
-      sfonts.prepend(sf);
-
-	/* reset the presets for all channels */
-	program_reset();
-	return sf->id();
-      }
-
-//---------------------------------------------------------
-//   remove_sfont
-//---------------------------------------------------------
-
-void Fluid::remove_sfont(SFont* sf)
-      {
-	int sfont_id = sf->id();
-	sfonts.removeAll(sf);
-
-	remove_bank_offset(sfont_id); /* remove a possible bank offset */
-	program_reset();              /* reset the presets for all channels */
       }
 
 //---------------------------------------------------------
@@ -907,52 +826,6 @@ float Fluid::get_gen(int chan, int param)
             return 0.0;
             }
       return channel[chan]->getGen(param);
-      }
-
-BankOffset* Fluid::get_bank_offset0(int sfont_id) const
-      {
-      foreach(BankOffset* offset, bank_offsets) {
-		if (offset->sfont_id == sfont_id)
-			return offset;
-	      }
-	return 0;
-      }
-
-int Fluid::set_bank_offset(int sfont_id, int offset)
-      {
-	BankOffset* bank_offset = get_bank_offset0(sfont_id);
-
-	if (bank_offset == 0) {
-		bank_offset = new BankOffset;
-		bank_offset->sfont_id = sfont_id;
-		bank_offset->offset   = offset;
-		bank_offsets.prepend(bank_offset);
-	      }
-      else {
-	      bank_offset->offset = offset;
-            }
-	return 0;
-      }
-
-//---------------------------------------------------------
-//   get_bank_offset
-//---------------------------------------------------------
-
-int Fluid::get_bank_offset(int sfont_id)
-      {
-      BankOffset* bank_offset = get_bank_offset0(sfont_id);
-      return (bank_offset == 0)? 0 : bank_offset->offset;
-      }
-
-//---------------------------------------------------------
-//   remove_bank_offset
-//---------------------------------------------------------
-
-void Fluid::remove_bank_offset(int sfont_id)
-      {
-	BankOffset* bank_offset = get_bank_offset0(sfont_id);
-	if (bank_offset)
-		bank_offsets.removeAll(bank_offset);
       }
 
 //---------------------------------------------------------
