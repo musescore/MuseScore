@@ -2033,6 +2033,7 @@ bool Text::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
             _cursor.clearSelection();
       if (_cursor.hasSelection())
             QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
+      updateCursorFormat(&_cursor);
       return true;
       }
 
