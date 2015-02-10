@@ -871,6 +871,13 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::STAFF_TEXT:
             case Element::Type::STAFF_STATE:
             case Element::Type::INSTRUMENT_CHANGE:
+                  if(e->type() == Element::Type::INSTRUMENT_CHANGE
+                     && staff()->part()->instrList()->find(tick()) != staff()->part()->instrList()->end()) {
+                        qDebug()<<"InstrumentChange already exists at tick = "<<tick();
+                        delete e;
+                        return 0;
+                        }
+                  // fall through
             case Element::Type::REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
