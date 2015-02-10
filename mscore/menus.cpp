@@ -351,7 +351,7 @@ Palette* MuseScore::newBarLinePalette(bool basic)
 Palette* MuseScore::newRepeatsPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Repeats"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Repeats && Jumps"));
       sp->setMag(0.65);
       sp->setGrid(84, 28);
       sp->setDrawGrid(true);
