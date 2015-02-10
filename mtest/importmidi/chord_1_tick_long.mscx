@@ -96,50 +96,15 @@
           <transposingClefType>G</transposingClefType>
           </Clef>
         <TimeSig>
-          <sigN>3</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <durationType>16th</durationType>
-          </Rest>
-        <Rest>
-          <durationType>32nd</durationType>
-          </Rest>
-        <Rest>
-          <durationType>64th</durationType>
-          </Rest>
         <Chord>
           <durationType>128th</durationType>
           <Note>
-            <pitch>81</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>128th</durationType>
-          </Rest>
-        <Rest>
-          <durationType>eighth</durationType>
-          </Rest>
-        </Measure>
-      <Measure number="2">
-        <Rest>
-          <durationType>16th</durationType>
-          </Rest>
-        <Chord>
-          <durationType>128th</durationType>
-          <Note>
-            <pitch>84</pitch>
-            <tpc>14</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
@@ -154,13 +119,16 @@
           <durationType>32nd</durationType>
           </Rest>
         <Rest>
+          <durationType>16th</durationType>
+          </Rest>
+        <Rest>
           <durationType>eighth</durationType>
           </Rest>
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           </Rest>
         </Measure>
       </Staff>

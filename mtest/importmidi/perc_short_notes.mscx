@@ -29,7 +29,7 @@
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
-    <metaTag name="copyright"></metaTag>
+    <metaTag name="copyright">(c)&lt;&lt; N I N E K &gt;&gt; software production, Zagreb, Croatia</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
@@ -268,139 +268,227 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
-          <program value="21"/>
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <Measure number="1">
         <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
+          <sigN>6</sigN>
+          <sigD>8</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>38</pitch>
+            <tpc>16</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <tick>0</tick>
+        <Chord>
+          <track>1</track>
+          <durationType>eighth</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <dots>1</dots>
+          <durationType>quarter</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         </Measure>
       <Measure number="2">
         <Chord>
           <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
           <Note>
-            <pitch>77</pitch>
-            <tpc>13</tpc>
-            <velocity>62</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <pitch>80</pitch>
-            <tpc>22</tpc>
-            <velocity>31</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
           <Note>
-            <pitch>77</pitch>
-            <tpc>13</tpc>
-            <velocity>69</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <pitch>80</pitch>
-            <tpc>22</tpc>
-            <velocity>34</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Tuplet id="1">
-          <normalNotes>2</normalNotes>
-          <actualNotes>3</actualNotes>
-          <baseNote>eighth</baseNote>
-          </Tuplet>
-        <Rest>
-          <Tuplet>1</Tuplet>
+        <Chord>
           <durationType>eighth</durationType>
-          </Rest>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <Chord>
-          <Tuplet>1</Tuplet>
           <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
           <Note>
-            <pitch>77</pitch>
-            <tpc>13</tpc>
-            <velocity>60</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <pitch>80</pitch>
-            <tpc>22</tpc>
-            <velocity>30</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Rest>
-          <Tuplet>1</Tuplet>
-          <durationType>16th</durationType>
-          </Rest>
         <Chord>
-          <Tuplet>1</Tuplet>
-          <durationType>16th</durationType>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
           <Note>
-            <pitch>73</pitch>
-            <tpc>21</tpc>
-            <velocity>67</velocity>
+            <pitch>38</pitch>
+            <tpc>16</tpc>
+            <velocity>95</velocity>
             <veloType>user</veloType>
             </Note>
           <Note>
-            <pitch>77</pitch>
-            <tpc>13</tpc>
-            <velocity>33</velocity>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <velocity>95</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
         <Chord>
-          <durationType>quarter</durationType>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
           <Note>
-            <pitch>70</pitch>
+            <pitch>46</pitch>
             <tpc>12</tpc>
-            <velocity>58</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <pitch>73</pitch>
-            <tpc>21</tpc>
-            <velocity>29</velocity>
+            <velocity>95</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        </Measure>
-      <Measure number="3">
+        <tick>1440</tick>
         <Chord>
-          <durationType>quarter</durationType>
+          <track>1</track>
+          <durationType>eighth</durationType>
+          <StemDirection>down</StemDirection>
           <Note>
-            <pitch>73</pitch>
-            <tpc>21</tpc>
-            <velocity>64</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <pitch>77</pitch>
-            <tpc>13</tpc>
-            <velocity>32</velocity>
+            <track>1</track>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>95</velocity>
             <veloType>user</veloType>
             </Note>
           </Chord>
-        <Rest>
+        <Chord>
+          <track>1</track>
           <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <dots>1</dots>
+          <durationType>quarter</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <velocity>95</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         </Measure>
       </Staff>
     </Score>
