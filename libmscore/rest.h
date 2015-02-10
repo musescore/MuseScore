@@ -89,6 +89,8 @@ class Rest : public ChordRest {
       ElementList el()                            { return _el; }
       const ElementList el() const                { return _el; }
 
+      bool setProperty(P_ID propertyId, const QVariant& v) override;
+
       virtual QString accessibleInfo() override;
       virtual QString screenReaderInfo() override;
       };

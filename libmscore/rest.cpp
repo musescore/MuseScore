@@ -822,5 +822,26 @@ void Rest::read(XmlReader& e)
             }
       }
 
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Rest::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_ID::USER_OFF:
+                  score()->addRefresh(canvasBoundingRect());
+                  setUserOff(v.toPointF());
+                  layout();
+                  score()->addRefresh(canvasBoundingRect());
+                  if (beam())
+                        score()->setLayoutAll(true);
+                  break;
+            default:
+                  return ChordRest::setProperty(propertyId, v);
+            }
+      return true;
+      }
+
 }
 
