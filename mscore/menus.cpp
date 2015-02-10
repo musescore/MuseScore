@@ -1193,8 +1193,6 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       QMenu* popup = new QMenu(tr("&Add"), parent);
       popup->setObjectName("Add");
 
-      popup->addAction(getAction("instruments"));
-
       QMenu* measures = popup->addMenu(tr("&Measures"));
       measures->addAction(getAction("insert-measure"));
       measures->addAction(getAction("insert-measures"));

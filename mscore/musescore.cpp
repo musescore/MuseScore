@@ -652,6 +652,8 @@ MuseScore::MuseScore()
 
       menuEdit->addSeparator();
 
+      menuEdit->addAction(getAction("instruments"));
+
       QMenu* menuMeasure = new QMenu(tr("&Measure"));
       for (auto i : { "delete-measures", "split-measure", "join-measure" })
             menuMeasure->addAction(getAction(i));
@@ -895,7 +897,6 @@ MuseScore::MuseScore()
       menuHelp->addAction(hw);
       connect(menuHelp, SIGNAL(aboutToShow()), hw, SLOT(setFocus()));
 #endif
-
       menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
 
