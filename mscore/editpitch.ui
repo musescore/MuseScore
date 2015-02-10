@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>680</width>
-    <height>420</height>
+    <width>760</width>
+    <height>425</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,7 +38,7 @@
       <number>10</number>
      </property>
      <property name="columnCount">
-      <number>12</number>
+      <number>13</number>
      </property>
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>50</number>
@@ -159,9 +159,20 @@
        <string>B</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>»C</string>
+      </property>
+     </column>
      <item row="0" column="0">
       <property name="text">
        <string>C 8</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -255,9 +266,23 @@
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
+     <item row="0" column="12">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
      <item row="1" column="0">
       <property name="text">
        <string>C 7</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -351,9 +376,23 @@
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
+     <item row="1" column="12">
+      <property name="text">
+       <string>C 8</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
      <item row="2" column="0">
       <property name="text">
        <string>C 6</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -447,9 +486,23 @@
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
+     <item row="2" column="12">
+      <property name="text">
+       <string>C 7</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
      <item row="3" column="0">
       <property name="text">
        <string>C 5</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -543,9 +596,23 @@
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
+     <item row="3" column="12">
+      <property name="text">
+       <string>C 6</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
      <item row="4" column="0">
       <property name="text">
        <string>C 4</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -643,9 +710,23 @@
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
+     <item row="4" column="12">
+      <property name="text">
+       <string>C 5</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
      <item row="5" column="0">
       <property name="text">
        <string>C 3</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -686,6 +767,10 @@
      <item row="5" column="5">
       <property name="text">
        <string>F 3</string>
+      </property>
+      <property name="icon">
+       <iconset resource="musescore.qrc">
+        <normaloff>:/data/icons/clef-bass.svg</normaloff>:/data/icons/clef-bass.svg</iconset>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -739,9 +824,23 @@
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
+     <item row="5" column="12">
+      <property name="text">
+       <string>C 4</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
      <item row="6" column="0">
       <property name="text">
        <string>C 2</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -835,9 +934,23 @@
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
+     <item row="6" column="12">
+      <property name="text">
+       <string>C 3</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
      <item row="7" column="0">
       <property name="text">
        <string>C 1</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -931,9 +1044,23 @@
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
+     <item row="7" column="12">
+      <property name="text">
+       <string>C 2</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
      <item row="8" column="0">
       <property name="text">
        <string>C 0</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1027,9 +1154,23 @@
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
+     <item row="8" column="12">
+      <property name="text">
+       <string>C 1</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
      <item row="9" column="0">
       <property name="text">
        <string>C -1</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1121,6 +1262,14 @@
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="12">
+      <property name="text">
+       <string>C 0</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
       </property>
      </item>
     </widget>

@@ -154,5 +154,6 @@
         <file>data/icons/dialog-warning.svg</file>
         <file>data/icons/arrow_down.svg</file>
         <file>data/icons/arrow_up.svg</file>
+        <file>data/icons/clef-bass.svg</file>
     </qresource>
 </RCC>
