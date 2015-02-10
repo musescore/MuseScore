@@ -171,7 +171,7 @@ Fraction XmlReader::readFraction()
 //    unknown tag read
 //---------------------------------------------------------
 
-void XmlReader::unknown() const
+void XmlReader::unknown()
       {
       if (XmlStreamReader::error())
             qDebug("StreamReaderError: %s", qPrintable(errorString()));

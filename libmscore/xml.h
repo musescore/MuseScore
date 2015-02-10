@@ -67,7 +67,7 @@ class XmlReader : public XmlStreamReader {
       XmlReader(QIODevice* d, const QString& s = QString()) : XmlStreamReader(d), docName(s) {}
       XmlReader(const QString& d, const QString& s = QString()) : XmlStreamReader(d), docName(s) {}
 
-      void unknown() const;
+      void unknown();
 
       // attribute helper routines:
       QString attribute(const char* s) const { return attributes().value(s).toString(); }
