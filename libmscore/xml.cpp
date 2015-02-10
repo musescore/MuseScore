@@ -175,10 +175,10 @@ void XmlReader::unknown() const
       {
       if (XmlStreamReader::error())
             qDebug("StreamReaderError: %s", qPrintable(errorString()));
-      qFatal("%s: xml read error at line %lld col %lld: %s",
+      qDebug("%s: xml read error at line %lld col %lld: %s",
          qPrintable(docName), lineNumber(), columnNumber(),
          name().toUtf8().data());
-      // skipCurrentElement();
+      skipCurrentElement();
       }
 
 //---------------------------------------------------------
