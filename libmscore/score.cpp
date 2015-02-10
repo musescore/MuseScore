@@ -2113,6 +2113,10 @@ bool Score::appendScore(Score* score)
             lastMeasure->undoSetBreak(true, LayoutBreak::Type::SECTION);
             }
 
+      // match concert pitch states
+      if (styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch))
+            score->cmdConcertPitchChanged(styleB(StyleIdx::concertPitch), true);
+
       // clone the measures
       MeasureBaseList* ml = &score->_measures;
       for (MeasureBase* mb = ml->first(); mb; mb = mb->next()) {
@@ -2128,12 +2132,30 @@ bool Score::appendScore(Score* score)
             }
       fixTicks();
 
+      // adjust key signatures
       for (Staff* st : score->staves()) {
+            int staffIdx = score->staffIdx(st);
+            Staff* joinedStaff = staff(staffIdx);
+            // special case for initial "C" key signature - these have no explicit element
+            Measure* m = tick2measure(tickLen);
+            Segment* seg = m->getSegment(Segment::Type::KeySig, tickLen);
+            if (!seg->element(staffIdx * VOICES)) {
+                  // no need to create new initial "C" key sig
+                  // if staff already ends in that key
+                  if (joinedStaff->key(tickLen - 1) == Key::C)
+                        continue;
+                  Key key = Key::C;
+                  KeySig* ks = new KeySig(this);
+                  ks->setTrack(staffIdx * VOICES);
+                  ks->setKey(key);
+                  ks->setParent(seg);
+                  addElement(ks);
+                  }
+            // other key signatures (initial other than "C", non-initial)
             for (auto k : *(st->keyList())) {
                   int tick = k.first;
                   KeySigEvent key = k.second;
-                  int staffIdx = score->staffIdx(st);
-                  staff(staffIdx)->setKey(tick + tickLen, key);
+                  joinedStaff->setKey(tick + tickLen, key);
                   }
             }
 
