@@ -131,9 +131,9 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
       if (!validLibraryLoaded()) {
             qDebug("(Maybe) ask user for library");
             int ret = QMessageBox::question(0, qApp->translate("MP3Exporter", "Save as MP3"),
-                  qApp->translate("MP3Exporter", "MuseScore does not export MP3 files directly, but instead uses \n"
-                   "the freely available LAME library.  You must obtain %1 \n"
-                   "separately, and then locate the file for MuseScore.\n"
+                  qApp->translate("MP3Exporter", "MuseScore does not export MP3 files directly, but instead uses "
+                   "the freely available LAME library.  You must obtain %1 "
+                   "separately (for details check the handbook), and then locate the file for MuseScore.\n"
                    "You only need to do this once.\n\n"
                    "Would you like to locate %2 now?").arg(getLibraryName()).arg(getLibraryName()),
                    QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
