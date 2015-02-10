@@ -2084,7 +2084,6 @@ void Score::cmdMoveRest(Rest* rest, MScore::Direction dir)
       else if (dir == MScore::Direction::DOWN)
             pos.ry() += spatium();
       undoChangeProperty(rest, P_ID::USER_OFF, pos);
-      setLayoutAll(rest->beam() != nullptr);    // layout all if rest is beamed
       }
 
 //---------------------------------------------------------
