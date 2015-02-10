@@ -902,18 +902,18 @@ MuseScore::MuseScore()
 
       menuHelp->addSeparator();
 
-      QAction *aboutAction = new QAction(tr("&About"), 0);
+      QAction *aboutAction = new QAction(tr("&About..."), 0);
 
       aboutAction->setMenuRole(QAction::AboutRole);
       connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
       menuHelp->addAction(aboutAction);
 
-      QAction *aboutQtAction = new QAction(tr("About &Qt"), 0);
+      QAction *aboutQtAction = new QAction(tr("About &Qt..."), 0);
       aboutQtAction->setMenuRole(QAction::AboutQtRole);
       connect(aboutQtAction, SIGNAL(triggered()), this, SLOT(aboutQt()));
       menuHelp->addAction(aboutQtAction);
 
-      QAction *aboutMusicXMLAction = new QAction(tr("About &MusicXML"), 0);
+      QAction *aboutMusicXMLAction = new QAction(tr("About &MusicXML..."), 0);
       aboutMusicXMLAction->setMenuRole(QAction::ApplicationSpecificRole);
       connect(aboutMusicXMLAction, SIGNAL(triggered()), this, SLOT(aboutMusicXML()));
       menuHelp->addAction(aboutMusicXMLAction);
