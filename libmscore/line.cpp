@@ -201,6 +201,7 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
       SLine* l        = line();
       SpannerSegmentType st = spannerSegmentType();
       int track   = l->track();
+      int track2  = l->track2();    // assumed to be same as track
 
       if (l->anchor() == Spanner::Anchor::SEGMENT) {
             Segment* s1 = spanner()->startSegment();
@@ -220,13 +221,13 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
                   if (curGrip == Grip::START)
                         s1 = prevSeg1(s1, track);
                   else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
-                        s2 = prevSeg1(s2, track);
+                        s2 = prevSeg1(s2, track2);
                   }
             else if (key == Qt::Key_Right) {
                   if (curGrip == Grip::START)
                         s1 = nextSeg1(s1, track);
                   else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
-                        Segment* ns2 = nextSeg1(s2, track);
+                        Segment* ns2 = nextSeg1(s2, track2);
                         if (ns2)
                               s2 = ns2;
                         else
@@ -541,29 +542,31 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         else if (type() == Element::Type::HAIRPIN || type() == Element::Type::TRILL
                                     || type() == Element::Type::TEXTLINE || type() == Element::Type::LYRICSLINE) {
                               // (for LYRICSLINE, this is hyphen; melisma line is handled above)
-                              // lay out to just before next CR or barline
+                              // lay out to just before next chordrest on this staff, or barline
+                              // tick2 actually tells us the right chordrest to look for
                               if (cr && endElement()->parent() && endElement()->parent()->type() == Element::Type::SEGMENT) {
                                     qreal x2 = cr->x() + cr->space().rw();
-                                    int t = track2();
-                                    Segment* seg = static_cast<Segment*>(endElement()->parent())->next();
-                                    for ( ; seg; seg = seg->next()) {
-                                          if (seg->segmentType() == Segment::Type::ChordRest) {
-                                                if (t != -1 && !seg->element(t)) {
-                                                      continue;
-                                                      }
-                                                x2 = qMax(x2, seg->x() - sp);
-                                                break;
-                                                }
-                                          else if (seg->segmentType() == Segment::Type::EndBarLine) {
-                                                // allow lyrics hyphen to extend to barline; other lines stop 1sp short
-                                                qreal gap = (type() == Element::Type::LYRICSLINE) ? 0.0 : sp;
-                                                x2 = qMax(x2, seg->x() - gap);
-                                                break;
-                                                }
-                                          }
+                                    Segment* currentSeg = static_cast<Segment*>(endElement()->parent());
+                                    Segment* seg = score()->tick2segmentMM(tick2(), false, Segment::Type::ChordRest);
                                     if (!seg) {
                                           // no end segment found, use measure width
                                           x2 = endElement()->parent()->parent()->width() - sp;
+                                          }
+                                    else if (currentSeg->measure() == seg->measure()) {
+                                          // next chordrest found in same measure;
+                                          // end line 1sp to left
+                                          x2 = qMax(x2, seg->x() - sp);
+                                          }
+                                    else {
+                                          // next chordrest is in next measure
+                                          // lay out to end (barline) of current measure instead
+                                          seg = currentSeg->next(Segment::Type::EndBarLine);
+                                          if (!seg)
+                                                seg = currentSeg->measure()->last();
+                                          // allow lyrics hyphen to extend to barline
+                                          // other lines stop 1sp short
+                                          qreal gap = (type() == Element::Type::LYRICSLINE) ? 0.0 : sp;
+                                          x2 = qMax(x2, seg->x() - gap);
                                           }
                                     x = x2 - endElement()->parent()->x();
                                     }
