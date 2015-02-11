@@ -133,6 +133,7 @@ void Mixer::showEvent(QShowEvent* e)
       enablePlay->showEvent(e);
       QScrollArea::showEvent(e);
       activateWindow();
+      setFocus();
       }
 
 //---------------------------------------------------------

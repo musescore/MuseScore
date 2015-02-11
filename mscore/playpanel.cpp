@@ -149,6 +149,7 @@ void PlayPanel::showEvent(QShowEvent* e)
       enablePlay->showEvent(e);
       QWidget::showEvent(e);
       activateWindow();
+      setFocus();
       }
 
 //---------------------------------------------------------
