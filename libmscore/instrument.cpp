@@ -89,7 +89,7 @@ InstrumentData::InstrumentData()
       _maxPitchA   = 127;
       _minPitchP   = 0;
       _maxPitchP   = 127;
-      _useDrumset  = DrumsetKind::NONE;
+      _useDrumset  = false;
       _drumset     = 0;
       }
 
@@ -176,8 +176,8 @@ void InstrumentData::write(Xml& xml) const
             xml.tag("transposeChromatic", _transpose.chromatic);
       if (!_instrumentId.isEmpty())
             xml.tag("instrumentId", _instrumentId);
-      if (_useDrumset != DrumsetKind::NONE) {
-            xml.tag("useDrumset", int(_useDrumset));
+      if (_useDrumset) {
+            xml.tag("useDrumset", _useDrumset);
             _drumset->save(xml);
             }
       for (int i = 0; i < _clefType.size(); ++i) {
@@ -271,12 +271,10 @@ void InstrumentData::read(XmlReader& e)
             else if (tag == "instrumentId")
                   _instrumentId = e.readElementText();
             else if (tag == "useDrumset") {
-                  int drumset = e.readInt();
-                  if (!drumset)
-                        _useDrumset = DrumsetKind::NONE;
-                  else  {
-                        _useDrumset = DrumsetKind::DEFAULT_DRUMS;
-                         _drumset = new Drumset(*smDrumset);
+                  _useDrumset = e.readInt();
+                  if (_useDrumset) {
+                        delete _drumset;
+                        _drumset = new Drumset(*smDrumset);
                         }
                   }
             else if (tag == "Drum") {
@@ -351,7 +349,7 @@ void InstrumentData::read(XmlReader& e)
             a.pan     = pan;
             _channel.append(a);
             }
-      if (_useDrumset != DrumsetKind::NONE) {
+      if (_useDrumset) {
             if (_channel[0].bank == 0)
                   _channel[0].bank = 128;
             _channel[0].updateInitList();
@@ -696,21 +694,11 @@ bool StaffName::operator==(const StaffName& i) const
 //   setUseDrumset
 //---------------------------------------------------------
 
-void InstrumentData::setUseDrumset(DrumsetKind val)
+void InstrumentData::setUseDrumset(bool val)
       {
       _useDrumset = val;
-      if (val != DrumsetKind::NONE && _drumset == 0) {
-            switch (val) {
-                  case DrumsetKind::DEFAULT_DRUMS:
-                        _drumset = new Drumset(*smDrumset);
-                        break;
-                  case DrumsetKind::GUITAR_PRO:
-                        _drumset = new Drumset(*gpDrumset);
-                        break;
-                  default:
-                        break;
-                  }
-            }
+      if (val && !_drumset)
+            _drumset = new Drumset(*smDrumset);
       }
 
 //---------------------------------------------------------
@@ -720,7 +708,14 @@ void InstrumentData::setUseDrumset(DrumsetKind val)
 void InstrumentData::setDrumset(const Drumset* ds)
       {
       delete _drumset;
-      _drumset = ds ? new Drumset(*ds) : nullptr;
+      if (ds) {
+            _useDrumset = true;
+            _drumset = new Drumset(*ds);
+            }
+      else {
+            _useDrumset = false;
+            _drumset = 0;
+            }
       }
 
 //---------------------------------------------------------
@@ -1009,7 +1004,7 @@ const Drumset* Instrument::drumset() const
 //   useDrumset
 //---------------------------------------------------------
 
-DrumsetKind Instrument::useDrumset() const
+bool Instrument::useDrumset() const
       {
       return d->useDrumset();
       }
@@ -1018,7 +1013,7 @@ DrumsetKind Instrument::useDrumset() const
 //   setUseDrumset
 //---------------------------------------------------------
 
-void Instrument::setUseDrumset(DrumsetKind val)
+void Instrument::setUseDrumset(bool val)
       {
       d->setUseDrumset(val);
       }
@@ -1300,10 +1295,8 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
       instr.setInstrumentId(t->musicXMLid);
-      if (t->useDrumset != DrumsetKind::NONE) {
-            instr.setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
-            instr.setDrumset(new Drumset(*((t->drumset) ? t->drumset : smDrumset)));
-            }
+      if (t->useDrumset)
+            instr.setDrumset(t->drumset ? t->drumset : smDrumset);
       for (int i = 0; i < t->nstaves(); ++i)
             instr.setClefType(i, t->clefTypes[i]);
       instr.setMidiActions(t->midiActions);

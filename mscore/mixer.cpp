@@ -46,6 +46,7 @@ PartEdit::PartEdit(QWidget* parent)
       connect(reverb,   SIGNAL(valueChanged(double,int)), SLOT(reverbChanged(double)));
       connect(mute,     SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
       connect(solo,     SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
+      connect(drumset,  SIGNAL(toggled(bool)),            SLOT(drumsetToggled(bool)));
       }
 
 //---------------------------------------------------------
@@ -82,7 +83,7 @@ void PartEdit::setPart(Part* p, Channel* a)
                   break;
                   }
             }
-      drumset->setVisible((p->instr()->useDrumset() != DrumsetKind::NONE));
+      drumset->setChecked(p->instr()->useDrumset());
       }
 
 //---------------------------------------------------------
@@ -183,9 +184,13 @@ void Mixer::updateAll(Score* score)
       patchListChanged();
       }
 
+//---------------------------------------------------------
+//   partEdit
+//---------------------------------------------------------
+
 PartEdit* Mixer::partEdit(int index)
       {
-      if(index < vb->count()) {
+      if (index < vb->count()) {
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(index));
             return (PartEdit*) wi->widget();
             }
@@ -207,7 +212,7 @@ void Mixer::patchListChanged()
       foreach (const MidiMapping& m, *mm) {
             QWidgetItem* wi  = (QWidgetItem*)(vb->itemAt(idx));
             PartEdit* pe     = (PartEdit*)(wi->widget());
-            bool drum = (m.part->instr()->useDrumset() != DrumsetKind::NONE);
+            bool drum        = m.part->instr()->useDrumset();
             pe->patch->clear();
             foreach(const MidiPatch* p, pl) {
                   if (p->drum == drum)
@@ -254,6 +259,7 @@ void PartEdit::patchChanged(int n)
       if (score) {
             score->startCmd();
             score->undo(new ChangePatch(channel, p));
+            score->setLayoutAll(true);
             score->endCmd();
             }
       }
@@ -359,12 +365,43 @@ void PartEdit::soloToggled(bool val)
       }
 
 //---------------------------------------------------------
+//   drumsetToggled
+//---------------------------------------------------------
+
+void PartEdit::drumsetToggled(bool val)
+      {
+      if (part == 0)
+            return;
+
+      Score* score = part->score();
+      score->startCmd();
+
+      part->undoChangeProperty(P_ID::USE_DRUMSET, val);
+      patch->clear();
+      const QList<MidiPatch*> pl = synti->getPatchInfo();
+      for (const MidiPatch* p : pl) {
+            if (p->drum == val)
+                  patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));
+            }
+
+      // switch to first instrument
+      const MidiPatch* p = (MidiPatch*)patch->itemData(0, Qt::UserRole).value<void*>();
+      if (p == 0) {
+            qDebug("PartEdit::patchChanged: no patch");
+            return;
+            }
+      score->undo(new ChangePatch(channel, p));
+      score->setLayoutAll(true);
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
 //   updateSolo
 //---------------------------------------------------------
 
 void Mixer::updateSolo(bool val)
       {
-      for(int i = 0; i <vb->count(); i++ ){
+      for (int i = 0; i < vb->count(); i++ ){
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(i));
             PartEdit* pe    = (PartEdit*)(wi->widget());
             pe->mute->setEnabled(!val);

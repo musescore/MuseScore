@@ -553,7 +553,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
       {
       Staff* cstaff          = score->staff(track/VOICES);
       const Drumset* drumset = cstaff->part()->instr()->drumset();
-      DrumsetKind useDrumset = cstaff->part()->instr()->useDrumset();
+      bool useDrumset        = cstaff->part()->instr()->useDrumset();
       int tick               = notes->at(0)->mc.ontime();
 
       //
@@ -593,7 +593,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
                   note->setTrack(track);
                   chord->add(note);
 
-                  if (useDrumset != DrumsetKind::NONE) {
+                  if (useDrumset) {
                         if (!drumset->isValid(mn.pitch())) {
                               qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                               }

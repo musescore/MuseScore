@@ -899,13 +899,13 @@ void Score::rebuildMidiMapping()
       foreach(Part* part, _parts) {
             InstrumentList* il = part->instrList();
             for (auto i = il->begin(); i != il->end(); ++i) {
-                  DrumsetKind drum = i->second.useDrumset();
+                  bool drum = i->second.useDrumset();
                   for (int k = 0; k < i->second.channel().size(); ++k) {
                         Channel* a = &(i->second.channel(k));
                         MidiMapping mm;
                         if (port > maxport)
                               maxport = port;
-                        if (drum != DrumsetKind::NONE) {
+                        if (drum) {
                               mm.port    = port;
                               mm.channel = 9;
                               }

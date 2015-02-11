@@ -48,6 +48,7 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
       void chorusChanged(double);
       void muteChanged(bool);
       void soloToggled(bool);
+      void drumsetToggled(bool);
 
    public slots:
 

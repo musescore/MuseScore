@@ -1616,7 +1616,7 @@ void ScoreView::setShadowNote(const QPointF& p)
       int line                    = pos.line;
       NoteHead::Type noteHead       = is.duration().headType();
 
-      if (instr->useDrumset() != DrumsetKind::NONE) {
+      if (instr->useDrumset()) {
             const Drumset* ds  = instr->drumset();
             int pitch    = is.drumNote();
             if (pitch >= 0 && ds->isValid(pitch)) {
@@ -4275,7 +4275,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
       _score->startCmd();
       for (Note* n : _score->selection().noteList()) {
             Staff* staff = n->staff();
-            if (staff->part()->instr()->useDrumset() != DrumsetKind::NONE)
+            if (staff->part()->instr()->useDrumset())
                   continue;
             if (staff->isTabStaff()) {
                   int string = n->line() + (up ? 1 : -1);

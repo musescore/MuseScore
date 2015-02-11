@@ -207,6 +207,7 @@ enum class P_ID : unsigned char {
       SYSTEM_INITIAL_BARLINE_TYPE,
 
       MAG,
+      USE_DRUMSET,
 
       END
       };
