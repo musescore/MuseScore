@@ -3582,6 +3582,7 @@ ChordRest* Score::findCR(int tick, int track) const
 //---------------------------------------------------------
 //   findCRinStaff
 //    find chord/rest <= tick in staff
+//    prefer shortest duration (so it does not overlap next chordrest segment)
 //---------------------------------------------------------
 
 ChordRest* Score::findCRinStaff(int tick, int track) const
@@ -3602,11 +3603,14 @@ ChordRest* Score::findCRinStaff(int tick, int track) const
       for (Segment* ns = s; ; ns = ns->next(Segment::Type::ChordRest)) {
             if (ns == 0 || ns->tick() > tick)
                   break;
+            // found a segment; now find shortest chordrest on this staff (if any)
+            ChordRest* shortestCR = 0;
             for (int t = strack; t < etrack; ++t) {
-                  if (ns->element(t)) {
+                  ChordRest* cr = static_cast<ChordRest*>(ns->element(t));
+                  if (cr && (!shortestCR || cr->actualTicks() < shortestCR->actualTicks())) {
+                        shortestCR = cr;
                         s = ns;
                         actualTrack = t;
-                        break;
                         }
                   }
             }
