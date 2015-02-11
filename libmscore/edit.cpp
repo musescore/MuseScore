@@ -360,6 +360,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
       note->setNval(noteVal);
       undoAddElement(note);
       _playNote = true;
+      _playChord = true;
       select(note, SelectType::SINGLE, 0);
       if (!chord->staff()->isTabStaff())
             _is.moveToNextInputPos();

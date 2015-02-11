@@ -104,6 +104,7 @@ void Preferences::init()
 
       enableMidiInput    = true;
       playNotes          = true;
+      playChordOnAddNote = true;
 
       showNavigator      = false;
       showPlayPanel      = false;
@@ -246,6 +247,7 @@ void Preferences::write()
       s.setValue("defaultColor",       MScore::defaultColor);
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("playNotes",          playNotes);
+      s.setValue("playChordOnAddNote", playChordOnAddNote);
 
       s.setValue("showNavigator",      showNavigator);
       s.setValue("showPlayPanel",      showPlayPanel);
@@ -395,6 +397,7 @@ void Preferences::read()
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
       playNotes               = s.value("playNotes", playNotes).toBool();
+      playChordOnAddNote      = s.value("playChordOnAddNote", playChordOnAddNote).toBool();
 
       showNavigator            = s.value("showNavigator", showNavigator).toBool();
       showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
@@ -801,6 +804,7 @@ void PreferenceDialog::updateValues()
 
       enableMidiInput->setChecked(prefs.enableMidiInput);
       playNotes->setChecked(prefs.playNotes);
+      playChordOnAddNote->setChecked(prefs.playChordOnAddNote);
 
       //Update
       checkUpdateStartup->clear();
@@ -1272,6 +1276,7 @@ void PreferenceDialog::apply()
       prefs.fgUseColor     = fgColorButton->isChecked();
       prefs.enableMidiInput = enableMidiInput->isChecked();
       prefs.playNotes      = playNotes->isChecked();
+      prefs.playChordOnAddNote = playChordOnAddNote->isChecked();
 
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();

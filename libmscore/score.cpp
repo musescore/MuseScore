@@ -295,6 +295,7 @@ void Score::init()
       layoutFlags             = 0;
       _undoRedo               = false;
       _playNote               = false;
+      _playChord              = false;
       _excerptsChanged        = false;
       _instrumentsChanged     = false;
       _selectionChanged       = false;
