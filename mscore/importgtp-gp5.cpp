@@ -416,7 +416,8 @@ void GuitarPro5::readTracks()
             ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
-                  instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
+                  // instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
+                  instr->setDrumset(gpDrumset);
                   staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)

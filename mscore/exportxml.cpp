@@ -282,7 +282,7 @@ class ExportMusicXml {
       int findBracket(const TextLine* tl) const;
       int findOttava(const Ottava* tl) const;
       int findTrill(const Trill* tl) const;
-      void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset);
+      void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff);
       void clef(int staff, ClefType clef);
       void timesig(TimeSig* tsig);
@@ -2243,7 +2243,7 @@ static QString instrId(int partNr, int instrNr)
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset)
+void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset)
       {
       Part* part = chord->score()->staff(chord->track() / VOICES)->part();
       int partNr = _score->parts().indexOf(part);
@@ -2314,15 +2314,15 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
                   tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
             }
             else {
-                  if (useDrumset == DrumsetKind::NONE) {
+                  if (!useDrumset) {
                         pitch2xml(note, step, alter, octave);
                   }
                   else {
                         unpitch2xml(note, step, octave);
                   }
             }
-            xml.stag(useDrumset != DrumsetKind::NONE ? "unpitched" : "pitch");
-            xml.tag(useDrumset != DrumsetKind::NONE ? "display-step" : "step", step);
+            xml.stag(useDrumset ? "unpitched" : "pitch");
+            xml.tag(useDrumset  ? "display-step" : "step", step);
             // Check for microtonal accidentals and overwrite "alter" tag
             Accidental* acc = note->accidental();
             double alter2 = 0.0;
@@ -2340,7 +2340,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
             if (!alter && alter2)
                   xml.tag("alter", alter2);
             // TODO what if both alter and alter2 are present? For Example: playing with transposing instruments
-            xml.tag(useDrumset != DrumsetKind::NONE ? "display-octave" : "octave", octave);
+            xml.tag(useDrumset ? "display-octave" : "octave", octave);
             xml.etag();
 
             // duration
@@ -2353,7 +2353,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
                   xml.tagE("tie type=\"start\"");
 
             // instrument for multi-instrument or unpitched parts
-            if (useDrumset == DrumsetKind::NONE) {
+            if (!useDrumset) {
                   if (instrMap.size() > 1 && instNr >= 0)
                         xml.tagE(QString("instrument %1").arg(instrId(partNr + 1, instNr + 1)));
                   }
@@ -4342,7 +4342,7 @@ void ExportMusicXml::write(QIODevice* dev)
             if (!part->shortName().isEmpty())
                   xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
-            if (part->instr()->useDrumset() != DrumsetKind::NONE) {
+            if (part->instr()->useDrumset()) {
                   const Drumset* drumset = part->instr()->drumset();
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);

@@ -461,7 +461,7 @@ void setMusicNotesFromMidi(Score *score,
                            const QList<MidiNote> &midiNotes,
                            Chord *chord,
                            const Drumset *drumset,
-                           DrumsetKind useDrumset)
+                           bool useDrumset)
       {
       for (int i = 0; i < midiNotes.size(); ++i) {
             const MidiNote& mn = midiNotes[i];
@@ -478,7 +478,7 @@ void setMusicNotesFromMidi(Score *score,
             note->setVeloType(Note::ValueType::USER_VAL);
             note->setVeloOffset(mn.velo);
 
-            if (useDrumset != DrumsetKind::NONE) {
+            if (useDrumset) {
                   if (!drumset->isValid(mn.pitch))
                         qDebug("unmapped drum note 0x%02x %d", mn.pitch, mn.pitch);
                   else {
@@ -520,7 +520,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
       Score* score = staff->score();
       const int track = staff->idx() * VOICES + voice;
       const Drumset* drumset = staff->part()->instr()->drumset();
-      const DrumsetKind useDrumset = staff->part()->instr()->useDrumset();
+      const bool useDrumset  = staff->part()->instr()->useDrumset();
 
       const auto& opers = preferences.midiImportOperations.data()->trackOpers;
       const int currentTrack = preferences.midiImportOperations.currentTrack();

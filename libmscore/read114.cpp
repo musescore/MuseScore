@@ -283,7 +283,7 @@ void Part::read114(XmlReader& e)
       if (_partName.isEmpty())
             _partName = instr()->trackName();
 
-      if (instr()->useDrumset() != DrumsetKind::NONE) {
+      if (instr()->useDrumset()) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
                   int bf    = staff->barLineFrom();

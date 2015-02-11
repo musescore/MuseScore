@@ -107,7 +107,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // or a memory leak may result
 
       bool canUseTabs = false; // assume only normal staves are applicable
-      DrumsetKind canUsePerc = DrumsetKind::NONE;
+      bool canUsePerc = false;
       PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
 
       // PartListItem has different members filled out if used in New Score Wizard
@@ -117,14 +117,14 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
                         ( (part->part && part->part->instr()) ? part->part->instr()->stringData() : 0);
             canUseTabs = stringData && stringData->strings() > 0;
             canUsePerc = part->it ? part->it->useDrumset :
-                        ( (part->part && part->part->instr()) ? part->part->instr()->useDrumset() : DrumsetKind::NONE);
+                        ( (part->part && part->part->instr()) ? part->part->instr()->useDrumset() : false);
             }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
       int idx = 0;
       for (const StaffType& st : StaffType::presets()) {
-            if ( (st.group() == StaffGroup::STANDARD && (canUsePerc == DrumsetKind::NONE))    // percussion excludes standard
-                        || (st.group() == StaffGroup::PERCUSSION && (canUsePerc != DrumsetKind::NONE))
+            if ( (st.group() == StaffGroup::STANDARD && (!canUsePerc))    // percussion excludes standard
+                        || (st.group() == StaffGroup::PERCUSSION && canUsePerc)
                         || (st.group() == StaffGroup::TAB && canUseTabs)) {
                   _staffTypeCombo->addItem(st.name(), idx);
                   }

@@ -167,7 +167,7 @@ const InstrumentTemplate* findClosestInstrument(const MTrack &track)
             for (const InstrumentTemplate *templ: group->instrumentTemplates) {
                   if (templ->staffGroup == StaffGroup::TAB)
                         continue;
-                  const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
+                  const bool isDrumTemplate = templ->useDrumset;
                   if (track.mtrack->drumTrack() != isDrumTemplate)
                         continue;
                   for (const auto &channel: templ->channel) {
@@ -195,7 +195,7 @@ std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &
             for (const InstrumentTemplate *templ: group->instrumentTemplates) {
                   if (templ->staffGroup == StaffGroup::TAB)
                         continue;
-                  const bool isDrumTemplate = (templ->useDrumset != DrumsetKind::NONE);
+                  const bool isDrumTemplate = templ->useDrumset;
                   if (track.mtrack->drumTrack() != isDrumTemplate)
                         continue;
 
@@ -399,7 +399,6 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                         part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                         if (!instr) {
                               part->instr()->setDrumset(smDrumset);
-                              part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
                               }
                         }
                   }

@@ -353,10 +353,15 @@ void Part::setShortName(const QString& s)
 
 QVariant Part::getProperty(P_ID id) const
       {
-      if (id == P_ID::VISIBLE)
-            return QVariant(_show);
-      else
-            return QVariant();
+      switch (id) {
+            case P_ID::VISIBLE:
+                  return QVariant(_show);
+            case P_ID::USE_DRUMSET:
+                  return instr()->useDrumset();
+
+            default:
+                  return QVariant();
+            }
       }
 
 //---------------------------------------------------------
@@ -365,17 +370,24 @@ QVariant Part::getProperty(P_ID id) const
 
 bool Part::setProperty(P_ID id, const QVariant& property)
       {
-      if (id == P_ID::VISIBLE) {
-            setShow(property.toBool());
-            for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
-                  m->setDirty();
-                  if (m->mmRest())
-                        m->mmRest()->setDirty();
+      switch (id) {
+            case P_ID::VISIBLE:
+                  setShow(property.toBool());
+                  for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
+                        m->setDirty();
+                        if (m->mmRest())
+                              m->mmRest()->setDirty();
+                        break;
+                        }
                   break;
-                  }
+            case P_ID::USE_DRUMSET:
+                  instr()->setUseDrumset(property.toBool());
+                  score()->updateNotes();
+                  break;
+            default:
+                  qDebug("Part::setProperty: unknown id %d", int(id));
+                  break;
             }
-      else
-            qDebug("Part::setProperty: unknown id %d", int(id));
       score()->setLayoutAll(true);
       return true;
       }

@@ -115,8 +115,6 @@ struct Channel {
 //   Instrument
 //---------------------------------------------------------
 
-enum class DrumsetKind : char { NONE, DEFAULT_DRUMS, GUITAR_PRO };
-
 class InstrumentData;
 
 class Instrument {
@@ -151,8 +149,8 @@ class Instrument {
 
       void setDrumset(const Drumset* ds);
       const Drumset* drumset() const;
-      DrumsetKind useDrumset() const;
-      void setUseDrumset(DrumsetKind val);
+      bool useDrumset() const;
+      void setUseDrumset(bool val);
       void setAmateurPitchRange(int a, int b);
       void setProfessionalPitchRange(int a, int b);
       Channel& channel(int idx);

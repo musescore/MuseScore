@@ -212,6 +212,7 @@ static const PropertyData propertyList[] = {
 
       { P_ID::SYSTEM_INITIAL_BARLINE_TYPE, false, "sysInitBarLineType", P_TYPE::INT },
       { P_ID::MAG,                 false, "mag",                   P_TYPE::REAL },
+      { P_ID::USE_DRUMSET,         false, "useDrumset",            P_TYPE::BOOL },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
