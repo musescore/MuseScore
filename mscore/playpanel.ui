@@ -16,6 +16,9 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>MuseScore: Play Panel</string>
   </property>
@@ -145,6 +148,12 @@
      </item>
      <item>
       <widget class="QSlider" name="posSlider">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Playback Position</string>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -329,8 +338,17 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="toolTip">
         <string>Relative tempo</string>
+       </property>
+       <property name="accessibleName">
+        <string>Relative Tempo to 120 beats per minute</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Use up and down arrows to change value</string>
        </property>
        <property name="value" stdset="0">
         <double>100.000000000000000</double>
@@ -360,8 +378,20 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
        <property name="toolTip">
         <string>Master volume</string>
+       </property>
+       <property name="whatsThis">
+        <string/>
+       </property>
+       <property name="accessibleName">
+        <string>Master Volume</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Use up and down arrows to change value</string>
        </property>
       </widget>
      </item>
@@ -908,6 +938,12 @@
      </item>
      <item row="1" column="0">
       <widget class="QDoubleSpinBox" name="relTempoBox">
+       <property name="accessibleName">
+        <string>Relative tempo to 120 beats per minute</string>
+       </property>
+       <property name="accessibleDescription">
+        <string/>
+       </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>

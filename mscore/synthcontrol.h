@@ -22,6 +22,7 @@
 #define __SYNTHCONTROL_H__
 
 #include "ui_synthcontrol.h"
+#include "enableplayforwidget.h"
 
 namespace Ms {
 
@@ -35,7 +36,12 @@ class SynthControl : public QWidget, Ui::SynthControl {
       Q_OBJECT
 
       Score* _score;
+      EnablePlayForWidget* enablePlay;
+
       virtual void closeEvent(QCloseEvent*);
+      virtual void showEvent(QShowEvent*);
+      virtual bool eventFilter(QObject*, QEvent*);
+      virtual void keyPressEvent(QKeyEvent*) override;
       void updateGui();
 
    private slots:
