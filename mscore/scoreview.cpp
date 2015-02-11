@@ -2730,6 +2730,8 @@ void ScoreView::cmd(const QAction* a)
                   Element* el = _score->move(cmd);
                   if (el)
                         adjustCanvasPosition(el, false);
+                  else if(score()->selection().isNone())
+                        cmdGotoElement(score()->firstSegment(Segment::Type::ChordRest)->firstElement(0));
                   updateAll();
                   }
             }
@@ -2765,21 +2767,29 @@ void ScoreView::cmd(const QAction* a)
             Element* el = score()->selection().element();
             if (el && (el->type() == Element::Type::NOTE || el->type() == Element::Type::REST))
                   cmdGotoElement(score()->upAlt(el));
+            else if (score()->selection().isNone())
+                  cmdGotoElement(score()->firstSegment(Segment::Type::ChordRest)->firstElement(0));
             }
       else if (cmd == "down-chord") {
             Element* el = score()->selection().element();
             if (el && (el->type() == Element::Type::NOTE || el->type() == Element::Type::REST))
                   cmdGotoElement(score()->downAlt(el));
+            else if (score()->selection().isNone())
+                  cmdGotoElement(score()->firstSegment(Segment::Type::ChordRest)->firstElement(0));
             }
       else if (cmd == "top-chord" ) {
             Element* el = score()->selection().element();
             if (el && el->type() == Element::Type::NOTE)
                   cmdGotoElement(score()->upAltCtrl(static_cast<Note*>(el)));
+            else if (score()->selection().isNone())
+                  cmdGotoElement(score()->firstSegment(Segment::Type::ChordRest)->firstElement(0));
             }
       else if (cmd == "bottom-chord") {
             Element* el = score()->selection().element();
             if (el && el->type() == Element::Type::NOTE)
                   cmdGotoElement(score()->downAltCtrl(static_cast<Note*>(el)));
+            else if (score()->selection().isNone())
+                  cmdGotoElement(score()->firstSegment(Segment::Type::ChordRest)->firstElement(0));
             }
       else if (cmd == "next-element"){
             Element* el = score()->selection().element();
