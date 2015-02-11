@@ -16,6 +16,9 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
   <property name="windowTitle">
    <string/>
   </property>
@@ -70,6 +73,9 @@
         <property name="toolTip">
          <string>Part name</string>
         </property>
+        <property name="accessibleName">
+         <string>Part Name</string>
+        </property>
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -103,8 +109,17 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Volume</string>
+          </property>
+          <property name="accessibleName">
+           <string>Volume</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use arrows to modify</string>
           </property>
           <property name="invertedAppearance" stdset="0">
            <bool>false</bool>
@@ -150,8 +165,17 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Panorama position</string>
+          </property>
+          <property name="accessibleName">
+           <string>Panorama position</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use arrows to modify</string>
           </property>
           <property name="scaleWidth" stdset="0">
            <number>5</number>
@@ -178,8 +202,17 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Reverb</string>
+          </property>
+          <property name="accessibleName">
+           <string>Reverb</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use arrows to modify</string>
           </property>
           <property name="scaleWidth" stdset="0">
            <number>5</number>
@@ -215,8 +248,17 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Chorus</string>
+          </property>
+          <property name="accessibleName">
+           <string>Chorus</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use arrows to modify</string>
           </property>
           <property name="scaleWidth" stdset="0">
            <number>5</number>
@@ -353,6 +395,9 @@
         </property>
         <item>
          <widget class="QCheckBox" name="mute">
+          <property name="accessibleName">
+           <string>Mute</string>
+          </property>
           <property name="text">
            <string>Mute</string>
           </property>
@@ -360,6 +405,9 @@
         </item>
         <item>
          <widget class="QCheckBox" name="solo">
+          <property name="accessibleName">
+           <string>Solo</string>
+          </property>
           <property name="text">
            <string>Solo</string>
           </property>
@@ -413,6 +461,9 @@
           <property name="toolTip">
            <string>MIDI sound</string>
           </property>
+          <property name="accessibleName">
+           <string>Sound</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -434,6 +485,16 @@
    <header>awl/midipanknob.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>partName</tabstop>
+  <tabstop>mute</tabstop>
+  <tabstop>solo</tabstop>
+  <tabstop>patch</tabstop>
+  <tabstop>volume</tabstop>
+  <tabstop>pan</tabstop>
+  <tabstop>reverb</tabstop>
+  <tabstop>chorus</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

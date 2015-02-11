@@ -22,6 +22,7 @@
 #define __AWLASLIDER_H__
 
 // #include "synthesizer/sparm.h"
+#include <QAccessibleWidget>
 
 namespace Awl {
 
@@ -69,6 +70,7 @@ class AbstractSlider : public QWidget {
       QColor _scaleColor;
       QColor _scaleValueColor;
       bool _log;
+      bool _useActualValue; //! for user value
 
       virtual void wheelEvent(QWheelEvent*);
       virtual void keyPressEvent(QKeyEvent*);
@@ -108,6 +110,7 @@ class AbstractSlider : public QWidget {
       void setId(int i) { _id = i; }
 
       virtual double value() const;
+      virtual QString userValue() const;
 
       double minValue() const { return _minValue; }
       void setMinValue(double v) { _minValue = v; }
@@ -134,7 +137,20 @@ class AbstractSlider : public QWidget {
       void setDclickValue1(double val) { _dclickValue1 = val;  }
       void setDclickValue2(double val) { _dclickValue2 = val;  }
       void setEnabled(bool val);
+      void setUseActualValue(bool v)   { _useActualValue = v;  }
       };
+
+class AccessibleAbstractSlider : public QObject, QAccessibleWidget {
+      Q_OBJECT
+      AbstractSlider* slider;
+      QAccessible::Role role() const Q_DECL_OVERRIDE;
+      QString text(QAccessible::Text t) const Q_DECL_OVERRIDE;
+public:
+      static QAccessibleInterface* AbstractSliderFactory(const QString &classname, QObject *object);
+      AccessibleAbstractSlider(AbstractSlider*);
+public slots:
+      void valueChanged(double,int);
+};
 
 }
 

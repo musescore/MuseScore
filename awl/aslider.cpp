@@ -40,6 +40,7 @@ AbstractSlider::AbstractSlider(QWidget* parent)
       _invert     = false;
       _scaleWidth = 4;
       _log        = false;
+      _useActualValue = false;
       setFocusPolicy(Qt::StrongFocus);
       }
 
@@ -203,6 +204,21 @@ double AbstractSlider::value() const
       }
 
 //---------------------------------------------------------
+//   userValue (between 0 and 100)
+//---------------------------------------------------------
+
+QString AbstractSlider::userValue() const
+      {
+      double result;
+      if (_useActualValue)
+            result = value();
+      else
+            result = (_value - minValue())/ ((maxValue() - minValue())/100);
+
+      return QString::number(result, 'f', 2);
+      }
+
+//---------------------------------------------------------
 //   minLogValue
 //---------------------------------------------------------
 
@@ -261,4 +277,48 @@ void AbstractSlider::init(const SyntiParameter& f)
       _pageStep   = _lineStep * 2.0;
       }
 #endif
+
+AccessibleAbstractSlider::AccessibleAbstractSlider(AbstractSlider* s) : QAccessibleWidget(s)
+      {
+      slider = s;
+      }
+
+QAccessible::Role AccessibleAbstractSlider::role() const
+      {
+      return QAccessible::Slider;
+      }
+
+QString AccessibleAbstractSlider::text(QAccessible::Text t) const
+      {
+      switch (t) {
+            case QAccessible::Name:
+                  return slider->accessibleName();
+            case QAccessible::Value:
+                  return slider->userValue();
+            case QAccessible::Description:
+                  return slider->accessibleDescription();
+            default:
+                  return QString();
+            }
+      return QString();
+      }
+
+void AccessibleAbstractSlider::valueChanged(double, int)
+      {
+      QAccessibleValueChangeEvent ev(slider, slider->userValue());
+      QAccessible::updateAccessibility(&ev);
+      }
+
+QAccessibleInterface* AccessibleAbstractSlider::AbstractSliderFactory(const QString& /*classname*/, QObject *object)
+      {
+      QAccessibleInterface *iface = 0;
+      if (object && object->isWidgetType() && object->inherits("Awl::AbstractSlider")){
+            AbstractSlider* slider = static_cast<AbstractSlider*>(object);
+            AccessibleAbstractSlider* acc = new AccessibleAbstractSlider(slider);
+            QObject::connect(slider, SIGNAL(valueChanged(double,int)), acc, SLOT(valueChanged(double,int)));
+            iface = static_cast<QAccessibleInterface*>(acc);
+            }
+
+      return iface;
+      }
 }

@@ -368,11 +368,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QLabel* cornerLabel;
       QStringList _recentScores;
+      QToolButton* _playButton;
 
       //---------------------
 
       virtual void closeEvent(QCloseEvent*);
-
       virtual void dragEnterEvent(QDragEnterEvent*);
       virtual void dropEvent(QDropEvent*);
 
@@ -492,6 +492,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ~MuseScore();
       bool checkDirty(Score*);
       PlayPanel* getPlayPanel() const { return playPanel; }
+      Mixer* getMixer() const { return mixer; }
       QMenu* genCreateMenu(QWidget* parent = 0);
       virtual int appendScore(Score*);
       void midiCtrlReceived(int controller, int value);
@@ -665,6 +666,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Inspector* inspector()           { return _inspector; }
       PluginCreator* pluginCreator()   { return _pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
+      QToolButton* playButton()        { return _playButton;    }
       void showMessage(const QString& s, int timeout);
       void showHelp(QString);
       void showHelp(const QUrl&);
