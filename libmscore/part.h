@@ -97,7 +97,9 @@ class Part : public QObject, public ScoreElement {
       void setMute(bool mute);
 
       int reverb() const;
+      void setReverb(int);
       int chorus() const;
+      void setChorus(int);
       int pan() const;
       void setPan(int pan);
       int midiProgram() const;

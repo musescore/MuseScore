@@ -208,6 +208,11 @@ enum class P_ID : unsigned char {
 
       MAG,
       USE_DRUMSET,
+      PART_VOLUME,
+      PART_MUTE,
+      PART_PAN,
+      PART_REVERB,
+      PART_CHORUS,
 
       END
       };

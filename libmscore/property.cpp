@@ -213,6 +213,11 @@ static const PropertyData propertyList[] = {
       { P_ID::SYSTEM_INITIAL_BARLINE_TYPE, false, "sysInitBarLineType", P_TYPE::INT },
       { P_ID::MAG,                 false, "mag",                   P_TYPE::REAL },
       { P_ID::USE_DRUMSET,         false, "useDrumset",            P_TYPE::BOOL },
+      { P_ID::PART_VOLUME,         false, "volume",                P_TYPE::INT },
+      { P_ID::PART_MUTE,           false, "mute",                  P_TYPE::BOOL },
+      { P_ID::PART_PAN,            false, "pan",                   P_TYPE::INT },
+      { P_ID::PART_REVERB,         false, "reverb",                P_TYPE::INT },
+      { P_ID::PART_CHORUS,         false, "chorus",                P_TYPE::INT },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };

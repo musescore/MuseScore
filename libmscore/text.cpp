@@ -324,7 +324,8 @@ void TextBlock::layout(Text* t)
 
                   _bbox |= r.translated(f.pos);
                   x += w;
-                  _lineSpacing = _lineSpacing == 0 || fm.lineSpacing() == 0 ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
+                  // _lineSpacing = (_lineSpacing == 0 || fm.lineSpacing() == 0) ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
+                  _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
                   }
             }
       qreal rx;
@@ -798,7 +799,9 @@ TextBlock TextBlock::split(int column)
                   ++col;
                   }
             }
-      tl._text.append(TextFragment(""));  //??
+      TextFragment tf("");
+      tf.format = _text.last().format;
+      tl._text.append(tf);
       return tl;
       }
 
@@ -981,24 +984,16 @@ QRectF Text::cursorRect() const
       const TextBlock& tline = curLine();
       const TextFragment* fragment = tline.fragment(_cursor.column());
 
-      qreal ascent;
+      QFont font;
       if (fragment) {
-            QFont font = fragment->font(this);
-            if (font.family() == score()->scoreFont()->font().family()) {
-                  QFontMetricsF fm = QFontMetricsF(_textStyle.fontPx(spatium()));
-                  ascent = fm.ascent();
-                  }
-            else {
-                  QFontMetricsF fm = QFontMetrics(font);
-                  ascent = fm.ascent();
-                  }
+            font = fragment->font(this);
+            if (font.family() == score()->scoreFont()->font().family())
+                  font = _textStyle.fontPx(spatium());
             }
-      else {
-            QFontMetricsF fm = QFontMetricsF(_textStyle.fontPx(spatium()));
-            ascent = fm.ascent();
-            }
+      else
+            font = _textStyle.fontPx(spatium());
 
-      ascent *= 0.7;
+      qreal ascent = QFontMetricsF(font).ascent() * .7;
       qreal h = ascent;       // lineSpacing();
       qreal x = tline.xpos(_cursor.column(), this);
       qreal y = tline.y();
