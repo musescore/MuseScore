@@ -1181,73 +1181,77 @@
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QCheckBox" name="playNotes">
-              <property name="accessibleName">
-               <string>Play notes when editing</string>
-              </property>
-              <property name="text">
-               <string>Play notes when editing</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_37">
-              <property name="text">
-               <string>Default duration:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="defaultPlayDuration">
-              <property name="accessibleName">
-               <string>Default duration</string>
-              </property>
-              <property name="suffix">
-               <string>ms</string>
-              </property>
-              <property name="minimum">
-               <number>20</number>
-              </property>
-              <property name="maximum">
-               <number>2000</number>
-              </property>
-              <property name="singleStep">
-               <number>100</number>
-              </property>
-              <property name="value">
-               <number>300</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
+           <widget class="QGroupBox" name="playNotes">
+            <property name="mouseTracking">
+             <bool>true</bool>
+            </property>
+            <property name="accessibleName">
+             <string>Play notes when editing</string>
+            </property>
+            <property name="title">
+             <string>Play notes when editing</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_37">
+               <property name="text">
+                <string>Default duration:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="defaultPlayDuration">
+               <property name="accessibleName">
+                <string>Default duration</string>
+               </property>
+               <property name="suffix">
+                <string>ms</string>
+               </property>
+               <property name="minimum">
+                <number>20</number>
+               </property>
+               <property name="maximum">
+                <number>2000</number>
+               </property>
+               <property name="singleStep">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>300</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="playChordOnAddNote">
+               <property name="accessibleName">
+                <string>Play whole chord when adding note</string>
+               </property>
+               <property name="text">
+                <string>Play whole chord when adding note</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="warnPitchRange">
@@ -3560,8 +3564,6 @@
   <tabstop>autoSaveTime</tabstop>
   <tabstop>oscServer</tabstop>
   <tabstop>oscPort</tabstop>
-  <tabstop>resetToDefault</tabstop>
-  <tabstop>buttonBox</tabstop>
   <tabstop>bgColorButton</tabstop>
   <tabstop>bgWallpaperButton</tabstop>
   <tabstop>bgColorLabel</tabstop>
@@ -3572,11 +3574,10 @@
   <tabstop>fgColorLabel</tabstop>
   <tabstop>fgWallpaper</tabstop>
   <tabstop>fgWallpaperSelect</tabstop>
-  <tabstop>drawAntialiased</tabstop>
-  <tabstop>proximity</tabstop>
   <tabstop>enableMidiInput</tabstop>
   <tabstop>playNotes</tabstop>
   <tabstop>defaultPlayDuration</tabstop>
+  <tabstop>playChordOnAddNote</tabstop>
   <tabstop>warnPitchRange</tabstop>
   <tabstop>rcGroup</tabstop>
   <tabstop>rewindActive</tabstop>
@@ -3662,6 +3663,10 @@
   <tabstop>defineShortcut</tabstop>
   <tabstop>printShortcuts</tabstop>
   <tabstop>checkUpdateStartup</tabstop>
+  <tabstop>resetToDefault</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>drawAntialiased</tabstop>
+  <tabstop>proximity</tabstop>
  </tabstops>
  <resources/>
  <connections/>

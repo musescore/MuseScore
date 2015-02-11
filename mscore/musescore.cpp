@@ -3904,9 +3904,13 @@ void MuseScore::endCmd()
             updateUndoRedo();
             dirtyChanged(cs);
             Element* e = cs->selection().element();
-            if (e && cs->playNote()) {
-                  play(e);
+            if (e && (cs->playNote() || cs->playChord())) {
+                  if (cs->playChord() && preferences.playChordOnAddNote &&  e->type() == Element::Type::NOTE)
+                        play(static_cast<Note*>(e)->chord());
+                  else
+                        play(e);
                   cs->setPlayNote(false);
+                  cs->setPlayChord(false);
                   }
             if (cs->rootScore()->excerptsChanged()) {
                   //Q_ASSERT(cs == cs->rootScore());

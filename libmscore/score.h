@@ -349,6 +349,7 @@ class Score : public QObject {
 
       bool _undoRedo;         ///< true if in processing a undo/redo
       bool _playNote;         ///< play selected note after command
+      bool _playChord;        ///< play whole chord for the selected note
 
       bool _excerptsChanged;
       bool _instrumentsChanged;
@@ -954,6 +955,8 @@ class Score : public QObject {
       const QList<MuseScoreView*>& getViewer() const { return viewer;       }
       bool playNote() const                 { return _playNote; }
       void setPlayNote(bool v)              { _playNote = v;    }
+      bool playChord() const                { return _playChord; }
+      void setPlayChord(bool v)             { _playChord = v;    }
       bool excerptsChanged() const          { return _excerptsChanged; }
       void setExcerptsChanged(bool val)     { _excerptsChanged = val; }
       bool instrumentsChanged() const       { return _instrumentsChanged; }
