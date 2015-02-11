@@ -183,45 +183,99 @@ void Part::setMidiProgram(int program, int bank)
       instr()->setChannel(0, c);
       }
 
+//---------------------------------------------------------
+//   volume
+//---------------------------------------------------------
+
 int Part::volume() const
       {
       return instr()->channel(0).volume;
       }
+
+//---------------------------------------------------------
+//   setVolume
+//---------------------------------------------------------
 
 void Part::setVolume(int volume)
       {
       instr()->channel(0).volume = volume;
       }
 
+//---------------------------------------------------------
+//   mute
+//---------------------------------------------------------
+
 bool Part::mute() const
       {
       return instr()->channel(0).mute;
       }
+
+//---------------------------------------------------------
+//   setMute
+//---------------------------------------------------------
 
 void Part::setMute(bool mute)
       {
       instr()->channel(0).mute = mute;
       }
 
+//---------------------------------------------------------
+//   reverb
+//---------------------------------------------------------
+
 int Part::reverb() const
       {
       return instr()->channel(0).reverb;
       }
+
+//---------------------------------------------------------
+//   setReverb
+//---------------------------------------------------------
+
+void Part::setReverb(int val)
+      {
+      instr()->channel(0).reverb = val;
+      }
+
+//---------------------------------------------------------
+//   chorus
+//---------------------------------------------------------
 
 int Part::chorus() const
       {
       return instr()->channel(0).chorus;
       }
 
+//---------------------------------------------------------
+//   setChorus
+//---------------------------------------------------------
+
+void Part::setChorus(int val)
+      {
+      instr()->channel(0).chorus = val;
+      }
+
+//---------------------------------------------------------
+//   pan
+//---------------------------------------------------------
+
 int Part::pan() const
       {
       return instr()->channel(0).pan;
       }
 
+//---------------------------------------------------------
+//   setPan
+//---------------------------------------------------------
+
 void Part::setPan(int pan)
       {
       instr()->channel(0).pan = pan;
       }
+
+//---------------------------------------------------------
+//   midiProgram
+//---------------------------------------------------------
 
 int Part::midiProgram() const
       {
@@ -253,6 +307,7 @@ int Part::midiPort() const
 
 void Part::setMidiChannel(int) const
       {
+      // TODO
       }
 
 //---------------------------------------------------------
@@ -358,7 +413,16 @@ QVariant Part::getProperty(P_ID id) const
                   return QVariant(_show);
             case P_ID::USE_DRUMSET:
                   return instr()->useDrumset();
-
+            case P_ID::PART_VOLUME:
+                  return volume();
+            case P_ID::PART_MUTE:
+                  return mute();
+            case P_ID::PART_PAN:
+                  return pan();
+            case P_ID::PART_REVERB:
+                  return reverb();
+            case P_ID::PART_CHORUS:
+                  return chorus();
             default:
                   return QVariant();
             }
@@ -383,6 +447,21 @@ bool Part::setProperty(P_ID id, const QVariant& property)
             case P_ID::USE_DRUMSET:
                   instr()->setUseDrumset(property.toBool());
                   score()->updateNotes();
+                  break;
+            case P_ID::PART_VOLUME:
+                  setVolume(property.toInt());
+                  break;
+            case P_ID::PART_MUTE:
+                  setMute(property.toBool());
+                  break;
+            case P_ID::PART_PAN:
+                  setPan(property.toInt());
+                  break;
+            case P_ID::PART_REVERB:
+                  setReverb(property.toInt());
+                  break;
+            case P_ID::PART_CHORUS:
+                  setChorus(property.toInt());
                   break;
             default:
                   qDebug("Part::setProperty: unknown id %d", int(id));
