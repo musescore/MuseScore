@@ -320,7 +320,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             Bend* bend = static_cast<Bend*>(e);
             BendProperties bp(bend, 0);
             if (bp.exec()) {
-                  for (Element* b : bend->linkList())
+                  for (ScoreElement* b : bend->linkList())
                         b->score()->undo(new ChangeBend(static_cast<Bend*>(b), bp.points()));
                   }
             }
@@ -551,7 +551,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int rv = fp.exec();
             nFret->layout();
             if (rv) {
-                  for (Element* e : fd->linkList()) {
+                  for (ScoreElement* ee : fd->linkList()) {
+                        Element* e = static_cast<Element*>(ee);
                         FretDiagram* f = static_cast<FretDiagram*>(nFret->clone());
                         f->setScore(e->score());
                         f->setTrack(e->track());

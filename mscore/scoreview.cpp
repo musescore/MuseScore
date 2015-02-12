@@ -5738,7 +5738,7 @@ void ScoreView::cmdMoveCR(bool left)
                   e = e->parent();
             QList<ChordRest*> crl;
             if (e->links()) {
-                  for (Element* cr : *e->links())
+                  for (ScoreElement* cr : *e->links())
                         crl.append(static_cast<ChordRest*>(cr));
                   }
             else

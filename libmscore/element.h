@@ -91,20 +91,6 @@ class Space {
       };
 
 //---------------------------------------------------------
-//   LinkedElements
-//---------------------------------------------------------
-
-class LinkedElements : public QList<Element*> {
-      int _lid;         // unique id for every linked list
-
-   public:
-      LinkedElements(Score*);
-      LinkedElements(Score*, int id);
-      void setLid(Score*, int val);
-      int lid() const   { return _lid;    }
-      };
-
-//---------------------------------------------------------
 //   DropData
 //---------------------------------------------------------
 
@@ -185,7 +171,6 @@ class Element : public QObject, public ScoreElement {
       Q_PROPERTY(QPointF                  userOff     READ scriptUserOff WRITE scriptSetUserOff)
       Q_PROPERTY(bool                     visible     READ visible      WRITE setVisible)
 
-      LinkedElements* _links = 0;
       Element* _parent       = 0;
 
       bool _generated;            ///< automatically generated Element
@@ -329,14 +314,7 @@ class Element : public QObject, public ScoreElement {
       Element &operator=(const Element&) = delete;
       Q_INVOKABLE virtual Ms::Element* clone() const = 0;
       virtual Element* linkedClone();
-      QList<Element*> linkList() const;
 
-      void linkTo(Element*);
-      void unlink();
-      virtual void undoUnlink();
-      int lid() const                         { return _links ? _links->lid() : 0; }
-      const LinkedElements* links() const     { return _links;      }
-      void setLinks(LinkedElements* le)       { _links = le;        }
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
       Element* findMeasure();

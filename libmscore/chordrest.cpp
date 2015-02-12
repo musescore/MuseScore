@@ -358,12 +358,12 @@ bool ChordRest::readProperties(XmlReader& e)
                         if (spanner->type() == Element::Type::SLUR)
                               spanner->setStartElement(this);
                         if (e.pasteMode()) {
-                              for (Element* e : spanner->linkList()) {
+                              for (ScoreElement* e : spanner->linkList()) {
                                     if (e == spanner)
                                           continue;
                                     Spanner* ls = static_cast<Spanner*>(e);
                                     ls->setTick(spanner->tick());
-                                    for (Element* ee : linkList()) {
+                                    for (ScoreElement* ee : linkList()) {
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack(cr->track());
@@ -384,12 +384,12 @@ bool ChordRest::readProperties(XmlReader& e)
                         if (start)
                               spanner->setTrack(start->track());
                         if (e.pasteMode()) {
-                              for (Element* e : spanner->linkList()) {
+                              for (ScoreElement* e : spanner->linkList()) {
                                     if (e == spanner)
                                           continue;
                                     Spanner* ls = static_cast<Spanner*>(e);
                                     ls->setTick2(spanner->tick2());
-                                    for (Element* ee : linkList()) {
+                                    for (ScoreElement* ee : linkList()) {
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack2(cr->track());

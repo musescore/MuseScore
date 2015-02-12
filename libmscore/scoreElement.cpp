@@ -56,5 +56,100 @@ void ScoreElement::writeProperty(Xml& xml, P_ID id) const
       xml.tag(id, getProperty(id), propertyDefault(id));
       }
 
+//---------------------------------------------------------
+//   linkTo
+//---------------------------------------------------------
+
+void ScoreElement::linkTo(ScoreElement* element)
+      {
+      Q_ASSERT(element != this);
+      if (!_links) {
+            if (element->links()) {
+                  _links = element->_links;
+                  Q_ASSERT(_links->contains(element));
+                  }
+            else {
+                  _links = new LinkedElements(score());
+                  _links->append(element);
+                  element->_links = _links;
+                  }
+            Q_ASSERT(!_links->contains(this));
+            _links->append(this);
+            }
+      else {
+            _links->append(element);
+            element->_links = _links;
+            }
+      }
+
+//---------------------------------------------------------
+//   unlink
+//---------------------------------------------------------
+
+void ScoreElement::unlink()
+      {
+      if (_links) {
+            Q_ASSERT(_links->contains(this));
+            _links->removeOne(this);
+
+            // if link list is empty, remove list
+            if (_links->size() <= 1) {
+                  if (!_links->empty())         // abnormal case: only "this" is in list
+                        _links->front()->_links = 0;
+                  delete _links;
+                  }
+            _links = 0;
+            }
+      }
+
+//---------------------------------------------------------
+//   undoUnlink
+//---------------------------------------------------------
+
+void ScoreElement::undoUnlink()
+      {
+      if (_links)
+            _score->undo(new Unlink(this));
+      }
+
+//---------------------------------------------------------
+//   linkList
+//---------------------------------------------------------
+
+QList<ScoreElement*> ScoreElement::linkList() const
+      {
+      QList<ScoreElement*> el;
+      if (links())
+            el.append(*links());
+      else
+            el.append((Element*)this);
+      return el;
+      }
+
+//---------------------------------------------------------
+//   LinkedElements
+//---------------------------------------------------------
+
+LinkedElements::LinkedElements(Score* score)
+      {
+      _lid = score->linkId(); // create new unique id
+      }
+
+LinkedElements::LinkedElements(Score* score, int id)
+      {
+      _lid = id;
+      score->linkId(id);      // remember used id
+      }
+
+//---------------------------------------------------------
+//   setLid
+//---------------------------------------------------------
+
+void LinkedElements::setLid(Score* score, int id)
+      {
+      _lid = id;
+      score->linkId(id);
+      }
+
 }
 

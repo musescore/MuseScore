@@ -400,8 +400,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               }
                         }
                   else if (e->type() == Element::Type::KEYSIG && trKeys && mode != TransposeMode::DIATONICALLY) {
-                        QList<Element*> ll = e->linkList();
-                        for (Element* e : ll) {
+                        QList<ScoreElement*> ll = e->linkList();
+                        for (ScoreElement* e : ll) {
                               KeySig* ks = static_cast<KeySig*>(e);
                               if (!ks->isCustom()) {
                                     Key nKey = transposeKey(ks->key(), interval);
@@ -433,7 +433,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         // undoTransposeHarmony does not do links
                         // because it is also used to handle transposing instruments
                         // and score / parts could be in different concert pitch states
-                        for (Element* e : h->linkList())
+                        for (ScoreElement* e : h->linkList())
                               undoTransposeHarmony(static_cast<Harmony*>(e), rootTpc, baseTpc);
                         }
                   }

@@ -1586,7 +1586,7 @@ void Measure::adjustToLen(Fraction nf)
                         QList<TDuration> durList = toDurationList(nf, false, 0);
 
                         // set the existing rest to the first value of the duration list
-                        for (Element* e : rest->linkList()) {
+                        for (ScoreElement* e : rest->linkList()) {
                               s->undo(new ChangeChordRestLen(static_cast<Rest*>(e), durList[0]));
                               }
 

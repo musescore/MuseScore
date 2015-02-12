@@ -1478,10 +1478,10 @@ void Score::deleteItem(Element* el)
 
                         Tuplet* tuplet = chord->tuplet();
                         if (tuplet) {
-                              QList<Element*> tl = tuplet->linkList();
-                              for (Element* e : rest->linkList()) {
+                              QList<ScoreElement*> tl = tuplet->linkList();
+                              for (ScoreElement* e : rest->linkList()) {
                                     DurationElement* de = static_cast<DurationElement*>(e);
-                                    for (Element* ee : tl) {
+                                    for (ScoreElement* ee : tl) {
                                           Tuplet* t = static_cast<Tuplet*>(ee);
                                           if (t->score() == de->score() && t->track() == de->track()) {
                                                 de->setTuplet(t);
@@ -2215,8 +2215,8 @@ void Score::cmdEnterRest(const TDuration& d)
 void Score::removeChordRest(ChordRest* cr, bool clearSegment)
       {
       QList<Segment*> segments;
-      for (Element* e : cr->linkList()) {
-            undo(new RemoveElement(e));
+      for (ScoreElement* e : cr->linkList()) {
+            undo(new RemoveElement(static_cast<Element*>(e)));
             if (clearSegment) {
                   Segment* s = cr->segment();
                   if (!segments.contains(s))
@@ -2298,7 +2298,7 @@ static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
             if (!mb->links())
                   qDebug("searchMeasureBase: no links");
             else {
-                  for (Element* m : *mb->links()) {
+                  for (ScoreElement* m : *mb->links()) {
                         if (m->score() == score)
                               return static_cast<MeasureBase*>(m);
                         }
