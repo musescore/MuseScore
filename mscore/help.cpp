@@ -15,8 +15,6 @@
 
 namespace Ms {
 
-QHelpEngine* helpEngine;
-
 //---------------------------------------------------------
 //   HelpQuery
 //---------------------------------------------------------
@@ -24,21 +22,6 @@ QHelpEngine* helpEngine;
 HelpQuery::HelpQuery(QWidget* parent)
    : QWidgetAction(parent)
       {
-      if (!helpEngine) {
-            QString lang = mscore->getLocaleISOCode();
-            if (lang == "en_US")    // HACK
-                  lang = "en";
-
-            QString s = getSharePath() + "manual/doc_" + lang + ".qhc";
-            qDebug("init Help from: <%s>", qPrintable(s));
-            helpEngine = new QHelpEngine(s, this);
-            if (!helpEngine->setupData()) {
-                  qDebug("cannot setup data for help engine: %s", qPrintable(helpEngine->error()));
-                  delete helpEngine;
-                  helpEngine = 0;
-                  }
-            }
-
       mapper = new QSignalMapper(this);
 
       w = new QWidget(parent);
@@ -106,8 +89,10 @@ void HelpQuery::textChanged(const QString& ss)
                   menu->removeAction(a);
             }
       emptyState = false;
-      QMap<QString,QUrl>list = helpEngine->linksForIdentifier(s);
-//      QMap<QString,QUrl>list = helpEngine->indexModel()->linksForKeyword(s);
+      if (!mscore->helpEngine())
+            return;
+      QMap<QString,QUrl>list = mscore->helpEngine()->linksForIdentifier(s);
+//      QMap<QString,QUrl>list = mscore->helpEngine()->indexModel()->linksForKeyword(s);
       int k = 0;
       for (auto i = list.begin(); i != list.end(); ++i) {
             QAction* action = new QAction(i.key(), this);
@@ -144,7 +129,7 @@ void HelpQuery::actionTriggered(QObject* obj)
 
 void HelpQuery::returnPressed()
       {
-      QMap<QString,QUrl>list = helpEngine->linksForIdentifier(entry->text().toLower());
+      QMap<QString,QUrl>list = mscore->helpEngine()->linksForIdentifier(entry->text().toLower());
       if (!list.isEmpty()) {
             mscore->showHelp(list.begin().value());
             }

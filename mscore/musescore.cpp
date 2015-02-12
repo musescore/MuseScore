@@ -961,13 +961,30 @@ MuseScore::MuseScore()
       connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveTimerTimeout()));
       initOsc();
       startAutoSave();
+
       if (enableExperimental) {
             cornerLabel = new QLabel(this);
             cornerLabel->setScaledContents(true);
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
             }
-      _loginManager = new LoginManager(this);
+      if (!converterMode) {
+            _loginManager = new LoginManager(this);
+
+            // initialize help engine
+            QString lang = mscore->getLocaleISOCode();
+            if (lang == "en_US")    // HACK
+                  lang = "en";
+
+            QString s = getSharePath() + "manual/doc_" + lang + ".qhc";
+            qDebug("init Help from: <%s>", qPrintable(s));
+            _helpEngine = new QHelpEngine(s, this);
+            if (!_helpEngine->setupData()) {
+                  qDebug("cannot setup data for help engine: %s", qPrintable(_helpEngine->error()));
+                  delete _helpEngine;
+                  _helpEngine = 0;
+                  }
+            }
       }
 
 MuseScore::~MuseScore()
@@ -1023,7 +1040,7 @@ void MuseScore::showHelp(const QUrl& url)
       {
       qDebug("showHelp <%s>", qPrintable(url.toString()));
 
-      if (!helpEngine)
+      if (!_helpEngine)
             return;
 
       QAction* a = getAction("local-help");
@@ -1048,12 +1065,12 @@ void MuseScore::showHelp(QString s)
       {
       s = s.toLower();
       qDebug("showHelp <%s>", qPrintable(s));
-      QMap<QString,QUrl>list = helpEngine->linksForIdentifier(s);
+      QMap<QString,QUrl>list = _helpEngine->linksForIdentifier(s);
       if (!list.isEmpty())
             showHelp(*list.begin());
       else {
             qDebug("help for <%s> not found", qPrintable(s));
-            QMap<QString,QUrl>list = helpEngine->linksForIdentifier("manual");
+            QMap<QString,QUrl>list = _helpEngine->linksForIdentifier("manual");
             if (!list.isEmpty())
                   showHelp(*list.begin());
             }
