@@ -357,7 +357,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QComboBox* playMode;
       QNetworkAccessManager* networkManager { 0 };
       QAction* lastCmd                      { 0 };
-      const Shortcut* lastShortcut                { 0 };
+      const Shortcut* lastShortcut          { 0 };
+      QHelpEngine* _helpEngine              { 0 };
 
       QAction* countInAction;
       QAction* metronomeAction;
@@ -683,7 +684,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void showLoginDialog();
       void showUploadScoreDialog();
-      LoginManager* loginManager() { return _loginManager; }
+      LoginManager* loginManager()     { return _loginManager; }
+      QHelpEngine*  helpEngine() const { return _helpEngine;   }
 
       void updateInspector();
       };

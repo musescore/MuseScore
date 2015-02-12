@@ -13,6 +13,7 @@
 #include "helpBrowser.h"
 #include "icons.h"
 #include "help.h"
+#include "musescore.h"
 
 namespace Ms {
 
@@ -24,7 +25,7 @@ namespace Ms {
 HelpBrowser::HelpBrowser(QWidget* parent)
    : QWidget(parent)
       {
-      view    = new HelpView(helpEngine);
+      view    = new HelpView(mscore->helpEngine());
       toolbar = new QWidget;
       toolbar->setSizePolicy(QSizePolicy::Expanding,
       QSizePolicy::Fixed);
