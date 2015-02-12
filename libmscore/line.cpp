@@ -45,7 +45,7 @@ bool LineSegment::readProperties(XmlReader& e)
       const QStringRef& tag(e.name());
       if (tag == "subtype")
             setSpannerSegmentType(SpannerSegmentType(e.readInt()));
-      else if (tag == "off1")       // obsolete
+      else if (tag == "off1")        // off1 is obsolete
             setUserOff(e.readPoint() * spatium());
       else if (tag == "off2")
             setUserOff2(e.readPoint() * spatium());
@@ -54,6 +54,8 @@ bool LineSegment::readProperties(XmlReader& e)
                   qreal _spatium = spatium();
                   setUserOff(QPointF());
                   setReadPos(e.readPoint() * _spatium);
+                  if (e.pasteMode())      // x position will be wrong
+                        setReadPos(QPointF());
                   }
             else
                   e.readNext();

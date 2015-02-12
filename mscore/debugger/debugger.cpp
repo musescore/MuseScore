@@ -1837,7 +1837,7 @@ void ShowElementBase::parentClicked()
 
 void ShowElementBase::linkClicked()
       {
-      emit elementChanged(el->links()->at(0));
+      emit elementChanged(static_cast<Element*>(el->links()->at(0)));
       }
 
 //---------------------------------------------------------
@@ -1846,7 +1846,7 @@ void ShowElementBase::linkClicked()
 
 void ShowElementBase::link2Clicked()
       {
-      emit elementChanged(el->links()->at(1));
+      emit elementChanged(static_cast<Element*>(el->links()->at(1)));
       }
 
 //---------------------------------------------------------
@@ -1855,7 +1855,7 @@ void ShowElementBase::link2Clicked()
 
 void ShowElementBase::link3Clicked()
       {
-      emit elementChanged(el->links()->at(2));
+      emit elementChanged(static_cast<Element*>(el->links()->at(2)));
       }
 
 //---------------------------------------------------------

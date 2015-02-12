@@ -1590,7 +1590,7 @@ void SlurTie::endEdit()
                   // handle parts:
                   //    search new start/end elements
                   //
-                  for (Element* e : linkList()) {
+                  for (ScoreElement* e : linkList()) {
                         Spanner* spanner = static_cast<Spanner*>(e);
                         if (spanner == this)
                               score()->undo()->push1(new ChangeStartEndSpanner(this, editStartElement, editEndElement));
@@ -1598,8 +1598,9 @@ void SlurTie::endEdit()
                               Element* se = 0;
                               Element* ee = 0;
                               if (startElement()) {
-                                    QList<Element*> sel = startElement()->linkList();
-                                    for (Element* e : sel) {
+                                    QList<ScoreElement*> sel = startElement()->linkList();
+                                    for (ScoreElement* eee : sel) {
+                                          Element* e = static_cast<Element*>(eee);
                                           if (e->score() == spanner->score() && e->track() == spanner->track()) {
                                                 se = e;
                                                 break;
@@ -1607,8 +1608,9 @@ void SlurTie::endEdit()
                                           }
                                     }
                               if (endElement()) {
-                                    QList<Element*> sel = endElement()->linkList();
-                                    for (Element* e : sel) {
+                                    QList<ScoreElement*> sel = endElement()->linkList();
+                                    for (ScoreElement* eee : sel) {
+                                          Element* e = static_cast<Element*>(eee);
                                           if (e->score() == spanner->score() && e->track() == spanner->track2()) {
                                                 ee = e;
                                                 break;

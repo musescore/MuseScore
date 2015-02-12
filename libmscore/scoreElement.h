@@ -19,6 +19,21 @@ namespace Ms {
 
 class Score;
 class Xml;
+class ScoreElement;
+
+//---------------------------------------------------------
+//   LinkedElements
+//---------------------------------------------------------
+
+class LinkedElements : public QList<ScoreElement*> {
+      int _lid;         // unique id for every linked list
+
+   public:
+      LinkedElements(Score*);
+      LinkedElements(Score*, int id);
+      void setLid(Score*, int val);
+      int lid() const   { return _lid;    }
+      };
 
 //---------------------------------------------------------
 //   ScoreElement
@@ -27,6 +42,7 @@ class Xml;
 class ScoreElement {
    protected:
       Score* _score;
+      LinkedElements* _links = 0;
 
    public:
       ScoreElement(Score* s) : _score(s)   {}
@@ -44,6 +60,15 @@ class ScoreElement {
       void undoChangeProperty(P_ID, const QVariant&);
       void undoPushProperty(P_ID);
       void writeProperty(Xml& xml, P_ID id) const;
+
+      QList<ScoreElement*> linkList() const;
+
+      void linkTo(ScoreElement*);
+      void unlink();
+      virtual void undoUnlink();
+      int lid() const                         { return _links ? _links->lid() : 0; }
+      const LinkedElements* links() const     { return _links;      }
+      void setLinks(LinkedElements* le)       { _links = le;        }
       };
 }
 

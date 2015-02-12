@@ -288,7 +288,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
                         s = s->next1(Segment::Type::ChordRest);
                         }
                   if (s) {
-                        for (Element* e : spanner->linkList())
+                        for (ScoreElement* e : spanner->linkList())
                               static_cast<Spanner*>(e)->setTick2(s->tick());
                         }
                   Fraction d(1,32);
@@ -589,9 +589,10 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   //
                   Chord* chord = static_cast<Note*>(nr)->chord();
                   _is.slur()->undoChangeProperty(P_ID::SPANNER_TICKS, chord->tick() - _is.slur()->tick());
-                  for (Element* e : _is.slur()->linkList()) {
+                  for (ScoreElement* e : _is.slur()->linkList()) {
                         Slur* slur = static_cast<Slur*>(e);
-                        for (Element* e : chord->linkList()) {
+                        for (ScoreElement* ee : chord->linkList()) {
+                              Element* e = static_cast<Element*>(ee);
                               if (e->score() == slur->score() && e->track() == slur->track2()) {
                                     slur->score()->undo(new ChangeSpannerElements(slur, slur->startElement(), e));
                                     break;
@@ -1289,7 +1290,7 @@ void Score::upDown(bool up, UpDownMode mode)
                   // remove accidental if present to make sure
                   // user added accidentals are removed here.
                   if (oNote->links()) {
-                        for (Element* e : *oNote->links()) {
+                        for (ScoreElement* e : *oNote->links()) {
                               Note* ln = static_cast<Note*>(e);
                               if (ln->accidental())
                                     undoRemoveElement(ln->accidental());
@@ -1469,7 +1470,7 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
             forceAdd = true;
 
       if (note->links()) {
-            for (Element* e : *note->links()) {
+            for (ScoreElement* e : *note->links()) {
                   Note* ln = static_cast<Note*>(e);
                   if (ln->concertPitch() != note->concertPitch())
                         continue;
@@ -2432,7 +2433,7 @@ void Score::cmdInsertClef(ClefType type)
 void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
       {
       Clef* gclef = 0;
-      for (Element* e : cr->linkList()) {
+      for (ScoreElement* e : cr->linkList()) {
             ChordRest* cr = static_cast<ChordRest*>(e);
             Score* score  = cr->score();
 
@@ -2784,7 +2785,7 @@ void Score::cmdSlashFill()
                   s = setNoteRest(s, track + voice, nv, f);
                   Chord* c = static_cast<Chord*>(s->element(track + voice));
                   if (c->links()) {
-                        foreach (Element* e, *c->links()) {
+                        foreach (ScoreElement* e, *c->links()) {
                               Chord* lc = static_cast<Chord*>(e);
                               lc->setSlash(true, true);
                               }
@@ -2859,7 +2860,7 @@ void Score::cmdResequenceRehearsalMarks()
                         RehearsalMark* rm = static_cast<RehearsalMark*>(e);
                         if (last) {
                               QString rmText = nextRehearsalMarkText(last, rm);
-                              for (Element* le : rm->linkList())
+                              for (ScoreElement* le : rm->linkList())
                                     le->undoChangeProperty(P_ID::TEXT, rmText);
                               }
                         last = rm;

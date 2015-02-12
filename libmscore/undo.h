@@ -1318,11 +1318,11 @@ class ChangeNoteEvent : public UndoCommand {
 //---------------------------------------------------------
 
 class Unlink : public UndoCommand {
-      Element* e;
-      Element* le = 0;
+      ScoreElement* e;
+      ScoreElement* le = 0;
 
    public:
-      Unlink(Element* _e);
+      Unlink(ScoreElement* _e);
       virtual void undo();
       virtual void redo();
       UNDO_NAME("Unlink")

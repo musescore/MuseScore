@@ -563,8 +563,7 @@ class Score : public QObject {
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
       void undoChangeBarLine(Measure* m, BarLineType);
-      void undoChangeProperty(Element*, P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
-      void undoChangeProperty(ScoreElement*, P_ID, const QVariant&);
+      void undoChangeProperty(ScoreElement*, P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
       void undoPropertyChanged(Element*, P_ID, const QVariant& v);
       void undoPropertyChanged(ScoreElement*, P_ID, const QVariant& v);
       UndoStack* undo() const;

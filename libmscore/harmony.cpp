@@ -735,7 +735,7 @@ void Harmony::endEdit()
       Text::endEdit();
       layout();
       if (links()) {
-            foreach(Element* e, *links()) {
+            foreach(ScoreElement* e, *links()) {
                   if (e == this)
                         continue;
                   Harmony* h = static_cast<Harmony*>(e);

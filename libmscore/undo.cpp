@@ -363,34 +363,18 @@ void SaveState::redo()
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Score::undoChangeProperty(Element* e, P_ID t, const QVariant& st, PropertyStyle ps)
+void Score::undoChangeProperty(ScoreElement* e, P_ID t, const QVariant& st, PropertyStyle ps)
       {
       if (propertyLink(t)) {
-            if (e->links()) {
-                  foreach(Element* e, *e->links()) {
-                        if (e->getProperty(t) != st)
-                              undo(new ChangeProperty(e, t, st, ps));
-                        }
-                  }
-            else if (e->type() == Element::Type::MEASURE) {
-                  if (e->getProperty(t) != st)
-                        undo(new ChangeProperty(e, t, st, ps));
-                  }
-            else {
-                  if (e->getProperty(t) != st)
-                        undo(new ChangeProperty(e, t, st, ps));
+            for (ScoreElement* ee : e->linkList()) {
+                  if (ee->getProperty(t) != st)
+                        undo(new ChangeProperty(ee, t, st, ps));
                   }
             }
       else {
             if (e->getProperty(t) != st)
-                  undo(new ChangeProperty(e, t, st));
+                  undo(new ChangeProperty(e, t, st, ps));
             }
-      }
-
-void Score::undoChangeProperty(ScoreElement* e, P_ID t, const QVariant& st)
-      {
-      if (e->getProperty(t) != st)
-            undo(new ChangeProperty(e, t, st));
       }
 
 //---------------------------------------------------------
@@ -400,7 +384,7 @@ void Score::undoChangeProperty(ScoreElement* e, P_ID t, const QVariant& st)
 void Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
       {
       if (propertyLink(t) && e->links()) {
-            foreach (Element* ee, *e->links()) {
+            foreach (ScoreElement* ee, *e->links()) {
                   if (ee == e) {
                         if (ee->getProperty(t) != st)
                               undo()->push1(new ChangeProperty(ee, t, st));
@@ -443,7 +427,7 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
       {
       const LinkedElements* l = note->links();
       if (l) {
-            for (Element* e : *l) {
+            for (ScoreElement* e : *l) {
                   Note* n = static_cast<Note*>(e);
                   undo()->push(new ChangePitch(n, pitch, tpc1, tpc2));
                   }
@@ -465,7 +449,7 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
       {
             const LinkedElements* l = note->links();
             if (l) {
-                  for (Element* e : *l) {
+                  for (ScoreElement* e : *l) {
                         Note* n = static_cast<Note*>(e);
                         undo()->push(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
                         }
@@ -959,7 +943,8 @@ void Score::undoAddElement(Element* element)
                         }
                   return;
                   }
-            foreach (Element* e, *links) {
+            foreach (ScoreElement* ee, *links) {
+                  Element* e = static_cast<Element*>(ee);
                   Element* ne = (e == parent) ? element : element->linkedClone();
                   ne->setScore(e->score());
                   ne->setSelected(false);
@@ -1165,8 +1150,9 @@ void Score::undoAddElement(Element* element)
                   //
                   if (element->type() == Element::Type::SLUR && sp != nsp) {
                         if (sp->startElement()) {
-                              QList<Element*> sel = sp->startElement()->linkList();
-                              for (Element* e : sel) {
+                              QList<ScoreElement*> sel = sp->startElement()->linkList();
+                              for (ScoreElement* ee : sel) {
+                                    Element* e = static_cast<Element*>(ee);
                                     if (e->score() == nsp->score() && e->track() == nsp->track()) {
                                           nsp->setStartElement(e);
                                           break;
@@ -1174,8 +1160,9 @@ void Score::undoAddElement(Element* element)
                                     }
                               }
                         if (sp->endElement()) {
-                              QList<Element*> eel = sp->endElement()->linkList();
-                              for (Element* e : eel) {
+                              QList<ScoreElement*> eel = sp->endElement()->linkList();
+                              for (ScoreElement* ee : eel) {
+                                    Element* e = static_cast<Element*>(ee);
                                     if (e->score() == nsp->score() && e->track() == nsp->track2()) {
                                           nsp->setEndElement(e);
                                           break;
@@ -1326,7 +1313,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                   if (staff != ostaff) {
                         Tuplet* nt = 0;
                         if (t->elements().empty() || t->elements().front() == cr) {
-                              for (Element* e : t->linkList()) {
+                              for (ScoreElement* e : t->linkList()) {
                                     Tuplet* nt1 = static_cast<Tuplet*>(e);
                                     if (nt1 == t)
                                           continue;
@@ -1372,7 +1359,8 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                               const LinkedElements* le = t->links();
                               // search the linked tuplet
                               if (le) {
-                                    for (Element* e : *le) {
+                                    for (ScoreElement* ee : *le) {
+                                          Element* e = static_cast<Element*>(ee);
                                           if (e->score() == score && e->track() == ntrack) {
                                                 nt = static_cast<Tuplet*>(e);
                                                 break;
@@ -1397,7 +1385,8 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
 void Score::undoRemoveElement(Element* element)
       {
       QList<Segment*> segments;
-      for (Element* e : element->linkList()) {
+      for (ScoreElement* ee : element->linkList()) {
+            Element* e = static_cast<Element*>(ee);
             undo(new RemoveElement(e));
             if (e->parent() && (e->parent()->type() == Element::Type::SEGMENT)) {
                   Segment* s = static_cast<Segment*>(e->parent());
@@ -2851,7 +2840,7 @@ void ChangeChordStaffMove::flip()
       const LinkedElements* l = chordRest->links();
       int v = chordRest->staffMove();
       if (l) {
-            for (Element* e : *l) {
+            for (ScoreElement* e : *l) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   cr->setStaffMove(staffMove);
                   cr->measure()->cmdUpdateNotes(cr->staffIdx());
@@ -3720,7 +3709,7 @@ void ChangeNoteEvent::flip()
 //   Unlink
 //---------------------------------------------------------
 
-Unlink::Unlink(Element* _e) : e(_e)
+Unlink::Unlink(ScoreElement* _e) : e(_e)
       {
       Q_ASSERT(e->links());
       }
@@ -3745,7 +3734,7 @@ void Unlink::redo()
       {
       Q_ASSERT(le == nullptr);
       const LinkedElements* l = e->links();
-      for (Element* ee : *l) {
+      for (ScoreElement* ee : *l) {
             if (e != ee) {
                   le = ee;
                   break;

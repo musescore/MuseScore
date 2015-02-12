@@ -1528,7 +1528,7 @@ void Text::endEdit()
             // the code to special case transposition relies on the fact
             // that we are setting all linked elements to same text here
 
-            for (Element* e : linkList()) {
+            for (ScoreElement* e : linkList()) {
                   // this line was added in https://github.com/musescore/MuseScore/commit/dcf963b3d6140fa550c08af18d9fb6f6e59733a3
                   // it replaced the commented-out call to undoPushProperty in startEdit() above
                   // the two calls do the same thing, but by doing it here, we can avoid the need if the text hasn't changed
