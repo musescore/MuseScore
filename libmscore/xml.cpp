@@ -674,6 +674,7 @@ QString XmlReader::readXml()
 
 //---------------------------------------------------------
 //   writeXml
+//    string s is already escaped (& -> "&amp;")
 //---------------------------------------------------------
 
 void Xml::writeXml(const QString& name, QString s)

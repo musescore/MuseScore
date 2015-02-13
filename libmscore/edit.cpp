@@ -2335,7 +2335,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
 
       QList<pair<Score*, MeasureBase*>> ml;
       for (Score* score : scoreList())
-            ml.append(pair<Score*,MeasureBase*>(score, searchMeasureBase(score, measure)));
+            ml.append(pair<Score*, MeasureBase*>(score, searchMeasureBase(score, measure)));
 
       MeasureBase* omb = nullptr;   // measure base in "this" score
       MeasureBase* rmb = nullptr;   // measure base in root score (for linking)
@@ -2359,7 +2359,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                               createEndBar = true;
                               score->undoChangeEndBarLineType(lm, BarLineType::NORMAL);
                               }
-                        else if (lm == nullptr)
+                        else if (!lm)
                               createEndBar = true;
                         }
 
@@ -2431,7 +2431,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   if (createEndBar) {
                         m->setEndBarLineType(BarLineType::END, false);
                         }
-                  score->fixTicks();
+//                  score->fixTicks();
                   }
             else {
                   // a frame, not a measure
