@@ -1877,7 +1877,8 @@ void InsertMeasure::undo()
       {
       Score* score = measure->score();
       score->measures()->remove(measure);
-      score->addLayoutFlags(LayoutFlag::FIX_TICKS);
+      score->insertTime(measure->tick(), -measure->ticks());
+      score->fixTicks();
       score->setLayoutAll(true);
       }
 
@@ -1885,7 +1886,8 @@ void InsertMeasure::redo()
       {
       Score* score = measure->score();
       score->addMeasure(measure, pos);
-      score->addLayoutFlags(LayoutFlag::FIX_TICKS);
+      score->insertTime(pos->tick(), measure->ticks());
+      score->fixTicks();
       score->setLayoutAll(true);
       }
 

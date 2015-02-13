@@ -87,14 +87,8 @@ DrumTools::DrumTools(QWidget* parent)
 void DrumTools::updateDrumset()
       {
       drumPalette->clear();
-      if (drumset == 0)
+      if (!drumset)
             return;
-      int drumInstruments = 0;
-      for (int pitch = 0; pitch < 128; ++pitch) {
-            if (drumset->isValid(pitch))
-                  ++drumInstruments;
-            }
-      int i = 0;
       double _spatium = gscore->spatium();
       for (int pitch = 0; pitch < 128; ++pitch) {
             if (!drumset->isValid(pitch))
@@ -133,8 +127,7 @@ void DrumTools::updateDrumset()
             QString shortcut;
             if (sc)
                   shortcut = QChar(sc);
-            drumPalette->append(chord, qApp->translate("drumset", drumset->name(pitch).toUtf8().constData()), shortcut);
-            ++i;
+            drumPalette->append(chord, qApp->translate("drumset", drumset->name(pitch).toLatin1().data()), shortcut);
             }
       }
 
