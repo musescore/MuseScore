@@ -334,6 +334,15 @@ void Score::expandVoice(Segment* s, int track)
                   qDebug("expandVoice: cannot insert element here");
                   return;
                   }
+            if (cr->type() == Element::Type::CHORD) {
+                  // since there was nothing in track at original segment,
+                  // and chord at previous segment does not take us up to tick of original segment.
+                  // we have a hole, but it starts *after* this chord
+                  // move ps to start of hole
+                  // don't move ps for holes after rests
+                  // they will be cleaned up when we fill up to s->tick() with rests below
+                  ps = ps->measure()->undoGetSegment(Segment::Type::ChordRest, tick);
+                  }
             }
       //
       // fill upto s->tick() with rests
