@@ -92,6 +92,7 @@ private slots:
       void incorrectStaffNumber() { mxmlIoTestRef("testIncorrectStaffNumber"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
+      void keysig2() { mxmlIoTest("testKeysig2"); }
       void lines1() { mxmlIoTest("testLines1"); }
       void lines2() { mxmlIoTest("testLines2"); }
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }

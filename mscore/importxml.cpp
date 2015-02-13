@@ -3873,8 +3873,12 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "fifths")
                               key.setKey(Key(ee.text().toInt()));
-                        else if (ee.tagName() == "mode")
-                              domNotImplemented(ee);
+                        else if (ee.tagName() == "mode") {
+                              if (ee.text() == "none")
+                                    key.setCustom(true);
+                              else
+                                    domNotImplemented(ee);
+                              }
                         else if (ee.tagName() == "cancel")
                               domNotImplemented(ee); // TODO
                         else if (ee.tagName() == "key-step") {
