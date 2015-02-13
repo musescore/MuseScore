@@ -1035,8 +1035,6 @@ static int adjust(qreal _spatium4, int slant, const QList<ChordRest*>& cl)
       int n = cl.size();
       const ChordRest* c1 = cl[0];
       const ChordRest* c2 = cl[n-1];
-      if (c1->staff() && c1->staff()->isTabStaff())
-            return 0;
 
       QPointF p1(c1->stemPosBeam());   // canvas coordinates
       qreal slope = (slant * _spatium4) / (c2->stemPosBeam().x() - p1.x());
@@ -1057,6 +1055,13 @@ static int adjust(qreal _spatium4, int slant, const QList<ChordRest*>& cl)
                   int l       = lrint((p3.y() - yUp) / (_spatium4));
                   ml          = qMax(ml, l);
                   }
+            }
+      // on tab staff, reduce a bit the stems (value 4 is experimental)
+      // TODO : proper fix should adapt all the numeric vaues used in Beam::computeStemLen() below
+      // to variable line distance
+      if (c1->staff() && c1->staff()->isTabStaff()) {
+            ml = (ml != 0) ? ml - 4 : 0;
+            return ml;
             }
       return (ml > 0) ? ml : 0;
       }
