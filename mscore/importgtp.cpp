@@ -1540,7 +1540,7 @@ void GuitarPro1::readNote(int string, Note* note)
                         fret = 0;
                   gn->setFret(fret);
                   gn->setString(string);
-                  int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret);
+                  int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret, nullptr, 0);
                   gn->setPitch(grace_pitch);
                   gn->setTpcFromPitch();
 
@@ -1630,7 +1630,7 @@ void GuitarPro1::readNote(int string, Note* note)
       // dead note represented as high numbers - fix to zero
       if (fretNumber > 99 || fretNumber == -1)
             fretNumber = 0;
-      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
+      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber, nullptr, 0);
 
       /* it's possible to specifiy extraordinarily high pitches by
       specifying fret numbers that don't exist. This is an issue that

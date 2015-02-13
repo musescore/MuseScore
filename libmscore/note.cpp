@@ -1184,6 +1184,7 @@ void Note::endDrag()
 
       int staffIdx = chord()->staffIdx() + chord()->staffMove();
       Staff* staff = score()->staff(staffIdx);
+      int tick     = chord()->tick();
 
       if (staff->isTabStaff()) {
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
@@ -1194,7 +1195,7 @@ void Note::endDrag()
             // get a fret number for same pitch on new string
 
             const StringData* strData = staff->part()->instr()->stringData();
-            int nFret       = strData->fret(_pitch, nString);
+            int nFret       = strData->fret(_pitch, nString, staff, tick);
             if (nFret < 0)                      // no fret?
                   return;                       // no party!
 
@@ -1206,7 +1207,6 @@ void Note::endDrag()
             // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
             int nLine   = _line + _lineOffset;
             // get note context
-            int tick      = chord()->tick();
             ClefType clef = staff->clef(tick);
             Key key       = staff->key(tick);
             // determine new pitch of dragged note
@@ -1785,15 +1785,16 @@ void Note::updateAccidental(AccidentalState* as)
 
 void Note::layout10(AccidentalState* as)
       {
-      if (staff()->isTabStaff()) {
+      Staff* st = staff();
+      if (st->isTabStaff()) {
             if (_accidental) {
                   delete _accidental;
                   _accidental = 0;
                   }
             if (_fret < 0) {
                   int string, fret;
-                  const StringData* stringData = staff()->part()->instr()->stringData();
-                  if (stringData->convertPitch(_pitch, &string, &fret)) {
+                  const StringData* stringData = st->part()->instr()->stringData();
+                  if (stringData->convertPitch(_pitch, st, chord()->tick(), &string, &fret)) {
                         _fret   = fret;
                         _string = string;
                         }
@@ -1809,7 +1810,7 @@ void Note::layout10(AccidentalState* as)
                   acci = _accidental->accidentalType();
                   if (acci == Accidental::Type::SHARP || acci == Accidental::Type::FLAT) {
                         // TODO - what about double flat and double sharp?
-                        Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
+                        Key key = (st && chord()) ? st->key(chord()->tick()) : Key::C;
                         int ntpc = pitch2tpc(epitch(), key, acci == Accidental::Type::SHARP ? Prefer::SHARPS : Prefer::FLATS);
                         if (ntpc != tpc()) {
 //not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), tpc(), ntpc, acci);
