@@ -216,7 +216,7 @@ ClefType Staff::clef(int tick) const
 
 void Staff::dumpClefs(const char* title) const
       {
-      qDebug("dump clefs (%ld): %s", clefs.size(), title);
+      qDebug("dump clefs (%zd): %s", clefs.size(), title);
       for (auto& i : clefs) {
             qDebug("  %d: %d %d", i.first, int(i.second._concertClef), int(i.second._transposingClef));
             }
@@ -228,7 +228,7 @@ void Staff::dumpClefs(const char* title) const
 
 void Staff::dumpKeys(const char* title) const
       {
-      qDebug("dump keys (%ld): %s", _keys.size(), title);
+      qDebug("dump keys (%zd): %s", _keys.size(), title);
       for (auto& i : _keys) {
             qDebug("  %d: %d", i.first, int(i.second.key()));
             }
