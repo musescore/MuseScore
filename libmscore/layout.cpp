@@ -124,12 +124,18 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       int downDots = 0;
       bool upHooks = false;
       bool downHooks = false;
+      // also check for grace notes
+      bool upGrace = false;
+      bool downGrace = false;
 
       for (int track = startTrack; track < endTrack; ++track) {
             Element* e = segment->element(track);
             if (e && (e->type() == Element::Type::CHORD)) {
                   Chord* chord = static_cast<Chord*>(e);
+                  bool hasGraceBefore = false;
                   for (Chord* c : chord->graceNotes()) {
+                        if (c->isGraceBefore())
+                              hasGraceBefore = true;
                         // layout grace note noteheads
                         layoutChords2(c->notes(), c->up());
                         // layout grace note chords
@@ -142,6 +148,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         maxUpMag = qMax(maxUpMag, chord->mag());
                         if (!upHooks)
                               upHooks = chord->hook();
+                        if (hasGraceBefore)
+                              upGrace = true;
                         }
                   else {
                         ++downVoices;
@@ -150,6 +158,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         maxDownMag = qMax(maxDownMag, chord->mag());
                         if (!downHooks)
                               downHooks = chord->hook();
+                        if (hasGraceBefore)
+                              downGrace = true;
                         }
                   }
             }
@@ -385,7 +395,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     }
                               }
                         }
-                  else if (conflictUnison && separation == 0)
+                  else if (conflictUnison && separation == 0 && (!downGrace || upGrace))
                         downOffset = maxUpWidth + 0.3 * sp;
                   else if (conflictUnison)
                         upOffset = maxDownWidth + 0.3 * sp;
