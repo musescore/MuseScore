@@ -1569,6 +1569,8 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
       else {
             // traditional key signature
             xml.tag("fifths", static_cast<int>(kse.key()));
+            if (kse.custom())
+                  xml.tag("mode", "none");
             }
 
       xml.etag();
