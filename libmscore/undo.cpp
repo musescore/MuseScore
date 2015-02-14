@@ -977,6 +977,7 @@ void Score::undoAddElement(Element* element)
                               undo(new AddElement(lb));
                         else {
                               Element* e = lb->linkedClone();
+                              e->setScore(s);
                               Measure* nm = s->tick2measure(m->tick());
                               e->setParent(nm);
                               undo(new AddElement(e));
