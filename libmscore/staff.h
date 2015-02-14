@@ -247,6 +247,12 @@ class Staff : public QObject, public ScoreElement {
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+
+#ifndef NDEBUG
+      void dumpClefs(const char* title) const;
+#else
+      void dumpClefs(const char*) const {}
+#endif
       };
 
 }     // namespace Ms

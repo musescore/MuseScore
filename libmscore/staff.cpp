@@ -209,6 +209,20 @@ ClefType Staff::clef(int tick) const
       return score()->styleB(StyleIdx::concertPitch) ? c._concertClef : c._transposingClef;
       }
 
+#ifndef NDEBUG
+//---------------------------------------------------------
+//   dumpClef
+//---------------------------------------------------------
+
+void Staff::dumpClefs(const char* title) const
+      {
+      printf("dump clefs (%ld): %s\n", clefs.size(), title);
+      for (auto& i : clefs) {
+            printf("  %d: %d %d\n", i.first, int(i.second._concertClef), int(i.second._transposingClef));
+            }
+      }
+#endif
+
 //---------------------------------------------------------
 //   setClef
 //---------------------------------------------------------
@@ -225,6 +239,7 @@ void Staff::setClef(Clef* clef)
                   }
             }
       clefs.setClef(clef->segment()->tick(), clef->clefTypeList());
+//      dumpClefs("setClef");
       }
 
 //---------------------------------------------------------
@@ -244,12 +259,15 @@ void Staff::removeClef(Clef* clef)
             }
       clefs.erase(clef->segment()->tick());
       for (Segment* s = clef->segment()->prev(); s && s->tick() == tick; s = s->prev()) {
-            if (s->segmentType() == Segment::Type::Clef && s->element(clef->track())) {
+            if (s->segmentType() == Segment::Type::Clef
+               && s->element(clef->track())
+               && !s->element(clef->track())->generated()) {
                   // a previous clef at the same tick position gets valid
                   clefs.setClef(tick, static_cast<Clef*>(s->element(clef->track()))->clefTypeList());
                   break;
                   }
             }
+//      dumpClefs("removeClef");
       }
 
 //---------------------------------------------------------
