@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.00">
+<museScore version="2.05">
+  <programVersion>2.0.0</programVersion>
+  <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
+    <Synthesizer>
+      <s>
+        </s>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      <f>
+        </f>
+      </Synthesizer>
     <Division>480</Division>
     <Style>
       <page-layout>
@@ -27,14 +51,25 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2015-02-14</metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -68,22 +103,24 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>10</height>
+        <height>13.6235</height>
         <Text>
           <style>Title</style>
           <text>Test</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>Join Measure</text>
+          <text>Join Measure
+test staff clef map after join</text>
           </Text>
         </VBox>
-      <Measure number="1" len="1/2">
+      <Measure number="1">
         <Clef>
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
@@ -96,44 +133,10 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>62</pitch>
-            <tpc>16</tpc>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="2" len="1/2">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>64</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <HairPin id="2">
-          <subtype>0</subtype>
-          <veloChange>10</veloChange>
-          </HairPin>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
-        </Measure>
-      <Measure number="3">
-        <endSpanner id="2"/>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
@@ -144,13 +147,81 @@
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
+        </Measure>
+      <Measure number="3">
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>43</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>43</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>43</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>43</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>

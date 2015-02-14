@@ -31,13 +31,10 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       ScoreRange range;
       range.read(m1->first(), m2->last());
 
-      int tick = m1->tick();
-      int len  = m2->endTick() - tick;
       undoRemoveMeasures(m1, m2);
-      undoInsertTime(tick, -len);
-
-      Measure* m = static_cast<Measure*>(insertMeasure(Element::Type::MEASURE, m2->next(), true));
-      fixTicks();
+      Measure* m = new Measure(this);
+      m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
+         m2->endBarLineVisible(), m2->endBarLineColor());
 
       m->setTick(m1->tick());
       m->setTimesig(m1->timesig());
@@ -48,6 +45,8 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
                   break;
             }
       m->setLen(f);
+      undo(new InsertMeasure(m, m2->next()));
+
       range.write(this, m1->tick());
 
       endCmd();
