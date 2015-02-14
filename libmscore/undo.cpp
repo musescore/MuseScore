@@ -1886,7 +1886,8 @@ void InsertMeasure::redo()
       {
       Score* score = measure->score();
       score->addMeasure(measure, pos);
-      score->insertTime(pos->tick(), measure->ticks());
+      if (pos)
+            score->insertTime(pos->tick(), measure->ticks());
       score->fixTicks();
       score->setLayoutAll(true);
       }

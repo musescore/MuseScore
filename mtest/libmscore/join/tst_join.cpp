@@ -17,6 +17,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/chord.h"
 
 #define DIR QString("libmscore/join/")
 
@@ -32,6 +33,7 @@ class TestJoin : public QObject, public MTest
 
       void join(const char* p1, const char* p2);
       void join(const char* p1, const char* p2, int);
+      void join1(const char* p1);
 
    private slots:
       void initTestCase();
@@ -42,6 +44,7 @@ class TestJoin : public QObject, public MTest
       void join05() { join("join05.mscx", "join05-ref.mscx"); }
       void join06() { join("join06.mscx", "join06-ref.mscx", 1); }
       void join07() { join("join07.mscx", "join07-ref.mscx"); }
+      void join08() { join1("join08.mscx"); }
       };
 
 //---------------------------------------------------------
@@ -90,6 +93,33 @@ void TestJoin::join(const char* p1, const char* p2, int index)
       score->cmdJoinMeasure(m1, m2);
 
       QVERIFY(saveCompareScore(score, p1, DIR + p2));
+      delete score;
+      }
+
+void TestJoin::join1(const char* p1)
+      {
+      Score* score = readScore(DIR + p1);
+      score->doLayout();
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+
+      QVERIFY(m1 != 0);
+      QVERIFY(m2 != 0);
+      QVERIFY(m1 != m2);
+
+      score->cmdJoinMeasure(m1, m2);
+      score->updateNotes();
+
+
+      // check if notes are still on line 6
+      Segment* s = score->firstSegment(Segment::Type::ChordRest);
+
+      for (int i = 0; i < 8; ++i) {
+            Note* note = static_cast<Chord*>(s->element(0))->upNote();
+            QVERIFY(note->line() == 6);
+            s = s->next1(Segment::Type::ChordRest);
+            }
+
       delete score;
       }
 
