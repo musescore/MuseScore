@@ -1607,8 +1607,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             KeySigEvent keyIdx = staff->keySigEvent(tick);
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                  // search only up to the first ChordRest
-                  if (seg->segmentType() == Segment::Type::ChordRest)
+                  // search only up to the first ChordRest/StartRepeatBarLine
+                  if (seg->segmentType() & (Segment::Type::ChordRest | Segment::Type::StartRepeatBarLine))
                         break;
                   Element* el = seg->element(strack);
                   if (!el)
@@ -1657,12 +1657,26 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef->setSmall(false);
                         clef->setGenerated(true);
 
-                        Segment* s = m->undoGetSegment(Segment::Type::Clef, tick);
+                        Segment* ns = m->findSegment(Segment::Type::Clef, tick);
+                        Segment* s;
+                        if (ns && !ns->element(clef->track())) {
+                              s = ns;
+                              ns = 0;
+                              }
+                        else {
+                              s  = new Segment(m, Segment::Type::Clef, tick);
+                              undoAddElement(s);
+                              }
                         clef->setParent(s);
+
+                        // if there is already a clef at the same tick position,
+                        // then this is the real clef change and we have to
+                        // show the previous clef type at tick-1
+
+                        ClefTypeList clefType = staff->clefType(ns ? tick - 1 : tick);
                         clef->layout();
-                        clef->setClefType(staff->clefType(tick));  // set before add !
+                        clef->setClefType(clefType);  // set before add !
                         undo(new AddElement(clef));
-                        // undoAddElement(clef);
                         }
                   else if (clef->generated()) {
                         ClefTypeList cl = staff->clefType(tick);
