@@ -230,25 +230,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     }
                               e.readNext();
                               }
-/* unused: Lyrics are now part of <Chord>
- * and parenting lyrics to segment is wrong anyway!
-                        else if (tag == "Lyrics") {
-                              Lyrics* lyrics = new Lyrics(this);
-                              lyrics->setTrack(e.track());
-                              lyrics->read(e);
-                              lyrics->setTrack(e.track());
-                              int tick = e.tick();
-                              Segment* segment = tick2segment(tick);
-                              if (segment) {
-                                    lyrics->setParent(segment);
-                                    undoAddElement(lyrics);
-                                    }
-                              else {
-                                    delete lyrics;
-                                    qDebug("no segment found for lyrics");
-                                    }
-                              }
-*/
                         else if (tag == "Harmony") {
                               Harmony* harmony = new Harmony(this);
                               harmony->setTrack(e.track());
@@ -295,18 +276,19 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                            || tag == "FiguredBass"
                            ) {
                               Element* el = Element::name2Element(tag, this);
-                              el->setTrack(e.track());             // a valid track might be necessary for el->read() to work
+                              el->setTrack(e.track());      // a valid track might be necessary for el->read() to work
+                              el->read(e);
 
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
                               el->setParent(seg);
-                              el->read(e);
 
                               // be sure to paste the element in the destination track;
                               // setting track needs to be repeated, as it might have been overwritten by el->read()
                               el->setTrack(e.track());
-                              undoAddElement(el);
+
+                              undoChangeElement(seg->element(e.track()), el);
                               }
                         else if (tag == "Clef") {
                               Clef* clef = new Clef(this);
@@ -318,7 +300,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     m = m->prevMeasure();
                               Segment* segment = m->undoGetSegment(Segment::Type::Clef, tick);
                               clef->setParent(segment);
-                              undoAddElement(clef);
+                              undoChangeElement(segment->element(e.track()), clef);
                               }
                         else if (tag == "Breath") {
                               Breath* breath = new Breath(this);
@@ -328,7 +310,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Measure* m = tick2measure(tick);
                               Segment* segment = m->undoGetSegment(Segment::Type::Breath, tick);
                               breath->setParent(segment);
-                              undoAddElement(breath);
+                              undoChangeElement(segment->element(e.track()), breath);
                               }
                         else if (tag == "Beam") {
                               Beam* beam = new Beam(this);

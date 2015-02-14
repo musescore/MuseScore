@@ -416,7 +416,10 @@ void Score::undoPropertyChanged(ScoreElement* e, P_ID t, const QVariant& st)
 
 void Score::undoChangeElement(Element* oldElement, Element* newElement)
       {
-      undo(new ChangeElement(oldElement, newElement));
+      if (!oldElement)
+            undoAddElement(newElement);
+      else
+            undo(new ChangeElement(oldElement, newElement));
       }
 
 //---------------------------------------------------------
