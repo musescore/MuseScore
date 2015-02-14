@@ -3165,7 +3165,13 @@ void ScoreView::startNoteEntry()
       if (el == 0 || (el->type() != Element::Type::CHORD && el->type() != Element::Type::REST && el->type() != Element::Type::NOTE)) {
             // if no note/rest is selected, start with voice 0
             int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
-            el = _score->searchNote(0, track);
+            // try to find an appropriate measure to start in
+            while (el && el->type() != Element::Type::MEASURE)
+                  el = el->parent();
+            int tick = el ? static_cast<Measure*>(el)->tick() : 0;
+            el = _score->searchNote(tick, track);
+            if (!el)
+                  el = _score->searchNote(0, track);
             Q_ASSERT(el);
             }
       if (el->type() == Element::Type::CHORD) {
@@ -3183,6 +3189,7 @@ void ScoreView::startNoteEntry()
       is.update(el);
       is.setRest(false);
       is.setNoteEntryMode(true);
+      adjustCanvasPosition(el, false);
 
       getAction("pad-rest")->setChecked(false);
       setMouseTracking(true);
