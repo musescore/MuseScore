@@ -652,18 +652,33 @@ QString StaffType::durationString(TDuration::DurationType type, int dots) const
 
 int StaffType::physStringToVisual(int strg) const
       {
-      if(strg <= STRING_NONE || strg >= _lines)             // if no physical string, return topmost visual string
-            return 0;
+#if 0
+      // in preparation for support of historic tab indications of bass strings
+      if (strg < 0)                       // if above top string, return top string
+            strg = 0;
+      if (strg >= _lines) {               // if below bottom string...
+            if (_slashStyle && _genDurations)   // if no stem and duration symbols (= historic)
+                  strg = _lines;                //    return bottom+1 string
+            else                                // otherwise
+                  strg = _lines - 1;            //    return bottom string
+            }
+#endif
+      if (strg < 0)           // if physical string does not exist, reduce to nearest existing
+            strg = 0;
+      if (strg >= _lines)     // if physical string has no visual representation, reduce to nearest visual line
+            strg = _lines - 1;
       // if TAB upside down, reverse string number
       return (_upsideDown ? _lines - 1 - strg : strg);
       }
 
-int StaffType::visualStringToPhys(int strg) const
+int StaffType::visualStringToPhys(int line) const
       {
-      if(strg <= VISUAL_STRING_NONE || strg >= _lines)      // if no visual string, return topmost physical string
-            return 0;
+      if (line < 0)           // if visual line does not exist, reduce to nearest existing
+            line = 0;
+      if (line >= _lines)
+            line = _lines - 1;
       // if TAB upside down, reverse string number
-      return (_upsideDown ? _lines - 1 - strg : strg);
+      return (_upsideDown ? _lines - 1 - line : line);
       }
 
 //---------------------------------------------------------
