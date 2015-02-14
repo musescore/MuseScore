@@ -250,8 +250,10 @@ class Staff : public QObject, public ScoreElement {
 
 #ifndef NDEBUG
       void dumpClefs(const char* title) const;
+      void dumpKeys(const char* title) const;
 #else
       void dumpClefs(const char*) const {}
+      void dumpKeys(const char*) const {}
 #endif
       };
 

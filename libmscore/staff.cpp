@@ -216,9 +216,21 @@ ClefType Staff::clef(int tick) const
 
 void Staff::dumpClefs(const char* title) const
       {
-      printf("dump clefs (%ld): %s\n", clefs.size(), title);
+      qDebug("dump clefs (%ld): %s", clefs.size(), title);
       for (auto& i : clefs) {
-            printf("  %d: %d %d\n", i.first, int(i.second._concertClef), int(i.second._transposingClef));
+            qDebug("  %d: %d %d", i.first, int(i.second._concertClef), int(i.second._transposingClef));
+            }
+      }
+
+//---------------------------------------------------------
+//   dumpKeys
+//---------------------------------------------------------
+
+void Staff::dumpKeys(const char* title) const
+      {
+      qDebug("dump keys (%ld): %s", _keys.size(), title);
+      for (auto& i : _keys) {
+            qDebug("  %d: %d", i.first, int(i.second.key()));
             }
       }
 #endif
@@ -358,6 +370,7 @@ KeySigEvent Staff::keySigEvent(int tick) const
 void Staff::setKey(int tick, KeySigEvent k)
       {
       _keys.setKey(tick, k);
+//      dumpKeys("setKey");
       }
 
 //---------------------------------------------------------
@@ -367,6 +380,7 @@ void Staff::setKey(int tick, KeySigEvent k)
 void Staff::removeKey(int tick)
       {
       _keys.erase(tick);
+//      dumpKeys("removeKey");
       }
 
 //---------------------------------------------------------
@@ -950,6 +964,8 @@ void Staff::undoSetColor(const QColor& /*val*/)
 
 void Staff::insertTime(int tick, int len)
       {
+      qDebug("Staff: %d insertTime at %d len %d", idx(), tick, len);
+
       // when inserting measures directly in front of a key change,
       // using lower_bound() (for tick != 0) means the key change at that point is moved later
       // so the measures being inserted get the old key signature
@@ -958,8 +974,11 @@ void Staff::insertTime(int tick, int len)
       // but either way, at the begining of the staff, we need to keep the original key,
       // so we use upper_bound() in that case, and the initial key signature is moved in insertMeasure()
 
+      // ws: i don't understand this (and it does not work right: #46671)
+
       KeyList kl2;
-      for (auto i = tick ? _keys.lower_bound(tick) : _keys.upper_bound(tick); i != _keys.end();) {
+//      for (auto i = tick ? _keys.lower_bound(tick) : _keys.upper_bound(tick); i != _keys.end();) {
+      for (auto i = _keys.upper_bound(tick); i != _keys.end();) {
             KeySigEvent kse = i->second;
             int k   = i->first;
             _keys.erase(i++);

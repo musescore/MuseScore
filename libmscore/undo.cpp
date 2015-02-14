@@ -3209,10 +3209,12 @@ void RemoveMeasures::redo()
 
 void InsertMeasures::undo()
       {
-      fm->score()->measures()->remove(fm, lm);
-      fm->score()->fixTicks();
-      fm->score()->setLayoutAll(true);
-      fm->score()->connectTies(true);
+      Score* s = fm->score();
+      s->measures()->remove(fm, lm);
+      s->fixTicks();
+      s->insertTime(fm->tick(), -(lm->endTick() - fm->tick()));
+      s->setLayoutAll(true);
+      s->connectTies(true);
       }
 
 //---------------------------------------------------------
@@ -3225,6 +3227,7 @@ void InsertMeasures::redo()
       Score* s = fm->score();
       s->measures()->insert(fm, lm);
       s->fixTicks();
+      s->insertTime(fm->tick(), lm->endTick() - fm->tick());
       s->setLayoutAll(true);
       s->connectTies(true);
 
