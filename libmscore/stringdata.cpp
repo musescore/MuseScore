@@ -137,7 +137,7 @@ bool StringData::convertPitch(int pitch, int* string, int* fret) const
 int StringData::getPitch(int string, int fret) const
       {
       int strings = stringTable.size();
-      if (strings < 1)
+      if (strings < 1 || string >= strings)
             return INVALID_PITCH;
       instrString strg = stringTable.at(strings - string - 1);
       return strg.pitch + (strg.open ? 0 : fret);
