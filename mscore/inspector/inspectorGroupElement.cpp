@@ -124,14 +124,11 @@ void InspectorGroupElement::notesClicked()
       Score* score = inspector->el().front()->score();
       QList<Element*> el = score->selection().elements();
       QList<Element*> nel;
-      bool elementFound = false;
+      score->deselectAll();
       for (Element* e : el) {
             if (e->type() == Element::Type::NOTE) {
                   nel.append(e);
-                  if (!elementFound)
-                        score->deselectAll();
                   score->selection().add(e);
-                  elementFound = true;
                   }
             }
       inspector->setElements(nel);
@@ -147,14 +144,11 @@ void InspectorGroupElement::restsClicked()
       Score* score = inspector->el().front()->score();
       QList<Element*> el = score->selection().elements();
       QList<Element*> nel;
-      bool elementFound = false;
+      score->deselectAll();
       for (Element* e : el) {
             if (e->type() == Element::Type::REST) {
                   nel.append(e);
-                  if (!elementFound)
-                        score->deselectAll();
                   score->selection().add(e);
-                  elementFound = true;
                   }
             }
       inspector->setElements(nel);
