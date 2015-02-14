@@ -156,7 +156,7 @@ void TempoText::textChanged()
       QString s = text();
 
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
-            QRegExp re(QString(tp[i].pattern)+"\\s*=\\s*(\\d+)");      // 1/4
+            QRegExp re(QString(tp[i].pattern)+"\\s*=\\s*(\\d+([\.,]\\d+)?)");      // 1/4
             if (re.indexIn(s) != -1) {
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
