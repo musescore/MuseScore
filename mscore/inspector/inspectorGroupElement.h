@@ -27,11 +27,15 @@ class InspectorGroupElement : public InspectorBase {
       Q_OBJECT
 
       Ui::InspectorGroupElement ge;
+      QToolButton* notes;
+      QToolButton* rests;
 
    private slots:
       void setColor();
       void setVisible();
       void setInvisible();
+      void notesClicked();
+      void restsClicked();
 
    public:
       InspectorGroupElement(QWidget* parent);

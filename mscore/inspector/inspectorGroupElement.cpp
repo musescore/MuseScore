@@ -32,6 +32,36 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
       connect(ge.setColor, SIGNAL(clicked()), SLOT(setColor()));
       connect(ge.setVisible, SIGNAL(clicked()), SLOT(setVisible()));
       connect(ge.setInvisible, SIGNAL(clicked()), SLOT(setInvisible()));
+
+      //
+      // Select
+      //
+      QLabel* l = new QLabel;
+      l->setText(tr("Select"));
+      QFont font(l->font());
+      font.setBold(true);
+      l->setFont(font);
+      l->setAlignment(Qt::AlignHCenter);
+      _layout->addWidget(l);
+      QFrame* f = new QFrame;
+      f->setFrameStyle(QFrame::HLine | QFrame::Raised);
+      f->setLineWidth(2);
+      _layout->addWidget(f);
+      QHBoxLayout* hbox = new QHBoxLayout;
+
+      notes = new QToolButton(this);
+      notes->setText(tr("Notes"));
+      notes->setEnabled(true);
+      hbox->addWidget(notes);
+
+      rests = new QToolButton(this);
+      rests->setText(tr("Rests"));
+      rests->setEnabled(true);
+      hbox->addWidget(rests);
+
+      _layout->addLayout(hbox);
+      connect(notes, SIGNAL(clicked()), SLOT(notesClicked()));
+      connect(rests, SIGNAL(clicked()), SLOT(restsClicked()));
       }
 
 //---------------------------------------------------------
@@ -83,6 +113,52 @@ void InspectorGroupElement::setInvisible()
                   e->score()->undoChangeProperty(e, P_ID::VISIBLE, false);
             }
       score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   notesClicked
+//---------------------------------------------------------
+
+void InspectorGroupElement::notesClicked()
+      {
+      Score* score = inspector->el().front()->score();
+      QList<Element*> el = score->selection().elements();
+      QList<Element*> nel;
+      bool elementFound = false;
+      for (Element* e : el) {
+            if (e->type() == Element::Type::NOTE) {
+                  nel.append(e);
+                  if (!elementFound)
+                        score->deselectAll();
+                  score->selection().add(e);
+                  elementFound = true;
+                  }
+            }
+      inspector->setElements(nel);
+      score->end();
+      }
+
+//---------------------------------------------------------
+//   restsClicked
+//---------------------------------------------------------
+
+void InspectorGroupElement::restsClicked()
+      {
+      Score* score = inspector->el().front()->score();
+      QList<Element*> el = score->selection().elements();
+      QList<Element*> nel;
+      bool elementFound = false;
+      for (Element* e : el) {
+            if (e->type() == Element::Type::REST) {
+                  nel.append(e);
+                  if (!elementFound)
+                        score->deselectAll();
+                  score->selection().add(e);
+                  elementFound = true;
+                  }
+            }
+      inspector->setElements(nel);
+      score->end();
       }
 
 }
