@@ -681,7 +681,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Center text vertical to text baseline</string>
+            <string>Align baseline of text to reference point</string>
            </property>
            <property name="text">
             <string notr="true">...</string>
