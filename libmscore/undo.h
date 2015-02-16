@@ -547,34 +547,6 @@ class ChangeInstrumentLong : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeChordRestLen
-//---------------------------------------------------------
-
-class ChangeChordRestLen : public UndoCommand {
-      ChordRest* cr;
-      TDuration d;
-      void flip();
-
-   public:
-      ChangeChordRestLen(ChordRest*, const TDuration& d);
-      UNDO_NAME("ChangeChordRestLen")
-      };
-
-//---------------------------------------------------------
-//   ChangeChordRestDuration
-//---------------------------------------------------------
-
-class ChangeChordRestDuration : public UndoCommand {
-      ChordRest* cr;
-      Fraction f;
-      void flip();
-
-   public:
-      ChangeChordRestDuration(ChordRest*, const Fraction& f);
-      UNDO_NAME("ChangeChordRestDuration")
-      };
-
-//---------------------------------------------------------
 //   MoveElement
 //---------------------------------------------------------
 

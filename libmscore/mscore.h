@@ -353,7 +353,6 @@ class MScore : public QObject {
    public:
       enum class Direction  : char { AUTO, UP, DOWN };
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
-
       static void init();
 
       static MStyle* defaultStyle();

@@ -555,8 +555,11 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             ts->setTrack(track);
             ts->setStretch((ns / fm->timesig()).reduced());
             ts->setSelected(false);
-            undoAddElement(ts);
-            timesigStretchChanged(ts, fm, staffIdx);
+            if (seg->element(track))
+                  undoChangeElement(seg->element(track), ts);
+            else
+                  undoAddElement(ts);
+//            timesigStretchChanged(ts, fm, staffIdx);
             return;
             }
 

@@ -652,21 +652,16 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
 
 void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
       {
-      Staff* ostaff = cr->staff();
-      LinkedStaves* linkedStaves = ostaff->linkedStaves();
-      if (linkedStaves) {
-            foreach(Staff* staff, linkedStaves->staves()) {
-                  if (staff == cr->staff())
-                        continue;
-                  ChordRest *ncr;
-                  if (cr->isGrace())
-                        ncr = findLinkedChord(static_cast<Chord*>(cr), staff);
-                  else
-                        ncr = static_cast<ChordRest*>(findLinkedVoiceElement(cr, staff));
-                  undo(new ChangeChordRestLen(ncr, d));
-                  }
+      auto sl = cr->staff()->staffList();
+      for (Staff* staff : sl) {
+            ChordRest *ncr;
+            if (cr->isGrace())
+                  ncr = findLinkedChord(static_cast<Chord*>(cr), staff);
+            else
+                  ncr = static_cast<ChordRest*>(findLinkedVoiceElement(cr, staff));
+            ncr->undoChangeProperty(P_ID::DURATION_TYPE, QVariant::fromValue(d));
+            ncr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(d.fraction()));
             }
-      undo(new ChangeChordRestLen(cr, d));
       }
 
 //---------------------------------------------------------
@@ -2365,48 +2360,6 @@ void ChangeInstrumentLong::flip()
       part->setLongNames(text, tick);
       text = s;
       part->score()->setLayoutAll(true);
-      }
-
-//---------------------------------------------------------
-//   ChangeChordRestLen
-//---------------------------------------------------------
-
-ChangeChordRestLen::ChangeChordRestLen(ChordRest* c, const TDuration& _d)
-   : cr(c), d(_d)
-      {
-      Q_ASSERT(c);
-      }
-
-void ChangeChordRestLen::flip()
-      {
-      TDuration od = cr->durationType();
-      cr->setDurationType(d);
-      if (d == TDuration::DurationType::V_MEASURE) {
-            cr->setDuration(cr->measure()->len());
-            }
-      else {
-            cr->setDuration(d.fraction());
-            }
-      d   = od;
-      cr->score()->setLayoutAll(true);
-      }
-
-//---------------------------------------------------------
-//   ChangeChordRestDuration
-///  Used to change the duration only.
-///  Mainly used for full time rest to make them look different for 8/4 and up.
-//---------------------------------------------------------
-
-ChangeChordRestDuration::ChangeChordRestDuration(ChordRest* c, const Fraction& _f)
-   : cr(c), f(_f)
-      {
-      }
-
-void ChangeChordRestDuration::flip()
-      {
-      Fraction od = cr->duration();
-      cr->setDuration(f);
-      f   = od;
       }
 
 //---------------------------------------------------------

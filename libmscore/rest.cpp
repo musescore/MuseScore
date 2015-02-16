@@ -828,7 +828,7 @@ void Rest::read(XmlReader& e)
 
 bool Rest::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::USER_OFF:
                   score()->addRefresh(canvasBoundingRect());
                   setUserOff(v.toPointF());

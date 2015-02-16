@@ -31,13 +31,14 @@ class TDuration {
             };
    private:
       DurationType _val;
-      int _dots;
+      char _dots;
 
    public:
       TDuration() : _val(DurationType::V_INVALID), _dots(0) {}
       TDuration(const Fraction&);
       TDuration(const QString&);
       TDuration(DurationType t) : _val(t), _dots(0) {}
+
       DurationType type() const             { return _val; }
       bool isValid() const                  { return _val != DurationType::V_INVALID; }
       bool isZero() const                   { return _val == DurationType::V_ZERO; }
@@ -72,6 +73,10 @@ class TDuration {
 extern QList<TDuration> toDurationList(
             Fraction, bool useDots, int maxDots = 2, bool printRestRemains = true);
 
+
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::TDuration)
+
 #endif
 

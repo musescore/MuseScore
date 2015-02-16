@@ -793,7 +793,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                   int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
                   if (t == 0) // avoid crash on very short tremolo
                         t = 1;
-                  int n = chord->durationTicks() / t;
+                  int n = chord->duration().ticks() / t;
                   int l = 1000 / n;
                   for (int k = 0; k < notes; ++k) {
                         NoteEventList* events = &(ell)[k];

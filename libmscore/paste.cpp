@@ -190,7 +190,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     //shorten last cr to fit in the space made by makeGap
                                     if ((tick - dstTick) + cr->actualTicks() > tickLen) {
                                           int newLength = tickLen - (tick - dstTick);
-                                          cr->setDuration(newLength);
+                                          cr->setDuration(Fraction::fromTicks(newLength));
                                           cr->setDurationType(newLength);
                                           }
                                     pasteChordRest(cr, tick, e.transpose());
@@ -666,7 +666,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                           }
                                     else
                                           // by default, assign to FiguredBass element the duration of the chord it refers to
-                                          ticks = static_cast<ChordRest*>(currSegm->element(destTrack))->durationTicks();
+                                          ticks = static_cast<ChordRest*>(currSegm->element(destTrack))->duration().ticks();
                                     // in both cases, look for an existing f.b. element in segment and remove it, if found
                                     FiguredBass* oldFB = nullptr;
                                     foreach (Element* a, currSegm->annotations()) {
