@@ -763,59 +763,6 @@
             </property>
            </spacer>
           </item>
-          <item row="10" column="2">
-           <widget class="QCheckBox" name="genCourtesyClef">
-            <property name="text">
-             <string>Create courtesy clefs</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="0" colspan="2">
-           <widget class="QCheckBox" name="genTimesig">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Create time signature for all systems</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="2" colspan="2">
-           <widget class="QCheckBox" name="genCourtesyTimesig">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Create courtesy time signatures</string>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="0" colspan="2">
-           <widget class="QCheckBox" name="genKeysig">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Create key signature for all systems</string>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="2" colspan="2">
-           <widget class="QCheckBox" name="genCourtesyKeysig">
-            <property name="text">
-             <string>Create courtesy key signatures</string>
-            </property>
-           </widget>
-          </item>
           <item row="9" column="0">
            <spacer name="verticalSpacer_9">
             <property name="orientation">
@@ -944,6 +891,46 @@
             </property>
             <property name="value">
              <double>100.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QCheckBox" name="genKeysig">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Create key signature for all systems</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="0">
+           <widget class="QCheckBox" name="genCourtesyClef">
+            <property name="text">
+             <string>Create courtesy clefs</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="2">
+           <widget class="QCheckBox" name="genCourtesyTimesig">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Create courtesy time signatures</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="2">
+           <widget class="QCheckBox" name="genCourtesyKeysig">
+            <property name="text">
+             <string>Create courtesy key signatures</string>
             </property>
            </widget>
           </item>
@@ -5689,11 +5676,6 @@
   <tabstop>frameSystemDistance</tabstop>
   <tabstop>lastSystemFillThreshold</tabstop>
   <tabstop>genClef</tabstop>
-  <tabstop>genCourtesyClef</tabstop>
-  <tabstop>genTimesig</tabstop>
-  <tabstop>genCourtesyTimesig</tabstop>
-  <tabstop>genKeysig</tabstop>
-  <tabstop>genCourtesyKeysig</tabstop>
   <tabstop>showHeader</tabstop>
   <tabstop>showHeaderFirstPage</tabstop>
   <tabstop>headerOddEven</tabstop>
