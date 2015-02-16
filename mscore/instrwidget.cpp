@@ -621,16 +621,33 @@ void InstrumentsWidget::on_removeButton_clicked()
                         }
                   }
             static_cast<PartListItem*>(parent)->updateClefs();
+            partiturList->setItemSelected(parent, true);
             }
       else {
+            int idx = partiturList->indexOfTopLevelItem(item);
             if (((PartListItem*)item)->op == ListItemOp::ADD)
                   delete item;
             else {
                   ((PartListItem*)item)->op = ListItemOp::I_DELETE;
                   item->setHidden(true);
                   }
+            // select an item, do not consider hidden ones
+            int plusIdx = 0;
+            QTreeWidgetItem* nextParent = partiturList->topLevelItem(idx + plusIdx);
+            while (nextParent && nextParent->isHidden()) {
+                  plusIdx++;
+                  nextParent = partiturList->topLevelItem(idx + plusIdx);
+                  }
+            if(!nextParent) { // could find after, check before
+                  plusIdx = 1;
+                  nextParent = partiturList->topLevelItem(idx - plusIdx);
+                  while (nextParent && nextParent->isHidden()) {
+                       plusIdx++;
+                       nextParent = partiturList->topLevelItem(idx - plusIdx);
+                  }
+                  }
+            partiturList->setItemSelected(nextParent, true);
             }
-      partiturList->clearSelection();
       }
 
 //---------------------------------------------------------
@@ -658,7 +675,14 @@ void InstrumentsWidget::on_upButton_clicked()
                   int staffIdx[numOfStaffListItems];
                   for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
                         staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
-                  partiturList->insertTopLevelItem(idx-1, item);
+                  // do not consider hidden ones
+                  int minusIdx = 1;
+                  QTreeWidgetItem* prevParent = partiturList->topLevelItem(idx - minusIdx);
+                  while (prevParent && prevParent->isHidden()) {
+                       minusIdx++;
+                       prevParent = partiturList->topLevelItem(idx - minusIdx);
+                  }
+                  partiturList->insertTopLevelItem(idx - minusIdx, item);
                   // after-re-insertion, recreate each combo and set its index
                   for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
                         StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
@@ -679,7 +703,7 @@ void InstrumentsWidget::on_upButton_clicked()
                   // Qt looses the QComboBox set into StaffListItem when it is re-inserted into the tree:
                   // get currently selected staff type and re-insert
                   int staffTypeIdx = item->staffTypeIdx();
-                  parent->insertChild(idx-1, item);
+                  parent->insertChild(idx - 1, item);
                   // after item has been inserted into the tree, create a new QComboBox and set its index
                   item->initStaffTypeCombo(true);
                   item->setStaffType(staffTypeIdx);
@@ -735,7 +759,14 @@ void InstrumentsWidget::on_downButton_clicked()
                   int itemIdx;
                   for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
                         staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
-                  partiturList->insertTopLevelItem(idx+1, item);
+                  // do not consider hidden ones
+                  int plusIdx = 1;
+                  QTreeWidgetItem* nextParent = partiturList->topLevelItem(idx + plusIdx);
+                  while (nextParent && nextParent->isHidden()) {
+                       plusIdx++;
+                       nextParent = partiturList->topLevelItem(idx + plusIdx);
+                  }
+                  partiturList->insertTopLevelItem(idx + plusIdx, item);
                   // after-re-insertion, recreate each combo and set its index
                   for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
                         StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
