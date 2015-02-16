@@ -416,8 +416,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
-            score()->undo(new ChangeTimesig(static_cast<TimeSig*>(e), !ts->showCourtesySig(), ts->sig(),
-                  ts->stretch(), ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
+            ts->undoChangeProperty(P_ID::SHOW_COURTESY, !ts->showCourtesySig());
             }
       else if (cmd == "ts-props") {
             TimeSig* ts = static_cast<TimeSig*>(e);
@@ -425,20 +424,12 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             TimeSigProperties vp(&r);
             int rv = vp.exec();
             if (rv) {
-                  bool stretchChanged = r.stretch() != ts->stretch();
-                  if (r.numeratorString() != ts->numeratorString()
-                     || r.denominatorString() != ts->denominatorString()
-                     || r.sig() != ts->sig()
-                     || stretchChanged
-                     || !(r.groups() == ts->groups())
-                     || r.timeSigType() != ts->timeSigType()) {
-                        score()->undo(new ChangeTimesig(ts, r.showCourtesySig(), r.sig(), r.stretch(),
-                           r.numeratorString(), r.denominatorString(), r.timeSigType()));
-                        if (stretchChanged)
-                              score()->timesigStretchChanged(ts, ts->measure(), ts->staffIdx());
-                        if (!(r.groups() == ts->groups()))
-                              ts->undoSetGroups(r.groups());
-                        }
+                  ts->undoChangeProperty(P_ID::SHOW_COURTESY,      r.showCourtesySig());
+                  ts->undoChangeProperty(P_ID::TIMESIG_STRETCH,    QVariant::fromValue(r.stretch()));
+                  ts->undoChangeProperty(P_ID::TIMESIG,            QVariant::fromValue(r.sig()));
+                  ts->undoChangeProperty(P_ID::NUMERATOR_STRING,   r.numeratorString());
+                  ts->undoChangeProperty(P_ID::DENOMINATOR_STRING, r.denominatorString());
+                  ts->undoChangeProperty(P_ID::TIMESIG_TYPE,       int(r.timeSigType()));
                   }
             }
       else if (cmd == "smallNote")

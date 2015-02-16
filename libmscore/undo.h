@@ -849,27 +849,6 @@ class ChangeMStaffProperties : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeTimesig
-//---------------------------------------------------------
-
-class ChangeTimesig : public UndoCommand {
-      TimeSig* timesig;
-      bool showCourtesy;
-      Fraction sig;
-      Fraction stretch;
-      TimeSigType subtype;
-      QString numeratorString;
-      QString denominatorString;
-
-      void flip();
-
-   public:
-      ChangeTimesig(TimeSig* _timesig, bool sc, const Fraction&,
-         const Fraction&, QString, QString, TimeSigType subtype);
-      UNDO_NAME("ChangeTimesig")
-      };
-
-//---------------------------------------------------------
 //   RemoveMeasures
 //---------------------------------------------------------
 

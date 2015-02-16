@@ -233,6 +233,18 @@ void Staff::dumpKeys(const char* title) const
             qDebug("  %d: %d", i.first, int(i.second.key()));
             }
       }
+
+//---------------------------------------------------------
+//   dumpTimeSigs
+//---------------------------------------------------------
+
+void Staff::dumpTimeSigs(const char* title) const
+      {
+      qDebug("dump timesig size (%zd) staffIdx %d: %s", timesigs.size(), idx(), title);
+      for (auto& i : timesigs) {
+            qDebug("  %d: %d/%d", i.first, i.second->sig().numerator(), i.second->sig().denominator());
+            }
+      }
 #endif
 
 //---------------------------------------------------------
@@ -331,6 +343,7 @@ void Staff::addTimeSig(TimeSig* timesig)
       {
       if (timesig->segment()->segmentType() == Segment::Type::TimeSig)
             timesigs[timesig->segment()->tick()] = timesig;
+//      dumpTimeSigs("after addTimeSig");
       }
 
 //---------------------------------------------------------
@@ -341,6 +354,7 @@ void Staff::removeTimeSig(TimeSig* timesig)
       {
       if (timesig->segment()->segmentType() == Segment::Type::TimeSig)
             timesigs.erase(timesig->segment()->tick());
+//      dumpTimeSigs("after removeTimeSig");
       }
 
 //---------------------------------------------------------

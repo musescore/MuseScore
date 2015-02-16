@@ -83,6 +83,7 @@ QT5_WRAP_UI (ui_headers
       debugger/text.ui
       debugger/stem.ui
       debugger/system.ui
+      debugger/timesig.ui
 
       inspector/inspector_element.ui
       inspector/inspector_vbox.ui
@@ -412,7 +413,7 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5PrintSupport.dll
       ${CROSSQT}/bin/Qt5OpenGL.dll
       ${CROSSQT}/bin/Qt5Sensors.dll
-      ${CROSSQT}/bin/Qt5Multimedia.dll      
+      ${CROSSQT}/bin/Qt5Multimedia.dll
       ${CROSSQT}/bin/Qt5MultimediaWidgets.dll
       ${CROSSQT}/bin/icuin53.dll
       ${CROSSQT}/bin/icuuc53.dll

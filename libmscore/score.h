@@ -452,8 +452,8 @@ class Score : public QObject {
 
       void checkSlurs();
       void checkScore();
-      bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&);
-      bool rewriteMeasures(Measure* fm, const Fraction& ns);
+      bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, int staffIdx);
+      bool rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx);
       void updateVelo();
       void swingAdjustParams(Chord*, int&, int&, int, int);
       bool isSubdivided(ChordRest*, int);
