@@ -274,7 +274,7 @@
        <item row="0" column="1">
         <widget class="QDoubleSpinBox" name="masterTuning">
          <property name="accessibleName">
-          <string>Master tunning</string>
+          <string>Master tuning</string>
          </property>
          <property name="accessibleDescription">
           <string>Hertz</string>
