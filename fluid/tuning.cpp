@@ -132,7 +132,7 @@ float Tuning::getnotefreq(int note, int keyshift)
             if (minus)
                   rap_anote_middlenote=1.0/rap_anote_middlenote;
 
-            //Convert from note (midi) to degree (note from the tunning)
+            //Convert from note (midi) to degree (note from the tuning)
             int degoct = (note - middlenote + mapsize*200)/mapsize - 200;
             int degkey = (note - middlenote+(int)mapsize*100) % mapsize;
             degkey     = mapping[degkey];
