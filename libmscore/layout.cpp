@@ -82,7 +82,7 @@ ChordRest* Score::searchNote(int tick, int track) const
       {
       ChordRest* ipe = 0;
       Segment::Type st = Segment::Type::ChordRest;
-      for (Segment* segment = firstSegment(st); segment; segment = segment->next(st)) {
+      for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
             ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
             if (!cr)
                   continue;
