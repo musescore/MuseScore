@@ -74,7 +74,11 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
 
       void setEndpos(int);
       void setScore(Score* s);
+      Score* score() const;
       bool isTempoSliderPressed() {return tempoSliderIsPressed;}
+      QLabel* position() const;
+      QLabel* time() const;
+
       };
 
 

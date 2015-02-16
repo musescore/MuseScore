@@ -4563,7 +4563,7 @@ int main(int argc, char* av[])
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
       QAccessible::installFactory(Awl::AccessibleAbstractSlider::AbstractSliderFactory);
-
+      QAccessible::installFactory(AccessiblePlayPosSlider::PlayPosSliderFactory);
       Q_INIT_RESOURCE(zita);
 
 #ifndef Q_OS_MAC

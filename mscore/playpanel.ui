@@ -147,7 +147,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSlider" name="posSlider">
+      <widget class="Ms::PlayPositionSlider" name="posSlider">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -987,6 +987,11 @@
    <class>Awl::VolSlider</class>
    <extends>Awl::Slider</extends>
    <header>awl/volslider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Ms::PlayPositionSlider</class>
+   <extends>QSlider</extends>
+   <header>playpositionslider.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

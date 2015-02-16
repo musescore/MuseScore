@@ -51,7 +51,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       move(settings.value("playPanel/pos", QPoint(DEFAULT_POS_X, DEFAULT_POS_Y)).toPoint());
 
       setScore(0);
-
+      posSlider->setPlayPanel(this);
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
       countInButton->setDefaultAction(getAction("countin"));
@@ -66,7 +66,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       tempoSlider->setUseActualValue(true);
 
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
-      connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
+      connect(posSlider,    SIGNAL(valueChanged(int)),        SLOT(setPos(int)));
       connect(tempoSlider,  SIGNAL(valueChanged(double,int)), SLOT(relTempoChanged(double,int)));
       connect(tempoSlider,  SIGNAL(sliderPressed(int)),       SLOT(tempoSliderPressed(int)));
       connect(tempoSlider,  SIGNAL(sliderReleased(int)),      SLOT(tempoSliderReleased(int)));
@@ -202,6 +202,16 @@ void PlayPanel::setScore(Score* s)
       }
 
 //---------------------------------------------------------
+//   score
+//---------------------------------------------------------
+
+Score* PlayPanel::score() const
+      {
+      return cs;
+      }
+
+
+//---------------------------------------------------------
 //   setEndpos
 //---------------------------------------------------------
 
@@ -259,6 +269,7 @@ void PlayPanel::setPos(int utick)
             return;
       if (cachedTickPosition != utick)
             emit posChange(utick);
+
       updatePosLabel(utick);
       updateTimeLabel(cs->utick2utime(utick));
       }
@@ -327,6 +338,24 @@ void PlayPanel::tempoSliderPressed(int)
       }
 
 //---------------------------------------------------------
+//   position
+//---------------------------------------------------------
+
+QLabel* PlayPanel::position() const
+      {
+      return posLabel;
+      }
+
+//---------------------------------------------------------
+//   time
+//---------------------------------------------------------
+
+QLabel* PlayPanel::time() const
+      {
+      return timeLabel;
+      }
+
+//---------------------------------------------------------
 //   tempoSliderReleased
 //---------------------------------------------------------
 
@@ -334,5 +363,6 @@ void PlayPanel::tempoSliderReleased(int)
       {
       tempoSliderIsPressed = false;
       }
+
 }
 
