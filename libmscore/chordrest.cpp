@@ -767,8 +767,9 @@ void ChordRest::layoutArticulations()
 
 Element* ChordRest::drop(const DropData& data)
       {
-      Element* e = data.element;
-      Measure* m  = measure();
+      Element* e       = data.element;
+      Measure* m       = measure();
+      bool fromPalette = (e->track() == -1);
       switch (e->type()) {
             case Element::Type::BREATH:
                   {
@@ -826,9 +827,12 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(e);
+                  tt->setTrack(0);
                   tt->setParent(segment());
                   TextStyleType st = tt->textStyleType();
-                  tt->setTextStyleType(st);
+                  //tt->setTextStyleType(st);
+                  if (st >= TextStyleType::DEFAULT && fromPalette)
+                        tt->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
                   score()->undoAddElement(tt);
                   }
                   return e;
@@ -838,7 +842,9 @@ Element* ChordRest::drop(const DropData& data)
                   Dynamic* d = static_cast<Dynamic*>(e);
                   d->setTrack(track());
                   TextStyleType st = d->textStyleType();
-                  d->setTextStyleType(st);
+                  //d->setTextStyleType(st);
+                  if (st >= TextStyleType::DEFAULT && fromPalette)
+                        d->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
                   d->setParent(segment());
                   score()->undoAddElement(d);
                   }
@@ -882,12 +888,16 @@ Element* ChordRest::drop(const DropData& data)
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
                   {
-                  Text* f = static_cast<Text*>(e);
-                  TextStyleType st = f->textStyleType();
-                  if (st >= TextStyleType::DEFAULT)
-                        f->setTextStyleType(st);
+                  Text* t = static_cast<Text*>(e);
+                  TextStyleType st = t->textStyleType();
+                  // for palette items, we want to use current score text style settings
+                  // except where the source element had explicitly overridden these via text properties
+                  // palette text style will be relative to baseStyle, so rebase this to score
+                  //f->setTextStyleType(st);
+                  if (st >= TextStyleType::DEFAULT && fromPalette)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
                   if (e->type() == Element::Type::REHEARSAL_MARK)
-                        f->setText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
+                        t->setText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
                   }
                   score()->undoAddElement(e);
                   return e;

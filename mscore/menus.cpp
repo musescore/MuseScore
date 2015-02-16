@@ -970,7 +970,10 @@ Palette* MuseScore::newTempoPalette()
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
             tt->setFollowText(true);
-            tt->setTrack(0);
+            // leave track at default (-1) to make it possible
+            // for drop() to tell that this came from palette
+            // (it will then be set to 0 there)
+            //tt->setTrack(0);
             tt->setTempo(tp[i].f);
             tt->setText(tp[i].pattern);
             sp->append(tt, tr("Tempo text"), QString(), 1.5);
@@ -1007,7 +1010,6 @@ Palette* MuseScore::newTextPalette()
       sp->append(st, tr("Swing"));
 
       RehearsalMark* rhm = new RehearsalMark(gscore);
-      rhm->setTrack(0);
       rhm->setText("B1");
       sp->append(rhm, tr("Rehearsal mark"));
 

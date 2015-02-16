@@ -1176,7 +1176,7 @@ void Text::createLayout()
 
 //---------------------------------------------------------
 //   sameLayout
-//   Undates the text, but keeps the same postition and textStyle
+//   Updates the text, but keeps the same postition and textStyle
 //---------------------------------------------------------
 
 void Text::sameLayout()
