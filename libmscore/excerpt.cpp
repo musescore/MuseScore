@@ -155,7 +155,7 @@ void createExcerpt(Excerpt* excerpt)
       if (!partLabel.isEmpty()) {
             Text* txt = new Text(score);
             txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
-            txt->setText(partLabel);
+            txt->setPlainText(partLabel);
             txt->setTrack(0);
             measure->add(txt);
             score->setMetaTag("partName", partLabel);
