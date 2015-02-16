@@ -2059,15 +2059,17 @@ QString Text::selectedText() const
             if (row >= r1 && row <= r2) {
                   if (row == r1 && r1 == r2)
                         s += t.text(c1, c2 - c1);
-                  else if (row == r1)
+                  else if (row == r1) {
                         s += t.text(c1, -1);
+                        s += "\n";
+                        }
                   else if (row == r2)
                         s += t.text(0, c2);
-                  else
+                  else {
                         s += t.text(0, -1);
+                        s += "\n";
+                        }
                   }
-            if (row != rows - 1)
-                  s += "\n";
             }
       return s;
       }
