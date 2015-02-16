@@ -506,7 +506,6 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::TIMESIG_STRETCH:
                   setStretch(v.value<Fraction>());
-                  score()->timesigStretchChanged(this, measure(), staffIdx());
                   break;
             case P_ID::TIMESIG_TYPE:
                   _timeSigType = (TimeSigType)(v.toInt());
