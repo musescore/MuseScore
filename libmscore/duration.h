@@ -35,6 +35,8 @@ class DurationElement : public Element {
 
       Fraction _duration;
       Tuplet* _tuplet;
+      void setDuration(int ticks)         { _duration = Fraction::fromTicks(ticks); }
+      int durationTicks() const           { return _duration.ticks(); }
 
    public:
       DurationElement(Score* s);
@@ -57,8 +59,9 @@ class DurationElement : public Element {
       virtual Fraction duration() const   { return _duration; }
       Fraction globalDuration() const;
       void setDuration(const Fraction& f) { _duration = f;    }
-      void setDuration(int ticks)         { _duration = Fraction::fromTicks(ticks); }
-      int durationTicks() const           { return _duration.ticks(); }
+
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       };
 
 

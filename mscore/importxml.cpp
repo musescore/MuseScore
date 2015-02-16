@@ -5120,9 +5120,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                               t->setChords(tremStart, static_cast<Chord*>(cr));
                               // fixup chord duration and type
                               t->chord1()->setDurationType(ticks);
-                              t->chord1()->setDuration(ticks);
+                              t->chord1()->setDuration(Fraction::fromTicks(ticks));
                               t->chord2()->setDurationType(ticks);
-                              t->chord2()->setDuration(ticks);
+                              t->chord2()->setDuration(Fraction::fromTicks(ticks));
                               // add tremolo to first chord (only)
                               tremStart->add(t);
                               }

@@ -1580,14 +1580,16 @@ void Measure::adjustToLen(Fraction nf)
             if (rests == 1 && chords == 0) {
                   // if measure value didn't change, stick to whole measure rest
                   if (_timesig == nf)
-                        s->undo(new ChangeChordRestLen(rest, TDuration(TDuration::DurationType::V_MEASURE)));
+                        rest->undoChangeProperty(P_ID::DURATION,
+                           QVariant::fromValue<TDuration>(TDuration(TDuration::DurationType::V_MEASURE)));
                   else {      // if measure value did change, represent with rests actual measure value
                         // convert the measure duration in a list of values (no dots for rests)
                         QList<TDuration> durList = toDurationList(nf, false, 0);
 
                         // set the existing rest to the first value of the duration list
                         for (ScoreElement* e : rest->linkList()) {
-                              s->undo(new ChangeChordRestLen(static_cast<Rest*>(e), durList[0]));
+                              e->undoChangeProperty(P_ID::DURATION, QVariant::fromValue<Fraction>(durList[0].fraction()));
+                              e->undoChangeProperty(P_ID::DURATION_TYPE, QVariant::fromValue<TDuration>(durList[0]));
                               }
 
                         // add rests for any other duration list value
@@ -1901,8 +1903,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                                           // force duration to half
                                           Fraction pts(timeStretch * pch->globalDuration());
                                           int pcrticks = pts.ticks();
-                                          pch->setDuration(pcrticks / 2);
-                                          chord->setDuration(crticks / 2);
+                                          pch->setDuration(Fraction::fromTicks(pcrticks / 2));
+                                          chord->setDuration(Fraction::fromTicks(crticks / 2));
                                           }
                                     else {
                                           qDebug("tremolo: first note not found");

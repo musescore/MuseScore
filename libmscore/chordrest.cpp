@@ -979,16 +979,20 @@ void ChordRest::setDurationType(int ticks)
       _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
-void ChordRest::setDurationType(const TDuration& v)
+void ChordRest::setDurationType(TDuration v)
       {
       _durationType = v;
       _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
+//---------------------------------------------------------
+//   durationUserName
+//---------------------------------------------------------
+
 QString ChordRest::durationUserName()
       {
       QString tupletType = "";
-      if(tuplet()) {
+      if (tuplet()) {
               switch (tuplet()->ratio().numerator()) {
                   case 2:
                         tupletType = tr("Duplet");
@@ -1186,6 +1190,7 @@ QVariant ChordRest::getProperty(P_ID propertyId) const
             case P_ID::SMALL:      return QVariant(small());
             case P_ID::BEAM_MODE:  return int(beamMode());
             case P_ID::STAFF_MOVE: return staffMove();
+            case P_ID::DURATION_TYPE: return QVariant::fromValue(actualDurationType());
             default:               return DurationElement::getProperty(propertyId);
             }
       }
@@ -1203,6 +1208,9 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::VISIBLE:
                   setVisible(v.toBool());
                   measure()->checkMultiVoices(staffIdx());
+                  break;
+            case P_ID::DURATION_TYPE:
+                  setDurationType(v.value<TDuration>());
                   break;
             default:
                   return DurationElement::setProperty(propertyId, v);

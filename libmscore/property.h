@@ -166,6 +166,7 @@ enum class P_ID : unsigned char {
       TIME_STRETCH,
       TIMESIG,
       TIMESIG_GLOBAL,
+      TIMESIG_STRETCH,
       TIMESIG_TYPE,
       SPANNER_TICK,
       SPANNER_TICKS,
@@ -214,6 +215,9 @@ enum class P_ID : unsigned char {
       PART_REVERB,
       PART_CHORUS,
 
+      DURATION,
+      DURATION_TYPE,
+
       END
       };
 
@@ -234,6 +238,7 @@ enum class P_TYPE : char {
       COLOR,
       DIRECTION,      // enum class MScore::Direction
       DIRECTION_H,    // enum class MScore::DirectionH
+      TDURATION,
       LAYOUT_BREAK,
       VALUE_TYPE,
       BEAM_MODE,

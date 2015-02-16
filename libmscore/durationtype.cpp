@@ -20,7 +20,7 @@ namespace Ms {
 //   dots
 //---------------------------------------------------------
 
-static int getDots(int base, int rest, int* dots)
+static int getDots(int base, int rest, char* dots)
       {
       *dots = 0;
       if (rest >= base / 2) {
