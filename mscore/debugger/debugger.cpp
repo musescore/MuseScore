@@ -68,6 +68,7 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/bracket.h"
 #include "libmscore/trill.h"
+#include "libmscore/timesig.h"
 
 namespace Ms {
 
@@ -592,7 +593,7 @@ void Debugger::updateElement(Element* el)
                   case Element::Type::NOTE:             ew = new ShowNoteWidget;      break;
                   case Element::Type::REST:             ew = new RestView;            break;
                   case Element::Type::CLEF:             ew = new ClefView;            break;
-                  case Element::Type::TIMESIG:          ew = new ShowTimesigWidget;   break;
+                  case Element::Type::TIMESIG:          ew = new TimeSigView;         break;
                   case Element::Type::KEYSIG:           ew = new KeySigView;          break;
                   case Element::Type::SEGMENT:          ew = new SegmentView;         break;
                   case Element::Type::HAIRPIN:          ew = new HairpinView;         break;
@@ -1296,23 +1297,30 @@ void RestView::tupletClicked()
       }
 
 //---------------------------------------------------------
-//   ShowTimesigWidget
+//   TimesigView
 //---------------------------------------------------------
 
-ShowTimesigWidget::ShowTimesigWidget()
+TimeSigView::TimeSigView()
    : ShowElementBase()
       {
-      layout->addStretch(100);
+      tb.setupUi(addWidget());
       }
 
 //---------------------------------------------------------
 //   setElement
 //---------------------------------------------------------
 
-void ShowTimesigWidget::setElement(Element* e)
+void TimeSigView::setElement(Element* e)
       {
-//      TimeSig* tsig = (TimeSig*)e;
+      TimeSig* tsig = static_cast<TimeSig*>(e);
       ShowElementBase::setElement(e);
+      tb.numeratorString->setText(tsig->numeratorString());
+      tb.denominatorString->setText(tsig->denominatorString());
+      tb.numerator->setValue(tsig->sig().numerator());
+      tb.denominator->setValue(tsig->sig().denominator());
+      tb.numeratorStretch->setValue(tsig->stretch().numerator());
+      tb.denominatorStretch->setValue(tsig->stretch().denominator());
+      tb.showCourtesySig->setChecked(tsig->showCourtesySig());
       }
 
 //---------------------------------------------------------
