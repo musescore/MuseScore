@@ -41,7 +41,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Fretboard diagram</string>
+      <string>Fretboard Diagram</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
