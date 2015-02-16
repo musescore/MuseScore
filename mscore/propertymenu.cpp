@@ -420,17 +420,21 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "ts-props") {
             TimeSig* ts = static_cast<TimeSig*>(e);
-            TimeSig r(*ts);
-            TimeSigProperties vp(&r);
-            int rv = vp.exec();
-            if (rv) {
-                  ts->undoChangeProperty(P_ID::SHOW_COURTESY,      r.showCourtesySig());
-                  ts->undoChangeProperty(P_ID::TIMESIG_STRETCH,    QVariant::fromValue(r.stretch()));
-                  ts->undoChangeProperty(P_ID::TIMESIG,            QVariant::fromValue(r.sig()));
-                  ts->undoChangeProperty(P_ID::NUMERATOR_STRING,   r.numeratorString());
-                  ts->undoChangeProperty(P_ID::DENOMINATOR_STRING, r.denominatorString());
-                  ts->undoChangeProperty(P_ID::TIMESIG_TYPE,       int(r.timeSigType()));
+            TimeSig* r = new TimeSig(*ts);
+            TimeSigProperties tsp(r);
+
+            if (tsp.exec()) {
+                  ts->undoChangeProperty(P_ID::SHOW_COURTESY, r->showCourtesySig());
+                  ts->undoChangeProperty(P_ID::NUMERATOR_STRING, r->numeratorString());
+                  ts->undoChangeProperty(P_ID::DENOMINATOR_STRING, r->denominatorString());
+                  ts->undoChangeProperty(P_ID::TIMESIG_TYPE, int(r->timeSigType()));
+
+                  if (r->sig() != ts->sig()) {
+                        score()->cmdAddTimeSig(ts->measure(), ts->staffIdx(), r, true);
+                        r = 0;
+                        }
                   }
+            delete r;
             }
       else if (cmd == "smallNote")
             score()->undoChangeProperty(e, P_ID::SMALL, !static_cast<Note*>(e)->small());

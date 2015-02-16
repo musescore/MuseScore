@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
-    <height>266</height>
+    <width>588</width>
+    <height>303</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -275,7 +275,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string notr="true">ticks:</string>
+           <string notr="true">actualTicks:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

@@ -387,10 +387,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
                                     continue;
                               if (cr->type() == Element::Type::REST && cr->durationType() == TDuration::DurationType::V_MEASURE)
                                     cr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(ns));
-                              else {
-                                    qDebug("timeSigChanged: not implemented: chord/rest does not fit");
+                              else
                                     return false;
-                                    }
                               }
                         }
                   }
@@ -565,6 +563,10 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       Fraction ns  = ts->sig();
       int tick     = fm->tick();
       TimeSig* lts = staff(staffIdx)->timeSig(tick);
+      if (local) {
+            Fraction stretch = (ns / fm->timesig()).reduced();
+            ts->setStretch(stretch);
+            }
 
       Fraction stretch;
       Fraction lsig;                // last signature
@@ -580,35 +582,16 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       int track    = staffIdx * VOICES;
       Segment* seg = fm->undoGetSegment(Segment::Type::TimeSig, tick);
       TimeSig* ots = static_cast<TimeSig*>(seg->element(track));
-      if (ots) {
+
+      if (ots && (*ots == *ts)) {
             //
             //  ignore if there is already a timesig
             //  with same values
             //
-            if (*ots == *ts) {
-                  delete ts;
-                  return;
-                  }
+            delete ts;
+            return;
             }
 
-      if (local) {
-            Fraction stretch = (ns / fm->timesig()).reduced();
-            ts->setStretch(stretch);
-#if 0
-            if (ots) {
-                  ots->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ts->sig()));
-                  ots->undoChangeProperty(P_ID::TIMESIG_STRETCH, QVariant::fromValue(stretch));
-                  }
-            else {
-                  TimeSig* nts = new TimeSig(*ts);
-                  nts->setParent(seg);
-                  nts->setTrack(track);
-                  nts->setStretch(stretch);
-                  nts->setSelected(false);
-                  undoAddElement(nts);
-                  }
-#endif
-            }
 
       if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
             ots->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ns));
@@ -687,11 +670,11 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               }
                         else {
                               nsig->undoChangeProperty(P_ID::SHOW_COURTESY, false);
-                              nsig->undoChangeProperty(P_ID::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
                               nsig->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ts->sig()));
                               nsig->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
                               nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
                               nsig->undoChangeProperty(P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
+                              nsig->undoChangeProperty(P_ID::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
                               nsig->setSelected(false);
                               nsig->setDropTarget(0);       // DEBUG
                               }
@@ -699,31 +682,6 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   }
             }
       delete ts;
-      }
-
-//---------------------------------------------------------
-//   timesigStretchChanged
-//---------------------------------------------------------
-
-void Score::timesigStretchChanged(TimeSig* ts, Measure* fm, int staffIdx)
-      {
-      for (Measure* m = fm; m; m = m->nextMeasure()) {
-            if ((m != fm) && m->first(Segment::Type::TimeSig))
-                  break;
-            int strack = staffIdx * VOICES;
-            int etrack = strack + VOICES;
-            for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
-                  for (int track = strack; track < etrack; ++track) {
-                        ChordRest* cr = static_cast<ChordRest*>(s->element(track));
-                        if (!cr)
-                              continue;
-                        if (cr->type() == Element::Type::REST && cr->durationType() == TDuration::DurationType::V_MEASURE)
-                              cr->setDuration(ts->sig());
-                        else
-                              qDebug("timeSigChanged: not implemented: chord/rest does not fit");
-                        }
-                  }
-            }
       }
 
 //---------------------------------------------------------

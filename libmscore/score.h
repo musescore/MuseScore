@@ -931,7 +931,6 @@ class Score : public QObject {
       void layoutFingering(Fingering*);
       void cmdSplitMeasure(ChordRest*);
       void cmdJoinMeasure(Measure*, Measure*);
-      void timesigStretchChanged(TimeSig* ts, Measure* fm, int staffIdx);
       int pageNumberOffset() const          { return _pageNumberOffset; }
       void setPageNumberOffset(int v)       { _pageNumberOffset = v; }
 
