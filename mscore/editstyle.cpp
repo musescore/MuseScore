@@ -426,7 +426,6 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::lastSystemFillLimit,     lastSystemFillThreshold->value() / 100.0);
       lstyle.set(StyleIdx::genClef,                 genClef->isChecked());
       lstyle.set(StyleIdx::genKeysig,               genKeysig->isChecked());
-      lstyle.set(StyleIdx::genTimesig,              genTimesig->isChecked());
       lstyle.set(StyleIdx::genCourtesyTimesig,      genCourtesyTimesig->isChecked());
       lstyle.set(StyleIdx::genCourtesyKeysig,       genCourtesyKeysig->isChecked());
       lstyle.set(StyleIdx::genCourtesyClef,         genCourtesyClef->isChecked());
@@ -648,7 +647,6 @@ void EditStyle::setValues()
 
       genClef->setChecked(lstyle.value(StyleIdx::genClef).toBool());
       genKeysig->setChecked(lstyle.value(StyleIdx::genKeysig).toBool());
-      genTimesig->setChecked(lstyle.value(StyleIdx::genTimesig).toBool());
       genCourtesyTimesig->setChecked(lstyle.value(StyleIdx::genCourtesyTimesig).toBool());
       genCourtesyKeysig->setChecked(lstyle.value(StyleIdx::genCourtesyKeysig).toBool());
       genCourtesyClef->setChecked(lstyle.value(StyleIdx::genCourtesyClef).toBool());

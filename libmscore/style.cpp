@@ -136,7 +136,7 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::smallClefMag,                StyleType("smallClefMag",            StyleValueType::DOUBLE) },
       { StyleIdx::genClef,                     StyleType("genClef",                 StyleValueType::BOOL) },           // create clef for all systems, not only for first
       { StyleIdx::genKeysig,                   StyleType("genKeysig",               StyleValueType::BOOL) },         // create key signature for all systems
-      { StyleIdx::genTimesig,                  StyleType("genTimesig",              StyleValueType::BOOL) },
+//      { StyleIdx::genTimesig,                  StyleType("genTimesig",              StyleValueType::BOOL) },
       { StyleIdx::genCourtesyTimesig,          StyleType("genCourtesyTimesig",      StyleValueType::BOOL) },
       { StyleIdx::genCourtesyKeysig,           StyleType("genCourtesyKeysig",       StyleValueType::BOOL) },
       { StyleIdx::genCourtesyClef,             StyleType("genCourtesyClef",         StyleValueType::BOOL) },
@@ -486,7 +486,7 @@ StyleData::StyleData()
             { StyleIdx::smallClefMag,                QVariant(0.8) },
             { StyleIdx::genClef,                     QVariant(true) },
             { StyleIdx::genKeysig,                   QVariant(true) },
-            { StyleIdx::genTimesig,                  QVariant(true) },
+//            { StyleIdx::genTimesig,                  QVariant(true) },
             { StyleIdx::genCourtesyTimesig,          QVariant(true) },
             { StyleIdx::genCourtesyKeysig,           QVariant(true) },
             { StyleIdx::genCourtesyClef,             QVariant(true) },
