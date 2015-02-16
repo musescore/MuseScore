@@ -1656,7 +1656,11 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             else if (keysig && !(keysig->keySigEvent() == keyIdx))
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
 
-            bool needClef = isFirstSystem || styleB(StyleIdx::genClef);
+            bool needClef = isFirstSystem
+               || styleB(StyleIdx::genClef)
+                  // real clef change?:
+               || staff->clef(m->tick()) != staff->clef(m->tick()-1);
+
             if (needClef) {
                   if (!clef) {
                         //
