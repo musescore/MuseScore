@@ -1816,6 +1816,8 @@ void Score::cmdDeleteSelection()
             int track2  = selection().staffEnd() * VOICES;
             for (auto i : _spanner.findOverlapping(stick1, stick2 - 1)) {
                   Spanner* sp = i.value;
+                  if (sp->type() == Element::Type::VOLTA)
+                        continue;
                   if (sp->track() >= track1 && sp->track() < track2) {
                         if (sp->tick() >= stick1 && sp->tick() < stick2
                             && sp->tick2() >= stick1 && sp->tick2() < stick2) {
