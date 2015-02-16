@@ -260,7 +260,7 @@ enum class StyleIdx : unsigned char {
       smallClefMag,
       genClef,
       genKeysig,
-      genTimesig,
+//      genTimesig,
       genCourtesyTimesig,
       genCourtesyKeysig,
       genCourtesyClef,

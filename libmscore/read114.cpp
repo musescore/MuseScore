@@ -124,7 +124,7 @@ static const StyleVal2 style114[] = {
       { StyleIdx::smallClefMag,                 QVariant(qreal(0.8)) },
       { StyleIdx::genClef,                      QVariant(true) },
       { StyleIdx::genKeysig,                    QVariant(true) },
-      { StyleIdx::genTimesig,                   QVariant(true) },
+//      { StyleIdx::genTimesig,                   QVariant(true) },
       { StyleIdx::genCourtesyTimesig,           QVariant(true) },
       { StyleIdx::genCourtesyKeysig,            QVariant(true) },
       { StyleIdx::useStandardNoteNames,         QVariant(true) },

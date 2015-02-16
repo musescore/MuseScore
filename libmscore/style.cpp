@@ -1046,7 +1046,7 @@ void StyleData::load(XmlReader& e)
                   _customChordList = true;
                   chordListTag = true;
                   }
-            else if (tag == "pageFillLimit")   // obsolete
+            else if (tag == "pageFillLimit" || tag == "genTimesig")   // obsolete
                   e.skipCurrentElement();
             else if (tag == "systemDistance")  // obsolete
                   set(StyleIdx::minSystemDistance, QVariant(e.readDouble()));
