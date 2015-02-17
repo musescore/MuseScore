@@ -1448,9 +1448,9 @@ void Score::doLayout()
                   else if (!measure->irregular())      // dont count measure
                         ++measureNo;
                   measure->setBreakMMRest(false);
-                  measure->layoutStage1();
                   for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx)
                         measure->cmdUpdateNotes(staffIdx);
+                  measure->layoutStage1();
                   }
             }
 

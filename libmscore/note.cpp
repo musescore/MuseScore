@@ -1706,6 +1706,79 @@ bool Note::dotIsUp() const
       }
 
 //---------------------------------------------------------
+//   updateAccidental
+//    set _accidental and _line depending on tpc
+//---------------------------------------------------------
+
+void Note::updateAccidental(AccidentalState* as)
+      {
+      int relLine = absStep(tpc(), epitch());
+
+      // don't touch accidentals that don't concern tpc such as
+      // quarter tones
+      if (!(_accidental && _accidental->accidentalType() > Accidental::Type::NATURAL)) {
+            // calculate accidental
+            Accidental::Type acci = Accidental::Type::NONE;
+
+            AccidentalVal accVal = tpc2alter(tpc());
+            if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
+                  as->setAccidentalVal(relLine, accVal, _tieBack != 0);
+                  if (_tieBack)
+                        acci = Accidental::Type::NONE;
+                  else {
+                        acci = Accidental::value2subtype(accVal);
+                        if (acci == Accidental::Type::NONE)
+                              acci = Accidental::Type::NATURAL;
+                        }
+                  }
+            if (acci != Accidental::Type::NONE && !_tieBack && !_hidden) {
+                  if (_accidental == 0) {
+                        Accidental* a = new Accidental(score());
+                        a->setParent(this);
+                        a->setAccidentalType(acci);
+                        score()->undoAddElement(a);
+                        }
+                  else if (_accidental->accidentalType() != acci) {
+                        Accidental* a = _accidental->clone();
+                        a->setParent(this);
+                        a->setAccidentalType(acci);
+                        score()->undoChangeElement(_accidental, a);
+                        }
+                  }
+            else {
+                  if (_accidental) {
+                        // remove this if it was AUTO:
+                        if (_accidental->role() == Accidental::Role::AUTO)
+                              score()->undoRemoveElement(_accidental);
+                        else {
+                              // keep it, but update type if needed
+                              acci = Accidental::value2subtype(accVal);
+                              if (acci == Accidental::Type::NONE)
+                                    acci = Accidental::Type::NATURAL;
+                              if (_accidental->accidentalType() != acci) {
+                                    Accidental* a = _accidental->clone();
+                                    a->setParent(this);
+                                    a->setAccidentalType(acci);
+                                    score()->undoChangeElement(_accidental, a);
+                                    }
+                              }
+                        }
+                  }
+            }
+
+      else {
+            // microtonal accidentals playback as naturals
+            // in 1.X, they had no effect on accidental state of measure
+            // ultimetely, they should probably get their own state
+            // for now, at least change state to natural, so subsequent notes playback as might be expected
+            // this is an incompatible change, but better to break it for 2.0 than wait until later
+            as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0);
+            }
+
+      updateRelLine(relLine, true);
+      }
+
+//---------------------------------------------------------
 //   layout10
 //    compute actual accidental and line
 //---------------------------------------------------------
@@ -2025,79 +2098,6 @@ void Note::endEdit()
             setUserOff(QPointF());
             score()->setLayoutAll(true);
             }
-      }
-
-//---------------------------------------------------------
-//   updateAccidental
-//    set _accidental and _line depending on tpc
-//---------------------------------------------------------
-
-void Note::updateAccidental(AccidentalState* as)
-      {
-      int relLine = absStep(tpc(), epitch());
-
-      // don't touch accidentals that don't concern tpc such as
-      // quarter tones
-      if (!(_accidental && _accidental->accidentalType() > Accidental::Type::NATURAL)) {
-            // calculate accidental
-            Accidental::Type acci = Accidental::Type::NONE;
-
-            AccidentalVal accVal = tpc2alter(tpc());
-            if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
-                  as->setAccidentalVal(relLine, accVal, _tieBack != 0);
-                  if (_tieBack)
-                        acci = Accidental::Type::NONE;
-                  else {
-                        acci = Accidental::value2subtype(accVal);
-                        if (acci == Accidental::Type::NONE)
-                              acci = Accidental::Type::NATURAL;
-                        }
-                  }
-            if (acci != Accidental::Type::NONE && !_tieBack && !_hidden) {
-                  if (_accidental == 0) {
-                        Accidental* a = new Accidental(score());
-                        a->setParent(this);
-                        a->setAccidentalType(acci);
-                        score()->undoAddElement(a);
-                        }
-                  else if (_accidental->accidentalType() != acci) {
-                        Accidental* a = _accidental->clone();
-                        a->setParent(this);
-                        a->setAccidentalType(acci);
-                        score()->undoChangeElement(_accidental, a);
-                        }
-                  }
-            else {
-                  if (_accidental) {
-                        // remove this if it was AUTO:
-                        if (_accidental->role() == Accidental::Role::AUTO)
-                              score()->undoRemoveElement(_accidental);
-                        else {
-                              // keep it, but update type if needed
-                              acci = Accidental::value2subtype(accVal);
-                              if (acci == Accidental::Type::NONE)
-                                    acci = Accidental::Type::NATURAL;
-                              if (_accidental->accidentalType() != acci) {
-                                    Accidental* a = _accidental->clone();
-                                    a->setParent(this);
-                                    a->setAccidentalType(acci);
-                                    score()->undoChangeElement(_accidental, a);
-                                    }
-                              }
-                        }
-                  }
-            }
-
-      else {
-            // microtonal accidentals playback as naturals
-            // in 1.X, they had no effect on accidental state of measure
-            // ultimetely, they should probably get their own state
-            // for now, at least change state to natural, so subsequent notes playback as might be expected
-            // this is an incompatible change, but better to break it for 2.0 than wait until later
-            as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0);
-            }
-
-      updateRelLine(relLine, true);
       }
 
 //---------------------------------------------------------
