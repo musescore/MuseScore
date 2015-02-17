@@ -111,16 +111,18 @@ class MeasureBase : public Element {
       virtual qreal userDistanceUp(int) const   { return .0;  }
       virtual qreal userDistanceDown(int) const { return .0;  }
 
-      virtual void add(Element*);
-      virtual void remove(Element*);
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
       int tick() const                       { return _tick;  }
       int endTick() const                    { return tick() + ticks();  }
       void setTick(int t)                    { _tick = t;     }
 
       qreal pause() const;
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+
+      void clearElements();
       };
 
 

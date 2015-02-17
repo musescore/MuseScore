@@ -32,6 +32,16 @@ LayoutBreak::LayoutBreak(Score* score)
       setFlag(ElementFlag::HAS_TAG, true);
       }
 
+LayoutBreak::LayoutBreak(const LayoutBreak& lb)
+   : Element(lb)
+      {
+      _layoutBreakType = lb._layoutBreakType;
+      lw = lb.lw;
+      _pause = lb._pause;
+      _startWithLongNames  = lb._startWithLongNames;
+      _startWithMeasureOne = lb._startWithMeasureOne;
+      }
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------

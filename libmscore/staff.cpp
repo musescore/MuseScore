@@ -978,6 +978,8 @@ void Staff::undoSetColor(const QColor& /*val*/)
 
 void Staff::insertTime(int tick, int len)
       {
+      if (len == 0)
+            return;
       qDebug("Staff: %d insertTime at %d len %d", idx(), tick, len);
 
       // when inserting measures directly in front of a key change,
