@@ -3862,7 +3862,7 @@ static void annotations(ExportMusicXml* exp, Xml&, int strack, int etrack, int t
 //  figuredBass
 //---------------------------------------------------------
 
-static void figuredBass(Xml& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap)
+static void figuredBass(Xml& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap, int divisions)
       {
       Segment* seg = cr->segment();
       if (seg->segmentType() == Segment::Type::ChordRest) {
@@ -3886,8 +3886,20 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
                                     }
                               else
                                     fbMap.remove(strack);
-                              fb->writeMusicXML(xml, true, extend);
-                              // there can only be one FB, if one was found
+                              int crEndTick = cr->tick() + cr->actualTicks();
+                              int fbEndTick = fb->segment()->tick() + fb->ticks();
+                              bool writeDuration = fb->ticks() < cr->actualTicks();
+                              fb->writeMusicXML(xml, true, crEndTick, fbEndTick, writeDuration, divisions);
+
+                              // Check for changing figures under a single note (each figure stored in a separate segment)
+                              for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
+                                    foreach (Element* annot, segNext->annotations()) {
+                                          if (annot->type() == Element::Type::FIGURED_BASS && annot->track() == track) {
+                                                const FiguredBass* fb = static_cast<const FiguredBass*>(annot);
+                                                fb->writeMusicXML(xml, true, 0, 0, true, divisions);
+                                                }
+                                          }
+                                    }
                               // no extend can be pending
                               return;
                               }
@@ -3896,13 +3908,14 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
             // check for extend pending
             if (fbMap.contains(strack)) {
                   const FiguredBass* fb = fbMap.value(strack);
-                  int endTick = fb->segment()->tick() + fb->ticks();
-                  if (cr->tick() < endTick) {
+                  int crEndTick = cr->tick() + cr->actualTicks();
+                  int fbEndTick = fb->segment()->tick() + fb->ticks();
+                  bool writeDuration = fb->ticks() < cr->actualTicks();
+                  if (cr->tick() < fbEndTick) {
                         //qDebug("figuredbass() at tick %d extend only", cr->tick());
-                        // write figured bass element with extend only
-                        fb->writeMusicXML(xml, false, true);
+                        fb->writeMusicXML(xml, false, crEndTick, fbEndTick, writeDuration, divisions);
                         }
-                  if (endTick <= cr->tick() + cr->actualTicks()) {
+                  if (fbEndTick <= crEndTick) {
                         //qDebug("figuredbass() at tick %d extend done", cr->tick() + cr->actualTicks());
                         fbMap.remove(strack);
                         }
@@ -4403,7 +4416,7 @@ void ExportMusicXml::write(QIODevice* dev)
             int irregularMeasureNo = 1; // number of next irregular measure
             int pickupMeasureNo = 1;    // number of next pickup measure
 
-            FigBassMap fbMap;           // pending figure base extends
+            FigBassMap fbMap;           // pending figured bass extends
 
             for (MeasureBase* mb = _score->measures()->first(); mb; mb = mb->next()) {
                   if (mb->type() != Element::Type::MEASURE)
@@ -4718,7 +4731,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                                       }
                                                 }
                                           }
-                                    figuredBass(xml, strack, etrack, st, static_cast<const ChordRest*>(el), fbMap);
+                                    figuredBass(xml, strack, etrack, st, static_cast<const ChordRest*>(el), fbMap, div);
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
                                     }
 
