@@ -87,7 +87,7 @@
         <string>Reset Follow text value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -107,7 +107,7 @@
         <string>Reset Tempo value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>

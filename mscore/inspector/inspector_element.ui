@@ -156,7 +156,7 @@
         <string>Reset Horizontal offset value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -197,7 +197,7 @@
         <string>Reset Vertical offset value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -232,14 +232,14 @@
         <string>Reset Color value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
      <item row="3" column="2">
       <widget class="QToolButton" name="hRaster">
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -252,7 +252,7 @@
         <string/>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -318,7 +318,7 @@
         <string>Reset Visible value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>

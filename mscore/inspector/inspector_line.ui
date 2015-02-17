@@ -84,7 +84,7 @@
         <string>Reset Line color value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -124,7 +124,7 @@
         <string>Reset Allow diagonal value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -198,7 +198,7 @@
         <string>Reset Line thickness value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -211,7 +211,7 @@
         <string>Reset Line style value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -227,7 +227,7 @@
         <string>Reset Line visible value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>

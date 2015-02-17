@@ -97,7 +97,7 @@
         <string>Reset Top gap value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -110,7 +110,7 @@
         <string>Reset Bottom gap value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -328,7 +328,7 @@
         <string>Reset Left margin value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -341,7 +341,7 @@
         <string>Reset Right margin value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -354,7 +354,7 @@
         <string>Reset Top margin value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -367,7 +367,7 @@
         <string>Reset Bottom margin value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
