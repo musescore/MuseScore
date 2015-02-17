@@ -1117,7 +1117,7 @@ void ExportMusicXml::credits(Xml& xml)
 
       // write the credits
       if (measure) {
-            foreach(const Element* element, *measure->el()) {
+            foreach(const Element* element, measure->el()) {
                   if (element->type() == Element::Type::TEXT) {
                         const Text* text = (const Text*)element;
                         const double ph = getTenthsFromDots(parentHeight(text));
@@ -3641,7 +3641,7 @@ static int findTrackForAnnotations(int track, Segment* seg)
 static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int strack, int etrack, int track)
       {
       // loop over all segments
-      for (Element* e : *m->el()) {
+      for (Element* e : m->el()) {
             int wtrack = -1; // track to write jump
             if (strack <= e->track() && e->track() < etrack)
                   wtrack = findTrackForAnnotations(e->track(), m->first(Segment::Type::ChordRest));
@@ -3684,7 +3684,7 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
 
 static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, int track)
       {
-      for (Element* e : *m->el()) {
+      for (Element* e : m->el()) {
             int wtrack = -1; // track to write jump
             if (strack <= e->track() && e->track() < etrack)
                   wtrack = findTrackForAnnotations(e->track(), m->first(Segment::Type::ChordRest));

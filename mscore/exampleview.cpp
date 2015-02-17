@@ -64,7 +64,6 @@ void ExampleView::setScore(Score* s)
       _score = s;
       _score->addViewer(this);
       _score->setLayoutMode(LayoutMode::LINE);
-      _score->updateNotes();
       _score->doLayout();
       update();
       }

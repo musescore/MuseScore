@@ -1278,7 +1278,6 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       // score->connectSlurs();
       score->connectTies();
       score->fixTicks();
-      score->updateNotes();
       score->setPlaylistDirty();
       score->setLayoutAll(true);
       score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);

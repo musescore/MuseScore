@@ -199,7 +199,6 @@ void createExcerpt(Excerpt* excerpt)
                               }
                         }
                   }
-            score->updateNotes();
             }
 
       //
@@ -479,7 +478,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   }
 
             nmb->linkTo(mb);
-            foreach (Element* e, *mb->el()) {
+            foreach (Element* e, mb->el()) {
                   if (e->type() == Element::Type::LAYOUT_BREAK) {
                         LayoutBreak::Type st = static_cast<LayoutBreak*>(e)->layoutBreakType();
                         if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE)

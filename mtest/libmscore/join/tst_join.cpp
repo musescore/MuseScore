@@ -108,8 +108,6 @@ void TestJoin::join1(const char* p1)
       QVERIFY(m1 != m2);
 
       score->cmdJoinMeasure(m1, m2);
-      score->updateNotes();
-
 
       // check if notes are still on line 6
       Segment* s = score->firstSegment(Segment::Type::ChordRest);

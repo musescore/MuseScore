@@ -1363,7 +1363,7 @@ QString BarLine::accessibleExtraInfo()
 
             if (m) {
                   //jumps
-                  foreach (Element* e, *m->el()) {
+                  foreach (Element* e, m->el()) {
                         if (!score()->selectionFilter().canSelect(e)) continue;
                         if (e->type() == Element::Type::JUMP)
                               rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
@@ -1377,7 +1377,7 @@ QString BarLine::accessibleExtraInfo()
                   //markers
                   Measure* nextM = m->nextMeasureMM();
                   if (nextM) {
-                        foreach (Element* e, *nextM->el()) {
+                        foreach (Element* e, nextM->el()) {
                               if (!score()->selectionFilter().canSelect(e)) continue;
                               if (e->type() == Element::Type::MARKER)
                                     if (static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)

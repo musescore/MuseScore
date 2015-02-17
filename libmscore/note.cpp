@@ -672,13 +672,8 @@ void Note::remove(Element* e)
                   {
                   Tie* tie = static_cast<Tie*>(e);
                   setTieFor(0);
-                  if (tie->endNote()) {
+                  if (tie->endNote())
                         tie->endNote()->setTieBack(0);
-                        // update accidentals for endNote
-                        Chord* chord = tie->endNote()->chord();
-                        Measure* m = chord->segment()->measure();
-                        m->cmdUpdateNotes(chord->staffIdx());
-                        }
                   int n = tie->spannerSegments().size();
                   for (int i = 0; i < n; ++i) {
                         SpannerSegment* ss = tie->spannerSegments().at(i);
@@ -2237,19 +2232,13 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_ID::PITCH:
                   setPitch(v.toInt());
-                  if (m)
-                        m->cmdUpdateNotes(chord()->staffIdx());
                   score()->setPlaylistDirty();
                   break;
             case P_ID::TPC1:
                   _tpc[0] = v.toInt();
-                  if (m)
-                        m->cmdUpdateNotes(chord()->staffIdx());
                   break;
             case P_ID::TPC2:
                   _tpc[1] = v.toInt();
-                  if (m)
-                        m->cmdUpdateNotes(chord()->staffIdx());
                   break;
             case P_ID::LINE:
                   _line = v.toInt();

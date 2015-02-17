@@ -1368,9 +1368,8 @@ void Score::layoutStage3()
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             if (!staff(staffIdx)->show())
                   continue;
-            for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
+            for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st))
                   layoutChords1(segment, staffIdx);
-                  }
             }
       }
 
@@ -1391,38 +1390,6 @@ void Score::doLayout()
             // abort();
             // return;
             }
-
-      _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
-      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / (MScore::DPI * SPATIUM20));
-
-      if (layoutFlags & LayoutFlag::FIX_TICKS)
-            fixTicks();
-      if (layoutFlags & LayoutFlag::FIX_PITCH_VELO)
-            updateVelo();
-      if (layoutFlags & LayoutFlag::PLAY_EVENTS)
-            createPlayEvents();
-
-      int measureNo = 0;
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            Measure* measure = static_cast<Measure*>(m);
-            measureNo += measure->noOffset();
-            measure->setNo(measureNo);
-            if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
-                  measureNo = 0;
-            else if (measure->irregular())      // dont count measure
-                  ;
-            else
-                  ++measureNo;
-            measure->setBreakMMRest(false);
-            }
-
-      for (MeasureBase* m = first(); m; m = m->next())      // set layout break
-            m->layout0();
-
-      layoutFlags = 0;
-
-      int nstaves = _staves.size();
-
       if (_staves.isEmpty() || first() == 0) {
             // score is empty
             // qDeleteAll(_pages);
@@ -1438,8 +1405,55 @@ void Score::doLayout()
             return;
             }
 
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
-            m->layoutStage1();
+      _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
+      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / (MScore::DPI * SPATIUM20));
+
+      if (layoutFlags & LayoutFlag::FIX_TICKS)
+            fixTicks();
+      if (layoutFlags & LayoutFlag::FIX_PITCH_VELO)
+            updateVelo();
+      if (layoutFlags & LayoutFlag::PLAY_EVENTS)
+            createPlayEvents();
+      layoutFlags = 0;
+
+      int measureNo = 0;
+      int nstaves = _staves.size();
+      for (MeasureBase* m = first(); m; m = m->next()) {      // set layout break
+            m->setPageBreak(false);
+            m->setLineBreak(false);
+            m->setSectionBreak(0);
+
+            for (Element* e : m->el()) {
+                  if (!tagIsValid(e->tag()) || (e->type() != Element::Type::LAYOUT_BREAK))
+                        continue;
+                  LayoutBreak* lb = static_cast<LayoutBreak*>(e);
+                  switch (lb->layoutBreakType()) {
+                        case LayoutBreak::Type::PAGE:
+                              m->setPageBreak(true);
+                              break;
+                        case LayoutBreak::Type::LINE:
+                              m->setLineBreak(true);
+                              break;
+                        case LayoutBreak::Type::SECTION:
+                              m->setSectionBreak(lb);
+                              break;
+                        }
+                  }
+            if (m->type() == Element::Type::MEASURE) {
+                  Measure* measure = static_cast<Measure*>(m);
+                  measureNo += measure->noOffset();
+                  measure->setNo(measureNo);
+                  if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
+                        measureNo = 0;
+                  else if (!measure->irregular())      // dont count measure
+                        ++measureNo;
+                  measure->setBreakMMRest(false);
+                  measure->layoutStage1();
+                  for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx)
+                        measure->cmdUpdateNotes(staffIdx);
+                  }
+            }
+
       if (styleB(StyleIdx::createMultiMeasureRests))
             createMMRests();
 
@@ -1786,7 +1800,7 @@ static bool breakMultiMeasureRest(Measure* m)
             }
 
       // break for marker in this measure
-      for (Element* e : *m->el()) {
+      for (Element* e : m->el()) {
             if (e->type() == Element::Type::MARKER) {
                   Marker* mark = static_cast<Marker*>(e);
                   if (!(mark->textStyle().align() & AlignmentFlags::RIGHT))
@@ -1797,7 +1811,7 @@ static bool breakMultiMeasureRest(Measure* m)
       // break for marker & jump in previous measure
       Measure* pm = m->prevMeasure();
       if (pm) {
-            for (Element* e : *pm->el()) {
+            for (Element* e : pm->el()) {
                   if (e->type() == Element::Type::JUMP) {
                         return true;
                         }
@@ -1902,15 +1916,15 @@ void Score::createMMRests()
 
                   mmr->setRepeatFlags(m->repeatFlags() | lm->repeatFlags());
 
-                  qDeleteAll(*mmr->el());
-                  mmr->el()->clear();
+                  qDeleteAll(mmr->el());
+                  mmr->el().clear();
 
-                  for (Element* e : *m->el()) {
+                  for (Element* e : m->el()) {
                         if (e->type() == Element::Type::MARKER)
                               mmr->add(e->clone());
                         }
 
-                  for (Element* e : *lm->el())
+                  for (Element* e : lm->el())
                         mmr->add(e->clone());
 
                   Segment* s = mmr->undoGetSegment(Segment::Type::ChordRest, m->tick());
@@ -2058,9 +2072,6 @@ void Score::createMMRests()
                   m->setMMRestCount(0);
                   }
             }
-/* Update Notes After creating mmRest Because on load, mmRest->next() was not set
-on first pass in updateNotes() and break occur */
-            updateNotes();
       }
 
 //---------------------------------------------------------

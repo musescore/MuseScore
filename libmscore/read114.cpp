@@ -779,7 +779,6 @@ Score::FileError Score::read114(XmlReader& e)
       fixTicks();
       rebuildMidiMapping();
       updateChannel();
-      updateNotes();    // only for parts needed?
 
       // treat reading a 1.2 file as import
       // on save warn if old file will be overwritten

@@ -507,13 +507,8 @@ void Chord::remove(Element* e)
                   Note* note = static_cast<Note*>(e);
                   if (_notes.removeOne(note)) {
                         if (note->tieFor()) {
-                              if (note->tieFor()->endNote()) {
+                              if (note->tieFor()->endNote())
                                     note->tieFor()->endNote()->setTieBack(0);
-                                    // update accidentals for endNote
-                                    Chord* chord = note->tieFor()->endNote()->chord();
-                                    Measure* m = chord->segment()->measure();
-                                    m->cmdUpdateNotes(chord->staffIdx());
-                                    }
                               }
                         }
                   else
@@ -1588,47 +1583,6 @@ void Chord::layout2()
                   }
             }
 
-      }
-
-//---------------------------------------------------------
-//   updateNotes
-//---------------------------------------------------------
-
-void Chord::updateNotes(AccidentalState* as)
-      {
-
-      QList<Chord*> graceNotesBefore;
-      int gnb = getGraceNotesBefore(&graceNotesBefore);
-      if (gnb) {
-            for (Chord* c : graceNotesBefore)
-                  c->updateNotes(as);
-            }
-
-      const Drumset* drumset = 0;
-      if (staff()->part()->instr()->useDrumset())
-            drumset = staff()->part()->instr()->drumset();
-
-      QList<Note*> nl(notes());
-      if (drumset) {
-            for (Note* note : nl) {
-                  int pitch = note->pitch();
-                  if (drumset->isValid(pitch) && !note->fixed()) {
-                        note->setHeadGroup(drumset->noteHead(pitch));
-                        note->setLine(drumset->line(pitch));
-                        }
-                  }
-            }
-      else {
-            for (Note* note : nl)
-                  note->layout10(as);
-            }
-      QList<Chord*> graceNotesAfter;
-      int gna = getGraceNotesAfter(&graceNotesAfter);
-      if (gna) {
-            for (Chord* c : graceNotesAfter)
-                  c->updateNotes(as);
-            }
-      sortNotes();
       }
 
 //---------------------------------------------------------
