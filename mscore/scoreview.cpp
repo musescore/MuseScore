@@ -4473,47 +4473,8 @@ void ScoreView::changeVoice(int voice)
                   }
             }
       else {
-            score()->startCmd();
-            QList<Element*> el;
-            foreach(Element* e, score()->selection().elements()) {
-                  if (e->type() == Element::Type::NOTE) {
-                        Note* note = static_cast<Note*>(e);
-                        Chord* chord = note->chord();
-                        if (chord->voice() != voice) {
-                              int notes = note->chord()->notes().size();
-                              if (notes > 1) {
-                                    //
-                                    // TODO: check destination voice content
-                                    //
-                                    Note* newNote   = new Note(*note);
-                                    Chord* newChord = new Chord(score());
-                                    newNote->setSelected(false);
-                                    el.append(newNote);
-                                    int track = chord->staffIdx() * VOICES + voice;
-                                    newChord->setTrack(track);
-                                    newChord->setDurationType(chord->durationType());
-                                    newChord->setDuration(chord->duration());
-                                    newChord->setParent(chord->parent());
-                                    newChord->add(newNote);
-                                    score()->undoRemoveElement(note);
-                                    score()->undoAddElement(newChord);
-                                    }
-                              else if (notes == 1 && voice && chord->voice()) {
-                                    Chord* newChord = new Chord(*chord);
-                                    int track = chord->staffIdx() * VOICES + voice;
-                                    newChord->setTrack(track);
-                                    newChord->setParent(chord->parent());
-                                    score()->undoRemoveElement(chord);
-                                    score()->undoAddElement(newChord);
-                                    }
-                              }
-                        }
-                  }
-            score()->selection().clear();
-            foreach(Element* e, el)
-                  score()->select(e, SelectType::ADD, -1);
-            score()->setLayoutAll(true);
-            score()->endCmd();
+            // treat as command to move notes to another voice
+            score()->changeVoice(voice);
             }
       mscore->updateInputState(score());
       }
