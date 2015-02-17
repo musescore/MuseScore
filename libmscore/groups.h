@@ -71,7 +71,6 @@ class Groups : public std::vector<GroupNode> {
       static Beam::Mode endBeam(ChordRest* cr, ChordRest* prev = 0);
       };
 
-
 //---------------------------------------------------------
 //   NoteGroup
 //---------------------------------------------------------

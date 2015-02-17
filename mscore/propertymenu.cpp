@@ -424,10 +424,11 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             TimeSigProperties tsp(r);
 
             if (tsp.exec()) {
-                  ts->undoChangeProperty(P_ID::SHOW_COURTESY, r->showCourtesySig());
-                  ts->undoChangeProperty(P_ID::NUMERATOR_STRING, r->numeratorString());
+                  ts->undoChangeProperty(P_ID::SHOW_COURTESY,      r->showCourtesySig());
+                  ts->undoChangeProperty(P_ID::NUMERATOR_STRING,   r->numeratorString());
                   ts->undoChangeProperty(P_ID::DENOMINATOR_STRING, r->denominatorString());
-                  ts->undoChangeProperty(P_ID::TIMESIG_TYPE, int(r->timeSigType()));
+                  ts->undoChangeProperty(P_ID::TIMESIG_TYPE,       int(r->timeSigType()));
+                  ts->undoChangeProperty(P_ID::GROUPS,        QVariant::fromValue<Groups>(r->groups()));
 
                   if (r->sig() != ts->sig()) {
                         score()->cmdAddTimeSig(ts->measure(), ts->staffIdx(), r, true);
