@@ -101,7 +101,7 @@
         <string>Reset Scale to frame size value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -234,7 +234,7 @@
         <string>Reset Lock aspect ratio value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -244,7 +244,7 @@
         <string>Reset Size in staff space units value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>

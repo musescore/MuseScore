@@ -91,7 +91,7 @@
         <string>Reset Velocity value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -143,7 +143,7 @@
         <string>Reset Dynamic range value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>

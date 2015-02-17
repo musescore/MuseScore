@@ -160,7 +160,7 @@
         <string>Reset Leading space value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -173,7 +173,7 @@
         <string>Reset Trailing space value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>

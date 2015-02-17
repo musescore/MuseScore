@@ -79,7 +79,7 @@
            <string>Close MIDI import panel</string>
           </property>
           <property name="text">
-           <string>...</string>
+           <string notr="true">...</string>
           </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
