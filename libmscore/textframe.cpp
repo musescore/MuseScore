@@ -100,5 +100,20 @@ void TBox::scanElements(void* data, void (*func)(void*, Element*), bool all)
       Box::scanElements(data, func, all);
       }
 
+//---------------------------------------------------------
+//   add
+//---------------------------------------------------------
+
+void TBox::add(Element* e)
+      {
+      if (e->type() == Element::Type::TEXT) {
+            delete _text;
+            e->setParent(this);
+            _text = static_cast<Text*>(e);
+            }
+      else
+            VBox::add(e);
+      }
+
 }
 

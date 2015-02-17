@@ -37,6 +37,7 @@ class TBox : public VBox {
       virtual void layout();
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       Text* text()                        { return _text; }
+      virtual void add(Element* e) override;
       };
 
 
