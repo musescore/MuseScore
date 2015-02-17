@@ -419,6 +419,10 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
             Measure* m1 = s->tick2measure(fm->tick());
             Measure* m2 = s->tick2measure(lm->tick());
 
+            int tick1 = m1->tick();
+            int tick2 = m2->endTick();
+            for (auto i : s->spannerMap().findContained(tick1, tick2))
+                  undo(new RemoveElement(i.value));
             s->undoRemoveMeasures(m1, m2);
 
             Measure* nfm = 0;
@@ -1758,12 +1762,12 @@ void Score::cmdDeleteSelectedMeasures()
       int startTick = is->tick();
       int endTick   = ie->tick();
 
+      undoInsertTime(is->tick(), -(ie->endTick() - is->tick()));
       foreach (Score* score, scoreList()) {
             Measure* is = score->tick2measure(startTick);
             Measure* ie = score->tick2measure(endTick);
 
             undoRemoveMeasures(is, ie);
-            undoInsertTime(is->tick(), -(ie->endTick() - is->tick()));
 
             // adjust views
             Measure* focusOn = is->prevMeasure() ? is->prevMeasure() : firstMeasure();

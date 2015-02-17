@@ -2864,7 +2864,7 @@ void ChangeMStaffProperties::flip()
 
 void Score::undoInsertTime(int tick, int len)
       {
-//      qDebug("insertTime %d at %d, spanner %d", len, tick, _spanner.map().size());
+      qDebug("undoInsertTime %d at %d, spanners %ld", len, tick, _spanner.map().size());
       if (len == 0)
             return;
 
@@ -2963,8 +2963,9 @@ void Score::undoInsertTime(int tick, int len)
                         int d1 = s->tick() - tick;
                         int d2 = tick2 - s->tick();
                         int len = s->ticks() - d2;
-                        if (len == 0)
-                             undoRemoveElement(s);
+                        if (len == 0) {
+                              undoRemoveElement(s);
+                              }
                         else {
                               undoChangeProperty(s, P_ID::SPANNER_TICK, s->tick() - d1);
                               undoChangeProperty(s, P_ID::SPANNER_TICKS, len);
@@ -2980,12 +2981,6 @@ void Score::undoInsertTime(int tick, int len)
 
 void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
       {
-      int tick1 = m1->tick();
-      int tick2 = m2->endTick();
-      for (auto i : _spanner.findContained(tick1, tick2)) {
-            undo(new RemoveElement(i.value));
-            }
-
       //
       //  handle ties which start before m1 and end in (m1-m2)
       //
