@@ -419,6 +419,7 @@ void Lyrics::paste(MuseScoreView* scoreview)
 
       QStringList hyph = sl[0].split("-");
       bool minus = false;
+      bool underscore = false;
       if(hyph.length() > 1) {
             insertText(hyph[0]);
             hyph.removeFirst();
@@ -430,6 +431,26 @@ void Lyrics::paste(MuseScoreView* scoreview)
             sl.removeFirst();
             sl.removeFirst();
             minus = true;
+            }
+      else if (sl[0].startsWith("_")) {
+            sl[0].remove(0, 1);
+            if (sl[0].isEmpty())
+                  sl.removeFirst();
+            underscore = true;
+            }
+      else if (sl[0].contains("_")) {
+            int p = sl[0].indexOf("_");
+            insertText(sl[0].left(p));
+            sl[0] = sl[0].mid(p + 1);
+            if (sl[0].isEmpty())
+                  sl.removeFirst();
+            underscore = true;
+            }
+      else if (sl.length() > 1 && sl[1] == "_") {
+            insertText(sl[0]);
+            sl.removeFirst();
+            sl.removeFirst();
+            underscore = true;
             }
       else {
             insertText(sl[0]);
@@ -444,6 +465,8 @@ void Lyrics::paste(MuseScoreView* scoreview)
       QApplication::clipboard()->setText(txt, mode);
       if (minus)
             scoreview->lyricsMinus();
+      else if (underscore)
+            scoreview->lyricsUnderscore();
       else
             scoreview->lyricsTab(false, false, true);
       }
