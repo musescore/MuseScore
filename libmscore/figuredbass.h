@@ -177,8 +177,8 @@ class FiguredBassItem : public Element {
       virtual void      write(Xml& xml) const override;
 
       // read / write MusicXML
-//      void              readMusicXML(XmlReader& de, bool paren, bool& extend);
-      void              writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const;
+//      void              readMusicXML(XmlReader& de, bool paren);
+      void              writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
       bool              startsWithParenthesis() const;
 
       // specific API
@@ -196,6 +196,7 @@ class FiguredBassItem : public Element {
       void              setSuffix(const Modifier& v)  { _suffix = v;          }
       void              undoSetSuffix(Modifier suff);
       ContLine          contLine() const              { return _contLine;     }
+      void              setContLine(const ContLine& v){ _contLine = v;        }
       void              undoSetContLine(ContLine val);
       Parenthesis       parenth1()                    { return parenth[0];    }
       Parenthesis       parenth2()                    { return parenth[1];    }
@@ -290,8 +291,8 @@ class FiguredBass : public Text {
       virtual void      write(Xml& xml) const override;
 
       // read / write MusicXML
-      bool              readMusicXML(XmlReader& de, int divisions, bool& extend);
-      void              writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const;
+//      bool              readMusicXML(XmlReader& de, int divisions);
+      void              writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
 
 //DEBUG
 //Q_INVOKABLE Ms::FiguredBassItem* addItem();

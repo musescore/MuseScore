@@ -209,7 +209,7 @@ class MusicXml {
       Harmony* harmony;                          ///< Current harmony
       Chord* tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
-      bool figBassExtend;                        ///< Current figured bass extend
+      QVector<FiguredBass*> figBassList;         ///< List of figured bass elements under a single note
       Beam::Mode beamMode;                       ///< Current beam mode
       QString glissandoText;                     ///< Glissando text at glissando start
       QString glissandoColor;                    ///< Glissando color at glissando start
