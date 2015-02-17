@@ -31,6 +31,10 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       ScoreRange range;
       range.read(m1->first(), m2->last());
 
+      int tick1 = m1->tick();
+      int tick2 = m2->endTick();
+      for (auto i : _spanner.findContained(tick1, tick2))
+            undo(new RemoveElement(i.value));
       undoRemoveMeasures(m1, m2);
       Measure* m = new Measure(this);
       m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),

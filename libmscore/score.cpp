@@ -3486,10 +3486,8 @@ bool Score::isSpannerStartEnd(int tick, int track) const
 
 void Score::insertTime(int tick, int len)
       {
-      for (Score* score : scoreList()) {
-            for (Staff* staff : score->staves())
-                  staff->insertTime(tick, len);
-            }
+      for (Staff* staff : staves())
+            staff->insertTime(tick, len);
       }
 
 //---------------------------------------------------------
