@@ -2864,7 +2864,7 @@ void ChangeMStaffProperties::flip()
 
 void Score::undoInsertTime(int tick, int len)
       {
-      qDebug("undoInsertTime %d at %d, spanners %ld", len, tick, _spanner.map().size());
+      qDebug("undoInsertTime %d at %d, spanners %zd", len, tick, _spanner.map().size());
       if (len == 0)
             return;
 
