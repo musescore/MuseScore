@@ -327,8 +327,13 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   nmb = new HBox(score);
             else if (mb->type() == Element::Type::VBOX)
                   nmb = new VBox(score);
-            else if (mb->type() == Element::Type::TBOX)
+            else if (mb->type() == Element::Type::TBOX) {
                   nmb = new TBox(score);
+                  Text* text = static_cast<TBox*>(mb)->text();
+                  Element* ne = text->linkedClone();
+                  ne->setScore(score);
+                  nmb->add(ne);
+                  }
             else if (mb->type() == Element::Type::MEASURE) {
                   Measure* m  = static_cast<Measure*>(mb);
                   Measure* nm = new Measure(score);
