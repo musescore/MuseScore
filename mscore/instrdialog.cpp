@@ -353,18 +353,10 @@ void MuseScore::editInstrList()
                               // check changes in staff type
                               Staff* staff = sli->staff();
                               const StaffType* stfType = sli->staffType();
-                              // before changing staff type, check if notes need to be updated
-                              // (true if changing into or away from TAB)
-                              StaffGroup ng = stfType->group();         // new staff group
-                              StaffGroup og = staff->staffGroup();      // old staff group
-                              bool updateNeeded = (ng == StaffGroup::TAB) != (og == StaffGroup::TAB);
 
                               // use selected staff type
                               if (stfType->name() != staff->staffType()->name())
                                     rootScore->undo(new ChangeStaffType(staff, *stfType));
-
-                              if (updateNeeded)
-                                    rootScore->cmdUpdateNotes();
                               }
                         else {
                               ++staffIdx;
@@ -440,8 +432,7 @@ void MuseScore::editInstrList()
             rootScore->undo(new RemoveExcerpt(s));
 
       rootScore->setLayoutAll(true);
-      rootScore->cmdUpdateNotes();  // do it before global layout or layout of chords will not
-      rootScore->endCmd();          // find notes in right positions for stems, ledger lines, etc
+      rootScore->endCmd();
       rootScore->rebuildMidiMapping();
       seq->initInstruments();
       }

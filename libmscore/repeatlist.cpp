@@ -50,7 +50,7 @@ Measure* Score::searchLabel(const QString& s)
       else if (s == "end")
             return lastMeasure();
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (auto e : *m->el()) {
+            for (auto e : m->el()) {
                   if (e->type() == Element::Type::MARKER) {
                         const Marker* marker = static_cast<const Marker*>(e);
                         if (marker->label() == s)
@@ -295,7 +295,7 @@ void RepeatList::unwind()
                   // Jumps are only accepted outside of other repeats
                   if (flags & Repeat::JUMP) {
                         Jump* s = 0;
-                        foreach(Element* e, *m->el()) {
+                        foreach(Element* e, m->el()) {
                               if (e->type() == Element::Type::JUMP) {
                                     s = static_cast<Jump*>(e);
                                     break;

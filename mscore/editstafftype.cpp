@@ -494,7 +494,6 @@ void EditStaffType::updatePreview()
       setFromDlg();
       if (preview) {
             preview->score()->staff(0)->setStaffType(&staffType);
-            preview->score()->cmdUpdateNotes();
             preview->score()->doLayout();
             preview->updateAll();
             preview->update();

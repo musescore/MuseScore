@@ -83,12 +83,11 @@ class MeasureBase : public Element {
       virtual int ticks() const              { return 0;       }
       virtual void write(Xml&, int, bool) const = 0;
 
-      void layout0();
       virtual void layout();
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      ElementList* el()                      { return &_el; }
-      const ElementList* el() const          { return &_el; }
+      ElementList el()                       { return _el; }
+      const ElementList& el() const          { return _el; }
       System* system() const                 { return (System*)parent(); }
       void setSystem(System* s)              { setParent((Element*)s);   }
 

@@ -2377,7 +2377,6 @@ Score::FileError importGTP(Score* score, const QString& name)
             pscore->setPlaylistDirty();
             pscore->rebuildMidiMapping();
             pscore->updateChannel();
-            pscore->updateNotes();
 
             pscore->setLayoutAll(true);
             pscore->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);

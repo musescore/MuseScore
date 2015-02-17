@@ -244,7 +244,7 @@ static void addSymbol(ElementItem* parent, BSymbol* bs)
 
 static void addMeasureBaseToList(ElementItem* mi, MeasureBase* mb)
       {
-      foreach(Element* e, *mb->el()) {
+      foreach(Element* e, mb->el()) {
             ElementItem* mmi = new ElementItem(mi, e);
             if (e->type() == Element::Type::HBOX || e->type() == Element::Type::VBOX)
                   addMeasureBaseToList(mmi, static_cast<MeasureBase*>(e));
@@ -769,7 +769,7 @@ void MeasureView::setElement(Element* e)
       mb.len->setText(m->len().print());
       mb.tick->setValue(m->tick());
       mb.sel->clear();
-      foreach(const Element* e, *m->el()) {
+      foreach(const Element* e, m->el()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, e->name());
 //            item->setText(1, QString("%1").arg(e->subtype()));

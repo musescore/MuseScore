@@ -924,9 +924,6 @@ class Score : public QObject {
       Q_INVOKABLE QString metaTag(const QString& s) const;
       Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val);
 
-      void updateNotes();
-      void cmdUpdateNotes();
-      void cmdUpdateAccidentals(Measure* m, int staffIdx);
       QMap<int, LinkedElements*>& links();
       void layoutFingering(Fingering*);
       void cmdSplitMeasure(ChordRest*);

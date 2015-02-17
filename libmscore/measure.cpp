@@ -1646,7 +1646,7 @@ void Measure::adjustToLen(Fraction nf)
             //
             //  CHECK: do not remove all slurs
             //
-            foreach(Element* e, *m->el()) {
+            foreach(Element* e, m->el()) {
                   if (e->type() == Element::Type::SLUR)
                         s->undoRemoveElement(e);
                   }
@@ -3793,47 +3793,12 @@ void Measure::layoutStage1()
       if (!score()->styleB(StyleIdx::createMultiMeasureRests) || breakMultiMeasureRest())
             return;
 
-      // break mm rest on any spanner
-#if 0
-      for (auto i : sl) {
-            Spanner* sp = i.value;
-            if (sp->type() == Element::VOLTA) {
-                  setBreakMMRest(true);
-                  break;
-                  }
-            }
-#endif
       MeasureBase* mb = prev();
       if (mb && mb->type() == Element::Type::MEASURE) {
             Measure* pm = static_cast<Measure*>(mb);
             if (pm->endBarLineType() != BarLineType::NORMAL
                && pm->endBarLineType() != BarLineType::BROKEN && pm->endBarLineType() != BarLineType::DOTTED)
                   setBreakMMRest(true);
-            }
-      }
-
-//---------------------------------------------------------
-//   updateNotes
-//    recompute note lines and accidentals
-///   not undoable add/remove
-//---------------------------------------------------------
-
-void Measure::updateNotes(int staffIdx)
-      {
-      AccidentalState as;      // state of already set accidentals for this measure
-      Staff* staff = score()->staff(staffIdx);
-      as.init(staff->key(tick()));
-
-      int startTrack = staffIdx * VOICES;
-      int endTrack   = startTrack + VOICES;
-
-      for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
-            for (int track = startTrack; track < endTrack; ++track) {
-                  Chord* chord = static_cast<Chord*>(s->element(track));
-                  if (!chord || chord->type() != Element::Type::CHORD)
-                       continue;
-                  chord->updateNotes(&as);
-                  }
             }
       }
 
@@ -3976,7 +3941,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                   s->add(ne);
                   }
             }
-      foreach(Element* e, *el()) {
+      foreach(Element* e, el()) {
             Element* ne = e->clone();
             ne->setScore(sc);
             ne->setUserOff(e->userOff());

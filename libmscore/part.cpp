@@ -446,7 +446,6 @@ bool Part::setProperty(P_ID id, const QVariant& property)
                   break;
             case P_ID::USE_DRUMSET:
                   instr()->setUseDrumset(property.toBool());
-                  score()->updateNotes();
                   break;
             case P_ID::PART_VOLUME:
                   setVolume(property.toInt());

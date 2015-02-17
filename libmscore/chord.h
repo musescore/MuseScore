@@ -172,7 +172,6 @@ class Chord : public ChordRest {
       Note* selectedNote() const;
       virtual void layout();
       void layout2();
-      void updateNotes(AccidentalState*);
       void cmdUpdateNotes(AccidentalState*);
 
       NoteType noteType() const       { return _noteType; }

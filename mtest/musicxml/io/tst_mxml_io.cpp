@@ -208,8 +208,6 @@ static void fixupScore(Score* score)
             ++staffIdx;
             }
 #endif
-
-      score->updateNotes();
       }
 
 //---------------------------------------------------------

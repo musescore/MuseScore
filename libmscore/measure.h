@@ -302,7 +302,6 @@ class Measure : public MeasureBase {
       bool isEmpty() const;
       bool isOnlyRests(int track) const;
 
-      void updateNotes(int staffIdx);
       void cmdUpdateNotes(int staffIdx);
 
       void layoutStage1();

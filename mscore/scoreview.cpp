@@ -2898,7 +2898,7 @@ void ScoreView::cmd(const QAction* a)
             if (mb) {
                   TBox* tf = static_cast<TBox*>(mb);
                   Text* text = 0;
-                  foreach(Element* e, *tf->el()) {
+                  foreach(Element* e, tf->el()) {
                         if (e->type() == Element::Type::TEXT) {
                               text = static_cast<Text*>(e);
                               break;

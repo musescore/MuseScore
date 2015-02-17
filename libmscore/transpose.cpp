@@ -667,7 +667,6 @@ void Score::transpositionChanged(Part* part, Interval oldV)
                         }
                   }
             }
-      cmdUpdateNotes();       // DEBUG
       }
 }
 

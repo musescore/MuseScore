@@ -228,7 +228,6 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
                   }
             }
 
-      measure->cmdUpdateNotes(chord->staffIdx());
       return chord;
       }
 
@@ -1463,7 +1462,6 @@ void Score::deleteItem(Element* el)
 
             case Element::Type::KEYSIG:
                   undoRemoveElement(el);
-                  cmdUpdateNotes();
                   break;
 
             case Element::Type::NOTE:
@@ -1633,7 +1631,7 @@ void Score::deleteItem(Element* el)
                   if (m->isMMRest()) {
                         // propagate to original measure
                         m = m->mmRestLast();
-                        foreach(Element* e, *m->el()) {
+                        foreach(Element* e, m->el()) {
                               if (e->type() == Element::Type::LAYOUT_BREAK) {
                                     undoRemoveElement(e);
                                     break;

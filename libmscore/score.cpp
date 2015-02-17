@@ -233,7 +233,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
       if (nb->type() == Element::Type::HBOX || nb->type() == Element::Type::VBOX
          || nb->type() == Element::Type::TBOX || nb->type() == Element::Type::FBOX)
             nb->setSystem(ob->system());
-      foreach(Element* e, *nb->el())
+      foreach(Element* e, nb->el())
             e->setParent(nb);
       }
 
@@ -1440,12 +1440,7 @@ void Score::addElement(Element* element)
                   // createPlayEvents(static_cast<Chord*>(element));
                   break;
 
-            case Element::Type::NOTE: {
-                  Note* note = static_cast<Note*>(element);
-                  note->chord()->segment()->measure()->cmdUpdateNotes(element->staffIdx());
-                  }
-                  // fall through
-
+            case Element::Type::NOTE:
             case Element::Type::TREMOLO:
             case Element::Type::ARTICULATION:
             case Element::Type::ARPEGGIO:
@@ -1827,7 +1822,7 @@ Text* Score::getText(TextStyleType subtype)
       {
       MeasureBase* m = first();
       if (m && m->type() == Element::Type::VBOX) {
-            foreach(Element* e, *m->el()) {
+            foreach(Element* e, m->el()) {
                   if (e->type() == Element::Type::TEXT && static_cast<Text*>(e)->textStyleType() == subtype)
                         return static_cast<Text*>(e);
                   }
@@ -1974,53 +1969,6 @@ void Score::removeExcerpt(Score* score)
       }
 
 //---------------------------------------------------------
-//   updateNotes
-///   recompute note lines and accidental
-///   not undoable add/remove
-//---------------------------------------------------------
-
-void Score::updateNotes()
-      {
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
-                  m->updateNotes(staffIdx);
-            }
-      }
-
-//---------------------------------------------------------
-//   cmdUpdateNotes
-///   recompute note lines and accidental
-///   undoable add/remove
-//---------------------------------------------------------
-
-void Score::cmdUpdateNotes()
-      {
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
-                  m->cmdUpdateNotes(staffIdx);
-            }
-      }
-
-//---------------------------------------------------------
-//   cmdUpdateAccidentals
-///   update accidentals upto next keySig change
-//---------------------------------------------------------
-
-void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
-      {
-      for (Measure* m = beginMeasure; m; m = m->nextMeasureMM()) {
-            m->cmdUpdateNotes(staffIdx);
-            if (m == beginMeasure)
-                  continue;
-            for (Segment* s = m->first(Segment::Type::KeySig); s; s = s->next(Segment::Type::KeySig)) {
-                  KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
-                  if (ks && (!ks->generated()))
-                        return;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   clone
 //---------------------------------------------------------
 
@@ -2041,7 +1989,6 @@ Score* Score::clone()
       Score* score = new Score(style());
       score->read1(r, true);
 
-      score->updateNotes();
       score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       score->scanElements(0, elementAdjustReadPos);  //??
@@ -2604,7 +2551,6 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         }
                   }
             }
-      cmdUpdateNotes();
       }
 
 //---------------------------------------------------------

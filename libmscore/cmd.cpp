@@ -431,8 +431,6 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
 
             select(note, SelectType::SINGLE, 0);
             }
-      Chord* c = nl.front()->chord();
-      c->measure()->cmdUpdateNotes(c->staffIdx());
       setLayoutAll(true);
       _is.moveToNextInputPos();
       endCmd();
@@ -948,8 +946,6 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
       if (srcF == dstF)
             return;
 
-qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(), dstF.numerator(), dstF.denominator());
-
       //keep selected element if any
       Element* selElement = selection().isSingle() ? getSelectedElement() : 0;
 
@@ -977,7 +973,6 @@ qDebug("changeCRlen: %d/%d -> %d/%d", srcF.numerator(), srcF.denominator(), dstF
                         }
                   }
             undoChangeChordRestLen(cr, TDuration(dstF));
-qDebug("  setRest at %d+%d, %d/%d", cr->tick(), cr->actualTicks(), (srcF-dstF).numerator(), (srcF-dstF).denominator());
             setRest(cr->tick() + cr->actualTicks(), track, srcF - dstF, false, tuplet);
 
             if (selElement)
@@ -994,9 +989,6 @@ qDebug("  setRest at %d+%d, %d/%d", cr->tick(), cr->actualTicks(), (srcF-dstF).n
             return;
 
       deselectAll();
-qDebug("ChangeCRLen::List:");
-      foreach (Fraction f, flist)
-            qDebug("  %d/%d", f.numerator(), f.denominator());
 
       int tick       = cr->tick();
       Fraction f     = dstF;
@@ -1004,12 +996,11 @@ qDebug("ChangeCRLen::List:");
       Chord* oc      = 0;
 
       bool first = true;
-      foreach (Fraction f2, flist) {
+      for (Fraction f2 : flist) {
             f  -= f2;
             makeGap(cr1->segment(), cr1->track(), f2, tuplet, first);
 
             if (cr->type() == Element::Type::REST) {
-qDebug("  +ChangeCRLen::setRest %d/%d", f2.numerator(), f2.denominator());
                   Fraction timeStretch = cr1->staff()->timeStretch(cr1->tick());
                   Rest* r = static_cast<Rest*>(cr);
                   if (first) {
@@ -1029,15 +1020,12 @@ qDebug("  +ChangeCRLen::setRest %d/%d", f2.numerator(), f2.denominator());
                         select(r, SelectType::SINGLE, 0);
                         first = false;
                         }
-qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * timeStretch.numerator() / timeStretch.denominator());
                   tick += f2.ticks() * timeStretch.numerator() / timeStretch.denominator();
                   }
             else {
                   QList<TDuration> dList = toDurationList(f2, true);
                   Measure* measure = tick2measure(tick);
                   int etick = measure->tick();
-//                  if (measure->tick() != tick)
-//                        etick += measure->ticks();
                   if (((tick - etick) % dList[0].ticks()) == 0) {
                         foreach(TDuration du, dList) {
                               bool genTie;
@@ -1097,7 +1085,6 @@ qDebug("  ChangeCRLen:: %d += %d(actual=%d)", tick, f2.ticks(), f2.ticks() * tim
             expandVoice(s, track);
             cr1 = static_cast<ChordRest*>(s->element(track));
             }
-//      checkSpanner(cr->tick(), cr->tick() + d.ticks());
       connectTies();
       }
 
@@ -1419,11 +1406,6 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
                         }
                   }
             }
-      //
-      // recalculate needed accidentals for
-      // whole measure
-      //
-      chord->measure()->cmdUpdateNotes(staffIdx);
       }
 
 //---------------------------------------------------------

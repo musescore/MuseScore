@@ -2072,7 +2072,6 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             s->setPlaylistDirty();
             s->rebuildMidiMapping();
             s->updateChannel();
-            s->updateNotes();
             s->setSoloMute();
             s->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
             }

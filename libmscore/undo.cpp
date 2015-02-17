@@ -600,7 +600,6 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   clef->setParent(destSeg);
                   score->undo(new AddElement(clef));
                   }
-            cmdUpdateNotes();
             }
       }
 
@@ -937,7 +936,6 @@ void Score::undoAddElement(Element* element)
                               Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
                               }
 #endif
-                        element->score()->updateNotes();
                         }
                   return;
                   }
@@ -957,7 +955,6 @@ void Score::undoAddElement(Element* element)
                         //      n->setTpcFromPitch();
                               }
 #endif
-                        ne->score()->updateNotes();
                         }
                   }
             return;
@@ -1373,7 +1370,6 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                         }
                   }
             undo(new AddElement(newcr));
-            m->cmdUpdateNotes(staffIdx);
             }
       }
 
@@ -1495,39 +1491,11 @@ static void undoAddTuplet(DurationElement* cr)
 
 void AddElement::endUndoRedo(bool isUndo) const
       {
-      if (element->type() == Element::Type::TIE) {
-            Tie* tie = static_cast<Tie*>(element);
-            Measure* m1 = tie->startNote()->chord()->measure();
-            Measure* m2 = 0;
-            if(tie->endNote())
-                  m2 = tie->endNote()->chord()->measure();
-
-            if (m1 != m2) {
-                  m1->cmdUpdateNotes(tie->staffIdx());
-                  if (m2)
-                        m2->cmdUpdateNotes(tie->staffIdx());
-                  // tie->score()->cmdUpdateNotes();
-                  }
-            else
-                  m1->cmdUpdateNotes(tie->staffIdx());
-            }
-      else if (element->isChordRest()) {
+      if (element->isChordRest()) {
             if (isUndo)
                   undoRemoveTuplet(static_cast<ChordRest*>(element));
             else
                   undoAddTuplet(static_cast<ChordRest*>(element));
-            if (element->type() == Element::Type::CHORD) {
-                  Measure* m = static_cast<Chord*>(element)->measure();
-                  m->cmdUpdateNotes(element->staffIdx());
-                  }
-            }
-      else if (element->type() == Element::Type::NOTE) {
-            Measure* m = static_cast<Note*>(element)->chord()->measure();
-            m->cmdUpdateNotes(element->staffIdx());
-            }
-      else if (element->type() == Element::Type::KEYSIG) {
-            if (element->score()->undo()->active())
-                  element->score()->cmdUpdateNotes();
             }
       }
 
@@ -1668,10 +1636,6 @@ void RemoveElement::undo()
                   }
             undoAddTuplet(static_cast<ChordRest*>(element));
             }
-      else if (element->type() == Element::Type::NOTE) {
-            Note* note = static_cast<Note*>(element);
-            note->chord()->measure()->cmdUpdateNotes(note->chord()->staffIdx());
-            }
       }
 
 //---------------------------------------------------------
@@ -1686,24 +1650,12 @@ void RemoveElement::redo()
             undoRemoveTuplet(static_cast<ChordRest*>(element));
             if (element->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(element);
-                  Note* endNote = 0; // find one instance of endNote
                   foreach(Note* note, chord->notes()) {
                         if (note->tieFor() && note->tieFor()->endNote()) {
-                              endNote = note->tieFor()->endNote();
                               note->tieFor()->endNote()->setTieBack(0);
                               }
                         }
-                  if (endNote) {
-                        // update accidentals in endNotes's measure
-                        Chord* eChord = endNote->chord();
-                        Measure* m = eChord->segment()->measure();
-                        m->cmdUpdateNotes(eChord->staffIdx());
-                        }
                   }
-            }
-      else if (element->type() == Element::Type::NOTE) {
-            Note* note = static_cast<Note*>(element);
-            note->chord()->measure()->cmdUpdateNotes(note->chord()->staffIdx());
             }
       }
 
@@ -1742,7 +1694,6 @@ void ChangeConcertPitch::flip()
       int oval = int(score->styleB(StyleIdx::concertPitch));
       score->style()->set(StyleIdx::concertPitch, val);
       score->setLayoutAll(true);
-      score->cmdUpdateNotes();
       val = oval;
       }
 
@@ -1942,8 +1893,6 @@ void ChangePitch::flip()
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
 
-      Chord* chord = note->chord();
-      chord->measure()->cmdUpdateNotes(chord->staffIdx());
       note->score()->setLayoutAll(true);
       }
 
@@ -1986,9 +1935,6 @@ void ChangeFretting::flip()
       fret  = f_fret;
       tpc1  = f_tpc1;
       tpc2  = f_tpc2;
-
-      Chord* chord = note->chord();
-      chord->measure()->cmdUpdateNotes(chord->staffIdx());
       note->score()->setLayoutAll(true);
       }
 
@@ -2117,11 +2063,6 @@ void ChangeKeySig::flip()
 
       showCourtesy = sc;
       ks           = oe;
-
-      Measure* m = keysig->score()->tick2measure(keysig->staff()->currentKeyTick(tick));
-      for (; m; m = m->nextMeasure()) {
-            m->cmdUpdateNotes(keysig->staffIdx());
-            }
       keysig->score()->setLayoutAll(true);
       }
 
@@ -2596,14 +2537,11 @@ void ChangeStaffType::flip()
       {
       StaffType st = *staff->staffType();
 
-      bool updateNotesNeeded = st.group() != staffType.group();
       staff->setStaffType(&staffType);
 
       staffType = st;
 
       Score* score = staff->score();
-      if (updateNotesNeeded)
-            score->cmdUpdateNotes();
       score->setLayoutAll(true);
       score->scanElements(0, notifyTimeSigs);
       }
@@ -2640,9 +2578,6 @@ void ChangePart::flip()
       // check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another
 
-//      bool updateNeeded = oi.stringData() != part->instr()->stringData();
-//      if (updateNeeded)
-            score->cmdUpdateNotes();
       score->setLayoutAll(true);
 
       partName   = s;
@@ -2803,13 +2738,11 @@ void ChangeChordStaffMove::flip()
             for (ScoreElement* e : *l) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   cr->setStaffMove(staffMove);
-                  cr->measure()->cmdUpdateNotes(cr->staffIdx());
                   cr->score()->setLayoutAll(true);
                   }
             }
       else {
             chordRest->setStaffMove(staffMove);
-            chordRest->measure()->cmdUpdateNotes(chordRest->staffIdx());
             chordRest->score()->setLayoutAll(true);
             }
       staffMove = v;
@@ -3041,8 +2974,6 @@ void RemoveMeasures::undo()
       score->insertTime(fm->tick(), lm->endTick() - fm->tick());
       for (Clef* clef : clefs)
             clef->staff()->setClef(clef);
-      if (!clefs.empty())
-            score->cmdUpdateNotes();
       score->setLayoutAll(true);
 
       //
@@ -3081,7 +3012,6 @@ void RemoveMeasures::undo()
 void RemoveMeasures::redo()
       {
       Score* score = fm->score();
-      bool updateNotesNeeded = false;
       for (Segment* s = fm->first(); s != lm->last(); s = s->next1()) {
             if (s->segmentType() != Segment::Type::Clef)
                   continue;
@@ -3090,14 +3020,11 @@ void RemoveMeasures::redo()
                   if (clef == 0 || clef->generated())
                         continue;
                   clef->staff()->removeClef(clef);
-                  updateNotesNeeded = true;
                   }
             }
       score->measures()->remove(fm, lm);
       score->fixTicks();
       score->insertTime(fm->tick(), -(lm->endTick() - fm->tick()));
-      if (updateNotesNeeded)
-            score->cmdUpdateNotes();
       score->setLayoutAll(true);
       }
 

@@ -104,11 +104,8 @@ void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool a
 
 //---------------------------------------------------------
 //   add
+///   Add new Element \a el to MeasureBase
 //---------------------------------------------------------
-
-/**
- Add new Element \a el to MeasureBase
-*/
 
 void MeasureBase::add(Element* e)
       {
@@ -141,11 +138,8 @@ void MeasureBase::add(Element* e)
 
 //---------------------------------------------------------
 //   remove
+///   Remove Element \a el from MeasureBase.
 //---------------------------------------------------------
-
-/**
- Remove Element \a el from MeasureBase.
-*/
 
 void MeasureBase::remove(Element* el)
       {
@@ -253,34 +247,6 @@ qreal MeasureBase::pause() const
       }
 
 //---------------------------------------------------------
-//   layout0
-//---------------------------------------------------------
-
-void MeasureBase::layout0()
-      {
-      _pageBreak = false;
-      _lineBreak = false;
-      _sectionBreak = 0;
-
-      foreach (Element* element, _el) {
-            if (!score()->tagIsValid(element->tag()) || (element->type() != Element::Type::LAYOUT_BREAK))
-                  continue;
-            LayoutBreak* e = static_cast<LayoutBreak*>(element);
-            switch (e->layoutBreakType()) {
-                  case LayoutBreak::Type::PAGE:
-                        _pageBreak = true;
-                        break;
-                  case LayoutBreak::Type::LINE:
-                        _lineBreak = true;
-                        break;
-                  case LayoutBreak::Type::SECTION:
-                        _sectionBreak = e;
-                        break;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -369,7 +335,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
             }
       else {
             // remove line break
-            foreach(Element* e, *el()) {
+            foreach(Element* e, el()) {
                   if (e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
                         _score->undoRemoveElement(e);
                         break;
