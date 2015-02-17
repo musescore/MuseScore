@@ -551,10 +551,10 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += QString("%1").arg(_score->npages() + _score->pageNumberOffset());
                               break;
                         case 'f':
-                              d += _score->rootScore()->name();
+                              d += _score->rootScore()->name().toHtmlEscaped();
                               break;
                         case 'F':
-                              d += _score->rootScore()->fileInfo()->absoluteFilePath();
+                              d += _score->rootScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
                               break;
                         case 'd':
                               d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
@@ -583,7 +583,7 @@ QString Page::replaceTextMacros(const QString& s) const
                         case 'C': // only on first page
                               if (!_no) // FALLTHROUGH
                         case 'c':
-                              d += _score->metaTag("copyright");
+                              d += _score->metaTag("copyright").toHtmlEscaped();
                               break;
                         case '$':
                               d += '$';
@@ -598,7 +598,7 @@ QString Page::replaceTextMacros(const QString& s) const
                                     tag += s[k];
                                     }
                               if (k != n) {       // found ':' ?
-                                    d += _score->metaTag(tag);
+                                    d += _score->metaTag(tag).toHtmlEscaped();
                                     i = k-1;
                                     }
                               }
