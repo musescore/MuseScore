@@ -173,7 +173,7 @@
         <string>Reset Direction value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -212,7 +212,7 @@
         <string>Reset Anchor value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -222,7 +222,7 @@
         <string>Reset Time stretch value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
