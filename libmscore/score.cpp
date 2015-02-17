@@ -3909,5 +3909,127 @@ QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* cur
             }
       }
 
+//---------------------------------------------------------
+//   changeVoice
+//    moves selected notes into specified voice if possible
+//---------------------------------------------------------
+
+void Score::changeVoice(int voice)
+      {
+      startCmd();
+      QList<Element*> el;
+      foreach(Element* e, selection().elements()) {
+            if (e->type() == Element::Type::NOTE) {
+                  Note* note   = static_cast<Note*>(e);
+                  Chord* chord = note->chord();
+
+                  // TODO - handle ties; for now we skip tied notes
+                  if (note->tieFor() || note->tieBack())
+                        continue;
+
+                  if (chord->voice() != voice) {
+                        Segment* s       = chord->segment();
+                        Measure* m       = s->measure();
+                        int notes        = chord->notes().size();
+                        int dstTrack     = chord->staffIdx() * VOICES + voice;
+                        ChordRest* dstCR = static_cast<ChordRest*>(s->element(dstTrack));
+                        Chord* dstChord  = nullptr;
+
+                        // set up destination chord
+
+                        if (dstCR && dstCR->type() == Element::Type::CHORD && dstCR->globalDuration() == chord->globalDuration()) {
+                              // existing chord in destination with correct duration;
+                              //   can simply move note in
+                              dstChord = static_cast<Chord*>(dstCR);
+                              }
+
+                        else if (dstCR && dstCR->type() == Element::Type::REST && dstCR->globalDuration() == chord->globalDuration()) {
+                              // existing rest in destination with correct duration;
+                              //   replace with chord, then move note in
+                              //   this case allows for tuplets, unlike the more general case below
+                              dstChord = new Chord(this);
+                              dstChord->setTrack(dstTrack);
+                              dstChord->setDurationType(chord->durationType());
+                              dstChord->setDuration(chord->duration());
+                              dstChord->setTuplet(dstCR->tuplet());
+                              dstChord->setParent(s);
+                              undoRemoveElement(dstCR);
+                              }
+
+                        else if (!chord->tuplet()) {
+                              // rests or gap in destination
+                              //   insert new chord if the rests / gap are long enough
+                              //   then move note in
+                              ChordRest* pcr = nullptr;
+                              ChordRest* ncr = nullptr;
+                              for (Segment* s2 = m->first(Segment::Type::ChordRest); s2; s2 = s2->next()) {
+                                    ChordRest* cr2 = static_cast<ChordRest*>(s2->element(dstTrack));
+                                    if (!cr2 || cr2->type() == Element::Type::REST)
+                                          continue;
+                                    if (s2->tick() < s->tick()) {
+                                          pcr = cr2;
+                                          continue;
+                                          }
+                                    else if (s2->tick() >= s->tick()) {
+                                          ncr = cr2;
+                                          break;
+                                          }
+                                    }
+                              int gapStart = pcr ? pcr->tick() + pcr->actualTicks() : m->tick();
+                              int gapEnd = ncr ? ncr->tick() : m->tick() + m->ticks();
+                              if (gapStart <= s->tick() && gapEnd >= s->tick() + chord->actualTicks()) {
+                                    // big enough gap found
+                                    dstChord = new Chord(this);
+                                    dstChord->setTrack(dstTrack);
+                                    dstChord->setDurationType(chord->durationType());
+                                    dstChord->setDuration(chord->duration());
+                                    dstChord->setParent(s);
+                                    // makeGapVoice will not back-fill an empty voice
+                                    if (voice && !dstCR)
+                                          expandVoice(s, /*m->first(Segment::Type::ChordRest,*/ dstTrack);
+                                    makeGapVoice(s, dstTrack, chord->actualFraction(), s->tick());
+                                    }
+                              }
+
+                        // move note to destination chord
+                        if (dstChord) {
+                              // create & add new note
+                              Note* newNote = new Note(*note);
+                              newNote->setSelected(false);
+                              newNote->setParent(dstChord);
+                              undoAddElement(newNote);
+                              el.append(newNote);
+                              // add new chord if one was created
+                              if (dstChord != dstCR)
+                                    undoAddCR(dstChord, m, s->tick());
+                              // remove original note
+                              if (notes > 1) {
+                                    undoRemoveElement(note);
+                                    }
+                              else if (notes == 1) {
+                                    // create rest to leave behind
+                                    Rest* r = new Rest(this);
+                                    r->setTrack(chord->track());
+                                    r->setDurationType(chord->durationType());
+                                    r->setDuration(chord->duration());
+                                    r->setTuplet(chord->tuplet());
+                                    r->setParent(s);
+                                    // remove chord, replace with rest
+                                    undoRemoveElement(chord);
+                                    undoAddCR(r, m, s->tick());
+                                    }
+                              }
+                        }
+                  }
+            }
+
+      if (!el.isEmpty())
+            selection().clear();
+      foreach(Element* e, el)
+            select(e, SelectType::ADD, -1);
+      setLayoutAll(true);
+      endCmd();
+      }
+
 }
 
