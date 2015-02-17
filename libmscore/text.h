@@ -36,6 +36,7 @@ class CharFormat {
       bool _bold                { false };
       bool _italic              { false };
       bool _underline           { false };
+      bool _preedit             { false };
       VerticalAlignment _valign { VerticalAlignment::AlignNormal };
       qreal _fontSize           { 12.0  };
       QString _fontFamily;
@@ -47,7 +48,8 @@ class CharFormat {
       bool bold() const                      { return _bold;        }
       bool italic() const                    { return _italic;      }
       bool underline() const                 { return _underline;   }
-      VerticalAlignment valign() const       { return _valign;   }
+      bool preedit() const                   { return _preedit;     }
+      VerticalAlignment valign() const       { return _valign;      }
       qreal fontSize() const                 { return _fontSize;    }
       QString fontFamily() const             { return _fontFamily;  }
 
@@ -55,6 +57,7 @@ class CharFormat {
       void setBold(bool val)                 { _bold        = val;  }
       void setItalic(bool val)               { _italic      = val;  }
       void setUnderline(bool val)            { _underline   = val;  }
+      void setPreedit(bool val)              { _preedit     = val;  }
       void setValign(VerticalAlignment val)  { _valign      = val;  }
       void setFontSize(qreal val)            { _fontSize    = val;  }
       void setFontFamily(const QString& val) { _fontFamily  = val;  }
@@ -184,6 +187,7 @@ class Text : public Element {
 
       QString _text;
       static QString oldText;      // used to remember original text in edit mode
+      static QString preEdit;
       QList<TextBlock> _layout;
       TextStyleType _styleIndex;
 
@@ -322,6 +326,7 @@ class Text : public Element {
       static bool validateText(QString& s);
       bool inHexState() const { return hexState >= 0; }
       void endHexState();
+      void inputTransition(QInputMethodEvent*);
 
       friend class TextCursor;
       };

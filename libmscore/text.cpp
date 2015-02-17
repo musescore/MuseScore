@@ -33,6 +33,7 @@ static const qreal superScriptOffset = -0.5;       // of x-height
 static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
 TextCursor Text::_cursor;
+QString Text::preEdit;
 QString Text::oldText;
 
 //---------------------------------------------------------
@@ -46,6 +47,7 @@ bool CharFormat::operator==(const CharFormat& cf) const
       if (cf.bold() != bold()
          || cf.italic() != italic()
          || cf.underline() != underline()
+         || cf.preedit() != preedit()
          || cf.valign() != valign()
          || cf.fontSize() != fontSize())
             return false;
@@ -76,6 +78,7 @@ void TextCursor::initFromStyle(const TextStyle& s)
       _format.setBold(s.bold());
       _format.setItalic(s.italic());
       _format.setUnderline(s.underline());
+      _format.setPreedit(false);
       _format.setValign(VerticalAlignment::AlignNormal);
       }
 
@@ -214,7 +217,7 @@ QFont TextFragment::font(const Text* t) const
       if (t->textStyle().sizeIsSpatiumDependent())
             m *= t->spatium() / ( SPATIUM20 * MScore::DPI);
 
-      font.setUnderline(format.underline());
+      font.setUnderline(format.underline() || format.preedit());
       if (format.type() == CharFormatType::TEXT) {
             font.setFamily(format.fontFamily());
             font.setBold(format.bold());
@@ -2963,5 +2966,51 @@ bool Text::validateText(QString& s)
       return false;
       }
 
+//---------------------------------------------------------
+//   inputTransition
+//---------------------------------------------------------
+
+void Text::inputTransition(QInputMethodEvent* ie)
+      {
+      // remove preedit string
+      int n = preEdit.size();
+      while (n--)
+            deletePreviousChar();
+
+      qDebug("Text::inputTransition <%s><%s> len %d start %d, preEdit size %d",
+         qPrintable(ie->commitString()),
+         qPrintable(ie->preeditString()),
+         ie->replacementLength(), ie->replacementStart(), preEdit.size());
+
+      if (!ie->commitString().isEmpty()) {
+            _cursor.format()->setPreedit(false);
+            editInsertText(ie->commitString());
+            preEdit.clear();
+            }
+      else  {
+            preEdit = ie->preeditString();
+            if (!preEdit.isEmpty()) {
+#if 0
+                  for (auto a : ie->attributes()) {
+                        switch(a.type) {
+                              case QInputMethodEvent::TextFormat:
+                                    {
+                                    printf("attribute TextFormat: %d-%d\n", a.start, a.length);
+                                    QTextFormat tf = a.value.value<QTextFormat>();
+                                    }
+                                    break;
+                              case QInputMethodEvent::Cursor:
+                                    printf("attribute Cursor at %d\n", a.start);
+                                    break;
+                              default:
+                                    printf("attribute %d\n", a.type);
+                              }
+                        }
+#endif
+                  _cursor.format()->setPreedit(true);
+                  editInsertText(preEdit);
+                  }
+            }
+      }
 }
 

@@ -3576,13 +3576,8 @@ bool ScoreView::fotoMode() const
 
 void ScoreView::editInputTransition(QInputMethodEvent* ie)
       {
-      if (editObject->edit(this, curGrip, 0, 0, ie->commitString())) {
-            if (editObject->isText())
-                  mscore->textTools()->updateTools();
-            updateGrips();
-            _score->update();
-            mscore->endCmd();
-            }
+      if (editObject->isText())
+            static_cast<Text*>(editObject)->inputTransition(ie);
       }
 
 //---------------------------------------------------------
