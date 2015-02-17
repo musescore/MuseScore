@@ -3474,7 +3474,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3490,7 +3490,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3506,7 +3506,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3522,7 +3522,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3675,7 +3675,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3691,7 +3691,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3707,7 +3707,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3723,7 +3723,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3757,7 +3757,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3882,7 +3882,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3898,7 +3898,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3914,7 +3914,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3950,7 +3950,7 @@
              <string>Reset value</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -4228,7 +4228,7 @@
              <item row="0" column="2">
               <widget class="QToolButton" name="chordDescriptionFileButton">
                <property name="text">
-                <string>...</string>
+                <string notr="true">...</string>
                </property>
               </widget>
              </item>
