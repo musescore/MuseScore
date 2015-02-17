@@ -1913,11 +1913,8 @@ void Score::createMMRests()
                   else
                         t = lm->endBarLineType();
                   mmr->setEndBarLineType(t, false, lm->endBarLineVisible(), lm->endBarLineColor());
-
                   mmr->setRepeatFlags(m->repeatFlags() | lm->repeatFlags());
-
-                  qDeleteAll(mmr->el());
-                  mmr->el().clear();
+                  mmr->clearElements();
 
                   for (Element* e : m->el()) {
                         if (e->type() == Element::Type::MARKER)

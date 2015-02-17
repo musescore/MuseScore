@@ -55,6 +55,16 @@ MeasureBase::MeasureBase(const MeasureBase& m)
       }
 
 //---------------------------------------------------------
+//   clearElements
+//---------------------------------------------------------
+
+void MeasureBase::clearElements()
+      {
+      qDeleteAll(_el);
+      _el.clear();
+      }
+
+//---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
 
@@ -160,8 +170,10 @@ void MeasureBase::remove(Element* el)
                         break;
                   }
             }
-      if (!_el.remove(el))
+      if (!_el.remove(el)) {
             qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->name(), el);
+            abort();
+            }
       }
 
 //---------------------------------------------------------
