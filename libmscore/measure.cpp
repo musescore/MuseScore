@@ -3725,14 +3725,18 @@ void Measure::layoutX(qreal stretch)
 //---------------------------------------------------------
 //   layoutStage1
 //    compute multi measure rest break
+//    call layoutCR0 for every chord/rest
 //---------------------------------------------------------
 
 void Measure::layoutStage1()
       {
       setDirty();
 
+      bool mmrests = score()->styleB(StyleIdx::createMultiMeasureRests);
+      setBreakMMRest(false);
+
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-            if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
+            if (mmrests) {
                   if (
                         (repeatFlags() & Repeat::START)
                      || (prevMeasure() && (prevMeasure()->repeatFlags() & Repeat::END))
@@ -3764,12 +3768,7 @@ void Measure::layoutStage1()
                               if (segment->segmentType() & (Segment::Type::KeySig | Segment::Type::TimeSig) && tick())
                                     setBreakMMRest(true);
                               else if (segment->segmentType() == Segment::Type::Clef) {
-                                    if (segment->tick() == endTick()) {
-                                          Measure* m = nextMeasure();
-                                          if (m)
-                                                m->setBreakMMRest(true);
-                                          }
-                                    else if (tick())
+                                    if (segment->tick() != endTick() && tick())
                                           setBreakMMRest(true);
                                     }
                               }
@@ -3790,16 +3789,21 @@ void Measure::layoutStage1()
                   }
             }
 
-      if (!score()->styleB(StyleIdx::createMultiMeasureRests) || breakMultiMeasureRest())
+      if (!mmrests || breakMultiMeasureRest())
             return;
 
-      MeasureBase* mb = prev();
-      if (mb && mb->type() == Element::Type::MEASURE) {
-            Measure* pm = static_cast<Measure*>(mb);
+      Measure* pm = prevMeasure();
+      if (pm) {
             if (pm->endBarLineType() != BarLineType::NORMAL
-               && pm->endBarLineType() != BarLineType::BROKEN && pm->endBarLineType() != BarLineType::DOTTED)
+               && pm->endBarLineType() != BarLineType::BROKEN
+               && pm->endBarLineType() != BarLineType::DOTTED) {
+                  setBreakMMRest(true);
+                  return;
+                  }
+            if (pm->findSegment(Segment::Type::Clef, tick()))
                   setBreakMMRest(true);
             }
+
       }
 
 //---------------------------------------------------------
