@@ -4831,7 +4831,7 @@ int main(int argc, char* av[])
 //                            { QPalette::Shadow,          "ShadowColor",          "#00FF00" },
                               { QPalette::Highlight,       "HighlightColor",       "#88bff6" },
 //                            { QPalette::HighlightedText, "HighlightedTextColor", "#00FF00" },
-//                            { QPalette::Link,            "HighlightedTextColor", "#ffffff" },
+                              { QPalette::Link,            "HighlightedTextColor", "#00ffff" },
 //                            { QPalette::LinkVisited,     "HighlightedTextColor", "#00ffff" },
                               { QPalette::ToolTipBase,     "ToolTipBaseColor",     "#808080" },
                               { QPalette::ToolTipText,     "ToolTipTextColor",     "#000000" },

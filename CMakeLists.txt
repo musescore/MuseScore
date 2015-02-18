@@ -386,7 +386,6 @@ subdirs(
       mscore  awl bww2mxml share midi audiofile fluid mstyle libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
       thirdparty/xmlstream thirdparty/qzip thirdparty/kQOAuth thirdparty/qtwaitingspinner
-      rdoc
       )
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 #with xcode, we need to have all the targets in the same project
@@ -395,6 +394,7 @@ else(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
 endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
+add_subdirectory(rdoc EXCLUDE_FROM_ALL)
 add_subdirectory(miditools EXCLUDE_FROM_ALL)
 add_subdirectory(fonttools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
