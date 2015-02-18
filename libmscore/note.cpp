@@ -1089,6 +1089,9 @@ void Note::read(XmlReader& e)
                         e.removeSpanner(sp);
                         }
                   else
+                        // TODO : manage endSpanner from one staff to a previous staff
+                        // (like from piano bass staff to treble staff), where endSpanner is
+                        // found before the spanner itself
                         qDebug("Note::read(): cannot find spanner %d", id);
                   e.readNext();
                   }
