@@ -154,15 +154,15 @@ void TempoText::textChanged()
       if (!_followText)
             return;
       QString s = text();
-
+      std::replace( s.begin(),s.end(), ',', '.');
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
-            QRegExp re(QString(tp[i].pattern)+"\\s*=\\s*(\\d+)");      // 1/4
+            QRegExp re(QString(tp[i].pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)");
             if (re.indexIn(s) != -1) {
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
-                        qreal nt = qreal(sl[1].toInt()) * tp[i].f;
+                        qreal nt = qreal(sl[1].toDouble()) * tp[i].f;
                         if (nt != _tempo) {
-                              _tempo = qreal(sl[1].toInt()) * tp[i].f;
+                              _tempo = qreal(sl[1].toDouble()) * tp[i].f;
                               if(segment())
                                     score()->setTempo(segment(), _tempo);
                               score()->setPlaylistDirty();
