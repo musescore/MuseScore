@@ -632,7 +632,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
                   }
             gn->setFret(fret);
             gn->setString(note->string());
-            int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(note->string(), fret);
+            int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(note->string(), fret, nullptr, 0);
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
@@ -864,7 +864,7 @@ bool GuitarPro5::readNote(int string, Note* note)
             note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
-      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
+      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber, nullptr, 0);
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);

@@ -198,7 +198,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
             foreach(const Note* note, chord->notes()) {
                   int string;
                   int fret;
-                  if (stringData->convertPitch(note->ppitch(), &string, &fret))
+                  if (stringData->convertPitch(note->pitch(), chord->staff(), chord->segment()->tick(), &string, &fret))
                         setDot(string, fret);
                   }
             _maxFrets = stringData->frets();
