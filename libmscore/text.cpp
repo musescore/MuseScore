@@ -1654,6 +1654,8 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         CharFormat* charFmt = _cursor.format();         // take current format
                         _layout.insert(line + 1, curLine().split(_cursor.column()));
                         _layout[line].setEol(true);
+                        if (_layout.last() != _layout[line+1])
+                              _layout[line+1].setEol(true);
 
                         _cursor.setLine(line+1);
                         _cursor.setColumn(0);
@@ -1876,6 +1878,8 @@ bool Text::deletePreviousChar()
             for (const TextFragment& f : l1.fragments())
                   l2.fragments().append(f);
             _layout.removeAt(_cursor.line());
+            if (_layout.last() == l2)
+                  l2.setEol(false);
             _cursor.setLine(_cursor.line()-1);
             }
       else {
@@ -1899,6 +1903,8 @@ bool Text::deleteChar()
                   for (const TextFragment& f : l2.fragments())
                         l1.fragments().append(f);
                   _layout.removeAt(_cursor.line() + 1);
+                  if (_layout.last() == l1)
+                        l1.setEol(false);
                   return true;
                   }
             return false;
@@ -2117,13 +2123,14 @@ void Text::deleteSelectedText()
             const TextBlock& l2 = _layout[r2];
             for (const TextFragment& f : l2.fragments())
                   l1.fragments().append(f);
-
             _layout.removeAt(r2);
             QMutableListIterator<TextBlock> i(_layout);
             while (i.hasNext()) {
                   if (toDelete.contains(i.next()))
                         i.remove();
                   }
+            if (_layout.last() == l1)
+                  l1.setEol(false);
             }
       _cursor.setLine(r1);
       _cursor.setColumn(c1);
