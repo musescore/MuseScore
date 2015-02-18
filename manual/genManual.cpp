@@ -66,7 +66,6 @@ static void addHeader(QString& out)
              "<html>\n"
              "<head>\n"
              "   <meta charset=\"utf-8\">\n"
-             "   <link rel=\"stylesheet\" type=\"text/css\" href=\"manual.css\"/>\n"
              "   </head>\n"
              "<body>\n";
       }
@@ -77,9 +76,12 @@ static void addHeader(QString& out)
 
 static void addFooter(QString& out)
       {
-      out += "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - Free music notation software<br />\n"
+/*      out += "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - Free music notation software<br />\n"
              "&copy; 2002-2014 Werner Schweer &amp; others</div>\n"
              "</body>\n"
+             "</html>\n";
+      */
+      out += "</body>\n"
              "</html>\n";
       }
 
@@ -348,22 +350,20 @@ static void copyAssets(QString& srcPath, QString& dstPath)
       {
       QString assetDstPath = dstPath + "/plugins/";
       QString assetSrcPath = srcPath + "/manual/";
-      QString cssFname     = "manual.css";
-      QString pngFname     = "mscore.png";
-      // be sure destination files do not exist
-      QFile dstCSS(assetDstPath + cssFname);
-      dstCSS.remove();
-      QFile dstPNG(assetDstPath+pngFname);
-      dstPNG.remove();
-      // copy CSS and PNG from source to destination path
-      if (!QFile::copy(assetSrcPath + cssFname, assetDstPath + cssFname) )
-            fprintf(stderr, "Cannot copy %s to %s\n",
-                        qPrintable(assetSrcPath + cssFname),
-                        qPrintable(assetDstPath + cssFname) );
-      if (!QFile::copy(assetSrcPath + pngFname, assetDstPath + pngFname) )
-            fprintf(stderr, "Cannot copy %s to %s\n",
-                        qPrintable(assetSrcPath + pngFname),
-                        qPrintable(assetDstPath + pngFname) );
+//      QStringList files = {"manual.css", "manual-dark.css", "mscore.png" };
+      QStringList files = {"mscore.png" };
+
+      // copy files from source to destination path
+      for (QString f : files) {
+            // be sure destination files do not exist
+            QFile dst(assetDstPath + f);
+            dst.remove();
+
+            if (!QFile::copy(assetSrcPath + f, assetDstPath + f))
+                  fprintf(stderr, "Cannot copy %s to %s\n",
+                     qPrintable(assetSrcPath + f),
+                     qPrintable(assetDstPath + f));
+            }
       }
 
 //---------------------------------------------------------

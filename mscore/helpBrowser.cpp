@@ -14,8 +14,106 @@
 #include "icons.h"
 #include "help.h"
 #include "musescore.h"
+#include "preferences.h"
 
 namespace Ms {
+
+//    manual css style sheets:
+
+static const char* css = R"XXXX(
+body {
+	font-family:	Arial, Helvetica, FreeSans, "DejaVu Sans", sans-serif;
+	font-size:		11pt;
+	margin:		15px;
+      }
+h2, h3 {
+	font-size:		24px;
+	padding:		6px 0 6px 48px;
+	background:		#dcdcdc left center no-repeat url('mscore.png');
+	background-size:32px 32px;
+      }
+h4 {
+	margin:  10px 0 8px 16px;
+      }
+table {
+	border-collapse:collapse;
+      }
+td {
+	padding:		2px 12px 2px 0;
+	vertical-align:	text-top;
+      }
+.class-description {
+	margin:			0 0 16px 0;
+      }
+.class-inherit {
+	margin:			0 0 16px 0;
+	font-size:		0.8em;
+      }
+.method {
+	font-family:	"Lucida Console", Monaco, "DejaVu Sans Mono", monospace;
+	font-size:		0.8em;
+      }
+.prop-odd {
+	background:		#dcdcdc;
+      }
+.prop-name {
+	font-weight:	bold;
+      }
+.prop-type {
+	font-style:		italic
+      }
+.prop-desc {
+      }
+.footer {
+	margin-top:		24px;
+	background:		#dcdcdc;
+	padding:		16px;
+	text-align:		center;
+	font-size:		0.8em;
+      }
+)XXXX";
+
+static const char* cssDark = R"XXXX(
+body {
+	font-family:	Arial, Helvetica, FreeSans, "DejaVu Sans", sans-serif;
+	font-size:		11pt;
+	margin-left:	15px;
+      }
+h1, h2, h3 {
+      }
+h4 {
+	margin-left:      0px;
+      }
+table {
+	border-collapse:collapse;
+      }
+td {
+	padding:		2px 12px 2px 0;
+	vertical-align:	text-top;
+      }
+.class-description {
+	margin-top:		16px;
+      }
+.class-inherit {
+	margin-top:		16px;
+	font-size:		0.8em;
+      }
+.method {
+	font-family:	"Lucida Console", Monaco, "DejaVu Sans Mono", monospace;
+	font-size:		0.7em;
+      }
+.prop-odd {
+	background:		#989898;
+      }
+.prop-name {
+	font-weight:	bold;
+      }
+.prop-type {
+	font-style:		italic;
+      }
+.prop-desc {
+      }
+)XXXX";
 
 
 //---------------------------------------------------------
@@ -56,12 +154,8 @@ HelpBrowser::HelpBrowser(QWidget* parent)
 
       bl->addStretch(10);
 
-//      QToolButton* reload = new QToolButton;
-//      QAction * reloadAction = view->pageAction(QWebPage::Reload);
-      //for an unknown reason setting icon on the QToolButton doesn't work here...
-//      reloadAction->setIcon(QIcon(*icons[int(Icons::viewRefresh_ICON)]));
-//      reload->setDefaultAction(reloadAction);
-//      bl->addWidget(reload);
+      view->document()->setDefaultStyleSheet(
+            preferences.globalStyle == MuseScoreStyleType::DARK ? cssDark : css);
 
       toolbar->setLayout(bl);
       }
@@ -79,7 +173,6 @@ void HelpBrowser::setContent(const QString& path)
 void HelpBrowser::setContent(const QUrl& url)
       {
       homePath = url;
-      printf("HelpBroser::setContent: <%s>\n", qPrintable(url.toString()));
       view->setSource(url);
       }
 
@@ -100,8 +193,17 @@ QVariant HelpView::loadResource(int type, const QUrl& name)
       {
       if (name.scheme() == "qthelp")
             return QVariant(helpEngine->fileData(name));
+#if 0
+      if (preferences.globalStyle == MuseScoreStyleType::DARK) {
+            QFileInfo fi(name.path());
+            if (fi.fileName() == "manual.css") {
+                  QUrl url(QString("file://%1/manual-dark.css").arg(fi.absolutePath()));
+//                  qDebug("exchange css <%s>\n", qPrintable(url.toString()));
+                  return QTextBrowser::loadResource(type, url);
+                  }
+            }
+#endif
       return QTextBrowser::loadResource(type, name);
       }
-
 }
 
