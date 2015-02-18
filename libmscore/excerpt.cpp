@@ -455,9 +455,9 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                       int   newTrack    = nn->track() + (on->track() - oldStart->track());
                                                       // look in notes linked to oldStart for a note with the same
                                                       // score as new score and required track offset
-                                                      for (Element* newEl : oldStart->linkList())
-                                                            if (newEl->score() == score
-                                                                        && newEl->track() == newTrack) {
+                                                      for (ScoreElement* newEl : oldStart->linkList())
+                                                            if (static_cast<Note*>(newEl)->score() == score
+                                                                        && static_cast<Note*>(newEl)->track() == newTrack) {
                                                                   newStart = static_cast<Note*>(newEl);
                                                                   break;
                                                             }
@@ -731,9 +731,9 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                 int   newTrack    = nn->track() + (on->track() - oldStart->track());
                                                 // look in notes linked to oldStart for a note with the same
                                                 // score as new score and required track offset
-                                                for (Element* newEl : oldStart->linkList())
-                                                      if (newEl->score() == score
-                                                                  && newEl->track() == newTrack) {
+                                                for (ScoreElement* newEl : oldStart->linkList())
+                                                      if (static_cast<Note*>(newEl)->score() == score
+                                                                  && static_cast<Note*>(newEl)->track() == newTrack) {
                                                             newStart = static_cast<Note*>(newEl);
                                                             break;
                                                       }
