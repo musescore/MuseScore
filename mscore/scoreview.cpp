@@ -646,7 +646,9 @@ ScoreView::ScoreView(QWidget* parent)
    : QWidget(parent)
       {
       setAcceptDrops(true);
+#ifndef Q_OS_MAC
       setAttribute(Qt::WA_OpaquePaintEvent);
+#endif
       setAttribute(Qt::WA_NoSystemBackground);
       setFocusPolicy(Qt::ClickFocus);
       setAttribute(Qt::WA_InputMethodEnabled);
