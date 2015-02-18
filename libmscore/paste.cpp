@@ -394,9 +394,22 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
       if (!measure)
             return;
 
+      // we can paste a measure rest as such only at start of measure
+      // and only if the lengths of the rest and measure match
+      // otherwise, we need to convert to duration rest(s)
+      // and potentially split the rest up (eg, 5/4 => whole + quarter)
+      bool convertMeasureRest;
+      if (cr->type() == Element::Type::REST
+          && cr->durationType().type() == TDuration::DurationType::V_MEASURE
+          && (tick != measure->tick() || cr->duration() != measure->len())) {
+            convertMeasureRest = true;
+            }
+      else
+            convertMeasureRest = false;
+
       int measureEnd = measure->endTick();
       bool isGrace = (cr->type() == Element::Type::CHORD) && (((Chord*)cr)->noteType() != NoteType::NORMAL);
-      if (!isGrace && (tick + cr->actualTicks() > measureEnd)) {
+      if (!isGrace && (tick + cr->actualTicks() > measureEnd || convertMeasureRest)) {
             if (cr->type() == Element::Type::CHORD) {
                   // split Chord
                   Chord* c = static_cast<Chord*>(cr);
@@ -483,8 +496,6 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                   }
             }
       else {
-            if (cr->durationType().type() == TDuration::DurationType::V_MEASURE)
-                  cr->setDurationType(TDuration(cr->duration()));
             undoAddCR(cr, measure, tick);
             }
       }
