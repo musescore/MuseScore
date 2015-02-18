@@ -40,16 +40,20 @@ class StringData {
 
       static bool bFretting;
 
-      void sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord* chord, int* count) const;
+      bool        convertPitch(int pitch, int pitchOffset, int* string, int* fret) const;
+      int         fret(int pitch, int string, int pitchOffset) const;
+      int         getPitch(int string, int fret, int pitchOffset) const;
+      void        sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const;
 
 public:
       StringData() {}
       StringData(int numFrets, int numStrings, int strings[]);
       StringData(int numFrets, QList<instrString>& strings);
-      bool        convertPitch(int pitch, int* string, int* fret) const;
-      int         fret(int pitch, int string) const;
+      bool        convertPitch(int pitch, Staff* staff, int tick, int* string, int* fret) const;
+      int         fret(int pitch, int string, Staff* staff, int tick) const;
       void        fretChords(Chord * chord) const;
-      int         getPitch(int string, int fret) const;
+      int         getPitch(int string, int fret, Staff* staff, int tick) const;
+      static int  pitchOffsetAt(Staff* staff, int tick);
       int         strings() const               { return stringTable.size(); }
       QList<instrString>  stringList() const    { return stringTable; }
       QList<instrString>&  stringList()         { return stringTable; }

@@ -1159,8 +1159,9 @@ void Score::upDown(bool up, UpDownMode mode)
 
       foreach (Note* oNote, el) {
             int tick     = oNote->chord()->tick();
-            Part* part   = oNote->staff()->part();
-            Key key      = oNote->staff()->key(tick);
+            Staff* staff = oNote->staff();
+            Part* part   = staff->part();
+            Key key      = staff->key(tick);
             int tpc1     = oNote->tpc1();
             int tpc2     = oNote->tpc2();
             int pitch    = oNote->pitch();
@@ -1170,7 +1171,7 @@ void Score::upDown(bool up, UpDownMode mode)
             int string   = oNote->string();
             int fret     = oNote->fret();
 
-            switch (oNote->staff()->staffType()->group()) {
+            switch (staff->staffType()->group()) {
                   case StaffGroup::PERCUSSION:
                         {
                         const Drumset* ds = part->instr()->drumset();
@@ -1184,13 +1185,13 @@ void Score::upDown(bool up, UpDownMode mode)
                         switch (mode) {
                               case UpDownMode::OCTAVE:          // move same note to next string, if possible
                                     {
-                                    StaffType* stt = oNote->staff()->staffType();
+                                    StaffType* stt = staff->staffType();
                                     string = stt->physStringToVisual(string);
                                     string += (up ? -1 : 1);
                                     if (string < 0 || string >= stringData->strings())
                                           return;           // no next string to move to
                                     string = stt->visualStringToPhys(string);
-                                    fret = stringData->fret(pitch, string);
+                                    fret = stringData->fret(pitch, string, staff, tick);
                                     if (fret == -1)          // can't have that note on that string
                                           return;
                                     // newPitch and newTpc remain unchanged
@@ -1204,24 +1205,27 @@ void Score::upDown(bool up, UpDownMode mode)
 
                               case UpDownMode::CHROMATIC:       // increase / decrease the fret
                                     {                       // without changing the string
-                                    if (!stringData->frets())
+                                    // compute new fret
+                                    if (!stringData->frets()) {
                                           qDebug("upDown tab chromatic: no frets?");
-                                    fret += (up ? 1 : -1);
-                                    if (fret < 0)
-                                          fret = 0;
-                                    else if (fret >= stringData->frets())
-                                          fret = stringData->frets() - 1;
-                                    newPitch    = stringData->getPitch(string, fret);
-                                    if (newPitch == -1) {
-                                          qDebug("upDown tab chromatic: getPitch(%d,%d) returns -1", string, fret);
-                                          newPitch = oNote->pitch();
+                                          return;
                                           }
-                                    // TAB's are by definition non-transposing
-                                    newTpc1 = newTpc2 = pitch2tpc(newPitch, key, up ? Prefer::SHARPS : Prefer::FLATS);
+                                    fret += (up ? 1 : -1);
+                                    if (fret < 0 || fret >= stringData->frets()) {
+                                          qDebug("upDown tab in-string: out of fret range");
+                                          return;
+                                          }
+                                    // update pitch and tpc's and check it matches stringData
+                                    upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
+                                    if (newPitch != stringData->getPitch(string, fret, staff, tick) ) {
+                                          // oh-oh: something went very wrong!
+                                          qDebug("upDown tab in-string: pitch mismatch");
+                                          return;
+                                    }
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
                                     undoChangeProperty(oNote, P_ID::FRET, fret);
-                                    undoChangeProperty(oNote, P_ID::STRING, string);
+//                                    undoChangeProperty(oNote, P_ID::STRING, string);
                                     }
                                     break;
                               }
@@ -1299,7 +1303,7 @@ void Score::upDown(bool up, UpDownMode mode)
 
             // store fret change only if undoChangePitch has not been called,
             // as undoChangePitch() already manages fret changes, if necessary
-            else if (oNote->staff()->staffType()->group() == StaffGroup::TAB) {
+            else if (staff->staffType()->group() == StaffGroup::TAB) {
                   bool refret = false;
                   if (oNote->string() != string) {
                         undoChangeProperty(oNote, P_ID::STRING, string);
@@ -1377,7 +1381,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
                   //
                   const StringData* stringData = n->staff()->part()->instr()->stringData();
                   if (stringData)
-                        stringData->convertPitch(pitch, &string, &fret);
+                        stringData->convertPitch(pitch, st, chord->tick(), &string, &fret);
                   }
             }
       int tpc1;
