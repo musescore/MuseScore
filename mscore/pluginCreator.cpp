@@ -64,7 +64,7 @@ PluginCreator::PluginCreator(QWidget* parent)
       actionSave->setShortcut(QKeySequence(QKeySequence::Save));
       fileTools->addAction(actionSave);
 
-      actionQuit->setShortcut(QKeySequence(QKeySequence::Quit));
+      actionQuit->setShortcut(QKeySequence(QKeySequence::Close));
 
       actionManual->setIcon(QIcon(*icons[int(Icons::helpContents_ICON)]));
       actionManual->setShortcut(QKeySequence(QKeySequence::HelpContents));
