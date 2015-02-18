@@ -571,9 +571,12 @@ int Note::playTicks() const
 
 void Note::addSpanner(Spanner* l)
       {
-      Element* e = l->endElement();
-      if (e)
-            static_cast<Note*>(e)->addSpannerBack(l);
+      Note* e = static_cast<Note*>(l->endElement());
+      if (e && e->type() == Element::Type::NOTE) {
+            e->addSpannerBack(l);
+            if (l->type() == Element::Type::GLISSANDO)
+                 e->chord()->setEndsGlissando(true);
+            }
       addSpannerFor(l);
       }
 
@@ -583,9 +586,14 @@ void Note::addSpanner(Spanner* l)
 
 void Note::removeSpanner(Spanner* l)
       {
-      if (!static_cast<Note*>(l->endElement())->removeSpannerBack(l)) {
-            qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->name(), l);
-            // abort();
+      Note* e = static_cast<Note*>(l->endElement());
+      if (e && e->type() == Element::Type::NOTE) {
+            if (!e->removeSpannerBack(l)) {
+                  qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->name(), l);
+                  // abort();
+                  }
+            if (l->type() == Element::Type::GLISSANDO)
+                 e->chord()->setEndsGlissando(false);
             }
       if (!removeSpannerFor(l)) {
             qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->name(), l);
@@ -636,6 +644,7 @@ void Note::add(Element* e)
                   _accidental = static_cast<Accidental*>(e);
                   break;
             case Element::Type::TEXTLINE:
+            case Element::Type::GLISSANDO:
                   addSpanner(static_cast<Spanner*>(e));
                   break;
             default:
@@ -689,6 +698,7 @@ void Note::remove(Element* e)
                   break;
 
             case Element::Type::TEXTLINE:
+            case Element::Type::GLISSANDO:
                   removeSpanner(static_cast<Spanner*>(e));
                   break;
 
@@ -1070,15 +1080,20 @@ void Note::read(XmlReader& e)
                         sp->setEndElement(this);
                         if (sp->type() == Element::Type::TIE)
                               _tieBack = static_cast<Tie*>(sp);
-                        else
+                        else {
+                              if (sp->type() == Element::Type::GLISSANDO
+                                          && parent() && parent()->type() == Element::Type::CHORD)
+                                    static_cast<Chord*>(parent())->setEndsGlissando(true);
                               addSpannerBack(sp);
+                              }
                         e.removeSpanner(sp);
                         }
                   else
                         qDebug("Note::read(): cannot find spanner %d", id);
                   e.readNext();
                   }
-            else if (tag == "TextLine") {
+            else if (tag == "TextLine"
+                  || tag == "Glissando") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
                   sp->setTrack(track());
                   sp->read(e);
@@ -1455,32 +1470,31 @@ Element* Note::drop(const DropData& data)
 
             case Element::Type::GLISSANDO:
                   {
-                  Segment* s = ch->segment();
-                  s = s->next1();
-                  while (s) {
-                        if ((s->segmentType() == Segment::Type::ChordRest) && s->element(track()))
-                              break;
-                        s = s->next1();
+                  // this is the glissando initial note, look for a suitable final note
+                  Note* finalNote = Glissando::guessFinalNote(chord());
+                  if (finalNote != nullptr) {
+                        // init glissando data
+                        Glissando* gliss = static_cast<Glissando*>(e);
+                        gliss->setAnchor(Spanner::Anchor::NOTE);
+                        gliss->setStartElement(this);
+                        gliss->setEndElement(finalNote);
+                        gliss->setTick(ch->tick());
+                        gliss->setTick2(finalNote->chord()->tick());
+                        gliss->setTrack(track());
+                        gliss->setTrack2(finalNote->track());
+                        // in TAB, use straight line with no text
+                        if (staff()->isTabStaff()) {
+                              gliss->setGlissandoType(Glissando::Type::STRAIGHT);
+                              gliss->setShowText(false);
+                              }
+                        gliss->setParent(this);
+                        score()->undoAddElement(e);
                         }
-                  if (s == 0) {
+                  else {
                         qDebug("no segment for second note of glissando found");
                         delete e;
                         return 0;
                         }
-                  ChordRest* cr1 = static_cast<ChordRest*>(s->element(track()));
-                  if (cr1 == 0 || cr1->type() != Element::Type::CHORD) {
-                        qDebug("no second note for glissando found, track %d", track());
-                        delete e;
-                        return 0;
-                        }
-                  e->setTrack(track());
-                  e->setParent(cr1);
-                  // in TAB, use straight line with no text
-                  if (staff()->isTabStaff()) {
-                        (static_cast<Glissando*>(e))->setGlissandoType(Glissando::Type::STRAIGHT);
-                        (static_cast<Glissando*>(e))->setShowText(false);
-                        }
-                  score()->undoAddElement(e);
                   }
                   break;
 

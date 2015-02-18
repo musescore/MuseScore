@@ -47,7 +47,7 @@
 #include "libmscore/textline.h"
 #include "libmscore/system.h"
 #include "libmscore/arpeggio.h"
-#include "libmscore/glissando.h"
+//#include "libmscore/glissando.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/articulation.h"
 #include "libmscore/ottava.h"
@@ -287,8 +287,8 @@ static void addChord(ElementItem* sei, Chord* chord)
             new ElementItem(sei, chord->arpeggio());
       if (chord->tremolo() && (chord->tremolo()->chord1() == chord))
             new ElementItem(sei, chord->tremolo());
-      if (chord->glissando())
-            new ElementItem(sei, chord->glissando());
+//      if (chord->glissando())
+//            new ElementItem(sei, chord->glissando());
 
       for (Articulation* a : chord->articulations())
             new ElementItem(sei, a);
@@ -890,7 +890,7 @@ ChordDebug::ChordDebug()
       connect(cb.stemSlashButton, SIGNAL(clicked()), SLOT(stemSlashClicked()));
       connect(cb.arpeggioButton, SIGNAL(clicked()), SLOT(arpeggioClicked()));
       connect(cb.tremoloButton, SIGNAL(clicked()), SLOT(tremoloClicked()));
-      connect(cb.glissandoButton, SIGNAL(clicked()), SLOT(glissandoClicked()));
+//      connect(cb.glissandoButton, SIGNAL(clicked()), SLOT(glissandoClicked()));
 
       connect(cb.stemDirection, SIGNAL(activated(int)), SLOT(directionChanged(int)));
       connect(cb.helplineList, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
@@ -936,13 +936,16 @@ void ChordDebug::setElement(Element* e)
 
       cb.hookButton->setEnabled(chord->hook());
       cb.stemButton->setEnabled(chord->stem());
-      cb.graceNote->setChecked(chord->noteType() != NoteType::NORMAL);
-      cb.stemDirection->setCurrentIndex(int(chord->stemDirection()));
-
       cb.stemSlashButton->setEnabled(chord->stemSlash());
       cb.arpeggioButton->setEnabled(chord->arpeggio());
       cb.tremoloButton->setEnabled(chord->tremolo());
-      cb.glissandoButton->setEnabled(chord->glissando());
+
+//      cb.glissandoButton->setEnabled(chord->glissando());
+//      cb.glissandoButton->setEnabled(false);
+      cb.graceNote->setChecked(chord->noteType() != NoteType::NORMAL);
+      cb.userPlayEvents->setChecked(chord->playEventType() != PlayEventType::Auto);
+      cb.endsGlissando->setChecked(chord->endsGlissando());
+      cb.stemDirection->setCurrentIndex(int(chord->stemDirection()));
 
       crb.attributes->clear();
       foreach(Articulation* a, chord->articulations()) {
@@ -960,14 +963,6 @@ void ChordDebug::setElement(Element* e)
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)lyrics));
             crb.lyrics->addItem(item);
             }
-      cb.helplineList->clear();
-      for (LedgerLine* h = chord->ledgerLines(); h; h = h->next()) {
-            QString s;
-            s.setNum(qptrdiff(h), 16);
-            QListWidgetItem* item = new QListWidgetItem(s);
-            item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)h));
-            cb.helplineList->addItem(item);
-            }
       cb.notes->clear();
       foreach(Element* n, chord->notes()) {
             QString s;
@@ -975,6 +970,14 @@ void ChordDebug::setElement(Element* e)
             QListWidgetItem* item = new QListWidgetItem(s);
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)n));
             cb.notes->addItem(item);
+            }
+      cb.helplineList->clear();
+      for (LedgerLine* h = chord->ledgerLines(); h; h = h->next()) {
+            QString s;
+            s.setNum(qptrdiff(h), 16);
+            QListWidgetItem* item = new QListWidgetItem(s);
+            item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)h));
+            cb.helplineList->addItem(item);
             }
       cb.graceChords1->clear();
       for (Element* c : chord->graceNotes()) {
@@ -992,7 +995,6 @@ void ChordDebug::setElement(Element* e)
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)c));
             cb.elements->addItem(item);
             }
-      cb.userPlayEvents->setChecked(chord->playEventType() != PlayEventType::Auto);
       }
 
 //---------------------------------------------------------
@@ -1045,12 +1047,12 @@ void ChordDebug::tremoloClicked()
       {
       emit elementChanged(((Chord*)element())->tremolo());
       }
-
+/*
 void ChordDebug::glissandoClicked()
       {
       emit elementChanged(((Chord*)element())->glissando());
       }
-
+*/
 //---------------------------------------------------------
 //   upChanged
 //---------------------------------------------------------

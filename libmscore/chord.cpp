@@ -191,7 +191,7 @@ Chord::Chord(Score* s)
       _stemDirection    = MScore::Direction::AUTO;
       _arpeggio         = 0;
       _tremolo          = 0;
-      _glissando        = 0;
+      _endsGlissando    = false;
       _noteType         = NoteType::NORMAL;
       _stemSlash        = 0;
       _noStem           = false;
@@ -221,7 +221,7 @@ Chord::Chord(const Chord& c, bool link)
 
       _stem          = 0;
       _hook          = 0;
-      _glissando     = 0;
+      _endsGlissando = false;
       _arpeggio      = 0;
       _stemSlash     = 0;
       _tremolo       = 0;
@@ -240,12 +240,12 @@ Chord::Chord(const Chord& c, bool link)
       if (c._stemSlash) {
             add(new StemSlash(*(c._stemSlash)));
             }
-      if (c._glissando) {
+/*      if (c._glissando) {
             Glissando* g = new Glissando(*(c._glissando));
             add(g);
             if (link)
                   g->linkTo(c._glissando);
-            }
+            } */
       if (c._arpeggio) {
             Arpeggio* a = new Arpeggio(*(c._arpeggio));
             add(a);
@@ -282,8 +282,8 @@ void Chord::undoUnlink()
       for (Chord* gn : graceNotes())
             gn->undoUnlink();
 
-      if (_glissando)
-            _glissando->undoUnlink();
+/*      if (_glissando)
+            _glissando->undoUnlink(); */
       if (_arpeggio)
             _arpeggio->undoUnlink();
       if (_tremolo && !_tremolo->twoNotes())
@@ -307,7 +307,6 @@ Chord::~Chord()
                   _tremolo->chord2()->setTremolo(0);
             delete _tremolo;
             }
-      delete _glissando;
       delete _stemSlash;
       delete _stem;
       delete _hook;
@@ -461,7 +460,7 @@ void Chord::add(Element* e)
                   }
                   break;
             case Element::Type::GLISSANDO:
-                  _glissando = static_cast<Glissando*>(e);
+                  _endsGlissando = true;
                   break;
             case Element::Type::STEM:
                   Q_ASSERT(!_stem);
@@ -543,7 +542,7 @@ void Chord::remove(Element* e)
                   }
                   break;
             case Element::Type::GLISSANDO:
-                  _glissando = 0;
+                  _endsGlissando = false;
                   break;
             case Element::Type::STEM:
                   _stem = 0;
@@ -961,8 +960,6 @@ void Chord::write(Xml& xml) const
             n->write(xml);
       if (_arpeggio)
             _arpeggio->write(xml);
-      if (_glissando)
-            _glissando->write(xml);
       if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote)
             _tremolo->write(xml);
       for (Element* e : _el)
@@ -1048,11 +1045,26 @@ void Chord::read(XmlReader& e)
                   _arpeggio->read(e);
                   _arpeggio->setParent(this);
                   }
+            // old glissando format, chord-to-chord, attached to its final chord
             else if (tag == "Glissando") {
-                  _glissando = new Glissando(score());
-                  _glissando->setTrack(track());
-                  _glissando->read(e);
-                  _glissando->setParent(this);
+                  // the measure we are reading is not inserted in the score yet
+                  // as well as, possibly, the glissando intended initial chord;
+                  // then we cannot fully link the glissando right now;
+                  // temporarily attach the glissando to its final note as a back spanner;
+                  // after the whole score is read, Score::connectTies() will look for
+                  // the suitable initial note
+                  Note* finalNote = upNote();
+                  Glissando* gliss = new Glissando(score());
+                  gliss->read(e);
+                  gliss->setAnchor(Spanner::Anchor::NOTE);
+                  gliss->setStartElement(nullptr);
+                  gliss->setEndElement(nullptr);
+                  // in TAB, use straight line with no text
+                  if (score()->staff(e.track() >> 2)->isTabStaff()) {
+                        gliss->setGlissandoType(Glissando::Type::STRAIGHT);
+                        gliss->setShowText(false);
+                        }
+                  finalNote->addSpannerBack(gliss);
                   }
             else if (tag == "Tremolo") {
                   _tremolo = new Tremolo(score());
@@ -1143,8 +1155,6 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
             func(data, _arpeggio);
       if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote))
             func(data, _tremolo);
-      if (_glissando)
-            func(data, _glissando);
       if (staff() && staff()->showLedgerLines())
             for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
                   func(data, ll);
@@ -1175,8 +1185,6 @@ void Chord::processSiblings(std::function<void(Element*)> func)
             func(_arpeggio);
       if (_tremolo)
             func(_tremolo);
-      if (_glissando)
-            func(_glissando);
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
             func(ll);
       for (int i = 0; i < _notes.size(); ++i)
@@ -1497,8 +1505,6 @@ void Chord::layout2()
       for (Chord* c : _graceNotes)
             c->layout2();
 
-      if (glissando())
-            glissando()->layout();
       qreal _spatium = spatium();
 
       //
@@ -1848,10 +1854,10 @@ void Chord::layoutPitched()
             }
 
       // allocate enough room for glissandi
-      if (_glissando) {
-            lll += _spatium * 0.5;
-            if (rtick())
-                  lll += minTieLength;
+      if (_endsGlissando) {
+            if (rtick())                        // if not at beginning of measure
+                  lll += _spatium * 0.5 + minTieLength;
+            // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
 
       if (dots()) {
@@ -2166,10 +2172,11 @@ void Chord::layoutTablature()
             // know the y position of the next staves
             }
 
-      if (_glissando) {
-            lll += _spatium * 0.5;
-            if (rtick())
-                  lll += score()->styleS(StyleIdx::MinTieLength).val() * _spatium;
+      // allocate enough room for glissandi
+      if (_endsGlissando) {
+            if (rtick())                        // if not at beginning of measure
+                  lll += (0.5 + score()->styleS(StyleIdx::MinTieLength).val()) * _spatium;
+            // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
 
       if (dots()) {
@@ -3002,8 +3009,8 @@ QString Chord::accessibleExtraInfo()
       if (tremolo() && score()->selectionFilter().canSelect(tremolo()))
             rez = QString("%1 %2").arg(rez).arg(tremolo()->screenReaderInfo());
 
-      if (glissando() && score()->selectionFilter().canSelect(glissando()))
-            rez = QString("%1 %2").arg(rez).arg(glissando()->screenReaderInfo());
+//      if (glissando() && score()->selectionFilter().canSelect(glissando()))
+//            rez = QString("%1 %2").arg(rez).arg(glissando()->screenReaderInfo());
 
       foreach (Element* e, el()) {
             if (!score()->selectionFilter().canSelect(e)) continue;
