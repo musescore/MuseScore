@@ -89,7 +89,7 @@ void StringData::write(Xml& xml) const
 //   convertPitch
 //   Finds string and fret for a note.
 //
-//   Fills *string and *fret with suitable values for pitch
+//   Fills *string and *fret with suitable values for pitch at given tick of given staff,
 //   using the highest possible string.
 //   If note cannot be fretted, uses fret 0 on nearest string and returns false
 //
@@ -105,7 +105,10 @@ bool StringData::convertPitch(int pitch, Staff* staff, int tick, int* string, in
 
 //---------------------------------------------------------
 //   getPitch
-//   Returns the pitch corresponding to the string / fret combination
+//    Returns the pitch corresponding to the string / fret combination
+//    at given tick of given staff.
+//    Returns INVALID_PITCH if not possible
+//    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
 int StringData::getPitch(int string, int fret, Staff* staff, int tick) const
@@ -116,7 +119,8 @@ int StringData::getPitch(int string, int fret, Staff* staff, int tick) const
 //---------------------------------------------------------
 //   fret
 //    Returns the fret corresponding to the pitch / string combination
-//    returns -1 if not possible
+//    at given tick of given staff.
+//    Returns FRET_NONE if not possible
 //---------------------------------------------------------
 
 int StringData::fret(int pitch, int string, Staff* staff, int tick) const
@@ -265,7 +269,7 @@ int StringData::pitchOffsetAt(Staff* staff, int /*tick*/)
 //   convertPitch
 //   Finds string and fret for a note.
 //
-//   Fills *string and *fret with suitable values for pitch
+//   Fills *string and *fret with suitable values for pitch / pitchOffset,
 //   using the highest possible string.
 //   If note cannot be fretted, uses fret 0 on nearest string and returns false
 //
@@ -311,7 +315,9 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
 
 //---------------------------------------------------------
 //   getPitch
-//   Returns the pitch corresponding to the string / fret combination
+//    Returns the pitch corresponding to the string / fret / pitchOffset combination.
+//    Returns INVALID_PITCH if not possible
+//    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
 int StringData::getPitch(int string, int fret, int pitchOffset) const
@@ -325,8 +331,8 @@ int StringData::getPitch(int string, int fret, int pitchOffset) const
 
 //---------------------------------------------------------
 //   fret
-//    Returns the fret corresponding to the pitch / string combination
-//    returns -1 if not possible
+//    Returns the fret corresponding to the pitch / string / pitchOffset combination.
+//    returns FRET_NONE if not possible
 //---------------------------------------------------------
 
 int StringData::fret(int pitch, int string, int pitchOffset) const
