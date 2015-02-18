@@ -783,13 +783,15 @@ void MusicXml::initPartState()
             hairpins[i] = 0;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             trills[i] = 0;
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
+            glissandi[i][0] = glissandi[i][1] = 0;
       pedal = 0;
       pedalContinue = 0;
       harmony = 0;
       tremStart = 0;
       figBass = 0;
-      glissandoText = "";
-      glissandoColor = "";
+//      glissandoText = "";
+//      glissandoColor = "";
       }
 
 //---------------------------------------------------------
@@ -4731,7 +4733,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
       QString wavyLineType;
       int wavyLineNo = 0;
       QString arpeggioType;
-      QString glissandoType;
+//      QString glissandoType;
       int breath = -1;
       int tremolo = 0;
       QString tremoloType;
@@ -4970,6 +4972,52 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                   }
             else if (ee.tagName() == "non-arpeggiate")
                   arpeggioType = "non-arpeggiate";
+
+            if (ee.tagName() == "glissando" || ee.tagName() == "slide") {
+                  int n                   = ee.attribute(QString("number"), "1").toInt() - 1;
+                  QString spannerType     = ee.attribute(QString("type"));
+                  int tag                 = ee.tagName() == "slide" ? 0 : 1;
+//                  QString lineType  = ee.attribute(QString("line-type"), "solid");
+                  Glissando*& gliss = glissandi[n][tag];
+                  if (spannerType == "start") {
+                        if (gliss) {
+                              qDebug("overlapping glissando/slide %d not supported", n+1);
+                              delete gliss;
+                              gliss = 0;
+                              }
+                        else {
+                              gliss = new Glissando(score);
+                              gliss->setAnchor(Spanner::Anchor::NOTE);
+                              gliss->setStartElement(note);
+                              gliss->setTick(tick);
+                              gliss->setTrack(track);
+                              gliss->setParent(note);
+                              gliss->setText(ee.text());
+                              QColor color(ee.attribute("color"));
+                              if (color.isValid())
+                                    gliss->setColor(color);
+                              gliss->setGlissandoType(tag == 0 ? Glissando::Type::STRAIGHT : Glissando::Type::WAVY);
+                              spanners[gliss] = QPair<int, int>(tick, -1);
+                              // qDebug("glissando/slide=%p inserted at first tick %d", gliss, tick);
+                              }
+                        }
+                  else if (spannerType == "stop") {
+                        if (!gliss) {
+                              qDebug("glissando/slide %d stop without start", n+1);
+                              }
+                        else {
+                              spanners[gliss].second = tick + ticks;
+                              gliss->setEndElement(note);
+                              gliss->setTick2(tick);
+                              gliss->setTrack2(track);
+                              // qDebug("glissando/slide=%p second tick %d", gliss, tick);
+                              gliss = 0;
+                              }
+                        }
+                  else
+                        qDebug("unknown glissando/slide type %s", qPrintable(spannerType));
+                  }
+/*
             // glissando and slide are added to the "stop" chord only
             // but text and color are read at start
             else if (ee.tagName() == "glissando") {
@@ -4987,7 +5035,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                   else if (ee.attribute("type") == "stop") glissandoType = "slide";
                   }
             else
-                  domError(ee);
+                  domError(ee); */
             }
       // no support for arpeggio on rest
       if (!arpeggioType.isEmpty() && cr->type() == Element::Type::CHORD) {
@@ -5013,7 +5061,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
             else
                   cr->add(a);
             }
-
+/*
       if (!glissandoType.isEmpty()) {
             Glissando* g = new Glissando(score);
             if (glissandoType == "slide")
@@ -5047,7 +5095,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                   }
             else
                   cr->add(g);
-            }
+            } */
 
       if (!wavyLineType.isEmpty()) {
             int n = wavyLineNo - 1;

@@ -26,36 +26,29 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="2" column="1">
-       <widget class="QCheckBox" name="userPlayEvents">
+      <item row="0" column="1">
+       <widget class="QPushButton" name="stemButton">
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
-         <string notr="true">userPlayEvents</string>
+         <string notr="true" comment="do not translate">Stem</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="4" colspan="2">
-       <widget class="QPushButton" name="stemSlashButton">
-        <property name="text">
-         <string notr="true" extracomment="do not translate">StemSlash</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
+      <item row="0" column="3">
        <widget class="QPushButton" name="arpeggioButton">
         <property name="text">
          <string notr="true">Arpeggio</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="4" colspan="2">
-       <widget class="QPushButton" name="glissandoButton">
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="graceNote">
         <property name="text">
-         <string notr="true">Glissando</string>
+         <string notr="true" comment="do not translate">Grace Note</string>
         </property>
        </widget>
-      </item>
-      <item row="2" column="5">
-       <widget class="QComboBox" name="stemDirection"/>
       </item>
       <item row="0" column="0">
        <widget class="QPushButton" name="hookButton">
@@ -67,31 +60,28 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="graceNote">
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="userPlayEvents">
         <property name="text">
-         <string notr="true" comment="do not translate">Grace Note</string>
+         <string notr="true">userPlayEvents</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="0" column="2">
+       <widget class="QPushButton" name="stemSlashButton">
+        <property name="text">
+         <string notr="true" extracomment="do not translate">StemSlash</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
        <widget class="QPushButton" name="tremoloButton">
         <property name="text">
          <string notr="true">Tremolo</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="stemButton">
-        <property name="toolTip">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string notr="true" comment="do not translate">Stem</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="4">
+      <item row="2" column="3">
        <widget class="QLabel" name="label">
         <property name="text">
          <string notr="true" comment="do not translate">Stem Direction</string>
@@ -101,6 +91,16 @@
         </property>
         <property name="indent">
          <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QComboBox" name="stemDirection"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QCheckBox" name="endsGlissando">
+        <property name="text">
+         <string>Glissando end</string>
         </property>
        </widget>
       </item>
@@ -288,6 +288,22 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>hookButton</tabstop>
+  <tabstop>stemButton</tabstop>
+  <tabstop>stemSlashButton</tabstop>
+  <tabstop>arpeggioButton</tabstop>
+  <tabstop>tremoloButton</tabstop>
+  <tabstop>graceNote</tabstop>
+  <tabstop>userPlayEvents</tabstop>
+  <tabstop>endsGlissando</tabstop>
+  <tabstop>stemDirection</tabstop>
+  <tabstop>notes</tabstop>
+  <tabstop>helplineList</tabstop>
+  <tabstop>graceChords1</tabstop>
+  <tabstop>graceChords2</tabstop>
+  <tabstop>elements</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

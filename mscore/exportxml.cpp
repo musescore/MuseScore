@@ -243,14 +243,14 @@ public:
 //---------------------------------------------------------
 
 class GlissandoHandler {
-      const Chord* glissChrd[MAX_NUMBER_LEVEL];
-      const Chord* slideChrd[MAX_NUMBER_LEVEL];
-      int findChord(const Chord* c, int st) const;
+      const Note* glissNote[MAX_NUMBER_LEVEL];
+      const Note* slideNote[MAX_NUMBER_LEVEL];
+      int findNote(const Note* note, int type) const;
 
 public:
       GlissandoHandler();
-      void doGlissandoStart(Chord* chord, Notations& notations, Xml& xml);
-      void doGlissandoStop(Chord* chord, Notations& notations, Xml& xml);
+      void doGlissandoStart(Glissando* gliss, Notations& notations, Xml& xml);
+      void doGlissandoStop(Glissando* gliss, Notations& notations, Xml& xml);
       };
 
 //---------------------------------------------------------
@@ -637,25 +637,25 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
 GlissandoHandler::GlissandoHandler()
       {
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            glissChrd[i] = 0;
-            slideChrd[i] = 0;
+            glissNote[i] = 0;
+            slideNote[i] = 0;
             }
       }
 
 //---------------------------------------------------------
-//   findChord -- get index of chord in chord table for subtype st
+//   findNote -- get index of Note in note table for subtype type
 //   return -1 if not found
 //---------------------------------------------------------
 
-int GlissandoHandler::findChord(const Chord* c, int st) const
+int GlissandoHandler::findNote(const Note* note, int type) const
       {
-      if (st != 0 && st != 1) {
-            qDebug("GlissandoHandler::findChord: unknown glissando subtype %d", st);
+      if (type != 0 && type != 1) {
+            qDebug("GlissandoHandler::findNote: unknown glissando subtype %d", type);
             return -1;
             }
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (st == 0 && slideChrd[i] == c) return i;
-            if (st == 1 && glissChrd[i] == c) return i;
+            if (type == 0 && slideNote[i] == note) return i;
+            if (type == 1 && glissNote[i] == note) return i;
             }
       return -1;
       }
@@ -664,27 +664,28 @@ int GlissandoHandler::findChord(const Chord* c, int st) const
 //   doGlissandoStart
 //---------------------------------------------------------
 
-void GlissandoHandler::doGlissandoStart(Chord* chord, Notations& notations, Xml& xml)
+void GlissandoHandler::doGlissandoStart(Glissando* gliss, Notations& notations, Xml& xml)
       {
-      Glissando::Type st = chord->glissando()->glissandoType();
-      if (st != Glissando::Type::STRAIGHT && st != Glissando::Type::WAVY) {
-            qDebug("doGlissandoStart: unknown glissando subtype %hhd", st);
+      Glissando::Type type = gliss->glissandoType();
+      if (type != Glissando::Type::STRAIGHT && type != Glissando::Type::WAVY) {
+            qDebug("doGlissandoStart: unknown glissando subtype %hhd", type);
             return;
             }
+      Note* note = static_cast<Note*>(gliss->startElement());
       // check if on chord list
-      int i = findChord(chord, int(st));
+      int i = findNote(note, int(type));
       if (i >= 0) {
             // print error and remove from list
-            qDebug("doGlissandoStart: chord %p already on list", chord);
-            if (st == Glissando::Type::STRAIGHT) slideChrd[i] = 0;
-            if (st == Glissando::Type::WAVY) glissChrd[i] = 0;
+            qDebug("doGlissandoStart: note for glissando/slide %p already on list", gliss);
+            if (type == Glissando::Type::STRAIGHT)      slideNote[i] = 0;
+            if (type == Glissando::Type::WAVY)          glissNote[i] = 0;
             }
       // find free slot to store it
-      i = findChord(0, int(st));
+      i = findNote(0, int(type));
       if (i >= 0) {
-            if (st == Glissando::Type::STRAIGHT) slideChrd[i] = chord;
-            if (st == Glissando::Type::WAVY) glissChrd[i] = chord;
-            glissando(chord->glissando(), i + 1, true, notations, xml);
+            if (type == Glissando::Type::STRAIGHT)      slideNote[i] = note;
+            if (type == Glissando::Type::WAVY)          glissNote[i] = note;
+            glissando(gliss, i + 1, true, notations, xml);
             }
       else
             qDebug("doGlissandoStart: no free slot");
@@ -694,26 +695,27 @@ void GlissandoHandler::doGlissandoStart(Chord* chord, Notations& notations, Xml&
 //   doGlissandoStop
 //---------------------------------------------------------
 
-void GlissandoHandler::doGlissandoStop(Chord* chord, Notations& notations, Xml& xml)
+void GlissandoHandler::doGlissandoStop(Glissando* gliss, Notations& notations, Xml& xml)
       {
-      Glissando::Type st = chord->glissando()->glissandoType();
-      if (st != Glissando::Type::STRAIGHT && st != Glissando::Type::WAVY) {
-            qDebug("doGlissandoStart: unknown glissando subtype %hhd", st);
+      Glissando::Type type = gliss->glissandoType();
+      if (type != Glissando::Type::STRAIGHT && type != Glissando::Type::WAVY) {
+            qDebug("doGlissandoStart: unknown glissando subtype %hhd", type);
             return;
             }
+      Note* note = static_cast<Note*>(gliss->startElement());
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (st == Glissando::Type::STRAIGHT && slideChrd[i] == chord) {
-                  slideChrd[i] = 0;
-                  glissando(chord->glissando(), i + 1, false, notations, xml);
+            if (type == Glissando::Type::STRAIGHT && slideNote[i] == note) {
+                  slideNote[i] = 0;
+                  glissando(gliss, i + 1, false, notations, xml);
                   return;
                   }
-            if (st == Glissando::Type::WAVY && glissChrd[i] == chord) {
-                  glissChrd[i] = 0;
-                  glissando(chord->glissando(), i + 1, false, notations, xml);
+            if (type == Glissando::Type::WAVY && glissNote[i] == note) {
+                  glissNote[i] = 0;
+                  glissando(gliss, i + 1, false, notations, xml);
                   return;
                   }
             }
-      qDebug("doGlissandoStop: glissando chord %p not found", chord);
+      qDebug("doGlissandoStop: glissando note %p not found", note);
       }
 
 //---------------------------------------------------------
@@ -2131,7 +2133,7 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, Xml& xml, Notations
       }
 
 // find the next chord in the same track
-
+/* NO LONGER NEEDED
 static Chord* nextChord(Chord* ch)
       {
       Segment* s = ch->segment();
@@ -2152,7 +2154,7 @@ static Chord* nextChord(Chord* ch)
             }
       return c;
       }
-
+*/
 //---------------------------------------------------------
 //   determineTupletNormalTicks
 //---------------------------------------------------------
@@ -2569,14 +2571,22 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             if (chord->arpeggio()) {
                   arpeggiate(chord->arpeggio(), note == nl.front(), note == nl.back(), xml, notations);
                   }
-            // write glissando (only for last note)
+            for (Spanner* spanner : note->spannerFor())
+                  if (spanner->type() == Element::Type::GLISSANDO) {
+                        gh.doGlissandoStart(static_cast<Glissando*>(spanner), notations, xml);
+                  }
+            for (Spanner* spanner : note->spannerBack())
+                  if (spanner->type() == Element::Type::GLISSANDO) {
+                        gh.doGlissandoStop(static_cast<Glissando*>(spanner), notations, xml);
+                  }
+/*            // write glissando (only for last note)
             Chord* ch = nextChord(chord);
             if ((note == nl.back()) && ch && ch->glissando()) {
                   gh.doGlissandoStart(ch, notations, xml);
                   }
             if (chord->glissando()) {
                   gh.doGlissandoStop(chord, notations, xml);
-                  }
+                  } */
             notations.etag(xml);
             // write lyrics (only for first note)
             if ((note == nl.front()) && ll)

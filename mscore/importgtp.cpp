@@ -550,28 +550,43 @@ void GuitarPro::readLyrics()
 
 void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
       {
-      // shift slide
-      if (slide == SHIFT_SLIDE) {
+      // shift / legato slide
+      if (slide == SHIFT_SLIDE || slide == LEGATO_SLIDE) {
             Glissando* s = new Glissando(score);
-            s->setText("");
+/*            s->setText("");
             s->setGlissandoType(Glissando::Type::STRAIGHT);
-            cr->add(s);
-            }
-      // legato slide
-      else if (slide == LEGATO_SLIDE) {
+            cr->add(s); */
+            s->setAnchor(Spanner::Anchor::NOTE);
             Segment* prevSeg = cr->segment()->prev1(Segment::Type::ChordRest);
-                  Element* e = prevSeg->element(staffIdx);
-                  if (e) {
-                        if (e->type() == Element::Type::CHORD) {
-                              ChordRest* prevCr = static_cast<ChordRest*>(e);
-                              createSlur(true, staffIdx, prevCr);
-                              }
+            Element* prevElem = prevSeg->element(staffIdx);
+            if (prevElem) {
+                  if (prevElem->type() == Element::Type::CHORD) {
+                        Chord* prevChord = static_cast<Chord*>(prevElem);
+                        /** TODO we should not just take the top note here
+                        * but the /correct/ note need to check whether GP
+                        * supports multi-note gliss. I think it can in modern
+                        * versions */
+                        s->setStartElement(prevChord->upNote());
+                        s->setTick(prevSeg->tick());
+                        s->setTrack(staffIdx);
+                        s->setParent(prevChord->upNote());
+                        s->setText("");
+                        s->setGlissandoType(Glissando::Type::STRAIGHT);
+                        if (slide == LEGATO_SLIDE)
+                              createSlur(true, staffIdx, prevChord);
                         }
-            createSlur(false, staffIdx, cr);
-            Glissando* s = new Glissando(score);
-            s->setText("");
-            s->setGlissandoType(Glissando::Type::STRAIGHT);
-            cr->add(s);
+                  }
+
+            Chord* chord = (Chord*) cr;
+            /* TODO again here, we should not just set the up note but the
+             * /correct/ note need to check whether GP supports
+             * multi-note gliss. I think it can in modern versions */
+            s->setEndElement(chord->upNote());
+            s->setTick2(chord->segment()->tick());
+            s->setTrack2(staffIdx);
+            score->addElement(s);
+            if (slide == LEGATO_SLIDE)
+                  createSlur(false, staffIdx, cr);
             }
       // slide out downwards (fall)
       else if (slide == SLIDE_OUT_DOWN) {

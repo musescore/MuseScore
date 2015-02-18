@@ -221,7 +221,7 @@ class ChordDebug : public ShowElementBase {
       void stemSlashClicked();
       void arpeggioClicked();
       void tremoloClicked();
-      void glissandoClicked();
+//      void glissandoClicked();
 
    public:
       ChordDebug();

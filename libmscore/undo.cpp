@@ -1168,6 +1168,8 @@ void Score::undoAddElement(Element* element)
                         }
                   undo(new AddElement(nsp));
                   }
+            else if (et == Element::Type::GLISSANDO)
+                  undo(new AddElement(static_cast<Spanner*>(ne)));
             else if (element->type() == Element::Type::TREMOLO && static_cast<Tremolo*>(element)->twoNotes()) {
                   Tremolo* tremolo = static_cast<Tremolo*>(element);
                   ChordRest* cr1 = static_cast<ChordRest*>(tremolo->chord1());
