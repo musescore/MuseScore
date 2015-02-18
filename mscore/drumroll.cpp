@@ -281,7 +281,7 @@ void DrumrollEditor::selectionChanged()
 
 void DrumrollEditor::changeSelection(SelState)
       {
-//      gv->scene()->blockSignals(true);
+      gv->scene()->blockSignals(true);
       gv->scene()->clearSelection();
       QList<QGraphicsItem*> il = gv->scene()->items();
       foreach(QGraphicsItem* item, il) {
@@ -289,7 +289,7 @@ void DrumrollEditor::changeSelection(SelState)
             if (note)
                   item->setSelected(note->selected());
             }
-//      gv->scene()->blockSignals(false);
+      gv->scene()->blockSignals(false);
       }
 
 //---------------------------------------------------------
