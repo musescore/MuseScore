@@ -12,6 +12,7 @@
 
 #include "fingering.h"
 #include "score.h"
+#include "staff.h"
 #include "undo.h"
 #include "xml.h"
 
@@ -51,6 +52,29 @@ void Fingering::read(XmlReader& e)
             if (!Text::readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Fingering::layout()
+      {
+      if (staff() && staff()->isTabStaff())     // in TAB staves
+            setbbox(QRectF());                  // fingerings have no area
+      else
+            Text::layout();
+      }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void Fingering::draw(QPainter* painter) const
+      {
+      if (staff() && staff()->isTabStaff())     // hide fingering in TAB staves
+            return;
+      Text::draw(painter);
       }
 
 //---------------------------------------------------------
