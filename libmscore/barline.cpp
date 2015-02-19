@@ -944,6 +944,8 @@ void BarLine::layout()
       qreal y1, y2;
       getY(&y1, &y2);
 
+      setPos(QPointF());
+
       // if bar line does not belong to a system, has a staff and staff is set to hide bar lines, set null bbox
       if (parent() && parent()->type() != Element::Type::SYSTEM && staff() && !staff()->staffType()->showBarlines())
             setbbox(QRectF());
