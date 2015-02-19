@@ -1455,6 +1455,35 @@
             <property name="fieldGrowthPolicy">
              <enum>QFormLayout::ExpandingFieldsGrow</enum>
             </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_91">
+              <property name="text">
+               <string>System bracket thickness:</string>
+              </property>
+              <property name="buddy">
+               <cstring>bracketWidth</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="bracketWidth">
+              <property name="suffix">
+               <string extracomment="spatium unit">sp</string>
+              </property>
+              <property name="decimals">
+               <number>2</number>
+              </property>
+              <property name="minimum">
+               <double>-1000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1000.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_52">
               <property name="text">
@@ -1490,65 +1519,6 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_90">
-              <property name="text">
-               <string>Brace distance:</string>
-              </property>
-              <property name="buddy">
-               <cstring>akkoladeBarDistance</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_29">
-              <property name="text">
-               <string>Fixed number of measures/system:</string>
-              </property>
-              <property name="buddy">
-               <cstring>fixNumberMeasures</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QSpinBox" name="fixNumberMeasures"/>
-            </item>
-            <item row="5" column="0">
-             <widget class="QCheckBox" name="fixMeasureWidth">
-              <property name="text">
-               <string>Fixed measure width</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QDoubleSpinBox" name="akkoladeBarDistance">
-              <property name="suffix">
-               <string extracomment="spatium unit">sp</string>
-              </property>
-              <property name="decimals">
-               <number>2</number>
-              </property>
-              <property name="minimum">
-               <double>-1000.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>1000.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_91">
-              <property name="text">
-               <string>System bracket thickness:</string>
-              </property>
-              <property name="buddy">
-               <cstring>bracketWidth</cstring>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_92">
               <property name="text">
@@ -1578,8 +1548,18 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="bracketWidth">
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_90">
+              <property name="text">
+               <string>Brace distance:</string>
+              </property>
+              <property name="buddy">
+               <cstring>akkoladeBarDistance</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QDoubleSpinBox" name="akkoladeBarDistance">
               <property name="suffix">
                <string extracomment="spatium unit">sp</string>
               </property>
@@ -5704,8 +5684,6 @@
   <tabstop>bracketDistance</tabstop>
   <tabstop>akkoladeWidth</tabstop>
   <tabstop>akkoladeBarDistance</tabstop>
-  <tabstop>fixNumberMeasures</tabstop>
-  <tabstop>fixMeasureWidth</tabstop>
   <tabstop>minMeasureWidth_2</tabstop>
   <tabstop>measureSpacing</tabstop>
   <tabstop>barNoteDistance</tabstop>
