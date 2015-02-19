@@ -67,7 +67,9 @@
 #include "transposedialog.h"
 #include "metaedit.h"
 #include "inspector/inspector.h"
+#ifdef OMR
 #include "omrpanel.h"
+#endif
 #include "shortcut.h"
 #ifdef SCRIPT_INTERFACE
 #include "pluginCreator.h"
