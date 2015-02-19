@@ -143,7 +143,7 @@ static const ElementName elementNames[] = {
       ElementName("TextLineSegment",      QT_TRANSLATE_NOOP("elementName", "Text Line Segment")),
       ElementName("VoltaSegment",         QT_TRANSLATE_NOOP("elementName", "Volta Segment")),
       ElementName("PedalSegment",         QT_TRANSLATE_NOOP("elementName", "Pedal Segment")),
-      ElementName("LyricsLineSegment",    QT_TRANSLATE_NOOP("elementName", "Lyrics Line Segment")),
+      ElementName("LyricsLineSegment",    QT_TRANSLATE_NOOP("elementName", "Melisma Line Segment")),
       ElementName("GlissandoSegment",     QT_TRANSLATE_NOOP("elementName", "Glissando Segment")),
       ElementName("LayoutBreak",          QT_TRANSLATE_NOOP("elementName", "Layout Break")),
       ElementName("Spacer",               QT_TRANSLATE_NOOP("elementName", "Spacer")),
