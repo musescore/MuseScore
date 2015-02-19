@@ -30,31 +30,19 @@ class Note;
 
 class GlissandoSegment : public LineSegment {
       Q_OBJECT
-/*
-      QString _symbols;
 
-      void symbolLine(SymId start, SymId fill);
-      void symbolLine(SymId start, SymId fill, SymId end);
-*/
    protected:
+      // make glissando segment non-editable, until proper support is added for
+      // anchor selection
+      virtual bool isEditable() const override              { return false; }
+
    public:
-      GlissandoSegment(Score* s) : LineSegment(s) {}
-      Glissando* glissando() const                { return (Glissando*)spanner(); }
-      virtual Element::Type type() const override  { return Element::Type::GLISSANDO_SEGMENT; }
-      virtual GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }
+      GlissandoSegment(Score* s) : LineSegment(s)           {}
+      Glissando* glissando() const                          { return (Glissando*)spanner(); }
+      virtual Element::Type type() const override           { return Element::Type::GLISSANDO_SEGMENT; }
+      virtual GlissandoSegment* clone() const override      { return new GlissandoSegment(*this); }
       virtual void draw(QPainter*) const override;
-//      virtual bool acceptDrop(const DropData&) const override;
-//      virtual Element* drop(const DropData&) override;
       virtual void layout() override;
-//      virtual QVariant getProperty(P_ID propertyId) const override;
-//      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-//      virtual QVariant propertyDefault(P_ID) const override;
-//      virtual void add(Element*) override;
-//      virtual void remove(Element*) override;
-//      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all) override;
-/*
-      QString symbols() const           { return _symbols; }
-      void setSymbols(const QString& s) { _symbols = s; } */
       };
 
 //---------------------------------------------------------
@@ -82,6 +70,12 @@ class Glissando : public SLine {
       QString _text;
       bool _showText;
 
+   protected:
+      // make glissando non-editable, until proper support is added for anchor selection
+      // (in some occasions, trying to edit a single-segment glissando, redirects into
+      // editing the whole glissando)
+      virtual bool isEditable() const override              { return false; }
+
    public:
       Glissando(Score* s);
       Glissando(const Glissando&);
@@ -99,7 +93,6 @@ class Glissando : public SLine {
       virtual void layout() override;
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
-//      virtual void computeStartElement() override;
 
       // Glissando specific methods
       Type glissandoType() const          { return _glissandoType;}
@@ -109,7 +102,7 @@ class Glissando : public SLine {
       bool showText() const               { return _showText;     }
       void setShowText(bool v)            { _showText = v;        }
 
-      void setSize(const QSizeF&);        // used for palette ????
+//      void setSize(const QSizeF&);        // was used for palette; no longer used?
 
       void undoSetGlissandoType(Type);
       void undoSetText(const QString&);
