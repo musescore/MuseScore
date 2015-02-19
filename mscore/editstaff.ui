@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>920</width>
-    <height>578</height>
+    <height>606</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -720,6 +720,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QSpinBox" name="lines">
+            <property name="statusTip">
+             <string notr="true">stafflines</string>
+            </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>

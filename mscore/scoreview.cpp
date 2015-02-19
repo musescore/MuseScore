@@ -645,6 +645,7 @@ void DragTransition::onTransition(QEvent* e)
 ScoreView::ScoreView(QWidget* parent)
    : QWidget(parent)
       {
+      setStatusTip("scoreview");
       setAcceptDrops(true);
 #ifndef Q_OS_MAC
       setAttribute(Qt::WA_OpaquePaintEvent);

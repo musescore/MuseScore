@@ -210,7 +210,7 @@ class MuseScoreApplication : public QtSingleApplication {
       MuseScoreApplication(const QString &id, int &argc, char **argv)
          : QtSingleApplication(id, argc, argv) {
             };
-      bool event(QEvent *ev);
+      virtual bool event(QEvent *ev) override;
       };
 
 //---------------------------------------------------------
@@ -359,6 +359,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* lastCmd                      { 0 };
       const Shortcut* lastShortcut          { 0 };
       QHelpEngine* _helpEngine              { 0 };
+      int globalX, globalY;       // current mouse position
 
       QAction* countInAction;
       QAction* metronomeAction;
@@ -670,6 +671,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QToolButton* playButton()        { return _playButton;    }
       void showMessage(const QString& s, int timeout);
       void showHelp(QString);
+      void showContextHelp();
       void showHelp(const QUrl&);
 
       void registerPlugin(PluginDescription*);
