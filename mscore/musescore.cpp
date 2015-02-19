@@ -355,6 +355,24 @@ MuseScore::MuseScore()
                   }
             }
 
+      if (!converterMode) {
+            _loginManager = new LoginManager(this);
+
+            // initialize help engine
+            QString lang = mscore->getLocaleISOCode();
+            if (lang == "en_US")    // HACK
+                  lang = "en";
+
+            QString s = getSharePath() + "manual/doc_" + lang + ".qhc";
+            qDebug("init Help from: <%s>", qPrintable(s));
+            _helpEngine = new QHelpEngine(s, this);
+            if (!_helpEngine->setupData()) {
+                  qDebug("cannot setup data for help engine: %s", qPrintable(_helpEngine->error()));
+                  delete _helpEngine;
+                  _helpEngine = 0;
+                  }
+            }
+
       _positionLabel = new QLabel;
       _positionLabel->setObjectName("decoration widget");  // this prevents animations
       _positionLabel->setToolTip(tr("Measure:Beat:Tick"));
@@ -894,9 +912,11 @@ MuseScore::MuseScore()
       menuHelp->setObjectName("Help");
 
 #ifndef Q_OS_MAC
-      HelpQuery* hw = new HelpQuery(menuHelp);
-      menuHelp->addAction(hw);
-      connect(menuHelp, SIGNAL(aboutToShow()), hw, SLOT(setFocus()));
+      if (_helpEngine) {
+            HelpQuery* hw = new HelpQuery(menuHelp);
+            menuHelp->addAction(hw);
+            connect(menuHelp, SIGNAL(aboutToShow()), hw, SLOT(setFocus()));
+            }
 #endif
       menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
@@ -967,23 +987,6 @@ MuseScore::MuseScore()
             cornerLabel->setScaledContents(true);
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
-            }
-      if (!converterMode) {
-            _loginManager = new LoginManager(this);
-
-            // initialize help engine
-            QString lang = mscore->getLocaleISOCode();
-            if (lang == "en_US")    // HACK
-                  lang = "en";
-
-            QString s = getSharePath() + "manual/doc_" + lang + ".qhc";
-            qDebug("init Help from: <%s>", qPrintable(s));
-            _helpEngine = new QHelpEngine(s, this);
-            if (!_helpEngine->setupData()) {
-                  qDebug("cannot setup data for help engine: %s", qPrintable(_helpEngine->error()));
-                  delete _helpEngine;
-                  _helpEngine = 0;
-                  }
             }
       }
 
@@ -1063,6 +1066,10 @@ void MuseScore::showHelp(const QUrl& url)
 
 void MuseScore::showHelp(QString s)
       {
+      if (!_helpEngine) {
+            qDebug("no help available");
+            return;
+            }
       s = s.toLower();
       qDebug("showHelp <%s>", qPrintable(s));
       QMap<QString,QUrl>list = _helpEngine->linksForIdentifier(s);

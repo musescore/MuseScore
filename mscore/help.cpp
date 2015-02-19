@@ -129,7 +129,10 @@ void HelpQuery::actionTriggered(QObject* obj)
 
 void HelpQuery::returnPressed()
       {
-      QMap<QString,QUrl>list = mscore->helpEngine()->linksForIdentifier(entry->text().toLower());
+      QHelpEngine* he = mscore->helpEngine();
+      if (!he)
+            return;
+      QMap<QString,QUrl>list = he->linksForIdentifier(entry->text().toLower());
       if (!list.isEmpty()) {
             mscore->showHelp(list.begin().value());
             }
