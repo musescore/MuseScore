@@ -80,8 +80,6 @@
       <ArpeggioNoteDistance>0.7</ArpeggioNoteDistance>
       <ArpeggioLineWidth>0.19</ArpeggioLineWidth>
       <ArpeggioHookLen>0.9</ArpeggioHookLen>
-      <FixMeasureNumbers>4</FixMeasureNumbers>
-      <FixMeasureWidth>1</FixMeasureWidth>
       <evenFooterL>$P</evenFooterL>
       <oddFooterR>$P</oddFooterR>
       <voltaY>-2</voltaY>
