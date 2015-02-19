@@ -950,7 +950,7 @@ void BarLine::layout()
 
       // bar lines not hidden
       else {
-            qreal dw = layoutWidth(score(), barLineType(), magS());
+            qreal dw = layoutWidth(score(), barLineType(), mag());
             QRectF r(0.0, y1, dw, y2-y1);
 
             if (score()->styleB(StyleIdx::repeatBarTips)) {
