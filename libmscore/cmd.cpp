@@ -1368,7 +1368,6 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
       {
       Score* score  = n->score();
       Chord* chord  = n->chord();
-//      int staffIdx  = chord->staffIdx();
       Staff* st     = chord->staff();
       int fret      = n->fret();
       int string    = n->string();

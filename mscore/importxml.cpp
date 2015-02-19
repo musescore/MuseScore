@@ -5204,6 +5204,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
       }
 
 
+#if 0 /* currently unused */
 //---------------------------------------------------------
 //   findLastFiguredBass
 //---------------------------------------------------------
@@ -5227,6 +5228,7 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
             }
       return 0;
       }
+#endif
 
 //---------------------------------------------------------
 //   graceNoteType
