@@ -2330,6 +2330,7 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                   QKeyEvent* e = static_cast<QKeyEvent*>(event);
                   if(obj->isWidgetType() && e->key() == Qt::Key_Escape && e->modifiers() == Qt::NoModifier) {
                         if (isActiveWindow()) {
+                              obj->event(e);
                               if(currentScoreView())
                                     currentScoreView()->setFocus();
                               else
