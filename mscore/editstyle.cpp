@@ -467,9 +467,6 @@ void EditStyle::getValues()
 
       lstyle.set(StyleIdx::shortenStem,             shortenStem->isChecked());
 
-      lstyle.set(StyleIdx::FixMeasureNumbers,       fixNumberMeasures->value());
-      lstyle.set(StyleIdx::FixMeasureWidth,         fixMeasureWidth->isChecked());
-
       int idx1 = musicalSymbolFont->itemData(musicalSymbolFont->currentIndex()).toInt();
       lstyle.set(StyleIdx::MusicalSymbolFont, ScoreFont::scoreFonts().at(idx1).name());
 
@@ -724,9 +721,6 @@ void EditStyle::setValues()
             cb->setCurrentIndex(idx);
             }
 
-      fixNumberMeasures->setValue(lstyle.value(StyleIdx::FixMeasureNumbers).toInt());
-      fixMeasureWidth->setChecked(lstyle.value(StyleIdx::FixMeasureWidth).toBool());
-
       QString mfont(lstyle.value(StyleIdx::MusicalSymbolFont).toString());
       int idx = 0;
       for (auto i : ScoreFont::scoreFonts()) {
@@ -737,6 +731,8 @@ void EditStyle::setValues()
             ++idx;
             }
       musicalTextFont->clear();
+      // CAUTION: the second element, the itemdata, is a font family name!
+      // It's also stored in score file as the musicalTextFont
       musicalTextFont->addItem("Emmentaler Text", "MScore Text");
       musicalTextFont->addItem("Gonville Text", "Gootville Text");
       musicalTextFont->addItem("Bravura Text", "Bravura Text");

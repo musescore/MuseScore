@@ -2277,7 +2277,6 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
             else
                   nt = curMeasure->nextMeasureMM() ? curMeasure->nextMeasureMM()->type() : Element::Type::INVALID;
 
-            int n = styleI(StyleIdx::FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
                   case LayoutMode::PAGE:
@@ -2289,8 +2288,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                         pbreak = false;
                         break;
                   }
-            if ((n && system->measures().size() >= n)
-               || continueFlag
+            if (continueFlag
                || pbreak
                || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)
                ) {
@@ -2488,7 +2486,6 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
 
             system->measures().append(curMeasure);
             Element::Type nt = curMeasure->next() ? curMeasure->next()->type() : Element::Type::INVALID;
-            int n = styleI(StyleIdx::FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
                   case LayoutMode::PAGE:
@@ -2500,8 +2497,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                         pbreak = false;
                         break;
                   }
-            if ((n && system->measures().size() >= n)
-               || continueFlag || pbreak || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)) {
+            if (continueFlag || pbreak || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)) {
                   if (_layoutMode != LayoutMode::SYSTEM)
                         system->setPageBreak(curMeasure->pageBreak());
                   curMeasure = nextMeasure;
@@ -3004,13 +3000,8 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         mb->setPos(pos);
                         Measure* m    = static_cast<Measure*>(mb);
-                        if (styleB(StyleIdx::FixMeasureWidth)) {
-                              ww = rowWidth / system->measures().size();
-                              }
-                        else {
-                              qreal weight = m->ticks() * m->userStretch();
-                              ww           = m->minWidth2() + rest * weight;
-                              }
+                        qreal weight = m->ticks() * m->userStretch();
+                        ww           = m->minWidth2() + rest * weight;
                         m->layout(ww);
                         }
                   else if (mb->type() == Element::Type::HBOX) {

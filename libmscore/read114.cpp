@@ -148,8 +148,6 @@ static const StyleVal2 style114[] = {
       { StyleIdx::ArpeggioNoteDistance,         QVariant(.5) },
       { StyleIdx::ArpeggioLineWidth,            QVariant(.18) },
       { StyleIdx::ArpeggioHookLen,              QVariant(.8) },
-      { StyleIdx::FixMeasureNumbers,            QVariant(0) },
-      { StyleIdx::FixMeasureWidth,              QVariant(false) },
       { StyleIdx::keySigNaturals,               QVariant(int(KeySigNatural::BEFORE)) },
       { StyleIdx::tupletMaxSlope,               QVariant(qreal(0.5)) },
       { StyleIdx::tupletOufOfStaff,             QVariant(false) },

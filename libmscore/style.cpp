@@ -168,8 +168,6 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::ArpeggioNoteDistance,        StyleType("ArpeggioNoteDistance",    StyleValueType::SPATIUM) },
       { StyleIdx::ArpeggioLineWidth,           StyleType("ArpeggioLineWidth",       StyleValueType::SPATIUM) },
       { StyleIdx::ArpeggioHookLen,             StyleType("ArpeggioHookLen",         StyleValueType::SPATIUM) },
-      { StyleIdx::FixMeasureNumbers,           StyleType("FixMeasureNumbers",       StyleValueType::INT) },
-      { StyleIdx::FixMeasureWidth,             StyleType("FixMeasureWidth",         StyleValueType::BOOL) },
       { StyleIdx::SlurEndWidth,                StyleType("slurEndWidth",            StyleValueType::SPATIUM) },
       { StyleIdx::SlurMidWidth,                StyleType("slurMidWidth",            StyleValueType::SPATIUM) },
       { StyleIdx::SlurDottedWidth,             StyleType("slurDottedWidth",         StyleValueType::SPATIUM) },
@@ -518,8 +516,6 @@ StyleData::StyleData()
             { StyleIdx::ArpeggioNoteDistance,        QVariant(.5) },
             { StyleIdx::ArpeggioLineWidth,           QVariant(.18) },
             { StyleIdx::ArpeggioHookLen,             QVariant(.8) },
-            { StyleIdx::FixMeasureNumbers,           QVariant(0) },
-            { StyleIdx::FixMeasureWidth,             QVariant(false) },
             { StyleIdx::SlurEndWidth,                QVariant(.07) },
             { StyleIdx::SlurMidWidth,                QVariant(.15) },
             { StyleIdx::SlurDottedWidth,             QVariant(.1) },
@@ -1046,7 +1042,7 @@ void StyleData::load(XmlReader& e)
                   _customChordList = true;
                   chordListTag = true;
                   }
-            else if (tag == "pageFillLimit" || tag == "genTimesig")   // obsolete
+            else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth")   // obsolete
                   e.skipCurrentElement();
             else if (tag == "systemDistance")  // obsolete
                   set(StyleIdx::minSystemDistance, QVariant(e.readDouble()));

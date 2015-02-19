@@ -295,8 +295,6 @@ enum class StyleIdx : unsigned char {
       ArpeggioNoteDistance,
       ArpeggioLineWidth,
       ArpeggioHookLen,
-      FixMeasureNumbers,
-      FixMeasureWidth,
 
       SlurEndWidth,
       SlurMidWidth,
