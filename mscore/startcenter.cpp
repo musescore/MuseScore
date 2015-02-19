@@ -55,6 +55,7 @@ Startcenter::Startcenter()
       horizontalLayout->addWidget(_webView);
       if (enableExperimental)
             QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+      QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
       recentPage->setBoldTitle(true);
       updateRecentScores();
       }
