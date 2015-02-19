@@ -9,8 +9,7 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
-#include <QLabel>
-#include <QList>
+
 /**
  \file
  Implementation of classes Note and ShadowNote.
@@ -184,43 +183,7 @@ Note::Note(Score* s)
    : Element(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      dragMode           = false;
-      _pitch             = 0;
-      _play              = true;
-      _tuning            = 0.0;
-      _accidental        = 0;
-      _mirror            = false;
-      _userMirror        = MScore::DirectionH::AUTO;
-      _small             = false;
-      _userDotPosition   = MScore::Direction::AUTO;
-      _line              = 0;
-      _fret              = -1;
-      _string            = -1;
-      _ghost             = false;
-      _hidden            = false;
-      _dotsHidden        = false;
-      _fretConflict      = false;
-
-      _lineOffset        = 0;
-      _tieFor            = 0;
-      _tieBack           = 0;
-      _tpc[0]            = Tpc::TPC_INVALID;
-      _tpc[1]            = Tpc::TPC_INVALID;
-      _headGroup         = NoteHead::Group::HEAD_NORMAL;
-      _headType          = NoteHead::Type::HEAD_AUTO;
-      _fixed             = false;
-      _fixedLine         = 0;
-
-      _subchannel        = 0;
-
-      _veloType          = ValueType::OFFSET_VAL;
-      _veloOffset        = 0;
-
-      _dots[0]           = 0;
-      _dots[1]           = 0;
-      _dots[2]           = 0;
       _playEvents.append(NoteEvent());    // add default play event
-      _mark             = 0;
       }
 
 Note::~Note()
@@ -228,9 +191,7 @@ Note::~Note()
       delete _accidental;
       qDeleteAll(_el);
       delete _tieFor;
-      delete _dots[0];
-      delete _dots[1];
-      delete _dots[2];
+      qDeleteAll(_dots);
       }
 
 Note::Note(const Note& n, bool link)
@@ -285,10 +246,11 @@ Note::Note(const Note& n, bool link)
       else
             _tieFor = 0;
       _tieBack  = 0;
-      for (int i = 0; i < 3; ++i) {
-            _dots[i] = 0;
+      for (int i = 0; i < MAX_DOTS; ++i) {
             if (n._dots[i])
                   add(new NoteDot(*n._dots[i]));
+            else
+                  _dots[i] = 0;
             }
       _lineOffset = n._lineOffset;
       _mark      = n._mark;
@@ -434,6 +396,10 @@ int Note::tpc() const
       return _tpc[concertPitchIdx()];
       }
 
+//---------------------------------------------------------
+//   tpcUserName
+//---------------------------------------------------------
+
 QString Note::tpcUserName(bool explicitAccidental)
       {
       QString pitchName = tpc2name(tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental);
@@ -500,6 +466,10 @@ qreal Note::headWidth() const
       return symWidth(noteHead());
       }
 
+//---------------------------------------------------------
+//   tabHeadWidth
+//---------------------------------------------------------
+
 qreal Note::tabHeadWidth(StaffType* tab) const
       {
       qreal val;
@@ -539,7 +509,7 @@ qreal Note::headHeight() const
 
 qreal Note::tabHeadHeight(StaffType* tab) const
       {
-      if(tab && _fret != FRET_NONE && _string != STRING_NONE)
+      if (tab && _fret != FRET_NONE && _string != STRING_NONE)
             return tab->fretBoxH() * magS();
       return headHeight();
       }
@@ -661,7 +631,7 @@ void Note::remove(Element* e)
       {
       switch(e->type()) {
             case Element::Type::NOTEDOT:
-                  for (int i = 0; i < 3; ++i) {
+                  for (int i = 0; i < MAX_DOTS; ++i) {
                         if (_dots[i] == e) {
                               _dots[i] = 0;
                               break;
@@ -798,17 +768,13 @@ void Note::write(Xml& xml) const
       _el.write(xml);
       int dots = chord() ? chord()->dots() : 0;
       if (dots) {
-            bool hasUserModifiedDots = false;
             for (int i = 0; i < dots; ++i) {
                   if (_dots[i] && (!_dots[i]->userOff().isNull() || !_dots[i]->visible()
                      || _dots[i]->color() != Qt::black || _dots[i]->visible() != visible())) {
-                        hasUserModifiedDots = true;
+                        for (int i = 0; i < dots; ++i)
+                              _dots[i]->write(xml);
                         break;
                         }
-                  }
-            if (hasUserModifiedDots) {
-                  for (int i = 0; i < dots; ++i)
-                        _dots[i]->write(xml);
                   }
             }
       if (_tieFor)
@@ -1045,7 +1011,7 @@ void Note::read(XmlReader& e)
             else if (tag == "NoteDot") {
                   NoteDot* dot = new NoteDot(score());
                   dot->read(e);
-                  for (int i = 0; i < 3; ++i) {
+                  for (int i = 0; i < MAX_DOTS; ++i) {
                         if (_dots[i] == 0) {
                               dot->setIdx(i);
                               add(dot);
@@ -1588,7 +1554,7 @@ void Note::setDotY(MScore::Direction pos)
       // apply to dots
 
       int dots = chord()->dots();
-      for (int i = 0; i < 3; ++i) {
+      for (int i = 0; i < MAX_DOTS; ++i) {
             if (i < dots) {
                   if (_dots[i] == 0) {
                         NoteDot* dot = new NoteDot(score());
@@ -1793,85 +1759,6 @@ void Note::updateAccidental(AccidentalState* as)
       }
 
 //---------------------------------------------------------
-//   layout10
-//    compute actual accidental and line
-//---------------------------------------------------------
-
-void Note::layout10(AccidentalState* as)
-      {
-      Staff* st = staff();
-      if (st->isTabStaff()) {
-            if (_accidental) {
-                  delete _accidental;
-                  _accidental = 0;
-                  }
-            if (_fret < 0) {
-                  int string, fret;
-                  const StringData* stringData = st->part()->instr()->stringData();
-                  if (stringData->convertPitch(_pitch, st, chord()->tick(), &string, &fret)) {
-                        _fret   = fret;
-                        _string = string;
-                        }
-                  }
-            }
-      else {
-            int relLine = absStep(tpc(), epitch());
-
-            // calculate accidental
-
-            Accidental::Type acci = Accidental::Type::NONE;
-            if (_accidental && _accidental->role() == Accidental::Role::USER) {
-                  acci = _accidental->accidentalType();
-                  if (acci == Accidental::Type::SHARP || acci == Accidental::Type::FLAT) {
-                        // TODO - what about double flat and double sharp?
-                        Key key = (st && chord()) ? st->key(chord()->tick()) : Key::C;
-                        int ntpc = pitch2tpc(epitch(), key, acci == Accidental::Type::SHARP ? Prefer::SHARPS : Prefer::FLATS);
-                        if (ntpc != tpc()) {
-//not true:                     qDebug("note at %d has wrong tpc: %d, expected %d, acci %d", chord()->tick(), tpc(), ntpc, acci);
-//                              setColor(QColor(255, 0, 0));
-//                             setTpc(ntpc);
-                              relLine = absStep(tpc(), epitch());
-                              }
-                        }
-                  else if (acci > Accidental::Type::NATURAL) {
-                        // microtonal accidental - see comment in updateAccidental
-                        as->setAccidentalVal(relLine, AccidentalVal::NATURAL, _tieBack != 0);
-                        }
-                  }
-            else  {
-                  AccidentalVal accVal = tpc2alter(tpc());
-
-                  if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
-                        as->setAccidentalVal(relLine, accVal, _tieBack != 0);
-                        if (!_tieBack) {
-                              acci = Accidental::value2subtype(accVal);
-                              if (acci == Accidental::Type::NONE)
-                                    acci = Accidental::Type::NATURAL;
-                              }
-                        }
-                  }
-            if (acci != Accidental::Type::NONE && !_tieBack && !_hidden) {
-                  if (_accidental == 0) {
-                        _accidental = new Accidental(score());
-                        _accidental->setGenerated(true);
-                        add(_accidental);
-                        }
-                  _accidental->setAccidentalType(acci);
-                  }
-            else {
-                  if (_accidental) {
-                        if (_accidental->selected())
-                              score()->deselect(_accidental);
-                        // delete should be done in undo/redo mechanism
-                        // delete _accidental;
-                        _accidental = 0;
-                        }
-                  }
-            updateRelLine(relLine, false);
-            }
-      }
-
-//---------------------------------------------------------
 //   noteType
 //---------------------------------------------------------
 
@@ -2011,6 +1898,10 @@ void Note::setSmall(bool val)
       {
       _small = val;
       }
+
+//---------------------------------------------------------
+//   line
+//---------------------------------------------------------
 
 int Note::line() const
       {
@@ -2609,17 +2500,25 @@ NoteVal Note::noteVal() const
 
 int Note::qmlDots()
       {
-      QList<NoteDot*> list;
+      int i = 0;
       for (NoteDot* dot : _dots)
-            if (dot != nullptr)
-                  list.append(dot);
-      return list.size();
+            if (dot)
+                  ++i;
+      return i;
       }
+
+//---------------------------------------------------------
+//   groupToGroupName
+//---------------------------------------------------------
 
 const char* NoteHead::groupToGroupName(NoteHead::Group group)
       {
       return noteHeadNames[int(group)];
       }
+
+//---------------------------------------------------------
+//   subtypeName
+//---------------------------------------------------------
 
 QString Note::subtypeName() const
       {

@@ -181,55 +181,52 @@ class Note : public Element {
       enum class ValueType : char { OFFSET_VAL, USER_VAL };
 
    private:
-      int _subchannel;        ///< articulation
-      int _line;              ///< y-Position; 0 - top line.
-      int _fret;              ///< for tablature view
-      int _string;
-      mutable int _tpc[2];    ///< tonal pitch class  (concert/transposing)
-      mutable int _pitch;     ///< Note pitch as midi value (0 - 127).
+      int _subchannel     { 0  };   ///< articulation
+      int _line           { 0  };   ///< y-Position; 0 - top line.
+      int _fret           { -1 };   ///< for tablature view
+      int _string         { -1 };
+      mutable int _tpc[2] { Tpc::TPC_INVALID, Tpc::TPC_INVALID }; ///< tonal pitch class  (concert/transposing)
+      mutable int _pitch  { 0  };   ///< Note pitch as midi value (0 - 127).
 
-      bool _ghost;            ///< ghost note (guitar: death note)
-      bool _hidden;           ///< markes this note as the hidden one if there are
-                              ///< overlapping notes; hidden notes are not played
-                              ///< and heads + accidentals are not shown
-      bool _dotsHidden;       ///< dots of hidden notes are hidden too
-                              ///< except if only one note is dotted
-      bool _fretConflict;     ///< used by TAB staves to mark a fretting conflict:
-                              ///< two or mor enotes on the same string
+      bool _ghost         { false };      ///< ghost note (guitar: death note)
+      bool _hidden        { false };      ///< markes this note as the hidden one if there are
+                                          ///< overlapping notes; hidden notes are not played
+                                          ///< and heads + accidentals are not shown
+      bool _dotsHidden    { false };      ///< dots of hidden notes are hidden too
+                                          ///< except if only one note is dotted
+      bool _fretConflict  { false };      ///< used by TAB staves to mark a fretting conflict:
+                                          ///< two or mor enotes on the same string
 
-      bool dragMode;
-      bool _mirror;           ///< True if note is mirrored at stem.
-      bool _small;
-      bool _play;             // note is not played if false
-      mutable bool _mark;     // for use in sequencer
-      bool _fixed;            // for slash notation
-      int _fixedLine;         // fixed line number if _fixed == true
+      bool dragMode       { false };
+      bool _mirror        { false };      ///< True if note is mirrored at stem.
+      bool _small         { false };
+      bool _play          { true  };      // note is not played if false
+      mutable bool _mark  { false };      // for use in sequencer
+      bool _fixed         { false };      // for slash notation
 
+      MScore::DirectionH _userMirror { MScore::DirectionH::AUTO };    ///< user override of mirror
+      MScore::Direction _userDotPosition { MScore::Direction::AUTO }; ///< user override of dot position
 
-      MScore::DirectionH _userMirror;     ///< user override of mirror
-      MScore::Direction _userDotPosition; ///< user override of dot position
+      NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
+      NoteHead::Type  _headType  { NoteHead::Type::HEAD_AUTO    };
 
-      NoteHead::Group _headGroup;
-      NoteHead::Type  _headType;
+      ValueType _veloType { ValueType::OFFSET_VAL };
+      int _veloOffset     { 0 };    ///< velocity user offset in percent, or absolute velocity for this note
+      int _fixedLine      { 0 };    // fixed line number if _fixed == true
+      int _offTimeType    { 0 };    // compatibility only 1 - user(absolute), 2 - offset (%)
+      int _onTimeType     { 0 };    // compatibility only 1 - user, 2 - offset
+      int _lineOffset     { 0 };    ///< Used during mouse dragging.
+      qreal _tuning       { 0.0 };  ///< pitch offset in cent, playable only by internal synthesizer
 
-      ValueType _veloType;
-      short int _veloOffset; ///< velocity user offset in percent, or absolute velocity for this note
-
-      qreal _tuning;         ///< pitch offset in cent, playable only by internal synthesizer
-
-      Accidental* _accidental;
+      Accidental* _accidental { 0 };
 
       ElementList _el;        ///< fingering, other text, symbols or images
-      Tie* _tieFor;
-      Tie* _tieBack;
+      Tie* _tieFor        { 0 };
+      Tie* _tieBack       { 0 };
 
-      NoteDot* _dots[MAX_DOTS];
+      QList<NoteDot*> _dots { 0, 0, 0 };
 
       NoteEventList _playEvents;
-      int _offTimeType = 0; // compatibility only 1 - user(absolute), 2 - offset (%)
-      int _onTimeType = 0;  // compatibility only 1 - user, 2 - offset
-
-      int _lineOffset;        ///< Used during mouse dragging.
       QList<Spanner*> _spannerFor;
       QList<Spanner*> _spannerBack;
 
@@ -256,7 +253,6 @@ class Note : public Element {
       QPointF canvasPos() const;    ///< position in page coordinates
       void layout();
       void layout2();
-      void layout10(AccidentalState*);
       void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       void setTrack(int val);
 

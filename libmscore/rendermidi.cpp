@@ -350,9 +350,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         instr->updateVelocity(&velocity,channel, a->subtypeName());
                   }
 
-                  QList<Chord*> gnb;
-                  chord->getGraceNotesBefore(&gnb);
-                  for (Chord* c : gnb) {
+                  for (Chord* c : chord->graceNotesBefore()) {
                         for (const Note* note : c->notes())
                               collectNote(events, channel, note, velocity, tickOffset);
                         }
@@ -923,8 +921,8 @@ void Score::createPlayEvents(Chord* chord)
             instr->updateGateTime(&gateTime, 0, "");
             }
 
-      QList<Chord*> gnb;
-      int n = chord->getGraceNotesBefore(&gnb);
+      QList<Chord*> gnb = chord->graceNotesBefore();
+      int n = gnb.size();
       int ontime = 0;
       if (n) {
             //
