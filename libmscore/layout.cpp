@@ -201,7 +201,6 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       qreal dotAdjustThreshold      = 0.0;      // if it exceeds this amount
 
       // centering adjustments for whole note, breve, and small chords
-      qreal headDiff;
       qreal centerUp          = 0.0;      // offset to apply in order to center upstem chords
       qreal oversizeUp        = 0.0;      // adjustment to oversized upstem chord needed if laid out to the right
       qreal centerDown        = 0.0;      // offset to apply in order to center downstem chords
@@ -216,20 +215,38 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       // unless you change to left alignment as described in the comments below
       qreal centerThreshold   = 0.01 * sp;
 
-      headDiff = maxUpWidth - nominalWidth;
+      // amount by which actual width exceeds nominal, adjusted for staff mag() only
+      qreal headDiff = maxUpWidth - nominalWidth;
+      // amount by which actual width exceeds nominal, adjusted for staff & chord/note mag()
+      qreal headDiff2 = maxUpWidth - nominalWidth * (maxUpMag / staff->mag());
       if (headDiff > centerThreshold) {
             // larger than nominal
-            centerUp = headDiff * 0.5;
-            // to left align rather than center, change the above to
-            //centerUp = headDiff;
-            maxUpWidth = nominalWidth + centerUp;
-            oversizeUp = headDiff;
+            centerUp = headDiff * -0.5;
+            // maxUpWidth is true width, but we no longer will care about that
+            // instead, we care only about portion to right of origin
+            maxUpWidth += centerUp;
+            // to left align rather than center, delete both of the above
+            if (headDiff2 > centerThreshold) {
+                  // if max notehead is wider than nominal with chord/note mag() applied
+                  // then noteheads extend to left of origin
+                  // because stemPosX() is based on nominal width
+                  // so we need to correct for that too
+                  centerUp += headDiff2;
+                  oversizeUp = headDiff2;
+                  }
             }
       else if (-headDiff > centerThreshold) {
             // smaller than nominal
-            centerUp = headDiff * -0.5;
+            centerUp = -headDiff * 0.5;
+            if (headDiff2 > centerThreshold) {
+                  // max notehead is wider than nominal with chord/note mag() applied
+                  // perform same adjustment as above
+                  centerUp += headDiff2;
+                  oversizeUp = headDiff2;
+                  }
             centerAdjustDown = centerUp;
             }
+
       headDiff = maxDownWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             // larger than nominal
@@ -240,7 +257,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             }
       else if (-headDiff > centerThreshold) {
             // smaller than nominal
-            centerDown = headDiff * -0.5;
+            centerDown = -headDiff * 0.5;
             centerAdjustUp = centerDown;
             }
 
@@ -814,11 +831,6 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             Chord* chord = note->chord();
             bool _up     = chord->up();
             qreal stemX  = chord->stemPosX();   // stem position for nominal notehead, but allowing for mag
-
-            // for small upstem chords, set stem to minimum of actual and nominal head width
-            // this allows the chord alignment code in layoutChords() to function correctly
-            if (_up && chord->small())
-                  stemX = qMin(noteHeadWidth(), hw);
 
             qreal overlapMirror;
             if (chord->stem()) {
