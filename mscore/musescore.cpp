@@ -1035,55 +1035,6 @@ QString MuseScore::getLocaleISOCode() const
       }
 
 //---------------------------------------------------------
-//   showHelp
-//    show local help
-//---------------------------------------------------------
-
-void MuseScore::showHelp(const QUrl& url)
-      {
-      qDebug("showHelp <%s>", qPrintable(url.toString()));
-
-      if (!_helpEngine)
-            return;
-
-      QAction* a = getAction("local-help");
-      a->blockSignals(true);
-      a->setChecked(true);
-      a->blockSignals(false);
-
-      if (!helpBrowser) {
-            helpBrowser = new HelpBrowser;
-            manualDock = new QDockWidget(tr("Manual"), 0);
-            manualDock->setObjectName("Manual");
-
-            manualDock->setWidget(helpBrowser);
-            Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
-            addDockWidget(area, manualDock);
-            }
-      manualDock->show();
-      helpBrowser->setContent(url);
-      }
-
-void MuseScore::showHelp(QString s)
-      {
-      if (!_helpEngine) {
-            qDebug("no help available");
-            return;
-            }
-      s = s.toLower();
-      qDebug("showHelp <%s>", qPrintable(s));
-      QMap<QString,QUrl>list = _helpEngine->linksForIdentifier(s);
-      if (!list.isEmpty())
-            showHelp(*list.begin());
-      else {
-            qDebug("help for <%s> not found", qPrintable(s));
-            QMap<QString,QUrl>list = _helpEngine->linksForIdentifier("manual");
-            if (!list.isEmpty())
-                  showHelp(*list.begin());
-            }
-      }
-
-//---------------------------------------------------------
 //   helpBrowser1
 //    show online help
 //---------------------------------------------------------
@@ -2303,7 +2254,7 @@ bool MuseScore::unstable()
 //   MuseScoreApplication::event (mac only)
 //---------------------------------------------------------
 
-bool MuseScoreApplication::event(QEvent *event)
+bool MuseScoreApplication::event(QEvent* event)
       {
       switch(event->type()) {
             case QEvent::FileOpen:
@@ -2332,6 +2283,12 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                   handleMessage(static_cast<QFileOpenEvent *>(event)->file());
                   return true;
 #endif
+            case QEvent::MouseMove: {
+                  QMouseEvent* me = static_cast<QMouseEvent*>(event);
+                  globalX = me->globalX();
+                  globalY = me->globalY();
+                  return QMainWindow::eventFilter(obj, event);
+                  }
             case QEvent::KeyPress:
                   {
                   QKeyEvent* e = static_cast<QKeyEvent*>(event);
@@ -4108,15 +4065,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
 //            transportTools->setVisible(!transportTools->isVisible());
 //      else if (cmd == "toggle-noteinput")
 //            entryTools->setVisible(!entryTools->isVisible());
-      else if (cmd == "local-help") {
-            if (!a->isChecked()) {
-                  if (manualDock)
-                        manualDock->hide();
-                  a->setChecked(false);
-                  }
-            else
-                  showHelp("manual");
-            }
+      else if (cmd == "local-help")
+            showContextHelp();
       else if (cmd == "follow")
             preferences.followSong = a->isChecked();
       else if (cmd == "split-h")
@@ -4559,11 +4509,7 @@ int main(int argc, char* av[])
       revision = QString(f.readAll()).trimmed();
       f.close();
 
-#ifdef Q_OS_MAC
       MuseScoreApplication* app = new MuseScoreApplication("mscore-dev", argc, av);
-#else
-      QtSingleApplication* app = new QtSingleApplication("mscore-dev", argc, av);
-#endif
 
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");

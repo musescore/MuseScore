@@ -36,7 +36,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Local handbook"),     // Appears in Edit > Preferences > Shortcuts
          QT_TRANSLATE_NOOP("action","Show local handbook"), // Appears if you use Help > What's This?
          Icons::Invalid_ICON,
-         Qt::WindowShortcut,
+         Qt::ApplicationShortcut,
          ShortcutFlags::NONE | ShortcutFlags::A_CHECKABLE
          },
       {
@@ -3351,6 +3351,7 @@ QAction* Shortcut::action() const
             _action->setToolTip(descr());
             _action->setWhatsThis(descr());
             }
+      _action->setStatusTip(QString("action:%1").arg(_key.data()));
       QList<QKeySequence> kl = _action->shortcuts();
       if (!kl.isEmpty()) {
             QString s(_action->toolTip());

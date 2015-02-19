@@ -68,7 +68,6 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void showTimeSigChanged();
       void showBarlinesChanged();
 
-
    signals:
       void instrumentChanged();
 

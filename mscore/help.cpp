@@ -11,7 +11,9 @@
 //=============================================================================
 
 #include "help.h"
+#include "helpBrowser.h"
 #include "musescore.h"
+#include "scoreview.h"
 
 namespace Ms {
 
@@ -137,6 +139,83 @@ void HelpQuery::returnPressed()
             mscore->showHelp(list.begin().value());
             }
       entry->clear();
+      }
+
+//---------------------------------------------------------
+//   showHelp
+//    show local help
+//---------------------------------------------------------
+
+void MuseScore::showHelp(const QUrl& url)
+      {
+      qDebug("showHelp <%s>", qPrintable(url.toString()));
+
+      if (!_helpEngine)
+            return;
+
+      QAction* a = getAction("local-help");
+      a->blockSignals(true);
+      a->setChecked(true);
+      a->blockSignals(false);
+
+      if (!helpBrowser) {
+            helpBrowser = new HelpBrowser;
+            manualDock = new QDockWidget(tr("Manual"), 0);
+            manualDock->setObjectName("Manual");
+
+            manualDock->setWidget(helpBrowser);
+            Qt::DockWidgetArea area = Qt::RightDockWidgetArea;
+            addDockWidget(area, manualDock);
+            }
+      manualDock->show();
+      helpBrowser->setContent(url);
+      }
+
+void MuseScore::showHelp(QString s)
+      {
+      if (!_helpEngine) {
+            qDebug("no help available");
+            return;
+            }
+      s = s.toLower();
+      qDebug("showHelp <%s>", qPrintable(s));
+      QMap<QString,QUrl>list = _helpEngine->linksForIdentifier(s);
+      if (!list.isEmpty())
+            showHelp(*list.begin());
+      else {
+            qDebug("help for <%s> not found", qPrintable(s));
+            QMap<QString,QUrl>list = _helpEngine->linksForIdentifier("manual");
+            if (!list.isEmpty())
+                  showHelp(*list.begin());
+            }
+      }
+
+//---------------------------------------------------------
+//   showContextHelp
+//---------------------------------------------------------
+
+void MuseScore::showContextHelp()
+      {
+      qDebug("showContextHelp");
+      QString s;
+      QWidget* w = qApp->widgetAt(globalX, globalY);
+      while (w) {
+            if (!w->statusTip().isEmpty()) {
+                  s = w->statusTip();
+                  break;
+                  }
+            w = w->parentWidget();
+            }
+      if (w && s == "scoreview") {
+            ScoreView* canvas = static_cast<ScoreView*>(w);
+            QPoint pt = w->mapFromGlobal(QPoint(globalX, globalY));
+            printf("%d %d\n", pt.x(), pt.y());
+            QPointF p = canvas->toLogical(pt);
+            Element* e = canvas->elementNear(p);
+            if (e)
+                  s = e->name();
+            }
+      showHelp(s);
       }
 
 }  // end namespace Ms
