@@ -2136,19 +2136,11 @@ void ScoreView::wheelEvent(QWheelEvent* event)
       }
 
 //-----------------------------------------------------------------------------
-//   constraints
-// (ws: too restrictive; it should be possible at least to move the right edge
-//    of the score to center of the screen (or top, left, bottom).
-//    I do this often before zooming in.
-//    I believe there should be no limitation at all. Its irritating that dragging
-//    the canvas sometimes work and sometimes not bc. of some arbitrary limitation
-//    which is not immediate obvious.)
+//   constraintCanvas
 //-----------------------------------------------------------------------------
 
-void ScoreView::constraintCanvas (int* /*dxx*/, int* /*dyy*/)
+void ScoreView::constraintCanvas (int* dxx, int* dyy)
       {
-#if 0
-      const qreal margin = 50.0; //move to preferences?
       int dx = *dxx;
       int dy = *dyy;
       QRectF rect = QRectF(0, 0, width(), height());
@@ -2167,7 +2159,9 @@ void ScoreView::constraintCanvas (int* /*dxx*/, int* /*dyy*/)
                                          lastPage->width() * mag(),
                                          lastPage->height() * mag());
             QRectF pagesRect = firstPageRect.unite(lastPageRect).translated(offsetPt);
-            pagesRect.adjust(-margin, -margin, margin, margin);
+            qreal hmargin = this->width() * 0.75;
+            qreal vmargin = this->height() * 0.75;
+            pagesRect.adjust(-hmargin, -vmargin, hmargin, vmargin);
             QRectF toPagesRect = pagesRect.translated(dx, dy);
 
             // move right
@@ -2216,7 +2210,6 @@ void ScoreView::constraintCanvas (int* /*dxx*/, int* /*dyy*/)
             }
       *dxx = dx;
       *dyy = dy;
-#endif
       }
 
 //---------------------------------------------------------

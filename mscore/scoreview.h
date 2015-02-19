@@ -203,7 +203,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void focusInEvent(QFocusEvent*);
       virtual void focusOutEvent(QFocusEvent*);
       virtual void mouseReleaseEvent(QMouseEvent*);
-      void constraintCanvas(int*, int*);
+      void constraintCanvas(int *dxx, int *dyy);
 
       void contextItem(Element*);
 
