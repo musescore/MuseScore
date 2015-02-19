@@ -8,8 +8,6 @@
   modified for MuseScore Werner Schweer, 2009
 */
 
-#if 0
-
 #ifndef _REV_H
 #define _REV_H
 
@@ -76,7 +74,7 @@ class Comb {
 //---------------------------------------------------------
 
 class Freeverb : public Effect {
-      Q_OBJECT
+      //Q_OBJECT
 
       float roomsize, damp, width, sendLevel, wet;
       float newRoomsize, newDamp, newWidth, newSendLevel, newWet;
@@ -104,5 +102,4 @@ class Freeverb : public Effect {
       virtual const std::vector<ParDescr>& parDescr() const;
       };
 
-#endif
 #endif

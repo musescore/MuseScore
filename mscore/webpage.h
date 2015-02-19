@@ -36,7 +36,7 @@ class MuseScore;
 
 class MyNetworkAccessManager: public QNetworkAccessManager
       {
-      Q_OBJECT
+      //Q_OBJECT
 
    public:
       MyNetworkAccessManager(QObject *parent) : QNetworkAccessManager(parent) {}
@@ -56,7 +56,7 @@ class MyNetworkAccessManager: public QNetworkAccessManager
 
 class MyWebPage: public QWebPage
       {
-      Q_OBJECT
+      //Q_OBJECT
 
    protected:
       QObject *createPlugin(
@@ -80,7 +80,7 @@ class MyWebPage: public QWebPage
 
 class MyWebView: public QWebView
       {
-      Q_OBJECT
+      //Q_OBJECT
 
       MyWebPage m_page;
       QProgressBar* progressBar;
@@ -107,7 +107,7 @@ class MyWebView: public QWebView
 
 class WebPageDockWidget : public QDockWidget
       {
-      Q_OBJECT
+      //Q_OBJECT
 
       MyWebView* web;
 
@@ -127,7 +127,7 @@ class WebPageDockWidget : public QDockWidget
 
 class CookieJar : public QNetworkCookieJar
       {
-      Q_OBJECT
+      //Q_OBJECT
 
     public:
       CookieJar(QString path, QObject *parent = 0);  //load cookie
@@ -144,7 +144,7 @@ class CookieJar : public QNetworkCookieJar
 
 class WebScoreView : public ScoreView
       {
-      Q_OBJECT
+      //Q_OBJECT
       QNetworkAccessManager* networkManager;
 
    private slots:
