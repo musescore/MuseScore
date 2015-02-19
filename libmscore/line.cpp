@@ -51,7 +51,7 @@ bool LineSegment::readProperties(XmlReader& e)
             setUserOff2(e.readPoint() * spatium());
       else if (tag == "pos") {
             if (score()->mscVersion() > 114) {
-                  qreal _spatium = spatium();
+                  qreal _spatium = score()->spatium();
                   setUserOff(QPointF());
                   setReadPos(e.readPoint() * _spatium);
                   if (e.pasteMode())      // x position will be wrong
