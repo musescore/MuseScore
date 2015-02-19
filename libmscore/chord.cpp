@@ -1948,8 +1948,10 @@ void Chord::layoutPitched()
                   if (!pc) {
                         // no previous grace note found
                         if (!before){
-                              // grace note after - use main note
-                              pc = mainChord;
+                              // grace note after - we would use main note
+                              // but it hasn't been laid out yet, so we can't be sure about its ledger lines
+                              // err on the side of safety
+                              lll = qMax(lll, ledgerLineLength + lhead + 0.2 * _spatium * mag());
                               }
                         else if (mainChord->rtick()) {
                               // grace note before - use previous normal note of measure
@@ -1972,7 +1974,7 @@ void Chord::layoutPitched()
                         // both chords have ledger lines above or below staff
                         llsp = ledgerLineLength;
                         // add space between ledger lines
-                        llsp += _spatium * 0.2 * pc->mag();
+                        llsp += 0.2 * _spatium * pc->mag();
                         // if any portion of note extended to left of origin
                         // we need to include that here so it is not subsumed by ledger line
                         llsp += lhead;
@@ -1981,8 +1983,20 @@ void Chord::layoutPitched()
                         // even if no ledger lines in previous chord,
                         // we may need a little space to avoid crossing stem
                         llsp = ledgerLineLength * 0.5;
-                        llsp += _spatium * 0.2 * pc->mag();
+                        llsp += 0.2 * _spatium * pc->mag();
                         llsp += lhead;
+                        }
+                  if (_noteType == NoteType::NORMAL && pc->isGraceAfter()) {
+                        // add appropriate space to right of previous (grace note after) chord
+                        // this will be used in calculating its position relative to this chord
+                        // it is too late to actually allocate space for this in segment of previous chord
+                        // so we will allocate room in left space of this chord
+                        qreal oldR = pc->space().rw();
+                        qreal stemX = pc->stemPosX();
+                        qreal available = oldR - stemX;
+                        qreal newR = stemX + qMax(available, llsp);
+                        if (newR > oldR)
+                              pc->_space.rRw() = newR;
                         }
                   lll = qMax(llsp, lll);
                   }
