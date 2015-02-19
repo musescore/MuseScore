@@ -302,12 +302,8 @@ struct AcEl {
 //   layoutCR0
 //---------------------------------------------------------
 
-void Measure::layoutCR0(ChordRest* cr, qreal mm)
+void Measure::layoutCR0(ChordRest* cr, qreal mm, AccidentalState* as)
       {
-      const Drumset* drumset = 0;
-      if (cr->staff()->part()->instr()->useDrumset())
-            drumset = cr->staff()->part()->instr()->drumset();
-
       qreal m = mm;
       if (cr->small())
             m *= score()->styleD(StyleIdx::smallNoteMag);
@@ -315,10 +311,15 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm)
       if (cr->type() == Element::Type::CHORD) {
             Chord* chord = static_cast<Chord*>(cr);
             for (Chord* c : chord->graceNotes())
-                  layoutCR0(c, mm);
+                  layoutCR0(c, mm, as);
+            if (!chord->isGrace())
+                  chord->cmdUpdateNotes(as);          // TODO: merge cmdUpdateNotes()
 
             if (chord->noteType() != NoteType::NORMAL)
                   m *= score()->styleD(StyleIdx::graceNoteMag);
+            const Drumset* drumset = 0;
+            if (cr->staff()->part()->instr()->useDrumset())
+                  drumset = cr->staff()->part()->instr()->drumset();
             if (drumset) {
                   for (Note* note : chord->notes()) {
                         int pitch = note->pitch();
@@ -3197,7 +3198,7 @@ void Measure::layoutX(qreal stretch)
                                     // check for accidentals in chord
                                     if (cr->type() == Element::Type::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
-                                          if (c->getGraceNotesBefore(0))
+                                          if (c->graceNotesBefore().size())
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
@@ -3735,6 +3736,10 @@ void Measure::layoutStage1()
       setBreakMMRest(false);
 
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+            AccidentalState as;      // list of already set accidentals for this measure
+            Staff* staff = score()->staff(staffIdx);
+            as.init(staff->key(tick()));
+
             if (mmrests) {
                   if (
                         (repeatFlags() & Repeat::START)
@@ -3756,7 +3761,8 @@ void Measure::layoutStage1()
                         }
                   }
 
-            int track = staffIdx * VOICES;
+            int track    = staffIdx * VOICES;
+            int endTrack = track + VOICES;
 
             for (Segment* segment = first(); segment; segment = segment->next()) {
                   if (score()->staff(staffIdx)->show()) {
@@ -3777,12 +3783,11 @@ void Measure::layoutStage1()
                         Staff* staff     = score()->staff(staffIdx);
                         qreal staffMag  = staff->mag();
 
-                        int endTrack = track + VOICES;
                         for (int t = track; t < endTrack; ++t) {
                               ChordRest* cr = static_cast<ChordRest*>(segment->element(t));
                               if (!cr)
                                     continue;
-                              layoutCR0(cr, staffMag);
+                              layoutCR0(cr, staffMag, &as);
                               }
                         }
                   }
@@ -3803,31 +3808,6 @@ void Measure::layoutStage1()
                   setBreakMMRest(true);
             }
 
-      }
-
-//---------------------------------------------------------
-//   cmdUpdateNotes
-///   recompute note lines and accidental
-///   undoable add/remove
-//---------------------------------------------------------
-
-void Measure::cmdUpdateNotes(int staffIdx)
-      {
-      AccidentalState as;      // list of already set accidentals for this measure
-      Staff* staff = score()->staff(staffIdx);
-      as.init(staff->key(tick()));
-
-      int startTrack = staffIdx * VOICES;
-      int endTrack   = startTrack + VOICES;
-
-      for (Segment* segment = first(Segment::Type::ChordRest); segment; segment = segment->next(Segment::Type::ChordRest)) {
-            for (int track = startTrack; track < endTrack; ++track) {
-                  Chord* chord = static_cast<Chord*>(segment->element(track));
-                  if (!chord || chord->type() != Element::Type::CHORD)
-                       continue;
-                  chord->cmdUpdateNotes(&as);
-                  }
-            }
       }
 
 //---------------------------------------------------------

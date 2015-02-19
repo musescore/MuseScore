@@ -1560,9 +1560,8 @@ void Chord::layout2()
       // room for them has been reserved in Chord::layout()
       //
 
-      QList<Chord*> graceNotesAfter;
-      int gna = getGraceNotesAfter(&graceNotesAfter);
-      if (gna) {
+      QList<Chord*> gna = graceNotesAfter();
+      if (!gna.isEmpty()) {
             qreal minNoteDist = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium
                   * score()->styleD(StyleIdx::graceNoteMag);
             // position grace notes from the rightmost to the leftmost
@@ -1581,8 +1580,9 @@ void Chord::layout2()
                   ? score()->styleS(StyleIdx::noteBarDistance).val() * _spatium
                   : minNoteDist;
             // scan grace note list from the end
-            for (int i = gna-1; i >= 0; i--) {
-                  Chord* g = graceNotesAfter.value(i);
+            int n = gna.size();
+            for (int i = n-1; i >= 0; i--) {
+                  Chord* g = gna.value(i);
                   xOff -= g->space().rw();                  // move to left by grace note left space (incl. grace own width)
                   g->rxpos() = xOff;
                   xOff -= minNoteDist + g->space().lw();    // move to left by grace note right space and inter-grace distance
@@ -1611,17 +1611,13 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 
       // PITCHED_ and PERCUSSION_STAFF can go note by note
 
-      QList<Chord*> graceNotesBefore;
-      int gnb = getGraceNotesBefore(&graceNotesBefore);
-      if (gnb) {
-            for (Chord* ch : graceNotesBefore) {
-                  if (staffGroup != StaffGroup::PERCUSSION) {
-                        QList<Note*> notes(ch->notes());  // we need a copy!
-                        for (Note* note : notes)
-                              note->updateAccidental(as);
-                        }
-                  ch->sortNotes();
+      for (Chord* ch : graceNotesBefore()) {
+            if (staffGroup != StaffGroup::PERCUSSION) {
+                  QList<Note*> notes(ch->notes());  // we need a copy!
+                  for (Note* note : notes)
+                        note->updateAccidental(as);
                   }
+            ch->sortNotes();
             }
 
       QList<Note*> lnotes(notes());  // we need a copy!
@@ -1654,17 +1650,13 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                   }
             }
 
-      QList<Chord*> graceNotesAfter;
-      int gna = getGraceNotesAfter(&graceNotesAfter);
-      if (gna) {
-            for (Chord* ch : graceNotesAfter) {
-                  if (staffGroup != StaffGroup::PERCUSSION) {
-                        QList<Note*> notes(ch->notes());  // we need a copy!
-                        for (Note* note : notes)
-                              note->updateAccidental(as);
-                        }
-                  ch->sortNotes();
+      for (Chord* ch : graceNotesAfter()) {
+            if (staffGroup != StaffGroup::PERCUSSION) {
+                  QList<Note*> notes(ch->notes());  // we need a copy!
+                  for (Note* note : notes)
+                        note->updateAccidental(as);
                   }
+            ch->sortNotes();
             }
       sortNotes();
       }
@@ -1697,16 +1689,15 @@ void Chord::layoutPitched()
             if (c->isGraceBefore())
                   c->layoutPitched();
             }
-      QList<Chord*> graceNotesBefore;
-      int gnb = getGraceNotesBefore(&graceNotesBefore);
-      QList<Chord*> graceNotesAfter;
+      QList<Chord*> graceNotesBefore = Chord::graceNotesBefore();
+      int gnb = graceNotesBefore.size();
+
       // lay out grace notes after separately so they are processed left to right
       // (they are normally stored right to left)
-      int gna = getGraceNotesAfter(&graceNotesAfter);
-      if (gna) {
-            for (Chord* c : graceNotesAfter)
-                  c->layoutPitched();
-            }
+
+      QList<Chord*> gna = graceNotesAfter();
+      for (Chord* c : gna)
+            c->layoutPitched();
 
       qreal _spatium  = spatium();
       qreal dotNoteDistance = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
@@ -2003,10 +1994,11 @@ void Chord::layoutPitched()
               if (-xl > _space.lw())
                     _space.setLw(-xl);
               }
-       if (gna){
+       if (!gna.isEmpty()) {
             qreal xr = _space.rw();
-            for (int i = 0; i <= gna - 1; i++) {
-                  Chord* g = graceNotesAfter.value(i);
+            int n = gna.size();
+            for (int i = 0; i <= n - 1; i++) {
+                  Chord* g = gna.value(i);
                   xr += g->space().lw() + g->space().rw() + minNoteDistance * graceMag;
                   }
            if (xr > _space.rw())
@@ -2203,10 +2195,11 @@ void Chord::layoutTablature()
       _space.setLw(lll);
       _space.setRw(rrr);
 
-      QList<Chord*> graceNotesBefore;
       qreal graceMag = score()->styleD(StyleIdx::graceNoteMag);
-      int nb = getGraceNotesBefore(&graceNotesBefore);
-      if (nb){
+
+      QList<Chord*> graceNotesBefore = Chord::graceNotesBefore();
+      int nb = graceNotesBefore.size();
+      if (nb) {
               qreal xl = -(_space.lw() + minNoteDistance);
               for (int i = nb-1; i >= 0; --i) {
                     Chord* c = graceNotesBefore.value(i);
@@ -2217,10 +2210,9 @@ void Chord::layoutTablature()
               if (-xl > _space.lw())
                     _space.setLw(-xl);
               }
-       QList<Chord*> graceNotesAfter;
-       getGraceNotesAfter(&graceNotesAfter);
-       int na = graceNotesAfter.size();
-       if (na){
+       QList<Chord*> gna = graceNotesAfter();
+       int na = gna.size();
+       if (na) {
            // get factor for start distance after main note. Values found by testing.
            qreal fc;
            switch (durationType().type()) {
@@ -2235,7 +2227,7 @@ void Chord::layoutTablature()
                  }
            qreal xr = fc * (_space.rw() + minNoteDistance);
            for (int i = 0; i <= na - 1; i++) {
-                 Chord* c = graceNotesAfter.value(i);
+                 Chord* c = gna.value(i);
                  xr += c->space().lw() * (i == 0 ? 1.3 : 1);
                  c->setPos(xr, 0);
                  xr += c->space().rw() + minNoteDistance * graceMag;
@@ -2864,46 +2856,37 @@ Measure* Chord::measure() const
       }
 
 //---------------------------------------------------------
-//   getGraceNotesBefore
+//   graceNotesBefore
 //---------------------------------------------------------
 
-int Chord::getGraceNotesBefore(QList<Chord*>* graceNotesBefore)
+QList<Chord*> Chord::graceNotesBefore() const
       {
-      int i = 0;
-      foreach (Chord* c, _graceNotes) {
+      QList<Chord*> cl;
+      for (Chord* c : _graceNotes) {
                if (c->noteType() == NoteType::ACCIACCATURA
                || c->noteType() == NoteType::APPOGGIATURA
                || c->noteType() == NoteType::GRACE4
                || c->noteType() == NoteType::GRACE16
-               || c->noteType() == NoteType::GRACE32){
-                    if (graceNotesBefore)
-                          graceNotesBefore->append(c);
-                    i++;
-                    }
+               || c->noteType() == NoteType::GRACE32)
+                  cl.append(c);
               }
-      return i;
+      return cl;
       }
 
 //---------------------------------------------------------
-//   getGraceNotesAfter
+//   graceNotesAfter
 //---------------------------------------------------------
 
-int Chord::getGraceNotesAfter(QList<Chord*>* graceNotesAfter)
+QList<Chord*> Chord::graceNotesAfter() const
       {
-      if (_graceNotes.length() == 0)
-            return 0;
-      int i = 0;
-      for (int j = _graceNotes.length() - 1; j >= 0; --j) {
-            Chord* c = _graceNotes.at(j);
+      QList<Chord*> cl;
+      for (Chord* c : _graceNotes) {
             if (c->noteType() == NoteType::GRACE8_AFTER
              || c->noteType() == NoteType::GRACE16_AFTER
-             || c->noteType() == NoteType::GRACE32_AFTER){
-                  if (graceNotesAfter)
-                        graceNotesAfter->append(c);
-                  i++;
-                  }
+             || c->noteType() == NoteType::GRACE32_AFTER)
+                  cl.prepend(c);
             }
-      return i;
+      return cl;
       }
 
 //---------------------------------------------------------

@@ -1117,11 +1117,8 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
       ChordRest* a1    = 0;      // start of (potential) beam
       Beam* beam       = 0;      // current beam
       Beam::Mode bm = Beam::Mode::AUTO;
-      QList<Chord*> graceNotes;
-      if (after)
-            mainNote->getGraceNotesAfter(&graceNotes);
-      else
-            mainNote->getGraceNotesBefore(&graceNotes);
+      QList<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
+
       foreach (ChordRest* cr, graceNotes) {
             bm = Groups::endBeam(cr);
             if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
@@ -1447,8 +1444,6 @@ void Score::doLayout()
                         measureNo = 0;
                   else if (!measure->irregular())      // dont count measure
                         ++measureNo;
-                  for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx)
-                        measure->cmdUpdateNotes(staffIdx);
                   measure->layoutStage1();
                   }
             }
@@ -3726,7 +3721,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                     qreal noteX = 0.0;
                                     if (cr->type() == Element::Type::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
-                                          if (c->getGraceNotesBefore(0))
+                                          if (c->graceNotesBefore().size())
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {

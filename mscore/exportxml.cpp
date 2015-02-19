@@ -570,9 +570,7 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
                   }
             }
       // surch for slurs to grace notes after
-      QList<Chord*> graceNotesAfter;
-      chord->getGraceNotesAfter(&graceNotesAfter);
-      for (Chord* g : graceNotesAfter) {
+      for (Chord* g : chord->graceNotesAfter()) {
             foreach(Element* el, g->el()){
                   if (el->type() == Element::Type::SLUR){
                         const Slur* s = static_cast<const Slur*>(el);
@@ -4784,15 +4782,11 @@ void ExportMusicXml::write(QIODevice* dev)
                                           const QList<Lyrics*>* ll = &c->lyricsList();
                                    // ise grace after
                                           if(c){
-                                                QList<Chord*> graceNotesBefore;
-                                                c->getGraceNotesBefore(&graceNotesBefore);
-                                                for (Chord* g : graceNotesBefore) {
+                                                for (Chord* g : c->graceNotesBefore()) {
                                                       chord(g, sstaff, ll, part->instr()->useDrumset());
                                                       }
                                                 chord(c, sstaff, ll, part->instr()->useDrumset());
-                                                QList<Chord*> graceNotesAfter;
-                                                 c->getGraceNotesAfter(&graceNotesAfter);
-                                                 for (Chord* g : graceNotesAfter) {
+                                                 for (Chord* g : c->graceNotesAfter()) {
                                                        chord(g, sstaff, ll, part->instr()->useDrumset());
                                                        }
                                                 }

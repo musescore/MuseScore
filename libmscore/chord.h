@@ -156,8 +156,10 @@ class Chord : public ChordRest {
 
       const QList<Chord*>& graceNotes() const { return _graceNotes; }
       QList<Chord*>& graceNotes()             { return _graceNotes; }
-      int getGraceNotesBefore(QList<Chord*>*);
-      int getGraceNotesAfter(QList<Chord*>*);
+
+      QList<Chord*> graceNotesBefore() const;
+      QList<Chord*> graceNotesAfter() const;
+
       int graceIndex() const                        { return _graceIndex; }
       void setGraceIndex(int val)                   { _graceIndex = val;  }
 

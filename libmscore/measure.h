@@ -155,7 +155,7 @@ class Measure : public MeasureBase {
 
       void push_back(Segment* e);
       void push_front(Segment* e);
-      void layoutCR0(ChordRest* cr, qreal m);
+      void layoutCR0(ChordRest* cr, qreal m, AccidentalState*);
 
    public:
       Measure(Score* = 0);
@@ -302,7 +302,6 @@ class Measure : public MeasureBase {
       bool isEmpty() const;
       bool isOnlyRests(int track) const;
 
-      void cmdUpdateNotes(int staffIdx);
 
       void layoutStage1();
       int playbackCount() const      { return _playbackCount; }
