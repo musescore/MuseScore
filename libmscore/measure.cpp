@@ -3696,8 +3696,10 @@ void Measure::layoutX(qreal stretch)
                               e->adjustReadPos();
                               }
                         }
-                  else if (t == Element::Type::BAR_LINE)
+                  else if (t == Element::Type::BAR_LINE) {
+                        e->setPos(QPointF());
                         barLineWidth = qMax(barLineWidth, e->width());
+                        }
                   else {
                         if (t != Element::Type::AMBITUS)
                               e->setPos(-e->bbox().x(), 0.0);
