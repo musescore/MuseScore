@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "resourceManager.h"
+#include "musescore.h"
 #include "ui_resourceManager.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
@@ -68,7 +69,20 @@ void ResourceManager::displayLanguages()
       QPushButton* temp;
       languagesTable->verticalHeader()->show();
 
-      for (QString key : result.object().keys()) {
+      // move current language to first row
+	QStringList languages = result.object().keys();
+      QString lang = mscore->getLocaleISOCode();
+      int index = languages.indexOf(lang);
+      if (index < 0 &&  lang.size() > 2) {
+            lang = lang.left(2);
+            index = languages.indexOf(lang);
+            }
+      if (index >= 0) {
+            QString l = languages.takeAt(index);
+            languages.prepend(l);
+            }
+
+      for (QString key : languages) {
             if (!result.object().value(key).isObject())
                   continue;
             QJsonObject value = result.object().value(key).toObject();
