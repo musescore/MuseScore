@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>Quit %1</source>
-        <translation>Stoppen %1</translation>
+        <translation>%1 afsluiten</translation>
     </message>
     <message>
         <source>About %1</source>
