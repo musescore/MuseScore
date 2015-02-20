@@ -228,7 +228,7 @@ Palette* MuseScore::newDynamicsPalette(bool basic, bool master)
 //   newKeySigPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newKeySigPalette()
+Palette* MuseScore::newKeySigPalette(bool basic)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Key Signatures"));
@@ -249,12 +249,15 @@ Palette* MuseScore::newKeySigPalette()
       KeySig* k = new KeySig(gscore);
       k->setKey(Key::C);
       sp->append(k, qApp->translate("MuseScore", keyNames[14]));
-      // atonal key signature
-      KeySigEvent nke;
-      nke.setCustom(true);
-      KeySig* nk = new KeySig(gscore);
-      nk->setKeySigEvent(nke);
-      sp->append(nk, qApp->translate("MuseScore", keyNames[15]));
+
+      if (!basic) {
+            // atonal key signature
+            KeySigEvent nke;
+            nke.setCustom(true);
+            KeySig* nk = new KeySig(gscore);
+            nk->setKeySigEvent(nke);
+            sp->append(nk, qApp->translate("MuseScore", keyNames[15]));
+            }
       return sp;
       }
 
@@ -1165,7 +1168,7 @@ void MuseScore::setBasicPalette()
       paletteBox->clear();
       paletteBox->addPalette(newGraceNotePalette(true));
       paletteBox->addPalette(newClefsPalette(true));
-      paletteBox->addPalette(newKeySigPalette());
+      paletteBox->addPalette(newKeySigPalette(true));
       paletteBox->addPalette(newTimePalette());
       paletteBox->addPalette(newBarLinePalette(true));
       paletteBox->addPalette(newLinesPalette(true));
