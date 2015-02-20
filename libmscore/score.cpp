@@ -3977,5 +3977,39 @@ void Score::changeVoice(int voice)
       endCmd();
       }
 
+//---------------------------------------------------------
+//   cropPage - crop a single page score to the content
+///    margins will be applied on the 4 sides
+//---------------------------------------------------------
+
+void Score::cropPage(qreal margins)
+      {
+      if (npages() == 1) {
+            Page* page = pages()[0];
+            if (page) {
+                  QRectF ttbox = page->tbbox();
+
+                  PageFormat* curFormat = pageFormat();
+                  PageFormat f;
+                  f.copy(*curFormat);
+
+                  qreal margin = margins / INCH;
+                  f.setSize(QSizeF((ttbox.width() / MScore::DPI) + 2 * margin, (ttbox.height()/ MScore::DPI) + 2 * margin));
+
+                  qreal offset = curFormat->oddLeftMargin() - ttbox.x() / MScore::DPI;
+                  if (offset < 0)
+                        offset = 0.0;
+                  f.setOddLeftMargin(margin + offset);
+                  f.setEvenLeftMargin(margin + offset);
+                  f.setOddBottomMargin(margin);
+                  f.setOddTopMargin(margin);
+                  f.setEvenBottomMargin(margin);
+                  f.setEvenTopMargin(margin);
+
+                  undoChangePageFormat(&f, spatium(), pageNumberOffset());
+                  }
+            }
+      }
+
 }
 

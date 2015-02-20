@@ -1053,6 +1053,8 @@ class Score : public QObject {
       QString createRehearsalMarkText(RehearsalMark* current) const;
       QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
+      Q_INVOKABLE void cropPage(qreal margins);
+
       friend class ChangeSynthesizerState;
       friend class Chord;
       };
