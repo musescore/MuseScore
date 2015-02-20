@@ -278,7 +278,7 @@ KeyEditor::KeyEditor(QWidget* parent)
       l->setContentsMargins(0, 0, 0, 0);
       frame->setLayout(l);
 
-      sp = MuseScore::newKeySigPalette();
+      sp = MuseScore::newKeySigPalette(false);
       sp->setReadOnly(false);
 
       _keyPalette = new PaletteScrollArea(sp);
