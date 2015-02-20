@@ -1058,7 +1058,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       if (cmd == "list")
             mscore->showElementContext(obj);
       else if (cmd == "help")
-            mscore->showHelp(obj->name());
+            mscore->showHelp(QString("element:%1").arg(obj->name()));
       else if (cmd == "edit-element") {
             if (obj->isEditable()) {
                   startEdit(obj);
