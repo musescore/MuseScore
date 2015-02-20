@@ -209,6 +209,16 @@ void Element::spatiumChanged(qreal oldValue, qreal newValue)
       }
 
 //---------------------------------------------------------
+//   localSpatiumChanged
+//    the scale of a staff changed
+//---------------------------------------------------------
+
+void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      _userOff *= (newValue / oldValue);
+      }
+
+//---------------------------------------------------------
 //   spatium
 //---------------------------------------------------------
 

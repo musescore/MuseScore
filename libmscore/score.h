@@ -309,6 +309,7 @@ class Score : public QObject {
       MeasureBaseList _measures;          // here are the notes
       SpannerMap _spanner;
       std::set<Spanner*> _unmanagedSpanner;
+
       //
       // generated objects during layout:
       //
