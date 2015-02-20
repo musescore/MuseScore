@@ -27,9 +27,9 @@ class ScoreItem;
 class ScoreListWidget : public QListWidget
       {
       Q_OBJECT
-      int CELLW           { 112   };
-      int CELLH           { 224   };
-      int SPACE           { 4    };
+      int CELLW           { 140   };
+      int CELLH           { 228   };
+      int SPACE           { 2    };
 
       virtual QSize sizeHint() const override;
 
