@@ -173,6 +173,9 @@ void MuseScore::showHelp(const QUrl& url)
 
 void MuseScore::showHelp(QString s)
       {
+      s = s.toLower();
+      QDesktopServices::openUrl(QString("http://musescore.org/redirect/help?tag=%1&locale=%2").arg(s).arg(getLocaleISOCode()));
+#if 0
       if (!_helpEngine) {
             qDebug("no help available");
             return;
@@ -188,6 +191,7 @@ void MuseScore::showHelp(QString s)
             if (!list.isEmpty())
                   showHelp(*list.begin());
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -213,7 +217,7 @@ void MuseScore::showContextHelp()
             QPointF p = canvas->toLogical(pt);
             Element* e = canvas->elementNear(p);
             if (e)
-                  s = e->name();
+                  s = QString("element:%1").arg(e->name());
             }
       showHelp(s);
       }

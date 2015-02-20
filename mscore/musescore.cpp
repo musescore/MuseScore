@@ -913,7 +913,7 @@ MuseScore::MuseScore()
       QMenu* menuHelp = mb->addMenu(tr("&Help"));
       menuHelp->setObjectName("Help");
 
-#ifndef Q_OS_MAC
+#if 0
       if (_helpEngine) {
             HelpQuery* hw = new HelpQuery(menuHelp);
             menuHelp->addAction(hw);
