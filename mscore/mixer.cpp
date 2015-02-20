@@ -83,7 +83,9 @@ void PartEdit::setPart(Part* p, Channel* a)
                   break;
                   }
             }
+      drumset->blockSignals(true);
       drumset->setChecked(p->instr()->useDrumset());
+      drumset->blockSignals(false);
       }
 
 //---------------------------------------------------------
