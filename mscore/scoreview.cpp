@@ -3158,6 +3158,8 @@ void ScoreView::startNoteEntry()
       is.setSegment(0);
       Note* note  = 0;
       Element* el = _score->selection().activeCR() ? _score->selection().activeCR() : _score->selection().element();
+      if (!el)
+            el = _score->selection().firstChordRest();
       if (el == 0 || (el->type() != Element::Type::CHORD && el->type() != Element::Type::REST && el->type() != Element::Type::NOTE)) {
             // if no note/rest is selected, start with voice 0
             int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
@@ -3175,7 +3177,7 @@ void ScoreView::startNoteEntry()
             note = c->selectedNote();
             if (note == 0)
                   note = c->upNote();
-            el    = note;
+            el = note;
             }
       TDuration d(is.duration());
       if (!d.isValid() || d.isZero() || d.type() == TDuration::DurationType::V_MEASURE)
