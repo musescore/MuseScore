@@ -174,9 +174,10 @@ void MuseScore::showHelp(const QUrl& url)
 void MuseScore::showHelp(QString s)
       {
       s = s.toLower();
-      QUrl url(QString("http://musescore.org/redirect/help?tag=%1&locale=%2").arg(s).arg(getLocaleISOCode()));
-      QDesktopServices::openUrl(url);
-//      showHelp(url);
+      if (!s.isEmpty()) {
+            QUrl url(QString("http://musescore.org/redirect/help?tag=%1&locale=%2").arg(s).arg(getLocaleISOCode()));
+            QDesktopServices::openUrl(url);
+            }
 #if 0
       if (!_helpEngine) {
             qDebug("no help available");
