@@ -72,7 +72,7 @@ ScoreListWidget* ScoreBrowser::createScoreList()
       static_cast<QVBoxLayout*>(scoreList->layout())->addWidget(sl);
       sl->setWrapping(true);
       sl->setViewMode(QListView::IconMode);
-      sl->setIconSize(QSize(sl->cellWidth(), sl->cellHeight()-30));
+      sl->setIconSize(QSize(sl->cellWidth(), sl->cellHeight() - 30));
       sl->setSpacing(10);
       sl->setResizeMode(QListView::Adjust);
       sl->setFlow(QListView::LeftToRight);
@@ -104,32 +104,51 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
       {
       ScoreInfo si(fi);
 
-      QPixmap pm;
+      QPixmap pm(l->iconSize() * qApp->devicePixelRatio());
       if (!QPixmapCache::find(fi.filePath(), &pm)) {
-            pm = mscore->extractThumbnail(fi.filePath());
-            if (pm.isNull())
-                  pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
+            //load and scale pixmap
+            QPixmap pixmap = mscore->extractThumbnail(fi.filePath());
+            if (pixmap.isNull())
+                  pixmap = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
+            pixmap = pixmap.scaled(pm.width() - 2, pm.height() - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            // draw pixmap and add border
+            pm.fill(Qt::transparent);
+            QPainter painter( &pm );
+            painter.drawPixmap(0, 0, pixmap);
+            painter.setPen(QColor(0,0,0,128));
+            painter.setBrush(Qt::white);
+            if (fi.baseName() == "00-Blank" || fi.baseName() == "Create_New_Score")
+                  painter.drawRoundedRect(QRectF(0, 0, pm.width() - 1 , pm.height() - 1), 10.0, 10.0);
+            else
+                  painter.drawRect(0, 0, pm.width()  - 1, pm.height()  - 1);
+            if (fi.baseName() != "00-Blank")
+                  painter.drawPixmap(1, 1, pixmap);
+            painter.end();
             QPixmapCache::insert(fi.filePath(), pm);
             }
-      // add border
-      QPainter p(&pm);
-      p.setPen(QColor(0,0,0,128));
-      p.drawRect(0, 0, pm.width() - 1, pm.height() - 1);
+
       si.setPixmap(pm);
       ScoreItem* item = new ScoreItem(si);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignBottom);
 
-      QString s(si.completeBaseName());
-      if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
-            s = s.mid(3);
-      s = s.replace('_', ' ');
-      item->setText(s);
+      if (fi.baseName() == "00-Blank")
+            item->setText(tr("Choose Instruments"));
+      else if (fi.baseName() == "Create_New_Score")
+            item->setText(tr("Create New Score"));
+      else {
+            QString s(si.completeBaseName());
+            if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
+                  s = s.mid(3);
+            s = s.replace('_', ' ');
+            item->setText(s);
+            }
+
       QFont f = item->font();
       f.setPointSize(f.pointSize() - 2.0);
       f.setBold(_boldTitle);
       item->setFont(f);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignTop);
-      item->setIcon(QIcon(si.pixmap()));
+      item->setIcon(QIcon(pm));
       item->setSizeHint(l->cellSize());
       return item;
       }
