@@ -1455,7 +1455,7 @@ AddElement::AddElement(Element* e)
 void AddElement::cleanup(bool undo)
       {
       if (!undo) {
-            qDebug("AddElement::cleanup: delete %d %s", undo, element->name());
+            qDebug("AddElement::cleanup: delete %d %p %s", undo, element, element->name());
             delete element;
             element = 0;
             }
