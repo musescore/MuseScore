@@ -172,19 +172,6 @@ void ScoreBrowser::setScores(const QFileInfoList& s)
 
       QSet<QString> entries; //to avoid duplicates
       for (const QFileInfo& fi : s) {
-            if (fi.isFile()) {
-                  QString s = fi.filePath();
-                  if (entries.contains(s))
-                      continue;
-                  if (s.endsWith(".mscz") || s.endsWith(".mscx")) {
-                        if (!sl)
-                              sl = createScoreList();
-                        sl->addItem(genScoreItem(fi, sl));
-                        entries.insert(s);
-                        }
-                  }
-            }
-      for (const QFileInfo& fi : s) {
             if (fi.isDir()) {
                   QString s(fi.fileName());
                   if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
@@ -210,6 +197,27 @@ void ScoreBrowser::setScores(const QFileInfoList& s)
                         delete sl;
                         }
                   sl = 0;
+                  }
+            }
+      for (const QFileInfo& fi : s) {
+            if (fi.isFile()) {
+                  QString s = fi.filePath();
+                  if (entries.contains(s))
+                      continue;
+                  if (s.endsWith(".mscz") || s.endsWith(".mscx")) {
+                        if (!sl) {
+                              if (_showCustomCategory) {
+                                    QLabel* label = new QLabel(tr("Custom Templates"));
+                                    QFont f = label->font();
+                                    f.setBold(true);
+                                    label->setFont(f);
+                                    static_cast<QVBoxLayout*>(l)->addWidget(label);
+                                    }
+                              sl = createScoreList();
+                              }
+                        sl->addItem(genScoreItem(fi, sl));
+                        entries.insert(s);
+                        }
                   }
             }
       }

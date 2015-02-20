@@ -272,7 +272,8 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       
       QDir myTemplatesDir(preferences.myTemplatesPath);
       fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
-      
+
+      templateFileBrowser->setShowCustomCategory(true);
       templateFileBrowser->setScores(fil);
       templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 
