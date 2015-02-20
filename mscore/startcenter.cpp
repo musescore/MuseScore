@@ -66,7 +66,7 @@ Startcenter::Startcenter()
 
 Startcenter::~Startcenter() {
       delete _webView;
-}
+      }
 
 //---------------------------------------------------------
 //   loadScore
@@ -153,7 +153,7 @@ void Startcenter::readSettings(QSettings& settings)
 //   MyNetworkAccessManager
 //---------------------------------------------------------
 
-QNetworkReply * MyNetworkAccessManager::createRequest(Operation op,
+QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
                                           const QNetworkRequest & req,
                                           QIODevice * outgoingData)
       {
@@ -171,7 +171,7 @@ MyWebView::MyWebView(QWidget *parent):
    QWebView(parent)
       {
       page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-      QNetworkAccessManager *networkManager = new MyNetworkAccessManager(this);
+      QNetworkAccessManager* networkManager = new MyNetworkAccessManager(this);
 #ifndef QT_NO_OPENSSL
       connect(networkManager,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),this, SLOT(ignoreSSLErrors(QNetworkReply*,QList<QSslError>)));
 #endif

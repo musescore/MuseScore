@@ -174,7 +174,9 @@ void MuseScore::showHelp(const QUrl& url)
 void MuseScore::showHelp(QString s)
       {
       s = s.toLower();
-      QDesktopServices::openUrl(QString("http://musescore.org/redirect/help?tag=%1&locale=%2").arg(s).arg(getLocaleISOCode()));
+      QUrl url(QString("http://musescore.org/redirect/help?tag=%1&locale=%2").arg(s).arg(getLocaleISOCode()));
+      QDesktopServices::openUrl(url);
+//      showHelp(url);
 #if 0
       if (!_helpEngine) {
             qDebug("no help available");
@@ -213,7 +215,6 @@ void MuseScore::showContextHelp()
       if (w && s == "scoreview") {
             ScoreView* canvas = static_cast<ScoreView*>(w);
             QPoint pt = w->mapFromGlobal(QPoint(globalX, globalY));
-            printf("%d %d\n", pt.x(), pt.y());
             QPointF p = canvas->toLogical(pt);
             Element* e = canvas->elementNear(p);
             if (e)

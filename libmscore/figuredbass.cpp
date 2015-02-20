@@ -872,7 +872,7 @@ void FiguredBassItem::readMusicXML(XmlReader& e, bool paren)
 //   Write MusicXML
 //
 // Writes the portion within the <figure> tag.
-// 
+//
 // NOTE: Both MuseScore and MusicXML provide two ways of altering the (temporal) length of a
 // figured bass object: extension lines and duration. The convention is that an EXTENSION is
 // used if the figure lasts LONGER than the note (i.e., it "extends" to the following notes),
@@ -963,7 +963,9 @@ FiguredBass::FiguredBass(const FiguredBass& fb)
       {
       setOnNote(fb.onNote());
       setTicks(fb.ticks());
-      items = fb.items;
+      for (auto i : fb.items)       // deep copy is needed
+            items.push_back(new FiguredBassItem(*i));
+//      items = fb.items;
       }
 
 FiguredBass::~FiguredBass()
