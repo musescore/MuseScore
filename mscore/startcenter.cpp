@@ -112,7 +112,7 @@ void Startcenter::updateRecentScores()
       QFileInfo newScore(":/data/Create_New_Score.mscz");
       fil.prepend(newScore);
       recentPage->setScores(fil);
-      recentPage->selectLast();
+      recentPage->selectFirst();
       }
 
 //---------------------------------------------------------
