@@ -204,9 +204,9 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             return std::pair<int, float>(0, 0);
             }
 
-      int bar;
-      int beat;
-      int ticks;
+      int bar = 0;
+      int beat = 0;
+      int ticks = 0;
       TimeSigMap* tsm = e->score()->sigmap();
       Element* p = e;
       while(p && p->type() != Element::Type::SEGMENT && p->type() != Element::Type::MEASURE)
