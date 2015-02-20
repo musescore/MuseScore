@@ -260,6 +260,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdMoveCR(bool left);
       void cmdGotoElement(Element*);
       bool checkCopyOrCut();
+      void restoreInputState();
 
    private slots:
       void enterState();

@@ -2655,6 +2655,34 @@ void Score::padToggle(Pad n)
 
       }
 
+void Score::recordSelection(Element* e)
+      {
+      if (e == 0)
+            return;
+      Element* p = e;
+      _is.setLastSelectedTrack(e->track());
+      while(p && p->type() != Element::Type::SYSTEM) {
+            if (p->type() == Element::Type::SEGMENT) {
+                  Segment* s = static_cast<Segment*>(p);
+                  _is.setLastSelectedTick(s->tick());
+                  return;
+                  }
+            if (p->type() == Element::Type::MEASURE) {
+                  Measure* m = static_cast<Measure*>(p);
+                  _is.setLastSelectedTick(m->tick());
+                  return;
+                  }
+            if (p->isSpannerSegment())
+                  p = static_cast<SpannerSegment*>(p)->spanner();
+            if (p->isSpanner()) {
+                  Segment* s = static_cast<Spanner*>(p)->startSegment();
+                  _is.setLastSelectedTick(s->tick());
+                  return;
+                  }
+            p = p->parent();
+            }
+      }
+
 //---------------------------------------------------------
 //   deselect
 //---------------------------------------------------------
@@ -2712,13 +2740,15 @@ void Score::selectSingle(Element* e, int staffIdx)
             refresh |= e->abbox();
             _selection.add(e);
             _is.setTrack(e->track());
+            recordSelection(e);
             selState = SelState::LIST;
             if (e->type() == Element::Type::NOTE) {
                   e = e->parent();
                   }
             if (e->type() == Element::Type::REST || e->type() == Element::Type::CHORD) {
                   _is.setLastSegment(_is.segment());
-                  _is.setSegment(static_cast<ChordRest*>(e)->segment());
+                  ChordRest* ch = static_cast<ChordRest*>(e);
+                  _is.setSegment(ch->segment());
                   }
             }
       _selection.setActiveSegment(0);

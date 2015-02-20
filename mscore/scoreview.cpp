@@ -2468,6 +2468,44 @@ void ScoreView::normalCopy()
             }
       }
 
+void ScoreView::restoreInputState()
+      {
+      InputState is = score()->inputState();
+      int tick = is.lastSelectedTick();
+      Segment* s = score()->tick2leftSegment(tick);
+      if(!s) { //probably deleted
+            s = score()->lastSegment();
+            if(s->segmentType() != Segment::Type::ChordRest)
+                  s = s->prev1(Segment::Type::ChordRest);
+            }
+      int track = is.lastSelectedTrack();
+      if (track < 0 || track >= score()->staves().size() * VOICES)
+            track = 0;
+      //semgnet found, but it might not have a note/rest on this staff
+      Element* e = s->element(track);
+      if(e) {
+            cmdGotoElement(e);
+            if(!noteEntryMode())
+                  sm->postEvent(new CommandEvent("note-input"));
+            return;
+            }
+
+      int startTrack = (track / VOICES) * VOICES;
+      int endTrack   = startTrack + VOICES;
+      while(!e && s) {
+            for(int i = startTrack; i < endTrack && e == 0; i++)
+                  e = s->element(i);
+            if (e) break;
+            s = s->prev1(Segment::Type::ChordRest);
+            }
+
+      if(e)
+            cmdGotoElement(e);
+
+      if(!noteEntryMode())
+            sm->postEvent(new CommandEvent("note-input"));
+      }
+
 //---------------------------------------------------------
 //   normalCut
 //---------------------------------------------------------
@@ -2812,6 +2850,8 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "last-element"){
             cmdGotoElement(score()->lastElement());
       }
+      else if (cmd == "restore-input-state")
+            restoreInputState();
       else if (cmd == "rest" || cmd == "rest-TAB")
             cmdEnterRest();
       else if (cmd == "rest-1")

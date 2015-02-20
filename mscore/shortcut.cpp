@@ -717,6 +717,17 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
+         "restore-input-state",
+         QT_TRANSLATE_NOOP("action","Restore input state"),
+         QT_TRANSLATE_NOOP("action","Restore input state"),
+         QT_TRANSLATE_NOOP("action","Restore input state"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD | ShortcutFlags::A_SCORE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
          "prev-element",
          QT_TRANSLATE_NOOP("action","Previous element"),
          QT_TRANSLATE_NOOP("action","Accessibility: previous element"),

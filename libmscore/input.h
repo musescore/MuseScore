@@ -36,6 +36,8 @@ class InputState {
       int         _drumNote    { -1 };
       int         _track       { 0 };
       int         _prevTrack   { 0 };                       // used for navigation
+      int         _lastSelectedTrack { 0 };
+      int         _lastSelectedTick  { 0 };
       Segment*    _lastSegment { 0 };
       Segment*    _segment     { 0 };                       // current segment
       int         _string      { VISUAL_STRING_NONE };      // visual string selected for input (TAB staves only)
@@ -75,6 +77,10 @@ class InputState {
       int track() const                   { return _track;          }
       void setTrack(int v)                { _prevTrack = _track; _track = v; }
       int prevTrack() const               { return _prevTrack;      }
+      void setLastSelectedTrack(int v)    {  v < 0 ? _lastSelectedTrack = 0 : _lastSelectedTrack = v; }
+      void setLastSelectedTick(int v)     {  _lastSelectedTick = v; }
+      int  lastSelectedTick() const       { return _lastSelectedTick;  }
+      int  lastSelectedTrack() const      { return _lastSelectedTrack; }
 
       int string() const                  { return _string;             }
       void setString(int val)             { _string = val;              }

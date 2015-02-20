@@ -671,6 +671,7 @@ class Score : public QObject {
       void selectSimilar(Element* e, bool sameStaff);
       void selectSimilarInRange(Element* e);
       static void collectMatch(void* data, Element* e);
+      void recordSelection(Element* e);
       void deselect(Element* obj);
       void deselectAll()                    { _selection.deselectAll(); }
       void updateSelection()                { _selection.update(); }
