@@ -2291,6 +2291,8 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                   globalY = me->globalY();
                   return QMainWindow::eventFilter(obj, event);
                   }
+            case QEvent::StatusTip:
+                  return true; // prevent updates to the status bar
             case QEvent::KeyPress:
                   {
                   QKeyEvent* e = static_cast<QKeyEvent*>(event);
@@ -2316,10 +2318,12 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                               return true;
                               }
                         }
+                  break;
                   }
             default:
                   return QMainWindow::eventFilter(obj, event);
             }
+      return QMainWindow::eventFilter(obj, event);
       }
 
 //---------------------------------------------------------
