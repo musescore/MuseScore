@@ -1864,9 +1864,14 @@ void Score::cmdDeleteSelection()
                                     undoRemoveElement(annotation);
                               }
 
-                        if (s->segmentType() != Segment::Type::ChordRest || !s->element(track))
+                        Element* e = s->element(track);
+                        if (!e)
                               continue;
-                        ChordRest* cr = static_cast<ChordRest*>(s->element(track));
+                        if (s->segmentType() != Segment::Type::ChordRest) {
+                              undoRemoveElement(e);
+                              continue;
+                              }
+                        ChordRest* cr = static_cast<ChordRest*>(e);
                         if (tick == -1) {
                               // first ChordRest found:
                               int offset = cr->tick() - s->measure()->tick();
