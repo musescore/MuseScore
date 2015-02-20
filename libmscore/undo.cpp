@@ -2453,11 +2453,10 @@ void ChangePageFormat::flip()
 //   ChangeStaff
 //---------------------------------------------------------
 
-ChangeStaff::ChangeStaff(Staff* _staff, bool _small, bool _invisible,
+ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible,
    qreal _userDist, bool _neverHide, bool _showIfEmpty, bool hide)
       {
       staff       = _staff;
-      small       = _small;
       invisible   = _invisible;
       userDist    = _userDist;
       neverHide   = _neverHide;
@@ -2483,23 +2482,19 @@ static void notifyTimeSigs(void*, Element* e)
 void ChangeStaff::flip()
       {
       bool invisibleChanged = staff->invisible() != invisible;
-      bool smallChanged = staff->small() != small;
 
-      int oldSmall        = staff->small();
       bool oldInvisible   = staff->invisible();
       qreal oldUserDist   = staff->userDist();
       bool oldNeverHide   = staff->neverHide();
       bool oldShowIfEmpty = staff->showIfEmpty();
       bool hide           = staff->hideSystemBarLine();
 
-      staff->setSmall(small);
       staff->setInvisible(invisible);
       staff->setUserDist(userDist);
       staff->setNeverHide(neverHide);
       staff->setShowIfEmpty(showIfEmpty);
       staff->setHideSystemBarLine(hideSystemBarLine);
 
-      small       = oldSmall;
       invisible   = oldInvisible;
       userDist    = oldUserDist;
       neverHide   = oldNeverHide;
@@ -2512,16 +2507,6 @@ void ChangeStaff::flip()
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
                   MStaff* mstaff = m->mstaff(staffIdx);
                   mstaff->lines->setVisible(!staff->invisible());
-                  }
-            }
-      if (smallChanged) {
-            for (Segment* s = score->firstSegment(Segment::Type::ChordRest); s; s = s->next1(Segment::Type::ChordRest)) {
-                  for (Element* e : s->annotations()) {
-                        if (e->type() == Element::Type::HARMONY && e->staff() == staff) {
-                              Harmony* h = static_cast<Harmony*>(e);
-                              h->render();
-                              }
-                        }
                   }
             }
       staff->score()->setLayoutAll(true);

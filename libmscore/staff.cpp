@@ -29,6 +29,7 @@
 #include "instrtemplate.h"
 #include "barline.h"
 #include "ottava.h"
+#include "harmony.h"
 
 namespace Ms {
 
@@ -1073,6 +1074,8 @@ QVariant Staff::getProperty(P_ID id) const
                   return userMag();
             case P_ID::COLOR:
                   return color();
+            case P_ID::SMALL:
+                  return small();
             default:
                   qDebug("Staff::setProperty: unhandled id");
                   return QVariant();
@@ -1086,11 +1089,20 @@ QVariant Staff::getProperty(P_ID id) const
 bool Staff::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::MAG:
+            case P_ID::MAG: {
+                  double oldVal = mag();
                   setUserMag(v.toDouble());
+                  scaleChanged(oldVal, mag());
+                  }
                   break;
             case P_ID::COLOR:
                   setColor(v.value<QColor>());
+                  break;
+            case P_ID::SMALL: {
+                  double oldVal = mag();
+                  setSmall(v.toBool());
+                  scaleChanged(oldVal, mag());
+                  }
                   break;
             default:
                   qDebug("Staff::setProperty: unhandled id");
@@ -1111,8 +1123,36 @@ QVariant Staff::propertyDefault(P_ID id) const
                   return 1.0;
             case P_ID::COLOR:
                   return QColor(Qt::black);
+            case P_ID::SMALL:
+                  return false;
             default:
                   return QVariant();
+            }
+      }
+
+//---------------------------------------------------------
+//   scaleChanged
+//---------------------------------------------------------
+
+void Staff::scaleChanged(double oldVal, double newVal)
+      {
+      int staffIdx = idx();
+      int startTrack = staffIdx * VOICES;
+      int endTrack = startTrack + VOICES;
+      for (Segment* s = score()->firstSegment(); s; s = s->next1()) {
+            for (Element* e : s->annotations())
+                  e->localSpatiumChanged(oldVal, newVal);
+            for (int track = startTrack; track < endTrack; ++track) {
+                  if (s->element(track))
+                        s->element(track)->localSpatiumChanged(oldVal, newVal);
+                  }
+            }
+      for (auto i : score()->spanner()) {
+            Spanner* spanner = i.second;
+            if (spanner->staffIdx() == staffIdx) {
+                  for (auto k : spanner->spannerSegments())
+                        k->localSpatiumChanged(oldVal, newVal);
+                  }
             }
       }
 }

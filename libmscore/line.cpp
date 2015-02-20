@@ -366,6 +366,16 @@ void LineSegment::spatiumChanged(qreal ov, qreal nv)
       }
 
 //---------------------------------------------------------
+//   localSpatiumChanged
+//---------------------------------------------------------
+
+void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
+      {
+      Element::localSpatiumChanged(ov, nv);
+      _userOff2 *= nv / ov;
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

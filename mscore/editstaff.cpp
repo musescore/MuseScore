@@ -255,14 +255,11 @@ void EditStaff::apply()
       instrument.setShortName(sn);
       instrument.setLongName(ln);
 
-      bool s         = small->isChecked();
       bool inv       = invisible->isChecked();
       qreal userDist = spinExtraDistance->value();
-      QColor col     = color->color();
       bool nhide     = neverHide->isChecked();
       bool ifEmpty   = showIfEmpty->isChecked();
       bool hideSystemBL = hideSystemBarLine->isChecked();
-      qreal scale    = mag->value() / 100.0;
 
       QString newPartName = partName->text().simplified();
       if (!(instrument == *part->instr()) || part->partName() != newPartName) {
@@ -275,17 +272,17 @@ void EditStaff::apply()
             if (v1 != v2)
                   score->transpositionChanged(part, v2);
             }
-      orgStaff->undoChangeProperty(P_ID::MAG, scale);
-      orgStaff->undoChangeProperty(P_ID::COLOR, col);
+      orgStaff->undoChangeProperty(P_ID::MAG, mag->value() / 100.0);
+      orgStaff->undoChangeProperty(P_ID::COLOR, color->color());
+      orgStaff->undoChangeProperty(P_ID::SMALL, small->isChecked());
 
-      if (s != orgStaff->small()
-         || inv != orgStaff->invisible()
+      if (inv != orgStaff->invisible()
          || userDist != orgStaff->userDist()
          || nhide != orgStaff->neverHide()
          || ifEmpty != orgStaff->showIfEmpty()
          || hideSystemBL != orgStaff->hideSystemBarLine()
          ) {
-            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), nhide, ifEmpty, hideSystemBL));
+            score->undo(new ChangeStaff(orgStaff, inv, userDist * score->spatium(), nhide, ifEmpty, hideSystemBL));
             }
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {

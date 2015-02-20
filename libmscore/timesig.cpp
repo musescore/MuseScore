@@ -548,6 +548,11 @@ void TimeSig::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
       _needLayout = true;
       }
 
+void TimeSig::localSpatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
+      {
+      _needLayout = true;
+      }
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------

@@ -127,6 +127,8 @@ class Staff : public QObject, public ScoreElement {
       VeloList _velocities;         ///< cached value
       PitchList _pitchOffsets;      ///< cached value
 
+      void scaleChanged(double oldValue, double newValue);
+
    public:
       Staff(Score* = 0);
       ~Staff();

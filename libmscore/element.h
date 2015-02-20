@@ -438,6 +438,7 @@ class Element : public QObject, public ScoreElement {
 
       virtual void layout() {}
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+      virtual void localSpatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 
       // debug functions
       virtual void dump() const;
