@@ -1466,6 +1466,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   setSelected(v.toBool());
                   break;
             case P_ID::USER_OFF:
+                  score()->addRefresh(canvasBoundingRect());
                   _userOff = v.toPointF();
                   break;
             case P_ID::PLACEMENT:
