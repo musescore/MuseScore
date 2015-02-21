@@ -53,6 +53,12 @@ void TextLineSegment::setSelected(bool f)
             else if (textLine()->_continueText)
                   _text->setSelected(f);
             }
+      if (_endText) {
+            if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
+                  if (textLine()->_endText)
+                        _endText->setSelected(f);
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -445,6 +451,12 @@ void TextLine::createBeginTextElement()
             _beginText = new Text(score());
             _beginText->setParent(this);
             _beginText->setTextStyleType(TextStyleType::TEXTLINE);
+            if (type() == Element::Type::PEDAL) {
+                  TextStyle ts = _beginText->textStyle();
+                  ts.setAlign(AlignmentFlags::LEFT|AlignmentFlags::BASELINE);
+                  ts.setYoff(lineWidth().val());
+                  _beginText->setTextStyle(ts);
+                  }
             }
       }
 
@@ -471,6 +483,12 @@ void TextLine::createEndTextElement()
             _endText = new Text(score());
             _endText->setParent(this);
             _endText->setTextStyleType(TextStyleType::TEXTLINE);
+            if (type() == Element::Type::PEDAL) {
+                  TextStyle ts = _endText->textStyle();
+                  ts.setAlign(AlignmentFlags::LEFT|AlignmentFlags::BASELINE);
+                  ts.setYoff(lineWidth().val());
+                  _endText->setTextStyle(ts);
+                  }
             }
       }
 
