@@ -301,6 +301,7 @@ enum class TextStyleType : char {
       TEXTLINE,
       GLISSANDO,
       OTTAVA,
+      PEDAL,
       BENCH,
       HEADER,
       FOOTER,
