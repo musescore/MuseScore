@@ -711,6 +711,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
             playPos = events.cbegin();
+            synti->allSoundsOff(-1);
+
             //
             // init instruments
             //
@@ -734,6 +736,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
             for (;;) {
                   unsigned frames = FRAMES;
+                  float max = 0;
                   //
                   // collect events for one segment
                   //
@@ -785,6 +788,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
                   if (pass == 1) {
                         for (int i = 0; i < FRAMES; ++i) {
+                              max = qMax(max, qAbs(bufferL[i]));
+                              max = qMax(max, qAbs(bufferR[i]));
                               bufferL[i] *= gain;
                               bufferR[i] *= gain;
                               }
@@ -808,13 +813,16 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         }
                   else {
                         for (int i = 0; i < FRAMES; ++i) {
+                              max = qMax(max, qAbs(bufferL[i]));
+                              max = qMax(max, qAbs(bufferR[i]));
                               peak = qMax(peak, qAbs(bufferL[i]));
                               peak = qMax(peak, qAbs(bufferR[i]));
                               }
                         }
                   playTime = endTime;
                   pBar->setValue((pass * et + playTime) / 2);
-                  if (playTime >= et)
+                  // create sound until the sound decays
+                  if (playTime >= et && max * peak < 0.000001)
                         break;
                   }
             if (pass == 0 && peak == 0.0) {
