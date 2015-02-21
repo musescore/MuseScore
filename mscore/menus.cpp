@@ -867,8 +867,8 @@ Palette* MuseScore::newLinesPalette(bool basic)
             pedal = new Pedal(gscore);
             pedal->setLen(w);
             pedal->setBeginText("<sym>keyboardPedalPed</sym>");
-            sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
             pedal->setEndHook(true);
+            sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
             }
 
       pedal = new Pedal(gscore);

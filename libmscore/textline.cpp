@@ -53,6 +53,12 @@ void TextLineSegment::setSelected(bool f)
             else if (textLine()->_continueText)
                   _text->setSelected(f);
             }
+      if (_endText) {
+            if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
+                  if (textLine()->_endText)
+                        _endText->setSelected(f);
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -444,7 +450,7 @@ void TextLine::createBeginTextElement()
       if (!_beginText) {
             _beginText = new Text(score());
             _beginText->setParent(this);
-            _beginText->setTextStyleType(TextStyleType::TEXTLINE);
+            _beginText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
             }
       }
 
@@ -457,7 +463,7 @@ void TextLine::createContinueTextElement()
       if (!_continueText) {
             _continueText = new Text(score());
             _continueText->setParent(this);
-            _continueText->setTextStyleType(TextStyleType::TEXTLINE);
+            _continueText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
             }
       }
 
@@ -470,7 +476,7 @@ void TextLine::createEndTextElement()
       if (!_endText) {
             _endText = new Text(score());
             _endText->setParent(this);
-            _endText->setTextStyleType(TextStyleType::TEXTLINE);
+            _endText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
             }
       }
 
@@ -773,6 +779,7 @@ bool TextLine::readProperties(XmlReader& e)
             if (!_beginText) {
                   _beginText = new Text(score());
                   _beginText->setParent(this);
+                  _beginText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
                   }
             else
                   _beginText->setText("");
@@ -782,6 +789,7 @@ bool TextLine::readProperties(XmlReader& e)
             if (!_continueText) {
                   _continueText = new Text(score());
                   _continueText->setParent(this);
+                  _continueText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
                   }
             else
                   _continueText->setText("");
@@ -791,6 +799,7 @@ bool TextLine::readProperties(XmlReader& e)
             if (!_endText) {
                   _endText = new Text(score());
                   _endText->setParent(this);
+                  _endText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
                   }
             else
                   _endText->setText("");
@@ -919,6 +928,12 @@ QVariant TextLine::propertyDefault(P_ID id) const
                   return QString("");
             case P_ID::LINE_VISIBLE:
                   return true;
+            case P_ID::BEGIN_TEXT_STYLE:
+            case P_ID::CONTINUE_TEXT_STYLE:
+            case P_ID::END_TEXT_STYLE:
+                  return QVariant::fromValue(score()->textStyle(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt())));
+            case P_ID::TEXT_STYLE_TYPE:
+                  return int(TextStyleType::TEXTLINE);
 
             default:
                   return SLine::propertyDefault(id);
