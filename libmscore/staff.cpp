@@ -1019,6 +1019,7 @@ void Staff::insertTime(int tick, int len)
             cl2.setClef(key + len, ctl);
             }
       clefs.insert(cl2.begin(), cl2.end());
+      updateOttava();
       }
 
 //---------------------------------------------------------
