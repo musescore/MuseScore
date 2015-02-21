@@ -797,8 +797,12 @@ void Score::undoInsertStaff(Staff* staff, int ridx, bool createRests)
             if (m->hasMMRest())
                   m->mmRest()->cmdAddStaves(idx, idx+1, false);
             }
-
-      adjustBracketsIns(idx, idx+1);
+      // when newly adding an instrument,
+      // this was already set when we created the staff
+      // we don't have any better info at this point
+      // and it dooesn't work to adjust bracket & barlines until all staves are added
+      // TODO: adjust brackets only when appropriate
+      //adjustBracketsIns(idx, idx+1);
       }
 
 //---------------------------------------------------------
