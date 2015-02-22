@@ -1918,9 +1918,9 @@ Element* Score::selectMove(const QString& cmd)
 
       ChordRest* el = 0;
       if (cmd == "select-next-chord")
-            el = nextChordRest(cr);
+            el = nextChordRest(cr, true);
       else if (cmd == "select-prev-chord")
-            el = prevChordRest(cr);
+            el = prevChordRest(cr, true);
       else if (cmd == "select-next-measure")
             el = nextMeasure(cr, true, true);
       else if (cmd == "select-prev-measure")
