@@ -18,8 +18,8 @@ namespace Ms {
 class ChordRest;
 
 extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);
-extern ChordRest* nextChordRest(ChordRest* cr);
-extern ChordRest* prevChordRest(ChordRest* cr);
+extern ChordRest* nextChordRest(ChordRest* cr, bool skipGrace = false);
+extern ChordRest* prevChordRest(ChordRest* cr, bool skipGrace = false);
 
 
 }     // namespace Ms
