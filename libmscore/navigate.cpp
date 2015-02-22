@@ -36,7 +36,7 @@ namespace Ms {
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(ChordRest* cr)
+ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
       {
       if (!cr)
             return 0;
@@ -48,7 +48,10 @@ ChordRest* nextChordRest(ChordRest* cr)
             Chord* c  = static_cast<Chord*>(cr);
             Chord* pc = static_cast<Chord*>(cr->parent());
 
-            if (cr->isGraceBefore()) {
+            if (skipGrace) {
+                  cr = static_cast<ChordRest*>(cr->parent());
+                  }
+            else if (cr->isGraceBefore()) {
                   QList<Chord*> cl = pc->graceNotesBefore();
                   auto i = std::find(cl.begin(), cl.end(), c);
                   if (i == cl.end())
@@ -74,7 +77,7 @@ ChordRest* nextChordRest(ChordRest* cr)
       else {
             //
             // cr is not a grace note
-            if (cr->type() == Element::Type::CHORD) {
+            if (cr->type() == Element::Type::CHORD && !skipGrace) {
                   Chord* c = static_cast<Chord*>(cr);
                   if (!c->graceNotes().empty()) {
                         QList<Chord*> cl = c->graceNotesAfter();
@@ -90,7 +93,7 @@ ChordRest* nextChordRest(ChordRest* cr)
       for (Segment* seg = cr->segment()->next1MM(st); seg; seg = seg->next1MM(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
-                  if (e->type() == Element::Type::CHORD) {
+                  if (e->type() == Element::Type::CHORD && !skipGrace) {
                         Chord* c = static_cast<Chord*>(e);
                         if (!c->graceNotes().empty()) {
                               QList<Chord*> cl = c->graceNotesBefore();
@@ -108,9 +111,10 @@ ChordRest* nextChordRest(ChordRest* cr)
 //---------------------------------------------------------
 //   prevChordRest
 //    return previous Chord or Rest
+//    if grace is true, include grace notes
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(ChordRest* cr)
+ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
       {
       if (!cr)
             return 0;
@@ -122,7 +126,10 @@ ChordRest* prevChordRest(ChordRest* cr)
             Chord* c  = static_cast<Chord*>(cr);
             Chord* pc = static_cast<Chord*>(cr->parent());
 
-            if (cr->isGraceBefore()) {
+            if (skipGrace) {
+                  cr = static_cast<ChordRest*>(cr->parent());
+                  }
+            else if (cr->isGraceBefore()) {
                   QList<Chord*> cl = pc->graceNotesBefore();
                   auto i = std::find(cl.begin(), cl.end(), c);
                   if (i == cl.end())
@@ -146,7 +153,7 @@ ChordRest* prevChordRest(ChordRest* cr)
       else {
             //
             // cr is not a grace note
-            if (cr->type() == Element::Type::CHORD) {
+            if (cr->type() == Element::Type::CHORD && !skipGrace) {
                   Chord* c = static_cast<Chord*>(cr);
                   QList<Chord*> cl = c->graceNotesBefore();
                   if (!cl.isEmpty())
@@ -159,7 +166,7 @@ ChordRest* prevChordRest(ChordRest* cr)
       for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
-                  if (e->type() == Element::Type::CHORD) {
+                  if (e->type() == Element::Type::CHORD && !skipGrace) {
                         QList<Chord*> cl = static_cast<Chord*>(e)->graceNotesAfter();
                         if (!cl.isEmpty())
                               return cl.last();
