@@ -1339,7 +1339,7 @@ void Score::cmdSetBeamMode(Beam::Mode mode)
 
 void Score::cmdFlip()
       {
-      const QList<Element*>& el = selection().elements();
+      const QSet<Element*>& el = QSet<Element*>::fromList(selection().elements());
       if (el.isEmpty()) {
             selectNoteSlurMessage();
             return;
@@ -1354,7 +1354,10 @@ void Score::cmdFlip()
                   else //if (e->type() == Element::Type::HOOK) // no other option left
                         chord = static_cast<Hook*>(e)->chord();
                   if (chord->beam())
-                        e = chord->beam();  // fall trough
+                        if (!selection().isRange())
+                              e = chord->beam();  // fall through
+                        else
+                              continue;
                   else {
                         MScore::Direction dir = chord->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
                         undoChangeProperty(chord, P_ID::STEM_DIRECTION, int(dir));
