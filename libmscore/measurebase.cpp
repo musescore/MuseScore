@@ -93,7 +93,7 @@ MeasureBase::~MeasureBase()
 
 void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      if (type() == Element::Type::MEASURE) {
+      if (isMeasure()) {
             foreach(Element* e, _el) {
                   if (score()->tagIsValid(e->tag())) {
                         if (e->staffIdx() >= score()->staves().size())
