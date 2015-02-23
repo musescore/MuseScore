@@ -136,6 +136,12 @@
         <KeySig>
           <accidental>1</accidental>
           </KeySig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="7">
         <Chord>
           <durationType>whole</durationType>
           <Note>
@@ -144,12 +150,6 @@
             </Note>
           </Chord>
         </Measure>
-      <Measure number="7">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        </Measure>
       <Measure number="8">
         <Rest>
           <durationType>measure</durationType>
@@ -157,6 +157,12 @@
           </Rest>
         </Measure>
       <Measure number="9">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="10">
         <Rest>
           <durationType>measure</durationType>
           <duration z="4" n="4"/>

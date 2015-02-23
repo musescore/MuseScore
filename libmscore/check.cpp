@@ -18,6 +18,8 @@
 #include "rest.h"
 #include "segment.h"
 #include "staff.h"
+#include "keysig.h"
+#include "clef.h"
 
 namespace Ms {
 
@@ -198,5 +200,56 @@ bool Score::sanityCheck()
             }
       return result;
       }
+
+//---------------------------------------------------------
+//   checkKeys
+///    check that key map is in sync with actual keys
+//---------------------------------------------------------
+
+bool Score::checkKeys()
+      {
+      bool rc = true;
+      for (int i = 0; i < nstaves(); ++i) {
+            Key k = staff(i)->key(0);
+            for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+                  Segment* s = m->findSegment(Segment::Type::KeySig, m->tick());
+                  if (s)
+                        k = static_cast<KeySig*>(s->element(i * VOICES))->key();
+                  if (staff(i)->key(m->tick()) != k) {
+                        qDebug("measure %d (tick %d) : key %d, map %d", m->no(), m->tick(), k, staff(i)->key(m->tick()));
+                        rc = false;
+                        }
+                  }
+            }
+      return rc;
+      }
+
+//---------------------------------------------------------
+//   checkClefs
+///    check that clef map is in sync with actual clefs
+//---------------------------------------------------------
+
+bool Score::checkClefs()
+      {
+      bool rc = true;
+      for (int i = 0; i < nstaves(); ++i) {
+            ClefType clef = staff(i)->clef(0);
+            Measure* cm = nullptr;
+            for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+                  if (cm) {
+                        Segment* s = cm->findSegment(Segment::Type::Clef, m->tick());
+                        if (s)
+                              clef = static_cast<Clef*>(s->element(i * VOICES))->clefType();
+                        }
+                  if (staff(i)->clef(m->tick()) != clef) {
+                        qDebug("measure %d (tick %d) : clef %d, map %d", m->no(), m->tick(), clef, staff(i)->clef(m->tick()));
+                        rc = false;
+                        }
+                  cm = m;
+                  }
+            }
+      return rc;
+      }
+
 }
 
