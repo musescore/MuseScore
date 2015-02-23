@@ -2285,6 +2285,7 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
                   // open files requested to be loaded by OS X
                   // this event is generated when a file is dragged onto the MuseScore icon
                   // in the dock when MuseScore is already running
+                  scoresOnCommandline = true;
                   handleMessage(static_cast<QFileOpenEvent *>(event)->file());
                   return true;
 #endif
@@ -3072,6 +3073,8 @@ void MuseScore::handleMessage(const QString& message)
       {
       if (message.isEmpty())
             return;
+      if (startcenter)
+            showStartcenter(false);
       ((QtSingleApplication*)(qApp))->activateWindow();
       Score* score = readScore(message);
       if (score) {
@@ -4985,9 +4988,23 @@ int main(int argc, char* av[])
             mscore->checkForUpdate();
 
       if (!scoresOnCommandline && preferences.showStartcenter && !restoredSession) {
+#ifdef Q_OS_MAC
+// ugly, but on mac we get an event when a file is open.
+// We can't get the event when the startcenter is shown.
+// So we let the event loop run a bit before showing the start center.
+            QTimer::singleShot(500, []() {
+                  if (!scoresOnCommandline) {
+                        getAction("startcenter")->setChecked(true);
+                        mscore->showStartcenter(true);
+                        }
+                  });
+#else
             getAction("startcenter")->setChecked(true);
             mscore->showStartcenter(true);
+#endif
             }
+
+
       return qApp->exec();
       }
 
