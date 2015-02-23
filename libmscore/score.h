@@ -453,7 +453,6 @@ class Score : public QObject {
 
       void checkSlurs();
       void checkScore();
-      bool sanityCheck();
 
       bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, int staffIdx);
       bool rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx);
@@ -695,7 +694,7 @@ class Score : public QObject {
       bool addArticulation(Element*, Articulation* atr);
 
       void cmd(const QAction*);
-      int fileDivision(int t) const { return (t * MScore::division + _fileDivision/2) / _fileDivision; }
+      int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision/2) / _fileDivision; }
       bool saveFile();
 
       QFileInfo* fileInfo()          { return &info; }
@@ -1056,6 +1055,7 @@ class Score : public QObject {
       QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
       Q_INVOKABLE void cropPage(qreal margins);
+      bool sanityCheck();
 
       bool checkKeys();
       bool checkClefs();
