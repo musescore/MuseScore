@@ -160,5 +160,43 @@ qDebug("    -   Rest %d/%d", d.fraction().numerator(), d.fraction().denominator(
             }
       }
 
+//---------------------------------------------------------
+//   sanityCheck - Simple check for score
+///    Check that voice 1 is complete
+///    Check that voices > 1 contains less than measure duration
+//---------------------------------------------------------
+
+bool Score::sanityCheck()
+      {
+      bool result = true;
+      int mNumber = 1;
+      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            int mTicks = m->ticks();
+            int endStaff = staves().size();
+            for (int staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
+                  int voices[VOICES] = {};
+                  for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+                        for (int v = 0; v < VOICES; ++v) {
+                              ChordRest* cr = static_cast<ChordRest*>(s->element(staffIdx* VOICES + v));
+                              if (cr == 0)
+                                    continue;
+                              voices[v] += cr->actualTicks();
+                              }
+                        }
+                  if (voices[0] != mTicks) {
+                        qDebug("Measure %d staff %d incomplete. Expected: %d; Found: %d", mNumber, staffIdx, mTicks, voices[0]);
+                        result = false;
+                        }
+                  for (int v = 1; v < VOICES; ++v) {
+                        if (voices[v] > mTicks) {
+                              qDebug("Measure %d, staff %d, voice %d too long. Expected: %d; Found: %d", mNumber, staffIdx, v, mTicks, voices[0]);
+                              result = false;
+                              }
+                        }
+                  }
+            mNumber++;
+            }
+      return result;
+      }
 }
 
