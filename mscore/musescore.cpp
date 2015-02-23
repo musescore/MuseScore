@@ -4992,12 +4992,23 @@ int main(int argc, char* av[])
 // ugly, but on mac we get an event when a file is open.
 // We can't get the event when the startcenter is shown.
 // So we let the event loop run a bit before showing the start center.
-            QTimer::singleShot(500, []() {
+            QTimer *timer = new QTimer();
+            timer->setSingleShot(true);
+            QObject::connect(timer, &QTimer::timeout, [=]() {
                   if (!scoresOnCommandline) {
                         getAction("startcenter")->setChecked(true);
                         mscore->showStartcenter(true);
                         }
-                  });
+                  timer->deleteLater();
+                  } );
+            timer->start(500);
+            // Qt 5.4 version...
+            /*QTimer::singleShot(500, []() {
+                  if (!scoresOnCommandline) {
+                        getAction("startcenter")->setChecked(true);
+                        mscore->showStartcenter(true);
+                        }
+                  });*/
 #else
             getAction("startcenter")->setChecked(true);
             mscore->showStartcenter(true);
