@@ -368,7 +368,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
 
 //---------------------------------------------------------
 //   rewriteMeasures
-//    rewrite all measures from fm to lm
+//    rewrite all measures from fm to lm (including)
 //    If staffIdx is valid (>= 0), then rewrite a local
 //    timesig change.
 //---------------------------------------------------------
@@ -376,20 +376,22 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
 bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int staffIdx)
       {
       if (staffIdx >= 0) {
-            for (Measure* m = fm; m != lm; m = m->nextMeasure()) {
-                  int strack = staffIdx * VOICES;
-                  int etrack = strack + VOICES;
+            int strack = staffIdx * VOICES;
+            int etrack = strack + VOICES;
+            for (Measure* m = fm; ; m = m->nextMeasure()) {
                   for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
                         for (int track = strack; track < etrack; ++track) {
                               ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                               if (!cr)
                                     continue;
-                              if (cr->type() == Element::Type::REST && cr->durationType() == TDuration::DurationType::V_MEASURE)
+                              if (cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE)
                                     cr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(ns));
                               else
                                     return false;
                               }
                         }
+                  if (m == lm)
+                        break;
                   }
             return true;
             }
@@ -520,7 +522,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
       // split into Measure segments fm-lm
       //
       for (MeasureBase* m = fm; ; m = m->next()) {
-            if (!m || (m->type() != Element::Type::MEASURE)
+            if (!m || !m->isMeasure()
               || (static_cast<Measure*>(m)->first(Segment::Type::TimeSig) && m != fm))
                   {
                   if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
@@ -536,9 +538,9 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                               }
                         return false;
                         }
-                  if (!m || m->type() == Element::Type::MEASURE)
+                  if (!m || m->isMeasure())
                         break;
-                  while (m->type() != Element::Type::MEASURE) {
+                  while (!m->isMeasure()) {
                         m = m->next();
                         if (!m)
                               break;
@@ -1720,7 +1722,7 @@ void Score::cmdDeleteSelectedMeasures()
             return;
 
       MeasureBase* is = selection().startSegment()->measure();
-      if (is->type() == Element::Type::MEASURE && static_cast<Measure*>(is)->isMMRest())
+      if (is->isMeasure() && static_cast<Measure*>(is)->isMMRest())
             is = static_cast<Measure*>(is)->mmRestFirst();
       Segment* seg    = selection().endSegment();
       MeasureBase* ie;
@@ -1734,7 +1736,7 @@ void Score::cmdDeleteSelectedMeasures()
 
       // createEndBar if last measure is deleted
       bool createEndBar = false;
-      if (ie->type() == Element::Type::MEASURE) {
+      if (ie->isMeasure()) {
             Measure* iem = static_cast<Measure*>(ie);
             if (iem->isMMRest())
                   ie = iem = iem->mmRestLast();
@@ -1745,7 +1747,7 @@ void Score::cmdDeleteSelectedMeasures()
       // get the last deleted timesig in order to restore after deletion
       TimeSig* lastDeletedSig = 0;
       for (MeasureBase* mb = ie;; mb = mb->prev()) {
-            if (mb->type() == Element::Type::MEASURE) {
+            if (mb->isMeasure()) {
                   Measure* m = static_cast<Measure*>(mb);
                   Segment* sts = m->findSegment(Segment::Type::TimeSig, m->tick());
                   if (sts) {
@@ -2313,7 +2315,7 @@ static MeasureBase* searchMeasureBase(Score* score, MeasureBase* mb)
       {
       if (mb == 0)
             return nullptr;
-      if (mb->type() == Element::Type::MEASURE) {
+      if (mb->isMeasure()) {
             for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
                   if (m->tick() == mb->tick())
                         return m;
@@ -2345,7 +2347,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
       int tick;
       int ticks = 0;
       if (measure) {
-            if (measure->type() == Element::Type::MEASURE && static_cast<Measure*>(measure)->isMMRest()) {
+            if (measure->isMeasure() && static_cast<Measure*>(measure)->isMMRest()) {
                   measure = static_cast<Measure*>(measure)->prev();
                   measure = measure ? measure->next() : firstMeasure();
                   deselectAll();

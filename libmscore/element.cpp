@@ -176,7 +176,6 @@ static const ElementName elementNames[] = {
       ElementName("ElementList",          QT_TRANSLATE_NOOP("elementName", "Element List")),
       ElementName("StaffList",            QT_TRANSLATE_NOOP("elementName", "Staff List")),
       ElementName("MeasureList",          QT_TRANSLATE_NOOP("elementName", "Measure List")),
-      ElementName("Layout",               QT_TRANSLATE_NOOP("elementName", "Layout")),
       ElementName("HBox",                 QT_TRANSLATE_NOOP("elementName", "Horizontal Frame")),
       ElementName("VBox",                 QT_TRANSLATE_NOOP("elementName", "Vertical Frame")),
       ElementName("TBox",                 QT_TRANSLATE_NOOP("elementName", "Text Frame")),
@@ -1504,24 +1503,6 @@ QVariant Element::propertyDefault(P_ID id) const
                   break;
             }
       return QVariant();
-      }
-
-//---------------------------------------------------------
-//   isChordRest
-//---------------------------------------------------------
-
-bool Element::isChordRest() const
-      {
-      return type() == Element::Type::REST || type() == Element::Type::CHORD || type() == Element::Type::REPEAT_MEASURE;
-      }
-
-//---------------------------------------------------------
-//   isDurationElement
-//---------------------------------------------------------
-
-bool Element::isDurationElement() const
-      {
-      return isChordRest() || (type() == Element::Type::TUPLET);
       }
 
 //---------------------------------------------------------

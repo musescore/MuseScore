@@ -391,8 +391,13 @@ class Element : public QObject, public ScoreElement {
 
       virtual Element::Type type() const = 0;
       virtual int subtype() const   { return -1; }  // for select gui
-      bool isChordRest() const;
-      bool isDurationElement() const;
+
+      bool isRest() const      { return type() == Element::Type::REST; }
+      bool isChord() const     { return type() == Element::Type::CHORD; }
+      bool isMeasure() const   { return type() == Element::Type::MEASURE; }
+      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD || type() == Element::Type::REPEAT_MEASURE; }
+
+      bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
       bool isSLine() const;
 
       virtual void draw(QPainter*) const {}
