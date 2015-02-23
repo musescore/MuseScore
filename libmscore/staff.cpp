@@ -981,7 +981,6 @@ void Staff::insertTime(int tick, int len)
       {
       if (len == 0)
             return;
-      qDebug("Staff: %d insertTime at %d len %d", idx(), tick, len);
 
       // when inserting measures directly in front of a key change,
       // using lower_bound() (for tick != 0) means the key change at that point is moved later
@@ -991,15 +990,12 @@ void Staff::insertTime(int tick, int len)
       // but either way, at the begining of the staff, we need to keep the original key,
       // so we use upper_bound() in that case, and the initial key signature is moved in insertMeasure()
 
-      // ws: i don't understand this (and it does not work right: #46671)
-
       KeyList kl2;
-//      for (auto i = tick ? _keys.lower_bound(tick) : _keys.upper_bound(tick); i != _keys.end();) {
       for (auto i = _keys.upper_bound(tick); i != _keys.end();) {
             KeySigEvent kse = i->second;
-            int k   = i->first;
+            int key   = i->first;
             _keys.erase(i++);
-            kl2[k + len] = kse;
+            kl2[key + len] = kse;
             }
       _keys.insert(kl2.begin(), kl2.end());
 
