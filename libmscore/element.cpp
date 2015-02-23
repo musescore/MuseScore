@@ -1326,7 +1326,6 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::ELEMENT_LIST:
             case Element::Type::STAFF_LIST:
             case Element::Type::MEASURE_LIST:
-            case Element::Type::LAYOUT:
             case Element::Type::MAXTYPE:
             case Element::Type::INVALID:  break;
             }
@@ -1580,7 +1579,6 @@ bool Element::isPrintable() const
             case Element::Type::STAFF_LIST:
             case Element::Type::MEASURE_LIST:
             case Element::Type::SELECTION:
-            case Element::Type::LAYOUT:
                   return false;
             default:
                   return true;

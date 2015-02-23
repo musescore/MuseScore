@@ -273,7 +273,6 @@ class Element : public QObject, public ScoreElement {
             ELEMENT_LIST,
             STAFF_LIST,
             MEASURE_LIST,
-            LAYOUT,
             HBOX,
             VBOX,
             TBOX,
