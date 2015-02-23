@@ -871,8 +871,11 @@ MuseScore::MuseScore()
       menuLayout = mb->addMenu(tr("&Layout"));
       menuLayout->setObjectName("Layout");
 
-      for (auto i : { "page-settings", "reset", "stretch+", "stretch-", "reset-stretch", "reset-beammode" })
-            menuLayout->addAction(getAction(i));
+      for (auto i : { "page-settings", "reset", "stretch+", "stretch-", "reset-stretch", "reset-beammode" }) {
+            QAction* action = getAction(i);
+            action->setMenuRole(QAction::NoRole);
+            menuLayout->addAction(action);
+            }
 
       //---------------------
       //    Menu Style
