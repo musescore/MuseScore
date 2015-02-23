@@ -4927,6 +4927,7 @@ int main(int argc, char* av[])
       mscore->setRevision(revision);
 
       int files = 0;
+      bool restoredSession = false;
       if (MScore::noGui) {
 #ifdef Q_OS_MAC
             // see issue #28706: Hangup in converter mode with MusicXML source
@@ -4960,7 +4961,8 @@ int main(int argc, char* av[])
             //
             // TODO: delete old session backups
             //
-            if (!mscore->restoreSession((preferences.sessionStart == SessionStart::LAST) && (files == 0)) || files)
+            restoredSession = mscore->restoreSession((preferences.sessionStart == SessionStart::LAST && (files == 0)));
+            if (!restoredSession || files)
                   loadScores(argv);
             }
       errorMessage = new QErrorMessage(mscore);
@@ -4979,7 +4981,7 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 
-      if (!scoresOnCommandline && preferences.showStartcenter) {
+      if (!scoresOnCommandline && preferences.showStartcenter && !restoredSession) {
             getAction("startcenter")->setChecked(true);
             mscore->showStartcenter(true);
             }
