@@ -5191,7 +5191,7 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
-                  <Drum pitch="69">
+                  <Drum pitch="83">
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
