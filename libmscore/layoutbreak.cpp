@@ -40,6 +40,7 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
       _pause = lb._pause;
       _startWithLongNames  = lb._startWithLongNames;
       _startWithMeasureOne = lb._startWithMeasureOne;
+      layout0();
       }
 
 //---------------------------------------------------------
