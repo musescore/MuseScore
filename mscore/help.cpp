@@ -173,6 +173,7 @@ void MuseScore::showHelp(const QUrl& url)
 
 void MuseScore::showHelp(QString s)
       {
+      qDebug("showHelp <%s>", qPrintable(s));
       s = s.toLower();
       if (!s.isEmpty()) {
             QUrl url(QString("http://musescore.org/redirect/help?tag=%1&locale=%2").arg(s).arg(getLocaleISOCode()));
@@ -203,7 +204,6 @@ void MuseScore::showHelp(QString s)
 
 void MuseScore::showContextHelp()
       {
-      qDebug("showContextHelp");
       QString s;
       QWidget* w = qApp->widgetAt(globalX, globalY);
       while (w) {
