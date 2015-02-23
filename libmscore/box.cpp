@@ -209,73 +209,7 @@ void Box::read(XmlReader& e)
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "height")
-                  _boxHeight = Spatium(e.readDouble());
-            else if (tag == "width")
-                  _boxWidth = Spatium(e.readDouble());
-            else if (tag == "topGap") {                     // this value is not device independent for
-                  _topGap = e.readDouble();                 // versions < 2.03
-                  if (score()->mscVersion() >= 203)
-                        _topGap *= score()->spatium();
-                  }
-            else if (tag == "bottomGap") {                  // this value is not device independent for
-                  _bottomGap = e.readDouble();              // versions < 2.03
-                  if (score()->mscVersion() >= 203)
-                        _bottomGap *= score()->spatium();
-                  }
-            else if (tag == "leftMargin")
-                  _leftMargin = e.readDouble();
-            else if (tag == "rightMargin")
-                  _rightMargin = e.readDouble();
-            else if (tag == "topMargin")
-                  _topMargin = e.readDouble();
-            else if (tag == "bottomMargin")
-                  _bottomMargin = e.readDouble();
-            else if (tag == "Text") {
-                  Text* t;
-                  if (type() == Element::Type::TBOX) {
-                        t = static_cast<TBox*>(this)->text();
-                        t->read(e);
-                        }
-                  else {
-                        t = new Text(score());
-                        t->read(e);
-                        if (t->isEmpty()) {
-                              qDebug("read empty text");
-                              }
-                        else {
-                              add(t);
-                              if (score()->mscVersion() <= 114)
-                                    t->setLayoutToParentWidth(true);
-                              }
-                        }
-                  }
-            else if (tag == "Symbol") {
-                  Symbol* s = new Symbol(score());
-                  s->read(e);
-                  add(s);
-                  }
-            else if (tag == "Image") {
-                  if (MScore::noImages)
-                        e.skipCurrentElement();
-                  else {
-                        Image* image = new Image(score());
-                        image->setTrack(e.track());
-                        image->read(e);
-                        add(image);
-                        }
-                  }
-            else if (tag == "FretDiagram") {
-                  FretDiagram* f = new FretDiagram(score());
-                  f->read(e);
-                  add(f);
-                  }
-            else if (tag == "LayoutBreak") {
-                  LayoutBreak* lb = new LayoutBreak(score());
-                  lb->read(e);
-                  add(lb);
-                  }
-            else if (tag == "HBox") {
+            if (tag == "HBox") {
                   HBox* hb = new HBox(score());
                   hb->read(e);
                   add(hb);
@@ -287,9 +221,7 @@ void Box::read(XmlReader& e)
                   add(vb);
                   keepMargins = true;     // in old file, box nesting used outer box margins
                   }
-            else if (Element::readProperties(e))
-                  ;
-            else
+            else if (!Box::readProperties(e))
                   e.unknown();
             }
 
@@ -312,10 +244,16 @@ bool Box::readProperties(XmlReader& e)
             _boxHeight = Spatium(e.readDouble());
       else if (tag == "width")
             _boxWidth = Spatium(e.readDouble());
-      else if (tag == "topGap")
+      else if (tag == "topGap") {
             _topGap = e.readDouble();
-      else if (tag == "bottomGap")
+            if (score()->mscVersion() >= 203)
+                  _topGap *= score()->spatium();
+            }
+      else if (tag == "bottomGap") {
             _bottomGap = e.readDouble();
+             if (score()->mscVersion() >= 203)
+                  _bottomGap *= score()->spatium();
+            }
       else if (tag == "leftMargin")
             _leftMargin = e.readDouble();
       else if (tag == "rightMargin")
@@ -336,11 +274,8 @@ bool Box::readProperties(XmlReader& e)
                   if (t->isEmpty()) {
                         qDebug("read empty text");
                         }
-                  else {
+                  else
                         add(t);
-                        if (score()->mscVersion() <= 114)
-                              t->setLayoutToParentWidth(true);
-                        }
                   }
             }
       else if (tag == "Symbol") {

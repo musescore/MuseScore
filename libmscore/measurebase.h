@@ -66,7 +66,10 @@ class MeasureBase : public Element {
       MeasureBase(Score* score = 0);
       ~MeasureBase();
       MeasureBase(const MeasureBase&);
+
       virtual MeasureBase* clone() const = 0;
+      virtual Element::Type type() const = 0;
+
       virtual void setScore(Score* s) override;
 
       MeasureBase* next() const              { return _next;   }

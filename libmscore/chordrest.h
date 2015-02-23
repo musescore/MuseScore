@@ -79,6 +79,7 @@ class ChordRest : public DurationElement {
       ~ChordRest();
 
       virtual Element::Type type() const = 0;
+
       virtual Element* drop(const DropData&) override;
       virtual void undoUnlink() override;
 

@@ -146,7 +146,7 @@ class FBox : public VBox {
       virtual Element::Type type() const override { return Element::Type::FBOX;       }
 
       virtual void layout() override;
-      void add(Element*);
+      virtual void add(Element*) override;
       };
 
 
