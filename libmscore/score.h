@@ -1057,6 +1057,9 @@ class Score : public QObject {
 
       Q_INVOKABLE void cropPage(qreal margins);
 
+      bool checkKeys();
+      bool checkClefs();
+
       friend class ChangeSynthesizerState;
       friend class Chord;
       };
