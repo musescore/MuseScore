@@ -5002,13 +5002,6 @@ int main(int argc, char* av[])
                   timer->deleteLater();
                   } );
             timer->start(500);
-            // Qt 5.4 version...
-            /*QTimer::singleShot(500, []() {
-                  if (!scoresOnCommandline) {
-                        getAction("startcenter")->setChecked(true);
-                        mscore->showStartcenter(true);
-                        }
-                  });*/
 #else
             getAction("startcenter")->setChecked(true);
             mscore->showStartcenter(true);
