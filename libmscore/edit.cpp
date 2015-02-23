@@ -2357,8 +2357,8 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
       else
             tick = last() ? last()->endTick() : 0;
 
-      // use nominal time signature of previous measure
-      Fraction f = sigmap()->timesig(tick - 1).nominal();
+      // use nominal time signature of current measure
+      Fraction f = sigmap()->timesig(tick).nominal();
 
       QList<pair<Score*, MeasureBase*>> ml;
       for (Score* score : scoreList())
@@ -2391,6 +2391,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         }
 
                   Measure* m = static_cast<Measure*>(mb);
+                  Measure* mi = static_cast<Measure*>(im);
                   m->setTimesig(f);
                   m->setLen(f);
                   ticks = m->ticks();
@@ -2399,31 +2400,35 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   QList<KeySig*>  ksl;
                   QList<Clef*>    cl;
 
-                  if (tick == 0) {
-                        //
-                        // remove clef, time and key signatures
-                        //
+                  //
+                  // remove clef, time and key signatures
+                  //
+                  if (mi) {
                         for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-                              for (Segment* s = score->firstSegment(); s && s->tick() == 0; s = s->next()) {
+                              for (Segment* s = mi->first(); s && s->tick() == tick; s = s->next()) {
                                     Element* e = s->element(staffIdx * VOICES);
-                                    if (e == nullptr)
+                                    if (!e)
                                           continue;
+                                    Element* ee = 0;
                                     if (e->type() == Element::Type::KEYSIG) {
                                           KeySig* ks = static_cast<KeySig*>(e);
-                                          ksl.append(ks);
+                                          ksl.push_back(ks);
+                                          ee = e;
                                           }
                                     else if (e->type() == Element::Type::TIMESIG) {
                                           TimeSig* ts = static_cast<TimeSig*>(e);
-                                          tsl.append(ts);
+                                          tsl.push_back(ts);
+                                          ee = e;
                                           }
-                                    else if (e->type() == Element::Type::CLEF) {
-                                          Clef* clef = static_cast<Clef*>(e);
-                                          cl.append(clef);
+                                    if (tick == 0) {
+                                          if (e->type() == Element::Type::CLEF) {
+                                                Clef* clef = static_cast<Clef*>(e);
+                                                cl.push_back(clef);
+                                                ee = e;
+                                                }
                                           }
-                                    else
-                                          e = 0;
-                                    if (e) {
-                                          undo(new RemoveElement(e));
+                                    if (ee) {
+                                          undo(new RemoveElement(ee));
                                           if (s->isEmpty())
                                                 undoRemoveElement(s);
                                           }
@@ -2434,31 +2439,28 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   undo(new InsertMeasure(m, im));
 
                   //
-                  // if measure is inserted at tick zero,
-                  // create key and time signature
+                  // move clef, time, key signatrues
                   //
-                  foreach(TimeSig* ts, tsl) {
+                  for (TimeSig* ts : tsl) {
                         TimeSig* nts = new TimeSig(*ts);
-                        Segment* s   = m->undoGetSegment(Segment::Type::TimeSig, 0);
+                        Segment* s   = m->undoGetSegment(Segment::Type::TimeSig, tick);
                         nts->setParent(s);
                         undoAddElement(nts);
                         }
-                  foreach(KeySig* ks, ksl) {
+                  for (KeySig* ks : ksl) {
                         KeySig* nks = new KeySig(*ks);
-                        Segment* s  = m->undoGetSegment(Segment::Type::KeySig, 0);
+                        Segment* s  = m->undoGetSegment(Segment::Type::KeySig, tick);
                         nks->setParent(s);
                         undoAddElement(nks);
                         }
-                  foreach(Clef* clef, cl) {
+                  for (Clef* clef : cl) {
                         Clef* nClef = new Clef(*clef);
-                        Segment* s  = m->undoGetSegment(Segment::Type::Clef, 0);
+                        Segment* s  = m->undoGetSegment(Segment::Type::Clef, tick);
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }
-                  if (createEndBar) {
+                  if (createEndBar)
                         m->setEndBarLineType(BarLineType::END, false);
-                        }
-//                  score->fixTicks();
                   }
             else {
                   // a frame, not a measure
