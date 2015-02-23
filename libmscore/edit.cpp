@@ -2478,7 +2478,6 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   }
             }
       undoInsertTime(tick, ticks);
-      undo(new InsertTime(this, tick, ticks));
 
       if (omb && type == Element::Type::MEASURE && !createEmptyMeasures) {
             //
