@@ -194,7 +194,7 @@ bool Score::sanityCheck(const QString& name)
                         }
                   for (int v = 1; v < VOICES; ++v) {
                         if (voices[v] > mTicks) {
-                              QString msg = tr("Measure %d, staff %d, voice %d too long. Expected: %d; Found: %d").arg( mNumber).arg(staffIdx + 1).arg(v+1).arg(mTicks).arg(voices[0]);
+                              QString msg = tr("Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5").arg( mNumber).arg(staffIdx + 1).arg(v+1).arg(mTicks).arg(voices[0]);
                               qDebug() << msg;
                               error += QString("%1\n").arg(msg);
                               result = false;
