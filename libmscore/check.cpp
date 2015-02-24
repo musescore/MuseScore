@@ -168,10 +168,11 @@ qDebug("    -   Rest %d/%d", d.fraction().numerator(), d.fraction().denominator(
 ///    Check that voices > 1 contains less than measure duration
 //---------------------------------------------------------
 
-bool Score::sanityCheck()
+bool Score::sanityCheck(const QString& name)
       {
       bool result = true;
       int mNumber = 1;
+      QString error;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             int mTicks = m->ticks();
             int endStaff = staves().size();
@@ -186,17 +187,42 @@ bool Score::sanityCheck()
                               }
                         }
                   if (voices[0] != mTicks) {
-                        qDebug("Measure %d staff %d incomplete. Expected: %d; Found: %d", mNumber, staffIdx, mTicks, voices[0]);
+                        QString msg = tr("Measure %1 Staff %2 incomplete. Expected: %3; Found: %4").arg(mNumber).arg( staffIdx+1).arg(mTicks).arg(voices[0]);
+                        qDebug() << msg;
+                        error += QString("%1\n").arg(msg);
                         result = false;
                         }
                   for (int v = 1; v < VOICES; ++v) {
                         if (voices[v] > mTicks) {
-                              qDebug("Measure %d, staff %d, voice %d too long. Expected: %d; Found: %d", mNumber, staffIdx, v, mTicks, voices[0]);
+                              QString msg = tr("Measure %d, staff %d, voice %d too long. Expected: %d; Found: %d").arg( mNumber).arg(staffIdx + 1).arg(v+1).arg(mTicks).arg(voices[0]);
+                              qDebug() << msg;
+                              error += QString("%1\n").arg(msg);
                               result = false;
                               }
                         }
                   }
             mNumber++;
+            }
+      if (!name.isEmpty()) {
+            QJsonObject json;
+            if (result) {
+                  json["result"] = 0;
+                  }
+            else {
+                  json["result"] = 1;
+                  json["error"] = error;
+                  }
+            QJsonDocument jsonDoc(json);
+            QFile fp(name);
+            if (!fp.open(QIODevice::WriteOnly)) {
+                  qDebug("Open <%s> failed", qPrintable(name));
+                  return false;
+                  }
+            fp.write(jsonDoc.toJson());
+            fp.close();
+            }
+      else {
+            MScore::lastError = error;
             }
       return result;
       }

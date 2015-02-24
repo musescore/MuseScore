@@ -156,6 +156,7 @@ static QString createDefaultFileName(QString fn)
 static bool readScoreError(const QString& name, Score::FileError error, bool ask)
       {
       QString msg = QObject::tr("Cannot read file %1:\n").arg(name);
+      QString detailedMsg;
       bool canIgnore = false;
       switch(error) {
             case Score::FileError::FILE_NO_ERROR:
@@ -183,6 +184,11 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             case Score::FileError::FILE_NOT_FOUND:
                   msg = QObject::tr("File not found %1").arg(name);
                   break;
+            case Score::FileError::FILE_CORRUPTED:
+                  msg = QObject::tr("File corrupted %1").arg(name);
+                  detailedMsg = MScore::lastError;
+                  canIgnore = true;
+                  break;
             case Score::FileError::FILE_ERROR:
             case Score::FileError::FILE_OPEN_ERROR:
             default:
@@ -198,6 +204,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             QMessageBox msgBox;
             msgBox.setWindowTitle(QObject::tr("MuseScore: Load Error"));
             msgBox.setText(msg);
+            msgBox.setDetailedText(detailedMsg);
             msgBox.setTextFormat(Qt::RichText);
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setStandardButtons(
@@ -313,9 +320,12 @@ Score* MuseScore::readScore(const QString& name)
       Score* score = new Score(MScore::baseStyle());  // start with built-in style
       setMidiReopenInProgress(name);
       Score::FileError rv = Ms::readScore(score, name, false);
-      if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW) {
-            if (readScoreError(name, rv, true))
+      if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW || rv == Score::FileError::FILE_CORRUPTED) {
+            if (readScoreError(name, rv, true)) {
+                  delete score;
+                  score = score = new Score(MScore::baseStyle());
                   rv = Ms::readScore(score, name, true);
+                  }
             else {
                   delete score;
                   return 0;
@@ -1805,6 +1815,9 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save positions of measures
             rv = savePositions(cs, fn, false);
             }
+      else if (ext == "mlog") {
+            rv = cs->sanityCheck(fn);
+            }
       else {
             qDebug("Internal error: unsupported extension <%s>",
                qPrintable(ext));
@@ -2077,6 +2090,9 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             }
       score->setSaved(false);
       score->update();
+      if (!ignoreVersionError && !MScore::noGui)
+            if (!score->sanityCheck())
+                  return Score::FileError::FILE_CORRUPTED;
       return Score::FileError::FILE_NO_ERROR;
       }
 

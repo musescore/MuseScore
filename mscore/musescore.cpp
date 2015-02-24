@@ -2146,6 +2146,8 @@ static bool processNonGui()
                   return savePositions(cs, fn, true);
             if (fn.endsWith(".mpos"))
                   return savePositions(cs, fn, false);
+            if (fn.endsWith(".mlog"))
+                  return cs->sanityCheck(fn);
             else {
                   qDebug("dont know how to convert to %s", qPrintable(outFileName));
                   return false;

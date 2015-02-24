@@ -283,6 +283,7 @@ class Score : public QObject {
             FILE_NO_ROOTFILE,
             FILE_TOO_OLD,
             FILE_TOO_NEW,
+            FILE_CORRUPTED,
             FILE_USER_ABORT,
             FILE_IGNORE_ERROR
             };
@@ -1055,7 +1056,7 @@ class Score : public QObject {
       QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
       Q_INVOKABLE void cropPage(qreal margins);
-      bool sanityCheck();
+      bool sanityCheck(const QString& name = nullptr);
 
       bool checkKeys();
       bool checkClefs();
