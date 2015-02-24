@@ -1373,7 +1373,6 @@
         <Volta id="2">
           <lid>193</lid>
           <beginText>
-            <style>Volta</style>
             <text>1</text>
             </beginText>
           <endings>1</endings>
@@ -1435,7 +1434,6 @@
         <Volta id="3">
           <lid>194</lid>
           <beginText>
-            <style>Volta</style>
             <text>2,3,6,8</text>
             </beginText>
           <endings>2, 3, 6, 8</endings>
@@ -2885,7 +2883,6 @@
           <Volta id="4">
             <lid>193</lid>
             <beginText>
-              <style>Volta</style>
               <text>1</text>
               </beginText>
             <endings>1</endings>
@@ -2947,7 +2944,6 @@
           <Volta id="5">
             <lid>194</lid>
             <beginText>
-              <style>Volta</style>
               <text>2,3,6,8</text>
               </beginText>
             <endings>2, 3, 6, 8</endings>

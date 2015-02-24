@@ -422,10 +422,8 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_ID::END_TEXT:
                   return QString("");
 
-            case P_ID::BEGIN_TEXT_STYLE:
-            case P_ID::CONTINUE_TEXT_STYLE:
-            case P_ID::END_TEXT_STYLE:
-                  return QVariant::fromValue(score()->textStyle(TextStyleType::OTTAVA));
+            case P_ID::TEXT_STYLE_TYPE:
+                  return int(TextStyleType::OTTAVA);
 
             case P_ID::END_HOOK:
                   return true;
