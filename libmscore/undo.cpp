@@ -3342,7 +3342,10 @@ void ChangeProperty::flip()
             << property
             ;
 #endif
-      if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS)
+      // Ottavas expect its spanner to be in the score lists while updating ticks as,
+      // while doing so, the parent staff calls updateOttava()
+      if ( (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS)
+                  && static_cast<Element*>(element)->type() != Element::Type::OTTAVA)
             static_cast<Element*>(element)->score()->removeSpanner(static_cast<Spanner*>(element));
 
       QVariant v       = element->getProperty(id);
@@ -3352,7 +3355,8 @@ void ChangeProperty::flip()
       else
             element->setProperty(id, property);
 
-      if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS)
+      if ( (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS)
+                  && static_cast<Element*>(element)->type() != Element::Type::OTTAVA)
             static_cast<Element*>(element)->score()->addSpanner(static_cast<Spanner*>(element));
       property = v;
       propertyStyle = ps;
