@@ -76,7 +76,7 @@ namespace Ms {
 
 void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
       {
-      if (!e->generated() || e->type() == Element::Type::BAR_LINE) {
+      if ((!e->generated() || e->type() == Element::Type::BAR_LINE) && enableExperimental){
             if (e->flag(ElementFlag::HAS_TAG)) {
                   popup->addSeparator();
 
@@ -101,7 +101,7 @@ void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
 
 void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
       {
-      if (e->flag(ElementFlag::HAS_TAG)) {
+      if (e->flag(ElementFlag::HAS_TAG) && enableExperimental) {
             popup->addSeparator();
 
             QMenu* menuLayer = new QMenu(tr("Layer"));
