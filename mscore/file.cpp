@@ -323,7 +323,7 @@ Score* MuseScore::readScore(const QString& name)
       if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW || rv == Score::FileError::FILE_CORRUPTED) {
             if (readScoreError(name, rv, true)) {
                   delete score;
-                  score = score = new Score(MScore::baseStyle());
+                  score = new Score(MScore::baseStyle());
                   rv = Ms::readScore(score, name, true);
                   }
             else {
