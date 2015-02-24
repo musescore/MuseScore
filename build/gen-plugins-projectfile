@@ -2,13 +2,13 @@
 
 echo "TRANSLATIONS = \\"
 for l in `cat \`basename $0\`/build/locales`; do
-      echo "      $1/../../share/locale/instruments_$l.ts \\"
+      echo "      $1/translations/locale_$l.ts \\"
       done
 echo 
 
-echo "FORMS = \\"
-uis=`find $1 -name "*.h"`
-for a in $uis; do
+echo "SOURCES = \\"
+src=`find $1 -name "*.qml *.js"`
+for a in $src; do
       echo "    " $a \\;
       done
 echo
