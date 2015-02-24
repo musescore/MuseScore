@@ -7,10 +7,10 @@
 namespace Ms {
 
 static const char* labels[] = {
-      QT_TRANSLATE_NOOP("selectionfilter", "1st Voice"),
-      QT_TRANSLATE_NOOP("selectionfilter", "2nd Voice"),
-      QT_TRANSLATE_NOOP("selectionfilter", "3rd Voice"),
-      QT_TRANSLATE_NOOP("selectionfilter", "4th Voice"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Voice 1"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Voice 2"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Voice 3"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Voice 4"),
       QT_TRANSLATE_NOOP("selectionfilter", "Dynamics"),
       QT_TRANSLATE_NOOP("selectionfilter", "Fingering"),
       QT_TRANSLATE_NOOP("selectionfilter", "Lyrics"),
