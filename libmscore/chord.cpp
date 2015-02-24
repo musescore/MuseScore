@@ -2088,6 +2088,9 @@ void Chord::layoutTablature()
             lll = stemX - halfHeadWidth;
       if (rrr < stemX + halfHeadWidth)
             rrr = stemX + halfHeadWidth;
+      // align dots to the widest fret mark (not needed in all TAB styles, but harmless anyway)
+      if (segment())
+            segment()->setDotPosX(staffIdx(), headWidth);
       // if tab type is stemless or chord is stemless (possible when imported from MusicXML)
       // or duration longer than half (if halves have stems) or duration longer than crochet
       // remove stems
