@@ -33,6 +33,8 @@ class Fingering : public Text {
 
       Note* note() const { return (Note*)parent(); }
 
+      virtual void draw(QPainter*) const override;
+      virtual void layout() override;
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
       virtual void reset() override;
