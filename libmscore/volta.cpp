@@ -365,6 +365,9 @@ QVariant Volta::propertyDefault(P_ID propertyId) const
             case P_ID::END_HOOK_HEIGHT:
                   return score()->styleS(StyleIdx::voltaHook).val();
 
+            case P_ID::TEXT_STYLE_TYPE:
+                  return int(TextStyleType::VOLTA);
+
             default:
                   return TextLine::propertyDefault(propertyId);
             }

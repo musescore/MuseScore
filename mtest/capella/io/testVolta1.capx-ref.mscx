@@ -113,7 +113,6 @@
         <Volta id="2">
           <endHook>1</endHook>
           <beginText>
-            <style>Volta</style>
             <text>1.</text>
             </beginText>
           <endings>1</endings>
@@ -130,7 +129,6 @@
         <endSpanner id="2"/>
         <Volta id="3">
           <beginText>
-            <style>Volta</style>
             <text>2.</text>
             </beginText>
           <endings>2</endings>
