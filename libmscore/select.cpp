@@ -403,7 +403,7 @@ void Selection::appendFiltered(Element* e)
 
 void Selection::appendChord(Chord* chord)
       {
-      if (chord->beam()) _el.append(chord->beam());
+      if (chord->beam() && !_el.contains(chord->beam())) _el.append(chord->beam());
       if (chord->stem()) _el.append(chord->stem());
       if (chord->hook()) _el.append(chord->hook());
       if (chord->arpeggio()) appendFiltered(chord->arpeggio());
