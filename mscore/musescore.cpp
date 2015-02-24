@@ -4715,6 +4715,7 @@ int main(int argc, char* av[])
             PaperSize ps("system", psf.width(), psf.height());
             PageFormat pf;
             pf.setSize(&ps);
+            pf.setPrintableWidth(psf.width() - 20.0 / INCH);
             MScore::defaultStyle()->setPageFormat(pf);
             }
 
