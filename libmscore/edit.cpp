@@ -1339,7 +1339,7 @@ void Score::cmdSetBeamMode(Beam::Mode mode)
 
 void Score::cmdFlip()
       {
-      const QSet<Element*>& el = QSet<Element*>::fromList(selection().elements());
+      const QList<Element*>& el = selection().elements();
       if (el.isEmpty()) {
             selectNoteSlurMessage();
             return;
