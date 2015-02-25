@@ -2675,7 +2675,7 @@ void Score::connectTies(bool silent)
                                           spanner->setTrack(n->track());
                                           spanner->setTrack2(n->track());
                                           spanner->setParent(initialNote);
-                                         initialNote->add(spanner);
+                                          initialNote->add(spanner);
                                           }
                                     else
                                           delete spanner;
