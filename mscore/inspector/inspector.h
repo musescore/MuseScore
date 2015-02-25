@@ -16,6 +16,7 @@
 
 #include "inspectorBase.h"
 #include "ui_inspector_element.h"
+#include "ui_inspector_break.h"
 #include "ui_inspector_vbox.h"
 #include "ui_inspector_hbox.h"
 #include "ui_inspector_articulation.h"
@@ -61,6 +62,18 @@ class InspectorElement : public InspectorBase {
 
    public:
       InspectorElement(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorBreak
+//---------------------------------------------------------
+
+class InspectorBreak : public InspectorBase {
+      Q_OBJECT
+      Ui::InspectorBreak b;
+
+   public:
+      InspectorBreak(QWidget* parent);
       };
 
 //---------------------------------------------------------

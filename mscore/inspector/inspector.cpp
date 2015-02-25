@@ -237,6 +237,9 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::Type::FRET_DIAGRAM:
                               ie = new InspectorFret(this);
                               break;
+                        case Element::Type::LAYOUT_BREAK:
+                              ie = new InspectorBreak(this);
+                              break;
                         default:
                               if (_element->isText())
                                     ie = new InspectorText(this);
@@ -313,6 +316,21 @@ InspectorElement::InspectorElement(QWidget* parent)
             { P_ID::VISIBLE,  0, 0, b.visible,    b.resetVisible },
             { P_ID::USER_OFF, 0, 0, b.offsetX,    b.resetX       },
             { P_ID::USER_OFF, 1, 0, b.offsetY,    b.resetY       }
+            };
+
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorBreak
+//---------------------------------------------------------
+
+InspectorBreak::InspectorBreak(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      b.setupUi(addWidget());
+
+      iList = {         // currently empty
             };
 
       mapSignals();
