@@ -2430,6 +2430,11 @@ Element* Chord::drop(const DropData& data)
                               return 0;
                               }
                         Chord* ch2 = static_cast<Chord*>(s->element(track()));
+                        if (ch2->duration() != duration()) {
+                              qDebug("no matching chord for second note of tremolo found");
+                              delete e;
+                              return 0;
+                             }
                         t->setChords(this, ch2);
                         }
                   }
