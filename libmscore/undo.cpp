@@ -3352,8 +3352,15 @@ void ChangeProperty::flip()
       else
             element->setProperty(id, property);
 
-      if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS)
+      if (id == P_ID::SPANNER_TICK || id == P_ID::SPANNER_TICKS) {
             static_cast<Element*>(element)->score()->addSpanner(static_cast<Spanner*>(element));
+            // while updating ticks for an Ottava, the parent staff calls updateOttava()
+            // and expects to find the Ottava spanner(s) in the score lists;
+            // thus, the above (re)setProperty() left the staff pitchOffset map in a wrong state
+            // as the spanner has been removed from the score lists; redo the map here
+            if (static_cast<Element*>(element)->type() == Element::Type::OTTAVA)
+                  static_cast<Element*>(element)->staff()->updateOttava();
+            }
       property = v;
       propertyStyle = ps;
       }
