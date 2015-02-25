@@ -1173,19 +1173,26 @@ void Note::endDrag()
       if (staff->isTabStaff()) {
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
             // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
-
-            int nString = _string + (staff->staffType()->upsideDown() ? -_lineOffset : _lineOffset);
-
-            // get a fret number for same pitch on new string
-
+            // and fret for the same pitch on the new string
             const StringData* strData = staff->part()->instr()->stringData();
-            int nFret       = strData->fret(_pitch, nString, staff, tick);
+            int nString = _string + (staff->staffType()->upsideDown() ? -_lineOffset : _lineOffset);
+            int nFret   = strData->fret(_pitch, nString, staff, tick);
             if (nFret < 0)                      // no fret?
                   return;                       // no party!
-
-            undoChangeProperty(P_ID::FRET, nFret);
-            undoChangeProperty(P_ID::STRING, nString);
-            strData->fretChords(chord());
+            // move the note together with all notes tied to it
+            for (Note* nn : tiedNotes()) {
+                  bool refret = false;
+                  if (nn->fret() != nFret) {
+                        nn->undoChangeProperty(P_ID::FRET, nFret);
+                        refret = true;
+                        }
+                  if (nn->string() != nString) {
+                        nn->undoChangeProperty(P_ID::STRING, nString);
+                        refret = true;
+                        }
+                  if (refret)
+                        strData->fretChords(nn->chord());
+                  }
             }
       else {
             // on PITCHED / PERCUSSION staves, dragging a note changes the note pitch
