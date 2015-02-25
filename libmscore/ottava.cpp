@@ -310,6 +310,29 @@ void Ottava::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Ottava::layout()
+      {
+      if (staff() && staff()->isTabStaff())           // in TABs ottavas have no output
+            setbbox(QRectF());
+      else
+            TextLine::layout();
+      }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void Ottava::draw(QPainter* painter) const
+      {
+      if (staff() && staff()->isTabStaff())           // do not draw ottavas in TABs
+            return;
+      TextLine::draw(painter);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

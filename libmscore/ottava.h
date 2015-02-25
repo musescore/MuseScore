@@ -105,6 +105,8 @@ class Ottava : public TextLine {
       virtual void endEdit() override;
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader& de) override;
+      virtual void layout() override;
+      virtual void draw(QPainter* painter) const override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

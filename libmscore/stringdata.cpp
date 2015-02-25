@@ -158,7 +158,7 @@ void StringData::fretChords(Chord * chord) const
       // store staff pitch offset at this tick, to speed up actual note pitch calculations
       // (ottavas not implemented yet)
       int transp = chord->staff() ? chord->staff()->part()->instr()->transpose().chromatic : 0;
-      int pitchOffset = /*chord->staff()->pitchOffset(chord->segment()->tick())*/ - transp;
+      int pitchOffset = chord->staff()->pitchOffset(chord->segment()->tick()) - transp;
       // if chord parent is not a segment, the chord is special (usually a grace chord):
       // fret it by itself, ignoring the segment
       if (chord->parent()->type() != Element::Type::SEGMENT)
