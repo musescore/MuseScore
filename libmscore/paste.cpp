@@ -30,6 +30,7 @@
 #include "image.h"
 #include "repeat.h"
 #include "chord.h"
+#include "tremolo.h"
 
 namespace Ms {
 
@@ -190,6 +191,22 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     //shorten last cr to fit in the space made by makeGap
                                     if ((tick - dstTick) + cr->actualTicks() > tickLen) {
                                           int newLength = tickLen - (tick - dstTick);
+                                          // check previous CR on same track, if it has tremolo, delete the tremolo
+                                          if (cr->type() == Element::Type::CHORD) {
+                                                Segment* s = tick2leftSegment(tick - 1);
+                                                if (s) {
+                                                      ChordRest* crt = static_cast<ChordRest*>(s->element(cr->track()));
+                                                      if (crt->type() == Element::Type::CHORD) {
+                                                            Chord* chrt = static_cast<Chord*>(crt);
+                                                            Tremolo* tr = chrt->tremolo();
+                                                            if (tr) {
+                                                                  tr->setChords(chrt, static_cast<Chord*>(cr));
+                                                                  chrt->remove(tr);
+                                                                  }
+                                                            }
+                                                      }
+                                                }
+                                          // set shorten duration
                                           cr->setDuration(Fraction::fromTicks(newLength));
                                           cr->setDurationType(newLength);
                                           }
