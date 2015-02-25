@@ -2223,7 +2223,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                               case LayoutMode::LINE:
                               case LayoutMode::PAGE:
                               case LayoutMode::SYSTEM:
-                                    continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
+                                    continueFlag = !(curMeasure->lineBreak()
+                                                     || curMeasure->sectionBreak()
+                                                     || curMeasure->pageBreak());
                                     break;
                               }
                         }
@@ -2295,7 +2297,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
             switch (_layoutMode) {
                   case LayoutMode::PAGE:
                   case LayoutMode::SYSTEM:
-                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
+                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak() || curMeasure->sectionBreak();
                         break;
                   case LayoutMode::FLOAT:
                   case LayoutMode::LINE:
@@ -2475,7 +2477,9 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                               case LayoutMode::LINE:
                               case LayoutMode::PAGE:
                               case LayoutMode::SYSTEM:
-                                    continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
+                                    continueFlag = !(curMeasure->lineBreak()
+                                                    || curMeasure->sectionBreak()
+                                                    || curMeasure->pageBreak());
                                     break;
                               }
                         }
@@ -2504,7 +2508,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
             switch (_layoutMode) {
                   case LayoutMode::PAGE:
                   case LayoutMode::SYSTEM:
-                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
+                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak() || curMeasure->sectionBreak();
                         break;
                   case LayoutMode::FLOAT:
                   case LayoutMode::LINE:
