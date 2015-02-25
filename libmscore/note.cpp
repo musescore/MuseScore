@@ -1637,9 +1637,7 @@ void Note::layout2()
                   // setDotY() actually also manages creation/deletion of NoteDot's
                   setDotY(MScore::Direction::AUTO);
 
-                  // with TAB's, dotPosX is not set:
-                  // get dot X from width of fret text and use TAB default spacing
-                  x = width();
+                  // use TAB default note-to-dot spacing
                   dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
                   d = dd * 0.5;
                   }

@@ -2082,6 +2082,9 @@ void Chord::layoutTablature()
             lll = stemX - halfHeadWidth;
       if (rrr < stemX + halfHeadWidth)
             rrr = stemX + halfHeadWidth;
+      // align dots to the widest fret mark (not needed in all TAB styles, but harmless anyway)
+      if (segment())
+            segment()->setDotPosX(staffIdx(), headWidth);
       // if tab type is stemless or chord is stemless (possible when imported from MusicXML)
       // or duration longer than half (if halves have stems) or duration longer than crochet
       // remove stems
@@ -2179,14 +2182,6 @@ void Chord::layoutTablature()
             // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
 
-      if (dots()) {
-            qreal x = dotPosX() + dotNoteDistance
-               + (dots()-1) * score()->styleS(StyleIdx::dotDotDistance).val() * _spatium;
-            x += symWidth(SymId::augmentationDot);
-            if (x > rrr)
-                  rrr = x;
-            }
-
       if (_hook) {
             if (beam())
                   score()->undoRemoveElement(_hook);
@@ -2198,6 +2193,27 @@ void Chord::layoutTablature()
                         rrr = qMax(rrr, x);
                         }
                   }
+            }
+
+      if (dots()) {
+            qreal x = 0.0;
+            // if stems are beside staff, dots are placed near to stem
+            if (!tab->stemThrough()) {
+                  // if there is an unbeamed hook, dots should start after the hook
+                  if (_hook && !beam())
+                        x = _hook->width() + dotNoteDistance;
+                  // if not, dots should start at a fixed distance right after the stem
+                  else
+                        x = STAFFTYPE_TAB_DEFAULTDOTDIST_X * _spatium;
+                  if (segment())
+                        segment()->setDotPosX(staffIdx(), x);
+                  }
+            // if stems are through staff, use dot position computed above on fret mark widths
+            else
+                  x = dotPosX() + dotNoteDistance
+                        + (dots()-1) * score()->styleS(StyleIdx::dotDotDistance).val() * _spatium;
+            x += symWidth(SymId::augmentationDot);
+            rrr = qMax(rrr, x);
             }
 
       _space.setLw(lll);
