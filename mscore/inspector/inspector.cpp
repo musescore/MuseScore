@@ -878,7 +878,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       for (const char* name : builtinSpanNames)
             b.spanType->addItem(qApp->translate("inspector", name));
       for (BarLineType t : types)
-            b.type->addItem(BarLine::userTypeName2(t), int(t));
+            b.type->addItem(BarLine::userTypeName(t), int(t));
 
       iList = {
             { P_ID::COLOR,             0, 0, e.color,    e.resetColor    },
