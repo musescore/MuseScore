@@ -1920,15 +1920,29 @@ void Score::createMMRests()
                         t = lm->endBarLineType();
                   mmr->setEndBarLineType(t, false, lm->endBarLineVisible(), lm->endBarLineColor());
                   mmr->setRepeatFlags(m->repeatFlags() | lm->repeatFlags());
-                  mmr->clearElements();
+
+                  ElementList oldList = mmr->takeElements();
+                  ElementList newList = lm->el();
 
                   for (Element* e : m->el()) {
                         if (e->type() == Element::Type::MARKER)
+                              newList.append(e);
+                        }
+                  for (Element* e : newList) {
+                        bool found = false;
+                        for (Element* ee : oldList) {
+                              if (ee->type() == e->type()) {
+                                    mmr->add(ee);
+                                    oldList.removeOne(ee);
+                                    found = true;
+                                    break;
+                                    }
+                              }
+                        if (!found)
                               mmr->add(e->clone());
                         }
-
-                  for (Element* e : lm->el())
-                        mmr->add(e->clone());
+                  for (Element* e : oldList)
+                        delete e;
 
                   Segment* s = mmr->undoGetSegment(Segment::Type::ChordRest, m->tick());
                   for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {

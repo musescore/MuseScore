@@ -120,6 +120,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_ambitus.ui
       inspector/inspector_empty.ui
       inspector/inspector_fret.ui
+      inspector/inspector_break.ui
       ${SCRIPT_UI}
       )
 

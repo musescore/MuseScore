@@ -126,6 +126,7 @@ class MeasureBase : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
 
       void clearElements();
+      ElementList takeElements();
       };
 
 
