@@ -326,7 +326,8 @@ void Spanner::endEdit()
             score()->undoPropertyChanged(this, P_ID::SPANNER_TICK, editTick);
             rebuild = true;
             }
-      if (editTick2 != tick2()) {
+      // ticks may also change by moving initial anchor, without moving ending anchor
+      if (editTick2 != tick2() || editTick2 - editTick != tick2() - tick()) {
             score()->undoPropertyChanged(this, P_ID::SPANNER_TICKS, editTick2 - editTick);
             rebuild = true;
             }
