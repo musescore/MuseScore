@@ -240,12 +240,6 @@ Chord::Chord(const Chord& c, bool link)
       if (c._stemSlash) {
             add(new StemSlash(*(c._stemSlash)));
             }
-/*      if (c._glissando) {
-            Glissando* g = new Glissando(*(c._glissando));
-            add(g);
-            if (link)
-                  g->linkTo(c._glissando);
-            } */
       if (c._arpeggio) {
             Arpeggio* a = new Arpeggio(*(c._arpeggio));
             add(a);

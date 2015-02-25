@@ -78,7 +78,6 @@ class Chord : public ChordRest {
 
       Arpeggio*           _arpeggio;
       Tremolo*            _tremolo;
-//      Glissando*          _glissando;
       bool                _endsGlissando;///< true if this chord is the ending point of a glissando (nneeded for layout)
       ElementList         _el;           ///< chordline, slur
       QList<Chord*>       _graceNotes;

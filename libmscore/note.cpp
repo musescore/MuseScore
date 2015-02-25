@@ -1223,6 +1223,13 @@ bool Note::acceptDrop(const DropData& data) const
       {
       Element* e = data.element;
       Element::Type type = e->type();
+      if (type == Element::Type::GLISSANDO) {
+            for (auto e : _spannerFor)
+                  if (e->type() == Element::Type::GLISSANDO) {
+                        return false;
+                  }
+            return true;
+            }
       return (type == Element::Type::ARTICULATION
          || type == Element::Type::CHORDLINE
          || type == Element::Type::TEXT
@@ -1259,7 +1266,6 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == Element::Type::SYMBOL)
          || (type == Element::Type::CLEF)
          || (type == Element::Type::BAR_LINE)
-         || (type == Element::Type::GLISSANDO)
          || (type == Element::Type::SLUR)
          || (type == Element::Type::HAIRPIN)
          || (type == Element::Type::STAFF_TEXT)
@@ -1439,6 +1445,14 @@ Element* Note::drop(const DropData& data)
 
             case Element::Type::GLISSANDO:
                   {
+                  for (auto e : _spannerFor) {
+                        if (e->type() == Element::Type::GLISSANDO) {
+                              qDebug("there is already a glossando");
+                              delete e;
+                              return 0;
+                              }
+                        }
+
                   // this is the glissando initial note, look for a suitable final note
                   Note* finalNote = Glissando::guessFinalNote(chord());
                   if (finalNote != nullptr) {
