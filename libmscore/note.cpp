@@ -1454,7 +1454,7 @@ Element* Note::drop(const DropData& data)
                   {
                   for (auto e : _spannerFor) {
                         if (e->type() == Element::Type::GLISSANDO) {
-                              qDebug("there is already a glossando");
+                              qDebug("there is already a glissando");
                               delete e;
                               return 0;
                               }
