@@ -172,6 +172,7 @@ void genIcons()
             QPainter painter(&image);
             painter.setFont(QFont("FreeSans", 8));
             painter.setRenderHint(QPainter::Antialiasing);
+            painter.setRenderHint(QPainter::TextAntialiasing);
             painter.setPen(QPen(Qt::black));
             painter.drawText(QRect(0, 0, iw, ih), Qt::AlignCenter, vtext[i]);
             painter.end();
