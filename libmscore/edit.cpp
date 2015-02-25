@@ -376,6 +376,7 @@ Note* Score::addNote(Chord* chord, NoteVal& noteVal)
 bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int staffIdx)
       {
       if (staffIdx >= 0) {
+            // local timesig
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
             for (Measure* m = fm; ; m = m->nextMeasure()) {
@@ -396,8 +397,24 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
             return true;
             }
       int measures = 1;
-      for (Measure* m = fm; m != lm; m = m -> nextMeasure())
+      bool fmr = true;
+      for (Measure* m = fm; m != lm; m = m -> nextMeasure()) {
+            if (!m->isFullMeasureRest())
+                  fmr = false;
             ++measures;
+            }
+
+      if (!fmr) {
+            // check for local time signatures
+            for (Measure* m = fm; m != lm; m = m -> nextMeasure()) {
+                  for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                        if (staff(staffIdx)->timeStretch(m->tick()) != Fraction(1,1)) {
+                              // we cannot change a staff with a local time signature
+                              return false;
+                              }
+                        }
+                  }
+            }
 
       ScoreRange range;
       range.read(fm->first(), lm->last());
