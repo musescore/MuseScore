@@ -1384,6 +1384,23 @@ class ChangeDrumset : public UndoCommand {
       UNDO_NAME("ChangeDrumset")
       };
 
+//---------------------------------------------------------
+//   TabAdjustOttava
+//---------------------------------------------------------
+
+class TabAdjustOttava : public UndoCommand {
+      Staff*      staff;
+      int         fromTick, toTick;
+      int         pitchOffset;
+
+      void flip();
+
+   public:
+      TabAdjustOttava(Staff* st, int from, int to, int offset) :
+                  staff(st), fromTick(from), toTick(to), pitchOffset(offset) {}
+      UNDO_NAME("TabAdjustOttava")
+      };
+
 
 }     // namespace Ms
 #endif

@@ -21,6 +21,7 @@
 #include "staff.h"
 #include "segment.h"
 #include "sym.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -226,6 +227,19 @@ void Ottava::endEdit()
             s->updateOttava();
             score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
             score()->setPlaylistDirty();
+            // adjust pitches in linked TAB staves
+            for (Staff* st : s->staffList()) {
+                  if (st != s && st->isTabStaff()) {
+                        if (tick() > editTick)        // new start tick after original start tick
+                              score()->undo(new TabAdjustOttava(st, editTick, tick(), -pitchShift()));
+                        if (tick() < editTick)        // new start tick before original start tick
+                              score()->undo(new TabAdjustOttava(st, tick(), editTick, pitchShift()));
+                        if (tick2() > editTick2)      // new end tick after original end tick
+                              score()->undo(new TabAdjustOttava(st, editTick2, tick2(), pitchShift()));
+                        if (tick2() < editTick2)      // new end tick before original end tick
+                              score()->undo(new TabAdjustOttava(st, tick2(), editTick2, -pitchShift()));
+                        }
+                  }
             }
       TextLine::endEdit();
       }
