@@ -2232,7 +2232,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "sysInitBarLineType") {
                   const QString& val(e.readElementText());
                   _systemInitialBarLineType = BarLineType::NORMAL;
-                  for (unsigned i = 0; i < sizeof(barLineTable)/sizeof(*barLineTable); ++i) {
+                  for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
                         if (BarLine::barLineTypeName(BarLineType(i)) == val) {
                               _systemInitialBarLineType = BarLineType(i);
                               break;

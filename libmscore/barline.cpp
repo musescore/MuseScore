@@ -41,19 +41,43 @@ int  BarLine::_origSpan, BarLine::_origSpanFrom, BarLine::_origSpanTo;
 //---------------------------------------------------------
 
 static const char* barLineNames[] = {
-      QT_TRANSLATE_NOOP("barline", "normal"),
-      QT_TRANSLATE_NOOP("barline", "double"),
-      QT_TRANSLATE_NOOP("barline", "start-repeat"),
-      QT_TRANSLATE_NOOP("barline", "end-repeat"),
-      QT_TRANSLATE_NOOP("barline", "dashed"),
-      QT_TRANSLATE_NOOP("barline", "end"),
-      QT_TRANSLATE_NOOP("barline", "end-start-repeat"),
-      QT_TRANSLATE_NOOP("barline", "dotted")
+      "normal",
+      "double",
+      "start-repeat",
+      "end-repeat",
+      "dashed",
+      "end",
+      "end-start-repeat",
+      "dotted"
       };
 
-unsigned int barLineTableSize()
+static const BarLineTableItem barLineTable[] {
+        { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal barline") },
+        { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed barline") },
+        { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted barline") },
+        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "End bar barline") },
+        { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double barline") },
+        { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat") },
+        { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat") },
+        { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-start repeat") },
+      };
+
+//---------------------------------------------------------
+//   barLineTableSize
+//---------------------------------------------------------
+
+unsigned int BarLine::barLineTableSize()
       {
       return sizeof(barLineTable)/sizeof(*barLineTable);
+      }
+
+//---------------------------------------------------------
+//   barLineTableItem
+//---------------------------------------------------------
+
+BarLineTableItem BarLine::barLineTableItem(int i)
+      {
+      return barLineTable[i];
       }
 
 //---------------------------------------------------------
@@ -61,15 +85,6 @@ unsigned int barLineTableSize()
 //---------------------------------------------------------
 
 QString BarLine::userTypeName(BarLineType t)
-      {
-      return qApp->translate("barline", barLineNames[int(t)]);
-      }
-
-//---------------------------------------------------------
-//   userTypeName2
-//---------------------------------------------------------
-
-QString BarLine::userTypeName2(BarLineType t)
       {
       for (const auto& i : barLineTable) {
            if (i.type == t)
@@ -1336,7 +1351,7 @@ Element* BarLine::prevElement()
 
 QString BarLine::accessibleInfo()
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(BarLine::userTypeName2(this->barLineType()));
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(BarLine::userTypeName(this->barLineType()));
       }
 
 //---------------------------------------------------------

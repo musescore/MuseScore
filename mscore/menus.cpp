@@ -319,10 +319,11 @@ Palette* MuseScore::newBarLinePalette(bool basic)
       sp->setGrid(42, 38);
 
       // bar line styles
-      for (unsigned i = 0; i < sizeof(barLineTable)/sizeof(*barLineTable); ++i) {
+      for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
             BarLine* b  = new BarLine(gscore);
-            b->setBarLineType(barLineTable[i].type);
-            sp->append(b, barLineTable[i].name);
+            BarLineTableItem bti = BarLine::barLineTableItem(i);
+            b->setBarLineType(bti.type);
+            sp->append(b, qApp->translate("Palette", bti.name));
             }
 
       if (!basic) {
@@ -341,7 +342,7 @@ Palette* MuseScore::newBarLinePalette(bool basic)
                   b->setBarLineType(BarLineType::NORMAL);
                   b->setSpanFrom(span[i].from);
                   b->setSpanTo(span[i].to);
-                  sp->append(b, span[i].name);
+                  sp->append(b, qApp->translate("Palette", span[i].name));
                   }
             }
       return sp;

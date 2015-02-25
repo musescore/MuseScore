@@ -46,6 +46,15 @@ static const int BARLINE_SPAN_SHORT2_TO         = 7;
 static const int UNKNOWN_BARLINE_TO = -6;
 
 //---------------------------------------------------------
+//   BarLineTableItem
+//---------------------------------------------------------
+
+struct BarLineTableItem {
+      BarLineType type;
+      const char* name;
+      };
+
+//---------------------------------------------------------
 //   @@ BarLine
 //---------------------------------------------------------
 
@@ -119,7 +128,8 @@ class BarLine : public Element {
       const ElementList* el() const      { return &_el; }
 
       static QString userTypeName(BarLineType);
-      static QString userTypeName2(BarLineType);
+      static unsigned int barLineTableSize();
+      static BarLineTableItem barLineTableItem(int i);
 
       QString barLineTypeName() const;
       static QString barLineTypeName(BarLineType t);
@@ -146,29 +156,6 @@ class BarLine : public Element {
       virtual QString accessibleInfo() override;
       virtual QString accessibleExtraInfo() override;
       };
-
-//---------------------------------------------------------
-//   BarLineTableItem
-//---------------------------------------------------------
-
-struct BarLineTableItem {
-      BarLineType type;
-      const char* name;
-      };
-static const BarLineTableItem barLineTable[] {
-        { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal") },
-        { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed style") },
-        { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted style") },
-        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "End bar style") },
-        { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double bar style") },
-        { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat") },
-        { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat") },
-        { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-start repeat") },
-      };
-
-
-// unsigned int BarLineTableSize();
-
 }     // namespace Ms
 #endif
 
