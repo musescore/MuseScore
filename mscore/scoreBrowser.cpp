@@ -114,11 +114,15 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
             // draw pixmap and add border
             pm.fill(Qt::transparent);
             QPainter painter( &pm );
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.setRenderHint(QPainter::TextAntialiasing);
             painter.drawPixmap(0, 0, pixmap);
-            painter.setPen(QColor(0,0,0,128));
+            painter.setPen(QPen(QColor(0,0,0,128), 1));
             painter.setBrush(Qt::white);
-            if (fi.baseName() == "00-Blank" || fi.baseName() == "Create_New_Score")
-                  painter.drawRoundedRect(QRectF(0, 0, pm.width() - 1 , pm.height() - 1), 10.0, 10.0);
+            if (fi.baseName() == "00-Blank" || fi.baseName() == "Create_New_Score") {
+                  qreal round = 8.0 * qApp->devicePixelRatio();
+                  painter.drawRoundedRect(QRectF(0, 0, pm.width() - 1 , pm.height() - 1), round, round);
+                  }
             else
                   painter.drawRect(0, 0, pm.width()  - 1, pm.height()  - 1);
             if (fi.baseName() != "00-Blank")
