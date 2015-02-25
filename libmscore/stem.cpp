@@ -191,8 +191,11 @@ void Stem::draw(QPainter* painter) const
       // with tablatures and stems beside staves, dots are not drawn near 'notes', but near stems
       int nDots = chord()->dots();
       if (nDots > 0 && !stt->stemThrough()) {
-            qreal y =  ( (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (_up ? -1.0 : 1.0);
-            drawSymbol(SymId::augmentationDot, painter, QPointF(STAFFTYPE_TAB_DEFAULTDOTDIST_X * sp, y), nDots);
+            qreal x     = chord()->dotPosX();
+            qreal y     = ( (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (_up ? -1.0 : 1.0);
+            qreal step  = score()->styleS(StyleIdx::dotDotDistance).val() * sp;
+            for (int dot = 0; dot < nDots; dot++, x += step)
+                  drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
             }
       }
 
