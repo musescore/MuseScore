@@ -188,10 +188,24 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                 }
                                           graceNotes.clear();
                                           }
+                                    // delete pending ties, they are not selected when copy
+                                    if ((tick - dstTick) + cr->actualTicks() >= tickLen) {
+                                          if (cr->type() == Element::Type::CHORD) {
+                                                Chord* c = static_cast<Chord*>(cr);
+                                                for (Note* note: c->notes()) {
+                                                      Tie* tie = note->tieFor();
+                                                      if (tie) {
+                                                            note->setTieFor(0);
+                                                            delete tie;
+                                                            }
+                                                      }
+                                                }
+                                          }
                                     //shorten last cr to fit in the space made by makeGap
                                     if ((tick - dstTick) + cr->actualTicks() > tickLen) {
                                           int newLength = tickLen - (tick - dstTick);
                                           // check previous CR on same track, if it has tremolo, delete the tremolo
+                                          // we don't want a tremolo and two different chord durations
                                           if (cr->type() == Element::Type::CHORD) {
                                                 Segment* s = tick2leftSegment(tick - 1);
                                                 if (s) {
@@ -204,6 +218,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                             if (tr) {
                                                                   tr->setChords(chrt, static_cast<Chord*>(cr));
                                                                   chrt->remove(tr);
+                                                                  delete tr;
                                                                   }
                                                             }
                                                       }

@@ -69,7 +69,6 @@
 #include "sym.h"
 #include "rehearsalmark.h"
 #include "breath.h"
-#include "tie.h"
 
 namespace Ms {
 
@@ -1558,15 +1557,6 @@ void Score::removeElement(Element* element)
                   break;
 
             case Element::Type::CHORD:
-                  {
-                  Chord* c = static_cast<Chord*>(element);
-                  for (Note* n : c->notes()) {
-                        Tie* t = n->tieFor();
-                        if (t)
-                              n->remove(t);
-                        }
-                  }
-                  // fall through
             case Element::Type::REST:
                   {
                   ChordRest* cr = static_cast<ChordRest*>(element);
