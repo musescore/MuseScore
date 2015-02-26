@@ -174,27 +174,27 @@ bool Score::sanityCheck(const QString& name)
       int mNumber = 1;
       QString error;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            int mTicks = m->ticks();
+            Fraction mLen = m->len();
             int endStaff = staves().size();
             for (int staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
-                  int voices[VOICES] = {};
+                  Fraction voices[VOICES] = {};
                   for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
                         for (int v = 0; v < VOICES; ++v) {
                               ChordRest* cr = static_cast<ChordRest*>(s->element(staffIdx* VOICES + v));
                               if (cr == 0)
                                     continue;
-                              voices[v] += cr->actualTicks();
+                              voices[v] += cr->actualFraction();
                               }
                         }
-                  if (voices[0] != mTicks) {
-                        QString msg = tr("Measure %1 Staff %2 incomplete. Expected: %3; Found: %4").arg(mNumber).arg( staffIdx+1).arg(mTicks).arg(voices[0]);
+                  if (voices[0] != mLen) {
+                        QString msg = tr("Measure %1 Staff %2 incomplete. Expected: %3; Found: %4").arg(mNumber).arg( staffIdx+1).arg(mLen.print()).arg(voices[0].print());
                         qDebug() << msg;
                         error += QString("%1\n").arg(msg);
                         result = false;
                         }
                   for (int v = 1; v < VOICES; ++v) {
-                        if (voices[v] > mTicks) {
-                              QString msg = tr("Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5").arg( mNumber).arg(staffIdx + 1).arg(v+1).arg(mTicks).arg(voices[0]);
+                        if (voices[v] > mLen) {
+                              QString msg = tr("Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5").arg( mNumber).arg(staffIdx + 1).arg(v+1).arg(mLen.print()).arg(voices[v].print());
                               qDebug() << msg;
                               error += QString("%1\n").arg(msg);
                               result = false;
