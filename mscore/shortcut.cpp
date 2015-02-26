@@ -2380,7 +2380,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_FOTO,
          "fotomode",
-         QT_TRANSLATE_NOOP("action","Toggle screenshot mode"),
+         QT_TRANSLATE_NOOP("action","Toggle foto mode"),
          0,
          0,
          Icons::fotomode_ICON,
