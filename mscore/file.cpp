@@ -554,6 +554,7 @@ void MuseScore::newFile()
                               }
                         }
                   }
+            score->setImportedFilePath("");
             }
       else {
             newWizard->createInstruments(score);
