@@ -519,6 +519,13 @@ Note* Glissando::guessInitialNote(Chord* chord)
 
 Note* Glissando::guessFinalNote(Chord* chord)
       {
+      // if chord parent is another chord, chord is a grace, look for final note in parent
+      if (chord->parent()->type() == Element::Type::CHORD)
+            return static_cast<Chord*>(chord->parent())->upNote();
+      // if parent not a segment, can't locate a target note
+      if (chord->parent()->type() != Element::Type::SEGMENT)
+            return nullptr;
+
       int         chordTrack  = chord->track();
       Segment*    segm        = chord->segment();
       Part*       part        = chord->staff()->part();
