@@ -904,10 +904,7 @@ void Note::read(XmlReader& e)
                   tie->setTrack(track());
                   tie->read(e);
                   tie->setStartNote(this);
-                  if (e.pasteMode())
-                        score()->undo(new AddElement(tie));
-                  else
-                        _tieFor = tie;
+                  _tieFor = tie;
                   }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
