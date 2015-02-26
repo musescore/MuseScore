@@ -395,7 +395,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showPalette(bool);
       void showInspector(bool);
       void showOmrPanel(bool);
-      void showPlayPanel(bool);
       void showNavigator(bool);
       void showMixer(bool);
       void showSynthControl(bool);
@@ -677,6 +676,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void unregisterPlugin(PluginDescription*);
 
       Q_INVOKABLE void showStartcenter(bool);
+      void showPlayPanel(bool);
+
       QFileInfoList recentScores() const;
       void saveDialogState(const char* name, QFileDialog* d);
       void restoreDialogState(const char* name, QFileDialog* d);
