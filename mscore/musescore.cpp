@@ -976,8 +976,6 @@ MuseScore::MuseScore()
             }
       loadScoreList();
 
-      showPlayPanel(preferences.showPlayPanel);
-
       QClipboard* cb = QApplication::clipboard();
       connect(cb, SIGNAL(dataChanged()), SLOT(clipboardChanged()));
       connect(cb, SIGNAL(selectionChanged()), SLOT(clipboardChanged()));
@@ -5006,11 +5004,13 @@ int main(int argc, char* av[])
                   } );
             timer->start(500);
 #else
+
             getAction("startcenter")->setChecked(true);
             mscore->showStartcenter(true);
 #endif
             }
 
+      mscore->showPlayPanel(preferences.showPlayPanel);
 
       return qApp->exec();
       }
