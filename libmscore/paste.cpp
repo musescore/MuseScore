@@ -196,7 +196,9 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                 Segment* s = tick2leftSegment(tick - 1);
                                                 if (s) {
                                                       ChordRest* crt = static_cast<ChordRest*>(s->element(cr->track()));
-                                                      if (crt->type() == Element::Type::CHORD) {
+                                                      if (!crt)
+                                                            crt = s->nextChordRest(cr->track(), true);
+                                                      if (crt && crt->type() == Element::Type::CHORD) {
                                                             Chord* chrt = static_cast<Chord*>(crt);
                                                             Tremolo* tr = chrt->tremolo();
                                                             if (tr) {

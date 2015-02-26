@@ -59,6 +59,7 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste2Voice6();
       void copyPasteOnlySecondVoice();
       void copypaste19() { copypaste("19"); }       // chord symbols
+      void copyPasteShortTremolo() { copypastevoice("21", 1); } // remove tremolo on shorten note #30411
       
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
