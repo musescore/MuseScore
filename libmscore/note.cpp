@@ -653,9 +653,7 @@ void Note::remove(Element* e)
                   setTieFor(0);
                   if (tie->endNote())
                         tie->endNote()->setTieBack(0);
-                  int n = tie->spannerSegments().size();
-                  for (int i = 0; i < n; ++i) {
-                        SpannerSegment* ss = tie->spannerSegments().at(i);
+                  for (SpannerSegment* ss : tie->spannerSegments()) {
                         Q_ASSERT(ss->spanner() == tie);
                         if (ss->system())
                               ss->system()->remove(ss);
@@ -901,10 +899,15 @@ void Note::read(XmlReader& e)
             else if (tag == "line")
                   _line = e.readInt();
             else if (tag == "Tie") {
-                  _tieFor = new Tie(score());
-                  _tieFor->setTrack(track());
-                  _tieFor->read(e);
-                  _tieFor->setStartNote(this);
+                  Tie* tie = new Tie(score());
+                  tie->setParent(this);
+                  tie->setTrack(track());
+                  tie->read(e);
+                  tie->setStartNote(this);
+                  if (e.pasteMode())
+                        score()->undo(new AddElement(tie));
+                  else
+                        _tieFor = tie;
                   }
             else if (tag == "Fingering" || tag == "Text") {       // Text is obsolete
                   Fingering* f = new Fingering(score());
