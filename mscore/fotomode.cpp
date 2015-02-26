@@ -587,7 +587,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       QMenu* popup = new QMenu(this);
       popup->setSeparatorsCollapsible(false);
       QAction* a = popup->addSeparator();
-      a->setText(tr("Screenshot Mode"));
+      a->setText(tr("Foto Mode"));
 
       a = getAction("copy");
       popup->addAction(a);

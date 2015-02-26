@@ -565,7 +565,7 @@ MuseScore::MuseScore()
       cpitchTools->setObjectName("pitch-tools");
       cpitchTools->addWidget(new AccessibleToolButton( cpitchTools, getAction("concert-pitch")));
 
-      QToolBar* foto = addToolBar(tr("Screenshot Mode"));
+      QToolBar* foto = addToolBar(tr("Foto Mode"));
       foto->setObjectName("foto-tools");
       foto->addWidget(new AccessibleToolButton(foto, getAction("fotomode")));
 
@@ -2564,7 +2564,7 @@ void MuseScore::changeState(ScoreState val)
                   showModeText(tr("Play"));
                   break;
             case STATE_FOTO:
-                  showModeText(tr("Screenshot mode"));
+                  showModeText(tr("Foto mode"));
                   updateInspector();
                   break;
             case STATE_LOCK:
