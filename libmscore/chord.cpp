@@ -1840,7 +1840,8 @@ void Chord::layoutPitched()
 
       // allocate enough room for glissandi
       if (_endsGlissando) {
-            if (rtick())                        // if not at beginning of measure
+            if (rtick()                                     // if not at beginning of measure
+                        || graceNotesBefore.size() > 0)     // or there are graces before
                   lll += _spatium * 0.5 + minTieLength;
             // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
