@@ -223,6 +223,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorMarker(this);
                               break;
                         case Element::Type::GLISSANDO:
+                        case Element::Type::GLISSANDO_SEGMENT:
                               ie = new InspectorGlissando(this);
                               break;
                         case Element::Type::TEMPO_TEXT:
