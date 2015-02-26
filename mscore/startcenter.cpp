@@ -43,16 +43,18 @@ Startcenter::Startcenter()
  : QDialog(0)
       {
       setupUi(this);
-      setBackgroundRole(QPalette::Window);
+      setBackgroundRole(QPalette::Base);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowModality(Qt::ApplicationModal);
       connect(recentPage,  &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
-      connect(openScore, SIGNAL(linkActivated(QString)), this, SLOT(openScoreClicked(QString)));
+      connect(openScore, SIGNAL(clicked()), this, SLOT(openScoreClicked()));
+      connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
       //init webview
       MyWebView* _webView = new MyWebView(this);
       _webView->setUrl(QUrl("http://connect2.musescore.com/"));
       horizontalLayout->addWidget(_webView);
+
       if (enableExperimental)
             QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
       QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
@@ -119,7 +121,7 @@ void Startcenter::updateRecentScores()
 //   openScoreClicked
 //---------------------------------------------------------
 
-void Startcenter::openScoreClicked(const QString & /*link*/)
+void Startcenter::openScoreClicked()
       {
       close();
       getAction("file-open")->trigger();
@@ -144,7 +146,7 @@ void Startcenter::writeSettings(QSettings& settings)
 void Startcenter::readSettings(QSettings& settings)
       {
       settings.beginGroup("Startcenter");
-      resize(settings.value("size", QSize(740, 500)).toSize());
+      resize(settings.value("size", QSize(690, 500)).toSize());
       move(settings.value("pos", QPoint(200, 100)).toPoint());
       settings.endGroup();
       }
@@ -293,7 +295,7 @@ void MyWebView::addToJavascript()
 
 QSize MyWebView::sizeHint() const
       {
-      return QSize(300 * guiScaling, 600 * guiScaling);
+      return QSize(200 * guiScaling, 600 * guiScaling);
       }
 
 //---------------------------------------------------------

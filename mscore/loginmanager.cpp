@@ -313,10 +313,11 @@ void LoginManager::onGetScoreRequestReady(QByteArray ba)
                   QString sharing = score.value("sharing").toString();
                   QString license = score.value("license").toString();
                   QString tags = score.value("tags").toString();
+                  QString url = score.value("custom_url").toString();
                   if (user.value("uid") != QJsonValue::Undefined) {
                         int uid = user.value("uid").toString().toInt();
                         if (uid == _uid)
-                              emit getScoreSuccess(title, description, (sharing == "private"), license, tags);
+                              emit getScoreSuccess(title, description, (sharing == "private"), license, tags, url);
                         else
                               emit getScoreError("");
                         }

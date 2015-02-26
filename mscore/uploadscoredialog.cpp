@@ -51,12 +51,24 @@ UploadScoreDialog::UploadScoreDialog(LoginManager* loginManager)
 	license->addItem(tr("Creative Commons Attribution Noncommercial Non Derivate Works"), "cc-by-nc-nd");
       license->addItem(tr("Public Domain"), "publicdomain");
       license->addItem(tr("Creative Commons Zero"), "cc-zero");
+
+      licenseHelp->setText(tr("<a href=\"%1\">What does this mean?</a>").arg("http://musescore.com/help/license"));
+      QFont font = licenseHelp->font();
+      font.setPointSize(8);
+      licenseHelp->setFont(font);
+
+      privateHelp->setText(tr("Respect the <a href=\"%1\">community guidelines</a>. Only make your scores accessible to anyone with permission from the right holders.").arg("http://musescore.com/community-guidelines"));
+      privateHelp->setFont(font);
+
+      tagsHelp->setText(tr("Use a comma to separate the tags"));
+      tagsHelp->setFont(font);
+
       connect(buttonBox,   SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       chkSignoutOnExit->setVisible(false);
       _loginManager = loginManager;
       connect(_loginManager, SIGNAL(uploadSuccess(QString)), this, SLOT(uploadSuccess(QString)));
       connect(_loginManager, SIGNAL(uploadError(QString)), this, SLOT(uploadError(QString)));
-      connect(_loginManager, SIGNAL(getScoreSuccess(QString, QString, bool, QString, QString)), this, SLOT(onGetScoreSuccess(QString, QString, bool, QString, QString)));
+      connect(_loginManager, SIGNAL(getScoreSuccess(QString, QString, bool, QString, QString, QString)), this, SLOT(onGetScoreSuccess(QString, QString, bool, QString, QString, QString)));
       connect(_loginManager, SIGNAL(getScoreError(QString)), this, SLOT(onGetScoreError(QString)));
       connect(_loginManager, SIGNAL(tryLoginSuccess()), this, SLOT(display()));
       connect(btnSignout, SIGNAL(pressed()), this, SLOT(logout()));
@@ -89,7 +101,7 @@ void UploadScoreDialog::upload(int nid)
      QString path = QDir::tempPath() + "/temp.mscz";
      if(mscore->saveAs(score, true, path, "mscz")) {
            QString licenseString = license->currentData().toString();
-           QString privateString = rbPrivate->isChecked() ? "1" : "0";
+           QString privateString = cbPrivate->isChecked() ? "1" : "0";
             _loginManager->upload(path, nid, title->text(), description->toPlainText(), privateString, licenseString, tags->text());
            }
      }
@@ -155,19 +167,19 @@ void UploadScoreDialog::display()
 //   onGetScoreSuccess
 //---------------------------------------------------------
 
-void UploadScoreDialog::onGetScoreSuccess(const QString &t, const QString &desc, bool priv, const QString& lic, const QString& tag)
+void UploadScoreDialog::onGetScoreSuccess(const QString &t, const QString &desc, bool priv, const QString& lic, const QString& tag, const QString& url)
       {
       // file with score info
       title->setText(t);
       description->setPlainText(desc);
-      rbPrivate->setChecked(priv);
-      rbPublic->setChecked(!priv);
+      cbPrivate->setChecked(priv);
       int lIndex = license->findData(lic);
       if (lIndex < 0) lIndex = 0;
       license->setCurrentIndex(lIndex);
       tags->setText(tag);
       updateExistingCb->setChecked(true);
       updateExistingCb->setVisible(true);
+      linkToScore->setText(tr("[<a href=\"%1\">link</a>]").arg(url));
       setVisible(true);
       }
 
@@ -188,12 +200,12 @@ void UploadScoreDialog::onGetScoreError(const QString& /*error*/)
 void UploadScoreDialog::clear()
       {
       description->clear();
-      rbPrivate->setChecked(false);
-      rbPublic->setChecked(true);
+      cbPrivate->setChecked(false);
       license->setCurrentIndex(0);
       tags->clear();
       updateExistingCb->setChecked(false);
       updateExistingCb->setVisible(false);
+      linkToScore->setText("");
       _nid = -1;
       }
 
