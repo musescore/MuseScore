@@ -192,7 +192,7 @@ void PlayPanel::setScore(Score* s)
             heartBeat(tick, tick, 0);
             }
       else {
-            setTempo(120.0);
+            setTempo(2.0);
             setRelTempo(1.0);
             setEndpos(0);
             heartBeat(0, 0, 0);
