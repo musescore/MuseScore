@@ -928,18 +928,18 @@ MuseScore::MuseScore()
 
       menuHelp->addSeparator();
 
-      QAction *aboutAction = new QAction(tr("&About..."), 0);
+      QAction* aboutAction = new QAction(tr("&About..."), 0);
 
       aboutAction->setMenuRole(QAction::AboutRole);
       connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
       menuHelp->addAction(aboutAction);
 
-      QAction *aboutQtAction = new QAction(tr("About &Qt..."), 0);
+      QAction* aboutQtAction = new QAction(tr("About &Qt..."), 0);
       aboutQtAction->setMenuRole(QAction::AboutQtRole);
       connect(aboutQtAction, SIGNAL(triggered()), this, SLOT(aboutQt()));
       menuHelp->addAction(aboutQtAction);
 
-      QAction *aboutMusicXMLAction = new QAction(tr("About &MusicXML..."), 0);
+      QAction* aboutMusicXMLAction = new QAction(tr("About &MusicXML..."), 0);
       aboutMusicXMLAction->setMenuRole(QAction::ApplicationSpecificRole);
       connect(aboutMusicXMLAction, SIGNAL(triggered()), this, SLOT(aboutMusicXML()));
       menuHelp->addAction(aboutMusicXMLAction);
@@ -2837,10 +2837,8 @@ void MuseScore::about()
 AboutBoxDialog::AboutBoxDialog()
       {
       setupUi(this);
-      if (preferences.globalStyle == MuseScoreStyleType::DARK)
-            museLogo->setPixmap(QPixmap(":/data/musescore_logo_full1.png"));
-      else
-            museLogo->setPixmap(QPixmap(":/data/musescore_logo_full.png"));
+      museLogo->setPixmap(QPixmap(preferences.globalStyle == MuseScoreStyleType::DARK ?
+            ":/data/musescore-logo-transbg-m.png" : ":/data/musescore_logo_full.png"));
 
 #ifdef MSCORE_UNSTABLE
       versionLabel->setText(tr("Unstable Prerelease for Version: ") + VERSION);
@@ -4799,7 +4797,7 @@ int main(int argc, char* av[])
                               { QPalette::Highlight,       "HighlightColor",       "#88bff6" },
 //                            { QPalette::HighlightedText, "HighlightedTextColor", "#00FF00" },
                               { QPalette::Link,            "HighlightedTextColor", "#00ffff" },
-//                            { QPalette::LinkVisited,     "HighlightedTextColor", "#00ffff" },
+                              { QPalette::LinkVisited,     "HighlightedTextColor", "#00ffff" },
                               { QPalette::ToolTipBase,     "ToolTipBaseColor",     "#808080" },
                               { QPalette::ToolTipText,     "ToolTipTextColor",     "#000000" },
                               };

@@ -18,6 +18,7 @@
 #include "inspectorBase.h"
 #include "inspector.h"
 #include "icons.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -275,7 +276,10 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
                   if (valuesAreDifferent)
                         break;
                   }
-            ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
+            QColor c(preferences.globalStyle == MuseScoreStyleType::DARK ? Qt::yellow : Qt::blue);
+
+            // ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(MScore::selectColor[0].name()) : "");
+            ii.w->setStyleSheet(valuesAreDifferent ? QString("* { color: %1 }").arg(c.name()) : "");
             }
 
       //deal with reset if only one element, or if values are the same
