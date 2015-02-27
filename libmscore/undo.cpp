@@ -2897,6 +2897,9 @@ void Score::undoInsertTime(int tick, int len)
                         }
                   }
             }
+
+      for (Spanner* s : _unmanagedSpanner)
+            s->undoInsertTimeUnmanaged(tick, len);
       }
 
 //---------------------------------------------------------

@@ -156,6 +156,8 @@ class Spanner : public Element {
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
       bool removeSpannerBack();
+      virtual void removeUnmanaged();
+      virtual void undoInsertTimeUnmanaged(int tick, int len);
       virtual void setYoff(qreal) {}    // used in musicxml import
 
       QVariant getProperty(P_ID propertyId) const;
