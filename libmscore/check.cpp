@@ -210,7 +210,7 @@ bool Score::sanityCheck(const QString& name)
                   }
             else {
                   json["result"] = 1;
-                  json["error"] = error;
+                  json["error"] = error.trimmed().replace("\n", "\\n");
                   }
             QJsonDocument jsonDoc(json);
             QFile fp(name);
@@ -218,7 +218,7 @@ bool Score::sanityCheck(const QString& name)
                   qDebug("Open <%s> failed", qPrintable(name));
                   return false;
                   }
-            fp.write(jsonDoc.toJson());
+            fp.write(jsonDoc.toJson(QJsonDocument::Compact));
             fp.close();
             }
       else {
