@@ -35,8 +35,8 @@
 #include "ui_inspector_tempotext.h"
 #include "ui_inspector_dynamic.h"
 #include "ui_inspector_slur.h"
-#include "ui_inspector_text.h"
 #include "ui_inspector_empty.h"
+#include "ui_inspector_text.h"
 
 namespace Ms {
 
@@ -226,21 +226,6 @@ class InspectorAccidental : public InspectorBase {
 
    public:
       InspectorAccidental(QWidget* parent);
-      };
-
-//---------------------------------------------------------
-//   InspectorText
-//---------------------------------------------------------
-
-class InspectorText : public InspectorBase {
-      Q_OBJECT
-
-      UiInspectorElement e;
-      Ui::InspectorText t;
-
-   public:
-      InspectorText(QWidget* parent);
-      virtual void setElement() override;
       };
 
 //---------------------------------------------------------

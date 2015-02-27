@@ -387,7 +387,6 @@ void InspectorBase::valueChanged(int idx, bool reset)
       inspector->setInspectorEdit(true);
       checkDifferentValues(ii);
       score->endCmd();
-      mscore->endCmd();
       inspector->setInspectorEdit(false);
       postInit();
       }

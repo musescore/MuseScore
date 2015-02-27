@@ -239,6 +239,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorBase.cpp inspector/inspectorBeam.cpp masterpalette.cpp
       inspector/inspectorGroupElement.cpp dragdrop.cpp inspector/inspectorImage.cpp
       inspector/inspectorFret.cpp
+      inspector/inspectorText.cpp
       waveview.cpp helpBrowser.cpp inspector/inspectorLasso.cpp
       editelement.cpp inspector/inspectorVolta.cpp inspector/inspectorOttava.cpp enableplayforwidget.cpp
       inspector/inspectorTrill.cpp
