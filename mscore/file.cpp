@@ -531,6 +531,9 @@ void MuseScore::newFile()
                               }
                         s = ns;
                         }
+                  // clear key map
+                  for (int i = 0; i < score->nstaves(); ++i)
+                        score->staff(i)->keyList()->clear();
                   }
             foreach (Excerpt* excerpt, score->excerpts()) {
                   Score* exScore =  excerpt->partScore();
