@@ -70,19 +70,19 @@
          <item>
           <widget class="QLabel" name="museLogo">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="text">
-            <string/>
+            <string notr="true"/>
            </property>
            <property name="textFormat">
             <enum>Qt::PlainText</enum>
            </property>
            <property name="pixmap">
-            <pixmap resource="musescore.qrc">:/data/musescore_logo_full1.png</pixmap>
+            <pixmap>:/data/musescore_logo_full1.png</pixmap>
            </property>
            <property name="margin">
             <number>0</number>
