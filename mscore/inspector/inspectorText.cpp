@@ -63,10 +63,13 @@ void InspectorText::setElement()
 
 void InspectorText::resetToStyle()
       {
-      Text* text = static_cast<Text*>(inspector->element());
-      Score* score = text->score();
+      Score* score = inspector->element()->score();
       score->startCmd();
-      text->undoChangeProperty(P_ID::TEXT, text->plainText());
+      for (Element* e : inspector->el()) {
+            Text* text = static_cast<Text*>(e);
+            text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(score->textStyle(text->textStyleType())));
+            text->undoChangeProperty(P_ID::TEXT, text->plainText());
+            }
       score->endCmd();
       }
 
