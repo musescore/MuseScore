@@ -150,7 +150,10 @@ LineSegment* Glissando::createLineSegment()
 void Glissando::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       func(data, this);
-      SLine::scanElements(data, func, all);
+      // don't scan segments belonging to systems; the systems themselves will scan them
+      for (SpannerSegment* seg : segments)
+            if (!seg->parent() || seg->parent()->type() != Element::Type::SYSTEM)
+                  seg->scanElements(data, func, all);
       }
 
 //---------------------------------------------------------
