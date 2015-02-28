@@ -85,7 +85,7 @@ Lyrics::Lyrics(const Lyrics& l)
 Lyrics::~Lyrics()
       {
       if (_separator != nullptr) {
-            _separator->unchain();
+            _separator->removeUnmanaged();
             delete _separator;
             }
       }
@@ -200,7 +200,7 @@ void Lyrics::add(Element* el)
 void Lyrics::remove(Element* el)
       {
       if (el->type() == Element::Type::LYRICSLINE) {
-            _separator->unchain();
+            _separator->removeUnmanaged();
             delete _separator;
             _separator = nullptr;
             }
@@ -395,7 +395,7 @@ void Lyrics::layout1()
             }
       else
             if (_separator != nullptr) {
-                  _separator->unchain();
+                  _separator->removeUnmanaged();
                   delete _separator;
                   _separator = nullptr;
                   }
@@ -544,7 +544,7 @@ void Lyrics::endEdit()
 void Lyrics::removeFromScore()
       {
       if (_separator) {
-            _separator->unchain();
+            _separator->removeUnmanaged();
             delete _separator;
             _separator = nullptr;
             }
@@ -729,17 +729,31 @@ LineSegment* LyricsLine::createLineSegment()
       }
 
 //---------------------------------------------------------
-//   unchain
-//
-//    Remove the LyricsLine and its segments from objects which may know about them
+//   setProperty
 //---------------------------------------------------------
 
-void LyricsLine::unchain()
+bool LyricsLine::setProperty(P_ID propertyId, const QVariant& v)
       {
-      for (SpannerSegment* ss : spannerSegments())
-            if (ss->system())
-                  ss->system()->remove(ss);
-      score()->removeUnmanagedSpanner(this);
+      switch(propertyId) {
+            case P_ID::SPANNER_TICKS:
+                  {
+                  // if parent lyrics has a melisma, change its length too
+                  if (parent() && parent()->type() == Element::Type::LYRICS
+                              && static_cast<Lyrics*>(parent())->ticks() > 0) {
+                        int newTicks   = static_cast<Lyrics*>(parent())->ticks() + v.toInt() - ticks();
+                        score()->undoChangeProperty(parent(), P_ID::LYRIC_TICKS, newTicks);
+//                        static_cast<Lyrics*>(parent())->setTicks(newTicks); */
+                        }
+                  setTicks(v.toInt());
+                  }
+                  break;
+            default:
+                  if (!SLine::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
       }
 
 //=========================================================
