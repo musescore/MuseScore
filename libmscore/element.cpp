@@ -113,7 +113,6 @@ static const ElementName elementNames[] = {
       ElementName("TimeSig",              QT_TRANSLATE_NOOP("elementName", "Time Signature")),
       ElementName("Rest",                 QT_TRANSLATE_NOOP("elementName", "Rest")),
       ElementName("Breath",               QT_TRANSLATE_NOOP("elementName", "Breath")),
-      ElementName("Glissando",            QT_TRANSLATE_NOOP("elementName", "Glissando")),
       ElementName("RepeatMeasure",        QT_TRANSLATE_NOOP("elementName", "Repeat Measure")),
       ElementName("Image",                QT_TRANSLATE_NOOP("elementName", "Image")),
       ElementName("Tie",                  QT_TRANSLATE_NOOP("elementName", "Tie")),
@@ -167,6 +166,7 @@ static const ElementName elementNames[] = {
       ElementName("TextLine",             QT_TRANSLATE_NOOP("elementName", "Text Line")),
       ElementName("NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note Line")),
       ElementName("LyricsLine",           QT_TRANSLATE_NOOP("elementName", "Melisma Line")),
+      ElementName("Glissando",            QT_TRANSLATE_NOOP("elementName", "Glissando")),
       ElementName("Segment",              QT_TRANSLATE_NOOP("elementName", "Segment")),
       ElementName("System",               QT_TRANSLATE_NOOP("elementName", "System")),
       ElementName("Compound",             QT_TRANSLATE_NOOP("elementName", "Compound")),
@@ -608,7 +608,8 @@ void Element::writeProperties(Xml& xml) const
       if (_links && (_links->size() > 1) && !xml.clipboardmode)
             xml.tag("lid", _links->lid());
       if (!userOff().isNull()) {
-            if (type() == Element::Type::VOLTA_SEGMENT || isChordRest())
+            if (type() == Element::Type::VOLTA_SEGMENT
+                        || type() == Element::Type::GLISSANDO_SEGMENT || isChordRest())
                   xml.tag("offset", userOff() / spatium());
             else
                   xml.tag("pos", pos() / score()->spatium());
