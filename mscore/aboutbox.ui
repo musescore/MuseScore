@@ -82,7 +82,7 @@
             <enum>Qt::PlainText</enum>
            </property>
            <property name="pixmap">
-            <pixmap>:/data/musescore_logo_full1.png</pixmap>
+            <pixmap>:/data/musescore_logo_full.png</pixmap>
            </property>
            <property name="margin">
             <number>0</number>
