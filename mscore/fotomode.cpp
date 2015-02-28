@@ -701,7 +701,14 @@ void ScoreView::fotoModeCopy()
       printer.fill(transparent ? 0 : 0xffffffff);
       QPainter p(&printer);
       paintRect(true, p, r, mag);
+#if defined(Q_OS_WIN)
+      // workaround for apparent Qt 5.4 bug; corrupt clipboard when using setImage()
+      QPixmap px;
+      px.convertFromImage(printer);
+      QApplication::clipboard()->setPixmap(px);
+#else
       QApplication::clipboard()->setImage(printer);
+#endif
       }
 
 //---------------------------------------------------------
