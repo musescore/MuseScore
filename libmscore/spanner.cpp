@@ -484,6 +484,93 @@ void Spanner::computeEndElement()
       }
 
 //---------------------------------------------------------
+//   startElementFromSpanner
+//
+//    Given a Spanner and an end element, determines a start element suitable for the end
+//    element of a new Spanner, so that it is 'parallel' to the old one.
+//    Can be used while cloning a linked Spanner, to update the cloned spanner start and end elements
+//    (Spanner(const Spanner&) copies start and end elements from the original to the copy).
+//    NOTES:      Only spanners with Anchor::NOTE are currently supported.
+//                Going back from end to start ensures the 'other' anchor of this is already set up
+//                      (for instance, while cloning staves)
+//---------------------------------------------------------
+
+Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
+      {
+      if (sp->anchor() != Anchor::NOTE)
+            return nullptr;
+
+      Note*  oldStart   = static_cast<Note*>(sp->startElement());
+      Note*  oldEnd     = static_cast<Note*>(sp->endElement());
+      Note*  newStart   = nullptr;
+      Score* score      = newEnd->score();
+      // determine the track where to expect the 'parallel' start element
+      int   newTrack    = newEnd->track() + (oldEnd->track() - oldStart->track());
+      // look in notes linked to oldStart for a note with the
+      // same score as new score and appropriate track
+      for (ScoreElement* newEl : oldStart->linkList())
+            if (static_cast<Note*>(newEl)->score() == score
+                        && static_cast<Note*>(newEl)->track() == newTrack) {
+                  newStart = static_cast<Note*>(newEl);
+                  break;
+            }
+      return newStart;
+      }
+
+//---------------------------------------------------------
+//   endElementFromSpanner
+//
+//    Given a Spanner and a start element, determines an end element suitable for the start
+//    element of a new Spanner, so that it is 'parallel' to the old one.
+//    Can be used while cloning a linked Spanner, to update the cloned spanner start and end elements
+//    (Spanner(const Spanner&) copies start and end elements from the original to the copy).
+//    NOTES:      Only spanners with Anchor::NOTE are currently supported.
+//---------------------------------------------------------
+
+Note* Spanner::endElementFromSpanner(Spanner* sp, Element* newStart)
+      {
+      if (sp->anchor() != Anchor::NOTE)
+            return nullptr;
+
+      Note*  oldStart   = static_cast<Note*>(sp->startElement());
+      Note*  oldEnd     = static_cast<Note*>(sp->endElement());
+      Note*  newEnd     = nullptr;
+      Score* score      = newStart->score();
+      // determine the track where to expect the 'parallel' start element
+      int   newTrack    = newStart->track() + (oldEnd->track() - oldStart->track());
+      // look in notes linked to oldEnd for a note with the
+      // same score as new score and appropriate track
+      for (ScoreElement* newEl : oldEnd->linkList())
+            if (static_cast<Note*>(newEl)->score() == score
+                        && static_cast<Note*>(newEl)->track() == newTrack) {
+                  newEnd = static_cast<Note*>(newEl);
+                  break;
+            }
+      return newEnd;
+      }
+
+//---------------------------------------------------------
+//   setNoteSpan
+//
+//    Sets up all the variables congruent with given start and end note anchors.
+//---------------------------------------------------------
+
+void  Spanner::setNoteSpan(Note* startNote, Note* endNote)
+      {
+      if (_anchor != Anchor::NOTE)
+            return;
+
+      setScore(startNote->score());
+      setParent(startNote);
+      setStartElement(startNote);
+      setEndElement(endNote);
+      setTick(startNote->chord()->tick());
+      setTick2(endNote->chord()->tick());
+      setTrack(startNote->track());
+      setTrack2(endNote->track());
+      }
+
+//---------------------------------------------------------
 //   startChord
 //---------------------------------------------------------
 
