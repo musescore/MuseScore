@@ -45,9 +45,9 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>French Horn</trackName>
+      <trackName>Horn in F</trackName>
       <Instrument>
-        <longName pos="0">French Horn</longName>
+        <longName pos="0">Horn in F</longName>
         <shortName pos="0">F Hn.</shortName>
         <trackName>Horn in F</trackName>
         <minPitchP>31</minPitchP>
