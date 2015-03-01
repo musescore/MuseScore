@@ -434,5 +434,22 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
             }
       }
 
+QString msInstrName(int trackIndex)
+      {
+      const auto& opers = preferences.midiImportOperations.data()->trackOpers;
+
+      const int instrIndex = opers.msInstrIndex.value(trackIndex);
+      const auto &trackInstrList = opers.msInstrList.value(trackIndex);
+      const InstrumentTemplate *instr = (trackInstrList.empty())
+                                      ? nullptr : trackInstrList[instrIndex];
+      if (!instr)
+            return "";
+      if (!instr->trackName.isEmpty())
+            return instr->trackName;
+      if (!instr->longNames.isEmpty())
+            return instr->longNames.front().name;
+      return "";
+      }
+
 } // namespace MidiInstr
 } // namespace Ms
