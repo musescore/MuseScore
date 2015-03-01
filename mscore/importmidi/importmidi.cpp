@@ -879,18 +879,22 @@ void createMeasures(const ReducedFraction &firstTick, ReducedFraction &lastTick,
 void setTrackInfo(MidiType midiType, MTrack &mt)
       {
       auto &opers = preferences.midiImportOperations;
+
+      const int currentTrack = opers.currentTrack();
       const QString instrName = MidiInstr::instrumentName(midiType, mt.program,
                                                           mt.mtrack->drumTrack());
       if (opers.data()->processingsOfOpenedFile == 0) {
-            const int currentTrack = opers.currentTrack();
             opers.data()->trackOpers.midiInstrName.setValue(currentTrack, instrName);
                         // set channel number (from 1): number = index + 1
             opers.data()->trackOpers.channel.setValue(currentTrack, mt.mtrack->outChannel() + 1);
             }
 
+      const QString msInstrName = MidiInstr::msInstrName(currentTrack);
+      const QString trackInstrName = (msInstrName.isEmpty()) ? instrName : msInstrName;
+
       if (mt.staff->isTop()) {
             Part *part  = mt.staff->part();
-            part->setLongName(MidiInstr::concatenateWithComma(instrName, mt.name));
+            part->setLongName(MidiInstr::concatenateWithComma(trackInstrName, mt.name));
             part->setPartName(part->longName());
             part->setMidiChannel(mt.mtrack->outChannel());
             int bank = 0;
@@ -899,8 +903,8 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
             part->setMidiProgram(mt.program & 0x7f, bank);  // only GM
             }
 
-      if (mt.name.isEmpty() && !instrName.isEmpty())
-            mt.name = instrName;
+      if (mt.name.isEmpty() && !trackInstrName.isEmpty())
+            mt.name = trackInstrName;
       }
 
 void createTimeSignatures(Score *score)
