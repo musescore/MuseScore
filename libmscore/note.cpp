@@ -1087,6 +1087,7 @@ void Note::read(XmlReader& e)
                         sp->setTrack2(placeholder->track2());
                         sp->setTick(e.tick());                          // make sure tick2 will be correct
                         sp->setTick2(placeholder->tick2());
+                        static_cast<Note*>(placeholder->endElement())->addSpannerBack(sp);
                         // remove no longer needed place-holder before reading the new spanner,
                         // as reading it also adds it to XML reader list of spanners,
                         // which would overwrite the place-holder
