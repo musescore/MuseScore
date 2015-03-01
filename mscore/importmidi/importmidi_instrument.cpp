@@ -162,6 +162,7 @@ const InstrumentTemplate* findInstrument(const QString &groupId, const QString &
 const InstrumentTemplate* findClosestInstrument(const MTrack &track)
       {
       int maxLessProgram = -1;
+      const InstrumentTemplate* closestTemplate = nullptr;
 
       for (const InstrumentGroup *group: instrumentGroups) {
             for (const InstrumentTemplate *templ: group->instrumentTemplates) {
@@ -174,12 +175,13 @@ const InstrumentTemplate* findClosestInstrument(const MTrack &track)
                         if (channel.program < track.program
                                     && channel.program > maxLessProgram) {
                               maxLessProgram = channel.program;
-                              return templ;
+                              closestTemplate = templ;
+                              break;
                               }
                         }
                   }
             }
-      return nullptr;
+      return closestTemplate;
       }
 
 std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &track)
