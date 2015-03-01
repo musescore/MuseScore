@@ -46,9 +46,9 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Steel Gtr.</trackName>
+      <trackName>Acoustic Guitar</trackName>
       <Instrument>
-        <longName pos="0">Steel Gtr.</longName>
+        <longName pos="0">Acoustic Guitar</longName>
         <shortName pos="0">Guit.</shortName>
         <trackName>Acoustic Guitar</trackName>
         <minPitchP>40</minPitchP>
