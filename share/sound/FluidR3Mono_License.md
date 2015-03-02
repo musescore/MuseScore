@@ -1,11 +1,11 @@
 FluidR3Mono_GM.sf3
 ---
 
-Current version: 2.9
+Current version: 2.103 (28th February 2015)
 
 Original Stereo version by Frank Wen Copyright © 2000-2002
 
-Mono version by Michael Cowgill Copyright © 2014
+Mono version by Michael Cowgill Copyright © 2014-15
 
 This Mono version of FluidR3 GM is released under the MIT license as described in COPYING
 
@@ -59,7 +59,7 @@ Who knows, maybe I'll kick start this project again? ;)
 COPYING
 ---
 
-Mono version:  Copyright (c) 2014 Michael Cowgill 
+Mono version:  Copyright (c) 2014-15 Michael Cowgill 
 Copyright (c) 2000-2002, 2008 Frank Wen <getfrank@gmail.com>
 
 Permission is hereby granted, free of charge, to any person
