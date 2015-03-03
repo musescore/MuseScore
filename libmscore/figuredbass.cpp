@@ -168,7 +168,8 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
                         else
                               return -1;              // but no other combination is acceptable
                         }
-                  *dest = Modifier::FLAT;
+                  else
+                        *dest = Modifier::FLAT;
                   break;
             case 'h':
                   if(*dest != Modifier::NONE)           // cannot combine with any other accidental
@@ -182,7 +183,8 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
                         else
                               return -1;              // but no other combination is acceptable
                         }
-                  *dest = Modifier::SHARP;
+                  else
+                        *dest = Modifier::SHARP;
                   break;
             case '+':
                   // accept '+' as both a prefix and a suffix for harmony notation
