@@ -57,9 +57,9 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Church Organ, Manual</trackName>
+      <trackName>Organ, Manual</trackName>
       <Instrument>
-        <longName pos="0">Church Organ, Manual</longName>
+        <longName pos="0">Organ, Manual</longName>
         <shortName pos="0">Org.</shortName>
         <trackName>Organ</trackName>
         <instrumentId>keyboard.organ</instrumentId>

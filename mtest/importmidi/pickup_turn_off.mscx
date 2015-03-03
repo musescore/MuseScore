@@ -45,9 +45,9 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Choir Aahs, Staff</trackName>
+      <trackName>Soprano, Staff</trackName>
       <Instrument>
-        <longName pos="0">Choir Aahs, Staff</longName>
+        <longName pos="0">Soprano, Staff</longName>
         <shortName pos="0">S.</shortName>
         <trackName>Soprano</trackName>
         <minPitchP>60</minPitchP>

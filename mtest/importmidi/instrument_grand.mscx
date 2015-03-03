@@ -52,9 +52,9 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Syn.Strings 1</trackName>
+      <trackName>String Synthesizer</trackName>
       <Instrument>
-        <longName pos="0">Syn.Strings 1</longName>
+        <longName pos="0">String Synthesizer</longName>
         <shortName pos="0">Synth.</shortName>
         <trackName>String Synthesizer</trackName>
         <minPitchP>21</minPitchP>
@@ -111,9 +111,9 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Grand Piano</trackName>
+      <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Grand Piano</longName>
+        <longName pos="0">Piano</longName>
         <shortName pos="0">Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>

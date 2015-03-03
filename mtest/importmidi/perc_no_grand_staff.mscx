@@ -49,9 +49,9 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Percussion</trackName>
+      <trackName>Tambourine</trackName>
       <Instrument>
-        <longName pos="0">Percussion</longName>
+        <longName pos="0">Tambourine</longName>
         <shortName pos="0">Tamb.</shortName>
         <trackName>Tambourine</trackName>
         <instrumentId>drum.tambourine</instrumentId>
@@ -107,9 +107,9 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Percussion</trackName>
+      <trackName>Drumset</trackName>
       <Instrument>
-        <longName pos="0">Percussion</longName>
+        <longName pos="0">Drumset</longName>
         <shortName pos="0">Drs.</shortName>
         <trackName>Drumset</trackName>
         <instrumentId>drum.group.set</instrumentId>

@@ -48,9 +48,9 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Percussion, drum</trackName>
+      <trackName>Drumset, drum</trackName>
       <Instrument>
-        <longName pos="0">Percussion, drum</longName>
+        <longName pos="0">Drumset, drum</longName>
         <shortName pos="0">Drs.</shortName>
         <trackName>Drumset</trackName>
         <instrumentId>drum.group.set</instrumentId>
