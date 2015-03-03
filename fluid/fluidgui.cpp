@@ -18,7 +18,7 @@ using namespace Ms;
 SfListDialog::SfListDialog(QWidget* parent)
    : QDialog(parent)
       {
-      setWindowTitle(tr("Soundfont Files"));
+      setWindowTitle(tr("SoundFont Files"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       list = new QListWidget;
       QVBoxLayout* layout = new QVBoxLayout;
@@ -196,14 +196,14 @@ void FluidGui::soundFontAddClicked()
       if (sl.contains(sfPath)) {
             QMessageBox::warning(this,
             tr("MuseScore"),
-            tr("Soundfont %1 already loaded").arg(sfPath));
+            tr("SoundFont %1 already loaded").arg(sfPath));
             }
       else {
             bool loaded = fluid()->addSoundFont(sfPath);
             if (!loaded) {
                   QMessageBox::warning(this,
                   tr("MuseScore"),
-                  tr("cannot load soundfont %1").arg(sfPath));
+                  tr("cannot load SoundFont %1").arg(sfPath));
                   }
             else {
                   soundFonts->insertItem(0, sfName);
