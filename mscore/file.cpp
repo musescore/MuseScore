@@ -572,25 +572,25 @@ void MuseScore::newFile()
                               Measure* m = _score->firstMeasure();
                               Segment* s = m->getSegment(ts, 0);
                               s->add(ts);
-                              }
-                        Part* part = staff->part();
-                        if (!part->instr()->useDrumset()) {
-                              //
-                              // transpose key
-                              //
-                              KeySigEvent nKey = ks;
-                              if (!nKey.custom() && part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
-                                    int diff = -part->instr()->transpose().chromatic;
-                                    nKey.setKey(transposeKey(nKey.key(), diff));
-                                    }
-                              // do not create empty, invisible keysig
-                              if (nKey.custom() || nKey.key() != Key::C) {
-                                    staff->setKey(0, nKey);
-                                    KeySig* keysig = new KeySig(score);
-                                    keysig->setTrack(staffIdx * VOICES);
-                                    keysig->setKeySigEvent(nKey);
-                                    Segment* s = measure->getSegment(keysig, 0);
-                                    s->add(keysig);
+                              Part* part = staff->part();
+                              if (!part->instr()->useDrumset()) {
+                                    //
+                                    // transpose key
+                                    //
+                                    KeySigEvent nKey = ks;
+                                    if (!nKey.custom() && part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
+                                          int diff = -part->instr()->transpose().chromatic;
+                                          nKey.setKey(transposeKey(nKey.key(), diff));
+                                          }
+                                    // do not create empty, invisible keysig
+                                    if (nKey.custom() || nKey.key() != Key::C) {
+                                          staff->setKey(0, nKey);
+                                          KeySig* keysig = new KeySig(score);
+                                          keysig->setTrack(staffIdx * VOICES);
+                                          keysig->setKeySigEvent(nKey);
+                                          Segment* s = measure->getSegment(keysig, 0);
+                                          s->add(keysig);
+                                          }
                                     }
                               }
                         if (measure->timesig() != measure->len()) {
