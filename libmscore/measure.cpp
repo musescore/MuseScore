@@ -1986,7 +1986,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Slur *sl = new Slur(score());
                   sl->setTick(e.tick());
                   sl->read(e);
-                  score()->addSpanner(sl);
                   //
                   // check if we already saw "endSpanner"
                   //
@@ -1994,7 +1993,9 @@ void Measure::read(XmlReader& e, int staffIdx)
                   const SpannerValues* sv = e.spannerValues(id);
                   if (sv) {
                         sl->setTick2(sv->tick2);
+                        sl->setTrack2(sv->track2);
                         }
+                  score()->addSpanner(sl);
                   }
             else if (tag == "HairPin"
                || tag == "Pedal"

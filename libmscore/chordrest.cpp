@@ -346,14 +346,24 @@ bool ChordRest::readProperties(XmlReader& e)
             if (id == 0)
                   id = e.intAttribute("number");                  // obsolete
             Spanner* spanner = e.findSpanner(id);
-            if (!spanner)
-                  qDebug("ChordRest::read(): Slur id %d not found", id);
+            QString atype(e.attribute("type"));
+
+            if (!spanner) {
+                  if (atype == "stop") {
+                        SpannerValues sv;
+                        sv.spannerId = id;
+                        sv.track2    = e.track();
+                        sv.tick2     = e.tick();
+                        e.addSpannerValues(sv);
+                        }
+                  else if (atype == "start")
+                        qDebug("spanner: start without spanner");
+                  }
             else {
-                  QString atype(e.attribute("type"));
                   if (atype == "start") {
+                        if (spanner->ticks() > 0 && spanner->tick() == 0) // stop has been read first
+                              spanner->setTicks(spanner->ticks() - e.tick());
                         spanner->setTick(e.tick());
-                        if (spanner->ticks() > 0) // stop has been read first, ticks is tick2 - (-1)
-                        	spanner->setTick2(spanner->ticks() - 1);
                         spanner->setTrack(track());
                         if (spanner->type() == Element::Type::SLUR)
                               spanner->setStartElement(this);
