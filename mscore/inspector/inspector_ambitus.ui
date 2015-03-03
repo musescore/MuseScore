@@ -44,7 +44,7 @@
       <string/>
      </property>
      <property name="text">
-      <string>Part Range</string>
+      <string>Ambitus</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
