@@ -212,7 +212,7 @@ bool BBFile::read(const QString& name)
                   beat += a[idx++];
             else {
                   int root = val % 18;
-                  int bass = (root - 1 + val / 18) % 12 + 1;
+                  int bass = (root - 1 + val / 18) % 18 + 1;
                   if (root == bass)
                         bass = 0;
                   int ibeat = beat * (timesigZ() / timesigN());
@@ -478,7 +478,8 @@ Score::FileError importBB(Score* score, const QString& name)
       //---------------------------------------------------
 
       static const int table[] = {
-            14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19
+          //C  Db, D,  Eb,  E, F, Gb, G,  Ab, A,  Bb, B,  C#, D#, F#  G#  A#
+            14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19, 21, 23, 20, 22, 24
             };
       foreach(const BBChord& c, bb.chords()) {
             int tick = c.beat * MScore::division;
