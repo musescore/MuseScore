@@ -175,9 +175,6 @@ void Score::write(Xml& xml, bool selectionOnly)
             xml.etag();
             }
 
-      foreach(const Part* part, _parts)
-            part->write(xml);
-
       xml.curTrack = 0;
       int staffStart;
       int staffEnd;
@@ -188,9 +185,6 @@ void Score::write(Xml& xml, bool selectionOnly)
             staffStart   = _selection.staffStart();
             staffEnd     = _selection.staffEnd();
             measureStart = _selection.startSegment()->measure();
-            // include title frames:
-            while (measureStart->prev() && !measureStart->prev()->sectionBreak())
-                  measureStart = measureStart->prev();
             if (_selection.endSegment())
                   measureEnd   = _selection.endSegment()->measure()->next();
             else
@@ -203,10 +197,16 @@ void Score::write(Xml& xml, bool selectionOnly)
             measureEnd   = 0;
             }
 
+      foreach(const Part* part, _parts) {
+            if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves())))
+                  part->write(xml);
+            }
+
+      xml.curTrack = 0;
       xml.trackDiff = -staffStart * VOICES;
       if (measureStart) {
             for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
-                  xml.stag(QString("Staff id=\"%1\"").arg(staffIdx + 1));
+                  xml.stag(QString("Staff id=\"%1\"").arg(staffIdx + 1 - staffStart));
                   xml.curTick  = measureStart->tick();
                   xml.tickDiff = xml.curTick;
                   xml.curTrack = staffIdx * VOICES;
