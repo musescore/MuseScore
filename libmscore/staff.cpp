@@ -886,8 +886,17 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 
       setStaffType(pst);
       setDefaultClefType(t->clefType(cidx));
-//      if (pst->group() == ArticulationShowIn::PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
-//            setLines(t->staffLines[cidx]);      // use number of lines from instr. template
+      }
+
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void Staff::init(const Staff* s)
+      {
+      setStaffType(s->staffType());
+      setDefaultClefType(s->defaultClefType());
+      setSmall(s->small());
       }
 
 //---------------------------------------------------------

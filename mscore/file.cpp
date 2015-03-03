@@ -506,18 +506,21 @@ void MuseScore::newFile()
             // create instruments from template
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
-                  part->setInstrument(*tpart->instr(0), 0);
+
+                  Instrument* i = tpart->instr(0);
+
+                  part->setInstrument(*i, 0);
+                  part->setPartName(tpart->partName());
+
                   for (Staff* tstaff : *tpart->staves()) {
                         Staff* staff = new Staff(score);
                         staff->setPart(part);
-                        staff->setStaffType(tstaff->staffType());
-                        staff->setDefaultClefType(tstaff->defaultClefType());
-                        staff->setSmall(tstaff->small());
+                        staff->init(tstaff);
                         if (tstaff->linkedStaves() && !part->staves()->isEmpty()) {
                               Staff* linkedStaff = part->staves()->back();
                               staff->linkTo(linkedStaff);
                               }
-                        part->staves()->push_back(staff);
+                        part->insertStaff(staff, -1);
                         score->staves().append(staff);
                         }
                   score->appendPart(part);
@@ -534,6 +537,7 @@ void MuseScore::newFile()
                         }
                   excerpts.append(x);
                   }
+            delete tscore;
             }
       else {
             score = new Score(MScore::defaultStyle());
