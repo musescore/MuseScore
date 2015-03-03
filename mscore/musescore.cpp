@@ -565,17 +565,17 @@ MuseScore::MuseScore()
       cpitchTools->setObjectName("pitch-tools");
       cpitchTools->addWidget(new AccessibleToolButton( cpitchTools, getAction("concert-pitch")));
 
-      QToolBar* foto = addToolBar(tr("Screenshot Mode"));
+      QToolBar* foto = addToolBar(tr("Image Capture"));
       foto->setObjectName("foto-tools");
       foto->addWidget(new AccessibleToolButton(foto, getAction("fotomode")));
 
       addToolBarBreak();
 
       //-------------------------------
-      //    Note Entry Tool Bar
+      //    Note Input Tool Bar
       //-------------------------------
 
-      entryTools = addToolBar(tr("Note Entry"));
+      entryTools = addToolBar(tr("Note Input"));
       entryTools->setObjectName("entry-tools");
 
       static const char* sl1[] = {
@@ -2534,11 +2534,11 @@ void MuseScore::changeState(ScoreState val)
                   _modeText->hide();
                   break;
             case STATE_NOTE_ENTRY_PITCHED:
-                  showModeText(tr("Note entry mode"));
+                  showModeText(tr("Note input mode"));
                   break;
             case STATE_NOTE_ENTRY_DRUM:
                   {
-                  showModeText(tr("Drum entry mode"));
+                  showModeText(tr("Drum input mode"));
                   InputState& is = cs->inputState();
                   showDrumTools(is.drumset(), cs->staff(is.track() / VOICES));
                   if (_drumTools)
@@ -2546,7 +2546,7 @@ void MuseScore::changeState(ScoreState val)
                   }
                   break;
             case STATE_NOTE_ENTRY_TAB:
-                  showModeText(tr("TAB entry mode"));
+                  showModeText(tr("TAB input mode"));
                   break;
             case STATE_EDIT:
                   showModeText(tr("Edit mode"));
@@ -2564,7 +2564,7 @@ void MuseScore::changeState(ScoreState val)
                   showModeText(tr("Play"));
                   break;
             case STATE_FOTO:
-                  showModeText(tr("Screenshot mode"));
+                  showModeText(tr("Image capture mode"));
                   updateInspector();
                   break;
             case STATE_LOCK:
