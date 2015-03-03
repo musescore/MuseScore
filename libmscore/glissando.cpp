@@ -106,8 +106,57 @@ void GlissandoSegment::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   Glissando
+//   getProperty
 //---------------------------------------------------------
+
+QVariant GlissandoSegment::getProperty(P_ID id) const
+      {
+      switch (id) {
+            // route properties of the whole Glissando element to it
+            case P_ID::GLISS_TYPE:
+            case P_ID::GLISS_TEXT:
+            case P_ID::GLISS_SHOW_TEXT:
+                  return glissando()->getProperty(id);
+            default:
+                  return LineSegment::getProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool GlissandoSegment::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_ID::GLISS_TYPE:
+            case P_ID::GLISS_TEXT:
+            case P_ID::GLISS_SHOW_TEXT:
+                  return glissando()->setProperty(id, v);
+            default:
+                  return LineSegment::setProperty(id, v);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant GlissandoSegment::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+      case P_ID::GLISS_TYPE:
+      case P_ID::GLISS_TEXT:
+      case P_ID::GLISS_SHOW_TEXT:
+                  return glissando()->propertyDefault(id);
+            default:
+                  return LineSegment::propertyDefault(id);
+            }
+      }
+
+//=========================================================
+//   Glissando
+//=========================================================
 
 Glissando::Glissando(Score* s)
   : SLine(s)

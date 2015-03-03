@@ -208,7 +208,6 @@ class Element : public QObject, public ScoreElement {
             TIMESIG,
             REST,
             BREATH,
-            GLISSANDO,
 
             REPEAT_MEASURE,
             IMAGE,
@@ -264,6 +263,7 @@ class Element : public QObject, public ScoreElement {
             TEXTLINE,
             NOTELINE,
             LYRICSLINE,
+            GLISSANDO,
             SEGMENT,
             SYSTEM,
             COMPOUND,
