@@ -117,7 +117,7 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
             painter.setRenderHint(QPainter::Antialiasing);
             painter.setRenderHint(QPainter::TextAntialiasing);
             painter.drawPixmap(0, 0, pixmap);
-            painter.setPen(QPen(QColor(0,0,0,128), 1));
+            painter.setPen(QPen(QColor(0, 0, 0, 128), 1));
             painter.setBrush(Qt::white);
             if (fi.baseName() == "00-Blank" || fi.baseName() == "Create_New_Score") {
                   qreal round = 8.0 * qApp->devicePixelRatio();
@@ -135,10 +135,17 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
       ScoreItem* item = new ScoreItem(si);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignBottom);
 
-      if (fi.baseName() == "00-Blank")
+      QFont f = item->font();
+      f.setPointSize(f.pointSize() - 2.0);
+      f.setBold(_boldTitle);
+      if (fi.baseName() == "00-Blank") {
             item->setText(tr("Choose Instruments"));
-      else if (fi.baseName() == "Create_New_Score")
+            f.setBold(true);
+            }
+      else if (fi.baseName() == "Create_New_Score") {
             item->setText(tr("Create New Score"));
+            f.setBold(true);
+            }
       else {
             QString s(si.completeBaseName());
             if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
@@ -146,10 +153,6 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
             s = s.replace('_', ' ');
             item->setText(s);
             }
-
-      QFont f = item->font();
-      f.setPointSize(f.pointSize() - 2.0);
-      f.setBold(_boldTitle);
       item->setFont(f);
       item->setTextAlignment(Qt::AlignHCenter | Qt::AlignTop);
       item->setIcon(QIcon(pm));
