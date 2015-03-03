@@ -803,7 +803,8 @@ TextBlock TextBlock::split(int column)
                   }
             }
       TextFragment tf("");
-      tf.format = _text.last().format;
+      if (_text.size() > 0)
+            tf.format = _text.last().format;
       tl._text.append(tf);
       return tl;
       }
