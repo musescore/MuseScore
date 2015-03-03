@@ -595,7 +595,7 @@ MuseScore::MuseScore()
                   entryTools->addAction(getAction(s));
             }
 
-      static const char* vbsh { "QToolButton:checked { color: white;}" };
+      static const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white;}" };
 
       for (int i = 0; i < VOICES; ++i) {
             QToolButton* tb = new QToolButton(this);
