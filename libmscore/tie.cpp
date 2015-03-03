@@ -155,7 +155,11 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
 
 void Tie::slurPos(SlurPos* sp)
       {
-      qreal hw   = startNote()->headWidth();
+      bool useTablature = staff() != nullptr && staff()->isTabStaff();
+      StaffType* stt = nullptr;
+      if (useTablature)
+            stt = staff()->staffType();
+      qreal hw   = startNote()->tabHeadWidth(stt);    // if stt == 0, defaults to headWidth()
       qreal __up = _up ? -1.0 : 1.0;
       qreal _spatium = spatium();
 
@@ -201,6 +205,7 @@ void Tie::slurPos(SlurPos* sp)
             qDebug("Tie::slurPos no system2");
             sp->system2 = sp->system1;
             }
+      hw = endNote()->tabHeadWidth(stt);
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
             xo = endNote()->x() - hw * 0.12;
       else if (shortStart)
