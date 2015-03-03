@@ -361,8 +361,8 @@ bool ChordRest::readProperties(XmlReader& e)
                   }
             else {
                   if (atype == "start") {
-                        if (spanner->ticks() > 0 && spanner->tick() == 0) // stop has been read first
-                              spanner->setTicks(spanner->ticks() - e.tick());
+                        if (spanner->ticks() > 0 && spanner->tick() == -1) // stop has been read first
+                              spanner->setTicks(spanner->ticks() - e.tick() - 1);
                         spanner->setTick(e.tick());
                         spanner->setTrack(track());
                         if (spanner->type() == Element::Type::SLUR)
