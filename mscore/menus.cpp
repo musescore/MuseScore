@@ -1133,7 +1133,7 @@ void MuseScore::setAdvancedPalette()
       //-----------------------------------
 
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Symbols"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Fretboard Diagrams"));
       sp->setGrid(42, 45);
       sp->setDrawGrid(true);
 
