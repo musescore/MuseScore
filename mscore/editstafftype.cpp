@@ -27,7 +27,7 @@ const char* g_groupNames[STAFF_GROUP_MAX] = {
       QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF"),
       QT_TRANSLATE_NOOP("staff group header name", "PERCUSSION STAFF"),
       QT_TRANSLATE_NOOP("staff group header name", "TABLATURE STAFF")
-};
+      };
 
 //---------------------------------------------------------
 //   EditStaffType

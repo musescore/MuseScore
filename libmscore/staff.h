@@ -134,6 +134,7 @@ class Staff : public QObject, public ScoreElement {
       ~Staff();
       void init(const InstrumentTemplate*, const StaffType *staffType, int);
       void initFromStaffType(const StaffType* staffType);
+      void init(const Staff*);
 
       bool isTop() const;
       QString partName() const;
