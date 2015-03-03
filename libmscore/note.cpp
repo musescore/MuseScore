@@ -1054,16 +1054,46 @@ void Note::read(XmlReader& e)
                               }
                         e.removeSpanner(sp);
                         }
-                  else
-                        // TODO : manage endSpanner from one staff to a previous staff
-                        // (like from piano bass staff to treble staff), where endSpanner is
-                        // found before the spanner itself
-                        qDebug("Note::read(): cannot find spanner %d", id);
+                  else {
+                        // End of a spanner whose start element will appear later;
+                        // may happen for cross-staff spanner from a lower to a higher staff
+                        // (for instance a glissando from bass to treble staff of piano).
+                        // Create a place-holder spanner with end data
+                        // (a TextLine is used only because both Spanner or SLine are abstract,
+                        // the actual class does not matter, as long as it is derived from Spanner)
+                        int id = e.intAttribute("id", -1);
+                        if (id != -1) {
+                              Spanner* placeholder = new TextLine(score());
+                              placeholder->setAnchor(Spanner::Anchor::NOTE);
+                              placeholder->setEndElement(this);
+                              placeholder->setTrack2(track());
+                              placeholder->setTick(0);
+                              placeholder->setTick2(e.tick());
+                              e.addSpanner(id, placeholder);
+                              }
+                        }
                   e.readNext();
                   }
             else if (tag == "TextLine"
                   || tag == "Glissando") {
                   Spanner* sp = static_cast<Spanner*>(Element::name2Element(tag, score()));
+                  // check this is not a lower-to-higher cross-staff spanner we already got
+                  int id = e.intAttribute("id");
+                  Spanner* placeholder = e.findSpanner(id);
+                  if (placeholder) {
+                        // if it is, fill end data from place-holder
+                        sp->setAnchor(Spanner::Anchor::NOTE);           // make sure we can set a Note as end element
+                        sp->setEndElement(placeholder->endElement());
+                        sp->setTrack2(placeholder->track2());
+                        sp->setTick(e.tick());                          // make sure tick2 will be correct
+                        sp->setTick2(placeholder->tick2());
+                        static_cast<Note*>(placeholder->endElement())->addSpannerBack(sp);
+                        // remove no longer needed place-holder before reading the new spanner,
+                        // as reading it also adds it to XML reader list of spanners,
+                        // which would overwrite the place-holder
+                        e.removeSpanner(placeholder);
+                        delete placeholder;
+                        }
                   sp->setTrack(track());
                   sp->read(e);
                   sp->setAnchor(Spanner::Anchor::NOTE);
