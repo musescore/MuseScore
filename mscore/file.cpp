@@ -493,72 +493,50 @@ void MuseScore::newFile()
       Score* score = new Score(MScore::defaultStyle());
       QString tp = newWizard->templatePath();
 
+      QList<Excerpt*> excerpts;
       if (!newWizard->emptyScore()) {
-            Score::FileError rv = Ms::readScore(score, tp, false);
+            Score* tscore = new Score(MScore::defaultStyle());
+            Score::FileError rv = Ms::readScore(tscore, tp, false);
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
                   delete score;
+                  delete tscore;
                   return;
                   }
-
-            int tmeasures = 0;
-            for (Measure* mb = score->firstMeasure(); mb; mb = mb->nextMeasure()) {
-                  if (mb->type() == Element::Type::MEASURE)
-                        ++tmeasures;
-                  }
-
-            //
-            // remove all notes & rests
-            //
-            score->deselectAll();
-            if (score->firstMeasure()) {
-                  for (Segment* s = score->firstMeasure()->first(); s;) {
-                        Segment* ns = s->next1();
-                        if (s->segmentType() == Segment::Type::ChordRest && s->tick() == 0) {
-                              int tracks = s->elist().size();
-                              for (int track = 0; track < tracks; ++track) {
-                                    delete s->element(track);
-                                    s->setElement(track, 0);
-                                    }
+            // create instruments from template
+            for (Part* tpart : tscore->parts()) {
+                  Part* part = new Part(score);
+                  part->setInstrument(*tpart->instr(0), 0);
+                  for (Staff* tstaff : *tpart->staves()) {
+                        Staff* staff = new Staff(score);
+                        staff->setPart(part);
+                        staff->setStaffType(tstaff->staffType());
+                        staff->setDefaultClefType(tstaff->defaultClefType());
+                        staff->setSmall(tstaff->small());
+                        if (tstaff->linkedStaves() && !part->staves()->isEmpty()) {
+                              Staff* linkedStaff = part->staves()->back();
+                              staff->linkTo(linkedStaff);
                               }
-                        else if (
-                           (s->segmentType() == Segment::Type::ChordRest)
-                           || (s->segmentType() == Segment::Type::KeySig)
-                           || (s->segmentType() == Segment::Type::Breath)
-                           ) {
-                              s->measure()->remove(s);
-                              delete s;
-                              }
-                        s = ns;
+                        part->staves()->push_back(staff);
+                        score->staves().append(staff);
                         }
+                  score->appendPart(part);
                   }
-            foreach (Excerpt* excerpt, score->excerpts()) {
-                  Score* exScore =  excerpt->partScore();
-                  if (exScore->firstMeasure()) {
-                        for (Segment* s = exScore->firstMeasure()->first(); s;) {
-                              Segment* ns = s->next1();
-                              if (s->segmentType() == Segment::Type::ChordRest && s->tick() == 0) {
-                                    int tracks = s->elist().size();
-                                    for (int track = 0; track < tracks; ++track) {
-                                          delete s->element(track);
-                                          s->setElement(track, 0);
-                                          }
-                                    }
-                              s->measure()->remove(s);
-                              if (s->measure()->segments()->size() == 0){
-                                    exScore->measures()->remove(s->measure(), s->measure());
-                                    delete s->measure();
-                                    }
-                              delete s;
-                              s = ns;
-                              }
+            for (Excerpt* ex : tscore->excerpts()) {
+                  Excerpt* x = new Excerpt(score);
+                  x->setTitle(ex->title());
+                  for (Part* p : ex->parts()) {
+                        int pidx = tscore->parts().indexOf(p);
+                        if (pidx == -1)
+                              qDebug("newFile: part not found");
+                        else
+                              x->parts().append(score->parts()[pidx]);
                         }
+                  excerpts.append(x);
                   }
-            score->setImportedFilePath("");
             }
-      else {
+      else
             newWizard->createInstruments(score);
-            }
       score->setCreated(true);
       score->fileInfo()->setFile(createDefaultName());
 
@@ -569,54 +547,32 @@ void MuseScore::newFile()
             }
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
-      Measure* pm = score->firstMeasure();
 
-      Measure* nm = 0;
       for (int i = 0; i < measures; ++i) {
-            if (pm) {
-                  nm  = pm;
-                  pm = pm->nextMeasure();
-                  }
-            else {
-                  nm = new Measure(score);
-                  score->measures()->add(nm);
-                  }
-            nm->setTimesig(timesig);
-            nm->setLen(timesig);
-            if (pickupMeasure) {
-                  if (i == 0) {
-                        nm->setIrregular(true);        // dont count pickup measure
-                        nm->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
+            int tick = timesig.ticks() * i;
+            for (Score* _score : score->scoreList()) {
+                  Rest* rest = 0;
+                  Measure* measure = new Measure(_score);
+                  measure->setTimesig(timesig);
+                  measure->setLen(timesig);
+                  measure->setTick(tick);
+
+                  if (pickupMeasure && tick == 0) {
+                        measure->setIrregular(true);        // dont count pickup measure
+                        measure->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
                         }
-                  /*else if (i == (measures - 1)) {
-                        // last measure is shorter
-                        m->setLen(timesig - Fraction(pickupTimesigZ, pickupTimesigN));
-                        }*/
-                  }
-            nm->setEndBarLineType(i == (measures - 1) ? BarLineType::END : BarLineType::NORMAL, i != (measures - 1));
-            }
-      //delete unused measures if any
-      if (nm->nextMeasure())
-            score->undoRemoveMeasures(nm->nextMeasure(), score->lastMeasure());
+                  _score->measures()->add(measure);
 
-      int tick = 0;
-      for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
-            mb->setTick(tick);
-            if (mb->type() != Element::Type::MEASURE)
-                  continue;
-            Measure* measure = static_cast<Measure*>(mb);
-            int ticks = measure->ticks();
-
-            QList<int> sl = score->uniqueStaves();
-
-            for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-                  Staff* staff = score->staff(staffIdx);
-                  if (tick == 0) {
-                        TimeSig* ts = new TimeSig(score);
-                        ts->setTrack(staffIdx * VOICES);
-                        ts->setSig(timesig, timesigType);
-                        Segment* s = measure->getSegment(ts, 0);
-                        s->add(ts);
+                  for (Staff* staff : _score->staves()) {
+                        int staffIdx = staff->idx();
+                        if (tick == 0) {
+                              TimeSig* ts = new TimeSig(_score);
+                              ts->setTrack(staffIdx * VOICES);
+                              ts->setSig(timesig, timesigType);
+                              Measure* m = _score->firstMeasure();
+                              Segment* s = m->getSegment(ts, 0);
+                              s->add(ts);
+                              }
                         Part* part = staff->part();
                         if (!part->instr()->useDrumset()) {
                               //
@@ -637,74 +593,39 @@ void MuseScore::newFile()
                                     s->add(keysig);
                                     }
                               }
-                        }
-                  if (staff->primaryStaff()) {
                         if (measure->timesig() != measure->len()) {
                               QList<TDuration> dList = toDurationList(measure->len(), false);
                               if (!dList.isEmpty()) {
-                                    int tick = measure->tick();
+                                    int ltick = tick;
                                     foreach (TDuration d, dList) {
-                                          Rest* rest = 0;
-                                          for (Staff* s : staff->staffList()) {
-                                                if (rest)
-                                                      rest = static_cast<Rest*>(rest->linkedClone());
-                                                else
-                                                      rest = new Rest(score, d);
-                                                rest->setDuration(d.fraction());
-                                                rest->setTrack(s->idx() * VOICES);
-                                                Segment* seg = measure->getSegment(rest, tick);
-                                                seg->add(rest);
-                                                }
-                                          tick += rest->actualTicks();
+                                          if (rest)
+                                                rest = static_cast<Rest*>(rest->linkedClone());
+                                          else
+                                                rest = new Rest(score, d);
+                                          rest->setScore(_score);
+                                          rest->setDuration(d.fraction());
+                                          rest->setTrack(staffIdx * VOICES);
+                                          Segment* seg = measure->getSegment(rest, ltick);
+                                          seg->add(rest);
+                                          ltick += rest->actualTicks();
                                           }
                                     }
                               }
                         else {
-                              Rest* rest = 0;
-                              for (Staff* s : staff->staffList()) {
-                                    if (rest)
-                                          rest = static_cast<Rest*>(rest->linkedClone());
-                                    else
-                                          rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
-                                    rest->setDuration(measure->len());
-                                    rest->setTrack(s->idx() * VOICES);
-                                    Segment* seg = measure->getSegment(rest, tick);
-                                    seg->add(rest);
-                                    }
-                              }
-                        }
-                  }
-            tick += ticks;
-            }
-      score->fixTicks();
-#if 0
-      //
-      // ceate linked staves
-      //
-      QMap<Score*, QList<int>> scoremap;
-      foreach (Staff* staff, score->staves()) {
-            if (!staff->linkedStaves())
-                  continue;
-            foreach(Staff* lstaff, staff->linkedStaves()->staves()) {
-                  if (staff != lstaff) {
-                        if (staff->score() == lstaff->score())
-                              cloneStaff(staff, lstaff);
-                        else {
-                              //keep reference of staves in parts to clone them later
-                              QList<int> srcStaves = scoremap.value(lstaff->score());
-                              srcStaves.append(staff->score()->staffIdx(staff));
-                              scoremap.insert(lstaff->score(), srcStaves);
+                              if (rest)
+                                    rest = static_cast<Rest*>(rest->linkedClone());
+                              else
+                                    rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
+                              rest->setScore(_score);
+                              rest->setDuration(measure->len());
+                              rest->setTrack(staffIdx * VOICES);
+                              Segment* seg = measure->getSegment(rest, tick);
+                              seg->add(rest);
                               }
                         }
                   }
             }
-       // clone staves for excerpts
-       auto it = scoremap.constBegin();
-       while (it != scoremap.constEnd()) {
-            cloneStaves(score, it.key(), it.value());
-            ++it;
-            }
-#endif
+      score->lastMeasure()->setEndBarLineType(BarLineType::END, true);
 
       //
       // select first rest
@@ -782,6 +703,16 @@ void MuseScore::newFile()
       score->rebuildMidiMapping();
       score->doLayout();
       setCurrentScoreView(appendScore(score));
+
+      for (Excerpt* x : excerpts) {
+            Score* xs = new Score(score);
+            xs->setName(x->title());
+            xs->style()->set(StyleIdx::createMultiMeasureRests, true);
+            x->setPartScore(xs);
+            score->excerpts().append(x);
+            createExcerpt(x);
+            score->setExcerptsChanged(true);
+            }
       }
 
 //---------------------------------------------------------

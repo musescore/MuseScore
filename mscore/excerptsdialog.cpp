@@ -292,7 +292,7 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
 
       score->startCmd();
       score->undo(new AddExcerpt(nscore));
-      Ms::createExcerpt(e);
+      createExcerpt(e);
       score->endCmd();
 
       partList->setEnabled(false);
