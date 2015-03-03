@@ -695,7 +695,7 @@ void Xml::writeXml(const QString& name, QString s)
 //   spannerValues
 //---------------------------------------------------------
 
-const SpannerValues* XmlReader::spannerValues(int id)
+const SpannerValues* XmlReader::spannerValues(int id) const
       {
       for (const SpannerValues& v : _spannerValues) {
             if (v.spannerId == id)

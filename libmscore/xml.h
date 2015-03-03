@@ -121,7 +121,7 @@ class XmlReader : public XmlStreamReader {
       int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
 
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
-      const SpannerValues* spannerValues(int id);
+      const SpannerValues* spannerValues(int id) const;
       QList<StaffType>& staffType() { return _staffTypes; }
       Interval transpose() const { return _transpose; }
       void setTransposeChromatic(int v) { _transpose.chromatic = v; }
