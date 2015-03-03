@@ -58,7 +58,7 @@ Startcenter::Startcenter()
       if (enableExperimental)
             QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
       QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
-      recentPage->setBoldTitle(true);
+      recentPage->setBoldTitle(false);
       updateRecentScores();
       }
 
