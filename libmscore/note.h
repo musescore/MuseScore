@@ -51,6 +51,8 @@ static const int MAX_DOTS = 3;
 
 class NoteHead : public Symbol {
       Q_OBJECT
+      Q_ENUMS(Group)
+      Q_ENUMS(Type)
 
    public:
       enum class Group : signed char {
@@ -80,6 +82,7 @@ class NoteHead : public Symbol {
             HEAD_TYPES
             };
 
+      NoteHead() : Symbol(0) {}
       NoteHead(Score* s) : Symbol(s) {}
       NoteHead &operator=(const NoteHead&) = delete;
       virtual NoteHead* clone() const override    { return new NoteHead(*this); }

@@ -321,6 +321,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
             qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
             qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
+            qmlRegisterType<NoteHead>   ("MuseScore", 1, 0, "NoteHead");
             qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
             qmlRegisterType<Text>       ("MuseScore", 1, 0, "MText");
             qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
