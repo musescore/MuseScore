@@ -272,7 +272,11 @@ void Glissando::layout()
 
       // FINAL SYSTEM-INITIAL NOTE
       // if the last gliss. segment attaches to a system-initial note, some extra width has to be added
-      if (cr2->segment()->measure() == cr2->segment()->system()->firstMeasure() && cr2->rtick() == 0)
+      if (cr2->segment()->measure() == cr2->segment()->system()->firstMeasure() && cr2->rtick() == 0
+                  // but ignore graces after, as they are not the first note of the system,
+                  // even if their segment is the first segment of the system
+                  && !(cr2->noteType() == NoteType::GRACE8_AFTER
+                        || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER))
       {
             segm2->rxpos() -= GLISS_STARTOFSYSTEM_WIDTH * _spatium;
             segm2->rxpos2()+= GLISS_STARTOFSYSTEM_WIDTH * _spatium;
@@ -522,12 +526,13 @@ void Glissando::undoSetShowText(bool f)
 //---------------------------------------------------------
 //   STATIC FUNCTIONS: guessInitialNote
 //
-//    Used while reading old scores to determine (guess!) the glissando initial note
-//    from its final chord. Returns the top note of previous chord of the same instrument,
-//    preferring the chord in the same track as chord, if it exists.
+//    Used while reading old scores (either 1.x or transitional 2.0) to determine (guess!)
+//    the glissando initial note from its final chord. Returns the top note of previous chord
+//    of the same instrument, preferring the chord in the same track as chord, if it exists.
 //
-//    Can be called when the final chord and/or its segment do not exist yet in the score
-//    (i.e. while reading the chord itself).
+//    CANNOT be called if the final chord and/or its segment do not exist yet in the score
+//    (i.e. while reading the chord itself): for this reason, Score::read114() calls it
+//    during Score::connectTies(), once everything have been read in.
 //
 //    Parameter:  chord: the chord this glissando ends into
 //    Returns:    the top note in a suitable previous chord or nullptr if none found.
@@ -535,6 +540,43 @@ void Glissando::undoSetShowText(bool f)
 
 Note* Glissando::guessInitialNote(Chord* chord)
       {
+      switch (chord->noteType()) {
+            case NoteType::INVALID:
+                  return nullptr;
+            // for grace notes before, previous chord is previous chord of parent chord
+            case NoteType::ACCIACCATURA:
+            case NoteType::APPOGGIATURA:
+            case NoteType::GRACE4:
+            case NoteType::GRACE16:
+            case NoteType::GRACE32:
+                  // move unto parent chord and proceed to standard case
+                  if (chord->parent() && chord->parent()->type() == Element::Type::CHORD)
+                        chord = static_cast<Chord*>(chord->parent());
+                  else
+                        return nullptr;
+                  break;
+            // for grace notes after, return top note of parent chord
+            case NoteType::GRACE8_AFTER:
+            case NoteType::GRACE16_AFTER:
+            case NoteType::GRACE32_AFTER:
+                  if (chord->parent() && chord->parent()->type() == Element::Type::CHORD)
+                        return static_cast<Chord*>(chord->parent())->upNote();
+                  else                          // no parent or parent is not a chord?
+                        return nullptr;
+            case NoteType::NORMAL:
+                  // if chord has grace notes before, the last one is the previous note
+                  QList<Chord*>graces = chord->graceNotesBefore();
+                  if (graces.size() > 0)
+                        return graces.last()->upNote();
+                  break;                        // else process to standard case
+            }
+
+      // standard case (NORMAL or grace before chord)
+
+      // if parent not a segment, can't locate a target note
+      if (chord->parent()->type() != Element::Type::SEGMENT)
+            return nullptr;
+
       int         chordTrack  = chord->track();
       Segment*    segm        = chord->segment();
       Part*       part        = chord->staff()->part();
@@ -543,14 +585,25 @@ Note* Glissando::guessInitialNote(Chord* chord)
       while (segm) {
             // if previous segment is a ChordRest segment
             if (segm->segmentType() == Segment::Type::ChordRest) {
-                  // look for a Chord in the same track and returns its top note, if found
+                  Chord* target = nullptr;
+                  // look for a Chord in the same track
                   if (segm->element(chordTrack) && segm->element(chordTrack)->type() == Element::Type::CHORD)
-                        return static_cast<Chord*>(segm->element(chordTrack))->upNote();
-                  // if no chord, look for other chords in the same instrument
-                  for (Element* currChord : segm->elist())
-                        if (currChord != nullptr && currChord->type() == Element::Type::CHORD
-                                    && static_cast<Chord*>(currChord)->staff()->part() == part)
-                              return static_cast<Chord*>(currChord)->upNote();
+                        target = static_cast<Chord*>(segm->element(chordTrack));
+                  else              // if no same track, look for other chords in the same instrument
+                        for (Element* currChord : segm->elist())
+                              if (currChord != nullptr && currChord->type() == Element::Type::CHORD
+                                          && static_cast<Chord*>(currChord)->staff()->part() == part) {
+                                    target = static_cast<Chord*>(currChord);
+                                    break;
+                                    }
+                  // if we found a target previous chord
+                  if (target) {
+                        // if chord has grace notes after, the last one is the previous note
+                        QList<Chord*>graces = target->graceNotesAfter();
+                        if (graces.size() > 0)
+                              return graces.last()->upNote();
+                        return target->upNote();      // if no grace after, return top note
+                        }
                   }
             segm = segm->prev1();
             }
@@ -571,6 +624,43 @@ Note* Glissando::guessInitialNote(Chord* chord)
 
 Note* Glissando::guessFinalNote(Chord* chord)
       {
+      switch (chord->noteType()) {
+            case NoteType::INVALID:
+                  return nullptr;
+            // for grace notes before, return top note of parent chord
+            case NoteType::ACCIACCATURA:
+            case NoteType::APPOGGIATURA:
+            case NoteType::GRACE4:
+            case NoteType::GRACE16:
+            case NoteType::GRACE32:
+                  if (chord->parent() && chord->parent()->type() == Element::Type::CHORD)
+                        return static_cast<Chord*>(chord->parent())->upNote();
+                  else                          // no parent or parent is not a chord?
+                        return nullptr;
+            // for grace notes after, next chord is next chord of parent chord
+            case NoteType::GRACE8_AFTER:
+            case NoteType::GRACE16_AFTER:
+            case NoteType::GRACE32_AFTER:
+                  // move unto parent chord and proceed to standard case
+                  if (chord->parent() && chord->parent()->type() == Element::Type::CHORD)
+                        chord = static_cast<Chord*>(chord->parent());
+                  else
+                        return nullptr;
+                  break;
+            case NoteType::NORMAL:
+                  // if chord has grace notes after, the first one is the next note
+                  QList<Chord*>graces = chord->graceNotesAfter();
+                  if (graces.size() > 0)
+                        return graces.first()->upNote();
+                  break;
+            }
+
+      // standard case (NORMAL or grace after chord)
+
+      // if parent not a segment, can't locate a target note
+      if (chord->parent()->type() != Element::Type::SEGMENT)
+            return nullptr;
+
       int         chordTrack  = chord->track();
       Segment*    segm        = chord->segment();
       Part*       part        = chord->staff()->part();
@@ -579,14 +669,27 @@ Note* Glissando::guessFinalNote(Chord* chord)
       while (segm) {
             // if next segment is a ChordRest segment
             if (segm->segmentType() == Segment::Type::ChordRest) {
-                  // look for a Chord in the same track and returns its top note, if found
+                  Chord* target = nullptr;
+
+                  // look for a Chord in the same track
                   if (segm->element(chordTrack) && segm->element(chordTrack)->type() == Element::Type::CHORD)
-                        return static_cast<Chord*>(segm->element(chordTrack))->upNote();
-                  // if no chord, look for other chords in the same instrument
-                  for (Element* currChord : segm->elist())
-                        if (currChord != nullptr && currChord->type() == Element::Type::CHORD
-                                    && static_cast<Chord*>(currChord)->staff()->part() == part)
-                              return static_cast<Chord*>(currChord)->upNote();
+                        target = static_cast<Chord*>(segm->element(chordTrack));
+                  else              // if no same track, look for other chords in the same instrument
+                        for (Element* currChord : segm->elist())
+                              if (currChord != nullptr && currChord->type() == Element::Type::CHORD
+                                          && static_cast<Chord*>(currChord)->staff()->part() == part) {
+                                    target = static_cast<Chord*>(currChord);
+                                    break;
+                                    }
+
+                  // if we found a target next chord
+                  if (target) {
+                        // if chord has grace notes before, the first one is the next note
+                        QList<Chord*>graces = target->graceNotesBefore();
+                        if (graces.size() > 0)
+                              return graces.first()->upNote();
+                        return target->upNote();      // if no grace before, return top note
+                        }
                   }
             segm = segm->next1();
             }
