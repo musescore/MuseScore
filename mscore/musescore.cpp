@@ -595,8 +595,12 @@ MuseScore::MuseScore()
                   entryTools->addAction(getAction(s));
             }
 
+      static const char* vbsh { "QToolButton:checked { color: white;}" };
+
       for (int i = 0; i < VOICES; ++i) {
             QToolButton* tb = new QToolButton(this);
+            if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
+                  tb->setStyleSheet(vbsh);
             tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
             QPalette p(tb->palette());
             p.setColor(QPalette::Base, MScore::selectColor[i]);
