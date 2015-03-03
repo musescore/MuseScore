@@ -490,7 +490,7 @@ void MuseScore::newFile()
       if (pickupMeasure)
             measures += 1;
 
-      Score* score = new Score(MScore::defaultStyle());
+      Score* score;
       QString tp = newWizard->templatePath();
 
       QList<Excerpt*> excerpts;
@@ -499,10 +499,10 @@ void MuseScore::newFile()
             Score::FileError rv = Ms::readScore(tscore, tp, false);
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
-                  delete score;
                   delete tscore;
                   return;
                   }
+            score = new Score(tscore->style());
             // create instruments from template
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
@@ -535,8 +535,10 @@ void MuseScore::newFile()
                   excerpts.append(x);
                   }
             }
-      else
+      else {
+            score = new Score(MScore::defaultStyle());
             newWizard->createInstruments(score);
+            }
       score->setCreated(true);
       score->fileInfo()->setFile(createDefaultName());
 
@@ -612,7 +614,7 @@ void MuseScore::newFile()
                                     }
                               }
                         else {
-                              if (rest)
+                              if (rest && staff->linkedStaves())
                                     rest = static_cast<Rest*>(rest->linkedClone());
                               else
                                     rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
