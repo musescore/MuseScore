@@ -43,6 +43,10 @@ class GlissandoSegment : public LineSegment {
       virtual GlissandoSegment* clone() const override      { return new GlissandoSegment(*this); }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
+
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 //---------------------------------------------------------
