@@ -14,6 +14,7 @@ class MTrack;
 namespace MidiInstr {
 
 QString instrumentName(MidiType type, int program, bool isDrumTrack);
+QString msInstrName(int trackIndex);
 QString concatenateWithComma(const QString &left, const QString &right);
 bool isGrandStaff(const MTrack &t1, const MTrack &t2);
 void setGrandStaffProgram(QList<MTrack> &tracks);

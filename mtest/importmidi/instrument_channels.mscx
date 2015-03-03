@@ -45,9 +45,9 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Strings 1</trackName>
+      <trackName>String Section</trackName>
       <Instrument>
-        <longName pos="0">Strings 1</longName>
+        <longName pos="0">String Section</longName>
         <shortName pos="0">Str.</shortName>
         <trackName>String Section</trackName>
         <minPitchP>55</minPitchP>
@@ -99,9 +99,9 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Trumpet</trackName>
+      <trackName>B♭ Cornet</trackName>
       <Instrument>
-        <longName pos="0">Trumpet</longName>
+        <longName pos="0">B♭ Cornet</longName>
         <shortName pos="0">B♭ Cnt.</shortName>
         <trackName>B♭ Cornet</trackName>
         <minPitchP>52</minPitchP>
