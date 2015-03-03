@@ -138,7 +138,7 @@ enum fluid_midi_control_change {
       };
 
 /**
- * Generator (effect) numbers (Soundfont 2.01 specifications section 8.1.3)
+ * Generator (effect) numbers (SoundFont 2.01 specifications section 8.1.3)
  */
 enum fluid_gen_type {
   GEN_STARTADDROFS,		/**< Sample start address offset (0-32767) */

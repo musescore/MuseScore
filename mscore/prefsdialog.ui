@@ -473,7 +473,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>Soundfont folders:</string>
+             <string>SoundFont folders:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -486,10 +486,10 @@
           <item row="4" column="1">
            <widget class="QLineEdit" name="sfPath">
             <property name="accessibleName">
-             <string>Soundfont folders</string>
+             <string>SoundFont folders</string>
             </property>
             <property name="accessibleDescription">
-             <string>Insert path to soundfont folders</string>
+             <string>Insert path to SoundFont folders</string>
             </property>
            </widget>
           </item>
@@ -564,10 +564,10 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="accessibleName">
-             <string>Soundfont folders</string>
+             <string>SoundFont folders</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a dialog for configuring the soundfont folders</string>
+             <string>Opens a dialog for configuring the SoundFont folders</string>
             </property>
             <property name="text">
              <string/>
@@ -1158,16 +1158,16 @@
      </widget>
      <widget class="QWidget" name="tabNoteEntry">
       <property name="accessibleName">
-       <string>Note Entry Tab</string>
+       <string>Note Input Tab</string>
       </property>
       <attribute name="title">
-       <string>Note Entry</string>
+       <string>Note Input</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QGroupBox" name="groupBox_13">
          <property name="title">
-          <string>Note Entry</string>
+          <string>Note Input</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -1817,7 +1817,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_52">
             <property name="text">
-             <string>Note entry</string>
+             <string>Note input</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1833,7 +1833,7 @@
              <string>Is active</string>
             </property>
             <property name="accessibleName">
-             <string>Note entry is active</string>
+             <string>Note input is active</string>
             </property>
             <property name="text">
              <string notr="true">...</string>
@@ -1849,7 +1849,7 @@
              <string>Record</string>
             </property>
             <property name="accessibleName">
-             <string>Note entry record</string>
+             <string>Note input record</string>
             </property>
             <property name="text">
              <string notr="true">...</string>

@@ -1905,8 +1905,8 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
 void importSoundfont(QString name)
       {
       QFileInfo info(name);
-      int ret = QMessageBox::question(0, QWidget::tr("Install Soundfont"),
-            QWidget::tr("Do you want to install the soundfont %1?").arg(info.fileName()),
+      int ret = QMessageBox::question(0, QWidget::tr("Install SoundFont"),
+            QWidget::tr("Do you want to install the SoundFont %1?").arg(info.fileName()),
              QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
       if (ret == QMessageBox::Yes) {
             QStringList pl = preferences.sfPath.split(";");
@@ -1930,7 +1930,7 @@ void importSoundfont(QString name)
                         }
                   QFile orig(name);
                   if (orig.copy(destFilePath)) {
-                        QMessageBox::information(0, QWidget::tr("Soundfont installed"), QWidget::tr("Soundfont installed. Please go to View > Synthesizer to add it and View > Mixer to choose an instrument sound."));
+                        QMessageBox::information(0, QWidget::tr("SoundFont installed"), QWidget::tr("SoundFont installed. Please go to View > Synthesizer to add it and View > Mixer to choose an instrument sound."));
                         }
                   }
             }

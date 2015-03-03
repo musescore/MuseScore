@@ -1677,7 +1677,7 @@ void PreferenceDialog::selectImagesDirectory()
 void PreferenceDialog::changeSoundfontPaths()
       {
       PathListDialog pld(this);
-      pld.setWindowTitle(tr("Soundfont Folders"));
+      pld.setWindowTitle(tr("SoundFont Folders"));
       pld.setPath(sfPath->text());
       if(pld.exec())
             sfPath->setText(pld.path());
