@@ -1762,7 +1762,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             return false;
             }
       if (!rv && !MScore::noGui)
-            QMessageBox::critical(this, tr("MuseScore:"), tr("Cannot write into ") + fn);
+            QMessageBox::critical(this, tr("MuseScore:"), tr("Cannot write into %1").arg(fn));
       return rv;
       }
 
