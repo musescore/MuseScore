@@ -1489,7 +1489,7 @@ void MuseScore::printFile()
 //    return true on success
 //---------------------------------------------------------
 
-bool MuseScore::exportFile()
+void MuseScore::exportFile()
       {
       QStringList fl;
       fl.append(tr("PDF File (*.pdf)"));
@@ -1537,17 +1537,15 @@ bool MuseScore::exportFile()
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
-            return false;
+            return;
 
       QFileInfo fi(fn);
       lastSaveCopyDirectory = fi.absolutePath();
 
-      QString ext = fi.suffix();
-      if (ext.isEmpty()) {
-            QMessageBox::critical(this, tr("MuseScore: Save As"), tr("cannot determine file type"));
-            return false;
-            }
-      return saveAs(cs, true, fn, ext);
+      if (fi.suffix().isEmpty())
+            QMessageBox::critical(this, tr("MuseScore: Export"), tr("cannot determine file type"));
+      else
+            saveAs(cs, true, fn, fi.suffix());
       }
 
 //---------------------------------------------------------
@@ -1763,6 +1761,8 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
                qPrintable(ext));
             return false;
             }
+      if (!rv && !MScore::noGui)
+            QMessageBox::critical(this, tr("MuseScore:"), tr("cannot write into ") + fn);
       return rv;
       }
 
@@ -1802,7 +1802,10 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
-      QPainter p(&printerDev);
+
+      QPainter p;
+      if (!p.begin(&printerDev))
+            return false;
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
       double mag = printerDev.logicalDpiX() / MScore::DPI;
@@ -1855,7 +1858,11 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
-      QPainter p(&printerDev);
+
+      QPainter p;
+      if (!p.begin(&printerDev))
+            return false;
+
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
       double mag = printerDev.logicalDpiX() / MScore::DPI;
@@ -2096,12 +2103,12 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
       else
             mscore->lastSaveDirectory = fi.absolutePath();
 
-      QString ext = fi.suffix();
-      if (ext.isEmpty()) {
-            if(!MScore::noGui) QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("cannot determine file type"));
+      if (fi.suffix().isEmpty()) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("cannot determine file type"));
             return false;
             }
-      return saveAs(cs, saveCopy, fn, ext);
+      return saveAs(cs, saveCopy, fn, fi.suffix());
       }
 
 //---------------------------------------------------------

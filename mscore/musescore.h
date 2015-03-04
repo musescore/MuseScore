@@ -594,7 +594,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       virtual void endCmd() override;
       void printFile();
-      bool exportFile();
+      void exportFile();
       bool exportParts();
       bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext);
       bool savePdf(const QString& saveName);
