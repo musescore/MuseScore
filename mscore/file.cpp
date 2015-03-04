@@ -507,9 +507,9 @@ void MuseScore::newFile()
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
 
-                  Instrument* i = tpart->instr(0);
+                  Instrument* i = tpart->instr();
 
-                  part->setInstrument(*i, 0);
+                  part->setInstrument(*i);
                   part->setPartName(tpart->partName());
 
                   for (Staff* tstaff : *tpart->staves()) {
