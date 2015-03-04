@@ -235,7 +235,10 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
       int staffIdx;
       Segment* segment;
       MeasureBase* mb = pos2measure(pos, &staffIdx, 0, &segment, 0);
-      if (mb == 0 || mb->type() != Element::Type::MEASURE) {
+      Staff* st = staff(staffIdx);
+      // ignore if we do not have a measure or when droping an ottava onto a TAB staff
+      if (mb == 0 || mb->type() != Element::Type::MEASURE
+                  || (st->isTabStaff() && spanner->type() == Element::Type::OTTAVA) ) {
             qDebug("cmdAddSpanner: cannot put object here");
             delete spanner;
             return;
@@ -253,7 +256,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             int tick2 = qMin(segment->measure()->tick() + segment->measure()->ticks(), lastTick);
             spanner->setTick2(tick2);
             }
-      else {      // Anchor::MEASURE
+      else {      // Anchor::MEASURE, Anchor::CHORD, Anchor::NOTE
             Measure* m = static_cast<Measure*>(mb);
             QRectF b(m->canvasBoundingRect());
 
