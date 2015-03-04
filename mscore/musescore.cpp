@@ -126,7 +126,7 @@ QString iconPath;
 
 bool converterMode = false;
 bool externalIcons = false;
-static bool pluginMode = false;
+bool pluginMode = false;
 static bool startWithNewScore = false;
 double converterDpi = 0;
 double guiScaling = 1.0;
@@ -4654,7 +4654,7 @@ int main(int argc, char* av[])
       mscoreGlobalShare = getSharePath();
       iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
-      if (!converterMode) {
+      if (!converterMode && !pluginMode) {
             if (!argv.isEmpty()) {
                   int ok = true;
                   foreach(QString message, argv) {

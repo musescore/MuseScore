@@ -27,6 +27,7 @@ PluginManager::PluginManager(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
       connect(clearPluginShortcut, SIGNAL(clicked()), SLOT(clearPluginShortcutClicked()));
       readSettings();
