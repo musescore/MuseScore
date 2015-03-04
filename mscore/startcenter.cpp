@@ -310,9 +310,17 @@ QSize MyWebView::sizeHint() const
 CookieJar::CookieJar(QString path, QObject *parent)
     : QNetworkCookieJar(parent)
       {
-      file = path;
-      QFile cookieFile(this->file);
+      _file = path;
+      load();
+      }
 
+//---------------------------------------------------------
+//   save
+//---------------------------------------------------------
+
+void CookieJar::load()
+      {
+      QFile cookieFile(_file);
       if (cookieFile.exists() && cookieFile.open(QIODevice::ReadOnly)) {
             QList<QNetworkCookie> list;
             QByteArray line;
@@ -324,35 +332,49 @@ CookieJar::CookieJar(QString path, QObject *parent)
             }
       else {
             if (MScore::debugMode)
-                  qDebug() << "Can't open "<< this->file << " to read cookies";
+                  qDebug() << "Can't open "<<  _file << " to read cookies";
             }
       }
 
 //---------------------------------------------------------
-//   ~CookieJar
+//   setCookiesFromUrl
 //---------------------------------------------------------
 
-CookieJar::~CookieJar()
+bool CookieJar::setCookiesFromUrl(const QList<QNetworkCookie>& cookieList, const QUrl& url)
       {
-      QList <QNetworkCookie> cookieList;
-      cookieList = allCookies();
+      bool res = QNetworkCookieJar::setCookiesFromUrl(cookieList, url);
+      save();
+      return res;
+      }
 
-      QFile file(this->file);
+//---------------------------------------------------------
+//   save
+//---------------------------------------------------------
 
+void CookieJar::save()
+      {
+      QList <QNetworkCookie> cookieList = allCookies();
+      QDateTime now = QDateTime::currentDateTime();
+      for (int i = cookieList.count() - 1; i >= 0; --i) {
+            if (cookieList.at(i).isSessionCookie() || cookieList.at(i).expirationDate() < now)
+                  cookieList.removeAt(i);
+            }
+
+      QFile file(_file);
       if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             if (MScore::debugMode)
-                  qDebug() << "Can't open "<< this->file << " to save cookies";
+                  qDebug() << "Can't open "<< _file << " to save cookies";
             return;
             }
 
       QTextStream out(&file);
       for(int i = 0 ; i < cookieList.size() ; i++) {
-                //get cookie data
-                QNetworkCookie cookie = cookieList.at(i);
-                if (!cookie.isSessionCookie()) {
-                      QByteArray line =  cookieList.at(i).toRawForm(QNetworkCookie::Full);
-                      out << line << "\n";
-                      }
+            //get cookie data
+            QNetworkCookie cookie = cookieList.at(i);
+            if (!cookie.isSessionCookie()) {
+                  QByteArray line =  cookie.toRawForm(QNetworkCookie::Full);
+                  out << line << "\n";
+                  }
             }
       file.close();
       }
