@@ -28,6 +28,7 @@ PluginManager::PluginManager(QWidget* parent)
       {
       setupUi(this);
       connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
+      connect(clearPluginShortcut, SIGNAL(clicked()), SLOT(clearPluginShortcutClicked()));
       readSettings();
       }
 
@@ -52,7 +53,10 @@ void PluginManager::init()
       int n = preferences.pluginList.size();
       pluginList->clear();
       for (int i = 0; i < n; ++i) {
-            const PluginDescription& d = preferences.pluginList[i];
+            PluginDescription& d = preferences.pluginList[i];
+            Shortcut* s = &d.shortcut;
+            localShortcuts[s->key()] = new Shortcut(*s);
+
             QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).baseName(),  pluginList);
             item->setFlags(item->flags() | Qt::ItemIsEnabled);
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
@@ -163,6 +167,28 @@ void PluginManager::definePluginShortcutClicked()
       QAction* action = s->action();
       action->setShortcuts(s->keys());
       mscore->addAction(action);
+
+      pluginShortcut->setText(s->keysToString());
+      prefs.dirty = true;
+      }
+
+//---------------------------------------------------------
+//   clearPluginShortcutClicked
+//---------------------------------------------------------
+
+void PluginManager::clearPluginShortcutClicked()
+      {
+      QListWidgetItem* item = pluginList->currentItem();
+      if (!item)
+            return;
+      int idx = item->data(Qt::UserRole).toInt();
+      PluginDescription* pd = &prefs.pluginList[idx];
+      Shortcut* s = &pd->shortcut;
+      s->clear();
+
+      QAction* action = s->action();
+      action->setShortcuts(s->keys());
+//      mscore->addAction(action);
 
       pluginShortcut->setText(s->keysToString());
       prefs.dirty = true;

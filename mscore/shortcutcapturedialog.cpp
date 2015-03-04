@@ -18,6 +18,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+
 #include "shortcutcapturedialog.h"
 #include "musescore.h"
 #include "shortcut.h"
@@ -48,7 +49,6 @@ ShortcutCaptureDialog::ShortcutCaptureDialog(Shortcut* _s, QMap<QString, Shortcu
 
       nshrtLabel->installEventFilter(this);
       }
-
 
 //---------------------------------------------------------
 //   addClicked
@@ -114,12 +114,11 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
 
       k += e->modifiers();
       // remove shift-modifier for keys that don't need it: letters and special keys
-      if((k & Qt::ShiftModifier) && ((e->key() < 0x41) || (e->key() > 0x5a) || (e->key() >= 0x01000000)))
-      {
-      qDebug() << k;
+      if ((k & Qt::ShiftModifier) && ((e->key() < 0x41) || (e->key() > 0x5a) || (e->key() >= 0x01000000))) {
+            qDebug() << k;
       	k -= Qt::ShiftModifier;
-      qDebug() << k;
-      }
+            qDebug() << k;
+            }
 
       switch(key.count()) {
             case 0: key = QKeySequence(k); break;
@@ -138,8 +137,8 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
       foreach (Shortcut* ss, localShortcuts) {
             if (s == ss)
                   continue;
-            if (! (s->state() & ss->state()))    // no conflict if states do not overlap
-                  continue;
+//            if (!(s->state() & ss->state()))    // no conflict if states do not overlap
+//                  continue;
             foreach(const QKeySequence& ks, ss->keys()) {
                   if (ks == key) {
                         msgString = tr("Shortcut conflicts with ") + ss->descr();
