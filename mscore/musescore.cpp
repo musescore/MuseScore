@@ -357,7 +357,7 @@ MuseScore::MuseScore()
                   }
             }
 
-      if (!converterMode) {
+      if (!converterMode && !pluginMode) {
             _loginManager = new LoginManager(this);
 
             // initialize help engine
@@ -4771,7 +4771,7 @@ int main(int argc, char* av[])
             qApp->processEvents();
             }
 
-      if (!converterMode) {
+      if (!converterMode && !pluginMode) {
             struct PaletteItem {
                   QPalette::ColorRole role;
                   const char* name;
