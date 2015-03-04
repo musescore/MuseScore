@@ -75,10 +75,7 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void printShortcutsClicked();
 
       void languageChanged(int);
-
       void changeSoundfontPaths();
-      void changeSfzPaths();
-      
       void updateTranslationClicked();
 
    signals:
