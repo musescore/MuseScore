@@ -2508,13 +2508,13 @@ void ScoreView::normalPaste()
       PasteStatus status = _score->cmdPaste(ms,this);
       switch (status) {
             case PasteStatus::NO_DEST:
-                  errorMessage->showMessage(tr("no destination to paste"), "pasteDestination");
+                  errorMessage->showMessage(tr("No destination to paste"), "pasteDestination");
                   break;
             case PasteStatus::DEST_TUPLET:
-                  errorMessage->showMessage(tr("cannot paste into tuplet"), "pasteTuplet");
+                  errorMessage->showMessage(tr("Cannot paste into tuplet"), "pasteTuplet");
                   break;
             case PasteStatus::TUPLET_CROSSES_BAR:
-                  errorMessage->showMessage(tr("tuplet cannot cross barlines"), "tupletCrossBar");
+                  errorMessage->showMessage(tr("Tuplet cannot cross barlines"), "tupletCrossBar");
                   _score->undo()->current()->unwind();
                   break;
             default:

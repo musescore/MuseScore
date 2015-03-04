@@ -214,7 +214,7 @@ void ZerberusGui::onSoundFontLoaded()
       if (!loaded) {
             QMessageBox::warning(this,
             tr("MuseScore"),
-            tr("cannot load SoundFont %1").arg(_loadedSfPath));
+            tr("Cannot load SoundFont %1").arg(_loadedSfPath));
             }
       else {
             QListWidgetItem* item = new QListWidgetItem;
