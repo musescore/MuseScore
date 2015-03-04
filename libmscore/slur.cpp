@@ -600,8 +600,9 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
       QRectF bbox = path.boundingRect();
 
       // adjust position to avoid staff line if necessary
+      Staff* st = staff();
       bool reverseAdjust = false;
-      if (slurTie()->type() == Element::Type::TIE) {
+      if (slurTie()->type() == Element::Type::TIE && st && !st->isTabStaff()) {
             // multinote chords with ties need special handling
             // otherwise, adjusted tie might crowd an unadjusted tie unnecessarily
             Tie* t = static_cast<Tie*>(slurTie());
@@ -609,7 +610,7 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
             Chord* sc = sn ? sn->chord() : 0;
             // normally, the adjustment moves ties according to their direction (eg, up if tie is up)
             // but we will reverse this for notes within chords when appropriate
-            // for two-note chords, it looks better to have ties on notes with spaces outside the lines
+            // for two-note chords, it looks better to have notes on spaces tied outside the lines
             if (sc) {
                   int notes = sc->notes().size();
                   bool onLine = !(sn->line() & 1);
@@ -619,9 +620,8 @@ void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
             }
       qreal sp = spatium();
       qreal minDistance = 0.5;
-      Staff* st = staff();
       autoAdjustOffset = QPointF();
-      if (bbox.height() < minDistance * 2 * sp && st) {
+      if (bbox.height() < minDistance * 2 * sp && st && !st->isTabStaff()) {
             // slur/tie is fairly flat
             bool up = slurTie()->up();
             qreal ld = st->lineDistance() * sp;
