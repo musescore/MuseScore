@@ -12,8 +12,9 @@
 
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
-//#include "libmscore/barline.h"
-//#include "libmscore/measure.h"
+#include "libmscore/chord.h"
+#include "libmscore/glissando.h"
+#include "libmscore/measure.h"
 #include "libmscore/score.h"
 //#include "libmscore/system.h"
 //#include "libmscore/undo.h"
@@ -33,6 +34,7 @@ class TestSpanners : public QObject, public MTest
    private slots:
       void initTestCase();
       void spanners01();            // cross-staff glissando from lower to higher staff
+      void spanners02();            // glissando from/to grace notes
       };
 
 //---------------------------------------------------------
@@ -56,9 +58,84 @@ void TestSpanners::initTestCase()
 void TestSpanners::spanners01()
       {
       Score* score = readScore(DIR + "glissando-crossstaff01.mscx");
+      QVERIFY(score);
       score->doLayout();
 
       QVERIFY(saveCompareScore(score, "glissando-crsossstaff01.mscx", DIR + "glissando-crossstaff01-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners02
+///   Loads a score with before- and after-grace notes and adds several glissandi from/to them.
+//---------------------------------------------------------
+
+void TestSpanners::spanners02()
+      {
+      DropData    dropData;
+      Glissando*  gliss;
+
+      Score* score = readScore(DIR + "glissando-graces01.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // GLISSANDO FROM MAIN NOTE TO AFTER-GRACE
+      // go to top note of first chord
+      Measure*    msr   = score->firstMeasure();
+      QVERIFY(msr);
+      Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
+      QVERIFY(seg);
+      Chord*      chord = static_cast<Chord*>(seg->element(0));
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      Note*       note  = chord->upNote();
+      QVERIFY(note);
+      // drop a glissando on note
+      gliss             = new Glissando(score); // create a new element each time, as drop() will eventually delete it
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      // GLISSANDO FROM AFTER-GRACE TO BEFORE-GRACE OF NEXT CHORD
+      // go to last after-grace of chord and drop a glissando on it
+      Chord*      grace = chord->graceNotesAfter().last();
+      QVERIFY(grace && grace->type() == Element::Type::CHORD);
+      note              = grace->upNote();
+      QVERIFY(note);
+      gliss             = new Glissando(score);
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      // GLISSANDO FROM MAIN NOTE TO BEFORE-GRACE OF NEXT CHORD
+      // go to next chord
+      seg               = seg->nextCR(0);
+      QVERIFY(seg);
+      chord             = static_cast<Chord*>(seg->element(0));
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      note              = chord->upNote();
+      QVERIFY(note);
+      gliss             = new Glissando(score);
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      // GLISSANDO FROM BEFORE-GRACE TO MAIN NOTE
+      // go to next chord
+      seg               = seg->nextCR(0);
+      QVERIFY(seg);
+      chord             = static_cast<Chord*>(seg->element(0));
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      // go to its last before-grace note
+      grace             = chord->graceNotesBefore().last();
+      QVERIFY(grace && grace->type() == Element::Type::CHORD);
+      note              = grace->upNote();
+      QVERIFY(note);
+      gliss             = new Glissando(score);
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      QVERIFY(saveCompareScore(score, "glissando-graces01.mscx", DIR + "glissando-graces01-ref.mscx"));
       delete score;
       }
 
