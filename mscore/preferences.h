@@ -164,7 +164,6 @@ struct Preferences {
       QString myPluginsPath;
 
       QString sfPath;
-      QString sfzPath;
 
       bool nativeDialogs;
 

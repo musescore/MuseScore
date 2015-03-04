@@ -134,7 +134,7 @@ QFileInfoList Zerberus::sfzFiles()
       {
       QFileInfoList l;
 
-      QString path = Ms::preferences.sfzPath;
+      QString path = Ms::preferences.sfPath;
       QStringList pl = path.split(";");
       foreach (const QString& s, pl) {
             QString ss(s);

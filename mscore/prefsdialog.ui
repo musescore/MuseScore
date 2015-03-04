@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>880</width>
-    <height>592</height>
+    <width>712</width>
+    <height>538</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -293,7 +293,7 @@
        <item row="2" column="0" rowspan="3">
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
-          <string>Paths</string>
+          <string>Folders</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -317,10 +317,20 @@
           <property name="verticalSpacing">
            <number>0</number>
           </property>
-          <item row="6" column="0">
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="myScores">
+            <property name="accessibleName">
+             <string>Score folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to score folder.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Image folder:</string>
+             <string>Images:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -333,7 +343,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_86">
             <property name="text">
-             <string>Score folder:</string>
+             <string>Scores:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -346,7 +356,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_88">
             <property name="text">
-             <string>Style folder:</string>
+             <string>Styles:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -369,7 +379,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Template folder:</string>
+             <string>Templates:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -411,20 +421,10 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="myScores">
-            <property name="accessibleName">
-             <string>Score folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to score folder.</string>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_89">
             <property name="text">
-             <string>Plugin folder:</string>
+             <string>Plugins:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -454,6 +454,16 @@
             </property>
            </widget>
           </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="sfPath">
+            <property name="accessibleName">
+             <string>SoundFont folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to SoundFont folders</string>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="2">
            <widget class="QToolButton" name="myPluginsButton">
             <property name="focusPolicy">
@@ -473,7 +483,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>SoundFont folders:</string>
+             <string>SoundFonts:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -483,17 +493,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="sfPath">
-            <property name="accessibleName">
-             <string>SoundFont folders</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to SoundFont folders</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
+          <item row="5" column="1">
            <widget class="QLineEdit" name="myImages">
             <property name="accessibleName">
              <string>Image folder</string>
@@ -519,30 +519,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
-           <widget class="QLineEdit" name="sfzPath">
-            <property name="accessibleName">
-             <string>SFZ folders</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to SFZ folders</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_19">
-            <property name="text">
-             <string>SFZ folders:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="indent">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2">
+          <item row="5" column="2">
            <widget class="QToolButton" name="myImagesButton">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -568,22 +545,6 @@
             </property>
             <property name="accessibleDescription">
              <string>Opens a dialog for configuring the SoundFont folders</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="2">
-           <widget class="QToolButton" name="mySfzButton">
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="accessibleName">
-             <string>SFZ folders</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Opens a dialog for configuring the SFZ folders</string>
             </property>
             <property name="text">
              <string/>
@@ -3550,8 +3511,6 @@
   <tabstop>myPluginsButton</tabstop>
   <tabstop>sfPath</tabstop>
   <tabstop>mySoundfontsButton</tabstop>
-  <tabstop>sfzPath</tabstop>
-  <tabstop>mySfzButton</tabstop>
   <tabstop>myImages</tabstop>
   <tabstop>myImagesButton</tabstop>
   <tabstop>language</tabstop>
