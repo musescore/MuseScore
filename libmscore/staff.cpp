@@ -897,6 +897,17 @@ void Staff::init(const Staff* s)
       setStaffType(s->staffType());
       setDefaultClefType(s->defaultClefType());
       setSmall(s->small());
+      _brackets          = s->_brackets;
+      _barLineSpan       = s->_barLineSpan;
+      _barLineFrom       = s->_barLineFrom;
+      _barLineTo         = s->_barLineTo;
+      _invisible         = s->_invisible;
+      _neverHide         = s->_neverHide;
+      _showIfEmpty       = s->_showIfEmpty;
+      _hideSystemBarLine = s->_hideSystemBarLine;
+      _color             = s->_color;
+      _userDist          = s->_userDist;
+      _userMag           = s->_userMag;
       }
 
 //---------------------------------------------------------
