@@ -203,7 +203,7 @@ void FluidGui::soundFontAddClicked()
             if (!loaded) {
                   QMessageBox::warning(this,
                   tr("MuseScore"),
-                  tr("cannot load SoundFont %1").arg(sfPath));
+                  tr("Cannot load SoundFont %1").arg(sfPath));
                   }
             else {
                   soundFonts->insertItem(0, sfName);

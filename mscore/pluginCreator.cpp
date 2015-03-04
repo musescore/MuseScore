@@ -420,7 +420,7 @@ void PluginCreator::savePlugin()
       QFile f(path);
       QFileInfo fi(f);
       if(fi.suffix() != "qml" ) {
-            QMessageBox::critical(mscore, tr("MuseScore: Save Plugin"), tr("cannot determine file type"));
+            QMessageBox::critical(mscore, tr("MuseScore: Save Plugin"), tr("Cannot determine file type"));
             return;
       }
 

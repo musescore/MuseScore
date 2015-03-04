@@ -763,7 +763,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             }
 
       if (ext.isEmpty()) {
-            QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("cannot determine file type"));
+            QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("Cannot determine file type"));
             return false;
             }
 

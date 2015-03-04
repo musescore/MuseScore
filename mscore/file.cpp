@@ -1543,7 +1543,7 @@ void MuseScore::exportFile()
       lastSaveCopyDirectory = fi.absolutePath();
 
       if (fi.suffix().isEmpty())
-            QMessageBox::critical(this, tr("MuseScore: Export"), tr("cannot determine file type"));
+            QMessageBox::critical(this, tr("MuseScore: Export"), tr("Cannot determine file type"));
       else
             saveAs(cs, true, fn, fi.suffix());
       }
@@ -1603,7 +1603,7 @@ bool MuseScore::exportParts()
 
       QString ext = fi.suffix();
       if (ext.isEmpty()) {
-            QMessageBox::critical(this, tr("MuseScore: Export Parts"), tr("cannot determine file type"));
+            QMessageBox::critical(this, tr("MuseScore: Export Parts"), tr("Cannot determine file type"));
             return false;
             }
 
@@ -1762,7 +1762,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             return false;
             }
       if (!rv && !MScore::noGui)
-            QMessageBox::critical(this, tr("MuseScore:"), tr("cannot write into ") + fn);
+            QMessageBox::critical(this, tr("MuseScore:"), tr("Cannot write into ") + fn);
       return rv;
       }
 
@@ -2105,7 +2105,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
 
       if (fi.suffix().isEmpty()) {
             if (!MScore::noGui)
-                  QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("cannot determine file type"));
+                  QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("Cannot determine file type"));
             return false;
             }
       return saveAs(cs, saveCopy, fn, fi.suffix());
@@ -2145,7 +2145,7 @@ bool MuseScore::saveSelection(Score* cs)
 
       QString ext = fi.suffix();
       if (ext.isEmpty()) {
-            QMessageBox::critical(mscore, tr("MuseScore: Save Selection"), tr("cannot determine file type"));
+            QMessageBox::critical(mscore, tr("MuseScore: Save Selection"), tr("Cannot determine file type"));
             return false;
             }
       bool rv = true;
