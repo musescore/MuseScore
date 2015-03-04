@@ -1652,33 +1652,57 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         // unconditionally set beam at right or left side
                         if (c1 == 0)                // first => point to right
                               ;
-                        else if (c1 == n - 1)       // last => point to left
+                        else if (c1 == n - 1)       // last of beam or tuplet => point to left
+                              len = -len;
+                        else if (cr1->tuplet() && cr1 == cr1->tuplet()->elements().last())
                               len = -len;
                         else if (!(cr1->isGrace())) {
                               // if inside group
-                              // PRO: this algorithm is simple(r) and finds the right direction in
-                              // the great majority of cases, without attempting to 'understand'
-                              // neither the rhythm nor the time signature
-                              // CON: it fails in some highly subdivided tuplets (9-plet or more) or sub-tuplets.
-                              // Compute the position in the measure of the end of this
-                              // (i.e. of the beginning of next chord)
-
-                              int measTick = cr1->measure()->tick();
-                              int tickNext = crl[c1+1]->tick() - measTick;
-
-                              // determine the tick length of a chord with one beam level less than this
-                              // (i.e. twice the ticks of this)
-
-                              int tickMod  = (tickNext - (crl[c1]->tick() - measTick)) * 2;
-
-                              // if this completes, within the measure, a unit of tickMod length, flip beam to left
-                              // (allow some tolerance for tick rounding in tuplets
-                              // without tuplet tolerance, could be simplified to:)
-
-                              static const int BEAM_TUPLET_TOLERANCE = 6;
-                              int mod = tickNext % tickMod;
-                              if (mod <= BEAM_TUPLET_TOLERANCE || (tickMod - mod) <= BEAM_TUPLET_TOLERANCE)
+                              // use beam group info to tell us if we have reached the end of a logical grouping
+                              // in which case, we should point broken segment to left
+                              // probably the beam *could* have broken here, but didn't for whatever reason
+                              // (could be user override, or limitations in beam grouping algorithm, especially in compound meters)
+                              // assumption: we have a broken segment here because next chord is longer than this
+                              // check to see if beam *would* have broken (or used sub-beam) here if the next chord were same length as this
+                              // if so, then point broken segment to left
+                              // see http://musescore.org/en/node/42856
+                              ChordRest* nextCR = crl[c1+1];
+                              TDuration currentDuration = cr1->durationType();
+                              TDuration nextDuration = nextCR->durationType();
+                              const Groups& g = nextCR->staff()->group(nextCR->tick());
+                              Fraction stretch = nextCR->staff()->timeStretch(nextCR->tick());
+                              int nextTick = (nextCR->rtick() * stretch.numerator()) / stretch.denominator();
+                              Beam::Mode bm = g.beamMode(nextTick, currentDuration.type());
+                              if (bm != Beam::Mode::AUTO) {
                                     len = -len;
+                                    }
+                              else if (currentDuration.hooks() - nextDuration.hooks() > 1) {
+                                    // also point left if more than one level of beam difference with note to right
+                                    // this code is just an approximation, but it solves http://musescore.org/en/node/40806
+                                    len = -len;
+                                    }
+                              else {
+                                    // we should also point the broken segment to the left
+                                    // if the next note on a "sub-beat" as defined by 2 * current note duration
+                                    // note that formerly, this was the *only* check we had (other than last note of group)
+
+                                    int measTick = cr1->measure()->tick();
+                                    int tickNext = crl[c1+1]->tick() - measTick;
+
+                                    // determine the tick length of a chord with one beam level less than this
+                                    // (i.e. twice the ticks of this)
+
+                                    int tickMod  = cr1->duration().ticks() * 2;    // (tickNext - (crl[c1]->tick() - measTick)) * 2;
+
+                                    // if this completes, within the measure, a unit of tickMod length, flip beam to left
+                                    // (allow some tolerance for tick rounding in tuplets
+                                    // without tuplet tolerance, could be simplified to:)
+
+                                    static const int BEAM_TUPLET_TOLERANCE = 6;
+                                    int mod = tickNext % tickMod;
+                                    if (mod <= BEAM_TUPLET_TOLERANCE || (tickMod - mod) <= BEAM_TUPLET_TOLERANCE)
+                                          len = -len;
+                                    }
                               }
                         if (tab) {
                               if (len > 0)
