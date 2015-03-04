@@ -196,7 +196,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   break;
             }
       int rv = false;
-      if (converterMode) {
+      if (converterMode || pluginMode) {
             fprintf(stderr, "%s\n", qPrintable(msg));
             return rv;
             }
