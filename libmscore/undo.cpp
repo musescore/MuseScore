@@ -2416,6 +2416,7 @@ void ChangePatch::flip()
       event.setValue(channel->program);
 
       MScore::seq->sendEvent(event);
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
