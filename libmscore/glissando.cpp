@@ -252,7 +252,7 @@ void Glissando::layout()
       // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
       // make bottom end point lower and top ending point higher
       if (cr1->staff()->isTabStaff()) {
-                  qreal yOff = cr1->staff()->lineDistance() * 0.3 * _spatium;
+                  qreal yOff = cr1->staff()->lineDistance() * 0.7 * _spatium;
                   offs1.ry() += yOff * upDown;
                   offs2.ry() -= yOff * upDown;
             }
