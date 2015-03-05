@@ -387,7 +387,7 @@
           <linkedTo>1</linkedTo>
           <StaffType group="tablature">
             <name>tab6StrCommon</name>
-            <lines>6</lines>
+            <lines>4</lines>
             <lineDistance>1.5</lineDistance>
             <timesig>0</timesig>
             <durations>0</durations>
@@ -407,6 +407,7 @@
             <useNumbers>1</useNumbers>
             </StaffType>
           <bracket type="-1" span="0"/>
+          <barLineSpan from="0" to="14">1</barLineSpan>
           </Staff>
         <trackName></trackName>
         <Instrument>
@@ -716,8 +717,8 @@
             <track>4</track>
             </Slur>
           <Beam id="7">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>34</l1>
+            <l2>34</l2>
             </Beam>
           <Chord>
             <lid>5</lid>
@@ -762,8 +763,8 @@
             <track>4</track>
             </Slur>
           <Beam id="8">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>34</l1>
+            <l2>34</l2>
             </Beam>
           <Chord>
             <lid>11</lid>
@@ -853,8 +854,8 @@
             <durationType>quarter</durationType>
             </Rest>
           <Beam id="9">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>34</l1>
+            <l2>34</l2>
             </Beam>
           <Chord>
             <lid>24</lid>
