@@ -2843,7 +2843,7 @@ void Score::cmdSlashRhythm()
 
 void Score::cmdResequenceRehearsalMarks()
       {
-      bool noSelection = selection().isNone();
+      bool noSelection = !selection().isRange();
 
       if (noSelection)
             cmdSelectAll();
