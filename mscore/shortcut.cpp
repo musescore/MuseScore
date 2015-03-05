@@ -3040,77 +3040,77 @@ Shortcut Shortcut::_sc[] = {
          STATE_HARMONY_FIGBASS_EDIT,
          "advance-longa",
          QT_TRANSLATE_NOOP("action","Longa Advance (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Advance of a longa (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Advance of a longa (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "advance-breve",
          QT_TRANSLATE_NOOP("action","Breve Advance (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Advance of a double whole note (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Advance of a double whole note (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "advance-1",
          QT_TRANSLATE_NOOP("action","Whole Note Advance (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Advance of a whole note (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Advance of a whole note (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "advance-2",
          QT_TRANSLATE_NOOP("action","Half Note Advance (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Advance of a half note (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Advance of a half note (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "advance-4",
          QT_TRANSLATE_NOOP("action","Quarter Note Advance (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Advance of a quarter note (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Advance of a quarter note (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "advance-8",
          QT_TRANSLATE_NOOP("action","Eighth Note Advance (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Advance of an eighth note (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Advance of an eighth note (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "advance-16",
          QT_TRANSLATE_NOOP("action","16th Note Advance (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Advance of a 16th note (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Advance of a 16th note (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "advance-32",
          QT_TRANSLATE_NOOP("action","32nd Note Advance (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Advance of a 32nd note (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Advance of a 32nd note (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "advance-64",
          QT_TRANSLATE_NOOP("action","64th Note Advance (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Advance of a 64th note (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Advance of a 64th note (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "prev-measure-TEXT",
          QT_TRANSLATE_NOOP("action","Previous Measure (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Previous measure (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Previous measure (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
          STATE_HARMONY_FIGBASS_EDIT,
          "next-measure-TEXT",
          QT_TRANSLATE_NOOP("action","Next Measure (F.B./Chord Symbol)"),
-         QT_TRANSLATE_NOOP("action","Next measure (Figured Bass/Chord symbol only)")
+         QT_TRANSLATE_NOOP("action","Next measure (Figured bass/Chord symbol only)")
          },
       {
          MsWidget::SCORE_TAB,
