@@ -29,7 +29,7 @@ class ScoreListWidget : public QListWidget
       Q_OBJECT
       int CELLW           { 140   };
       int CELLH           { 228   };
-      int SPACE           { 2    };
+      int SPACE           { 10    };
 
       virtual QSize sizeHint() const override;
 
@@ -37,6 +37,7 @@ class ScoreListWidget : public QListWidget
       ScoreListWidget(QWidget* parent = 0) : QListWidget(parent) {}
       int cellWidth() const { return CELLW; }
       int cellHeight() const { return CELLH; }
+      int space() const { return SPACE; }
       QSize cellSize() const { return QSize(CELLW, CELLH); }
       };
 
