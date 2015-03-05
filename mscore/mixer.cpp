@@ -265,6 +265,7 @@ void PartEdit::patchChanged(int n)
             score->setLayoutAll(true);
             score->endCmd();
             }
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -276,6 +277,7 @@ void PartEdit::volChanged(double val)
       int iv = lrint(val);
       seq->setController(channel->channel, CTRL_VOLUME, iv);
       channel->volume = iv;
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -287,6 +289,7 @@ void PartEdit::panChanged(double val)
       int iv = lrint(val);
       seq->setController(channel->channel, CTRL_PANPOT, iv);
       channel->pan = iv;
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -298,6 +301,7 @@ void PartEdit::reverbChanged(double val)
       int iv = lrint(val);
       seq->setController(channel->channel, CTRL_REVERB_SEND, iv);
       channel->reverb = iv;
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -309,6 +313,7 @@ void PartEdit::chorusChanged(double val)
       int iv = lrint(val);
       seq->setController(channel->channel, CTRL_CHORUS_SEND, iv);
       channel->chorus = iv;
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
