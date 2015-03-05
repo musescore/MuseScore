@@ -301,10 +301,17 @@ qDebug("  3beat read 0x%02x", rrr);
 void GuitarPro5::readMeasure(Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange)
       {
       for (int voice = 0; voice < 2; ++voice) {
+            Fraction measureLen = 0;
             int tick = measure->tick();
             int beats = readInt();
-            for (int beat = 0; beat < beats; ++beat)
-                  tick += readBeat(tick, voice, measure, staffIdx, tuplets, mixChange);
+            for (int beat = 0; beat < beats; ++beat) {
+                  int ticks = readBeat(tick, voice, measure, staffIdx, tuplets, mixChange);
+                  tick += ticks;
+                  measureLen += Fraction::fromTicks(ticks);
+                  }
+            if (measureLen < measure->len()) {
+                  score->setRest(tick, staffIdx * VOICES + voice, measure->len() - measureLen, false, nullptr, false);
+                  }
             }
       }
 

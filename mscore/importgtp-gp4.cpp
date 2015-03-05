@@ -684,6 +684,7 @@ void GuitarPro4::read(QFile* fp)
                   tuplets[staffIdx] = 0;
 
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
+                  Fraction measureLen = 0;
                   int tick  = measure->tick();
                   int beats = readInt();
                   int track = staffIdx * VOICES;
@@ -853,6 +854,10 @@ void GuitarPro4::read(QFile* fp)
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         createSlur(hasSlur, staffIdx, cr);
                         tick += cr->actualTicks();
+                        measureLen += cr->actualFraction();
+                        }
+                  if (measureLen < measure->len()) {
+                        score->setRest(tick, track, measure->len() - measureLen, false, nullptr, false);
                         }
                   }
             if (bar == 1 && !mixChange)
