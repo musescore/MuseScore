@@ -22,6 +22,7 @@ class Spanner;
 class System;
 class Chord;
 class ChordRest;
+class Note;
 
 //---------------------------------------------------------
 //   SpannerSegmentType
@@ -164,6 +165,9 @@ class Spanner : public Element {
 
       void computeStartElement();
       void computeEndElement();
+      static Note* endElementFromSpanner(Spanner* sp, Element* newStart);
+      static Note* startElementFromSpanner(Spanner* sp, Element* newEnd);
+      void setNoteSpan(Note* startNote, Note* endNote);
 
       Element* startElement() const    { return _startElement; }
       Element* endElement() const      { return _endElement;   }

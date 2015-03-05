@@ -74,6 +74,7 @@
 #include "sym.h"
 #include "utils.h"
 #include "stringdata.h"
+#include "glissando.h"
 
 namespace Ms {
 
@@ -946,7 +947,22 @@ void Score::undoAddElement(Element* element)
                   }
             foreach (ScoreElement* ee, *links) {
                   Element* e = static_cast<Element*>(ee);
-                  Element* ne = (e == parent) ? element : element->linkedClone();
+                  Element* ne;
+                  if (e == parent)
+                        ne = element;
+                  else {
+                        if (element->type() == Element::Type::GLISSANDO) {    // and other spanners with Anchor::NOTE
+                              Note* newEnd = Spanner::endElementFromSpanner(static_cast<Glissando*>(element), e);
+                              if (newEnd) {
+                                    ne = element->linkedClone();
+                                    static_cast<Spanner*>(ne)->setNoteSpan(static_cast<Note*>(e), newEnd);
+                                    }
+                              else              //couldn't find suitable start note
+                                    continue;
+                              }
+                        else
+                              ne = element->linkedClone();
+                        }
                   ne->setScore(e->score());
                   ne->setSelected(false);
                   ne->setParent(e);
