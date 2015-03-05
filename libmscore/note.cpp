@@ -1907,6 +1907,12 @@ void Note::setTrack(int val)
             foreach(SpannerSegment* seg, _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
+      for (Spanner* s : _spannerFor) {
+            s->setTrack(val);
+            }
+      for (Spanner* s : _spannerBack) {
+            s->setTrack2(val);
+            }
       foreach (Element* e, _el)
             e->setTrack(val);
       if (_accidental)
