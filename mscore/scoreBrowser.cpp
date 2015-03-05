@@ -73,7 +73,7 @@ ScoreListWidget* ScoreBrowser::createScoreList()
       sl->setWrapping(true);
       sl->setViewMode(QListView::IconMode);
       sl->setIconSize(QSize(sl->cellWidth(), sl->cellHeight() - 30));
-      sl->setSpacing(10);
+      sl->setSpacing(sl->space());
       sl->setResizeMode(QListView::Adjust);
       sl->setFlow(QListView::LeftToRight);
       sl->setMovement(QListView::Static);
