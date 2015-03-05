@@ -297,15 +297,22 @@ void Tie::calculateDirection()
                   //
                   QList<int> ties;
                   int idx = 0;
+                  int noteIdx = -1;
                   for (int i = 0; i < n; ++i) {
                         if (notes[i]->tieFor()) {
                               ties.append(notes[i]->line());
-                              if (notes[i] == startNote())
+                              if (notes[i] == startNote()) {
                                     idx = ties.size() - 1;
+                                    noteIdx = i;
+                                    }
                               }
                         }
-                  if (idx == 0)
-                        _up = false;
+                  if (idx == 0) {
+                        if (ties.size() == 1)         // if just one tie
+                              _up = noteIdx != 0;     // it is up if not the bottom note of the chord
+                        else                          // if several ties and this is the bottom one (idx == 0)
+                              _up = false;            // it is down
+                        }
                   else if (idx == ties.size() - 1)
                         _up = true;
                   else {
