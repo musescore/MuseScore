@@ -790,8 +790,10 @@ void GuitarPro4::read(QFile* fp)
                               }
 
                         cr->setDuration(l);
-                        if (cr->type() == Element::Type::REST && (pause == 0 || l == measure->len()))
+                        if (cr->type() == Element::Type::REST && (pause == 0 || l == measure->len())) {
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                              cr->setDuration(measure->len());
+                              }
                         else
                               cr->setDurationType(d);
                         if(!segment->cr(track))
