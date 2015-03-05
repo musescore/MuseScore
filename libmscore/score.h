@@ -160,10 +160,10 @@ class MeasureBaseList {
 //---------------------------------------------------------
 
 struct MidiMapping {
-      char port;
-      char channel;
       Part* part;
       Channel* articulation;
+      char port;
+      char channel;
       };
 
 //---------------------------------------------------------

@@ -1268,12 +1268,12 @@ void Score::undoAddElement(Element* element)
                   Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
                   InstrumentChange* nis = static_cast<InstrumentChange*>(ne);
                   nis->setParent(ns1);
-                  if (is->instrument().channel().isEmpty() || is->instrument().channel(0).program == -1)
+                  // ws: instrument should not be changed here
+                  if (is->instrument()->channel().isEmpty() || is->instrument()->channel(0)->program == -1)
                         nis->setInstrument(*staff->part()->instr(s1->tick()));
-                  else
-                        nis->setInstrument(is->instrument());
+                  else if (nis != is)
+                        nis->setInstrument(*is->instrument());
                   undo(new AddElement(nis));
-                  undo(new ChangeInstrument(nis, nis->instrument()));
                   }
             else if (element->type() == Element::Type::BREATH) {
                   Breath* breath   = static_cast<Breath*>(element);
@@ -2406,6 +2406,8 @@ void ChangePatch::flip()
       channel->program = patch.prog;
       channel->bank    = patch.bank;
       channel->synti   = patch.synti;
+      channel->updateInitList();
+
       patch            = op;
 
       if (MScore::seq == 0) {
@@ -2430,6 +2432,8 @@ void ChangePatch::flip()
 
       event.setController(CTRL_PROGRAM);
       event.setValue(channel->program);
+
+      score->setInstrumentsChanged(true);
 
       MScore::seq->sendEvent(event);
       channel->updateInitList();
@@ -2565,7 +2569,7 @@ void ChangeStaffType::flip()
 //   ChangePart
 //---------------------------------------------------------
 
-ChangePart::ChangePart(Part* _part, const Instrument& i, const QString& s)
+ChangePart::ChangePart(Part* _part, Instrument* i, const QString& s)
       {
       instrument = i;
       part       = _part;
@@ -2578,17 +2582,14 @@ ChangePart::ChangePart(Part* _part, const Instrument& i, const QString& s)
 
 void ChangePart::flip()
       {
-      Instrument oi = *part->instr();
-      QString s     = part->partName();
+      Instrument* oi = part->instr();
+      QString s      = part->partName();
       part->setInstrument(instrument);
       part->setPartName(partName);
       Score* score = part->score();
       score->rebuildMidiMapping();
       score->setInstrumentsChanged(true);
       score->setPlaylistDirty();
-
-//      Interval oint = oi.transpose();
-//      Interval nint = part->instr()->transpose();
 
       // check if notes need to be updated
       // true if changing into or away from TAB or from one TAB type to another
@@ -3252,10 +3253,9 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
 
 void ChangeInstrument::flip()
       {
-      Instrument oi = is->instrument();
+      Instrument* oi = is->instrument();
       is->setInstrument(instrument);
 
-      is->staff()->part()->setInstrument(instrument, is->segment()->tick());
       is->score()->rebuildMidiMapping();
       is->score()->setInstrumentsChanged(true);
       is->score()->setLayoutAll(true);

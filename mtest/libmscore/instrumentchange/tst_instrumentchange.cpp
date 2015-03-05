@@ -124,7 +124,7 @@ void TestInstrumentChange::testMixer()
       Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
       int idx = score->staff(0)->channel(s->tick(), 0);
-      Channel* c = &score->staff(0)->part()->instr(s->tick())->channel(idx);
+      Channel* c = score->staff(0)->part()->instr(s->tick())->channel(idx);
       MidiPatch* mp = new MidiPatch;
       mp->bank = 0;
       mp->drum = false;
@@ -133,7 +133,7 @@ void TestInstrumentChange::testMixer()
       mp->synti = "Fluid";
       score->startCmd();
       ic->setText("Mixer Viola");
-      score->undo(new ChangePatch(c, mp));
+      score->undo(new ChangePatch(score, c, mp));
       score->endCmd();
       score->doLayout();
       test_post(score, "mixer");

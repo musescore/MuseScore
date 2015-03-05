@@ -29,6 +29,18 @@ StaffState::StaffState(Score* score)
    : Element(score)
       {
       _staffStateType = StaffStateType::INSTRUMENT;
+      _instrument = new Instrument;
+      }
+
+StaffState::StaffState(const StaffState& ss)
+   : Element(ss)
+      {
+      _instrument = new Instrument(*ss._instrument);
+      }
+
+StaffState::~StaffState()
+      {
+      delete _instrument;
       }
 
 //---------------------------------------------------------
@@ -40,7 +52,7 @@ void StaffState::write(Xml& xml) const
       xml.stag(name());
       xml.tag("subtype", int(_staffStateType));
       if (staffStateType() == StaffStateType::INSTRUMENT)
-            _instrument.write(xml);
+            _instrument->write(xml);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -56,7 +68,7 @@ void StaffState::read(XmlReader& e)
             if (tag == "subtype")
                   _staffStateType = StaffStateType(e.readInt());
             else if (tag == "Instrument")
-                  _instrument.read(e);
+                  _instrument->read(e);
             else if (!Element::readProperties(e))
                   e.unknown();
             }

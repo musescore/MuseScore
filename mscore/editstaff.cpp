@@ -266,7 +266,7 @@ void EditStaff::apply()
             Interval v1 = instrument.transpose();
             Interval v2 = part->instr()->transpose();
 
-            score->undo(new ChangePart(part, instrument, newPartName));
+            score->undo(new ChangePart(part, new Instrument(instrument), newPartName));
             emit instrumentChanged();
 
             if (v1 != v2)
@@ -377,7 +377,7 @@ void EditStaff::showBarlinesChanged()
 
 void EditStaff::showInstrumentDialog()
       {
-      SelectInstrument si(instrument, this);
+      SelectInstrument si(&instrument, this);
       si.setWindowModality(Qt::WindowModal);
       if (si.exec()) {
             instrument = Instrument::fromTemplate(si.instrTemplate());

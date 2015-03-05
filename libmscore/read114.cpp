@@ -237,7 +237,7 @@ void Part::read114(XmlReader& e)
                   if (instrument->stringData()->strings() == 0
                               && instrument->channel().count() > 0
                               && instrument->drumset() == nullptr) {
-                        int program = instrument->channel(0).program;
+                        int program = instrument->channel(0)->program;
                         if (program >= 24 && program <= 30)       // guitars
                               instrument->setStringData(StringData(19, 6, g_guitarStrings));
                         else if ( (program >= 32 && program <= 39) || program == 43)      // bass / double-bass

@@ -55,11 +55,11 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
 //      const QList<MidiArticulation>& articulation() const;
 //      const QList<Channel>& channel() const;
 
-            foreach(const Channel& a, instrument->channel()) {
-                  if (a.name.isEmpty() || a.name == "normal")
+            foreach(const Channel* a, instrument->channel()) {
+                  if (a->name.isEmpty() || a->name == "normal")
                         channelList->addItem(tr("normal"));
                   else
-                        channelList->addItem(a.name);
+                        channelList->addItem(a->name);
                   }
             foreach(const NamedEventList& el, instrument->midiActions()) {
                   midiActionList->addItem(el.name);

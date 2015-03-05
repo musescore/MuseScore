@@ -1829,15 +1829,6 @@ void MuseScore::midiCtrlReceived(int controller, int value)
       }
 
 //---------------------------------------------------------
-//   playEnabled
-//---------------------------------------------------------
-
-bool MuseScore::playEnabled() const
-      {
-      return preferences.playNotes;
-      }
-
-//---------------------------------------------------------
 //   removeTab
 //---------------------------------------------------------
 
@@ -2775,7 +2766,7 @@ void MuseScore::readSettings()
 
 void MuseScore::play(Element* e) const
       {
-      if (noSeq || !(seq && seq->isRunning()) || !mscore->playEnabled())
+      if (noSeq || !(seq && seq->isRunning()) || !preferences.playNotes)
             return;
 
       if (e->type() == Element::Type::NOTE) {
@@ -2790,8 +2781,8 @@ void MuseScore::play(Element* e) const
             seq->seek(tick);
             Instrument* instr = part->instr(tick);
             foreach(Note* n, c->notes()) {
-                  const Channel& channel = instr->channel(n->subchannel());
-                  seq->startNote(channel.channel, n->ppitch(), 80, n->tuning());
+                  const Channel* channel = instr->channel(n->subchannel());
+                  seq->startNote(channel->channel, n->ppitch(), 80, n->tuning());
                   }
             seq->startNoteTimer(MScore::defaultPlayDuration);
             }
@@ -2801,15 +2792,14 @@ void MuseScore::play(Element* e, int pitch) const
       {
       if (noSeq || !(seq && seq->isRunning()))
             return;
-      if (mscore->playEnabled() && e->type() == Element::Type::NOTE) {
+      if (preferences.playNotes && e->type() == Element::Type::NOTE) {
             Note* note = static_cast<Note*>(e);
             int tick = note->chord()->tick();
             if (tick < 0)
                   tick = 0;
-            Part* part = note->staff()->part();
-            Instrument* instr = part->instr(tick);
-            const Channel& channel = instr->channel(note->subchannel());
-            seq->startNote(channel.channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
+            Instrument* instr = note->part()->instr(tick);
+            const Channel* channel = instr->channel(note->subchannel());
+            seq->startNote(channel->channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
             }
       }
 
@@ -3917,7 +3907,7 @@ void MuseScore::endCmd()
             if (cs->instrumentsChanged()) {
                   if (!noSeq && (seq && seq->isRunning()))
                         seq->initInstruments();
-                  emit instrumentChanged();
+                  instrumentChanged();                // update mixer
                   cs->setInstrumentsChanged(false);
                   }
             if (cs->selectionChanged()) {

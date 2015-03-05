@@ -25,17 +25,24 @@ namespace Ms {
 class InstrumentChange : public Text  {
       Q_OBJECT
 
-      Instrument _instrument;
+      Instrument* _instrument;  // Staff holds ownership if part of score
 
    public:
       InstrumentChange(Score*);
+      InstrumentChange(const Instrument&, Score*);
+      InstrumentChange(const InstrumentChange&);
+      ~InstrumentChange();
+
       virtual InstrumentChange* clone() const override { return new InstrumentChange(*this); }
       virtual Element::Type type() const override      { return Element::Type::INSTRUMENT_CHANGE; }
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
 
-      Instrument instrument() const           { return _instrument; }
-      void setInstrument(const Instrument& i) { _instrument = i;    }
+      Instrument* instrument() const        { return _instrument;  }
+      void setInstrument(Instrument* i)     { _instrument = i;     }
+      void setInstrument(Instrument&& i)    { *_instrument = i;    }
+      void setInstrument(const Instrument& i);
+
       Segment* segment() const                { return (Segment*)parent(); }
 
       virtual QVariant getProperty(P_ID propertyId) const override;

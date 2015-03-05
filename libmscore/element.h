@@ -31,6 +31,7 @@ namespace Ms {
 class Xml;
 class Measure;
 class Staff;
+class Part;
 class Score;
 class Sym;
 class MuseScoreView;
@@ -435,6 +436,7 @@ class Element : public QObject, public ScoreElement {
       int voice() const                       { return _track & 3;         }
       void setVoice(int v)                    { _track = (_track / VOICES) + v; }
       Staff* staff() const;
+      Part* part() const;
 
       virtual void add(Element*);
       virtual void remove(Element*);

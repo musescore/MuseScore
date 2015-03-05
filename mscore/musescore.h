@@ -499,7 +499,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showElementContext(Element* el);
       void cmdAppendMeasures(int);
       bool midiinEnabled() const;
-      bool playEnabled() const;
 
       void incMag();
       void decMag();

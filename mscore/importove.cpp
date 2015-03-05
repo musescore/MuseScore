@@ -607,7 +607,7 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
                         }
                   }
 
-            part->instr()->channel(0).bank = 128;
+            part->instr()->channel(0)->bank = 128;
             part->setMidiProgram(0);
             part->instr()->setDrumset(smDrumset);
             part->instr()->setDrumset(drumset);

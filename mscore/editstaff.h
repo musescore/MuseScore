@@ -54,7 +54,6 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
 
    private slots:
       void bboxClicked(QAbstractButton* button);
-//      void editDrumsetClicked();        UNUSED?
       void editStringDataClicked();
       void showInstrumentDialog();
       void showStaffTypeDialog();

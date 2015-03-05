@@ -2178,8 +2178,8 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                         part->staff(j)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
             // set drumset for instrument
             part->instr()->setDrumset(drumset);
-            part->instr()->channel(0).bank = 128;
-            part->instr()->channel(0).updateInitList();
+            part->instr()->channel(0)->bank = 128;
+            part->instr()->channel(0)->updateInitList();
             }
       else {
             // drumset is not needed
@@ -2204,12 +2204,11 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                               MusicXMLDrumInstrument mxmlInstr = drumsets[id].value(instrId);
                               Instrument instr;
                               // part->setMidiChannel(instr.midiChannel); not required (is a NOP anyway)
-                              instr.channel(0).program = mxmlInstr.midiProgram;
-                              instr.channel(0).pan = mxmlInstr.midiPan;
-                              instr.channel(0).volume = mxmlInstr.midiVolume;
+                              instr.channel(0)->program = mxmlInstr.midiProgram;
+                              instr.channel(0)->pan = mxmlInstr.midiPan;
+                              instr.channel(0)->volume = mxmlInstr.midiVolume;
                               instr.setTrackName(mxmlInstr.name);
-                              InstrumentChange* ic = new InstrumentChange(score);
-                              ic->setInstrument(instr);
+                              InstrumentChange* ic = new InstrumentChange(instr, score);
                               ic->setTrack(track);
                               // if there is already a staff text at this tick / track,
                               // delete it and use its text here instead of "Instrument"

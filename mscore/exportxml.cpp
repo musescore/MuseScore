@@ -4203,16 +4203,16 @@ static void midiInstrument(Xml& xml, const int partNr, const int instrNr,
                            const Instrument* instr, const Score* score, const int unpitched = 0)
       {
       xml.stag(QString("midi-instrument %1").arg(instrId(partNr, instrNr)));
-      int midiChannel = score->midiChannel(instr->channel(0).channel);
+      int midiChannel = score->midiChannel(instr->channel(0)->channel);
       if (midiChannel >= 0 && midiChannel < 16)
             xml.tag("midi-channel", midiChannel + 1);
-      int midiProgram = instr->channel(0).program;
+      int midiProgram = instr->channel(0)->program;
       if (midiProgram >= 0 && midiProgram < 128)
             xml.tag("midi-program", midiProgram + 1);
       if (unpitched > 0)
             xml.tag("midi-unpitched", unpitched);
-      xml.tag("volume", (instr->channel(0).volume / 127.0) * 100);  //percent
-      xml.tag("pan", int(((instr->channel(0).pan - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
+      xml.tag("volume", (instr->channel(0)->volume / 127.0) * 100);  //percent
+      xml.tag("pan", int(((instr->channel(0)->pan - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
       xml.etag();
       }
 
@@ -4229,7 +4229,7 @@ static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList* il, const 
       {
       im.clear();
       for (auto i = il->begin(); i != il->end(); ++i) {
-            const Instrument* pinstr = &(i->second);
+            const Instrument* pinstr = i->second;
             if (!im.contains(pinstr))
                   im.insert(pinstr, im.size());
             }

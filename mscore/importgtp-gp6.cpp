@@ -389,40 +389,23 @@ void GuitarPro6::readTracks(QDomNode* track)
                         part->setPartName(currentNode.toElement().text());
                   else if (nodeName == "Instrument") {
                         QString ref = currentNode.attributes().namedItem("ref").toAttr().value();
-                        Instrument* instr = new Instrument;
                         // use an array as a map instead?
-                        if (!ref.compare("e-gtr6")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("electric-guitar"));
-                              part->setInstrument(*instr);
-                              }
-                        else if (!ref.compare("tnr-s")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("voice"));
-                              part->setInstrument(*instr);
-                              }
-                        else if (!ref.compare("s-gtr6")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("guitar-steel"));
-                              part->setInstrument(*instr);
-                              }
-                        else if (!ref.compare("snt-lead-ss")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("poly-synth"));
-                              part->setInstrument(*instr);
-                              }
-                        else if (!ref.compare("f-bass5")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("bass-guitar"));
-                              part->setInstrument(*instr);
-                              }
-                        else if (!ref.compare("snt-bass-ss")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("metallic-synth"));
-                              part->setInstrument(*instr);
-                              }
-                        else if (!ref.compare("mrcs")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("maracas"));
-                              part->setInstrument(*instr);
-                             }
-                        else if (!ref.compare("drmkt")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("drumset"));
-                              part->setInstrument(*instr);
-                              }
+                        if (!ref.compare("e-gtr6"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("electric-guitar")));
+                        else if (!ref.compare("tnr-s"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("voice")));
+                        else if (!ref.compare("s-gtr6"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("guitar-steel")));
+                        else if (!ref.compare("snt-lead-ss"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("poly-synth")));
+                        else if (!ref.compare("f-bass5"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("bass-guitar")));
+                        else if (!ref.compare("snt-bass-ss"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("metallic-synth")));
+                        else if (!ref.compare("mrcs"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("maracas")));
+                        else if (!ref.compare("drmkt"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("drumset")));
                         }
                   else if (nodeName == "Properties") {
                         QDomNode currentProperty = currentNode.firstChild();
