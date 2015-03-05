@@ -1706,7 +1706,7 @@ bool Score::processMidiInput()
                               ev.pitch += p->instr(selection().tickStart())->transpose().chromatic;
                         }
                         MScore::seq->startNote(
-                                          p->instr()->channel(0).channel,
+                                          p->instr()->channel(0)->channel,
                                           ev.pitch,
                                           80,
                                           MScore::defaultPlayDuration,

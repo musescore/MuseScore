@@ -646,21 +646,21 @@ void GuitarPro4::read(QFile* fp)
                   measure->add(st);
             }
 
-            Channel& ch = instr->channel(0);
+            Channel* ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
-                  ch.program = 0;
-                  ch.bank    = 128;
+                  ch->program = 0;
+                  ch->bank    = 128;
                   }
             else {
-                  ch.program = patch;
-                  ch.bank    = 0;
+                  ch->program = patch;
+                  ch->bank    = 0;
                   }
-            ch.volume  = channelDefaults[midiChannel].volume;
-            ch.pan     = channelDefaults[midiChannel].pan;
-            ch.chorus  = channelDefaults[midiChannel].chorus;
-            ch.reverb  = channelDefaults[midiChannel].reverb;
+            ch->volume  = channelDefaults[midiChannel].volume;
+            ch->pan     = channelDefaults[midiChannel].pan;
+            ch->chorus  = channelDefaults[midiChannel].chorus;
+            ch->reverb  = channelDefaults[midiChannel].reverb;
             // missing: phase, tremolo
-            ch.updateInitList();
+            ch->updateInitList();
             }
 
       slurs = new Slur*[staves];

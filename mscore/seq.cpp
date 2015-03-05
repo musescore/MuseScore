@@ -500,8 +500,8 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
 
             if (note) {
                   Instrument* instr = note->staff()->part()->instr(note->chord()->tick());
-                  const Channel& a = instr->channel(note->subchannel());
-                  mute = a.mute || a.soloMute;
+                  const Channel* a = instr->channel(note->subchannel());
+                  mute = a->mute || a->soloMute;
                   }
             else
                   mute = false;
@@ -1386,7 +1386,7 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
             return;
       int channel = event.channel();
       if (channel >= cs->midiMapping()->size()) {
-            qDebug("bad channel value");
+            qDebug("bad channel value %d >= %d", channel, cs->midiMapping()->size());
             return;
             }
       int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);

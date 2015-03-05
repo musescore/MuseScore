@@ -69,6 +69,7 @@
 #include "sym.h"
 #include "rehearsalmark.h"
 #include "breath.h"
+#include "instrchange.h"
 
 namespace Ms {
 
@@ -891,16 +892,17 @@ void Score::appendPart(Part* p)
 void Score::rebuildMidiMapping()
       {
       _midiMapping.clear();
-      int port    = 0;
-      int channel = 0;
-      int idx     = 0;
-      int maxport = 0;
-      foreach(Part* part, _parts) {
+      int port        = 0;
+      int midiChannel = 0;
+      int idx         = 0;
+      int maxport     = 0;
+      for (Part* part : _parts) {
             InstrumentList* il = part->instrList();
             for (auto i = il->begin(); i != il->end(); ++i) {
-                  bool drum = i->second.useDrumset();
-                  for (int k = 0; k < i->second.channel().size(); ++k) {
-                        Channel* a = &(i->second.channel(k));
+                  Instrument* instr = i->second;
+                  bool drum         = instr->useDrumset();
+
+                  for (Channel* channel : instr->channel()) {
                         MidiMapping mm;
                         if (port > maxport)
                               maxport = port;
@@ -910,21 +912,21 @@ void Score::rebuildMidiMapping()
                               }
                         else {
                               mm.port    = port;
-                              mm.channel = channel;
-                              if (channel == 15) {
-                                    channel = 0;
+                              mm.channel = midiChannel;
+                              if (midiChannel == 15) {
+                                    midiChannel = 0;
                                     ++port;
                                     }
                               else {
-                                    ++channel;
-                                    if (channel == 9)
-                                          ++channel;
+                                    ++midiChannel;
+                                    if (midiChannel == 9)   // skip drum channel
+                                          ++midiChannel;
                                     }
                               }
                         mm.part         = part;
-                        mm.articulation = a;
+                        mm.articulation = channel;
                         _midiMapping.append(mm);
-                        a->channel = idx;
+                        channel->channel = idx;
                         ++idx;
                         }
                   }
@@ -1428,9 +1430,12 @@ void Score::addElement(Element* element)
                   }
                   break;
 
-            case Element::Type::INSTRUMENT_CHANGE:
+            case Element::Type::INSTRUMENT_CHANGE: {
+                  InstrumentChange* ic = static_cast<InstrumentChange*>(element);
+                  ic->part()->setInstrument(ic->instrument(), ic->segment()->tick());
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
+                  }
                   break;
 
             case Element::Type::CHORD:
@@ -1575,9 +1580,12 @@ void Score::removeElement(Element* element)
                   tempomap()->delTempo(tick);
                   }
                   break;
-            case Element::Type::INSTRUMENT_CHANGE:
+            case Element::Type::INSTRUMENT_CHANGE: {
+                  InstrumentChange* ic = static_cast<InstrumentChange*>(element);
+                  ic->part()->removeInstrument(ic->segment()->tick());
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
+                  }
                   break;
 
             case Element::Type::TREMOLO:

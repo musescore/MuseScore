@@ -34,7 +34,7 @@ Part::Part(Score* s)
    : ScoreElement(s)
       {
       _show  = true;
-      setInstrument(Instrument());     // default instrument
+      _instrList.setInstrument(new Instrument, -1);   // default instrument
       }
 
 //---------------------------------------------------------
@@ -44,8 +44,7 @@ Part::Part(Score* s)
 void Part::initFromInstrTemplate(const InstrumentTemplate* t)
       {
       _partName = t->trackName;
-      Instrument instr = Instrument::fromTemplate(t);
-      setInstrument(instr);
+      setInstrument(Instrument::fromTemplate(t));
       }
 
 //---------------------------------------------------------
@@ -72,8 +71,11 @@ void Part::read(XmlReader& e)
                   _staves.push_back(staff);
                   staff->read(e);
                   }
-            else if (tag == "Instrument")
-                  instr()->read(e);
+            else if (tag == "Instrument") {
+                  Instrument* instr = new Instrument;
+                  instr->read(e);
+                  setInstrument(instr, -1);
+                  }
             else if (tag == "name")
                   instr()->setLongName(e.readElementText());
             else if (tag == "shortName")
@@ -176,11 +178,11 @@ void Part::removeStaff(Staff* staff)
 
 void Part::setMidiProgram(int program, int bank)
       {
-      Channel c = instr()->channel(0);
-      c.program = program;
-      c.bank    = bank;
-      c.updateInitList();
-      instr()->setChannel(0, c);
+      Channel* c = instr()->channel(0);
+      c->program = program;
+      c->bank    = bank;
+      c->updateInitList();
+//      instr()->setChannel(0, c);
       }
 
 //---------------------------------------------------------
@@ -189,7 +191,7 @@ void Part::setMidiProgram(int program, int bank)
 
 int Part::volume() const
       {
-      return instr()->channel(0).volume;
+      return instr()->channel(0)->volume;
       }
 
 //---------------------------------------------------------
@@ -198,7 +200,7 @@ int Part::volume() const
 
 void Part::setVolume(int volume)
       {
-      instr()->channel(0).volume = volume;
+      instr()->channel(0)->volume = volume;
       }
 
 //---------------------------------------------------------
@@ -207,7 +209,7 @@ void Part::setVolume(int volume)
 
 bool Part::mute() const
       {
-      return instr()->channel(0).mute;
+      return instr()->channel(0)->mute;
       }
 
 //---------------------------------------------------------
@@ -216,7 +218,7 @@ bool Part::mute() const
 
 void Part::setMute(bool mute)
       {
-      instr()->channel(0).mute = mute;
+      instr()->channel(0)->mute = mute;
       }
 
 //---------------------------------------------------------
@@ -225,7 +227,7 @@ void Part::setMute(bool mute)
 
 int Part::reverb() const
       {
-      return instr()->channel(0).reverb;
+      return instr()->channel(0)->reverb;
       }
 
 //---------------------------------------------------------
@@ -234,7 +236,7 @@ int Part::reverb() const
 
 void Part::setReverb(int val)
       {
-      instr()->channel(0).reverb = val;
+      instr()->channel(0)->reverb = val;
       }
 
 //---------------------------------------------------------
@@ -243,7 +245,7 @@ void Part::setReverb(int val)
 
 int Part::chorus() const
       {
-      return instr()->channel(0).chorus;
+      return instr()->channel(0)->chorus;
       }
 
 //---------------------------------------------------------
@@ -252,7 +254,7 @@ int Part::chorus() const
 
 void Part::setChorus(int val)
       {
-      instr()->channel(0).chorus = val;
+      instr()->channel(0)->chorus = val;
       }
 
 //---------------------------------------------------------
@@ -261,7 +263,7 @@ void Part::setChorus(int val)
 
 int Part::pan() const
       {
-      return instr()->channel(0).pan;
+      return instr()->channel(0)->pan;
       }
 
 //---------------------------------------------------------
@@ -270,7 +272,7 @@ int Part::pan() const
 
 void Part::setPan(int pan)
       {
-      instr()->channel(0).pan = pan;
+      instr()->channel(0)->pan = pan;
       }
 
 //---------------------------------------------------------
@@ -279,7 +281,7 @@ void Part::setPan(int pan)
 
 int Part::midiProgram() const
       {
-      return instr()->channel(0).program;
+      return instr()->channel(0)->program;
       }
 
 //---------------------------------------------------------
@@ -288,7 +290,7 @@ int Part::midiProgram() const
 
 int Part::midiChannel() const
       {
-      return score()->midiChannel(instr()->channel(0).channel);
+      return score()->midiChannel(instr()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -297,7 +299,7 @@ int Part::midiChannel() const
 
 int Part::midiPort() const
       {
-      return score()->midiPort(instr()->channel(0).channel);
+      return score()->midiPort(instr()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -314,9 +316,18 @@ void Part::setMidiChannel(int) const
 //   setInstrument
 //---------------------------------------------------------
 
-void Part::setInstrument(const Instrument& i, int tick)
+void Part::setInstrument(Instrument* i, int tick)
       {
       _instrList.setInstrument(i, tick);
+      }
+
+void Part::setInstrument(const Instrument&& i, int tick)
+      {
+      _instrList.setInstrument(new Instrument(i), tick);
+      }
+void Part::setInstrument(const Instrument& i, int tick)
+      {
+      _instrList.setInstrument(new Instrument(i), tick);
       }
 
 //---------------------------------------------------------
@@ -325,7 +336,13 @@ void Part::setInstrument(const Instrument& i, int tick)
 
 void Part::removeInstrument(int tick)
       {
-      _instrList.erase(tick);
+      auto i = _instrList.find(tick);
+      if (i == _instrList.end()) {
+            qDebug("Part::removeInstrument: not found at tick %d", tick);
+            return;
+            }
+//      delete i->second;
+      _instrList.erase(i);
       }
 
 //---------------------------------------------------------
@@ -334,7 +351,7 @@ void Part::removeInstrument(int tick)
 
 Instrument* Part::instr(int tick)
       {
-      return &_instrList.instrument(tick);
+      return _instrList.instrument(tick);
       }
 
 //---------------------------------------------------------
@@ -343,7 +360,7 @@ Instrument* Part::instr(int tick)
 
 const Instrument* Part::instr(int tick) const
       {
-      return &_instrList.instrument(tick);
+      return _instrList.instrument(tick);
       }
 
 //---------------------------------------------------------

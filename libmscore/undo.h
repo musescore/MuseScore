@@ -648,14 +648,15 @@ class EditText : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangePatch : public UndoCommand {
+      Score* score;
       Channel* channel;
       MidiPatch patch;
 
       void flip();
 
    public:
-      ChangePatch(Channel* c, const MidiPatch* pt)
-         : channel(c), patch(*pt) {}
+      ChangePatch(Score* s, Channel* c, const MidiPatch* pt)
+         : score(s), channel(c), patch(*pt) {}
       UNDO_NAME("ChangePitch")
       };
 
@@ -720,13 +721,13 @@ class ChangeStaffType : public UndoCommand {
 
 class ChangePart : public UndoCommand {
       Part* part;
-      Instrument instrument;
+      Instrument* instrument;
       QString partName;
 
       void flip();
 
    public:
-      ChangePart(Part*, const Instrument&, const QString& name);
+      ChangePart(Part*, Instrument*, const QString& name);
       UNDO_NAME("ChangePart")
       };
 
@@ -985,16 +986,17 @@ class ChangeNoteEvents : public UndoCommand {
 
 //---------------------------------------------------------
 //   ChangeInstrument
+//    change instrument in an InstrumentChange element
 //---------------------------------------------------------
 
 class ChangeInstrument : public UndoCommand {
       InstrumentChange* is;
-      Instrument instrument;
+      Instrument* instrument;
 
       void flip();
 
    public:
-      ChangeInstrument(InstrumentChange* _is, const Instrument& i) : is(_is), instrument(i) {}
+      ChangeInstrument(InstrumentChange* _is, Instrument* i) : is(_is), instrument(i) {}
       UNDO_NAME("ChangeInstrument")
       };
 

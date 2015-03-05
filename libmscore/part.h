@@ -116,6 +116,8 @@ class Part : public QObject, public ScoreElement {
 
       Instrument* instr(int tick = -1);
       const Instrument* instr(int tick = -1) const;
+      void setInstrument(Instrument*, int tick = -1);       // transfer ownership
+      void setInstrument(const Instrument&&, int tick = -1);
       void setInstrument(const Instrument&, int tick = -1);
       void removeInstrument(int tick);
 

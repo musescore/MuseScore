@@ -32,12 +32,12 @@ extern void filterInstruments(QTreeWidget *instrumentList, const QString &search
 //   SelectInstrument
 //---------------------------------------------------------
 
-SelectInstrument::SelectInstrument(const Instrument& instrument, QWidget* parent)
+SelectInstrument::SelectInstrument(const Instrument* instrument, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      currentInstrument->setText(instrument.trackName());
+      currentInstrument->setText(instrument->trackName());
       buildTemplateList();
       buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
       connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));

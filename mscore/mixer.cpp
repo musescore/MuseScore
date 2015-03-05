@@ -261,7 +261,7 @@ void PartEdit::patchChanged(int n)
       Score* score = part->score();
       if (score) {
             score->startCmd();
-            score->undo(new ChangePatch(channel, p));
+            score->undo(new ChangePatch(score, channel, p));
             score->setLayoutAll(true);
             score->endCmd();
             }
@@ -337,9 +337,8 @@ void PartEdit::soloToggled(bool val)
       channel->soloMute = !val;
       if (val) {
             mute->setChecked(false);
-            foreach(Part* part, part->score()->parts()) {
-                  for (int i = 0; i < part->instr()->channel().size(); ++i) {
-                        Channel* a = &part->instr()->channel(i);
+            for (Part* p : part->score()->parts()) {
+                  for (Channel* a : p->instr()->channel()) {
                         a->soloMute = (channel != a && !a->solo);
                         a->solo     = (channel == a || a->solo);
                         if (a->soloMute)
@@ -350,25 +349,23 @@ void PartEdit::soloToggled(bool val)
             }
       else { //do nothing except if it's the last solo to be switched off
             bool found = false;
-            foreach(Part* part, part->score()->parts()) {
-                  for (int i = 0; i < part->instr()->channel().size(); ++i) {
-                        Channel* a = &part->instr()->channel(i);
-                        if(a->solo){
+            for (Part* p : part->score()->parts()) {
+                  for (Channel* a : p->instr()->channel()) {
+                        if (a->solo){
                             found = true;
                             break;
                             }
                         }
                   }
             if (!found){
-                foreach(Part* part, part->score()->parts()) {
-                  for (int i = 0; i < part->instr()->channel().size(); ++i) {
-                        Channel* a = &part->instr()->channel(i);
-                        a->soloMute = false;
-                        a->solo     = false;
+                  foreach(Part* p, part->score()->parts()) {
+                        for (Channel* a : p->instr()->channel()) {
+                              a->soloMute = false;
+                              a->solo     = false;
+                              }
                         }
-                  }
                   emit soloChanged(false);
-                }
+                  }
             }
       }
 
@@ -398,7 +395,7 @@ void PartEdit::drumsetToggled(bool val)
             qDebug("PartEdit::patchChanged: no patch");
             return;
             }
-      score->undo(new ChangePatch(channel, p));
+      score->undo(new ChangePatch(score, channel, p));
       score->setLayoutAll(true);
       score->endCmd();
       }

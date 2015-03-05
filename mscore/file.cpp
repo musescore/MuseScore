@@ -506,10 +506,7 @@ void MuseScore::newFile()
             // create instruments from template
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
-
-                  Instrument* i = tpart->instr();
-
-                  part->setInstrument(*i);
+                  part->setInstrument(tpart->instr());
                   part->setPartName(tpart->partName());
 
                   for (Staff* tstaff : *tpart->staves()) {

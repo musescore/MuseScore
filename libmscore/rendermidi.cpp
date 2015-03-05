@@ -344,7 +344,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   Staff* staff = chord->staff();
                   int velocity = staff->velocities().velo(seg->tick());
                   Instrument* instr = chord->staff()->part()->instr(tick);
-                  int channel = instr->channel(chord->upNote()->subchannel()).channel;
+                  int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
                   foreach (Articulation* a, chord->articulations()) {
                         instr->updateVelocity(&velocity,channel, a->subtypeName());
@@ -638,7 +638,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                         continue;
 
                   int idx = s->staff()->channel(s->tick(), 0);
-                  int channel = s->staff()->part()->instr(s->tick())->channel(idx).channel;
+                  int channel = s->staff()->part()->instr(s->tick())->channel(idx)->channel;
                   channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
                   std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
                   std::pair<int, bool> lastEvent;
