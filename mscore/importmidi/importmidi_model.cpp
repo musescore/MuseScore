@@ -672,7 +672,7 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         {
                         }
                   QString headerName() const override { return QCoreApplication::translate(
-                                          "MIDI import operations", "Show\nchord names"); }
+                                          "MIDI import operations", "Show\nchord symbols"); }
                   bool isForAllTracksOnly() const override { return true; }
                   QVariant value(int /*trackIndex*/) const override
                         {
