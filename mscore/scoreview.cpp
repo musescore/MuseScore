@@ -5742,7 +5742,7 @@ void ScoreView::cmdMoveCR(bool left)
 
 void ScoreView::cmdAddRemoveBreaks()
       {
-      bool noSelection = _score->selection().isNone();
+      bool noSelection = !_score->selection().isRange();
 
       if (noSelection)
             _score->cmdSelectAll();
