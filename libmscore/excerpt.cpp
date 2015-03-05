@@ -448,29 +448,10 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                 // makes sure the 'other' spanner anchor element is already set up)
                                                 // 'on' is the old spanner end note and 'nn' is the new spanner end note
                                                 for (Spanner* oldSp : on->spannerBack()) {
-                                                      // determining the new spanner start element:
-                                                      Note* oldStart    = static_cast<Note*>(oldSp->startElement());
-                                                      Note* newStart    = nullptr;
-                                                      // determine the track offset from the spanner end to the spanner start
-                                                      int   newTrack    = nn->track() + (on->track() - oldStart->track());
-                                                      // look in notes linked to oldStart for a note with the same
-                                                      // score as new score and required track offset
-                                                      for (ScoreElement* newEl : oldStart->linkList())
-                                                            if (static_cast<Note*>(newEl)->score() == score
-                                                                        && static_cast<Note*>(newEl)->track() == newTrack) {
-                                                                  newStart = static_cast<Note*>(newEl);
-                                                                  break;
-                                                            }
+                                                      Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
                                                       if (newStart != nullptr) {
                                                             Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
-                                                            newSp->setScore(score);
-                                                            newSp->setParent(newStart);
-                                                            newSp->setStartElement(newStart);
-                                                            newSp->setEndElement(nn);
-                                                            newSp->setTick(newStart->chord()->tick());
-                                                            newSp->setTick2(nch->tick());
-                                                            newSp->setTrack(newTrack);
-                                                            newSp->setTrack2(nn->track());
+                                                            newSp->setNoteSpan(newStart, nn);
                                                             score->addElement(newSp);
                                                             }
                                                       else {
@@ -724,29 +705,10 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           // makes sure the 'other' spanner anchor element is already set up)
                                           // 'on' is the old spanner end note and 'nn' is the new spanner end note
                                           for (Spanner* oldSp : on->spannerBack()) {
-                                                // determining the new spanner start element:
-                                                Note* oldStart    = static_cast<Note*>(oldSp->startElement());
-                                                Note* newStart    = nullptr;
-                                                // determine the track offset from the spanner end to the spanner start
-                                                int   newTrack    = nn->track() + (on->track() - oldStart->track());
-                                                // look in notes linked to oldStart for a note with the same
-                                                // score as new score and required track offset
-                                                for (ScoreElement* newEl : oldStart->linkList())
-                                                      if (static_cast<Note*>(newEl)->score() == score
-                                                                  && static_cast<Note*>(newEl)->track() == newTrack) {
-                                                            newStart = static_cast<Note*>(newEl);
-                                                            break;
-                                                      }
+                                                Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
                                                 if (newStart != nullptr) {
                                                       Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
-                                                      newSp->setScore(score);
-                                                      newSp->setParent(newStart);
-                                                      newSp->setStartElement(newStart);
-                                                      newSp->setEndElement(nn);
-                                                      newSp->setTick(newStart->chord()->tick());
-                                                      newSp->setTick2(nch->tick());
-                                                      newSp->setTrack(newTrack);
-                                                      newSp->setTrack2(nn->track());
+                                                      newSp->setNoteSpan(newStart, nn);
                                                       score->addElement(newSp);
                                                       }
                                                 else {
