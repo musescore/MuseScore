@@ -53,6 +53,7 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/ottava.h"
 #include "libmscore/notedot.h"
+#include "libmscore/stafftext.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -1294,7 +1295,6 @@ void GuitarPro2::read(QFile* fp)
             Instrument* instr = part->instr();
             instr->setStringData(stringData);
             part->setPartName(name);
-            instr->setTranspose(Interval(capo));
             part->setLongName(name);
 
             //
@@ -1319,6 +1319,16 @@ void GuitarPro2::read(QFile* fp)
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
+
+            if (capo > 0) {
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  StaffText* st = new StaffText(score);
+                  st->setTextStyleType(TextStyleType::STAFF);
+                  st->setText(QString("Capo. fret ") + QString::number(capo));
+                  st->setParent(s);
+                  st->setTrack(i * VOICES);
+                  measure->add(st);
+            }
 
             Channel& ch = instr->channel(0);
             if (midiChannel == int(StaffTypes::PERC_DEFAULT)) {
@@ -1901,7 +1911,6 @@ void GuitarPro3::read(QFile* fp)
             instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
-            instr->setTranspose(Interval(capo));
 
             //
             // determine clef
@@ -1925,6 +1934,16 @@ void GuitarPro3::read(QFile* fp)
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
+
+            if (capo > 0) {
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  StaffText* st = new StaffText(score);
+                  st->setTextStyleType(TextStyleType::STAFF);
+                  st->setText(QString("Capo. fret ") + QString::number(capo));
+                  st->setParent(s);
+                  st->setTrack(i * VOICES);
+                  measure->add(st);
+            }
 
             Channel& ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
@@ -2354,6 +2373,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   StaffType st = *StaffType::preset(StaffTypes::TAB_DEFAULT);
                   st.setSlashStyle(true);
                   s1->setStaffType(&st);
+                  s1->setLines(staff->part()->instr()->stringData()->strings());
                   cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
@@ -2369,7 +2389,8 @@ Score::FileError importGTP(Score* score, const QString& name)
             if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   Staff* staff2 = pscore->staff(1);
                   staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
-                  }
+                  staff2->setLines(staff->part()->instr()->stringData()->strings());
+            }
 
             //
             // create excerpt title

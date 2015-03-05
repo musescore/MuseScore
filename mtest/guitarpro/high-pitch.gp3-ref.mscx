@@ -325,7 +325,6 @@
           <linkedTo>1</linkedTo>
           <StaffType group="tablature">
             <name>tab6StrCommon</name>
-            <lines>6</lines>
             <lineDistance>1.5</lineDistance>
             <timesig>0</timesig>
             <durations>0</durations>
@@ -345,6 +344,7 @@
             <useNumbers>1</useNumbers>
             </StaffType>
           <bracket type="-1" span="0"/>
+          <barLineSpan from="0" to="12">1</barLineSpan>
           </Staff>
         <trackName></trackName>
         <Instrument>

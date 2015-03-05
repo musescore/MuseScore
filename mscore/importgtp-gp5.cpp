@@ -48,6 +48,7 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/fingering.h"
 #include "libmscore/notedot.h"
+#include "libmscore/stafftext.h"
 #include "preferences.h"
 
 
@@ -407,7 +408,6 @@ void GuitarPro5::readTracks()
             instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
-            instr->setTranspose(Interval(capo));
 
             //
             // determine clef
@@ -430,6 +430,17 @@ void GuitarPro5::readTracks()
             clef->setTrack(i * VOICES);
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
+
+            if (capo > 0) {
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  StaffText* st = new StaffText(score);
+                  st->setTextStyleType(TextStyleType::STAFF);
+                  st->setText(QString("Capo. fret ") + QString::number(capo));
+                  st->setParent(s);
+                  st->setTrack(i * VOICES);
+                  measure->add(st);
+            }
+
 
             Channel& ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
