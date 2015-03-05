@@ -2046,6 +2046,8 @@ void ScoreView::zoom(qreal _mag, const QPointF& pos)
       int dx    = lrint(p3.x() * m);
       int dy    = lrint(p3.y() * m);
 
+      constraintCanvas(&dx, &dy);
+
       _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
          _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy()+dy, _matrix.m33());
       imatrix = _matrix.inverted();
