@@ -581,18 +581,6 @@
     <seq>Space</seq>
     </SC>
   <SC>
-    <key>loop</key>
-    <seq>Shift+L</seq>
-    </SC>
-  <SC>
-    <key>loop-in</key>
-    <seq>Shift+I</seq>
-    </SC>
-  <SC>
-    <key>loop-out</key>
-    <seq>Shift+O</seq>
-    </SC>
-  <SC>
     <key>play-prev-chord</key>
     <seq>Left</seq>
     </SC>
