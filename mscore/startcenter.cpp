@@ -49,6 +49,7 @@ Startcenter::Startcenter()
       connect(recentPage,  &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
       connect(openScore, SIGNAL(clicked()), this, SLOT(openScoreClicked()));
       connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+      setStyleSheet(QString("QPushButton { background-color: %1 }").arg(openScore->palette().color(QPalette::Base).name()));
 
       //init webview
       MyWebView* _webView = new MyWebView(this);
@@ -111,6 +112,8 @@ void Startcenter::closeEvent(QCloseEvent*)
 void Startcenter::updateRecentScores()
       {
       QFileInfoList fil = mscore->recentScores();
+      QFileInfo gettingStartedScore(":/data/Getting_Started.mscz");
+      fil.prepend(gettingStartedScore);
       QFileInfo newScore(":/data/Create_New_Score.mscz");
       fil.prepend(newScore);
       recentPage->setScores(fil);
@@ -146,7 +149,7 @@ void Startcenter::writeSettings(QSettings& settings)
 void Startcenter::readSettings(QSettings& settings)
       {
       settings.beginGroup("Startcenter");
-      resize(settings.value("size", QSize(690, 500)).toSize());
+      resize(settings.value("size", QSize(670, 520)).toSize());
       move(settings.value("pos", QPoint(200, 100)).toPoint());
       settings.endGroup();
       }

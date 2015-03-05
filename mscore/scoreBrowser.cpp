@@ -146,6 +146,10 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
             item->setText(tr("Create New Score"));
             f.setBold(true);
             }
+      else if (fi.baseName() == "Getting_Started") {
+            item->setText(tr("Getting Started"));
+            f.setBold(true);
+      }
       else {
             QString s(si.completeBaseName());
             if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
