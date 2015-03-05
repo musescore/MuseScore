@@ -174,6 +174,8 @@ class StaffType {
       bool  _useNumbers   = true;         // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
 
       // TAB: internally managed variables
+      // Note: values in RASTER UNITS are independent from score scaling and
+      //    must be multiplied by magS() to be used in contexts using sp units
       qreal _durationBoxH = 0.0;
       qreal _durationBoxY = 0.0;          // the height and the y rect.coord. (relative to staff top line)
                                           // of a box bounding all duration symbols (raster units) internally computed:
@@ -193,7 +195,7 @@ class StaffType {
                                           // (raster units); internally computed: depends upon _onString, _useNumbers
                                           // and the metrics of the fret font
       bool  _fretMetricsValid = false;    // whether fret font metrics are valid or not
-      qreal _refDPI = 0.0;                // reference value used to last compute metrics and to see if they are still valid
+      qreal _refDPI = 0.0;                // reference value used to last computed metrics and to see if they are still valid
 
       // the array of configured fonts
       static QList<TablatureFretFont> _fretFonts;

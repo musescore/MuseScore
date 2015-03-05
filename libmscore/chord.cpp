@@ -2041,9 +2041,10 @@ void Chord::layoutPitched()
 
 void Chord::layoutTablature()
       {
-      qreal _spatium  = spatium();
-      qreal dotNoteDistance = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
-      qreal minNoteDistance = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
+      qreal _spatium          = spatium();
+      qreal dotNoteDistance   = score()->styleS(StyleIdx::dotNoteDistance).val() * _spatium;
+      qreal minNoteDistance   = score()->styleS(StyleIdx::minNoteDistance).val() * _spatium;
+      qreal minTieLength      = score()->styleS(StyleIdx::MinTieLength).val() * _spatium;
 
       for (Chord* c : _graceNotes)
             c->layoutTablature();
@@ -2076,6 +2077,53 @@ void Chord::layoutTablature()
                   note->setPos(x, note->line() * lineDist / 2);
             else
                   note->setPos(x, tab->physStringToVisual(note->string()) * lineDist);
+
+            // allow extra space for shortened ties
+            // this code must be kept synchronized
+            // with the tie positioning code in Tie::slurPos()
+            // but the allocation of space needs to be performed here
+            Tie* tie;
+            tie = note->tieBack();
+            if (tie) {
+                  tie->calculateDirection();
+                  qreal overlap = 0.0;          // how much tie can overlap start and end notes
+                  bool shortStart = false;      // whether tie should clear start note or not
+                  Note* startNote = tie->startNote();
+                  Chord* startChord = startNote->chord();
+                  if (startChord && startChord->measure() == measure() && startChord == prevChordRest(this)) {
+                        qreal startNoteWidth = startNote->width();
+                        // overlap into start chord?
+                        // if in start chord, there are several notes or stem and tie in same direction
+                        if (startChord->notes().size() > 1 || (startChord->stem() && startChord->up() == tie->up())) {
+                              // clear start note (1/8 of fret mark width)
+                              shortStart = true;
+                              overlap -= startNoteWidth * 0.125;
+                              }
+                        else        // overlap start note (by ca. 1/3 of fret mark width)
+                              overlap += startNoteWidth * 0.35;
+                        // overlap into end chord (this)?
+                        // if several notes or neither stem or tie are up
+                        if (notes().size() > 1 || (stem() && !up() && !tie->up())) {
+                              // for positive offset:
+                              //    use available space
+                              // for negative x offset:
+                              //    space is allocated elsewhere, so don't re-allocate here
+                              if (note->ipos().x() != 0.0)              // this probably does not work for TAB, as
+                                    overlap += qAbs(note->ipos().x());  // _pos is used to centre the fret on the stem
+                              else
+                                    overlap -= fretWidth * 0.125;
+                              }
+                        else {
+                              if (shortStart)
+                                    overlap += fretWidth * 0.15;
+                              else
+                                    overlap += fretWidth * 0.35;
+                              }
+                        qreal d = qMax(minTieLength - overlap, 0.0);
+                        lll = qMax(lll, d);
+                        }
+                  }
+
             }
       // horiz. spacing: leave half width at each side of the (potential) stem
       qreal halfHeadWidth = headWidth * 0.5;

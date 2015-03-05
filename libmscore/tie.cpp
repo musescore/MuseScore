@@ -159,9 +159,19 @@ void Tie::slurPos(SlurPos* sp)
       StaffType* stt = nullptr;
       if (useTablature)
             stt = staff()->staffType();
-      qreal hw   = startNote()->tabHeadWidth(stt);    // if stt == 0, defaults to headWidth()
-      qreal __up = _up ? -1.0 : 1.0;
-      qreal _spatium = spatium();
+      qreal _spatium    = spatium();
+      qreal hw          = startNote()->tabHeadWidth(stt);   // if stt == 0, defaults to headWidth()
+      qreal __up        = _up ? -1.0 : 1.0;
+      // y offset for ties inside chord margins (typically multi-note chords): lined up with note top or bottom margin
+      //    or outside (typically single-note chord): overlaps note and is above/below it
+      // Outside: Tab: uses font size and may be asymmetric placed above/below line (frets ON or ABOVE line)
+      //          Std: assumes note head is 1 sp high, 1/2 sp above and 1/2 below line; add 1/4 sp to it
+      // Inside:  Tab: 1/2 of Outside offset
+      //          Std: use a fixed pecentage of note width
+      qreal yOffOutside = useTablature
+            ? (_up ? stt->fretBoxY() : stt->fretBoxY() + stt->fretBoxH()) * magS()
+            : 0.75 * _spatium * __up;
+      qreal yOffInside  = useTablature ? yOffOutside * 0.5 : hw * .3 * __up;
 
       Chord* sc   = startNote()->chord();
       Q_ASSERT(sc);
@@ -184,12 +194,12 @@ void Tie::slurPos(SlurPos* sp)
       //------p1
       if ((sc->notes().size() > 1) || (sc->stem() && (sc->up() == _up))) {
             xo = startNote()->x() + hw * 1.12;
-            yo = startNote()->pos().y() + hw * .3 * __up;
+            yo = startNote()->pos().y() + yOffInside;
             shortStart = true;
             }
       else {
             xo = startNote()->x() + hw * 0.65;
-            yo = startNote()->pos().y() + _spatium * .75 * __up;
+            yo = startNote()->pos().y() + yOffOutside;
             }
       sp->p1 = sc->pagePos() - sp->system1->pagePos() + QPointF(xo, yo);
 
