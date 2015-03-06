@@ -154,7 +154,7 @@
         <Rest>
           <lid>17</lid>
           <durationType>measure</durationType>
-          <duration z="1" n="1"/>
+          <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -337,7 +337,7 @@
           <Rest>
             <lid>17</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="1"/>
+            <duration z="4" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
@@ -383,7 +383,7 @@
           <Rest>
             <lid>17</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="1"/>
+            <duration z="4" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>

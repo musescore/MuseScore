@@ -1289,7 +1289,10 @@
             <string>0</string>
             </Note>
           </Chord>
-        <tick>57600</tick>
+        <Rest>
+          <lid>157</lid>
+          <durationType>half</durationType>
+          </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
@@ -2580,7 +2583,10 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>57600</tick>
+          <Rest>
+            <lid>157</lid>
+            <durationType>half</durationType>
+            </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
