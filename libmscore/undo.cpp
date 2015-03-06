@@ -73,7 +73,6 @@
 #include "tremolo.h"
 #include "sym.h"
 #include "utils.h"
-#include "stringdata.h"
 #include "glissando.h"
 
 namespace Ms {
@@ -1044,12 +1043,6 @@ void Score::undoAddElement(Element* element)
                               case Element::Type::DYNAMIC:
                               case Element::Type::LYRICS:   // not normally segment-attached
                                     continue;
-                              case Element::Type::OTTAVA:
-                                    if (staff->isTabStaff()) {
-                                          Ottava* o = static_cast<Ottava*>(element);
-                                          undo(new TabAdjustOttava(staff,o->tick(), o->tick2(), o->pitchShift()));
-                                          continue;
-                                          }
                               default:
                                     break;
                               }
@@ -3702,42 +3695,6 @@ void ChangeDrumset::flip()
       Drumset d = *instrument->drumset();
       instrument->setDrumset(&drumset);
       drumset = d;
-      }
-
-//---------------------------------------------------------
-//   TabAdjustOttava::flip
-//---------------------------------------------------------
-
-void TabAdjustOttava::flip()
-      {
-      if (!staff->isTabStaff())           // only affect TAB staves
-            return;                       // (possibly overkill?)
-
-      int               fromTrack   = staff->idx() * VOICES;
-      int               toTrack     = fromTrack + VOICES;
-      Score*            score       = staff->score();
-      const StringData* stringData  = staff->part()->instr()->stringData();
-      // for each ChordRest segment spanned by ottava
-      for (Segment* s = score->tick2segment(fromTick, true, Segment::Type::ChordRest, false);
-                  s && s->tick() < toTick; s = s->nextCR()) {
-            Chord* chord = nullptr;
-            // for each segment element
-            for (int track = fromTrack; track < toTrack; track++) {
-                  Element* e = s->element(track);
-                  if (e && e->type() == Element::Type::CHORD) {
-                        if (chord == nullptr)
-                              chord = static_cast<Chord*>(e);     // at least one chord found
-                        // update pitch of each chord note (ottava shift does not change TPC's)
-                        for (Note* note : static_cast<Chord*>(e)->notes())
-                              note->setPitch(note->pitch() + pitchOffset, note->tpc1(), note->tpc2());
-                        }
-                  }
-            // for each segment, TAB chords from all voices are fretted cumulatively,
-            // by passing any chord in that segment of the TAB staff, as long as there is at least one
-            if (stringData && chord)
-                  stringData->fretChords(chord);
-            }
-      pitchOffset = -pitchOffset;         // next flip will reverse the offset
       }
 
 }
