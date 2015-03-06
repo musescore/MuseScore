@@ -133,7 +133,7 @@
         <Rest>
           <lid>5</lid>
           <durationType>measure</durationType>
-          <duration z="1" n="1"/>
+          <duration z="4" n="4"/>
           </Rest>
         </Measure>
       <Measure number="2">
@@ -158,7 +158,7 @@
         <Rest>
           <lid>11</lid>
           <durationType>measure</durationType>
-          <duration z="1" n="1"/>
+          <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
@@ -320,7 +320,7 @@
           <Rest>
             <lid>5</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="1"/>
+            <duration z="4" n="4"/>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -345,7 +345,7 @@
           <Rest>
             <lid>11</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="1"/>
+            <duration z="4" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
@@ -362,7 +362,7 @@
           <Rest>
             <lid>5</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="1"/>
+            <duration z="4" n="4"/>
             </Rest>
           </Measure>
         <Measure number="2">
@@ -382,7 +382,7 @@
           <Rest>
             <lid>11</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="1"/>
+            <duration z="4" n="4"/>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
