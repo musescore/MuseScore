@@ -1915,4 +1915,16 @@ bool Element::prevGrip(Grip* grip) const
       *grip = Grip(i);
       return true;
       }
+
+//---------------------------------------------------------
+//   isUserModified
+//    Check if this element was modified by user and
+//    therefore must be saved.
+//---------------------------------------------------------
+
+bool Element::isUserModified() const
+      {
+      return !visible() || !userOff().isNull() || (color() != MScore::defaultColor);
+      }
+
 }

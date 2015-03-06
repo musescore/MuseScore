@@ -62,6 +62,7 @@ void StemSlash::layout()
             }
       qreal w  = chord()->upNote()->headWidth() * .7;
       setLine(QLineF(QPointF(x + w, y - h2), QPointF(x - w, y + h2)));
+      adjustReadPos();
       }
 
 
