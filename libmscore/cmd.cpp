@@ -235,10 +235,8 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
       int staffIdx;
       Segment* segment;
       MeasureBase* mb = pos2measure(pos, &staffIdx, 0, &segment, 0);
-      Staff* st = staff(staffIdx);
-      // ignore if we do not have a measure or when droping an ottava onto a TAB staff
-      if (mb == 0 || mb->type() != Element::Type::MEASURE
-                  || (st->isTabStaff() && spanner->type() == Element::Type::OTTAVA) ) {
+      // ignore if we do not have a measure
+      if (mb == 0 || mb->type() != Element::Type::MEASURE) {
             qDebug("cmdAddSpanner: cannot put object here");
             delete spanner;
             return;

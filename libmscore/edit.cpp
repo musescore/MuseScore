@@ -1715,18 +1715,6 @@ void Score::deleteItem(Element* el)
                   }
                   break;
 
-            case Element::Type::OTTAVA:
-                  {
-                  Ottava* o = static_cast<Ottava*>(el);
-                  // adjust pitches of linked TAB staves
-                  for (Staff* st : o->staff()->staffList()) {
-                        if (st->isTabStaff())
-                              st->score()->undo(new TabAdjustOttava(st, o->tick(), o->tick2(), -o->pitchShift()));
-                        }
-                  undoRemoveElement(el);
-                  }
-                  break;
-
             case Element::Type::OTTAVA_SEGMENT:
             case Element::Type::HAIRPIN_SEGMENT:
             case Element::Type::TRILL_SEGMENT:
