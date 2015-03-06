@@ -200,7 +200,7 @@ void MuseScore::editInstrList()
             }
       rootScore->inputState().setTrack(-1);
 
-      // keep the keylist of the first staff to apply it to new ones
+      // keep the keylist of the first pitched staff to apply it to new ones
       KeyList tmpKeymap;
       Staff* firstStaff = nullptr;
       for (Staff* s : rootScore->staves()) {
@@ -211,9 +211,11 @@ void MuseScore::editInstrList()
                   break;
                   }
             }
-      //normalize the keyevent to concert pitch if necessary
+      Key normalizedC = Key::C;
+      // normalize the keyevents to concert pitch if necessary
       if (firstStaff && !rootScore->styleB(StyleIdx::concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
             int interval = firstStaff->part()->instr()->transpose().chromatic;
+            normalizedC = transposeKey(normalizedC, interval);
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                   int tick = i->first;
                   Key oKey = i->second.key();
@@ -223,7 +225,7 @@ void MuseScore::editInstrList()
       // create initial keyevent for transposing instrument if necessary
       auto i = tmpKeymap.begin();
       if (i == tmpKeymap.end() || i->first != 0)
-            tmpKeymap[0].setKey(Key::C);
+            tmpKeymap[0].setKey(normalizedC);
 
       //
       // process modified partitur list
