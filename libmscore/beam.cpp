@@ -1555,6 +1555,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         slant = -slant;
                   py1   = yUpMin + (yDownMax - yUpMin) * .5 - slant * .5;
                   slope = slant / (px2 - px1);
+                  if (_direction == MScore::Direction::AUTO)
+                        _up = crl.front()->up();
                   }
             else {
                   py1 = c1->stemPos().y();
@@ -1574,7 +1576,9 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
       int baseLevel = 0;
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
-            bool growDown = _up || _cross;
+            bool growDown = _up;
+            // loop through the different groups for this beam level
+            // inner loop will advance through chordrests within each group
             for (int i = 0; i < n;) {
                   ChordRest* cr1 = crl[i];
                   int l = cr1->durationType().hooks() - 1;
@@ -1583,6 +1587,8 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         ++i;
                         continue;
                         }
+                  // at the beginning of a group
+                  // loop through chordrests looking for end
                   int c1 = i;
                   ++i;
                   for (; i < n; ++i) {
@@ -1602,10 +1608,18 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               }
                         }
 
+                  // default assumption - everything grows in same direction
                   int bl = growDown ? beamLevel : -beamLevel;
 
-                  ChordRest* cr2 = crl[i-1];
-                  if (c1 && (cr1->up() == cr2->up())) {
+                  ChordRest* cr2 = crl[i-1];    // last cr of group for this beam level
+                  if ((c1 && (cr1->up() == cr2->up()))
+                      || ((i == n) && (cr1->up() != cr2->up()))) {
+                        // matching direction for outer stems, not first group
+                        // or, opposing direction for outer stems, last group
+                        // recalculate growth direction for this group based on its *first* cr
+#if 1
+                        bl = cr1->up() ? beamLevel : -beamLevel;
+#else
                         QPointF stemPos(cr1->stemPos());
                         qreal x2  = stemPos.x() - _pagePos.x();
                         qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
@@ -1613,6 +1627,12 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
                         if ((y1 < y2) != growDown)
                               bl = baseLevel - (beamLevel + 1);
+#endif
+                        }
+                  else if (!c1 && (i < n) && (cr1->up() != cr2->up())) {
+                        // opposing directions for outer stems, first (but not only) group
+                        // recalculate growth direction for this group based on its *last* cr
+                        bl = cr2->up() ? beamLevel : -beamLevel;
                         }
                   int c2 = i;
                   if (c1 == 0 && c2 == n)
@@ -1969,6 +1989,10 @@ void Beam::editDrag(const EditData& ed)
       for (ChordRest* cr : _elements) {
             if (cr->tuplet())
                   cr->tuplet()->layout();
+            // TODO: would be nice to redraw stems while dragging beam,
+            // the following is not sufficient - a full (?) relayout would still be needed
+            //if (cr->type() == Element::Type::CHORD)
+            //      static_cast<Chord*>(cr)->layoutStem();
             }
       }
 
@@ -2058,6 +2082,17 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
                   }
             ++i;
             }
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void Beam::endEdit()
+      {
+      Element::endEdit();
+      // we need a full relayout to trigger stems to be redrawn
+      score()->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
