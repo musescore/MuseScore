@@ -576,6 +576,8 @@ class Element : public QObject, public ScoreElement {
                                                                          //  if the screen-reader needs a special string (see note for example)
       virtual QString accessibleExtraInfo() { return QString();        } //< used to return info that will be appended to accessibleInfo
                                                                          // and passed only to the screen-reader
+
+      virtual bool isUserModified() const;
       };
 
 //---------------------------------------------------------

@@ -1732,7 +1732,7 @@ void Score::deleteItem(Element* el)
 
             case Element::Type::STEM_SLASH:           // cannot delete this elements
             case Element::Type::HOOK:
-                  qDebug("cannot remove %s\n", el->name());
+                  qDebug("cannot remove %s", el->name());
                   break;
 
             default:

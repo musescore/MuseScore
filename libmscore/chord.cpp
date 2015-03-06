@@ -939,10 +939,12 @@ void Chord::write(Xml& xml) const
 
       if (_noStem)
             xml.tag("noStem", _noStem);
-      else if (_stem && (!_stem->userOff().isNull() || (_stem->userLen() != 0.0) || !_stem->visible() || (_stem->color() != MScore::defaultColor)))
+      else if (_stem && (_stem->isUserModified() || (_stem->userLen() != 0.0)))
             _stem->write(xml);
-      if (_hook && (!_hook->visible() || !_hook->userOff().isNull() || (_hook->color() != MScore::defaultColor)))
+      if (_hook && _hook->isUserModified())
             _hook->write(xml);
+      if (_stemSlash && _stemSlash->isUserModified())
+            _stemSlash->write(xml);
       switch(_stemDirection) {
             case MScore::Direction::UP:   xml.tag("StemDirection", QVariant("up")); break;
             case MScore::Direction::DOWN: xml.tag("StemDirection", QVariant("down")); break;
@@ -1019,6 +1021,11 @@ void Chord::read(XmlReader& e)
             else if (tag == "grace32after") {
                   _noteType = NoteType::GRACE32_AFTER;
                   e.readNext();
+                  }
+            else if (tag == "StemSlash") {
+                  StemSlash* ss = new StemSlash(score());
+                  ss->read(e);
+                  add(ss);
                   }
             else if (tag == "StemDirection") {
                   QString val(e.readElementText());
