@@ -929,7 +929,7 @@ void Score::createPlayEvents(Chord* chord)
             //  render grace notes:
             //  simplified implementation:
             //  - grace notes start on the beat of the main note
-            //  - duration: appoggiatura: 0.5  * duration of main note
+            //  - duration: appoggiatura: 0.5  * duration of main note (2/3 for dotted notes, 4/7 for double-dotted)
             //              acciacatura: min of 0.5 * duration or 65ms fixed (independent of duration or tempo)
             //  - for appoggiaturas, the duration is divided by the number of grace notes
             //  - the grace note duration as notated does not matter
@@ -942,6 +942,12 @@ void Score::createPlayEvents(Chord* chord)
                   // number of milliseconds per second, also unit for ontime
                   qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
                   ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
+                  }
+            else if (chord->dots() == 1) {
+                  ontime = 667;
+                  }
+            else if (chord->dots() == 2) {
+                  ontime = 571;
                   }
             else {
                   ontime = 500;
