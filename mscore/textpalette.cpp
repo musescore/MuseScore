@@ -31,9 +31,9 @@
 
 namespace Ms {
 
-const int buttonSize = 40;
-const int iconSize   = 20;
-const int fontSize   = 20;
+//const int buttonSize = 40;
+//const int iconSize   = 20;
+//const int fontSize   = 20;
 
 //---------------------------------------------------------
 //   TextPalette

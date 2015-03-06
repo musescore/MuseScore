@@ -360,7 +360,7 @@ void Seq::stopWait()
       QWaitCondition sleep;
       int idx = 0;
       while (state != Transport::STOP) {
-            qDebug("State %d", state);
+            qDebug("State %d", (int)state);
             mutex.lock();
             sleep.wait(&mutex, 100);
             mutex.unlock();
@@ -758,7 +758,7 @@ void Seq::process(unsigned n, float* buffer)
                   }
             else if (state != driverState)
                   qDebug("Seq: state transition %d -> %d ?",
-                     state, driverState);
+                     (int)state, (int)driverState);
             }
 
       memset(buffer, 0, sizeof(float) * n * 2); // assume two channels
