@@ -239,7 +239,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   }
 
             cr->setDuration(l);
-            if (cr->type() == Element::Type::REST && (pause == 0 || l == measure->len())) {
+            if (cr->type() == Element::Type::REST && (pause == 0 || l >= measure->len())) {
                   cr->setDurationType(TDuration::DurationType::V_MEASURE);
                   cr->setDuration(measure->len());
                   }
