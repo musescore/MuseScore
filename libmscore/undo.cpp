@@ -2586,6 +2586,7 @@ void ChangePart::flip()
       QString s      = part->partName();
       part->setInstrument(instrument);
       part->setPartName(partName);
+
       Score* score = part->score();
       score->rebuildMidiMapping();
       score->setInstrumentsChanged(true);
