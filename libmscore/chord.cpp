@@ -237,9 +237,8 @@ Chord::Chord(const Chord& c, bool link)
             add(new Stem(*(c._stem)));
       if (c._hook)
             add(new Hook(*(c._hook)));
-      if (c._stemSlash) {
+      if (c._stemSlash)
             add(new StemSlash(*(c._stemSlash)));
-            }
       if (c._arpeggio) {
             Arpeggio* a = new Arpeggio(*(c._arpeggio));
             add(a);
@@ -548,7 +547,6 @@ void Chord::remove(Element* e)
                   Q_ASSERT(_stemSlash);
                   if (_stemSlash->selected() && score())
                         score()->deselect(_stemSlash);
-                  delete _stemSlash;
                   _stemSlash = 0;
                   break;
             case Element::Type::CHORDLINE:
@@ -1238,9 +1236,8 @@ void Chord::layoutStem1()
             if (_stem)
                   score()->undoRemoveElement(_stem);
             if (_stemSlash)
-                  remove(_stemSlash);
+                  score()->undoRemoveElement(_stemSlash);
             }
-
       }
 
 //---------------------------------------------------------

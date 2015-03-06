@@ -1738,6 +1738,11 @@ void Score::deleteItem(Element* el)
             case Element::Type::GLISSANDO_SEGMENT:
                   el = static_cast<SpannerSegment*>(el)->spanner();
 
+            case Element::Type::STEM_SLASH:           // cannot delete this elements
+            case Element::Type::HOOK:
+                  qDebug("cannot remove %s\n", el->name());
+                  break;
+
             default:
                   undoRemoveElement(el);
                   break;
