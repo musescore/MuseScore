@@ -137,6 +137,7 @@ class Instrument {
    public:
       Instrument();
       Instrument(const Instrument&);
+      void operator=(const Instrument&);
       ~Instrument();
 
       void read(XmlReader&);

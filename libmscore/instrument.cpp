@@ -116,6 +116,33 @@ Instrument::Instrument(const Instrument& i)
       _clefType     = i._clefType;
       }
 
+void Instrument::operator=(const Instrument& i)
+      {
+      qDeleteAll(_channel);
+      _channel.clear();
+      delete _drumset;
+
+      _longNames    = i._longNames;
+      _shortNames   = i._shortNames;
+      _trackName    = i._trackName;
+      _minPitchA    = i._minPitchA;
+      _maxPitchA    = i._maxPitchA;
+      _minPitchP    = i._minPitchP;
+      _maxPitchP    = i._maxPitchP;
+      _transpose    = i._transpose;
+      _instrumentId = i._instrumentId;
+      _stringData   = i._stringData;
+      _drumset      = 0;
+      setDrumset(i._drumset);
+      _useDrumset   = i._useDrumset;
+      _stringData   = i._stringData;
+      _midiActions  = i._midiActions;
+      _articulation = i._articulation;
+      for (Channel* c : i._channel)
+            _channel.append(new Channel(*c));
+      _clefType     = i._clefType;
+      }
+
 //---------------------------------------------------------
 //   ~Instrument
 //---------------------------------------------------------
