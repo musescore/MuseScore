@@ -226,6 +226,7 @@ void System::layout(qreal xo1)
                   _leftMargin += bracketWidth[i] + bd;
             }
 
+      int nVisible = 0;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             SysStaff* s  = _staves[staffIdx];
             Staff* staff = score()->staff(staffIdx);
@@ -233,6 +234,7 @@ void System::layout(qreal xo1)
                   s->setbbox(QRectF());
                   continue;
                   }
+            ++nVisible;
             qreal staffMag = staff->mag();
             qreal h;
             if (staff->lines() == 1)
@@ -243,7 +245,7 @@ void System::layout(qreal xo1)
             s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
             }
 
-      if ((nstaves > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
+      if ((nVisible > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (nVisible <= 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
             if (_barLine == 0) {
                   BarLine* bl = new BarLine(score());
                   bl->setParent(this);
