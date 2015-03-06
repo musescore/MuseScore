@@ -2090,8 +2090,10 @@ void GuitarPro3::read(QFile* fp)
 
                         cr->setDuration(l);
 
-                        if (cr->type() == Element::Type::REST && l == measure->len())
+                        if (cr->type() == Element::Type::REST && l >= measure->len()) {
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                              cr->setDuration(measure->len());
+                              }
                         else
                               cr->setDurationType(d);
 

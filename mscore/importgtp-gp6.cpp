@@ -1370,8 +1370,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               tuplet->add(cr);
                         TDuration d(l);
                         cr->setDuration(l);
-                        if (cr->type() == Element::Type::REST && l == measure->len())
+                        if (cr->type() == Element::Type::REST && l >= measure->len()) {
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                              cr->setDuration(measure->len());
+                              }
                         else
                               cr->setDurationType(d);
                         if(!segment->cr(track))
@@ -1481,8 +1483,10 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                   cr->setTrack(staffIdx * VOICES + voiceNum);
                   TDuration d(l);
                   cr->setDuration(l);
-                  if (cr->type() == Element::Type::REST && l == measure->len())
+                  if (cr->type() == Element::Type::REST && l >= measure->len()) {
                         cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                        cr->setDuration(measure->len());
+                        }
                   else
                         cr->setDurationType(d);
 
