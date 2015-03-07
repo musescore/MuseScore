@@ -551,6 +551,8 @@ void MuseScore::newFile()
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
 
+      score->sigmap()->add(0, timesig);
+
       for (int i = 0; i < measures; ++i) {
             int tick = timesig.ticks() * i;
             for (Score* _score : score->scoreList()) {
