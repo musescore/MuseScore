@@ -675,8 +675,8 @@ static void initBeamMetrics()
       B(0,  3,  4,  13, 1);
       B(0,  3,  5,  13, 2);
       B(0,  3,  6,  14, 4);
-      B(0,  3,  7,  13, 4);
-      B(0,  3,  8,  13, 6);
+      B(0,  3,  7,  14, 4);
+      B(0,  3,  8,  14, 6);
 
       B(0,  3,  2,  11, -1);
       B(0,  3,  1,  11, -2);
@@ -716,17 +716,17 @@ static void initBeamMetrics()
 
       B(0, -5,-4,   16, 2);
       B(0, -5,-3,   16, 2);
-      B(0, -5,-2,   16, 2);
-      B(0, -5,-1,   16, 2);
-      B(0, -5, 0,   16, 4);
-      B(0, -5, 1,   16, 5);
-      B(0, -5, 2,   16, 5);
+      B(0, -5,-2,   17, 2);
+      B(0, -5,-1,   17, 2);
+      B(0, -5, 0,   18, 4);
+      B(0, -5, 1,   18, 5);
+      B(0, -5, 2,   21, 5);
 
       B(0,  2, 3,   12, 1);
       B(0,  2, 4,   12, 4);
       B(0,  2, 5,   13, 4);  // F
       B(0,  2, 6,   15, 5);
-      B(0,  2, 7,   13, 6);
+      B(0,  2, 7,   15, 6);
       B(0,  2, 8,   16, 8);
       B(0,  2, 9,   16, 8);
 
@@ -741,7 +741,7 @@ static void initBeamMetrics()
       // =================================== E
       B(1, 8, 8,  -12, 0);
       B(0, 1, 1,   13, 0);
-      B(1, 1, 1,   -9, 0);
+      B(1, 1, 1,  -12, 0);
 
       B(1, 8, 7, -12, -1);
       B(1, 8, 6, -12, -4);
@@ -753,8 +753,8 @@ static void initBeamMetrics()
 
       B(1, 15, 11, -21, -1);
       B(1, 15, 10, -21, -1);
-      B(1, 15,  9, -21, -1);
-      B(1, 15,  8, -21, -1);
+      B(1, 15,  9, -21, -4);
+      B(1, 15,  8, -21, -5);
 
       B(1,  1,  8, -11,  6);
       B(1,  1,  7, -11,  6);
@@ -766,7 +766,7 @@ static void initBeamMetrics()
       B(1,  8, 12, -12,  5);
       B(1,  8, 13, -12,  4);
       B(1,  8, 14, -12,  5);
-      B(1,  8, 15, -12,  1);
+      B(1,  8, 15, -12,  5);
 
       B(0,  1,  0, 11,  -1);
       B(0,  1, -1, 11,  -2);
@@ -796,7 +796,7 @@ static void initBeamMetrics()
       // =================================== F
       B(1, 7, 7,-13, 0);      //F
       B(0, 0, 0, 12, 0);
-      B(0, 7, 7, 10, 0);
+      B(0, 7, 7, 12, 0);
 
       B(1, 7, 6, -13, -1);
       B(1, 7, 5, -13, -2);
@@ -908,8 +908,8 @@ static void initBeamMetrics()
       B(1,  5,  4, -13, -1);
       B(1,  5,  3, -13, -2);
       B(1,  5,  2, -14, -4);
-      B(1,  5,  1, -14, -4);
-      B(1,  5,  0, -13, -6);
+      B(1,  5,  1, -15, -4);
+      B(1,  5,  0, -15, -6);
 
       B(1, 12, 11, -15, -1);
       B(1, 12, 10, -15, -2);
@@ -1164,6 +1164,28 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
             if (hasNoSlope())
                   bm.s = 0.0;
 
+            // special case for two beamed notes: flatten to max of 1sp
+            static int maxShortSlant = 4;
+            if (bm.l && elements().size() == 2) {
+                  //qDebug("computeStemLen: l = %d, s = %d", (int)bm.l, (int)bm.s);
+                  if (bm.s > maxShortSlant) {
+                        // slant downward
+                        // lengthen first stem if down
+                        if (bm.l > 0)
+                              bm.l += bm.s - maxShortSlant;
+                        // flatten beam
+                        bm.s = maxShortSlant;
+                        }
+                  else if (bm.s < -maxShortSlant) {
+                        // slant upward
+                        // lengthen first stem if up
+                        if (bm.l < 0)
+                              bm.l -= -maxShortSlant - bm.s;
+                        // flatten beam
+                        bm.s = -maxShortSlant;
+                        }
+                  }
+
             if (bm.l) {
                   if (bm.l > 0)
                         bm.l -= graceStemLengthCorrection;
@@ -1264,6 +1286,10 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
                   uint interval = qAbs((l2 - l1) / 2);
                   minS          = minSlant(interval);
                   maxS          = maxSlant(interval);
+                  if (elements().size() == 2) {
+                        minS = qMin(minS, 2);
+                        maxS = qMin(maxS, 4);
+                        }
                   }
             int ll1;
             if (_up) {
