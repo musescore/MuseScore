@@ -35,6 +35,7 @@ TBox::TBox(Score* score)
       {
       setBoxHeight(Spatium(1));
       _text  = new Text(score);
+      _text->setLayoutToParentWidth(true);
       _text->setParent(this);
       _text->setTextStyleType(TextStyleType::FRAME);
       }
@@ -99,5 +100,18 @@ void TBox::scanElements(void* data, void (*func)(void*, Element*), bool all)
       _text->scanElements(data, func, all);
       Box::scanElements(data, func, all);
       }
+
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void TBox::remove(Element* el)
+     {
+     if (el == _text) {
+           _text->clear();
+           }
+     else
+           MeasureBase::remove(el);
+     }
 }
 
