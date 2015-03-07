@@ -576,6 +576,20 @@ class ChangeBracketSpan : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   ChangeBracketType
+//---------------------------------------------------------
+
+class ChangeBracketType : public UndoCommand {
+      Bracket* bracket;
+      BracketType type;
+      void flip();
+
+   public:
+      ChangeBracketType(Bracket*, BracketType type);
+      UNDO_NAME("ChangeBracketType")
+      };
+
+//---------------------------------------------------------
 //   AddElement
 //---------------------------------------------------------
 
