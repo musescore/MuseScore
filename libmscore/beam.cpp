@@ -1600,9 +1600,12 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
       qreal x1 = crl[0]->stemPosX() + crl[0]->pageX() - pageX();
 
-      int baseLevel = 0;
+      int baseLevel = 0;      // beam level that covers all notes of beam
+      int crBase[n];          // offset of beam level 0 for each chord
+      bool growDown = _up;
+
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
-            bool growDown = _up;
+
             // loop through the different groups for this beam level
             // inner loop will advance through chordrests within each group
             for (int i = 0; i < n;) {
@@ -1613,6 +1616,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         ++i;
                         continue;
                         }
+
                   // at the beginning of a group
                   // loop through chordrests looking for end
                   int c1 = i;
@@ -1634,35 +1638,54 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               }
                         }
 
+                  // found end of group
+                  int c2 = i;
+                  ChordRest* cr2 = crl[c2 - 1];
+
+                  // if group covers whole beam, we are still at base level
+                  if (c1 == 0 && c2 == n)
+                        baseLevel = beamLevel;
+
                   // default assumption - everything grows in same direction
                   int bl = growDown ? beamLevel : -beamLevel;
+                  bool growDownGroup = growDown;
 
-                  ChordRest* cr2 = crl[i-1];    // last cr of group for this beam level
-                  if ((c1 && (cr1->up() == cr2->up()))
-                      || ((i == n) && (cr1->up() != cr2->up()))) {
-                        // matching direction for outer stems, not first group
-                        // or, opposing direction for outer stems, last group
-                        // recalculate growth direction for this group based on its *first* cr
-#if 1
-                        bl = cr1->up() ? beamLevel : -beamLevel;
-#else
-                        QPointF stemPos(cr1->stemPos());
-                        qreal x2  = stemPos.x() - _pagePos.x();
-                        qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
-                        qreal y2 = cr1->stemPos().y();
+                  // calculate direction for this group
+                  if (beamLevel > baseLevel) {
 
-                        if ((y1 < y2) != growDown)
-                              bl = baseLevel - (beamLevel + 1);
-#endif
+                        if ((c1 && (cr1->up() == cr2->up()))
+                            || ((c2 == n) && (cr1->up() != cr2->up()))) {
+                              // matching direction for outer stems, not first group
+                              // or, opposing direction for outer stems, last group
+                              // recalculate beam for this group based on its *first* cr
+                              growDownGroup = cr1->up();
+                              }
+
+                        else if (!c1 && (c2 < n) && (cr1->up() != cr2->up())) {
+                              // opposing directions for outer stems, first (but not only) group
+                              // recalculate beam for this group if necessary based on its *last* cr
+                              growDownGroup = cr2->up();
+                              }
+
+                        // recalculate segment offset bl
+                        int base = crBase[c1];
+                        if (growDownGroup && base <= 0)
+                              bl = base + beamLevel;
+                        else if (growDownGroup)
+                              bl = base + 1;
+                        else if (!growDownGroup && base >= 0)
+                              bl = base - beamLevel;
+                        else if (!growDownGroup)
+                              bl = base - 1;
+
                         }
-                  else if (!c1 && (i < n) && (cr1->up() != cr2->up())) {
-                        // opposing directions for outer stems, first (but not only) group
-                        // recalculate growth direction for this group based on its *last* cr
-                        bl = cr2->up() ? beamLevel : -beamLevel;
+
+                  // if there are more beam levels,
+                  // record current beam offsets for all notes of this group for re-use
+                  if (beamLevel < beamLevels - 1) {
+                        for (int i = c1; i < c2; ++i)
+                              crBase[i] = bl;
                         }
-                  int c2 = i;
-                  if (c1 == 0 && c2 == n)
-                        ++baseLevel;
 
                   qreal stemWidth  = point(score()->styleS(StyleIdx::stemWidth));
                   qreal x2   = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
