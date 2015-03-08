@@ -239,8 +239,11 @@ bool Score::checkKeys()
             Key k = staff(i)->key(0);
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                   Segment* s = m->findSegment(Segment::Type::KeySig, m->tick());
-                  if (s)
-                        k = static_cast<KeySig*>(s->element(i * VOICES))->key();
+                  if (s) {
+                        Element* element = s->element(i * VOICES);
+                        if (element)
+                              k = static_cast<KeySig*>(element)->key();
+                        }
                   if (staff(i)->key(m->tick()) != k) {
                         qDebug("measure %d (tick %d) : key %d, map %d", m->no(), m->tick(), k, staff(i)->key(m->tick()));
                         rc = false;
