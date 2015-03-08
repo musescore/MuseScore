@@ -196,6 +196,7 @@ void System::layout(qreal xo1)
                               _brackets.append(b);
                         b->setFirstStaff(firstStaff);
                         b->setLastStaff(lastStaff);
+                        b->setBracketType(s->bracket(i));
                         bracketWidth[i] = qMax(bracketWidth[i], b->width());
                         }
                   }

@@ -341,15 +341,8 @@ Element* Bracket::drop(const DropData& data)
       Element* e = data.element;
       if (e->type() == Element::Type::BRACKET) {
             Bracket* b = static_cast<Bracket*>(e);
-            b->setParent(parent());
-            b->setTrack(track());
-            b->setSpan(span());
-            b->setFirstStaff(firstStaff());
-            b->setLastStaff(lastStaff());
-            b->setLevel(level());
-            score()->undoRemoveElement(this);
-            score()->undoAddElement(b);
-            return b;
+            score()->undoChangeBracketType(this, b->bracketType());
+            return this;
             }
       delete e;
       return 0;
