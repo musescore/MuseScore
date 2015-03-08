@@ -2026,8 +2026,10 @@ static void loadScores(const QStringList& argv)
                         case SessionStart::SCORE:
                               {
                               Score* score = mscore->readScore(preferences.startScore);
-                              if (preferences.startScore.startsWith(":/") && score)
+                              if (preferences.startScore.startsWith(":/") && score) {
+                                    score->setPageFormat(*MScore::defaultStyle()->pageFormat());
                                     score->setCreated(true);
+                                    }
                               if (score == 0) {
                                     score = mscore->readScore(":/data/My_First_Score.mscz");
                                     score->setCreated(true);
