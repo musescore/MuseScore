@@ -342,6 +342,7 @@ Element* Bracket::drop(const DropData& data)
       if (e->type() == Element::Type::BRACKET) {
             Bracket* b = static_cast<Bracket*>(e);
             score()->undoChangeBracketType(this, b->bracketType());
+            delete e;
             return this;
             }
       delete e;
