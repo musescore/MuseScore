@@ -2366,7 +2366,7 @@ Score::FileError importGTP(Score* score, const QString& name)
 
             QList<int> stavesMap;
             Part*   p = new Part(pscore);
-            p->setInstrument(part->instr());
+            p->setInstrument(*part->instr());
 
             Staff* staff = part->staves()->front();
 
