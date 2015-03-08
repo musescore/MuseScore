@@ -630,7 +630,7 @@ void MuseScore::newFile()
                         }
                   }
             }
-      score->lastMeasure()->setEndBarLineType(BarLineType::END, true);
+      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
 
       //
       // select first rest
