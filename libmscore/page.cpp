@@ -422,7 +422,7 @@ void PageFormat::read(XmlReader& e, Score* score)
             _size.transpose();
       qreal w1 = _size.width() - _oddLeftMargin - _oddRightMargin;
       qreal w2 = _size.width() - _evenLeftMargin - _evenRightMargin;
-      _printableWidth = qMax(w1, w2);     // silently adjust right margins
+      _printableWidth = qMin(w1, w2);     // silently adjust right margins
       }
 
 //---------------------------------------------------------
