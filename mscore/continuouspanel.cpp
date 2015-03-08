@@ -204,6 +204,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   }
                   Text* newName = new Text(_score);
                   newName->setText(staffName);
+                  newName->setTextStyle(_score->style()->textStyle(TextStyleType::INSTRUMENT_SHORT));
                   newName->setParent(parent);
                   newName->setTrack(e->track());
                   newName->layout();
@@ -379,6 +380,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
 
                   Text* newName = new Text(_score);
                   newName->setText(staffName);
+                  newName->setTextStyle(_score->style()->textStyle(TextStyleType::INSTRUMENT_SHORT));
                   newName->setParent(parent);
                   newName->setTrack(e->track());
                   newName->layout();
@@ -388,7 +390,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   //if (currentStaff->part()->startTrack() == currentStaff->idx() * VOICES) {
                   if (currentStaff->part()->staff(0) == currentStaff) {
                         painter.rotate(-90);
-                        pos = QPointF (- newBarLine->height() / 2 - newName->width() / 2, _heightName - newName->height() + _lineHeightName * 0.8);  // Because we rotate the canvas, height and width are swaped
+                        pos = QPointF (- newBarLine->height() / 2 + newName->width() / 2, _heightName - newName->height() + _lineHeightName * 0.5);  // Because we rotate the canvas, height and width are swaped
                         painter.translate(pos);
                         newName->draw(&painter);
                         //qDebug() << "_heightName=" << _heightName << "Barline height=" << newBarLine->height() << "  newName->height=" << newName->height() << "  staff (e->height)=" << e->height() << "  newName->width()=" << newName->width() << "  newName->linespace()=" << newName->lineSpacing() << "  newName->lineHeight()=" << newName->lineHeight() << " pos (" << pos.x() << "," << pos.y() << ")";
