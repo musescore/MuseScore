@@ -555,6 +555,7 @@ void MuseScore::newFile()
 
       for (int i = 0; i < measures; ++i) {
             int tick = timesig.ticks() * i;
+            QList<Rest*> puRests;
             for (Score* _score : score->scoreList()) {
                   Rest* rest = 0;
                   Measure* measure = new Measure(_score);
@@ -602,17 +603,21 @@ void MuseScore::newFile()
                               QList<TDuration> dList = toDurationList(measure->len(), false);
                               if (!dList.isEmpty()) {
                                     int ltick = tick;
+                                    int k = 0;
                                     foreach (TDuration d, dList) {
-                                          if (rest)
-                                                rest = static_cast<Rest*>(rest->linkedClone());
-                                          else
+                                          if (k < puRests.count())
+                                                rest = static_cast<Rest*>(puRests[k]->linkedClone());
+                                          else {
                                                 rest = new Rest(score, d);
+                                                puRests.append(rest);
+                                                }
                                           rest->setScore(_score);
                                           rest->setDuration(d.fraction());
                                           rest->setTrack(staffIdx * VOICES);
                                           Segment* seg = measure->getSegment(rest, ltick);
                                           seg->add(rest);
                                           ltick += rest->actualTicks();
+                                          k++;
                                           }
                                     }
                               }
