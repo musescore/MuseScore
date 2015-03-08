@@ -1755,8 +1755,10 @@ Element* Score::move(const QString& cmd)
       if (noteEntryMode()) {
             // if selection exists and is grace note, use it
             // otherwise use chord/rest at input position
+            // also use it if we are moving to next chord
+            // to catch up with the cursor and not move the selection by 2 positions
             cr = selection().cr();
-            if (cr && cr->isGrace())
+            if (cr && (cr->isGrace() || cmd == "next-chord"))
                   ;
             else
                   cr = inputState().cr();
