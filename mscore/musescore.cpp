@@ -541,8 +541,8 @@ MuseScore::MuseScore()
 #endif
       viewModeCombo->setAccessibleName(tr("View Mode"));
       viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
-      viewModeCombo->addItem(tr("Page View"));
-      viewModeCombo->addItem(tr("Continuous View"));
+      viewModeCombo->addItem(tr("Page Mode"));
+      viewModeCombo->addItem(tr("Continuous Mode"));
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
       fileTools->addWidget(viewModeCombo);
 
