@@ -803,7 +803,7 @@ static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setText(strTxt);
+            text->setPlainText(strTxt);
             vbx->add(text);
             }
       }
@@ -813,7 +813,7 @@ static void addText2(VBox* vbx, Score* s, QString strTxt, TextStyleType stl, Ali
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setText(strTxt);
+            text->setPlainText(strTxt);
             text->textStyle().setAlign(v);
             text->textStyle().setYoff(yoffs);
             vbx->add(text);
