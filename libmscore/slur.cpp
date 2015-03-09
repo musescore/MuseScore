@@ -818,6 +818,11 @@ void Slur::slurPos(SlurPos* sp)
             return;
             }
 
+      bool useTablature = staff() != nullptr && staff()->isTabStaff();
+      StaffType* stt = nullptr;
+      if (useTablature)
+            stt = staff()->staffType();
+
       ChordRest* scr = startCR();
       ChordRest* ecr = endCR();
       Chord* sc      = 0;
@@ -888,8 +893,8 @@ void Slur::slurPos(SlurPos* sp)
       //
       //------p1
       bool stemPos = false;   // p1 starts at chord stem side
-      qreal hw = note1 ? note1->headWidth() : startCR()->width();
-      xo = hw * .5;
+      qreal hw = note1 ? note1->tabHeadWidth(stt) : startCR()->width();     // if stt == 0, tabHeadWidth()
+      xo = hw * .5;                                                           // defaults to headWidth()
       if (note1)
             yo = note1->pos().y();
       else if(_up)
@@ -949,7 +954,7 @@ void Slur::slurPos(SlurPos* sp)
             sp->p1 += QPointF(xo, yo);
 
       //------p2
-      hw = note2 ? note2->headWidth() : endCR()->width();
+      hw = note2 ? note2->tabHeadWidth(stt) : endCR()->width();
       xo = hw * .5;
       if (note2)
             yo = note2->pos().y();
