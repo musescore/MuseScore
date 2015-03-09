@@ -188,8 +188,6 @@ void System::layout(qreal xo1)
                               b->setParent(this);
                               b->setTrack(track);
                               b->setLevel(i);
-                              b->setBracketType(s->bracket(i));
-                              b->setSpan(s->bracketSpan(i));
                               score()->undoAddElement(b);
                               }
                         else
@@ -197,6 +195,7 @@ void System::layout(qreal xo1)
                         b->setFirstStaff(firstStaff);
                         b->setLastStaff(lastStaff);
                         b->setBracketType(s->bracket(i));
+                        b->setSpan(s->bracketSpan(i));
                         bracketWidth[i] = qMax(bracketWidth[i], b->width());
                         }
                   }
