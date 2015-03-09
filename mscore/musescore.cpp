@@ -635,12 +635,12 @@ MuseScore::MuseScore()
       connect(openRecent, SIGNAL(triggered(QAction*)), SLOT(selectScore(QAction*)));
 
       for (auto i : {
-            "", "file-save", "file-save-online", "file-save-as", "file-save-a-copy",
-            "file-save-selection", "file-export", "file-part-export",
+            "", "file-save", "file-save-as", "file-save-a-copy",
+            "file-save-selection", "file-save-online", "file-export", "file-part-export",
             "", "file-close", "", "parts", "album" }) {
             if (!*i)
                   _fileMenu->addSeparator();
-            else if (i != QString("file-save-online") || enableExperimental)
+            else
                   _fileMenu->addAction(getAction(i));
             }
       if (enableExperimental)
