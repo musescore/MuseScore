@@ -2428,12 +2428,26 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   QList<TimeSig*> tsl;
                   QList<KeySig*>  ksl;
                   QList<Clef*>    cl;
+                  QList<Clef*>    pcl;
 
                   //
                   // remove clef, time and key signatures
                   //
                   if (mi) {
                         for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                              Measure* pm = mi->prevMeasure();
+                              if (pm) {
+                                    Segment* ps = pm->findSegment(Segment::Type::Clef, tick);
+                                    if (ps) {
+                                          Element* pc = ps->element(staffIdx * VOICES);
+                                          if (pc) {
+                                                pcl.push_back(static_cast<Clef*>(pc));
+                                                undo(new RemoveElement(pc));
+                                                if (ps->isEmpty())
+                                                      undoRemoveElement(ps);
+                                                }
+                                          }
+                                    }
                               for (Segment* s = mi->first(); s && s->tick() == tick; s = s->next()) {
                                     Element* e = s->element(staffIdx * VOICES);
                                     if (!e)
@@ -2485,6 +2499,13 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                   for (Clef* clef : cl) {
                         Clef* nClef = new Clef(*clef);
                         Segment* s  = m->undoGetSegment(Segment::Type::Clef, tick);
+                        nClef->setParent(s);
+                        undoAddElement(nClef);
+                        }
+                  Measure* pm = m->prevMeasure();
+                  for (Clef* clef : pcl) {
+                        Clef* nClef = new Clef(*clef);
+                        Segment* s  = pm->undoGetSegment(Segment::Type::Clef, tick);
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }

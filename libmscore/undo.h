@@ -863,17 +863,33 @@ class ChangeMStaffProperties : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   RemoveMeasures
+//   InsertRemoveMeasures
 //---------------------------------------------------------
 
-class RemoveMeasures : public UndoCommand {
+class InsertRemoveMeasures : public UndoCommand {
       Measure* fm;
       Measure* lm;
 
+   protected:
+      void removeMeasures();
+      void insertMeasures();
+
    public:
-      RemoveMeasures(Measure*, Measure*);
-      virtual void undo();
-      virtual void redo();
+      InsertRemoveMeasures(Measure* _fm, Measure* _lm) : fm(_fm), lm(_lm) {}
+      virtual void undo() = 0;
+      virtual void redo() = 0;
+      };
+
+//---------------------------------------------------------
+//   RemoveMeasures
+//---------------------------------------------------------
+
+class RemoveMeasures : public InsertRemoveMeasures {
+
+   public:
+      RemoveMeasures(Measure* m1, Measure* m2) : InsertRemoveMeasures(m1, m2) {}
+      virtual void undo() { insertMeasures(); }
+      virtual void redo() { removeMeasures(); }
       UNDO_NAME("RemoveMeasures")
       };
 
@@ -881,14 +897,12 @@ class RemoveMeasures : public UndoCommand {
 //   InsertMeasures
 //---------------------------------------------------------
 
-class InsertMeasures : public UndoCommand {
-      Measure* fm;
-      Measure* lm;
+class InsertMeasures : public InsertRemoveMeasures {
 
    public:
-      InsertMeasures(Measure* m1, Measure* m2) : fm(m1), lm(m2) {}
-      virtual void undo();
-      virtual void redo();
+      InsertMeasures(Measure* m1, Measure* m2) : InsertRemoveMeasures(m1, m2) {}
+      virtual void redo() { insertMeasures(); }
+      virtual void undo() { removeMeasures(); }
       UNDO_NAME("InsertMeasures")
       };
 

@@ -2098,7 +2098,7 @@ bool Score::appendScore(Score* score)
                   addElement(ks);
                   }
             // other key signatures (initial other than "C", non-initial)
-            for (auto k : *(st->keyList())) {
+           for (auto k : *(st->keyList())) {
                   int tick = k.first;
                   KeySigEvent key = k.second;
                   joinedStaff->setKey(tick + tickLen, key);

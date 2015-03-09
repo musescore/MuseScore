@@ -385,7 +385,7 @@ KeySigEvent Staff::keySigEvent(int tick) const
 void Staff::setKey(int tick, KeySigEvent k)
       {
       _keys.setKey(tick, k);
-//      dumpKeys("setKey");
+//    dumpKeys("setKey");
       }
 
 //---------------------------------------------------------
@@ -395,7 +395,7 @@ void Staff::setKey(int tick, KeySigEvent k)
 void Staff::removeKey(int tick)
       {
       _keys.erase(tick);
-//      dumpKeys("removeKey");
+//    dumpKeys("removeKey");
       }
 
 //---------------------------------------------------------
@@ -1002,37 +1002,29 @@ void Staff::insertTime(int tick, int len)
       if (len == 0)
             return;
 
-      // when inserting measures directly in front of a key change,
-      // using lower_bound() (for tick != 0) means the key change at that point is moved later
-      // so the measures being inserted get the old key signature
-      // if we wish to make this work like clefs (see below),
-      // we would need to move the key signature from this measure to the first inserted measure
-      // but either way, at the begining of the staff, we need to keep the original key,
-      // so we use upper_bound() in that case, and the initial key signature is moved in insertMeasure()
+      // move all keys and clefs >= tick
+
+      if (len < 0) {
+            // remove entries between tickpos >= tick and tickpos < (tick+len)
+            _keys.erase(_keys.lower_bound(tick), _keys.lower_bound(tick-len));
+            clefs.erase(clefs.lower_bound(tick), clefs.lower_bound(tick-len));
+            }
 
       KeyList kl2;
-      for (auto i = _keys.upper_bound(tick); i != _keys.end();) {
+      for (auto i = _keys.lower_bound(tick); i != _keys.end();) {
             KeySigEvent kse = i->second;
-            int key   = i->first;
+            int tick = i->first;
             _keys.erase(i++);
-            kl2[key + len] = kse;
+            kl2[tick + len] = kse;
             }
       _keys.insert(kl2.begin(), kl2.end());
 
-      // when inserting measures directly in front of a clef change,
-      // using upper_bound() means the clef change remains in its original location
-      // so the measures being inserted get the new clef
-      // this make sense because the clef change technically happens at the end of the previous measure
-      // if we wish to make this work like key signatures (see above),
-      // we would need to move the clef from the previous measure to the last inserted measure
-      // and be sure to continue to handle the initial clef well
-
       ClefList cl2;
-      for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
+      for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
-            int key = i->first;
+            int tick = i->first;
             clefs.erase(i++);
-            cl2.setClef(key + len, ctl);
+            cl2.setClef(tick + len, ctl);
             }
       clefs.insert(cl2.begin(), cl2.end());
       updateOttava();
