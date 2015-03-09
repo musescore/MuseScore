@@ -1706,6 +1706,9 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             }
 
       if (grips) {
+            if (editObject) {      // if object is moved, it may not be covered by bsp
+                  paintElement(&vp, editObject);
+                  }
             if (grips == 6) {       // HACK: this are grips of a slur
                   QPolygonF polygon(grips+1);
                   polygon[0] = QPointF(grip[int(Grip::START)].center());
@@ -1723,13 +1726,10 @@ void ScoreView::paintEvent(QPaintEvent* ev)
             vp.setPen(pen);
             for (int i = 0; i < grips; ++i) {
                   if (Grip(i) == curGrip && hasFocus())
-                        vp.setBrush(MScore::selectColor[0]);
+                        vp.setBrush(MScore::frameMarginColor);
                   else
                         vp.setBrush(Qt::NoBrush);
                   vp.drawRect(grip[i]);
-                  }
-            if (editObject) {      // if object is moved, it may not be covered by bsp
-                  paintElement(&vp, editObject);
                   }
             }
       }
