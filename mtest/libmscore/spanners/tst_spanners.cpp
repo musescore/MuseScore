@@ -24,7 +24,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestClef
+//   TestSpanners
 //---------------------------------------------------------
 
 class TestSpanners : public QObject, public MTest
@@ -33,8 +33,9 @@ class TestSpanners : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void spanners01();            // cross-staff glissando from lower to higher staff
-      void spanners02();            // glissando from/to grace notes
+      void spanners01();            // adding glissandos in several contexts
+      void spanners02();            // loading back existing cross-staff glissando from lower to higher staff
+      void spanners03();            // adding glissandos from/to grace notes
       };
 
 //---------------------------------------------------------
@@ -48,6 +49,104 @@ void TestSpanners::initTestCase()
 
 //---------------------------------------------------------
 ///  spanners01
+///   Adds glissandi in several contexts.
+//---------------------------------------------------------
+
+void TestSpanners::spanners01()
+      {
+      DropData    dropData;
+      Glissando*  gliss;
+
+      Score* score = readScore(DIR + "glissando01.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // SIMPLE CASE: GLISSANDO FROM A NOTE TO THE FOLLOWING
+      // go to top note of first chord
+      Measure*    msr   = score->firstMeasure();
+      QVERIFY(msr);
+      Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
+      QVERIFY(seg);
+      Chord*      chord = static_cast<Chord*>(seg->element(0));
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      Note*       note  = chord->upNote();
+      QVERIFY(note);
+      // drop a glissando on note
+      gliss             = new Glissando(score); // create a new element each time, as drop() will eventually delete it
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      // GLISSANDO FROM TOP STAFF TO BOTTOM STAFF
+      // go to top note of first chord of next measure
+      msr   = msr->nextMeasure();
+      QVERIFY(msr);
+      seg   = msr->first();
+      QVERIFY(seg);
+      chord = static_cast<Chord*>(seg->element(0));   // voice 0 of staff 0
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      note  = chord->upNote();
+      QVERIFY(note);
+      // drop a glissando on note
+      gliss             = new Glissando(score);
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      // GLISSANDO FROM BOTTOM STAFF TO TOP STAFF
+      // go to bottom note of first chord of next measure
+      msr   = msr->nextMeasure();
+      QVERIFY(msr);
+      seg   = msr->first();
+      QVERIFY(seg);
+      chord = static_cast<Chord*>(seg->element(4));   // voice 0 of staff 1
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      note  = chord->upNote();
+      QVERIFY(note);
+      // drop a glissando on note
+      gliss             = new Glissando(score);
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      // GLISSANDO OVER INTERVENING NOTES IN ANOTHER VOICE
+      // go to top note of first chord of next measure
+      msr   = msr->nextMeasure();
+      QVERIFY(msr);
+      seg   = msr->first();
+      QVERIFY(seg);
+      chord = static_cast<Chord*>(seg->element(0));   // voice 0 of staff 0
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      note  = chord->upNote();
+      QVERIFY(note);
+      // drop a glissando on note
+      gliss             = new Glissando(score);
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      // GLISSANDO OVER INTERVENING NOTES IN ANOTHER STAFF
+      // go to top note of first chord of next measure
+      msr   = msr->nextMeasure()->nextMeasure();
+      QVERIFY(msr);
+      seg   = msr->first();
+      QVERIFY(seg);
+      chord = static_cast<Chord*>(seg->element(0));   // voice 0 of staff 0
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      note  = chord->upNote();
+      QVERIFY(note);
+      // drop a glissando on note
+      gliss             = new Glissando(score);
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      QVERIFY(saveCompareScore(score, "glissando01.mscx", DIR + "glissando01-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners02
 ///   Check loading of score with a glissando from a lower to a higher staff:
 //    A score with:
 //          grand staff,
@@ -55,7 +154,7 @@ void TestSpanners::initTestCase()
 //    is loaded and laid out and saved: should be round-trip safe.
 //---------------------------------------------------------
 
-void TestSpanners::spanners01()
+void TestSpanners::spanners02()
       {
       Score* score = readScore(DIR + "glissando-crossstaff01.mscx");
       QVERIFY(score);
@@ -66,11 +165,11 @@ void TestSpanners::spanners01()
       }
 
 //---------------------------------------------------------
-///  spanners02
+///  spanners03
 ///   Loads a score with before- and after-grace notes and adds several glissandi from/to them.
 //---------------------------------------------------------
 
-void TestSpanners::spanners02()
+void TestSpanners::spanners03()
       {
       DropData    dropData;
       Glissando*  gliss;
