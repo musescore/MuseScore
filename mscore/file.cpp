@@ -553,8 +553,12 @@ void MuseScore::newFile()
 
       score->sigmap()->add(0, timesig);
 
+      int firstMeasureTicks = pickupMeasure ? Fraction(pickupTimesigZ, pickupTimesigN).ticks() : timesig.ticks();
+
       for (int i = 0; i < measures; ++i) {
-            int tick = timesig.ticks() * i;
+            int tick = firstMeasureTicks + timesig.ticks() * (i - 1);
+            if (i == 0)
+                  tick = 0;
             QList<Rest*> puRests;
             for (Score* _score : score->scoreList()) {
                   Rest* rest = 0;
