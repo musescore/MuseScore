@@ -3357,7 +3357,7 @@ PAGEDBG("  system %d", i);
                   bmargin  = vbox->bottomGap();
                   tmargin  = vbox->topGap();
                   if (pC.lastSystem) {
-                       if (pC.lastSystem->isVbox())
+                        if (pC.lastSystem->isVbox())
                               tmargin += pC.lastSystem->vbox()->bottomGap();
                         else
                               tmargin += systemFrameDistance;
@@ -3473,6 +3473,15 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                         }
                   }
             return;
+            }
+
+      // allow room for lyrics on last staff of last system
+      // these are not included in system height or in previous margin calculations
+      // but they are accounted for in prevDist
+      int lastStaffIdx = nstaves() - 1;
+      if (!pC.lastSystem->isVbox() && staff(lastStaffIdx)->show() && pC.lastSystem->staff(lastStaffIdx)->show()) {
+            if (pC.prevDist > pC.slb)
+                  restHeight -= pC.prevDist - pC.slb;
             }
 
       const qreal maxStretch = styleP(StyleIdx::maxSystemDistance) - styleP(StyleIdx::minSystemDistance);
