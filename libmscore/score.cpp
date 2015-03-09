@@ -2601,13 +2601,13 @@ void Score::padToggle(Pad n)
                   _is.setRest(!_is.rest());
                   break;
             case Pad::DOT:
-                  if (_is.duration().dots() == 1)
+                  if ((_is.duration().dots() == 1) || (_is.duration() == TDuration::DurationType::V_128TH))
                         _is.setDots(0);
                   else
                         _is.setDots(1);
                   break;
             case Pad::DOTDOT:
-                  if (_is.duration().dots() == 2)
+                  if ((_is.duration().dots() == 2) || (_is.duration() == TDuration::DurationType::V_64TH) || (_is.duration() == TDuration::DurationType::V_128TH))
                         _is.setDots(0);
                   else
                         _is.setDots(2);
