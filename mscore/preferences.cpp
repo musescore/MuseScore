@@ -172,7 +172,7 @@ void Preferences::init()
 
       mag                     = 1.0;
 
-      checkUpdateStartup      = 0;
+      checkUpdateStartup      = true;
 
       followSong              = true;
       importCharsetOve        = "GBK";
@@ -492,9 +492,7 @@ void Preferences::read()
 
       workspace          = s.value("workspace", workspace).toString();
 
-      checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toInt();
-      if (checkUpdateStartup == 0)
-            checkUpdateStartup = UpdateChecker::defaultPeriod();
+      checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toBool();
 
       QString ss(s.value("sessionStart", "score").toString());
       if (ss == "last")
@@ -797,15 +795,7 @@ void PreferenceDialog::updateValues()
       playChordOnAddNote->setChecked(prefs.playChordOnAddNote);
 
       //Update
-      checkUpdateStartup->clear();
-      int curPeriodIdx = 0;
-
-      for(unsigned i = 0; i < sizeof(updatePeriods)/sizeof(*updatePeriods); ++i) {
-            checkUpdateStartup->addItem(qApp->translate("preferences", updatePeriods[i].text), i);
-            if (updatePeriods[i].time == prefs.checkUpdateStartup)
-                  curPeriodIdx = i;
-            }
-      checkUpdateStartup->setCurrentIndex(curPeriodIdx);
+      checkUpdateStartup->setChecked(prefs.checkUpdateStartup);
 
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
@@ -1402,9 +1392,7 @@ void PreferenceDialog::apply()
       prefs.language = l;
 
       //update
-      int periodIndex = checkUpdateStartup->currentIndex();
-      int t = updatePeriods[periodIndex].time;
-      prefs.checkUpdateStartup = t;
+      prefs.checkUpdateStartup = checkUpdateStartup->isChecked();
 
       prefs.mag         = scale->value()/100.0;
 

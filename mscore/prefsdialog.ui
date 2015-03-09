@@ -3414,25 +3414,8 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Check for new versions of MuseScore on startup:</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QComboBox" name="checkUpdateStartup">
-              <property name="accessibleName">
-               <string>Check for new versions of MuseScore on startup</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Choose interval</string>
-              </property>
-             </widget>
-            </item>
             <item>
              <spacer name="horizontalSpacer_5">
               <property name="orientation">
@@ -3460,6 +3443,13 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkUpdateStartup">
+            <property name="text">
+             <string>Check for new version of MuseScore</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -3621,7 +3611,6 @@
   <tabstop>clearShortcut</tabstop>
   <tabstop>defineShortcut</tabstop>
   <tabstop>printShortcuts</tabstop>
-  <tabstop>checkUpdateStartup</tabstop>
   <tabstop>resetToDefault</tabstop>
   <tabstop>buttonBox</tabstop>
   <tabstop>drawAntialiased</tabstop>
