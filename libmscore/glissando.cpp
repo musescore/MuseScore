@@ -630,6 +630,9 @@ Note* Glissando::guessFinalNote(Chord* chord)
             case NoteType::INVALID:
                   return nullptr;
             // for grace notes before, return top note of parent chord
+            // TODO : if the grace-before is not the LAST ONE, this still returns the main note
+            //    which is probably not correct; however a glissando between two grace notes
+            //    probably makes little sense.
             case NoteType::ACCIACCATURA:
             case NoteType::APPOGGIATURA:
             case NoteType::GRACE4:
@@ -640,6 +643,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
                   else                          // no parent or parent is not a chord?
                         return nullptr;
             // for grace notes after, next chord is next chord of parent chord
+            // TODO : same note as case above!
             case NoteType::GRACE8_AFTER:
             case NoteType::GRACE16_AFTER:
             case NoteType::GRACE32_AFTER:
@@ -663,11 +667,10 @@ Note* Glissando::guessFinalNote(Chord* chord)
       if (chord->parent()->type() != Element::Type::SEGMENT)
             return nullptr;
 
+      // look for first ChordRest segment after initial note is elapsed
+      Segment*    segm        = chord->score()->tick2rightSegment(chord->tick() + chord->actualTicks());
       int         chordTrack  = chord->track();
-      Segment*    segm        = chord->segment();
       Part*       part        = chord->staff()->part();
-      if (segm != nullptr)
-            segm = segm->next1();
       while (segm) {
             // if next segment is a ChordRest segment
             if (segm->segmentType() == Segment::Type::ChordRest) {
