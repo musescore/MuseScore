@@ -2347,7 +2347,7 @@ bool MuseScore::hasToCheckForUpdate()
 void MuseScore::checkForUpdate()
       {
       if (ucheck)
-            ucheck->check(revision(), sender() != 0);
+            ucheck->check(version(), sender() != 0);
       }
 
 //---------------------------------------------------------
@@ -4521,6 +4521,7 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationName("MuseScoreDevelopment");
+      QCoreApplication::setApplicationVersion(VERSION);
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
       QAccessible::installFactory(Awl::AccessibleAbstractSlider::AbstractSliderFactory);

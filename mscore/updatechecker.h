@@ -32,12 +32,11 @@ class UpdateChecker : public QObject{
       QNetworkAccessManager* manager;
       QString os;
       QString release;
-      QString revision;
+      QString _currentVersion;
       bool manual;
 
    public:
       void check(QString,bool);
-      static int defaultPeriod();
       static bool hasToCheck();
 
    public slots:
@@ -45,6 +44,8 @@ class UpdateChecker : public QObject{
 
    private:
       QString parseText(QXmlStreamReader&);
+      static int defaultPeriod();
+      static int computeVersion(QString);
 
    public:
       UpdateChecker();

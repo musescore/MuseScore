@@ -141,7 +141,7 @@ struct Preferences {
       double mag;
 
       //update
-      int checkUpdateStartup;
+      bool checkUpdateStartup;
 
       bool followSong;
       QString importCharsetOve;
