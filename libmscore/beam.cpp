@@ -1511,6 +1511,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   // set stem direction for every chord
                   //
+                  bool relayoutGrace = false;
                   for (int i = 0; i < n; ++i) {
                         Chord* c = static_cast<Chord*>(crl.at(i));
                         if (c->type() == Element::Type::REST)
@@ -1521,10 +1522,18 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         if (c->up() != nup) {
                               c->setUp(nup);
                               // guess was wrong, have to relayout
-                              score()->layoutChords1(c->segment(), c->staffIdx());
+                              if (!_isGrace) {
+                                    score()->layoutChords1(c->segment(), c->staffIdx());
+                                    }
+                              else {
+                                    relayoutGrace = true;
+                                    score()->layoutChords3(c->notes(), c->staff(), 0);
+                                    }
                               }
                         }
                   _up = crl.front()->up();
+                  if (relayoutGrace)
+                        c1->parent()->layout();
                   }
             else if (_cross) {
                   qreal beamY   = 0.0;  // y position of main beam start
@@ -2117,6 +2126,8 @@ void Beam::reset()
 void Beam::startEdit(MuseScoreView*, const QPointF& p)
       {
       undoPushProperty(P_ID::BEAM_POS);
+      undoPushProperty(P_ID::USER_MODIFIED);
+      undoPushProperty(P_ID::GENERATED);
 
       QPointF pt(p - pagePos());
       qreal ydiff = 100000000.0;
