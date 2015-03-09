@@ -267,8 +267,11 @@ bool Score::checkClefs()
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                   if (cm) {
                         Segment* s = cm->findSegment(Segment::Type::Clef, m->tick());
-                        if (s)
-                              clef = static_cast<Clef*>(s->element(i * VOICES))->clefType();
+                        if (s) {
+                              Element* element = s->element(i * VOICES);
+                              if (element)
+                                    clef = static_cast<Clef*>(element)->clefType();
+                              }
                         }
                   if (staff(i)->clef(m->tick()) != clef) {
                         qDebug("measure %d (tick %d) : clef %d, map %d", m->no(), m->tick(), clef, staff(i)->clef(m->tick()));

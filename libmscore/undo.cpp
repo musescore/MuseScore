@@ -2980,31 +2980,25 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
       }
 
 //---------------------------------------------------------
-//   RemoveMeasures
+//   insertMeasures
 //---------------------------------------------------------
 
-RemoveMeasures::RemoveMeasures(Measure* m1, Measure* m2)
-   : fm(m1), lm(m2)
-      {
-      }
-
-//---------------------------------------------------------
-//   undo
-//    insert back measures
-//---------------------------------------------------------
-
-void RemoveMeasures::undo()
+void InsertRemoveMeasures::insertMeasures()
       {
       Score* score = fm->score();
       QList<Clef*> clefs;
+      QList<KeySig*> keys;
       for (Segment* s = fm->first(); s != lm->last(); s = s->next1()) {
-            if (s->segmentType() != Segment::Type::Clef)
+            if (!(s->segmentType() & (Segment::Type::Clef | Segment::Type::KeySig)))
                   continue;
             for (int track = 0; track < score->ntracks(); track += VOICES) {
-                  Clef* c = static_cast<Clef*>(s->element(track));
-                  if (c == 0 || c->generated())
+                  Element* e = s->element(track);
+                  if (!e || e->generated())
                         continue;
-                  clefs.append(c);
+                  if (e->type() == Element::Type::CLEF)
+                        clefs.append(static_cast<Clef*>(e));
+                  else if (e->type() == Element::Type::KEYSIG)
+                        keys.append(static_cast<KeySig*>(e));
                   }
             }
       score->measures()->insert(fm, lm);
@@ -3012,6 +3006,8 @@ void RemoveMeasures::undo()
       score->insertTime(fm->tick(), lm->endTick() - fm->tick());
       for (Clef* clef : clefs)
             clef->staff()->setClef(clef);
+      for (KeySig* key : keys)
+            key->staff()->setKey(key->segment()->tick(), key->keySigEvent());
       score->setLayoutAll(true);
 
       //
@@ -3043,84 +3039,18 @@ void RemoveMeasures::undo()
       }
 
 //---------------------------------------------------------
-//   redo
-//    remove measures
+//   removeMeasures
 //---------------------------------------------------------
 
-void RemoveMeasures::redo()
+void InsertRemoveMeasures::removeMeasures()
       {
       Score* score = fm->score();
-      for (Segment* s = fm->first(); s != lm->last(); s = s->next1()) {
-            if (s->segmentType() != Segment::Type::Clef)
-                  continue;
-            for (int track = 0; track < score->ntracks(); track += VOICES) {
-                  Clef* clef = static_cast<Clef*>(s->element(track));
-                  if (clef == 0 || clef->generated())
-                        continue;
-                  clef->staff()->removeClef(clef);
-                  }
-            }
+
       score->measures()->remove(fm, lm);
       score->fixTicks();
       score->insertTime(fm->tick(), -(lm->endTick() - fm->tick()));
       score->setLayoutAll(true);
-      }
-
-//---------------------------------------------------------
-//   undo
-//    insert back measures
-//---------------------------------------------------------
-
-void InsertMeasures::undo()
-      {
-      Score* s = fm->score();
-      s->measures()->remove(fm, lm);
-      s->fixTicks();
-      s->insertTime(fm->tick(), -(lm->endTick() - fm->tick()));
-      s->setLayoutAll(true);
-      s->connectTies(true);
-      }
-
-//---------------------------------------------------------
-//   redo
-//    remove measures
-//---------------------------------------------------------
-
-void InsertMeasures::redo()
-      {
-      Score* s = fm->score();
-      s->measures()->insert(fm, lm);
-      s->fixTicks();
-      s->insertTime(fm->tick(), lm->endTick() - fm->tick());
-      s->setLayoutAll(true);
-      s->connectTies(true);
-
-      //
-      // connect ties
-      //
-
-      if (!fm->prevMeasure())
-            return;
-      Measure* m = fm->prevMeasure();
-      for (Segment* seg = m->first(); seg; seg = seg->next()) {
-            for (int track = 0; track < s->ntracks(); ++track) {
-                  Chord* chord = static_cast<Chord*>(seg->element(track));
-                  if (chord == 0 || chord->type() != Element::Type::CHORD)
-                        continue;
-                  foreach (Note* n, chord->notes()) {
-                        Tie* tie = n->tieFor();
-                        if (!tie)
-                              continue;
-                        if (!tie->endNote() || tie->endNote()->chord()->segment()->measure() != m) {
-                              Note* nn = searchTieNote(n);
-                              if (nn) {
-                                    tie->setEndNote(nn);
-                                    nn->setTieBack(tie);
-                                    }
-                              }
-                        }
-                  }
-            }
+      score->connectTies(true);   // ??
       }
 
 //---------------------------------------------------------
