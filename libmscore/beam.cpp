@@ -1630,14 +1630,15 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   // loop through chordrests looking for end
                   int c1 = i;
                   ++i;
+                  bool b32, b64;
                   for (; i < n; ++i) {
                         ChordRest* c = crl[i];
                         ChordRest* p = i ? crl[i - 1] : 0;
                         int l = c->durationType().hooks() - 1;
 
                         Mode bm = Groups::endBeam(c, p);
-                        bool b32 = (beamLevel >= 1) && (bm == Mode::BEGIN32);
-                        bool b64 = (beamLevel >= 2) && (bm == Mode::BEGIN64);
+                        b32 = (beamLevel >= 1) && (bm == Mode::BEGIN32);
+                        b64 = (beamLevel >= 2) && (bm == Mode::BEGIN64);
 
                         if ((l >= beamLevel && (b32 || b64)) || (l < beamLevel)) {
                               if (i > 1 && crl[i-1]->type() == Element::Type::REST) {
@@ -1726,43 +1727,73 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         //
                         // find direction (by default, segment points to right)
                         //
-                        // if first or last of group
+                        // if first or last of group (including tuplet groups)
                         // unconditionally set beam at right or left side
-                        if (c1 == 0)                // first => point to right
+                        if (c1 == 0)
                               ;
-                        else if (c1 == n - 1)       // last of beam or tuplet => point to left
+                        else if (c1 == n - 1)
                               len = -len;
+                        else if (cr1->tuplet() && cr1 == cr1->tuplet()->elements().first())
+                              ;
                         else if (cr1->tuplet() && cr1 == cr1->tuplet()->elements().last())
                               len = -len;
+                        else if (b32 || b64)          // end of a sub-beam group
+                              len = -len;
                         else if (!(cr1->isGrace())) {
-                              // if inside group
-                              // use beam group info to tell us if we have reached the end of a logical grouping
-                              // in which case, we should point broken segment to left
-                              // probably the beam *could* have broken here, but didn't for whatever reason
-                              // (could be user override, or limitations in beam grouping algorithm, especially in compound meters)
-                              // assumption: we have a broken segment here because next chord is longer than this
-                              // check to see if beam *would* have broken (or used sub-beam) here if the next chord were same length as this
-                              // if so, then point broken segment to left
-                              // see http://musescore.org/en/node/42856
+                              // inside group - here it gets more complex
+                              // see http://musescore.org/en/node/42856, http://musescore.org/en/node/40806
+                              // our strategy:
+                              // decide if we have reached the end of a "logical" grouping
+                              // even if we are not literally at the end of a beam group
+                              // we do this two ways:
+                              // 1) see if beam groups would have indicated a break or sub-beam if the next chord were same length as this
+                              // 2) see if next note is on a "sub-beat" as defined by 2 * current note duration
+                              // in either case, broken segment should point left; otherwise right
+                              // however, we should try to be careful to avoid "floating" segments
+                              // caused by mismatches between number of incoming versus outgoing beams
+                              // so, we favor the side with more beams (to the extent we can count reliably)
+                              // if there is a corner case missed, this would probably be where
+                              ChordRest* prevCR = crl[c1-1];
                               ChordRest* nextCR = crl[c1+1];
                               TDuration currentDuration = cr1->durationType();
-                              TDuration nextDuration = nextCR->durationType();
-                              const Groups& g = nextCR->staff()->group(nextCR->tick());
-                              Fraction stretch = nextCR->staff()->timeStretch(nextCR->tick());
+                              int currentHooks = currentDuration.hooks();
+
+                              // since we have already established that we are not at end of sub-beam,
+                              // outgoing beams should always be # hooks of next chord
+                              int beamsOut = nextCR->durationType().hooks();
+
+                              // incoming beams is normally # hooks of previous chord
+                              // unless this is start of sub-beam
+                              const Groups& g = cr1->staff()->group(cr1->measure()->tick());
+                              Fraction stretch = cr1->staff()->timeStretch(cr1->measure()->tick());
+                              int currentTick = (cr1->rtick() * stretch.numerator()) / stretch.denominator();
+                              Beam::Mode bm = g.beamMode(currentTick, currentDuration.type());
+                              int beamsIn;
+                              if (bm == Beam::Mode::BEGIN32)
+                                    beamsIn = 1;
+                              else if (bm == Beam::Mode::BEGIN64)
+                                    beamsIn = 2;
+                              else
+                                    beamsIn = prevCR->durationType().hooks();
+
+                              // remember, we are checking whether nextCR would have started sub-beam *if* same duration as this
                               int nextTick = (nextCR->rtick() * stretch.numerator()) / stretch.denominator();
-                              Beam::Mode bm = g.beamMode(nextTick, currentDuration.type());
-                              if (bm != Beam::Mode::AUTO) {
+                              bm = g.beamMode(nextTick, currentDuration.type());
+
+                              if (currentHooks - beamsOut > 1 && beamsIn > beamsOut && currentHooks > beamsIn) {
+                                    // point left to avoid floating segment
                                     len = -len;
                                     }
-                              else if (currentDuration.hooks() - nextDuration.hooks() > 1) {
-                                    // also point left if more than one level of beam difference with note to right
-                                    // this code is just an approximation, but it solves http://musescore.org/en/node/40806
+                              else if (beamsIn < beamsOut) {
+                                    // point right to avoid floating segment
+                                    ;
+                                    }
+                              else if (bm != Beam::Mode::AUTO) {
+                                    // beam group info suggests this is a logical group end as per 1) above
                                     len = -len;
                                     }
                               else {
-                                    // we should also point the broken segment to the left
-                                    // if the next note on a "sub-beat" as defined by 2 * current note duration
-                                    // note that formerly, this was the *only* check we had (other than last note of group)
+                                    // determine if this is a logical group end as per 2) above
 
                                     int measTick = cr1->measure()->tick();
                                     int tickNext = crl[c1+1]->tick() - measTick;
@@ -1774,7 +1805,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
 
                                     // if this completes, within the measure, a unit of tickMod length, flip beam to left
                                     // (allow some tolerance for tick rounding in tuplets
-                                    // without tuplet tolerance, could be simplified to:)
+                                    // without tuplet tolerance, could be simplified)
 
                                     static const int BEAM_TUPLET_TOLERANCE = 6;
                                     int mod = tickNext % tickMod;
