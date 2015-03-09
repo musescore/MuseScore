@@ -605,7 +605,7 @@ void MuseScore::newFile()
                                     int ltick = tick;
                                     int k = 0;
                                     foreach (TDuration d, dList) {
-                                          if (k < puRests.count())
+                                          if (k < puRests.count() && staff->linkedStaves())
                                                 rest = static_cast<Rest*>(puRests[k]->linkedClone());
                                           else {
                                                 rest = new Rest(score, d);
