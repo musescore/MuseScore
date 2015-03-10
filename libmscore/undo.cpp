@@ -2944,6 +2944,9 @@ void Score::undoInsertTime(int tick, int len)
                         }
                   }
             }
+
+      for (Spanner* s : _unmanagedSpanner)
+            s->undoInsertTimeUnmanaged(tick, len);
       }
 
 //---------------------------------------------------------
@@ -3046,10 +3049,16 @@ void InsertRemoveMeasures::removeMeasures()
       {
       Score* score = fm->score();
 
+      int tick1 = fm->tick();
+      int tick2 = lm->endTick();
       score->measures()->remove(fm, lm);
       score->fixTicks();
-      score->insertTime(fm->tick(), -(lm->endTick() - fm->tick()));
+      score->insertTime(tick1, -(tick2 - tick1));
       score->setLayoutAll(true);
+      for (Spanner* sp : score->unmanagedSpanners())
+            if ( (sp->tick() >= tick1 && sp->tick() < tick2)
+                        || (sp->tick2() >= tick1 && sp->tick2() < tick2) )
+                  sp->removeUnmanaged();
       score->connectTies(true);   // ??
       }
 
