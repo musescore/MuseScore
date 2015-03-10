@@ -96,6 +96,7 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/fret.h"
 #include "libmscore/tie.h"
+#include "libmscore/undo.h"
 #include "musicxmlfonthandler.h"
 
 namespace Ms {
@@ -4265,15 +4266,15 @@ static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrum
 
 void ExportMusicXml::write(QIODevice* dev)
       {
-
       // must export in transposed pitch to prevent
       // losing the transposition information
       // if necessary, switch concert pitch mode off
       // before export and restore it after export
       bool concertPitch = score()->styleB(StyleIdx::concertPitch);
       if (concertPitch) {
-            score()->cmdConcertPitchChanged(false, false);
-            score()->doLayout();
+            score()->startCmd();
+            score()->undo(new ChangeConcertPitch(score(), false));
+            score()->doLayout();    // this is only allowed in a cmd context to not corrupt the undo/redo stack
             }
 
       calcDivisions();
@@ -4844,8 +4845,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
       if (concertPitch) {
             // restore concert pitch
-            score()->cmdConcertPitchChanged(true, false);
-            score()->doLayout();
+            score()->endCmd(true);        // rollback
             }
       }
 

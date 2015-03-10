@@ -117,6 +117,11 @@ void Score::endCmd(bool rollback)
             return;
             }
 
+      if (rollback) {
+            setLayoutAll(true);
+            undo()->current()->unwind();
+            }
+
       for (Score* s : scoreList()) {
             if (s->layoutAll()) {
                   s->_updateAll  = true;
@@ -135,8 +140,6 @@ void Score::endCmd(bool rollback)
 
       if (MScore::debugMode)
             qDebug("===endCmd() %d", undo()->current()->childCount());
-      if (rollback)
-            undo()->current()->unwind();
       bool noUndo = (undo()->current()->childCount() <= 1);       // nothing to undo?
       undo()->endMacro(noUndo);
       end();      // DEBUG
