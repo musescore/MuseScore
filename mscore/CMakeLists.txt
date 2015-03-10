@@ -294,7 +294,6 @@ target_link_libraries(mscore
       qzip
       beatroot
       kqoauth
-      qtwaitingspinner
       )
 
 if (MINGW)
