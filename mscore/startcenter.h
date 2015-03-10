@@ -14,7 +14,6 @@
 #define __STARTCENTER_H__
 
 #include "ui_startcenter.h"
-#include "thirdparty/qtwaitingspinner/QtWaitingSpinner.h"
 
 namespace Ms {
 
@@ -42,7 +41,6 @@ class MyNetworkAccessManager: public QNetworkAccessManager
 class MyWebView: public QWebView
       {
       Q_OBJECT
-      QtWaitingSpinner* _loadingSpinner;
 
    public slots:
       void link(const QUrl& url);

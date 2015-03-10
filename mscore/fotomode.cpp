@@ -595,7 +595,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       popup->addSeparator();
       a = popup->addAction(tr("Resolution (%1 DPI)...").arg(preferences.pngResolution));
       a->setData("set-res");
-      QAction* bgAction = popup->addAction(tr("transparent background"));
+      QAction* bgAction = popup->addAction(tr("Transparent background"));
       bgAction->setCheckable(true);
       bgAction->setChecked(preferences.pngTransparent);
       bgAction->setData("set-bg");

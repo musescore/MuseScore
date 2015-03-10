@@ -112,8 +112,10 @@ void Startcenter::closeEvent(QCloseEvent*)
 void Startcenter::updateRecentScores()
       {
       QFileInfoList fil = mscore->recentScores();
-      QFileInfo gettingStartedScore(":/data/Getting_Started.mscz");
-      fil.prepend(gettingStartedScore);
+      if (fil.size() == 0) {
+            QFileInfo gettingStartedScore(":/data/Getting_Started.mscz");
+            fil.prepend(gettingStartedScore);
+            }
       QFileInfo newScore(":/data/Create_New_Score.mscz");
       fil.prepend(newScore);
       recentPage->setScores(fil);
@@ -200,14 +202,6 @@ MyWebView::MyWebView(QWidget *parent):
 
       page()->currentFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
       page()->currentFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAsNeeded);
-
-       _loadingSpinner = new QtWaitingSpinner(this);
-      _loadingSpinner->setVisible(true);
-      _loadingSpinner->start();
-      QVBoxLayout* layout = new QVBoxLayout(this);
-      layout->addWidget(_loadingSpinner);
-      layout->setAlignment ( _loadingSpinner, Qt::AlignCenter);
-      setLayout(layout);
       }
 
 //---------------------------------------------------------
@@ -239,21 +233,8 @@ void MyWebView::ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors
 void MyWebView::stopBusy(bool val)
       {
       if (!val) {
-            setHtml(QString("<html><head>"
-                  "<link rel=\"stylesheet\" href=\"data/webview.css\" type=\"text/css\" /></head>"
-            "<body>"
-            "<div id=\"content\">"
-            "<div id=\"middle\">"
-            "  <div class=\"title\" align=\"center\"><h2>%1</h2></div>"
-            "  <ul><li>%2</li></ul>"
-            "</div></div>"
-            "</body></html>")
-            .arg(tr("Could not<br /> connect"))
-            .arg(tr("To connect with the community, <br /> you need to have internet <br /> connection enabled")),
-            QUrl("qrc:/"));
+            setVisible(false);
             }
-      _loadingSpinner->stop();
-      _loadingSpinner->setVisible(false);
       setCursor(Qt::ArrowCursor);
       }
 
