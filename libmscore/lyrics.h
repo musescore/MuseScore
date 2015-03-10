@@ -158,10 +158,11 @@ class LyricsLine : public SLine {
       virtual Element::Type type() const override     { return Element::Type::LYRICSLINE; }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
+      virtual void removeUnmanaged() override;
 
       Lyrics*     lyrics() const                      { return (Lyrics*)parent();   }
       Lyrics*     nextLyrics() const                  { return _nextLyrics;         }
-      void        unchain();
+      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       };
 
 //---------------------------------------------------------
