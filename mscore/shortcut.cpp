@@ -2616,7 +2616,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "loop-in",
          QT_TRANSLATE_NOOP("action","Loop In"),
-         QT_TRANSLATE_NOOP("action","Set loop In position"),
+         QT_TRANSLATE_NOOP("action","Set loop in position"),
          0,
          Icons::loopIn_ICON,
          Qt::WindowShortcut,
