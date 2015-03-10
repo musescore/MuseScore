@@ -5,7 +5,7 @@ import MuseScore 1.0
 MuseScore {
     menuPath: "Plugins.scorelist"
     version:  "2.0"
-    description: "This test plugin interates through the score list."
+    description: "This test plugin iterates through the score list."
     pluginType: "dialog"
 
     width:  150
