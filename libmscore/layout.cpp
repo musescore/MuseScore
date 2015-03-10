@@ -2280,6 +2280,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
 
             if (!empty && (minWidth + ww > systemWidth)) {
                   curMeasure->setSystem(oldSystem);
+                  continueFlag = false;
                   break;
                   }
             if (curMeasure->type() == Element::Type::MEASURE)
@@ -2310,6 +2311,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                ) {
                   if (_layoutMode != LayoutMode::SYSTEM)
                         system->setPageBreak(curMeasure->pageBreak());
+                  minWidth += ww;
                   curMeasure = nextMeasure;
                   break;
                   }
