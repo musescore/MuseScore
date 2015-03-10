@@ -1971,6 +1971,8 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
 
       if (suffix == "mscz" || suffix == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
+            if (score && score->fileInfo()->path().startsWith(":/"))
+                  score->setCreated(true);
             if (rv != Score::FileError::FILE_NO_ERROR)
                   return rv;
             }
