@@ -246,6 +246,16 @@ Note::Note(const Note& n, bool link)
       else
             _tieFor = 0;
       _tieBack  = 0;
+      // clone forward-spanners, leaving end note empty; at a later time,
+      // Score::connectTies() will hopefully find the correct end note
+      for (Spanner* oldSp : n._spannerFor) {
+            Spanner* newSp = static_cast<Spanner*>(oldSp->clone());
+            newSp->setStartElement(this);
+            newSp->setEndElement(nullptr);
+            if (link)
+                  newSp->linkTo(oldSp);
+            addSpannerFor(newSp);
+            }
       for (int i = 0; i < MAX_DOTS; ++i) {
             if (n._dots[i])
                   add(new NoteDot(*n._dots[i]));
