@@ -205,15 +205,13 @@ Chord::Chord(const Chord& c, bool link)
    : ChordRest(c, link)
       {
       if (link)
-            linkTo((Chord*)&c);      // HACK!
+            score()->undo(new Link(this, const_cast<Chord*>(&c)));
       _ledgerLines = 0;
-      int n = c._notes.size();
-      for (int i = 0; i < n; ++i) {
-            Note* onote = c._notes[i];
+
+      for (Note* onote : c._notes) {
             Note* nnote = new Note(*onote, link);
             add(nnote);
             }
-
       for (Chord* gn : c.graceNotes()) {
             Chord* nc = new Chord(*gn, link);
             add(nc);
@@ -243,13 +241,13 @@ Chord::Chord(const Chord& c, bool link)
             Arpeggio* a = new Arpeggio(*(c._arpeggio));
             add(a);
             if (link)
-                  a->linkTo(c._arpeggio);
+                  score()->undo(new Link(a, const_cast<Arpeggio*>(c._arpeggio)));
             }
       if (c._tremolo && !c._tremolo->twoNotes()) {
             Tremolo* t = new Tremolo(*(c._tremolo));
             add(t);
             if (link)
-                  t->linkTo(c._tremolo);
+                  score()->undo(new Link(t, const_cast<Tremolo*>(c._tremolo)));
             }
 
       for (Element* e : c.el()) {
@@ -258,7 +256,7 @@ Chord::Chord(const Chord& c, bool link)
                   ChordLine* ncl = new ChordLine(*cl);
                   add(ncl);
                   if (link)
-                        cl->linkTo(ncl);
+                        score()->undo(new Link(cl, const_cast<ChordLine*>(ncl)));
                   }
             }
       }
@@ -308,6 +306,7 @@ Chord::~Chord()
             delete ll;
             ll = llNext;
             }
+      qDeleteAll(_graceNotes);
       qDeleteAll(_notes);
       }
 
@@ -472,6 +471,7 @@ void Chord::add(Element* e)
             case Element::Type::CHORD:
                   {
                   Chord* gc = static_cast<Chord*>(e);
+                  Q_ASSERT(gc->noteType() != NoteType::NORMAL);
                   int idx = gc->graceIndex();
                   gc->setFlags(ElementFlag::MOVABLE);
                   _graceNotes.insert(_graceNotes.begin() + idx, gc);
