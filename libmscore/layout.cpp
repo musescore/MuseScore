@@ -3271,6 +3271,14 @@ struct SystemRow {
                   }
             return v;
             }
+      qreal extraDistance(int i) const {
+            qreal v = 0.0;
+            foreach(System* s, systems) {
+                  foreach(MeasureBase* mb, s->measures())
+                        v = qMax(mb->distanceDown(i), v);
+                  }
+            return v;
+            }
       void clear() {
             systems.clear();
             }
@@ -3477,13 +3485,27 @@ void Score::layoutPage(const PageContext& pC, qreal d)
             return;
             }
 
-      // allow room for lyrics on last staff of last system
+      // allow room for lyrics (and/or spacer) on last visible staff of last system
       // these are not included in system height or in previous margin calculations
-      // but they are accounted for in prevDist
-      int lastStaffIdx = nstaves() - 1;
-      if (!pC.lastSystem->isVbox() && staff(lastStaffIdx)->show() && pC.lastSystem->staff(lastStaffIdx)->show()) {
-            if (pC.prevDist > pC.slb)
-                  restHeight -= pC.prevDist - pC.slb;
+      System* lastSystem = page->systems()->last();
+      int lastStaff = nstaves() - 1;
+      if (!lastSystem->isVbox()) {
+            int lastVisible = -1;
+            for (int i = lastStaff; i >= 0; --i) {
+                  if (staff(i)->show() && lastSystem->staff(i)->show()) {
+                        lastVisible = i;
+                        break;
+                        }
+                  }
+            if (lastVisible >= 0) {
+                  qreal extra = pC.sr.extraDistance(lastVisible);
+                  // for last staff of system, this distance has not been accounted for at all
+                  // for interior staves (with last staves hidden), this is only partially accounted for
+                  if (lastVisible == lastStaff)
+                        restHeight -= extra;
+                  else
+                        restHeight -= qMin(extra, styleP(StyleIdx::staffDistance));
+                  }
             }
 
       const qreal maxStretch = styleP(StyleIdx::maxSystemDistance) - styleP(StyleIdx::minSystemDistance);
